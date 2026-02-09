@@ -6,19 +6,19 @@ import {
   MessageSquare, FileText, DollarSign,
   Calendar, Receipt, Star, ShoppingCart, Zap, ArrowRight,
   CheckCircle, Shield, Clock, BarChart3, Sparkles, Bot,
-  Code, Brain
+  Code
 } from "lucide-react";
 import { useRef } from "react";
 
 const agents = [
-  { icon: MessageSquare, title: "Atendimento Omnichannel", desc: "WhatsApp, Instagram e Site. Atendimento 24/7.", price: "R$ 2.000" },
-  { icon: FileText, title: "Conteúdo & Social", desc: "Posts, roteiros e agendamento automático.", price: "R$ 500" },
-  { icon: DollarSign, title: "Cobrança & Financeiro", desc: "PIX, boletos e follow-up automático.", price: "R$ 2.000" },
-  { icon: Calendar, title: "Agenda", desc: "Reservas, lembretes e confirmações.", price: "R$ 500" },
-  { icon: Receipt, title: "Fiscal & Documentos", desc: "NFs, DARF e relatórios inteligentes.", price: "R$ 8.000" },
-  { icon: Star, title: "Reputação Online", desc: "Google e Reclame Aqui automatizados.", price: "R$ 2.000" },
-  { icon: Code, title: "Desenvolvedor", desc: "Code review, PRs e deploy automático.", price: "R$ 23.000" },
-  { icon: Brain, title: "Analista de BI", desc: "Dashboards e insights automatizados.", price: "R$ 23.000" },
+  { icon: MessageSquare, title: "Atendimento Omnichannel", desc: "WhatsApp, Instagram e Site. Atendimento 24/7.", price: "R$ 1.899" },
+  { icon: FileText, title: "Conteúdo & Social", desc: "Posts, roteiros e agendamento automático.", price: "R$ 1.779" },
+  { icon: DollarSign, title: "Cobrança & Financeiro", desc: "PIX, boletos e follow-up automático.", price: "R$ 1.979" },
+  { icon: Calendar, title: "Agenda", desc: "Reservas, lembretes e confirmações.", price: "R$ 1.799" },
+  { icon: Receipt, title: "Fiscal & Documentos", desc: "NFs, DARF e relatórios inteligentes.", price: "R$ 2.199" },
+  { icon: Star, title: "Reputação Online", desc: "Google e Reclame Aqui automatizados.", price: "R$ 1.879" },
+  { icon: Code, title: "Desenvolvedor", desc: "Code review, PRs e deploy automático.", price: "R$ 2.447" },
+  { icon: Shield, title: "Segurança & Compliance", desc: "LGPD, auditoria e vulnerabilidades.", price: "R$ 2.399" },
 ];
 
 const features = [
@@ -154,10 +154,10 @@ const HomePage = () => {
           </motion.p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             {[
-              { value: "10k+", label: "Agentes Ativos" },
-              { value: "2M+", label: "Ações/mês" },
-              { value: "99.9%", label: "Uptime" },
-              { value: "500+", label: "Empresas" },
+              { value: "847", label: "Agentes Ativos" },
+              { value: "126k", label: "Ações/mês" },
+              { value: "99.7%", label: "Uptime" },
+              { value: "312", label: "Empresas" },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}
@@ -236,7 +236,7 @@ const HomePage = () => {
             </h2>
             <p className="text-muted-foreground text-lg max-w-xl mx-auto">
               Escolha, personalize e ative em minutos. 
-              De R$ 500 a R$ 23.000/mês dependendo da complexidade.
+              De R$ 1.779 a R$ 2.447/mês dependendo da complexidade.
             </p>
           </motion.div>
 
