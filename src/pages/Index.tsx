@@ -7,7 +7,8 @@ import {
   Calendar, Receipt, Star, Zap, ArrowRight,
   Shield, Clock, BarChart3, Sparkles, Bot,
   Code, Users, Mail, Briefcase, Search, TrendingUp,
-  Play, ChevronRight, Cpu, Globe, Lock
+  Play, ChevronRight, Cpu, Globe, Lock,
+  Target, Layers, Eye, CheckCircle2, XCircle, Network
 } from "lucide-react";
 import { useRef } from "react";
 
@@ -27,12 +28,18 @@ const features = [
   { icon: BarChart3, title: "Analytics Real-Time", desc: "Métricas de economia e performance", stat: "Live" },
 ];
 
-// Lightweight background - no blur, simple gradients
+// Modern background - clean gradients, no circles
 const StaticBackground = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden">
-    <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary/5 rounded-full opacity-50" />
-    <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-purple-500/5 rounded-full opacity-50" />
-    <div className="grid-pattern absolute inset-0 opacity-10" />
+    {/* Subtle top gradient */}
+    <div className="absolute top-0 left-0 right-0 h-[50vh] bg-gradient-to-b from-primary/[0.03] to-transparent" />
+    {/* Subtle bottom accent */}
+    <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-purple-500/[0.02] to-transparent" />
+    {/* Grid pattern */}
+    <div className="grid-pattern absolute inset-0 opacity-[0.04]" />
+    {/* Vertical accent lines */}
+    <div className="absolute left-1/4 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/10 to-transparent" />
+    <div className="absolute right-1/4 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/10 to-transparent" />
   </div>
 );
 
@@ -263,6 +270,224 @@ const HomePage = () => {
             </motion.div>
           </div>
         </motion.div>
+      </section>
+
+      {/* ABOUT APEXBOT */}
+      <section className="py-32 px-4 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-transparent" />
+        
+        <div className="max-w-6xl mx-auto relative">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <Badge variant="outline" className="mb-6 border-primary/30 text-primary px-4 py-2">
+              <Target className="h-4 w-4 mr-2" />
+              O que é o ApexBot?
+            </Badge>
+            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 leading-tight">
+              O agente que <span className="gradient-text">governa outros agentes</span>
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+              O ApexBot não é um chatbot comum. Ele não existe para responder perguntas ou simular conversas.
+              <span className="text-foreground font-semibold block mt-2">
+                É um agente de decisão e orquestração no nível mais alto da automação.
+              </span>
+            </p>
+          </motion.div>
+
+          {/* Core Concept Cards */}
+          <div className="grid md:grid-cols-2 gap-8 mb-20">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-card rounded-2xl p-10 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/10 to-transparent rounded-bl-full" />
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-6">
+                <Layers className="h-8 w-8 text-primary" />
+              </div>
+              <h3 className="font-display text-2xl font-bold mb-4">Camada Superior de Controle</h3>
+              <p className="text-muted-foreground leading-relaxed text-lg">
+                Enquanto bots tradicionais executam tarefas isoladas, o ApexBot atua como uma camada superior, 
+                responsável por coordenar agentes, priorizar ações e garantir que o sistema trabalhe de forma 
+                consistente, segura e eficiente.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-card rounded-2xl p-10 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-purple-500/10 to-transparent rounded-bl-full" />
+              <div className="w-16 h-16 rounded-2xl bg-purple-500/10 flex items-center justify-center mb-6">
+                <Network className="h-8 w-8 text-purple-400" />
+              </div>
+              <h3 className="font-display text-2xl font-bold mb-4">Nível Executivo da Automação</h3>
+              <p className="text-muted-foreground leading-relaxed text-lg">
+                Ele define objetivos, distribui tarefas, monitora resultados e ajusta rotas automaticamente. 
+                Seu papel não é executar microações, mas tomar decisões operacionais e manter o fluxo 
+                funcionando corretamente.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Why "Apex" */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="glass-card rounded-3xl p-12 md:p-16 text-center mb-20 relative overflow-hidden"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-primary/5 via-transparent to-purple-500/5" />
+            <div className="relative z-10">
+              <p className="text-xs uppercase tracking-[0.4em] text-primary mb-4">Por que "APEX"?</p>
+              <h3 className="font-display text-3xl sm:text-4xl font-bold mb-6">
+                A palavra <span className="gradient-text">Apex</span> significa ápice ou ponto mais alto
+              </h3>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
+                {[
+                  { icon: Target, text: "Topo da hierarquia" },
+                  { icon: Eye, text: "Supervisiona processos" },
+                  { icon: Layers, text: "Coordena automações" },
+                  { icon: Cpu, text: "Camada de decisão" },
+                ].map((item, i) => (
+                  <motion.div
+                    key={item.text}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex flex-col items-center gap-3 p-4"
+                  >
+                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                      <item.icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <span className="text-sm font-medium text-muted-foreground">{item.text}</span>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+
+          {/* How it Works */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-20"
+          >
+            <h3 className="font-display text-3xl font-bold text-center mb-12">
+              Como o <span className="gradient-text">ApexBot</span> funciona
+            </h3>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+              {[
+                { icon: Target, title: "Define prioridades", desc: "Estabelece o que importa" },
+                { icon: Users, title: "Distribui tarefas", desc: "Entre agentes especializados" },
+                { icon: BarChart3, title: "Acompanha resultados", desc: "Desempenho em tempo real" },
+                { icon: Zap, title: "Ajusta estratégias", desc: "Automaticamente" },
+                { icon: Shield, title: "Interrompe riscos", desc: "Identifica inconsistências" },
+              ].map((item, i) => (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08 }}
+                  className="glass-card rounded-xl p-6 text-center glass-hover group"
+                >
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/20 transition-colors">
+                    <item.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <h4 className="font-semibold mb-1">{item.title}</h4>
+                  <p className="text-xs text-muted-foreground">{item.desc}</p>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+
+          {/* What ApexBot is NOT */}
+          <div className="grid md:grid-cols-2 gap-8 mb-20">
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-card rounded-2xl p-10"
+            >
+              <h3 className="font-display text-2xl font-bold mb-6 flex items-center gap-3">
+                <XCircle className="h-7 w-7 text-red-400" />
+                O que o ApexBot NÃO é
+              </h3>
+              <ul className="space-y-4">
+                {[
+                  "Não é um chatbot de atendimento",
+                  "Não é uma automação simples",
+                  "Não funciona por respostas prontas",
+                  "Não depende de interação constante",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-muted-foreground">
+                    <div className="w-2 h-2 rounded-full bg-red-400/50" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 text-sm text-muted-foreground border-t border-white/5 pt-6">
+                Ele opera como uma <span className="text-foreground font-semibold">infraestrutura invisível</span>, focada em execução real.
+              </p>
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="glass-card rounded-2xl p-10"
+            >
+              <h3 className="font-display text-2xl font-bold mb-6 flex items-center gap-3">
+                <CheckCircle2 className="h-7 w-7 text-primary" />
+                Para quem o ApexBot existe
+              </h3>
+              <ul className="space-y-4">
+                {[
+                  "Empresas que usam múltiplos agentes",
+                  "Operações que exigem controle e decisão",
+                  "Fluxos complexos que não podem falhar",
+                  "Times que precisam escalar com governança",
+                ].map((item, i) => (
+                  <li key={i} className="flex items-center gap-3 text-muted-foreground">
+                    <div className="w-2 h-2 rounded-full bg-primary" />
+                    {item}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-6 text-sm text-muted-foreground border-t border-white/5 pt-6">
+                Perfeito para quem precisa de <span className="text-foreground font-semibold">escala sem perder controle</span>.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* Summary Quote */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <div className="inline-block glass-card rounded-2xl px-12 py-8 gradient-border">
+              <p className="font-display text-2xl sm:text-3xl font-bold mb-2">
+                O ApexBot transforma automação em <span className="gradient-text">operação real</span>.
+              </p>
+              <p className="text-muted-foreground text-lg">
+                Não é sobre conversar com IA. É sobre <span className="text-foreground font-semibold">executar, decidir e controlar</span>.
+              </p>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* FEATURES GRID */}
