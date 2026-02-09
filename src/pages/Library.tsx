@@ -18,7 +18,7 @@ const templates = [
     actions: ["Responder mensagens", "Triagem automática", "Escalar para humano", "Fechar tickets"],
     integrations: ["WhatsApp API", "Instagram API", "Webhook"],
     tier: "intermediate",
-    price: 200000,
+    price: 189900,
   },
   {
     icon: FileText,
@@ -28,7 +28,7 @@ const templates = [
     actions: ["Gerar posts", "Criar roteiros", "Escrever copy", "Agendar publicações"],
     integrations: ["Instagram API", "OpenAI", "Notion"],
     tier: "basic",
-    price: 50000,
+    price: 177900,
   },
   {
     icon: DollarSign,
@@ -38,7 +38,7 @@ const templates = [
     actions: ["Enviar lembretes", "Gerar boletos", "Enviar PIX", "Follow-up"],
     integrations: ["WhatsApp API", "Gateway de Pagamento", "Gmail"],
     tier: "intermediate",
-    price: 200000,
+    price: 197900,
   },
   {
     icon: Calendar,
@@ -48,7 +48,7 @@ const templates = [
     actions: ["Reservar horários", "Enviar lembretes", "Reagendar", "Confirmar presença"],
     integrations: ["Google Calendar", "WhatsApp API", "Gmail"],
     tier: "basic",
-    price: 50000,
+    price: 179900,
   },
   {
     icon: Receipt,
@@ -58,7 +58,7 @@ const templates = [
     actions: ["Gerar DARF", "Emitir NF", "Criar recibos", "Gerar PDFs"],
     integrations: ["SEFAZ", "Google Sheets", "APIs Customizadas"],
     tier: "advanced",
-    price: 800000,
+    price: 219900,
   },
   {
     icon: Star,
@@ -68,7 +68,7 @@ const templates = [
     actions: ["Monitorar avaliações", "Responder reviews", "Propor soluções"],
     integrations: ["Google Business", "Reclame Aqui API", "Slack"],
     tier: "intermediate",
-    price: 200000,
+    price: 187900,
   },
   {
     icon: ShoppingCart,
@@ -78,7 +78,7 @@ const templates = [
     actions: ["Tracking", "Pós-venda", "Status de pedido", "Notificações"],
     integrations: ["Shopify", "Mercado Livre API", "Correios API"],
     tier: "advanced",
-    price: 800000,
+    price: 229900,
   },
   {
     icon: Code,
@@ -88,17 +88,7 @@ const templates = [
     actions: ["Gerar código", "Code review", "Corrigir bugs", "Deploy automático"],
     integrations: ["GitHub API", "OpenAI", "Vercel", "Docker"],
     tier: "enterprise",
-    price: 2300000,
-  },
-  {
-    icon: Brain,
-    title: "Analista de Dados & BI",
-    desc: "Coleta dados, gera insights, cria dashboards e envia relatórios executivos.",
-    tags: ["Analytics", "BI", "Relatórios"],
-    actions: ["Coletar dados", "Análise preditiva", "Gerar dashboards"],
-    integrations: ["Google Analytics", "BigQuery", "Power BI", "Slack"],
-    tier: "enterprise",
-    price: 2300000,
+    price: 244700,
   },
   {
     icon: Shield,
@@ -108,7 +98,7 @@ const templates = [
     actions: ["Scan de vulnerabilidades", "Auditoria de acessos", "Relatório LGPD"],
     integrations: ["AWS Security", "Azure AD", "Slack"],
     tier: "enterprise",
-    price: 2300000,
+    price: 239900,
   },
   {
     icon: Mic,
@@ -118,7 +108,7 @@ const templates = [
     actions: ["Transcrever áudio", "Gerar atas", "Extrair tarefas"],
     integrations: ["Zoom API", "Google Meet", "Notion", "Slack"],
     tier: "advanced",
-    price: 800000,
+    price: 209900,
   },
 ];
 
