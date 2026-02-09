@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  MessageSquare, TrendingUp, FileText, DollarSign,
+  MessageSquare, FileText, DollarSign,
   Calendar, Receipt, Star, ShoppingCart, ArrowRight,
   Code, Brain, Shield, Mic
 } from "lucide-react";
@@ -16,14 +16,8 @@ const templates = [
     tags: ["WhatsApp", "Instagram", "Site"],
     actions: ["Responder mensagens", "Triagem automática", "Escalar para humano", "Fechar tickets"],
     integrations: ["WhatsApp API", "Instagram API", "Webhook"],
-  },
-  {
-    icon: TrendingUp,
-    title: "Prospecção & Vendas",
-    desc: "Busca leads qualificados, envia mensagens personalizadas, cria cadências e agenda reuniões automaticamente.",
-    tags: ["CRM", "E-mail", "LinkedIn"],
-    actions: ["Buscar leads", "Enviar e-mails", "Criar cadência", "Agendar reuniões", "Atualizar CRM"],
-    integrations: ["HubSpot", "Pipedrive", "Gmail"],
+    tier: "intermediate",
+    price: 200000,
   },
   {
     icon: FileText,
@@ -32,6 +26,8 @@ const templates = [
     tags: ["Instagram", "LinkedIn", "TikTok"],
     actions: ["Gerar posts", "Criar roteiros", "Escrever copy", "Agendar publicações"],
     integrations: ["Instagram API", "OpenAI", "Notion"],
+    tier: "basic",
+    price: 50000,
   },
   {
     icon: DollarSign,
@@ -40,6 +36,8 @@ const templates = [
     tags: ["PIX", "Boleto", "WhatsApp"],
     actions: ["Enviar lembretes", "Gerar boletos", "Enviar PIX", "Follow-up", "Relatórios"],
     integrations: ["WhatsApp API", "Gateway de Pagamento", "Gmail"],
+    tier: "intermediate",
+    price: 200000,
   },
   {
     icon: Calendar,
@@ -48,6 +46,8 @@ const templates = [
     tags: ["Agenda", "WhatsApp", "E-mail"],
     actions: ["Reservar horários", "Enviar lembretes", "Reagendar", "Confirmar presença"],
     integrations: ["Google Calendar", "WhatsApp API", "Gmail"],
+    tier: "basic",
+    price: 50000,
   },
   {
     icon: Receipt,
@@ -56,6 +56,8 @@ const templates = [
     tags: ["DARF", "NF-e", "PDF"],
     actions: ["Gerar DARF", "Emitir NF", "Criar recibos", "Gerar PDFs", "Relatórios"],
     integrations: ["SEFAZ", "Google Sheets", "APIs Customizadas"],
+    tier: "advanced",
+    price: 800000,
   },
   {
     icon: Star,
@@ -64,6 +66,8 @@ const templates = [
     tags: ["Google", "Reclame Aqui"],
     actions: ["Monitorar avaliações", "Responder reviews", "Propor soluções", "Alertar equipe"],
     integrations: ["Google Business", "Reclame Aqui API", "Slack"],
+    tier: "intermediate",
+    price: 200000,
   },
   {
     icon: ShoppingCart,
@@ -72,6 +76,8 @@ const templates = [
     tags: ["Shopify", "Mercado Livre", "Correios"],
     actions: ["Tracking", "Pós-venda", "Status de pedido", "Notificações"],
     integrations: ["Shopify", "Mercado Livre API", "Correios API"],
+    tier: "advanced",
+    price: 800000,
   },
   {
     icon: Code,
@@ -80,6 +86,8 @@ const templates = [
     tags: ["GitHub", "CI/CD", "IA"],
     actions: ["Gerar código", "Code review", "Corrigir bugs", "Criar PRs", "Deploy automático"],
     integrations: ["GitHub API", "OpenAI", "Vercel", "Docker"],
+    tier: "enterprise",
+    price: 2300000,
   },
   {
     icon: Brain,
@@ -88,6 +96,8 @@ const templates = [
     tags: ["Analytics", "BI", "Relatórios"],
     actions: ["Coletar dados", "Análise preditiva", "Gerar dashboards", "Alertas inteligentes"],
     integrations: ["Google Analytics", "BigQuery", "Power BI", "Slack"],
+    tier: "enterprise",
+    price: 2300000,
   },
   {
     icon: Shield,
@@ -96,6 +106,8 @@ const templates = [
     tags: ["LGPD", "Auditoria", "Segurança"],
     actions: ["Scan de vulnerabilidades", "Auditoria de acessos", "Relatório LGPD", "Alertas críticos"],
     integrations: ["AWS Security", "Azure AD", "Slack", "Email"],
+    tier: "enterprise",
+    price: 2300000,
   },
   {
     icon: Mic,
@@ -104,8 +116,24 @@ const templates = [
     tags: ["Zoom", "Meet", "Teams"],
     actions: ["Transcrever áudio", "Gerar atas", "Extrair tarefas", "Enviar resumos"],
     integrations: ["Zoom API", "Google Meet", "Notion", "Slack"],
+    tier: "advanced",
+    price: 800000,
   },
 ];
+
+const tierLabels: Record<string, string> = {
+  basic: "Básico",
+  intermediate: "Intermediário",
+  advanced: "Avançado",
+  enterprise: "Enterprise",
+};
+
+const tierColors: Record<string, string> = {
+  basic: "bg-muted text-muted-foreground",
+  intermediate: "bg-blue-500/20 text-blue-400",
+  advanced: "bg-purple-500/20 text-purple-400",
+  enterprise: "bg-primary/20 text-primary",
+};
 
 const LibraryPage = () => {
   return (
@@ -124,23 +152,34 @@ const LibraryPage = () => {
             transition={{ delay: i * 0.05 }}
             className="bg-background/40 backdrop-blur-xl border border-white/[0.08] rounded-xl p-6 hover:border-primary/30 transition-all duration-300 group"
           >
-            <div className="flex items-start gap-4 mb-4">
-              <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                <t.icon className="h-5 w-5 text-primary" />
+            <div className="flex items-start justify-between gap-4 mb-4">
+              <div className="flex items-start gap-4">
+                <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
+                  <t.icon className="h-5 w-5 text-primary" />
+                </div>
+                <div className="flex-1">
+                  <h3 className="font-display font-semibold text-lg mb-1">{t.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
+                </div>
               </div>
-              <div className="flex-1">
-                <h3 className="font-display font-semibold text-lg mb-1">{t.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
-              </div>
+              <Badge variant="secondary" className={`${tierColors[t.tier]} shrink-0`}>
+                {tierLabels[t.tier]}
+              </Badge>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 mb-4">
-              {t.tags.map((tag) => (
-                <Badge key={tag} variant="secondary" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex flex-wrap gap-1.5">
+                {t.tags.map((tag) => (
+                  <Badge key={tag} variant="outline" className="text-xs">
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+              <p className="font-display font-bold text-lg text-primary">
+                R$ {(t.price / 100).toLocaleString("pt-BR")}<span className="text-xs font-normal text-muted-foreground">/mês</span>
+              </p>
             </div>
+
 
             <div className="mb-4">
               <p className="text-xs text-muted-foreground mb-2 font-medium uppercase tracking-wider">Ações</p>
