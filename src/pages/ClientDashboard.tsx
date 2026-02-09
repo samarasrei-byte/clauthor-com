@@ -7,8 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import {
-  Bot, Plus, Zap, Clock, DollarSign, CheckCircle,
-  Activity, BarChart3, CreditCard, Settings, ArrowRight
+  Bot, Plus, Zap, Clock, CreditCard, CheckCircle,
+  Activity, ArrowRight, TrendingUp, Sparkles
 } from "lucide-react";
 
 const tierLabels: Record<string, string> = {
@@ -93,26 +93,29 @@ const ClientDashboard = () => {
   const monthlySpend = subscriptions.reduce((acc, s) => acc + (s.monthly_price || 0), 0);
 
   const stats = [
-    { icon: Bot, label: "Agentes Ativos", value: activeAgents.toString(), color: "text-primary" },
-    { icon: Zap, label: "Execuções Totais", value: totalExecutions.toLocaleString("pt-BR"), color: "text-primary" },
-    { icon: CreditCard, label: "Gasto Mensal", value: `R$ ${(monthlySpend / 100).toLocaleString("pt-BR")}`, color: "text-primary" },
-    { icon: CheckCircle, label: "Taxa de Sucesso", value: "98.5%", color: "text-primary" },
+    { icon: Bot, label: "Agentes Ativos", value: activeAgents.toString(), trend: "+2 este mês" },
+    { icon: Zap, label: "Execuções Totais", value: totalExecutions.toLocaleString("pt-BR"), trend: "+12%" },
+    { icon: CreditCard, label: "Gasto Mensal", value: `R$ ${(monthlySpend / 100).toLocaleString("pt-BR")}`, trend: "Fatura atual" },
+    { icon: CheckCircle, label: "Taxa de Sucesso", value: "98.5%", trend: "+0.5%" },
   ];
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+      {/* Header */}
       <motion.div 
         initial={{ opacity: 0, y: 10 }} 
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
+        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
       >
         <div>
           <h1 className="font-display text-3xl font-bold mb-1">Meu Painel</h1>
           <p className="text-muted-foreground">Gerencie seus funcionários digitais</p>
         </div>
         <Link to="/create-agent">
-          <Button className="neon-glow">
-            <Plus className="h-4 w-4 mr-2" /> Novo Agente
+          <Button className="glow group">
+            <Plus className="h-4 w-4 mr-2" /> 
+            Novo Agente
+            <ArrowRight className="h-4 w-4 ml-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all" />
           </Button>
         </Link>
       </motion.div>
@@ -126,15 +129,16 @@ const ClientDashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
           >
-            <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08] hover:border-primary/30 transition-all">
-              <CardContent className="p-5">
-                <div className="flex items-center justify-between mb-3">
-                  <s.icon className={`h-5 w-5 ${s.color}`} />
+            <div className="glass-card rounded-2xl p-5 glass-hover">
+              <div className="flex items-center justify-between mb-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <s.icon className="h-5 w-5 text-primary" />
                 </div>
-                <p className="font-display text-2xl font-bold">{s.value}</p>
-                <p className="text-xs text-muted-foreground mt-1">{s.label}</p>
-              </CardContent>
-            </Card>
+                <span className="text-xs text-primary font-medium">{s.trend}</span>
+              </div>
+              <p className="font-display text-2xl font-bold mb-1">{s.value}</p>
+              <p className="text-xs text-muted-foreground">{s.label}</p>
+            </div>
           </motion.div>
         ))}
       </div>
@@ -147,64 +151,76 @@ const ClientDashboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-            <CardHeader className="pb-3 flex flex-row items-center justify-between">
-              <CardTitle className="font-display text-lg flex items-center gap-2">
-                <Bot className="h-5 w-5 text-primary" />
-                Meus Agentes
-              </CardTitle>
+          <div className="glass-card rounded-2xl overflow-hidden">
+            <div className="p-6 border-b border-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Bot className="h-4 w-4 text-primary" />
+                </div>
+                <h2 className="font-display font-semibold">Meus Agentes</h2>
+              </div>
               <Link to="/agents">
-                <Button variant="ghost" size="sm">
+                <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
                   Ver todos <ArrowRight className="h-4 w-4 ml-1" />
                 </Button>
               </Link>
-            </CardHeader>
-            <CardContent className="space-y-3">
+            </div>
+            <div className="p-4">
               {loadingAgents ? (
-                <p className="text-sm text-muted-foreground">Carregando...</p>
+                <div className="py-8 text-center text-muted-foreground">
+                  Carregando...
+                </div>
               ) : agents.length === 0 ? (
-                <div className="text-center py-8">
-                  <Bot className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
-                  <p className="text-muted-foreground mb-4">Você ainda não tem agentes</p>
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                    <Sparkles className="h-8 w-8 text-primary" />
+                  </div>
+                  <h3 className="font-display font-semibold mb-2">Crie seu primeiro agente</h3>
+                  <p className="text-sm text-muted-foreground mb-6">
+                    Explore a biblioteca e ative um funcionário digital
+                  </p>
                   <Link to="/library">
-                    <Button size="sm" className="neon-glow">
+                    <Button className="glow">
                       Explorar Templates
                     </Button>
                   </Link>
                 </div>
               ) : (
-                agents.slice(0, 5).map((agent) => (
-                  <div
-                    key={agent.id}
-                    className="flex items-center justify-between p-3 rounded-lg bg-accent/30 hover:bg-accent/50 transition-colors"
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
-                      <div>
-                        <p className="text-sm font-medium">{agent.name}</p>
-                        <div className="flex gap-2 mt-1">
-                          <Badge variant="secondary" className={tierColors[agent.tier]}>
-                            {tierLabels[agent.tier]}
-                          </Badge>
-                          <Badge variant="secondary" className={statusColors[agent.status]}>
-                            {statusLabels[agent.status]}
-                          </Badge>
+                <div className="space-y-2">
+                  {agents.slice(0, 5).map((agent) => (
+                    <div
+                      key={agent.id}
+                      className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                        <div>
+                          <p className="font-medium text-sm">{agent.name}</p>
+                          <div className="flex gap-2 mt-1">
+                            <Badge variant="secondary" className={`text-[10px] ${tierColors[agent.tier]}`}>
+                              {tierLabels[agent.tier]}
+                            </Badge>
+                            <Badge variant="secondary" className={`text-[10px] ${statusColors[agent.status]}`}>
+                              {statusLabels[agent.status]}
+                            </Badge>
+                          </div>
                         </div>
                       </div>
+                      <div className="text-right">
+                        <p className="font-medium text-sm">
+                          R$ {(agent.monthly_price / 100).toLocaleString("pt-BR")}
+                          <span className="text-muted-foreground text-xs">/mês</span>
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          {agent.total_executions} exec
+                        </p>
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <p className="text-sm font-medium">
-                        R$ {(agent.monthly_price / 100).toLocaleString("pt-BR")}/mês
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {agent.total_executions} execuções
-                      </p>
-                    </div>
-                  </div>
-                ))
+                  ))}
+                </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </motion.div>
 
         {/* Recent Activity */}
@@ -213,38 +229,42 @@ const ClientDashboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-            <CardHeader className="pb-3">
-              <CardTitle className="font-display text-lg flex items-center gap-2">
-                <Activity className="h-5 w-5 text-primary" />
-                Atividade Recente
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
+          <div className="glass-card rounded-2xl overflow-hidden h-full">
+            <div className="p-6 border-b border-white/5">
+              <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Activity className="h-4 w-4 text-primary" />
+                </div>
+                <h2 className="font-display font-semibold">Atividade Recente</h2>
+              </div>
+            </div>
+            <div className="p-4">
               {recentLogs.length === 0 ? (
-                <p className="text-sm text-muted-foreground text-center py-4">
+                <p className="text-sm text-muted-foreground text-center py-8">
                   Nenhuma atividade ainda
                 </p>
               ) : (
-                recentLogs.map((log: any) => (
-                  <div key={log.id} className="flex gap-3">
-                    <span className="text-xs text-muted-foreground whitespace-nowrap mt-0.5">
-                      {new Date(log.created_at).toLocaleTimeString("pt-BR", { 
-                        hour: "2-digit", 
-                        minute: "2-digit" 
-                      })}
-                    </span>
-                    <div>
-                      <p className="text-xs font-medium">{log.agent?.name || "Agente"}</p>
-                      <p className={`text-xs ${log.status === "error" ? "text-destructive" : "text-muted-foreground"}`}>
-                        {log.action}
-                      </p>
+                <div className="space-y-4">
+                  {recentLogs.map((log: any) => (
+                    <div key={log.id} className="flex gap-3">
+                      <span className="text-xs text-muted-foreground whitespace-nowrap mt-0.5 w-12">
+                        {new Date(log.created_at).toLocaleTimeString("pt-BR", { 
+                          hour: "2-digit", 
+                          minute: "2-digit" 
+                        })}
+                      </span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-xs font-medium truncate">{log.agent?.name || "Agente"}</p>
+                        <p className={`text-xs truncate ${log.status === "error" ? "text-destructive" : "text-muted-foreground"}`}>
+                          {log.action}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                ))
+                  ))}
+                </div>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </motion.div>
       </div>
     </div>
