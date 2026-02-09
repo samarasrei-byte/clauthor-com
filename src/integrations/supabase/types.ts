@@ -14,16 +14,291 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      agents: {
+        Row: {
+          actions: Json | null
+          channels: Json | null
+          created_at: string
+          description: string | null
+          id: string
+          instructions: string | null
+          integrations: Json | null
+          knowledge_base: Json | null
+          monthly_price: number
+          name: string
+          objective: string | null
+          status: Database["public"]["Enums"]["agent_status"]
+          tier: Database["public"]["Enums"]["agent_tier"]
+          total_executions: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actions?: Json | null
+          channels?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          instructions?: string | null
+          integrations?: Json | null
+          knowledge_base?: Json | null
+          monthly_price?: number
+          name: string
+          objective?: string | null
+          status?: Database["public"]["Enums"]["agent_status"]
+          tier?: Database["public"]["Enums"]["agent_tier"]
+          total_executions?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actions?: Json | null
+          channels?: Json | null
+          created_at?: string
+          description?: string | null
+          id?: string
+          instructions?: string | null
+          integrations?: Json | null
+          knowledge_base?: Json | null
+          monthly_price?: number
+          name?: string
+          objective?: string | null
+          status?: Database["public"]["Enums"]["agent_status"]
+          tier?: Database["public"]["Enums"]["agent_tier"]
+          total_executions?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      execution_logs: {
+        Row: {
+          action: string
+          agent_id: string
+          created_at: string
+          details: Json | null
+          execution_time_ms: number | null
+          id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          agent_id: string
+          created_at?: string
+          details?: Json | null
+          execution_time_ms?: number | null
+          id?: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          agent_id?: string
+          created_at?: string
+          details?: Json | null
+          execution_time_ms?: number | null
+          id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "execution_logs_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketplace_agents: {
+        Row: {
+          agent_id: string
+          created_at: string
+          id: string
+          is_approved: boolean | null
+          is_featured: boolean | null
+          long_description: string | null
+          monthly_price: number
+          publisher_id: string
+          rating: number | null
+          short_description: string | null
+          tags: string[] | null
+          tier: Database["public"]["Enums"]["agent_tier"]
+          title: string
+          total_reviews: number | null
+          total_subscribers: number | null
+          updated_at: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          long_description?: string | null
+          monthly_price: number
+          publisher_id: string
+          rating?: number | null
+          short_description?: string | null
+          tags?: string[] | null
+          tier: Database["public"]["Enums"]["agent_tier"]
+          title: string
+          total_reviews?: number | null
+          total_subscribers?: number | null
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          id?: string
+          is_approved?: boolean | null
+          is_featured?: boolean | null
+          long_description?: string | null
+          monthly_price?: number
+          publisher_id?: string
+          rating?: number | null
+          short_description?: string | null
+          tags?: string[] | null
+          tier?: Database["public"]["Enums"]["agent_tier"]
+          title?: string
+          total_reviews?: number | null
+          total_subscribers?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketplace_agents_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          company_name: string | null
+          created_at: string
+          full_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          company_name?: string | null
+          created_at?: string
+          full_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      subscriptions: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          current_period_end: string | null
+          current_period_start: string | null
+          id: string
+          marketplace_agent_id: string | null
+          monthly_price: number
+          status: string
+          stripe_subscription_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          marketplace_agent_id?: string | null
+          monthly_price: number
+          status?: string
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          current_period_end?: string | null
+          current_period_start?: string | null
+          id?: string
+          marketplace_agent_id?: string | null
+          monthly_price?: number
+          status?: string
+          stripe_subscription_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "subscriptions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "subscriptions_marketplace_agent_id_fkey"
+            columns: ["marketplace_agent_id"]
+            isOneToOne: false
+            referencedRelation: "marketplace_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      agent_status: "draft" | "active" | "paused" | "archived"
+      agent_tier: "basic" | "intermediate" | "advanced" | "enterprise"
+      app_role: "admin" | "customer"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +425,10 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      agent_status: ["draft", "active", "paused", "archived"],
+      agent_tier: ["basic", "intermediate", "advanced", "enterprise"],
+      app_role: ["admin", "customer"],
+    },
   },
 } as const
