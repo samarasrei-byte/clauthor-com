@@ -1,0 +1,148 @@
+{
+  "nav": {
+    "home": "Home",
+    "library": "Library",
+    "pricing": "Pricing",
+    "dashboard": "Dashboard",
+    "login": "Login",
+    "logout": "Logout",
+    "admin": "Admin"
+  },
+  "hero": {
+    "badge": "Autonomous Agents Platform",
+    "title1": "Digital Employees.",
+    "title2": "Autonomous Agents",
+    "title3": "for your Business.",
+    "subtitle": "Create, train and operate intelligent agents that execute complete processes: customer service, sales, finance, tax and much more.",
+    "subtitle_highlight": "Your 24/7 operation.",
+    "cta_primary": "Start now, it's free",
+    "cta_secondary": "Explore agents"
+  },
+  "spotlight": {
+    "message1": "We didn't come to replace people.",
+    "message2": "We came to work alongside your best talents.",
+    "agent_label": "Meet the most advanced agent",
+    "agent_tagline": "Autonomous intelligence. Relentless execution.",
+    "agent_subtitle": "The fire that moves your operation."
+  },
+  "stats": {
+    "agents": "Active Agents",
+    "actions": "Actions/month",
+    "uptime": "Uptime",
+    "companies": "Companies"
+  },
+  "features": {
+    "badge": "Why AgentesBot?",
+    "title1": "You're not hiring software.",
+    "title2": "You're hiring digital employees.",
+    "autonomous": "Autonomous Execution",
+    "autonomous_desc": "Complete processes without human intervention",
+    "security": "Enterprise Security",
+    "security_desc": "Complete audit and LGPD compliance",
+    "uptime": "24/7 Operational",
+    "uptime_desc": "Zero vacations, zero absences, zero errors",
+    "analytics": "Real-Time Analytics",
+    "analytics_desc": "Economy and performance metrics"
+  },
+  "library": {
+    "badge": "Template Library",
+    "title": "Agents",
+    "title_highlight": "ready to use",
+    "subtitle": "Choose, customize and activate in minutes.",
+    "price_range": "From $350 to $480/month depending on complexity.",
+    "view_all": "View all agents",
+    "use_template": "Use this template",
+    "popular": "Popular",
+    "per_month": "/mo",
+    "actions_included": "Actions included",
+    "available_templates": "templates available",
+    "filter_all": "All"
+  },
+  "cta": {
+    "title": "Ready to scale?",
+    "subtitle": "Start for free. No credit card required. Set up in 5 minutes.",
+    "button": "Create my account"
+  },
+  "footer": {
+    "terms": "Terms",
+    "privacy": "Privacy",
+    "contact": "Contact"
+  },
+  "auth": {
+    "welcome": "Welcome back",
+    "create_account": "Create your account",
+    "login_subtitle": "Sign in to manage your agents",
+    "register_subtitle": "Start using autonomous agents today",
+    "email": "Email",
+    "password": "Password",
+    "full_name": "Full name",
+    "login": "Sign in",
+    "register": "Create account",
+    "no_account": "Don't have an account?",
+    "has_account": "Already have an account?",
+    "register_link": "Sign up",
+    "login_link": "Sign in",
+    "check_email": "Check your email",
+    "confirm_email": "We sent a confirmation link to your email."
+  },
+  "dashboard": {
+    "title": "My Dashboard",
+    "subtitle": "Manage your digital employees",
+    "new_agent": "New Agent",
+    "my_agents": "My Agents",
+    "view_all": "View all",
+    "recent_activity": "Recent Activity",
+    "no_activity": "No activity yet",
+    "create_first": "Create your first agent",
+    "explore_msg": "Explore the library and activate a digital employee",
+    "explore_templates": "Explore Templates",
+    "active_agents": "Active Agents",
+    "total_executions": "Total Executions",
+    "success_rate": "Success Rate",
+    "loading": "Loading..."
+  },
+  "credits": {
+    "title": "Credits",
+    "used": "Used",
+    "total": "Total",
+    "low_warning": "Low credits! Consider upgrading.",
+    "exhausted": "Credits exhausted! Upgrade your plan."
+  },
+  "agents": {
+    "customer_service": "Omnichannel Support",
+    "customer_service_desc": "WhatsApp, Instagram and Website. 24/7 support.",
+    "content": "Content & Social",
+    "content_desc": "Posts, scripts and automatic scheduling.",
+    "billing": "Billing & Finance",
+    "billing_desc": "PIX, invoices and automatic follow-up.",
+    "calendar": "Calendar & Bookings",
+    "calendar_desc": "Bookings, reminders and confirmations.",
+    "fiscal": "Tax & Documents",
+    "fiscal_desc": "Invoices, tax reports and smart documents.",
+    "reputation": "Online Reputation",
+    "reputation_desc": "Google and review sites automated.",
+    "developer": "Autonomous Developer",
+    "developer_desc": "Code review, PRs and automatic deploy.",
+    "security": "Security & Compliance",
+    "security_desc": "Compliance, audit and vulnerabilities.",
+    "sdr": "SDR & Prospecting",
+    "sdr_desc": "Lead qualification and call scheduling.",
+    "email": "Email Marketing",
+    "email_desc": "Campaigns, sequences and automatic follow-ups.",
+    "hr": "HR & Recruitment",
+    "hr_desc": "CV screening, scheduling and onboarding.",
+    "research": "Research & Analysis",
+    "research_desc": "Data collection, reports and insights."
+  },
+  "tiers": {
+    "basic": "Basic",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "enterprise": "Enterprise"
+  },
+  "payment": {
+    "pay_crypto": "Pay with Crypto",
+    "pay_card": "Pay with Card",
+    "crypto_desc": "Bitcoin, Ethereum, USDC and more"
+  }
+}

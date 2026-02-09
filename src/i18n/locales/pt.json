@@ -1,0 +1,148 @@
+{
+  "nav": {
+    "home": "Início",
+    "library": "Biblioteca",
+    "pricing": "Preços",
+    "dashboard": "Painel",
+    "login": "Entrar",
+    "logout": "Sair",
+    "admin": "Admin"
+  },
+  "hero": {
+    "badge": "Plataforma de Agentes Autônomos",
+    "title1": "Funcionários Digitais.",
+    "title2": "Agentes Autônomos",
+    "title3": "para sua Empresa.",
+    "subtitle": "Crie, treine e opere agentes inteligentes que executam processos completos: atendimento, vendas, financeiro, fiscal e muito mais.",
+    "subtitle_highlight": "Sua operação 24/7.",
+    "cta_primary": "Começar agora, é grátis",
+    "cta_secondary": "Explorar agentes"
+  },
+  "spotlight": {
+    "message1": "Não viemos substituir pessoas.",
+    "message2": "Viemos trabalhar ao lado dos seus melhores talentos.",
+    "agent_label": "Conheça o agente mais avançado",
+    "agent_tagline": "Inteligência autônoma. Execução implacável.",
+    "agent_subtitle": "O fogo que move sua operação."
+  },
+  "stats": {
+    "agents": "Agentes Ativos",
+    "actions": "Ações/mês",
+    "uptime": "Uptime",
+    "companies": "Empresas"
+  },
+  "features": {
+    "badge": "Por que AgentesBot?",
+    "title1": "Você não contrata software.",
+    "title2": "Você contrata funcionários digitais.",
+    "autonomous": "Execução Autônoma",
+    "autonomous_desc": "Processos inteiros sem intervenção humana",
+    "security": "Segurança Enterprise",
+    "security_desc": "Auditoria completa e LGPD compliance",
+    "uptime": "24/7 Operacional",
+    "uptime_desc": "Zero férias, zero faltas, zero erros",
+    "analytics": "Analytics Real-Time",
+    "analytics_desc": "Métricas de economia e performance"
+  },
+  "library": {
+    "badge": "Biblioteca de Templates",
+    "title": "Agentes",
+    "title_highlight": "prontos para usar",
+    "subtitle": "Escolha, personalize e ative em minutos.",
+    "price_range": "De R$ 1.779 a R$ 2.447/mês dependendo da complexidade.",
+    "view_all": "Ver todos os agentes",
+    "use_template": "Usar este template",
+    "popular": "Popular",
+    "per_month": "/mês",
+    "actions_included": "Ações incluídas",
+    "available_templates": "templates disponíveis",
+    "filter_all": "Todos"
+  },
+  "cta": {
+    "title": "Pronto para escalar?",
+    "subtitle": "Comece gratuitamente. Sem cartão de crédito. Configure em 5 minutos.",
+    "button": "Criar minha conta"
+  },
+  "footer": {
+    "terms": "Termos",
+    "privacy": "Privacidade",
+    "contact": "Contato"
+  },
+  "auth": {
+    "welcome": "Bem-vindo de volta",
+    "create_account": "Crie sua conta",
+    "login_subtitle": "Entre para gerenciar seus agentes",
+    "register_subtitle": "Comece a usar agentes autônomos hoje",
+    "email": "Email",
+    "password": "Senha",
+    "full_name": "Nome completo",
+    "login": "Entrar",
+    "register": "Criar conta",
+    "no_account": "Não tem conta?",
+    "has_account": "Já tem conta?",
+    "register_link": "Cadastre-se",
+    "login_link": "Entrar",
+    "check_email": "Verifique seu email",
+    "confirm_email": "Enviamos um link de confirmação para seu email."
+  },
+  "dashboard": {
+    "title": "Meu Painel",
+    "subtitle": "Gerencie seus funcionários digitais",
+    "new_agent": "Novo Agente",
+    "my_agents": "Meus Agentes",
+    "view_all": "Ver todos",
+    "recent_activity": "Atividade Recente",
+    "no_activity": "Nenhuma atividade ainda",
+    "create_first": "Crie seu primeiro agente",
+    "explore_msg": "Explore a biblioteca e ative um funcionário digital",
+    "explore_templates": "Explorar Templates",
+    "active_agents": "Agentes Ativos",
+    "total_executions": "Execuções Totais",
+    "success_rate": "Taxa de Sucesso",
+    "loading": "Carregando..."
+  },
+  "credits": {
+    "title": "Créditos",
+    "used": "Usado",
+    "total": "Total",
+    "low_warning": "Créditos baixos! Considere fazer upgrade.",
+    "exhausted": "Créditos esgotados! Faça upgrade do seu plano."
+  },
+  "agents": {
+    "customer_service": "Atendimento Omnichannel",
+    "customer_service_desc": "WhatsApp, Instagram e Site. Atendimento 24/7.",
+    "content": "Conteúdo & Social",
+    "content_desc": "Posts, roteiros e agendamento automático.",
+    "billing": "Cobrança & Financeiro",
+    "billing_desc": "PIX, boletos e follow-up automático.",
+    "calendar": "Agenda & Reservas",
+    "calendar_desc": "Reservas, lembretes e confirmações.",
+    "fiscal": "Fiscal & Documentos",
+    "fiscal_desc": "NFs, DARF e relatórios inteligentes.",
+    "reputation": "Reputação Online",
+    "reputation_desc": "Google e Reclame Aqui automatizados.",
+    "developer": "Desenvolvedor Autônomo",
+    "developer_desc": "Code review, PRs e deploy automático.",
+    "security": "Segurança & LGPD",
+    "security_desc": "Compliance, auditoria e vulnerabilidades.",
+    "sdr": "SDR & Prospecção",
+    "sdr_desc": "Qualificação de leads e agendamento de calls.",
+    "email": "Email Marketing",
+    "email_desc": "Campanhas, sequências e follow-ups automáticos.",
+    "hr": "RH & Recrutamento",
+    "hr_desc": "Triagem de CVs, agendamento e onboarding.",
+    "research": "Pesquisa & Análise",
+    "research_desc": "Coleta dados, gera relatórios e insights."
+  },
+  "tiers": {
+    "basic": "Básico",
+    "intermediate": "Intermediário",
+    "advanced": "Avançado",
+    "enterprise": "Enterprise"
+  },
+  "payment": {
+    "pay_crypto": "Pagar com Crypto",
+    "pay_card": "Pagar com Cartão",
+    "crypto_desc": "Bitcoin, Ethereum, USDC e mais"
+  }
+}

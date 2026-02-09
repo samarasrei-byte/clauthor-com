@@ -1,15 +1,18 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Bot, Menu, X, LogOut, Shield, ChevronDown } from "lucide-react";
+import { Bot, Menu, X, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "react-i18next";
+import { LanguageSelector } from "@/components/LanguageSelector";
 
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { user, isAdmin, signOut } = useAuth();
+  const { t } = useTranslation();
 
   const publicNavItems = [
     { label: "Biblioteca", href: "/library" },
@@ -78,6 +81,7 @@ const Navbar = () => {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
+            <LanguageSelector />
             {user ? (
               <>
                 <Button 
@@ -87,11 +91,11 @@ const Navbar = () => {
                   className="text-muted-foreground hover:text-foreground"
                 >
                   <LogOut className="h-4 w-4 mr-2" />
-                  Sair
+                  {t("nav.logout")}
                 </Button>
                 <Link to="/create-agent">
                   <Button size="sm" className="glow font-medium rounded-lg">
-                    Criar Agente
+                    {t("dashboard.new_agent")}
                   </Button>
                 </Link>
               </>
@@ -99,12 +103,12 @@ const Navbar = () => {
               <>
                 <Link to="/auth">
                   <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground font-medium">
-                    Entrar
+                    {t("nav.login")}
                   </Button>
                 </Link>
                 <Link to="/auth">
                   <Button size="sm" className="glow font-medium rounded-lg">
-                    Criar Conta
+                    {t("auth.create_account")}
                   </Button>
                 </Link>
               </>

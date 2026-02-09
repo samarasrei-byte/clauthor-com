@@ -1,0 +1,122 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "library": "Bibliothèque",
+    "pricing": "Tarifs",
+    "dashboard": "Tableau de bord",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "admin": "Admin"
+  },
+  "hero": {
+    "badge": "Plateforme d'Agents Autonomes",
+    "title1": "Employés Numériques.",
+    "title2": "Agents Autonomes",
+    "title3": "pour votre Entreprise.",
+    "subtitle": "Créez, formez et opérez des agents intelligents qui exécutent des processus complets: service client, ventes, finances, fiscalité et bien plus.",
+    "subtitle_highlight": "Votre opération 24/7.",
+    "cta_primary": "Commencer maintenant, c'est gratuit",
+    "cta_secondary": "Explorer les agents"
+  },
+  "spotlight": {
+    "message1": "Nous ne sommes pas venus remplacer les gens.",
+    "message2": "Nous sommes venus travailler aux côtés de vos meilleurs talents.",
+    "agent_label": "Découvrez l'agent le plus avancé",
+    "agent_tagline": "Intelligence autonome. Exécution implacable.",
+    "agent_subtitle": "Le feu qui fait avancer votre opération."
+  },
+  "stats": {
+    "agents": "Agents Actifs",
+    "actions": "Actions/mois",
+    "uptime": "Uptime",
+    "companies": "Entreprises"
+  },
+  "features": {
+    "badge": "Pourquoi AgentesBot?",
+    "title1": "Vous n'embauchez pas un logiciel.",
+    "title2": "Vous embauchez des employés numériques.",
+    "autonomous": "Exécution Autonome",
+    "autonomous_desc": "Processus complets sans intervention humaine",
+    "security": "Sécurité Enterprise",
+    "security_desc": "Audit complet et conformité RGPD",
+    "uptime": "24/7 Opérationnel",
+    "uptime_desc": "Zéro vacances, zéro absences, zéro erreurs",
+    "analytics": "Analytics Temps Réel",
+    "analytics_desc": "Métriques d'économie et de performance"
+  },
+  "library": {
+    "badge": "Bibliothèque de Templates",
+    "title": "Agents",
+    "title_highlight": "prêts à l'emploi",
+    "subtitle": "Choisissez, personnalisez et activez en quelques minutes.",
+    "price_range": "De 320€ à 450€/mois selon la complexité.",
+    "view_all": "Voir tous les agents",
+    "use_template": "Utiliser ce template",
+    "popular": "Populaire",
+    "per_month": "/mois",
+    "actions_included": "Actions incluses",
+    "available_templates": "templates disponibles",
+    "filter_all": "Tous"
+  },
+  "cta": {
+    "title": "Prêt à scaler?",
+    "subtitle": "Commencez gratuitement. Sans carte de crédit. Configurez en 5 minutes.",
+    "button": "Créer mon compte"
+  },
+  "footer": {
+    "terms": "Conditions",
+    "privacy": "Confidentialité",
+    "contact": "Contact"
+  },
+  "auth": {
+    "welcome": "Bon retour",
+    "create_account": "Créez votre compte",
+    "login_subtitle": "Connectez-vous pour gérer vos agents",
+    "register_subtitle": "Commencez à utiliser des agents autonomes aujourd'hui",
+    "email": "Email",
+    "password": "Mot de passe",
+    "full_name": "Nom complet",
+    "login": "Se connecter",
+    "register": "Créer un compte",
+    "no_account": "Pas de compte?",
+    "has_account": "Déjà un compte?",
+    "register_link": "S'inscrire",
+    "login_link": "Se connecter",
+    "check_email": "Vérifiez votre email",
+    "confirm_email": "Nous avons envoyé un lien de confirmation à votre email."
+  },
+  "dashboard": {
+    "title": "Mon Tableau de bord",
+    "subtitle": "Gérez vos employés numériques",
+    "new_agent": "Nouvel Agent",
+    "my_agents": "Mes Agents",
+    "view_all": "Voir tout",
+    "recent_activity": "Activité Récente",
+    "no_activity": "Aucune activité pour le moment",
+    "create_first": "Créez votre premier agent",
+    "explore_msg": "Explorez la bibliothèque et activez un employé numérique",
+    "explore_templates": "Explorer les Templates",
+    "active_agents": "Agents Actifs",
+    "total_executions": "Exécutions Totales",
+    "success_rate": "Taux de Réussite",
+    "loading": "Chargement..."
+  },
+  "credits": {
+    "title": "Crédits",
+    "used": "Utilisé",
+    "total": "Total",
+    "low_warning": "Crédits bas! Pensez à upgrader.",
+    "exhausted": "Crédits épuisés! Améliorez votre plan."
+  },
+  "tiers": {
+    "basic": "Basique",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé",
+    "enterprise": "Enterprise"
+  },
+  "payment": {
+    "pay_crypto": "Payer en Crypto",
+    "pay_card": "Payer par Carte",
+    "crypto_desc": "Bitcoin, Ethereum, USDC et plus"
+  }
+}

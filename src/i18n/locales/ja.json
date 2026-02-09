@@ -1,0 +1,77 @@
+{
+  "nav": {
+    "home": "ホーム",
+    "library": "ライブラリ",
+    "pricing": "料金",
+    "dashboard": "ダッシュボード",
+    "login": "ログイン",
+    "logout": "ログアウト",
+    "admin": "管理者"
+  },
+  "hero": {
+    "badge": "自律エージェントプラットフォーム",
+    "title1": "デジタル従業員。",
+    "title2": "自律エージェント",
+    "title3": "あなたのビジネスのために。",
+    "subtitle": "カスタマーサービス、営業、財務、税務など、完全なプロセスを実行するインテリジェントエージェントを作成、トレーニング、運用します。",
+    "subtitle_highlight": "24時間365日稼働。",
+    "cta_primary": "今すぐ無料で始める",
+    "cta_secondary": "エージェントを探す"
+  },
+  "spotlight": {
+    "message1": "私たちは人を置き換えるために来たのではありません。",
+    "message2": "最高の人材と一緒に働くために来ました。",
+    "agent_label": "最も先進的なエージェントをご紹介",
+    "agent_tagline": "自律的知性。容赦ない実行。",
+    "agent_subtitle": "あなたの業務を動かす炎。"
+  },
+  "stats": {
+    "agents": "アクティブエージェント",
+    "actions": "アクション/月",
+    "uptime": "稼働率",
+    "companies": "企業"
+  },
+  "features": {
+    "badge": "なぜAgentesBot?",
+    "title1": "ソフトウェアを雇うのではありません。",
+    "title2": "デジタル従業員を雇うのです。",
+    "autonomous": "自律実行",
+    "autonomous_desc": "人間の介入なしで完全なプロセス",
+    "security": "エンタープライズセキュリティ",
+    "security_desc": "完全な監査とコンプライアンス",
+    "uptime": "24時間365日稼働",
+    "uptime_desc": "休暇ゼロ、欠勤ゼロ、エラーゼロ",
+    "analytics": "リアルタイム分析",
+    "analytics_desc": "コスト削減とパフォーマンス指標"
+  },
+  "library": {
+    "badge": "テンプレートライブラリ",
+    "title": "エージェント",
+    "title_highlight": "すぐに使える",
+    "subtitle": "選択、カスタマイズ、数分でアクティベート。",
+    "price_range": "複雑さに応じて月額¥50,000〜¥70,000。",
+    "view_all": "すべてのエージェントを表示",
+    "use_template": "このテンプレートを使用",
+    "popular": "人気",
+    "per_month": "/月",
+    "actions_included": "含まれるアクション",
+    "available_templates": "利用可能なテンプレート",
+    "filter_all": "すべて"
+  },
+  "cta": {
+    "title": "スケールする準備は?",
+    "subtitle": "無料で開始。クレジットカード不要。5分で設定。",
+    "button": "アカウントを作成"
+  },
+  "tiers": {
+    "basic": "ベーシック",
+    "intermediate": "中級",
+    "advanced": "アドバンス",
+    "enterprise": "エンタープライズ"
+  },
+  "payment": {
+    "pay_crypto": "暗号通貨で支払う",
+    "pay_card": "カードで支払う",
+    "crypto_desc": "Bitcoin, Ethereum, USDCなど"
+  }
+}
