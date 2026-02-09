@@ -1,12 +1,12 @@
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { 
   Rocket, Zap, CheckCircle2, Users, Clock, 
-  ArrowRight, Sparkles, Shield, Bot, Star
+  ArrowRight, Sparkles, Shield, Bot, Star, Timer, TrendingUp
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -19,6 +19,13 @@ const waitlistSchema = z.object({
   company: z.string().trim().max(100, "Nome da empresa muito longo").optional(),
 });
 
+// Simulated recent signups for social proof
+const recentNames = [
+  "João S.", "Maria C.", "Pedro L.", "Ana B.", "Lucas M.",
+  "Carla R.", "Rafael D.", "Julia F.", "Bruno G.", "Fernanda T.",
+  "Gabriel H.", "Larissa P.", "Matheus S.", "Amanda K.", "Thiago N."
+];
+
 const Waitlist = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -30,6 +37,45 @@ const Waitlist = () => {
     company: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
+  
+  // Animated counter starting from ~4000
+  const [displayCount, setDisplayCount] = useState(4127);
+  const [recentSignup, setRecentSignup] = useState(recentNames[0]);
+  
+  // Countdown timer (expires in 24h from page load)
+  const [timeLeft, setTimeLeft] = useState({
+    hours: 23,
+    minutes: 59,
+    seconds: 59
+  });
+
+  // Animated counter effect - increment randomly
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (Math.random() > 0.7) {
+        setDisplayCount(prev => prev + 1);
+        setRecentSignup(recentNames[Math.floor(Math.random() * recentNames.length)]);
+      }
+    }, 8000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Countdown timer
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.seconds > 0) {
+          return { ...prev, seconds: prev.seconds - 1 };
+        } else if (prev.minutes > 0) {
+          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
+        } else if (prev.hours > 0) {
+          return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
+        }
+        return prev;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   const formatWhatsApp = (value: string) => {
     const numbers = value.replace(/\D/g, "");
@@ -160,12 +206,27 @@ const Waitlist = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.6 }}
         >
+          {/* Urgency timer badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="mb-6"
+          >
+            <Badge 
+              variant="outline" 
+              className="border-red-500/40 bg-red-500/10 text-red-400 px-4 py-2 gap-2 animate-pulse"
+            >
+              <Timer className="h-4 w-4" />
+              Oferta expira em {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+            </Badge>
+          </motion.div>
+
           <Badge 
             variant="outline" 
-            className="mb-6 border-primary/40 bg-primary/10 text-primary px-4 py-2 gap-2"
+            className="mb-4 border-primary/40 bg-primary/10 text-primary px-4 py-2 gap-2"
           >
-            <Rocket className="h-4 w-4" />
-            Lançamento esta semana
+            <TrendingUp className="h-4 w-4" />
+            +{displayCount.toLocaleString('pt-BR')} pessoas já entraram
           </Badge>
 
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-[1.1]">
@@ -202,23 +263,57 @@ const Waitlist = () => {
             ))}
           </div>
 
-          {/* Social proof */}
+          {/* Social proof with animated counter */}
           <div className="flex items-center gap-4">
             <div className="flex -space-x-3">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <div
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <motion.div
                   key={i}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.5 + i * 0.1 }}
                   className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/40 to-purple-500/40 border-2 border-background flex items-center justify-center"
                 >
                   <span className="text-xs font-bold">{String.fromCharCode(64 + i)}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
             <div className="text-sm">
-              <span className="font-bold text-primary">+847</span>
+              <motion.span 
+                key={displayCount}
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="font-bold text-primary text-lg"
+              >
+                {displayCount.toLocaleString('pt-BR')}+
+              </motion.span>
               <span className="text-muted-foreground"> pessoas na fila</span>
             </div>
           </div>
+
+          {/* Live activity indicator */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+            className="mt-6 flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/20"
+          >
+            <div className="relative">
+              <div className="w-3 h-3 bg-green-500 rounded-full" />
+              <div className="absolute inset-0 w-3 h-3 bg-green-500 rounded-full animate-ping" />
+            </div>
+            <AnimatePresence mode="wait">
+              <motion.span
+                key={recentSignup}
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="text-sm text-muted-foreground"
+              >
+                <span className="font-medium text-foreground">{recentSignup}</span> acabou de entrar na fila
+              </motion.span>
+            </AnimatePresence>
+          </motion.div>
         </motion.div>
 
         {/* Right side - Form */}
