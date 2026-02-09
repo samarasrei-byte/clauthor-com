@@ -13,6 +13,7 @@ import Agents from "./pages/Agents";
 import Library from "./pages/Library";
 import Pricing from "./pages/Pricing";
 import HowItWorks from "./pages/HowItWorks";
+import Waitlist from "./pages/Waitlist";
 import Community from "./pages/Community";
 import CreateAgent from "./pages/CreateAgent";
 import Integrations from "./pages/Integrations";
@@ -35,6 +36,7 @@ const App = () => (
               <Route path="/library" element={<Library />} />
               <Route path="/pricing" element={<Pricing />} />
               <Route path="/how-it-works" element={<HowItWorks />} />
+              <Route path="/waitlist" element={<Waitlist />} />
               <Route path="/community" element={<Community />} />
               <Route
                 path="/dashboard"
