@@ -11,6 +11,8 @@ import ClientDashboard from "./pages/ClientDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Agents from "./pages/Agents";
 import Library from "./pages/Library";
+import Pricing from "./pages/Pricing";
+import HowItWorks from "./pages/HowItWorks";
 import Community from "./pages/Community";
 import CreateAgent from "./pages/CreateAgent";
 import Integrations from "./pages/Integrations";
@@ -31,6 +33,8 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/library" element={<Library />} />
+              <Route path="/pricing" element={<Pricing />} />
+              <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/community" element={<Community />} />
               <Route
                 path="/dashboard"
