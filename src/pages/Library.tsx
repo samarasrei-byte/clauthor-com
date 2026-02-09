@@ -146,10 +146,10 @@ const LibraryPage = () => {
         <div>
           <Badge variant="outline" className="mb-4 border-primary/20 text-primary">
             <Bot className="h-3 w-3 mr-1" />
-            {templates.length} templates disponíveis
+            {templates.length} agentes disponíveis
           </Badge>
-          <h1 className="font-display text-3xl font-bold mb-2">Biblioteca de Agentes</h1>
-          <p className="text-muted-foreground">Escolha, personalize e ative em minutos.</p>
+          <h1 className="font-display text-3xl font-bold mb-2">Nossos Agentes</h1>
+          <p className="text-muted-foreground">Contrate, personalize e ative em minutos. Nós cuidamos de tudo.</p>
         </div>
         
         {/* Filter */}
@@ -239,7 +239,7 @@ const LibraryPage = () => {
               {/* CTA */}
               <Link to="/auth">
                 <Button className="w-full glow rounded-xl group">
-                  Usar este template
+                  Contratar este agente
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
