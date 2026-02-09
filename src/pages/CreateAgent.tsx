@@ -179,7 +179,7 @@ const CreateAgentPage = () => {
                 <div className="glass rounded-lg p-4 neon-border text-center cursor-pointer hover:bg-accent/30 transition-colors">
                   <Database className="h-8 w-8 text-primary mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">Arraste arquivos ou clique para upload</p>
-                  <p className="text-xs text-muted-foreground mt-1">PDF, DOCX, TXT, CSV — até 50MB</p>
+                  <p className="text-xs text-muted-foreground mt-1">PDF, DOCX, TXT, CSV (até 50MB)</p>
                 </div>
               </div>
             )}
