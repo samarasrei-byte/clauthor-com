@@ -52,7 +52,7 @@ const DashboardPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
           >
-            <Card className="glass border-border hover:neon-border transition-all">
+            <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08] hover:border-primary/30 transition-all">
               <CardContent className="p-5">
                 <div className="flex items-center justify-between mb-3">
                   <s.icon className={`h-5 w-5 ${s.color}`} />
@@ -74,7 +74,7 @@ const DashboardPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <Card className="glass border-border">
+          <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
             <CardHeader className="pb-3">
               <CardTitle className="font-display text-lg flex items-center gap-2">
                 <Bot className="h-5 w-5 text-primary" />
@@ -112,7 +112,7 @@ const DashboardPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3 }}
         >
-          <Card className="glass border-border">
+          <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
             <CardHeader className="pb-3">
               <CardTitle className="font-display text-lg flex items-center gap-2">
                 <Activity className="h-5 w-5 text-primary" />
@@ -144,7 +144,7 @@ const DashboardPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
       >
-        <Card className="glass border-border">
+        <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
           <CardHeader>
             <CardTitle className="font-display text-lg flex items-center gap-2">
               <BarChart3 className="h-5 w-5 text-primary" />

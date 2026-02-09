@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   MessageSquare, TrendingUp, FileText, DollarSign,
   Calendar, Receipt, Star, ShoppingCart, ArrowRight,
-  Zap, Globe, Mail, Phone
+  Code, Brain, Shield, Mic
 } from "lucide-react";
 
 const templates = [
@@ -73,6 +73,38 @@ const templates = [
     actions: ["Tracking", "Pós-venda", "Status de pedido", "Notificações"],
     integrations: ["Shopify", "Mercado Livre API", "Correios API"],
   },
+  {
+    icon: Code,
+    title: "Desenvolvedor Autônomo",
+    desc: "Escreve código, cria PRs, faz code review, corrige bugs e implementa features automaticamente.",
+    tags: ["GitHub", "CI/CD", "IA"],
+    actions: ["Gerar código", "Code review", "Corrigir bugs", "Criar PRs", "Deploy automático"],
+    integrations: ["GitHub API", "OpenAI", "Vercel", "Docker"],
+  },
+  {
+    icon: Brain,
+    title: "Analista de Dados & BI",
+    desc: "Coleta dados, gera insights, cria dashboards e envia relatórios executivos automaticamente.",
+    tags: ["Analytics", "BI", "Relatórios"],
+    actions: ["Coletar dados", "Análise preditiva", "Gerar dashboards", "Alertas inteligentes"],
+    integrations: ["Google Analytics", "BigQuery", "Power BI", "Slack"],
+  },
+  {
+    icon: Shield,
+    title: "Segurança & Compliance",
+    desc: "Monitora vulnerabilidades, audita acessos, verifica compliance LGPD e gera relatórios de segurança.",
+    tags: ["LGPD", "Auditoria", "Segurança"],
+    actions: ["Scan de vulnerabilidades", "Auditoria de acessos", "Relatório LGPD", "Alertas críticos"],
+    integrations: ["AWS Security", "Azure AD", "Slack", "Email"],
+  },
+  {
+    icon: Mic,
+    title: "Assistente de Reuniões",
+    desc: "Transcreve reuniões, gera atas, extrai action items e envia follow-ups automaticamente.",
+    tags: ["Zoom", "Meet", "Teams"],
+    actions: ["Transcrever áudio", "Gerar atas", "Extrair tarefas", "Enviar resumos"],
+    integrations: ["Zoom API", "Google Meet", "Notion", "Slack"],
+  },
 ];
 
 const LibraryPage = () => {
@@ -90,7 +122,7 @@ const LibraryPage = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
-            className="glass rounded-xl p-6 hover:neon-border transition-all duration-300 group"
+            className="bg-background/40 backdrop-blur-xl border border-white/[0.08] rounded-xl p-6 hover:border-primary/30 transition-all duration-300 group"
           >
             <div className="flex items-start gap-4 mb-4">
               <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
