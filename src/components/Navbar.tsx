@@ -16,11 +16,13 @@ const Navbar = () => {
 
   const publicNavItems = [
     { label: "Biblioteca", href: "/library" },
+    { label: "Preços", href: "/pricing" },
+    { label: "Como Funciona", href: "/how-it-works" },
   ];
 
   const authNavItems = [
     { label: "Dashboard", href: "/dashboard" },
-    { label: "Agentes", href: "/agents" },
+    { label: "Meus Agentes", href: "/agents" },
     { label: "Biblioteca", href: "/library" },
     { label: "Integrações", href: "/integrations" },
   ];
