@@ -4,8 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent } from "@/components/ui/card";
-import { Bot, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Bot, ArrowRight, Eye, EyeOff, Loader2, Sparkles } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 
@@ -52,88 +51,100 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 -mt-16">
+    <div className="min-h-screen flex items-center justify-center px-4 -mt-16 relative">
+      {/* Background effects */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/10 blur-[150px] rounded-full" />
+      </div>
+
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md relative z-10"
       >
-        <div className="text-center mb-8">
-          <Bot className="h-10 w-10 text-primary mx-auto mb-4" />
-          <h1 className="font-display text-2xl font-bold">
-            {isLogin ? "Entrar no AgentesBot" : "Criar sua conta"}
+        <div className="text-center mb-10">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6"
+          >
+            <Bot className="h-8 w-8 text-primary" />
+          </motion.div>
+          <h1 className="font-display text-3xl font-bold mb-2">
+            {isLogin ? "Bem-vindo de volta" : "Criar sua conta"}
           </h1>
-          <p className="text-sm text-muted-foreground mt-2">
-            {isLogin ? "Acesse seus agentes autônomos" : "Comece a criar seus funcionários digitais"}
+          <p className="text-muted-foreground">
+            {isLogin ? "Entre para acessar seus agentes" : "Comece a criar funcionários digitais"}
           </p>
         </div>
 
-        <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-          <CardContent className="p-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {!isLogin && (
-                <div className="space-y-2">
-                  <Label>Nome completo</Label>
-                  <Input
-                    placeholder="Seu nome completo"
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    className="bg-background/60 border-white/[0.08]"
-                    required
-                  />
-                </div>
-              )}
+        <div className="glass-card rounded-2xl p-8">
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {!isLogin && (
               <div className="space-y-2">
-                <Label>E-mail</Label>
+                <Label className="text-sm font-medium">Nome completo</Label>
                 <Input
-                  type="email"
-                  placeholder="seu@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-background/60 border-white/[0.08]"
+                  placeholder="Seu nome"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="h-12 bg-background/50 border-white/10 rounded-xl focus:border-primary/50 transition-colors"
                   required
                 />
               </div>
-              <div className="space-y-2">
-                <Label>Senha</Label>
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="bg-background/60 border-white/[0.08] pr-10"
-                    required
-                    minLength={6}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                  >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
-                  </button>
-                </div>
+            )}
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">E-mail</Label>
+              <Input
+                type="email"
+                placeholder="seu@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="h-12 bg-background/50 border-white/10 rounded-xl focus:border-primary/50 transition-colors"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm font-medium">Senha</Label>
+              <div className="relative">
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="h-12 bg-background/50 border-white/10 rounded-xl pr-12 focus:border-primary/50 transition-colors"
+                  required
+                  minLength={6}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                </button>
               </div>
+            </div>
 
-              <Button
-                type="submit"
-                className="w-full neon-glow font-semibold"
-                size="lg"
-                disabled={isLoading}
-              >
-                {isLoading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <>
-                    {isLogin ? "Entrar" : "Criar conta"}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </form>
+            <Button
+              type="submit"
+              className="w-full h-12 glow font-semibold rounded-xl shine group"
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  {isLogin ? "Entrar" : "Criar conta"}
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
+            </Button>
+          </form>
 
-            <p className="text-center text-sm text-muted-foreground mt-4">
+          <div className="mt-6 pt-6 border-t border-white/5 text-center">
+            <p className="text-sm text-muted-foreground">
               {isLogin ? "Não tem uma conta?" : "Já tem uma conta?"}{" "}
               <button
                 onClick={() => setIsLogin(!isLogin)}
@@ -142,8 +153,12 @@ const AuthPage = () => {
                 {isLogin ? "Criar conta" : "Entrar"}
               </button>
             </p>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
+
+        <p className="text-center text-xs text-muted-foreground mt-6">
+          Ao continuar, você concorda com nossos Termos e Política de Privacidade.
+        </p>
       </motion.div>
     </div>
   );

@@ -2,17 +2,18 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
 import {
   MessageSquare, FileText, DollarSign,
   Calendar, Receipt, Star, ShoppingCart, ArrowRight,
-  Code, Brain, Shield, Mic
+  Code, Brain, Shield, Mic, Bot, Filter
 } from "lucide-react";
 
 const templates = [
   {
     icon: MessageSquare,
     title: "Atendimento Omnichannel",
-    desc: "Atendimento automático 24/7 com triagem inteligente, mensagens humanizadas e resolução de tickets.",
+    desc: "Atendimento automático 24/7 com triagem inteligente e resolução de tickets.",
     tags: ["WhatsApp", "Instagram", "Site"],
     actions: ["Responder mensagens", "Triagem automática", "Escalar para humano", "Fechar tickets"],
     integrations: ["WhatsApp API", "Instagram API", "Webhook"],
@@ -22,7 +23,7 @@ const templates = [
   {
     icon: FileText,
     title: "Conteúdo & Social Media",
-    desc: "Criação de posts, roteiros, copy e agendamento automático para suas redes sociais.",
+    desc: "Criação de posts, roteiros, copy e agendamento automático para suas redes.",
     tags: ["Instagram", "LinkedIn", "TikTok"],
     actions: ["Gerar posts", "Criar roteiros", "Escrever copy", "Agendar publicações"],
     integrations: ["Instagram API", "OpenAI", "Notion"],
@@ -32,9 +33,9 @@ const templates = [
   {
     icon: DollarSign,
     title: "Cobrança & Financeiro",
-    desc: "Lembretes automáticos, geração de boletos, PIX, e-mails e follow-up de cobrança.",
+    desc: "Lembretes automáticos, geração de boletos, PIX e follow-up de cobrança.",
     tags: ["PIX", "Boleto", "WhatsApp"],
-    actions: ["Enviar lembretes", "Gerar boletos", "Enviar PIX", "Follow-up", "Relatórios"],
+    actions: ["Enviar lembretes", "Gerar boletos", "Enviar PIX", "Follow-up"],
     integrations: ["WhatsApp API", "Gateway de Pagamento", "Gmail"],
     tier: "intermediate",
     price: 200000,
@@ -42,7 +43,7 @@ const templates = [
   {
     icon: Calendar,
     title: "Agenda & Agendamentos",
-    desc: "Reserva horários, envia lembretes, reagenda e confirma automaticamente com seus clientes.",
+    desc: "Reserva horários, envia lembretes, reagenda e confirma automaticamente.",
     tags: ["Agenda", "WhatsApp", "E-mail"],
     actions: ["Reservar horários", "Enviar lembretes", "Reagendar", "Confirmar presença"],
     integrations: ["Google Calendar", "WhatsApp API", "Gmail"],
@@ -52,9 +53,9 @@ const templates = [
   {
     icon: Receipt,
     title: "Fiscal & Documentos",
-    desc: "Geração automática de DARF, NFs, recibos, PDFs e relatórios fiscais inteligentes.",
+    desc: "Geração automática de DARF, NFs, recibos, PDFs e relatórios fiscais.",
     tags: ["DARF", "NF-e", "PDF"],
-    actions: ["Gerar DARF", "Emitir NF", "Criar recibos", "Gerar PDFs", "Relatórios"],
+    actions: ["Gerar DARF", "Emitir NF", "Criar recibos", "Gerar PDFs"],
     integrations: ["SEFAZ", "Google Sheets", "APIs Customizadas"],
     tier: "advanced",
     price: 800000,
@@ -62,9 +63,9 @@ const templates = [
   {
     icon: Star,
     title: "Reputação Online",
-    desc: "Monitora e responde avaliações no Google e Reclame Aqui, propõe soluções e reduz danos.",
+    desc: "Monitora e responde avaliações no Google e Reclame Aqui automaticamente.",
     tags: ["Google", "Reclame Aqui"],
-    actions: ["Monitorar avaliações", "Responder reviews", "Propor soluções", "Alertar equipe"],
+    actions: ["Monitorar avaliações", "Responder reviews", "Propor soluções"],
     integrations: ["Google Business", "Reclame Aqui API", "Slack"],
     tier: "intermediate",
     price: 200000,
@@ -72,7 +73,7 @@ const templates = [
   {
     icon: ShoppingCart,
     title: "E-commerce",
-    desc: "Tracking de pedidos, pós-venda automatizado, status de entrega e integração com marketplaces.",
+    desc: "Tracking de pedidos, pós-venda automatizado e integração com marketplaces.",
     tags: ["Shopify", "Mercado Livre", "Correios"],
     actions: ["Tracking", "Pós-venda", "Status de pedido", "Notificações"],
     integrations: ["Shopify", "Mercado Livre API", "Correios API"],
@@ -82,9 +83,9 @@ const templates = [
   {
     icon: Code,
     title: "Desenvolvedor Autônomo",
-    desc: "Escreve código, cria PRs, faz code review, corrige bugs e implementa features automaticamente.",
+    desc: "Escreve código, cria PRs, faz code review e implementa features automaticamente.",
     tags: ["GitHub", "CI/CD", "IA"],
-    actions: ["Gerar código", "Code review", "Corrigir bugs", "Criar PRs", "Deploy automático"],
+    actions: ["Gerar código", "Code review", "Corrigir bugs", "Deploy automático"],
     integrations: ["GitHub API", "OpenAI", "Vercel", "Docker"],
     tier: "enterprise",
     price: 2300000,
@@ -92,9 +93,9 @@ const templates = [
   {
     icon: Brain,
     title: "Analista de Dados & BI",
-    desc: "Coleta dados, gera insights, cria dashboards e envia relatórios executivos automaticamente.",
+    desc: "Coleta dados, gera insights, cria dashboards e envia relatórios executivos.",
     tags: ["Analytics", "BI", "Relatórios"],
-    actions: ["Coletar dados", "Análise preditiva", "Gerar dashboards", "Alertas inteligentes"],
+    actions: ["Coletar dados", "Análise preditiva", "Gerar dashboards"],
     integrations: ["Google Analytics", "BigQuery", "Power BI", "Slack"],
     tier: "enterprise",
     price: 2300000,
@@ -102,19 +103,19 @@ const templates = [
   {
     icon: Shield,
     title: "Segurança & Compliance",
-    desc: "Monitora vulnerabilidades, audita acessos, verifica compliance LGPD e gera relatórios de segurança.",
+    desc: "Monitora vulnerabilidades, audita acessos e verifica compliance LGPD.",
     tags: ["LGPD", "Auditoria", "Segurança"],
-    actions: ["Scan de vulnerabilidades", "Auditoria de acessos", "Relatório LGPD", "Alertas críticos"],
-    integrations: ["AWS Security", "Azure AD", "Slack", "Email"],
+    actions: ["Scan de vulnerabilidades", "Auditoria de acessos", "Relatório LGPD"],
+    integrations: ["AWS Security", "Azure AD", "Slack"],
     tier: "enterprise",
     price: 2300000,
   },
   {
     icon: Mic,
     title: "Assistente de Reuniões",
-    desc: "Transcreve reuniões, gera atas, extrai action items e envia follow-ups automaticamente.",
+    desc: "Transcreve reuniões, gera atas, extrai action items e envia follow-ups.",
     tags: ["Zoom", "Meet", "Teams"],
-    actions: ["Transcrever áudio", "Gerar atas", "Extrair tarefas", "Enviar resumos"],
+    actions: ["Transcrever áudio", "Gerar atas", "Extrair tarefas"],
     integrations: ["Zoom API", "Google Meet", "Notion", "Slack"],
     tier: "advanced",
     price: 800000,
@@ -129,86 +130,130 @@ const tierLabels: Record<string, string> = {
 };
 
 const tierColors: Record<string, string> = {
-  basic: "bg-muted text-muted-foreground",
-  intermediate: "bg-blue-500/20 text-blue-400",
-  advanced: "bg-purple-500/20 text-purple-400",
-  enterprise: "bg-primary/20 text-primary",
+  basic: "bg-muted/80 text-muted-foreground border-transparent",
+  intermediate: "bg-blue-500/10 text-blue-400 border-blue-500/20",
+  advanced: "bg-purple-500/10 text-purple-400 border-purple-500/20",
+  enterprise: "bg-primary/10 text-primary border-primary/20",
 };
 
+const tiers = ["all", "basic", "intermediate", "advanced", "enterprise"];
+
 const LibraryPage = () => {
+  const [filter, setFilter] = useState("all");
+
+  const filteredTemplates = filter === "all" 
+    ? templates 
+    : templates.filter(t => t.tier === filter);
+
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="font-display text-3xl font-bold mb-1">Biblioteca de Agentes</h1>
-        <p className="text-muted-foreground">Templates prontos para usar. Personalize e ative em minutos.</p>
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
+      {/* Header */}
+      <motion.div 
+        initial={{ opacity: 0, y: 10 }} 
+        animate={{ opacity: 1, y: 0 }}
+        className="flex flex-col sm:flex-row sm:items-end justify-between gap-4"
+      >
+        <div>
+          <Badge variant="outline" className="mb-4 border-primary/20 text-primary">
+            <Bot className="h-3 w-3 mr-1" />
+            {templates.length} templates disponíveis
+          </Badge>
+          <h1 className="font-display text-3xl font-bold mb-2">Biblioteca de Agentes</h1>
+          <p className="text-muted-foreground">Escolha, personalize e ative em minutos.</p>
+        </div>
+        
+        {/* Filter */}
+        <div className="flex gap-2 flex-wrap">
+          {tiers.map((tier) => (
+            <Button
+              key={tier}
+              variant={filter === tier ? "default" : "outline"}
+              size="sm"
+              onClick={() => setFilter(tier)}
+              className={`rounded-lg text-xs ${
+                filter === tier 
+                  ? "glow" 
+                  : "border-white/10 hover:border-primary/30"
+              }`}
+            >
+              {tier === "all" ? "Todos" : tierLabels[tier]}
+            </Button>
+          ))}
+        </div>
       </motion.div>
 
-      <div className="grid md:grid-cols-2 gap-6">
-        {templates.map((t, i) => (
+      {/* Grid */}
+      <div className="grid md:grid-cols-2 gap-5">
+        {filteredTemplates.map((t, i) => (
           <motion.div
             key={t.title}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.05 }}
-            className="bg-background/40 backdrop-blur-xl border border-white/[0.08] rounded-xl p-6 hover:border-primary/30 transition-all duration-300 group"
+            transition={{ delay: i * 0.03 }}
+            layout
           >
-            <div className="flex items-start justify-between gap-4 mb-4">
-              <div className="flex items-start gap-4">
-                <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <t.icon className="h-5 w-5 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-display font-semibold text-lg mb-1">{t.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
+            <div className="glass-card rounded-2xl p-6 glass-hover h-full flex flex-col">
+              {/* Header */}
+              <div className="flex items-start justify-between gap-4 mb-4">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+                    <t.icon className="h-6 w-6 text-primary" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-display font-semibold text-lg mb-1">{t.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
+                  </div>
                 </div>
               </div>
-              <Badge variant="secondary" className={`${tierColors[t.tier]} shrink-0`}>
-                {tierLabels[t.tier]}
-              </Badge>
-            </div>
 
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex flex-wrap gap-1.5">
+              {/* Price & Tier */}
+              <div className="flex items-center justify-between mb-5 pb-5 border-b border-white/5">
+                <Badge variant="outline" className={tierColors[t.tier]}>
+                  {tierLabels[t.tier]}
+                </Badge>
+                <p className="font-display font-bold text-xl gradient-text">
+                  R$ {(t.price / 100).toLocaleString("pt-BR")}
+                  <span className="text-sm font-normal text-muted-foreground">/mês</span>
+                </p>
+              </div>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-1.5 mb-4">
                 {t.tags.map((tag) => (
-                  <Badge key={tag} variant="outline" className="text-xs">
+                  <span 
+                    key={tag} 
+                    className="text-xs px-2.5 py-1 rounded-md bg-white/[0.03] text-muted-foreground border border-white/5"
+                  >
                     {tag}
-                  </Badge>
-                ))}
-              </div>
-              <p className="font-display font-bold text-lg text-primary">
-                R$ {(t.price / 100).toLocaleString("pt-BR")}<span className="text-xs font-normal text-muted-foreground">/mês</span>
-              </p>
-            </div>
-
-
-            <div className="mb-4">
-              <p className="text-xs text-muted-foreground mb-2 font-medium uppercase tracking-wider">Ações</p>
-              <div className="flex flex-wrap gap-1.5">
-                {t.actions.map((a) => (
-                  <span key={a} className="text-xs px-2 py-1 rounded bg-accent/50 text-muted-foreground">
-                    {a}
                   </span>
                 ))}
               </div>
-            </div>
 
-            <div className="mb-4">
-              <p className="text-xs text-muted-foreground mb-2 font-medium uppercase tracking-wider">Integrações</p>
-              <div className="flex flex-wrap gap-1.5">
-                {t.integrations.map((ig) => (
-                  <span key={ig} className="text-xs px-2 py-1 rounded neon-border text-primary/80">
-                    {ig}
-                  </span>
-                ))}
+              {/* Actions */}
+              <div className="mb-5 flex-1">
+                <p className="text-[10px] text-muted-foreground mb-2 font-medium uppercase tracking-widest">
+                  Ações incluídas
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {t.actions.slice(0, 4).map((a) => (
+                    <span 
+                      key={a} 
+                      className="text-xs px-2 py-1 rounded-md bg-primary/5 text-primary/80"
+                    >
+                      {a}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
 
-            <Link to="/create-agent">
-              <Button size="sm" className="w-full neon-glow group-hover:opacity-100 opacity-80 transition-opacity">
-                Usar este template
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </Link>
+              {/* CTA */}
+              <Link to="/auth">
+                <Button className="w-full glow rounded-xl group">
+                  Usar este template
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         ))}
       </div>

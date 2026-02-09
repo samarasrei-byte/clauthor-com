@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Bot, Menu, X, LogOut, Shield } from "lucide-react";
+import { Bot, Menu, X, LogOut, Shield, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -34,13 +34,15 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-xl border-b border-white/[0.08]"
+      className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-2xl border-b border-white/[0.05]"
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2">
-            <Bot className="h-7 w-7 text-primary" />
-            <span className="font-display font-bold text-lg text-foreground">
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+              <Bot className="h-4 w-4 text-primary" />
+            </div>
+            <span className="font-display font-bold text-base text-foreground">
               AGENTESBOT
             </span>
           </Link>
@@ -51,10 +53,10 @@ const Navbar = () => {
               <Link
                 key={item.href}
                 to={item.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                   location.pathname === item.href
                     ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 }`}
               >
                 {item.label}
@@ -63,13 +65,13 @@ const Navbar = () => {
             {isAdmin && (
               <Link
                 to="/admin"
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-1.5 ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
                   location.pathname === "/admin"
                     ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent"
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 }`}
               >
-                <Shield className="h-4 w-4" />
+                <Shield className="h-3.5 w-3.5" />
                 Admin
               </Link>
             )}
@@ -78,12 +80,17 @@ const Navbar = () => {
           <div className="hidden md:flex items-center gap-3">
             {user ? (
               <>
-                <Button variant="ghost" size="sm" onClick={handleSignOut} className="text-muted-foreground">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={handleSignOut} 
+                  className="text-muted-foreground hover:text-foreground"
+                >
                   <LogOut className="h-4 w-4 mr-2" />
                   Sair
                 </Button>
                 <Link to="/create-agent">
-                  <Button size="sm" className="neon-glow font-semibold">
+                  <Button size="sm" className="glow font-medium rounded-lg">
                     Criar Agente
                   </Button>
                 </Link>
@@ -91,12 +98,12 @@ const Navbar = () => {
             ) : (
               <>
                 <Link to="/auth">
-                  <Button variant="ghost" size="sm" className="text-muted-foreground">
+                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground font-medium">
                     Entrar
                   </Button>
                 </Link>
                 <Link to="/auth">
-                  <Button size="sm" className="neon-glow font-semibold">
+                  <Button size="sm" className="glow font-medium rounded-lg">
                     Criar Conta
                   </Button>
                 </Link>
@@ -106,10 +113,10 @@ const Navbar = () => {
 
           {/* Mobile toggle */}
           <button
-            className="md:hidden text-foreground"
+            className="md:hidden text-foreground p-2 hover:bg-white/5 rounded-lg transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
-            {mobileOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
         </div>
       </div>
@@ -119,15 +126,20 @@ const Navbar = () => {
         <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
-          className="md:hidden bg-background/90 backdrop-blur-xl border-t border-white/[0.08]"
+          exit={{ opacity: 0, height: 0 }}
+          className="md:hidden bg-background/95 backdrop-blur-2xl border-t border-white/[0.05]"
         >
-          <div className="px-4 py-4 space-y-2">
+          <div className="px-4 py-6 space-y-2">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
                 onClick={() => setMobileOpen(false)}
-                className="block px-4 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-accent"
+                className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                  location.pathname === item.href
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                }`}
               >
                 {item.label}
               </Link>
@@ -136,46 +148,47 @@ const Navbar = () => {
               <Link
                 to="/admin"
                 onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm text-muted-foreground hover:text-foreground hover:bg-accent"
+                className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5"
               >
                 <Shield className="h-4 w-4" />
                 Admin
               </Link>
             )}
-            {user ? (
-              <>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="w-full mt-2"
-                  onClick={() => {
-                    handleSignOut();
-                    setMobileOpen(false);
-                  }}
-                >
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Sair
-                </Button>
-                <Link to="/create-agent" onClick={() => setMobileOpen(false)}>
-                  <Button size="sm" className="w-full neon-glow">
-                    Criar Agente
+            <div className="pt-4 space-y-2">
+              {user ? (
+                <>
+                  <Button
+                    variant="ghost"
+                    className="w-full justify-start"
+                    onClick={() => {
+                      handleSignOut();
+                      setMobileOpen(false);
+                    }}
+                  >
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Sair
                   </Button>
-                </Link>
-              </>
-            ) : (
-              <>
-                <Link to="/auth" onClick={() => setMobileOpen(false)}>
-                  <Button variant="ghost" size="sm" className="w-full mt-2">
-                    Entrar
-                  </Button>
-                </Link>
-                <Link to="/auth" onClick={() => setMobileOpen(false)}>
-                  <Button size="sm" className="w-full neon-glow">
-                    Criar Conta
-                  </Button>
-                </Link>
-              </>
-            )}
+                  <Link to="/create-agent" onClick={() => setMobileOpen(false)}>
+                    <Button className="w-full glow">
+                      Criar Agente
+                    </Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/auth" onClick={() => setMobileOpen(false)}>
+                    <Button variant="ghost" className="w-full">
+                      Entrar
+                    </Button>
+                  </Link>
+                  <Link to="/auth" onClick={() => setMobileOpen(false)}>
+                    <Button className="w-full glow">
+                      Criar Conta
+                    </Button>
+                  </Link>
+                </>
+              )}
+            </div>
           </div>
         </motion.div>
       )}
