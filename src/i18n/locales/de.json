@@ -1,0 +1,82 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "library": "Bibliothek",
+    "pricing": "Preise",
+    "dashboard": "Dashboard",
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "admin": "Admin"
+  },
+  "hero": {
+    "badge": "Autonome Agenten Plattform",
+    "title1": "Digitale Mitarbeiter.",
+    "title2": "Autonome Agenten",
+    "title3": "für Ihr Unternehmen.",
+    "subtitle": "Erstellen, trainieren und betreiben Sie intelligente Agenten, die komplette Prozesse ausführen: Kundenservice, Vertrieb, Finanzen, Steuern und vieles mehr.",
+    "subtitle_highlight": "Ihr 24/7 Betrieb.",
+    "cta_primary": "Jetzt starten, kostenlos",
+    "cta_secondary": "Agenten erkunden"
+  },
+  "spotlight": {
+    "message1": "Wir sind nicht gekommen, um Menschen zu ersetzen.",
+    "message2": "Wir sind gekommen, um mit Ihren besten Talenten zu arbeiten.",
+    "agent_label": "Lernen Sie den fortschrittlichsten Agenten kennen",
+    "agent_tagline": "Autonome Intelligenz. Unerbittliche Ausführung.",
+    "agent_subtitle": "Das Feuer, das Ihren Betrieb antreibt."
+  },
+  "stats": {
+    "agents": "Aktive Agenten",
+    "actions": "Aktionen/Monat",
+    "uptime": "Uptime",
+    "companies": "Unternehmen"
+  },
+  "features": {
+    "badge": "Warum AgentesBot?",
+    "title1": "Sie stellen keine Software ein.",
+    "title2": "Sie stellen digitale Mitarbeiter ein.",
+    "autonomous": "Autonome Ausführung",
+    "autonomous_desc": "Komplette Prozesse ohne menschliches Eingreifen",
+    "security": "Enterprise Sicherheit",
+    "security_desc": "Vollständiges Audit und DSGVO-Konformität",
+    "uptime": "24/7 Betriebsbereit",
+    "uptime_desc": "Null Urlaub, null Fehlzeiten, null Fehler",
+    "analytics": "Echtzeit-Analytics",
+    "analytics_desc": "Einsparungs- und Leistungsmetriken"
+  },
+  "library": {
+    "badge": "Template-Bibliothek",
+    "title": "Agenten",
+    "title_highlight": "einsatzbereit",
+    "subtitle": "Wählen, anpassen und in Minuten aktivieren.",
+    "price_range": "Von 320€ bis 450€/Monat je nach Komplexität.",
+    "view_all": "Alle Agenten anzeigen",
+    "use_template": "Template verwenden",
+    "popular": "Beliebt",
+    "per_month": "/Monat",
+    "actions_included": "Enthaltene Aktionen",
+    "available_templates": "verfügbare Templates",
+    "filter_all": "Alle"
+  },
+  "cta": {
+    "title": "Bereit zu skalieren?",
+    "subtitle": "Kostenlos starten. Keine Kreditkarte erforderlich. In 5 Minuten einrichten.",
+    "button": "Mein Konto erstellen"
+  },
+  "footer": {
+    "terms": "AGB",
+    "privacy": "Datenschutz",
+    "contact": "Kontakt"
+  },
+  "tiers": {
+    "basic": "Basis",
+    "intermediate": "Mittel",
+    "advanced": "Fortgeschritten",
+    "enterprise": "Enterprise"
+  },
+  "payment": {
+    "pay_crypto": "Mit Krypto bezahlen",
+    "pay_card": "Mit Karte bezahlen",
+    "crypto_desc": "Bitcoin, Ethereum, USDC und mehr"
+  }
+}
