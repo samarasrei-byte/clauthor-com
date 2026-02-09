@@ -4,21 +4,25 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
   MessageSquare, FileText, DollarSign,
-  Calendar, Receipt, Star, ShoppingCart, Zap, ArrowRight,
-  CheckCircle, Shield, Clock, BarChart3, Sparkles, Bot,
-  Code
+  Calendar, Receipt, Star, Zap, ArrowRight,
+  Shield, Clock, BarChart3, Sparkles, Bot,
+  Code, Users, Mail, Briefcase, Search, TrendingUp
 } from "lucide-react";
 import { useRef } from "react";
 
 const agents = [
-  { icon: MessageSquare, title: "Atendimento Omnichannel", desc: "WhatsApp, Instagram e Site. Atendimento 24/7.", price: "R$ 1.899" },
-  { icon: FileText, title: "Conteúdo & Social", desc: "Posts, roteiros e agendamento automático.", price: "R$ 1.779" },
-  { icon: DollarSign, title: "Cobrança & Financeiro", desc: "PIX, boletos e follow-up automático.", price: "R$ 1.979" },
-  { icon: Calendar, title: "Agenda", desc: "Reservas, lembretes e confirmações.", price: "R$ 1.799" },
-  { icon: Receipt, title: "Fiscal & Documentos", desc: "NFs, DARF e relatórios inteligentes.", price: "R$ 2.199" },
-  { icon: Star, title: "Reputação Online", desc: "Google e Reclame Aqui automatizados.", price: "R$ 1.879" },
-  { icon: Code, title: "Desenvolvedor", desc: "Code review, PRs e deploy automático.", price: "R$ 2.447" },
-  { icon: Shield, title: "Segurança & Compliance", desc: "LGPD, auditoria e vulnerabilidades.", price: "R$ 2.399" },
+  { icon: MessageSquare, title: "Atendimento Omnichannel", desc: "WhatsApp, Instagram e Site. Atendimento 24/7.", price: "R$ 1.899", hot: true },
+  { icon: FileText, title: "Conteúdo & Social", desc: "Posts, roteiros e agendamento automático.", price: "R$ 1.779", hot: false },
+  { icon: DollarSign, title: "Cobrança & Financeiro", desc: "PIX, boletos e follow-up automático.", price: "R$ 1.979", hot: true },
+  { icon: Calendar, title: "Agenda & Reservas", desc: "Reservas, lembretes e confirmações.", price: "R$ 1.799", hot: false },
+  { icon: Receipt, title: "Fiscal & Documentos", desc: "NFs, DARF e relatórios inteligentes.", price: "R$ 2.199", hot: false },
+  { icon: Star, title: "Reputação Online", desc: "Google e Reclame Aqui automatizados.", price: "R$ 1.879", hot: false },
+  { icon: Code, title: "Desenvolvedor Autônomo", desc: "Code review, PRs e deploy automático.", price: "R$ 2.447", hot: true },
+  { icon: Shield, title: "Segurança & LGPD", desc: "Compliance, auditoria e vulnerabilidades.", price: "R$ 2.399", hot: false },
+  { icon: Users, title: "SDR & Prospecção", desc: "Qualificação de leads e agendamento de calls.", price: "R$ 2.297", hot: true },
+  { icon: Mail, title: "Email Marketing", desc: "Campanhas, sequências e follow-ups automáticos.", price: "R$ 1.847", hot: false },
+  { icon: Briefcase, title: "RH & Recrutamento", desc: "Triagem de CVs, agendamento e onboarding.", price: "R$ 2.097", hot: true },
+  { icon: Search, title: "Pesquisa & Análise", desc: "Coleta dados, gera relatórios e insights.", price: "R$ 1.997", hot: false },
 ];
 
 const features = [
@@ -152,9 +156,9 @@ const HomePage = () => {
           className="max-w-4xl mx-auto text-center relative"
         >
           <p className="text-muted-foreground text-lg sm:text-xl mb-6 leading-relaxed">
-            Não estamos substituindo seres humanos.
+            Não viemos substituir pessoas.
             <br />
-            <span className="text-foreground font-medium">Estamos colocando máquinas para trabalhar por você.</span>
+            <span className="text-foreground font-medium">Viemos trabalhar ao lado dos seus melhores talentos.</span>
           </p>
           
           <div className="glass-card rounded-3xl p-8 md:p-12 gradient-border inline-block">
@@ -277,27 +281,46 @@ const HomePage = () => {
             </p>
           </motion.div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
             {agents.map((agent, i) => (
               <motion.div
                 key={agent.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.05 }}
+                transition={{ delay: i * 0.04 }}
               >
-                <Link to="/library" className="block">
-                  <div className="glass-card rounded-xl p-5 glass-hover h-full group cursor-pointer">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                        <agent.icon className="h-5 w-5 text-primary" />
+                <Link to="/library" className="block h-full">
+                  <div className="glass-card rounded-2xl p-6 glass-hover h-full group cursor-pointer relative overflow-hidden">
+                    {/* Hot badge */}
+                    {agent.hot && (
+                      <div className="absolute top-3 right-3">
+                        <span className="flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded-full bg-primary/20 text-primary border border-primary/30">
+                          <TrendingUp className="h-3 w-3" />
+                          Popular
+                        </span>
                       </div>
-                      <span className="text-xs font-medium text-primary">{agent.price}/mês</span>
+                    )}
+                    
+                    {/* Icon */}
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4 group-hover:from-primary/30 group-hover:to-primary/10 transition-all duration-300 group-hover:scale-110">
+                      <agent.icon className="h-7 w-7 text-primary" />
                     </div>
-                    <h3 className="font-display font-semibold text-sm mb-1.5 group-hover:text-primary transition-colors">
+                    
+                    {/* Content */}
+                    <h3 className="font-display font-bold text-base mb-2 group-hover:text-primary transition-colors">
                       {agent.title}
                     </h3>
-                    <p className="text-xs text-muted-foreground leading-relaxed">{agent.desc}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-4">{agent.desc}</p>
+                    
+                    {/* Price */}
+                    <div className="flex items-center justify-between pt-4 border-t border-white/5">
+                      <span className="text-lg font-display font-bold gradient-text">{agent.price}</span>
+                      <span className="text-xs text-muted-foreground">/mês</span>
+                    </div>
+                    
+                    {/* Hover glow effect */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                   </div>
                 </Link>
               </motion.div>
