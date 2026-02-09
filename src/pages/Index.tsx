@@ -28,18 +28,11 @@ const features = [
   { icon: BarChart3, title: "Analytics Real-Time", desc: "Métricas de economia e performance", stat: "Live" },
 ];
 
-// Modern background - clean gradients, no circles
+// Minimalist background - ultra clean
 const StaticBackground = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden">
-    {/* Subtle top gradient */}
-    <div className="absolute top-0 left-0 right-0 h-[50vh] bg-gradient-to-b from-primary/[0.03] to-transparent" />
-    {/* Subtle bottom accent */}
-    <div className="absolute bottom-0 left-0 right-0 h-[30vh] bg-gradient-to-t from-purple-500/[0.02] to-transparent" />
-    {/* Grid pattern */}
-    <div className="grid-pattern absolute inset-0 opacity-[0.04]" />
-    {/* Vertical accent lines */}
-    <div className="absolute left-1/4 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/10 to-transparent" />
-    <div className="absolute right-1/4 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-primary/10 to-transparent" />
+    {/* Subtle ambient gradient */}
+    <div className="absolute inset-0 bg-gradient-to-br from-primary/[0.02] via-transparent to-purple-500/[0.01]" />
   </div>
 );
 
