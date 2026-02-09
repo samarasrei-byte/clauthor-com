@@ -11,6 +11,7 @@ import ClientDashboard from "./pages/ClientDashboard";
 import AdminDashboard from "./pages/AdminDashboard";
 import Agents from "./pages/Agents";
 import Library from "./pages/Library";
+import Community from "./pages/Community";
 import CreateAgent from "./pages/CreateAgent";
 import Integrations from "./pages/Integrations";
 import Auth from "./pages/Auth";
@@ -30,6 +31,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/library" element={<Library />} />
+              <Route path="/community" element={<Community />} />
               <Route
                 path="/dashboard"
                 element={

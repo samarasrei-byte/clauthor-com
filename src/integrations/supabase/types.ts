@@ -71,6 +71,122 @@ export type Database = {
         }
         Relationships: []
       }
+      community_comments: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          likes_count: number
+          post_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          likes_count?: number
+          post_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          likes_count?: number
+          post_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_comments_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_likes: {
+        Row: {
+          comment_id: string | null
+          created_at: string
+          id: string
+          post_id: string | null
+          user_id: string
+        }
+        Insert: {
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          user_id: string
+        }
+        Update: {
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "community_likes_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "community_comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "community_likes_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "community_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      community_posts: {
+        Row: {
+          category: Database["public"]["Enums"]["community_category"]
+          comments_count: number
+          content: string
+          created_at: string
+          id: string
+          is_pinned: boolean
+          likes_count: number
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          category?: Database["public"]["Enums"]["community_category"]
+          comments_count?: number
+          content: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          likes_count?: number
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          category?: Database["public"]["Enums"]["community_category"]
+          comments_count?: number
+          content?: string
+          created_at?: string
+          id?: string
+          is_pinned?: boolean
+          likes_count?: number
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       credit_plans: {
         Row: {
           created_at: string
@@ -397,6 +513,12 @@ export type Database = {
       agent_status: "draft" | "active" | "paused" | "archived"
       agent_tier: "basic" | "intermediate" | "advanced" | "enterprise"
       app_role: "admin" | "customer"
+      community_category:
+        | "duvidas"
+        | "templates"
+        | "showcase"
+        | "anuncios"
+        | "geral"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -527,6 +649,13 @@ export const Constants = {
       agent_status: ["draft", "active", "paused", "archived"],
       agent_tier: ["basic", "intermediate", "advanced", "enterprise"],
       app_role: ["admin", "customer"],
+      community_category: [
+        "duvidas",
+        "templates",
+        "showcase",
+        "anuncios",
+        "geral",
+      ],
     },
   },
 } as const
