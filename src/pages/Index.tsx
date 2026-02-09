@@ -70,7 +70,7 @@ const HomePage = () => {
               transition={{ delay: 0.2, duration: 0.5 }}
             >
               <Badge 
-                variant="outline" 
+                variant="outline"
                 className="px-5 py-2.5 text-sm font-medium border-primary/40 bg-primary/10 text-primary gap-2"
               >
                 <Sparkles className="h-4 w-4" />
@@ -275,7 +275,7 @@ const HomePage = () => {
             className="text-center mb-20"
           >
             <Badge variant="outline" className="mb-6 border-primary/30 text-primary px-4 py-2">
-              Por que escolher AgentesBot?
+              Por que escolher NEXMIND?
             </Badge>
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               Você não contrata software.
@@ -429,13 +429,14 @@ const HomePage = () => {
 
       {/* FOOTER */}
       <footer className="border-t border-white/5 py-16 px-4">
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto space-y-12">
+          {/* Main Footer Content */}
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <Bot className="h-5 w-5 text-primary" />
               </div>
-              <span className="font-display font-bold text-xl">AGENTESBOT</span>
+              <span className="font-display font-bold text-xl tracking-tight">NEXMIND</span>
             </div>
             <div className="flex gap-10 text-sm text-muted-foreground">
               <a href="#" className="hover:text-primary transition-colors">Termos</a>
@@ -443,8 +444,51 @@ const HomePage = () => {
               <a href="#" className="hover:text-primary transition-colors">Contato</a>
               <a href="#" className="hover:text-primary transition-colors">Blog</a>
             </div>
+          </div>
+
+          {/* Security & Payment Badges */}
+          <div className="flex flex-col items-center gap-6 pt-8 border-t border-white/5">
+            <p className="text-xs text-muted-foreground uppercase tracking-widest">Segurança e pagamentos verificados</p>
+            <div className="flex flex-wrap items-center justify-center gap-6">
+              {/* Security Badges */}
+              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5">
+                <Shield className="h-5 w-5 text-primary" />
+                <span className="text-xs font-medium">SSL 256-bit</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5">
+                <Lock className="h-5 w-5 text-primary" />
+                <span className="text-xs font-medium">LGPD Compliant</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5">
+                <Shield className="h-5 w-5 text-green-500" />
+                <span className="text-xs font-medium">SOC 2 Type II</span>
+              </div>
+              {/* Payment Badges */}
+              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5">
+                <svg className="h-5 w-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M22 4H2v16h20V4zm-2 14H4V8h16v10zM6 12h3v2H6v-2zm4 0h8v2h-8v-2z" />
+                </svg>
+                <span className="text-xs font-medium">Visa / Mastercard</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5">
+                <svg className="h-5 w-5 text-[#32BCAD]" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm4 0h-2v-6h2v6zm-2-8H9V7h6v2h-2z" />
+                </svg>
+                <span className="text-xs font-medium">PIX</span>
+              </div>
+              <div className="flex items-center gap-2 px-4 py-2 rounded-lg bg-white/[0.02] border border-white/5">
+                <svg className="h-5 w-5 text-[#635BFF]" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M13.976 9.15c-2.172-.806-3.356-1.426-3.356-2.409 0-.831.683-1.305 1.901-1.305 2.227 0 4.515.858 6.09 1.631l.89-5.494C18.252.975 15.697 0 12.165 0 9.667 0 7.589.654 6.104 1.872 4.56 3.147 3.757 4.992 3.757 7.218c0 4.039 2.467 5.76 6.476 7.219 2.585.92 3.445 1.574 3.445 2.583 0 .98-.84 1.545-2.354 1.545-1.875 0-4.965-.921-6.99-2.109l-.9 5.555C5.175 22.99 8.385 24 11.714 24c2.641 0 4.843-.624 6.328-1.813 1.664-1.305 2.525-3.236 2.525-5.732 0-4.128-2.524-5.851-6.591-7.305z" />
+                </svg>
+                <span className="text-xs font-medium">Stripe</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Copyright */}
+          <div className="text-center pt-6">
             <p className="text-sm text-muted-foreground">
-              © 2026 AgentesBot. Todos os direitos reservados.
+              © 2026 NEXMIND. Todos os direitos reservados.
             </p>
           </div>
         </div>
