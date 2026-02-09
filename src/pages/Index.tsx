@@ -95,8 +95,8 @@ const HomePage = () => {
               transition={{ delay: 0.4, duration: 0.7 }}
               className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed"
             >
-              Crie, treine e opere agentes inteligentes que executam processos completos 
-              — atendimento, vendas, financeiro, fiscal e muito mais. 
+              Crie, treine e opere agentes inteligentes que executam processos completos: 
+              atendimento, vendas, financeiro, fiscal e muito mais. 
               <span className="text-foreground font-medium"> Sua operação 24/7.</span>
             </motion.p>
 
@@ -111,7 +111,7 @@ const HomePage = () => {
                   size="lg" 
                   className="glow font-semibold text-base px-8 h-14 rounded-xl shine group"
                 >
-                  Começar agora — grátis
+                  Começar agora, é grátis
                   <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>

@@ -24,7 +24,7 @@ const agentsList = [
 const recentLogs = [
   { time: "14:32", agent: "Atendimento WhatsApp", action: "Ticket #4521 resolvido automaticamente", type: "success" },
   { time: "14:28", agent: "Prospecção LinkedIn", action: "15 leads qualificados encontrados", type: "success" },
-  { time: "14:25", agent: "Cobranças PIX", action: "Erro ao gerar boleto — retry em 5min", type: "error" },
+  { time: "14:25", agent: "Cobranças PIX", action: "Erro ao gerar boleto, retry em 5min", type: "error" },
   { time: "14:20", agent: "Gerador de Conteúdo", action: "3 posts agendados para Instagram", type: "success" },
   { time: "14:15", agent: "Agenda Clínica", action: "12 confirmações enviadas via WhatsApp", type: "success" },
 ];
