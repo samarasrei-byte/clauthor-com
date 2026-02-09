@@ -5,8 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { 
-  Rocket, Zap, CheckCircle2, Users, Clock, 
-  ArrowRight, Sparkles, Shield, Bot, Star, Timer, TrendingUp
+  Zap, CheckCircle2, Clock, 
+  ArrowRight, Sparkles, Shield, Bot, Star, Timer, TrendingUp, Users
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
