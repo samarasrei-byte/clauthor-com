@@ -92,7 +92,7 @@ const AdminDashboard = () => {
           <Shield className="h-7 w-7 text-primary" />
           <h1 className="font-display text-3xl font-bold">Painel Admin</h1>
         </div>
-        <p className="text-muted-foreground">Gerencie a plataforma AGENTESBOT</p>
+        <p className="text-muted-foreground">Gerencie a plataforma ApexBot</p>
       </motion.div>
 
       {/* Stats */}

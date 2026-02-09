@@ -46,7 +46,7 @@ const Navbar = () => {
               <Bot className="h-4 w-4 text-primary" />
             </div>
             <span className="font-display font-bold text-base text-foreground">
-              AGENTESBOT
+              ApexBot
             </span>
           </Link>
 
