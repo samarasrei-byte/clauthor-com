@@ -16,7 +16,6 @@ const Navbar = () => {
 
   const publicNavItems = [
     { label: "Biblioteca", href: "/library" },
-    { label: "Preços", href: "/pricing" },
     { label: "Como Funciona", href: "/how-it-works" },
   ];
 
