@@ -2,13 +2,13 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { CreditsDisplay } from "@/components/CreditsDisplay";
 import {
-  Bot, Plus, Zap, Clock, CreditCard, CheckCircle,
-  Activity, ArrowRight, TrendingUp, Sparkles
+  Bot, Plus, Zap, CheckCircle,
+  Activity, ArrowRight, Sparkles
 } from "lucide-react";
 
 const tierLabels: Record<string, string> = {
@@ -90,12 +90,10 @@ const ClientDashboard = () => {
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
-  const monthlySpend = subscriptions.reduce((acc, s) => acc + (s.monthly_price || 0), 0);
 
   const stats = [
     { icon: Bot, label: "Agentes Ativos", value: activeAgents.toString(), trend: "+2 este mês" },
     { icon: Zap, label: "Execuções Totais", value: totalExecutions.toLocaleString("pt-BR"), trend: "+12%" },
-    { icon: CreditCard, label: "Gasto Mensal", value: `R$ ${(monthlySpend / 100).toLocaleString("pt-BR")}`, trend: "Fatura atual" },
     { icon: CheckCircle, label: "Taxa de Sucesso", value: "98.5%", trend: "+0.5%" },
   ];
 
@@ -120,8 +118,17 @@ const ClientDashboard = () => {
         </Link>
       </motion.div>
 
-      {/* Stats */}
+      {/* Credits + Stats */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* Credits Display - spans 1 column */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <CreditsDisplay />
+        </motion.div>
+        
+        {/* Stats */}
         {stats.map((s, i) => (
           <motion.div
             key={s.label}
