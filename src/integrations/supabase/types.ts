@@ -71,6 +71,33 @@ export type Database = {
         }
         Relationships: []
       }
+      credit_plans: {
+        Row: {
+          created_at: string
+          features: Json | null
+          id: string
+          monthly_credits: number
+          name: string
+          price_cents: number
+        }
+        Insert: {
+          created_at?: string
+          features?: Json | null
+          id?: string
+          monthly_credits: number
+          name: string
+          price_cents?: number
+        }
+        Update: {
+          created_at?: string
+          features?: Json | null
+          id?: string
+          monthly_credits?: number
+          name?: string
+          price_cents?: number
+        }
+        Relationships: []
+      }
       execution_logs: {
         Row: {
           action: string
@@ -263,6 +290,77 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      token_usage: {
+        Row: {
+          action_type: string
+          agent_id: string | null
+          created_at: string
+          id: string
+          model: string
+          tokens_used: number
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          agent_id?: string | null
+          created_at?: string
+          id?: string
+          model?: string
+          tokens_used: number
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          agent_id?: string | null
+          created_at?: string
+          id?: string
+          model?: string
+          tokens_used?: number
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "token_usage_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_credits: {
+        Row: {
+          created_at: string
+          credits_reset_at: string
+          id: string
+          plan_type: string
+          total_credits: number
+          updated_at: string
+          used_credits: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          credits_reset_at?: string
+          id?: string
+          plan_type?: string
+          total_credits?: number
+          updated_at?: string
+          used_credits?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          credits_reset_at?: string
+          id?: string
+          plan_type?: string
+          total_credits?: number
+          updated_at?: string
+          used_credits?: number
+          user_id?: string
+        }
+        Relationships: []
       }
       user_roles: {
         Row: {
