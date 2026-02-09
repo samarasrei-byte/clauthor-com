@@ -141,7 +141,44 @@ const HomePage = () => {
         </motion.div>
       </section>
 
-      {/* SOCIAL PROOF */}
+      {/* AGENT SPOTLIGHT */}
+      <section className="py-24 px-4 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.03] via-transparent to-transparent" />
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="max-w-4xl mx-auto text-center relative"
+        >
+          <p className="text-muted-foreground text-lg sm:text-xl mb-6 leading-relaxed">
+            Não estamos substituindo seres humanos.
+            <br />
+            <span className="text-foreground font-medium">Estamos colocando máquinas para trabalhar por você.</span>
+          </p>
+          
+          <div className="glass-card rounded-3xl p-8 md:p-12 gradient-border inline-block">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.6 }}
+            >
+              <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground mb-4">
+                Conheça o agente mais avançado
+              </p>
+              <h3 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold gradient-text glow-text tracking-tight mb-3">
+                PROMETHEUS
+              </h3>
+              <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
+                Inteligência autônoma. Execução implacável.
+                <br />
+                <span className="text-primary font-medium">O fogo que move sua operação.</span>
+              </p>
+            </motion.div>
+          </div>
+        </motion.div>
+      </section>
       <section className="py-24 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <motion.p
