@@ -11,6 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import DashboardStats from "@/components/dashboard/DashboardStats";
 import AgentsList from "@/components/dashboard/AgentsList";
+import ContractedAgents from "@/components/dashboard/ContractedAgents";
 import AgentChat from "@/components/dashboard/AgentChat";
 import AnalyticsChart from "@/components/dashboard/AnalyticsChart";
 import ExecutionLogs from "@/components/dashboard/ExecutionLogs";
@@ -132,6 +133,12 @@ const ClientDashboard = () => {
 
         {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
+          {/* Contracted Agents */}
+          <ContractedAgents
+            subscriptions={subscriptions}
+            onSelectAgent={handleSelectAgent}
+          />
+          
           <div className="grid lg:grid-cols-2 gap-6">
             <AgentsList
               agents={agents}
