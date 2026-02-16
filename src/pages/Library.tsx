@@ -28,7 +28,7 @@ const templates = [
     ],
     integrations: ["WhatsApp API", "Instagram API", "Webhook", "Telegram API"],
     tier: "intermediate",
-    price: 189900,
+    price: 399700,
   },
   {
     icon: FileText,
@@ -46,7 +46,7 @@ const templates = [
     ],
     integrations: ["Instagram API", "OpenAI", "Notion", "YouTube API"],
     tier: "basic",
-    price: 177900,
+    price: 349700,
   },
   {
     icon: DollarSign,
@@ -64,7 +64,7 @@ const templates = [
     ],
     integrations: ["WhatsApp API", "Gateway de Pagamento", "Gmail", "Sistema Contábil"],
     tier: "intermediate",
-    price: 197900,
+    price: 429700,
   },
   {
     icon: Calendar,
@@ -82,7 +82,7 @@ const templates = [
     ],
     integrations: ["Google Calendar", "WhatsApp API", "Gmail", "Zoom"],
     tier: "basic",
-    price: 179900,
+    price: 349700,
   },
   {
     icon: Receipt,
@@ -100,7 +100,7 @@ const templates = [
     ],
     integrations: ["SEFAZ", "Google Sheets", "APIs Customizadas", "Contabilidade"],
     tier: "advanced",
-    price: 219900,
+    price: 549700,
   },
   {
     icon: Star,
@@ -118,7 +118,7 @@ const templates = [
     ],
     integrations: ["Google Business", "Reclame Aqui API", "Slack", "Trustpilot API"],
     tier: "intermediate",
-    price: 187900,
+    price: 379700,
   },
   {
     icon: ShoppingCart,
@@ -136,7 +136,7 @@ const templates = [
     ],
     integrations: ["Shopify", "Mercado Livre API", "Correios API", "Amazon SP-API"],
     tier: "advanced",
-    price: 229900,
+    price: 599700,
   },
   {
     icon: Code,
@@ -154,7 +154,7 @@ const templates = [
     ],
     integrations: ["GitHub API", "OpenAI", "Vercel", "Docker"],
     tier: "enterprise",
-    price: 244700,
+    price: 799700,
   },
   {
     icon: Shield,
@@ -172,7 +172,7 @@ const templates = [
     ],
     integrations: ["AWS Security", "Azure AD", "Slack", "SentinelOne"],
     tier: "enterprise",
-    price: 239900,
+    price: 749700,
   },
   {
     icon: Mic,
@@ -190,7 +190,7 @@ const templates = [
     ],
     integrations: ["Zoom API", "Google Meet", "Notion", "Slack"],
     tier: "advanced",
-    price: 209900,
+    price: 499700,
   },
 ];
 

@@ -51,7 +51,7 @@ const ContractedAgents = ({ subscriptions, onSelectAgent }: ContractedAgentsProp
             </div>
             <h3 className="font-display font-semibold mb-1 text-sm">Nenhum agente contratado</h3>
             <p className="text-xs text-muted-foreground mb-4">
-              Explore nossa biblioteca e contrate seu primeiro funcionário digital
+              Explore nossa biblioteca e contrate seu primeiro funcionário de IA
             </p>
             <Link to="/library">
               <Button size="sm" className="glow">
