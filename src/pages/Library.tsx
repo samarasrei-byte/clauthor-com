@@ -6,8 +6,10 @@ import { useState } from "react";
 import {
   MessageSquare, FileText, DollarSign,
   Calendar, Receipt, Star, ShoppingCart, ArrowRight,
-  Code, Brain, Shield, Mic, Bot, Filter
+  Code, Brain, Shield, Mic, Bot, Eye
 } from "lucide-react";
+import ROICalculator from "@/components/library/ROICalculator";
+import AgentLivePreview from "@/components/library/AgentLivePreview";
 
 const templates = [
   {
@@ -130,6 +132,7 @@ const tiers = ["all", "basic", "intermediate", "advanced", "enterprise"];
 
 const LibraryPage = () => {
   const [filter, setFilter] = useState("all");
+  const [previewAgent, setPreviewAgent] = useState<{ name: string; desc: string } | null>(null);
 
   const filteredTemplates = filter === "all" 
     ? templates 
@@ -171,6 +174,9 @@ const LibraryPage = () => {
           ))}
         </div>
       </motion.div>
+
+      {/* ROI Calculator */}
+      <ROICalculator />
 
       {/* Grid */}
       <div className="grid md:grid-cols-2 gap-6">
@@ -289,20 +295,38 @@ const LibraryPage = () => {
               </div>
 
               {/* CTA */}
-              <Link to="/auth" className="relative z-10">
-                <Button className={`w-full rounded-xl group h-12 font-semibold ${
-                  t.tier === "enterprise" 
-                    ? "bg-gradient-to-r from-primary to-purple-500 hover:from-primary/90 hover:to-purple-500/90 shadow-lg shadow-primary/25" 
-                    : "glow"
-                }`}>
-                  Contratar Agente
-                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              <div className="flex gap-2 relative z-10">
+                <Button
+                  variant="outline"
+                  className="flex-1 rounded-xl h-12 border-white/10 hover:border-primary/30"
+                  onClick={() => setPreviewAgent({ name: t.title, desc: t.desc })}
+                >
+                  <Eye className="mr-2 h-4 w-4" />
+                  Testar 60s
                 </Button>
-              </Link>
+                <Link to="/auth" className="flex-1">
+                  <Button className={`w-full rounded-xl group h-12 font-semibold ${
+                    t.tier === "enterprise" 
+                      ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 shadow-lg shadow-primary/25" 
+                      : "glow"
+                  }`}>
+                    Contratar
+                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </Link>
+              </div>
             </div>
           </motion.div>
         ))}
       </div>
+
+      {/* Agent Live Preview Modal */}
+      <AgentLivePreview
+        agentName={previewAgent?.name || ""}
+        agentDesc={previewAgent?.desc || ""}
+        isOpen={!!previewAgent}
+        onClose={() => setPreviewAgent(null)}
+      />
     </div>
   );
 };
