@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   MessageSquare, FileText, DollarSign,
   Calendar, Receipt, Star, ShoppingCart, ArrowRight,
@@ -12,12 +13,13 @@ import {
 } from "lucide-react";
 import ROICalculator from "@/components/library/ROICalculator";
 import AgentLivePreview from "@/components/library/AgentLivePreview";
+import { getPriceDisplay, type PriceTier } from "@/lib/pricing";
 
 const templates = [
   {
     icon: Phone,
     title: "Voice AI Agent — Call Center Autônomo",
-    desc: "Atende e realiza ligações telefônicas com voz humana ultra-realista. Negocia, fecha vendas, cobra inadimplentes e faz qualify de leads — 24/7, sem pausas.",
+    desc: "Atende e realiza ligações com voz humana ultra-realista. Negocia, fecha vendas, cobra inadimplentes e qualifica leads — 24/7.",
     tags: ["Voz IA", "Telefonia", "WhatsApp", "Outbound", "Inbound"],
     actions: [
       "Atender ligações com voz natural em PT-BR", "Realizar cold calls outbound em escala", "Qualify de leads por telefone com scoring",
@@ -30,14 +32,14 @@ const templates = [
     ],
     integrations: ["Twilio", "VoIP SIP", "WhatsApp API", "CRM", "Discador"],
     tier: "enterprise",
-    price: 997700,
+    priceTier: "premium" as PriceTier,
     highlight: "🔥 #1 mais contratado",
     replaces: "5 operadores de call center",
   },
   {
     icon: Workflow,
     title: "Multi-Agent Orchestrator",
-    desc: "Orquestra múltiplos agentes de IA que colaboram entre si. Um supervisor delega tarefas, monitora resultados e toma decisões autônomas em workflows complexos.",
+    desc: "Orquestra múltiplos agentes que colaboram entre si. Um supervisor delega, monitora e toma decisões autônomas em workflows complexos.",
     tags: ["Multi-Agent", "Orquestração", "Workflow", "Autonomous"],
     actions: [
       "Orquestrar 5+ agentes simultâneos", "Delegar tarefas automaticamente por especialidade", "Monitorar output de cada sub-agente",
@@ -50,14 +52,14 @@ const templates = [
     ],
     integrations: ["API Interna", "Webhook", "Slack", "Jira", "N8N"],
     tier: "enterprise",
-    price: 1299700,
+    priceTier: "premium" as PriceTier,
     highlight: "⚡ Mais avançado",
     replaces: "1 gerente de operações + equipe",
   },
   {
     icon: Search,
     title: "Deep Research Agent — Analista Autônomo",
-    desc: "Pesquisa, analisa e sintetiza informações de centenas de fontes em minutos. Gera relatórios executivos com citações, comparativos e recomendações estratégicas.",
+    desc: "Pesquisa, analisa e sintetiza informações de centenas de fontes em minutos. Gera relatórios executivos com citações e recomendações.",
     tags: ["RAG", "Pesquisa", "Relatórios", "Análise", "Web Scraping"],
     actions: [
       "Pesquisar 100+ fontes simultaneamente", "Sintetizar dados em relatório executivo", "Citar fontes com links verificáveis",
@@ -70,14 +72,14 @@ const templates = [
     ],
     integrations: ["Web Scraping", "Google Scholar", "Bloomberg", "Notion", "Google Slides"],
     tier: "advanced",
-    price: 799700,
+    priceTier: "mid" as PriceTier,
     highlight: "🧠 Mais inteligente",
     replaces: "3 analistas de mercado",
   },
   {
     icon: Code,
     title: "Autonomous Coding Agent — Dev IA Full-Stack",
-    desc: "Desenvolve features completas end-to-end: entende o ticket, escreve código, cria testes, faz PR review e deploya. Computer Use para operar qualquer ferramenta.",
+    desc: "Desenvolve features end-to-end: entende o ticket, escreve código, cria testes, faz PR review e deploya. Computer Use para operar qualquer ferramenta.",
     tags: ["GitHub", "CI/CD", "Full-Stack", "Computer Use", "DevOps"],
     actions: [
       "Entender tickets e transformar em código", "Escrever código full-stack (front + back)", "Code review com sugestões detalhadas",
@@ -90,14 +92,14 @@ const templates = [
     ],
     integrations: ["GitHub", "Vercel", "Docker", "Linear", "Sentry", "AWS"],
     tier: "enterprise",
-    price: 1199700,
+    priceTier: "high" as PriceTier,
     highlight: "🚀 Computer Use",
     replaces: "2 desenvolvedores full-stack",
   },
   {
     icon: MessageSquare,
     title: "Omnichannel AI — Atendimento Hyper-Personalizado",
-    desc: "Atendimento com memória de longo prazo, personalização por perfil do cliente e resolução autônoma de 95% dos tickets sem intervenção humana.",
+    desc: "Atendimento com memória de longo prazo, personalização por perfil e resolução autônoma de 95% dos tickets sem intervenção humana.",
     tags: ["WhatsApp", "Instagram", "Chat", "E-mail", "Telegram"],
     actions: [
       "Memória de longo prazo por cliente", "Personalização baseada em histórico completo", "Resolução autônoma de tickets complexos",
@@ -110,14 +112,14 @@ const templates = [
     ],
     integrations: ["WhatsApp Business API", "Instagram Graph", "Intercom", "Zendesk", "HubSpot"],
     tier: "advanced",
-    price: 599700,
+    priceTier: "mid" as PriceTier,
     highlight: "💬 95% resolução autônoma",
     replaces: "4 atendentes",
   },
   {
     icon: BarChart3,
     title: "Revenue Operations Agent — CFO Digital",
-    desc: "Gestão financeira autônoma: conciliação, forecast, cobrança inteligente, DRE automática e análise preditiva de receita com IA.",
+    desc: "Gestão financeira autônoma: conciliação, forecast, cobrança inteligente, DRE automática e análise preditiva de receita.",
     tags: ["Financeiro", "PIX", "Cobrança", "Forecast", "Contábil"],
     actions: [
       "Conciliação bancária automática diária", "Forecast de receita com ML preditivo", "Cobrança escalonada com tom adaptativo",
@@ -130,14 +132,14 @@ const templates = [
     ],
     integrations: ["Gateway PIX", "ERP", "Conta Azul", "Omie", "SEFAZ"],
     tier: "advanced",
-    price: 699700,
+    priceTier: "mid" as PriceTier,
     highlight: "📊 ML Preditivo",
     replaces: "2 analistas financeiros + 1 cobrador",
   },
   {
     icon: Briefcase,
     title: "Sales AI Agent — Closer Autônomo",
-    desc: "Prospecta, qualifica, nutre e fecha vendas de forma autônoma. Usa dados comportamentais para personalizar cada abordagem e maximizar conversão.",
+    desc: "Prospecta, qualifica, nutre e fecha vendas de forma autônoma. Usa dados comportamentais para maximizar conversão.",
     tags: ["CRM", "LinkedIn", "WhatsApp", "Outbound", "Pipeline"],
     actions: [
       "Prospectar leads via LinkedIn e web scraping", "Qualify automático com BANT/MEDDIC scoring", "Enviar sequências de outbound personalizadas",
@@ -150,14 +152,14 @@ const templates = [
     ],
     integrations: ["HubSpot", "Salesforce", "LinkedIn Sales Nav", "Apollo.io", "DocuSign"],
     tier: "advanced",
-    price: 749700,
+    priceTier: "mid" as PriceTier,
     highlight: "🎯 Pipeline autônomo",
     replaces: "3 SDRs + 1 closer",
   },
   {
     icon: Layers,
     title: "RAG Enterprise — Knowledge Management",
-    desc: "Transforma toda documentação da empresa em uma base de conhecimento inteligente. Responde perguntas complexas cruzando milhares de documentos internos.",
+    desc: "Transforma toda documentação da empresa em uma base inteligente. Responde perguntas complexas cruzando milhares de documentos.",
     tags: ["RAG", "Knowledge Base", "Documentos", "Compliance", "Wiki"],
     actions: [
       "Indexar e vetorizar toda base documental", "Responder perguntas com citação de fonte", "Cruzar informações de múltiplos documentos",
@@ -170,14 +172,14 @@ const templates = [
     ],
     integrations: ["SharePoint", "Google Drive", "Notion", "Confluence", "Slack"],
     tier: "intermediate",
-    price: 499700,
+    priceTier: "entry" as PriceTier,
     highlight: "📚 RAG Avançado",
     replaces: "2 analistas de documentação",
   },
   {
     icon: Cpu,
     title: "Computer Use Agent — Automação Visual",
-    desc: "Opera qualquer software como um humano: clica, digita, navega e executa tarefas em ERPs, CRMs e sistemas legados que não possuem API.",
+    desc: "Opera qualquer software como um humano: clica, digita, navega e executa tarefas em ERPs, CRMs e sistemas legados sem API.",
     tags: ["Computer Use", "RPA", "ERP", "Legacy", "Automação"],
     actions: [
       "Operar ERPs via interface visual (SAP, TOTVS)", "Preencher formulários web automaticamente", "Navegar e extrair dados de portais gov",
@@ -190,14 +192,14 @@ const templates = [
     ],
     integrations: ["SAP", "TOTVS", "Qualquer ERP", "Portais Gov", "Bancos"],
     tier: "enterprise",
-    price: 899700,
+    priceTier: "high" as PriceTier,
     highlight: "🖥️ Opera qualquer software",
     replaces: "3 operadores administrativos",
   },
   {
     icon: Sparkles,
     title: "Content Engine — Fábrica de Conteúdo IA",
-    desc: "Produz conteúdo em escala industrial: posts, vídeos, blogs, emails, ads. Analisa performance e otimiza automaticamente baseado em dados reais.",
+    desc: "Produz conteúdo em escala industrial: posts, vídeos, blogs, emails, ads. Analisa performance e otimiza baseado em dados reais.",
     tags: ["Social Media", "Blog", "Ads", "E-mail", "Vídeo"],
     actions: [
       "Gerar 100+ posts/mês por plataforma", "Criar roteiros de vídeo otimizados", "Escrever artigos SEO-first com dados",
@@ -210,14 +212,14 @@ const templates = [
     ],
     integrations: ["Instagram API", "YouTube", "Mailchimp", "WordPress", "Meta Ads"],
     tier: "intermediate",
-    price: 449700,
+    priceTier: "entry" as PriceTier,
     highlight: "✨ 100+ posts/mês",
     replaces: "2 social media managers",
   },
   {
     icon: Shield,
     title: "Cyber Security Agent — SOC Autônomo",
-    desc: "Centro de operações de segurança autônomo: monitora, detecta, analisa e responde a ameaças em tempo real. LGPD, SOC2 e ISO 27001 compliance.",
+    desc: "Centro de operações de segurança autônomo: monitora, detecta, analisa e responde a ameaças em tempo real. LGPD, SOC2 e ISO 27001.",
     tags: ["Segurança", "LGPD", "SOC2", "Threat Detection", "Zero Trust"],
     actions: [
       "Monitoramento contínuo de ameaças 24/7", "Detecção de intrusão com ML", "Resposta automática a incidentes (SOAR)",
@@ -230,14 +232,14 @@ const templates = [
     ],
     integrations: ["AWS Security Hub", "Azure Sentinel", "CrowdStrike", "SentinelOne", "Splunk"],
     tier: "enterprise",
-    price: 1499700,
+    priceTier: "premium" as PriceTier,
     highlight: "🛡️ SOC autônomo 24/7",
     replaces: "1 equipe de segurança (4-5 pessoas)",
   },
   {
     icon: Users,
     title: "HR & People Agent — RH Inteligente",
-    desc: "Automatiza recrutamento, onboarding, gestão de performance, clima e people analytics. Do job posting ao offboarding, tudo autônomo.",
+    desc: "Automatiza recrutamento, onboarding, gestão de performance, clima e people analytics. Do job posting ao offboarding.",
     tags: ["Recrutamento", "Onboarding", "Performance", "People Analytics"],
     actions: [
       "Criar e publicar vagas em múltiplas plataformas", "Triagem automática de CVs com IA", "Agendar entrevistas e enviar convites",
@@ -250,21 +252,19 @@ const templates = [
     ],
     integrations: ["LinkedIn Recruiter", "Gupy", "Slack", "Google Workspace", "eSocial"],
     tier: "advanced",
-    price: 649700,
+    priceTier: "mid" as PriceTier,
     highlight: "👥 People Analytics",
     replaces: "2 analistas de RH + 1 recrutador",
   },
 ];
 
 const tierLabels: Record<string, string> = {
-  basic: "Básico",
   intermediate: "Intermediário",
   advanced: "Avançado",
   enterprise: "Enterprise",
 };
 
 const tierColors: Record<string, string> = {
-  basic: "bg-muted/80 text-muted-foreground border-transparent",
   intermediate: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
   advanced: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
   enterprise: "bg-primary/10 text-primary border-primary/20",
@@ -276,6 +276,8 @@ const LibraryPage = () => {
   const [filter, setFilter] = useState("all");
   const [previewAgent, setPreviewAgent] = useState<{ name: string; desc: string } | null>(null);
   const [expandedActions, setExpandedActions] = useState<string | null>(null);
+  const { i18n } = useTranslation();
+  const lang = i18n.language?.split("-")[0] || "pt";
 
   const filteredTemplates = filter === "all" 
     ? templates 
@@ -326,160 +328,164 @@ const LibraryPage = () => {
 
       {/* Grid */}
       <div className="grid md:grid-cols-2 gap-6">
-        {filteredTemplates.map((t, i) => (
-          <motion.div
-            key={t.title}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.03 }}
-            layout
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-          >
-            <div className="glass-card rounded-2xl p-6 glass-hover h-full flex flex-col relative overflow-hidden group">
-              {/* Glow effect on hover */}
-              <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              
-              {/* Enterprise badge glow */}
-              {t.tier === "enterprise" && (
-                <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-[60px]" />
-              )}
+        {filteredTemplates.map((t, i) => {
+          const priceDisplay = getPriceDisplay(lang, t.priceTier);
+          
+          return (
+            <motion.div
+              key={t.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.03 }}
+              layout
+              whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            >
+              <div className="glass-card rounded-2xl p-6 glass-hover h-full flex flex-col relative overflow-hidden group">
+                {/* Glow effect on hover */}
+                <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                {/* Enterprise badge glow */}
+                {t.tier === "enterprise" && (
+                  <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-[60px]" />
+                )}
 
-              {/* Highlight badge */}
-              {t.highlight && (
-                <div className="absolute top-4 right-4 z-20">
-                  <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary/15 text-primary font-semibold border border-primary/20 backdrop-blur-sm">
-                    {t.highlight}
-                  </span>
-                </div>
-              )}
-              
-              {/* Header */}
-              <div className="flex items-start gap-4 mb-5 relative z-10 pr-24">
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
-                  t.tier === "enterprise" 
-                     ? "bg-gradient-to-br from-primary/20 to-primary-glow/20" 
-                     : t.tier === "advanced"
-                     ? "bg-gradient-to-br from-cyan-500/10 to-primary/10"
-                    : "bg-primary/5"
-                }`}>
-                  <t.icon className="h-7 w-7 text-primary/80" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-display font-bold text-lg leading-tight mb-1">{t.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
-                </div>
-              </div>
-
-              {/* Replaces badge */}
-              {t.replaces && (
-                <div className="mb-4 relative z-10">
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                    <Users className="h-3.5 w-3.5 text-emerald-400" />
-                    <span className="text-xs font-medium text-emerald-400">Substitui {t.replaces}</span>
+                {/* Highlight badge */}
+                {t.highlight && (
+                  <div className="absolute top-4 right-4 z-20">
+                    <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary/15 text-primary font-semibold border border-primary/20 backdrop-blur-sm">
+                      {t.highlight}
+                    </span>
+                  </div>
+                )}
+                
+                {/* Header */}
+                <div className="flex items-start gap-4 mb-5 relative z-10 pr-24">
+                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
+                    t.tier === "enterprise" 
+                       ? "bg-gradient-to-br from-primary/20 to-primary-glow/20" 
+                       : t.tier === "advanced"
+                       ? "bg-gradient-to-br from-cyan-500/10 to-primary/10"
+                      : "bg-primary/5"
+                  }`}>
+                    <t.icon className="h-7 w-7 text-primary/80" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="font-display font-bold text-lg leading-tight mb-1">{t.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{t.desc}</p>
                   </div>
                 </div>
-              )}
 
-              {/* Price & Tier */}
-              <div className="flex items-center justify-between mb-5 pb-5 border-b border-border relative z-10">
-                <Badge variant="outline" className={`${tierColors[t.tier]} font-medium`}>
-                  {tierLabels[t.tier]}
-                </Badge>
-                <div className="text-right">
-                  <p className="font-display font-bold text-2xl gradient-text">
-                    R$ {(t.price / 100).toLocaleString("pt-BR")}
-                  </p>
-                  <span className="text-xs text-muted-foreground">/mês</span>
+                {/* Replaces badge */}
+                {t.replaces && (
+                  <div className="mb-4 relative z-10">
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
+                      <Users className="h-3.5 w-3.5 text-emerald-400" />
+                      <span className="text-xs font-medium text-emerald-400">Substitui {t.replaces}</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Price & Tier */}
+                <div className="flex items-center justify-between mb-5 pb-5 border-b border-border relative z-10">
+                  <Badge variant="outline" className={`${tierColors[t.tier]} font-medium`}>
+                    {tierLabels[t.tier]}
+                  </Badge>
+                  <div className="text-right">
+                    <p className="font-display font-bold text-2xl gradient-text">
+                      {priceDisplay}
+                    </p>
+                    <span className="text-xs text-muted-foreground">/mês</span>
+                  </div>
                 </div>
-              </div>
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1.5 mb-4 relative z-10">
-                {t.tags.map((tag) => (
-                  <span 
-                    key={tag} 
-                    className="text-xs px-2.5 py-1 rounded-lg bg-card text-muted-foreground border border-border"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-
-              {/* Actions */}
-              <div className="mb-5 flex-1 relative z-10">
-                <p className="text-[10px] text-muted-foreground mb-2 font-medium uppercase tracking-widest flex items-center gap-1">
-                  <Brain className="h-3 w-3" />
-                  {t.actions.length} Capacidades Autônomas
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {t.actions.slice(0, expandedActions === t.title ? 20 : 6).map((a) => (
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5 mb-4 relative z-10">
+                  {t.tags.map((tag) => (
                     <span 
-                      key={a} 
-                      className="text-xs px-2.5 py-1.5 rounded-lg bg-primary/[0.03] text-foreground/70 border border-primary/10"
+                      key={tag} 
+                      className="text-xs px-2.5 py-1 rounded-lg bg-card text-muted-foreground border border-border"
                     >
-                      {a}
+                      {tag}
                     </span>
                   ))}
                 </div>
-                {t.actions.length > 6 && (
-                  <button 
-                    onClick={() => setExpandedActions(expandedActions === t.title ? null : t.title)}
-                    className="text-xs text-primary/70 hover:text-primary mt-2 transition-colors"
-                  >
-                    {expandedActions === t.title ? "Ver menos" : `+${t.actions.length - 6} capacidades`}
-                  </button>
-                )}
-              </div>
 
-              {/* Integrations preview */}
-              <div className="mb-5 relative z-10">
-                <p className="text-[10px] text-muted-foreground mb-2 font-medium uppercase tracking-widest">
-                  Integrações
-                </p>
-                <div className="flex items-center gap-2">
-                  <div className="flex -space-x-2">
-                    {t.integrations.slice(0, 3).map((integration) => (
-                      <div 
-                        key={integration}
-                        className="w-7 h-7 rounded-lg bg-card border border-border flex items-center justify-center text-[10px] font-bold text-muted-foreground"
-                        title={integration}
+                {/* Actions */}
+                <div className="mb-5 flex-1 relative z-10">
+                  <p className="text-[10px] text-muted-foreground mb-2 font-medium uppercase tracking-widest flex items-center gap-1">
+                    <Brain className="h-3 w-3" />
+                    {t.actions.length} Capacidades Autônomas
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {t.actions.slice(0, expandedActions === t.title ? 20 : 6).map((a) => (
+                      <span 
+                        key={a} 
+                        className="text-xs px-2.5 py-1.5 rounded-lg bg-primary/[0.03] text-foreground/70 border border-primary/10"
                       >
-                        {integration.charAt(0)}
-                      </div>
+                        {a}
+                      </span>
                     ))}
                   </div>
-                  {t.integrations.length > 3 && (
-                    <span className="text-xs text-muted-foreground">
-                      +{t.integrations.length - 3}
-                    </span>
+                  {t.actions.length > 6 && (
+                    <button 
+                      onClick={() => setExpandedActions(expandedActions === t.title ? null : t.title)}
+                      className="text-xs text-primary/70 hover:text-primary mt-2 transition-colors"
+                    >
+                      {expandedActions === t.title ? "Ver menos" : `+${t.actions.length - 6} capacidades`}
+                    </button>
                   )}
                 </div>
-              </div>
 
-              {/* CTA */}
-              <div className="flex gap-2 relative z-10">
-                <Button
-                  variant="outline"
-                  className="flex-1 rounded-xl h-12 border-border hover:border-primary/20"
-                  onClick={() => setPreviewAgent({ name: t.title, desc: t.desc })}
-                >
-                  <Eye className="mr-2 h-4 w-4" />
-                  Testar 60s
-                </Button>
-                <Link to="/auth" className="flex-1">
-                  <Button className={`w-full rounded-xl group h-12 font-semibold ${
-                    t.tier === "enterprise" 
-                      ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90" 
-                      : "glow"
-                  }`}>
-                    Contratar
-                    <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                {/* Integrations preview */}
+                <div className="mb-5 relative z-10">
+                  <p className="text-[10px] text-muted-foreground mb-2 font-medium uppercase tracking-widest">
+                    Integrações
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <div className="flex -space-x-2">
+                      {t.integrations.slice(0, 3).map((integration) => (
+                        <div 
+                          key={integration}
+                          className="w-7 h-7 rounded-lg bg-card border border-border flex items-center justify-center text-[10px] font-bold text-muted-foreground"
+                          title={integration}
+                        >
+                          {integration.charAt(0)}
+                        </div>
+                      ))}
+                    </div>
+                    {t.integrations.length > 3 && (
+                      <span className="text-xs text-muted-foreground">
+                        +{t.integrations.length - 3}
+                      </span>
+                    )}
+                  </div>
+                </div>
+
+                {/* CTA */}
+                <div className="flex gap-2 relative z-10">
+                  <Button
+                    variant="outline"
+                    className="flex-1 rounded-xl h-12 border-border hover:border-primary/20"
+                    onClick={() => setPreviewAgent({ name: t.title, desc: t.desc })}
+                  >
+                    <Eye className="mr-2 h-4 w-4" />
+                    Testar 60s
                   </Button>
-                </Link>
+                  <Link to="/auth" className="flex-1">
+                    <Button className={`w-full rounded-xl group h-12 font-semibold ${
+                      t.tier === "enterprise" 
+                        ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90" 
+                        : "glow"
+                    }`}>
+                      Contratar
+                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
+                </div>
               </div>
-            </div>
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
 
       {/* Agent Live Preview Modal */}
