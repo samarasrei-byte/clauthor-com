@@ -6,7 +6,10 @@
     "dashboard": "Dashboard",
     "login": "Login",
     "logout": "Logout",
-    "admin": "Admin"
+    "admin": "Admin",
+    "how_it_works": "How It Works",
+    "my_agents": "My Agents",
+    "integrations": "Integrations"
   },
   "hero": {
     "badge": "Autonomous Agents Platform",

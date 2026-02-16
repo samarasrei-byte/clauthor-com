@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "Home", "library": "Libreria", "pricing": "Prezzi", "dashboard": "Dashboard", "login": "Accedi", "logout": "Esci", "admin": "Admin" },
+  "nav": { "home": "Home", "library": "Libreria", "pricing": "Prezzi", "dashboard": "Dashboard", "login": "Accedi", "logout": "Esci", "admin": "Admin", "how_it_works": "Come Funziona", "my_agents": "I Miei Agenti", "integrations": "Integrazioni" },
   "hero": { "badge": "Piattaforma Agenti Autonomi", "title1": "Dipendenti Digitali.", "title2": "Agenti Autonomi", "title3": "per la tua Azienda.", "subtitle": "Crea, addestra e opera agenti intelligenti che eseguono processi completi: assistenza clienti, vendite, finanza, fiscalità e molto altro.", "subtitle_highlight": "La tua operazione 24/7.", "cta_primary": "Inizia ora, è gratis", "cta_secondary": "Esplora gli agenti" },
   "spotlight": { "message1": "Non siamo venuti a sostituire le persone.", "message2": "Siamo venuti a lavorare accanto ai tuoi migliori talenti.", "agent_label": "Scopri l'agente più avanzato", "agent_tagline": "Intelligenza autonoma. Esecuzione implacabile.", "agent_subtitle": "Il fuoco che muove la tua operazione." },
   "stats": { "agents": "Agenti Attivi", "actions": "Azioni/mese", "uptime": "Uptime", "companies": "Aziende" },

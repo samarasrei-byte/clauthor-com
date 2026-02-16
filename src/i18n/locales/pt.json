@@ -6,7 +6,10 @@
     "dashboard": "Painel",
     "login": "Entrar",
     "logout": "Sair",
-    "admin": "Admin"
+    "admin": "Admin",
+    "how_it_works": "Como Funciona",
+    "my_agents": "Meus Agentes",
+    "integrations": "Integrações"
   },
   "hero": {
     "badge": "Plataforma de Agentes Autônomos",
