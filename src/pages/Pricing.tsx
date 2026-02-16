@@ -9,34 +9,34 @@ const plans = [
   {
     name: "Starter",
     description: "Para começar a automatizar",
-    price: "R$ 1.499",
-    tokens: "50.000",
+    price: "R$ 3.997",
+    tokens: "5.000.000",
     popular: false,
-    equivalent: "1 funcionário CLT",
-    cltCost: "R$ 4.500+",
-    savings: "67%",
+    equivalent: "3 funcionários CLT",
+    cltCost: "R$ 22.680+",
+    savings: "82%",
     features: [
-      "1 Agente ativo (= 20 funcionários)",
-      "50.000 tokens/mês inclusos",
-      "5.000 ações/mês",
+      "1 Agente ativo",
+      "5.000.000 tokens/mês inclusos",
+      "10.000 ações/mês",
       "Suporte por email",
       "Relatórios básicos",
-      "1 integração",
+      "3 integrações",
     ],
   },
   {
     name: "Professional",
     description: "Para empresas em crescimento",
-    price: "R$ 2.999",
-    tokens: "250.000",
+    price: "R$ 9.997",
+    tokens: "25.000.000",
     popular: true,
-    equivalent: "5 funcionários CLT",
-    cltCost: "R$ 22.500+",
+    equivalent: "10 funcionários CLT",
+    cltCost: "R$ 75.600+",
     savings: "87%",
     features: [
-      "5 Agentes ativos (= 100 funcionários)",
-      "250.000 tokens/mês inclusos",
-      "25.000 ações/mês",
+      "5 Agentes ativos",
+      "25.000.000 tokens/mês inclusos",
+      "50.000 ações/mês",
       "Suporte prioritário",
       "Analytics avançado",
       "10 integrações",
@@ -47,14 +47,14 @@ const plans = [
     name: "Enterprise",
     description: "Para operações de grande escala",
     price: "Sob consulta",
-    tokens: "Ilimitados",
+    tokens: "100.000.000+",
     popular: false,
     equivalent: "Equipe inteira CLT",
-    cltCost: "R$ 100.000+",
+    cltCost: "R$ 200.000+",
     savings: "95%+",
     features: [
-      "Agentes ilimitados (= 500+ funcionários)",
-      "Tokens ilimitados",
+      "Agentes ilimitados",
+      "100M+ tokens/mês",
       "Ações ilimitadas",
       "Suporte dedicado 24/7",
       "Dashboard personalizado",
@@ -66,21 +66,21 @@ const plans = [
 ];
 
 const tokenPacks = [
-  { amount: "50.000", price: "R$ 99", discount: null },
-  { amount: "150.000", price: "R$ 249", discount: "17% off" },
-  { amount: "500.000", price: "R$ 699", discount: "30% off" },
-  { amount: "1.000.000", price: "R$ 1.199", discount: "40% off" },
+  { amount: "5.000.000", price: "R$ 1.497", discount: null },
+  { amount: "15.000.000", price: "R$ 3.997", discount: "11% off" },
+  { amount: "50.000.000", price: "R$ 11.997", discount: "20% off" },
+  { amount: "100.000.000", price: "R$ 19.997", discount: "33% off" },
 ];
 
 const cltComparison = [
-  { label: "Salário CLT médio", clt: "R$ 4.500/mês", apex: "A partir de R$ 1.499/mês", winner: "apex" },
+  { label: "Salário CLT médio", clt: "R$ 4.500/mês", apex: "A partir de R$ 3.997/mês", winner: "apex" },
   { label: "Encargos trabalhistas (FGTS, INSS, 13º, férias)", clt: "+68% sobre salário", apex: "Zero encargos", winner: "apex" },
   { label: "Horas trabalhadas", clt: "8h/dia, 22 dias/mês", apex: "24h/dia, 365 dias/ano", winner: "apex" },
   { label: "Faltas e licenças", clt: "Média 15 dias/ano", apex: "Zero faltas", winner: "apex" },
   { label: "Treinamento", clt: "Semanas a meses", apex: "Configurado em minutos", winner: "apex" },
   { label: "Escala da operação", clt: "Contratar mais pessoas", apex: "Adicionar mais agentes", winner: "apex" },
   { label: "Erros humanos", clt: "Inevitáveis", apex: "Taxa de erro < 0.3%", winner: "apex" },
-  { label: "Custo real por funcionário/ano", clt: "R$ 90.720+", apex: "R$ 17.988/ano", winner: "apex" },
+  { label: "Custo real por 3 funcionários/ano", clt: "R$ 272.160+", apex: "R$ 47.964/ano", winner: "apex" },
 ];
 
 const Pricing = () => {
@@ -119,7 +119,7 @@ const Pricing = () => {
             Sem taxas ocultas, sem surpresas.
           </p>
           <p className="text-sm text-foreground/70 font-medium">
-            💡 Cada agente faz o trabalho de <span className="text-primary font-bold">20 funcionários CLT</span> — por uma fração do custo.
+            💡 Cada agente substitui até <span className="text-primary font-bold">3 funcionários CLT</span> — com economia de até 87%.
           </p>
         </motion.div>
 
@@ -263,10 +263,10 @@ const Pricing = () => {
             </div>
 
             <div className="mt-8 text-center">
-              <p className="text-sm text-muted-foreground mb-4">
+            <p className="text-sm text-muted-foreground mb-4">
                 Um funcionário CLT custa em média <span className="text-foreground font-bold">R$ 7.560/mês</span> (salário + encargos de 68%).
                 <br />
-                 Um agente ApexBot faz o trabalho de 20 deles por <span className="text-cyan-400 font-bold">R$ 1.499/mês</span>.
+                 Um agente ApexBot substitui 3 deles por <span className="text-cyan-400 font-bold">R$ 3.997/mês</span>.
               </p>
               <Link to="/auth">
                 <Button className="glow rounded-xl px-8 h-12 font-semibold">
