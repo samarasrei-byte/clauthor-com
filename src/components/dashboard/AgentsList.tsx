@@ -89,7 +89,7 @@ const AgentsList = ({ agents, isLoading, onSelectAgent }: AgentsListProps) => {
             </div>
             <h3 className="font-display font-semibold mb-2">Crie seu primeiro agente</h3>
             <p className="text-sm text-muted-foreground mb-6">
-              Explore a biblioteca e ative um funcionário digital
+              Explore a biblioteca e ative um funcionário de IA
             </p>
             <Link to="/library">
               <Button className="glow">
