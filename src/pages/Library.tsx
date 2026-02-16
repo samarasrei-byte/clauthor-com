@@ -203,8 +203,8 @@ const tierLabels: Record<string, string> = {
 
 const tierColors: Record<string, string> = {
   basic: "bg-muted/80 text-muted-foreground border-transparent",
-  intermediate: "bg-amber-500/10 text-amber-400 border-amber-500/20",
-  advanced: "bg-amber-500/10 text-amber-300 border-amber-500/20",
+  intermediate: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
+  advanced: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
   enterprise: "bg-primary/10 text-primary border-primary/20",
 };
 
@@ -286,7 +286,7 @@ const LibraryPage = () => {
                     t.tier === "enterprise" 
                        ? "bg-gradient-to-br from-primary/20 to-primary-glow/20" 
                        : t.tier === "advanced"
-                       ? "bg-gradient-to-br from-amber-500/10 to-primary/10"
+                       ? "bg-gradient-to-br from-cyan-500/10 to-primary/10"
                       : "bg-primary/5"
                   }`}>
                     <t.icon className="h-7 w-7 text-primary/80" />

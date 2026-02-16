@@ -23,7 +23,7 @@ interface PostCardProps {
 }
 
 const categoryConfig: Record<CommunityCategory, { label: string; color: string }> = {
-  duvidas: { label: "Dúvidas", color: "bg-amber-500/15 text-amber-400 border-amber-500/20" },
+  duvidas: { label: "Dúvidas", color: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20" },
   templates: { label: "Templates", color: "bg-primary/15 text-primary border-primary/20" },
   showcase: { label: "Showcase", color: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20" },
   anuncios: { label: "Anúncios", color: "bg-rose-500/15 text-rose-400 border-rose-500/20" },

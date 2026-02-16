@@ -104,7 +104,7 @@ const HomePage = () => {
             >
               <span className="block mb-2 text-foreground">Funcionários</span>
               <span className="block gradient-text">
-                Digitais
+                de IA
               </span>
               <span className="block text-3xl sm:text-4xl lg:text-5xl text-muted-foreground/70 font-normal mt-4">
                 que trabalham por você
@@ -513,7 +513,7 @@ const HomePage = () => {
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
               Você não contrata software.
               <br />
-              <span className="gradient-text">Você contrata funcionários digitais.</span>
+              <span className="gradient-text">Você contrata funcionários de IA.</span>
             </h2>
           </motion.div>
 

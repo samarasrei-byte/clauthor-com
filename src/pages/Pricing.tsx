@@ -166,10 +166,10 @@ const Pricing = () => {
               </div>
 
               {/* CLT comparison callout */}
-              <div className="mb-6 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
+              <div className="mb-6 p-3 rounded-xl bg-cyan-500/5 border border-cyan-500/10">
                 <div className="flex items-center gap-2 mb-1">
-                  <Users className="h-3.5 w-3.5 text-amber-400" />
-                  <span className="text-xs font-bold text-amber-400">Substitui {plan.equivalent}</span>
+                  <Users className="h-3.5 w-3.5 text-cyan-400" />
+                  <span className="text-xs font-bold text-cyan-400">Substitui {plan.equivalent}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-muted-foreground">Custo CLT equivalente:</span>
@@ -239,7 +239,7 @@ const Pricing = () => {
                   </span>
                 </div>
                 <div className="text-center">
-                  <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center justify-center gap-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center justify-center gap-1">
                     <CheckCircle2 className="h-3 w-3" />
                     ApexBot
                   </span>
@@ -257,7 +257,7 @@ const Pricing = () => {
                 >
                   <div className="text-sm font-medium text-foreground/80">{row.label}</div>
                   <div className="text-center text-sm text-muted-foreground">{row.clt}</div>
-                  <div className="text-center text-sm font-semibold text-amber-400">{row.apex}</div>
+                  <div className="text-center text-sm font-semibold text-cyan-400">{row.apex}</div>
                 </motion.div>
               ))}
             </div>
@@ -266,7 +266,7 @@ const Pricing = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Um funcionário CLT custa em média <span className="text-foreground font-bold">R$ 7.560/mês</span> (salário + encargos de 68%).
                 <br />
-                 Um agente ApexBot faz o trabalho de 20 deles por <span className="text-amber-400 font-bold">R$ 1.499/mês</span>.
+                 Um agente ApexBot faz o trabalho de 20 deles por <span className="text-cyan-400 font-bold">R$ 1.499/mês</span>.
               </p>
               <Link to="/auth">
                 <Button className="glow rounded-xl px-8 h-12 font-semibold">

@@ -31,7 +31,7 @@ export function CreditsDisplay() {
 
   const planColors: Record<string, string> = {
     free: "bg-muted/80 text-muted-foreground",
-    starter: "bg-amber-500/15 text-amber-400",
+    starter: "bg-cyan-500/15 text-cyan-400",
     pro: "bg-primary/15 text-primary",
     enterprise: "bg-emerald-500/15 text-emerald-400",
   };
@@ -69,7 +69,7 @@ export function CreditsDisplay() {
           className="h-2"
         />
         {usagePercentage > 80 && (
-          <p className="text-xs text-amber-400 flex items-center gap-1 mt-2">
+          <p className="text-xs text-cyan-400 flex items-center gap-1 mt-2">
             <TrendingUp className="h-3 w-3" />
             Créditos baixos! Considere fazer upgrade.
           </p>
