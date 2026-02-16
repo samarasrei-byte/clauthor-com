@@ -233,7 +233,7 @@ const LibraryPage = () => {
             {templates.length} agentes disponíveis
           </Badge>
           <h1 className="font-display text-3xl font-bold mb-2">Nossos Agentes</h1>
-          <p className="text-muted-foreground">Cada agente faz o trabalho de 20 funcionários. Contrate e ative em minutos.</p>
+          <p className="text-muted-foreground">Cada agente substitui até 3 funcionários de IA. Contrate e ative em minutos.</p>
         </div>
         
         {/* Filter */}
@@ -334,7 +334,7 @@ const LibraryPage = () => {
               <div className="mb-5 flex-1 relative z-10">
                 <p className="text-[10px] text-muted-foreground mb-2 font-medium uppercase tracking-widest flex items-center gap-1">
                   <Brain className="h-3 w-3" />
-                  {t.actions.length} Capacidades — Trabalho de 20 pessoas
+                  {t.actions.length} Capacidades
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {t.actions.slice(0, expandedActions === t.title ? 20 : 6).map((a) => (

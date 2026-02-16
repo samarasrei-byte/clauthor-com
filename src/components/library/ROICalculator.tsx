@@ -10,7 +10,7 @@ const ROICalculator = () => {
 
   const stats = useMemo(() => {
     const humanCost = employees * avgSalary;
-    const agentCost = employees * 1899; // avg agent price
+    const agentCost = Math.ceil(employees / 3) * 3997; // 1 agent replaces ~3 employees
     const savings = humanCost - agentCost;
     const savingsPercent = humanCost > 0 ? Math.round((savings / humanCost) * 100) : 0;
     const yearSavings = savings * 12;
