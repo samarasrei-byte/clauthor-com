@@ -76,7 +76,7 @@ const AuthPage = () => {
             {isLogin ? "Bem-vindo de volta" : "Criar sua conta"}
           </h1>
           <p className="text-muted-foreground">
-            {isLogin ? "Entre para acessar seus agentes" : "Comece a criar funcionários digitais"}
+            {isLogin ? "Entre para acessar seus agentes" : "Comece a criar funcionários de IA"}
           </p>
         </div>
 

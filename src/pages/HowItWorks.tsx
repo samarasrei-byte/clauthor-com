@@ -109,7 +109,7 @@ const HowItWorks = () => {
             Automação que <span className="gradient-text">realmente funciona</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Em 4 passos simples, você transforma sua operação com funcionários digitais 
+            Em 4 passos simples, você transforma sua operação com funcionários de IA 
             que trabalham 24/7 sem erros.
           </p>
         </motion.div>

@@ -100,7 +100,7 @@ const ClientDashboard = () => {
       >
         <div>
           <h1 className="font-display text-3xl font-bold mb-1">Meu Painel</h1>
-          <p className="text-muted-foreground">Gerencie seus funcionários digitais</p>
+          <p className="text-muted-foreground">Gerencie seus funcionários de IA</p>
         </div>
         <div className="flex items-center gap-3">
           <CreditsDisplay />

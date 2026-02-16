@@ -30,7 +30,7 @@ const ROICalculator = () => {
         </div>
         <div>
           <h2 className="font-display font-bold text-lg">Calculadora de ROI</h2>
-          <p className="text-xs text-muted-foreground">Quanto você economiza com funcionários digitais?</p>
+          <p className="text-xs text-muted-foreground">Quanto você economiza com funcionários de IA?</p>
         </div>
       </div>
 

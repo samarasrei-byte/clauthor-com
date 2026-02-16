@@ -27,7 +27,7 @@ const AgentsPage = () => (
     <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
       <div>
         <h1 className="font-display text-3xl font-bold mb-1">Meus Agentes</h1>
-        <p className="text-muted-foreground">Gerencie seus funcionários digitais</p>
+        <p className="text-muted-foreground">Gerencie seus funcionários de IA</p>
       </div>
       <Link to="/create-agent">
         <Button className="neon-glow">

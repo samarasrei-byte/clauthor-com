@@ -22,7 +22,7 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
       label: "Execuções Totais", 
       value: totalExecutions.toLocaleString("pt-BR"), 
       trend: "+12%",
-      color: "text-amber-400"
+      color: "text-cyan-400"
     },
     { 
       icon: CheckCircle, 
