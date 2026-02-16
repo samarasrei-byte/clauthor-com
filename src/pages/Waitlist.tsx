@@ -195,7 +195,7 @@ const Waitlist = () => {
       {/* Animated background */}
       <div className="absolute inset-0">
         <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[120px] opacity-60" />
-        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-purple-500/10 rounded-full blur-[120px] opacity-60" />
+        <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-primary-glow/10 rounded-full blur-[120px] opacity-60" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[80px]" />
       </div>
 
@@ -272,7 +272,7 @@ const Waitlist = () => {
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.5 + i * 0.1 }}
-                  className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/40 to-purple-500/40 border-2 border-background flex items-center justify-center"
+                  className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/40 to-primary-glow/40 border-2 border-background flex items-center justify-center"
                 >
                   <span className="text-xs font-bold">{String.fromCharCode(64 + i)}</span>
                 </motion.div>

@@ -28,9 +28,9 @@ const tierLabels: Record<string, string> = {
 
 const tierColors: Record<string, string> = {
   basic: "bg-muted text-muted-foreground",
-  intermediate: "bg-blue-500/20 text-blue-400",
-  advanced: "bg-purple-500/20 text-purple-400",
-  enterprise: "bg-primary/20 text-primary",
+  intermediate: "bg-amber-500/15 text-amber-400",
+  advanced: "bg-emerald-500/15 text-emerald-400",
+  enterprise: "bg-primary/15 text-primary",
 };
 
 const statusLabels: Record<string, string> = {

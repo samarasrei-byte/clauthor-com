@@ -72,7 +72,7 @@ const AdminDashboard = () => {
   const activeAgents = allAgents.filter((a) => a.status === "active").length;
 
   const stats = [
-    { icon: Users, label: "Total de Usuários", value: usersCount.toString(), color: "text-blue-400" },
+    { icon: Users, label: "Total de Usuários", value: usersCount.toString(), color: "text-amber-400" },
     { icon: Bot, label: "Agentes Ativos", value: activeAgents.toString(), color: "text-primary" },
     { icon: DollarSign, label: "Receita Mensal", value: `R$ ${(totalRevenue / 100).toLocaleString("pt-BR")}`, color: "text-green-400" },
     { icon: ShoppingBag, label: "Pendentes Aprovação", value: pendingAgents.length.toString(), color: "text-yellow-400" },

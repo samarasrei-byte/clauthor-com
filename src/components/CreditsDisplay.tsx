@@ -31,9 +31,9 @@ export function CreditsDisplay() {
 
   const planColors: Record<string, string> = {
     free: "bg-muted/80 text-muted-foreground",
-    starter: "bg-blue-500/20 text-blue-400",
-    pro: "bg-purple-500/20 text-purple-400",
-    enterprise: "bg-primary/20 text-primary",
+    starter: "bg-amber-500/15 text-amber-400",
+    pro: "bg-primary/15 text-primary",
+    enterprise: "bg-emerald-500/15 text-emerald-400",
   };
 
   return (
