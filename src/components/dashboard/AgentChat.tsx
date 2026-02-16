@@ -1,16 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Loader2, Sparkles } from "lucide-react";
+import { Send, Bot, User, Loader2, Sparkles, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-
-interface Message {
-  id: string;
-  role: "user" | "assistant";
-  content: string;
-  timestamp: Date;
-}
+import { useAgentChat } from "@/hooks/useAgentChat";
+import ReactMarkdown from "react-markdown";
 
 interface AgentChatProps {
   agentId?: string;
@@ -18,16 +13,8 @@ interface AgentChatProps {
 }
 
 const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => {
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      id: "welcome",
-      role: "assistant",
-      content: `Olá! Sou o ${agentName}. Como posso ajudar você hoje?`,
-      timestamp: new Date(),
-    },
-  ]);
+  const { messages, isLoading, sendMessage, clearMessages } = useAgentChat(agentId);
   const [input, setInput] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -38,31 +25,16 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
     scrollToBottom();
   }, [messages]);
 
+  // Reset chat when agent changes
+  useEffect(() => {
+    clearMessages();
+  }, [agentId]);
+
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
-
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      role: "user",
-      content: input,
-      timestamp: new Date(),
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
+    const msg = input;
     setInput("");
-    setIsLoading(true);
-
-    // Simular resposta do agente (substituir por chamada real à API)
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: "assistant",
-        content: "Entendi sua solicitação! Estou processando as informações e em breve terei uma resposta completa para você. Posso ajudar com mais alguma coisa enquanto isso?",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, assistantMessage]);
-      setIsLoading(false);
-    }, 1500);
+    await sendMessage(msg);
   };
 
   return (
@@ -81,18 +53,38 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
             </div>
           </div>
         </div>
-        <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
-          <Sparkles className="h-3 w-3 mr-1" />
-          IA Ativa
-        </Badge>
+        <div className="flex items-center gap-2">
+          {messages.length > 0 && (
+            <Button variant="ghost" size="icon" onClick={clearMessages} className="h-8 w-8">
+              <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
+            </Button>
+          )}
+          <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
+            <Sparkles className="h-3 w-3 mr-1" />
+            IA Ativa
+          </Badge>
+        </div>
       </div>
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        {messages.length === 0 && (
+          <div className="flex flex-col items-center justify-center h-full text-center">
+            <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+              <Bot className="h-8 w-8 text-primary" />
+            </div>
+            <p className="text-sm text-muted-foreground">
+              {agentId
+                ? `Converse com o ${agentName}. Ele está pronto para ajudar!`
+                : "Selecione um agente ativo para iniciar uma conversa."}
+            </p>
+          </div>
+        )}
+
         <AnimatePresence mode="popLayout">
-          {messages.map((message) => (
+          {messages.map((message, idx) => (
             <motion.div
-              key={message.id}
+              key={idx}
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
@@ -100,9 +92,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
             >
               <div
                 className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                  message.role === "user"
-                    ? "bg-primary/20"
-                    : "bg-white/5"
+                  message.role === "user" ? "bg-primary/20" : "bg-white/5"
                 }`}
               >
                 {message.role === "user" ? (
@@ -118,13 +108,13 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
                     : "bg-white/5 text-foreground"
                 }`}
               >
-                <p className="text-sm">{message.content}</p>
-                <p className="text-[10px] opacity-60 mt-1">
-                  {message.timestamp.toLocaleTimeString("pt-BR", {
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
-                </p>
+                {message.role === "assistant" ? (
+                  <div className="text-sm prose prose-sm prose-invert max-w-none">
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
+                ) : (
+                  <p className="text-sm">{message.content}</p>
+                )}
               </div>
             </motion.div>
           ))}
@@ -164,14 +154,14 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder="Digite sua mensagem..."
+            placeholder={agentId ? "Digite sua mensagem..." : "Selecione um agente primeiro"}
             className="flex-1 bg-white/5 border-white/10 focus:border-primary/50"
-            disabled={isLoading}
+            disabled={isLoading || !agentId}
           />
           <Button
             type="submit"
             size="icon"
-            disabled={!input.trim() || isLoading}
+            disabled={!input.trim() || isLoading || !agentId}
             className="shrink-0"
           >
             {isLoading ? (
