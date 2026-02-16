@@ -16,6 +16,7 @@ const Navbar = () => {
 
   const publicNavItems = [
     { label: "Biblioteca", href: "/library" },
+    { label: "Preços", href: "/pricing" },
     { label: "Como Funciona", href: "/how-it-works" },
   ];
 
@@ -23,6 +24,7 @@ const Navbar = () => {
     { label: "Dashboard", href: "/dashboard" },
     { label: "Meus Agentes", href: "/agents" },
     { label: "Biblioteca", href: "/library" },
+    { label: "Preços", href: "/pricing" },
     { label: "Integrações", href: "/integrations" },
   ];
 
