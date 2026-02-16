@@ -14,6 +14,7 @@ const plans = [
     popular: false,
     equivalent: "1 funcionário CLT",
     cltCost: "R$ 4.500+",
+    savings: "67%",
     features: [
       "1 Agente ativo (= 20 funcionários)",
       "50.000 tokens/mês inclusos",
@@ -31,6 +32,7 @@ const plans = [
     popular: true,
     equivalent: "5 funcionários CLT",
     cltCost: "R$ 22.500+",
+    savings: "87%",
     features: [
       "5 Agentes ativos (= 100 funcionários)",
       "250.000 tokens/mês inclusos",
@@ -49,6 +51,7 @@ const plans = [
     popular: false,
     equivalent: "Equipe inteira CLT",
     cltCost: "R$ 100.000+",
+    savings: "95%+",
     features: [
       "Agentes ilimitados (= 500+ funcionários)",
       "Tokens ilimitados",
@@ -163,14 +166,17 @@ const Pricing = () => {
               </div>
 
               {/* CLT comparison callout */}
-              <div className="mb-6 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+              <div className="mb-6 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
                 <div className="flex items-center gap-2 mb-1">
-                  <Users className="h-3.5 w-3.5 text-emerald-400" />
-                  <span className="text-xs font-bold text-emerald-400">Substitui {plan.equivalent}</span>
+                  <Users className="h-3.5 w-3.5 text-amber-400" />
+                  <span className="text-xs font-bold text-amber-400">Substitui {plan.equivalent}</span>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-[10px] text-muted-foreground">Custo CLT equivalente:</span>
-                  <span className="text-xs font-bold text-muted-foreground line-through">{plan.cltCost}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-muted-foreground line-through">{plan.cltCost}</span>
+                    <span className="text-[10px] font-bold text-primary px-1.5 py-0.5 rounded bg-primary/10">-{plan.savings}</span>
+                  </div>
                 </div>
               </div>
 
@@ -227,13 +233,13 @@ const Pricing = () => {
               <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border mb-2">
                 <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground"></div>
                 <div className="text-center">
-                  <span className="text-xs font-bold uppercase tracking-wider text-destructive/70 flex items-center justify-center gap-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center justify-center gap-1">
                     <XCircle className="h-3 w-3" />
                     CLT Tradicional
                   </span>
                 </div>
                 <div className="text-center">
-                  <span className="text-xs font-bold uppercase tracking-wider text-primary flex items-center justify-center gap-1">
+                  <span className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center justify-center gap-1">
                     <CheckCircle2 className="h-3 w-3" />
                     ApexBot
                   </span>
@@ -251,7 +257,7 @@ const Pricing = () => {
                 >
                   <div className="text-sm font-medium text-foreground/80">{row.label}</div>
                   <div className="text-center text-sm text-muted-foreground">{row.clt}</div>
-                  <div className="text-center text-sm font-semibold text-primary">{row.apex}</div>
+                  <div className="text-center text-sm font-semibold text-amber-400">{row.apex}</div>
                 </motion.div>
               ))}
             </div>
@@ -260,7 +266,7 @@ const Pricing = () => {
               <p className="text-sm text-muted-foreground mb-4">
                 Um funcionário CLT custa em média <span className="text-foreground font-bold">R$ 7.560/mês</span> (salário + encargos de 68%).
                 <br />
-                Um agente ApexBot faz o trabalho de 20 deles por <span className="text-primary font-bold">R$ 1.499/mês</span>.
+                 Um agente ApexBot faz o trabalho de 20 deles por <span className="text-amber-400 font-bold">R$ 1.499/mês</span>.
               </p>
               <Link to="/auth">
                 <Button className="glow rounded-xl px-8 h-12 font-semibold">
