@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "Accueil", "library": "Bibliothèque", "pricing": "Tarifs", "dashboard": "Tableau de bord", "login": "Connexion", "logout": "Déconnexion", "admin": "Admin" },
+  "nav": { "home": "Accueil", "library": "Bibliothèque", "pricing": "Tarifs", "dashboard": "Tableau de bord", "login": "Connexion", "logout": "Déconnexion", "admin": "Admin", "how_it_works": "Comment ça marche", "my_agents": "Mes Agents", "integrations": "Intégrations" },
   "hero": { "badge": "Plateforme d'Agents Autonomes", "title1": "Employés Numériques.", "title2": "Agents Autonomes", "title3": "pour votre Entreprise.", "subtitle": "Créez, formez et opérez des agents intelligents qui exécutent des processus complets: service client, ventes, finances, fiscalité et bien plus.", "subtitle_highlight": "Votre opération 24/7.", "cta_primary": "Commencer maintenant, c'est gratuit", "cta_secondary": "Explorer les agents" },
   "spotlight": { "message1": "Nous ne sommes pas venus remplacer les gens.", "message2": "Nous sommes venus travailler aux côtés de vos meilleurs talents.", "agent_label": "Découvrez l'agent le plus avancé", "agent_tagline": "Intelligence autonome. Exécution implacable.", "agent_subtitle": "Le feu qui fait avancer votre opération." },
   "stats": { "agents": "Agents Actifs", "actions": "Actions/mois", "uptime": "Uptime", "companies": "Entreprises" },

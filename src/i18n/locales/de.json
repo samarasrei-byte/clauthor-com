@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "Startseite", "library": "Bibliothek", "pricing": "Preise", "dashboard": "Dashboard", "login": "Anmelden", "logout": "Abmelden", "admin": "Admin" },
+  "nav": { "home": "Startseite", "library": "Bibliothek", "pricing": "Preise", "dashboard": "Dashboard", "login": "Anmelden", "logout": "Abmelden", "admin": "Admin", "how_it_works": "So funktioniert's", "my_agents": "Meine Agenten", "integrations": "Integrationen" },
   "hero": { "badge": "Autonome Agenten Plattform", "title1": "Digitale Mitarbeiter.", "title2": "Autonome Agenten", "title3": "für Ihr Unternehmen.", "subtitle": "Erstellen, trainieren und betreiben Sie intelligente Agenten, die komplette Prozesse ausführen: Kundenservice, Vertrieb, Finanzen, Steuern und vieles mehr.", "subtitle_highlight": "Ihr 24/7 Betrieb.", "cta_primary": "Jetzt starten, kostenlos", "cta_secondary": "Agenten erkunden" },
   "spotlight": { "message1": "Wir sind nicht gekommen, um Menschen zu ersetzen.", "message2": "Wir sind gekommen, um mit Ihren besten Talenten zu arbeiten.", "agent_label": "Lernen Sie den fortschrittlichsten Agenten kennen", "agent_tagline": "Autonome Intelligenz. Unerbittliche Ausführung.", "agent_subtitle": "Das Feuer, das Ihren Betrieb antreibt." },
   "stats": { "agents": "Aktive Agenten", "actions": "Aktionen/Monat", "uptime": "Uptime", "companies": "Unternehmen" },

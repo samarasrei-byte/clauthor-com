@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "首页", "library": "模板库", "pricing": "价格", "dashboard": "控制台", "login": "登录", "logout": "退出", "admin": "管理" },
+  "nav": { "home": "首页", "library": "模板库", "pricing": "价格", "dashboard": "控制台", "login": "登录", "logout": "退出", "admin": "管理", "how_it_works": "工作原理", "my_agents": "我的代理", "integrations": "集成" },
   "hero": { "badge": "自主代理平台", "title1": "数字员工。", "title2": "自主代理", "title3": "为您的企业服务。", "subtitle": "创建、培训和运营智能代理，执行完整流程：客户服务、销售、财务、税务等。", "subtitle_highlight": "您的24/7运营。", "cta_primary": "立即免费开始", "cta_secondary": "探索代理" },
   "spotlight": { "message1": "我们不是来取代人类的。", "message2": "我们是来与您最优秀的人才一起工作的。", "agent_label": "认识最先进的代理", "agent_tagline": "自主智能。无情执行。", "agent_subtitle": "推动您运营的火焰。" },
   "stats": { "agents": "活跃代理", "actions": "操作/月", "uptime": "正常运行时间", "companies": "企业" },

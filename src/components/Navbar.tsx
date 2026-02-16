@@ -15,17 +15,17 @@ const Navbar = () => {
   const { t } = useTranslation();
 
   const publicNavItems = [
-    { label: "Biblioteca", href: "/library" },
-    { label: "Preços", href: "/pricing" },
-    { label: "Como Funciona", href: "/how-it-works" },
+    { label: t("nav.library"), href: "/library" },
+    { label: t("nav.pricing"), href: "/pricing" },
+    { label: t("nav.how_it_works"), href: "/how-it-works" },
   ];
 
   const authNavItems = [
-    { label: "Dashboard", href: "/dashboard" },
-    { label: "Meus Agentes", href: "/agents" },
-    { label: "Biblioteca", href: "/library" },
-    { label: "Preços", href: "/pricing" },
-    { label: "Integrações", href: "/integrations" },
+    { label: t("nav.dashboard"), href: "/dashboard" },
+    { label: t("nav.my_agents"), href: "/agents" },
+    { label: t("nav.library"), href: "/library" },
+    { label: t("nav.pricing"), href: "/pricing" },
+    { label: t("nav.integrations"), href: "/integrations" },
   ];
 
   const navItems = user ? authNavItems : publicNavItems;
@@ -172,12 +172,12 @@ const Navbar = () => {
                       setMobileOpen(false);
                     }}
                   >
-                    <LogOut className="h-4 w-4 mr-2" />
-                    Sair
+                   <LogOut className="h-4 w-4 mr-2" />
+                    {t("nav.logout")}
                   </Button>
                   <Link to="/create-agent" onClick={() => setMobileOpen(false)}>
                     <Button className="w-full glow">
-                      Criar Agente
+                      {t("dashboard.new_agent")}
                     </Button>
                   </Link>
                 </>
@@ -185,12 +185,12 @@ const Navbar = () => {
                 <>
                   <Link to="/auth" onClick={() => setMobileOpen(false)}>
                     <Button variant="ghost" className="w-full">
-                      Entrar
+                      {t("nav.login")}
                     </Button>
                   </Link>
                   <Link to="/auth" onClick={() => setMobileOpen(false)}>
                     <Button className="w-full glow">
-                      Criar Conta
+                      {t("auth.create_account")}
                     </Button>
                   </Link>
                 </>

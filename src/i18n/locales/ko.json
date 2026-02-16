@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "홈", "library": "라이브러리", "pricing": "가격", "dashboard": "대시보드", "login": "로그인", "logout": "로그아웃", "admin": "관리자" },
+  "nav": { "home": "홈", "library": "라이브러리", "pricing": "가격", "dashboard": "대시보드", "login": "로그인", "logout": "로그아웃", "admin": "관리자", "how_it_works": "작동 방식", "my_agents": "내 에이전트", "integrations": "통합" },
   "hero": { "badge": "자율 에이전트 플랫폼", "title1": "디지털 직원.", "title2": "자율 에이전트", "title3": "귀하의 비즈니스를 위해.", "subtitle": "고객 서비스, 영업, 재무, 세무 등 완전한 프로세스를 실행하는 지능형 에이전트를 생성, 교육 및 운영하세요.", "subtitle_highlight": "24/7 운영.", "cta_primary": "지금 무료로 시작", "cta_secondary": "에이전트 탐색" },
   "spotlight": { "message1": "우리는 사람을 대체하러 온 것이 아닙니다.", "message2": "최고의 인재와 함께 일하러 왔습니다.", "agent_label": "가장 진보된 에이전트를 만나보세요", "agent_tagline": "자율 지능. 무자비한 실행.", "agent_subtitle": "당신의 운영을 움직이는 불." },
   "stats": { "agents": "활성 에이전트", "actions": "작업/월", "uptime": "가동 시간", "companies": "기업" },

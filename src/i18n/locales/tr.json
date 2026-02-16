@@ -1,5 +1,5 @@
 {
-  "nav": { "home": "Anasayfa", "library": "Kütüphane", "pricing": "Fiyatlar", "dashboard": "Kontrol Paneli", "login": "Giriş", "logout": "Çıkış", "admin": "Yönetici" },
+  "nav": { "home": "Anasayfa", "library": "Kütüphane", "pricing": "Fiyatlar", "dashboard": "Kontrol Paneli", "login": "Giriş", "logout": "Çıkış", "admin": "Yönetici", "how_it_works": "Nasıl Çalışır", "my_agents": "Ajanlarım", "integrations": "Entegrasyonlar" },
   "hero": { "badge": "Otonom Ajanlar Platformu", "title1": "Dijital Çalışanlar.", "title2": "Otonom Ajanlar", "title3": "işletmeniz için.", "subtitle": "Müşteri hizmetleri, satış, finans, vergi ve daha fazlası gibi tam süreçleri yürüten akıllı ajanlar oluşturun, eğitin ve işletin.", "subtitle_highlight": "7/24 operasyonunuz.", "cta_primary": "Şimdi ücretsiz başla", "cta_secondary": "Ajanları keşfet" },
   "spotlight": { "message1": "İnsanların yerini almaya gelmedik.", "message2": "En iyi yeteneklerinizle birlikte çalışmaya geldik.", "agent_label": "En gelişmiş ajanla tanışın", "agent_tagline": "Otonom zeka. Amansız uygulama.", "agent_subtitle": "Operasyonunuzu hareket ettiren ateş." },
   "stats": { "agents": "Aktif Ajanlar", "actions": "İşlem/ay", "uptime": "Çalışma Süresi", "companies": "Şirketler" },
