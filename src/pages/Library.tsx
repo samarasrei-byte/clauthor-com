@@ -1,9 +1,9 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import {
   MessageSquare, FileText, DollarSign,
@@ -12,7 +12,8 @@ import {
   Phone, Search, Users, Briefcase, BarChart3,
   Layers, Cpu, Sparkles, Globe, Rocket, Loader2,
   Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap,
-  HeartHandshake, Crown
+  HeartHandshake, Crown, Play, TrendingUp, Zap, Activity,
+  ChevronRight, Flame, Award
 } from "lucide-react";
 import ROICalculator from "@/components/library/ROICalculator";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
@@ -31,6 +32,9 @@ const agentKeys = [
   "seo_growth", "project_management", "supply_chain", "training",
   "concierge", "ceo", "startup_creator"
 ] as const;
+
+// Featured agents for the hero carousel
+const featuredKeys = ["voice_ai", "orchestrator", "ceo"] as const;
 
 // Map library keys to DB template slugs
 const agentSlugs: Record<string, string> = {
@@ -137,6 +141,68 @@ const agentIntegrations: Record<string, string[]> = {
   startup_creator: ["Lean Canvas", "Google Slides", "Notion", "Figma", "GitHub", "Stripe"],
 };
 
+// Simulated social proof data
+const agentSocialProof: Record<string, { companies: number; rating: number; savings: string }> = {
+  voice_ai: { companies: 248, rating: 4.9, savings: "R$ 25k" },
+  orchestrator: { companies: 132, rating: 4.8, savings: "R$ 40k" },
+  research: { companies: 189, rating: 4.7, savings: "R$ 18k" },
+  coding: { companies: 156, rating: 4.8, savings: "R$ 35k" },
+  omnichannel: { companies: 312, rating: 4.9, savings: "R$ 20k" },
+  revenue: { companies: 201, rating: 4.7, savings: "R$ 22k" },
+  sales: { companies: 267, rating: 4.8, savings: "R$ 30k" },
+  rag: { companies: 145, rating: 4.6, savings: "R$ 12k" },
+  computer: { companies: 98, rating: 4.7, savings: "R$ 28k" },
+  content: { companies: 334, rating: 4.8, savings: "R$ 15k" },
+  security: { companies: 87, rating: 4.9, savings: "R$ 45k" },
+  hr: { companies: 178, rating: 4.7, savings: "R$ 20k" },
+  customer_success: { companies: 156, rating: 4.8, savings: "R$ 18k" },
+  data_analytics: { companies: 198, rating: 4.7, savings: "R$ 22k" },
+  legal: { companies: 112, rating: 4.8, savings: "R$ 35k" },
+  ecommerce: { companies: 289, rating: 4.8, savings: "R$ 25k" },
+  influencer: { companies: 167, rating: 4.6, savings: "R$ 16k" },
+  marketing_automation: { companies: 234, rating: 4.7, savings: "R$ 18k" },
+  creative_design: { companies: 278, rating: 4.6, savings: "R$ 14k" },
+  video_production: { companies: 198, rating: 4.7, savings: "R$ 16k" },
+  seo_growth: { companies: 212, rating: 4.7, savings: "R$ 15k" },
+  project_management: { companies: 156, rating: 4.6, savings: "R$ 12k" },
+  supply_chain: { companies: 89, rating: 4.7, savings: "R$ 20k" },
+  training: { companies: 134, rating: 4.6, savings: "R$ 10k" },
+  concierge: { companies: 167, rating: 4.8, savings: "R$ 12k" },
+  ceo: { companies: 78, rating: 4.9, savings: "R$ 50k" },
+  startup_creator: { companies: 145, rating: 4.7, savings: "R$ 15k" },
+};
+
+// Capability badges per agent
+const agentCapabilities: Record<string, string[]> = {
+  voice_ai: ["🎙️ Voz", "📞 Telefonia", "🧠 NLP"],
+  orchestrator: ["🤖 Multi-Agent", "⚡ Autonomous", "🔄 Workflow"],
+  research: ["🔍 Deep Search", "📊 Analytics", "📄 Reports"],
+  coding: ["💻 Full-Stack", "🖥️ Computer Use", "🚀 CI/CD"],
+  omnichannel: ["💬 Omnichannel", "🧠 Memory", "🎯 95% Auto"],
+  revenue: ["📈 Forecast", "💰 Billing", "🤖 ML"],
+  sales: ["🎯 Pipeline", "📧 Outbound", "🤝 Closing"],
+  rag: ["📚 RAG", "🔗 Cross-Ref", "📋 Compliance"],
+  computer: ["🖥️ Computer Use", "🤖 RPA", "🏢 Legacy"],
+  content: ["✍️ Content", "📱 Social", "📊 Analytics"],
+  security: ["🛡️ SOC 24/7", "🔐 Zero Trust", "📋 LGPD"],
+  hr: ["👥 Recruiting", "📈 Analytics", "🎓 Training"],
+  customer_success: ["📊 Health Score", "🔄 Anti-Churn", "📈 NPS"],
+  data_analytics: ["📊 BI", "🗣️ NL→SQL", "🔮 Predictive"],
+  legal: ["⚖️ Contracts", "📋 Compliance", "🔍 Due Diligence"],
+  ecommerce: ["🛒 Catalog", "💲 Dynamic Price", "📦 Logistics"],
+  influencer: ["📣 Creators", "📊 ROI", "🤝 Management"],
+  marketing_automation: ["🎯 Funnels", "📧 Nurturing", "📊 Lead Score"],
+  creative_design: ["🎨 Design", "🖼️ Branding", "📱 Social Kit"],
+  video_production: ["🎬 Reels", "📹 Shorts", "🖼️ Thumbnails"],
+  seo_growth: ["🔍 SEO", "📈 Growth", "🔗 Link Building"],
+  project_management: ["📋 Agile", "⏱️ Timeline", "📊 Reports"],
+  supply_chain: ["📦 Inventory", "🚛 Routes", "📈 Forecast"],
+  training: ["🎓 LMS", "🎮 Gamification", "📊 Skills"],
+  concierge: ["📅 Agenda", "📧 E-mail", "⚡ +4h/dia"],
+  ceo: ["👑 Strategy", "📊 Scenarios", "🎯 Decisions"],
+  startup_creator: ["🚀 MVP", "📊 Validation", "💡 Pitch Deck"],
+};
+
 const tierColors: Record<string, string> = {
   intermediate: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
   advanced: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
@@ -150,12 +216,15 @@ const LibraryPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [previewAgent, setPreviewAgent] = useState<{ name: string; desc: string } | null>(null);
   const [hiringSlug, setHiringSlug] = useState<string | null>(null);
+  const [activeFeatured, setActiveFeatured] = useState(0);
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.split("-")[0] || "pt";
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  const filteredAgents = agentKeys.filter((k) => {
+  const filteredAgents = useMemo(() => agentKeys.filter((k) => {
+    // Exclude featured from the grid
+    if ((featuredKeys as readonly string[]).includes(k)) return false;
     if (filter !== "all" && agentTiers[k] !== filter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
@@ -165,7 +234,7 @@ const LibraryPage = () => {
       if (!title.includes(q) && !desc.includes(q) && !tags.includes(q)) return false;
     }
     return true;
-  });
+  }), [filter, searchQuery, t]);
 
   const handleHire = async (key: string) => {
     if (!user) {
@@ -177,7 +246,6 @@ const LibraryPage = () => {
     setHiringSlug(slug);
 
     try {
-      // Fetch template from DB
       const { data: template, error: tplError } = await supabase
         .from("agent_templates")
         .select("*")
@@ -194,7 +262,6 @@ const LibraryPage = () => {
       const priceTier = agentPriceTiers[key];
       const priceInCents = getPrice(lang, priceTier) * 100;
 
-      // Create agent from template
       const { data: agent, error: agentError } = await supabase
         .from("agents")
         .insert({
@@ -224,56 +291,240 @@ const LibraryPage = () => {
     }
   };
 
+  // Featured hero agent data
+  const featuredAgent = featuredKeys[activeFeatured];
+  const featuredIcon = agentIcons[featuredAgent];
+  const FeaturedIcon = featuredIcon;
+
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
-      {/* Header */}
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }} 
-        animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col sm:flex-row sm:items-end justify-between gap-4"
-      >
-        <div>
-          <Badge variant="outline" className="mb-4 border-primary/15 text-primary/80">
-            <Rocket className="h-3 w-3 mr-1" />
-            {t("library_page.badge_count", { count: agentKeys.length })}
-          </Badge>
-          <h1 className="font-display text-3xl font-bold mb-2">{t("library_page.title")}</h1>
-          <p className="text-muted-foreground max-w-xl">{t("library_page.subtitle")}</p>
-        </div>
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
+      
+      {/* ============ HERO SECTION — Featured Agents ============ */}
+      <section className="relative">
+        {/* Background glow */}
+        <div className="absolute -top-20 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/8 rounded-full blur-[120px] pointer-events-none" />
         
-        {/* Filter */}
-        <div className="flex gap-2 flex-wrap">
-          {tiers.map((tier) => (
-            <Button
-              key={tier}
-              variant={filter === tier ? "default" : "outline"}
-              size="sm"
-              onClick={() => setFilter(tier)}
-              className={`rounded-lg text-xs ${
-                filter === tier ? "glow" : "border-border hover:border-primary/20"
-              }`}
-            >
-              {tier === "all" ? t("library_page.all") : t(`tiers.${tier}`)}
-            </Button>
-          ))}
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }} 
+          animate={{ opacity: 1, y: 0 }}
+          className="relative"
+        >
+          {/* Hero badge */}
+          <div className="flex items-center justify-center mb-6">
+            <Badge variant="outline" className="border-primary/20 text-primary/90 px-4 py-1.5 text-sm">
+              <Flame className="h-3.5 w-3.5 mr-1.5" />
+              {t("library_page.badge_count", { count: agentKeys.length })}
+            </Badge>
+          </div>
+
+          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-3 tracking-tight">
+            {t("library_page.title")}
+          </h1>
+          <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10 text-base md:text-lg">
+            {t("library_page.subtitle")}
+          </p>
+
+          {/* Featured agent — cinematic card */}
+          <div className="relative max-w-4xl mx-auto">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={featuredAgent}
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.97 }}
+                transition={{ duration: 0.5 }}
+                className="relative rounded-3xl overflow-hidden"
+              >
+                {/* Cinematic gradient background */}
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-card to-primary-glow/10" />
+                <div className="absolute top-0 right-0 w-80 h-80 bg-primary/10 rounded-full blur-[100px]" />
+                <div className="absolute bottom-0 left-0 w-60 h-60 bg-primary-glow/8 rounded-full blur-[80px]" />
+                
+                {/* Scan line effect */}
+                <div className="absolute inset-0 scan-line pointer-events-none" />
+                
+                <div className="relative z-10 p-8 md:p-12 flex flex-col md:flex-row gap-8 items-center">
+                  {/* Left — Icon & Identity */}
+                  <div className="flex-shrink-0 flex flex-col items-center md:items-start gap-4">
+                    <motion.div 
+                      className="w-24 h-24 md:w-28 md:h-28 rounded-3xl bg-gradient-to-br from-primary/20 to-primary-glow/20 flex items-center justify-center border border-primary/20 animate-pulse-glow"
+                    >
+                      <FeaturedIcon className="h-12 w-12 md:h-14 md:w-14 text-primary" />
+                    </motion.div>
+                    
+                    {/* Social proof */}
+                    <div className="flex items-center gap-3">
+                      <div className="flex -space-x-1.5">
+                        {[...Array(4)].map((_, j) => (
+                          <div key={j} className="w-6 h-6 rounded-full bg-gradient-to-br from-muted to-card border-2 border-background" />
+                        ))}
+                      </div>
+                      <div>
+                        <p className="text-xs font-semibold text-foreground">{agentSocialProof[featuredAgent].companies}+ empresas</p>
+                        <div className="flex items-center gap-0.5">
+                          {[...Array(5)].map((_, j) => (
+                            <Star key={j} className="h-2.5 w-2.5 fill-primary text-primary" />
+                          ))}
+                          <span className="text-[10px] text-muted-foreground ml-1">{agentSocialProof[featuredAgent].rating}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right — Content */}
+                  <div className="flex-1 text-center md:text-left">
+                    <div className="flex items-center justify-center md:justify-start gap-3 mb-3">
+                      <Badge variant="outline" className={`${tierColors[agentTiers[featuredAgent]]} font-semibold`}>
+                        {t(`tiers.${agentTiers[featuredAgent]}`)}
+                      </Badge>
+                      <span className="text-xs px-3 py-1 rounded-full bg-primary/15 text-primary font-semibold border border-primary/20">
+                        {t(`library_page.agents.${featuredAgent}_highlight`)}
+                      </span>
+                    </div>
+
+                    <h2 className="font-display text-2xl md:text-3xl font-bold mb-2">
+                      {t(`library_page.agents.${featuredAgent}_title`)}
+                    </h2>
+                    <p className="text-muted-foreground mb-5 leading-relaxed max-w-lg">
+                      {t(`library_page.agents.${featuredAgent}_desc`)}
+                    </p>
+
+                    {/* Capability badges */}
+                    <div className="flex flex-wrap gap-2 mb-5 justify-center md:justify-start">
+                      {agentCapabilities[featuredAgent].map((cap) => (
+                        <span key={cap} className="text-xs px-3 py-1.5 rounded-lg bg-card/80 border border-border text-foreground font-medium">
+                          {cap}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* ROI & Stats row */}
+                    <div className="flex items-center gap-6 mb-6 justify-center md:justify-start">
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                          <TrendingUp className="h-4 w-4 text-emerald-400" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-emerald-400">{agentSocialProof[featuredAgent].savings}/mês</p>
+                          <p className="text-[10px] text-muted-foreground">economia média</p>
+                        </div>
+                      </div>
+                      <div className="w-px h-8 bg-border" />
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                          <Users className="h-4 w-4 text-primary" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold">{t(`library_page.agents.${featuredAgent}_replaces`)}</p>
+                          <p className="text-[10px] text-muted-foreground">{t("library_page.replaces_label")}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Price & CTAs */}
+                    <div className="flex items-center gap-4 flex-wrap justify-center md:justify-start">
+                      <div>
+                        <p className="font-display text-3xl font-bold gradient-text">
+                          {getPriceDisplay(lang, agentPriceTiers[featuredAgent])}
+                        </p>
+                        <span className="text-xs text-muted-foreground">{t("library.per_month")}</span>
+                      </div>
+                      <Button
+                        variant="outline"
+                        className="rounded-xl h-12 border-primary/20 hover:border-primary/40 gap-2"
+                        onClick={() => setPreviewAgent({ 
+                          name: t(`library_page.agents.${featuredAgent}_title`), 
+                          desc: t(`library_page.agents.${featuredAgent}_desc`) 
+                        })}
+                      >
+                        <Play className="h-4 w-4 text-primary" />
+                        {t("library_page.test_btn")}
+                      </Button>
+                      <Button
+                        className="rounded-xl h-12 font-semibold bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 neon-glow gap-2"
+                        disabled={hiringSlug === agentSlugs[featuredAgent]}
+                        onClick={() => handleHire(featuredAgent)}
+                      >
+                        {hiringSlug === agentSlugs[featuredAgent] ? (
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                        ) : (
+                          <>
+                            {t("library_page.hire_btn")}
+                            <ArrowRight className="h-4 w-4" />
+                          </>
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Featured selector pills */}
+            <div className="flex items-center justify-center gap-3 mt-6">
+              {featuredKeys.map((key, i) => {
+                const Icon = agentIcons[key];
+                const isActive = i === activeFeatured;
+                return (
+                  <button
+                    key={key}
+                    onClick={() => setActiveFeatured(i)}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-300 ${
+                      isActive
+                        ? "bg-primary/15 border border-primary/30 text-foreground neon-glow"
+                        : "bg-card/50 border border-border text-muted-foreground hover:text-foreground hover:border-primary/15"
+                    }`}
+                  >
+                    <Icon className={`h-4 w-4 ${isActive ? "text-primary" : ""}`} />
+                    <span className="text-xs font-medium hidden sm:inline">
+                      {t(`library_page.agents.${key}_title`).split("—")[0].trim()}
+                    </span>
+                    {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* ============ FILTERS & SEARCH ============ */}
+      <section className="space-y-4">
+        <div className="flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
+          {/* Tier filters */}
+          <div className="flex gap-2 flex-wrap">
+            {tiers.map((tier) => (
+              <Button
+                key={tier}
+                variant={filter === tier ? "default" : "outline"}
+                size="sm"
+                onClick={() => setFilter(tier)}
+                className={`rounded-xl text-xs ${
+                  filter === tier ? "neon-glow" : "border-border hover:border-primary/20"
+                }`}
+              >
+                {tier === "all" ? t("library_page.all") : t(`tiers.${tier}`)}
+              </Button>
+            ))}
+          </div>
+          
+          {/* Search */}
+          <div className="relative w-full sm:w-80">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              placeholder="Buscar agentes..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 glass border-border h-10 rounded-xl"
+            />
+          </div>
         </div>
-      </motion.div>
+      </section>
 
-      {/* Search */}
-      <div className="relative">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-        <Input
-          placeholder="Buscar agentes por nome, descrição ou tag..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="pl-10 glass border-border h-11"
-        />
-      </div>
-
-      {/* ROI Calculator */}
+      {/* ============ ROI Calculator ============ */}
       <ROICalculator />
 
-      {/* AI Squad Consultant */}
+      {/* ============ Squad Consultant ============ */}
       <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
         <div className="glass-card rounded-2xl p-8 md:p-10 relative overflow-hidden">
           <div className="absolute top-0 left-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
@@ -283,160 +534,180 @@ const LibraryPage = () => {
         </div>
       </motion.div>
 
-      {/* Grid */}
-      <div className="grid md:grid-cols-2 gap-6">
-        {filteredAgents.length === 0 ? (
-          <div className="col-span-2 text-center py-12 text-muted-foreground">
-            Nenhum agente encontrado para "{searchQuery}"
+      {/* ============ AGENT GRID — Cinematic Cards ============ */}
+      <section>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Zap className="h-4 w-4 text-primary" />
           </div>
-        ) : filteredAgents.map((key, i) => {
-          const tier = agentTiers[key];
-          const Icon = agentIcons[key];
-          const priceDisplay = getPriceDisplay(lang, agentPriceTiers[key]);
-          const agentTitle = t(`library_page.agents.${key}_title`);
-          const agentDesc = t(`library_page.agents.${key}_desc`);
-          const highlight = t(`library_page.agents.${key}_highlight`);
-          const replaces = t(`library_page.agents.${key}_replaces`);
-          const tags = agentTags[key];
-          const integrations = agentIntegrations[key];
-          const isHiring = hiringSlug === agentSlugs[key];
+          <h2 className="font-display text-xl font-bold">Todos os Agentes</h2>
+          <span className="text-xs text-muted-foreground">({filteredAgents.length})</span>
+        </div>
 
-          return (
-            <motion.div
-              key={key}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.03 }}
-              layout
-              whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            >
-              <div className="glass-card rounded-2xl p-6 glass-hover h-full flex flex-col relative overflow-hidden group">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-[80px] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                {tier === "enterprise" && (
-                  <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-[60px]" />
-                )}
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+          {filteredAgents.length === 0 ? (
+            <div className="col-span-full text-center py-12 text-muted-foreground">
+              Nenhum agente encontrado para "{searchQuery}"
+            </div>
+          ) : filteredAgents.map((key, i) => {
+            const tier = agentTiers[key];
+            const Icon = agentIcons[key];
+            const priceDisplay = getPriceDisplay(lang, agentPriceTiers[key]);
+            const agentTitle = t(`library_page.agents.${key}_title`);
+            const agentDesc = t(`library_page.agents.${key}_desc`);
+            const highlight = t(`library_page.agents.${key}_highlight`);
+            const replaces = t(`library_page.agents.${key}_replaces`);
+            const social = agentSocialProof[key];
+            const capabilities = agentCapabilities[key];
+            const integrations = agentIntegrations[key];
+            const isHiring = hiringSlug === agentSlugs[key];
 
-                {/* Header */}
-                <div className="flex items-start gap-4 mb-5 relative z-10">
-                  <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
+            return (
+              <motion.div
+                key={key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.03 }}
+                layout
+              >
+                <div className="glass-card rounded-2xl h-full flex flex-col relative overflow-hidden group hover:border-primary/15 transition-all duration-500">
+                  {/* Top gradient accent */}
+                  <div className={`h-1 w-full ${
                     tier === "enterprise" 
-                       ? "bg-gradient-to-br from-primary/20 to-primary-glow/20" 
-                       : tier === "advanced"
-                       ? "bg-gradient-to-br from-cyan-500/10 to-primary/10"
-                      : "bg-primary/5"
-                  }`}>
-                    <Icon className="h-7 w-7 text-primary/80" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h3 className="font-display font-bold text-lg leading-tight truncate">{agentTitle}</h3>
-                      {highlight && (
-                        <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary/15 text-primary font-semibold border border-primary/20 whitespace-nowrap shrink-0">
-                          {highlight}
-                        </span>
-                      )}
-                    </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{agentDesc}</p>
-                  </div>
-                </div>
+                      ? "bg-gradient-to-r from-primary via-primary-glow to-primary" 
+                      : tier === "advanced"
+                      ? "bg-gradient-to-r from-cyan-500/50 via-primary/30 to-cyan-500/50"
+                      : "bg-gradient-to-r from-muted via-border to-muted"
+                  }`} />
 
-                {/* Replaces badge */}
-                {replaces && (
-                  <div className="mb-4 relative z-10">
-                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                      <Users className="h-3.5 w-3.5 text-emerald-400" />
-                      <span className="text-xs font-medium text-emerald-400">
-                        {t("library_page.replaces_label")} {replaces}
-                      </span>
-                    </div>
-                  </div>
-                )}
-
-                {/* Price & Tier */}
-                <div className="flex items-center justify-between mb-5 pb-5 border-b border-border relative z-10">
-                  <Badge variant="outline" className={`${tierColors[tier]} font-medium`}>
-                    {t(`tiers.${tier}`)}
-                  </Badge>
-                  <div className="text-right">
-                    <p className="font-display font-bold text-2xl gradient-text">
-                      {priceDisplay}
-                    </p>
-                    <span className="text-xs text-muted-foreground">{t("library.per_month")}</span>
-                  </div>
-                </div>
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mb-4 relative z-10">
-                  {tags.map((tag) => (
-                    <span 
-                      key={tag} 
-                      className="text-xs px-2.5 py-1 rounded-lg bg-card text-muted-foreground border border-border"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Integrations preview */}
-                <div className="mb-5 flex-1 relative z-10">
-                  <p className="text-[10px] text-muted-foreground mb-2 font-medium uppercase tracking-widest">
-                    {t("library_page.integrations_label")}
-                  </p>
-                  <div className="flex items-center gap-2">
-                    <div className="flex -space-x-2">
-                      {integrations.slice(0, 3).map((integration) => (
-                        <div 
-                          key={integration}
-                          className="w-7 h-7 rounded-lg bg-card border border-border flex items-center justify-center text-[10px] font-bold text-muted-foreground"
-                          title={integration}
-                        >
-                          {integration.charAt(0)}
+                  <div className="p-5 flex flex-col flex-1">
+                    {/* Header row */}
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+                        tier === "enterprise" 
+                          ? "bg-gradient-to-br from-primary/20 to-primary-glow/20 border border-primary/15" 
+                          : "bg-primary/5"
+                      }`}>
+                        <Icon className="h-6 w-6 text-primary/80" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-display font-bold text-sm leading-tight mb-1 line-clamp-1">{agentTitle}</h3>
+                        <div className="flex items-center gap-1.5">
+                          <Badge variant="outline" className={`${tierColors[tier]} text-[10px] py-0 px-1.5`}>
+                            {t(`tiers.${tier}`)}
+                          </Badge>
+                          {highlight && (
+                            <span className="text-[9px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold whitespace-nowrap">
+                              {highlight}
+                            </span>
+                          )}
                         </div>
+                      </div>
+                    </div>
+
+                    {/* Description */}
+                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 mb-4">{agentDesc}</p>
+
+                    {/* Capability pills */}
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {capabilities.slice(0, 3).map((cap) => (
+                        <span key={cap} className="text-[10px] px-2 py-0.5 rounded-md bg-card border border-border text-muted-foreground">
+                          {cap}
+                        </span>
                       ))}
                     </div>
-                    {integrations.length > 3 && (
-                      <span className="text-xs text-muted-foreground">
-                        +{integrations.length - 3}
-                      </span>
+
+                    {/* ROI & Social Proof row */}
+                    <div className="flex items-center justify-between mb-4 py-3 px-3 rounded-xl bg-card/60 border border-border/50">
+                      <div className="flex items-center gap-1.5">
+                        <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
+                        <span className="text-xs font-semibold text-emerald-400">{social.savings}/mês</span>
+                      </div>
+                      <div className="w-px h-4 bg-border" />
+                      <div className="flex items-center gap-1">
+                        <Star className="h-3 w-3 fill-primary text-primary" />
+                        <span className="text-xs font-medium">{social.rating}</span>
+                      </div>
+                      <div className="w-px h-4 bg-border" />
+                      <span className="text-[10px] text-muted-foreground">{social.companies}+ empresas</span>
+                    </div>
+
+                    {/* Replaces */}
+                    {replaces && (
+                      <div className="flex items-center gap-1.5 mb-4">
+                        <Users className="h-3 w-3 text-emerald-400/70" />
+                        <span className="text-[10px] text-emerald-400/70 font-medium">
+                          {t("library_page.replaces_label")} {replaces}
+                        </span>
+                      </div>
                     )}
+
+                    {/* Integrations */}
+                    <div className="mb-4 flex-1">
+                      <div className="flex items-center gap-1.5">
+                        <div className="flex -space-x-1.5">
+                          {integrations.slice(0, 4).map((int) => (
+                            <div
+                              key={int}
+                              className="w-6 h-6 rounded-md bg-card border border-border flex items-center justify-center text-[9px] font-bold text-muted-foreground"
+                              title={int}
+                            >
+                              {int.charAt(0)}
+                            </div>
+                          ))}
+                        </div>
+                        {integrations.length > 4 && (
+                          <span className="text-[10px] text-muted-foreground">+{integrations.length - 4}</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Price + CTAs */}
+                    <div className="pt-4 border-t border-border/50">
+                      <div className="flex items-center justify-between mb-3">
+                        <div>
+                          <p className="font-display font-bold text-xl gradient-text">{priceDisplay}</p>
+                          <span className="text-[10px] text-muted-foreground">{t("library.per_month")}</span>
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 rounded-xl h-10 border-border hover:border-primary/20 text-xs"
+                          onClick={() => setPreviewAgent({ name: agentTitle, desc: agentDesc })}
+                        >
+                          <Play className="mr-1.5 h-3 w-3" />
+                          Demo
+                        </Button>
+                        <Button
+                          size="sm"
+                          className={`flex-1 rounded-xl h-10 text-xs font-semibold gap-1 ${
+                            tier === "enterprise"
+                              ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90"
+                              : "glow"
+                          }`}
+                          disabled={isHiring}
+                          onClick={() => handleHire(key)}
+                        >
+                          {isHiring ? (
+                            <Loader2 className="h-3 w-3 animate-spin" />
+                          ) : (
+                            <>
+                              {t("library_page.hire_btn")}
+                              <ArrowRight className="h-3 w-3" />
+                            </>
+                          )}
+                        </Button>
+                      </div>
+                    </div>
                   </div>
                 </div>
-
-                {/* CTA */}
-                <div className="flex gap-2 relative z-10">
-                  <Button
-                    variant="outline"
-                    className="flex-1 rounded-xl h-12 border-border hover:border-primary/20"
-                    onClick={() => setPreviewAgent({ name: agentTitle, desc: agentDesc })}
-                  >
-                    <Eye className="mr-2 h-4 w-4" />
-                    {t("library_page.test_btn")}
-                  </Button>
-                  <Button
-                    className={`flex-1 rounded-xl group h-12 font-semibold ${
-                      tier === "enterprise" 
-                        ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90" 
-                        : "glow"
-                    }`}
-                    disabled={isHiring}
-                    onClick={() => handleHire(key)}
-                  >
-                    {isHiring ? (
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                    ) : (
-                      <>
-                        {t("library_page.hire_btn")}
-                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </>
-                    )}
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
 
       {/* Agent Live Preview Modal */}
       <AgentLivePreview
