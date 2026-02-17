@@ -37,6 +37,10 @@ const availableAgents = [
   { key: "ecommerce", icon: ShoppingCart },
   { key: "research", icon: Sparkles },
   { key: "rag", icon: FileText },
+  { key: "orchestrator", icon: Users },
+  { key: "coding", icon: Wrench },
+  { key: "computer", icon: Building2 },
+  { key: "hr", icon: Star },
 ];
 
 function getTeamDiscount(count: number): number {
