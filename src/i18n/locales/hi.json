@@ -87,7 +87,10 @@
       "seo_growth_title": "SEO और ग्रोथ एजेंट", "seo_growth_desc": "SEO ऑडिट, कीवर्ड रिसर्च, लिंक बिल्डिंग और ऑर्गेनिक ट्रैफ़िक के लिए कंटेंट ऑप्टिमाइज़ेशन।", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2 SEO विशेषज्ञ",
       "project_management_title": "प्रोजेक्ट मैनेजमेंट एजेंट", "project_management_desc": "स्प्रिंट, टाइमलाइन, जोखिम और प्रगति रिपोर्ट प्रबंधित करता है।", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1 प्रोजेक्ट मैनेजर",
       "supply_chain_title": "सप्लाई चेन एजेंट", "supply_chain_desc": "इन्वेंटरी, डिलीवरी रूट, डिमांड फोरकास्ट और सप्लायर मैनेजमेंट ऑप्टिमाइज़ करता है।", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2 लॉजिस्टिक्स एनालिस्ट",
-      "training_title": "ट्रेनिंग और डेवलपमेंट एजेंट", "training_desc": "लर्निंग पाथ बनाता है, दक्षताओं का मूल्यांकन करता है और गेमिफिकेशन के साथ प्रशिक्षण प्रबंधित करता है।", "training_highlight": "🎓 Learning AI", "training_replaces": "1 प्रशिक्षण समन्वयक"
+      "training_title": "ट्रेनिंग और डेवलपमेंट एजेंट", "training_desc": "लर्निंग पाथ बनाता है, दक्षताओं का मूल्यांकन करता है और गेमिफिकेशन के साथ प्रशिक्षण प्रबंधित करता है।", "training_highlight": "🎓 Learning AI", "training_replaces": "1 प्रशिक्षण समन्वयक",
+      "concierge_title": "कॉन्सियर्ज AI एजेंट — एलीट पर्सनल असिस्टेंट", "concierge_desc": "AI पर्सनल असिस्टेंट जो 24/7 शेड्यूल, ईमेल, टास्क और कम्युनिकेशन मैनेज करता है। रोज़ 4 घंटे बचाएं।", "concierge_highlight": "🤝 +4h/दिन बचत", "concierge_replaces": "1 एक्जीक्यूटिव असिस्टेंट",
+      "ceo_title": "CEO AI एजेंट — स्ट्रैटेजिक C-Level को-पायलट", "ceo_desc": "एक्जीक्यूटिव AI जो सिनेरियो एनालाइज करता है, रिस्क प्रीडिक्ट करता है और डेटा-ड्रिवन डिसीज़न रिकमेंड करता है।", "ceo_highlight": "👑 3x बेहतर डिसीज़न", "ceo_replaces": "1 सीनियर स्ट्रैटेजी कंसल्टेंट",
+      "startup_creator_title": "स्टार्टअप क्रिएटर एजेंट — आइडिया से PMF तक", "startup_creator_desc": "AI को-फाउंडर जो आइडिया वैलिडेट करता है, बिज़नेस प्लान, पिच डेक और MVP ब्लूप्रिंट 72h में बनाता है।", "startup_creator_highlight": "🚀 आइडिया→MVP 72h", "startup_creator_replaces": "1 को-फाउंडर + 1 कंसल्टेंट"
     }
   },
   "cta": { "title": "स्केल करने के लिए तैयार?", "subtitle": "मुफ्त में शुरू करें। क्रेडिट कार्ड की आवश्यकता नहीं। 5 मिनट में सेटअप।", "button": "मेरा अकाउंट बनाएं" },

@@ -87,7 +87,10 @@
       "seo_growth_title": "SEO & Büyüme Ajanı", "seo_growth_desc": "SEO denetimi, anahtar kelime araştırması, bağlantı oluşturma ve organik trafik optimizasyonu.", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2 SEO uzmanı",
       "project_management_title": "Proje Yönetimi Ajanı", "project_management_desc": "Sprint, zaman çizelgesi, risk ve ilerleme raporlarını yönetir.", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1 proje yöneticisi",
       "supply_chain_title": "Tedarik Zinciri Ajanı", "supply_chain_desc": "Envanter, teslimat rotaları, talep tahmini ve tedarikçi yönetimini optimize eder.", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2 lojistik analisti",
-      "training_title": "Eğitim & Gelişim Ajanı", "training_desc": "Öğrenme yolları oluşturur, yetkinlikleri değerlendirir ve oyunlaştırma ile eğitim yönetir.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 eğitim koordinatörü"
+      "training_title": "Eğitim & Gelişim Ajanı", "training_desc": "Öğrenme yolları oluşturur, yetkinlikleri değerlendirir ve oyunlaştırma ile eğitim yönetir.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 eğitim koordinatörü",
+      "concierge_title": "Concierge AI Ajanı — Elit Kişisel Asistanınız", "concierge_desc": "Takvim, e-posta, görevler ve iletişimi 7/24 yöneten AI asistan. Günde 4 saat kazanın.", "concierge_highlight": "🤝 +4s/gün Kazanıldı", "concierge_replaces": "1 yönetici asistanı",
+      "ceo_title": "CEO AI Ajanı — Stratejik C-Level Yardımcı Pilotu", "ceo_desc": "Senaryoları analiz eden, riskleri öngören ve veri odaklı stratejik kararlar öneren yönetici AI.", "ceo_highlight": "👑 3x Daha İyi Kararlar", "ceo_replaces": "1 kıdemli strateji danışmanı",
+      "startup_creator_title": "Startup Creator Ajanı — Fikirden Product-Market Fit'e", "startup_creator_desc": "Fikirleri doğrulayan, iş planları, pitch dekleri ve MVP planları oluşturan AI kurucu ortağınız. 72 saatte.", "startup_creator_highlight": "🚀 Fikir → MVP 72s", "startup_creator_replaces": "1 kurucu ortak + 1 danışman"
     }
   },
   "cta": { "title": "Ölçeklendirmeye hazır mısınız?", "subtitle": "Ücretsiz başlayın. Kredi kartı gerekmez. 5 dakikada kurulum.", "button": "Hesabımı oluştur" },

@@ -87,7 +87,10 @@
       "seo_growth_title": "SEO与增长代理", "seo_growth_desc": "SEO审计、关键词研究、外链建设和有机流量内容优化。", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2名SEO专员",
       "project_management_title": "项目管理代理", "project_management_desc": "管理冲刺、时间线、风险和进度报告。自动化敏捷方法。", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1名项目经理",
       "supply_chain_title": "供应链代理", "supply_chain_desc": "优化库存、配送路线、需求预测和供应商管理。", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2名物流分析师",
-      "training_title": "培训与发展代理", "training_desc": "创建学习路径、评估能力、管理游戏化培训项目。", "training_highlight": "🎓 Learning AI", "training_replaces": "1名培训协调员"
+      "training_title": "培训与发展代理", "training_desc": "创建学习路径、评估能力、管理游戏化培训项目。", "training_highlight": "🎓 Learning AI", "training_replaces": "1名培训协调员",
+      "concierge_title": "管家AI代理 — 您的精英私人助理", "concierge_desc": "24/7管理日程、邮件、任务和沟通的AI助理。每天多出4小时。", "concierge_highlight": "🤝 +4h/天 恢复", "concierge_replaces": "1名行政助理",
+      "ceo_title": "CEO AI代理 — 战略C-Level副驾驶", "ceo_desc": "分析场景、预测风险、推荐数据驱动战略决策的高管AI。", "ceo_highlight": "👑 决策质量提升3倍", "ceo_replaces": "1名高级战略顾问",
+      "startup_creator_title": "创业者AI代理 — 从创意到产品市场契合", "startup_creator_desc": "验证创意、创建商业计划、演示文稿和MVP蓝图的AI联合创始人。72小时完成。", "startup_creator_highlight": "🚀 创意→MVP 72h", "startup_creator_replaces": "1名联合创始人 + 1名顾问"
     }
   },
   "cta": { "title": "准备好扩展了吗？", "subtitle": "免费开始。无需信用卡。5分钟完成设置。", "button": "创建我的账户" },
