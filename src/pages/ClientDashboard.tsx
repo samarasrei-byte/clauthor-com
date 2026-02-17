@@ -20,6 +20,7 @@ import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import QuickActions from "@/components/dashboard/QuickActions";
 import AgentChat from "@/components/dashboard/AgentChat";
+import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -223,6 +224,13 @@ const ClientDashboard = () => {
                     <span className="text-xs text-muted-foreground">
                       Reset em {credits.credits_reset_at ? new Date(credits.credits_reset_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" }) : "—"}
                     </span>
+                  </div>
+                  <div className="mt-3">
+                    <TokenUpgradeDialog trigger={
+                      <Button size="sm" variant="outline" className="w-full gap-1.5 border-primary/20 text-primary text-xs">
+                        <Coins className="h-3 w-3" /> Comprar mais tokens
+                      </Button>
+                    } />
                   </div>
                 </motion.div>
               )}
@@ -493,7 +501,7 @@ const ClientDashboard = () => {
                     <Progress value={usagePercentage} className="h-3" />
                     <p className="text-xs text-muted-foreground mt-2">{100 - usagePercentage}% restante</p>
                   </div>
-                  <Link to="/pricing"><Button className="w-full glow">Upgrade de Plano <ArrowRight className="h-4 w-4 ml-2" /></Button></Link>
+                  <TokenUpgradeDialog trigger={<Button className="w-full glow">Upgrade de Tokens <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
                 </div>
 
                 {/* Subscriptions */}

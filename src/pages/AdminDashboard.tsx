@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import MiniSparkline from "@/components/dashboard/MiniSparkline";
+import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -178,6 +179,11 @@ const AdminDashboard = () => {
               <Shield className="h-6 w-6 text-primary" />
               <h1 className="font-display text-2xl font-bold">Painel Admin</h1>
               <Badge variant="outline" className="border-primary/20 text-primary">Master</Badge>
+              <TokenUpgradeDialog trigger={
+                <Button size="sm" variant="outline" className="gap-1.5 border-primary/20 text-primary ml-auto">
+                  <Coins className="h-3.5 w-3.5" /> Gerenciar Tokens
+                </Button>
+              } />
             </div>
             <p className="text-sm text-muted-foreground">Controle total da plataforma ApexBot</p>
           </motion.div>
