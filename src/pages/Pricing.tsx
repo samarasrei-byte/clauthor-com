@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Check, Zap, Shield, Clock, Bot, ArrowRight, Sparkles, Coins, TrendingUp, Users, XCircle, CheckCircle2, DollarSign } from "lucide-react";
+import SquadPlans from "@/components/pricing/SquadPlans";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -127,6 +128,9 @@ const Pricing = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Squad Plans - Times de IA */}
+        <SquadPlans />
 
         {/* CLT vs PROMETHEUS Comparison */}
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-8 md:p-12 mb-16 relative overflow-hidden">
