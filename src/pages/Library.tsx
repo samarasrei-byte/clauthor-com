@@ -282,9 +282,9 @@ const LibraryPage = () => {
                   }`}>
                     <Icon className="h-7 w-7 text-primary/80" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-display font-bold text-lg leading-tight mb-1">{agentTitle}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{agentDesc}</p>
+                  <div className="flex-1 min-w-0 overflow-hidden">
+                    <h3 className="font-display font-bold text-lg leading-tight mb-1 truncate">{agentTitle}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{agentDesc}</p>
                   </div>
                 </div>
 
