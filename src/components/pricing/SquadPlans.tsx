@@ -8,9 +8,10 @@ import {
   Users, Package, Wrench, Building2, ArrowRight, Check,
   Phone, MessageSquare, Briefcase, BarChart3, Star, FileText,
   ShoppingCart, Shield, Sparkles, Plus, Flame, ChevronLeft,
-  Megaphone, Target, Palette, Video, Globe, ClipboardList, Truck, GraduationCap
+  Megaphone, Target, Palette, Video, Globe, ClipboardList, Truck, GraduationCap, Bot
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import SquadConsultant from "./SquadConsultant";
 
 const squadPacks = [
   { id: "squad-3", agents: 3, discount: 10, icon: Users, recommended: false },
@@ -183,7 +184,7 @@ export default function SquadPlans() {
         </div>
 
         <Tabs defaultValue="squads" className="mt-6">
-          <TabsList className="grid w-full grid-cols-3 bg-card/50 border border-border rounded-xl h-12">
+          <TabsList className="grid w-full grid-cols-4 bg-card/50 border border-border rounded-xl h-12">
             <TabsTrigger value="squads" className="gap-2 data-[state=active]:bg-primary/20 rounded-lg text-xs sm:text-sm" onClick={() => setActiveSquad(null)}>
               <Package className="h-3.5 w-3.5" /> {t("squads.tab_squads")}
             </TabsTrigger>
@@ -192,6 +193,9 @@ export default function SquadPlans() {
             </TabsTrigger>
             <TabsTrigger value="departments" className="gap-2 data-[state=active]:bg-primary/20 rounded-lg text-xs sm:text-sm">
               <Building2 className="h-3.5 w-3.5" /> {t("squads.tab_departments")}
+            </TabsTrigger>
+            <TabsTrigger value="consultant" className="gap-2 data-[state=active]:bg-primary/20 rounded-lg text-xs sm:text-sm">
+              <Bot className="h-3.5 w-3.5" /> {t("squads.tab_consultant", { defaultValue: "Consultor IA" })}
             </TabsTrigger>
           </TabsList>
 
@@ -445,6 +449,11 @@ export default function SquadPlans() {
                 </motion.div>
               ))}
             </div>
+          </TabsContent>
+
+          {/* AI CONSULTANT */}
+          <TabsContent value="consultant" className="mt-6">
+            <SquadConsultant />
           </TabsContent>
         </Tabs>
       </div>
