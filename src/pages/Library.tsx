@@ -430,7 +430,7 @@ const LibraryPage = () => {
                         <span className="text-xs text-muted-foreground">{t("library.per_month")}</span>
                       </div>
                       <Button
-                        className="rounded-xl h-12 font-semibold bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 neon-glow gap-2"
+                        className="rounded-xl h-12 font-semibold glass-btn-primary text-primary-foreground gap-2"
                         disabled={hiringSlug === agentSlugs[featuredAgent]}
                         onClick={() => handleHire(featuredAgent)}
                       >
@@ -662,8 +662,8 @@ const LibraryPage = () => {
                       <Button
                         className={`w-full rounded-xl h-11 text-sm font-semibold gap-1.5 transition-all duration-300 ${
                           tier === "enterprise"
-                            ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 shadow-[0_0_20px_-6px_hsl(var(--primary)/0.4)]"
-                            : "glow"
+                            ? "glass-btn-primary text-primary-foreground"
+                            : "glass-btn text-foreground"
                         }`}
                         disabled={isHiring}
                         onClick={() => handleHire(key)}
