@@ -185,7 +185,7 @@ const AdminDashboard = () => {
                 </Button>
               } />
             </div>
-            <p className="text-sm text-muted-foreground">Controle total da plataforma ApexBot</p>
+            <p className="text-sm text-muted-foreground">Controle total da plataforma PROMETHEUS</p>
           </motion.div>
 
           {/* Mobile tabs */}
