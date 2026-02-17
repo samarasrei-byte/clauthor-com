@@ -5,22 +5,22 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium tracking-wide ring-offset-background transition-all duration-300 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 rounded-lg",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-[13px] font-medium tracking-wider uppercase ring-offset-background transition-all duration-400 ease-[cubic-bezier(0.25,0.1,0.25,1)] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring/50 focus-visible:ring-offset-1 disabled:pointer-events-none disabled:opacity-40 [&_svg]:pointer-events-none [&_svg]:size-3.5 [&_svg]:shrink-0 rounded-md",
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/85 hover:shadow-[0_0_20px_hsl(var(--primary)/0.2)] active:scale-[0.98]",
-        destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/85 hover:shadow-[0_0_20px_hsl(var(--destructive)/0.2)] active:scale-[0.98]",
-        outline: "border border-border/60 bg-transparent hover:border-primary/30 hover:bg-primary/5 hover:text-foreground active:scale-[0.98]",
-        secondary: "bg-secondary text-secondary-foreground border border-border/40 hover:border-border/60 hover:bg-secondary/80 active:scale-[0.98]",
-        ghost: "hover:bg-accent/60 hover:text-accent-foreground active:scale-[0.98]",
-        link: "text-primary underline-offset-4 hover:underline",
+        default: "bg-primary/90 text-primary-foreground hover:bg-primary hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)] active:scale-[0.97]",
+        destructive: "bg-destructive/90 text-destructive-foreground hover:bg-destructive active:scale-[0.97]",
+        outline: "border border-white/[0.08] bg-transparent hover:border-white/[0.15] hover:bg-white/[0.03] active:scale-[0.97]",
+        secondary: "bg-white/[0.04] text-secondary-foreground hover:bg-white/[0.07] active:scale-[0.97]",
+        ghost: "hover:bg-white/[0.04] hover:text-foreground active:scale-[0.97]",
+        link: "text-primary/80 underline-offset-4 hover:text-primary hover:underline tracking-normal normal-case text-sm",
       },
       size: {
-        default: "h-10 px-5 py-2",
-        sm: "h-9 px-3.5 text-xs",
-        lg: "h-11 px-8",
-        icon: "h-10 w-10",
+        default: "h-9 px-5 py-2",
+        sm: "h-8 px-3.5 text-[11px]",
+        lg: "h-10 px-7",
+        icon: "h-9 w-9",
       },
     },
     defaultVariants: {
