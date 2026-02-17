@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_templates: {
+        Row: {
+          created_at: string
+          default_actions: Json | null
+          default_channels: Json | null
+          default_integrations: Json | null
+          description: string | null
+          id: string
+          instructions: string
+          is_active: boolean
+          name: string
+          slug: string
+          system_prompt: string
+          tags: string[] | null
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          default_actions?: Json | null
+          default_channels?: Json | null
+          default_integrations?: Json | null
+          description?: string | null
+          id?: string
+          instructions: string
+          is_active?: boolean
+          name: string
+          slug: string
+          system_prompt: string
+          tags?: string[] | null
+          tier?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          default_actions?: Json | null
+          default_channels?: Json | null
+          default_integrations?: Json | null
+          description?: string | null
+          id?: string
+          instructions?: string
+          is_active?: boolean
+          name?: string
+          slug?: string
+          system_prompt?: string
+          tags?: string[] | null
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       agents: {
         Row: {
           actions: Json | null
