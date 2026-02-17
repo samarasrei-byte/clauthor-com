@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -9,11 +10,14 @@ import {
   Calendar, Receipt, Star, ShoppingCart, ArrowRight,
   Code, Brain, Shield, Mic, Bot, Eye, Workflow,
   Phone, Search, Users, Briefcase, BarChart3,
-  Layers, Cpu, Sparkles, Globe, Rocket
+  Layers, Cpu, Sparkles, Globe, Rocket, Loader2
 } from "lucide-react";
 import ROICalculator from "@/components/library/ROICalculator";
 import AgentLivePreview from "@/components/library/AgentLivePreview";
-import { getPriceDisplay, type PriceTier } from "@/lib/pricing";
+import { getPriceDisplay, getPrice, type PriceTier } from "@/lib/pricing";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 
 // Agent keys map to i18n keys under library_page.agents.*
 const agentKeys = [
@@ -21,6 +25,14 @@ const agentKeys = [
   "revenue", "sales", "rag", "computer", "content", "security", "hr",
   "customer_success", "data_analytics", "legal", "ecommerce"
 ] as const;
+
+// Map library keys to DB template slugs
+const agentSlugs: Record<string, string> = {
+  voice_ai: "voice_ai", orchestrator: "orchestrator", research: "research", coding: "coding",
+  omnichannel: "omnichannel", revenue: "revenue", sales: "sales",
+  rag: "rag", computer: "computer", content: "content", security: "security", hr: "hr",
+  customer_success: "customer_success", data_analytics: "data_analytics", legal: "legal", ecommerce: "ecommerce",
+};
 
 const agentIcons: Record<string, React.ElementType> = {
   voice_ai: Phone, orchestrator: Workflow, research: Search, coding: Code,
@@ -91,14 +103,82 @@ const tiers = ["all", "intermediate", "advanced", "enterprise"];
 
 const LibraryPage = () => {
   const [filter, setFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [previewAgent, setPreviewAgent] = useState<{ name: string; desc: string } | null>(null);
-  const [expandedActions, setExpandedActions] = useState<string | null>(null);
+  const [hiringSlug, setHiringSlug] = useState<string | null>(null);
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.split("-")[0] || "pt";
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
-  const filteredAgents = filter === "all"
-    ? agentKeys
-    : agentKeys.filter(k => agentTiers[k] === filter);
+  const filteredAgents = agentKeys.filter((k) => {
+    if (filter !== "all" && agentTiers[k] !== filter) return false;
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      const title = t(`library_page.agents.${k}_title`).toLowerCase();
+      const desc = t(`library_page.agents.${k}_desc`).toLowerCase();
+      const tags = agentTags[k].join(" ").toLowerCase();
+      if (!title.includes(q) && !desc.includes(q) && !tags.includes(q)) return false;
+    }
+    return true;
+  });
+
+  const handleHire = async (key: string) => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
+    const slug = agentSlugs[key];
+    setHiringSlug(slug);
+
+    try {
+      // Fetch template from DB
+      const { data: template, error: tplError } = await supabase
+        .from("agent_templates")
+        .select("*")
+        .eq("slug", slug)
+        .eq("is_active", true)
+        .single();
+
+      if (tplError || !template) {
+        toast.error("Template não encontrado");
+        return;
+      }
+
+      const tier = template.tier as "basic" | "intermediate" | "advanced" | "enterprise";
+      const priceTier = agentPriceTiers[key];
+      const priceInCents = getPrice(lang, priceTier) * 100;
+
+      // Create agent from template
+      const { data: agent, error: agentError } = await supabase
+        .from("agents")
+        .insert({
+          user_id: user.id,
+          name: template.name,
+          description: template.description,
+          instructions: template.instructions,
+          tier,
+          monthly_price: priceInCents,
+          status: "active",
+          channels: template.default_channels,
+          integrations: template.default_integrations,
+          actions: template.default_actions,
+        })
+        .select()
+        .single();
+
+      if (agentError) throw agentError;
+
+      toast.success(`${template.name} contratado com sucesso! 🎉`);
+      navigate("/agents");
+    } catch (err: any) {
+      console.error(err);
+      toast.error("Erro ao contratar agente. Tente novamente.");
+    } finally {
+      setHiringSlug(null);
+    }
+  };
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 space-y-8">
@@ -135,12 +215,27 @@ const LibraryPage = () => {
         </div>
       </motion.div>
 
+      {/* Search */}
+      <div className="relative">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <Input
+          placeholder="Buscar agentes por nome, descrição ou tag..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="pl-10 glass border-border h-11"
+        />
+      </div>
+
       {/* ROI Calculator */}
       <ROICalculator />
 
       {/* Grid */}
       <div className="grid md:grid-cols-2 gap-6">
-        {filteredAgents.map((key, i) => {
+        {filteredAgents.length === 0 ? (
+          <div className="col-span-2 text-center py-12 text-muted-foreground">
+            Nenhum agente encontrado para "{searchQuery}"
+          </div>
+        ) : filteredAgents.map((key, i) => {
           const tier = agentTiers[key];
           const Icon = agentIcons[key];
           const priceDisplay = getPriceDisplay(lang, agentPriceTiers[key]);
@@ -150,6 +245,7 @@ const LibraryPage = () => {
           const replaces = t(`library_page.agents.${key}_replaces`);
           const tags = agentTags[key];
           const integrations = agentIntegrations[key];
+          const isHiring = hiringSlug === agentSlugs[key];
 
           return (
             <motion.div
@@ -264,16 +360,24 @@ const LibraryPage = () => {
                     <Eye className="mr-2 h-4 w-4" />
                     {t("library_page.test_btn")}
                   </Button>
-                  <Link to="/auth" className="flex-1">
-                    <Button className={`w-full rounded-xl group h-12 font-semibold ${
+                  <Button
+                    className={`flex-1 rounded-xl group h-12 font-semibold ${
                       tier === "enterprise" 
                         ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90" 
                         : "glow"
-                    }`}>
-                      {t("library_page.hire_btn")}
-                      <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </Button>
-                  </Link>
+                    }`}
+                    disabled={isHiring}
+                    onClick={() => handleHire(key)}
+                  >
+                    {isHiring ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        {t("library_page.hire_btn")}
+                        <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                      </>
+                    )}
+                  </Button>
                 </div>
               </div>
             </motion.div>
