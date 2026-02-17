@@ -577,6 +577,10 @@
     "dept_marketing_desc": "Criação de conteúdo e análise de dados",
     "bundle_discount": "Desconto do departamento",
     "included_agents": "Agentes inclusos",
-    "hire_department": "Contratar Departamento"
+    "hire_department": "Contratar Departamento",
+    "back_to_packs": "Voltar aos packs",
+    "pick_agents": "Escolha {{count}} agentes para o seu squad",
+    "confirm_squad": "Confirmar Squad",
+    "remaining_agents": "Selecione mais {{remaining}} agente(s)"
   }
 }

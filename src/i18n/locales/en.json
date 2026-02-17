@@ -578,6 +578,10 @@
     "dept_marketing_desc": "Content creation and data analysis",
     "bundle_discount": "Department discount",
     "included_agents": "Included agents",
-    "hire_department": "Hire Department"
+    "hire_department": "Hire Department",
+    "back_to_packs": "Back to packs",
+    "pick_agents": "Choose {{count}} agents for your squad",
+    "confirm_squad": "Confirm Squad",
+    "remaining_agents": "Select {{remaining}} more agent(s)"
   }
 }
