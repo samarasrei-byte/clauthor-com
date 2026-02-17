@@ -281,7 +281,42 @@ const LibraryPage = () => {
 
       if (agentError) throw agentError;
 
-      toast.success(`${template.name} contratado com sucesso! 🎉`);
+      // Run audit & register with OpenClaw
+      toast.info("Executando auditoria do agente...", { duration: 2000 });
+
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData?.session?.access_token;
+
+        const registerResponse = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/openclaw-register`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ agentId: agent.id }),
+          }
+        );
+
+        const registerData = await registerResponse.json();
+
+        if (!registerResponse.ok) {
+          console.error("OpenClaw register error:", registerData);
+          if (registerResponse.status === 422) {
+            toast.warning(`Auditoria: ${registerData.issues?.join(", ") || "Verifique as configurações do agente"}`, { duration: 5000 });
+          } else {
+            toast.warning("Agente contratado, mas registro no OpenClaw pendente.", { duration: 4000 });
+          }
+        } else {
+          toast.success(`${template.name} contratado e registrado! 🚀`, { duration: 3000 });
+        }
+      } catch (openclawErr) {
+        console.error("OpenClaw registration failed:", openclawErr);
+        toast.warning("Agente contratado! Registro OpenClaw será feito em breve.", { duration: 3000 });
+      }
+
       navigate("/agents");
     } catch (err: any) {
       console.error(err);
