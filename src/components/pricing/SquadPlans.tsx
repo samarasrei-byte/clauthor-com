@@ -65,7 +65,7 @@ function AgentSelectionGrid({
   t: (key: string, opts?: Record<string, unknown>) => string;
 }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
       {availableAgents.map((agent) => {
         const isSelected = selectedAgents.includes(agent.key);
         const isDisabled = !isSelected && maxAgents !== undefined && selectedAgents.length >= maxAgents;
@@ -74,7 +74,7 @@ function AgentSelectionGrid({
           <motion.div
             key={agent.key}
             whileTap={{ scale: 0.97 }}
-            className={`rounded-xl border p-4 transition-all ${
+            className={`rounded-xl border p-5 transition-all ${
               isDisabled
                 ? "border-border bg-card/10 opacity-40 cursor-not-allowed"
                 : isSelected
@@ -83,9 +83,9 @@ function AgentSelectionGrid({
             }`}
             onClick={() => !isDisabled && toggleAgent(agent.key)}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <Icon className={`h-4 w-4 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
-              <span className="text-sm font-medium truncate">
+            <div className="flex items-center gap-3 mb-3">
+              <Icon className={`h-5 w-5 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
+              <span className="text-sm font-semibold">
                 {t(`library_page.agents.${agent.key}_title`)}
               </span>
             </div>
