@@ -559,34 +559,34 @@ const LibraryPage = () => {
                 transition={{ delay: i * 0.03 }}
                 layout
               >
-                <div className="glass-card rounded-2xl h-full flex flex-col relative overflow-hidden group hover:border-primary/15 transition-all duration-500">
-                  {/* Top gradient accent */}
-                  <div className={`h-1 w-full ${
+                <div className="group relative h-full flex flex-col rounded-2xl border border-border/40 bg-card/30 backdrop-blur-md overflow-hidden transition-all duration-500 hover:border-primary/25 hover:shadow-[0_0_40px_-12px_hsl(var(--primary)/0.15)]">
+                  {/* Top accent bar */}
+                  <div className={`h-[2px] w-full ${
                     tier === "enterprise" 
-                      ? "bg-gradient-to-r from-primary via-primary-glow to-primary" 
+                      ? "bg-gradient-to-r from-transparent via-primary to-transparent" 
                       : tier === "advanced"
-                      ? "bg-gradient-to-r from-cyan-500/50 via-primary/30 to-cyan-500/50"
-                      : "bg-gradient-to-r from-muted via-border to-muted"
+                      ? "bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent"
+                      : "bg-gradient-to-r from-transparent via-border to-transparent"
                   }`} />
 
-                  <div className="p-5 flex flex-col flex-1">
-                    {/* Header row */}
-                    <div className="flex items-start gap-3 mb-4">
-                      <div className={`w-12 h-12 rounded-2xl flex items-center justify-center shrink-0 ${
+                  <div className="p-6 flex flex-col flex-1">
+                    {/* Header */}
+                    <div className="flex items-start gap-4 mb-5">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-105 ${
                         tier === "enterprise" 
-                          ? "bg-gradient-to-br from-primary/20 to-primary-glow/20 border border-primary/15" 
-                          : "bg-primary/5"
+                          ? "bg-gradient-to-br from-primary/15 to-primary-glow/10 border border-primary/20 shadow-[0_0_20px_-6px_hsl(var(--primary)/0.3)]" 
+                          : "bg-primary/5 border border-border/50"
                       }`}>
-                        <Icon className="h-6 w-6 text-primary/80" />
+                        <Icon className="h-7 w-7 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-display font-bold text-sm leading-tight mb-1 line-clamp-1">{agentTitle}</h3>
-                        <div className="flex items-center gap-1.5">
-                          <Badge variant="outline" className={`${tierColors[tier]} text-[10px] py-0 px-1.5`}>
+                        <h3 className="font-display font-bold text-base leading-snug mb-1.5 line-clamp-1">{agentTitle}</h3>
+                        <div className="flex items-center gap-2">
+                          <Badge variant="outline" className={`${tierColors[tier]} text-[11px] py-0.5 px-2`}>
                             {t(`tiers.${tier}`)}
                           </Badge>
                           {highlight && (
-                            <span className="text-[9px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-semibold whitespace-nowrap">
+                            <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold whitespace-nowrap">
                               {highlight}
                             </span>
                           )}
@@ -595,50 +595,50 @@ const LibraryPage = () => {
                     </div>
 
                     {/* Description */}
-                    <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2 mb-4">{agentDesc}</p>
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-5">{agentDesc}</p>
 
                     {/* Capability pills */}
-                    <div className="flex flex-wrap gap-1 mb-4">
+                    <div className="flex flex-wrap gap-1.5 mb-5">
                       {capabilities.slice(0, 3).map((cap) => (
-                        <span key={cap} className="text-[10px] px-2 py-0.5 rounded-md bg-card border border-border text-muted-foreground">
+                        <span key={cap} className="text-[11px] px-2.5 py-1 rounded-lg bg-card/80 border border-border/60 text-foreground/70 font-medium">
                           {cap}
                         </span>
                       ))}
                     </div>
 
-                    {/* ROI & Social Proof row */}
-                    <div className="flex items-center justify-between mb-4 py-3 px-3 rounded-xl bg-card/60 border border-border/50">
+                    {/* ROI & Social Proof */}
+                    <div className="flex items-center justify-between mb-5 py-3.5 px-4 rounded-xl bg-background/40 border border-border/30">
+                      <div className="flex items-center gap-2">
+                        <TrendingUp className="h-4 w-4 text-emerald-400" />
+                        <span className="text-sm font-semibold text-emerald-400">{social.savings}/mês</span>
+                      </div>
+                      <div className="w-px h-5 bg-border/50" />
                       <div className="flex items-center gap-1.5">
-                        <TrendingUp className="h-3.5 w-3.5 text-emerald-400" />
-                        <span className="text-xs font-semibold text-emerald-400">{social.savings}/mês</span>
+                        <Star className="h-3.5 w-3.5 fill-primary text-primary" />
+                        <span className="text-sm font-medium">{social.rating}</span>
                       </div>
-                      <div className="w-px h-4 bg-border" />
-                      <div className="flex items-center gap-1">
-                        <Star className="h-3 w-3 fill-primary text-primary" />
-                        <span className="text-xs font-medium">{social.rating}</span>
-                      </div>
-                      <div className="w-px h-4 bg-border" />
-                      <span className="text-[10px] text-muted-foreground">{social.companies}+ empresas</span>
+                      <div className="w-px h-5 bg-border/50" />
+                      <span className="text-xs text-muted-foreground font-medium">{social.companies}+ empresas</span>
                     </div>
 
                     {/* Replaces */}
                     {replaces && (
-                      <div className="flex items-center gap-1.5 mb-4">
-                        <Users className="h-3 w-3 text-emerald-400/70" />
-                        <span className="text-[10px] text-emerald-400/70 font-medium">
+                      <div className="flex items-center gap-2 mb-5">
+                        <Users className="h-3.5 w-3.5 text-emerald-400/80" />
+                        <span className="text-xs text-emerald-400/80 font-medium">
                           {t("library_page.replaces_label")} {replaces}
                         </span>
                       </div>
                     )}
 
                     {/* Integrations */}
-                    <div className="mb-4 flex-1">
-                      <div className="flex items-center gap-1.5">
-                        <div className="flex -space-x-1.5">
+                    <div className="mb-5 flex-1">
+                      <div className="flex items-center gap-2">
+                        <div className="flex -space-x-1">
                           {integrations.slice(0, 4).map((int) => (
                             <div
                               key={int}
-                              className="w-6 h-6 rounded-md bg-card border border-border flex items-center justify-center text-[9px] font-bold text-muted-foreground"
+                              className="w-7 h-7 rounded-lg bg-card border border-border/60 flex items-center justify-center text-[10px] font-bold text-muted-foreground"
                               title={int}
                             >
                               {int.charAt(0)}
@@ -646,35 +646,34 @@ const LibraryPage = () => {
                           ))}
                         </div>
                         {integrations.length > 4 && (
-                          <span className="text-[10px] text-muted-foreground">+{integrations.length - 4}</span>
+                          <span className="text-xs text-muted-foreground">+{integrations.length - 4}</span>
                         )}
                       </div>
                     </div>
 
-                    {/* Price + CTAs */}
-                    <div className="pt-4 border-t border-border/50">
-                      <div className="flex items-center justify-between mb-3">
+                    {/* Price + CTA */}
+                    <div className="pt-5 border-t border-border/30 mt-auto">
+                      <div className="flex items-end justify-between mb-4">
                         <div>
-                          <p className="font-display font-bold text-xl gradient-text">{priceDisplay}</p>
-                          <span className="text-[10px] text-muted-foreground">{t("library.per_month")}</span>
+                          <p className="font-display font-bold text-2xl gradient-text leading-none">{priceDisplay}</p>
+                          <span className="text-xs text-muted-foreground mt-1 block">{t("library.per_month")}</span>
                         </div>
                       </div>
                       <Button
-                        size="sm"
-                        className={`w-full rounded-xl h-10 text-xs font-semibold gap-1 ${
+                        className={`w-full rounded-xl h-11 text-sm font-semibold gap-1.5 transition-all duration-300 ${
                           tier === "enterprise"
-                            ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90"
+                            ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 shadow-[0_0_20px_-6px_hsl(var(--primary)/0.4)]"
                             : "glow"
                         }`}
                         disabled={isHiring}
                         onClick={() => handleHire(key)}
                       >
                         {isHiring ? (
-                          <Loader2 className="h-3 w-3 animate-spin" />
+                          <Loader2 className="h-4 w-4 animate-spin" />
                         ) : (
                           <>
                             {t("library_page.hire_btn")}
-                            <ArrowRight className="h-3 w-3" />
+                            <ArrowRight className="h-4 w-4" />
                           </>
                         )}
                       </Button>
