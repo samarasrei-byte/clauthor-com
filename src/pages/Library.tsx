@@ -263,16 +263,8 @@ const LibraryPage = () => {
                   <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-[60px]" />
                 )}
 
-                {highlight && (
-                  <div className="absolute top-4 right-4 z-20">
-                    <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary/15 text-primary font-semibold border border-primary/20 backdrop-blur-sm">
-                      {highlight}
-                    </span>
-                  </div>
-                )}
-                
                 {/* Header */}
-                <div className="flex items-start gap-4 mb-5 relative z-10 pr-28">
+                <div className="flex items-start gap-4 mb-5 relative z-10">
                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
                     tier === "enterprise" 
                        ? "bg-gradient-to-br from-primary/20 to-primary-glow/20" 
@@ -282,8 +274,15 @@ const LibraryPage = () => {
                   }`}>
                     <Icon className="h-7 w-7 text-primary/80" />
                   </div>
-                  <div className="flex-1 min-w-0 overflow-hidden">
-                    <h3 className="font-display font-bold text-lg leading-tight mb-1 truncate">{agentTitle}</h3>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1">
+                      <h3 className="font-display font-bold text-lg leading-tight truncate">{agentTitle}</h3>
+                      {highlight && (
+                        <span className="text-[10px] px-2.5 py-1 rounded-full bg-primary/15 text-primary font-semibold border border-primary/20 whitespace-nowrap shrink-0">
+                          {highlight}
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2">{agentDesc}</p>
                   </div>
                 </div>
