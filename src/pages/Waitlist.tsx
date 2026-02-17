@@ -236,7 +236,7 @@ const Waitlist = () => {
           </h1>
 
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-            O ApexBot está prestes a revolucionar a forma como empresas operam com IA. 
+            O PROMETHEUS está prestes a revolucionar a forma como empresas operam com IA. 
             Seja um dos primeiros a experimentar o futuro da automação inteligente.
           </p>
 

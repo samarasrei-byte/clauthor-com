@@ -128,7 +128,7 @@ const Pricing = () => {
           ))}
         </div>
 
-        {/* CLT vs ApexBot Comparison */}
+        {/* CLT vs PROMETHEUS Comparison */}
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-8 md:p-12 mb-16 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
           <div className="relative z-10">
@@ -156,7 +156,7 @@ const Pricing = () => {
                 <div className="text-center">
                   <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center justify-center gap-1">
                     <CheckCircle2 className="h-3 w-3" />
-                    ApexBot
+                    PROMETHEUS
                   </span>
                 </div>
               </div>

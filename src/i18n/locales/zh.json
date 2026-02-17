@@ -3,7 +3,7 @@
   "hero": { "badge": "自主代理平台", "title1": "数字员工。", "title2": "自主代理", "title3": "为您的企业服务。", "subtitle": "创建、培训和运营智能代理，执行完整流程：客户服务、销售、财务、税务等。", "subtitle_highlight": "您的24/7运营。", "cta_primary": "立即免费开始", "cta_secondary": "探索代理" },
   "spotlight": { "message1": "我们不是来取代人类的。", "message2": "我们是来与您最优秀的人才一起工作的。", "agent_label": "认识最先进的代理", "agent_tagline": "自主智能。无情执行。", "agent_subtitle": "推动您运营的火焰。" },
   "stats": { "agents": "活跃代理", "actions": "操作/月", "uptime": "正常运行时间", "companies": "企业" },
-  "features": { "badge": "为什么选择ApexBot?", "title1": "您不是在雇用软件。", "title2": "您是在雇用数字员工。", "autonomous": "自主执行", "autonomous_desc": "无需人工干预的完整流程", "security": "企业级安全", "security_desc": "完整审计和合规性", "uptime": "24/7运营", "uptime_desc": "零假期，零缺勤，零错误", "analytics": "实时分析", "analytics_desc": "节省和性能指标" },
+  "features": { "badge": "为什么选择PROMETHEUS?", "title1": "您不是在雇用软件。", "title2": "您是在雇用数字员工。", "autonomous": "自主执行", "autonomous_desc": "无需人工干预的完整流程", "security": "企业级安全", "security_desc": "完整审计和合规性", "uptime": "24/7运营", "uptime_desc": "零假期，零缺勤，零错误", "analytics": "实时分析", "analytics_desc": "节省和性能指标" },
   "library": { "badge": "模板库", "title": "代理", "title_highlight": "即可使用", "subtitle": "选择、自定义并在几分钟内激活。", "price_range": "根据复杂程度每月¥1,380至¥8,380。", "view_all": "查看所有代理", "use_template": "使用此模板", "popular": "热门", "per_month": "/月", "actions_included": "包含的操作", "available_templates": "可用模板", "filter_all": "全部" },
   "library_page": {
     "badge_count": "{{count}}款最新一代代理",

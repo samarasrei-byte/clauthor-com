@@ -1,11 +1,12 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Bot, Menu, X, LogOut, Shield } from "lucide-react";
+import { Menu, X, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import prometheusLogo from "@/assets/prometheus-logo.png";
 
 const Navbar = () => {
   const location = useLocation();
@@ -45,11 +46,9 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-              <Bot className="h-4 w-4 text-primary" />
-            </div>
-            <span className="font-display font-bold text-base text-foreground">
-              ApexBot
+            <img src={prometheusLogo} alt="PROMETHEUS" className="w-8 h-8 rounded-lg object-cover" />
+            <span className="font-display font-bold text-base text-foreground tracking-wider">
+              PROMETHEUS
             </span>
           </Link>
 

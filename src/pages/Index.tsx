@@ -5,13 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import {
   MessageSquare, FileText, DollarSign,
   Calendar, Receipt, Star, Zap, ArrowRight,
-  Shield, Clock, BarChart3, Sparkles, Bot,
+  Shield, Clock, BarChart3, Sparkles,
   Code, Users, Mail, Briefcase, Search, TrendingUp,
   Play, ChevronRight, Cpu, Globe, Lock,
   Target, Layers, Eye, CheckCircle2, XCircle, Network
 } from "lucide-react";
 import { useRef } from "react";
 import { useTranslation } from "react-i18next";
+import prometheusLogo from "@/assets/prometheus-logo.png";
 
 const agentIcons = [MessageSquare, DollarSign, Code, Users, Briefcase, Shield];
 
@@ -118,7 +119,7 @@ const HomePage = () => {
           </motion.div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { value: "847", label: t("home.stats_agents"), icon: Bot },
+              { value: "847", label: t("home.stats_agents"), icon: Cpu },
               { value: "126k", label: t("home.stats_actions"), icon: Zap },
               { value: "99.7%", label: t("home.stats_success"), icon: TrendingUp },
               { value: "312", label: t("home.stats_companies"), icon: Users },
@@ -159,7 +160,7 @@ const HomePage = () => {
         </motion.div>
       </section>
 
-      {/* ABOUT APEXBOT */}
+      {/* ABOUT PROMETHEUS */}
       <section className="py-32 px-4 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.01] to-transparent" />
         <div className="max-w-6xl mx-auto relative">
@@ -247,7 +248,7 @@ const HomePage = () => {
             </div>
           </motion.div>
 
-          {/* What ApexBot is NOT / For whom */}
+          {/* What PROMETHEUS is NOT / For whom */}
           <div className="grid md:grid-cols-2 gap-6 mb-20">
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-10">
               <h3 className="font-display text-2xl font-bold mb-6 flex items-center gap-3">
@@ -337,7 +338,7 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <Badge variant="outline" className="mb-6 border-primary/15 text-primary/80 px-4 py-2">
-              <Bot className="h-4 w-4 mr-2" />
+              <Sparkles className="h-4 w-4 mr-2" />
               {t("home.agents_badge")}
             </Badge>
             <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
@@ -421,10 +422,8 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-primary/5 flex items-center justify-center">
-                <Bot className="h-4.5 w-4.5 text-primary/70" />
-              </div>
-              <span className="font-display font-bold text-lg tracking-tight">ApexBot</span>
+              <img src={prometheusLogo} alt="PROMETHEUS" className="w-9 h-9 rounded-lg object-cover" />
+              <span className="font-display font-bold text-lg tracking-wider">PROMETHEUS</span>
             </div>
             <div className="flex gap-10 text-sm text-muted-foreground">
               <a href="#" className="hover:text-foreground/80 transition-colors">{t("home.footer_terms")}</a>
