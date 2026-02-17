@@ -65,7 +65,7 @@ function AgentSelectionGrid({
   t: (key: string, opts?: Record<string, unknown>) => string;
 }) {
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
       {availableAgents.map((agent) => {
         const isSelected = selectedAgents.includes(agent.key);
         const isDisabled = !isSelected && maxAgents !== undefined && selectedAgents.length >= maxAgents;
@@ -74,7 +74,7 @@ function AgentSelectionGrid({
           <motion.div
             key={agent.key}
             whileTap={{ scale: 0.97 }}
-            className={`rounded-xl border p-5 transition-all ${
+            className={`rounded-2xl border p-6 transition-all ${
               isDisabled
                 ? "border-border bg-card/10 opacity-40 cursor-not-allowed"
                 : isSelected
@@ -83,24 +83,31 @@ function AgentSelectionGrid({
             }`}
             onClick={() => !isDisabled && toggleAgent(agent.key)}
           >
-            <div className="flex items-center gap-3 mb-3">
-              <Icon className={`h-5 w-5 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
-              <span className="text-sm font-semibold">
-                {t(`library_page.agents.${agent.key}_title`)}
-              </span>
+            <div className="flex items-start gap-4 mb-3">
+              <div className="w-11 h-11 rounded-full bg-primary flex items-center justify-center shrink-0">
+                <Icon className="h-5 w-5 text-primary-foreground" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <span className="text-sm font-bold leading-tight block mb-1">
+                  {t(`library_page.agents.${agent.key}_title`)}
+                </span>
+                <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
+                  {t(`library_page.agents.${agent.key}_desc`)}
+                </p>
+              </div>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between mt-4 pt-3 border-t border-border/50">
               <span className="text-[10px] text-muted-foreground">
                 {t(`library_page.agents.${agent.key}_replaces`)}
               </span>
               <div
-                className={`w-5 h-5 rounded-md flex items-center justify-center ${
+                className={`w-6 h-6 rounded-lg flex items-center justify-center ${
                   isSelected
                     ? "bg-primary text-primary-foreground"
                     : "bg-card border border-border"
                 }`}
               >
-                {isSelected ? <Check className="h-3 w-3" /> : <Plus className="h-3 w-3 text-muted-foreground" />}
+                {isSelected ? <Check className="h-3.5 w-3.5" /> : <Plus className="h-3.5 w-3.5 text-muted-foreground" />}
               </div>
             </div>
           </motion.div>
