@@ -7,72 +7,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Users, Package, Wrench, Building2, ArrowRight, Check,
   Phone, MessageSquare, Briefcase, BarChart3, Star, FileText,
-  ShoppingCart, Shield, Sparkles, Minus, Plus, Flame
+  ShoppingCart, Shield, Sparkles, Plus, Flame, ChevronLeft
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
-// Squad Pack definitions
 const squadPacks = [
-  {
-    id: "squad-3",
-    agents: 3,
-    discount: 10,
-    icon: Users,
-    recommended: false,
-  },
-  {
-    id: "squad-5",
-    agents: 5,
-    discount: 20,
-    icon: Package,
-    recommended: true,
-  },
-  {
-    id: "squad-10",
-    agents: 10,
-    discount: 35,
-    icon: Building2,
-    recommended: false,
-  },
+  { id: "squad-3", agents: 3, discount: 10, icon: Users, recommended: false },
+  { id: "squad-5", agents: 5, discount: 20, icon: Package, recommended: true },
+  { id: "squad-10", agents: 10, discount: 35, icon: Building2, recommended: false },
 ];
 
-// Department bundles
 const departments = [
-  {
-    id: "vendas",
-    icon: Briefcase,
-    color: "text-cyan-400",
-    bgColor: "bg-cyan-500/10 border-cyan-500/20",
-    agents: ["sales", "customer_success", "omnichannel", "voice_ai"],
-    discount: 25,
-  },
-  {
-    id: "suporte",
-    icon: MessageSquare,
-    color: "text-emerald-400",
-    bgColor: "bg-emerald-500/10 border-emerald-500/20",
-    agents: ["omnichannel", "customer_success", "voice_ai", "rag"],
-    discount: 25,
-  },
-  {
-    id: "financeiro",
-    icon: BarChart3,
-    color: "text-amber-400",
-    bgColor: "bg-amber-500/10 border-amber-500/20",
-    agents: ["revenue", "legal", "data_analytics", "ecommerce"],
-    discount: 25,
-  },
-  {
-    id: "marketing",
-    icon: Sparkles,
-    color: "text-primary",
-    bgColor: "bg-primary/10 border-primary/20",
-    agents: ["content", "research", "data_analytics", "ecommerce"],
-    discount: 25,
-  },
+  { id: "vendas", icon: Briefcase, color: "text-cyan-400", bgColor: "bg-cyan-500/10 border-cyan-500/20", agents: ["sales", "customer_success", "omnichannel", "voice_ai"], discount: 25 },
+  { id: "suporte", icon: MessageSquare, color: "text-emerald-400", bgColor: "bg-emerald-500/10 border-emerald-500/20", agents: ["omnichannel", "customer_success", "voice_ai", "rag"], discount: 25 },
+  { id: "financeiro", icon: BarChart3, color: "text-amber-400", bgColor: "bg-amber-500/10 border-amber-500/20", agents: ["revenue", "legal", "data_analytics", "ecommerce"], discount: 25 },
+  { id: "marketing", icon: Sparkles, color: "text-primary", bgColor: "bg-primary/10 border-primary/20", agents: ["content", "research", "data_analytics", "ecommerce"], discount: 25 },
 ];
 
-// Available agents for Team Builder
 const availableAgents = [
   { key: "voice_ai", icon: Phone },
   { key: "omnichannel", icon: MessageSquare },
@@ -96,14 +47,90 @@ function getTeamDiscount(count: number): number {
   return 0;
 }
 
+interface ActiveSquad {
+  packId: string;
+  maxAgents: number;
+  discount: number;
+}
+
+function AgentSelectionGrid({
+  selectedAgents,
+  toggleAgent,
+  maxAgents,
+  t,
+}: {
+  selectedAgents: string[];
+  toggleAgent: (key: string) => void;
+  maxAgents?: number;
+  t: (key: string, opts?: Record<string, unknown>) => string;
+}) {
+  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+      {availableAgents.map((agent) => {
+        const isSelected = selectedAgents.includes(agent.key);
+        const isDisabled = !isSelected && maxAgents !== undefined && selectedAgents.length >= maxAgents;
+        const Icon = agent.icon;
+        return (
+          <motion.div
+            key={agent.key}
+            whileTap={{ scale: 0.97 }}
+            className={`rounded-xl border p-4 transition-all ${
+              isDisabled
+                ? "border-border bg-card/10 opacity-40 cursor-not-allowed"
+                : isSelected
+                ? "border-primary bg-primary/5 cursor-pointer"
+                : "border-border bg-card/30 hover:border-primary/30 cursor-pointer"
+            }`}
+            onClick={() => !isDisabled && toggleAgent(agent.key)}
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <Icon className={`h-4 w-4 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
+              <span className="text-sm font-medium truncate">
+                {t(`library_page.agents.${agent.key}_title`)}
+              </span>
+            </div>
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] text-muted-foreground">
+                {t(`library_page.agents.${agent.key}_replaces`)}
+              </span>
+              <div
+                className={`w-5 h-5 rounded-md flex items-center justify-center ${
+                  isSelected
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-card border border-border"
+                }`}
+              >
+                {isSelected ? <Check className="h-3 w-3" /> : <Plus className="h-3 w-3 text-muted-foreground" />}
+              </div>
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
 export default function SquadPlans() {
   const { t } = useTranslation();
   const [selectedAgents, setSelectedAgents] = useState<string[]>([]);
+  const [activeSquad, setActiveSquad] = useState<ActiveSquad | null>(null);
+  const [squadSelectedAgents, setSquadSelectedAgents] = useState<string[]>([]);
 
   const toggleAgent = (key: string) => {
     setSelectedAgents((prev) =>
       prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
     );
+  };
+
+  const toggleSquadAgent = (key: string) => {
+    setSquadSelectedAgents((prev) =>
+      prev.includes(key) ? prev.filter((k) => k !== key) : [...prev, key]
+    );
+  };
+
+  const handleSelectSquad = (pack: typeof squadPacks[0]) => {
+    setActiveSquad({ packId: pack.id, maxAgents: pack.agents, discount: pack.discount });
+    setSquadSelectedAgents([]);
   };
 
   const teamDiscount = getTeamDiscount(selectedAgents.length);
@@ -134,7 +161,7 @@ export default function SquadPlans() {
 
         <Tabs defaultValue="squads" className="mt-6">
           <TabsList className="grid w-full grid-cols-3 bg-card/50 border border-border rounded-xl h-12">
-            <TabsTrigger value="squads" className="gap-2 data-[state=active]:bg-primary/20 rounded-lg text-xs sm:text-sm">
+            <TabsTrigger value="squads" className="gap-2 data-[state=active]:bg-primary/20 rounded-lg text-xs sm:text-sm" onClick={() => setActiveSquad(null)}>
               <Package className="h-3.5 w-3.5" /> {t("squads.tab_squads")}
             </TabsTrigger>
             <TabsTrigger value="builder" className="gap-2 data-[state=active]:bg-primary/20 rounded-lg text-xs sm:text-sm">
@@ -147,85 +174,139 @@ export default function SquadPlans() {
 
           {/* SQUAD PACKS */}
           <TabsContent value="squads" className="mt-6">
-            <div className="grid md:grid-cols-3 gap-6">
-              {squadPacks.map((pack, i) => (
+            <AnimatePresence mode="wait">
+              {!activeSquad ? (
                 <motion.div
-                  key={pack.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className={`relative rounded-2xl border p-6 transition-all hover:border-primary/40 ${
-                    pack.recommended
-                      ? "border-primary/30 bg-primary/5"
-                      : "border-border bg-card/30"
-                  }`}
+                  key="packs"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  className="grid md:grid-cols-3 gap-6"
                 >
-                  {pack.recommended && (
-                    <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-[10px]">
-                      {t("squads.recommended")}
-                    </Badge>
-                  )}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-                      <pack.icon className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-display font-bold text-xl">
-                        {t("squads.squad_title", { count: pack.agents })}
-                      </h3>
-                      <p className="text-xs text-muted-foreground">
-                        {t("squads.squad_subtitle", { count: pack.agents })}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mb-4 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-medium text-emerald-400">
-                        {t("squads.discount")}
-                      </span>
-                      <span className="font-display font-bold text-2xl text-emerald-400">
-                        -{pack.discount}%
-                      </span>
-                    </div>
-                    <p className="text-[10px] text-muted-foreground mt-1">
-                      {t("squads.discount_desc")}
-                    </p>
-                  </div>
-
-                  <ul className="space-y-2 mb-6">
-                    <li className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-primary/70" />
-                      {t("squads.feature_agents", { count: pack.agents })}
-                    </li>
-                    <li className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-primary/70" />
-                      {t("squads.feature_shared_tokens")}
-                    </li>
-                    <li className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-primary/70" />
-                      {t("squads.feature_dashboard")}
-                    </li>
-                    <li className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-primary/70" />
-                      {t("squads.feature_support")}
-                    </li>
-                  </ul>
-
-                  <Link to="/library">
-                    <Button
-                      className={`w-full rounded-xl h-12 font-semibold gap-2 ${
-                        pack.recommended ? "glow" : ""
+                  {squadPacks.map((pack, i) => (
+                    <motion.div
+                      key={pack.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
+                      className={`relative rounded-2xl border p-6 transition-all hover:border-primary/40 ${
+                        pack.recommended ? "border-primary/30 bg-primary/5" : "border-border bg-card/30"
                       }`}
-                      variant={pack.recommended ? "default" : "outline"}
                     >
-                      {t("squads.select_squad")}
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
+                      {pack.recommended && (
+                        <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-[10px]">
+                          {t("squads.recommended")}
+                        </Badge>
+                      )}
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <pack.icon className="h-6 w-6 text-primary" />
+                        </div>
+                        <div>
+                          <h3 className="font-display font-bold text-xl">
+                            {t("squads.squad_title", { count: pack.agents })}
+                          </h3>
+                          <p className="text-xs text-muted-foreground">
+                            {t("squads.squad_subtitle", { count: pack.agents })}
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="mb-4 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm font-medium text-emerald-400">{t("squads.discount")}</span>
+                          <span className="font-display font-bold text-2xl text-emerald-400">-{pack.discount}%</span>
+                        </div>
+                        <p className="text-[10px] text-muted-foreground mt-1">{t("squads.discount_desc")}</p>
+                      </div>
+
+                      <ul className="space-y-2 mb-6">
+                        {["feature_agents", "feature_shared_tokens", "feature_dashboard", "feature_support"].map((f) => (
+                          <li key={f} className="flex items-center gap-2 text-sm">
+                            <Check className="h-4 w-4 text-primary/70" />
+                            {t(`squads.${f}`, { count: pack.agents })}
+                          </li>
+                        ))}
+                      </ul>
+
+                      <Button
+                        className={`w-full rounded-xl h-12 font-semibold gap-2 ${pack.recommended ? "glow" : ""}`}
+                        variant={pack.recommended ? "default" : "outline"}
+                        onClick={() => handleSelectSquad(pack)}
+                      >
+                        {t("squads.select_squad")}
+                        <ArrowRight className="h-4 w-4" />
+                      </Button>
+                    </motion.div>
+                  ))}
                 </motion.div>
-              ))}
-            </div>
+              ) : (
+                <motion.div
+                  key="selection"
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: 20 }}
+                  className="space-y-6"
+                >
+                  {/* Header with back + status */}
+                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="gap-2 text-muted-foreground"
+                      onClick={() => setActiveSquad(null)}
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                      {t("squads.back_to_packs")}
+                    </Button>
+                    <div className="inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-card/50 border border-border">
+                      <span className="text-sm font-medium">{t("squads.selected")}</span>
+                      <span className="font-display font-bold text-xl text-primary">
+                        {squadSelectedAgents.length}
+                      </span>
+                      <span className="text-sm text-muted-foreground">
+                        / {activeSquad.maxAgents}
+                      </span>
+                      <Badge className="bg-emerald-500/20 text-emerald-400 border-0">
+                        -{activeSquad.discount}% off
+                      </Badge>
+                    </div>
+                  </div>
+
+                  <p className="text-sm text-muted-foreground text-center">
+                    {t("squads.pick_agents", { count: activeSquad.maxAgents })}
+                  </p>
+
+                  <AgentSelectionGrid
+                    selectedAgents={squadSelectedAgents}
+                    toggleAgent={toggleSquadAgent}
+                    maxAgents={activeSquad.maxAgents}
+                    t={t}
+                  />
+
+                  {squadSelectedAgents.length === activeSquad.maxAgents && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-center"
+                    >
+                      <Link to="/auth">
+                        <Button className="glow rounded-xl px-8 h-12 font-semibold gap-2">
+                          {t("squads.confirm_squad")}
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </motion.div>
+                  )}
+
+                  {squadSelectedAgents.length > 0 && squadSelectedAgents.length < activeSquad.maxAgents && (
+                    <p className="text-center text-sm text-muted-foreground">
+                      {t("squads.remaining_agents", { remaining: activeSquad.maxAgents - squadSelectedAgents.length })}
+                    </p>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </TabsContent>
 
           {/* TEAM BUILDER */}
@@ -249,7 +330,6 @@ export default function SquadPlans() {
                 </div>
               </div>
 
-              {/* Discount tiers */}
               <div className="flex justify-center gap-2 flex-wrap">
                 {[
                   { min: 3, discount: 10 },
@@ -270,58 +350,15 @@ export default function SquadPlans() {
                 ))}
               </div>
 
-              {/* Agent grid */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-                {availableAgents.map((agent) => {
-                  const isSelected = selectedAgents.includes(agent.key);
-                  const Icon = agent.icon;
-                  return (
-                    <motion.div
-                      key={agent.key}
-                      whileTap={{ scale: 0.97 }}
-                      className={`rounded-xl border p-4 cursor-pointer transition-all ${
-                        isSelected
-                          ? "border-primary bg-primary/5"
-                          : "border-border bg-card/30 hover:border-primary/30"
-                      }`}
-                      onClick={() => toggleAgent(agent.key)}
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <Icon className={`h-4 w-4 ${isSelected ? "text-primary" : "text-muted-foreground"}`} />
-                        <span className="text-sm font-medium truncate">
-                          {t(`library_page.agents.${agent.key}_title`)}
-                        </span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] text-muted-foreground">
-                          {t(`library_page.agents.${agent.key}_replaces`)}
-                        </span>
-                        <div
-                          className={`w-5 h-5 rounded-md flex items-center justify-center ${
-                            isSelected
-                              ? "bg-primary text-primary-foreground"
-                              : "bg-card border border-border"
-                          }`}
-                        >
-                          {isSelected ? (
-                            <Check className="h-3 w-3" />
-                          ) : (
-                            <Plus className="h-3 w-3 text-muted-foreground" />
-                          )}
-                        </div>
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
+              <AgentSelectionGrid
+                selectedAgents={selectedAgents}
+                toggleAgent={toggleAgent}
+                t={t}
+              />
 
               {selectedAgents.length >= 3 && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-center"
-                >
-                  <Link to="/library">
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+                  <Link to="/auth">
                     <Button className="glow rounded-xl px-8 h-12 font-semibold gap-2">
                       {t("squads.build_team")}
                       <ArrowRight className="h-4 w-4" />
@@ -354,22 +391,14 @@ export default function SquadPlans() {
                       <dept.icon className={`h-6 w-6 ${dept.color}`} />
                     </div>
                     <div>
-                      <h3 className="font-display font-bold text-lg">
-                        {t(`squads.dept_${dept.id}`)}
-                      </h3>
-                      <p className="text-xs text-muted-foreground">
-                        {t(`squads.dept_${dept.id}_desc`)}
-                      </p>
+                      <h3 className="font-display font-bold text-lg">{t(`squads.dept_${dept.id}`)}</h3>
+                      <p className="text-xs text-muted-foreground">{t(`squads.dept_${dept.id}_desc`)}</p>
                     </div>
                   </div>
 
                   <div className="flex items-center justify-between mb-4 p-2 rounded-lg bg-background/30">
-                    <span className="text-xs font-medium text-emerald-400">
-                      {t("squads.bundle_discount")}
-                    </span>
-                    <span className="font-display font-bold text-lg text-emerald-400">
-                      -{dept.discount}%
-                    </span>
+                    <span className="text-xs font-medium text-emerald-400">{t("squads.bundle_discount")}</span>
+                    <span className="font-display font-bold text-lg text-emerald-400">-{dept.discount}%</span>
                   </div>
 
                   <div className="space-y-2 mb-5">
@@ -384,7 +413,7 @@ export default function SquadPlans() {
                     ))}
                   </div>
 
-                  <Link to="/library">
+                  <Link to="/auth">
                     <Button variant="outline" className="w-full rounded-xl h-11 font-semibold gap-2 border-border hover:border-primary/30">
                       {t("squads.hire_department")}
                       <ArrowRight className="h-4 w-4" />
