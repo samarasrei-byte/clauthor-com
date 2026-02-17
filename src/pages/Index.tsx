@@ -1,4 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
+import SquadConsultant from "@/components/pricing/SquadConsultant";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -385,6 +386,20 @@ const HomePage = () => {
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* AI SQUAD CONSULTANT */}
+      <section className="py-32 px-4 relative">
+        <div className="max-w-4xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="glass-card rounded-2xl p-8 md:p-12 relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
+              <div className="relative z-10">
+                <SquadConsultant />
+              </div>
+            </div>
           </motion.div>
         </div>
       </section>
