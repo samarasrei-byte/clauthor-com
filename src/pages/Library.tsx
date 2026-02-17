@@ -14,6 +14,7 @@ import {
   Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap
 } from "lucide-react";
 import ROICalculator from "@/components/library/ROICalculator";
+import SquadConsultant from "@/components/pricing/SquadConsultant";
 import AgentLivePreview from "@/components/library/AgentLivePreview";
 import { getPriceDisplay, getPrice, type PriceTier } from "@/lib/pricing";
 import { supabase } from "@/integrations/supabase/client";
@@ -259,6 +260,16 @@ const LibraryPage = () => {
 
       {/* ROI Calculator */}
       <ROICalculator />
+
+      {/* AI Squad Consultant */}
+      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <div className="glass-card rounded-2xl p-8 md:p-10 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
+          <div className="relative z-10">
+            <SquadConsultant />
+          </div>
+        </div>
+      </motion.div>
 
       {/* Grid */}
       <div className="grid md:grid-cols-2 gap-6">
