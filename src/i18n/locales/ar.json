@@ -79,10 +79,35 @@
       "ecommerce_title": "E-commerce Agent — العمليات الرقمية",
       "ecommerce_desc": "إدارة كتالوج ذاتية، تسعير ديناميكي، لوجستيات، استرداد سلة التسوق وتحسين التحويل متعدد الأسواق.",
       "ecommerce_highlight": "🛒 Revenue Optimization",
-      "ecommerce_replaces": "3 مشغلي تجارة إلكترونية"
+      "ecommerce_replaces": "3 مشغلي تجارة إلكترونية",
+      "influencer_title": "وكيل المؤثرين — إدارة صناع المحتوى", "influencer_desc": "يدير حملات المؤثرين ويحلل مقاييس التفاعل ويحسن عائد الاستثمار.", "influencer_highlight": "📣 Creator Economy", "influencer_replaces": "2 مدراء مؤثرين",
+      "marketing_automation_title": "وكيل أتمتة التسويق", "marketing_automation_desc": "يؤتمت مسارات التحويل وتسجيل العملاء المحتملين وحملات البريد الإلكتروني.", "marketing_automation_highlight": "🎯 Growth Engine", "marketing_automation_replaces": "3 متخصصي تسويق",
+      "creative_design_title": "وكيل التصميم الإبداعي", "creative_design_desc": "ينشئ لافتات ومجموعات اجتماعية وعروض تقديمية ومواد مرئية.", "creative_design_highlight": "🎨 Brand AI", "creative_design_replaces": "2 مصممي جرافيك",
+      "video_production_title": "وكيل إنتاج الفيديو", "video_production_desc": "ينتج Reels وShorts وصور مصغرة ويحرر مقاطع الفيديو بالذكاء الاصطناعي.", "video_production_highlight": "🎬 Video AI", "video_production_replaces": "2 محرري فيديو",
+      "seo_growth_title": "وكيل SEO والنمو", "seo_growth_desc": "تدقيق SEO وبحث الكلمات المفتاحية وبناء الروابط وتحسين المحتوى.", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2 متخصصي SEO",
+      "project_management_title": "وكيل إدارة المشاريع", "project_management_desc": "يدير السبرنتات والجداول الزمنية والمخاطر وتقارير التقدم.", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1 مدير مشاريع",
+      "supply_chain_title": "وكيل سلسلة التوريد", "supply_chain_desc": "يحسن المخزون ومسارات التوصيل والتنبؤ بالطلب وإدارة الموردين.", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2 محللي لوجستيات",
+      "training_title": "وكيل التدريب والتطوير", "training_desc": "ينشئ مسارات تعلم ويقيم الكفاءات ويدير برامج التدريب.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 منسق تدريب"
     }
   },
   "cta": { "title": "مستعد للتوسع؟", "subtitle": "ابدأ مجاناً. لا حاجة لبطاقة ائتمان. الإعداد في 5 دقائق.", "button": "إنشاء حسابي" },
   "tiers": { "basic": "أساسي", "intermediate": "متوسط", "advanced": "متقدم", "enterprise": "مؤسسي" },
-  "payment": { "pay_crypto": "الدفع بالعملات المشفرة", "pay_card": "الدفع بالبطاقة", "crypto_desc": "بيتكوين، إيثريوم، USDC والمزيد" }
+  "payment": { "pay_crypto": "الدفع بالعملات المشفرة", "pay_card": "الدفع بالبطاقة", "crypto_desc": "بيتكوين، إيثريوم، USDC والمزيد" },
+  "squads": {
+    "badge": "فرق الذكاء الاصطناعي", "title": "كوّن", "title_hl": "فريقك الذكي", "subtitle": "اجمع عدة موظفين ذكاء اصطناعي في خطة واحدة مع خصومات تصاعدية.",
+    "tab_squads": "Squad Packs", "tab_builder": "Team Builder", "tab_departments": "الأقسام", "recommended": "موصى به",
+    "squad_title": "Squad {{count}}", "squad_subtitle": "{{count}} وكلاء بخصم ثابت", "discount": "خصم Squad", "discount_desc": "يُطبق على القيمة الإجمالية للوكلاء",
+    "feature_agents": "{{count}} وكلاء من اختيارك", "feature_shared_tokens": "رموز مشتركة بين الوكلاء", "feature_dashboard": "لوحة تحكم موحدة للفريق", "feature_support": "دعم ذو أولوية",
+    "select_squad": "تكوين Squad", "builder_desc": "اختر الوكلاء واحصل على خصومات تصاعدية.", "selected": "المحددون:", "agents_label": "وكلاء",
+    "build_team": "توظيف الفريق", "min_agents": "اختر {{remaining}} وكيل/وكلاء إضافيين للخصم",
+    "dept_vendas": "قسم المبيعات", "dept_vendas_desc": "فريق مبيعات آلي كامل",
+    "dept_suporte": "قسم الدعم", "dept_suporte_desc": "دعم متعدد القنوات 24/7",
+    "dept_financeiro": "قسم المالية", "dept_financeiro_desc": "إدارة مالية وضريبية آلية",
+    "dept_marketing": "قسم التسويق", "dept_marketing_desc": "أتمتة التسويق وSEO والمؤثرين",
+    "dept_criacao": "قسم الإبداع", "dept_criacao_desc": "تصميم وفيديو وإنتاج محتوى بصري",
+    "dept_tecnologia": "قسم التكنولوجيا", "dept_tecnologia_desc": "تطوير وبنية تحتية وأمان",
+    "dept_rh": "قسم الموارد البشرية", "dept_rh_desc": "توظيف وتدريب وإدارة المواهب",
+    "bundle_discount": "خصم القسم", "included_agents": "الوكلاء المضمنون", "hire_department": "توظيف القسم",
+    "back_to_packs": "العودة للباقات", "pick_agents": "اختر {{count}} وكلاء لفريقك", "confirm_squad": "تأكيد Squad", "remaining_agents": "اختر {{remaining}} وكيل/وكلاء إضافيين"
+  }
 }

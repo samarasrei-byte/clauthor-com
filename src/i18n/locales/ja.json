@@ -79,10 +79,35 @@
       "ecommerce_title": "E-commerce Agent — デジタルオペレーション",
       "ecommerce_desc": "カタログ管理、ダイナミックプライシング、物流、カート回復、マルチマーケットプレイス最適化を自律実行。",
       "ecommerce_highlight": "🛒 Revenue Optimization",
-      "ecommerce_replaces": "ECオペレーター3名"
+      "ecommerce_replaces": "ECオペレーター3名",
+      "influencer_title": "インフルエンサーエージェント", "influencer_desc": "インフルエンサーキャンペーン管理、エンゲージメント分析、ROI最適化。", "influencer_highlight": "📣 Creator Economy", "influencer_replaces": "インフルエンサー担当2名",
+      "marketing_automation_title": "マーケティングオートメーションエージェント", "marketing_automation_desc": "ファネル、リードスコアリング、メールナーチャリング、マルチチャネルキャンペーンを自動化。", "marketing_automation_highlight": "🎯 Growth Engine", "marketing_automation_replaces": "マーケティング担当3名",
+      "creative_design_title": "クリエイティブデザインエージェント", "creative_design_desc": "バナー、ソーシャルキット、プレゼンテーション、ブランド素材を自動生成。", "creative_design_highlight": "🎨 Brand AI", "creative_design_replaces": "グラフィックデザイナー2名",
+      "video_production_title": "動画制作エージェント", "video_production_desc": "Reels、Shorts、サムネイルを制作し、AIで動画編集。", "video_production_highlight": "🎬 Video AI", "video_production_replaces": "動画エディター2名",
+      "seo_growth_title": "SEO＆グロースエージェント", "seo_growth_desc": "SEO監査、キーワードリサーチ、リンクビルディング、オーガニックトラフィック向けコンテンツ最適化。", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "SEO担当2名",
+      "project_management_title": "プロジェクト管理エージェント", "project_management_desc": "スプリント、タイムライン、リスク、進捗レポートを管理。アジャイル手法を自動化。", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "プロジェクトマネージャー1名",
+      "supply_chain_title": "サプライチェーンエージェント", "supply_chain_desc": "在庫、配送ルート、需要予測、サプライヤー管理をAIで最適化。", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "ロジスティクス担当2名",
+      "training_title": "トレーニング＆開発エージェント", "training_desc": "学習パスの作成、能力評価、ゲーミフィケーション付き研修プログラム管理。", "training_highlight": "🎓 Learning AI", "training_replaces": "研修コーディネーター1名"
     }
   },
   "cta": { "title": "スケールする準備は?", "subtitle": "無料で開始。クレジットカード不要。5分で設定。", "button": "アカウントを作成" },
   "tiers": { "basic": "ベーシック", "intermediate": "中級", "advanced": "アドバンス", "enterprise": "エンタープライズ" },
-  "payment": { "pay_crypto": "暗号通貨で支払う", "pay_card": "カードで支払う", "crypto_desc": "Bitcoin, Ethereum, USDCなど" }
+  "payment": { "pay_crypto": "暗号通貨で支払う", "pay_card": "カードで支払う", "crypto_desc": "Bitcoin, Ethereum, USDCなど" },
+  "squads": {
+    "badge": "AIチーム", "title": "あなたの", "title_hl": "AIチームを構築", "subtitle": "複数のAI従業員を段階的割引付きの1つのプランにまとめます。",
+    "tab_squads": "Squad Packs", "tab_builder": "Team Builder", "tab_departments": "部門", "recommended": "おすすめ",
+    "squad_title": "Squad {{count}}", "squad_subtitle": "{{count}}エージェント固定割引付き", "discount": "Squad割引", "discount_desc": "エージェント合計額に適用",
+    "feature_agents": "{{count}}エージェント選択可能", "feature_shared_tokens": "エージェント間でトークン共有", "feature_dashboard": "統合チームダッシュボード", "feature_support": "優先サポート",
+    "select_squad": "Squadを組む", "builder_desc": "エージェントを選択して段階的割引を取得。", "selected": "選択済み:", "agents_label": "エージェント",
+    "build_team": "チームを採用", "min_agents": "割引には{{remaining}}エージェント追加選択が必要",
+    "dept_vendas": "営業部", "dept_vendas_desc": "完全自動化営業チーム",
+    "dept_suporte": "サポート部", "dept_suporte_desc": "24/7オムニチャネルサポート",
+    "dept_financeiro": "経理部", "dept_financeiro_desc": "自動化された財務・税務管理",
+    "dept_marketing": "マーケティング部", "dept_marketing_desc": "マーケティング自動化、SEO、インフルエンサー",
+    "dept_criacao": "クリエイティブ部", "dept_criacao_desc": "デザイン、動画、ビジュアルコンテンツ制作",
+    "dept_tecnologia": "テクノロジー部", "dept_tecnologia_desc": "開発、インフラ、セキュリティ",
+    "dept_rh": "人事部", "dept_rh_desc": "採用、研修、タレントマネジメント",
+    "bundle_discount": "部門割引", "included_agents": "含まれるエージェント", "hire_department": "部門を採用",
+    "back_to_packs": "パックに戻る", "pick_agents": "Squadのために{{count}}エージェントを選択", "confirm_squad": "Squad確認", "remaining_agents": "{{remaining}}エージェント追加選択"
+  }
 }

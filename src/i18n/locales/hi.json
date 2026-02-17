@@ -79,10 +79,35 @@
       "ecommerce_title": "E-commerce Agent — डिजिटल ऑपरेशन",
       "ecommerce_desc": "स्वायत्त कैटलॉग प्रबंधन, डायनामिक प्राइसिंग, लॉजिस्टिक्स, कार्ट रिकवरी और मल्टी-मार्केटप्लेस कन्वर्शन ऑप्टिमाइज़ेशन।",
       "ecommerce_highlight": "🛒 Revenue Optimization",
-      "ecommerce_replaces": "3 ई-कॉमर्स ऑपरेटर"
+      "ecommerce_replaces": "3 ई-कॉमर्स ऑपरेटर",
+      "influencer_title": "इन्फ्लुएंसर एजेंट — क्रिएटर मैनेजमेंट", "influencer_desc": "इन्फ्लुएंसर अभियान प्रबंधित करता है, एंगेजमेंट विश्लेषण करता है और ROI अनुकूलित करता है।", "influencer_highlight": "📣 Creator Economy", "influencer_replaces": "2 इन्फ्लुएंसर मैनेजर",
+      "marketing_automation_title": "मार्केटिंग ऑटोमेशन एजेंट", "marketing_automation_desc": "फनल, लीड स्कोरिंग, ईमेल नर्चरिंग और मल्टी-चैनल अभियान स्वचालित करता है।", "marketing_automation_highlight": "🎯 Growth Engine", "marketing_automation_replaces": "3 मार्केटिंग विशेषज्ञ",
+      "creative_design_title": "क्रिएटिव डिज़ाइन एजेंट", "creative_design_desc": "बैनर, सोशल किट, प्रेजेंटेशन और ब्रांड सामग्री स्वचालित रूप से बनाता है।", "creative_design_highlight": "🎨 Brand AI", "creative_design_replaces": "2 ग्राफिक डिज़ाइनर",
+      "video_production_title": "वीडियो प्रोडक्शन एजेंट", "video_production_desc": "Reels, Shorts, थंबनेल बनाता है और AI से वीडियो एडिट करता है।", "video_production_highlight": "🎬 Video AI", "video_production_replaces": "2 वीडियो एडिटर",
+      "seo_growth_title": "SEO और ग्रोथ एजेंट", "seo_growth_desc": "SEO ऑडिट, कीवर्ड रिसर्च, लिंक बिल्डिंग और ऑर्गेनिक ट्रैफ़िक के लिए कंटेंट ऑप्टिमाइज़ेशन।", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2 SEO विशेषज्ञ",
+      "project_management_title": "प्रोजेक्ट मैनेजमेंट एजेंट", "project_management_desc": "स्प्रिंट, टाइमलाइन, जोखिम और प्रगति रिपोर्ट प्रबंधित करता है।", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1 प्रोजेक्ट मैनेजर",
+      "supply_chain_title": "सप्लाई चेन एजेंट", "supply_chain_desc": "इन्वेंटरी, डिलीवरी रूट, डिमांड फोरकास्ट और सप्लायर मैनेजमेंट ऑप्टिमाइज़ करता है।", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2 लॉजिस्टिक्स एनालिस्ट",
+      "training_title": "ट्रेनिंग और डेवलपमेंट एजेंट", "training_desc": "लर्निंग पाथ बनाता है, दक्षताओं का मूल्यांकन करता है और गेमिफिकेशन के साथ प्रशिक्षण प्रबंधित करता है।", "training_highlight": "🎓 Learning AI", "training_replaces": "1 प्रशिक्षण समन्वयक"
     }
   },
   "cta": { "title": "स्केल करने के लिए तैयार?", "subtitle": "मुफ्त में शुरू करें। क्रेडिट कार्ड की आवश्यकता नहीं। 5 मिनट में सेटअप।", "button": "मेरा अकाउंट बनाएं" },
   "tiers": { "basic": "बेसिक", "intermediate": "इंटरमीडिएट", "advanced": "एडवांस्ड", "enterprise": "एंटरप्राइज़" },
-  "payment": { "pay_crypto": "क्रिप्टो से भुगतान करें", "pay_card": "कार्ड से भुगतान करें", "crypto_desc": "बिटकॉइन, एथेरियम, USDC और अधिक" }
+  "payment": { "pay_crypto": "क्रिप्टो से भुगतान करें", "pay_card": "कार्ड से भुगतान करें", "crypto_desc": "बिटकॉइन, एथेरियम, USDC और अधिक" },
+  "squads": {
+    "badge": "AI टीमें", "title": "अपनी", "title_hl": "AI टीम बनाएं", "subtitle": "कई AI कर्मचारियों को एक प्लान में प्रगतिशील छूट के साथ जोड़ें।",
+    "tab_squads": "Squad Packs", "tab_builder": "Team Builder", "tab_departments": "विभाग", "recommended": "अनुशंसित",
+    "squad_title": "Squad {{count}}", "squad_subtitle": "{{count}} एजेंट निश्चित छूट के साथ", "discount": "Squad छूट", "discount_desc": "एजेंटों के कुल मूल्य पर लागू",
+    "feature_agents": "आपकी पसंद के {{count}} एजेंट", "feature_shared_tokens": "एजेंटों के बीच साझा टोकन", "feature_dashboard": "एकीकृत टीम डैशबोर्ड", "feature_support": "प्राथमिकता सहायता",
+    "select_squad": "Squad बनाएं", "builder_desc": "एजेंट चुनें और प्रगतिशील छूट प्राप्त करें।", "selected": "चयनित:", "agents_label": "एजेंट",
+    "build_team": "टीम नियुक्त करें", "min_agents": "छूट के लिए {{remaining}} और एजेंट चुनें",
+    "dept_vendas": "बिक्री विभाग", "dept_vendas_desc": "पूर्ण स्वचालित बिक्री टीम",
+    "dept_suporte": "सहायता विभाग", "dept_suporte_desc": "24/7 ऑम्निचैनल सहायता",
+    "dept_financeiro": "वित्त विभाग", "dept_financeiro_desc": "स्वचालित वित्तीय और कर प्रबंधन",
+    "dept_marketing": "मार्केटिंग विभाग", "dept_marketing_desc": "मार्केटिंग ऑटोमेशन, SEO और इन्फ्लुएंसर",
+    "dept_criacao": "क्रिएटिव विभाग", "dept_criacao_desc": "डिज़ाइन, वीडियो और विज़ुअल कंटेंट प्रोडक्शन",
+    "dept_tecnologia": "टेक विभाग", "dept_tecnologia_desc": "विकास, इन्फ्रा और सुरक्षा",
+    "dept_rh": "HR और लोग विभाग", "dept_rh_desc": "भर्ती, प्रशिक्षण और प्रतिभा प्रबंधन",
+    "bundle_discount": "विभाग छूट", "included_agents": "शामिल एजेंट", "hire_department": "विभाग नियुक्त करें",
+    "back_to_packs": "पैक पर वापस", "pick_agents": "अपने squad के लिए {{count}} एजेंट चुनें", "confirm_squad": "Squad पुष्टि करें", "remaining_agents": "{{remaining}} और एजेंट चुनें"
+  }
 }

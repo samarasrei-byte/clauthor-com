@@ -612,6 +612,8 @@
     "dept_criacao_desc": "Design, video and visual content production",
     "dept_tecnologia": "Tech Dept.",
     "dept_tecnologia_desc": "Development, infrastructure and security",
+    "dept_rh": "HR & People Dept.",
+    "dept_rh_desc": "Recruiting, training and talent management",
     "bundle_discount": "Department discount",
     "included_agents": "Included agents",
     "hire_department": "Hire Department",

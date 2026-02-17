@@ -25,6 +25,7 @@ const departments = [
   { id: "marketing", icon: Sparkles, color: "text-primary", bgColor: "bg-primary/10 border-primary/20", agents: ["content", "marketing_automation", "seo_growth", "influencer"], discount: 25 },
   { id: "criacao", icon: Palette, color: "text-violet-400", bgColor: "bg-violet-500/10 border-violet-500/20", agents: ["creative_design", "video_production", "content", "influencer"], discount: 25 },
   { id: "tecnologia", icon: Wrench, color: "text-blue-400", bgColor: "bg-blue-500/10 border-blue-500/20", agents: ["coding", "computer", "project_management", "security"], discount: 25 },
+  { id: "rh", icon: GraduationCap, color: "text-pink-400", bgColor: "bg-pink-500/10 border-pink-500/20", agents: ["hr", "training", "customer_success", "data_analytics"], discount: 25 },
 ];
 
 const availableAgents = [
