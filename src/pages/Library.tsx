@@ -18,25 +18,29 @@ import { getPriceDisplay, type PriceTier } from "@/lib/pricing";
 // Agent keys map to i18n keys under library_page.agents.*
 const agentKeys = [
   "voice_ai", "orchestrator", "research", "coding", "omnichannel",
-  "revenue", "sales", "rag", "computer", "content", "security", "hr"
+  "revenue", "sales", "rag", "computer", "content", "security", "hr",
+  "customer_success", "data_analytics", "legal", "ecommerce"
 ] as const;
 
 const agentIcons: Record<string, React.ElementType> = {
   voice_ai: Phone, orchestrator: Workflow, research: Search, coding: Code,
   omnichannel: MessageSquare, revenue: BarChart3, sales: Briefcase,
   rag: Layers, computer: Cpu, content: Sparkles, security: Shield, hr: Users,
+  customer_success: Star, data_analytics: Eye, legal: FileText, ecommerce: ShoppingCart,
 };
 
 const agentTiers: Record<string, string> = {
   voice_ai: "enterprise", orchestrator: "enterprise", research: "advanced", coding: "enterprise",
   omnichannel: "advanced", revenue: "advanced", sales: "advanced",
   rag: "intermediate", computer: "enterprise", content: "intermediate", security: "enterprise", hr: "advanced",
+  customer_success: "advanced", data_analytics: "advanced", legal: "enterprise", ecommerce: "advanced",
 };
 
 const agentPriceTiers: Record<string, PriceTier> = {
   voice_ai: "premium", orchestrator: "premium", research: "mid", coding: "high",
   omnichannel: "mid", revenue: "mid", sales: "mid",
   rag: "entry", computer: "high", content: "entry", security: "premium", hr: "mid",
+  customer_success: "mid", data_analytics: "mid", legal: "high", ecommerce: "mid",
 };
 
 const agentTags: Record<string, string[]> = {
@@ -52,6 +56,10 @@ const agentTags: Record<string, string[]> = {
   content: ["Social Media", "Blog", "Ads", "E-mail", "Video"],
   security: ["Security", "LGPD", "SOC2", "Threat Detection", "Zero Trust"],
   hr: ["Recruiting", "Onboarding", "Performance", "People Analytics"],
+  customer_success: ["Churn", "NPS", "Health Score", "Retention", "Onboarding"],
+  data_analytics: ["BI", "SQL", "Dashboards", "Insights", "Predictive"],
+  legal: ["Contracts", "Compliance", "LGPD", "Due Diligence", "Risk"],
+  ecommerce: ["Marketplace", "Pricing", "Catalog", "Logistics", "Conversion"],
 };
 
 const agentIntegrations: Record<string, string[]> = {
@@ -67,6 +75,10 @@ const agentIntegrations: Record<string, string[]> = {
   content: ["Instagram API", "YouTube", "Mailchimp", "WordPress", "Meta Ads"],
   security: ["AWS Security Hub", "Azure Sentinel", "CrowdStrike", "SentinelOne", "Splunk"],
   hr: ["LinkedIn Recruiter", "Gupy", "Slack", "Google Workspace", "eSocial"],
+  customer_success: ["HubSpot", "Salesforce", "Intercom", "Mixpanel", "Stripe"],
+  data_analytics: ["BigQuery", "PostgreSQL", "Metabase", "Looker", "Google Sheets"],
+  legal: ["DocuSign", "Google Drive", "SharePoint", "Notion", "SAP"],
+  ecommerce: ["Shopify", "Mercado Livre", "Amazon", "Stripe", "Google Ads"],
 };
 
 const tierColors: Record<string, string> = {

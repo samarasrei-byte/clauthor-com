@@ -119,7 +119,23 @@
       "hr_title": "HR & People Agent — RH Inteligente",
       "hr_desc": "Automatiza recrutamento, onboarding, gestão de performance, clima e people analytics. Do job posting ao offboarding.",
       "hr_highlight": "👥 People Analytics",
-      "hr_replaces": "2 analistas de RH + 1 recrutador"
+      "hr_replaces": "2 analistas de RH + 1 recrutador",
+      "customer_success_title": "Customer Success Agent — Retenção Autônoma",
+      "customer_success_desc": "Monitora health score, prevê churn e executa playbooks de retenção automaticamente. NPS, onboarding e expansão de contas.",
+      "customer_success_highlight": "📈 Anti-Churn AI",
+      "customer_success_replaces": "2 CSMs + 1 analista de dados",
+      "data_analytics_title": "Data Analytics Agent — BI Autônomo",
+      "data_analytics_desc": "Transforma perguntas em linguagem natural em dashboards, relatórios e insights preditivos. SQL, visualização e anomaly detection.",
+      "data_analytics_highlight": "📊 Natural Language BI",
+      "data_analytics_replaces": "3 analistas de dados",
+      "legal_title": "Legal & Contract Agent — Jurídico IA",
+      "legal_desc": "Revisão autônoma de contratos, compliance regulatório (LGPD, CDC), gestão de prazos e due diligence. Análise de risco contratual.",
+      "legal_highlight": "⚖️ Contract Review AI",
+      "legal_replaces": "2 paralegais + 1 analista de compliance",
+      "ecommerce_title": "E-commerce Agent — Operação Digital",
+      "ecommerce_desc": "Gestão autônoma de catálogo, pricing dinâmico, logística, recuperação de carrinho e otimização de conversão multi-marketplace.",
+      "ecommerce_highlight": "🛒 Revenue Optimization",
+      "ecommerce_replaces": "3 operadores de e-commerce"
     }
   },
   "home": {
