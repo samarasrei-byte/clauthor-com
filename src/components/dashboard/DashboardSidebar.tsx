@@ -24,7 +24,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       initial={false}
       animate={{ width: collapsed ? 64 : 220 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="sticky top-20 h-[calc(100vh-6rem)] flex flex-col glass-card rounded-2xl border border-white/[0.06] overflow-hidden shrink-0"
+      className="h-full flex flex-col glass-card border-r border-white/[0.06] overflow-hidden shrink-0 relative"
     >
       {/* Toggle */}
       <button

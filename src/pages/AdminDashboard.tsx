@@ -164,15 +164,15 @@ const AdminDashboard = () => {
   const formatTokens = (n: number) => n > 1000000 ? `${(n / 1000000).toFixed(1)}M` : n > 1000 ? `${(n / 1000).toFixed(0)}k` : n.toString();
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-      <div className="flex gap-6">
-        {/* Sidebar */}
-        <div className="hidden lg:block">
-          <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={setActiveTab} />
-        </div>
+    <div className="flex h-full">
+      {/* Sidebar — fixed, full height */}
+      <div className="hidden lg:block">
+        <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={setActiveTab} />
+      </div>
 
-        {/* Main */}
-        <div className="flex-1 min-w-0 space-y-6">
+      {/* Scrollable content area */}
+      <div className="flex-1 min-w-0 overflow-y-auto">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-6">
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center gap-3 mb-1">

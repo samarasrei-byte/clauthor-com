@@ -1,12 +1,11 @@
-import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Bot, LogOut, Home, Shield, LanguagesIcon } from "lucide-react";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Bot, LogOut, Home, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageSelector } from "@/components/LanguageSelector";
 
 const DashboardLayout = () => {
-  const { user, isAdmin, signOut } = useAuth();
+  const { isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -15,9 +14,9 @@ const DashboardLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Minimal top bar */}
-      <header className="h-14 border-b border-white/[0.05] bg-background/70 backdrop-blur-2xl flex items-center justify-between px-4 sm:px-6 shrink-0 z-40">
+    <div className="h-screen flex flex-col bg-background overflow-hidden">
+      {/* Fixed top bar */}
+      <header className="h-14 border-b border-white/[0.05] bg-background/80 backdrop-blur-2xl flex items-center justify-between px-4 sm:px-6 shrink-0 z-40">
         <Link to="/" className="flex items-center gap-2.5 group">
           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
             <Bot className="h-4 w-4 text-primary" />
@@ -51,10 +50,10 @@ const DashboardLayout = () => {
         </div>
       </header>
 
-      {/* Content */}
-      <main className="flex-1">
+      {/* Below header: sidebar + scrollable content */}
+      <div className="flex-1 overflow-hidden">
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 };
