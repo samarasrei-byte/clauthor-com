@@ -142,8 +142,15 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
         <div ref={messagesEndRef} />
       </div>
 
+      {/* AI Disclaimer */}
+      <div className="px-4 pt-2">
+        <p className="text-[10px] text-muted-foreground/60 text-center">
+          🤖 Assistente com IA — respostas podem conter imprecisões. Não substitui aconselhamento profissional.
+        </p>
+      </div>
+
       {/* Input */}
-      <div className="p-4 border-t border-white/5">
+      <div className="px-4 pb-4 pt-1 border-t border-white/5">
         <form
           onSubmit={(e) => {
             e.preventDefault();
