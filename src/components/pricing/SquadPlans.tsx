@@ -22,7 +22,9 @@ const departments = [
   { id: "vendas", icon: Briefcase, color: "text-cyan-400", bgColor: "bg-cyan-500/10 border-cyan-500/20", agents: ["sales", "customer_success", "omnichannel", "voice_ai"], discount: 25 },
   { id: "suporte", icon: MessageSquare, color: "text-emerald-400", bgColor: "bg-emerald-500/10 border-emerald-500/20", agents: ["omnichannel", "customer_success", "voice_ai", "rag"], discount: 25 },
   { id: "financeiro", icon: BarChart3, color: "text-amber-400", bgColor: "bg-amber-500/10 border-amber-500/20", agents: ["revenue", "legal", "data_analytics", "ecommerce"], discount: 25 },
-  { id: "marketing", icon: Sparkles, color: "text-primary", bgColor: "bg-primary/10 border-primary/20", agents: ["content", "research", "data_analytics", "ecommerce"], discount: 25 },
+  { id: "marketing", icon: Sparkles, color: "text-primary", bgColor: "bg-primary/10 border-primary/20", agents: ["content", "marketing_automation", "seo_growth", "influencer"], discount: 25 },
+  { id: "criacao", icon: Palette, color: "text-violet-400", bgColor: "bg-violet-500/10 border-violet-500/20", agents: ["creative_design", "video_production", "content", "influencer"], discount: 25 },
+  { id: "tecnologia", icon: Wrench, color: "text-blue-400", bgColor: "bg-blue-500/10 border-blue-500/20", agents: ["coding", "computer", "project_management", "security"], discount: 25 },
 ];
 
 const availableAgents = [
