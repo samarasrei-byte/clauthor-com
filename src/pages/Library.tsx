@@ -615,13 +615,13 @@ const LibraryPage = () => {
                         <Icon className="h-7 w-7 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-display font-bold text-base leading-snug mb-1.5 line-clamp-1">{agentTitle}</h3>
+                        <h3 className="font-display font-extrabold text-lg leading-tight mb-1.5 line-clamp-1 tracking-tight">{agentTitle}</h3>
                         <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={`${tierColors[tier]} text-[11px] py-0.5 px-2`}>
+                          <Badge variant="outline" className={`${tierColors[tier]} text-xs py-0.5 px-2.5 font-semibold`}>
                             {t(`tiers.${tier}`)}
                           </Badge>
                           {highlight && (
-                            <span className="text-[10px] px-2.5 py-0.5 rounded-full bg-primary/10 text-primary font-semibold whitespace-nowrap">
+                            <span className="text-[11px] px-3 py-0.5 rounded-full bg-primary/10 text-primary font-bold whitespace-nowrap tracking-wide uppercase">
                               {highlight}
                             </span>
                           )}
@@ -630,12 +630,12 @@ const LibraryPage = () => {
                     </div>
 
                     {/* Description */}
-                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-5">{agentDesc}</p>
+                    <p className="text-sm text-muted-foreground/90 leading-relaxed line-clamp-2 mb-5 font-medium">{agentDesc}</p>
 
                     {/* Capability pills */}
                     <div className="flex flex-wrap gap-1.5 mb-5">
                       {capabilities.slice(0, 3).map((cap) => (
-                        <span key={cap} className="text-[11px] px-2.5 py-1 rounded-lg bg-card/80 border border-border/60 text-foreground/70 font-medium">
+                        <span key={cap} className="text-xs px-3 py-1 rounded-lg bg-card/80 border border-border/60 text-foreground/80 font-semibold tracking-wide">
                           {cap}
                         </span>
                       ))}
@@ -645,15 +645,15 @@ const LibraryPage = () => {
                     <div className="flex items-center justify-between mb-5 py-3.5 px-4 rounded-xl bg-background/40 border border-border/30">
                       <div className="flex items-center gap-2">
                         <TrendingUp className="h-4 w-4 text-emerald-400" />
-                        <span className="text-sm font-semibold text-emerald-400">{social.savings}/mês</span>
+                        <span className="text-sm font-bold text-emerald-400">{social.savings}/mês</span>
                       </div>
                       <div className="w-px h-5 bg-border/50" />
                       <div className="flex items-center gap-1.5">
                         <Star className="h-3.5 w-3.5 fill-primary text-primary" />
-                        <span className="text-sm font-medium">{social.rating}</span>
+                        <span className="text-sm font-bold">{social.rating}</span>
                       </div>
                       <div className="w-px h-5 bg-border/50" />
-                      <span className="text-xs text-muted-foreground font-medium">{social.companies}+ empresas</span>
+                      <span className="text-xs text-muted-foreground font-semibold">{social.companies}+ empresas</span>
                     </div>
 
                     {/* Replaces */}
@@ -690,8 +690,8 @@ const LibraryPage = () => {
                     <div className="pt-5 border-t border-border/30 mt-auto">
                       <div className="flex items-end justify-between mb-4">
                         <div>
-                          <p className="font-display font-bold text-2xl gradient-text leading-none">{priceDisplay}</p>
-                          <span className="text-xs text-muted-foreground mt-1 block">{t("library.per_month")}</span>
+                          <p className="font-display font-black text-3xl gradient-text leading-none tracking-tight">{priceDisplay}</p>
+                          <span className="text-xs text-muted-foreground mt-1.5 block font-medium">{t("library.per_month")}</span>
                         </div>
                       </div>
                       <Button
