@@ -87,7 +87,10 @@
       "seo_growth_title": "SEO & 성장 에이전트", "seo_growth_desc": "SEO 감사, 키워드 리서치, 링크 빌딩 및 오가닉 트래픽 콘텐츠 최적화.", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "SEO 전문가 2명",
       "project_management_title": "프로젝트 관리 에이전트", "project_management_desc": "스프린트, 타임라인, 리스크 및 진행 보고서 관리. 자동화된 애자일 방법론.", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "프로젝트 매니저 1명",
       "supply_chain_title": "공급망 에이전트", "supply_chain_desc": "재고, 배송 경로, 수요 예측 및 공급업체 관리를 AI로 최적화.", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "물류 분석가 2명",
-      "training_title": "교육 & 개발 에이전트", "training_desc": "학습 경로 생성, 역량 평가, 게이미피케이션 교육 프로그램 관리.", "training_highlight": "🎓 Learning AI", "training_replaces": "교육 코디네이터 1명"
+      "training_title": "교육 & 개발 에이전트", "training_desc": "학습 경로 생성, 역량 평가, 게이미피케이션 교육 프로그램 관리.", "training_highlight": "🎓 Learning AI", "training_replaces": "교육 코디네이터 1명",
+      "concierge_title": "컨시어지 AI 에이전트 — 엘리트 개인 비서", "concierge_desc": "일정, 이메일, 업무, 커뮤니케이션을 24/7 관리하는 AI 비서. 하루 4시간을 되찾으세요.", "concierge_highlight": "🤝 +4h/일 회복", "concierge_replaces": "임원 비서 1명",
+      "ceo_title": "CEO AI 에이전트 — 전략적 C-Level 코파일럿", "ceo_desc": "시나리오 분석, 리스크 예측, 데이터 기반 전략적 의사결정을 추천하는 경영 AI.", "ceo_highlight": "👑 3배 나은 의사결정", "ceo_replaces": "시니어 전략 컨설턴트 1명",
+      "startup_creator_title": "스타트업 크리에이터 에이전트 — 아이디어에서 PMF까지", "startup_creator_desc": "아이디어 검증, 비즈니스 플랜, 피치덱, MVP 블루프린트를 72시간에 만드는 AI 공동창업자.", "startup_creator_highlight": "🚀 아이디어→MVP 72h", "startup_creator_replaces": "공동창업자 1명 + 컨설턴트 1명"
     }
   },
   "cta": { "title": "확장할 준비가 되셨나요?", "subtitle": "무료로 시작. 신용카드 불필요. 5분 만에 설정.", "button": "내 계정 만들기" },

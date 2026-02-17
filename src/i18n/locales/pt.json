@@ -167,7 +167,19 @@
       "training_title": "Training & Education Agent — Universidade Corporativa IA",
       "training_desc": "Cria trilhas de aprendizado personalizadas, produz conteúdo educacional, aplica avaliações e mede evolução. Onboarding e capacitação contínua.",
       "training_highlight": "🎓 Learning Adaptativo",
-      "training_replaces": "2 instrutores + 1 designer instrucional"
+      "training_replaces": "2 instrutores + 1 designer instrucional",
+      "concierge_title": "Concierge AI Agent — Seu Assistente Pessoal de Elite",
+      "concierge_desc": "Assistente pessoal de IA que gerencia agenda, e-mails, tarefas e comunicações 24/7. Recupere 4h do seu dia com um chefe de gabinete digital.",
+      "concierge_highlight": "🤝 +4h/dia Recuperadas",
+      "concierge_replaces": "1 assistente executivo",
+      "ceo_title": "CEO AI Agent — Co-piloto Estratégico C-Level",
+      "ceo_desc": "Inteligência artificial executiva que analisa cenários, prevê riscos e recomenda decisões estratégicas baseadas em dados. Seu conselheiro que nunca dorme.",
+      "ceo_highlight": "👑 Decisões 3x Melhores",
+      "ceo_replaces": "1 consultor estratégico sênior",
+      "startup_creator_title": "Startup Creator Agent — Da Ideia ao Product-Market Fit",
+      "startup_creator_desc": "Co-fundador de IA que valida ideias, cria business plans, pitch decks e blueprints de MVP. Transforme sua visão em startup de sucesso em 72h.",
+      "startup_creator_highlight": "🚀 Ideia → MVP em 72h",
+      "startup_creator_replaces": "1 co-founder + 1 consultor"
     }
   },
   "home": {

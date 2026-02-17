@@ -87,7 +87,10 @@
       "seo_growth_title": "SEO и Рост Агент", "seo_growth_desc": "SEO-аудит, поиск ключевых слов, линкбилдинг и оптимизация контента для органического трафика.", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2 SEO-специалиста",
       "project_management_title": "Агент Управления Проектами", "project_management_desc": "Управляет спринтами, таймлайнами, рисками и отчётами о прогрессе.", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1 проект-менеджер",
       "supply_chain_title": "Агент Цепи Поставок", "supply_chain_desc": "Оптимизирует запасы, маршруты доставки, прогноз спроса и управление поставщиками.", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2 логистических аналитика",
-      "training_title": "Агент Обучения и Развития", "training_desc": "Создаёт пути обучения, оценивает компетенции и управляет программами с геймификацией.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 координатор обучения"
+      "training_title": "Агент Обучения и Развития", "training_desc": "Создаёт пути обучения, оценивает компетенции и управляет программами с геймификацией.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 координатор обучения",
+      "concierge_title": "Консьерж AI Агент — Ваш Элитный Личный Ассистент", "concierge_desc": "AI-ассистент, управляющий расписанием, почтой, задачами и коммуникациями 24/7. Верните 4 часа в день.", "concierge_highlight": "🤝 +4ч/день Возвращены", "concierge_replaces": "1 исполнительный ассистент",
+      "ceo_title": "CEO AI Агент — Стратегический Ко-пилот C-Level", "ceo_desc": "Исполнительный AI, анализирующий сценарии, прогнозирующий риски и рекомендующий стратегические решения на основе данных.", "ceo_highlight": "👑 В 3 раза лучше решения", "ceo_replaces": "1 старший стратегический консультант",
+      "startup_creator_title": "Стартап Креатор Агент — От Идеи до Product-Market Fit", "startup_creator_desc": "AI-сооснователь, валидирующий идеи, создающий бизнес-планы, питч-деки и MVP-чертежи за 72 часа.", "startup_creator_highlight": "🚀 Идея → MVP за 72ч", "startup_creator_replaces": "1 сооснователь + 1 консультант"
     }
   },
   "cta": { "title": "Готовы масштабироваться?", "subtitle": "Начните бесплатно. Без кредитной карты. Настройка за 5 минут.", "button": "Создать аккаунт" },

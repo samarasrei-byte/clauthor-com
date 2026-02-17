@@ -87,7 +87,10 @@
       "seo_growth_title": "SEO＆グロースエージェント", "seo_growth_desc": "SEO監査、キーワードリサーチ、リンクビルディング、オーガニックトラフィック向けコンテンツ最適化。", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "SEO担当2名",
       "project_management_title": "プロジェクト管理エージェント", "project_management_desc": "スプリント、タイムライン、リスク、進捗レポートを管理。アジャイル手法を自動化。", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "プロジェクトマネージャー1名",
       "supply_chain_title": "サプライチェーンエージェント", "supply_chain_desc": "在庫、配送ルート、需要予測、サプライヤー管理をAIで最適化。", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "ロジスティクス担当2名",
-      "training_title": "トレーニング＆開発エージェント", "training_desc": "学習パスの作成、能力評価、ゲーミフィケーション付き研修プログラム管理。", "training_highlight": "🎓 Learning AI", "training_replaces": "研修コーディネーター1名"
+      "training_title": "トレーニング＆開発エージェント", "training_desc": "学習パスの作成、能力評価、ゲーミフィケーション付き研修プログラム管理。", "training_highlight": "🎓 Learning AI", "training_replaces": "研修コーディネーター1名",
+      "concierge_title": "コンシェルジュAIエージェント — エリート・パーソナルアシスタント", "concierge_desc": "スケジュール、メール、タスク、コミュニケーションを24時間管理するAIアシスタント。1日4時間を取り戻す。", "concierge_highlight": "🤝 +4h/日 回復", "concierge_replaces": "エグゼクティブアシスタント1名",
+      "ceo_title": "CEO AIエージェント — 戦略的C-Levelコパイロット", "ceo_desc": "シナリオ分析、リスク予測、データ駆動の戦略的意思決定を推奨するエグゼクティブAI。", "ceo_highlight": "👑 3倍優れた意思決定", "ceo_replaces": "シニア戦略コンサルタント1名",
+      "startup_creator_title": "スタートアップクリエイターエージェント — アイデアからPMFまで", "startup_creator_desc": "アイデア検証、ビジネスプラン、ピッチデッキ、MVPブループリントを72時間で作成するAI共同創業者。", "startup_creator_highlight": "🚀 アイデア→MVP 72h", "startup_creator_replaces": "共同創業者1名 + コンサルタント1名"
     }
   },
   "cta": { "title": "スケールする準備は?", "subtitle": "無料で開始。クレジットカード不要。5分で設定。", "button": "アカウントを作成" },

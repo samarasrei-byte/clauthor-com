@@ -11,7 +11,8 @@ import {
   Code, Brain, Shield, Mic, Bot, Eye, Workflow,
   Phone, Search, Users, Briefcase, BarChart3,
   Layers, Cpu, Sparkles, Globe, Rocket, Loader2,
-  Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap
+  Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap,
+  HeartHandshake, Crown
 } from "lucide-react";
 import ROICalculator from "@/components/library/ROICalculator";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
@@ -27,7 +28,8 @@ const agentKeys = [
   "revenue", "sales", "rag", "computer", "content", "security", "hr",
   "customer_success", "data_analytics", "legal", "ecommerce",
   "influencer", "marketing_automation", "creative_design", "video_production",
-  "seo_growth", "project_management", "supply_chain", "training"
+  "seo_growth", "project_management", "supply_chain", "training",
+  "concierge", "ceo", "startup_creator"
 ] as const;
 
 // Map library keys to DB template slugs
@@ -39,6 +41,7 @@ const agentSlugs: Record<string, string> = {
   influencer: "influencer", marketing_automation: "marketing_automation", creative_design: "creative_design",
   video_production: "video_production", seo_growth: "seo_growth", project_management: "project_management",
   supply_chain: "supply_chain", training: "training",
+  concierge: "concierge", ceo: "ceo", startup_creator: "startup_creator",
 };
 
 const agentIcons: Record<string, React.ElementType> = {
@@ -49,6 +52,7 @@ const agentIcons: Record<string, React.ElementType> = {
   influencer: Megaphone, marketing_automation: Target, creative_design: Palette,
   video_production: Video, seo_growth: Globe, project_management: ClipboardList,
   supply_chain: Truck, training: GraduationCap,
+  concierge: HeartHandshake, ceo: Crown, startup_creator: Rocket,
 };
 
 const agentTiers: Record<string, string> = {
@@ -59,6 +63,7 @@ const agentTiers: Record<string, string> = {
   influencer: "advanced", marketing_automation: "advanced", creative_design: "intermediate",
   video_production: "advanced", seo_growth: "advanced", project_management: "intermediate",
   supply_chain: "advanced", training: "intermediate",
+  concierge: "advanced", ceo: "enterprise", startup_creator: "advanced",
 };
 
 const agentPriceTiers: Record<string, PriceTier> = {
@@ -69,6 +74,7 @@ const agentPriceTiers: Record<string, PriceTier> = {
   influencer: "mid", marketing_automation: "mid", creative_design: "entry",
   video_production: "mid", seo_growth: "mid", project_management: "entry",
   supply_chain: "mid", training: "entry",
+  concierge: "mid", ceo: "premium", startup_creator: "mid",
 };
 
 const agentTags: Record<string, string[]> = {
@@ -96,6 +102,9 @@ const agentTags: Record<string, string[]> = {
   project_management: ["Agile", "Sprints", "Timeline", "Riscos", "PMO"],
   supply_chain: ["Estoque", "Logística", "Fornecedores", "Demanda", "Rotas"],
   training: ["LMS", "Onboarding", "Gamificação", "Trilhas", "Avaliações"],
+  concierge: ["Assistente", "Produtividade", "Agenda", "E-mail", "Pessoal"],
+  ceo: ["Estratégia", "C-Level", "Decisões", "Previsão", "Board"],
+  startup_creator: ["Startup", "MVP", "Pitch Deck", "Validação", "Empreendedorismo"],
 };
 
 const agentIntegrations: Record<string, string[]> = {
@@ -123,6 +132,9 @@ const agentIntegrations: Record<string, string[]> = {
   project_management: ["Jira", "Asana", "Trello", "Monday.com", "Notion"],
   supply_chain: ["SAP", "Oracle ERP", "TOTVS", "WMS", "Google Maps API"],
   training: ["LMS", "Google Classroom", "Notion", "Moodle", "Microsoft Teams"],
+  concierge: ["Google Calendar", "Outlook", "Gmail", "WhatsApp", "Slack", "Notion"],
+  ceo: ["ERP", "CRM", "Power BI", "Google Sheets", "Financeiro", "RH"],
+  startup_creator: ["Lean Canvas", "Google Slides", "Notion", "Figma", "GitHub", "Stripe"],
 };
 
 const tierColors: Record<string, string> = {

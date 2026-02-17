@@ -87,7 +87,10 @@
       "seo_growth_title": "وكيل SEO والنمو", "seo_growth_desc": "تدقيق SEO وبحث الكلمات المفتاحية وبناء الروابط وتحسين المحتوى.", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2 متخصصي SEO",
       "project_management_title": "وكيل إدارة المشاريع", "project_management_desc": "يدير السبرنتات والجداول الزمنية والمخاطر وتقارير التقدم.", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1 مدير مشاريع",
       "supply_chain_title": "وكيل سلسلة التوريد", "supply_chain_desc": "يحسن المخزون ومسارات التوصيل والتنبؤ بالطلب وإدارة الموردين.", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2 محللي لوجستيات",
-      "training_title": "وكيل التدريب والتطوير", "training_desc": "ينشئ مسارات تعلم ويقيم الكفاءات ويدير برامج التدريب.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 منسق تدريب"
+      "training_title": "وكيل التدريب والتطوير", "training_desc": "ينشئ مسارات تعلم ويقيم الكفاءات ويدير برامج التدريب.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 منسق تدريب",
+      "concierge_title": "وكيل الكونسيرج الذكي — مساعدك الشخصي النخبوي", "concierge_desc": "مساعد شخصي بالذكاء الاصطناعي يدير جدولك وبريدك ومهامك واتصالاتك على مدار الساعة. استعد 4 ساعات يومياً.", "concierge_highlight": "🤝 +4 ساعات/يوم مستعادة", "concierge_replaces": "1 مساعد تنفيذي",
+      "ceo_title": "وكيل CEO الذكي — مساعد استراتيجي C-Level", "ceo_desc": "ذكاء اصطناعي تنفيذي يحلل السيناريوهات ويتنبأ بالمخاطر ويوصي بقرارات استراتيجية مبنية على البيانات.", "ceo_highlight": "👑 قرارات أفضل 3 مرات", "ceo_replaces": "1 مستشار استراتيجي أول",
+      "startup_creator_title": "وكيل إنشاء الشركات الناشئة — من الفكرة إلى ملاءمة السوق", "startup_creator_desc": "مؤسس مشارك بالذكاء الاصطناعي يتحقق من الأفكار وينشئ خطط أعمال وعروض تقديمية ومخططات MVP في 72 ساعة.", "startup_creator_highlight": "🚀 فكرة → MVP في 72 ساعة", "startup_creator_replaces": "1 مؤسس مشارك + 1 مستشار"
     }
   },
   "cta": { "title": "مستعد للتوسع؟", "subtitle": "ابدأ مجاناً. لا حاجة لبطاقة ائتمان. الإعداد في 5 دقائق.", "button": "إنشاء حسابي" },
