@@ -371,6 +371,56 @@ export type Database = {
           },
         ]
       }
+      openclaw_registrations: {
+        Row: {
+          agent_id: string
+          created_at: string
+          error_message: string | null
+          id: string
+          last_webhook_at: string | null
+          metadata: Json | null
+          openclaw_agent_id: string | null
+          status: string
+          updated_at: string
+          user_id: string
+          webhook_url: string | null
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          last_webhook_at?: string | null
+          metadata?: Json | null
+          openclaw_agent_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+          webhook_url?: string | null
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          last_webhook_at?: string | null
+          metadata?: Json | null
+          openclaw_agent_id?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+          webhook_url?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "openclaw_registrations_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
