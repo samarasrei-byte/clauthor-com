@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   Users, Package, Wrench, Building2, ArrowRight, Check,
   Phone, MessageSquare, Briefcase, BarChart3, Star, FileText,
-  ShoppingCart, Shield, Sparkles, Plus, Flame, ChevronLeft
+  ShoppingCart, Shield, Sparkles, Plus, Flame, ChevronLeft,
+  Megaphone, Target, Palette, Video, Globe, ClipboardList, Truck, GraduationCap
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
@@ -41,6 +42,14 @@ const availableAgents = [
   { key: "coding", icon: Wrench },
   { key: "computer", icon: Building2 },
   { key: "hr", icon: Star },
+  { key: "influencer", icon: Megaphone },
+  { key: "marketing_automation", icon: Target },
+  { key: "creative_design", icon: Palette },
+  { key: "video_production", icon: Video },
+  { key: "seo_growth", icon: Globe },
+  { key: "project_management", icon: ClipboardList },
+  { key: "supply_chain", icon: Truck },
+  { key: "training", icon: GraduationCap },
 ];
 
 function getTeamDiscount(count: number): number {
