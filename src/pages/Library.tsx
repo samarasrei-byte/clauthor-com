@@ -607,12 +607,8 @@ const LibraryPage = () => {
                   <div className="p-6 flex flex-col flex-1">
                     {/* Header */}
                     <div className="flex items-start gap-4 mb-5">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-300 group-hover:scale-105 ${
-                        tier === "enterprise" 
-                          ? "bg-primary/8 border border-primary/10" 
-                          : "bg-muted/50"
-                      }`}>
-                        <Icon className="h-5 w-5 text-primary/70" strokeWidth={1.5} />
+                      <div className="w-9 h-9 flex items-center justify-center shrink-0">
+                        <Icon className="h-5 w-5 text-foreground/40 group-hover:text-primary/60 transition-colors duration-500" strokeWidth={1.2} />
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-display font-extrabold text-lg leading-tight mb-1.5 line-clamp-1 tracking-tight">{agentTitle}</h3>
