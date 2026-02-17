@@ -79,11 +79,36 @@
       "ecommerce_title": "E-commerce Agent — Digitaler Betrieb",
       "ecommerce_desc": "Autonomes Katalogmanagement, dynamische Preisgestaltung, Logistik, Warenkorbwiederherstellung und Multi-Marketplace-Conversion-Optimierung.",
       "ecommerce_highlight": "🛒 Revenue Optimization",
-      "ecommerce_replaces": "3 E-Commerce-Operatoren"
+      "ecommerce_replaces": "3 E-Commerce-Operatoren",
+      "influencer_title": "Influencer Agent — Creator Management", "influencer_desc": "Verwaltet Influencer-Kampagnen, analysiert Engagement und optimiert Influencer-Marketing-ROI.", "influencer_highlight": "📣 Creator Economy", "influencer_replaces": "2 Influencer-Manager",
+      "marketing_automation_title": "Marketing Automation Agent", "marketing_automation_desc": "Automatisiert Funnels, Lead Scoring, E-Mail-Nurturing und Multi-Channel-Kampagnen.", "marketing_automation_highlight": "🎯 Growth Engine", "marketing_automation_replaces": "3 Marketing-Spezialisten",
+      "creative_design_title": "Creative Design Agent — KI-Design", "creative_design_desc": "Erstellt Banner, Social Kits, Präsentationen und Markenmaterialien automatisch.", "creative_design_highlight": "🎨 Brand AI", "creative_design_replaces": "2 Grafikdesigner",
+      "video_production_title": "Video Production Agent", "video_production_desc": "Produziert Reels, Shorts, Thumbnails und editiert Videos mit KI.", "video_production_highlight": "🎬 Video AI", "video_production_replaces": "2 Videoeditoren",
+      "seo_growth_title": "SEO & Growth Agent", "seo_growth_desc": "SEO-Audit, Keyword-Recherche, Linkaufbau und Content-Optimierung für organischen Traffic.", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2 SEO-Spezialisten",
+      "project_management_title": "Project Management Agent — PMO KI", "project_management_desc": "Verwaltet Sprints, Timelines, Risiken und Fortschrittsberichte. Automatisierte agile Methoden.", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1 Projektmanager",
+      "supply_chain_title": "Supply Chain Agent — Logistik KI", "supply_chain_desc": "Optimiert Lagerbestand, Lieferrouten, Nachfrageprognose und Lieferantenmanagement.", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2 Logistikanalysten",
+      "training_title": "Training & Development Agent", "training_desc": "Erstellt Lernpfade, bewertet Kompetenzen und verwaltet Schulungsprogramme mit Gamification.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 Schulungskoordinator"
     }
   },
   "cta": { "title": "Bereit zu skalieren?", "subtitle": "Kostenlos starten. Keine Kreditkarte erforderlich. In 5 Minuten einrichten.", "button": "Mein Konto erstellen" },
   "footer": { "terms": "AGB", "privacy": "Datenschutz", "contact": "Kontakt" },
   "tiers": { "basic": "Basis", "intermediate": "Mittel", "advanced": "Fortgeschritten", "enterprise": "Enterprise" },
-  "payment": { "pay_crypto": "Mit Krypto bezahlen", "pay_card": "Mit Karte bezahlen", "crypto_desc": "Bitcoin, Ethereum, USDC und mehr" }
+  "payment": { "pay_crypto": "Mit Krypto bezahlen", "pay_card": "Mit Karte bezahlen", "crypto_desc": "Bitcoin, Ethereum, USDC und mehr" },
+  "squads": {
+    "badge": "KI-Teams", "title": "Bauen Sie Ihr", "title_hl": "KI-Team", "subtitle": "Kombinieren Sie mehrere KI-Mitarbeiter in einem Plan mit progressiven Rabatten.",
+    "tab_squads": "Squad Packs", "tab_builder": "Team Builder", "tab_departments": "Abteilungen", "recommended": "Empfohlen",
+    "squad_title": "Squad {{count}}", "squad_subtitle": "{{count}} Agenten mit festem Rabatt", "discount": "Squad-Rabatt", "discount_desc": "Angewendet auf den Gesamtwert der Agenten",
+    "feature_agents": "{{count}} Agenten Ihrer Wahl", "feature_shared_tokens": "Geteilte Tokens zwischen Agenten", "feature_dashboard": "Einheitliches Team-Dashboard", "feature_support": "Prioritäts-Support",
+    "select_squad": "Squad zusammenstellen", "builder_desc": "Wählen Sie Agenten und erhalten Sie progressive Rabatte.", "selected": "Ausgewählt:", "agents_label": "Agenten",
+    "build_team": "Team einstellen", "min_agents": "Wählen Sie {{remaining}} weitere(n) Agent(en) für den Rabatt",
+    "dept_vendas": "Abt. Vertrieb", "dept_vendas_desc": "Komplettes automatisiertes Vertriebsteam",
+    "dept_suporte": "Abt. Support", "dept_suporte_desc": "24/7 Omnichannel-Support",
+    "dept_financeiro": "Abt. Finanzen", "dept_financeiro_desc": "Automatisierte Finanz- und Steuerverwaltung",
+    "dept_marketing": "Abt. Marketing", "dept_marketing_desc": "Marketing-Automatisierung, SEO und Influencer",
+    "dept_criacao": "Abt. Kreation", "dept_criacao_desc": "Design, Video und visuelle Content-Produktion",
+    "dept_tecnologia": "Abt. Technologie", "dept_tecnologia_desc": "Entwicklung, Infrastruktur und Sicherheit",
+    "dept_rh": "Abt. HR & Personal", "dept_rh_desc": "Recruiting, Schulung und Talentmanagement",
+    "bundle_discount": "Abteilungsrabatt", "included_agents": "Enthaltene Agenten", "hire_department": "Abteilung einstellen",
+    "back_to_packs": "Zurück zu Packs", "pick_agents": "Wählen Sie {{count}} Agenten für Ihren Squad", "confirm_squad": "Squad bestätigen", "remaining_agents": "Wählen Sie {{remaining}} weitere(n) Agent(en)"
+  }
 }

@@ -79,10 +79,35 @@
       "ecommerce_title": "E-commerce Agent — 디지털 운영",
       "ecommerce_desc": "카탈로그 관리, 다이나믹 프라이싱, 물류, 장바구니 복구 및 멀티 마켓플레이스 전환 최적화를 자율 실행.",
       "ecommerce_highlight": "🛒 Revenue Optimization",
-      "ecommerce_replaces": "이커머스 운영 3명"
+      "ecommerce_replaces": "이커머스 운영 3명",
+      "influencer_title": "인플루언서 에이전트", "influencer_desc": "인플루언서 캠페인 관리, 참여 분석 및 ROI 최적화.", "influencer_highlight": "📣 Creator Economy", "influencer_replaces": "인플루언서 매니저 2명",
+      "marketing_automation_title": "마케팅 자동화 에이전트", "marketing_automation_desc": "퍼널, 리드 스코어링, 이메일 너처링 및 멀티채널 캠페인 자동화.", "marketing_automation_highlight": "🎯 Growth Engine", "marketing_automation_replaces": "마케팅 전문가 3명",
+      "creative_design_title": "크리에이티브 디자인 에이전트", "creative_design_desc": "배너, 소셜 키트, 프레젠테이션 및 브랜드 자료 자동 생성.", "creative_design_highlight": "🎨 Brand AI", "creative_design_replaces": "그래픽 디자이너 2명",
+      "video_production_title": "비디오 프로덕션 에이전트", "video_production_desc": "Reels, Shorts, 썸네일 제작 및 AI 비디오 편집.", "video_production_highlight": "🎬 Video AI", "video_production_replaces": "비디오 편집자 2명",
+      "seo_growth_title": "SEO & 성장 에이전트", "seo_growth_desc": "SEO 감사, 키워드 리서치, 링크 빌딩 및 오가닉 트래픽 콘텐츠 최적화.", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "SEO 전문가 2명",
+      "project_management_title": "프로젝트 관리 에이전트", "project_management_desc": "스프린트, 타임라인, 리스크 및 진행 보고서 관리. 자동화된 애자일 방법론.", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "프로젝트 매니저 1명",
+      "supply_chain_title": "공급망 에이전트", "supply_chain_desc": "재고, 배송 경로, 수요 예측 및 공급업체 관리를 AI로 최적화.", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "물류 분석가 2명",
+      "training_title": "교육 & 개발 에이전트", "training_desc": "학습 경로 생성, 역량 평가, 게이미피케이션 교육 프로그램 관리.", "training_highlight": "🎓 Learning AI", "training_replaces": "교육 코디네이터 1명"
     }
   },
   "cta": { "title": "확장할 준비가 되셨나요?", "subtitle": "무료로 시작. 신용카드 불필요. 5분 만에 설정.", "button": "내 계정 만들기" },
   "tiers": { "basic": "기본", "intermediate": "중급", "advanced": "고급", "enterprise": "엔터프라이즈" },
-  "payment": { "pay_crypto": "암호화폐로 결제", "pay_card": "카드로 결제", "crypto_desc": "비트코인, 이더리움, USDC 등" }
+  "payment": { "pay_crypto": "암호화폐로 결제", "pay_card": "카드로 결제", "crypto_desc": "비트코인, 이더리움, USDC 등" },
+  "squads": {
+    "badge": "AI 팀", "title": "당신의", "title_hl": "AI 팀 구성", "subtitle": "여러 AI 직원을 점진적 할인이 적용되는 하나의 플랜으로 결합하세요.",
+    "tab_squads": "Squad Packs", "tab_builder": "Team Builder", "tab_departments": "부서", "recommended": "추천",
+    "squad_title": "Squad {{count}}", "squad_subtitle": "{{count}}명 에이전트 고정 할인", "discount": "Squad 할인", "discount_desc": "에이전트 총 가치에 적용",
+    "feature_agents": "{{count}}명 에이전트 선택 가능", "feature_shared_tokens": "에이전트 간 토큰 공유", "feature_dashboard": "통합 팀 대시보드", "feature_support": "우선 지원",
+    "select_squad": "Squad 구성", "builder_desc": "에이전트를 선택하고 점진적 할인을 받으세요.", "selected": "선택됨:", "agents_label": "에이전트",
+    "build_team": "팀 고용", "min_agents": "할인을 위해 {{remaining}}명 더 선택하세요",
+    "dept_vendas": "영업부", "dept_vendas_desc": "완전 자동화 영업팀",
+    "dept_suporte": "지원부", "dept_suporte_desc": "24/7 옴니채널 지원",
+    "dept_financeiro": "재무부", "dept_financeiro_desc": "자동화된 재무 및 세무 관리",
+    "dept_marketing": "마케팅부", "dept_marketing_desc": "마케팅 자동화, SEO 및 인플루언서",
+    "dept_criacao": "크리에이티브부", "dept_criacao_desc": "디자인, 비디오 및 비주얼 콘텐츠 제작",
+    "dept_tecnologia": "기술부", "dept_tecnologia_desc": "개발, 인프라 및 보안",
+    "dept_rh": "HR & 인사부", "dept_rh_desc": "채용, 교육 및 인재 관리",
+    "bundle_discount": "부서 할인", "included_agents": "포함된 에이전트", "hire_department": "부서 고용",
+    "back_to_packs": "팩으로 돌아가기", "pick_agents": "Squad를 위해 {{count}}명 에이전트 선택", "confirm_squad": "Squad 확인", "remaining_agents": "{{remaining}}명 더 선택하세요"
+  }
 }

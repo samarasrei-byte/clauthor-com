@@ -79,10 +79,35 @@
       "ecommerce_title": "E-commerce Agent — Цифровые операции",
       "ecommerce_desc": "Автономное управление каталогом, динамическое ценообразование, логистика, возврат корзин и мультимаркетплейс-оптимизация.",
       "ecommerce_highlight": "🛒 Revenue Optimization",
-      "ecommerce_replaces": "3 оператора e-commerce"
+      "ecommerce_replaces": "3 оператора e-commerce",
+      "influencer_title": "Агент Инфлюенсеров", "influencer_desc": "Управляет кампаниями инфлюенсеров, анализирует вовлечённость и оптимизирует ROI.", "influencer_highlight": "📣 Creator Economy", "influencer_replaces": "2 менеджера инфлюенсеров",
+      "marketing_automation_title": "Агент Маркетинговой Автоматизации", "marketing_automation_desc": "Автоматизирует воронки, скоринг лидов, email-нёрчинг и мультиканальные кампании.", "marketing_automation_highlight": "🎯 Growth Engine", "marketing_automation_replaces": "3 маркетолога",
+      "creative_design_title": "Агент Креативного Дизайна", "creative_design_desc": "Создаёт баннеры, соцсети-киты, презентации и брендированные материалы.", "creative_design_highlight": "🎨 Brand AI", "creative_design_replaces": "2 графических дизайнера",
+      "video_production_title": "Агент Видеопроизводства", "video_production_desc": "Создаёт Reels, Shorts, превью и редактирует видео с ИИ.", "video_production_highlight": "🎬 Video AI", "video_production_replaces": "2 видеоредактора",
+      "seo_growth_title": "SEO и Рост Агент", "seo_growth_desc": "SEO-аудит, поиск ключевых слов, линкбилдинг и оптимизация контента для органического трафика.", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2 SEO-специалиста",
+      "project_management_title": "Агент Управления Проектами", "project_management_desc": "Управляет спринтами, таймлайнами, рисками и отчётами о прогрессе.", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1 проект-менеджер",
+      "supply_chain_title": "Агент Цепи Поставок", "supply_chain_desc": "Оптимизирует запасы, маршруты доставки, прогноз спроса и управление поставщиками.", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2 логистических аналитика",
+      "training_title": "Агент Обучения и Развития", "training_desc": "Создаёт пути обучения, оценивает компетенции и управляет программами с геймификацией.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 координатор обучения"
     }
   },
   "cta": { "title": "Готовы масштабироваться?", "subtitle": "Начните бесплатно. Без кредитной карты. Настройка за 5 минут.", "button": "Создать аккаунт" },
   "tiers": { "basic": "Базовый", "intermediate": "Средний", "advanced": "Продвинутый", "enterprise": "Корпоративный" },
-  "payment": { "pay_crypto": "Оплата криптовалютой", "pay_card": "Оплата картой", "crypto_desc": "Bitcoin, Ethereum, USDC и другие" }
+  "payment": { "pay_crypto": "Оплата криптовалютой", "pay_card": "Оплата картой", "crypto_desc": "Bitcoin, Ethereum, USDC и другие" },
+  "squads": {
+    "badge": "AI-команды", "title": "Соберите свою", "title_hl": "AI-команду", "subtitle": "Объедините нескольких AI-сотрудников в один план с прогрессивными скидками.",
+    "tab_squads": "Squad Packs", "tab_builder": "Team Builder", "tab_departments": "Отделы", "recommended": "Рекомендуется",
+    "squad_title": "Squad {{count}}", "squad_subtitle": "{{count}} агентов с фиксированной скидкой", "discount": "Скидка Squad", "discount_desc": "Применяется к общей стоимости агентов",
+    "feature_agents": "{{count}} агентов на выбор", "feature_shared_tokens": "Общие токены между агентами", "feature_dashboard": "Единый дашборд команды", "feature_support": "Приоритетная поддержка",
+    "select_squad": "Собрать Squad", "builder_desc": "Выберите агентов и получите прогрессивные скидки.", "selected": "Выбрано:", "agents_label": "агентов",
+    "build_team": "Нанять команду", "min_agents": "Выберите ещё {{remaining}} агент(ов) для скидки",
+    "dept_vendas": "Отд. Продаж", "dept_vendas_desc": "Полностью автоматизированная команда продаж",
+    "dept_suporte": "Отд. Поддержки", "dept_suporte_desc": "Омниканальная поддержка 24/7",
+    "dept_financeiro": "Отд. Финансов", "dept_financeiro_desc": "Автоматизированное финансовое и налоговое управление",
+    "dept_marketing": "Отд. Маркетинга", "dept_marketing_desc": "Автоматизация маркетинга, SEO и инфлюенсеры",
+    "dept_criacao": "Отд. Креатива", "dept_criacao_desc": "Дизайн, видео и визуальный контент",
+    "dept_tecnologia": "Отд. Технологий", "dept_tecnologia_desc": "Разработка, инфраструктура и безопасность",
+    "dept_rh": "Отд. HR и Персонала", "dept_rh_desc": "Рекрутинг, обучение и управление талантами",
+    "bundle_discount": "Скидка отдела", "included_agents": "Включённые агенты", "hire_department": "Нанять отдел",
+    "back_to_packs": "Назад к пакам", "pick_agents": "Выберите {{count}} агентов для squad", "confirm_squad": "Подтвердить Squad", "remaining_agents": "Выберите ещё {{remaining}} агент(ов)"
+  }
 }

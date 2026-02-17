@@ -79,10 +79,35 @@
       "ecommerce_title": "E-commerce Agent — 数字化运营",
       "ecommerce_desc": "自主目录管理、动态定价、物流、购物车回收和多平台转化优化。",
       "ecommerce_highlight": "🛒 Revenue Optimization",
-      "ecommerce_replaces": "3名电商运营"
+      "ecommerce_replaces": "3名电商运营",
+      "influencer_title": "网红代理 — 创作者管理", "influencer_desc": "管理网红活动、分析互动指标并优化影响力营销ROI。", "influencer_highlight": "📣 Creator Economy", "influencer_replaces": "2名网红经理",
+      "marketing_automation_title": "营销自动化代理", "marketing_automation_desc": "自动化漏斗、线索评分、邮件培育和多渠道营销活动。", "marketing_automation_highlight": "🎯 Growth Engine", "marketing_automation_replaces": "3名营销专员",
+      "creative_design_title": "创意设计代理", "creative_design_desc": "自动生成横幅、社交媒体素材、演示文稿和品牌材料。", "creative_design_highlight": "🎨 Brand AI", "creative_design_replaces": "2名平面设计师",
+      "video_production_title": "视频制作代理", "video_production_desc": "制作Reels、Shorts、缩略图，并用AI编辑视频。", "video_production_highlight": "🎬 Video AI", "video_production_replaces": "2名视频编辑",
+      "seo_growth_title": "SEO与增长代理", "seo_growth_desc": "SEO审计、关键词研究、外链建设和有机流量内容优化。", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2名SEO专员",
+      "project_management_title": "项目管理代理", "project_management_desc": "管理冲刺、时间线、风险和进度报告。自动化敏捷方法。", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1名项目经理",
+      "supply_chain_title": "供应链代理", "supply_chain_desc": "优化库存、配送路线、需求预测和供应商管理。", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2名物流分析师",
+      "training_title": "培训与发展代理", "training_desc": "创建学习路径、评估能力、管理游戏化培训项目。", "training_highlight": "🎓 Learning AI", "training_replaces": "1名培训协调员"
     }
   },
   "cta": { "title": "准备好扩展了吗？", "subtitle": "免费开始。无需信用卡。5分钟完成设置。", "button": "创建我的账户" },
   "tiers": { "basic": "基础", "intermediate": "中级", "advanced": "高级", "enterprise": "企业版" },
-  "payment": { "pay_crypto": "加密货币支付", "pay_card": "银行卡支付", "crypto_desc": "比特币、以太坊、USDC等" }
+  "payment": { "pay_crypto": "加密货币支付", "pay_card": "银行卡支付", "crypto_desc": "比特币、以太坊、USDC等" },
+  "squads": {
+    "badge": "AI团队", "title": "组建你的", "title_hl": "AI团队", "subtitle": "将多名AI员工合并为一个计划，享受阶梯折扣。",
+    "tab_squads": "Squad Packs", "tab_builder": "Team Builder", "tab_departments": "部门", "recommended": "推荐",
+    "squad_title": "Squad {{count}}", "squad_subtitle": "{{count}}个代理固定折扣", "discount": "Squad折扣", "discount_desc": "适用于代理总价值",
+    "feature_agents": "任选{{count}}个代理", "feature_shared_tokens": "代理间共享令牌", "feature_dashboard": "统一团队仪表板", "feature_support": "优先支持",
+    "select_squad": "组建Squad", "builder_desc": "选择代理获得阶梯折扣。", "selected": "已选:", "agents_label": "个代理",
+    "build_team": "雇用团队", "min_agents": "再选{{remaining}}个代理即可解锁折扣",
+    "dept_vendas": "销售部", "dept_vendas_desc": "全自动化销售团队",
+    "dept_suporte": "客服部", "dept_suporte_desc": "7×24全渠道支持",
+    "dept_financeiro": "财务部", "dept_financeiro_desc": "自动化财务和税务管理",
+    "dept_marketing": "市场部", "dept_marketing_desc": "营销自动化、SEO和网红",
+    "dept_criacao": "创意部", "dept_criacao_desc": "设计、视频和视觉内容制作",
+    "dept_tecnologia": "技术部", "dept_tecnologia_desc": "开发、基础设施和安全",
+    "dept_rh": "人力资源部", "dept_rh_desc": "招聘、培训和人才管理",
+    "bundle_discount": "部门折扣", "included_agents": "包含代理", "hire_department": "雇用部门",
+    "back_to_packs": "返回套餐", "pick_agents": "为Squad选择{{count}}个代理", "confirm_squad": "确认Squad", "remaining_agents": "再选{{remaining}}个代理"
+  }
 }

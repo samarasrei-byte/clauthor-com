@@ -79,10 +79,35 @@
       "ecommerce_title": "E-commerce Agent — Dijital Operasyonlar",
       "ecommerce_desc": "Otonom katalog yönetimi, dinamik fiyatlandırma, lojistik, sepet kurtarma ve çoklu pazar yeri dönüşüm optimizasyonu.",
       "ecommerce_highlight": "🛒 Revenue Optimization",
-      "ecommerce_replaces": "3 e-ticaret operatörü"
+      "ecommerce_replaces": "3 e-ticaret operatörü",
+      "influencer_title": "Influencer Ajanı", "influencer_desc": "Influencer kampanyalarını yönetir, etkileşim analizi yapar ve ROI optimize eder.", "influencer_highlight": "📣 Creator Economy", "influencer_replaces": "2 influencer yöneticisi",
+      "marketing_automation_title": "Pazarlama Otomasyon Ajanı", "marketing_automation_desc": "Funnel, lead scoring, e-posta beslemesi ve çok kanallı kampanyaları otomatikleştirir.", "marketing_automation_highlight": "🎯 Growth Engine", "marketing_automation_replaces": "3 pazarlama uzmanı",
+      "creative_design_title": "Yaratıcı Tasarım Ajanı", "creative_design_desc": "Banner, sosyal medya kitleri, sunumlar ve marka materyalleri otomatik oluşturur.", "creative_design_highlight": "🎨 Brand AI", "creative_design_replaces": "2 grafik tasarımcı",
+      "video_production_title": "Video Prodüksiyon Ajanı", "video_production_desc": "Reels, Shorts, küçük resimler üretir ve AI ile video düzenler.", "video_production_highlight": "🎬 Video AI", "video_production_replaces": "2 video editörü",
+      "seo_growth_title": "SEO & Büyüme Ajanı", "seo_growth_desc": "SEO denetimi, anahtar kelime araştırması, bağlantı oluşturma ve organik trafik optimizasyonu.", "seo_growth_highlight": "🔍 Organic Growth", "seo_growth_replaces": "2 SEO uzmanı",
+      "project_management_title": "Proje Yönetimi Ajanı", "project_management_desc": "Sprint, zaman çizelgesi, risk ve ilerleme raporlarını yönetir.", "project_management_highlight": "📋 Agile AI", "project_management_replaces": "1 proje yöneticisi",
+      "supply_chain_title": "Tedarik Zinciri Ajanı", "supply_chain_desc": "Envanter, teslimat rotaları, talep tahmini ve tedarikçi yönetimini optimize eder.", "supply_chain_highlight": "🚛 Logistics AI", "supply_chain_replaces": "2 lojistik analisti",
+      "training_title": "Eğitim & Gelişim Ajanı", "training_desc": "Öğrenme yolları oluşturur, yetkinlikleri değerlendirir ve oyunlaştırma ile eğitim yönetir.", "training_highlight": "🎓 Learning AI", "training_replaces": "1 eğitim koordinatörü"
     }
   },
   "cta": { "title": "Ölçeklendirmeye hazır mısınız?", "subtitle": "Ücretsiz başlayın. Kredi kartı gerekmez. 5 dakikada kurulum.", "button": "Hesabımı oluştur" },
   "tiers": { "basic": "Temel", "intermediate": "Orta", "advanced": "Gelişmiş", "enterprise": "Kurumsal" },
-  "payment": { "pay_crypto": "Kripto ile öde", "pay_card": "Kart ile öde", "crypto_desc": "Bitcoin, Ethereum, USDC ve daha fazlası" }
+  "payment": { "pay_crypto": "Kripto ile öde", "pay_card": "Kart ile öde", "crypto_desc": "Bitcoin, Ethereum, USDC ve daha fazlası" },
+  "squads": {
+    "badge": "AI Takımları", "title": "Kendi", "title_hl": "AI Takımını Kur", "subtitle": "Birden fazla AI çalışanını kademeli indirimlerle tek bir planda birleştirin.",
+    "tab_squads": "Squad Packs", "tab_builder": "Team Builder", "tab_departments": "Departmanlar", "recommended": "Önerilen",
+    "squad_title": "Squad {{count}}", "squad_subtitle": "{{count}} ajan sabit indirimli", "discount": "Squad İndirimi", "discount_desc": "Ajanların toplam değerine uygulanır",
+    "feature_agents": "Seçtiğiniz {{count}} ajan", "feature_shared_tokens": "Ajanlar arası paylaşılan tokenler", "feature_dashboard": "Birleşik takım panosu", "feature_support": "Öncelikli destek",
+    "select_squad": "Squad Oluştur", "builder_desc": "Ajanları seçin ve kademeli indirimler kazanın.", "selected": "Seçilenler:", "agents_label": "ajan",
+    "build_team": "Takımı İşe Al", "min_agents": "İndirim için {{remaining}} ajan daha seçin",
+    "dept_vendas": "Satış Dep.", "dept_vendas_desc": "Tam otomatik satış ekibi",
+    "dept_suporte": "Destek Dep.", "dept_suporte_desc": "7/24 omnichannel destek",
+    "dept_financeiro": "Finans Dep.", "dept_financeiro_desc": "Otomatik mali ve vergi yönetimi",
+    "dept_marketing": "Pazarlama Dep.", "dept_marketing_desc": "Pazarlama otomasyonu, SEO ve influencer'lar",
+    "dept_criacao": "Yaratıcı Dep.", "dept_criacao_desc": "Tasarım, video ve görsel içerik üretimi",
+    "dept_tecnologia": "Teknoloji Dep.", "dept_tecnologia_desc": "Geliştirme, altyapı ve güvenlik",
+    "dept_rh": "İK & İnsan Dep.", "dept_rh_desc": "İşe alım, eğitim ve yetenek yönetimi",
+    "bundle_discount": "Departman indirimi", "included_agents": "Dahil ajanlar", "hire_department": "Departmanı İşe Al",
+    "back_to_packs": "Paketlere dön", "pick_agents": "Squad için {{count}} ajan seçin", "confirm_squad": "Squad'ı Onayla", "remaining_agents": "{{remaining}} ajan daha seçin"
+  }
 }
