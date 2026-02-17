@@ -1,0 +1,407 @@
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useCredits } from "@/hooks/useCredits";
+import {
+  Coins, Zap, Crown, Rocket, ArrowRight, CheckCircle,
+  QrCode, Bitcoin, Copy, ExternalLink, Sparkles, Package
+} from "lucide-react";
+import { toast } from "sonner";
+
+interface Plan {
+  id: string;
+  name: string;
+  tokens: string;
+  tokensNum: number;
+  price: string;
+  priceNum: number;
+  replaces: string;
+  features: string[];
+  popular?: boolean;
+  icon: typeof Coins;
+  color: string;
+}
+
+interface TokenPack {
+  id: string;
+  tokens: string;
+  tokensNum: number;
+  price: string;
+  priceNum: number;
+  savings?: string;
+}
+
+const plans: Plan[] = [
+  {
+    id: "starter",
+    name: "Starter",
+    tokens: "5M",
+    tokensNum: 5000000,
+    price: "R$ 3.997",
+    priceNum: 3997,
+    replaces: "Substitui 3 CLT",
+    icon: Zap,
+    color: "text-cyan-400",
+    features: [
+      "5 milhões de tokens/mês",
+      "Até 5 agentes ativos",
+      "Suporte prioritário",
+      "Analytics avançado",
+    ],
+  },
+  {
+    id: "pro",
+    name: "Profissional",
+    tokens: "25M",
+    tokensNum: 25000000,
+    price: "R$ 9.997",
+    priceNum: 9997,
+    replaces: "Substitui 10 CLT",
+    popular: true,
+    icon: Crown,
+    color: "text-primary",
+    features: [
+      "25 milhões de tokens/mês",
+      "Agentes ilimitados",
+      "Suporte dedicado 24/7",
+      "API de integração",
+      "Relatórios customizados",
+    ],
+  },
+  {
+    id: "enterprise",
+    name: "Enterprise",
+    tokens: "100M+",
+    tokensNum: 100000000,
+    price: "Sob consulta",
+    priceNum: 0,
+    replaces: "Substitui 30+ CLT",
+    icon: Rocket,
+    color: "text-emerald-400",
+    features: [
+      "100M+ tokens/mês",
+      "Infraestrutura dedicada",
+      "SLA garantido 99.99%",
+      "Onboarding personalizado",
+      "Treinamento da equipe",
+      "Consultoria de processos",
+    ],
+  },
+];
+
+const tokenPacks: TokenPack[] = [
+  { id: "pack-5m", tokens: "5M", tokensNum: 5000000, price: "R$ 1.497", priceNum: 1497 },
+  { id: "pack-10m", tokens: "10M", tokensNum: 10000000, price: "R$ 2.497", priceNum: 2497, savings: "17% off" },
+  { id: "pack-25m", tokens: "25M", tokensNum: 25000000, price: "R$ 4.997", priceNum: 4997, savings: "33% off" },
+  { id: "pack-50m", tokens: "50M", tokensNum: 50000000, price: "R$ 8.997", priceNum: 8997, savings: "40% off" },
+  { id: "pack-100m", tokens: "100M", tokensNum: 100000000, price: "R$ 14.997", priceNum: 14997, savings: "50% off" },
+];
+
+type PaymentMethod = "pix" | "crypto";
+
+interface TokenUpgradeDialogProps {
+  trigger?: React.ReactNode;
+}
+
+export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps) {
+  const { credits } = useCredits();
+  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [selectedPack, setSelectedPack] = useState<string | null>(null);
+  const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
+  const [showPayment, setShowPayment] = useState(false);
+
+  const currentPlan = credits?.plan_type || "free";
+
+  const handleSelectPlan = (planId: string) => {
+    setSelectedPlan(planId);
+    setSelectedPack(null);
+    setShowPayment(true);
+  };
+
+  const handleSelectPack = (packId: string) => {
+    setSelectedPack(packId);
+    setSelectedPlan(null);
+    setShowPayment(true);
+  };
+
+  const handlePayment = (method: PaymentMethod) => {
+    setPaymentMethod(method);
+    const item = selectedPlan
+      ? plans.find((p) => p.id === selectedPlan)?.name
+      : tokenPacks.find((p) => p.id === selectedPack)?.tokens;
+    
+    if (method === "pix") {
+      toast.success(`PIX para ${item} gerado! Copie o código abaixo.`);
+    } else {
+      toast.success(`Redirecionando para pagamento cripto de ${item}...`);
+    }
+  };
+
+  const copyPixCode = () => {
+    navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136apexbot-tokens@pix.com5204000053039865802BR5925APEXBOT TOKENS LTDA6009SAO PAULO62070503***6304ABCD");
+    toast.success("Código PIX copiado!");
+  };
+
+  const selectedItemPrice = selectedPlan
+    ? plans.find((p) => p.id === selectedPlan)?.price
+    : tokenPacks.find((p) => p.id === selectedPack)?.price;
+
+  const selectedItemName = selectedPlan
+    ? plans.find((p) => p.id === selectedPlan)?.name
+    : `Pacote ${tokenPacks.find((p) => p.id === selectedPack)?.tokens}`;
+
+  return (
+    <Dialog onOpenChange={() => { setShowPayment(false); setPaymentMethod(null); }}>
+      <DialogTrigger asChild>
+        {trigger || (
+          <Button className="glow gap-2">
+            <Coins className="h-4 w-4" /> Upgrade de Tokens
+          </Button>
+        )}
+      </DialogTrigger>
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-background/95 backdrop-blur-xl border-white/10">
+        <DialogHeader>
+          <DialogTitle className="font-display text-xl flex items-center gap-2">
+            <Sparkles className="h-5 w-5 text-primary" />
+            {showPayment ? "Finalizar Pagamento" : "Upgrade de Tokens"}
+          </DialogTitle>
+        </DialogHeader>
+
+        {!showPayment ? (
+          <Tabs defaultValue="plans" className="mt-2">
+            <TabsList className="grid w-full grid-cols-2 bg-white/5">
+              <TabsTrigger value="plans" className="gap-2 data-[state=active]:bg-primary/20">
+                <Crown className="h-3.5 w-3.5" /> Planos Mensais
+              </TabsTrigger>
+              <TabsTrigger value="packs" className="gap-2 data-[state=active]:bg-primary/20">
+                <Package className="h-3.5 w-3.5" /> Pacotes Avulsos
+              </TabsTrigger>
+            </TabsList>
+
+            {/* PLANS */}
+            <TabsContent value="plans" className="mt-4">
+              <div className="grid md:grid-cols-3 gap-4">
+                {plans.map((plan) => {
+                  const isCurrentPlan = currentPlan === plan.id;
+                  return (
+                    <motion.div
+                      key={plan.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`relative rounded-2xl border p-5 transition-all cursor-pointer hover:border-primary/40 ${
+                        plan.popular ? "border-primary/30 bg-primary/5" : "border-white/10 bg-white/[0.02]"
+                      } ${isCurrentPlan ? "opacity-60 pointer-events-none" : ""}`}
+                      onClick={() => !isCurrentPlan && handleSelectPlan(plan.id)}
+                    >
+                      {plan.popular && (
+                        <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-[10px]">
+                          Mais Popular
+                        </Badge>
+                      )}
+                      <div className="flex items-center gap-2 mb-3">
+                        <plan.icon className={`h-5 w-5 ${plan.color}`} />
+                        <h3 className="font-display font-bold">{plan.name}</h3>
+                      </div>
+                      <div className="mb-3">
+                        <span className="font-display text-2xl font-bold">{plan.price}</span>
+                        {plan.priceNum > 0 && <span className="text-xs text-muted-foreground">/mês</span>}
+                      </div>
+                      <p className="text-xs text-cyan-400 mb-4">{plan.replaces}</p>
+                      <div className="space-y-2">
+                        {plan.features.map((f) => (
+                          <div key={f} className="flex items-start gap-2">
+                            <CheckCircle className="h-3.5 w-3.5 text-emerald-500 mt-0.5 shrink-0" />
+                            <span className="text-xs text-muted-foreground">{f}</span>
+                          </div>
+                        ))}
+                      </div>
+                      <Button
+                        className={`w-full mt-4 gap-1.5 ${plan.popular ? "glow" : ""}`}
+                        variant={plan.popular ? "default" : "outline"}
+                        size="sm"
+                        disabled={isCurrentPlan}
+                      >
+                        {isCurrentPlan ? "Plano Atual" : plan.priceNum === 0 ? "Falar com Vendas" : "Selecionar"}
+                        {!isCurrentPlan && <ArrowRight className="h-3.5 w-3.5" />}
+                      </Button>
+                    </motion.div>
+                  );
+                })}
+              </div>
+            </TabsContent>
+
+            {/* TOKEN PACKS */}
+            <TabsContent value="packs" className="mt-4">
+              <p className="text-sm text-muted-foreground mb-4">
+                Compre tokens extras sem mudar de plano. Os tokens adicionais não expiram.
+              </p>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {tokenPacks.map((pack) => (
+                  <motion.div
+                    key={pack.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="relative rounded-xl border border-white/10 bg-white/[0.02] p-4 cursor-pointer hover:border-primary/40 transition-all"
+                    onClick={() => handleSelectPack(pack.id)}
+                  >
+                    {pack.savings && (
+                      <Badge className="absolute -top-2 right-3 bg-emerald-500/20 text-emerald-400 text-[10px] border-0">
+                        {pack.savings}
+                      </Badge>
+                    )}
+                    <div className="flex items-center gap-2 mb-2">
+                      <Coins className="h-4 w-4 text-primary" />
+                      <span className="font-display font-bold text-lg">{pack.tokens}</span>
+                      <span className="text-xs text-muted-foreground">tokens</span>
+                    </div>
+                    <p className="font-display text-xl font-bold mb-3">{pack.price}</p>
+                    <Button variant="outline" size="sm" className="w-full gap-1.5 border-white/10">
+                      Comprar <ArrowRight className="h-3.5 w-3.5" />
+                    </Button>
+                  </motion.div>
+                ))}
+              </div>
+            </TabsContent>
+          </Tabs>
+        ) : (
+          /* PAYMENT SCREEN */
+          <AnimatePresence mode="wait">
+            <motion.div
+              key="payment"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              className="space-y-6 mt-2"
+            >
+              {/* Summary */}
+              <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-muted-foreground">Selecionado</p>
+                    <p className="font-display font-bold text-lg">{selectedItemName}</p>
+                  </div>
+                  <p className="font-display text-2xl font-bold gradient-text">{selectedItemPrice}</p>
+                </div>
+              </div>
+
+              {/* Payment Methods */}
+              <div>
+                <p className="text-sm font-medium mb-3">Escolha o método de pagamento:</p>
+                <div className="grid grid-cols-2 gap-4">
+                  {/* PIX */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className={`rounded-xl border p-5 cursor-pointer transition-all ${
+                      paymentMethod === "pix" ? "border-primary bg-primary/5" : "border-white/10 bg-white/[0.02] hover:border-primary/30"
+                    }`}
+                    onClick={() => handlePayment("pix")}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                        <QrCode className="h-5 w-5 text-emerald-500" />
+                      </div>
+                      <div>
+                        <p className="font-display font-bold">PIX</p>
+                        <p className="text-[10px] text-muted-foreground">Instantâneo</p>
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Pagamento instantâneo via QR Code ou chave PIX</p>
+                  </motion.div>
+
+                  {/* Crypto */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className={`rounded-xl border p-5 cursor-pointer transition-all ${
+                      paymentMethod === "crypto" ? "border-primary bg-primary/5" : "border-white/10 bg-white/[0.02] hover:border-primary/30"
+                    }`}
+                    onClick={() => handlePayment("crypto")}
+                  >
+                    <div className="flex items-center gap-3 mb-3">
+                      <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
+                        <Bitcoin className="h-5 w-5 text-orange-500" />
+                      </div>
+                      <div>
+                        <p className="font-display font-bold">Cripto</p>
+                        <p className="text-[10px] text-muted-foreground">BTC, ETH, USDC</p>
+                      </div>
+                    </div>
+                    <p className="text-xs text-muted-foreground">Bitcoin, Ethereum ou USDC via Coinbase Commerce</p>
+                  </motion.div>
+                </div>
+              </div>
+
+              {/* Payment Details */}
+              {paymentMethod === "pix" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5 space-y-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <QrCode className="h-5 w-5 text-emerald-500" />
+                    <p className="font-display font-bold">Pagamento via PIX</p>
+                  </div>
+                  <div className="bg-background/60 rounded-lg p-4 text-center">
+                    <div className="w-40 h-40 mx-auto bg-white rounded-lg flex items-center justify-center mb-3">
+                      <QrCode className="h-24 w-24 text-background" />
+                    </div>
+                    <p className="text-xs text-muted-foreground">Escaneie o QR Code ou copie o código</p>
+                  </div>
+                  <Button variant="outline" className="w-full gap-2 border-emerald-500/20" onClick={copyPixCode}>
+                    <Copy className="h-4 w-4" /> Copiar Código PIX
+                  </Button>
+                  <p className="text-[10px] text-muted-foreground text-center">
+                    Seus tokens serão creditados automaticamente após a confirmação do pagamento (1-5 minutos).
+                  </p>
+                </motion.div>
+              )}
+
+              {paymentMethod === "crypto" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-orange-500/20 bg-orange-500/5 p-5 space-y-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <Bitcoin className="h-5 w-5 text-orange-500" />
+                    <p className="font-display font-bold">Pagamento via Criptomoedas</p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Você será redirecionado para o Coinbase Commerce para finalizar o pagamento com Bitcoin, Ethereum ou USDC.
+                  </p>
+                  <div className="flex gap-3">
+                    <div className="flex-1 rounded-lg bg-background/60 p-3 text-center">
+                      <p className="font-bold text-sm">BTC</p>
+                      <p className="text-[10px] text-muted-foreground">Bitcoin</p>
+                    </div>
+                    <div className="flex-1 rounded-lg bg-background/60 p-3 text-center">
+                      <p className="font-bold text-sm">ETH</p>
+                      <p className="text-[10px] text-muted-foreground">Ethereum</p>
+                    </div>
+                    <div className="flex-1 rounded-lg bg-background/60 p-3 text-center">
+                      <p className="font-bold text-sm">USDC</p>
+                      <p className="text-[10px] text-muted-foreground">USD Coin</p>
+                    </div>
+                  </div>
+                  <Button className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white">
+                    <ExternalLink className="h-4 w-4" /> Pagar com Coinbase Commerce
+                  </Button>
+                  <p className="text-[10px] text-muted-foreground text-center">
+                    Tokens creditados em até 30 minutos após confirmação na blockchain.
+                  </p>
+                </motion.div>
+              )}
+
+              <Button variant="ghost" size="sm" className="text-xs" onClick={() => { setShowPayment(false); setPaymentMethod(null); }}>
+                ← Voltar para planos
+              </Button>
+            </motion.div>
+          </AnimatePresence>
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+}
