@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import AppLayout from "@/components/AppLayout";
+import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Index from "./pages/Index";
 import ClientDashboard from "./pages/ClientDashboard";
@@ -30,6 +31,7 @@ const App = () => (
         <Sonner />
         <BrowserRouter>
           <Routes>
+            {/* Public pages with full navbar */}
             <Route element={<AppLayout />}>
               <Route path="/" element={<Index />} />
               <Route path="/auth" element={<Auth />} />
@@ -38,47 +40,21 @@ const App = () => (
               <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/waitlist" element={<Waitlist />} />
               <Route path="/community" element={<Community />} />
-              <Route
-                path="/dashboard"
-                element={
-                  <ProtectedRoute>
-                    <ClientDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/admin"
-                element={
-                  <ProtectedRoute requireAdmin>
-                    <AdminDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/agents"
-                element={
-                  <ProtectedRoute>
-                    <Agents />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/create-agent"
-                element={
-                  <ProtectedRoute>
-                    <CreateAgent />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/integrations"
-                element={
-                  <ProtectedRoute>
-                    <Integrations />
-                  </ProtectedRoute>
-                }
-              />
             </Route>
+
+            {/* Dashboard pages with minimal header + sidebar only */}
+            <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
+              <Route path="/dashboard" element={<ClientDashboard />} />
+              <Route path="/agents" element={<Agents />} />
+              <Route path="/create-agent" element={<CreateAgent />} />
+              <Route path="/integrations" element={<Integrations />} />
+            </Route>
+
+            {/* Admin */}
+            <Route element={<ProtectedRoute requireAdmin><DashboardLayout /></ProtectedRoute>}>
+              <Route path="/admin" element={<AdminDashboard />} />
+            </Route>
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
