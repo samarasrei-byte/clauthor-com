@@ -272,7 +272,7 @@ const LibraryPage = () => {
                 )}
                 
                 {/* Header */}
-                <div className="flex items-start gap-4 mb-5 relative z-10 pr-24">
+                <div className="flex items-start gap-4 mb-5 relative z-10 pr-28">
                   <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 ${
                     tier === "enterprise" 
                        ? "bg-gradient-to-br from-primary/20 to-primary-glow/20" 
