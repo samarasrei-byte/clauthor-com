@@ -23,6 +23,48 @@ const SAFETY_LAYER = `
 6. **ALUCINAÇÃO ZERO**: Se não souber uma informação, diga claramente. NUNCA invente dados, estatísticas ou fatos.
 `;
 
+// Plan-based limits for token optimization
+const PLAN_LIMITS: Record<string, { maxHistoryMessages: number; maxResponseTokens: number; creditWarningThreshold: number }> = {
+  free:       { maxHistoryMessages: 10, maxResponseTokens: 512,  creditWarningThreshold: 0.8 },
+  starter:    { maxHistoryMessages: 20, maxResponseTokens: 1024, creditWarningThreshold: 0.8 },
+  pro:        { maxHistoryMessages: 30, maxResponseTokens: 2048, creditWarningThreshold: 0.8 },
+  enterprise: { maxHistoryMessages: 50, maxResponseTokens: 4096, creditWarningThreshold: 0.9 },
+};
+
+function getPlanLimits(planType: string) {
+  return PLAN_LIMITS[planType] || PLAN_LIMITS.free;
+}
+
+// Sliding window: keep only the last N messages to save tokens
+function applyHistoryWindow(messages: any[], maxMessages: number): any[] {
+  if (messages.length <= maxMessages) return messages;
+  
+  // Always keep the first user message for context, then take the last N-1
+  const firstMessage = messages[0];
+  const recentMessages = messages.slice(-(maxMessages - 1));
+  
+  return [firstMessage, ...recentMessages];
+}
+
+// Truncate older messages in the window to save additional tokens
+function truncateOlderMessages(messages: any[], maxChars: number = 500): any[] {
+  if (messages.length <= 2) return messages;
+  
+  return messages.map((msg, index) => {
+    // Keep the first and last 2 messages at full length
+    if (index === 0 || index >= messages.length - 2) return msg;
+    
+    // Truncate middle messages
+    if (msg.content && msg.content.length > maxChars) {
+      return {
+        ...msg,
+        content: msg.content.slice(0, maxChars) + "... [truncado]",
+      };
+    }
+    return msg;
+  });
+}
+
 // Input validation: max message length and sanitization
 function validateInput(messages: any[]): { valid: boolean; error?: string } {
   if (!Array.isArray(messages) || messages.length === 0) {
@@ -114,6 +156,19 @@ serve(async (req) => {
       });
     }
 
+    // Get plan-based limits
+    const planLimits = getPlanLimits(credits.plan_type);
+
+    // Check credit warning threshold (80% used)
+    const usageRatio = credits.used_credits / credits.total_credits;
+    const creditWarning = usageRatio >= planLimits.creditWarningThreshold;
+
+    // Apply sliding window to history — KEY OPTIMIZATION
+    let optimizedMessages = applyHistoryWindow(messages, planLimits.maxHistoryMessages);
+    
+    // Truncate older messages in the window
+    optimizedMessages = truncateOlderMessages(optimizedMessages, 500);
+
     // Build system prompt with safety layer
     let agentPrompt = "Você é um assistente de IA útil e profissional. Responda em português do Brasil.";
     let agentInstructions = "";
@@ -135,7 +190,6 @@ Instruções: ${agent.instructions}`;
 
       // If no custom instructions, try template
       if (!agentInstructions) {
-        // Use service role to read templates (public read policy)
         const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
         const adminClient = createClient(supabaseUrl, serviceKey);
         
@@ -144,16 +198,13 @@ Instruções: ${agent.instructions}`;
           .select("name, system_prompt, instructions")
           .eq("is_active", true)
           .limit(1);
-
-        // Check if agentId matches a template slug pattern
-        // For now, templates are used as defaults when agents have no custom instructions
       }
     }
 
-    // Combine: Safety Layer + Agent Prompt + Agent Instructions
-    const fullSystemPrompt = `${SAFETY_LAYER}\n\n${agentPrompt}\n\nResponda sempre em português do Brasil de forma profissional.`;
+    // Combine: Safety Layer + Agent Prompt
+    const fullSystemPrompt = `${SAFETY_LAYER}\n\n${agentPrompt}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
 
-    // Call Lovable AI Gateway
+    // Call Lovable AI Gateway with max_tokens limit
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
@@ -169,8 +220,9 @@ Instruções: ${agent.instructions}`;
         model: "google/gemini-3-flash-preview",
         messages: [
           { role: "system", content: fullSystemPrompt },
-          ...messages,
+          ...optimizedMessages,
         ],
+        max_tokens: planLimits.maxResponseTokens,
         stream: false,
       }),
     });
@@ -198,7 +250,7 @@ Instruções: ${agent.instructions}`;
     
     // Use actual token count from API if available, otherwise estimate
     const apiTokens = aiResponse.usage?.total_tokens;
-    const inputTokens = messages.reduce((acc: number, m: any) => acc + Math.ceil((m.content?.length || 0) / 4), 0);
+    const inputTokens = optimizedMessages.reduce((acc: number, m: any) => acc + Math.ceil((m.content?.length || 0) / 4), 0);
     const outputTokens = Math.ceil(assistantMessage.length / 4);
     const totalTokens = apiTokens || (inputTokens + outputTokens + Math.ceil(fullSystemPrompt.length / 4));
 
@@ -224,10 +276,17 @@ Instruções: ${agent.instructions}`;
       console.error("Error logging usage:", logError);
     }
 
+    // Calculate new remaining after this request
+    const newRemaining = remainingCredits - totalTokens;
+
     return new Response(JSON.stringify({
       message: assistantMessage,
       tokens_used: totalTokens,
-      remaining_credits: remainingCredits - totalTokens,
+      remaining_credits: newRemaining,
+      credit_warning: creditWarning,
+      history_trimmed: messages.length > planLimits.maxHistoryMessages,
+      messages_sent: optimizedMessages.length,
+      messages_original: messages.length,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

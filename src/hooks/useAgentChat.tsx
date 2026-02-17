@@ -12,6 +12,10 @@ interface ChatResponse {
   message: string;
   tokens_used: number;
   remaining_credits: number;
+  credit_warning?: boolean;
+  history_trimmed?: boolean;
+  messages_sent?: number;
+  messages_original?: number;
 }
 
 export function useAgentChat(agentId?: string) {
@@ -74,6 +78,13 @@ export function useAgentChat(agentId?: string) {
 
       setMessages([...updatedMessages, assistantMessage]);
       
+      // Credit warning alert at 80%
+      if (data.credit_warning) {
+        toast.warning("⚠️ Seus créditos estão em 80%+. Considere fazer upgrade do plano.", {
+          duration: 5000,
+        });
+      }
+
       // Refetch credits to update UI
       refetchCredits();
 
