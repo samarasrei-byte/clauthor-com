@@ -20,6 +20,7 @@ import CreateAgent from "./pages/CreateAgent";
 import Integrations from "./pages/Integrations";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import AgentLanding from "./pages/AgentLanding";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
               <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/waitlist" element={<Waitlist />} />
               <Route path="/community" element={<Community />} />
+              <Route path="/agente/:slug" element={<AgentLanding />} />
             </Route>
 
             {/* Dashboard pages with minimal header + sidebar only */}
