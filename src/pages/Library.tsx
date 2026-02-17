@@ -430,17 +430,6 @@ const LibraryPage = () => {
                         <span className="text-xs text-muted-foreground">{t("library.per_month")}</span>
                       </div>
                       <Button
-                        variant="outline"
-                        className="rounded-xl h-12 border-primary/20 hover:border-primary/40 gap-2"
-                        onClick={() => setPreviewAgent({ 
-                          name: t(`library_page.agents.${featuredAgent}_title`), 
-                          desc: t(`library_page.agents.${featuredAgent}_desc`) 
-                        })}
-                      >
-                        <Play className="h-4 w-4 text-primary" />
-                        {t("library_page.test_btn")}
-                      </Button>
-                      <Button
                         className="rounded-xl h-12 font-semibold bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90 neon-glow gap-2"
                         disabled={hiringSlug === agentSlugs[featuredAgent]}
                         onClick={() => handleHire(featuredAgent)}
@@ -670,36 +659,25 @@ const LibraryPage = () => {
                           <span className="text-[10px] text-muted-foreground">{t("library.per_month")}</span>
                         </div>
                       </div>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex-1 rounded-xl h-10 border-border hover:border-primary/20 text-xs"
-                          onClick={() => setPreviewAgent({ name: agentTitle, desc: agentDesc })}
-                        >
-                          <Play className="mr-1.5 h-3 w-3" />
-                          Demo
-                        </Button>
-                        <Button
-                          size="sm"
-                          className={`flex-1 rounded-xl h-10 text-xs font-semibold gap-1 ${
-                            tier === "enterprise"
-                              ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90"
-                              : "glow"
-                          }`}
-                          disabled={isHiring}
-                          onClick={() => handleHire(key)}
-                        >
-                          {isHiring ? (
-                            <Loader2 className="h-3 w-3 animate-spin" />
-                          ) : (
-                            <>
-                              {t("library_page.hire_btn")}
-                              <ArrowRight className="h-3 w-3" />
-                            </>
-                          )}
-                        </Button>
-                      </div>
+                      <Button
+                        size="sm"
+                        className={`w-full rounded-xl h-10 text-xs font-semibold gap-1 ${
+                          tier === "enterprise"
+                            ? "bg-gradient-to-r from-primary to-primary-glow hover:from-primary/90 hover:to-primary-glow/90"
+                            : "glow"
+                        }`}
+                        disabled={isHiring}
+                        onClick={() => handleHire(key)}
+                      >
+                        {isHiring ? (
+                          <Loader2 className="h-3 w-3 animate-spin" />
+                        ) : (
+                          <>
+                            {t("library_page.hire_btn")}
+                            <ArrowRight className="h-3 w-3" />
+                          </>
+                        )}
+                      </Button>
                     </div>
                   </div>
                 </div>
