@@ -10,7 +10,8 @@ import {
   Calendar, Receipt, Star, ShoppingCart, ArrowRight,
   Code, Brain, Shield, Mic, Bot, Eye, Workflow,
   Phone, Search, Users, Briefcase, BarChart3,
-  Layers, Cpu, Sparkles, Globe, Rocket, Loader2
+  Layers, Cpu, Sparkles, Globe, Rocket, Loader2,
+  Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap
 } from "lucide-react";
 import ROICalculator from "@/components/library/ROICalculator";
 import AgentLivePreview from "@/components/library/AgentLivePreview";
@@ -23,7 +24,9 @@ import { toast } from "sonner";
 const agentKeys = [
   "voice_ai", "orchestrator", "research", "coding", "omnichannel",
   "revenue", "sales", "rag", "computer", "content", "security", "hr",
-  "customer_success", "data_analytics", "legal", "ecommerce"
+  "customer_success", "data_analytics", "legal", "ecommerce",
+  "influencer", "marketing_automation", "creative_design", "video_production",
+  "seo_growth", "project_management", "supply_chain", "training"
 ] as const;
 
 // Map library keys to DB template slugs
@@ -32,6 +35,9 @@ const agentSlugs: Record<string, string> = {
   omnichannel: "omnichannel", revenue: "revenue", sales: "sales",
   rag: "rag", computer: "computer", content: "content", security: "security", hr: "hr",
   customer_success: "customer_success", data_analytics: "data_analytics", legal: "legal", ecommerce: "ecommerce",
+  influencer: "influencer", marketing_automation: "marketing_automation", creative_design: "creative_design",
+  video_production: "video_production", seo_growth: "seo_growth", project_management: "project_management",
+  supply_chain: "supply_chain", training: "training",
 };
 
 const agentIcons: Record<string, React.ElementType> = {
@@ -39,6 +45,9 @@ const agentIcons: Record<string, React.ElementType> = {
   omnichannel: MessageSquare, revenue: BarChart3, sales: Briefcase,
   rag: Layers, computer: Cpu, content: Sparkles, security: Shield, hr: Users,
   customer_success: Star, data_analytics: Eye, legal: FileText, ecommerce: ShoppingCart,
+  influencer: Megaphone, marketing_automation: Target, creative_design: Palette,
+  video_production: Video, seo_growth: Globe, project_management: ClipboardList,
+  supply_chain: Truck, training: GraduationCap,
 };
 
 const agentTiers: Record<string, string> = {
@@ -46,6 +55,9 @@ const agentTiers: Record<string, string> = {
   omnichannel: "advanced", revenue: "advanced", sales: "advanced",
   rag: "intermediate", computer: "enterprise", content: "intermediate", security: "enterprise", hr: "advanced",
   customer_success: "advanced", data_analytics: "advanced", legal: "enterprise", ecommerce: "advanced",
+  influencer: "advanced", marketing_automation: "advanced", creative_design: "intermediate",
+  video_production: "advanced", seo_growth: "advanced", project_management: "intermediate",
+  supply_chain: "advanced", training: "intermediate",
 };
 
 const agentPriceTiers: Record<string, PriceTier> = {
@@ -53,6 +65,9 @@ const agentPriceTiers: Record<string, PriceTier> = {
   omnichannel: "mid", revenue: "mid", sales: "mid",
   rag: "entry", computer: "high", content: "entry", security: "premium", hr: "mid",
   customer_success: "mid", data_analytics: "mid", legal: "high", ecommerce: "mid",
+  influencer: "mid", marketing_automation: "mid", creative_design: "entry",
+  video_production: "mid", seo_growth: "mid", project_management: "entry",
+  supply_chain: "mid", training: "entry",
 };
 
 const agentTags: Record<string, string[]> = {
@@ -72,6 +87,14 @@ const agentTags: Record<string, string[]> = {
   data_analytics: ["BI", "SQL", "Dashboards", "Insights", "Predictive"],
   legal: ["Contracts", "Compliance", "LGPD", "Due Diligence", "Risk"],
   ecommerce: ["Marketplace", "Pricing", "Catalog", "Logistics", "Conversion"],
+  influencer: ["Influencer", "UGC", "Creators", "Social Media", "Brand"],
+  marketing_automation: ["Funis", "Lead Scoring", "Email", "Growth", "Nurturing"],
+  creative_design: ["Design", "Banners", "Social Kit", "Branding", "Visual"],
+  video_production: ["Reels", "Shorts", "Edição", "Thumbnails", "YouTube"],
+  seo_growth: ["SEO", "Keywords", "Link Building", "Tráfego", "Growth"],
+  project_management: ["Agile", "Sprints", "Timeline", "Riscos", "PMO"],
+  supply_chain: ["Estoque", "Logística", "Fornecedores", "Demanda", "Rotas"],
+  training: ["LMS", "Onboarding", "Gamificação", "Trilhas", "Avaliações"],
 };
 
 const agentIntegrations: Record<string, string[]> = {
@@ -91,6 +114,14 @@ const agentIntegrations: Record<string, string[]> = {
   data_analytics: ["BigQuery", "PostgreSQL", "Metabase", "Looker", "Google Sheets"],
   legal: ["DocuSign", "Google Drive", "SharePoint", "Notion", "SAP"],
   ecommerce: ["Shopify", "Mercado Livre", "Amazon", "Stripe", "Google Ads"],
+  influencer: ["Instagram API", "TikTok API", "YouTube API", "Hootsuite", "Sprout Social"],
+  marketing_automation: ["HubSpot", "Mailchimp", "ActiveCampaign", "Google Ads", "RD Station"],
+  creative_design: ["Canva", "Figma", "Adobe Suite", "Unsplash", "Shutterstock"],
+  video_production: ["YouTube API", "CapCut", "Descript", "Eleven Labs", "TikTok API"],
+  seo_growth: ["Google Search Console", "Ahrefs", "SEMrush", "Screaming Frog", "Surfer SEO"],
+  project_management: ["Jira", "Asana", "Trello", "Monday.com", "Notion"],
+  supply_chain: ["SAP", "Oracle ERP", "TOTVS", "WMS", "Google Maps API"],
+  training: ["LMS", "Google Classroom", "Notion", "Moodle", "Microsoft Teams"],
 };
 
 const tierColors: Record<string, string> = {
