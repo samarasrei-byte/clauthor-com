@@ -130,19 +130,19 @@ const ClientDashboard = () => {
   };
 
   return (
-    <div className="max-w-[1400px] mx-auto px-4 sm:px-6 py-6">
-      <div className="flex gap-6">
-        {/* Sidebar */}
-        <div className="hidden lg:block">
-          <DashboardSidebar
-            items={sidebarItems}
-            activeItem={activeSection}
-            onItemChange={setActiveSection}
-          />
-        </div>
+    <div className="flex h-full">
+      {/* Sidebar — fixed, full height */}
+      <div className="hidden lg:block">
+        <DashboardSidebar
+          items={sidebarItems}
+          activeItem={activeSection}
+          onItemChange={setActiveSection}
+        />
+      </div>
 
-        {/* Main Content */}
-        <div className="flex-1 min-w-0 space-y-6">
+      {/* Scrollable content area */}
+      <div className="flex-1 min-w-0 overflow-y-auto">
+        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-6">
           {/* Header */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
