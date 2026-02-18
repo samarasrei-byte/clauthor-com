@@ -17,12 +17,58 @@ import prometheusLogo from "@/assets/prometheus-logo.png";
 
 const agentIcons = [MessageSquare, DollarSign, Code, Users, Briefcase, Shield];
 
-// Futuristic grid background
+// Futuristic AI background with neural network effect
 const FuturisticBackground = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden">
+    {/* Dot grid */}
     <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(0 65% 48%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
+    
+    {/* Primary ambient glow */}
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-primary/[0.04] to-transparent rounded-full blur-[120px]" />
     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-t from-primary/[0.02] to-transparent rounded-full blur-[100px]" />
+
+    {/* Floating AI orbs */}
+    <motion.div
+      animate={{ y: [-20, 20, -20], x: [-10, 10, -10], opacity: [0.03, 0.07, 0.03] }}
+      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+      className="absolute top-[15%] left-[20%] w-[300px] h-[300px] rounded-full bg-primary/[0.05] blur-[100px]"
+    />
+    <motion.div
+      animate={{ y: [15, -25, 15], x: [10, -15, 10], opacity: [0.02, 0.06, 0.02] }}
+      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+      className="absolute top-[40%] right-[15%] w-[250px] h-[250px] rounded-full bg-primary/[0.04] blur-[80px]"
+    />
+    <motion.div
+      animate={{ y: [10, -10, 10], opacity: [0.02, 0.05, 0.02] }}
+      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
+      className="absolute bottom-[20%] left-[40%] w-[200px] h-[200px] rounded-full bg-primary/[0.03] blur-[90px]"
+    />
+
+    {/* Neural network lines */}
+    <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
+      <motion.line x1="10%" y1="20%" x2="30%" y2="40%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
+        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.6, 0] }} transition={{ duration: 4, repeat: Infinity, delay: 0 }} />
+      <motion.line x1="70%" y1="15%" x2="50%" y2="45%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
+        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.5, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} />
+      <motion.line x1="80%" y1="60%" x2="60%" y2="30%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
+        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.4, 0] }} transition={{ duration: 6, repeat: Infinity, delay: 2 }} />
+      <motion.line x1="20%" y1="70%" x2="45%" y2="50%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
+        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.5, 0] }} transition={{ duration: 4.5, repeat: Infinity, delay: 1.5 }} />
+      <motion.line x1="90%" y1="80%" x2="65%" y2="55%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
+        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.3, 0] }} transition={{ duration: 5.5, repeat: Infinity, delay: 3 }} />
+      {/* Neural nodes */}
+      {[
+        { cx: "10%", cy: "20%" }, { cx: "30%", cy: "40%" }, { cx: "70%", cy: "15%" },
+        { cx: "50%", cy: "45%" }, { cx: "80%", cy: "60%" }, { cx: "60%", cy: "30%" },
+        { cx: "20%", cy: "70%" }, { cx: "45%", cy: "50%" }, { cx: "90%", cy: "80%" },
+        { cx: "65%", cy: "55%" },
+      ].map((node, i) => (
+        <motion.circle key={i} cx={node.cx} cy={node.cy} r="2" fill="hsl(0 65% 48%)"
+          animate={{ opacity: [0.1, 0.6, 0.1], r: [1.5, 2.5, 1.5] }}
+          transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay: i * 0.3 }}
+        />
+      ))}
+    </svg>
   </div>
 );
 
@@ -54,6 +100,25 @@ const HomePage = () => {
         <div className="absolute inset-0 scan-line pointer-events-none" />
         <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
         <div className="absolute top-2/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
+        
+        {/* Pulsing AI ring behind hero */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
+          <motion.div
+            animate={{ scale: [1, 1.15, 1], opacity: [0.03, 0.08, 0.03] }}
+            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+            className="w-[600px] h-[600px] rounded-full border border-primary/10"
+          />
+          <motion.div
+            animate={{ scale: [1, 1.2, 1], opacity: [0.02, 0.06, 0.02] }}
+            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+            className="absolute inset-0 w-[600px] h-[600px] rounded-full border border-primary/5"
+          />
+          <motion.div
+            animate={{ scale: [1, 1.3, 1], opacity: [0.01, 0.04, 0.01] }}
+            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+            className="absolute -inset-16 rounded-full border border-primary/5"
+          />
+        </div>
 
         <motion.div style={{ opacity: heroOpacity, y: heroY }} className="relative z-10 max-w-6xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }} className="space-y-8">
