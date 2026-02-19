@@ -8,3 +8,12 @@ verify_jwt = false
 
 [functions.admin-agent]
 verify_jwt = false
+
+[functions.cyber-security-agent]
+verify_jwt = false
+
+[functions.cfo-agent]
+verify_jwt = false
+
+[functions.growth-agent]
+verify_jwt = false
