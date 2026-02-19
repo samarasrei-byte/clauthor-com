@@ -112,10 +112,10 @@ const HomePage = () => {
   };
 
   const featureData = [
-    { icon: Zap, key: "autonomous", stat: "100%", color: "text-accent-amber", bgClass: "bg-accent-amber/5 group-hover:bg-accent-amber/10" },
-    { icon: Shield, key: "security", stat: "256bit", color: "text-accent-emerald", bgClass: "bg-accent-emerald/5 group-hover:bg-accent-emerald/10" },
-    { icon: Clock, key: "uptime", stat: "∞", color: "text-accent-cyan", bgClass: "bg-accent-cyan/5 group-hover:bg-accent-cyan/10" },
-    { icon: BarChart3, key: "analytics", stat: "Live", color: "text-accent-violet", bgClass: "bg-accent-violet/5 group-hover:bg-accent-violet/10" },
+    { icon: Zap, key: "autonomous", stat: "100%" },
+    { icon: Shield, key: "security", stat: "256bit" },
+    { icon: Clock, key: "uptime", stat: "∞" },
+    { icon: BarChart3, key: "analytics", stat: "Live" },
   ];
 
   return (
@@ -169,13 +169,24 @@ const HomePage = () => {
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.7 }} className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
               <Link to="/auth">
-                <Button size="lg" className="glow font-semibold text-base px-10 h-14 rounded-xl group text-lg">
-                  <Play className="h-5 w-5 mr-2 fill-current" />
-                  {t("home.cta_start")}
-                  <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <button className="group relative h-14 px-12 rounded-xl font-display font-semibold text-lg text-primary-foreground overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
+                  {/* Animated gradient background */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
+                  {/* Glow ring */}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
+                  {/* Scan line */}
+                  <div className="absolute inset-0 overflow-hidden rounded-xl">
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  </div>
+                  {/* Content */}
+                  <span className="relative z-10 flex items-center gap-2">
+                    <Play className="h-5 w-5 fill-current" />
+                    {t("home.cta_start")}
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 transition-transform duration-300" />
+                  </span>
+                </button>
               </Link>
-              <Button size="lg" variant="outline" className="font-semibold text-base px-10 h-14 rounded-xl border-border hover:border-primary/20 hover:bg-primary/[0.03] transition-all text-lg group">
+              <Button size="lg" variant="outline" className="glass-btn font-semibold text-base px-10 h-14 rounded-xl text-lg group">
                 <Globe className="h-5 w-5 mr-2" />
                 {t("home.cta_demo")}
                 <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
@@ -245,15 +256,15 @@ const HomePage = () => {
           </motion.div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { value: "847", label: t("home.stats_agents"), icon: Cpu, color: "text-accent-cyan", bg: "bg-accent-cyan/5", bgHover: "group-hover:bg-accent-cyan/10" },
-              { value: "126k", label: t("home.stats_actions"), icon: Zap, color: "text-accent-amber", bg: "bg-accent-amber/5", bgHover: "group-hover:bg-accent-amber/10" },
-              { value: "99.7%", label: t("home.stats_success"), icon: TrendingUp, color: "text-accent-emerald", bg: "bg-accent-emerald/5", bgHover: "group-hover:bg-accent-emerald/10" },
-              { value: "312", label: t("home.stats_companies"), icon: Users, color: "text-accent-violet", bg: "bg-accent-violet/5", bgHover: "group-hover:bg-accent-violet/10" },
+              { value: "847", label: t("home.stats_agents"), icon: Cpu },
+              { value: "126k", label: t("home.stats_actions"), icon: Zap },
+              { value: "99.7%", label: t("home.stats_success"), icon: TrendingUp },
+              { value: "312", label: t("home.stats_companies"), icon: Users },
             ].map((stat, i) => (
               <motion.div key={stat.label} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}>
                 <div className="glass-card rounded-2xl p-8 text-center glass-hover group">
-                  <div className={`w-12 h-12 rounded-xl ${stat.bg} flex items-center justify-center mx-auto mb-4 ${stat.bgHover} transition-colors`}>
-                    <stat.icon className={`h-6 w-6 ${stat.color}`} />
+                  <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
+                    <stat.icon className="h-6 w-6 text-primary/80" />
                   </div>
                   <p className="text-4xl sm:text-5xl font-display font-bold gradient-text mb-2">{stat.value}</p>
                   <p className="text-xs text-muted-foreground tracking-wide">{stat.label}</p>
@@ -445,10 +456,10 @@ const HomePage = () => {
               <motion.div key={f.key} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}>
                 <div className="glass-card rounded-2xl p-8 glass-hover group h-full relative overflow-hidden">
                   <div className="absolute top-4 right-4">
-                    <span className={`text-2xl font-display font-bold ${f.color} opacity-15`}>{f.stat}</span>
+                    <span className="text-2xl font-display font-bold text-primary/15">{f.stat}</span>
                   </div>
-                  <div className={`w-12 h-12 rounded-xl ${f.bgClass} flex items-center justify-center mb-6 transition-all duration-300`}>
-                    <f.icon className={`h-6 w-6 ${f.color}`} />
+                  <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mb-6 group-hover:bg-primary/10 transition-all duration-300">
+                    <f.icon className="h-6 w-6 text-primary/70" />
                   </div>
                   <h3 className="font-display font-bold text-lg mb-3">{t(`features.${f.key}`)}</h3>
                   <p className="text-muted-foreground leading-relaxed text-sm">{t(`features.${f.key}_desc`)}</p>
