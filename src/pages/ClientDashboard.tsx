@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target
+  TrendingUp, Coins, Target, Settings
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,6 +22,7 @@ import QuickActions from "@/components/dashboard/QuickActions";
 import AgentChat from "@/components/dashboard/AgentChat";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import ClientCommandCenter from "@/components/dashboard/ClientCommandCenter";
+import AgentSettings from "@/components/dashboard/AgentSettings";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -94,6 +95,7 @@ const ClientDashboard = () => {
   const sidebarItems = [
     { id: "overview", label: "Command Center", icon: LayoutDashboard },
     { id: "agents", label: "Meus Agentes", icon: Bot, badge: agents.length || undefined },
+    { id: "agent-settings", label: "Configurações", icon: Settings },
     { id: "chat", label: "Assistente IA", icon: Sparkles },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     { id: "logs", label: "Logs", icon: Activity, badge: recentLogs.length || undefined },
@@ -199,6 +201,9 @@ const ClientDashboard = () => {
               <AgentChat agentId={selectedAgent?.id} agentName={selectedAgent?.name || "Assistente IA"} />
             </div>
           )}
+
+          {/* ═══ AGENT SETTINGS ═══ */}
+          {activeSection === "agent-settings" && <AgentSettings />}
 
           {/* ═══ AGENTS ═══ */}
           {activeSection === "agents" && (
