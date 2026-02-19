@@ -18,6 +18,7 @@ import {
 import ROICalculator from "@/components/library/ROICalculator";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 import AgentLivePreview from "@/components/library/AgentLivePreview";
+import SmartAgentFinder from "@/components/library/SmartAgentFinder";
 import { getPriceDisplay, getPrice, type PriceTier } from "@/lib/pricing";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -415,7 +416,26 @@ const LibraryPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
-      
+
+      {/* ============ AI CONCIERGE — Smart Agent Finder ============ */}
+      <SmartAgentFinder
+        agentMeta={Object.fromEntries(
+          agentKeys.map((k) => [k, {
+            icon: agentIcons[k],
+            tier: agentTiers[k],
+            socialProof: agentSocialProof[k],
+            capabilities: agentCapabilities[k] || [],
+            slug: agentSlugs[k],
+          }])
+        )}
+        onHire={(key) => handleHire(key)}
+        onPreview={(key) => setPreviewAgent({
+          name: t(`library_page.agents.${key}_title`),
+          desc: t(`library_page.agents.${key}_desc`),
+        })}
+        hiringSlug={hiringSlug}
+      />
+
       {/* ============ HERO SECTION — Featured Agents ============ */}
       <section className="relative">
         {/* Background glow */}
