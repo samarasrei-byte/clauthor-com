@@ -19,6 +19,13 @@
     --primary-foreground: 0 0% 100%;
     --primary-glow: 8 65% 62%;
 
+    /* Accent palette for variety */
+    --accent-cyan: 190 80% 55%;
+    --accent-emerald: 160 65% 45%;
+    --accent-amber: 38 92% 55%;
+    --accent-violet: 270 65% 60%;
+    --accent-blue: 220 75% 58%;
+
     --secondary: 0 0% 7%;
     --secondary-foreground: 0 0% 90%;
 
