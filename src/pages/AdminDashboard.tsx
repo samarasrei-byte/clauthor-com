@@ -21,6 +21,8 @@ import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import AdminAgentChat from "@/components/dashboard/AdminAgentChat";
+import AdminCommandCenter from "@/components/dashboard/AdminCommandCenter";
+import PaymentsPanel from "@/components/dashboard/PaymentsPanel";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -116,14 +118,15 @@ const AdminDashboard = () => {
   const waitingCount = waitlist.filter((w) => w.status === "waiting").length;
 
   const sidebarItems = [
-    { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
+    { id: "overview", label: "Command Center", icon: LayoutDashboard },
+    { id: "payments", label: "Pagamentos", icon: Wallet },
     { id: "ai-agent", label: "Agente Master", icon: Sparkles },
     { id: "cyber-agent", label: "Cyber Security", icon: ShieldCheck },
-    { id: "cfo-agent", label: "CFO Agent", icon: Wallet },
+    { id: "cfo-agent", label: "CFO Agent", icon: DollarSign },
     { id: "growth-agent", label: "Growth Agent", icon: Rocket },
     { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
     { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined },
-    { id: "revenue", label: "Receita", icon: DollarSign },
+    { id: "revenue", label: "Receita", icon: BarChart3 },
     { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined },
     { id: "logs", label: "Logs", icon: Activity, badge: totalExecutions || undefined },
     { id: "marketplace", label: "Marketplace", icon: Store, badge: pendingAgents.length || undefined },
@@ -182,16 +185,19 @@ const AdminDashboard = () => {
           {/* Header */}
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
             <div className="flex items-center gap-3 mb-1">
-              <Shield className="h-6 w-6 text-primary" />
-              <h1 className="font-display text-2xl font-bold">Painel Admin</h1>
-              <Badge variant="outline" className="border-primary/20 text-primary">Master</Badge>
+              <div className="relative">
+                <Shield className="h-6 w-6 text-primary" />
+                <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-background" />
+              </div>
+              <h1 className="font-display text-2xl font-bold">PROMETHEUS</h1>
+              <Badge variant="outline" className="border-primary/20 text-primary text-[10px] font-mono">ADMIN MASTER</Badge>
               <TokenUpgradeDialog trigger={
-                <Button size="sm" variant="outline" className="gap-1.5 border-primary/20 text-primary ml-auto">
-                  <Coins className="h-3.5 w-3.5" /> Gerenciar Tokens
+                <Button size="sm" variant="outline" className="gap-1.5 border-primary/20 text-primary ml-auto text-xs">
+                  <Coins className="h-3.5 w-3.5" /> Tokens
                 </Button>
               } />
             </div>
-            <p className="text-sm text-muted-foreground">Controle total da plataforma PROMETHEUS</p>
+            <p className="text-xs text-muted-foreground">Command Center — Controle total da plataforma</p>
           </motion.div>
 
           {/* Mobile tabs */}
@@ -260,131 +266,32 @@ const AdminDashboard = () => {
             />
           )}
 
-          {/* ═══ OVERVIEW ═══ */}
+          {/* ═══ COMMAND CENTER (OVERVIEW) ═══ */}
           {activeTab === "overview" && (
-            <div className="space-y-6">
-              {/* KPI Grid */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                {kpiCards.map((kpi, i) => (
-                  <motion.div key={kpi.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }} className="glass-card rounded-2xl p-4 glass-hover group">
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center">
-                        <kpi.icon className={`h-4 w-4 ${kpi.color}`} />
-                      </div>
-                      <MiniSparkline data={kpi.spark} color={kpi.color.includes("cyan") ? "#22d3ee" : kpi.color.includes("emerald") ? "#10b981" : "hsl(var(--primary))"} width={60} height={24} />
-                    </div>
-                    <p className="font-display text-xl font-bold">
-                      <AnimatedCounter value={kpi.value} prefix={kpi.prefix} suffix={kpi.suffix} />
-                    </p>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">{kpi.label}</p>
-                  </motion.div>
-                ))}
-              </div>
+            <AdminCommandCenter
+              usersCount={usersCount}
+              activeAgents={activeAgents}
+              totalRevenue={totalRevenue}
+              pendingCount={pendingAgents.length}
+              totalTokensUsed={totalTokensUsed}
+              totalExecutions={totalExecutions}
+              successRate={successRate}
+              waitingCount={waitingCount}
+              allAgents={allAgents}
+              allCredits={allCredits}
+              allProfiles={allProfiles}
+              executionLogs={executionLogs}
+              revenueData={revenueData}
+              onTabChange={setActiveTab}
+            />
+          )}
 
-              {/* Charts Row */}
-              <div className="grid lg:grid-cols-2 gap-6">
-                {/* Revenue Chart */}
-                <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="font-display text-base flex items-center gap-2">
-                      <TrendingUp className="h-4 w-4 text-cyan-400" /> Receita Mensal
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="h-[200px]">
-                      <ResponsiveContainer width="100%" height="100%">
-                        <AreaChart data={revenueData}>
-                          <defs>
-                            <linearGradient id="colorReceita" x1="0" y1="0" x2="0" y2="1">
-                              <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                              <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                            </linearGradient>
-                          </defs>
-                          <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                          <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
-                          <YAxis stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
-                          <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }} />
-                          <Area type="monotone" dataKey="receita" stroke="hsl(var(--primary))" strokeWidth={2} fillOpacity={1} fill="url(#colorReceita)" />
-                        </AreaChart>
-                      </ResponsiveContainer>
-                    </div>
-                  </CardContent>
-                </Card>
-
-                {/* Plan Distribution + Recent */}
-                <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="font-display text-base flex items-center gap-2">
-                      <Bot className="h-4 w-4 text-primary" /> Agentes Recentes
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    {allAgents.slice(0, 5).map((agent: any) => (
-                      <div key={agent.id} className="flex items-center justify-between p-3 rounded-lg bg-accent/30">
-                        <div>
-                          <p className="text-sm font-medium">{agent.name}</p>
-                          <p className="text-[10px] text-muted-foreground">{agent.tier} • R$ {(agent.monthly_price / 100).toLocaleString("pt-BR")}/mês</p>
-                        </div>
-                        <Badge variant="secondary" className={agent.status === "active" ? "bg-primary/20 text-primary text-[10px]" : "text-[10px]"}>{agent.status}</Badge>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-
-                {/* Pending Approvals */}
-                <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="font-display text-base flex items-center gap-2">
-                      <Clock className="h-4 w-4 text-primary/80" /> Aguardando Aprovação ({pendingAgents.length})
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    {pendingAgents.length === 0 ? (
-                      <p className="text-sm text-muted-foreground text-center py-4">Nenhum agente pendente</p>
-                    ) : pendingAgents.slice(0, 5).map((agent: any) => (
-                      <div key={agent.id} className="flex items-center justify-between p-3 rounded-lg bg-accent/30 mb-2">
-                        <div>
-                          <p className="text-sm font-medium">{agent.title}</p>
-                          <p className="text-[10px] text-muted-foreground">R$ {(agent.monthly_price / 100).toLocaleString("pt-BR")}/mês</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => approveAgent(agent.id)}><CheckCircle className="h-3.5 w-3.5 text-primary" /></Button>
-                          <Button size="sm" variant="outline" className="h-7 w-7 p-0" onClick={() => rejectAgent(agent.id)}><XCircle className="h-3.5 w-3.5 text-destructive" /></Button>
-                        </div>
-                      </div>
-                    ))}
-                  </CardContent>
-                </Card>
-
-                {/* Waitlist Summary */}
-                <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-                  <CardHeader className="pb-2">
-                    <CardTitle className="font-display text-base flex items-center gap-2">
-                      <ListOrdered className="h-4 w-4 text-cyan-400" /> Waitlist ({waitlist.length})
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-2">
-                    {waitlist.slice(0, 4).map((entry: any) => (
-                      <div key={entry.id} className="flex items-center justify-between p-3 rounded-lg bg-accent/30">
-                        <div className="flex items-center gap-3">
-                          <div className="w-7 h-7 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">#{entry.position}</div>
-                          <div>
-                            <p className="text-sm font-medium">{entry.name || entry.email}</p>
-                            <p className="text-[10px] text-muted-foreground">{entry.company || "—"}</p>
-                          </div>
-                        </div>
-                        <Badge variant="secondary" className={entry.status === "waiting" ? "bg-cyan-500/10 text-cyan-400 text-[10px]" : "bg-primary/20 text-primary text-[10px]"}>
-                          {entry.status === "waiting" ? "Aguardando" : entry.status}
-                        </Badge>
-                      </div>
-                    ))}
-                    {waitlist.length > 4 && (
-                      <Button variant="ghost" className="w-full text-xs text-muted-foreground" onClick={() => setActiveTab("waitlist")}>Ver todos ({waitlist.length})</Button>
-                    )}
-                  </CardContent>
-                </Card>
-              </div>
-            </div>
+          {/* ═══ PAYMENTS ═══ */}
+          {activeTab === "payments" && (
+            <PaymentsPanel
+              totalRevenue={totalRevenue}
+              subscriptionCount={allSubscriptions.length}
+            />
           )}
 
           {/* ═══ USERS ═══ */}
