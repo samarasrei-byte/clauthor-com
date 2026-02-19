@@ -21,6 +21,8 @@ const SAFETY_LAYER = `
 5. **CONTEÚDO PROIBIDO**: Não gere conteúdo ilegal, discriminatório, sexualmente explícito, violento ou que promova danos.
 
 6. **ALUCINAÇÃO ZERO**: Se não souber uma informação, diga claramente. NUNCA invente dados, estatísticas ou fatos.
+
+7. **ISOLAMENTO MULTI-TENANT**: Você opera EXCLUSIVAMENTE dentro do contexto do tenant, usuário e agente informados. NUNCA acesse, mencione ou infira dados de outros tenants, usuários ou agentes.
 `;
 
 // Plan-based limits for token optimization
@@ -35,37 +37,24 @@ function getPlanLimits(planType: string) {
   return PLAN_LIMITS[planType] || PLAN_LIMITS.free;
 }
 
-// Sliding window: keep only the last N messages to save tokens
 function applyHistoryWindow(messages: any[], maxMessages: number): any[] {
   if (messages.length <= maxMessages) return messages;
-  
-  // Always keep the first user message for context, then take the last N-1
   const firstMessage = messages[0];
   const recentMessages = messages.slice(-(maxMessages - 1));
-  
   return [firstMessage, ...recentMessages];
 }
 
-// Truncate older messages in the window to save additional tokens
 function truncateOlderMessages(messages: any[], maxChars: number = 500): any[] {
   if (messages.length <= 2) return messages;
-  
   return messages.map((msg, index) => {
-    // Keep the first and last 2 messages at full length
     if (index === 0 || index >= messages.length - 2) return msg;
-    
-    // Truncate middle messages
     if (msg.content && msg.content.length > maxChars) {
-      return {
-        ...msg,
-        content: msg.content.slice(0, maxChars) + "... [truncado]",
-      };
+      return { ...msg, content: msg.content.slice(0, maxChars) + "... [truncado]" };
     }
     return msg;
   });
 }
 
-// Input validation: max message length and sanitization
 function validateInput(messages: any[]): { valid: boolean; error?: string } {
   if (!Array.isArray(messages) || messages.length === 0) {
     return { valid: false, error: "Messages array is required." };
@@ -87,6 +76,101 @@ function validateInput(messages: any[]): { valid: boolean; error?: string } {
   return { valid: true };
 }
 
+// === MULTI-TENANT VALIDATION ===
+async function validateTenantAccess(
+  adminClient: any,
+  userId: string,
+  agentId: string | null
+): Promise<{ valid: boolean; tenantId: string | null; error?: string }> {
+  // Get user's tenant
+  const { data: membership, error: memberError } = await adminClient
+    .from("tenant_members")
+    .select("tenant_id, role")
+    .eq("user_id", userId)
+    .limit(1)
+    .single();
+
+  if (memberError || !membership) {
+    return { valid: false, tenantId: null, error: "Usuário não pertence a nenhum tenant. Acesso negado." };
+  }
+
+  const tenantId = membership.tenant_id;
+
+  // If agent specified, verify it belongs to the same tenant or to the user
+  if (agentId) {
+    const { data: agent, error: agentError } = await adminClient
+      .from("agents")
+      .select("id, user_id")
+      .eq("id", agentId)
+      .single();
+
+    if (agentError || !agent) {
+      return { valid: false, tenantId, error: "Agente não encontrado." };
+    }
+
+    // Agent must belong to the same user (tenant isolation at user level)
+    if (agent.user_id !== userId) {
+      console.error(`SECURITY: User ${userId} tried to access agent ${agentId} owned by ${agent.user_id}`);
+      return { valid: false, tenantId, error: "Acesso negado. Este agente não pertence ao seu contexto." };
+    }
+  }
+
+  return { valid: true, tenantId };
+}
+
+// Save conversation memory with tenant isolation
+async function saveMemory(
+  adminClient: any,
+  tenantId: string,
+  userId: string,
+  agentId: string,
+  userMessage: string,
+  assistantMessage: string
+) {
+  try {
+    await adminClient.from("agent_memory").insert({
+      tenant_id: tenantId,
+      user_id: userId,
+      agent_id: agentId,
+      memory_type: "conversation",
+      content: {
+        user: userMessage,
+        assistant: assistantMessage,
+        timestamp: new Date().toISOString(),
+      },
+    });
+  } catch (err) {
+    console.error("Error saving memory:", err);
+  }
+}
+
+// Load recent memory for context (tenant-isolated)
+async function loadRecentMemory(
+  adminClient: any,
+  tenantId: string,
+  userId: string,
+  agentId: string,
+  limit: number = 5
+): Promise<string> {
+  const { data, error } = await adminClient
+    .from("agent_memory")
+    .select("content")
+    .eq("tenant_id", tenantId)
+    .eq("user_id", userId)
+    .eq("agent_id", agentId)
+    .eq("memory_type", "conversation")
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error || !data || data.length === 0) return "";
+
+  const memories = data.reverse().map((m: any) => 
+    `[Memória] Usuário: ${m.content.user?.slice(0, 200)} | Agente: ${m.content.assistant?.slice(0, 200)}`
+  ).join("\n");
+
+  return `\n## MEMÓRIA RECENTE (contexto anterior deste usuário com este agente):\n${memories}\n`;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -95,7 +179,6 @@ serve(async (req) => {
   try {
     const { messages, agentId, actionType = "chat" } = await req.json();
 
-    // Validate input
     const validation = validateInput(messages);
     if (!validation.valid) {
       return new Response(JSON.stringify({ error: validation.error }), {
@@ -104,7 +187,6 @@ serve(async (req) => {
       });
     }
 
-    // Validate auth
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -113,12 +195,15 @@ serve(async (req) => {
       });
     }
 
-    // Create Supabase client
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+
     const supabase = createClient(supabaseUrl, supabaseKey, {
       global: { headers: { Authorization: authHeader } },
     });
+
+    const adminClient = createClient(supabaseUrl, serviceKey);
 
     // Verify user
     const token = authHeader.replace("Bearer ", "");
@@ -131,7 +216,17 @@ serve(async (req) => {
     }
     const userId = claimsData.user.id;
 
-    // Check user credits
+    // === MULTI-TENANT VALIDATION ===
+    const tenantCheck = await validateTenantAccess(adminClient, userId, agentId);
+    if (!tenantCheck.valid) {
+      return new Response(JSON.stringify({ error: tenantCheck.error }), {
+        status: 403,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    const tenantId = tenantCheck.tenantId!;
+
+    // Check credits
     const { data: credits, error: creditsError } = await supabase
       .from("user_credits")
       .select("*")
@@ -156,26 +251,18 @@ serve(async (req) => {
       });
     }
 
-    // Get plan-based limits
     const planLimits = getPlanLimits(credits.plan_type);
-
-    // Check credit warning threshold (80% used)
     const usageRatio = credits.used_credits / credits.total_credits;
     const creditWarning = usageRatio >= planLimits.creditWarningThreshold;
 
-    // Apply sliding window to history — KEY OPTIMIZATION
     let optimizedMessages = applyHistoryWindow(messages, planLimits.maxHistoryMessages);
-    
-    // Truncate older messages in the window
     optimizedMessages = truncateOlderMessages(optimizedMessages, 500);
 
-    // Build system prompt with safety layer
+    // Build system prompt
     let agentPrompt = "Você é um assistente de IA útil e profissional. Responda em português do Brasil.";
-    let agentInstructions = "";
     
     if (agentId) {
-      // First try user's custom agent
-      const { data: agent } = await supabase
+      const { data: agent } = await adminClient
         .from("agents")
         .select("name, instructions, objective")
         .eq("id", agentId)
@@ -185,26 +272,26 @@ serve(async (req) => {
         agentPrompt = `Você é o agente "${agent.name}". 
 Objetivo: ${agent.objective || "Ajudar o usuário"}
 Instruções: ${agent.instructions}`;
-        agentInstructions = agent.instructions;
-      }
-
-      // If no custom instructions, try template
-      if (!agentInstructions) {
-        const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-        const adminClient = createClient(supabaseUrl, serviceKey);
-        
-        const { data: template } = await adminClient
-          .from("agent_templates")
-          .select("name, system_prompt, instructions")
-          .eq("is_active", true)
-          .limit(1);
       }
     }
 
-    // Combine: Safety Layer + Agent Prompt
-    const fullSystemPrompt = `${SAFETY_LAYER}\n\n${agentPrompt}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
+    // Load tenant-isolated memory
+    let memoryContext = "";
+    if (agentId) {
+      memoryContext = await loadRecentMemory(adminClient, tenantId, userId, agentId);
+    }
 
-    // Call Lovable AI Gateway with max_tokens limit
+    // Tenant isolation context injected into every prompt
+    const tenantContext = `
+## CONTEXTO DE EXECUÇÃO (IMUTÁVEL):
+- TENANT_ID: ${tenantId}
+- USER_ID: ${userId}
+- AGENT_ID: ${agentId || "general"}
+- Você opera EXCLUSIVAMENTE neste contexto. Qualquer referência a dados externos é PROIBIDA.
+`;
+
+    const fullSystemPrompt = `${SAFETY_LAYER}\n${tenantContext}\n${memoryContext}\n${agentPrompt}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
@@ -248,35 +335,36 @@ Instruções: ${agent.instructions}`;
     const aiResponse = await response.json();
     const assistantMessage = aiResponse.choices?.[0]?.message?.content || "";
     
-    // Use actual token count from API if available, otherwise estimate
     const apiTokens = aiResponse.usage?.total_tokens;
     const inputTokens = optimizedMessages.reduce((acc: number, m: any) => acc + Math.ceil((m.content?.length || 0) / 4), 0);
     const outputTokens = Math.ceil(assistantMessage.length / 4);
     const totalTokens = apiTokens || (inputTokens + outputTokens + Math.ceil(fullSystemPrompt.length / 4));
 
-    // Update user credits
+    // Update credits
     const { error: updateError } = await supabase
       .from("user_credits")
       .update({ used_credits: credits.used_credits + totalTokens })
       .eq("user_id", userId);
 
-    if (updateError) {
-      console.error("Error updating credits:", updateError);
-    }
+    if (updateError) console.error("Error updating credits:", updateError);
 
-    // Log token usage
+    // Log usage
     const { error: logError } = await supabase.from("token_usage").insert({
       user_id: userId,
       agent_id: agentId || null,
       tokens_used: totalTokens,
       action_type: actionType,
     });
+    if (logError) console.error("Error logging usage:", logError);
 
-    if (logError) {
-      console.error("Error logging usage:", logError);
+    // === SAVE MEMORY WITH TENANT ISOLATION ===
+    if (agentId && optimizedMessages.length > 0) {
+      const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
+      if (lastUserMsg) {
+        await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+      }
     }
 
-    // Calculate new remaining after this request
     const newRemaining = remainingCredits - totalTokens;
 
     return new Response(JSON.stringify({
@@ -287,6 +375,7 @@ Instruções: ${agent.instructions}`;
       history_trimmed: messages.length > planLimits.maxHistoryMessages,
       messages_sent: optimizedMessages.length,
       messages_original: messages.length,
+      tenant_id: tenantId,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
