@@ -30,7 +30,7 @@ const agentKeys = [
   "customer_success", "data_analytics", "legal", "ecommerce",
   "influencer", "marketing_automation", "creative_design", "video_production",
   "seo_growth", "project_management", "supply_chain", "training",
-  "concierge", "ceo", "startup_creator"
+  "concierge", "ceo", "startup_creator", "paid_traffic"
 ] as const;
 
 // Featured agents for the hero carousel
@@ -46,6 +46,7 @@ const agentSlugs: Record<string, string> = {
   video_production: "video_production", seo_growth: "seo_growth", project_management: "project_management",
   supply_chain: "supply_chain", training: "training",
   concierge: "concierge", ceo: "ceo", startup_creator: "startup_creator",
+  paid_traffic: "paid-traffic-manager",
 };
 
 const agentIcons: Record<string, React.ElementType> = {
@@ -57,6 +58,7 @@ const agentIcons: Record<string, React.ElementType> = {
   video_production: Video, seo_growth: Globe, project_management: ClipboardList,
   supply_chain: Truck, training: GraduationCap,
   concierge: HeartHandshake, ceo: Crown, startup_creator: Rocket,
+  paid_traffic: Target,
 };
 
 const agentTiers: Record<string, string> = {
@@ -68,6 +70,7 @@ const agentTiers: Record<string, string> = {
   video_production: "advanced", seo_growth: "advanced", project_management: "intermediate",
   supply_chain: "advanced", training: "intermediate",
   concierge: "advanced", ceo: "enterprise", startup_creator: "advanced",
+  paid_traffic: "advanced",
 };
 
 const agentPriceTiers: Record<string, PriceTier> = {
@@ -79,6 +82,7 @@ const agentPriceTiers: Record<string, PriceTier> = {
   video_production: "mid", seo_growth: "mid", project_management: "entry",
   supply_chain: "mid", training: "entry",
   concierge: "mid", ceo: "premium", startup_creator: "mid",
+  paid_traffic: "mid",
 };
 
 const agentTags: Record<string, string[]> = {
@@ -109,6 +113,7 @@ const agentTags: Record<string, string[]> = {
   concierge: ["Assistente", "Produtividade", "Agenda", "E-mail", "Pessoal"],
   ceo: ["Estratégia", "C-Level", "Decisões", "Previsão", "Board"],
   startup_creator: ["Startup", "MVP", "Pitch Deck", "Validação", "Empreendedorismo"],
+  paid_traffic: ["Meta Ads", "Google Ads", "TikTok Ads", "Landing Page", "ROAS", "CPA"],
 };
 
 const agentIntegrations: Record<string, string[]> = {
@@ -139,6 +144,7 @@ const agentIntegrations: Record<string, string[]> = {
   concierge: ["Google Calendar", "Outlook", "Gmail", "WhatsApp", "Slack", "Notion"],
   ceo: ["ERP", "CRM", "Power BI", "Google Sheets", "Financeiro", "RH"],
   startup_creator: ["Lean Canvas", "Google Slides", "Notion", "Figma", "GitHub", "Stripe"],
+  paid_traffic: ["Meta Business Suite", "Google Ads API", "TikTok Ads Manager", "GA4", "GTM", "Hotjar"],
 };
 
 // Simulated social proof data
@@ -170,6 +176,7 @@ const agentSocialProof: Record<string, { companies: number; rating: number; savi
   concierge: { companies: 167, rating: 4.8, savings: "R$ 12k" },
   ceo: { companies: 78, rating: 4.9, savings: "R$ 50k" },
   startup_creator: { companies: 145, rating: 4.7, savings: "R$ 15k" },
+  paid_traffic: { companies: 312, rating: 4.9, savings: "R$ 28k" },
 };
 
 // Capability badges per agent
@@ -201,6 +208,7 @@ const agentCapabilities: Record<string, string[]> = {
   concierge: ["📅 Agenda", "📧 E-mail", "⚡ +4h/dia"],
   ceo: ["👑 Strategy", "📊 Scenarios", "🎯 Decisions"],
   startup_creator: ["🚀 MVP", "📊 Validation", "💡 Pitch Deck"],
+  paid_traffic: ["🎯 Meta Ads", "📊 ROAS", "🔥 Criativos"],
 };
 
 const tierColors: Record<string, string> = {
