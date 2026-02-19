@@ -30,7 +30,9 @@ const agentKeys = [
   "customer_success", "data_analytics", "legal", "ecommerce",
   "influencer", "marketing_automation", "creative_design", "video_production",
   "seo_growth", "project_management", "supply_chain", "training",
-  "concierge", "ceo", "startup_creator", "paid_traffic"
+  "concierge", "ceo", "startup_creator", "paid_traffic",
+  "influencer_liveshop", "podcast_manager", "affiliate_manager", "community_mgr",
+  "whatsapp_commerce", "ai_cfo", "scheduler", "reputation", "proposal_gen"
 ] as const;
 
 // Featured agents for the hero carousel
@@ -47,6 +49,15 @@ const agentSlugs: Record<string, string> = {
   supply_chain: "supply_chain", training: "training",
   concierge: "concierge", ceo: "ceo", startup_creator: "startup_creator",
   paid_traffic: "paid-traffic-manager",
+  influencer_liveshop: "influencer-liveshop",
+  podcast_manager: "podcast-manager",
+  affiliate_manager: "affiliate-manager",
+  community_mgr: "community-manager",
+  whatsapp_commerce: "whatsapp-commerce",
+  ai_cfo: "ai-cfo",
+  scheduler: "appointment-scheduler",
+  reputation: "reputation-manager",
+  proposal_gen: "proposal-generator",
 };
 
 const agentIcons: Record<string, React.ElementType> = {
@@ -59,6 +70,15 @@ const agentIcons: Record<string, React.ElementType> = {
   supply_chain: Truck, training: GraduationCap,
   concierge: HeartHandshake, ceo: Crown, startup_creator: Rocket,
   paid_traffic: Target,
+  influencer_liveshop: Play,
+  podcast_manager: Mic,
+  affiliate_manager: TrendingUp,
+  community_mgr: Users,
+  whatsapp_commerce: ShoppingCart,
+  ai_cfo: DollarSign,
+  scheduler: Calendar,
+  reputation: Award,
+  proposal_gen: FileText,
 };
 
 const agentTiers: Record<string, string> = {
@@ -71,6 +91,15 @@ const agentTiers: Record<string, string> = {
   supply_chain: "advanced", training: "intermediate",
   concierge: "advanced", ceo: "enterprise", startup_creator: "advanced",
   paid_traffic: "advanced",
+  influencer_liveshop: "advanced",
+  podcast_manager: "advanced",
+  affiliate_manager: "advanced",
+  community_mgr: "intermediate",
+  whatsapp_commerce: "advanced",
+  ai_cfo: "enterprise",
+  scheduler: "intermediate",
+  reputation: "advanced",
+  proposal_gen: "advanced",
 };
 
 const agentPriceTiers: Record<string, PriceTier> = {
@@ -83,6 +112,15 @@ const agentPriceTiers: Record<string, PriceTier> = {
   supply_chain: "mid", training: "entry",
   concierge: "mid", ceo: "premium", startup_creator: "mid",
   paid_traffic: "mid",
+  influencer_liveshop: "mid",
+  podcast_manager: "mid",
+  affiliate_manager: "mid",
+  community_mgr: "entry",
+  whatsapp_commerce: "mid",
+  ai_cfo: "premium",
+  scheduler: "entry",
+  reputation: "mid",
+  proposal_gen: "mid",
 };
 
 const agentTags: Record<string, string[]> = {
@@ -114,6 +152,15 @@ const agentTags: Record<string, string[]> = {
   ceo: ["Estratégia", "C-Level", "Decisões", "Previsão", "Board"],
   startup_creator: ["Startup", "MVP", "Pitch Deck", "Validação", "Empreendedorismo"],
   paid_traffic: ["Meta Ads", "Google Ads", "TikTok Ads", "Landing Page", "ROAS", "CPA"],
+  influencer_liveshop: ["Live Commerce", "Influencers", "Conversão", "TikTok Shop", "Shopee Live"],
+  podcast_manager: ["Podcast", "Roteiro", "Áudio", "SEO", "Distribuição"],
+  affiliate_manager: ["Afiliados", "Funil", "Comissão", "Hotmart", "Performance"],
+  community_mgr: ["Comunidade", "Moderação", "Engajamento", "Discord", "Telegram"],
+  whatsapp_commerce: ["WhatsApp", "E-commerce", "Carrinho", "PIX", "Catálogo"],
+  ai_cfo: ["DRE", "Fluxo de Caixa", "Tributário", "Conciliação", "Valuation"],
+  scheduler: ["Agendamento", "WhatsApp", "No-show", "Clínica", "Salão"],
+  reputation: ["Reviews", "Reclame Aqui", "Google Reviews", "Crise", "NPS"],
+  proposal_gen: ["Proposta", "PDF", "Pricing", "Follow-up", "Assinatura"],
 };
 
 const agentIntegrations: Record<string, string[]> = {
@@ -145,6 +192,15 @@ const agentIntegrations: Record<string, string[]> = {
   ceo: ["ERP", "CRM", "Power BI", "Google Sheets", "Financeiro", "RH"],
   startup_creator: ["Lean Canvas", "Google Slides", "Notion", "Figma", "GitHub", "Stripe"],
   paid_traffic: ["Meta Business Suite", "Google Ads API", "TikTok Ads Manager", "GA4", "GTM", "Hotjar"],
+  influencer_liveshop: ["TikTok Shop", "Shopee Live", "Instagram Live", "OBS Studio", "Stripe"],
+  podcast_manager: ["Spotify", "Apple Podcasts", "Descript", "Riverside", "Buzzsprout"],
+  affiliate_manager: ["Hotmart", "Eduzz", "Monetizze", "ClickBank", "Impact"],
+  community_mgr: ["Discord", "Telegram", "Slack", "Circle", "Mighty Networks"],
+  whatsapp_commerce: ["WhatsApp Business API", "Stripe", "Mercado Pago", "Shopify", "Bling"],
+  ai_cfo: ["Conta Azul", "Omie", "Nibo", "Bling ERP", "Power BI"],
+  scheduler: ["Google Calendar", "Calendly", "WhatsApp API", "iClinic", "Trinks"],
+  reputation: ["Google Business", "Reclame Aqui", "Trustpilot", "Hootsuite", "Sprinklr"],
+  proposal_gen: ["DocuSign", "PandaDoc", "HubSpot", "Google Docs", "Canva"],
 };
 
 // Simulated social proof data
@@ -177,6 +233,15 @@ const agentSocialProof: Record<string, { companies: number; rating: number; savi
   ceo: { companies: 78, rating: 4.9, savings: "R$ 50k" },
   startup_creator: { companies: 145, rating: 4.7, savings: "R$ 15k" },
   paid_traffic: { companies: 312, rating: 4.9, savings: "R$ 28k" },
+  influencer_liveshop: { companies: 198, rating: 4.8, savings: "R$ 22k" },
+  podcast_manager: { companies: 134, rating: 4.7, savings: "R$ 14k" },
+  affiliate_manager: { companies: 178, rating: 4.7, savings: "R$ 18k" },
+  community_mgr: { companies: 212, rating: 4.6, savings: "R$ 10k" },
+  whatsapp_commerce: { companies: 456, rating: 4.9, savings: "R$ 25k" },
+  ai_cfo: { companies: 89, rating: 4.9, savings: "R$ 55k" },
+  scheduler: { companies: 534, rating: 4.8, savings: "R$ 8k" },
+  reputation: { companies: 267, rating: 4.8, savings: "R$ 15k" },
+  proposal_gen: { companies: 312, rating: 4.7, savings: "R$ 18k" },
 };
 
 // Capability badges per agent
@@ -209,6 +274,15 @@ const agentCapabilities: Record<string, string[]> = {
   ceo: ["👑 Strategy", "📊 Scenarios", "🎯 Decisions"],
   startup_creator: ["🚀 MVP", "📊 Validation", "💡 Pitch Deck"],
   paid_traffic: ["🎯 Meta Ads", "📊 ROAS", "🔥 Criativos"],
+  influencer_liveshop: ["🎥 Live Commerce", "📣 Influencers", "💰 Conversão"],
+  podcast_manager: ["🎙️ Roteiro", "🎧 Edição", "📈 Growth"],
+  affiliate_manager: ["💰 Afiliados", "🎯 Funis", "📊 Performance"],
+  community_mgr: ["👥 Moderação", "💬 Engajamento", "🛡️ Anti-Crise"],
+  whatsapp_commerce: ["🛒 Carrinho", "💳 PIX in-chat", "📦 Catálogo"],
+  ai_cfo: ["📊 DRE", "💰 Cash Flow", "📈 Valuation"],
+  scheduler: ["📅 Agenda", "📲 WhatsApp", "🔔 Lembretes"],
+  reputation: ["⭐ Reviews", "🛡️ Anti-Crise", "📊 Sentimento"],
+  proposal_gen: ["📄 PDF Pro", "💲 Pricing", "✍️ Assinatura"],
 };
 
 const tierColors: Record<string, string> = {
