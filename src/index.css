@@ -330,3 +330,9 @@
   outline: 2px solid hsl(0 65% 48% / 0.3);
   outline-offset: 2px;
 }
+
+/* Scan line animation for futuristic buttons */
+@keyframes scan {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(48px); }
+}

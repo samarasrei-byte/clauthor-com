@@ -690,24 +690,36 @@ const LibraryPage = () => {
                           <span className="text-xs text-muted-foreground mt-1.5 block font-medium">{t("library.per_month")}</span>
                         </div>
                       </div>
-                      <Button
-                        className={`w-full rounded-xl h-11 text-sm font-semibold gap-1.5 transition-all duration-300 ${
+                      <button
+                        className={`group/btn relative w-full rounded-xl h-12 text-sm font-bold uppercase tracking-[0.15em] overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed ${
                           tier === "enterprise"
-                            ? "glass-btn-primary text-primary-foreground"
-                            : "glass-btn text-foreground"
+                            ? "bg-primary text-primary-foreground shadow-[0_0_30px_-5px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_50px_-5px_hsl(var(--primary)/0.7)]"
+                            : "bg-foreground/[0.06] text-foreground border border-border/50 hover:border-primary/40 hover:shadow-[0_0_30px_-8px_hsl(var(--primary)/0.3)]"
                         }`}
                         disabled={isHiring}
                         onClick={() => handleHire(key)}
                       >
-                        {isHiring ? (
-                          <Loader2 className="h-4 w-4 animate-spin" />
-                        ) : (
-                          <>
-                            {t("library_page.hire_btn")}
-                            <ArrowRight className="h-4 w-4" />
-                          </>
-                        )}
-                      </Button>
+                        {/* Animated scan line */}
+                        <span className="absolute inset-0 overflow-hidden rounded-xl">
+                          <span className={`absolute top-0 left-0 w-full h-[1px] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 ${
+                            tier === "enterprise" ? "bg-white/40" : "bg-primary/50"
+                          } group-hover/btn:animate-[scan_1.5s_ease-in-out_infinite]`} />
+                        </span>
+                        {/* Shimmer effect */}
+                        <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                        {/* Content */}
+                        <span className="relative z-10 flex items-center justify-center gap-2">
+                          {isHiring ? (
+                            <Loader2 className="h-4 w-4 animate-spin" />
+                          ) : (
+                            <>
+                              <Zap className="h-4 w-4" />
+                              <span>Ativar Agente Agora</span>
+                              <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                            </>
+                          )}
+                        </span>
+                      </button>
                     </div>
                   </div>
                 </div>
