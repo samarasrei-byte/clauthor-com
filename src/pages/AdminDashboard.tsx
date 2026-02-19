@@ -11,7 +11,7 @@ import {
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
   Building, Zap, LayoutDashboard, CreditCard, Store,
-  ShieldCheck, Wallet, Rocket, Sparkles
+  ShieldCheck, Wallet, Rocket, Sparkles, Crown
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { toast } from "sonner";
@@ -20,10 +20,9 @@ import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
-import AdminAgentChat from "@/components/dashboard/AdminAgentChat";
 import AdminCommandCenter from "@/components/dashboard/AdminCommandCenter";
 import PaymentsPanel from "@/components/dashboard/PaymentsPanel";
-import CyberSecurityGroup from "@/components/dashboard/CyberSecurityGroup";
+import AdminWarRoom from "@/components/dashboard/AdminWarRoom";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -120,12 +119,8 @@ const AdminDashboard = () => {
 
   const sidebarItems = [
     { id: "overview", label: "Command Center", icon: LayoutDashboard },
+    { id: "war-room", label: "War Room", icon: Crown },
     { id: "payments", label: "Pagamentos", icon: Wallet },
-    { id: "ai-agent", label: "Agente Master", icon: Sparkles },
-    { id: "cyber-group", label: "Grupo Cyber Security", icon: Shield },
-    { id: "cyber-agent", label: "Chat CISO", icon: ShieldCheck },
-    { id: "cfo-agent", label: "CFO Agent", icon: DollarSign },
-    { id: "growth-agent", label: "Growth Agent", icon: Rocket },
     { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
     { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined },
     { id: "revenue", label: "Receita", icon: BarChart3 },
@@ -211,65 +206,9 @@ const AdminDashboard = () => {
             ))}
           </div>
 
-          {/* ═══ AI AGENTS ═══ */}
-          {activeTab === "ai-agent" && (
-            <AdminAgentChat
-              functionName="admin-agent"
-              title="Agente Operador Master"
-              subtitle="COO Digital — Análise inteligente em tempo real"
-              icon={<Sparkles className="h-5 w-5 text-primary" />}
-              greeting="Olá, CEO 👋"
-              description="Sou seu Agente Operador Master. Tenho acesso a todos os dados da plataforma em tempo real. Pergunte-me qualquer coisa sobre receita, churn, clientes, operações e estratégia."
-              suggestions={["Qual o panorama geral da plataforma?", "Existe risco de churn?", "Qual a receita e projeção de crescimento?", "Faça uma auditoria completa"]}
-              loadingText="Analisando dados da plataforma..."
-              placeholder="Pergunte sobre receita, churn, clientes, operações..."
-            />
-          )}
-
-          {activeTab === "cyber-group" && (
-            <CyberSecurityGroup />
-          )}
-
-          {activeTab === "cyber-agent" && (
-            <AdminAgentChat
-              functionName="cyber-security-agent"
-              title="Agente Cyber Security"
-              subtitle="CISO Digital — Proteção e monitoramento em tempo real"
-              icon={<ShieldCheck className="h-5 w-5 text-primary" />}
-              greeting="🛡️ CISO Digital ativo"
-              description="Monitoro a segurança da plataforma em tempo real. Detecto atividades suspeitas, tentativas de ataque, uso abusivo e picos anômalos de cadastro."
-              suggestions={["Relatório de segurança completo", "Tem atividade suspeita?", "Picos de cadastro anormais?", "Alguém está abusando dos créditos?", "Qual o nível de ameaça atual?"]}
-              loadingText="Analisando logs de segurança..."
-              placeholder="Pergunte sobre segurança, ameaças, atividades suspeitas..."
-            />
-          )}
-
-          {activeTab === "cfo-agent" && (
-            <AdminAgentChat
-              functionName="cfo-agent"
-              title="Agente CFO"
-              subtitle="Diretor Financeiro Digital — Controle de custos e receita"
-              icon={<Wallet className="h-5 w-5 text-primary" />}
-              greeting="💰 CFO Digital ativo"
-              description="Gerencio as finanças da plataforma. Analiso custos de IA, margem operacional, projeções de receita e oportunidades de otimização financeira."
-              suggestions={["DRE simplificado da plataforma", "Custo de tokens vs receita?", "Projeção financeira próximos 3 meses", "Onde posso cortar custos?", "ROI por plano de assinatura"]}
-              loadingText="Analisando dados financeiros..."
-              placeholder="Pergunte sobre finanças, custos, receita, projeções..."
-            />
-          )}
-
-          {activeTab === "growth-agent" && (
-            <AdminAgentChat
-              functionName="growth-agent"
-              title="Agente Growth"
-              subtitle="CGO Digital — Crescimento e aquisição de clientes"
-              icon={<Rocket className="h-5 w-5 text-primary" />}
-              greeting="🚀 Growth Agent ativo"
-              description="Analiso o funil de crescimento completo: waitlist, conversão, retenção e expansão. Recomendo estratégias baseadas em dados para escalar a plataforma."
-              suggestions={["Análise do funil AARRR", "Quem são candidatos a upgrade?", "Estratégia para converter waitlist", "Taxa de churn e como reduzir", "Projeção de crescimento da base"]}
-              loadingText="Analisando métricas de crescimento..."
-              placeholder="Pergunte sobre crescimento, conversão, funil, retenção..."
-            />
+          {/* ═══ WAR ROOM — ALL AGENTS UNIFIED ═══ */}
+          {activeTab === "war-room" && (
+            <AdminWarRoom />
           )}
 
           {/* ═══ COMMAND CENTER (OVERVIEW) ═══ */}
