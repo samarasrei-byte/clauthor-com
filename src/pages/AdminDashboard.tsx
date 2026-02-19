@@ -19,6 +19,7 @@ import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
+import AdminAgentChat from "@/components/dashboard/AdminAgentChat";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -115,6 +116,7 @@ const AdminDashboard = () => {
 
   const sidebarItems = [
     { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
+    { id: "ai-agent", label: "Agente Master", icon: Zap },
     { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
     { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined },
     { id: "revenue", label: "Receita", icon: DollarSign },
@@ -196,6 +198,11 @@ const AdminDashboard = () => {
               </Button>
             ))}
           </div>
+
+          {/* ═══ AI AGENT ═══ */}
+          {activeTab === "ai-agent" && (
+            <AdminAgentChat />
+          )}
 
           {/* ═══ OVERVIEW ═══ */}
           {activeTab === "overview" && (
