@@ -11,7 +11,7 @@ import {
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
   Building, Zap, LayoutDashboard, CreditCard, Store,
-  ShieldCheck, Wallet, Rocket, Sparkles, Crown
+  ShieldCheck, Wallet, Rocket, Sparkles, Crown, Settings
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { toast } from "sonner";
@@ -23,6 +23,7 @@ import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import AdminCommandCenter from "@/components/dashboard/AdminCommandCenter";
 import PaymentsPanel from "@/components/dashboard/PaymentsPanel";
 import AdminWarRoom from "@/components/dashboard/AdminWarRoom";
+import AdminAgentSettings from "@/components/dashboard/AdminAgentSettings";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -120,6 +121,7 @@ const AdminDashboard = () => {
   const sidebarItems = [
     { id: "overview", label: "Command Center", icon: LayoutDashboard },
     { id: "war-room", label: "War Room", icon: Crown },
+    { id: "agent-settings", label: "Config. Agentes", icon: Settings },
     { id: "payments", label: "Pagamentos", icon: Wallet },
     { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
     { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined },
@@ -207,9 +209,10 @@ const AdminDashboard = () => {
           </div>
 
           {/* ═══ WAR ROOM — ALL AGENTS UNIFIED ═══ */}
-          {activeTab === "war-room" && (
-            <AdminWarRoom />
-          )}
+          {activeTab === "war-room" && <AdminWarRoom />}
+
+          {/* ═══ AGENT SETTINGS — ADMIN ═══ */}
+          {activeTab === "agent-settings" && <AdminAgentSettings />}
 
           {/* ═══ COMMAND CENTER (OVERVIEW) ═══ */}
           {activeTab === "overview" && (
