@@ -21,6 +21,7 @@ import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import QuickActions from "@/components/dashboard/QuickActions";
 import AgentChat from "@/components/dashboard/AgentChat";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
+import ClientCommandCenter from "@/components/dashboard/ClientCommandCenter";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -91,8 +92,9 @@ const ClientDashboard = () => {
   const estimatedSavings = activeAgents * 7560;
 
   const sidebarItems = [
-    { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
+    { id: "overview", label: "Command Center", icon: LayoutDashboard },
     { id: "agents", label: "Meus Agentes", icon: Bot, badge: agents.length || undefined },
+    { id: "chat", label: "Assistente IA", icon: Sparkles },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
     { id: "logs", label: "Logs", icon: Activity, badge: recentLogs.length || undefined },
     { id: "billing", label: "Assinatura", icon: CreditCard },
@@ -176,161 +178,25 @@ const ClientDashboard = () => {
 
           {/* ═══ OVERVIEW ═══ */}
           {activeSection === "overview" && (
-            <div className="space-y-6">
-              {/* KPI Grid */}
-              <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
-                {kpiCards.map((kpi, i) => (
-                  <motion.div
-                    key={kpi.label}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="glass-card rounded-2xl p-5 glass-hover group"
-                  >
-                    <div className="flex items-start justify-between mb-3">
-                      <div className="w-9 h-9 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                        <kpi.icon className={`h-4.5 w-4.5 ${kpi.color}`} />
-                      </div>
-                      <MiniSparkline data={kpi.spark} color={kpi.color.includes("primary") ? "hsl(var(--primary))" : kpi.color.includes("cyan") ? "#22d3ee" : "#10b981"} />
-                    </div>
-                    <p className="font-display text-2xl font-bold">
-                      <AnimatedCounter value={kpi.value} prefix={kpi.prefix} suffix={kpi.suffix} />
-                    </p>
-                    <p className="text-xs text-muted-foreground mt-1">{kpi.label}</p>
-                  </motion.div>
-                ))}
-              </div>
+            <ClientCommandCenter
+              activeAgents={activeAgents}
+              totalExecutions={totalExecutions}
+              totalTokensUsed={totalTokensUsed}
+              usagePercentage={usagePercentage}
+              estimatedSavings={estimatedSavings}
+              credits={credits}
+              remainingCredits={remainingCredits}
+              agents={agents}
+              subscriptions={subscriptions}
+              recentLogs={recentLogs}
+              tokenUsage={tokenUsage}
+            />
+          )}
 
-              {/* Token Usage */}
-              {credits && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="glass-card rounded-2xl p-5"
-                >
-                  <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <Coins className="h-4 w-4 text-primary" />
-                      <span className="text-sm font-medium">Consumo de Tokens</span>
-                      <Badge variant="secondary" className="text-[10px]">{credits.plan_type}</Badge>
-                    </div>
-                    <span className="text-xs text-muted-foreground">
-                      {credits.used_credits.toLocaleString("pt-BR")} / {credits.total_credits.toLocaleString("pt-BR")}
-                    </span>
-                  </div>
-                  <Progress value={usagePercentage} className="h-2.5" />
-                  <div className="flex justify-between mt-2">
-                    <span className="text-xs text-muted-foreground">{remainingCredits.toLocaleString("pt-BR")} restantes</span>
-                    <span className="text-xs text-muted-foreground">
-                      Reset em {credits.credits_reset_at ? new Date(credits.credits_reset_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" }) : "—"}
-                    </span>
-                  </div>
-                  <div className="mt-3">
-                    <TokenUpgradeDialog trigger={
-                      <Button size="sm" variant="outline" className="w-full gap-1.5 border-primary/20 text-primary text-xs">
-                        <Coins className="h-3 w-3" /> Comprar mais tokens
-                      </Button>
-                    } />
-                  </div>
-                </motion.div>
-              )}
-
-              {/* Contracted + Agents + Chat */}
-              <div className="grid lg:grid-cols-5 gap-6">
-                {/* Left: Contracted + My Agents */}
-                <div className="lg:col-span-3 space-y-6">
-                  {/* Contracted Agents */}
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl overflow-hidden">
-                    <div className="p-5 border-b border-white/5 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                          <Sparkles className="h-4 w-4 text-emerald-500" />
-                        </div>
-                        <div>
-                          <h2 className="font-display font-semibold text-sm">Agentes Contratados</h2>
-                          <p className="text-[10px] text-muted-foreground">{subscriptions.length} ativo{subscriptions.length !== 1 ? "s" : ""}</p>
-                        </div>
-                      </div>
-                      <Link to="/library">
-                        <Button size="sm" variant="outline" className="gap-1 border-white/10 text-xs">Contratar</Button>
-                      </Link>
-                    </div>
-                    <div className="p-4">
-                      {subscriptions.length === 0 ? (
-                        <div className="text-center py-8">
-                          <Bot className="h-8 w-8 text-primary/40 mx-auto mb-3" />
-                          <p className="text-sm text-muted-foreground">Nenhum agente contratado</p>
-                          <Link to="/library"><Button size="sm" className="mt-3 glow text-xs">Ver Agentes</Button></Link>
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          {subscriptions.map((sub) => (
-                            <div key={sub.id} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors">
-                              <div className="flex items-center gap-3">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-sm font-medium">{sub.agent_name}</span>
-                              </div>
-                              <span className="text-sm text-muted-foreground">R$ {(sub.monthly_price / 100).toLocaleString("pt-BR")}/mês</span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-
-                  {/* My Agents */}
-                  <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card rounded-2xl overflow-hidden">
-                    <div className="p-5 border-b border-white/5 flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                          <Bot className="h-4 w-4 text-primary" />
-                        </div>
-                        <h2 className="font-display font-semibold text-sm">Meus Agentes</h2>
-                      </div>
-                      <div className="flex gap-2">
-                        <Link to="/agents"><Button variant="ghost" size="sm" className="text-xs">Ver todos <ArrowRight className="h-3 w-3 ml-1" /></Button></Link>
-                        <Link to="/create-agent"><Button size="sm" className="gap-1 text-xs"><Plus className="h-3 w-3" /> Novo</Button></Link>
-                      </div>
-                    </div>
-                    <div className="p-4">
-                      {agents.length === 0 ? (
-                        <div className="text-center py-8">
-                          <Sparkles className="h-8 w-8 text-primary/40 mx-auto mb-3" />
-                          <p className="text-sm font-medium">Crie seu primeiro agente</p>
-                          <p className="text-xs text-muted-foreground mt-1">Explore a biblioteca e ative um funcionário de IA</p>
-                          <Link to="/library"><Button className="mt-3 glow text-xs">Explorar Templates</Button></Link>
-                        </div>
-                      ) : (
-                        <div className="space-y-2">
-                          {agents.slice(0, 5).map((agent) => (
-                            <div key={agent.id} className="flex items-center justify-between p-3 rounded-xl bg-white/[0.02] hover:bg-white/[0.04] transition-colors group cursor-pointer" onClick={() => agent.status === "active" && setSelectedAgent({ id: agent.id, name: agent.name })}>
-                              <div className="flex items-center gap-3">
-                                <span className={`w-2 h-2 rounded-full ${agent.status === "active" ? "bg-emerald-500 animate-pulse" : "bg-muted"}`} />
-                                <div>
-                                  <p className="text-sm font-medium">{agent.name}</p>
-                                  <div className="flex gap-1.5 mt-1">
-                                    <Badge variant="secondary" className={`text-[9px] ${tierColors[agent.tier] || ""}`}>{agent.tier}</Badge>
-                                    <Badge variant="secondary" className={`text-[9px] ${agent.status === "active" ? "bg-emerald-500/20 text-emerald-500" : "bg-muted text-muted-foreground"}`}>{agent.status}</Badge>
-                                  </div>
-                                </div>
-                              </div>
-                              <div className="text-right">
-                                <p className="text-sm font-medium">R$ {(agent.monthly_price / 100).toLocaleString("pt-BR")}<span className="text-[10px] text-muted-foreground">/mês</span></p>
-                                <p className="text-[10px] text-muted-foreground">{agent.total_executions} exec</p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Right: Chat */}
-                <div className="lg:col-span-2">
-                  <AgentChat agentId={selectedAgent?.id} agentName={selectedAgent?.name || "Assistente IA"} />
-                </div>
-              </div>
+          {/* ═══ CHAT ═══ */}
+          {activeSection === "chat" && (
+            <div className="h-[calc(100vh-14rem)]">
+              <AgentChat agentId={selectedAgent?.id} agentName={selectedAgent?.name || "Assistente IA"} />
             </div>
           )}
 

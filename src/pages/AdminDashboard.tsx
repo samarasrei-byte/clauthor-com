@@ -23,6 +23,7 @@ import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import AdminAgentChat from "@/components/dashboard/AdminAgentChat";
 import AdminCommandCenter from "@/components/dashboard/AdminCommandCenter";
 import PaymentsPanel from "@/components/dashboard/PaymentsPanel";
+import CyberSecurityGroup from "@/components/dashboard/CyberSecurityGroup";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -121,7 +122,8 @@ const AdminDashboard = () => {
     { id: "overview", label: "Command Center", icon: LayoutDashboard },
     { id: "payments", label: "Pagamentos", icon: Wallet },
     { id: "ai-agent", label: "Agente Master", icon: Sparkles },
-    { id: "cyber-agent", label: "Cyber Security", icon: ShieldCheck },
+    { id: "cyber-group", label: "Grupo Cyber Security", icon: Shield },
+    { id: "cyber-agent", label: "Chat CISO", icon: ShieldCheck },
     { id: "cfo-agent", label: "CFO Agent", icon: DollarSign },
     { id: "growth-agent", label: "Growth Agent", icon: Rocket },
     { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
@@ -222,6 +224,10 @@ const AdminDashboard = () => {
               loadingText="Analisando dados da plataforma..."
               placeholder="Pergunte sobre receita, churn, clientes, operações..."
             />
+          )}
+
+          {activeTab === "cyber-group" && (
+            <CyberSecurityGroup />
           )}
 
           {activeTab === "cyber-agent" && (
