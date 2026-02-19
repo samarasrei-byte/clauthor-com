@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Send, Loader2, Sparkles, RotateCcw } from "lucide-react";
+import { Bot, Send, Loader2, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
@@ -9,15 +9,29 @@ import { toast } from "sonner";
 
 type Message = { role: "user" | "assistant"; content: string };
 
-const SUGGESTIONS = [
-  "Qual é o panorama geral da plataforma hoje?",
-  "Existe risco de churn? Quais usuários estão em risco?",
-  "Qual a receita atual e projeção de crescimento?",
-  "Quantos clientes entraram essa semana? O que recomendar?",
-  "Faça uma auditoria completa da operação",
-];
+interface AdminAgentChatProps {
+  functionName: string;
+  title: string;
+  subtitle: string;
+  icon: React.ReactNode;
+  greeting: string;
+  description: string;
+  suggestions: string[];
+  loadingText?: string;
+  placeholder?: string;
+}
 
-const AdminAgentChat = () => {
+const AdminAgentChat = ({
+  functionName,
+  title,
+  subtitle,
+  icon,
+  greeting,
+  description,
+  suggestions,
+  loadingText = "Analisando dados...",
+  placeholder = "Digite sua pergunta...",
+}: AdminAgentChatProps) => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -47,7 +61,7 @@ const AdminAgentChat = () => {
       }
 
       const resp = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/admin-agent`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/${functionName}`,
         {
           method: "POST",
           headers: {
@@ -107,8 +121,8 @@ const AdminAgentChat = () => {
         }
       }
     } catch (err) {
-      console.error("Admin agent error:", err);
-      toast.error("Erro ao comunicar com o Agente Operador.");
+      console.error(`${functionName} error:`, err);
+      toast.error("Erro ao comunicar com o agente.");
     } finally {
       setIsLoading(false);
     }
@@ -127,11 +141,11 @@ const AdminAgentChat = () => {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-            <Sparkles className="h-5 w-5 text-primary" />
+            {icon}
           </div>
           <div>
-            <h2 className="font-display font-bold text-lg">Agente Operador Master</h2>
-            <p className="text-xs text-muted-foreground">COO Digital — Análise inteligente em tempo real</p>
+            <h2 className="font-display font-bold text-lg">{title}</h2>
+            <p className="text-xs text-muted-foreground">{subtitle}</p>
           </div>
         </div>
         {messages.length > 0 && (
@@ -148,12 +162,10 @@ const AdminAgentChat = () => {
             <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
               <Bot className="h-8 w-8 text-primary" />
             </div>
-            <h3 className="font-display text-xl font-bold mb-2">Olá, CEO 👋</h3>
-            <p className="text-sm text-muted-foreground mb-6 max-w-md">
-              Sou seu Agente Operador Master. Tenho acesso a todos os dados da plataforma em tempo real. Pergunte-me qualquer coisa sobre receita, churn, clientes, operações e estratégia.
-            </p>
+            <h3 className="font-display text-xl font-bold mb-2">{greeting}</h3>
+            <p className="text-sm text-muted-foreground mb-6 max-w-md">{description}</p>
             <div className="flex flex-wrap gap-2 justify-center max-w-lg">
-              {SUGGESTIONS.map((s) => (
+              {suggestions.map((s) => (
                 <button
                   key={s}
                   onClick={() => sendMessage(s)}
@@ -197,7 +209,7 @@ const AdminAgentChat = () => {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
             <div className="bg-accent/40 border border-white/[0.06] rounded-2xl px-4 py-3 flex items-center gap-2">
               <Loader2 className="h-4 w-4 animate-spin text-primary" />
-              <span className="text-xs text-muted-foreground">Analisando dados da plataforma...</span>
+              <span className="text-xs text-muted-foreground">{loadingText}</span>
             </div>
           </motion.div>
         )}
@@ -209,7 +221,7 @@ const AdminAgentChat = () => {
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Pergunte sobre receita, churn, clientes, operações..."
+          placeholder={placeholder}
           className="min-h-[48px] max-h-32 resize-none bg-accent/30 border-white/[0.08] rounded-xl"
           disabled={isLoading}
         />

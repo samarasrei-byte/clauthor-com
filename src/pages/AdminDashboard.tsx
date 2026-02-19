@@ -10,7 +10,8 @@ import {
   Users, Bot, DollarSign, TrendingUp, ShoppingBag,
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
-  Building, Zap, LayoutDashboard, CreditCard, Store
+  Building, Zap, LayoutDashboard, CreditCard, Store,
+  ShieldCheck, Wallet, Rocket, Sparkles
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { toast } from "sonner";
@@ -116,7 +117,10 @@ const AdminDashboard = () => {
 
   const sidebarItems = [
     { id: "overview", label: "Visão Geral", icon: LayoutDashboard },
-    { id: "ai-agent", label: "Agente Master", icon: Zap },
+    { id: "ai-agent", label: "Agente Master", icon: Sparkles },
+    { id: "cyber-agent", label: "Cyber Security", icon: ShieldCheck },
+    { id: "cfo-agent", label: "CFO Agent", icon: Wallet },
+    { id: "growth-agent", label: "Growth Agent", icon: Rocket },
     { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
     { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined },
     { id: "revenue", label: "Receita", icon: DollarSign },
@@ -199,9 +203,61 @@ const AdminDashboard = () => {
             ))}
           </div>
 
-          {/* ═══ AI AGENT ═══ */}
+          {/* ═══ AI AGENTS ═══ */}
           {activeTab === "ai-agent" && (
-            <AdminAgentChat />
+            <AdminAgentChat
+              functionName="admin-agent"
+              title="Agente Operador Master"
+              subtitle="COO Digital — Análise inteligente em tempo real"
+              icon={<Sparkles className="h-5 w-5 text-primary" />}
+              greeting="Olá, CEO 👋"
+              description="Sou seu Agente Operador Master. Tenho acesso a todos os dados da plataforma em tempo real. Pergunte-me qualquer coisa sobre receita, churn, clientes, operações e estratégia."
+              suggestions={["Qual o panorama geral da plataforma?", "Existe risco de churn?", "Qual a receita e projeção de crescimento?", "Faça uma auditoria completa"]}
+              loadingText="Analisando dados da plataforma..."
+              placeholder="Pergunte sobre receita, churn, clientes, operações..."
+            />
+          )}
+
+          {activeTab === "cyber-agent" && (
+            <AdminAgentChat
+              functionName="cyber-security-agent"
+              title="Agente Cyber Security"
+              subtitle="CISO Digital — Proteção e monitoramento em tempo real"
+              icon={<ShieldCheck className="h-5 w-5 text-primary" />}
+              greeting="🛡️ CISO Digital ativo"
+              description="Monitoro a segurança da plataforma em tempo real. Detecto atividades suspeitas, tentativas de ataque, uso abusivo e picos anômalos de cadastro."
+              suggestions={["Relatório de segurança completo", "Tem atividade suspeita?", "Picos de cadastro anormais?", "Alguém está abusando dos créditos?", "Qual o nível de ameaça atual?"]}
+              loadingText="Analisando logs de segurança..."
+              placeholder="Pergunte sobre segurança, ameaças, atividades suspeitas..."
+            />
+          )}
+
+          {activeTab === "cfo-agent" && (
+            <AdminAgentChat
+              functionName="cfo-agent"
+              title="Agente CFO"
+              subtitle="Diretor Financeiro Digital — Controle de custos e receita"
+              icon={<Wallet className="h-5 w-5 text-primary" />}
+              greeting="💰 CFO Digital ativo"
+              description="Gerencio as finanças da plataforma. Analiso custos de IA, margem operacional, projeções de receita e oportunidades de otimização financeira."
+              suggestions={["DRE simplificado da plataforma", "Custo de tokens vs receita?", "Projeção financeira próximos 3 meses", "Onde posso cortar custos?", "ROI por plano de assinatura"]}
+              loadingText="Analisando dados financeiros..."
+              placeholder="Pergunte sobre finanças, custos, receita, projeções..."
+            />
+          )}
+
+          {activeTab === "growth-agent" && (
+            <AdminAgentChat
+              functionName="growth-agent"
+              title="Agente Growth"
+              subtitle="CGO Digital — Crescimento e aquisição de clientes"
+              icon={<Rocket className="h-5 w-5 text-primary" />}
+              greeting="🚀 Growth Agent ativo"
+              description="Analiso o funil de crescimento completo: waitlist, conversão, retenção e expansão. Recomendo estratégias baseadas em dados para escalar a plataforma."
+              suggestions={["Análise do funil AARRR", "Quem são candidatos a upgrade?", "Estratégia para converter waitlist", "Taxa de churn e como reduzir", "Projeção de crescimento da base"]}
+              loadingText="Analisando métricas de crescimento..."
+              placeholder="Pergunte sobre crescimento, conversão, funil, retenção..."
+            />
           )}
 
           {/* ═══ OVERVIEW ═══ */}
