@@ -179,7 +179,11 @@
       "startup_creator_title": "Startup Creator Agent — From Idea to Product-Market Fit",
       "startup_creator_desc": "AI co-founder that validates ideas, creates business plans, pitch decks and MVP blueprints. Turn your vision into a successful startup in 72h.",
       "startup_creator_highlight": "🚀 Idea → MVP in 72h",
-      "startup_creator_replaces": "1 co-founder + 1 consultant"
+      "startup_creator_replaces": "1 co-founder + 1 consultant",
+      "paid_traffic_title": "Paid Traffic Manager AI — High-Performance Paid Ads",
+      "paid_traffic_desc": "AI-powered paid traffic manager that creates campaigns, tests creatives with scientific methodology, optimizes ROAS and generates high-converting landing pages.",
+      "paid_traffic_highlight": "🎯 5x+ ROAS Guaranteed",
+      "paid_traffic_replaces": "1 senior traffic manager"
     }
   },
   "home": {
