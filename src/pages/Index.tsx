@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
-import { Link } from "react-router-dom";
+import SmartAgentFinder from "@/components/library/SmartAgentFinder";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -9,9 +10,10 @@ import {
   Shield, Clock, BarChart3, Sparkles,
   Code, Users, Mail, Briefcase, Search, TrendingUp,
   Play, ChevronRight, Cpu, Globe, Lock,
-  Target, Layers, Eye, CheckCircle2, XCircle, Network
+  Target, Layers, Eye, CheckCircle2, XCircle, Network,
+  Headphones, Bot, PenTool, ShoppingCart, Megaphone, LineChart
 } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import prometheusLogo from "@/assets/prometheus-logo.png";
 
@@ -75,6 +77,8 @@ const FuturisticBackground = () => (
 const HomePage = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [hiringSlug, setHiringSlug] = useState<string | null>(null);
   
   const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroOpacity = useTransform(heroProgress, [0, 0.5], [1, 0]);
@@ -83,6 +87,29 @@ const HomePage = () => {
   const agentKeys = ["customer_service", "billing", "developer", "sdr", "hr", "security"];
   const agentHot = [true, true, true, true, false, false];
   const agentPrices = ["R$ 1.899", "R$ 1.979", "R$ 2.447", "R$ 2.297", "R$ 2.097", "R$ 2.399"];
+
+  // Agent metadata for AI Concierge on homepage
+  const finderIcons: Record<string, React.ElementType> = {
+    customer_service: Headphones, sales: DollarSign, billing: Receipt,
+    developer: Code, sdr: Megaphone, hr: Users, security: Shield,
+    omnichannel: MessageSquare, content: PenTool, social_media: Globe,
+    ecommerce: ShoppingCart, traffic_manager: LineChart, legal: Briefcase,
+  };
+
+  const finderMeta = useMemo(() => {
+    const keys = Object.keys(finderIcons);
+    return Object.fromEntries(keys.map(k => [k, {
+      icon: finderIcons[k],
+      tier: "advanced" as string,
+      socialProof: { companies: 150, rating: 4.9, savings: "R$ 8.500" },
+      capabilities: [],
+      slug: k.replace(/_/g, "-"),
+    }]));
+  }, []);
+
+  const handleFinderHire = (key: string) => {
+    navigate("/library");
+  };
 
   const featureData = [
     { icon: Zap, key: "autonomous", stat: "100%" },
@@ -175,6 +202,25 @@ const HomePage = () => {
             <div className="w-1 h-2.5 bg-primary/50 rounded-full" />
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* AI CONCIERGE — Find Your Ideal Agent */}
+      <section className="py-24 px-4 relative">
+        <div className="max-w-4xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="glass-card rounded-2xl p-8 md:p-12 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
+              <div className="relative z-10">
+                <SmartAgentFinder
+                  agentMeta={finderMeta}
+                  onHire={handleFinderHire}
+                  onPreview={() => {}}
+                  hiringSlug={hiringSlug}
+                />
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* AI SQUAD CONSULTANT */}
