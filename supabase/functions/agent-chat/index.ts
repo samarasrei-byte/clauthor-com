@@ -216,7 +216,224 @@ const AGENT_TOOLS = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "delegate_to_agent",
+      description: "Delega uma tarefa para OUTRO agente especializado do mesmo tenant. Use quando a tarefa é melhor executada por um agente com expertise diferente. Exemplos: delegar análise financeira ao CFO Agent, prospecção ao Sales Agent, segurança ao Cyber Agent.",
+      parameters: {
+        type: "object",
+        properties: {
+          target_agent_name: { type: "string", description: "Nome do agente alvo (ex: 'CFO AI', 'Sales Agent', 'Growth Agent')" },
+          task_description: { type: "string", description: "Descrição clara da tarefa a ser delegada" },
+          context: { type: "string", description: "Contexto relevante para o agente alvo executar a tarefa" },
+          priority: { type: "string", enum: ["low", "normal", "high", "urgent"], description: "Prioridade da delegação" },
+          expect_result: { type: "boolean", description: "Se true, aguarda resultado do agente alvo" },
+        },
+        required: ["target_agent_name", "task_description"],
+        additionalProperties: false,
+      },
+    },
+  },
 ];
+
+// === AGENT-TO-AGENT DELEGATION ===
+async function delegateToAgent(
+  args: any,
+  adminClient: any,
+  userId: string,
+  tenantId: string,
+  sourceAgentId: string,
+  LOVABLE_API_KEY: string,
+  depth: number = 0
+): Promise<{ success: boolean; result: any }> {
+  const MAX_DEPTH = 3; // Prevent infinite delegation loops
+  if (depth >= MAX_DEPTH) {
+    return { success: false, result: { error: "Limite máximo de delegação atingido (3 níveis). Evitar loops infinitos." } };
+  }
+
+  const timestamp = new Date().toISOString();
+
+  // Find the target agent by name (fuzzy match within same user's agents)
+  const { data: agents, error: agentsError } = await adminClient
+    .from("agents")
+    .select("id, name, instructions, objective, status")
+    .eq("user_id", userId)
+    .eq("status", "active");
+
+  if (agentsError || !agents || agents.length === 0) {
+    return { success: false, result: { error: "Nenhum agente ativo encontrado para delegação." } };
+  }
+
+  // Fuzzy match agent name
+  const targetName = args.target_agent_name.toLowerCase();
+  const targetAgent = agents.find((a: any) => 
+    a.name.toLowerCase().includes(targetName) || targetName.includes(a.name.toLowerCase())
+  ) || agents.find((a: any) => {
+    const words = targetName.split(/\s+/);
+    return words.some((w: string) => a.name.toLowerCase().includes(w) && w.length > 2);
+  });
+
+  if (!targetAgent) {
+    const availableNames = agents.map((a: any) => a.name).join(", ");
+    return { 
+      success: false, 
+      result: { 
+        error: `Agente "${args.target_agent_name}" não encontrado. Agentes disponíveis: ${availableNames}` 
+      } 
+    };
+  }
+
+  if (targetAgent.id === sourceAgentId) {
+    return { success: false, result: { error: "Um agente não pode delegar para si mesmo." } };
+  }
+
+  console.log(`[A2A] Delegating from ${sourceAgentId} to ${targetAgent.name} (${targetAgent.id}) at depth ${depth}`);
+
+  // Log the delegation
+  try {
+    await adminClient.from("execution_logs").insert({
+      user_id: userId,
+      agent_id: sourceAgentId,
+      action: `delegation:${targetAgent.name}`,
+      status: "success",
+      details: { 
+        type: "agent_to_agent",
+        source_agent: sourceAgentId,
+        target_agent: targetAgent.id,
+        target_name: targetAgent.name,
+        task: args.task_description,
+        priority: args.priority || "normal",
+        depth,
+        timestamp 
+      },
+      execution_time_ms: 0,
+    });
+  } catch {}
+
+  // Build the delegated agent's system prompt
+  const delegatedPrompt = `${targetAgent.instructions || "Você é um assistente profissional."}
+
+## CONTEXTO DE DELEGAÇÃO:
+Você recebeu uma tarefa delegada por outro agente do mesmo workspace.
+- Tarefa: ${args.task_description}
+- Contexto adicional: ${args.context || "Nenhum"}
+- Prioridade: ${args.priority || "normal"}
+
+Execute a tarefa diretamente e retorne o resultado de forma clara e estruturada.
+Responda em português do Brasil.`;
+
+  // Call AI for the delegated agent
+  const delegatedResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${LOVABLE_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: delegatedPrompt },
+        { role: "user", content: args.task_description },
+      ],
+      tools: AGENT_TOOLS,
+      max_tokens: 1024,
+      stream: false,
+    }),
+  });
+
+  if (!delegatedResponse.ok) {
+    return { success: false, result: { error: `Falha ao executar agente delegado: HTTP ${delegatedResponse.status}` } };
+  }
+
+  const delegatedData = await delegatedResponse.json();
+  const delegatedChoice = delegatedData.choices?.[0];
+  let delegatedMessage = delegatedChoice?.message?.content || "";
+  const delegatedToolCalls = delegatedChoice?.message?.tool_calls;
+  const subToolResults: any[] = [];
+
+  // If the delegated agent also wants to use tools, execute them
+  if (delegatedToolCalls && delegatedToolCalls.length > 0) {
+    for (const tc of delegatedToolCalls) {
+      const fnName = tc.function?.name;
+      let fnArgs: any = {};
+      try { fnArgs = JSON.parse(tc.function?.arguments || "{}"); } catch { fnArgs = {}; }
+
+      // Recursive delegation check
+      if (fnName === "delegate_to_agent") {
+        const subResult = await delegateToAgent(fnArgs, adminClient, userId, tenantId, targetAgent.id, LOVABLE_API_KEY, depth + 1);
+        subToolResults.push({ tool_call_id: tc.id, tool_name: fnName, args: fnArgs, ...subResult });
+      } else {
+        const result = await executeTool(fnName, fnArgs, adminClient, userId, tenantId, targetAgent.id);
+        subToolResults.push({ tool_call_id: tc.id, tool_name: fnName, args: fnArgs, ...result });
+      }
+    }
+
+    // Feed results back to get final response
+    const toolMessages = delegatedToolCalls.map((tc: any, i: number) => ({
+      role: "tool",
+      tool_call_id: tc.id,
+      content: JSON.stringify(subToolResults[i]?.result || {}),
+    }));
+
+    const finalResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        model: "google/gemini-3-flash-preview",
+        messages: [
+          { role: "system", content: delegatedPrompt },
+          { role: "user", content: args.task_description },
+          delegatedChoice.message,
+          ...toolMessages,
+        ],
+        max_tokens: 1024,
+        stream: false,
+      }),
+    });
+
+    if (finalResponse.ok) {
+      const finalData = await finalResponse.json();
+      delegatedMessage = finalData.choices?.[0]?.message?.content || delegatedMessage;
+    }
+  }
+
+  // Save delegation memory
+  try {
+    await adminClient.from("agent_memory").insert({
+      tenant_id: tenantId,
+      user_id: userId,
+      agent_id: targetAgent.id,
+      memory_type: "delegation",
+      content: {
+        source_agent: sourceAgentId,
+        task: args.task_description,
+        response: delegatedMessage?.slice(0, 500),
+        sub_tools: subToolResults.map((t: any) => t.tool_name),
+        timestamp,
+      },
+    });
+  } catch {}
+
+  return {
+    success: true,
+    result: {
+      delegation_id: `DEL-${Math.floor(Math.random() * 9000) + 1000}`,
+      source_agent: sourceAgentId,
+      target_agent: targetAgent.name,
+      target_agent_id: targetAgent.id,
+      task: args.task_description,
+      priority: args.priority || "normal",
+      response: delegatedMessage,
+      sub_actions: subToolResults.length > 0 ? subToolResults : undefined,
+      depth,
+      completed_at: new Date().toISOString(),
+    },
+  };
+}
 
 // === TOOL EXECUTION ===
 async function executeTool(
@@ -435,6 +652,7 @@ Você tem acesso a ferramentas poderosas para EXECUTAR ações reais. **USE-AS P
 - **search_leads**: Pesquisar e qualificar leads/prospects
 - **schedule_meeting**: Agendar reuniões, calls, compromissos
 - **analyze_data**: Analisar dados, métricas, tendências
+- **delegate_to_agent**: 🔗 DELEGAÇÃO AGENT-TO-AGENT — Delegar tarefas para outro agente especializado do mesmo workspace
 
 **REGRAS DE TOOL USE:**
 1. Quando o usuário pedir uma AÇÃO (enviar, criar, agendar, gerar, buscar), USE a ferramenta correspondente
@@ -442,7 +660,15 @@ Você tem acesso a ferramentas poderosas para EXECUTAR ações reais. **USE-AS P
 3. Você pode usar MÚLTIPLAS ferramentas em sequência se necessário
 4. NUNCA simule uma ação — sempre use a ferramenta real
 5. Se não tem certeza dos parâmetros, pergunte ao usuário antes de executar
+
+**REGRAS DE DELEGAÇÃO (Agent-to-Agent):**
+1. Se a tarefa requer expertise de outro agente, use delegate_to_agent
+2. Exemplos: "preciso de análise financeira" → delegue ao CFO Agent; "buscar leads" → delegue ao Sales Agent
+3. Ao receber o resultado da delegação, sintetize e apresente ao usuário
+4. Máximo de 3 níveis de delegação para evitar loops
+5. Sempre informe ao usuário QUEM executou cada parte do workflow
 `;
+
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -607,8 +833,15 @@ Instruções: ${agent.instructions}`;
         let fnArgs: any = {};
         try { fnArgs = JSON.parse(toolCall.function?.arguments || "{}"); } catch { fnArgs = {}; }
         console.log(`Executing tool: ${fnName}`, fnArgs);
-        const result = await executeTool(fnName, fnArgs, adminClient, userId, tenantId, agentId || "general");
-        toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...result });
+        
+        // Route delegate_to_agent to the delegation handler
+        if (fnName === "delegate_to_agent") {
+          const result = await delegateToAgent(fnArgs, adminClient, userId, tenantId, agentId || "general", LOVABLE_API_KEY, 0);
+          toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...result });
+        } else {
+          const result = await executeTool(fnName, fnArgs, adminClient, userId, tenantId, agentId || "general");
+          toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...result });
+        }
       }
 
       const toolMessages = toolCalls.map((tc: any, i: number) => ({

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Loader2, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap, Square, Volume2, VolumeX } from "lucide-react";
+import { Send, Bot, User, Loader2, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap, Square, Volume2, VolumeX, ArrowRightLeft, GitBranch } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -19,12 +19,98 @@ const TOOL_META: Record<string, { icon: any; label: string; color: string }> = {
   search_leads: { icon: Search, label: "Leads Encontrados", color: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
   schedule_meeting: { icon: Calendar, label: "Reunião Agendada", color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20" },
   analyze_data: { icon: TrendingUp, label: "Análise Concluída", color: "text-rose-400 bg-rose-500/10 border-rose-500/20" },
+  delegate_to_agent: { icon: GitBranch, label: "Delegação A2A", color: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20" },
 };
 
 function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
   const meta = TOOL_META[toolResult.tool_name] || { icon: Zap, label: toolResult.tool_name, color: "text-muted-foreground bg-white/5 border-white/10" };
   const Icon = meta.icon;
   const result = toolResult.result;
+
+  // Special rendering for Agent-to-Agent delegation
+  if (toolResult.tool_name === "delegate_to_agent") {
+    return (
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="rounded-xl border p-3 text-indigo-400 bg-indigo-500/10 border-indigo-500/20 mt-2"
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <GitBranch className="h-4 w-4" />
+          <span className="text-xs font-semibold uppercase tracking-wide">Delegação Agent-to-Agent</span>
+          {toolResult.success && (
+            <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-emerald-500/20 text-emerald-400 border-0">
+              ✓ Completa
+            </Badge>
+          )}
+        </div>
+        
+        {/* Delegation chain visualization */}
+        <div className="bg-black/20 rounded-lg p-2.5 mb-2">
+          <div className="flex items-center gap-2 text-[11px]">
+            <div className="flex items-center gap-1">
+              <Bot className="h-3 w-3 text-primary" />
+              <span className="font-medium">Agente Origem</span>
+            </div>
+            <ArrowRightLeft className="h-3 w-3 text-indigo-400 animate-pulse" />
+            <div className="flex items-center gap-1">
+              <Bot className="h-3 w-3 text-indigo-400" />
+              <span className="font-medium text-indigo-300">{result.target_agent}</span>
+            </div>
+          </div>
+          {result.delegation_id && (
+            <span className="text-[9px] opacity-50 mt-1 block">ID: {result.delegation_id}</span>
+          )}
+        </div>
+
+        {/* Task */}
+        <div className="text-[11px] mb-2">
+          <span className="opacity-60">Tarefa:</span>{" "}
+          <span className="font-medium">{result.task}</span>
+        </div>
+
+        {/* Response from delegated agent */}
+        {result.response && (
+          <div className="bg-black/30 rounded-lg p-2.5 text-[11px] border border-indigo-500/10">
+            <div className="flex items-center gap-1 mb-1.5 text-indigo-300">
+              <Bot className="h-3 w-3" />
+              <span className="font-semibold text-[10px] uppercase">Resposta de {result.target_agent}</span>
+            </div>
+            <div className="prose prose-sm prose-invert max-w-none text-[11px] leading-relaxed opacity-90">
+              <ReactMarkdown>{result.response.length > 600 ? result.response.slice(0, 600) + "..." : result.response}</ReactMarkdown>
+            </div>
+          </div>
+        )}
+
+        {/* Sub-actions executed by delegated agent */}
+        {result.sub_actions && result.sub_actions.length > 0 && (
+          <div className="mt-2 space-y-1">
+            <span className="text-[10px] uppercase font-semibold opacity-60">Sub-ações executadas:</span>
+            {result.sub_actions.map((sub: any, i: number) => {
+              const subMeta = TOOL_META[sub.tool_name] || { icon: Zap, label: sub.tool_name };
+              const SubIcon = subMeta.icon;
+              return (
+                <div key={i} className="flex items-center gap-2 bg-black/20 rounded-lg px-2 py-1 text-[10px]">
+                  <SubIcon className="h-3 w-3" />
+                  <span>{subMeta.label}</span>
+                  {sub.success && <span className="text-emerald-400">✓</span>}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {result.priority && result.priority !== "normal" && (
+          <Badge variant="secondary" className={`text-[9px] px-1.5 py-0 mt-2 border-0 ${
+            result.priority === "urgent" ? "bg-red-500/20 text-red-400" : 
+            result.priority === "high" ? "bg-amber-500/20 text-amber-400" : "bg-white/5"
+          }`}>
+            Prioridade: {result.priority}
+          </Badge>
+        )}
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div
