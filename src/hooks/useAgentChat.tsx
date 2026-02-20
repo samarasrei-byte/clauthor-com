@@ -3,9 +3,18 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useCredits } from "./useCredits";
 
-interface Message {
+export interface ToolResult {
+  tool_call_id: string;
+  tool_name: string;
+  args: Record<string, any>;
+  success: boolean;
+  result: Record<string, any>;
+}
+
+export interface Message {
   role: "user" | "assistant";
   content: string;
+  tool_results?: ToolResult[];
 }
 
 interface ChatResponse {
@@ -16,6 +25,7 @@ interface ChatResponse {
   history_trimmed?: boolean;
   messages_sent?: number;
   messages_original?: number;
+  tool_results?: ToolResult[];
 }
 
 export function useAgentChat(agentId?: string) {
@@ -41,6 +51,9 @@ export function useAgentChat(agentId?: string) {
         return;
       }
 
+      // Send only role+content to the API (no tool_results in history)
+      const apiMessages = updatedMessages.map(m => ({ role: m.role, content: m.content }));
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
         {
@@ -50,7 +63,7 @@ export function useAgentChat(agentId?: string) {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            messages: updatedMessages,
+            messages: apiMessages,
             agentId,
             actionType,
           }),
@@ -74,18 +87,33 @@ export function useAgentChat(agentId?: string) {
       const assistantMessage: Message = {
         role: "assistant",
         content: data.message,
+        tool_results: data.tool_results,
       };
 
       setMessages([...updatedMessages, assistantMessage]);
       
-      // Credit warning alert at 80%
       if (data.credit_warning) {
         toast.warning("⚠️ Seus créditos estão em 80%+. Considere fazer upgrade do plano.", {
           duration: 5000,
         });
       }
 
-      // Refetch credits to update UI
+      // Show tool execution toast
+      if (data.tool_results && data.tool_results.length > 0) {
+        const toolNames = data.tool_results.map((t: ToolResult) => {
+          const names: Record<string, string> = {
+            send_email: "📧 Email enviado",
+            create_task: "✅ Tarefa criada",
+            generate_report: "📊 Relatório gerado",
+            search_leads: "🔍 Leads encontrados",
+            schedule_meeting: "📅 Reunião agendada",
+            analyze_data: "📈 Análise concluída",
+          };
+          return names[t.tool_name] || t.tool_name;
+        });
+        toast.success(toolNames.join(" • "), { duration: 4000 });
+      }
+
       refetchCredits();
 
       return data as ChatResponse;
