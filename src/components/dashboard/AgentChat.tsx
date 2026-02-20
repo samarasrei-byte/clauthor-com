@@ -1,15 +1,113 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Loader2, Sparkles, Trash2 } from "lucide-react";
+import { Send, Bot, User, Loader2, Sparkles, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { useAgentChat } from "@/hooks/useAgentChat";
+import { useAgentChat, type ToolResult, type Message } from "@/hooks/useAgentChat";
 import ReactMarkdown from "react-markdown";
 
 interface AgentChatProps {
   agentId?: string;
   agentName?: string;
+}
+
+const TOOL_META: Record<string, { icon: any; label: string; color: string }> = {
+  send_email: { icon: Mail, label: "Email Enviado", color: "text-blue-400 bg-blue-500/10 border-blue-500/20" },
+  create_task: { icon: CheckSquare, label: "Tarefa Criada", color: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" },
+  generate_report: { icon: BarChart3, label: "Relatório Gerado", color: "text-purple-400 bg-purple-500/10 border-purple-500/20" },
+  search_leads: { icon: Search, label: "Leads Encontrados", color: "text-amber-400 bg-amber-500/10 border-amber-500/20" },
+  schedule_meeting: { icon: Calendar, label: "Reunião Agendada", color: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20" },
+  analyze_data: { icon: TrendingUp, label: "Análise Concluída", color: "text-rose-400 bg-rose-500/10 border-rose-500/20" },
+};
+
+function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
+  const meta = TOOL_META[toolResult.tool_name] || { icon: Zap, label: toolResult.tool_name, color: "text-muted-foreground bg-white/5 border-white/10" };
+  const Icon = meta.icon;
+  const result = toolResult.result;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      className={`rounded-xl border p-3 ${meta.color} mt-2`}
+    >
+      <div className="flex items-center gap-2 mb-2">
+        <Icon className="h-4 w-4" />
+        <span className="text-xs font-semibold uppercase tracking-wide">{meta.label}</span>
+        {toolResult.success && (
+          <Badge variant="secondary" className="text-[10px] px-1.5 py-0 bg-emerald-500/20 text-emerald-400 border-0">
+            ✓ Executado
+          </Badge>
+        )}
+      </div>
+      <div className="space-y-1">
+        {Object.entries(result).map(([key, value]) => {
+          if (key === "sections" && Array.isArray(value)) {
+            return (
+              <div key={key} className="space-y-2 mt-2">
+                {(value as any[]).map((section: any, i: number) => (
+                  <div key={i} className="bg-black/20 rounded-lg p-2">
+                    <p className="text-xs font-semibold">{section.heading}</p>
+                    <p className="text-[11px] opacity-80">{section.content}</p>
+                    {section.metrics && (
+                      <div className="flex flex-wrap gap-2 mt-1">
+                        {section.metrics.map((m: any, j: number) => (
+                          <span key={j} className="text-[10px] bg-white/5 rounded px-1.5 py-0.5">
+                            {m.label}: <strong>{m.value}</strong>
+                            {m.trend === "up" && " ↑"}
+                            {m.trend === "down" && " ↓"}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            );
+          }
+          if (key === "leads" && Array.isArray(value)) {
+            return (
+              <div key={key} className="space-y-1 mt-1">
+                {(value as any[]).map((lead: any, i: number) => (
+                  <div key={i} className="flex items-center justify-between bg-black/20 rounded-lg px-2 py-1.5 text-[11px]">
+                    <span className="font-medium">{lead.name}</span>
+                    <div className="flex items-center gap-2">
+                      <span className="opacity-70">{lead.industry}</span>
+                      <Badge variant="secondary" className={`text-[9px] px-1 py-0 border-0 ${
+                        lead.status === "hot" ? "bg-red-500/20 text-red-400" : "bg-amber-500/20 text-amber-400"
+                      }`}>
+                        {lead.score}% • {lead.status}
+                      </Badge>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            );
+          }
+          if (key === "insights" && Array.isArray(value)) {
+            return (
+              <div key={key} className="space-y-1 mt-1">
+                {(value as any[]).map((insight: any, i: number) => (
+                  <div key={i} className="bg-black/20 rounded-lg px-2 py-1.5 text-[11px]">
+                    <span>{insight.finding}</span>
+                    <span className="ml-2 opacity-60">({insight.confidence})</span>
+                  </div>
+                ))}
+              </div>
+            );
+          }
+          if (typeof value === "object") return null;
+          return (
+            <div key={key} className="flex items-center justify-between text-[11px]">
+              <span className="opacity-60 capitalize">{key.replace(/_/g, " ")}</span>
+              <span className="font-medium truncate max-w-[60%] text-right">{String(value)}</span>
+            </div>
+          );
+        })}
+      </div>
+    </motion.div>
+  );
 }
 
 const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => {
@@ -21,14 +119,8 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
-
-  // Reset chat when agent changes
-  useEffect(() => {
-    clearMessages();
-  }, [agentId]);
+  useEffect(() => { scrollToBottom(); }, [messages]);
+  useEffect(() => { clearMessages(); }, [agentId]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -49,7 +141,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
             <h3 className="font-display font-semibold text-sm">{agentName}</h3>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs text-muted-foreground">Online</span>
+              <span className="text-xs text-muted-foreground">Online • Tool Use Ativo</span>
             </div>
           </div>
         </div>
@@ -60,8 +152,8 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
             </Button>
           )}
           <Badge variant="secondary" className="bg-primary/10 text-primary text-xs">
-            <Sparkles className="h-3 w-3 mr-1" />
-            IA Ativa
+            <Zap className="h-3 w-3 mr-1" />
+            Agente Autônomo
           </Badge>
         </div>
       </div>
@@ -71,13 +163,25 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
-              <Bot className="h-8 w-8 text-primary" />
+              <Zap className="h-8 w-8 text-primary" />
             </div>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mb-2">
               {agentId
-                ? `Converse com o ${agentName}. Ele está pronto para ajudar!`
-                : "Selecione um agente ativo para iniciar uma conversa."}
+                ? `${agentName} está pronto para AGIR!`
+                : "Selecione um agente ativo para iniciar."}
             </p>
+            {agentId && (
+              <div className="flex flex-wrap gap-1 justify-center mt-2">
+                {Object.values(TOOL_META).map((t) => {
+                  const I = t.icon;
+                  return (
+                    <span key={t.label} className="text-[10px] text-muted-foreground bg-white/5 rounded-full px-2 py-0.5 flex items-center gap-1">
+                      <I className="h-3 w-3" /> {t.label.split(" ")[0]}
+                    </span>
+                  );
+                })}
+              </div>
+            )}
           </div>
         )}
 
@@ -101,19 +205,29 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
                   <Bot className="h-4 w-4 text-muted-foreground" />
                 )}
               </div>
-              <div
-                className={`max-w-[75%] rounded-2xl px-4 py-3 ${
-                  message.role === "user"
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-white/5 text-foreground"
-                }`}
-              >
-                {message.role === "assistant" ? (
-                  <div className="text-sm prose prose-sm prose-invert max-w-none">
-                    <ReactMarkdown>{message.content}</ReactMarkdown>
+              <div className={`max-w-[80%] ${message.role === "user" ? "" : ""}`}>
+                <div
+                  className={`rounded-2xl px-4 py-3 ${
+                    message.role === "user"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-white/5 text-foreground"
+                  }`}
+                >
+                  {message.role === "assistant" ? (
+                    <div className="text-sm prose prose-sm prose-invert max-w-none">
+                      <ReactMarkdown>{message.content}</ReactMarkdown>
+                    </div>
+                  ) : (
+                    <p className="text-sm">{message.content}</p>
+                  )}
+                </div>
+                {/* Tool Results */}
+                {message.tool_results && message.tool_results.length > 0 && (
+                  <div className="space-y-2 mt-2">
+                    {message.tool_results.map((tr, i) => (
+                      <ToolResultCard key={i} toolResult={tr} />
+                    ))}
                   </div>
-                ) : (
-                  <p className="text-sm">{message.content}</p>
                 )}
               </div>
             </motion.div>
@@ -121,19 +235,14 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
         </AnimatePresence>
 
         {isLoading && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex gap-3"
-          >
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3">
             <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
               <Bot className="h-4 w-4 text-muted-foreground" />
             </div>
             <div className="bg-white/5 rounded-2xl px-4 py-3">
-              <div className="flex gap-1">
-                <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-2 h-2 rounded-full bg-muted-foreground animate-bounce" style={{ animationDelay: "300ms" }} />
+              <div className="flex items-center gap-2">
+                <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
+                <span className="text-xs text-muted-foreground">Processando ações...</span>
               </div>
             </div>
           </motion.div>
@@ -145,37 +254,22 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
       {/* AI Disclaimer */}
       <div className="px-4 pt-2">
         <p className="text-[10px] text-muted-foreground/60 text-center">
-          🤖 Assistente com IA — respostas podem conter imprecisões. Não substitui aconselhamento profissional.
+          🤖 Agente autônomo com IA — execuções são registradas. Não substitui aconselhamento profissional.
         </p>
       </div>
 
       {/* Input */}
       <div className="px-4 pb-4 pt-1 border-t border-white/5">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSend();
-          }}
-          className="flex gap-2"
-        >
+        <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="flex gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            placeholder={agentId ? "Digite sua mensagem..." : "Selecione um agente primeiro"}
+            placeholder={agentId ? "Peça uma ação: enviar email, criar tarefa, gerar relatório..." : "Selecione um agente primeiro"}
             className="flex-1 bg-white/5 border-white/10 focus:border-primary/50"
             disabled={isLoading || !agentId}
           />
-          <Button
-            type="submit"
-            size="icon"
-            disabled={!input.trim() || isLoading || !agentId}
-            className="shrink-0"
-          >
-            {isLoading ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : (
-              <Send className="h-4 w-4" />
-            )}
+          <Button type="submit" size="icon" disabled={!input.trim() || isLoading || !agentId} className="shrink-0">
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </form>
       </div>
