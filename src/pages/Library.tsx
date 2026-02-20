@@ -351,7 +351,10 @@ const LibraryPage = () => {
           user_id: user.id,
           name: template.name,
           description: template.description,
-          instructions: template.instructions,
+          // Use system_prompt (full professional prompt) as instructions, 
+          // fallback to instructions field if system_prompt is empty
+          instructions: template.system_prompt || template.instructions,
+          objective: template.description,
           tier,
           monthly_price: priceInCents,
           status: "active",
