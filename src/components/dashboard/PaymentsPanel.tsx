@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import {
   CreditCard, Wallet, Bitcoin, Globe, QrCode,
   ArrowUpRight, Shield, CheckCircle2, Clock,
-  Banknote, Coins, Lock, ExternalLink, Settings
+  Banknote, Coins, Lock, ExternalLink, Settings, Smartphone
 } from "lucide-react";
 
 interface PaymentsPanelProps {
@@ -60,6 +60,21 @@ const PaymentsPanel = ({ totalRevenue, subscriptionCount }: PaymentsPanelProps) 
       volume: "—",
       share: 0,
       features: ["Checkout global", "Multi-moeda", "Proteção ao comprador"],
+    },
+    {
+      name: "Mercado Pago",
+      description: "PIX, boleto e cartão via Mercado Pago",
+      icon: Smartphone,
+      status: "config",
+      color: "from-cyan-500/20 to-sky-500/10",
+      borderColor: "border-cyan-500/30",
+      iconBg: "bg-cyan-500/10",
+      iconColor: "text-cyan-400",
+      badge: "Configurar",
+      badgeClass: "bg-cyan-500/10 text-cyan-400",
+      volume: "—",
+      share: 0,
+      features: ["PIX & Boleto", "Parcelamento 12x", "Checkout Pro"],
     },
     {
       name: "Cartão de Crédito",
