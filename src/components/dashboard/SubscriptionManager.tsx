@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CreditCard, Calendar, Receipt, ArrowUpRight, Bitcoin, Wallet } from "lucide-react";
+import { CreditCard, Calendar, Receipt, ArrowUpRight, Bitcoin, Wallet, Globe, QrCode, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -117,20 +117,36 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
 
         {/* Payment Methods */}
         <div className="pt-4 border-t border-white/5">
-          <h3 className="text-sm font-medium mb-3">Formas de Pagamento</h3>
-          <div className="grid grid-cols-2 gap-3">
-            <Button variant="outline" className="justify-start gap-2 h-auto py-3">
-              <CreditCard className="h-4 w-4" />
+          <h3 className="text-sm font-medium mb-3">Formas de Pagamento Aceitas</h3>
+          <div className="grid grid-cols-3 gap-2">
+            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10">
+              <QrCode className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
               <div className="text-left">
-                <p className="text-xs font-medium">Cartão</p>
-                <p className="text-[10px] text-muted-foreground">Visa, Master, PIX</p>
+                <p className="text-[11px] font-medium">PIX</p>
               </div>
             </Button>
-            <Button variant="outline" className="justify-start gap-2 h-auto py-3">
-              <Bitcoin className="h-4 w-4 text-orange-500" />
+            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10">
+              <CreditCard className="h-3.5 w-3.5 text-violet-500 shrink-0" />
               <div className="text-left">
-                <p className="text-xs font-medium">Crypto</p>
-                <p className="text-[10px] text-muted-foreground">BTC, ETH, USDC</p>
+                <p className="text-[11px] font-medium">Stripe</p>
+              </div>
+            </Button>
+            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10">
+              <Globe className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+              <div className="text-left">
+                <p className="text-[11px] font-medium">PayPal</p>
+              </div>
+            </Button>
+            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10">
+              <Smartphone className="h-3.5 w-3.5 text-cyan-500 shrink-0" />
+              <div className="text-left">
+                <p className="text-[11px] font-medium">Mercado Pago</p>
+              </div>
+            </Button>
+            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10 col-span-2">
+              <Bitcoin className="h-3.5 w-3.5 text-amber-500 shrink-0" />
+              <div className="text-left">
+                <p className="text-[11px] font-medium">Cripto (BTC, ETH, USDC)</p>
               </div>
             </Button>
           </div>

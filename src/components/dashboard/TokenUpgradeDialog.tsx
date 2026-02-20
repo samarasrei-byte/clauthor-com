@@ -7,7 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCredits } from "@/hooks/useCredits";
 import {
   Coins, Zap, Crown, Rocket, ArrowRight, CheckCircle,
-  QrCode, Bitcoin, Copy, ExternalLink, Sparkles, Package
+  QrCode, Bitcoin, Copy, ExternalLink, Sparkles, Package,
+  CreditCard, Globe, Smartphone
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -100,7 +101,7 @@ const tokenPacks: TokenPack[] = [
   { id: "pack-100m", tokens: "100M", tokensNum: 100000000, price: "R$ 14.997", priceNum: 14997, savings: "50% off" },
 ];
 
-type PaymentMethod = "pix" | "crypto";
+type PaymentMethod = "pix" | "crypto" | "stripe" | "paypal" | "mercadopago";
 
 interface TokenUpgradeDialogProps {
   trigger?: React.ReactNode;
@@ -290,45 +291,100 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
               {/* Payment Methods */}
               <div>
                 <p className="text-sm font-medium mb-3">Escolha o método de pagamento:</p>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                   {/* PIX */}
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className={`rounded-xl border p-5 cursor-pointer transition-all ${
-                      paymentMethod === "pix" ? "border-primary bg-primary/5" : "border-white/10 bg-white/[0.02] hover:border-primary/30"
+                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
+                      paymentMethod === "pix" ? "border-emerald-500 bg-emerald-500/10" : "border-white/10 bg-white/[0.02] hover:border-emerald-500/30"
                     }`}
                     onClick={() => handlePayment("pix")}
                   >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                        <QrCode className="h-5 w-5 text-emerald-500" />
+                    <div className="flex items-center gap-2.5 mb-2">
+                      <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center">
+                        <QrCode className="h-4 w-4 text-emerald-500" />
                       </div>
                       <div>
-                        <p className="font-display font-bold">PIX</p>
-                        <p className="text-[10px] text-muted-foreground">Instantâneo</p>
+                        <p className="font-display font-bold text-sm">PIX</p>
+                        <p className="text-[9px] text-muted-foreground">Instantâneo • 0% taxa</p>
                       </div>
                     </div>
-                    <p className="text-xs text-muted-foreground">Pagamento instantâneo via QR Code ou chave PIX</p>
+                  </motion.div>
+
+                  {/* Stripe (Cartão) */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
+                      paymentMethod === "stripe" ? "border-violet-500 bg-violet-500/10" : "border-white/10 bg-white/[0.02] hover:border-violet-500/30"
+                    }`}
+                    onClick={() => handlePayment("stripe")}
+                  >
+                    <div className="flex items-center gap-2.5 mb-2">
+                      <div className="w-9 h-9 rounded-lg bg-violet-500/10 flex items-center justify-center">
+                        <CreditCard className="h-4 w-4 text-violet-500" />
+                      </div>
+                      <div>
+                        <p className="font-display font-bold text-sm">Cartão</p>
+                        <p className="text-[9px] text-muted-foreground">Visa, Master, Amex</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* PayPal */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
+                      paymentMethod === "paypal" ? "border-blue-500 bg-blue-500/10" : "border-white/10 bg-white/[0.02] hover:border-blue-500/30"
+                    }`}
+                    onClick={() => handlePayment("paypal")}
+                  >
+                    <div className="flex items-center gap-2.5 mb-2">
+                      <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                        <Globe className="h-4 w-4 text-blue-500" />
+                      </div>
+                      <div>
+                        <p className="font-display font-bold text-sm">PayPal</p>
+                        <p className="text-[9px] text-muted-foreground">Internacional</p>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Mercado Pago */}
+                  <motion.div
+                    whileHover={{ scale: 1.02 }}
+                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
+                      paymentMethod === "mercadopago" ? "border-cyan-500 bg-cyan-500/10" : "border-white/10 bg-white/[0.02] hover:border-cyan-500/30"
+                    }`}
+                    onClick={() => handlePayment("mercadopago")}
+                  >
+                    <div className="flex items-center gap-2.5 mb-2">
+                      <div className="w-9 h-9 rounded-lg bg-cyan-500/10 flex items-center justify-center">
+                        <Smartphone className="h-4 w-4 text-cyan-500" />
+                      </div>
+                      <div>
+                        <p className="font-display font-bold text-sm">Mercado Pago</p>
+                        <p className="text-[9px] text-muted-foreground">PIX, Boleto, Cartão</p>
+                      </div>
+                    </div>
                   </motion.div>
 
                   {/* Crypto */}
                   <motion.div
                     whileHover={{ scale: 1.02 }}
-                    className={`rounded-xl border p-5 cursor-pointer transition-all ${
-                      paymentMethod === "crypto" ? "border-primary bg-primary/5" : "border-white/10 bg-white/[0.02] hover:border-primary/30"
+                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
+                      paymentMethod === "crypto" ? "border-amber-500 bg-amber-500/10" : "border-white/10 bg-white/[0.02] hover:border-amber-500/30"
                     }`}
                     onClick={() => handlePayment("crypto")}
                   >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-lg bg-orange-500/10 flex items-center justify-center">
-                        <Bitcoin className="h-5 w-5 text-orange-500" />
+                    <div className="flex items-center gap-2.5 mb-2">
+                      <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center">
+                        <Bitcoin className="h-4 w-4 text-amber-500" />
                       </div>
                       <div>
-                        <p className="font-display font-bold">Cripto</p>
-                        <p className="text-[10px] text-muted-foreground">BTC, ETH, USDC</p>
+                        <p className="font-display font-bold text-sm">Cripto</p>
+                        <p className="text-[9px] text-muted-foreground">BTC, ETH, USDC</p>
                       </div>
                     </div>
-                    <p className="text-xs text-muted-foreground">Bitcoin, Ethereum ou USDC via Coinbase Commerce</p>
                   </motion.div>
                 </div>
               </div>
@@ -354,7 +410,94 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     <Copy className="h-4 w-4" /> Copiar Código PIX
                   </Button>
                   <p className="text-[10px] text-muted-foreground text-center">
-                    Seus tokens serão creditados automaticamente após a confirmação do pagamento (1-5 minutos).
+                    Seus tokens serão creditados automaticamente após a confirmação (1-5 min).
+                  </p>
+                </motion.div>
+              )}
+
+              {paymentMethod === "stripe" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-5 space-y-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <CreditCard className="h-5 w-5 text-violet-500" />
+                    <p className="font-display font-bold">Pagamento via Cartão (Stripe)</p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Checkout seguro via Stripe. Aceita Visa, Mastercard, Amex, Elo e cartões internacionais.
+                  </p>
+                  <div className="flex gap-2">
+                    {["Visa", "Master", "Amex", "Elo"].map((card) => (
+                      <div key={card} className="flex-1 rounded-lg bg-background/60 p-2.5 text-center">
+                        <p className="font-bold text-xs">{card}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <Button className="w-full gap-2 bg-violet-600 hover:bg-violet-700 text-white">
+                    <ExternalLink className="h-4 w-4" /> Pagar com Stripe
+                  </Button>
+                  <p className="text-[10px] text-muted-foreground text-center">
+                    Parcelamento em até 12x. Tokens creditados instantaneamente.
+                  </p>
+                </motion.div>
+              )}
+
+              {paymentMethod === "paypal" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-5 space-y-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <Globe className="h-5 w-5 text-blue-500" />
+                    <p className="font-display font-bold">Pagamento via PayPal</p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Pagamentos internacionais com proteção ao comprador. Multi-moeda com conversão automática.
+                  </p>
+                  <div className="flex gap-2">
+                    {["USD", "EUR", "GBP", "BRL"].map((cur) => (
+                      <div key={cur} className="flex-1 rounded-lg bg-background/60 p-2.5 text-center">
+                        <p className="font-bold text-xs">{cur}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <Button className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white">
+                    <ExternalLink className="h-4 w-4" /> Pagar com PayPal
+                  </Button>
+                  <p className="text-[10px] text-muted-foreground text-center">
+                    Proteção ao comprador inclusa. Tokens creditados em até 5 minutos.
+                  </p>
+                </motion.div>
+              )}
+
+              {paymentMethod === "mercadopago" && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-5 space-y-4"
+                >
+                  <div className="flex items-center gap-2">
+                    <Smartphone className="h-5 w-5 text-cyan-500" />
+                    <p className="font-display font-bold">Pagamento via Mercado Pago</p>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    PIX, boleto bancário ou cartão de crédito pelo Mercado Pago. Parcelamento facilitado.
+                  </p>
+                  <div className="flex gap-2">
+                    {["PIX", "Boleto", "Cartão", "Saldo MP"].map((m) => (
+                      <div key={m} className="flex-1 rounded-lg bg-background/60 p-2.5 text-center">
+                        <p className="font-bold text-xs">{m}</p>
+                      </div>
+                    ))}
+                  </div>
+                  <Button className="w-full gap-2 bg-cyan-600 hover:bg-cyan-700 text-white">
+                    <ExternalLink className="h-4 w-4" /> Pagar com Mercado Pago
+                  </Button>
+                  <p className="text-[10px] text-muted-foreground text-center">
+                    Parcelamento em até 12x sem juros. Tokens creditados em até 5 minutos.
                   </p>
                 </motion.div>
               )}
@@ -363,30 +506,24 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="rounded-xl border border-orange-500/20 bg-orange-500/5 p-5 space-y-4"
+                  className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-5 space-y-4"
                 >
                   <div className="flex items-center gap-2">
-                    <Bitcoin className="h-5 w-5 text-orange-500" />
+                    <Bitcoin className="h-5 w-5 text-amber-500" />
                     <p className="font-display font-bold">Pagamento via Criptomoedas</p>
                   </div>
                   <p className="text-sm text-muted-foreground">
-                    Você será redirecionado para o Coinbase Commerce para finalizar o pagamento com Bitcoin, Ethereum ou USDC.
+                    Pague com Bitcoin, Ethereum ou USDC via Coinbase Commerce.
                   </p>
                   <div className="flex gap-3">
-                    <div className="flex-1 rounded-lg bg-background/60 p-3 text-center">
-                      <p className="font-bold text-sm">BTC</p>
-                      <p className="text-[10px] text-muted-foreground">Bitcoin</p>
-                    </div>
-                    <div className="flex-1 rounded-lg bg-background/60 p-3 text-center">
-                      <p className="font-bold text-sm">ETH</p>
-                      <p className="text-[10px] text-muted-foreground">Ethereum</p>
-                    </div>
-                    <div className="flex-1 rounded-lg bg-background/60 p-3 text-center">
-                      <p className="font-bold text-sm">USDC</p>
-                      <p className="text-[10px] text-muted-foreground">USD Coin</p>
-                    </div>
+                    {[{ name: "BTC", label: "Bitcoin" }, { name: "ETH", label: "Ethereum" }, { name: "USDC", label: "USD Coin" }].map((c) => (
+                      <div key={c.name} className="flex-1 rounded-lg bg-background/60 p-3 text-center">
+                        <p className="font-bold text-sm">{c.name}</p>
+                        <p className="text-[10px] text-muted-foreground">{c.label}</p>
+                      </div>
+                    ))}
                   </div>
-                  <Button className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white">
+                  <Button className="w-full gap-2 bg-amber-600 hover:bg-amber-700 text-white">
                     <ExternalLink className="h-4 w-4" /> Pagar com Coinbase Commerce
                   </Button>
                   <p className="text-[10px] text-muted-foreground text-center">
