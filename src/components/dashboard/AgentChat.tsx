@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Loader2, Sparkles, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap } from "lucide-react";
+import { Send, Bot, User, Loader2, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap, Square, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -110,10 +110,64 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
   );
 }
 
+// === TTS HOOK ===
+function useTTS() {
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [ttsEnabled, setTtsEnabled] = useState(false);
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  const speak = useCallback((text: string) => {
+    if (!ttsEnabled || !window.speechSynthesis) return;
+    
+    // Cancel any ongoing speech
+    window.speechSynthesis.cancel();
+    
+    // Strip markdown for cleaner speech
+    const cleanText = text
+      .replace(/[#*_~`>\-\[\]()!]/g, "")
+      .replace(/\n+/g, ". ")
+      .trim();
+    
+    if (!cleanText) return;
+
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = "pt-BR";
+    utterance.rate = 1.05;
+    utterance.pitch = 1;
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    
+    // Try to pick a Portuguese voice
+    const voices = window.speechSynthesis.getVoices();
+    const ptVoice = voices.find(v => v.lang.startsWith("pt")) || voices[0];
+    if (ptVoice) utterance.voice = ptVoice;
+
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+  }, [ttsEnabled]);
+
+  const stop = useCallback(() => {
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+  }, []);
+
+  const toggle = useCallback(() => {
+    if (ttsEnabled) {
+      stop();
+    }
+    setTtsEnabled(prev => !prev);
+  }, [ttsEnabled, stop]);
+
+  return { isSpeaking, ttsEnabled, speak, stop, toggle };
+}
+
 const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => {
-  const { messages, isLoading, sendMessage, clearMessages } = useAgentChat(agentId);
+  const { messages, isLoading, isStreaming, sendMessage, clearMessages, stopStreaming } = useAgentChat(agentId);
   const [input, setInput] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const { isSpeaking, ttsEnabled, speak, stop, toggle: toggleTTS } = useTTS();
+  const prevMessageCountRef = useRef(0);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -121,6 +175,16 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
 
   useEffect(() => { scrollToBottom(); }, [messages]);
   useEffect(() => { clearMessages(); }, [agentId]);
+
+  // Auto-speak when a new assistant message is complete (streaming done)
+  useEffect(() => {
+    if (isStreaming || isLoading) return;
+    const lastMsg = messages[messages.length - 1];
+    if (lastMsg?.role === "assistant" && messages.length > prevMessageCountRef.current) {
+      speak(lastMsg.content);
+    }
+    prevMessageCountRef.current = messages.length;
+  }, [isStreaming, isLoading, messages, speak]);
 
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
@@ -141,11 +205,27 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
             <h3 className="font-display font-semibold text-sm">{agentName}</h3>
             <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span className="text-xs text-muted-foreground">Online • Tool Use Ativo</span>
+              <span className="text-xs text-muted-foreground">
+                Online • Streaming {ttsEnabled ? "• 🔊 Voz" : ""}
+              </span>
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          {/* TTS Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleTTS}
+            className={`h-8 w-8 ${ttsEnabled ? "text-primary" : "text-muted-foreground"}`}
+            title={ttsEnabled ? "Desativar voz" : "Ativar voz"}
+          >
+            {ttsEnabled ? (
+              isSpeaking ? <Volume2 className="h-3.5 w-3.5 animate-pulse" /> : <Volume2 className="h-3.5 w-3.5" />
+            ) : (
+              <VolumeX className="h-3.5 w-3.5" />
+            )}
+          </Button>
           {messages.length > 0 && (
             <Button variant="ghost" size="icon" onClick={clearMessages} className="h-8 w-8">
               <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
@@ -169,6 +249,9 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
               {agentId
                 ? `${agentName} está pronto para AGIR!`
                 : "Selecione um agente ativo para iniciar."}
+            </p>
+            <p className="text-[10px] text-muted-foreground/60 mb-3">
+              🔊 Ative o botão de voz para ouvir as respostas
             </p>
             {agentId && (
               <div className="flex flex-wrap gap-1 justify-center mt-2">
@@ -205,7 +288,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
                   <Bot className="h-4 w-4 text-muted-foreground" />
                 )}
               </div>
-              <div className={`max-w-[80%] ${message.role === "user" ? "" : ""}`}>
+              <div className="max-w-[80%]">
                 <div
                   className={`rounded-2xl px-4 py-3 ${
                     message.role === "user"
@@ -216,6 +299,10 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
                   {message.role === "assistant" ? (
                     <div className="text-sm prose prose-sm prose-invert max-w-none">
                       <ReactMarkdown>{message.content}</ReactMarkdown>
+                      {/* Streaming cursor */}
+                      {isStreaming && idx === messages.length - 1 && (
+                        <span className="inline-block w-2 h-4 bg-primary/80 animate-pulse ml-0.5 rounded-sm" />
+                      )}
                     </div>
                   ) : (
                     <p className="text-sm">{message.content}</p>
@@ -234,7 +321,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
           ))}
         </AnimatePresence>
 
-        {isLoading && (
+        {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3">
             <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
               <Bot className="h-4 w-4 text-muted-foreground" />
@@ -254,7 +341,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
       {/* AI Disclaimer */}
       <div className="px-4 pt-2">
         <p className="text-[10px] text-muted-foreground/60 text-center">
-          🤖 Agente autônomo com IA — execuções são registradas. Não substitui aconselhamento profissional.
+          🤖 Agente autônomo com IA — streaming em tempo real + voz. Não substitui aconselhamento profissional.
         </p>
       </div>
 
@@ -268,9 +355,15 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
             className="flex-1 bg-white/5 border-white/10 focus:border-primary/50"
             disabled={isLoading || !agentId}
           />
-          <Button type="submit" size="icon" disabled={!input.trim() || isLoading || !agentId} className="shrink-0">
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-          </Button>
+          {isStreaming ? (
+            <Button type="button" size="icon" variant="destructive" onClick={stopStreaming} className="shrink-0" title="Parar streaming">
+              <Square className="h-4 w-4" />
+            </Button>
+          ) : (
+            <Button type="submit" size="icon" disabled={!input.trim() || isLoading || !agentId} className="shrink-0">
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            </Button>
+          )}
         </form>
       </div>
     </div>

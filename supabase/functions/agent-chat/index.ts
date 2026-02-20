@@ -229,7 +229,6 @@ async function executeTool(
 ): Promise<{ success: boolean; result: any }> {
   const timestamp = new Date().toISOString();
 
-  // Log the execution
   try {
     await adminClient.from("execution_logs").insert({
       user_id: userId,
@@ -257,7 +256,6 @@ async function executeTool(
           estimated_delivery: "< 2 minutos",
         },
       };
-
     case "create_task":
       return {
         success: true,
@@ -272,7 +270,6 @@ async function executeTool(
           created_at: timestamp,
         },
       };
-
     case "generate_report":
       return {
         success: true,
@@ -286,7 +283,6 @@ async function executeTool(
           format: "structured",
         },
       };
-
     case "search_leads":
       return {
         success: true,
@@ -302,7 +298,6 @@ async function executeTool(
           searched_at: timestamp,
         },
       };
-
     case "schedule_meeting":
       return {
         success: true,
@@ -318,7 +313,6 @@ async function executeTool(
           scheduled_at: timestamp,
         },
       };
-
     case "analyze_data":
       return {
         success: true,
@@ -335,7 +329,6 @@ async function executeTool(
           analyzed_at: timestamp,
         },
       };
-
     default:
       return { success: false, result: { error: `Tool ${toolName} not implemented` } };
   }
@@ -380,7 +373,6 @@ async function validateTenantAccess(
   return { valid: true, tenantId };
 }
 
-// Save conversation memory with tenant isolation
 async function saveMemory(
   adminClient: any,
   tenantId: string,
@@ -406,7 +398,6 @@ async function saveMemory(
   }
 }
 
-// Load recent memory for context (tenant-isolated)
 async function loadRecentMemory(
   adminClient: any,
   tenantId: string,
@@ -433,7 +424,6 @@ async function loadRecentMemory(
   return `\n## MEMÓRIA RECENTE (contexto anterior deste usuário com este agente):\n${memories}\n`;
 }
 
-// === TOOL USE INSTRUCTION ===
 const TOOL_USE_INSTRUCTION = `
 ## TOOL USE (Uso de Ferramentas)
 
@@ -460,7 +450,7 @@ serve(async (req) => {
   }
 
   try {
-    const { messages, agentId, actionType = "chat" } = await req.json();
+    const { messages, agentId, actionType = "chat", stream: wantStream = false } = await req.json();
 
     const validation = validateInput(messages);
     if (!validation.valid) {
@@ -485,7 +475,6 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseKey, {
       global: { headers: { Authorization: authHeader } },
     });
-
     const adminClient = createClient(supabaseUrl, serviceKey);
 
     const token = authHeader.replace("Bearer ", "");
@@ -515,7 +504,7 @@ serve(async (req) => {
       .single();
 
     if (creditsError || !credits) {
-      return new Response(JSON.stringify({ error: "Credits not found. Please contact support." }), {
+      return new Response(JSON.stringify({ error: "Credits not found." }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -523,10 +512,7 @@ serve(async (req) => {
 
     const remainingCredits = credits.total_credits - credits.used_credits;
     if (remainingCredits <= 0) {
-      return new Response(JSON.stringify({ 
-        error: "Créditos esgotados. Faça upgrade do seu plano.",
-        remaining_credits: 0 
-      }), {
+      return new Response(JSON.stringify({ error: "Créditos esgotados.", remaining_credits: 0 }), {
         status: 402,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -556,7 +542,6 @@ Instruções: ${agent.instructions}`;
       }
     }
 
-    // Load tenant-isolated memory
     let memoryContext = "";
     if (agentId) {
       memoryContext = await loadRecentMemory(adminClient, tenantId, userId, agentId);
@@ -577,13 +562,15 @@ Instruções: ${agent.instructions}`;
       throw new Error("LOVABLE_API_KEY is not configured");
     }
 
-    // === FIRST CALL WITH TOOLS ===
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const aiHeaders = {
+      Authorization: `Bearer ${LOVABLE_API_KEY}`,
+      "Content-Type": "application/json",
+    };
+
+    // === FIRST CALL: non-streaming to detect tool calls ===
+    const firstResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
+      headers: aiHeaders,
       body: JSON.stringify({
         model: "google/gemini-3-flash-preview",
         messages: [
@@ -596,128 +583,251 @@ Instruções: ${agent.instructions}`;
       }),
     });
 
-    if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+    if (!firstResponse.ok) {
+      if (firstResponse.status === 429) {
+        return new Response(JSON.stringify({ error: "Rate limit exceeded." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "AI service payment required." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+      if (firstResponse.status === 402) {
+        return new Response(JSON.stringify({ error: "AI service payment required." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
-      const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      throw new Error(`AI gateway error: ${response.status}`);
+      const errorText = await firstResponse.text();
+      console.error("AI gateway error:", firstResponse.status, errorText);
+      throw new Error(`AI gateway error: ${firstResponse.status}`);
     }
 
-    const aiResponse = await response.json();
+    const aiResponse = await firstResponse.json();
     const firstChoice = aiResponse.choices?.[0];
-    let assistantMessage = firstChoice?.message?.content || "";
     const toolCalls = firstChoice?.message?.tool_calls;
     const toolResults: any[] = [];
 
-    // === HANDLE TOOL CALLS ===
+    // If there are tool calls, execute them
     if (toolCalls && toolCalls.length > 0) {
       for (const toolCall of toolCalls) {
         const fnName = toolCall.function?.name;
         let fnArgs: any = {};
-        try {
-          fnArgs = JSON.parse(toolCall.function?.arguments || "{}");
-        } catch { fnArgs = {}; }
-
+        try { fnArgs = JSON.parse(toolCall.function?.arguments || "{}"); } catch { fnArgs = {}; }
         console.log(`Executing tool: ${fnName}`, fnArgs);
-
         const result = await executeTool(fnName, fnArgs, adminClient, userId, tenantId, agentId || "general");
-        toolResults.push({
-          tool_call_id: toolCall.id,
-          tool_name: fnName,
-          args: fnArgs,
-          ...result,
-        });
+        toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...result });
       }
 
-      // === SECOND CALL: Feed tool results back to get natural language response ===
       const toolMessages = toolCalls.map((tc: any, i: number) => ({
         role: "tool",
         tool_call_id: tc.id,
         content: JSON.stringify(toolResults[i]?.result || {}),
       }));
 
-      const secondResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+      const secondMessages = [
+        { role: "system", content: fullSystemPrompt },
+        ...optimizedMessages,
+        firstChoice.message,
+        ...toolMessages,
+      ];
+
+      // After tool use, stream or not based on client preference
+      if (wantStream) {
+        // Send tool results as an initial SSE event, then stream the AI response
+        const streamResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: aiHeaders,
+          body: JSON.stringify({
+            model: "google/gemini-3-flash-preview",
+            messages: secondMessages,
+            max_tokens: planLimits.maxResponseTokens,
+            stream: true,
+          }),
+        });
+
+        if (!streamResponse.ok || !streamResponse.body) {
+          throw new Error("Streaming failed after tool execution");
+        }
+
+        // Create a TransformStream to inject tool_results + credit metadata
+        const { readable, writable } = new TransformStream();
+        const writer = writable.getWriter();
+        const encoder = new TextEncoder();
+
+        // Background: pipe SSE with metadata
+        (async () => {
+          try {
+            // Send tool results as a custom SSE event
+            const metaEvent = `data: ${JSON.stringify({ 
+              type: "meta", 
+              tool_results: toolResults, 
+              credit_warning: creditWarning 
+            })}\n\n`;
+            await writer.write(encoder.encode(metaEvent));
+
+            // Pipe the AI stream through, collecting full text for credits
+            const reader = streamResponse.body!.getReader();
+            let fullText = "";
+            while (true) {
+              const { done, value } = await reader.read();
+              if (done) break;
+              await writer.write(value);
+              // Parse for credit calculation
+              const chunk = new TextDecoder().decode(value);
+              for (const line of chunk.split("\n")) {
+                if (!line.startsWith("data: ") || line.includes("[DONE]")) continue;
+                try {
+                  const parsed = JSON.parse(line.slice(6));
+                  const c = parsed.choices?.[0]?.delta?.content;
+                  if (c) fullText += c;
+                } catch {}
+              }
+            }
+
+            // Post-stream: update credits + save memory
+            const inputTokens = optimizedMessages.reduce((a: number, m: any) => a + Math.ceil((m.content?.length || 0) / 4), 0);
+            const outputTokens = Math.ceil(fullText.length / 4);
+            const totalTokens = aiResponse.usage?.total_tokens
+              ? aiResponse.usage.total_tokens + outputTokens
+              : inputTokens + outputTokens + Math.ceil(fullSystemPrompt.length / 4);
+
+            await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
+            await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: `tool:${toolCalls.map((t: any) => t.function?.name).join(",")}` });
+
+            if (agentId) {
+              const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
+              if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, fullText);
+            }
+          } catch (e) {
+            console.error("Stream pipe error:", e);
+          } finally {
+            await writer.close();
+          }
+        })();
+
+        return new Response(readable, {
+          headers: { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
+        });
+      } else {
+        // Non-streaming fallback (original behavior)
+        const secondResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+          method: "POST",
+          headers: aiHeaders,
+          body: JSON.stringify({
+            model: "google/gemini-3-flash-preview",
+            messages: secondMessages,
+            max_tokens: planLimits.maxResponseTokens,
+            stream: false,
+          }),
+        });
+
+        let assistantMessage = firstChoice?.message?.content || "";
+        if (secondResponse.ok) {
+          const secondData = await secondResponse.json();
+          assistantMessage = secondData.choices?.[0]?.message?.content || assistantMessage;
+        }
+
+        const totalTokens = aiResponse.usage?.total_tokens || Math.ceil(fullSystemPrompt.length / 4);
+        await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
+        await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: `tool:${toolCalls.map((t: any) => t.function?.name).join(",")}` });
+
+        if (agentId) {
+          const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
+          if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+        }
+
+        return new Response(JSON.stringify({
+          message: assistantMessage,
+          tokens_used: totalTokens,
+          remaining_credits: remainingCredits - totalTokens,
+          credit_warning: creditWarning,
+          tool_results: toolResults.length > 0 ? toolResults : undefined,
+        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+    }
+
+    // === NO TOOL CALLS ===
+    if (wantStream) {
+      // No tools detected but we want streaming — re-call with stream: true (no tools this time)
+      const streamResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${LOVABLE_API_KEY}`,
-          "Content-Type": "application/json",
-        },
+        headers: aiHeaders,
         body: JSON.stringify({
           model: "google/gemini-3-flash-preview",
           messages: [
             { role: "system", content: fullSystemPrompt },
             ...optimizedMessages,
-            firstChoice.message, // assistant message with tool_calls
-            ...toolMessages,
           ],
           max_tokens: planLimits.maxResponseTokens,
-          stream: false,
+          stream: true,
         }),
       });
 
-      if (secondResponse.ok) {
-        const secondData = await secondResponse.json();
-        assistantMessage = secondData.choices?.[0]?.message?.content || assistantMessage;
+      if (!streamResponse.ok || !streamResponse.body) {
+        throw new Error("Streaming failed");
       }
+
+      const { readable, writable } = new TransformStream();
+      const writer = writable.getWriter();
+      const encoder = new TextEncoder();
+
+      (async () => {
+        try {
+          // Send meta event
+          const metaEvent = `data: ${JSON.stringify({ type: "meta", credit_warning: creditWarning })}\n\n`;
+          await writer.write(encoder.encode(metaEvent));
+
+          const reader = streamResponse.body!.getReader();
+          let fullText = "";
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            await writer.write(value);
+            const chunk = new TextDecoder().decode(value);
+            for (const line of chunk.split("\n")) {
+              if (!line.startsWith("data: ") || line.includes("[DONE]")) continue;
+              try {
+                const parsed = JSON.parse(line.slice(6));
+                const c = parsed.choices?.[0]?.delta?.content;
+                if (c) fullText += c;
+              } catch {}
+            }
+          }
+
+          const inputTokens = optimizedMessages.reduce((a: number, m: any) => a + Math.ceil((m.content?.length || 0) / 4), 0);
+          const outputTokens = Math.ceil(fullText.length / 4);
+          const totalTokens = inputTokens + outputTokens + Math.ceil(fullSystemPrompt.length / 4);
+
+          await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
+          await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: actionType });
+
+          if (agentId) {
+            const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
+            if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, fullText);
+          }
+        } catch (e) {
+          console.error("Stream pipe error:", e);
+        } finally {
+          await writer.close();
+        }
+      })();
+
+      return new Response(readable, {
+        headers: { ...corsHeaders, "Content-Type": "text/event-stream", "Cache-Control": "no-cache" },
+      });
     }
 
-    // Calculate tokens
-    const apiTokens = aiResponse.usage?.total_tokens;
-    const inputTokens = optimizedMessages.reduce((acc: number, m: any) => acc + Math.ceil((m.content?.length || 0) / 4), 0);
-    const outputTokens = Math.ceil((assistantMessage?.length || 0) / 4);
-    const totalTokens = apiTokens || (inputTokens + outputTokens + Math.ceil(fullSystemPrompt.length / 4));
+    // Non-streaming, no tools (original)
+    const assistantMessage = firstChoice?.message?.content || "";
+    const totalTokens = aiResponse.usage?.total_tokens || 100;
 
-    // Update credits
-    const { error: updateError } = await supabase
-      .from("user_credits")
-      .update({ used_credits: credits.used_credits + totalTokens })
-      .eq("user_id", userId);
+    await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
+    await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: actionType });
 
-    if (updateError) console.error("Error updating credits:", updateError);
-
-    // Log usage
-    const { error: logError } = await supabase.from("token_usage").insert({
-      user_id: userId,
-      agent_id: agentId || null,
-      tokens_used: totalTokens,
-      action_type: toolCalls ? `tool:${toolCalls.map((t: any) => t.function?.name).join(",")}` : actionType,
-    });
-    if (logError) console.error("Error logging usage:", logError);
-
-    // Save memory
-    if (agentId && optimizedMessages.length > 0) {
+    if (agentId) {
       const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
-      if (lastUserMsg) {
-        await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
-      }
+      if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
     }
-
-    const newRemaining = remainingCredits - totalTokens;
 
     return new Response(JSON.stringify({
       message: assistantMessage,
       tokens_used: totalTokens,
-      remaining_credits: newRemaining,
+      remaining_credits: remainingCredits - totalTokens,
       credit_warning: creditWarning,
-      history_trimmed: messages.length > planLimits.maxHistoryMessages,
-      messages_sent: optimizedMessages.length,
-      messages_original: messages.length,
-      tenant_id: tenantId,
-      tool_results: toolResults.length > 0 ? toolResults : undefined,
-    }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+    }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   } catch (error) {
     console.error("agent-chat error:", error);
