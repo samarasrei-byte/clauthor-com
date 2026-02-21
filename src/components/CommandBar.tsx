@@ -1,8 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import {
-  Command, CommandDialog, CommandEmpty, CommandGroup,
+  CommandDialog, CommandEmpty, CommandGroup,
   CommandInput, CommandItem, CommandList, CommandSeparator,
 } from "@/components/ui/command";
 import {
@@ -10,7 +9,6 @@ import {
   Sparkles, ArrowRight, Zap, Rocket, Plus, Settings, MessageSquare,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import { Badge } from "@/components/ui/badge";
 
 const agentQuickList = [
   { key: "voice_ai", name: "Voice AI Agent", icon: "🎙️", tier: "enterprise" },
@@ -37,9 +35,9 @@ const navigationItems = [
 ];
 
 const quickActions = [
-  { name: "Criar novo agente", action: "/create-agent", icon: Rocket, badge: "Ação" },
-  { name: "Falar com consultor IA", action: "consultant", icon: MessageSquare, badge: "IA" },
-  { name: "Ver squads de IA", action: "/pricing", icon: Users, badge: "Planos" },
+  { name: "Criar novo agente", action: "/create-agent", icon: Rocket },
+  { name: "Falar com consultor IA", action: "consultant", icon: MessageSquare },
+  { name: "Ver squads de IA", action: "/pricing", icon: Users },
 ];
 
 interface CommandBarProps {
@@ -79,107 +77,82 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
     }
   }, [navigate, onOpenTestDrive]);
 
-  const tierBadge = (tier: string) => {
-    const colors: Record<string, string> = {
-      basic: "bg-emerald-500/15 text-emerald-400",
-      intermediate: "bg-cyan-500/15 text-cyan-400",
-      advanced: "bg-cyan-500/15 text-cyan-300",
-      enterprise: "bg-primary/15 text-primary",
-    };
+  const tierLabel = (tier: string) => {
     const labels: Record<string, string> = {
       basic: "Starter",
       intermediate: "Pro",
       advanced: "Avançado",
       enterprise: "Enterprise",
     };
-    return (
-      <Badge variant="secondary" className={`text-[9px] ${colors[tier] || ""}`}>
-        {labels[tier] || tier}
-      </Badge>
-    );
+    return labels[tier] || tier;
   };
 
   return (
     <>
-      {/* Floating trigger button */}
+      {/* Minimal floating trigger */}
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 rounded-xl glass-btn-primary text-sm font-medium text-foreground group transition-all duration-300 hover:scale-105"
+        className="fixed bottom-6 right-6 z-40 h-11 w-11 rounded-full border border-white/[0.06] bg-white/[0.03] backdrop-blur-xl flex items-center justify-center transition-all duration-500 hover:border-primary/30 hover:bg-primary/[0.06] hover:shadow-[0_0_30px_hsl(var(--primary)/0.1)] group"
       >
-        <Search className="h-4 w-4 text-primary" />
-        <span className="hidden sm:inline">Comando</span>
-        <kbd className="hidden sm:inline-flex items-center gap-0.5 rounded-md border border-white/10 bg-white/5 px-1.5 py-0.5 text-[10px] text-muted-foreground">
-          ⌘K
-        </kbd>
+        <Search className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300" />
       </button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <div className="border-b border-white/5 px-3 py-2 flex items-center gap-2">
-          <Zap className="h-4 w-4 text-primary animate-pulse" />
-          <span className="text-xs text-muted-foreground">
-            Busque agentes, navegue ou execute ações instantâneas
-          </span>
-        </div>
-        <CommandInput placeholder="O que você precisa? Ex: 'agente de vendas', 'criar agente'..." />
-        <CommandList className="max-h-[400px]">
+        <CommandInput placeholder="Busque agentes, navegue ou execute ações..." />
+        <CommandList className="max-h-[420px]">
           <CommandEmpty>
-            <div className="py-8 text-center">
-              <Sparkles className="h-8 w-8 text-primary/30 mx-auto mb-2" />
-              <p className="text-sm text-muted-foreground">Nenhum resultado encontrado</p>
-              <p className="text-xs text-muted-foreground/60 mt-1">Tente "vendas", "marketing" ou "criar"</p>
+            <div className="py-10 text-center">
+              <div className="h-px w-12 bg-white/[0.06] mx-auto mb-4" />
+              <p className="text-[13px] text-muted-foreground/60 tracking-wide">Sem resultados</p>
             </div>
           </CommandEmpty>
 
-          <CommandGroup heading="⚡ Ações Rápidas">
+          <CommandGroup heading="Ações">
             {quickActions.map((action) => (
               <CommandItem
                 key={action.name}
                 value={action.action}
                 onSelect={handleSelect}
-                className="flex items-center gap-3 py-3 cursor-pointer"
+                className="flex items-center gap-3 py-2.5 px-3 cursor-pointer rounded-lg group/item"
               >
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <action.icon className="h-4 w-4 text-primary" />
-                </div>
-                <span className="flex-1 font-medium text-sm">{action.name}</span>
-                <Badge variant="outline" className="text-[9px] border-primary/20 text-primary">
-                  {action.badge}
-                </Badge>
-                <ArrowRight className="h-3 w-3 text-muted-foreground" />
+                <action.icon className="h-3.5 w-3.5 text-muted-foreground group-hover/item:text-primary transition-colors" />
+                <span className="flex-1 text-[13px] tracking-wide">{action.name}</span>
+                <ArrowRight className="h-3 w-3 text-muted-foreground/30 group-hover/item:text-primary/60 transition-all group-hover/item:translate-x-0.5" />
               </CommandItem>
             ))}
           </CommandGroup>
 
-          <CommandSeparator />
+          <CommandSeparator className="bg-white/[0.04]" />
 
-          <CommandGroup heading="🤖 Test Drive — Converse com o Agente">
+          <CommandGroup heading="Test Drive">
             {agentQuickList.map((agent) => (
               <CommandItem
                 key={agent.key}
                 value={`agent:${agent.key}`}
                 onSelect={handleSelect}
-                className="flex items-center gap-3 py-2.5 cursor-pointer"
+                className="flex items-center gap-3 py-2 px-3 cursor-pointer rounded-lg group/item"
               >
-                <span className="text-lg">{agent.icon}</span>
-                <span className="flex-1 text-sm">{agent.name}</span>
-                {tierBadge(agent.tier)}
-                <MessageSquare className="h-3 w-3 text-muted-foreground opacity-0 group-hover:opacity-100" />
+                <span className="text-sm opacity-70 group-hover/item:opacity-100 transition-opacity">{agent.icon}</span>
+                <span className="flex-1 text-[13px] tracking-wide">{agent.name}</span>
+                <span className="text-[10px] text-muted-foreground/40 tracking-widest uppercase">
+                  {tierLabel(agent.tier)}
+                </span>
               </CommandItem>
             ))}
           </CommandGroup>
 
-          <CommandSeparator />
+          <CommandSeparator className="bg-white/[0.04]" />
 
-          <CommandGroup heading="📍 Navegação">
+          <CommandGroup heading="Navegar">
             {navigationItems.map((item) => (
               <CommandItem
                 key={item.href}
                 value={item.href}
                 onSelect={handleSelect}
-                className="flex items-center gap-3 py-2 cursor-pointer"
+                className="flex items-center gap-3 py-2 px-3 cursor-pointer rounded-lg group/item"
               >
-                <item.icon className="h-4 w-4 text-muted-foreground" />
-                <span className="text-sm">{item.name}</span>
+                <item.icon className="h-3.5 w-3.5 text-muted-foreground/50 group-hover/item:text-foreground transition-colors" />
+                <span className="text-[13px] tracking-wide">{item.name}</span>
               </CommandItem>
             ))}
           </CommandGroup>
