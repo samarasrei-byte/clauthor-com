@@ -46,7 +46,7 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <img src={prometheusLogo} alt="PROMETHEUS" className="w-8 h-8 rounded-lg object-cover" />
+            <img src={prometheusLogo} alt="PROMETHEUS" className="w-8 h-8 object-contain mix-blend-lighten" />
             <span className="font-display font-bold text-base text-foreground tracking-wider">
               PROMETHEUS
             </span>
