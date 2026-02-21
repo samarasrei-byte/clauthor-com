@@ -698,13 +698,13 @@ const LibraryPage = () => {
                 transition={{ delay: i * 0.02 }}
                 layout
               >
-                <div className="group relative h-full flex flex-col rounded-2xl border border-white/[0.05] bg-white/[0.015] overflow-hidden transition-all duration-500 hover:border-primary/15 hover:bg-white/[0.025]">
-                  {/* Top accent line */}
-                  <div className={`h-px w-full ${
+                <div className="group relative h-full flex flex-col rounded-2xl border border-white/[0.06] bg-white/[0.015] overflow-hidden transition-all duration-500 hover:border-primary/20 hover:bg-white/[0.03] hover:shadow-[0_0_30px_hsl(var(--primary)/0.06)]">
+                  {/* Top accent line — alive gradient */}
+                  <div className={`h-[1.5px] w-full ${
                     tier === "enterprise" 
-                      ? "bg-gradient-to-r from-transparent via-primary/30 to-transparent" 
-                      : "bg-gradient-to-r from-transparent via-white/[0.06] to-transparent"
-                  }`} />
+                      ? "bg-gradient-to-r from-transparent via-primary/50 to-transparent" 
+                      : "bg-gradient-to-r from-transparent via-primary/20 to-transparent"
+                  } group-hover:via-primary/40 transition-all duration-700`} />
 
                   <div className="p-5 flex flex-col flex-1">
                     {/* Header — Icon + Title + Tier */}
@@ -749,7 +749,7 @@ const LibraryPage = () => {
 
                     {/* Footer — Price + Actions */}
                     <div className="pt-4 mt-auto">
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent mb-4" />
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent group-hover:via-primary/15 transition-all duration-500 mb-4" />
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-bold text-lg text-foreground/90 tracking-tight">{priceDisplay}</p>
