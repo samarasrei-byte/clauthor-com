@@ -16,35 +16,29 @@ interface AgentLivePreviewProps {
   onClose: () => void;
 }
 
-const TRIAL_SECONDS = 60;
+const MAX_FREE_MESSAGES = 3;
 
 const AgentLivePreview = ({ agentName, agentDesc, isOpen, onClose }: AgentLivePreviewProps) => {
   const { user } = useAuth();
   const { messages, isLoading, sendMessage, clearMessages } = useAgentChat();
   const [input, setInput] = useState("");
-  const [timeLeft, setTimeLeft] = useState(TRIAL_SECONDS);
-  const [trialEnded, setTrialEnded] = useState(false);
+  const [messageCount, setMessageCount] = useState(0);
   const { t } = useTranslation();
+  const trialEnded = messageCount >= MAX_FREE_MESSAGES;
 
   useEffect(() => {
-    if (!isOpen || trialEnded) return;
-    const interval = setInterval(() => {
-      setTimeLeft((prev) => { if (prev <= 1) { setTrialEnded(true); return 0; } return prev - 1; });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [isOpen, trialEnded]);
-
-  useEffect(() => {
-    if (isOpen) { clearMessages(); setTimeLeft(TRIAL_SECONDS); setTrialEnded(false); setInput(""); }
+    if (isOpen) { clearMessages(); setMessageCount(0); setInput(""); }
   }, [isOpen]);
 
   const handleSend = useCallback(async () => {
     if (!input.trim() || isLoading || trialEnded) return;
-    const msg = input; setInput(""); await sendMessage(msg);
+    const msg = input; setInput("");
+    setMessageCount(prev => prev + 1);
+    await sendMessage(msg);
   }, [input, isLoading, trialEnded, sendMessage]);
 
   if (!isOpen) return null;
-  const progressPercent = (timeLeft / TRIAL_SECONDS) * 100;
+  const progressPercent = ((MAX_FREE_MESSAGES - messageCount) / MAX_FREE_MESSAGES) * 100;
 
   return (
     <AnimatePresence>
@@ -64,8 +58,8 @@ const AgentLivePreview = ({ agentName, agentDesc, isOpen, onClose }: AgentLivePr
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Badge variant="outline" className={`text-xs ${timeLeft <= 10 ? "border-destructive/30 text-destructive animate-pulse" : "border-primary/20 text-primary"}`}>
-                <Zap className="h-3 w-3 mr-1" />{timeLeft}s
+              <Badge variant="outline" className={`text-xs ${messageCount >= MAX_FREE_MESSAGES - 1 ? "border-destructive/30 text-destructive animate-pulse" : "border-primary/20 text-primary"}`}>
+                <Zap className="h-3 w-3 mr-1" />{MAX_FREE_MESSAGES - messageCount} msgs
               </Badge>
               <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}><X className="h-4 w-4" /></Button>
             </div>
