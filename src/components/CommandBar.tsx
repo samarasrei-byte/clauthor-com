@@ -49,7 +49,6 @@ interface CommandBarProps {
 
 const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
   const [open, setOpen] = useState(false);
-  const [hovered, setHovered] = useState(false);
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -93,42 +92,16 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
 
   return (
     <>
-      {/* Futuristic floating trigger with orbital glow */}
-      <motion.button
+      {/* Futuristic floating trigger */}
+      <button
         onClick={() => setOpen(true)}
-        onHoverStart={() => setHovered(true)}
-        onHoverEnd={() => setHovered(false)}
-        className="fixed bottom-6 right-6 z-40 h-12 w-12 rounded-full flex items-center justify-center group relative"
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+        className="fixed bottom-6 right-6 z-[9999] h-12 w-12 rounded-full flex items-center justify-center group relative hover:scale-105 active:scale-95 transition-transform duration-300"
+        style={{ position: "fixed" }}
       >
-        {/* Outer glow ring */}
-        <motion.div
-          className="absolute inset-0 rounded-full border border-primary/20"
-          animate={{
-            boxShadow: hovered
-              ? "0 0 40px hsl(var(--primary) / 0.2), inset 0 0 20px hsl(var(--primary) / 0.05)"
-              : "0 0 15px hsl(var(--primary) / 0.06), inset 0 0 10px hsl(var(--primary) / 0.02)",
-          }}
-          transition={{ duration: 0.6 }}
-        />
-        {/* Glass surface */}
-        <div className="absolute inset-[1px] rounded-full bg-background/80 backdrop-blur-xl" />
-        {/* Scan line */}
-        <motion.div
-          className="absolute inset-[1px] rounded-full overflow-hidden"
-          initial={false}
-        >
-          <motion.div
-            className="absolute inset-x-0 h-[1px] bg-gradient-to-r from-transparent via-primary/30 to-transparent"
-            animate={{ top: ["0%", "100%", "0%"] }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-          />
-        </motion.div>
-        {/* Icon */}
+        <div className="absolute inset-0 rounded-full border border-primary/20 shadow-[0_0_20px_hsl(var(--primary)/0.08)] group-hover:shadow-[0_0_40px_hsl(var(--primary)/0.2)] transition-shadow duration-500" />
+        <div className="absolute inset-[1px] rounded-full bg-background/90 backdrop-blur-xl" />
         <Search className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-300 relative z-10" />
-      </motion.button>
+      </button>
 
       {/* Custom futuristic dialog */}
       <AnimatePresence>
