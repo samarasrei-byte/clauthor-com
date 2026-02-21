@@ -559,7 +559,7 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-3">
-              <img src={prometheusLogo} alt="PROMETHEUS" className="w-9 h-9 rounded-lg object-cover" />
+              <img src={prometheusLogo} alt="PROMETHEUS" className="w-9 h-9 object-contain mix-blend-lighten" />
               <span className="font-display font-bold text-lg tracking-wider">PROMETHEUS</span>
             </div>
             <div className="flex gap-10 text-sm text-muted-foreground">
