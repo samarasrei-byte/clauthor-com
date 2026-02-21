@@ -665,20 +665,20 @@ const LibraryPage = () => {
         </div>
       </motion.div>
 
-      {/* ============ AGENT GRID — Cinematic Cards ============ */}
+      {/* ============ AGENT GRID — Minimal Marketplace Cards ============ */}
       <section>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-            <Zap className="h-4 w-4 text-primary" />
-          </div>
-          <h2 className="font-display text-xl font-bold">Todos os Agentes</h2>
-          <span className="text-xs text-muted-foreground">({filteredAgents.length})</span>
+        <div className="flex items-center gap-3 mb-8">
+          <h2 className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground/50 font-semibold">
+            Todos os Agentes
+          </h2>
+          <div className="flex-1 h-px bg-gradient-to-r from-white/[0.06] to-transparent" />
+          <span className="text-[11px] tracking-wider text-muted-foreground/30">{filteredAgents.length} agentes</span>
         </div>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
           {filteredAgents.length === 0 ? (
-            <div className="col-span-full text-center py-12 text-muted-foreground">
-              Nenhum agente encontrado para "{searchQuery}"
+            <div className="col-span-full py-16 text-center">
+              <p className="text-[13px] text-muted-foreground/40 tracking-wider">Nenhum agente encontrado</p>
             </div>
           ) : filteredAgents.map((key, i) => {
             const tier = agentTiers[key];
@@ -686,148 +686,106 @@ const LibraryPage = () => {
             const priceDisplay = getPriceDisplay(lang, agentPriceTiers[key]);
             const agentTitle = t(`library_page.agents.${key}_title`);
             const agentDesc = t(`library_page.agents.${key}_desc`);
-            const highlight = t(`library_page.agents.${key}_highlight`);
-            const replaces = t(`library_page.agents.${key}_replaces`);
             const social = agentSocialProof[key];
             const capabilities = agentCapabilities[key];
-            const integrations = agentIntegrations[key];
             const isHiring = hiringSlug === agentSlugs[key];
 
             return (
               <motion.div
                 key={key}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.03 }}
+                transition={{ delay: i * 0.02 }}
                 layout
               >
-                <div className="group relative h-full flex flex-col rounded-2xl border border-border/40 bg-card/30 backdrop-blur-md overflow-hidden transition-all duration-500 hover:border-primary/25 hover:shadow-[0_0_40px_-12px_hsl(var(--primary)/0.15)]">
-                  {/* Top accent bar */}
-                  <div className={`h-[2px] w-full ${
+                <div className="group relative h-full flex flex-col rounded-2xl border border-white/[0.05] bg-white/[0.015] overflow-hidden transition-all duration-500 hover:border-primary/15 hover:bg-white/[0.025]">
+                  {/* Top accent line */}
+                  <div className={`h-px w-full ${
                     tier === "enterprise" 
-                      ? "bg-gradient-to-r from-transparent via-primary to-transparent" 
-                      : tier === "advanced"
-                      ? "bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent"
-                      : tier === "basic"
-                      ? "bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent"
-                      : "bg-gradient-to-r from-transparent via-border to-transparent"
+                      ? "bg-gradient-to-r from-transparent via-primary/30 to-transparent" 
+                      : "bg-gradient-to-r from-transparent via-white/[0.06] to-transparent"
                   }`} />
 
-                  <div className="p-6 flex flex-col flex-1">
-                    {/* Header */}
-                    <div className="flex items-start gap-4 mb-5">
-                      <div className="w-9 h-9 flex items-center justify-center shrink-0">
-                        <Icon className="h-5 w-5 text-foreground/40 group-hover:text-primary/60 transition-colors duration-500" strokeWidth={1.2} />
+                  <div className="p-5 flex flex-col flex-1">
+                    {/* Header — Icon + Title + Tier */}
+                    <div className="flex items-start gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center shrink-0 group-hover:border-primary/15 group-hover:bg-primary/[0.04] transition-all duration-500">
+                        <Icon className="h-4.5 w-4.5 text-muted-foreground/40 group-hover:text-primary/70 transition-colors duration-500" strokeWidth={1.2} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-display font-extrabold text-lg leading-tight mb-1.5 line-clamp-1 tracking-tight">{agentTitle}</h3>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className={`${tierColors[tier]} text-xs py-0.5 px-2.5 font-semibold`}>
-                            {t(`tiers.${tier}`)}
-                          </Badge>
-                          {highlight && (
-                            <span className="text-[11px] px-3 py-0.5 rounded-full bg-primary/10 text-primary font-bold whitespace-nowrap tracking-wide uppercase">
-                              {highlight}
-                            </span>
-                          )}
-                        </div>
+                        <h3 className="font-semibold text-[14px] leading-tight mb-1 line-clamp-1 text-foreground/85 tracking-wide">{agentTitle}</h3>
+                        <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/35 font-medium">
+                          {t(`tiers.${tier}`)}
+                        </span>
+                      </div>
+                      {/* Rating */}
+                      <div className="flex items-center gap-1 shrink-0">
+                        <Star className="h-3 w-3 fill-primary/50 text-primary/50" />
+                        <span className="text-[11px] text-muted-foreground/40 font-medium">{social.rating}</span>
                       </div>
                     </div>
 
                     {/* Description */}
-                    <p className="text-sm text-muted-foreground/90 leading-relaxed line-clamp-2 mb-5 font-medium">{agentDesc}</p>
+                    <p className="text-[12px] text-muted-foreground/50 leading-relaxed line-clamp-2 mb-4">{agentDesc}</p>
 
-                    {/* Capability pills */}
-                    <div className="flex flex-wrap gap-1.5 mb-5">
+                    {/* Capabilities — clean minimal chips */}
+                    <div className="flex flex-wrap gap-1.5 mb-4">
                       {capabilities.slice(0, 3).map((cap) => (
-                        <span key={cap} className="text-xs px-3 py-1 rounded-lg bg-card/80 border border-border/60 text-foreground/80 font-semibold tracking-wide">
+                        <span key={cap} className="text-[10px] px-2 py-0.5 rounded-md border border-white/[0.04] bg-white/[0.02] text-muted-foreground/40 font-medium">
                           {cap}
                         </span>
                       ))}
                     </div>
 
-                    {/* Reputation Badge */}
-                    <div className="mb-5">
-                      <ReputationBadge
-                        rating={social.rating}
-                        companies={social.companies}
-                        savings={social.savings}
-                      />
+                    {/* Metrics row */}
+                    <div className="flex items-center gap-4 mb-4 text-[10px] text-muted-foreground/30">
+                      <span>{social.companies}+ empresas</span>
+                      <span className="h-2.5 w-px bg-white/[0.06]" />
+                      <span>Economia {social.savings}/mês</span>
                     </div>
 
-                    {/* Replaces */}
-                    {replaces && (
-                      <div className="flex items-center gap-2 mb-5">
-                        <Users className="h-3.5 w-3.5 text-emerald-400/80" />
-                        <span className="text-xs text-emerald-400/80 font-medium">
-                          {t("library_page.replaces_label")} {replaces}
-                        </span>
-                      </div>
-                    )}
+                    {/* Spacer */}
+                    <div className="flex-1" />
 
-                    {/* Integrations */}
-                    <div className="mb-5 flex-1">
-                      <div className="flex items-center gap-2">
-                        <div className="flex -space-x-1">
-                          {integrations.slice(0, 4).map((int) => (
-                            <div
-                              key={int}
-                              className="w-7 h-7 rounded-lg bg-card border border-border/60 flex items-center justify-center text-[10px] font-bold text-muted-foreground"
-                              title={int}
-                            >
-                              {int.charAt(0)}
-                            </div>
-                          ))}
-                        </div>
-                        {integrations.length > 4 && (
-                          <span className="text-xs text-muted-foreground">+{integrations.length - 4}</span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Price + CTA */}
-                    <div className="pt-5 border-t border-border/30 mt-auto">
-                      <div className="flex items-end justify-between mb-4">
+                    {/* Footer — Price + Actions */}
+                    <div className="pt-4 mt-auto">
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent mb-4" />
+                      <div className="flex items-center justify-between">
                         <div>
-                          <p className="font-display font-black text-3xl gradient-text leading-none tracking-tight">{priceDisplay}</p>
-                          <span className="text-xs text-muted-foreground mt-1.5 block font-medium">{t("library.per_month")}</span>
+                          <p className="font-bold text-lg text-foreground/90 tracking-tight">{priceDisplay}</p>
+                          <span className="text-[9px] text-muted-foreground/25 tracking-wider">{t("library.per_month")}</span>
                         </div>
-                      </div>
-                      <div className="flex gap-2">
-                        {/* Test Drive button */}
-                        <button
-                          className="flex-shrink-0 rounded-xl h-12 px-4 text-xs font-bold uppercase tracking-wider border border-border/50 bg-white/[0.03] hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 flex items-center gap-1.5"
-                          onClick={() => setPreviewAgent({
-                            name: agentTitle,
-                            desc: agentDesc,
-                          })}
-                        >
-                          <MessageSquare className="h-3.5 w-3.5" />
-                          <span className="hidden sm:inline">Test Drive</span>
-                        </button>
-                        {/* Hire button */}
-                        <button
-                          className={`group/btn relative flex-1 rounded-xl h-12 text-sm font-bold uppercase tracking-[0.15em] overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed ${
-                            tier === "enterprise"
-                              ? "bg-primary text-primary-foreground shadow-[0_0_30px_-5px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_50px_-5px_hsl(var(--primary)/0.7)]"
-                              : "bg-foreground/[0.06] text-foreground border border-border/50 hover:border-primary/40 hover:shadow-[0_0_30px_-8px_hsl(var(--primary)/0.3)]"
-                          }`}
-                          disabled={isHiring}
-                          onClick={() => handleHire(key)}
-                        >
-                          <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                          <span className="relative z-10 flex items-center justify-center gap-2">
+                        <div className="flex gap-2">
+                          {/* Test Drive */}
+                          <button
+                            className="h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center hover:border-primary/20 hover:bg-primary/[0.04] transition-all duration-300"
+                            onClick={() => setPreviewAgent({ name: agentTitle, desc: agentDesc })}
+                            title="Test Drive"
+                          >
+                            <MessageSquare className="h-3.5 w-3.5 text-muted-foreground/40 hover:text-primary transition-colors" />
+                          </button>
+                          {/* Landing page */}
+                          <Link to={`/agente/${agentSlugs[key]}`}>
+                            <button
+                              className="h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center hover:border-primary/20 hover:bg-primary/[0.04] transition-all duration-300"
+                              title="Ver detalhes"
+                            >
+                              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40 hover:text-primary transition-colors" />
+                            </button>
+                          </Link>
+                          {/* Hire */}
+                          <button
+                            className="h-9 px-4 rounded-xl text-[11px] font-semibold tracking-wider uppercase border border-white/[0.06] bg-white/[0.02] hover:border-primary/25 hover:bg-primary/[0.06] hover:text-primary transition-all duration-300 disabled:opacity-30"
+                            disabled={isHiring}
+                            onClick={() => handleHire(key)}
+                          >
                             {isHiring ? (
-                              <Loader2 className="h-4 w-4 animate-spin" />
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
                             ) : (
-                              <>
-                                <Zap className="h-4 w-4" />
-                                <span>Ativar Agora</span>
-                                <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                              </>
+                              "Ativar"
                             )}
-                          </span>
-                        </button>
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
