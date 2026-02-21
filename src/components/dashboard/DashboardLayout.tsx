@@ -3,6 +3,7 @@ import { Bot, LogOut, Home, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import SupportChat from "@/components/SupportChat";
 
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
@@ -54,6 +55,8 @@ const DashboardLayout = () => {
       <div className="flex-1 overflow-hidden">
         <Outlet />
       </div>
+
+      <SupportChat area={isAdmin ? "admin" : "client"} />
     </div>
   );
 };
