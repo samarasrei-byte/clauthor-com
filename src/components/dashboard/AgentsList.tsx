@@ -20,14 +20,14 @@ interface AgentsListProps {
 }
 
 const tierLabels: Record<string, string> = {
-  basic: "Básico",
+  basic: "Starter",
   intermediate: "Intermediário",
   advanced: "Avançado",
   enterprise: "Enterprise",
 };
 
 const tierColors: Record<string, string> = {
-  basic: "bg-muted text-muted-foreground",
+  basic: "bg-emerald-500/15 text-emerald-400",
   intermediate: "bg-cyan-500/15 text-cyan-400",
   advanced: "bg-emerald-500/15 text-emerald-400",
   enterprise: "bg-primary/15 text-primary",
