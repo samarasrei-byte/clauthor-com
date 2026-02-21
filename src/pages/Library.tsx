@@ -16,6 +16,7 @@ import {
   ChevronRight, Flame, Award
 } from "lucide-react";
 import ROICalculator from "@/components/library/ROICalculator";
+import ReputationBadge from "@/components/library/ReputationBadge";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 import AgentLivePreview from "@/components/library/AgentLivePreview";
 import SmartAgentFinder from "@/components/library/SmartAgentFinder";
@@ -745,19 +746,13 @@ const LibraryPage = () => {
                       ))}
                     </div>
 
-                    {/* ROI & Social Proof */}
-                    <div className="flex items-center justify-between mb-5 py-3.5 px-4 rounded-xl bg-background/40 border border-border/30">
-                      <div className="flex items-center gap-2">
-                        <TrendingUp className="h-4 w-4 text-emerald-400" />
-                        <span className="text-sm font-bold text-emerald-400">{social.savings}/mês</span>
-                      </div>
-                      <div className="w-px h-5 bg-border/50" />
-                      <div className="flex items-center gap-1.5">
-                        <Star className="h-3.5 w-3.5 fill-primary text-primary" />
-                        <span className="text-sm font-bold">{social.rating}</span>
-                      </div>
-                      <div className="w-px h-5 bg-border/50" />
-                      <span className="text-xs text-muted-foreground font-semibold">{social.companies}+ empresas</span>
+                    {/* Reputation Badge */}
+                    <div className="mb-5">
+                      <ReputationBadge
+                        rating={social.rating}
+                        companies={social.companies}
+                        savings={social.savings}
+                      />
                     </div>
 
                     {/* Replaces */}
@@ -798,36 +793,42 @@ const LibraryPage = () => {
                           <span className="text-xs text-muted-foreground mt-1.5 block font-medium">{t("library.per_month")}</span>
                         </div>
                       </div>
-                      <button
-                        className={`group/btn relative w-full rounded-xl h-12 text-sm font-bold uppercase tracking-[0.15em] overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed ${
-                          tier === "enterprise"
-                            ? "bg-primary text-primary-foreground shadow-[0_0_30px_-5px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_50px_-5px_hsl(var(--primary)/0.7)]"
-                            : "bg-foreground/[0.06] text-foreground border border-border/50 hover:border-primary/40 hover:shadow-[0_0_30px_-8px_hsl(var(--primary)/0.3)]"
-                        }`}
-                        disabled={isHiring}
-                        onClick={() => handleHire(key)}
-                      >
-                        {/* Animated scan line */}
-                        <span className="absolute inset-0 overflow-hidden rounded-xl">
-                          <span className={`absolute top-0 left-0 w-full h-[1px] opacity-0 group-hover/btn:opacity-100 transition-opacity duration-300 ${
-                            tier === "enterprise" ? "bg-white/40" : "bg-primary/50"
-                          } group-hover/btn:animate-[scan_1.5s_ease-in-out_infinite]`} />
-                        </span>
-                        {/* Shimmer effect */}
-                        <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                        {/* Content */}
-                        <span className="relative z-10 flex items-center justify-center gap-2">
-                          {isHiring ? (
-                            <Loader2 className="h-4 w-4 animate-spin" />
-                          ) : (
-                            <>
-                              <Zap className="h-4 w-4" />
-                              <span>Ativar Agente Agora</span>
-                              <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                            </>
-                          )}
-                        </span>
-                      </button>
+                      <div className="flex gap-2">
+                        {/* Test Drive button */}
+                        <button
+                          className="flex-shrink-0 rounded-xl h-12 px-4 text-xs font-bold uppercase tracking-wider border border-border/50 bg-white/[0.03] hover:border-primary/30 hover:bg-primary/5 transition-all duration-300 flex items-center gap-1.5"
+                          onClick={() => setPreviewAgent({
+                            name: agentTitle,
+                            desc: agentDesc,
+                          })}
+                        >
+                          <MessageSquare className="h-3.5 w-3.5" />
+                          <span className="hidden sm:inline">Test Drive</span>
+                        </button>
+                        {/* Hire button */}
+                        <button
+                          className={`group/btn relative flex-1 rounded-xl h-12 text-sm font-bold uppercase tracking-[0.15em] overflow-hidden transition-all duration-500 disabled:opacity-50 disabled:cursor-not-allowed ${
+                            tier === "enterprise"
+                              ? "bg-primary text-primary-foreground shadow-[0_0_30px_-5px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_50px_-5px_hsl(var(--primary)/0.7)]"
+                              : "bg-foreground/[0.06] text-foreground border border-border/50 hover:border-primary/40 hover:shadow-[0_0_30px_-8px_hsl(var(--primary)/0.3)]"
+                          }`}
+                          disabled={isHiring}
+                          onClick={() => handleHire(key)}
+                        >
+                          <span className="absolute inset-0 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                          <span className="relative z-10 flex items-center justify-center gap-2">
+                            {isHiring ? (
+                              <Loader2 className="h-4 w-4 animate-spin" />
+                            ) : (
+                              <>
+                                <Zap className="h-4 w-4" />
+                                <span>Ativar Agora</span>
+                                <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
+                              </>
+                            )}
+                          </span>
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
