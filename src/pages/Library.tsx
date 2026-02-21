@@ -710,35 +710,35 @@ const LibraryPage = () => {
                     {/* Header — Icon + Title + Tier */}
                     <div className="flex items-start gap-3 mb-4">
                       <div className="w-10 h-10 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center shrink-0 group-hover:border-primary/15 group-hover:bg-primary/[0.04] transition-all duration-500">
-                        <Icon className="h-4.5 w-4.5 text-muted-foreground/40 group-hover:text-primary/70 transition-colors duration-500" strokeWidth={1.2} />
+                        <Icon className="h-4.5 w-4.5 text-muted-foreground/60 group-hover:text-primary/70 transition-colors duration-500" strokeWidth={1.2} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-[14px] leading-tight mb-1 line-clamp-1 text-foreground/85 tracking-wide">{agentTitle}</h3>
-                        <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/35 font-medium">
+                        <h3 className="font-semibold text-[14px] leading-tight mb-1 line-clamp-1 text-foreground tracking-wide">{agentTitle}</h3>
+                        <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/60 font-medium">
                           {t(`tiers.${tier}`)}
                         </span>
                       </div>
                       {/* Rating */}
                       <div className="flex items-center gap-1 shrink-0">
                         <Star className="h-3 w-3 fill-primary/50 text-primary/50" />
-                        <span className="text-[11px] text-muted-foreground/40 font-medium">{social.rating}</span>
+                        <span className="text-[11px] text-muted-foreground/60 font-medium">{social.rating}</span>
                       </div>
                     </div>
 
                     {/* Description */}
-                    <p className="text-[12px] text-muted-foreground/50 leading-relaxed line-clamp-2 mb-4">{agentDesc}</p>
+                    <p className="text-[12px] text-muted-foreground/70 leading-relaxed line-clamp-2 mb-4">{agentDesc}</p>
 
                     {/* Capabilities — clean minimal chips */}
                     <div className="flex flex-wrap gap-1.5 mb-4">
                       {capabilities.slice(0, 3).map((cap) => (
-                        <span key={cap} className="text-[10px] px-2 py-0.5 rounded-md border border-white/[0.04] bg-white/[0.02] text-muted-foreground/40 font-medium">
+                        <span key={cap} className="text-[10px] px-2 py-0.5 rounded-md border border-white/[0.06] bg-white/[0.03] text-muted-foreground/60 font-medium">
                           {cap}
                         </span>
                       ))}
                     </div>
 
                     {/* Metrics row */}
-                    <div className="flex items-center gap-4 mb-4 text-[10px] text-muted-foreground/30">
+                    <div className="flex items-center gap-4 mb-4 text-[10px] text-muted-foreground/50">
                       <span>{social.companies}+ empresas</span>
                       <span className="h-2.5 w-px bg-white/[0.06]" />
                       <span>Economia {social.savings}/mês</span>
@@ -753,7 +753,7 @@ const LibraryPage = () => {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-bold text-lg text-foreground/90 tracking-tight">{priceDisplay}</p>
-                          <span className="text-[9px] text-muted-foreground/25 tracking-wider">{t("library.per_month")}</span>
+                          <span className="text-[9px] text-muted-foreground/40 tracking-wider">{t("library.per_month")}</span>
                         </div>
                         <div className="flex gap-2">
                           {/* Test Drive */}
