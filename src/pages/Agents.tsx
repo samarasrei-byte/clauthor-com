@@ -25,7 +25,7 @@ const statusColor: Record<string, string> = {
 };
 
 const tierLabels: Record<string, string> = {
-  basic: "Básico",
+  basic: "Starter",
   intermediate: "Intermediário",
   advanced: "Avançado",
   enterprise: "Enterprise",

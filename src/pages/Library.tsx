@@ -87,20 +87,20 @@ const agentTiers: Record<string, string> = {
   omnichannel: "advanced", revenue: "advanced", sales: "advanced",
   rag: "intermediate", computer: "enterprise", content: "intermediate", security: "enterprise", hr: "advanced",
   customer_success: "advanced", data_analytics: "advanced", legal: "enterprise", ecommerce: "advanced",
-  influencer: "advanced", marketing_automation: "advanced", creative_design: "intermediate",
-  video_production: "advanced", seo_growth: "advanced", project_management: "intermediate",
-  supply_chain: "advanced", training: "intermediate",
+  influencer: "advanced", marketing_automation: "advanced", creative_design: "basic",
+  video_production: "advanced", seo_growth: "advanced", project_management: "basic",
+  supply_chain: "advanced", training: "basic",
   concierge: "advanced", ceo: "enterprise", startup_creator: "advanced",
   paid_traffic: "advanced",
   influencer_liveshop: "advanced",
   podcast_manager: "advanced",
   affiliate_manager: "advanced",
-  community_mgr: "intermediate",
+  community_mgr: "basic",
   whatsapp_commerce: "advanced",
   ai_cfo: "enterprise",
-  scheduler: "intermediate",
-  reputation: "advanced",
-  proposal_gen: "advanced",
+  scheduler: "basic",
+  reputation: "basic",
+  proposal_gen: "basic",
 };
 
 const agentPriceTiers: Record<string, PriceTier> = {
@@ -108,20 +108,20 @@ const agentPriceTiers: Record<string, PriceTier> = {
   omnichannel: "mid", revenue: "mid", sales: "mid",
   rag: "entry", computer: "high", content: "entry", security: "premium", hr: "mid",
   customer_success: "mid", data_analytics: "mid", legal: "high", ecommerce: "mid",
-  influencer: "mid", marketing_automation: "mid", creative_design: "entry",
-  video_production: "mid", seo_growth: "mid", project_management: "entry",
-  supply_chain: "mid", training: "entry",
+  influencer: "mid", marketing_automation: "mid", creative_design: "starter",
+  video_production: "mid", seo_growth: "mid", project_management: "starter",
+  supply_chain: "mid", training: "starter",
   concierge: "mid", ceo: "premium", startup_creator: "mid",
   paid_traffic: "mid",
   influencer_liveshop: "mid",
   podcast_manager: "mid",
   affiliate_manager: "mid",
-  community_mgr: "entry",
+  community_mgr: "starter",
   whatsapp_commerce: "mid",
   ai_cfo: "premium",
-  scheduler: "entry",
-  reputation: "mid",
-  proposal_gen: "mid",
+  scheduler: "starter",
+  reputation: "starter",
+  proposal_gen: "starter",
 };
 
 const agentTags: Record<string, string[]> = {
@@ -287,12 +287,13 @@ const agentCapabilities: Record<string, string[]> = {
 };
 
 const tierColors: Record<string, string> = {
+  basic: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
   intermediate: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
   advanced: "bg-cyan-500/10 text-cyan-300 border-cyan-500/20",
   enterprise: "bg-primary/10 text-primary border-primary/20",
 };
 
-const tiers = ["all", "intermediate", "advanced", "enterprise"];
+const tiers = ["all", "basic", "intermediate", "advanced", "enterprise"];
 
 const LibraryPage = () => {
   const [filter, setFilter] = useState("all");
@@ -706,6 +707,8 @@ const LibraryPage = () => {
                       ? "bg-gradient-to-r from-transparent via-primary to-transparent" 
                       : tier === "advanced"
                       ? "bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent"
+                      : tier === "basic"
+                      ? "bg-gradient-to-r from-transparent via-emerald-400/60 to-transparent"
                       : "bg-gradient-to-r from-transparent via-border to-transparent"
                   }`} />
 
