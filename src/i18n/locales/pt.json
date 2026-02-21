@@ -618,7 +618,7 @@
     "research_desc": "Coleta dados, gera relatórios e insights."
   },
   "tiers": {
-    "basic": "Básico",
+    "basic": "Starter",
     "intermediate": "Intermediário",
     "advanced": "Avançado",
     "enterprise": "Enterprise"
