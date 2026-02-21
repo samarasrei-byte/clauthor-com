@@ -27,7 +27,7 @@ const agentQuickList = [
 
 const navigationItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
-  { name: "Biblioteca de Agentes", href: "/library", icon: Library },
+  { name: "Marketplace", href: "/marketplace", icon: Library },
   { name: "Preços & Planos", href: "/pricing", icon: CreditCard },
   { name: "Como Funciona", href: "/how-it-works", icon: Sparkles },
   { name: "Comunidade", href: "/community", icon: Users },
