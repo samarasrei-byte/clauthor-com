@@ -170,15 +170,11 @@ const HomePage = () => {
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.7 }} className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
               <Link to="/auth">
                 <button className="group relative h-14 px-12 rounded-xl font-display font-semibold text-lg text-primary-foreground overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
-                  {/* Animated gradient background */}
                   <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
-                  {/* Glow ring */}
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
-                  {/* Scan line */}
                   <div className="absolute inset-0 overflow-hidden rounded-xl">
                     <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
-                  {/* Content */}
                   <span className="relative z-10 flex items-center gap-2">
                     <Play className="h-5 w-5 fill-current" />
                     {t("home.cta_start")}
@@ -186,11 +182,13 @@ const HomePage = () => {
                   </span>
                 </button>
               </Link>
-              <Button size="lg" variant="outline" className="glass-btn font-semibold text-base px-10 h-14 rounded-xl text-lg group">
-                <Globe className="h-5 w-5 mr-2" />
-                {t("home.cta_demo")}
-                <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-              </Button>
+              <Link to="/departamentos">
+                <Button size="lg" variant="outline" className="glass-btn font-semibold text-base px-10 h-14 rounded-xl text-lg group border-primary/20 hover:border-primary/40">
+                  <Users className="h-5 w-5 mr-2 text-primary" />
+                  Monte seu Time de IA
+                  <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Button>
+              </Link>
             </motion.div>
 
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 1 }} className="flex flex-wrap items-center justify-center gap-8 pt-10 text-muted-foreground text-sm">
