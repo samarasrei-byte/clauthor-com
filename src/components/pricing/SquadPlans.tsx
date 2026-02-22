@@ -20,13 +20,97 @@ const squadPacks = [
 ];
 
 const departments = [
-  { id: "vendas", icon: Briefcase, color: "text-cyan-400", bgColor: "bg-cyan-500/10 border-cyan-500/20", agents: ["sales", "customer_success", "omnichannel", "voice_ai"], discount: 25 },
-  { id: "suporte", icon: MessageSquare, color: "text-emerald-400", bgColor: "bg-emerald-500/10 border-emerald-500/20", agents: ["omnichannel", "customer_success", "voice_ai", "rag"], discount: 25 },
-  { id: "financeiro", icon: BarChart3, color: "text-amber-400", bgColor: "bg-amber-500/10 border-amber-500/20", agents: ["revenue", "legal", "data_analytics", "ecommerce"], discount: 25 },
-  { id: "marketing", icon: Sparkles, color: "text-primary", bgColor: "bg-primary/10 border-primary/20", agents: ["content", "marketing_automation", "seo_growth", "influencer"], discount: 25 },
-  { id: "criacao", icon: Palette, color: "text-violet-400", bgColor: "bg-violet-500/10 border-violet-500/20", agents: ["creative_design", "video_production", "content", "influencer"], discount: 25 },
-  { id: "tecnologia", icon: Wrench, color: "text-blue-400", bgColor: "bg-blue-500/10 border-blue-500/20", agents: ["coding", "computer", "project_management", "security"], discount: 25 },
-  { id: "rh", icon: GraduationCap, color: "text-pink-400", bgColor: "bg-pink-500/10 border-pink-500/20", agents: ["hr", "training", "customer_success", "data_analytics"], discount: 25 },
+  { 
+    id: "comercial", icon: Briefcase, color: "text-cyan-400", 
+    gradient: "from-cyan-500/20 to-cyan-500/5",
+    borderActive: "border-cyan-500/40",
+    iconBg: "bg-cyan-500/20",
+    agents: [
+      { key: "sales", icon: Briefcase, role: "SDR / Closer" },
+      { key: "customer_success", icon: Star, role: "Customer Success" },
+      { key: "omnichannel", icon: MessageSquare, role: "Atendente Multicanal" },
+      { key: "voice_ai", icon: Phone, role: "Operador de Telefonia" },
+    ],
+    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+  },
+  { 
+    id: "marketing", icon: Megaphone, color: "text-primary", 
+    gradient: "from-primary/20 to-primary/5",
+    borderActive: "border-primary/40",
+    iconBg: "bg-primary/20",
+    agents: [
+      { key: "content", icon: Sparkles, role: "Copywriter / Content" },
+      { key: "marketing_automation", icon: Target, role: "Automação de Marketing" },
+      { key: "seo_growth", icon: Globe, role: "Analista SEO" },
+      { key: "influencer", icon: Megaphone, role: "Social Media Manager" },
+    ],
+    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+  },
+  { 
+    id: "financeiro", icon: BarChart3, color: "text-amber-400", 
+    gradient: "from-amber-500/20 to-amber-500/5",
+    borderActive: "border-amber-500/40",
+    iconBg: "bg-amber-500/20",
+    agents: [
+      { key: "revenue", icon: BarChart3, role: "CFO / Controller" },
+      { key: "legal", icon: FileText, role: "Analista Fiscal / Jurídico" },
+      { key: "data_analytics", icon: BarChart3, role: "Analista de Dados" },
+      { key: "ecommerce", icon: ShoppingCart, role: "Gestor Financeiro E-com" },
+    ],
+    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+  },
+  { 
+    id: "suporte", icon: MessageSquare, color: "text-emerald-400", 
+    gradient: "from-emerald-500/20 to-emerald-500/5",
+    borderActive: "border-emerald-500/40",
+    iconBg: "bg-emerald-500/20",
+    agents: [
+      { key: "omnichannel", icon: MessageSquare, role: "Atendente N1 / N2" },
+      { key: "customer_success", icon: Star, role: "CS Manager" },
+      { key: "voice_ai", icon: Phone, role: "Operador Call Center" },
+      { key: "rag", icon: FileText, role: "Base de Conhecimento" },
+    ],
+    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+  },
+  { 
+    id: "criacao", icon: Palette, color: "text-violet-400", 
+    gradient: "from-violet-500/20 to-violet-500/5",
+    borderActive: "border-violet-500/40",
+    iconBg: "bg-violet-500/20",
+    agents: [
+      { key: "creative_design", icon: Palette, role: "Designer Gráfico" },
+      { key: "video_production", icon: Video, role: "Editor de Vídeo" },
+      { key: "content", icon: Sparkles, role: "Redator Criativo" },
+      { key: "influencer", icon: Megaphone, role: "Produtor de Conteúdo" },
+    ],
+    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+  },
+  { 
+    id: "tecnologia", icon: Wrench, color: "text-blue-400", 
+    gradient: "from-blue-500/20 to-blue-500/5",
+    borderActive: "border-blue-500/40",
+    iconBg: "bg-blue-500/20",
+    agents: [
+      { key: "coding", icon: Wrench, role: "Dev Full-Stack" },
+      { key: "computer", icon: Building2, role: "DevOps / Infra" },
+      { key: "project_management", icon: ClipboardList, role: "Gerente de Projetos" },
+      { key: "security", icon: Shield, role: "CISO / Segurança" },
+    ],
+    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+  },
+  { 
+    id: "rh", icon: GraduationCap, color: "text-pink-400", 
+    gradient: "from-pink-500/20 to-pink-500/5",
+    borderActive: "border-pink-500/40",
+    iconBg: "bg-pink-500/20",
+    agents: [
+      { key: "hr", icon: Star, role: "Recrutador / BP" },
+      { key: "training", icon: GraduationCap, role: "T&D / Onboarding" },
+      { key: "customer_success", icon: Star, role: "People Analytics" },
+      { key: "data_analytics", icon: BarChart3, role: "Analista de Dados RH" },
+    ],
+    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+  },
 ];
 
 const availableAgents = [
@@ -402,53 +486,131 @@ export default function SquadPlans() {
             </div>
           </TabsContent>
 
-          {/* DEPARTMENTS */}
-          <TabsContent value="departments" className="mt-6">
-            <div className="grid md:grid-cols-2 gap-6">
-              {departments.map((dept, i) => (
-                <motion.div
-                  key={dept.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
-                  className={`rounded-2xl border p-6 transition-all hover:border-primary/40 ${dept.bgColor}`}
-                >
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-background/50 flex items-center justify-center">
-                      <dept.icon className={`h-6 w-6 ${dept.color}`} />
-                    </div>
-                    <div>
-                      <h3 className="font-display font-bold text-lg">{t(`squads.dept_${dept.id}`)}</h3>
-                      <p className="text-xs text-muted-foreground">{t(`squads.dept_${dept.id}_desc`)}</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between mb-4 p-2 rounded-lg bg-background/30">
-                    <span className="text-xs font-medium text-emerald-400">{t("squads.bundle_discount")}</span>
-                    <span className="font-display font-bold text-lg text-emerald-400">-{dept.discount}%</span>
-                  </div>
-
-                  <div className="space-y-2 mb-5">
-                    <p className="text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
-                      {t("squads.included_agents")}
-                    </p>
-                    {dept.agents.map((agentKey) => (
-                      <div key={agentKey} className="flex items-center gap-2 text-sm">
-                        <Check className="h-3.5 w-3.5 text-primary/70 shrink-0" />
-                        <span>{t(`library_page.agents.${agentKey}_title`)}</span>
-                      </div>
-                    ))}
-                  </div>
-
-                  <Link to="/auth">
-                    <Button variant="outline" className="w-full rounded-xl h-11 font-semibold gap-2 border-border hover:border-primary/30">
-                      {t("squads.hire_department")}
-                      <ArrowRight className="h-4 w-4" />
-                    </Button>
-                  </Link>
-                </motion.div>
-              ))}
+          {/* DEPARTMENTS — Innovative org-chart style */}
+          <TabsContent value="departments" className="mt-8">
+            <div className="text-center mb-8">
+              <p className="text-muted-foreground text-sm max-w-xl mx-auto">
+                Monte seu time de IA por departamento. Cada setor vem com os agentes certos — prontos para substituir operações CLT inteiras.
+              </p>
             </div>
+
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+              {departments.map((dept, i) => {
+                const DeptIcon = dept.icon;
+                const savings = dept.cltCost - dept.prometheusCost;
+                const savingsPercent = Math.round((savings / dept.cltCost) * 100);
+                return (
+                  <motion.div
+                    key={dept.id}
+                    initial={{ opacity: 0, y: 24 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.08 }}
+                    className={`group relative rounded-2xl border border-border bg-card/20 overflow-hidden transition-all duration-300 hover:border-primary/30 hover:shadow-[0_0_40px_-12px_hsl(var(--primary)/0.15)]`}
+                  >
+                    {/* Gradient header */}
+                    <div className={`relative p-5 bg-gradient-to-br ${dept.gradient}`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className={`w-12 h-12 rounded-xl ${dept.iconBg} flex items-center justify-center`}>
+                            <DeptIcon className={`h-6 w-6 ${dept.color}`} />
+                          </div>
+                          <div>
+                            <h3 className="font-display font-bold text-lg">{t(`squads.dept_${dept.id}`)}</h3>
+                            <p className="text-[11px] text-muted-foreground">{dept.headcount} agentes especializados</p>
+                          </div>
+                        </div>
+                        <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 text-[11px] font-bold">
+                          -{dept.discount}%
+                        </Badge>
+                      </div>
+                    </div>
+
+                    {/* Agents org-chart */}
+                    <div className="p-5 space-y-2">
+                      <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-3">
+                        Agentes do departamento
+                      </p>
+                      {dept.agents.map((agent, idx) => {
+                        const AgentIcon = agent.icon;
+                        return (
+                          <div
+                            key={`${dept.id}-${agent.key}-${idx}`}
+                            className="flex items-center gap-3 p-2.5 rounded-xl bg-white/[0.02] border border-transparent hover:border-white/[0.06] transition-colors"
+                          >
+                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
+                              <AgentIcon className="h-3.5 w-3.5 text-primary-foreground" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <p className="text-sm font-medium truncate">
+                                {t(`library_page.agents.${agent.key}_title`)}
+                              </p>
+                              <p className="text-[10px] text-muted-foreground">
+                                Substitui: <span className="text-foreground/60">{agent.role}</span>
+                              </p>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Footer — savings CTA */}
+                    <div className="px-5 pb-5 space-y-3">
+                      <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                        <div>
+                          <p className="text-[10px] text-muted-foreground">CLT equivalente</p>
+                          <p className="text-sm font-bold line-through text-muted-foreground">
+                            R$ {dept.cltCost.toLocaleString("pt-BR")}/mês
+                          </p>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-[10px] text-emerald-400 font-medium">Com PROMETHEUS</p>
+                          <p className="text-sm font-bold text-emerald-400">
+                            R$ {dept.prometheusCost.toLocaleString("pt-BR")}/mês
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="text-center">
+                        <span className="text-xs text-muted-foreground">
+                          Economia de <span className="text-emerald-400 font-bold">R$ {savings.toLocaleString("pt-BR")}/mês</span>{" "}
+                          <span className="text-emerald-400">({savingsPercent}%)</span>
+                        </span>
+                      </div>
+
+                      <Link to="/auth">
+                        <Button variant="outline" className={`w-full rounded-xl h-11 font-semibold gap-2 border-border hover:${dept.borderActive} transition-colors`}>
+                          Contratar Departamento
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </Link>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+
+            {/* Bottom CTA — full company */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+              className="mt-10 text-center p-8 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/5 via-background to-primary/5"
+            >
+              <Flame className="h-8 w-8 text-primary mx-auto mb-3" />
+              <h3 className="font-display font-bold text-xl mb-2">
+                Contrate a empresa inteira por menos que 2 funcionários CLT
+              </h3>
+              <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-4">
+                7 departamentos × 4 agentes = <span className="text-foreground font-semibold">28 funcionários de IA</span> operando 24/7.
+                Enquanto o CLT custa R$ 211.680/mês, o PROMETHEUS entrega tudo por uma fração.
+              </p>
+              <Link to="/auth">
+                <Button className="glow rounded-xl px-8 h-12 font-semibold gap-2">
+                  Montar Meu Time Completo
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </motion.div>
           </TabsContent>
 
           {/* AI CONSULTANT */}
