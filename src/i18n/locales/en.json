@@ -424,13 +424,13 @@
     "clt_row8_apex": "$9,564/year",
     "clt_header_traditional": "Traditional",
     "token_pack1": "5,000,000",
-    "token_price1": "$597",
+    "token_price1": "$397",
     "token_pack2": "15,000,000",
-    "token_price2": "$1,597",
+    "token_price2": "$997",
     "token_pack3": "50,000,000",
-    "token_price3": "$4,597",
+    "token_price3": "$2,997",
     "token_pack4": "100,000,000",
-    "token_price4": "$7,997"
+    "token_price4": "$5,597"
   },
   "how_it_works_page": {
     "badge": "How It Works",
