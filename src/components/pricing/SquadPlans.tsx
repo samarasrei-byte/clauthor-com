@@ -31,7 +31,7 @@ const departments = [
       { key: "omnichannel", icon: MessageSquare, role: "Atendente Multicanal" },
       { key: "voice_ai", icon: Phone, role: "Operador de Telefonia" },
     ],
-    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+    headcount: 4, cltCost: 30240, prometheusCost: 2200, discount: 25,
   },
   { 
     id: "marketing", icon: Megaphone, color: "text-primary", 
@@ -44,7 +44,7 @@ const departments = [
       { key: "seo_growth", icon: Globe, role: "Analista SEO" },
       { key: "influencer", icon: Megaphone, role: "Social Media Manager" },
     ],
-    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+    headcount: 4, cltCost: 30240, prometheusCost: 2200, discount: 25,
   },
   { 
     id: "financeiro", icon: BarChart3, color: "text-amber-400", 
@@ -57,7 +57,7 @@ const departments = [
       { key: "data_analytics", icon: BarChart3, role: "Analista de Dados" },
       { key: "ecommerce", icon: ShoppingCart, role: "Gestor Financeiro E-com" },
     ],
-    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+    headcount: 4, cltCost: 30240, prometheusCost: 2200, discount: 25,
   },
   { 
     id: "suporte", icon: MessageSquare, color: "text-emerald-400", 
@@ -70,7 +70,7 @@ const departments = [
       { key: "voice_ai", icon: Phone, role: "Operador Call Center" },
       { key: "rag", icon: FileText, role: "Base de Conhecimento" },
     ],
-    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+    headcount: 4, cltCost: 30240, prometheusCost: 2200, discount: 25,
   },
   { 
     id: "criacao", icon: Palette, color: "text-violet-400", 
@@ -83,7 +83,7 @@ const departments = [
       { key: "content", icon: Sparkles, role: "Redator Criativo" },
       { key: "influencer", icon: Megaphone, role: "Produtor de Conteúdo" },
     ],
-    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+    headcount: 4, cltCost: 30240, prometheusCost: 2200, discount: 25,
   },
   { 
     id: "tecnologia", icon: Wrench, color: "text-blue-400", 
@@ -96,7 +96,7 @@ const departments = [
       { key: "project_management", icon: ClipboardList, role: "Gerente de Projetos" },
       { key: "security", icon: Shield, role: "CISO / Segurança" },
     ],
-    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+    headcount: 4, cltCost: 30240, prometheusCost: 2200, discount: 25,
   },
   { 
     id: "rh", icon: GraduationCap, color: "text-pink-400", 
@@ -109,7 +109,7 @@ const departments = [
       { key: "customer_success", icon: Star, role: "People Analytics" },
       { key: "data_analytics", icon: BarChart3, role: "Analista de Dados RH" },
     ],
-    headcount: 4, cltCost: 30240, prometheusCost: 1997, discount: 25,
+    headcount: 4, cltCost: 30240, prometheusCost: 2200, discount: 25,
   },
 ];
 
