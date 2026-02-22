@@ -1,8 +1,8 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { motion } from "framer-motion";
-import { Menu, X, LogOut, Shield } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Menu, X, LogOut, Shield, ChevronDown, Bot, Building2, ShoppingCart, Network } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "@/components/LanguageSelector";
@@ -12,11 +12,23 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
+  const megaMenuRef = useRef<HTMLDivElement>(null);
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useTranslation();
 
+  // Close mega menu on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (megaMenuRef.current && !megaMenuRef.current.contains(e.target as Node)) {
+        setMegaMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
   const publicNavItems = [
-    { label: t("nav.library"), href: "/library" },
     { label: t("nav.pricing"), href: "/pricing" },
     { label: t("nav.how_it_works"), href: "/how-it-works" },
   ];
@@ -24,7 +36,6 @@ const Navbar = () => {
   const authNavItems = [
     { label: t("nav.dashboard"), href: "/dashboard" },
     { label: t("nav.my_agents"), href: "/agents" },
-    { label: t("nav.library"), href: "/library" },
     { label: t("nav.pricing"), href: "/pricing" },
     { label: t("nav.integrations"), href: "/integrations" },
   ];
@@ -54,6 +65,62 @@ const Navbar = () => {
 
           {/* Desktop */}
           <div className="hidden md:flex items-center gap-1">
+            {/* Mega Menu — Soluções */}
+            <div ref={megaMenuRef} className="relative">
+              <button
+                onClick={() => setMegaMenuOpen(!megaMenuOpen)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                  ["/marketplace", "/library", "/departamentos"].includes(location.pathname)
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                }`}
+              >
+                Soluções
+                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${megaMenuOpen ? "rotate-180" : ""}`} />
+              </button>
+              <AnimatePresence>
+                {megaMenuOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full left-0 mt-2 w-[380px] rounded-2xl bg-background/95 backdrop-blur-2xl border border-white/[0.08] shadow-2xl p-3 z-50"
+                  >
+                    <Link
+                      to="/marketplace"
+                      onClick={() => setMegaMenuOpen(false)}
+                      className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-cyan-500/10 flex items-center justify-center shrink-0 group-hover:bg-cyan-500/20 transition-colors">
+                        <ShoppingCart className="h-5 w-5 text-cyan-400" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-sm text-foreground">Marketplace</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">37+ agentes individuais para contratar avulso</p>
+                      </div>
+                    </Link>
+                    <Link
+                      to="/departamentos"
+                      onClick={() => setMegaMenuOpen(false)}
+                      className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
+                        <Network className="h-5 w-5 text-primary" />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-sm text-foreground">Times de IA</p>
+                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">NOVO</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">7 departamentos completos com 28 agentes</p>
+                      </div>
+                    </Link>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
             {navItems.map((item) => (
               <Link
                 key={item.href}
@@ -136,6 +203,25 @@ const Navbar = () => {
           className="md:hidden bg-background/95 backdrop-blur-2xl border-t border-white/[0.05]"
         >
           <div className="px-4 py-6 space-y-2">
+            <Link
+              to="/marketplace"
+              onClick={() => setMobileOpen(false)}
+              className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                location.pathname === "/marketplace" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              }`}
+            >
+              🛒 Marketplace
+            </Link>
+            <Link
+              to="/departamentos"
+              onClick={() => setMobileOpen(false)}
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                location.pathname === "/departamentos" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              }`}
+            >
+              🏢 Times de IA
+              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">NOVO</span>
+            </Link>
             {navItems.map((item) => (
               <Link
                 key={item.href}

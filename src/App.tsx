@@ -21,6 +21,7 @@ import Integrations from "./pages/Integrations";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 import AgentLanding from "./pages/AgentLanding";
+import Departamentos from "./pages/Departamentos";
 
 const queryClient = new QueryClient();
 
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/how-it-works" element={<HowItWorks />} />
               <Route path="/waitlist" element={<Waitlist />} />
               <Route path="/community" element={<Community />} />
+              <Route path="/departamentos" element={<Departamentos />} />
               <Route path="/agente/:slug" element={<AgentLanding />} />
             </Route>
 
