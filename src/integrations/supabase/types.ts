@@ -323,6 +323,33 @@ export type Database = {
         }
         Relationships: []
       }
+      department_suggestions: {
+        Row: {
+          created_at: string
+          department_name: string
+          email: string | null
+          id: string
+          reason: string | null
+          votes: number
+        }
+        Insert: {
+          created_at?: string
+          department_name: string
+          email?: string | null
+          id?: string
+          reason?: string | null
+          votes?: number
+        }
+        Update: {
+          created_at?: string
+          department_name?: string
+          email?: string | null
+          id?: string
+          reason?: string | null
+          votes?: number
+        }
+        Relationships: []
+      }
       execution_logs: {
         Row: {
           action: string
