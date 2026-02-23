@@ -775,15 +775,22 @@ const LibraryPage = () => {
                           </Link>
                           {/* Hire */}
                           <button
-                            className="h-9 px-4 rounded-xl text-[11px] font-semibold tracking-wider uppercase border border-white/[0.06] bg-white/[0.02] hover:border-primary/25 hover:bg-primary/[0.06] hover:text-primary transition-all duration-300 disabled:opacity-30"
+                            className="group relative h-9 px-5 rounded-xl text-[11px] font-semibold tracking-wider uppercase overflow-hidden transition-all duration-300 disabled:opacity-30"
                             disabled={isHiring}
                             onClick={() => handleHire(key)}
                           >
-                            {isHiring ? (
-                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                            ) : (
-                              "Ativar"
-                            )}
+                            {/* Pulsing red glow behind */}
+                            <div className="absolute inset-0 bg-primary/10 rounded-xl animate-pulse" />
+                            <div className="absolute -inset-0.5 bg-primary/20 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            {/* Border */}
+                            <div className="absolute inset-0 rounded-xl border border-primary/25 group-hover:border-primary/50 transition-colors duration-300" />
+                            <span className="relative z-10 text-primary/80 group-hover:text-primary transition-colors">
+                              {isHiring ? (
+                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                              ) : (
+                                "Ativar"
+                              )}
+                            </span>
                           </button>
                         </div>
                       </div>
