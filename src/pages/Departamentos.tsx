@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import type { HireIntent } from "./Auth";
 import {
   Users, Building2, ArrowRight, Flame, Sparkles,
   Phone, MessageSquare, Briefcase, BarChart3, Star, FileText,
@@ -277,7 +278,17 @@ const Departamentos = () => {
                     </div>
                   </div>
 
-                  <Link to="/auth">
+                  <Link 
+                    to="/auth" 
+                    state={{ 
+                      hireIntent: { 
+                        type: "department", 
+                        label: t(`squads.dept_${dept.id}`),
+                        departmentId: dept.id,
+                        slugs: dept.agents.map(a => a.key),
+                      } as HireIntent 
+                    }}
+                  >
                     <Button 
                       variant={dept.popular ? "default" : "outline"} 
                       className={`w-full rounded-xl h-11 font-semibold gap-2 ${dept.popular ? "glow" : "border-border"}`}
@@ -323,7 +334,17 @@ const Departamentos = () => {
               -{totalSavingsPercent}%
             </Badge>
           </div>
-          <Link to="/auth">
+          <Link 
+            to="/auth" 
+            state={{ 
+              hireIntent: { 
+                type: "department", 
+                label: "Empresa Completa (7 departamentos)",
+                departmentId: "all",
+                slugs: departments.flatMap(d => d.agents.map(a => a.key)),
+              } as HireIntent 
+            }}
+          >
             <Button className="glow rounded-xl px-10 h-14 font-semibold gap-2 text-lg">
               Montar Meu Time Completo
               <ArrowRight className="h-5 w-5" />

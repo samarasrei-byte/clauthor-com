@@ -37,7 +37,7 @@ const AgentLanding = () => {
             </h1>
             <p className="text-muted-foreground text-lg sm:text-xl max-w-3xl mx-auto mb-10">{agent.heroSubheadline}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link to="/auth">
+              <Link to="/auth" state={{ hireIntent: { type: "agent", label: agent.solutionTitle, slugs: [slug] } }}>
                 <Button size="lg" className="glow rounded-xl px-8 h-14 text-lg font-semibold">
                   {agent.ctaButton} <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
@@ -251,7 +251,7 @@ const AgentLanding = () => {
             </div>
             <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">{agent.ctaHeadline}</h2>
             <p className="text-muted-foreground text-lg mb-8">{agent.ctaSubheadline}</p>
-            <Link to="/auth">
+            <Link to="/auth" state={{ hireIntent: { type: "agent", label: agent.solutionTitle, slugs: [slug] } }}>
               <Button size="lg" className="glow rounded-xl px-10 h-14 text-lg font-semibold">
                 <Zap className="h-5 w-5 mr-2" />
                 {agent.ctaButton}
