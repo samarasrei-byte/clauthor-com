@@ -650,7 +650,7 @@ export default function SquadPlans() {
                   <p className="font-display font-bold text-lg line-through text-muted-foreground">R$ 304.000/mês</p>
                 </div>
                 <div>
-                  <p className="text-xs text-emerald-400 font-medium">PROMETHEUS</p>
+                  <p className="text-xs text-emerald-400 font-medium">CLAUTHOR</p>
                   <p className="font-display font-bold text-lg text-emerald-400">R$ 21.179/mês</p>
                 </div>
                 <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 font-bold text-sm px-3 py-1">

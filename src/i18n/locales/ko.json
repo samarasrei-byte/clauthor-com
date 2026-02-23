@@ -3,7 +3,7 @@
   "hero": { "badge": "자율 에이전트 플랫폼", "title1": "디지털 직원.", "title2": "자율 에이전트", "title3": "귀하의 비즈니스를 위해.", "subtitle": "고객 서비스, 영업, 재무, 세무 등 완전한 프로세스를 실행하는 지능형 에이전트를 생성, 교육 및 운영하세요.", "subtitle_highlight": "24/7 운영.", "cta_primary": "지금 무료로 시작", "cta_secondary": "에이전트 탐색" },
   "spotlight": { "message1": "우리는 사람을 대체하러 온 것이 아닙니다.", "message2": "최고의 인재와 함께 일하러 왔습니다.", "agent_label": "가장 진보된 에이전트를 만나보세요", "agent_tagline": "자율 지능. 무자비한 실행.", "agent_subtitle": "당신의 운영을 움직이는 불." },
   "stats": { "agents": "활성 에이전트", "actions": "작업/월", "uptime": "가동 시간", "companies": "기업" },
-  "features": { "badge": "왜 PROMETHEUS?", "title1": "소프트웨어를 고용하는 게 아닙니다.", "title2": "디지털 직원을 고용하는 것입니다.", "autonomous": "자율 실행", "autonomous_desc": "인간 개입 없이 완전한 프로세스", "security": "엔터프라이즈 보안", "security_desc": "완전한 감사 및 규정 준수", "uptime": "24/7 운영", "uptime_desc": "휴가 제로, 결근 제로, 오류 제로", "analytics": "실시간 분석", "analytics_desc": "절감 및 성능 지표" },
+  "features": { "badge": "왜 CLAUTHOR?", "title1": "소프트웨어를 고용하는 게 아닙니다.", "title2": "디지털 직원을 고용하는 것입니다.", "autonomous": "자율 실행", "autonomous_desc": "인간 개입 없이 완전한 프로세스", "security": "엔터프라이즈 보안", "security_desc": "완전한 감사 및 규정 준수", "uptime": "24/7 운영", "uptime_desc": "휴가 제로, 결근 제로, 오류 제로", "analytics": "실시간 분석", "analytics_desc": "절감 및 성능 지표" },
   "library": { "badge": "템플릿 라이브러리", "title": "에이전트", "title_highlight": "바로 사용 가능", "subtitle": "몇 분 안에 선택, 사용자 정의 및 활성화.", "price_range": "복잡도에 따라 월 ₩259,000~₩1,559,000.", "view_all": "모든 에이전트 보기", "use_template": "이 템플릿 사용", "popular": "인기", "per_month": "/월", "actions_included": "포함된 작업", "available_templates": "사용 가능한 템플릿", "filter_all": "전체" },
   "library_page": {
     "badge_count": "{{count}}개의 차세대 에이전트",

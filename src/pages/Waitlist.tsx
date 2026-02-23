@@ -295,7 +295,7 @@ const Waitlist = () => {
           </h1>
 
           <p className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-lg">
-            O <span className="text-foreground font-semibold">PROMETHEUS</span> está prestes a revolucionar a forma como empresas operam com IA. 
+            O <span className="text-foreground font-semibold">CLAUTHOR</span> está prestes a revolucionar a forma como empresas operam com IA. 
             Seja um dos primeiros a experimentar o{" "}
             <span className="text-primary font-semibold">futuro da automação inteligente.</span>
           </p>

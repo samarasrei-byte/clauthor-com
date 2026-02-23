@@ -142,7 +142,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
   };
 
   const copyPixCode = () => {
-    navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136prometheus-tokens@pix.com5204000053039865802BR5925PROMETHEUS TOKENS LTDA6009SAO PAULO62070503***6304ABCD");
+    navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136clauthor-tokens@pix.com5204000053039865802BR5925CLAUTHOR TOKENS LTDA6009SAO PAULO62070503***6304ABCD");
     toast.success("Código PIX copiado!");
   };
 

@@ -329,7 +329,7 @@ const Departamentos = () => {
               </p>
             </div>
             <div>
-              <p className="text-xs text-emerald-400 font-medium">PROMETHEUS</p>
+              <p className="text-xs text-emerald-400 font-medium">CLAUTHOR</p>
               <p className="font-display font-bold text-xl text-emerald-400">
                 R$ {totalPrometheusCost.toLocaleString("pt-BR")}/mês
               </p>

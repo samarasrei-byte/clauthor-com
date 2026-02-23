@@ -285,7 +285,7 @@ const AdminCommandCenter = ({
                   <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-amber-500/10 flex items-center justify-center mb-3">
                     <Brain className="h-7 w-7 text-primary" />
                   </div>
-                  <h4 className="font-display font-bold text-sm mb-1">Orquestrador Prometheus</h4>
+                  <h4 className="font-display font-bold text-sm mb-1">Orquestrador Clauthor</h4>
                   <p className="text-[10px] text-muted-foreground mb-4 max-w-xs">
                     Coordeno todos os departamentos em tempo real. Pergunte qualquer coisa.
                   </p>

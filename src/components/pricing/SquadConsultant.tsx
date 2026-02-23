@@ -13,7 +13,7 @@ interface Message {
   content: string;
 }
 
-const CONSULTANT_PROMPT = `Você é o Consultor de Squad PROMETHEUS — um especialista em montagem de equipes de IA para empresas.
+const CONSULTANT_PROMPT = `Você é o Consultor de Squad CLAUTHOR — um especialista em montagem de equipes de IA para empresas.
 
 ## SEUS AGENTES DISPONÍVEIS (com slugs):
 - voice_ai: Atendimento por voz com IA

@@ -13,7 +13,7 @@ const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
   const [theme, setThemeState] = useState<Theme>(() => {
     if (typeof window !== "undefined") {
-      return (localStorage.getItem("prometheus-theme") as Theme) || "dark";
+      return (localStorage.getItem("clauthor-theme") as Theme) || "dark";
     }
     return "dark";
   });
@@ -25,7 +25,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     } else {
       root.classList.remove("light");
     }
-    localStorage.setItem("prometheus-theme", theme);
+    localStorage.setItem("clauthor-theme", theme);
   }, [theme]);
 
   const toggleTheme = () => setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
