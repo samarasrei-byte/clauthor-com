@@ -131,22 +131,22 @@ const HomePage = () => {
         transition={{ delay: 0.3, duration: 0.6 }}
         className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border-b border-primary/10 backdrop-blur-xl"
       >
-        <div className="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-center gap-3 text-sm">
-          <Flame className="h-4 w-4 text-primary animate-pulse" />
-          <span className="text-muted-foreground">
-            <span className="font-semibold text-foreground">Early Adopter Program</span> — Apenas{" "}
-            <span className="text-primary font-bold">23 vagas</span> restantes com 40% OFF no primeiro trimestre
+        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2 sm:py-2.5 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm">
+          <Flame className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary animate-pulse shrink-0" />
+          <span className="text-muted-foreground text-center">
+            <span className="font-semibold text-foreground">Early Adopter</span> — <span className="hidden sm:inline">Apenas </span>
+            <span className="text-primary font-bold">23 vagas</span> <span className="hidden sm:inline">restantes</span> com 40% OFF
           </span>
-          <Link to="/auth" className="ml-2">
-            <Button size="sm" variant="outline" className="h-7 text-[10px] border-primary/30 text-primary hover:bg-primary/10 rounded-lg">
-              Garantir vaga <ArrowRight className="ml-1 h-3 w-3" />
+          <Link to="/auth">
+            <Button size="sm" variant="outline" className="h-6 sm:h-7 text-[9px] sm:text-[10px] border-primary/30 text-primary hover:bg-primary/10 rounded-lg px-2 sm:px-3">
+              Garantir vaga <ArrowRight className="ml-1 h-2.5 w-2.5 sm:h-3 sm:w-3" />
             </Button>
           </Link>
         </div>
       </motion.div>
 
       {/* HERO SECTION — with social proof */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 pt-28 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-32 sm:pt-28 pb-8 overflow-hidden">
         <div className="absolute inset-0 scan-line pointer-events-none" />
         <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
 
@@ -165,23 +165,23 @@ const HomePage = () => {
               </Badge>
             </motion.div>
 
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="font-display text-5xl sm:text-6xl lg:text-8xl font-bold leading-[0.95] tracking-tight">
+            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-bold leading-[0.95] tracking-tight">
               <span className="block mb-2 text-foreground">{t("home.title1")}</span>
               <span className="block gradient-text">{t("home.title2")}</span>
-              <span className="block text-3xl sm:text-4xl lg:text-5xl text-muted-foreground/70 font-normal mt-4">{t("home.title3")}</span>
+              <span className="block text-xl sm:text-3xl md:text-4xl lg:text-5xl text-muted-foreground/70 font-normal mt-3 sm:mt-4">{t("home.title3")}</span>
             </motion.h1>
 
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.7 }} className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.7 }} className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2 sm:px-0">
               {t("home.subtitle")}
               <span className="text-foreground/90 font-semibold"> {t("home.subtitle_highlight")}</span>
             </motion.p>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.7 }} className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Link to="/auth">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.7 }} className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-4 px-2 sm:px-0">
+              <Link to="/auth" className="w-full sm:w-auto">
                 <motion.button 
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.95 }}
-                  className="group relative h-16 px-16 rounded-2xl font-display font-bold text-lg text-white overflow-hidden cursor-pointer"
+                  className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-16 rounded-2xl font-display font-bold text-base sm:text-lg text-white overflow-hidden cursor-pointer"
                 >
                   {/* Pulsing outer glow ring */}
                   <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-red-600/60 via-red-400/80 to-red-600/60 blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700 animate-pulse" />
@@ -206,11 +206,11 @@ const HomePage = () => {
                   </span>
                 </motion.button>
               </Link>
-              <Link to="/departamentos">
+              <Link to="/departamentos" className="w-full sm:w-auto">
                 <motion.button 
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.95 }}
-                  className="group relative h-16 px-16 rounded-2xl font-display font-bold text-lg overflow-hidden cursor-pointer"
+                  className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-16 rounded-2xl font-display font-bold text-base sm:text-lg overflow-hidden cursor-pointer"
                 >
                   {/* Glass base */}
                   <div className="absolute inset-0 bg-white/[0.04] backdrop-blur-2xl rounded-2xl" />
@@ -322,17 +322,17 @@ const HomePage = () => {
       </section>
 
       {/* AGENTS SHOWCASE */}
-      <section className="py-32 px-4 relative">
+      <section className="py-16 sm:py-32 px-4 relative">
         <div className="max-w-6xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <Badge variant="outline" className="mb-6 border-primary/15 text-primary/80 px-4 py-2">
               <Sparkles className="h-4 w-4 mr-2" />
               {t("home.agents_badge")}
             </Badge>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+            <h2 className="font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
               {t("home.agents_title")} <span className="gradient-text">{t("home.agents_title_hl")}</span>
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">{t("home.agents_desc")}</p>
+            <p className="text-muted-foreground text-sm sm:text-lg max-w-2xl mx-auto">{t("home.agents_desc")}</p>
           </motion.div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -459,20 +459,20 @@ const HomePage = () => {
       </section>
 
       {/* CTA FINAL */}
-      <section className="py-40 px-4 relative">
+      <section className="py-20 sm:py-40 px-4 relative">
         <div className="absolute inset-0 bg-gradient-to-t from-primary/[0.04] via-primary/[0.02] to-transparent" />
         <div className="max-w-4xl mx-auto text-center relative">
           <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <div className="glass-card rounded-[2rem] p-12 md:p-20 gradient-border relative overflow-hidden">
+            <div className="glass-card rounded-2xl sm:rounded-[2rem] p-6 sm:p-12 md:p-20 gradient-border relative overflow-hidden">
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[80px]" />
               <div className="relative z-10">
                 <div className="w-16 h-16 rounded-2xl bg-primary/5 flex items-center justify-center mx-auto mb-10">
                   <Sparkles className="h-8 w-8 text-primary/70" />
                 </div>
-                <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
+                <h2 className="font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6">
                   {t("home.cta_ready")} <span className="gradient-text">{t("home.cta_ready_hl")}</span>
                 </h2>
-                <p className="text-muted-foreground text-lg mb-10 max-w-lg mx-auto">{t("home.cta_desc")}</p>
+                <p className="text-muted-foreground text-sm sm:text-lg mb-8 sm:mb-10 max-w-lg mx-auto">{t("home.cta_desc")}</p>
                 <Link to="/auth">
                   <Button size="lg" className="glow font-semibold text-base px-12 h-14 rounded-xl group">
                     <Play className="h-5 w-5 mr-2 fill-current" />
@@ -494,7 +494,7 @@ const HomePage = () => {
               <img src={clauthorLogo} alt="CLAUTHOR" className="w-9 h-9 object-contain mix-blend-lighten" />
               <span className="font-display font-bold text-lg tracking-wider">CLAUTHOR</span>
             </div>
-            <div className="flex gap-10 text-sm text-muted-foreground">
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-10 text-sm text-muted-foreground">
               <a href="#" className="hover:text-foreground/80 transition-colors">{t("home.footer_terms")}</a>
               <a href="#" className="hover:text-foreground/80 transition-colors">{t("home.footer_privacy")}</a>
               <a href="#" className="hover:text-foreground/80 transition-colors">{t("home.footer_contact")}</a>
