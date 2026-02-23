@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useRef, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import clauthorLogo from "@/assets/prometheus-logo.png";
+import clauthorLogo from "@/assets/clauthor-logo.png";
 
 const agentIcons = [MessageSquare, DollarSign, Code, Users, Briefcase, Shield];
 
