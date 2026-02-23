@@ -15,9 +15,9 @@
     --popover: 0 0% 5.5%;
     --popover-foreground: 0 0% 97%;
 
-    --primary: 0 72% 58%;
+    --primary: 0 85% 55%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 8 65% 62%;
+    --primary-glow: 10 90% 60%;
 
     /* Accent palette for variety */
     --accent-cyan: 190 80% 55%;
@@ -40,23 +40,23 @@
 
     --border: 0 0% 9%;
     --input: 0 0% 9%;
-    --ring: 0 65% 48%;
+    --ring: 0 85% 55%;
 
     --radius: 0.625rem;
 
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 75%;
-    --sidebar-primary: 0 65% 48%;
+    --sidebar-primary: 0 85% 55%;
     --sidebar-primary-foreground: 0 0% 98%;
     --sidebar-accent: 0 0% 7%;
     --sidebar-accent-foreground: 0 0% 97%;
     --sidebar-border: 0 0% 8%;
-    --sidebar-ring: 0 65% 48%;
+    --sidebar-ring: 0 85% 55%;
 
     /* Refined Effects */
-    --glow-primary: 0 0 20px hsl(0 65% 48% / 0.15), 0 0 50px hsl(0 65% 48% / 0.05);
-    --glow-soft: 0 0 30px hsl(0 65% 48% / 0.08);
-    --glow-violet: 0 0 20px hsl(8 55% 52% / 0.12);
+    --glow-primary: 0 0 24px hsl(0 85% 55% / 0.25), 0 0 60px hsl(0 85% 55% / 0.1);
+    --glow-soft: 0 0 35px hsl(0 85% 55% / 0.12);
+    --glow-violet: 0 0 24px hsl(10 80% 58% / 0.15);
     --glass-bg: hsl(0 0% 100% / 0.015);
     --glass-border: hsl(0 0% 100% / 0.04);
     --gradient-primary: linear-gradient(135deg, hsl(0 65% 48%), hsl(8 55% 52%));
