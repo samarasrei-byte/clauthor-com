@@ -178,25 +178,40 @@ const HomePage = () => {
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.7 }} className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link to="/auth">
-                <button className="group relative h-14 px-12 rounded-xl font-display font-semibold text-lg text-primary-foreground overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
-                  <span className="relative z-10 flex items-center gap-2">
-                    <Play className="h-5 w-5 fill-current" />
+                <button className="group relative h-16 px-14 rounded-2xl font-display font-bold text-lg text-primary-foreground overflow-hidden transition-all duration-500 hover:scale-[1.05] active:scale-[0.96] cursor-pointer">
+                  {/* Animated gradient background */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-red-500 to-red-600 bg-[length:200%_100%] animate-gradient-shift rounded-2xl" />
+                  {/* Outer neon glow */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-red-600/70 via-red-400/70 to-red-600/70 rounded-2xl blur-xl opacity-60 group-hover:opacity-100 transition-opacity duration-500 animate-pulse" />
+                  {/* Inner shine */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/[0.15] to-transparent rounded-2xl opacity-80" />
+                  {/* Border glow */}
+                  <div className="absolute inset-0 rounded-2xl border border-white/[0.25] group-hover:border-white/[0.4] transition-colors duration-500" />
+                  {/* Scan line effect */}
+                  <div className="absolute inset-0 rounded-2xl overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/[0.08] to-transparent h-[200%] animate-[scan_3s_linear_infinite]" />
+                  </div>
+                  <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_0_16px_rgba(255,80,80,0.6)]">
+                    <Flame className="h-5 w-5 animate-pulse" />
                     {t("home.cta_start")}
-                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 transition-transform duration-300" />
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
                   </span>
                 </button>
               </Link>
               <Link to="/departamentos">
-                <button className="group relative h-14 px-12 rounded-xl font-display font-semibold text-lg overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/[0.06] via-white/[0.10] to-white/[0.06] rounded-xl border border-white/[0.10] group-hover:border-primary/30 transition-colors duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/0 via-primary/20 to-primary/0 rounded-xl blur-md opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
-                  <span className="relative z-10 flex items-center gap-2 text-foreground/90 group-hover:text-foreground transition-colors">
-                    <Users className="h-5 w-5 text-primary" />
+                <button className="group relative h-16 px-14 rounded-2xl font-display font-bold text-lg overflow-hidden transition-all duration-500 hover:scale-[1.05] active:scale-[0.96] cursor-pointer">
+                  {/* Glass background with red tint */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/[0.04] via-white/[0.08] to-white/[0.04] rounded-2xl backdrop-blur-xl" />
+                  {/* Animated border */}
+                  <div className="absolute inset-0 rounded-2xl border border-red-500/20 group-hover:border-red-500/50 transition-colors duration-500" />
+                  {/* Hover glow */}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-red-600/0 via-red-500/30 to-red-600/0 rounded-2xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                  {/* Red accent on hover */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-red-600/0 via-red-600/10 to-red-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
+                  <span className="relative z-10 flex items-center gap-3 text-foreground/90 group-hover:text-foreground transition-colors">
+                    <Users className="h-5 w-5 text-red-500 group-hover:text-red-400 transition-colors" />
                     Monte seu Time de IA
-                    <ChevronRight className="h-5 w-5 text-primary/60 group-hover:translate-x-1.5 group-hover:text-primary transition-all duration-300" />
+                    <ChevronRight className="h-5 w-5 text-red-500/60 group-hover:translate-x-2 group-hover:text-red-400 transition-all duration-300" />
                   </span>
                 </button>
               </Link>
