@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, LogOut, Shield, ChevronDown, Bot, Building2, ShoppingCart, Network } from "lucide-react";
+import { Menu, X, LogOut, Shield, ChevronDown, Bot, Building2, ShoppingCart, Network, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -178,8 +178,12 @@ const Navbar = () => {
                   </Button>
                 </Link>
                 <Link to="/auth">
-                  <Button size="sm" className="glow font-medium rounded-lg">
-                    {t("auth.create_account")}
+                  <Button size="sm" className="relative overflow-hidden glow font-semibold rounded-lg group">
+                    <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift" />
+                    <span className="relative z-10 flex items-center gap-1.5">
+                      <Zap className="h-3.5 w-3.5" />
+                      {t("auth.create_account")}
+                    </span>
                   </Button>
                 </Link>
               </>
