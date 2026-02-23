@@ -289,13 +289,15 @@ const Departamentos = () => {
                       } as HireIntent 
                     }}
                   >
-                    <button className="group relative w-full h-13 rounded-xl font-display font-semibold text-sm uppercase tracking-wider overflow-hidden transition-all duration-500 hover:scale-[1.03] active:scale-[0.97]">
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
-                      <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 via-primary-glow/50 to-primary/50 rounded-xl blur-lg opacity-40 group-hover:opacity-90 transition-opacity duration-500" />
-                      <div className="absolute inset-0 bg-white/[0.08] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                      <span className="relative z-10 flex items-center justify-center gap-2.5 text-primary-foreground font-bold">
+                    <button className="group relative w-full h-16 rounded-2xl font-display font-bold text-base uppercase tracking-widest overflow-hidden transition-all duration-500 hover:scale-[1.04] active:scale-[0.96] cursor-pointer">
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-2xl" />
+                      <div className="absolute -inset-1 bg-gradient-to-r from-primary/60 via-primary-glow/60 to-primary/60 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+                      <div className="absolute inset-0 bg-white/[0.06] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+                      <div className="absolute inset-0 rounded-2xl border border-white/[0.15] group-hover:border-white/[0.3] transition-colors duration-500" />
+                      <span className="relative z-10 flex items-center justify-center gap-3 text-primary-foreground font-bold text-[15px] drop-shadow-[0_0_12px_hsl(var(--primary)/0.5)]">
+                        <Flame className="h-5 w-5 animate-pulse" />
                         Contratar Departamento
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                        <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
                       </span>
                     </button>
                   </Link>
