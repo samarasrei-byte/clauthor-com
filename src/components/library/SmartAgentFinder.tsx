@@ -270,7 +270,7 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
                   >
                     {/* Match bar */}
                     <div className="absolute top-0 left-0 h-full w-1 rounded-l-2xl" style={{
-                      background: `linear-gradient(to bottom, hsl(0 65% 48% / ${rec.match / 100}), hsl(8 55% 52% / ${rec.match / 200}))`,
+                      background: `linear-gradient(to bottom, hsl(266 100% 50% / ${rec.match / 100}), hsl(259 100% 62% / ${rec.match / 200}))`,
                     }} />
 
                     <div className="flex items-center gap-4 p-4 pl-5">

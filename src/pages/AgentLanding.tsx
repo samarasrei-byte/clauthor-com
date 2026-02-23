@@ -21,7 +21,7 @@ const AgentLanding = () => {
       {/* HERO */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(circle, hsl(0 65% 48%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-primary/[0.06] to-transparent rounded-full blur-[120px]" />
         </div>
         <div className="max-w-5xl mx-auto relative z-10">
