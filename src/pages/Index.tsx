@@ -189,11 +189,16 @@ const HomePage = () => {
                 </button>
               </Link>
               <Link to="/departamentos">
-                <Button size="lg" variant="outline" className="glass-btn font-semibold text-base px-10 h-14 rounded-xl text-lg group border-primary/20 hover:border-primary/40">
-                  <Users className="h-5 w-5 mr-2 text-primary" />
-                  Monte seu Time de IA
-                  <ChevronRight className="ml-1 h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <button className="group relative h-14 px-12 rounded-xl font-display font-semibold text-lg overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/[0.06] via-white/[0.10] to-white/[0.06] rounded-xl border border-white/[0.10] group-hover:border-primary/30 transition-colors duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/0 via-primary/20 to-primary/0 rounded-xl blur-md opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
+                  <span className="relative z-10 flex items-center gap-2 text-foreground/90 group-hover:text-foreground transition-colors">
+                    <Users className="h-5 w-5 text-primary" />
+                    Monte seu Time de IA
+                    <ChevronRight className="h-5 w-5 text-primary/60 group-hover:translate-x-1.5 group-hover:text-primary transition-all duration-300" />
+                  </span>
+                </button>
               </Link>
             </motion.div>
 
