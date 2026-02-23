@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import ThemeToggle from "@/components/ThemeToggle";
 import prometheusLogo from "@/assets/prometheus-logo.png";
 
 const Navbar = () => {
@@ -149,7 +150,8 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-2">
+            <ThemeToggle />
             <LanguageSelector />
             {user ? (
               <>
