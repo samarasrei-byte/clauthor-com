@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings
+  TrendingUp, Coins, Target, Settings, Users, UserPlus
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,6 +24,8 @@ import AgentChat from "@/components/dashboard/AgentChat";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import ClientCommandCenter from "@/components/dashboard/ClientCommandCenter";
 import AgentSettings from "@/components/dashboard/AgentSettings";
+import SquadChat from "@/components/dashboard/SquadChat";
+import TeamMembers from "@/components/dashboard/TeamMembers";
 import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
@@ -161,9 +163,11 @@ const ClientDashboard = () => {
   const sidebarItems = [
     { id: "overview", label: "Command Center", icon: LayoutDashboard },
     { id: "agents", label: "Meus Agentes", icon: Bot, badge: agents.length || undefined },
+    { id: "squad-chat", label: "Reunião", icon: Users },
     { id: "agent-settings", label: "Configurações", icon: Settings },
     { id: "chat", label: "Assistente IA", icon: Sparkles },
     { id: "analytics", label: "Analytics", icon: BarChart3 },
+    { id: "team", label: "Equipe", icon: UserPlus },
     { id: "logs", label: "Logs", icon: Activity, badge: recentLogs.length || undefined },
     { id: "billing", label: "Assinatura", icon: CreditCard },
   ];
@@ -270,6 +274,12 @@ const ClientDashboard = () => {
 
           {/* ═══ AGENT SETTINGS ═══ */}
           {activeSection === "agent-settings" && <AgentSettings />}
+
+          {/* ═══ SQUAD CHAT (REUNIÃO) ═══ */}
+          {activeSection === "squad-chat" && <SquadChat agents={agents} />}
+
+          {/* ═══ TEAM MEMBERS ═══ */}
+          {activeSection === "team" && <TeamMembers />}
 
           {/* ═══ AGENTS ═══ */}
           {activeSection === "agents" && (
