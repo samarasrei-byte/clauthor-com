@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
-import { Plus, Search, Bell, Settings, Zap } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
+import NotificationPanel from "./NotificationPanel";
 
 const QuickActions = () => {
   return (
@@ -23,10 +24,7 @@ const QuickActions = () => {
           Biblioteca
         </Button>
       </Link>
-      <Button size="sm" variant="ghost" className="relative">
-        <Bell className="h-4 w-4" />
-        <span className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full bg-primary animate-pulse" />
-      </Button>
+      <NotificationPanel />
     </motion.div>
   );
 };
