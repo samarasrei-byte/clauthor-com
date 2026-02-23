@@ -23,7 +23,7 @@ const agentIcons = [MessageSquare, DollarSign, Code, Users, Briefcase, Shield];
 // Futuristic AI background with neural network effect
 const FuturisticBackground = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden">
-    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(0 65% 48%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
+    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-primary/[0.04] to-transparent rounded-full blur-[120px]" />
     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-t from-primary/[0.02] to-transparent rounded-full blur-[100px]" />
     <motion.div
@@ -37,17 +37,17 @@ const FuturisticBackground = () => (
       className="absolute top-[40%] right-[15%] w-[250px] h-[250px] rounded-full bg-primary/[0.04] blur-[80px]"
     />
     <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
-      <motion.line x1="10%" y1="20%" x2="30%" y2="40%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
+      <motion.line x1="10%" y1="20%" x2="30%" y2="40%" stroke="hsl(266 100% 50%)" strokeWidth="0.5"
         initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.6, 0] }} transition={{ duration: 4, repeat: Infinity, delay: 0 }} />
-      <motion.line x1="70%" y1="15%" x2="50%" y2="45%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
+      <motion.line x1="70%" y1="15%" x2="50%" y2="45%" stroke="hsl(266 100% 50%)" strokeWidth="0.5"
         initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.5, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} />
-      <motion.line x1="80%" y1="60%" x2="60%" y2="30%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
+      <motion.line x1="80%" y1="60%" x2="60%" y2="30%" stroke="hsl(266 100% 50%)" strokeWidth="0.5"
         initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.4, 0] }} transition={{ duration: 6, repeat: Infinity, delay: 2 }} />
       {[
         { cx: "10%", cy: "20%" }, { cx: "30%", cy: "40%" }, { cx: "70%", cy: "15%" },
         { cx: "50%", cy: "45%" }, { cx: "80%", cy: "60%" }, { cx: "60%", cy: "30%" },
       ].map((node, i) => (
-        <motion.circle key={i} cx={node.cx} cy={node.cy} r="2" fill="hsl(0 65% 48%)"
+        <motion.circle key={i} cx={node.cx} cy={node.cy} r="2" fill="hsl(266 100% 50%)"
           animate={{ opacity: [0.1, 0.6, 0.1], r: [1.5, 2.5, 1.5] }}
           transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay: i * 0.3 }}
         />
@@ -184,9 +184,9 @@ const HomePage = () => {
                   className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-16 rounded-2xl font-display font-bold text-base sm:text-lg text-white overflow-hidden cursor-pointer"
                 >
                   {/* Pulsing outer glow ring */}
-                  <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-red-600/60 via-red-400/80 to-red-600/60 blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700 animate-pulse" />
+                  <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-violet-600/60 via-purple-400/80 to-violet-600/60 blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700 animate-pulse" />
                   {/* Animated gradient bg */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-red-700 via-red-500 to-red-600 bg-[length:300%_100%] animate-gradient-shift rounded-2xl" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-violet-700 via-purple-500 to-violet-600 bg-[length:300%_100%] animate-gradient-shift rounded-2xl" />
                   {/* Top gloss highlight */}
                   <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent rounded-t-2xl" />
                   {/* Animated border */}
@@ -199,7 +199,7 @@ const HomePage = () => {
                   </div>
                   <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)]">
                     <motion.span animate={{ rotate: [0, -10, 10, -5, 5, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
-                      <Flame className="h-6 w-6 drop-shadow-[0_0_12px_rgba(255,100,50,0.8)]" />
+                      <Flame className="h-6 w-6 drop-shadow-[0_0_12px_rgba(110,0,255,0.8)]" />
                     </motion.span>
                     <span className="tracking-wide">{t("home.cta_start")}</span>
                     <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />

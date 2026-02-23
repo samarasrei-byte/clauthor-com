@@ -30,7 +30,7 @@ const recentNames = [
 const WaitlistBackground = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden">
     {/* Dot grid */}
-    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(0 65% 48%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
+    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
     
     {/* Primary ambient glows */}
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] bg-gradient-to-b from-primary/[0.06] to-transparent rounded-full blur-[150px]" />
