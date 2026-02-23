@@ -289,22 +289,13 @@ const Departamentos = () => {
                       } as HireIntent 
                     }}
                   >
-                    <button className="group relative w-full h-12 rounded-xl font-display font-semibold text-sm uppercase tracking-wider overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
-                      {dept.popular ? (
-                        <>
-                          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
-                          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
-                        </>
-                      ) : (
-                        <>
-                          <div className="absolute inset-0 bg-gradient-to-r from-white/[0.04] via-white/[0.08] to-white/[0.04] rounded-xl border border-white/[0.08] group-hover:border-primary/30 transition-colors duration-500" />
-                          <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
-                          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/0 via-primary/15 to-primary/0 rounded-xl blur-md opacity-0 group-hover:opacity-50 transition-opacity duration-500" />
-                        </>
-                      )}
-                      <span className={`relative z-10 flex items-center justify-center gap-2 ${dept.popular ? "text-primary-foreground" : "text-foreground/80 group-hover:text-foreground"} transition-colors`}>
+                    <button className="group relative w-full h-13 rounded-xl font-display font-semibold text-sm uppercase tracking-wider overflow-hidden transition-all duration-500 hover:scale-[1.03] active:scale-[0.97]">
+                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
+                      <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 via-primary-glow/50 to-primary/50 rounded-xl blur-lg opacity-40 group-hover:opacity-90 transition-opacity duration-500" />
+                      <div className="absolute inset-0 bg-white/[0.08] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
+                      <span className="relative z-10 flex items-center justify-center gap-2.5 text-primary-foreground font-bold">
                         Contratar Departamento
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-300" />
+                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform duration-300" />
                       </span>
                     </button>
                   </Link>
