@@ -124,7 +124,7 @@ const HomePage = () => {
     <div className="relative">
       <FuturisticBackground />
 
-      {/* URGENCY BANNER */}
+      {/* URGENCY BANNER — Departamentos */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -132,14 +132,14 @@ const HomePage = () => {
         className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border-b border-primary/10 backdrop-blur-xl"
       >
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2 sm:py-2.5 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm">
-          <Flame className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary animate-pulse shrink-0" />
+          <Network className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary animate-pulse shrink-0" />
           <span className="text-muted-foreground text-center">
-            <span className="font-semibold text-foreground">Early Adopter</span> — <span className="hidden sm:inline">Apenas </span>
-            <span className="text-primary font-bold">23 vagas</span> <span className="hidden sm:inline">restantes</span> com 40% OFF
+            <span className="font-semibold text-foreground">Times de IA</span> — <span className="hidden sm:inline">7 departamentos completos, </span>
+            <span className="text-primary font-bold">28 agentes</span> <span className="hidden sm:inline">prontos para operar</span>
           </span>
-          <Link to="/auth">
+          <Link to="/departamentos">
             <Button size="sm" variant="outline" className="h-6 sm:h-7 text-[9px] sm:text-[10px] border-primary/30 text-primary hover:bg-primary/10 rounded-lg px-2 sm:px-3">
-              Garantir vaga <ArrowRight className="ml-1 h-2.5 w-2.5 sm:h-3 sm:w-3" />
+              Montar meu time <ArrowRight className="ml-1 h-2.5 w-2.5 sm:h-3 sm:w-3" />
             </Button>
           </Link>
         </div>
@@ -177,56 +177,45 @@ const HomePage = () => {
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.7 }} className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-4 px-2 sm:px-0">
-              <Link to="/auth" className="w-full sm:w-auto">
+              <Link to="/departamentos" className="w-full sm:w-auto">
                 <motion.button 
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.95 }}
                   className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-16 rounded-2xl font-display font-bold text-base sm:text-lg text-white overflow-hidden cursor-pointer"
                 >
-                  {/* Pulsing outer glow ring */}
                   <div className="absolute -inset-2 rounded-3xl bg-gradient-to-r from-violet-600/60 via-purple-400/80 to-violet-600/60 blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700 animate-pulse" />
-                  {/* Animated gradient bg */}
                   <div className="absolute inset-0 bg-gradient-to-r from-violet-700 via-purple-500 to-violet-600 bg-[length:300%_100%] animate-gradient-shift rounded-2xl" />
-                  {/* Top gloss highlight */}
                   <div className="absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/20 to-transparent rounded-t-2xl" />
-                  {/* Animated border */}
                   <div className="absolute inset-0 rounded-2xl border-2 border-white/20 group-hover:border-white/40 transition-colors duration-500" />
-                  {/* Bottom light reflection */}
                   <div className="absolute inset-x-4 bottom-2 h-px bg-gradient-to-r from-transparent via-white/30 to-transparent" />
-                  {/* Scan line */}
                   <div className="absolute inset-0 rounded-2xl overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/10 to-transparent h-[200%] animate-[scan_3s_linear_infinite]" />
                   </div>
                   <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)]">
                     <motion.span animate={{ rotate: [0, -10, 10, -5, 5, 0] }} transition={{ duration: 2, repeat: Infinity, repeatDelay: 3 }}>
-                      <Flame className="h-6 w-6 drop-shadow-[0_0_12px_rgba(110,0,255,0.8)]" />
+                      <Network className="h-6 w-6 drop-shadow-[0_0_12px_rgba(110,0,255,0.8)]" />
                     </motion.span>
-                    <span className="tracking-wide">{t("home.cta_start")}</span>
+                    <span className="tracking-wide">Monte seu Time de IA</span>
                     <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
                   </span>
                 </motion.button>
               </Link>
-              <Link to="/departamentos" className="w-full sm:w-auto">
+              <Link to="/marketplace" className="w-full sm:w-auto">
                 <motion.button 
                   whileHover={{ scale: 1.06 }}
                   whileTap={{ scale: 0.95 }}
                   className="group relative w-full sm:w-auto h-14 sm:h-16 px-8 sm:px-16 rounded-2xl font-display font-bold text-base sm:text-lg overflow-hidden cursor-pointer"
                 >
-                  {/* Glass base */}
                   <div className="absolute inset-0 bg-white/[0.04] backdrop-blur-2xl rounded-2xl" />
-                  {/* Animated gradient border via pseudo */}
                   <div className="absolute inset-0 rounded-2xl gradient-border" />
-                  {/* Animated border glow on hover */}
                   <div className="absolute inset-0 rounded-2xl border border-primary/15 group-hover:border-primary/40 transition-all duration-500" />
-                  {/* Hover fill */}
                   <div className="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/10 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-                  {/* Hover glow */}
                   <div className="absolute -inset-1 bg-primary/20 rounded-3xl blur-xl opacity-0 group-hover:opacity-60 transition-opacity duration-500" />
                   <span className="relative z-10 flex items-center gap-3 text-foreground/80 group-hover:text-foreground transition-colors">
                     <motion.span animate={{ y: [0, -2, 0] }} transition={{ duration: 2, repeat: Infinity }}>
-                      <Network className="h-5 w-5 text-primary group-hover:drop-shadow-[0_0_8px_rgba(255,80,80,0.6)] transition-all" />
+                      <ShoppingCart className="h-5 w-5 text-primary group-hover:drop-shadow-[0_0_8px_rgba(255,80,80,0.6)] transition-all" />
                     </motion.span>
-                    <span className="tracking-wide">Monte seu Time de IA</span>
+                    <span className="tracking-wide">Explorar Agentes</span>
                     <ChevronRight className="h-5 w-5 text-primary/50 group-hover:translate-x-2 group-hover:text-primary transition-all duration-300" />
                   </span>
                 </motion.button>
@@ -473,10 +462,10 @@ const HomePage = () => {
                   {t("home.cta_ready")} <span className="gradient-text">{t("home.cta_ready_hl")}</span>
                 </h2>
                 <p className="text-muted-foreground text-sm sm:text-lg mb-8 sm:mb-10 max-w-lg mx-auto">{t("home.cta_desc")}</p>
-                <Link to="/auth">
+                <Link to="/departamentos">
                   <Button size="lg" className="glow font-semibold text-base px-12 h-14 rounded-xl group">
-                    <Play className="h-5 w-5 mr-2 fill-current" />
-                    {t("home.cta_btn")}
+                    <Network className="h-5 w-5 mr-2" />
+                    Montar meu Time de IA
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
