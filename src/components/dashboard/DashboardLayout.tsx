@@ -22,7 +22,7 @@ const DashboardLayout = () => {
           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
             <Bot className="h-4 w-4 text-primary" />
           </div>
-          <span className="font-display font-bold text-base text-foreground tracking-wider">PROMETHEUS</span>
+          <span className="font-display font-bold text-base text-foreground tracking-wider">CLAUTHOR</span>
         </Link>
 
         <div className="flex items-center gap-2">

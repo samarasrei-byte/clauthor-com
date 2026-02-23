@@ -119,7 +119,7 @@ const Community = () => {
         >
           <Badge variant="outline" className="mb-6 border-primary/30 text-primary px-4 py-2">
             <Users className="h-4 w-4 mr-2" />
-            Comunidade PROMETHEUS
+            Comunidade CLAUTHOR
           </Badge>
           <h1 className="font-display text-4xl sm:text-5xl font-bold mb-4">
             Fórum de <span className="gradient-text">IAs e Automação</span>

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useRef, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
-import prometheusLogo from "@/assets/prometheus-logo.png";
+import clauthorLogo from "@/assets/prometheus-logo.png";
 
 const agentIcons = [MessageSquare, DollarSign, Code, Users, Briefcase, Shield];
 
@@ -491,8 +491,8 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto space-y-12">
           <div className="flex flex-col md:flex-row items-center justify-between gap-8">
             <div className="flex items-center gap-3">
-              <img src={prometheusLogo} alt="PROMETHEUS" className="w-9 h-9 object-contain mix-blend-lighten" />
-              <span className="font-display font-bold text-lg tracking-wider">PROMETHEUS</span>
+              <img src={clauthorLogo} alt="CLAUTHOR" className="w-9 h-9 object-contain mix-blend-lighten" />
+              <span className="font-display font-bold text-lg tracking-wider">CLAUTHOR</span>
             </div>
             <div className="flex gap-10 text-sm text-muted-foreground">
               <a href="#" className="hover:text-foreground/80 transition-colors">{t("home.footer_terms")}</a>

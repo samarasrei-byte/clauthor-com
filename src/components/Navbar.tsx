@@ -7,7 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import ThemeToggle from "@/components/ThemeToggle";
-import prometheusLogo from "@/assets/prometheus-logo.png";
+import clauthorLogo from "@/assets/prometheus-logo.png";
 
 const Navbar = () => {
   const location = useLocation();
@@ -58,9 +58,9 @@ const Navbar = () => {
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <img src={prometheusLogo} alt="PROMETHEUS" className="w-8 h-8 object-contain mix-blend-lighten" />
+            <img src={clauthorLogo} alt="CLAUTHOR" className="w-8 h-8 object-contain mix-blend-lighten" />
             <span className="font-display font-bold text-base text-foreground tracking-wider">
-              PROMETHEUS
+              CLAUTHOR
             </span>
           </Link>
 

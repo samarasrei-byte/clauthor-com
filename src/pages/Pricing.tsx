@@ -132,7 +132,7 @@ const Pricing = () => {
         {/* Squad Plans - Times de IA */}
         <SquadPlans />
 
-        {/* CLT vs PROMETHEUS Comparison */}
+        {/* CLT vs CLAUTHOR Comparison */}
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-8 md:p-12 mb-16 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
           <div className="relative z-10">
@@ -160,7 +160,7 @@ const Pricing = () => {
                 <div className="text-center">
                   <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center justify-center gap-1">
                     <CheckCircle2 className="h-3 w-3" />
-                    PROMETHEUS
+                    CLAUTHOR
                   </span>
                 </div>
               </div>
@@ -178,7 +178,7 @@ const Pricing = () => {
                 <br />
                 {t("pricing_page.comparison_footer3")} <span className="text-cyan-400 font-bold">{t("pricing_page.comparison_footer3_value")}</span>.
               </p>
-              <Link to="/auth" state={{ hireIntent: { type: "agent", label: "Plano PROMETHEUS", slugs: [] } }}>
+              <Link to="/auth" state={{ hireIntent: { type: "agent", label: "Plano CLAUTHOR", slugs: [] } }}>
                 <Button className="glow rounded-xl px-8 h-12 font-semibold">
                   <Zap className="h-4 w-4 mr-2" />
                   {t("pricing_page.save_now")}

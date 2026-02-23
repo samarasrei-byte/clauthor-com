@@ -95,7 +95,7 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
     } catch {
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "Desculpe, estou com dificuldades no momento. Tente novamente ou entre em contato pelo email suporte@prometheus.ai"
+        content: "Desculpe, estou com dificuldades no momento. Tente novamente ou entre em contato pelo email suporte@clauthor.ai"
       }]);
     } finally {
       setIsLoading(false);
@@ -107,7 +107,7 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
     ? "Olá, Admin! Como posso ajudar na gestão da plataforma?"
     : area === "client"
     ? "Olá! Como posso ajudar com seus agentes hoje?"
-    : "Olá! Bem-vindo ao PROMETHEUS. Como posso ajudar?";
+    : "Olá! Bem-vindo ao CLAUTHOR. Como posso ajudar?";
 
   return (
     <>
@@ -297,7 +297,7 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
                   </button>
                 </div>
                 <p className="text-center text-[8px] tracking-[0.15em] uppercase text-muted-foreground/20 mt-2">
-                  Powered by PROMETHEUS AI
+                  Powered by CLAUTHOR AI
                 </p>
               </div>
             </div>
