@@ -270,50 +270,51 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
                   >
                     {/* Match bar */}
                     <div className="absolute top-0 left-0 h-full w-1 rounded-l-2xl" style={{
-                      background: `linear-gradient(to bottom, hsl(266 100% 50% / ${rec.match / 100}), hsl(259 100% 62% / ${rec.match / 200}))`,
+                      background: `linear-gradient(to bottom, hsl(266 100% 58% / ${rec.match / 100}), hsl(266 100% 58% / ${rec.match / 200}))`,
                     }} />
 
-                    <div className="flex items-center gap-4 p-4 pl-5">
-                      {/* Icon */}
-                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary/10 to-primary-glow/10 flex items-center justify-center border border-primary/10 shrink-0 group-hover:border-primary/20 transition-colors">
-                        <Icon className="h-6 w-6 text-primary" />
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 pl-5">
+                      {/* Top row: icon + info */}
+                      <div className="flex items-start gap-3 flex-1 min-w-0">
+                        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-br from-primary/10 to-primary-glow/10 flex items-center justify-center border border-primary/10 shrink-0 group-hover:border-primary/20 transition-colors">
+                          <Icon className="h-5 w-5 sm:h-6 sm:w-6 text-accent-violet" />
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-0.5 flex-wrap">
+                            <h3 className="font-display font-semibold text-sm truncate">
+                              {t(`library_page.agents.${rec.key}_title`)}
+                            </h3>
+                            <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${tierColors[meta.tier] || "text-muted-foreground"} border-current/20`}>
+                              {rec.match}% match
+                            </Badge>
+                          </div>
+                          <p className="text-xs text-muted-foreground line-clamp-2 sm:line-clamp-1">{rec.reason}</p>
+                          <div className="flex items-center gap-3 mt-1.5 flex-wrap">
+                            <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
+                              <Star className="h-2.5 w-2.5 fill-primary text-primary" />
+                              {meta.socialProof.rating}
+                            </span>
+                            <span className="text-[10px] text-muted-foreground">
+                              {meta.socialProof.companies}+ empresas
+                            </span>
+                            <span className="text-[10px] text-primary font-medium">
+                              ~{meta.socialProof.savings}/mês economia
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
-                      {/* Info */}
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <h3 className="font-display font-semibold text-sm truncate">
-                            {t(`library_page.agents.${rec.key}_title`)}
-                          </h3>
-                          <Badge variant="outline" className={`text-[10px] px-1.5 py-0 ${tierColors[meta.tier] || "text-muted-foreground"} border-current/20`}>
-                            {rec.match}% match
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-muted-foreground line-clamp-1">{rec.reason}</p>
-                        <div className="flex items-center gap-3 mt-1.5">
-                          <span className="text-[10px] text-muted-foreground flex items-center gap-0.5">
-                            <Star className="h-2.5 w-2.5 fill-primary text-primary" />
-                            {meta.socialProof.rating}
-                          </span>
-                          <span className="text-[10px] text-muted-foreground">
-                            {meta.socialProof.companies}+ empresas
-                          </span>
-                          <span className="text-[10px] text-primary font-medium">
-                            ~{meta.socialProof.savings}/mês economia
-                          </span>
-                        </div>
-                      </div>
-
-                      {/* Actions */}
-                      <div className="flex items-center gap-2 shrink-0">
-                        <Link to={`/agente/${rec.key}`}>
-                          <Button variant="ghost" size="sm" className="text-xs h-8 px-3 text-muted-foreground hover:text-foreground">
+                      {/* Actions — full width on mobile */}
+                      <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto pl-13 sm:pl-0">
+                        <Link to={`/agente/${rec.key}`} className="flex-1 sm:flex-none">
+                          <Button variant="ghost" size="sm" className="text-xs h-9 sm:h-8 px-3 text-muted-foreground hover:text-foreground w-full sm:w-auto">
                             {lang === "pt" ? "Detalhes" : "Details"}
                           </Button>
                         </Link>
                         <Button
                           size="sm"
-                          className="text-xs h-8 px-4 neon-glow gap-1.5 font-semibold"
+                          className="text-xs h-9 sm:h-8 px-4 neon-glow gap-1.5 font-semibold flex-1 sm:flex-none"
                           onClick={() => onHire(rec.key)}
                           disabled={isHiring}
                         >
