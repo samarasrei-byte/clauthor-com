@@ -1,17 +1,22 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import type { HireIntent } from "./Auth";
 import {
   Users, Building2, ArrowRight, Flame, Sparkles,
   Phone, MessageSquare, Briefcase, BarChart3, Star, FileText,
   ShoppingCart, Shield, Wrench, Megaphone, Target, Palette,
   Video, Globe, ClipboardList, GraduationCap, Bot, Zap,
-  CheckCircle2, TrendingUp, Coins, Network
+  CheckCircle2, TrendingUp, Coins, Network, Lightbulb, ThumbsUp, Send
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const departments = [
   { 
@@ -136,6 +141,74 @@ const totalSavingsPercent = Math.round(((totalCltCost - totalPrometheusCost) / t
 
 const Departamentos = () => {
   const { t } = useTranslation();
+  const [suggestionName, setSuggestionName] = useState("");
+  const [suggestionReason, setSuggestionReason] = useState("");
+  const [suggestionEmail, setSuggestionEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [suggestions, setSuggestions] = useState<{ department_name: string; votes: number }[]>([]);
+
+  useEffect(() => {
+    const fetchSuggestions = async () => {
+      const { data } = await supabase
+        .from("department_suggestions")
+        .select("department_name, votes")
+        .order("votes", { ascending: false })
+        .limit(10);
+      if (data) {
+        // Aggregate by name
+        const map = new Map<string, number>();
+        data.forEach((s) => {
+          const name = s.department_name.toLowerCase().trim();
+          map.set(name, (map.get(name) || 0) + s.votes);
+        });
+        setSuggestions(
+          Array.from(map.entries())
+            .map(([department_name, votes]) => ({ department_name, votes }))
+            .sort((a, b) => b.votes - a.votes)
+            .slice(0, 5)
+        );
+      }
+    };
+    fetchSuggestions();
+  }, []);
+
+  const handleSuggestionSubmit = async () => {
+    if (!suggestionName.trim()) return;
+    setIsSubmitting(true);
+    const { error } = await supabase.from("department_suggestions").insert({
+      department_name: suggestionName.trim().slice(0, 100),
+      reason: suggestionReason.trim().slice(0, 500) || null,
+      email: suggestionEmail.trim().slice(0, 255) || null,
+    });
+    setIsSubmitting(false);
+    if (error) {
+      toast.error("Erro ao enviar sugestão. Tente novamente.");
+    } else {
+      toast.success("Sugestão enviada! Obrigado pelo feedback.");
+      setSuggestionName("");
+      setSuggestionReason("");
+      setSuggestionEmail("");
+      // Refresh suggestions
+      const { data } = await supabase
+        .from("department_suggestions")
+        .select("department_name, votes")
+        .order("votes", { ascending: false })
+        .limit(10);
+      if (data) {
+        const map = new Map<string, number>();
+        data.forEach((s) => {
+          const name = s.department_name.toLowerCase().trim();
+          map.set(name, (map.get(name) || 0) + s.votes);
+        });
+        setSuggestions(
+          Array.from(map.entries())
+            .map(([department_name, votes]) => ({ department_name, votes }))
+            .sort((a, b) => b.votes - a.votes)
+            .slice(0, 5)
+        );
+      }
+    }
+  };
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4 relative">
@@ -374,6 +447,83 @@ const Departamentos = () => {
             </div>
             <SquadConsultant />
           </div>
+        </motion.div>
+
+        {/* Suggest New Departments */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="glass-card rounded-2xl p-8 md:p-12 mb-16"
+        >
+          <div className="text-center mb-8">
+            <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
+              <Lightbulb className="h-7 w-7 text-primary" />
+            </div>
+            <h2 className="font-display text-2xl font-bold mb-2">
+              Qual departamento você <span className="gradient-text">gostaria de ver</span>?
+            </h2>
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+              Sugira novos departamentos e ajude a moldar o futuro da plataforma. Sua voz define o que construímos.
+            </p>
+          </div>
+
+          <div className="max-w-xl mx-auto space-y-4">
+            <Input
+              placeholder="Nome do departamento (ex: Jurídico, Operações, Data Science...)"
+              value={suggestionName}
+              onChange={(e) => setSuggestionName(e.target.value)}
+              maxLength={100}
+              className="bg-card/40 border-border"
+            />
+            <Textarea
+              placeholder="Por que esse departamento seria útil para sua empresa? (opcional)"
+              value={suggestionReason}
+              onChange={(e) => setSuggestionReason(e.target.value)}
+              maxLength={500}
+              rows={3}
+              className="bg-card/40 border-border resize-none"
+            />
+            <Input
+              type="email"
+              placeholder="Seu e-mail (opcional — avisamos quando lançar)"
+              value={suggestionEmail}
+              onChange={(e) => setSuggestionEmail(e.target.value)}
+              maxLength={255}
+              className="bg-card/40 border-border"
+            />
+            <Button
+              onClick={handleSuggestionSubmit}
+              disabled={!suggestionName.trim() || isSubmitting}
+              className="w-full h-12 gap-2 text-sm font-bold"
+            >
+              <Send className="h-4 w-4" />
+              {isSubmitting ? "Enviando..." : "Enviar Sugestão"}
+            </Button>
+          </div>
+
+          {suggestions.length > 0 && (
+            <div className="mt-8 pt-6 border-t border-border">
+              <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-semibold text-center mb-4">
+                Mais votados pela comunidade
+              </p>
+              <div className="flex flex-wrap justify-center gap-3">
+                {suggestions.map((s) => (
+                  <button
+                    key={s.department_name}
+                    onClick={() => setSuggestionName(s.department_name)}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card/40 border border-border hover:border-primary/30 transition-colors cursor-pointer"
+                  >
+                    <ThumbsUp className="h-3.5 w-3.5 text-primary/60" />
+                    <span className="text-sm capitalize">{s.department_name}</span>
+                    <Badge variant="outline" className="text-[10px] px-1.5 py-0">
+                      {s.votes}
+                    </Badge>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </motion.div>
 
         {/* Bottom comparison */}
