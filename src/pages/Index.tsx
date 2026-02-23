@@ -1,9 +1,9 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import SquadConsultant from "@/components/pricing/SquadConsultant";
 import SmartAgentFinder from "@/components/library/SmartAgentFinder";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import {
   MessageSquare, FileText, DollarSign,
   Calendar, Receipt, Star, Zap, ArrowRight,
@@ -11,7 +11,8 @@ import {
   Code, Users, Mail, Briefcase, Search, TrendingUp,
   Play, ChevronRight, Cpu, Globe, Lock,
   Target, Layers, Eye, CheckCircle2, XCircle, Network,
-  Headphones, Bot, PenTool, ShoppingCart, Megaphone, LineChart
+  Headphones, Bot, PenTool, ShoppingCart, Megaphone, LineChart,
+  Quote, Timer, Flame
 } from "lucide-react";
 import { useRef, useState, useMemo } from "react";
 import { useTranslation } from "react-i18next";
@@ -22,14 +23,9 @@ const agentIcons = [MessageSquare, DollarSign, Code, Users, Briefcase, Shield];
 // Futuristic AI background with neural network effect
 const FuturisticBackground = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden">
-    {/* Dot grid */}
     <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(0 65% 48%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
-    
-    {/* Primary ambient glow */}
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-primary/[0.04] to-transparent rounded-full blur-[120px]" />
     <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-t from-primary/[0.02] to-transparent rounded-full blur-[100px]" />
-
-    {/* Floating AI orbs */}
     <motion.div
       animate={{ y: [-20, 20, -20], x: [-10, 10, -10], opacity: [0.03, 0.07, 0.03] }}
       transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
@@ -40,13 +36,6 @@ const FuturisticBackground = () => (
       transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       className="absolute top-[40%] right-[15%] w-[250px] h-[250px] rounded-full bg-primary/[0.04] blur-[80px]"
     />
-    <motion.div
-      animate={{ y: [10, -10, 10], opacity: [0.02, 0.05, 0.02] }}
-      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-      className="absolute bottom-[20%] left-[40%] w-[200px] h-[200px] rounded-full bg-primary/[0.03] blur-[90px]"
-    />
-
-    {/* Neural network lines */}
     <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
       <motion.line x1="10%" y1="20%" x2="30%" y2="40%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
         initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.6, 0] }} transition={{ duration: 4, repeat: Infinity, delay: 0 }} />
@@ -54,16 +43,9 @@ const FuturisticBackground = () => (
         initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.5, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} />
       <motion.line x1="80%" y1="60%" x2="60%" y2="30%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
         initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.4, 0] }} transition={{ duration: 6, repeat: Infinity, delay: 2 }} />
-      <motion.line x1="20%" y1="70%" x2="45%" y2="50%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.5, 0] }} transition={{ duration: 4.5, repeat: Infinity, delay: 1.5 }} />
-      <motion.line x1="90%" y1="80%" x2="65%" y2="55%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.3, 0] }} transition={{ duration: 5.5, repeat: Infinity, delay: 3 }} />
-      {/* Neural nodes */}
       {[
         { cx: "10%", cy: "20%" }, { cx: "30%", cy: "40%" }, { cx: "70%", cy: "15%" },
         { cx: "50%", cy: "45%" }, { cx: "80%", cy: "60%" }, { cx: "60%", cy: "30%" },
-        { cx: "20%", cy: "70%" }, { cx: "45%", cy: "50%" }, { cx: "90%", cy: "80%" },
-        { cx: "65%", cy: "55%" },
       ].map((node, i) => (
         <motion.circle key={i} cx={node.cx} cy={node.cy} r="2" fill="hsl(0 65% 48%)"
           animate={{ opacity: [0.1, 0.6, 0.1], r: [1.5, 2.5, 1.5] }}
@@ -79,7 +61,7 @@ const HomePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [hiringSlug, setHiringSlug] = useState<string | null>(null);
-  
+
   const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
   const heroOpacity = useTransform(heroProgress, [0, 0.5], [1, 0]);
   const heroY = useTransform(heroProgress, [0, 1], [0, 150]);
@@ -88,7 +70,6 @@ const HomePage = () => {
   const agentHot = [true, true, true, true, false, false];
   const agentPrices = ["R$ 1.899", "R$ 1.979", "R$ 2.447", "R$ 2.297", "R$ 2.097", "R$ 2.399"];
 
-  // Agent metadata for AI Concierge on homepage
   const finderIcons: Record<string, React.ElementType> = {
     customer_service: Headphones, sales: DollarSign, billing: Receipt,
     developer: Code, sdr: Megaphone, hr: Users, security: Shield,
@@ -118,33 +99,61 @@ const HomePage = () => {
     { icon: BarChart3, key: "analytics", stat: "Live" },
   ];
 
+  const testimonials = [
+    {
+      name: "Rafael Mendes",
+      role: "CEO, TechNova",
+      quote: "Reduzimos 72% dos custos operacionais em 3 meses. Os agentes trabalham 24/7 sem falhar.",
+      avatar: "RM",
+    },
+    {
+      name: "Ana Carolina Silva",
+      role: "COO, GrowthLab",
+      quote: "O departamento comercial inteiro foi substituído por 4 agentes. Conversão subiu 340%.",
+      avatar: "AC",
+    },
+    {
+      name: "Pedro Augusto",
+      role: "CTO, DataPulse",
+      quote: "A integração levou 15 minutos. Em 1 semana já tinha ROI positivo. Impressionante.",
+      avatar: "PA",
+    },
+  ];
+
   return (
     <div className="relative">
       <FuturisticBackground />
 
-      {/* HERO SECTION */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 pt-20 overflow-hidden">
+      {/* URGENCY BANNER */}
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+        className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border-b border-primary/10 backdrop-blur-xl"
+      >
+        <div className="max-w-6xl mx-auto px-4 py-2.5 flex items-center justify-center gap-3 text-sm">
+          <Flame className="h-4 w-4 text-primary animate-pulse" />
+          <span className="text-muted-foreground">
+            <span className="font-semibold text-foreground">Early Adopter Program</span> — Apenas{" "}
+            <span className="text-primary font-bold">23 vagas</span> restantes com 40% OFF no primeiro trimestre
+          </span>
+          <Link to="/auth" className="ml-2">
+            <Button size="sm" variant="outline" className="h-7 text-[10px] border-primary/30 text-primary hover:bg-primary/10 rounded-lg">
+              Garantir vaga <ArrowRight className="ml-1 h-3 w-3" />
+            </Button>
+          </Link>
+        </div>
+      </motion.div>
+
+      {/* HERO SECTION — with social proof */}
+      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 pt-28 overflow-hidden">
         <div className="absolute inset-0 scan-line pointer-events-none" />
         <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
-        <div className="absolute top-2/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
-        
-        {/* Pulsing AI ring behind hero */}
+
+        {/* Pulsing AI ring */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-          <motion.div
-            animate={{ scale: [1, 1.15, 1], opacity: [0.03, 0.08, 0.03] }}
-            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-            className="w-[600px] h-[600px] rounded-full border border-primary/10"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.2, 1], opacity: [0.02, 0.06, 0.02] }}
-            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-            className="absolute inset-0 w-[600px] h-[600px] rounded-full border border-primary/5"
-          />
-          <motion.div
-            animate={{ scale: [1, 1.3, 1], opacity: [0.01, 0.04, 0.01] }}
-            transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-            className="absolute -inset-16 rounded-full border border-primary/5"
-          />
+          <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.03, 0.08, 0.03] }} transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }} className="w-[600px] h-[600px] rounded-full border border-primary/10" />
+          <motion.div animate={{ scale: [1, 1.2, 1], opacity: [0.02, 0.06, 0.02] }} transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }} className="absolute inset-0 w-[600px] h-[600px] rounded-full border border-primary/5" />
         </div>
 
         <motion.div style={{ opacity: heroOpacity, y: heroY }} className="relative z-10 max-w-6xl mx-auto text-center">
@@ -167,14 +176,11 @@ const HomePage = () => {
               <span className="text-foreground/90 font-semibold"> {t("home.subtitle_highlight")}</span>
             </motion.p>
 
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.7 }} className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6, duration: 0.7 }} className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
               <Link to="/auth">
                 <button className="group relative h-14 px-12 rounded-xl font-display font-semibold text-lg text-primary-foreground overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98]">
                   <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
                   <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
-                  <div className="absolute inset-0 overflow-hidden rounded-xl">
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
                   <span className="relative z-10 flex items-center gap-2">
                     <Play className="h-5 w-5 fill-current" />
                     {t("home.cta_start")}
@@ -191,7 +197,42 @@ const HomePage = () => {
               </Link>
             </motion.div>
 
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 1 }} className="flex flex-wrap items-center justify-center gap-8 pt-10 text-muted-foreground text-sm">
+            {/* SOCIAL PROOF — Stats inline no hero */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.8 }}
+              className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 pt-10 max-w-3xl mx-auto"
+            >
+              {[
+                { value: 847, label: "Agentes ativos", suffix: "+", icon: Cpu },
+                { value: 126, label: "Ações executadas", suffix: "k", icon: Zap },
+                { value: 99.7, label: "Taxa de sucesso", suffix: "%", decimals: 1, icon: TrendingUp },
+                { value: 312, label: "Empresas", suffix: "+", icon: Users },
+              ].map((stat, i) => (
+                <motion.div
+                  key={stat.label}
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.9 + i * 0.1, duration: 0.5 }}
+                  className="text-center"
+                >
+                  <div className="flex items-center justify-center gap-1.5 mb-1">
+                    <stat.icon className="h-3.5 w-3.5 text-primary/60" />
+                    <AnimatedCounter
+                      value={stat.value}
+                      suffix={stat.suffix}
+                      decimals={stat.decimals || 0}
+                      className="text-2xl sm:text-3xl font-display font-bold gradient-text"
+                    />
+                  </div>
+                  <p className="text-[10px] sm:text-xs text-muted-foreground tracking-wide">{stat.label}</p>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Trust badges */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 1 }} className="flex flex-wrap items-center justify-center gap-8 pt-4 text-muted-foreground text-sm">
               {[
                 { icon: Lock, label: t("home.trust_encrypted") },
                 { icon: Shield, label: t("home.trust_compliant") },
@@ -206,17 +247,29 @@ const HomePage = () => {
           </motion.div>
         </motion.div>
 
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2, duration: 1 }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4, duration: 1 }} className="absolute bottom-8 left-1/2 -translate-x-1/2">
           <motion.div animate={{ y: [0, 12, 0] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} className="w-7 h-12 rounded-full border border-border flex items-start justify-center p-2">
             <div className="w-1 h-2.5 bg-primary/50 rounded-full" />
           </motion.div>
         </motion.div>
       </section>
 
-      {/* AI CONCIERGE — Find Your Ideal Agent */}
+      {/* UNIFIED AI CONCIERGE — Single discovery tool */}
       <section className="py-24 px-4 relative">
         <div className="max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="text-center mb-8">
+              <Badge variant="outline" className="mb-4 border-primary/15 text-primary/80 px-4 py-2 backdrop-blur-sm">
+                <Bot className="h-4 w-4 mr-2" />
+                Concierge IA
+              </Badge>
+              <h2 className="font-display text-3xl sm:text-4xl font-bold mb-3">
+                Não sabe por onde começar? <span className="gradient-text">Pergunte à IA</span>
+              </h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                Descreva seu problema ou objetivo e nosso concierge recomenda o agente individual ou departamento completo ideal para você.
+              </p>
+            </div>
             <div className="glass-card rounded-2xl p-8 md:p-12 relative overflow-hidden">
               <div className="absolute top-0 right-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
               <div className="relative z-10">
@@ -229,242 +282,6 @@ const HomePage = () => {
               </div>
             </div>
           </motion.div>
-        </div>
-      </section>
-
-      {/* AI SQUAD CONSULTANT */}
-      <section className="py-24 px-4 relative">
-        <div className="max-w-4xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="glass-card rounded-2xl p-8 md:p-12 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
-              <div className="relative z-10">
-                <SquadConsultant />
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* STATS SECTION */}
-      <section className="py-32 px-4 relative">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mb-20">
-            <p className="text-xs text-muted-foreground uppercase tracking-[0.3em]">{t("home.stats_subtitle")}</p>
-          </motion.div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { value: "847", label: t("home.stats_agents"), icon: Cpu },
-              { value: "126k", label: t("home.stats_actions"), icon: Zap },
-              { value: "99.7%", label: t("home.stats_success"), icon: TrendingUp },
-              { value: "312", label: t("home.stats_companies"), icon: Users },
-            ].map((stat, i) => (
-              <motion.div key={stat.label} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}>
-                <div className="glass-card rounded-2xl p-8 text-center glass-hover group">
-                  <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
-                    <stat.icon className="h-6 w-6 text-primary/80" />
-                  </div>
-                  <p className="text-4xl sm:text-5xl font-display font-bold gradient-text mb-2">{stat.value}</p>
-                  <p className="text-xs text-muted-foreground tracking-wide">{stat.label}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* PROMETHEUS SPOTLIGHT */}
-      <section className="py-32 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/[0.02] via-transparent to-transparent" />
-        <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1 }} className="max-w-5xl mx-auto text-center relative">
-          <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-xl sm:text-2xl text-muted-foreground mb-8 leading-relaxed">
-            {t("home.spotlight_msg1")}<br />
-            <span className="text-foreground/90 font-semibold">{t("home.spotlight_msg2")}</span>
-          </motion.p>
-          <div className="glass-card rounded-[2rem] p-10 md:p-16 gradient-border relative overflow-hidden">
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-gradient-to-r from-primary/10 to-primary-glow/10 rounded-full opacity-20 blur-[80px]" />
-            <motion.div initial={{ scale: 0.8, opacity: 0 }} whileInView={{ scale: 1, opacity: 1 }} viewport={{ once: true }} transition={{ delay: 0.3, duration: 0.8 }} className="relative z-10">
-              <p className="text-xs uppercase tracking-[0.4em] text-primary/80 mb-6">{t("home.spotlight_label")}</p>
-              <h3 className="font-display text-6xl sm:text-7xl lg:text-8xl font-bold gradient-text tracking-tight mb-6">PROMETHEUS</h3>
-              <p className="text-lg text-muted-foreground max-w-lg mx-auto">
-                {t("home.spotlight_tagline")}<br />
-                <span className="text-primary font-semibold text-xl">{t("home.spotlight_fire")}</span>
-              </p>
-            </motion.div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ABOUT PROMETHEUS */}
-      <section className="py-32 px-4 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.01] to-transparent" />
-        <div className="max-w-6xl mx-auto relative">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-20">
-            <Badge variant="outline" className="mb-6 border-primary/15 text-primary/80 px-4 py-2 backdrop-blur-sm">
-              <Target className="h-4 w-4 mr-2" />
-              {t("home.about_badge")}
-            </Badge>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-8 leading-tight">
-              {t("home.about_title")} <span className="gradient-text">{t("home.about_title_hl")}</span>
-            </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-              {t("home.about_desc")}
-              <span className="text-foreground/80 font-semibold block mt-2">{t("home.about_desc_hl")}</span>
-            </p>
-          </motion.div>
-
-          <div className="grid md:grid-cols-2 gap-6 mb-20">
-            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-10 relative overflow-hidden glass-hover">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary/5 to-transparent rounded-bl-full" />
-              <div className="w-14 h-14 rounded-xl bg-primary/5 flex items-center justify-center mb-6">
-                <Layers className="h-7 w-7 text-primary/80" />
-              </div>
-              <h3 className="font-display text-2xl font-bold mb-4">{t("home.about_card1_title")}</h3>
-              <p className="text-muted-foreground leading-relaxed">{t("home.about_card1_desc")}</p>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-10 relative overflow-hidden glass-hover">
-              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-primary-glow/5 to-transparent rounded-bl-full" />
-              <div className="w-14 h-14 rounded-xl bg-primary-glow/5 flex items-center justify-center mb-6">
-                <Network className="h-7 w-7 text-primary-glow/80" />
-              </div>
-              <h3 className="font-display text-2xl font-bold mb-4">{t("home.about_card2_title")}</h3>
-              <p className="text-muted-foreground leading-relaxed">{t("home.about_card2_desc")}</p>
-            </motion.div>
-          </div>
-
-          {/* Why Apex */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-12 md:p-16 text-center mb-20 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.02] via-transparent to-primary-glow/[0.02]" />
-            <div className="relative z-10">
-              <p className="text-xs uppercase tracking-[0.4em] text-primary/70 mb-4">{t("home.about_why")}</p>
-              <h3 className="font-display text-3xl sm:text-4xl font-bold mb-6">
-                {t("home.about_apex1")} <span className="gradient-text">{t("home.about_apex2")}</span> {t("home.about_apex3")}
-              </h3>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-10">
-                {[
-                  { icon: Target, text: t("home.apex_item1") },
-                  { icon: Eye, text: t("home.apex_item2") },
-                  { icon: Layers, text: t("home.apex_item3") },
-                  { icon: Cpu, text: t("home.apex_item4") },
-                ].map((item, i) => (
-                  <motion.div key={item.text} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }} className="flex flex-col items-center gap-3 p-4">
-                    <div className="w-11 h-11 rounded-lg bg-primary/5 flex items-center justify-center">
-                      <item.icon className="h-5 w-5 text-primary/70" />
-                    </div>
-                    <span className="text-sm font-medium text-muted-foreground">{item.text}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </motion.div>
-
-          {/* How it Works */}
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-20">
-            <h3 className="font-display text-3xl font-bold text-center mb-12">
-              {t("home.how_title")} <span className="gradient-text">{t("home.how_title_hl")}</span> {t("home.how_title_rest")}
-            </h3>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
-              {[
-                { icon: Target, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
-                { icon: Users, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
-                { icon: BarChart3, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
-                { icon: Zap, title: t("home.how_step4"), desc: t("home.how_step4_desc") },
-                { icon: Shield, title: t("home.how_step5"), desc: t("home.how_step5_desc") },
-              ].map((item, i) => (
-                <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="glass-card rounded-xl p-6 text-center glass-hover group">
-                  <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
-                    <item.icon className="h-5 w-5 text-primary/70" />
-                  </div>
-                  <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
-                  <p className="text-xs text-muted-foreground">{item.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-
-          {/* What PROMETHEUS is NOT / For whom */}
-          <div className="grid md:grid-cols-2 gap-6 mb-20">
-            <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-10">
-              <h3 className="font-display text-2xl font-bold mb-6 flex items-center gap-3">
-                <XCircle className="h-6 w-6 text-destructive/70" />
-                {t("home.not_title")}
-              </h3>
-              <ul className="space-y-4">
-                {[t("home.not_item1"), t("home.not_item2"), t("home.not_item3"), t("home.not_item4")].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-muted-foreground">
-                    <div className="w-1.5 h-1.5 rounded-full bg-destructive/40" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-6 text-sm text-muted-foreground border-t border-border pt-6">
-                {t("home.not_footer")}<span className="text-foreground/80 font-semibold">{t("home.not_footer_hl")}</span>{t("home.not_footer_rest")}
-              </p>
-            </motion.div>
-
-            <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-10">
-              <h3 className="font-display text-2xl font-bold mb-6 flex items-center gap-3">
-                <CheckCircle2 className="h-6 w-6 text-primary/80" />
-                {t("home.for_title")}
-              </h3>
-              <ul className="space-y-4">
-                {[t("home.for_item1"), t("home.for_item2"), t("home.for_item3"), t("home.for_item4")].map((item, i) => (
-                  <li key={i} className="flex items-center gap-3 text-muted-foreground">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary/60" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="mt-6 text-sm text-muted-foreground border-t border-border pt-6">
-                {t("home.for_footer")}<span className="text-foreground/80 font-semibold">{t("home.for_footer_hl")}</span>.
-              </p>
-            </motion.div>
-          </div>
-
-          {/* Summary */}
-          <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} className="text-center">
-            <div className="inline-block glass-card rounded-2xl px-12 py-8 gradient-border">
-              <p className="font-display text-2xl sm:text-3xl font-bold mb-2">
-                {t("home.summary1")} <span className="gradient-text">{t("home.summary1_hl")}</span>.
-              </p>
-              <p className="text-muted-foreground text-lg">
-                {t("home.summary2")} <span className="text-foreground/80 font-semibold">{t("home.summary2_hl")}</span>.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* FEATURES GRID */}
-      <section className="py-32 px-4 relative">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-20">
-            <Badge variant="outline" className="mb-6 border-primary/15 text-primary/80 px-4 py-2">
-              {t("home.features_badge")}
-            </Badge>
-            <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
-              {t("home.features_title1")}<br />
-              <span className="gradient-text">{t("home.features_title2")}</span>
-            </h2>
-          </motion.div>
-
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {featureData.map((f, i) => (
-              <motion.div key={f.key} initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1, duration: 0.6 }}>
-                <div className="glass-card rounded-2xl p-8 glass-hover group h-full relative overflow-hidden">
-                  <div className="absolute top-4 right-4">
-                    <span className="text-2xl font-display font-bold text-primary/15">{f.stat}</span>
-                  </div>
-                  <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mb-6 group-hover:bg-primary/10 transition-all duration-300">
-                    <f.icon className="h-6 w-6 text-primary/70" />
-                  </div>
-                  <h3 className="font-display font-bold text-lg mb-3">{t(`features.${f.key}`)}</h3>
-                  <p className="text-muted-foreground leading-relaxed text-sm">{t(`features.${f.key}_desc`)}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
         </div>
       </section>
 
@@ -513,14 +330,95 @@ const HomePage = () => {
             })}
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-16">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mt-16 flex flex-col sm:flex-row gap-4 justify-center">
             <Link to="/library">
               <Button variant="outline" size="lg" className="rounded-xl border-border hover:border-primary/20 group text-base px-10 h-12">
                 {t("home.agents_view_all")}
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
+            <Link to="/departamentos">
+              <Button size="lg" className="rounded-xl glow text-base px-10 h-12 group">
+                <Network className="h-4 w-4 mr-2" />
+                Ver Times de IA Completos
+                <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
           </motion.div>
+        </div>
+      </section>
+
+      {/* HOW IT WORKS — Compact */}
+      <section className="py-24 px-4 relative">
+        <div className="max-w-6xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+            <h2 className="font-display text-3xl sm:text-4xl font-bold">
+              {t("home.how_title")} <span className="gradient-text">{t("home.how_title_hl")}</span> {t("home.how_title_rest")}
+            </h2>
+          </motion.div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
+            {[
+              { icon: Target, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
+              { icon: Users, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
+              { icon: BarChart3, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
+              { icon: Zap, title: t("home.how_step4"), desc: t("home.how_step4_desc") },
+              { icon: Shield, title: t("home.how_step5"), desc: t("home.how_step5_desc") },
+            ].map((item, i) => (
+              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="glass-card rounded-xl p-6 text-center glass-hover group">
+                <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
+                  <item.icon className="h-5 w-5 text-primary/70" />
+                </div>
+                <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
+                <p className="text-xs text-muted-foreground">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="py-24 px-4 relative">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
+            <Badge variant="outline" className="mb-6 border-primary/15 text-primary/80 px-4 py-2">
+              <Star className="h-4 w-4 mr-2" />
+              Depoimentos
+            </Badge>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold">
+              Quem usa, <span className="gradient-text">não volta atrás</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.12, duration: 0.6 }}
+              >
+                <div className="glass-card rounded-2xl p-8 glass-hover h-full relative overflow-hidden">
+                  <Quote className="h-8 w-8 text-primary/10 absolute top-6 right-6" />
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary-glow/20 flex items-center justify-center text-sm font-bold text-primary border border-primary/10">
+                      {t.avatar}
+                    </div>
+                    <div>
+                      <p className="font-semibold text-sm">{t.name}</p>
+                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                    </div>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed text-sm italic">"{t.quote}"</p>
+                  <div className="flex gap-1 mt-4">
+                    {[...Array(5)].map((_, j) => (
+                      <Star key={j} className="h-3.5 w-3.5 fill-primary/80 text-primary/80" />
+                    ))}
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
