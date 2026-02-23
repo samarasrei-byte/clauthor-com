@@ -119,7 +119,7 @@ const Pricing = () => {
                   </li>
                 ))}
               </ul>
-              <Link to="/auth">
+              <Link to="/auth" state={{ hireIntent: { type: "agent", label: plan.name, slugs: [] } }}>
                 <Button className={`w-full rounded-xl h-12 font-semibold ${plan.popular ? "glow" : ""}`} variant={plan.popular ? "default" : "outline"}>
                   {isOnRequest(plan.price) ? t("pricing_page.contact_sales") : t("pricing_page.start_now")}
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -178,7 +178,7 @@ const Pricing = () => {
                 <br />
                 {t("pricing_page.comparison_footer3")} <span className="text-cyan-400 font-bold">{t("pricing_page.comparison_footer3_value")}</span>.
               </p>
-              <Link to="/auth">
+              <Link to="/auth" state={{ hireIntent: { type: "agent", label: "Plano PROMETHEUS", slugs: [] } }}>
                 <Button className="glow rounded-xl px-8 h-12 font-semibold">
                   <Zap className="h-4 w-4 mr-2" />
                   {t("pricing_page.save_now")}

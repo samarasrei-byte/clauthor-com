@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
@@ -14,6 +14,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
+import { toast } from "sonner";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
@@ -23,9 +24,12 @@ import AgentChat from "@/components/dashboard/AgentChat";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import ClientCommandCenter from "@/components/dashboard/ClientCommandCenter";
 import AgentSettings from "@/components/dashboard/AgentSettings";
+import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+  const hireProcessed = useRef(false);
   const [activeSection, setActiveSection] = useState("overview");
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const { credits, remainingCredits, usagePercentage } = useCredits();
@@ -86,6 +90,68 @@ const ClientDashboard = () => {
     },
     enabled: !!user,
   });
+
+  // Auto-hire from sessionStorage intent (set during auth flow)
+  useEffect(() => {
+    if (!user || hireProcessed.current) return;
+    const raw = sessionStorage.getItem("hireIntent");
+    if (!raw) return;
+    
+    hireProcessed.current = true;
+    sessionStorage.removeItem("hireIntent");
+    
+    const intent: HireIntent = JSON.parse(raw);
+    if (!intent.slugs || intent.slugs.length === 0) return;
+
+    const processHire = async () => {
+      const uniqueSlugs = [...new Set(intent.slugs)];
+      toast.info(`Contratando ${intent.label}...`, { duration: 3000 });
+
+      let hired = 0;
+      for (const slug of uniqueSlugs) {
+        try {
+          const { data: template } = await supabase
+            .from("agent_templates")
+            .select("*")
+            .eq("slug", slug)
+            .eq("is_active", true)
+            .single();
+
+          if (!template) continue;
+
+          const { error } = await supabase
+            .from("agents")
+            .insert({
+              user_id: user.id,
+              name: template.name,
+              description: template.description,
+              instructions: template.system_prompt || template.instructions,
+              objective: template.description,
+              tier: template.tier as any,
+              monthly_price: 0,
+              status: "active",
+              channels: template.default_channels,
+              integrations: template.default_integrations,
+              actions: template.default_actions,
+            });
+
+          if (!error) hired++;
+        } catch (err) {
+          console.error(`Failed to hire ${slug}:`, err);
+        }
+      }
+
+      if (hired > 0) {
+        toast.success(`${hired} agente(s) contratado(s) com sucesso! 🚀`);
+        queryClient.invalidateQueries({ queryKey: ["my-agents"] });
+        setActiveSection("agents");
+      } else {
+        toast.error("Não foi possível contratar os agentes. Tente pelo Marketplace.");
+      }
+    };
+
+    processHire();
+  }, [user, queryClient]);
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;

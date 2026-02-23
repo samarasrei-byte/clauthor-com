@@ -1,13 +1,23 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bot, ArrowRight, Eye, EyeOff, Loader2 } from "lucide-react";
+import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
+import { Badge } from "@/components/ui/badge";
+
+export interface HireIntent {
+  type: "agent" | "department";
+  label: string;
+  // For agent: slug to hire from templates
+  slugs?: string[];
+  // For department: department id
+  departmentId?: string;
+}
 
 const AuthPage = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,10 +27,24 @@ const AuthPage = () => {
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
   const { t } = useTranslation();
-  const { signIn, signUp } = useAuth();
+  const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = (location.state as { from?: { pathname: string } })?.from?.pathname || "/dashboard";
+
+  const state = location.state as { from?: { pathname: string }; hireIntent?: HireIntent } | null;
+  const from = state?.from?.pathname || "/dashboard";
+  const hireIntent = state?.hireIntent || null;
+
+  // If user is already logged in, redirect immediately
+  useEffect(() => {
+    if (user) {
+      if (hireIntent) {
+        // Store intent for post-login processing
+        sessionStorage.setItem("hireIntent", JSON.stringify(hireIntent));
+      }
+      navigate(from, { replace: true });
+    }
+  }, [user, from, hireIntent, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,12 +52,33 @@ const AuthPage = () => {
     try {
       if (isLogin) {
         const { error } = await signIn(email, password);
-        if (error) { toast.error(error.message); } else { toast.success(t("auth.login_success")); navigate(from, { replace: true }); }
+        if (error) {
+          toast.error(error.message);
+        } else {
+          toast.success(t("auth.login_success"));
+          if (hireIntent) {
+            sessionStorage.setItem("hireIntent", JSON.stringify(hireIntent));
+          }
+          navigate(from, { replace: true });
+        }
       } else {
         const { error } = await signUp(email, password, fullName);
-        if (error) { toast.error(error.message); } else { toast.success(t("auth.signup_success")); }
+        if (error) {
+          toast.error(error.message);
+        } else {
+          toast.success(t("auth.signup_success"));
+          if (hireIntent) {
+            sessionStorage.setItem("hireIntent", JSON.stringify(hireIntent));
+          }
+          // Redirect after signup (auto-confirm is enabled)
+          navigate(from, { replace: true });
+        }
       }
-    } catch (err) { toast.error(t("auth.error_generic")); } finally { setIsLoading(false); }
+    } catch (err) {
+      toast.error(t("auth.error_generic"));
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -49,6 +94,27 @@ const AuthPage = () => {
           <h1 className="font-display text-3xl font-bold mb-2">{isLogin ? t("auth.welcome") : t("auth.create_account")}</h1>
           <p className="text-muted-foreground">{isLogin ? t("auth.login_subtitle") : t("auth.register_subtitle")}</p>
         </div>
+
+        {/* Show hire intent banner */}
+        {hireIntent && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mb-4 p-3 rounded-xl bg-primary/5 border border-primary/15 flex items-center gap-3"
+          >
+            <ShoppingCart className="h-4 w-4 text-primary shrink-0" />
+            <div className="flex-1 min-w-0">
+              <p className="text-xs text-muted-foreground">
+                {hireIntent.type === "department" ? "Departamento selecionado" : "Agente selecionado"}
+              </p>
+              <p className="text-sm font-semibold text-foreground truncate">{hireIntent.label}</p>
+            </div>
+            <Badge variant="outline" className="shrink-0 border-primary/20 text-primary text-[10px]">
+              Auto-contrata
+            </Badge>
+          </motion.div>
+        )}
+
         <div className="glass-card rounded-2xl p-8">
           <form onSubmit={handleSubmit} className="space-y-5">
             {!isLogin && (
