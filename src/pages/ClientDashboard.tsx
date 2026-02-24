@@ -15,6 +15,7 @@ import { Progress } from "@/components/ui/progress";
 import { Link } from "react-router-dom";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
@@ -31,6 +32,7 @@ import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
+  const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const hireProcessed = useRef(false);
   const [activeSection, setActiveSection] = useState("overview");
@@ -64,7 +66,7 @@ const ClientDashboard = () => {
       if (error) throw error;
       return data.map((sub: any) => ({
         id: sub.id,
-        agent_name: sub.agent?.name || "Agente",
+        agent_name: sub.agent?.name || t("dashboard.ai_assistant"),
         monthly_price: sub.monthly_price,
         status: sub.status,
         current_period_end: sub.current_period_end,
@@ -85,7 +87,7 @@ const ClientDashboard = () => {
       if (error) throw error;
       return data.map((log: any) => ({
         id: log.id,
-        agent_name: log.agent?.name || "Agente",
+        agent_name: log.agent?.name || t("dashboard.ai_assistant"),
         action: log.action,
         status: log.status,
         execution_time_ms: log.execution_time_ms,
@@ -95,7 +97,7 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
-  // Auto-hire from sessionStorage intent (set during auth flow)
+  // Auto-hire from sessionStorage intent
   useEffect(() => {
     if (!user || hireProcessed.current) return;
     const raw = sessionStorage.getItem("hireIntent");
@@ -109,7 +111,7 @@ const ClientDashboard = () => {
 
     const processHire = async () => {
       const uniqueSlugs = [...new Set(intent.slugs)];
-      toast.info(`Contratando ${intent.label}...`, { duration: 3000 });
+      toast.info(t("dashboard.hiring_agents", { label: intent.label }), { duration: 3000 });
 
       let hired = 0;
       for (const slug of uniqueSlugs) {
@@ -146,23 +148,22 @@ const ClientDashboard = () => {
       }
 
       if (hired > 0) {
-        toast.success(`${hired} agente(s) contratado(s) com sucesso! 🚀`);
+        toast.success(t("dashboard.agents_hired", { count: hired }));
         queryClient.invalidateQueries({ queryKey: ["my-agents"] });
         setActiveSection("agents");
       } else {
-        toast.error("Não foi possível contratar os agentes. Tente pelo Marketplace.");
+        toast.error(t("dashboard.hire_failed"));
       }
     };
 
     processHire();
-  }, [user, queryClient]);
+  }, [user, queryClient, t]);
 
   // Show concierge on first visit
   useEffect(() => {
     if (!user || loadingAgents) return;
     const key = `clauthor_concierge_seen_${user.id}`;
     if (!localStorage.getItem(key)) {
-      // Small delay to let dashboard render first
       const timer = setTimeout(() => setShowConcierge(true), 1500);
       return () => clearTimeout(timer);
     }
@@ -178,35 +179,28 @@ const ClientDashboard = () => {
   const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);
   const estimatedSavings = activeAgents * 7560;
 
+  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
+
   const sidebarItems = [
-    { id: "overview", label: "Command Center", icon: LayoutDashboard },
-    { id: "concierge", label: "Concierge", icon: Wand2 },
-    { id: "agents", label: "Meus Agentes", icon: Bot, badge: agents.length || undefined },
-    { id: "squad-chat", label: "Reunião", icon: Users },
-    { id: "agent-settings", label: "Configurações", icon: Settings },
-    { id: "chat", label: "Assistente IA", icon: Sparkles },
-    { id: "analytics", label: "Analytics", icon: BarChart3 },
-    { id: "team", label: "Equipe", icon: UserPlus },
-    { id: "logs", label: "Logs", icon: Activity, badge: recentLogs.length || undefined },
-    { id: "billing", label: "Assinatura", icon: CreditCard },
+    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard },
+    { id: "concierge", label: t("dashboard.concierge"), icon: Wand2 },
+    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined },
+    { id: "squad-chat", label: t("dashboard.meeting"), icon: Users },
+    { id: "agent-settings", label: t("dashboard.settings"), icon: Settings },
+    { id: "chat", label: t("dashboard.ai_assistant"), icon: Sparkles },
+    { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3 },
+    { id: "team", label: t("dashboard.team"), icon: UserPlus },
+    { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined },
+    { id: "billing", label: t("dashboard.billing"), icon: CreditCard },
   ];
 
   const mockChartData = [
-    { name: "Jan", execucoes: 400, sucesso: 380 },
-    { name: "Fev", execucoes: 600, sucesso: 580 },
-    { name: "Mar", execucoes: 800, sucesso: 770 },
-    { name: "Abr", execucoes: 1200, sucesso: 1150 },
-    { name: "Mai", execucoes: 1500, sucesso: 1460 },
-    { name: "Jun", execucoes: 1800, sucesso: 1750 },
-  ];
-
-  const kpiCards = [
-    { icon: Bot, label: "Agentes Ativos", value: activeAgents, suffix: "", spark: [1, 2, 2, 3, 3, activeAgents], color: "text-primary" },
-    { icon: Zap, label: "Execuções", value: totalExecutions, suffix: "", spark: [100, 200, 350, 500, 800, totalExecutions || 0], color: "text-cyan-400" },
-    { icon: CheckCircle, label: "Taxa Sucesso", value: 98.5, suffix: "%", spark: [95, 96, 97, 97.5, 98, 98.5], color: "text-emerald-500" },
-    { icon: DollarSign, label: "Economia/mês", value: estimatedSavings, prefix: "R$ ", suffix: "", spark: [2000, 4000, 5000, 6000, 7000, estimatedSavings || 0], color: "text-cyan-400" },
-    { icon: Coins, label: "Tokens Usados", value: totalTokensUsed, suffix: "", spark: [0, 100, 300, 500, 800, totalTokensUsed || 0], color: "text-primary" },
-    { icon: Target, label: "Uso do Plano", value: usagePercentage, suffix: "%", spark: [10, 20, 30, 40, 50, usagePercentage], color: usagePercentage > 80 ? "text-destructive" : "text-cyan-400" },
+    { name: t("dashboard.jan"), execucoes: 400, sucesso: 380 },
+    { name: t("dashboard.feb"), execucoes: 600, sucesso: 580 },
+    { name: t("dashboard.mar"), execucoes: 800, sucesso: 770 },
+    { name: t("dashboard.apr"), execucoes: 1200, sucesso: 1150 },
+    { name: t("dashboard.may"), execucoes: 1500, sucesso: 1460 },
+    { name: t("dashboard.jun"), execucoes: 1800, sucesso: 1750 },
   ];
 
   const tierColors: Record<string, string> = {
@@ -222,9 +216,13 @@ const ClientDashboard = () => {
     return <Clock className="h-3.5 w-3.5 text-yellow-500" />;
   };
 
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(value / 100);
+  };
+
   return (
     <div className="flex h-full">
-      {/* Sidebar — fixed, full height */}
+      {/* Sidebar */}
       <div className="hidden lg:block">
         <DashboardSidebar
           items={sidebarItems}
@@ -249,9 +247,9 @@ const ClientDashboard = () => {
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
           >
             <div>
-              <h1 className="font-display text-2xl font-bold">Painel de Controle</h1>
+              <h1 className="font-display text-2xl font-bold">{t("dashboard.control_panel")}</h1>
               <p className="text-sm text-muted-foreground">
-                {new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long" })}
+                {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
               </p>
             </div>
             <QuickActions />
@@ -293,7 +291,7 @@ const ClientDashboard = () => {
           {/* ═══ CHAT ═══ */}
           {activeSection === "chat" && (
             <div className="h-[calc(100vh-14rem)]">
-              <AgentChat agentId={selectedAgent?.id} agentName={selectedAgent?.name || "Assistente IA"} />
+              <AgentChat agentId={selectedAgent?.id} agentName={selectedAgent?.name || t("dashboard.ai_assistant")} />
             </div>
           )}
 
@@ -310,15 +308,15 @@ const ClientDashboard = () => {
           {activeSection === "agents" && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="font-display text-xl font-bold">Meus Agentes ({agents.length})</h2>
-                <Link to="/create-agent"><Button className="glow gap-1.5"><Plus className="h-4 w-4" /> Novo Agente</Button></Link>
+                <h2 className="font-display text-xl font-bold">{t("dashboard.agents_tab")} ({agents.length})</h2>
+                <Link to="/create-agent"><Button className="glow gap-1.5"><Plus className="h-4 w-4" /> {t("dashboard.new_agent")}</Button></Link>
               </div>
               {agents.length === 0 ? (
                 <div className="glass-card rounded-2xl p-12 text-center">
                   <Sparkles className="h-12 w-12 text-primary/30 mx-auto mb-4" />
-                  <h3 className="font-display text-lg font-bold mb-2">Nenhum agente criado</h3>
-                  <p className="text-muted-foreground text-sm mb-6">Comece criando seu primeiro agente de IA</p>
-                  <Link to="/library"><Button className="glow">Explorar Biblioteca</Button></Link>
+                  <h3 className="font-display text-lg font-bold mb-2">{t("dashboard.no_agent_created")}</h3>
+                  <p className="text-muted-foreground text-sm mb-6">{t("dashboard.start_creating")}</p>
+                  <Link to="/library"><Button className="glow">{t("dashboard.explore_library")}</Button></Link>
                 </div>
               ) : (
                 <div className="grid sm:grid-cols-2 gap-4">
@@ -340,15 +338,15 @@ const ClientDashboard = () => {
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
-                          <p className="text-xs text-muted-foreground">Preço</p>
-                          <p className="font-display font-bold text-sm">R$ {(agent.monthly_price / 100).toLocaleString("pt-BR")}</p>
+                          <p className="text-xs text-muted-foreground">{t("dashboard.price")}</p>
+                          <p className="font-display font-bold text-sm">{formatCurrency(agent.monthly_price)}</p>
                         </div>
                         <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
-                          <p className="text-xs text-muted-foreground">Execuções</p>
+                          <p className="text-xs text-muted-foreground">{t("dashboard.executions")}</p>
                           <p className="font-display font-bold text-sm">{agent.total_executions}</p>
                         </div>
                         <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
-                          <p className="text-xs text-muted-foreground">Status</p>
+                          <p className="text-xs text-muted-foreground">{t("dashboard.status")}</p>
                           <p className={`font-bold text-sm ${agent.status === "active" ? "text-emerald-500" : "text-muted-foreground"}`}>
                             {agent.status === "active" ? "●" : "○"} {agent.status}
                           </p>
@@ -364,16 +362,16 @@ const ClientDashboard = () => {
           {/* ═══ ANALYTICS ═══ */}
           {activeSection === "analytics" && (
             <div className="space-y-6">
-              <h2 className="font-display text-xl font-bold">Analytics</h2>
+              <h2 className="font-display text-xl font-bold">{t("dashboard.analytics")}</h2>
               <div className="glass-card rounded-2xl p-6">
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center gap-3">
                     <BarChart3 className="h-5 w-5 text-primary" />
-                    <span className="font-display font-semibold">Execuções vs Sucesso</span>
+                    <span className="font-display font-semibold">{t("dashboard.exec_vs_success")}</span>
                   </div>
                   <div className="flex gap-4">
-                    <div className="flex items-center gap-2"><span className="w-3 h-1 rounded bg-primary" /><span className="text-xs text-muted-foreground">Execuções</span></div>
-                    <div className="flex items-center gap-2"><span className="w-3 h-1 rounded bg-emerald-500" /><span className="text-xs text-muted-foreground">Sucesso</span></div>
+                    <div className="flex items-center gap-2"><span className="w-3 h-1 rounded bg-primary" /><span className="text-xs text-muted-foreground">{t("dashboard.executions")}</span></div>
+                    <div className="flex items-center gap-2"><span className="w-3 h-1 rounded bg-emerald-500" /><span className="text-xs text-muted-foreground">{t("dashboard.success_rate_short")}</span></div>
                   </div>
                 </div>
                 <div className="h-[300px]">
@@ -400,19 +398,19 @@ const ClientDashboard = () => {
                 </div>
                 <div className="grid grid-cols-3 gap-4 mt-6">
                   <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">Este mês</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("dashboard.this_month")}</p>
                     <p className="font-display text-xl font-bold">1,800</p>
                     <p className="text-xs text-emerald-500">+20%</p>
                   </div>
                   <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">Taxa Média</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_rate")}</p>
                     <p className="font-display text-xl font-bold">97.2%</p>
-                    <p className="text-xs text-muted-foreground">de sucesso</p>
+                    <p className="text-xs text-muted-foreground">{t("dashboard.of_success")}</p>
                   </div>
                   <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">Tempo Médio</p>
+                    <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_time")}</p>
                     <p className="font-display text-xl font-bold">1.2s</p>
-                    <p className="text-xs text-muted-foreground">por execução</p>
+                    <p className="text-xs text-muted-foreground">{t("dashboard.per_execution")}</p>
                   </div>
                 </div>
               </div>
@@ -422,10 +420,10 @@ const ClientDashboard = () => {
           {/* ═══ LOGS ═══ */}
           {activeSection === "logs" && (
             <div className="space-y-6">
-              <h2 className="font-display text-xl font-bold">Logs de Execução ({recentLogs.length})</h2>
+              <h2 className="font-display text-xl font-bold">{t("dashboard.execution_logs")} ({recentLogs.length})</h2>
               <div className="glass-card rounded-2xl overflow-hidden">
                 {recentLogs.length === 0 ? (
-                  <div className="p-12 text-center text-muted-foreground">Nenhum log encontrado</div>
+                  <div className="p-12 text-center text-muted-foreground">{t("dashboard.no_logs_found")}</div>
                 ) : (
                   <div className="divide-y divide-white/5 max-h-[600px] overflow-y-auto">
                     {recentLogs.map((log) => (
@@ -442,7 +440,7 @@ const ClientDashboard = () => {
                             {log.status}
                           </Badge>
                           <p className="text-[10px] text-muted-foreground mt-1">
-                            {new Date(log.created_at).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
+                            {new Date(log.created_at).toLocaleString(locale, { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
                           </p>
                         </div>
                       </div>
@@ -456,34 +454,34 @@ const ClientDashboard = () => {
           {/* ═══ BILLING ═══ */}
           {activeSection === "billing" && (
             <div className="space-y-6">
-              <h2 className="font-display text-xl font-bold">Assinatura & Créditos</h2>
+              <h2 className="font-display text-xl font-bold">{t("dashboard.subscription_credits")}</h2>
               <div className="grid lg:grid-cols-2 gap-6">
                 {/* Credits */}
                 <div className="glass-card rounded-2xl p-6 space-y-5">
                   <div className="flex items-center gap-3">
                     <Coins className="h-5 w-5 text-primary" />
-                    <h3 className="font-display font-semibold">Créditos</h3>
+                    <h3 className="font-display font-semibold">{t("dashboard.credits_label")}</h3>
                     <Badge variant="secondary">{credits?.plan_type || "free"}</Badge>
                   </div>
                   <div>
                     <div className="flex justify-between text-sm mb-2">
-                      <span>{credits?.used_credits?.toLocaleString("pt-BR") || 0} usados</span>
-                      <span>{credits?.total_credits?.toLocaleString("pt-BR") || 0} total</span>
+                      <span>{credits?.used_credits?.toLocaleString(locale) || 0} {t("dashboard.used_label")}</span>
+                      <span>{credits?.total_credits?.toLocaleString(locale) || 0} {t("dashboard.total_label")}</span>
                     </div>
                     <Progress value={usagePercentage} className="h-3" />
-                    <p className="text-xs text-muted-foreground mt-2">{100 - usagePercentage}% restante</p>
+                    <p className="text-xs text-muted-foreground mt-2">{t("dashboard.pct_remaining", { pct: 100 - usagePercentage })}</p>
                   </div>
-                  <TokenUpgradeDialog trigger={<Button className="w-full glow">Upgrade de Tokens <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
+                  <TokenUpgradeDialog trigger={<Button className="w-full glow">{t("dashboard.token_upgrade")} <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
                 </div>
 
                 {/* Subscriptions */}
                 <div className="glass-card rounded-2xl p-6 space-y-5">
                   <div className="flex items-center gap-3">
                     <CreditCard className="h-5 w-5 text-primary" />
-                    <h3 className="font-display font-semibold">Assinaturas Ativas</h3>
+                    <h3 className="font-display font-semibold">{t("dashboard.active_subscriptions")}</h3>
                   </div>
                   {subscriptions.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-4">Nenhuma assinatura ativa</p>
+                    <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.no_subscriptions")}</p>
                   ) : (
                     <div className="space-y-2">
                       {subscriptions.map((sub) => (
@@ -492,12 +490,12 @@ const ClientDashboard = () => {
                             <span className="w-2 h-2 rounded-full bg-emerald-500" />
                             <span className="text-sm">{sub.agent_name}</span>
                           </div>
-                          <span className="text-sm font-medium">R$ {(sub.monthly_price / 100).toLocaleString("pt-BR")}/mês</span>
+                          <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{locale.startsWith("pt") ? "mês" : "mo"}</span>
                         </div>
                       ))}
                       <div className="pt-3 border-t border-white/5 flex justify-between">
-                        <span className="text-sm font-medium">Total mensal</span>
-                        <span className="font-display font-bold gradient-text">R$ {(subscriptions.reduce((a, s) => a + s.monthly_price, 0) / 100).toLocaleString("pt-BR")}</span>
+                        <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
+                        <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
                       </div>
                     </div>
                   )}

@@ -19,15 +19,15 @@ interface ConciergeChatProps {
   onNavigate?: (section: string) => void;
 }
 
-const QUICK_PROMPTS = [
-  { label: "O que meus agentes fazem?", icon: "🤖" },
-  { label: "Me mostre o dashboard", icon: "📊" },
-  { label: "Como falo com um agente?", icon: "💬" },
-  { label: "O que é a Reunião?", icon: "👥" },
-];
-
 const ConciergeChat = ({ isOpen, onClose, onNavigate }: ConciergeChatProps) => {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
+
+  const QUICK_PROMPTS = [
+    { label: i18n.language === "pt" ? "O que meus agentes fazem?" : "What do my agents do?", icon: "🤖" },
+    { label: i18n.language === "pt" ? "Me mostre o dashboard" : "Show me the dashboard", icon: "📊" },
+    { label: i18n.language === "pt" ? "Como falo com um agente?" : "How do I talk to an agent?", icon: "💬" },
+    { label: i18n.language === "pt" ? "O que é a Reunião?" : "What is the Meeting?", icon: "👥" },
+  ];
   const [messages, setMessages] = useState<ConciergeMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -44,7 +44,7 @@ const ConciergeChat = ({ isOpen, onClose, onNavigate }: ConciergeChatProps) => {
   useEffect(() => {
     if (isOpen && !initialSent.current && messages.length === 0) {
       initialSent.current = true;
-      sendToBackend([{ role: "user", content: "Olá! Acabei de chegar no meu dashboard. Me apresente meus agentes e me guie!" }], true);
+      sendToBackend([{ role: "user", content: i18n.language === "pt" ? "Olá! Acabei de chegar no meu dashboard. Me apresente meus agentes e me guie!" : "Hello! I just arrived at my dashboard. Introduce my agents and guide me!" }], true);
     }
   }, [isOpen]);
 
@@ -203,7 +203,7 @@ const ConciergeChat = ({ isOpen, onClose, onNavigate }: ConciergeChatProps) => {
               </div>
               <div>
                 <h3 className="font-display font-semibold text-sm">CLAUTHOR Concierge</h3>
-                <p className="text-[10px] text-muted-foreground">Seu guia pessoal • Sempre disponível</p>
+                <p className="text-[10px] text-muted-foreground">{t("dashboard.concierge_subtitle")}</p>
               </div>
             </div>
             <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
@@ -218,8 +218,8 @@ const ConciergeChat = ({ isOpen, onClose, onNavigate }: ConciergeChatProps) => {
                 <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary/10 to-primary-glow/10 flex items-center justify-center mb-4 animate-pulse-glow">
                   <Sparkles className="h-8 w-8 text-primary" />
                 </div>
-                <p className="text-sm font-medium mb-1">Preparando sua experiência...</p>
-                <p className="text-xs text-muted-foreground">O concierge está conhecendo seus agentes</p>
+                <p className="text-sm font-medium mb-1">{t("dashboard.preparing")}</p>
+                <p className="text-xs text-muted-foreground">{t("dashboard.getting_to_know")}</p>
               </div>
             )}
 
@@ -300,7 +300,7 @@ const ConciergeChat = ({ isOpen, onClose, onNavigate }: ConciergeChatProps) => {
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Pergunte qualquer coisa sobre seus agentes..."
+                placeholder={t("dashboard.ask_anything")}
                 disabled={isLoading}
                 className="flex-1 bg-card border-border text-sm h-9"
               />
@@ -317,7 +317,7 @@ const ConciergeChat = ({ isOpen, onClose, onNavigate }: ConciergeChatProps) => {
               onClick={onClose}
               className="w-full mt-2 text-[10px] text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-1"
             >
-              Pular e explorar sozinho <ArrowRight className="h-3 w-3" />
+              {t("dashboard.skip_explore")} <ArrowRight className="h-3 w-3" />
             </button>
           </div>
         </motion.div>
