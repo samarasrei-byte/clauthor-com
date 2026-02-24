@@ -69,15 +69,16 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
     return () => clearInterval(typeInterval);
   }, [placeholderIdx]);
 
-  const handleSearch = async () => {
-    if (!query.trim() || isSearching) return;
+  const handleSearch = async (overrideQuery?: string) => {
+    const searchQuery = overrideQuery || query;
+    if (!searchQuery.trim() || isSearching) return;
     setIsSearching(true);
     setHasSearched(true);
     setResults([]);
 
     try {
       const response = await supabase.functions.invoke("agent-concierge", {
-        body: { query: query.trim() },
+        body: { query: searchQuery.trim() },
       });
 
       if (response.error) throw response.error;
@@ -194,7 +195,7 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
               ].map((chip) => (
                 <button
                   key={chip}
-                  onClick={() => { setQuery(chip); setTimeout(handleSearch, 100); }}
+                  onClick={() => { setQuery(chip); handleSearch(chip); }}
                   className="px-3 py-1.5 rounded-full text-xs font-medium border border-border bg-card/50 text-muted-foreground hover:border-primary/30 hover:text-primary transition-all duration-200"
                 >
                   {chip}
