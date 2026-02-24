@@ -1,158 +1,145 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, MessageSquare, ChevronDown, ChevronUp } from "lucide-react";
+import { Bot, Zap } from "lucide-react";
 
 interface ChatMessage {
   agent: string;
   text: string;
-  delay: number; // ms before showing
 }
 
 const departmentChats: Record<string, ChatMessage[]> = {
   tecnologia: [
-    { agent: "Dev Full-Stack", text: "Acabei o endpoint da API de pagamentos. Preciso de review de segurança.", delay: 0 },
-    { agent: "CISO", text: "Analisando... Encontrei uma vulnerabilidade no header CORS. Corrigindo agora.", delay: 2500 },
-    { agent: "DevOps", text: "Deploy em staging pronto. Pipeline CI/CD verde. ✅", delay: 5000 },
-    { agent: "Gerente de Projetos", text: "Atualizado no board: task movida para 'Done'. Sprint no prazo. 📊", delay: 7500 },
+    { agent: "Dev Full-Stack", text: "Endpoint da API pronto. Preciso de review de segurança." },
+    { agent: "CISO", text: "Vulnerabilidade no CORS detectada. Corrigindo..." },
+    { agent: "DevOps", text: "Deploy staging: pipeline verde ✅" },
+    { agent: "PM", text: "Sprint atualizado. Task → Done 📊" },
   ],
   comercial: [
-    { agent: "SDR", text: "Novo lead qualificado: empresa de e-commerce, 200 funcionários. Score: 87.", delay: 0 },
-    { agent: "Closer", text: "Perfeito. Agendando call de apresentação para amanhã 14h.", delay: 2500 },
-    { agent: "CS Manager", text: "Preparei o onboarding kit personalizado para esse segmento.", delay: 5000 },
-    { agent: "Atendente", text: "Canal WhatsApp ativo. First response time configurado: < 2 min. 🚀", delay: 7500 },
+    { agent: "SDR", text: "Lead qualificado: e-commerce, 200 func. Score: 87" },
+    { agent: "Closer", text: "Call agendada para amanhã 14h" },
+    { agent: "CS", text: "Onboarding kit personalizado pronto" },
+    { agent: "Atendente", text: "WhatsApp ativo. Response time: < 2min 🚀" },
   ],
   marketing: [
-    { agent: "Copywriter", text: "Campanha de Black Friday pronta: 5 variações de copy para teste A/B.", delay: 0 },
-    { agent: "Growth", text: "Automação de email configurada: sequência de 7 dias com segmentação.", delay: 2500 },
-    { agent: "SEO", text: "Keywords rankeando: 12 termos na primeira página. Tráfego +34%. 📈", delay: 5000 },
-    { agent: "Social Media", text: "Conteúdo agendado: 30 posts, 15 reels, 8 stories para o mês.", delay: 7500 },
+    { agent: "Copywriter", text: "5 variações A/B para Black Friday prontas" },
+    { agent: "Growth", text: "Automação: sequência 7 dias segmentada" },
+    { agent: "SEO", text: "12 termos na 1ª página. Tráfego +34% 📈" },
+    { agent: "Social", text: "30 posts + 15 reels agendados pro mês" },
   ],
   financeiro: [
-    { agent: "CFO", text: "Relatório mensal: receita +18%, margem EBITDA estável em 23%.", delay: 0 },
-    { agent: "Fiscal", text: "Notas fiscais do mês emitidas. Zero pendências com o fisco.", delay: 2500 },
-    { agent: "BI", text: "Dashboard atualizado: previsão de caixa para os próximos 90 dias. 💰", delay: 5000 },
-    { agent: "Gestor Financeiro", text: "Contas a pagar reconciliadas. Fluxo de caixa positivo.", delay: 7500 },
+    { agent: "CFO", text: "Receita +18%. EBITDA estável: 23%" },
+    { agent: "Fiscal", text: "NFs emitidas. Zero pendências" },
+    { agent: "BI", text: "Forecast 90 dias atualizado 💰" },
+    { agent: "Financeiro", text: "Contas reconciliadas. Caixa positivo" },
   ],
   criacao: [
-    { agent: "Designer", text: "Nova identidade visual do produto finalizada. 3 conceitos para aprovação.", delay: 0 },
-    { agent: "Editor de Vídeo", text: "Vídeo institucional renderizado em 4K. Motion graphics aplicados. 🎬", delay: 2500 },
-    { agent: "Redator", text: "Storytelling da marca revisado. Tom de voz alinhado ao novo posicionamento.", delay: 5000 },
-    { agent: "Produtor", text: "Calendário de conteúdo visual integrado com o time de marketing.", delay: 7500 },
+    { agent: "Designer", text: "3 conceitos de identidade visual prontos" },
+    { agent: "Editor", text: "Vídeo 4K renderizado. Motion applied 🎬" },
+    { agent: "Redator", text: "Tom de voz alinhado ao novo posicionamento" },
+    { agent: "Produtor", text: "Calendário visual integrado com marketing" },
   ],
   suporte: [
-    { agent: "Atendente N1", text: "127 tickets resolvidos hoje. SLA médio: 4 min. Satisfação: 98%. ⭐", delay: 0 },
-    { agent: "CS Manager", text: "Churn risk detectado em 3 contas. Iniciando retenção proativa.", delay: 2500 },
-    { agent: "Call Center", text: "Fila de ligações zerada. Tempo médio de espera: 12 segundos.", delay: 5000 },
-    { agent: "Base de Conhecimento", text: "15 novos artigos criados baseados nos tickets mais frequentes. 📚", delay: 7500 },
+    { agent: "N1", text: "127 tickets hoje. SLA: 4min. CSAT: 98% ⭐" },
+    { agent: "CS", text: "3 contas em risco. Retenção proativa iniciada" },
+    { agent: "Call Center", text: "Fila zerada. Espera: 12s" },
+    { agent: "RAG", text: "15 artigos criados dos tickets frequentes 📚" },
   ],
   rh: [
-    { agent: "Recrutador", text: "Pipeline de candidatos: 45 CVs triados, 12 entrevistas agendadas.", delay: 0 },
-    { agent: "T&D", text: "Programa de onboarding atualizado. Trilha de 30 dias pronta.", delay: 2500 },
-    { agent: "People Analytics", text: "Turnover caiu 22% com as ações do último trimestre. 📉", delay: 5000 },
-    { agent: "Analista RH", text: "Relatório de clima organizacional gerado. eNPS: 72 (+8 pontos).", delay: 7500 },
+    { agent: "Recruiter", text: "45 CVs triados. 12 entrevistas agendadas" },
+    { agent: "T&D", text: "Onboarding 30 dias atualizado" },
+    { agent: "People", text: "Turnover -22% no trimestre 📉" },
+    { agent: "Analista", text: "eNPS: 72 (+8 pontos)" },
   ],
 };
 
 interface DepartmentMiniChatProps {
   departmentId: string;
+  autoPlay?: boolean;
+  compact?: boolean;
 }
 
-export default function DepartmentMiniChat({ departmentId }: DepartmentMiniChatProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const [visibleCount, setVisibleCount] = useState(0);
+export default function DepartmentMiniChat({ departmentId, autoPlay = true, compact = false }: DepartmentMiniChatProps) {
+  const [visibleCount, setVisibleCount] = useState(autoPlay ? 1 : 0);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const messages = departmentChats[departmentId] || [];
 
   useEffect(() => {
-    if (!isOpen) {
-      setVisibleCount(0);
-      if (intervalRef.current) clearInterval(intervalRef.current);
-      return;
-    }
+    if (!autoPlay || !messages.length) return;
 
-    // Auto-play messages one by one
     setVisibleCount(1);
     let count = 1;
     intervalRef.current = setInterval(() => {
       count++;
       if (count > messages.length) {
-        // Loop: restart after a pause
         count = 0;
         setVisibleCount(0);
-        setTimeout(() => setVisibleCount(1), 800);
+        setTimeout(() => setVisibleCount(1), 1200);
         return;
       }
       setVisibleCount(count);
-    }, 2500);
+    }, 2800);
 
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current);
     };
-  }, [isOpen, messages.length]);
+  }, [autoPlay, messages.length]);
 
   if (!messages.length) return null;
 
   return (
-    <div className="px-5">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between py-2 px-3 rounded-xl bg-primary/5 border border-primary/10 hover:border-primary/25 transition-colors text-xs"
-      >
-        <span className="flex items-center gap-2 text-primary/80 font-medium">
-          <MessageSquare className="h-3.5 w-3.5" />
-          Ver orquestração ao vivo
-        </span>
-        {isOpen ? <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />}
-      </button>
+    <div className={`rounded-xl bg-black/30 border border-white/[0.04] overflow-hidden ${compact ? "p-2" : "p-3"}`}>
+      {/* Header */}
+      <div className="flex items-center gap-1.5 mb-2">
+        <Zap className="h-3 w-3 text-primary/60" />
+        <span className="text-[9px] text-primary/50 uppercase tracking-[0.15em] font-bold">Orquestração ao vivo</span>
+        <div className="ml-auto flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-[8px] text-emerald-400/60">LIVE</span>
+        </div>
+      </div>
 
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="overflow-hidden"
-          >
-            <div className="mt-2 p-3 rounded-xl bg-background/50 border border-border/50 space-y-2 max-h-48 overflow-y-auto">
-              <div className="flex items-center gap-1.5 mb-1">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[9px] text-muted-foreground uppercase tracking-wider font-semibold">Orquestração ativa</span>
+      {/* Messages */}
+      <div className={`space-y-1.5 ${compact ? "max-h-28" : "max-h-40"} overflow-y-auto`}>
+        <AnimatePresence mode="popLayout">
+          {messages.slice(0, visibleCount).map((msg, idx) => (
+            <motion.div
+              key={`${departmentId}-msg-${idx}`}
+              initial={{ opacity: 0, x: -6, scale: 0.97 }}
+              animate={{ opacity: 1, x: 0, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
+              className="flex items-start gap-2 group"
+            >
+              <div className="w-5 h-5 rounded-md bg-primary/15 flex items-center justify-center shrink-0 mt-0.5 border border-primary/10">
+                <Bot className="h-2.5 w-2.5 text-primary/70" />
               </div>
-              <AnimatePresence>
-                {messages.slice(0, visibleCount).map((msg, idx) => (
-                  <motion.div
-                    key={`${departmentId}-${idx}-${visibleCount}`}
-                    initial={{ opacity: 0, x: -8, y: 4 }}
-                    animate={{ opacity: 1, x: 0, y: 0 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex items-start gap-2"
-                  >
-                    <div className="w-5 h-5 rounded-full bg-primary/20 flex items-center justify-center shrink-0 mt-0.5">
-                      <Bot className="h-2.5 w-2.5 text-primary" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <span className="text-[10px] font-bold text-primary/70 block">{msg.agent}</span>
-                      <p className="text-[11px] text-foreground/80 leading-relaxed">{msg.text}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-              {visibleCount < messages.length && visibleCount > 0 && (
-                <div className="flex items-center gap-1.5 pt-1">
-                  <div className="flex gap-0.5">
-                    <span className="w-1 h-1 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <span className="w-1 h-1 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "150ms" }} />
-                    <span className="w-1 h-1 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "300ms" }} />
-                  </div>
-                  <span className="text-[9px] text-muted-foreground">Agente digitando...</span>
-                </div>
-              )}
+              <div className="flex-1 min-w-0">
+                <span className="text-[9px] font-bold text-primary/50 block leading-none mb-0.5">{msg.agent}</span>
+                <p className="text-[11px] text-foreground/70 leading-snug">{msg.text}</p>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {/* Typing indicator */}
+        {visibleCount > 0 && visibleCount < messages.length && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex items-center gap-1.5 pl-7"
+          >
+            <div className="flex gap-[3px]">
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  className="w-1 h-1 rounded-full bg-primary/30 animate-bounce"
+                  style={{ animationDelay: `${i * 150}ms`, animationDuration: "0.8s" }}
+                />
+              ))}
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+      </div>
     </div>
   );
 }

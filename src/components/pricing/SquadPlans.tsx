@@ -513,7 +513,7 @@ export default function SquadPlans() {
             </div>
           </TabsContent>
 
-          {/* DEPARTMENTS — Innovative org-chart style */}
+          {/* DEPARTMENTS — Premium redesign */}
           <TabsContent value="departments" className="mt-8">
             <div className="text-center mb-8">
               <p className="text-muted-foreground text-sm max-w-xl mx-auto">
@@ -521,7 +521,7 @@ export default function SquadPlans() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
               {departments.map((dept, i) => {
                 const DeptIcon = dept.icon;
                 const deptKey = dept.id as keyof typeof region.departments;
@@ -534,108 +534,90 @@ export default function SquadPlans() {
                     key={dept.id}
                     initial={{ opacity: 0, y: 24 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.08 }}
-                    className={`group relative rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-12px_hsl(var(--primary)/0.15)] ${
+                    transition={{ delay: i * 0.06 }}
+                    className={`group relative rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.015] ${
                       dept.popular 
-                        ? "border-primary/40 bg-primary/[0.03]" 
-                        : "border-border bg-card/20 hover:border-primary/30"
+                        ? "ring-1 ring-primary/40 shadow-[0_0_60px_-15px_hsl(var(--primary)/0.25)]" 
+                        : "ring-1 ring-white/[0.06] hover:ring-primary/20"
                     }`}
                   >
-                    {/* Popular badge */}
+                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
+                    
                     {dept.popular && (
-                      <div className="absolute top-0 right-0">
-                        <Badge className="rounded-none rounded-bl-lg bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1">
-                          {t("squads.best_seller", { defaultValue: "MAIS VENDIDO" })}
+                      <div className="absolute top-3 right-3 z-10">
+                        <Badge className="bg-primary text-primary-foreground text-[9px] font-bold px-2.5 py-1 shadow-[0_0_20px_hsl(var(--primary)/0.4)]">
+                          🔥 {t("squads.best_seller", { defaultValue: "MAIS VENDIDO" })}
                         </Badge>
                       </div>
                     )}
 
-                    {/* Gradient header */}
-                    <div className={`relative p-5 bg-gradient-to-br ${dept.gradient}`}>
-                      <div className="flex items-center gap-3">
-                        <div className={`w-12 h-12 rounded-xl ${dept.iconBg} flex items-center justify-center`}>
-                          <DeptIcon className={`h-6 w-6 ${dept.color}`} />
+                    {/* Header + Price */}
+                    <div className="relative p-5 pb-4">
+                      <div className="flex items-start gap-3 mb-4">
+                        <div className={`w-11 h-11 rounded-xl ${dept.iconBg} flex items-center justify-center border border-white/[0.06]`}>
+                          <DeptIcon className={`h-5 w-5 ${dept.color}`} />
                         </div>
-                        <div className="flex-1">
-                          <h3 className="font-display font-bold text-lg">{t(`squads.dept_${dept.id}`)}</h3>
-                          <p className="text-[11px] text-muted-foreground">{dept.headcount} agentes · {dept.tokens} tokens · {dept.actions} ações/mês</p>
+                        <div className="flex-1 min-w-0">
+                          <h3 className="font-display font-bold text-base">{t(`squads.dept_${dept.id}`)}</h3>
+                          <p className="text-[10px] text-muted-foreground/60 mt-0.5">
+                            {dept.headcount} agentes · {dept.tokens} tokens
+                          </p>
                         </div>
                       </div>
 
-                      {/* Price highlight */}
-                      <div className="mt-4 flex items-end gap-2">
-                        <span className="font-display font-bold text-2xl text-foreground">
+                      <div className="flex items-baseline gap-2">
+                        <span className="font-display font-bold text-3xl tracking-tight">
                           {fp(deptPrice)}
                         </span>
-                        <span className="text-sm text-muted-foreground mb-0.5">/{t("pricing_page.per_month").replace("/", "")}</span>
-                        <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 text-[10px] font-bold ml-auto">
-                          -{dept.discount}% pack
-                        </Badge>
+                        <span className="text-xs text-muted-foreground/50">/{t("pricing_page.per_month").replace("/", "")}</span>
+                        <span className="ml-auto text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
+                          -{savingsPercent}%
+                        </span>
                       </div>
-                    </div>
-
-                    {/* Agents org-chart with token allocation */}
-                    <div className="p-5 space-y-1.5">
-                      <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-2">
-                        {t("squads.included_agents", { defaultValue: "Agentes inclusos" })}
+                      <p className="text-[10px] text-muted-foreground/40 mt-1">
+                        <span className="line-through">{fp(deptClt)}</span> CLT equivalente
                       </p>
-                      {dept.agents.map((agent, idx) => {
-                        const AgentIcon = agent.icon;
-                        return (
-                          <div
-                            key={`${dept.id}-${agent.key}-${idx}`}
-                            className="flex items-center gap-3 p-2 rounded-xl bg-white/[0.02] border border-transparent hover:border-white/[0.06] transition-colors"
-                          >
-                            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
-                              <AgentIcon className="h-3.5 w-3.5 text-primary-foreground" />
-                            </div>
-                            <div className="flex-1 min-w-0">
-                              <p className="text-[13px] font-medium truncate">
-                                {t(`library_page.agents.${agent.key}_title`)}
-                              </p>
-                              <p className="text-[10px] text-muted-foreground">
-                                Substitui: {agent.role}
-                              </p>
-                            </div>
-                            <span className="text-[10px] font-mono text-muted-foreground bg-white/[0.03] px-2 py-0.5 rounded-md shrink-0">
-                              {agent.tokens}
-                            </span>
-                          </div>
-                        );
-                      })}
                     </div>
 
-                    {/* Mini Chat — orchestration preview */}
-                    <DepartmentMiniChat departmentId={dept.id} />
+                    <div className="mx-5 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
 
-                    {/* FAQ */}
-                    <DepartmentFAQ departmentId={dept.id} />
-
-                    {/* Footer — savings CTA */}
-                     <div className="px-5 pb-5 space-y-3">
-                      <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
-                        <div>
-                          <p className="text-[10px] text-muted-foreground">{t("pricing_page.equivalent_cost", { defaultValue: "CLT equivalente" })}</p>
-                          <p className="text-sm font-bold line-through text-muted-foreground">
-                            {fp(deptClt)}/{t("pricing_page.per_month").replace("/", "")}
-                          </p>
-                        </div>
-                        <div className="text-right">
-                          <p className="text-[10px] text-emerald-400 font-semibold">{t("pricing_page.save_now", { defaultValue: "Economia" })}</p>
-                          <p className="text-sm font-bold text-emerald-400">
-                            -{savingsPercent}% ({fp(savings)})
-                          </p>
-                        </div>
+                    {/* Agents — compact 2-col grid */}
+                    <div className="p-5 pt-4">
+                      <div className="grid grid-cols-2 gap-1.5 mb-4">
+                        {dept.agents.map((agent, idx) => {
+                          const AgentIcon = agent.icon;
+                          return (
+                            <div
+                              key={`${dept.id}-${agent.key}-${idx}`}
+                              className="flex items-center gap-2 p-1.5 rounded-lg bg-white/[0.015] border border-white/[0.03]"
+                            >
+                              <div className="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center shrink-0">
+                                <AgentIcon className="h-3 w-3 text-primary/70" />
+                              </div>
+                              <div className="min-w-0 flex-1">
+                                <p className="text-[10px] font-medium truncate text-foreground/80">
+                                  {t(`library_page.agents.${agent.key}_title`).split("—")[0].trim().slice(0, 18)}
+                                </p>
+                                <p className="text-[8px] text-muted-foreground/40 font-mono">{agent.tokens}</p>
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
 
+                      {/* Live orchestration — ALWAYS VISIBLE */}
+                      <DepartmentMiniChat departmentId={dept.id} autoPlay compact />
+                    </div>
+
+                    {/* CTA */}
+                    <div className="px-5 pb-5 pt-2">
                       <Link to="/auth">
-                        <button className="group relative w-full h-13 rounded-xl font-display font-semibold text-sm uppercase tracking-wider overflow-hidden transition-all duration-500 hover:scale-[1.03] active:scale-[0.97]">
+                        <button className="group/btn relative w-full h-12 rounded-xl font-display font-semibold text-sm uppercase tracking-wider overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.97]">
                           <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
-                          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 via-primary-glow/50 to-primary/50 rounded-xl blur-lg opacity-40 group-hover:opacity-90 transition-opacity duration-500" />
-                          <div className="absolute inset-0 bg-white/[0.08] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
-                          <span className="relative z-10 flex items-center justify-center gap-2.5 text-primary-foreground font-bold">
+                          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-lg opacity-0 group-hover/btn:opacity-80 transition-opacity duration-500" />
+                          <span className="relative z-10 flex items-center justify-center gap-2 text-primary-foreground font-bold">
                             {t("squads.hire_dept", { defaultValue: "Contratar Departamento" })}
-                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform duration-300" />
+                            <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
                           </span>
                         </button>
                       </Link>
@@ -645,12 +627,22 @@ export default function SquadPlans() {
               })}
             </div>
 
+            {/* FAQ — separate clean section */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
+              className="mt-8"
+            >
+              <DepartmentFAQ departmentId="all" />
+            </motion.div>
+
             {/* Bottom CTA — full company */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.7 }}
-              className="mt-10 text-center p-8 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/5 via-background to-primary/5"
+              className="mt-10 text-center p-8 rounded-2xl ring-1 ring-primary/20 bg-gradient-to-r from-primary/5 via-background to-primary/5"
             >
               <Flame className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-display font-bold text-xl mb-2">

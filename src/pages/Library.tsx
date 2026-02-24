@@ -668,54 +668,56 @@ const LibraryPage = () => {
         </div>
       </motion.div>
 
-      {/* ============ DEPARTMENTS SECTION ============ */}
+      {/* ============ DEPARTMENTS — Horizontal showcase ============ */}
       <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
         <div className="flex items-center gap-3 mb-6">
           <h2 className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground/50 font-semibold">
-            Departamentos
+            Departamentos completos
           </h2>
           <div className="flex-1 h-px bg-gradient-to-r from-white/[0.06] to-transparent" />
           <Link to="/pricing" className="text-[11px] text-primary/60 hover:text-primary transition-colors flex items-center gap-1">
-            Ver todos <ChevronRight className="h-3 w-3" />
+            Ver preços <ChevronRight className="h-3 w-3" />
           </Link>
         </div>
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
-          {(["tecnologia", "comercial", "marketing", "financeiro", "suporte", "criacao", "rh"] as const).map((deptId, i) => {
-            const region = getRegion(lang);
-            const deptPrice = (region.departments as Record<string, number>)[deptId] ?? 0;
-            const deptNames: Record<string, string> = {
-              tecnologia: "Tech Dept.", comercial: "Sales Dept.", marketing: "Marketing Dept.",
-              financeiro: "Finance Dept.", suporte: "Support Dept.", criacao: "Creative Dept.", rh: "HR Dept."
-            };
-            const deptAgentCount: Record<string, number> = {
-              tecnologia: 4, comercial: 4, marketing: 4, financeiro: 4, suporte: 4, criacao: 4, rh: 4
-            };
+        
+        {/* Horizontal scroll on mobile, grid on desktop */}
+        <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory md:grid md:grid-cols-3 xl:grid-cols-4 md:overflow-visible scrollbar-hide">
+          {(["comercial", "tecnologia", "marketing", "suporte", "financeiro", "criacao", "rh"] as const).map((deptId, i) => {
+            const regionData = getRegion(lang);
+            const deptPrice = (regionData.departments as Record<string, number>)[deptId] ?? 0;
+            const deptClt = (regionData.departmentClt as Record<string, number>)[deptId] ?? 0;
+            const savingsPercent = deptClt > 0 ? Math.round((1 - deptPrice / deptClt) * 100) : 0;
             return (
               <motion.div
                 key={deptId}
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="rounded-2xl border border-white/[0.06] bg-white/[0.015] overflow-hidden hover:border-primary/20 transition-all duration-300"
+                transition={{ delay: i * 0.04 }}
+                className="min-w-[280px] md:min-w-0 snap-start rounded-2xl ring-1 ring-white/[0.06] hover:ring-primary/20 overflow-hidden transition-all duration-500 hover:scale-[1.015] group"
               >
-                <div className="p-4">
-                  <div className="flex items-center justify-between mb-3">
-                    <h3 className="font-semibold text-sm">{t(`squads.dept_${deptId}`)}</h3>
-                    <Badge variant="outline" className="text-[9px] border-primary/20 text-primary/70">
-                      {deptAgentCount[deptId]} agentes
-                    </Badge>
-                  </div>
-                  <p className="font-bold text-lg mb-3">{formatPrice(deptPrice, lang)}<span className="text-xs text-muted-foreground font-normal">/mês</span></p>
-                  
-                  <DepartmentMiniChat departmentId={deptId} />
-                  <div className="mt-2">
-                    <DepartmentFAQ departmentId={deptId} />
+                <div className="p-4 space-y-3">
+                  {/* Title + badge */}
+                  <div className="flex items-center justify-between">
+                    <h3 className="font-display font-bold text-sm">{t(`squads.dept_${deptId}`)}</h3>
+                    <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+                      -{savingsPercent}%
+                    </span>
                   </div>
                   
-                  <Link to="/pricing" className="mt-3 block">
-                    <Button variant="outline" size="sm" className="w-full rounded-xl text-xs gap-1.5 border-primary/15 hover:bg-primary/5">
-                      Ver departamento <ArrowRight className="h-3 w-3" />
-                    </Button>
+                  {/* Price */}
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="font-display font-bold text-xl">{formatPrice(deptPrice, lang)}</span>
+                    <span className="text-[10px] text-muted-foreground/40">/mês · 4 agentes</span>
+                  </div>
+
+                  {/* Live orchestration */}
+                  <DepartmentMiniChat departmentId={deptId} autoPlay compact />
+
+                  {/* CTA */}
+                  <Link to="/pricing" className="block">
+                    <button className="w-full h-9 rounded-lg text-[10px] font-bold uppercase tracking-wider ring-1 ring-primary/20 text-primary/70 hover:bg-primary/5 hover:ring-primary/40 transition-all duration-300">
+                      Ver departamento
+                    </button>
                   </Link>
                 </div>
               </motion.div>
@@ -757,102 +759,77 @@ const LibraryPage = () => {
                 transition={{ delay: i * 0.02 }}
                 layout
               >
-                <div className="group relative h-full flex flex-col rounded-2xl border border-white/[0.06] bg-white/[0.015] overflow-hidden transition-all duration-500 hover:border-primary/20 hover:bg-white/[0.03] hover:shadow-[0_0_30px_hsl(var(--primary)/0.06)]">
-                  {/* Top accent line — alive gradient */}
-                  <div className={`h-[1.5px] w-full ${
-                    tier === "enterprise" 
-                      ? "bg-gradient-to-r from-transparent via-primary/50 to-transparent" 
-                      : "bg-gradient-to-r from-transparent via-primary/20 to-transparent"
-                  } group-hover:via-primary/40 transition-all duration-700`} />
+                <div className={`group relative h-full flex flex-col rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.015] ${
+                  tier === "enterprise" 
+                    ? "ring-1 ring-primary/25 hover:ring-primary/40 shadow-[0_0_40px_-15px_hsl(var(--primary)/0.12)]" 
+                    : "ring-1 ring-white/[0.06] hover:ring-primary/15"
+                }`}>
+                  {/* Subtle gradient overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
 
-                  <div className="p-5 flex flex-col flex-1">
-                    {/* Header — Icon + Title + Tier */}
-                    <div className="flex items-start gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center shrink-0 group-hover:border-primary/15 group-hover:bg-primary/[0.04] transition-all duration-500">
-                        <Icon className="h-4.5 w-4.5 text-muted-foreground/60 group-hover:text-primary/70 transition-colors duration-500" strokeWidth={1.2} />
+                  <div className="relative p-5 flex flex-col flex-1">
+                    {/* Header */}
+                    <div className="flex items-start gap-3 mb-3">
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 ${
+                        tier === "enterprise" 
+                          ? "bg-primary/15 border border-primary/20" 
+                          : "bg-white/[0.03] border border-white/[0.06] group-hover:border-primary/15 group-hover:bg-primary/[0.04]"
+                      }`}>
+                        <Icon className={`h-4 w-4 transition-colors duration-500 ${
+                          tier === "enterprise" ? "text-primary/80" : "text-muted-foreground/50 group-hover:text-primary/60"
+                        }`} strokeWidth={1.5} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-[14px] leading-tight mb-1 line-clamp-1 text-foreground tracking-wide">{agentTitle}</h3>
-                        <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/60 font-medium">
-                          {t(`tiers.${tier}`)}
-                        </span>
-                      </div>
-                      {/* Rating */}
-                      <div className="flex items-center gap-1 shrink-0">
-                        <Star className="h-3 w-3 fill-primary/50 text-primary/50" />
-                        <span className="text-[11px] text-muted-foreground/60 font-medium">{social.rating}</span>
+                        <h3 className="font-semibold text-[13px] leading-tight mb-0.5 line-clamp-1">{agentTitle}</h3>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground/40 font-medium">
+                            {t(`tiers.${tier}`)}
+                          </span>
+                          <span className="flex items-center gap-0.5">
+                            <Star className="h-2.5 w-2.5 fill-primary/40 text-primary/40" />
+                            <span className="text-[9px] text-muted-foreground/40">{social.rating}</span>
+                          </span>
+                        </div>
                       </div>
                     </div>
 
                     {/* Description */}
-                    <p className="text-[12px] text-muted-foreground/70 leading-relaxed line-clamp-2 mb-4">{agentDesc}</p>
+                    <p className="text-[11px] text-muted-foreground/60 leading-relaxed line-clamp-2 mb-3">{agentDesc}</p>
 
-                    {/* Capabilities — clean minimal chips */}
-                    <div className="flex flex-wrap gap-1.5 mb-4">
+                    {/* Capabilities */}
+                    <div className="flex flex-wrap gap-1 mb-3">
                       {capabilities.slice(0, 3).map((cap) => (
-                        <span key={cap} className="text-[10px] px-2 py-0.5 rounded-md border border-white/[0.06] bg-white/[0.03] text-muted-foreground/60 font-medium">
+                        <span key={cap} className="text-[9px] px-1.5 py-0.5 rounded ring-1 ring-white/[0.04] text-muted-foreground/50">
                           {cap}
                         </span>
                       ))}
                     </div>
 
-                    {/* Metrics row */}
-                    <div className="flex items-center gap-4 mb-4 text-[10px] text-muted-foreground/50">
-                      <span>{social.companies}+ empresas</span>
-                      <span className="h-2.5 w-px bg-white/[0.06]" />
-                      <span>Economia {social.savings}/mês</span>
-                    </div>
-
-                    {/* Agent Mini Chat Demo */}
+                    {/* Mini Chat Demo — integrated */}
                     <AgentMiniChat agentKey={key} agentName={agentTitle} />
 
-                    {/* Spacer */}
                     <div className="flex-1" />
 
-                    {/* Footer — Price + Actions */}
-                    <div className="pt-4 mt-auto">
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent group-hover:via-primary/15 transition-all duration-500 mb-4" />
+                    {/* Footer — Price + CTA */}
+                    <div className="pt-3 mt-3">
+                      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent mb-3" />
                       <div className="flex items-center justify-between">
                         <div>
-                          <p className="font-bold text-lg text-foreground/90 tracking-tight">{priceDisplay}</p>
-                          <span className="text-[9px] text-muted-foreground/40 tracking-wider">{t("library.per_month")}</span>
+                          <p className="font-bold text-base tracking-tight">{priceDisplay}</p>
+                          <span className="text-[8px] text-muted-foreground/30 tracking-wider">{t("library.per_month")} · {social.companies}+ empresas</span>
                         </div>
-                        <div className="flex gap-2">
-                          {/* Test Drive */}
-                          <button
-                            className="h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center hover:border-primary/20 hover:bg-primary/[0.04] transition-all duration-300"
-                            onClick={() => setPreviewAgent({ name: agentTitle, desc: agentDesc })}
-                            title="Test Drive"
-                          >
-                            <MessageSquare className="h-3.5 w-3.5 text-muted-foreground/40 hover:text-primary transition-colors" />
-                          </button>
-                          {/* Landing page */}
+                        <div className="flex gap-1.5">
                           <Link to={`/agente/${agentSlugs[key]}`}>
-                            <button
-                              className="h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center hover:border-primary/20 hover:bg-primary/[0.04] transition-all duration-300"
-                              title="Ver detalhes"
-                            >
-                              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40 hover:text-primary transition-colors" />
+                            <button className="h-8 w-8 rounded-lg ring-1 ring-white/[0.06] flex items-center justify-center hover:ring-primary/20 hover:bg-primary/[0.04] transition-all duration-300" title="Detalhes">
+                              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40" />
                             </button>
                           </Link>
-                          {/* Hire */}
                           <button
-                            className="group relative h-9 px-5 rounded-xl text-[11px] font-semibold tracking-wider uppercase overflow-hidden transition-all duration-300 disabled:opacity-30"
+                            className="h-8 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-primary/10 ring-1 ring-primary/20 text-primary/80 hover:bg-primary/20 hover:ring-primary/40 transition-all duration-300 disabled:opacity-30"
                             disabled={isHiring}
                             onClick={() => handleHire(key)}
                           >
-                            {/* Pulsing red glow behind */}
-                            <div className="absolute inset-0 bg-primary/10 rounded-xl animate-pulse" />
-                            <div className="absolute -inset-0.5 bg-primary/20 rounded-xl blur-md opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            {/* Border */}
-                            <div className="absolute inset-0 rounded-xl border border-primary/25 group-hover:border-primary/50 transition-colors duration-300" />
-                            <span className="relative z-10 text-primary/80 group-hover:text-primary transition-colors">
-                              {isHiring ? (
-                                <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                              ) : (
-                                "Ativar"
-                              )}
-                            </span>
+                            {isHiring ? <Loader2 className="h-3 w-3 animate-spin" /> : "Ativar"}
                           </button>
                         </div>
                       </div>
