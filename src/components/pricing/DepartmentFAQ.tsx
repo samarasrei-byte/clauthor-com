@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown, HelpCircle } from "lucide-react";
+import { ChevronDown, HelpCircle, Wrench, Briefcase, Megaphone, BarChart3, Palette, MessageSquare, GraduationCap } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface FAQ {
   q: string;
@@ -45,54 +46,114 @@ const departmentFAQs: Record<string, FAQ[]> = {
   ],
 };
 
+const deptMeta: Record<string, { name: string; icon: React.ElementType }> = {
+  tecnologia: { name: "Tecnologia", icon: Wrench },
+  comercial: { name: "Comercial", icon: Briefcase },
+  marketing: { name: "Marketing", icon: Megaphone },
+  financeiro: { name: "Financeiro", icon: BarChart3 },
+  criacao: { name: "Criação", icon: Palette },
+  suporte: { name: "Suporte", icon: MessageSquare },
+  rh: { name: "RH", icon: GraduationCap },
+};
+
 interface DepartmentFAQProps {
   departmentId: string;
 }
 
 export default function DepartmentFAQ({ departmentId }: DepartmentFAQProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-  const faqs = departmentFAQs[departmentId] || [];
+  const [openKey, setOpenKey] = useState<string | null>(null);
+  const { t } = useTranslation();
 
+  // "all" mode — show grouped FAQs for all departments
+  if (departmentId === "all") {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center gap-2 mb-4">
+          <HelpCircle className="h-4 w-4 text-primary/60" />
+          <h3 className="font-display font-bold text-sm">Perguntas frequentes por departamento</h3>
+        </div>
+        <div className="grid md:grid-cols-2 gap-3">
+          {Object.entries(departmentFAQs).map(([deptId, faqs]) => {
+            const meta = deptMeta[deptId];
+            if (!meta) return null;
+            const Icon = meta.icon;
+            const isOpen = openKey === deptId;
+            return (
+              <div key={deptId} className="rounded-xl ring-1 ring-white/[0.06] overflow-hidden bg-white/[0.01]">
+                <button
+                  onClick={() => setOpenKey(isOpen ? null : deptId)}
+                  className="w-full flex items-center gap-2.5 px-4 py-3 hover:bg-white/[0.02] transition-colors"
+                >
+                  <Icon className="h-4 w-4 text-primary/50" />
+                  <span className="text-xs font-semibold flex-1 text-left">{t(`squads.dept_${deptId}`)}</span>
+                  <span className="text-[10px] text-muted-foreground/40">{faqs.length} perguntas</span>
+                  <ChevronDown className={`h-3 w-3 text-muted-foreground/40 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+                </button>
+                <AnimatePresence>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-4 pb-3 space-y-2">
+                        {faqs.map((faq, idx) => (
+                          <SingleFAQ key={idx} faq={faq} />
+                        ))}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
+  // Single department mode
+  const faqs = departmentFAQs[departmentId] || [];
   if (!faqs.length) return null;
 
   return (
-    <div className="px-5 pb-1">
-      <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-2 flex items-center gap-1.5">
-        <HelpCircle className="h-3 w-3" />
-        Dúvidas frequentes
+    <div className="space-y-1.5">
+      <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold flex items-center gap-1.5">
+        <HelpCircle className="h-3 w-3" /> FAQ
       </p>
-      <div className="space-y-1">
-        {faqs.map((faq, idx) => (
-          <div key={idx} className="rounded-lg border border-border/40 overflow-hidden bg-white/[0.01]">
-            <button
-              onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
-              className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-white/[0.02] transition-colors"
-            >
-              <span className="text-[11px] font-medium text-foreground/80 pr-2">{faq.q}</span>
-              <ChevronDown
-                className={`h-3 w-3 text-muted-foreground shrink-0 transition-transform duration-200 ${
-                  openIndex === idx ? "rotate-180" : ""
-                }`}
-              />
-            </button>
-            <AnimatePresence>
-              {openIndex === idx && (
-                <motion.div
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <p className="px-3 pb-2.5 text-[10px] text-muted-foreground leading-relaxed">
-                    {faq.a}
-                  </p>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        ))}
-      </div>
+      {faqs.map((faq, idx) => (
+        <SingleFAQ key={idx} faq={faq} />
+      ))}
+    </div>
+  );
+}
+
+function SingleFAQ({ faq }: { faq: FAQ }) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div className="rounded-lg ring-1 ring-white/[0.04] overflow-hidden">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between px-3 py-2 text-left hover:bg-white/[0.02] transition-colors"
+      >
+        <span className="text-[11px] font-medium text-foreground/70 pr-2">{faq.q}</span>
+        <ChevronDown className={`h-3 w-3 text-muted-foreground/40 shrink-0 transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+      </button>
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="overflow-hidden"
+          >
+            <p className="px-3 pb-2.5 text-[10px] text-muted-foreground/60 leading-relaxed">{faq.a}</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
