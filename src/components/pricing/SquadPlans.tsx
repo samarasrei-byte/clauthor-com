@@ -12,6 +12,8 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "./SquadConsultant";
+import DepartmentMiniChat from "./DepartmentMiniChat";
+import DepartmentFAQ from "./DepartmentFAQ";
 import { getRegion, formatPrice } from "@/lib/pricing";
 
 const squadPacks = [
@@ -603,8 +605,14 @@ export default function SquadPlans() {
                       })}
                     </div>
 
+                    {/* Mini Chat — orchestration preview */}
+                    <DepartmentMiniChat departmentId={dept.id} />
+
+                    {/* FAQ */}
+                    <DepartmentFAQ departmentId={dept.id} />
+
                     {/* Footer — savings CTA */}
-                    <div className="px-5 pb-5 space-y-3">
+                     <div className="px-5 pb-5 space-y-3">
                       <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
                         <div>
                           <p className="text-[10px] text-muted-foreground">{t("pricing_page.equivalent_cost", { defaultValue: "CLT equivalente" })}</p>
