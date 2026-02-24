@@ -668,60 +668,210 @@ const LibraryPage = () => {
         </div>
       </motion.div>
 
-      {/* ============ DEPARTMENTS — Compact horizontal strip ============ */}
+      {/* ============ DEPARTMENTS — Rich Experience Cards ============ */}
       <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-2 h-2 rounded-full bg-primary/40" />
-          <h2 className="text-xs tracking-[0.2em] uppercase text-muted-foreground/60 font-semibold">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+          <h2 className="text-lg font-bold tracking-tight">
             Times de IA · Departamentos
           </h2>
           <div className="flex-1 h-px bg-border/30" />
-          <Link to="/pricing" className="text-xs text-primary/60 hover:text-primary transition-colors flex items-center gap-1">
-            Ver preços <ChevronRight className="h-3 w-3" />
-          </Link>
+          <Badge variant="outline" className="text-xs border-primary/20 text-primary/70">
+            4 agentes orquestrados cada
+          </Badge>
         </div>
         
-        {/* Compact horizontal scroll */}
-        <div className="flex gap-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
+        <div className="grid md:grid-cols-2 gap-5">
           {(["comercial", "tecnologia", "marketing", "suporte", "financeiro", "criacao", "rh"] as const).map((deptId, i) => {
             const regionData = getRegion(lang);
             const deptPrice = (regionData.departments as Record<string, number>)[deptId] ?? 0;
             const deptClt = (regionData.departmentClt as Record<string, number>)[deptId] ?? 0;
             const savingsPercent = deptClt > 0 ? Math.round((1 - deptPrice / deptClt) * 100) : 0;
+            const deptName = t(`squads.dept_${deptId}`);
+            const deptDesc = t(`squads.dept_${deptId}_desc`);
+
+            // Department-specific data
+            const deptDetails: Record<string, { icon: React.ElementType; agents: string[]; replaces: string[]; faq: { q: string; a: string }[] }> = {
+              comercial: {
+                icon: Briefcase,
+                agents: ["SDR Outbound", "Closer de Vendas", "Customer Success", "Atendente Omnichannel"],
+                replaces: ["2 SDRs", "1 Closer", "1 CS Manager", "2 Atendentes"],
+                faq: [
+                  { q: "Quantos leads o time processa?", a: "Até 500 leads/dia com qualificação automática, scoring e distribuição inteligente." },
+                  { q: "Integra com meu CRM?", a: "Sim. HubSpot, Salesforce, Pipedrive, RD Station e qualquer CRM via API." },
+                  { q: "E se o lead pedir um humano?", a: "O agente transfere automaticamente quando detecta essa necessidade." },
+                ],
+              },
+              tecnologia: {
+                icon: Code,
+                agents: ["Dev Full-Stack", "CISO / Security", "DevOps Engineer", "Tech PM"],
+                replaces: ["2 Devs Sênior", "1 Analista Segurança", "1 DevOps", "1 PM"],
+                faq: [
+                  { q: "Que linguagens suporta?", a: "JavaScript, TypeScript, Python, Go, Rust, Java e mais. Full-stack com CI/CD integrado." },
+                  { q: "Faz deploy sozinho?", a: "Sim. Integra com GitHub, GitLab, Vercel, AWS. Pipeline completo automatizado." },
+                  { q: "E segurança?", a: "Scan de vulnerabilidades contínuo, LGPD compliance, SOC2 readiness e threat detection." },
+                ],
+              },
+              marketing: {
+                icon: Megaphone,
+                agents: ["Copywriter IA", "Growth Hacker", "SEO Specialist", "Social Media Manager"],
+                replaces: ["1 Copywriter", "1 Growth", "1 Analista SEO", "1 Social Media"],
+                faq: [
+                  { q: "Cria conteúdo original?", a: "Sim. Posts, reels, carrosséis, blogs, emails — tudo com tom de voz da sua marca." },
+                  { q: "Faz tráfego pago?", a: "O Growth Hacker gerencia campanhas Meta Ads e Google Ads com otimização automática." },
+                  { q: "Mede resultados?", a: "Dashboard integrado com métricas de engajamento, conversão e ROI por canal." },
+                ],
+              },
+              suporte: {
+                icon: HeartHandshake,
+                agents: ["Atendente N1 24/7", "Customer Success", "Call Center IA", "RAG Knowledge Base"],
+                replaces: ["3 Atendentes", "1 CS Manager", "2 Operadores Call", "1 Documentador"],
+                faq: [
+                  { q: "Qual o tempo de resposta?", a: "Média de 4 segundos. SLA garantido. CSAT médio: 98%." },
+                  { q: "Atende em quais canais?", a: "WhatsApp, Instagram, Chat, E-mail, Telegram e Telefone — tudo unificado." },
+                  { q: "Escala para humanos?", a: "Sim. Transferência inteligente quando a complexidade exige intervenção humana." },
+                ],
+              },
+              financeiro: {
+                icon: DollarSign,
+                agents: ["CFO Virtual", "Analista Fiscal", "BI Financeiro", "Controller"],
+                replaces: ["1 Analista Financeiro", "1 Contador", "1 Analista BI", "1 Controller"],
+                faq: [
+                  { q: "Emite nota fiscal?", a: "Integra com SEFAZ, Conta Azul, Omie e ERPs para emissão e conciliação automática." },
+                  { q: "Faz previsão de caixa?", a: "Sim. Forecast de 30, 60 e 90 dias com cenários otimista, neutro e pessimista." },
+                  { q: "E tributário?", a: "Análise tributária automática, alertas de vencimento e sugestões de economia fiscal." },
+                ],
+              },
+              criacao: {
+                icon: Palette,
+                agents: ["Designer IA", "Editor de Vídeo", "Redator Criativo", "Produtor de Conteúdo"],
+                replaces: ["1 Designer", "1 Editor Vídeo", "1 Redator", "1 Produtor"],
+                faq: [
+                  { q: "Cria em quais formatos?", a: "Banners, social kits, reels, shorts, thumbnails, presentations e materiais impressos." },
+                  { q: "Mantém identidade visual?", a: "Sim. Aprende seu brandbook e aplica consistentemente em todas as peças." },
+                  { q: "Faz edição de vídeo?", a: "Corte, legenda, motion graphics, correção de cor e thumbnail — tudo automático." },
+                ],
+              },
+              rh: {
+                icon: Users,
+                agents: ["Recruiter IA", "T&D Manager", "People Analytics", "Analista RH"],
+                replaces: ["1 Recruiter", "1 T&D Specialist", "1 People Analyst", "1 Analista RH"],
+                faq: [
+                  { q: "Como faz triagem de CVs?", a: "Analisa fit cultural, skills técnicas e experiência. Ranking automático por score." },
+                  { q: "Faz onboarding?", a: "Trilhas de onboarding personalizadas de 30/60/90 dias com gamificação." },
+                  { q: "Mede clima organizacional?", a: "Pesquisas de eNPS automáticas, análise de sentimento e alertas de risco." },
+                ],
+              },
+            };
+
+            const dept = deptDetails[deptId];
+            if (!dept) return null;
+            const DeptIcon = dept.icon;
+
             return (
-              <Link key={deptId} to="/pricing" className="min-w-[220px] snap-start">
-                <motion.div
-                  initial={{ opacity: 0, x: 12 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.03 }}
-                  className="rounded-xl bg-card/50 ring-1 ring-border/40 hover:ring-primary/30 p-3.5 transition-all duration-300 hover:bg-card/80 group"
-                >
-                  <div className="flex items-center justify-between mb-2">
-                    <h3 className="font-semibold text-xs">{t(`squads.dept_${deptId}`)}</h3>
-                    <span className="text-[8px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
-                      -{savingsPercent}%
-                    </span>
+              <motion.div
+                key={deptId}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04 }}
+              >
+                <div className="group relative h-full flex flex-col rounded-2xl overflow-hidden ring-1 ring-border/50 hover:ring-primary/30 bg-card/30 hover:bg-card/60 transition-all duration-500 hover:translate-y-[-2px]">
+                  {/* Gradient accent top */}
+                  <div className="h-1 bg-gradient-to-r from-primary/60 via-primary to-primary/60" />
+
+                  <div className="relative p-6 flex flex-col flex-1">
+                    {/* Header */}
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center shrink-0 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.15)]">
+                        <DeptIcon className="h-6 w-6 text-primary" strokeWidth={1.5} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-base leading-tight mb-1">{deptName}</h3>
+                        <p className="text-[12px] text-muted-foreground/60 leading-relaxed">{deptDesc}</p>
+                      </div>
+                      <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg shrink-0">
+                        -{savingsPercent}% vs CLT
+                      </span>
+                    </div>
+
+                    {/* 4 Agents roster */}
+                    <div className="mb-4">
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40 font-semibold mb-2 block">Agentes do time</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {dept.agents.map((agent, j) => (
+                          <div key={agent} className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-muted/20 ring-1 ring-border/30">
+                            <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
+                              <Bot className="h-3 w-3 text-primary/60" />
+                            </div>
+                            <div className="min-w-0">
+                              <span className="text-[11px] font-medium block leading-tight truncate">{agent}</span>
+                              <span className="text-[9px] text-muted-foreground/40">Substitui: {dept.replaces[j]}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Live orchestration mini-chat */}
+                    <DepartmentMiniChat departmentId={deptId} autoPlay compact />
+
+                    {/* FAQ accordion */}
+                    <div className="mt-4 space-y-1">
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40 font-semibold mb-1.5 block">Dúvidas frequentes</span>
+                      {dept.faq.map((item, idx) => (
+                        <details key={idx} className="group/faq rounded-lg ring-1 ring-border/20 overflow-hidden">
+                          <summary className="px-3 py-2 text-[11px] font-medium cursor-pointer hover:bg-muted/20 transition-colors flex items-center justify-between list-none">
+                            <span>{item.q}</span>
+                            <ChevronRight className="h-3 w-3 text-muted-foreground/30 transition-transform group-open/faq:rotate-90" />
+                          </summary>
+                          <div className="px-3 pb-2.5 pt-0.5 text-[11px] text-muted-foreground/60 leading-relaxed">
+                            {item.a}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+
+                    <div className="flex-1" />
+
+                    {/* Footer — Price + CTA */}
+                    <div className="pt-4 mt-4">
+                      <div className="h-px w-full bg-border/30 mb-4" />
+                      <div className="flex items-end justify-between gap-4">
+                        <div>
+                          <div className="flex items-baseline gap-2">
+                            <p className="font-bold text-xl tracking-tight">{formatPrice(deptPrice, lang)}</p>
+                            <span className="text-xs text-muted-foreground/40">/mês</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <TrendingUp className="h-3 w-3 text-emerald-400" />
+                            <span className="text-[11px] text-emerald-400 font-medium">vs {formatPrice(deptClt, lang)}/mês CLT</span>
+                          </div>
+                        </div>
+                        <Link to="/pricing">
+                          <Button size="sm" className="h-10 px-5 rounded-xl text-xs font-bold uppercase tracking-wider gap-1.5">
+                            <Flame className="h-3.5 w-3.5" />
+                            Contratar Time
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="font-bold text-sm">{formatPrice(deptPrice, lang)}</span>
-                    <span className="text-[9px] text-muted-foreground/40">/mês · 4 agentes</span>
-                  </div>
-                </motion.div>
-              </Link>
+                </div>
+              </motion.div>
             );
           })}
         </div>
       </motion.section>
 
       {/* ============ VISUAL SEPARATOR ============ */}
-      <div className="relative py-4">
+      <div className="relative py-6">
         <div className="absolute inset-0 flex items-center">
           <div className="w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         </div>
         <div className="relative flex justify-center">
           <span className="bg-background px-6 text-[10px] tracking-[0.3em] uppercase text-primary/50 font-semibold flex items-center gap-2">
             <Bot className="h-3.5 w-3.5" />
-            Agentes Individuais
+            Agentes Individuais · Avulsos
             <Bot className="h-3.5 w-3.5" />
           </span>
         </div>
@@ -756,6 +906,13 @@ const LibraryPage = () => {
             const integrations = agentIntegrations[key] || [];
             const isHiring = hiringSlug === agentSlugs[key];
 
+            // Quick FAQ from agentLandingData if available
+            const agentFaq = [
+              { q: `O que o ${agentTitle.split("—")[0].trim()} faz?`, a: agentDesc },
+              { q: "Precisa de configuração?", a: "Setup em 3 minutos. O agente já vem pré-configurado com as melhores práticas do mercado." },
+              { q: "Posso cancelar a qualquer momento?", a: "Sim. Sem fidelidade, sem multa. Cancele quando quiser." },
+            ];
+
             return (
               <motion.div
                 key={key}
@@ -769,13 +926,12 @@ const LibraryPage = () => {
                     ? "ring-1 ring-primary/30 hover:ring-primary/50 shadow-[0_0_60px_-20px_hsl(var(--primary)/0.15)] bg-gradient-to-br from-primary/[0.04] to-transparent" 
                     : "ring-1 ring-border/50 hover:ring-primary/25 bg-card/30 hover:bg-card/60"
                 }`}>
-                  {/* Enterprise glow */}
                   {tier === "enterprise" && (
                     <div className="absolute top-0 right-0 w-40 h-40 bg-primary/[0.06] rounded-full blur-[60px] pointer-events-none" />
                   )}
 
                   <div className="relative p-6 flex flex-col flex-1">
-                    {/* Top row: Icon + Title + Tier badge */}
+                    {/* Header */}
                     <div className="flex items-start gap-4 mb-4">
                       <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 ${
                         tier === "enterprise" 
@@ -792,7 +948,7 @@ const LibraryPage = () => {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-bold text-base leading-tight mb-1">{agentTitle}</h3>
-                        <div className="flex items-center gap-2">
+                        <div className="flex items-center gap-2 flex-wrap">
                           <Badge variant="outline" className={`text-[10px] px-2 py-0 h-5 ${tierColors[tier]}`}>
                             {t(`tiers.${tier}`)}
                           </Badge>
@@ -805,10 +961,10 @@ const LibraryPage = () => {
                       </div>
                     </div>
 
-                    {/* Description — more visible */}
-                    <p className="text-[13px] text-muted-foreground/70 leading-relaxed mb-4 line-clamp-2">{agentDesc}</p>
+                    {/* Description */}
+                    <p className="text-[13px] text-muted-foreground/70 leading-relaxed mb-4">{agentDesc}</p>
 
-                    {/* Capabilities row */}
+                    {/* Capabilities */}
                     <div className="flex flex-wrap gap-1.5 mb-4">
                       {capabilities.map((cap) => (
                         <span key={cap} className="text-[10px] px-2 py-1 rounded-md bg-muted/30 ring-1 ring-border/40 text-foreground/60 font-medium">
@@ -817,16 +973,14 @@ const LibraryPage = () => {
                       ))}
                     </div>
 
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-1 mb-4">
+                    {/* Tags + Integrations */}
+                    <div className="flex flex-wrap gap-1 mb-3">
                       {tags.slice(0, 5).map((tag) => (
                         <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded bg-primary/[0.04] text-primary/50 ring-1 ring-primary/[0.08]">
                           {tag}
                         </span>
                       ))}
                     </div>
-
-                    {/* Integrations row */}
                     <div className="flex items-center gap-1.5 mb-4">
                       <span className="text-[9px] text-muted-foreground/30 uppercase tracking-wider font-medium shrink-0">Integra:</span>
                       <div className="flex flex-wrap gap-1">
@@ -844,9 +998,25 @@ const LibraryPage = () => {
                     {/* Mini Chat Demo */}
                     <AgentMiniChat agentKey={key} agentName={agentTitle} />
 
+                    {/* FAQ section */}
+                    <div className="mt-4 space-y-1">
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40 font-semibold mb-1.5 block">Dúvidas frequentes</span>
+                      {agentFaq.map((item, idx) => (
+                        <details key={idx} className="group/faq rounded-lg ring-1 ring-border/20 overflow-hidden">
+                          <summary className="px-3 py-2 text-[11px] font-medium cursor-pointer hover:bg-muted/20 transition-colors flex items-center justify-between list-none">
+                            <span>{item.q}</span>
+                            <ChevronRight className="h-3 w-3 text-muted-foreground/30 transition-transform group-open/faq:rotate-90" />
+                          </summary>
+                          <div className="px-3 pb-2.5 pt-0.5 text-[11px] text-muted-foreground/60 leading-relaxed">
+                            {item.a}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+
                     <div className="flex-1" />
 
-                    {/* Footer — Price + CTA + ROI */}
+                    {/* Footer */}
                     <div className="pt-4 mt-4">
                       <div className="h-px w-full bg-border/30 mb-4" />
                       <div className="flex items-end justify-between gap-4">
