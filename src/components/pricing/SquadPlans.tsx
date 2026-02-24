@@ -34,7 +34,7 @@ const departments = [
       { key: "project_management", icon: ClipboardList, role: "Gerente de Projetos", tokens: "2M" },
       { key: "security", icon: Shield, role: "CISO / Eng. Segurança", tokens: "3M" },
     ],
-    headcount: 4, cltCost: 84000, prometheusCost: 4997, discount: 30,
+    headcount: 4, cltCost: 72000, prometheusCost: 4497, discount: 30,
   },
   { 
     id: "comercial", icon: Briefcase, color: "text-cyan-400", 
@@ -50,7 +50,7 @@ const departments = [
       { key: "omnichannel", icon: MessageSquare, role: "Atendente Multicanal", tokens: "2M" },
       { key: "voice_ai", icon: Phone, role: "Operador de Telefonia", tokens: "2M" },
     ],
-    headcount: 4, cltCost: 48000, prometheusCost: 3997, discount: 25,
+    headcount: 4, cltCost: 52000, prometheusCost: 3497, discount: 25,
   },
   { 
     id: "marketing", icon: Megaphone, color: "text-primary", 
@@ -66,7 +66,7 @@ const departments = [
       { key: "seo_growth", icon: Globe, role: "Analista SEO / Tráfego", tokens: "1.5M" },
       { key: "influencer", icon: Megaphone, role: "Social Media Manager", tokens: "1.5M" },
     ],
-    headcount: 4, cltCost: 40000, prometheusCost: 2997, discount: 25,
+    headcount: 4, cltCost: 44000, prometheusCost: 2697, discount: 25,
   },
   { 
     id: "financeiro", icon: BarChart3, color: "text-amber-400", 
@@ -82,7 +82,7 @@ const departments = [
       { key: "data_analytics", icon: BarChart3, role: "Analista de BI", tokens: "1.5M" },
       { key: "ecommerce", icon: ShoppingCart, role: "Gestor Financeiro", tokens: "1M" },
     ],
-    headcount: 4, cltCost: 44000, prometheusCost: 2997, discount: 20,
+    headcount: 4, cltCost: 48000, prometheusCost: 2497, discount: 20,
   },
   { 
     id: "criacao", icon: Palette, color: "text-violet-400", 
@@ -98,7 +98,7 @@ const departments = [
       { key: "content", icon: Sparkles, role: "Redator Criativo", tokens: "1M" },
       { key: "influencer", icon: Megaphone, role: "Produtor de Conteúdo", tokens: "1M" },
     ],
-    headcount: 4, cltCost: 36000, prometheusCost: 2497, discount: 20,
+    headcount: 4, cltCost: 36000, prometheusCost: 2197, discount: 20,
   },
   { 
     id: "suporte", icon: MessageSquare, color: "text-emerald-400", 
@@ -114,7 +114,7 @@ const departments = [
       { key: "voice_ai", icon: Phone, role: "Operador Call Center", tokens: "1M" },
       { key: "rag", icon: FileText, role: "Base de Conhecimento", tokens: "1M" },
     ],
-    headcount: 4, cltCost: 24000, prometheusCost: 1997, discount: 20,
+    headcount: 4, cltCost: 32000, prometheusCost: 1797, discount: 20,
   },
   { 
     id: "rh", icon: GraduationCap, color: "text-pink-400", 
@@ -130,7 +130,7 @@ const departments = [
       { key: "customer_success", icon: Star, role: "People Analytics", tokens: "1M" },
       { key: "data_analytics", icon: BarChart3, role: "Analista de Dados RH", tokens: "0.5M" },
     ],
-    headcount: 4, cltCost: 28000, prometheusCost: 1797, discount: 15,
+    headcount: 4, cltCost: 28000, prometheusCost: 1497, discount: 15,
   },
 ];
 
@@ -647,11 +647,11 @@ export default function SquadPlans() {
               <div className="flex items-center justify-center gap-6 mb-4">
                 <div>
                   <p className="text-xs text-muted-foreground">CLT total</p>
-                  <p className="font-display font-bold text-lg line-through text-muted-foreground">R$ 304.000/mês</p>
+                  <p className="font-display font-bold text-lg line-through text-muted-foreground">R$ 312.000/mês</p>
                 </div>
                 <div>
                   <p className="text-xs text-emerald-400 font-medium">CLAUTHOR</p>
-                  <p className="font-display font-bold text-lg text-emerald-400">R$ 21.179/mês</p>
+                  <p className="font-display font-bold text-lg text-emerald-400">R$ 18.679/mês</p>
                 </div>
                 <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 font-bold text-sm px-3 py-1">
                   -93%

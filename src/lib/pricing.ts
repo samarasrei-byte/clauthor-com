@@ -20,7 +20,7 @@ export const regionalPricing: Record<string, RegionalPricing> = {
     currency: "BRL",
     symbol: "R$",
     locale: "pt-BR",
-    prices: { starter: 497, entry: 997, mid: 1997, high: 3997, premium: 5997 },
+    prices: { starter: 397, entry: 797, mid: 1697, high: 3497, premium: 4997 },
   },
   en: {
     currency: "USD",
