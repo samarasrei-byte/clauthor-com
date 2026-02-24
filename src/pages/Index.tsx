@@ -1,4 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 import SmartAgentFinder from "@/components/library/SmartAgentFinder";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -21,40 +22,40 @@ import clauthorLogo from "@/assets/clauthor-logo.png";
 const agentIcons = [MessageSquare, DollarSign, Code, Users, Briefcase, Shield];
 
 // Futuristic AI background with neural network effect
-const FuturisticBackground = () => (
-  <div className="fixed inset-0 pointer-events-none overflow-hidden">
-    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-primary/[0.04] to-transparent rounded-full blur-[120px]" />
-    <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-t from-primary/[0.02] to-transparent rounded-full blur-[100px]" />
-    <motion.div
-      animate={{ y: [-20, 20, -20], x: [-10, 10, -10], opacity: [0.03, 0.07, 0.03] }}
-      transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-      className="absolute top-[15%] left-[20%] w-[300px] h-[300px] rounded-full bg-primary/[0.05] blur-[100px]"
-    />
-    <motion.div
-      animate={{ y: [15, -25, 15], x: [10, -15, 10], opacity: [0.02, 0.06, 0.02] }}
-      transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-      className="absolute top-[40%] right-[15%] w-[250px] h-[250px] rounded-full bg-primary/[0.04] blur-[80px]"
-    />
-    <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
-      <motion.line x1="10%" y1="20%" x2="30%" y2="40%" stroke="hsl(266 100% 50%)" strokeWidth="0.5"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.6, 0] }} transition={{ duration: 4, repeat: Infinity, delay: 0 }} />
-      <motion.line x1="70%" y1="15%" x2="50%" y2="45%" stroke="hsl(266 100% 50%)" strokeWidth="0.5"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.5, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} />
-      <motion.line x1="80%" y1="60%" x2="60%" y2="30%" stroke="hsl(266 100% 50%)" strokeWidth="0.5"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.4, 0] }} transition={{ duration: 6, repeat: Infinity, delay: 2 }} />
-      {[
-        { cx: "10%", cy: "20%" }, { cx: "30%", cy: "40%" }, { cx: "70%", cy: "15%" },
-        { cx: "50%", cy: "45%" }, { cx: "80%", cy: "60%" }, { cx: "60%", cy: "30%" },
-      ].map((node, i) => (
-        <motion.circle key={i} cx={node.cx} cy={node.cy} r="2" fill="hsl(266 100% 50%)"
-          animate={{ opacity: [0.1, 0.6, 0.1], r: [1.5, 2.5, 1.5] }}
-          transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay: i * 0.3 }}
-        />
-      ))}
-    </svg>
-  </div>
-);
+const FuturisticBackground = () => {
+  const isMobile = useIsMobile();
+  return (
+    <div className="fixed inset-0 pointer-events-none overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-primary/[0.04] to-transparent rounded-full blur-[120px]" />
+      {/* Skip heavy SVG animations on mobile for performance */}
+      {!isMobile && (
+        <>
+          <motion.div
+            animate={{ y: [-20, 20, -20], x: [-10, 10, -10], opacity: [0.03, 0.07, 0.03] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[15%] left-[20%] w-[300px] h-[300px] rounded-full bg-primary/[0.05] blur-[100px]"
+          />
+          <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
+            <motion.line x1="10%" y1="20%" x2="30%" y2="40%" stroke="hsl(266 100% 50%)" strokeWidth="0.5"
+              initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.6, 0] }} transition={{ duration: 4, repeat: Infinity, delay: 0 }} />
+            <motion.line x1="70%" y1="15%" x2="50%" y2="45%" stroke="hsl(266 100% 50%)" strokeWidth="0.5"
+              initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.5, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} />
+            {[
+              { cx: "10%", cy: "20%" }, { cx: "30%", cy: "40%" }, { cx: "70%", cy: "15%" },
+              { cx: "50%", cy: "45%" },
+            ].map((node, i) => (
+              <motion.circle key={i} cx={node.cx} cy={node.cy} r="2" fill="hsl(266 100% 50%)"
+                animate={{ opacity: [0.1, 0.6, 0.1], r: [1.5, 2.5, 1.5] }}
+                transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay: i * 0.3 }}
+              />
+            ))}
+          </svg>
+        </>
+      )}
+    </div>
+  );
+};
 
 const HomePage = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -129,7 +130,7 @@ const HomePage = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.6 }}
-        className="fixed top-16 left-0 right-0 z-40 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border-b border-primary/10 backdrop-blur-xl"
+        className="sticky top-16 z-40 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border-b border-primary/10 backdrop-blur-xl"
       >
         <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2 sm:py-2.5 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm">
           <Network className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary animate-pulse shrink-0" />
@@ -146,7 +147,7 @@ const HomePage = () => {
       </motion.div>
 
       {/* HERO SECTION — with social proof */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-32 sm:pt-28 pb-8 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[90vh] flex items-center justify-center px-4 sm:px-6 pt-12 sm:pt-20 pb-8 overflow-hidden">
         <div className="absolute inset-0 scan-line pointer-events-none" />
         <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
 
