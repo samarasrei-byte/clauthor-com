@@ -668,78 +668,81 @@ const LibraryPage = () => {
         </div>
       </motion.div>
 
-      {/* ============ DEPARTMENTS — Horizontal showcase ============ */}
+      {/* ============ DEPARTMENTS — Compact horizontal strip ============ */}
       <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-        <div className="flex items-center gap-3 mb-6">
-          <h2 className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground/50 font-semibold">
-            Departamentos completos
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-2 h-2 rounded-full bg-primary/40" />
+          <h2 className="text-xs tracking-[0.2em] uppercase text-muted-foreground/60 font-semibold">
+            Times de IA · Departamentos
           </h2>
-          <div className="flex-1 h-px bg-gradient-to-r from-white/[0.06] to-transparent" />
-          <Link to="/pricing" className="text-[11px] text-primary/60 hover:text-primary transition-colors flex items-center gap-1">
+          <div className="flex-1 h-px bg-border/30" />
+          <Link to="/pricing" className="text-xs text-primary/60 hover:text-primary transition-colors flex items-center gap-1">
             Ver preços <ChevronRight className="h-3 w-3" />
           </Link>
         </div>
         
-        {/* Horizontal scroll on mobile, grid on desktop */}
-        <div className="flex gap-3 overflow-x-auto pb-2 snap-x snap-mandatory md:grid md:grid-cols-3 xl:grid-cols-4 md:overflow-visible scrollbar-hide">
+        {/* Compact horizontal scroll */}
+        <div className="flex gap-2.5 overflow-x-auto pb-2 snap-x snap-mandatory scrollbar-hide">
           {(["comercial", "tecnologia", "marketing", "suporte", "financeiro", "criacao", "rh"] as const).map((deptId, i) => {
             const regionData = getRegion(lang);
             const deptPrice = (regionData.departments as Record<string, number>)[deptId] ?? 0;
             const deptClt = (regionData.departmentClt as Record<string, number>)[deptId] ?? 0;
             const savingsPercent = deptClt > 0 ? Math.round((1 - deptPrice / deptClt) * 100) : 0;
             return (
-              <motion.div
-                key={deptId}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04 }}
-                className="min-w-[280px] md:min-w-0 snap-start rounded-2xl ring-1 ring-white/[0.06] hover:ring-primary/20 overflow-hidden transition-all duration-500 hover:scale-[1.015] group"
-              >
-                <div className="p-4 space-y-3">
-                  {/* Title + badge */}
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-display font-bold text-sm">{t(`squads.dept_${deptId}`)}</h3>
-                    <span className="text-[9px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
+              <Link key={deptId} to="/pricing" className="min-w-[220px] snap-start">
+                <motion.div
+                  initial={{ opacity: 0, x: 12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.03 }}
+                  className="rounded-xl bg-card/50 ring-1 ring-border/40 hover:ring-primary/30 p-3.5 transition-all duration-300 hover:bg-card/80 group"
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <h3 className="font-semibold text-xs">{t(`squads.dept_${deptId}`)}</h3>
+                    <span className="text-[8px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded">
                       -{savingsPercent}%
                     </span>
                   </div>
-                  
-                  {/* Price */}
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="font-display font-bold text-xl">{formatPrice(deptPrice, lang)}</span>
-                    <span className="text-[10px] text-muted-foreground/40">/mês · 4 agentes</span>
+                  <div className="flex items-baseline gap-1">
+                    <span className="font-bold text-sm">{formatPrice(deptPrice, lang)}</span>
+                    <span className="text-[9px] text-muted-foreground/40">/mês · 4 agentes</span>
                   </div>
-
-                  {/* Live orchestration */}
-                  <DepartmentMiniChat departmentId={deptId} autoPlay compact />
-
-                  {/* CTA */}
-                  <Link to="/pricing" className="block">
-                    <button className="w-full h-9 rounded-lg text-[10px] font-bold uppercase tracking-wider ring-1 ring-primary/20 text-primary/70 hover:bg-primary/5 hover:ring-primary/40 transition-all duration-300">
-                      Ver departamento
-                    </button>
-                  </Link>
-                </div>
-              </motion.div>
+                </motion.div>
+              </Link>
             );
           })}
         </div>
       </motion.section>
 
-      {/* ============ AGENT GRID — Minimal Marketplace Cards ============ */}
+      {/* ============ VISUAL SEPARATOR ============ */}
+      <div className="relative py-4">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-background px-6 text-[10px] tracking-[0.3em] uppercase text-primary/50 font-semibold flex items-center gap-2">
+            <Bot className="h-3.5 w-3.5" />
+            Agentes Individuais
+            <Bot className="h-3.5 w-3.5" />
+          </span>
+        </div>
+      </div>
+
+      {/* ============ AGENT GRID — Premium Marketplace Cards ============ */}
       <section>
-        <div className="flex items-center gap-3 mb-8">
-          <h2 className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground/50 font-semibold">
-            Todos os Agentes
+        <div className="flex items-center gap-3 mb-6">
+          <h2 className="text-lg font-bold tracking-tight">
+            {filteredAgents.length} Agentes Disponíveis
           </h2>
-          <div className="flex-1 h-px bg-gradient-to-r from-white/[0.06] to-transparent" />
-          <span className="text-[11px] tracking-wider text-muted-foreground/30">{filteredAgents.length} agentes</span>
+          <div className="flex-1" />
+          <Badge variant="outline" className="text-xs border-primary/20 text-primary/70">
+            Contratação individual
+          </Badge>
         </div>
 
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid md:grid-cols-2 gap-5">
           {filteredAgents.length === 0 ? (
             <div className="col-span-full py-16 text-center">
-              <p className="text-[13px] text-muted-foreground/40 tracking-wider">Nenhum agente encontrado</p>
+              <p className="text-sm text-muted-foreground/50">Nenhum agente encontrado</p>
             </div>
           ) : filteredAgents.map((key, i) => {
             const tier = agentTiers[key];
@@ -749,88 +752,136 @@ const LibraryPage = () => {
             const agentDesc = t(`library_page.agents.${key}_desc`);
             const social = agentSocialProof[key];
             const capabilities = agentCapabilities[key];
+            const tags = agentTags[key] || [];
+            const integrations = agentIntegrations[key] || [];
             const isHiring = hiringSlug === agentSlugs[key];
 
             return (
               <motion.div
                 key={key}
-                initial={{ opacity: 0, y: 12 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.02 }}
+                transition={{ delay: i * 0.015 }}
                 layout
               >
-                <div className={`group relative h-full flex flex-col rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.015] ${
+                <div className={`group relative h-full flex flex-col rounded-2xl overflow-hidden transition-all duration-500 hover:translate-y-[-2px] ${
                   tier === "enterprise" 
-                    ? "ring-1 ring-primary/25 hover:ring-primary/40 shadow-[0_0_40px_-15px_hsl(var(--primary)/0.12)]" 
-                    : "ring-1 ring-white/[0.06] hover:ring-primary/15"
+                    ? "ring-1 ring-primary/30 hover:ring-primary/50 shadow-[0_0_60px_-20px_hsl(var(--primary)/0.15)] bg-gradient-to-br from-primary/[0.04] to-transparent" 
+                    : "ring-1 ring-border/50 hover:ring-primary/25 bg-card/30 hover:bg-card/60"
                 }`}>
-                  {/* Subtle gradient overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+                  {/* Enterprise glow */}
+                  {tier === "enterprise" && (
+                    <div className="absolute top-0 right-0 w-40 h-40 bg-primary/[0.06] rounded-full blur-[60px] pointer-events-none" />
+                  )}
 
-                  <div className="relative p-5 flex flex-col flex-1">
-                    {/* Header */}
-                    <div className="flex items-start gap-3 mb-3">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 transition-all duration-500 ${
+                  <div className="relative p-6 flex flex-col flex-1">
+                    {/* Top row: Icon + Title + Tier badge */}
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className={`w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 transition-all duration-500 ${
                         tier === "enterprise" 
-                          ? "bg-primary/15 border border-primary/20" 
-                          : "bg-white/[0.03] border border-white/[0.06] group-hover:border-primary/15 group-hover:bg-primary/[0.04]"
+                          ? "bg-primary/15 border border-primary/25 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.2)]" 
+                          : tier === "advanced"
+                            ? "bg-cyan-500/10 border border-cyan-500/15"
+                            : "bg-muted/50 border border-border group-hover:border-primary/20 group-hover:bg-primary/[0.05]"
                       }`}>
-                        <Icon className={`h-4 w-4 transition-colors duration-500 ${
-                          tier === "enterprise" ? "text-primary/80" : "text-muted-foreground/50 group-hover:text-primary/60"
+                        <Icon className={`h-6 w-6 transition-colors duration-500 ${
+                          tier === "enterprise" ? "text-primary" 
+                          : tier === "advanced" ? "text-cyan-400"
+                          : "text-muted-foreground group-hover:text-primary/70"
                         }`} strokeWidth={1.5} />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-[13px] leading-tight mb-0.5 line-clamp-1">{agentTitle}</h3>
+                        <h3 className="font-bold text-base leading-tight mb-1">{agentTitle}</h3>
                         <div className="flex items-center gap-2">
-                          <span className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground/40 font-medium">
+                          <Badge variant="outline" className={`text-[10px] px-2 py-0 h-5 ${tierColors[tier]}`}>
                             {t(`tiers.${tier}`)}
-                          </span>
+                          </Badge>
                           <span className="flex items-center gap-0.5">
-                            <Star className="h-2.5 w-2.5 fill-primary/40 text-primary/40" />
-                            <span className="text-[9px] text-muted-foreground/40">{social.rating}</span>
+                            <Star className="h-3 w-3 fill-primary/50 text-primary/50" />
+                            <span className="text-[11px] text-muted-foreground/60 font-medium">{social.rating}</span>
                           </span>
+                          <span className="text-[10px] text-muted-foreground/40">{social.companies}+ empresas</span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Description */}
-                    <p className="text-[11px] text-muted-foreground/60 leading-relaxed line-clamp-2 mb-3">{agentDesc}</p>
+                    {/* Description — more visible */}
+                    <p className="text-[13px] text-muted-foreground/70 leading-relaxed mb-4 line-clamp-2">{agentDesc}</p>
 
-                    {/* Capabilities */}
-                    <div className="flex flex-wrap gap-1 mb-3">
-                      {capabilities.slice(0, 3).map((cap) => (
-                        <span key={cap} className="text-[9px] px-1.5 py-0.5 rounded ring-1 ring-white/[0.04] text-muted-foreground/50">
+                    {/* Capabilities row */}
+                    <div className="flex flex-wrap gap-1.5 mb-4">
+                      {capabilities.map((cap) => (
+                        <span key={cap} className="text-[10px] px-2 py-1 rounded-md bg-muted/30 ring-1 ring-border/40 text-foreground/60 font-medium">
                           {cap}
                         </span>
                       ))}
                     </div>
 
-                    {/* Mini Chat Demo — integrated */}
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-1 mb-4">
+                      {tags.slice(0, 5).map((tag) => (
+                        <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded bg-primary/[0.04] text-primary/50 ring-1 ring-primary/[0.08]">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    {/* Integrations row */}
+                    <div className="flex items-center gap-1.5 mb-4">
+                      <span className="text-[9px] text-muted-foreground/30 uppercase tracking-wider font-medium shrink-0">Integra:</span>
+                      <div className="flex flex-wrap gap-1">
+                        {integrations.slice(0, 4).map((intg) => (
+                          <span key={intg} className="text-[9px] px-1.5 py-0.5 rounded bg-muted/20 text-muted-foreground/50">
+                            {intg}
+                          </span>
+                        ))}
+                        {integrations.length > 4 && (
+                          <span className="text-[9px] text-muted-foreground/30">+{integrations.length - 4}</span>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Mini Chat Demo */}
                     <AgentMiniChat agentKey={key} agentName={agentTitle} />
 
                     <div className="flex-1" />
 
-                    {/* Footer — Price + CTA */}
-                    <div className="pt-3 mt-3">
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.04] to-transparent mb-3" />
-                      <div className="flex items-center justify-between">
+                    {/* Footer — Price + CTA + ROI */}
+                    <div className="pt-4 mt-4">
+                      <div className="h-px w-full bg-border/30 mb-4" />
+                      <div className="flex items-end justify-between gap-4">
                         <div>
-                          <p className="font-bold text-base tracking-tight">{priceDisplay}</p>
-                          <span className="text-[8px] text-muted-foreground/30 tracking-wider">{t("library.per_month")} · {social.companies}+ empresas</span>
+                          <div className="flex items-baseline gap-2">
+                            <p className="font-bold text-xl tracking-tight">{priceDisplay}</p>
+                            <span className="text-xs text-muted-foreground/40">{t("library.per_month")}</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <TrendingUp className="h-3 w-3 text-emerald-400" />
+                            <span className="text-[11px] text-emerald-400 font-medium">Economia de {social.savings}/mês</span>
+                          </div>
                         </div>
-                        <div className="flex gap-1.5">
+                        <div className="flex gap-2">
                           <Link to={`/agente/${agentSlugs[key]}`}>
-                            <button className="h-8 w-8 rounded-lg ring-1 ring-white/[0.06] flex items-center justify-center hover:ring-primary/20 hover:bg-primary/[0.04] transition-all duration-300" title="Detalhes">
-                              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/40" />
-                            </button>
+                            <Button variant="outline" size="sm" className="h-10 px-4 rounded-xl border-border/50 hover:border-primary/30 text-xs gap-1.5">
+                              <Eye className="h-3.5 w-3.5" />
+                              Detalhes
+                            </Button>
                           </Link>
-                          <button
-                            className="h-8 px-4 rounded-lg text-[10px] font-bold uppercase tracking-wider bg-primary/10 ring-1 ring-primary/20 text-primary/80 hover:bg-primary/20 hover:ring-primary/40 transition-all duration-300 disabled:opacity-30"
+                          <Button
+                            size="sm"
+                            className="h-10 px-5 rounded-xl text-xs font-bold uppercase tracking-wider gap-1.5"
                             disabled={isHiring}
                             onClick={() => handleHire(key)}
                           >
-                            {isHiring ? <Loader2 className="h-3 w-3 animate-spin" /> : "Ativar"}
-                          </button>
+                            {isHiring ? (
+                              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                            ) : (
+                              <>
+                                <Zap className="h-3.5 w-3.5" />
+                                Contratar
+                              </>
+                            )}
+                          </Button>
                         </div>
                       </div>
                     </div>
