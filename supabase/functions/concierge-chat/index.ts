@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { fetchAI } from "../_shared/ai-gateway.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -24,7 +25,6 @@ serve(async (req) => {
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const adminClient = createClient(supabaseUrl, supabaseKey);
 
-    // Verify user
     const anonClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!);
     const { data: { user }, error: authError } = await anonClient.auth.getUser(authHeader.replace("Bearer ", ""));
     if (authError || !user) {
@@ -43,7 +43,6 @@ serve(async (req) => {
     };
     const userLang = langMap[language] || langMap["pt"];
 
-    // Fetch user's agents
     const { data: agents } = await adminClient
       .from("agents")
       .select("id, name, description, tier, status, instructions, objective")
@@ -52,7 +51,6 @@ serve(async (req) => {
 
     const activeAgents = (agents || []).filter((a: any) => a.status === "active");
 
-    // Build agent context for the concierge
     const agentsList = activeAgents.map((a: any, i: number) => {
       const examples: Record<string, string[]> = {
         sales: ["'Encontre 10 leads de SaaS em São Paulo'", "'Mande email de prospecção para o lead X'", "'Crie um pipeline de vendas para este mês'"],
@@ -71,7 +69,6 @@ serve(async (req) => {
         project_management: ["'Crie um sprint para as próximas 2 semanas'", "'Quais tarefas estão atrasadas?'", "'Monte um cronograma para o lançamento'"],
       };
 
-      // Try to match agent name to examples
       const nameKey = Object.keys(examples).find(k => 
         a.name.toLowerCase().includes(k.replace("_", " ")) || 
         a.name.toLowerCase().includes(k)
@@ -113,27 +110,17 @@ ${agentsList || "Nenhum agente ativo ainda."}
 ## TOOL USE:
 Os agentes podem executar ações reais: enviar emails, criar tarefas, gerar relatórios, buscar leads, agendar reuniões e analisar dados. Mencione isso como diferencial!`;
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
-
     const apiMessages = [
       { role: "system", content: systemPrompt },
       ...(messages || [{ role: "user", content: "Olá! Acabei de chegar." }]),
     ];
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash-lite",
-        messages: apiMessages,
-        stream: true,
-        max_tokens: 300,
-        temperature: 0.6,
-      }),
+    const response = await fetchAI({
+      model: "google/gemini-2.5-flash-lite",
+      messages: apiMessages,
+      stream: true,
+      max_tokens: 300,
+      temperature: 0.6,
     });
 
     if (!response.ok) {

@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { fetchAI } from "../_shared/ai-gateway.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -51,22 +52,18 @@ serve(async (req) => {
     const activeSubs = subs.filter((s: any) => s.status === "active");
     const totalRevenue = activeSubs.reduce((a: number, s: any) => a + (s.monthly_price || 0), 0);
 
-    // Growth by period
     const periods = [1, 7, 14, 30].map(days => {
       const cutoff = new Date(Date.now() - days * 24 * 60 * 60 * 1000).toISOString();
       return { days, users: users.filter((u: any) => u.created_at > cutoff).length };
     });
 
-    // Conversion funnel
     const waitingCount = waitlist.filter((w: any) => w.status === "waiting").length;
     const paidUsers = credits.filter((c: any) => c.plan_type !== "free").length;
     const conversionRate = users.length > 0 ? Math.round((paidUsers / users.length) * 100) : 0;
 
-    // Churn signals
     const exhausted = credits.filter((c: any) => c.total_credits > 0 && c.used_credits >= c.total_credits);
     const inactive = credits.filter((c: any) => c.used_credits === 0 && c.plan_type === "free");
 
-    // Plan upgrade potential
     const freeUsers = credits.filter((c: any) => c.plan_type === "free");
     const highUsageFree = freeUsers.filter((c: any) => c.total_credits > 0 && (c.used_credits / c.total_credits) > 0.5);
 
@@ -132,17 +129,10 @@ REGRAS:
 
 ${growthContext}`;
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
-
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [{ role: "system", content: systemPrompt }, ...messages],
-        stream: true,
-      }),
+    const response = await fetchAI({
+      model: "google/gemini-3-flash-preview",
+      messages: [{ role: "system", content: systemPrompt }, ...messages],
+      stream: true,
     });
 
     if (!response.ok) {
