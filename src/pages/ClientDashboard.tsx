@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Wand2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,7 @@ import ClientCommandCenter from "@/components/dashboard/ClientCommandCenter";
 import AgentSettings from "@/components/dashboard/AgentSettings";
 import SquadChat from "@/components/dashboard/SquadChat";
 import TeamMembers from "@/components/dashboard/TeamMembers";
+import ConciergeChat from "@/components/dashboard/ConciergeChat";
 import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
@@ -34,6 +35,7 @@ const ClientDashboard = () => {
   const hireProcessed = useRef(false);
   const [activeSection, setActiveSection] = useState("overview");
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
+  const [showConcierge, setShowConcierge] = useState(false);
   const { credits, remainingCredits, usagePercentage } = useCredits();
   const { data: tokenUsage = [] } = useTokenUsage();
 
@@ -155,6 +157,22 @@ const ClientDashboard = () => {
     processHire();
   }, [user, queryClient]);
 
+  // Show concierge on first visit
+  useEffect(() => {
+    if (!user || loadingAgents) return;
+    const key = `clauthor_concierge_seen_${user.id}`;
+    if (!localStorage.getItem(key)) {
+      // Small delay to let dashboard render first
+      const timer = setTimeout(() => setShowConcierge(true), 1500);
+      return () => clearTimeout(timer);
+    }
+  }, [user, loadingAgents]);
+
+  const handleCloseConcierge = () => {
+    setShowConcierge(false);
+    if (user) localStorage.setItem(`clauthor_concierge_seen_${user.id}`, "true");
+  };
+
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
   const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);
@@ -162,6 +180,7 @@ const ClientDashboard = () => {
 
   const sidebarItems = [
     { id: "overview", label: "Command Center", icon: LayoutDashboard },
+    { id: "concierge", label: "Concierge", icon: Wand2 },
     { id: "agents", label: "Meus Agentes", icon: Bot, badge: agents.length || undefined },
     { id: "squad-chat", label: "Reunião", icon: Users },
     { id: "agent-settings", label: "Configurações", icon: Settings },
@@ -210,7 +229,13 @@ const ClientDashboard = () => {
         <DashboardSidebar
           items={sidebarItems}
           activeItem={activeSection}
-          onItemChange={setActiveSection}
+          onItemChange={(id) => {
+            if (id === "concierge") {
+              setShowConcierge(true);
+            } else {
+              setActiveSection(id);
+            }
+          }}
         />
       </div>
 
@@ -239,7 +264,7 @@ const ClientDashboard = () => {
                 key={item.id}
                 variant={activeSection === item.id ? "default" : "ghost"}
                 size="sm"
-                onClick={() => setActiveSection(item.id)}
+                onClick={() => item.id === "concierge" ? setShowConcierge(true) : setActiveSection(item.id)}
                 className="shrink-0 gap-1.5"
               >
                 <item.icon className="h-3.5 w-3.5" />
@@ -482,6 +507,16 @@ const ClientDashboard = () => {
           )}
         </div>
       </div>
+
+      {/* Concierge Chat */}
+      <ConciergeChat
+        isOpen={showConcierge}
+        onClose={handleCloseConcierge}
+        onNavigate={(section) => {
+          setActiveSection(section);
+          handleCloseConcierge();
+        }}
+      />
     </div>
   );
 };
