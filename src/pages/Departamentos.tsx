@@ -139,7 +139,7 @@ const totalTokens = "48M";
 const totalAgents = 28;
 const totalSavingsPercent = Math.round(((totalCltCost - totalPrometheusCost) / totalCltCost) * 100);
 
-const Departamentos = () => {
+const Departamentos = () => { // v2
   const { t } = useTranslation();
   const [suggestionName, setSuggestionName] = useState("");
   const [suggestionReason, setSuggestionReason] = useState("");
