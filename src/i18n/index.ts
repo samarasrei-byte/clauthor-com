@@ -48,18 +48,28 @@ const resources = {
   tr: { translation: tr },
 };
 
+// Map browser language codes (e.g. pt-BR, zh-CN) to our supported codes
+const supportedLngs = languages.map((l) => l.code);
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
     resources,
     fallbackLng: "pt",
+    supportedLngs,
+    // Convert "pt-BR" → "pt", "zh-CN" → "zh", etc.
+    load: "languageOnly",
     interpolation: {
       escapeValue: false,
     },
     detection: {
+      // Prioritize navigator (browser/OS language) on first visit,
+      // then cache to localStorage for subsequent visits
       order: ["localStorage", "navigator", "htmlTag"],
       caches: ["localStorage"],
+      // Strip region code: "pt-BR" → "pt"
+      convertDetectedLanguage: (lng: string) => lng.split("-")[0],
     },
   });
 
