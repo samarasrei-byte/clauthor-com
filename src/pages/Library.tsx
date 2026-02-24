@@ -20,7 +20,10 @@ import ReputationBadge from "@/components/library/ReputationBadge";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 import AgentLivePreview from "@/components/library/AgentLivePreview";
 import SmartAgentFinder from "@/components/library/SmartAgentFinder";
-import { getPriceDisplay, getPrice, type PriceTier } from "@/lib/pricing";
+import AgentMiniChat from "@/components/library/AgentMiniChat";
+import DepartmentMiniChat from "@/components/pricing/DepartmentMiniChat";
+import DepartmentFAQ from "@/components/pricing/DepartmentFAQ";
+import { getPriceDisplay, getPrice, type PriceTier, getRegion, formatPrice } from "@/lib/pricing";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -665,6 +668,62 @@ const LibraryPage = () => {
         </div>
       </motion.div>
 
+      {/* ============ DEPARTMENTS SECTION ============ */}
+      <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <div className="flex items-center gap-3 mb-6">
+          <h2 className="text-[11px] tracking-[0.25em] uppercase text-muted-foreground/50 font-semibold">
+            Departamentos
+          </h2>
+          <div className="flex-1 h-px bg-gradient-to-r from-white/[0.06] to-transparent" />
+          <Link to="/pricing" className="text-[11px] text-primary/60 hover:text-primary transition-colors flex items-center gap-1">
+            Ver todos <ChevronRight className="h-3 w-3" />
+          </Link>
+        </div>
+        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {(["tecnologia", "comercial", "marketing", "financeiro", "suporte", "criacao", "rh"] as const).map((deptId, i) => {
+            const region = getRegion(lang);
+            const deptPrice = (region.departments as Record<string, number>)[deptId] ?? 0;
+            const deptNames: Record<string, string> = {
+              tecnologia: "Tech Dept.", comercial: "Sales Dept.", marketing: "Marketing Dept.",
+              financeiro: "Finance Dept.", suporte: "Support Dept.", criacao: "Creative Dept.", rh: "HR Dept."
+            };
+            const deptAgentCount: Record<string, number> = {
+              tecnologia: 4, comercial: 4, marketing: 4, financeiro: 4, suporte: 4, criacao: 4, rh: 4
+            };
+            return (
+              <motion.div
+                key={deptId}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                className="rounded-2xl border border-white/[0.06] bg-white/[0.015] overflow-hidden hover:border-primary/20 transition-all duration-300"
+              >
+                <div className="p-4">
+                  <div className="flex items-center justify-between mb-3">
+                    <h3 className="font-semibold text-sm">{t(`squads.dept_${deptId}`)}</h3>
+                    <Badge variant="outline" className="text-[9px] border-primary/20 text-primary/70">
+                      {deptAgentCount[deptId]} agentes
+                    </Badge>
+                  </div>
+                  <p className="font-bold text-lg mb-3">{formatPrice(deptPrice, lang)}<span className="text-xs text-muted-foreground font-normal">/mês</span></p>
+                  
+                  <DepartmentMiniChat departmentId={deptId} />
+                  <div className="mt-2">
+                    <DepartmentFAQ departmentId={deptId} />
+                  </div>
+                  
+                  <Link to="/pricing" className="mt-3 block">
+                    <Button variant="outline" size="sm" className="w-full rounded-xl text-xs gap-1.5 border-primary/15 hover:bg-primary/5">
+                      Ver departamento <ArrowRight className="h-3 w-3" />
+                    </Button>
+                  </Link>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.section>
+
       {/* ============ AGENT GRID — Minimal Marketplace Cards ============ */}
       <section>
         <div className="flex items-center gap-3 mb-8">
@@ -743,6 +802,9 @@ const LibraryPage = () => {
                       <span className="h-2.5 w-px bg-white/[0.06]" />
                       <span>Economia {social.savings}/mês</span>
                     </div>
+
+                    {/* Agent Mini Chat Demo */}
+                    <AgentMiniChat agentKey={key} agentName={agentTitle} />
 
                     {/* Spacer */}
                     <div className="flex-1" />
