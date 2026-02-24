@@ -4,7 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import {
-  CreditCard, Wallet, Bitcoin, Globe, QrCode,
+  CreditCard, Wallet, Globe, QrCode,
   ArrowUpRight, Shield, CheckCircle2, Clock,
   Banknote, Coins, Lock, ExternalLink, Settings, Smartphone
 } from "lucide-react";
@@ -30,21 +30,6 @@ const PaymentsPanel = ({ totalRevenue, subscriptionCount }: PaymentsPanelProps) 
       volume: "R$ " + (totalRevenue * 0.5 / 100).toLocaleString("pt-BR"),
       share: 50,
       features: ["Liquidação instantânea", "0% taxa", "QR Code dinâmico"],
-    },
-    {
-      name: "Bitcoin & Crypto",
-      description: "BTC, ETH, USDC via Coinbase Commerce",
-      icon: Bitcoin,
-      status: "active",
-      color: "from-amber-500/20 to-orange-500/10",
-      borderColor: "border-amber-500/30",
-      iconBg: "bg-amber-500/10",
-      iconColor: "text-amber-400",
-      badge: "Ativo",
-      badgeClass: "bg-amber-500/10 text-amber-400",
-      volume: "R$ " + (totalRevenue * 0.2 / 100).toLocaleString("pt-BR"),
-      share: 20,
-      features: ["Bitcoin (BTC)", "Ethereum (ETH)", "USDC (Stablecoin)"],
     },
     {
       name: "PayPal",
