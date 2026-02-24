@@ -276,12 +276,12 @@ const ConciergeChat = ({ isOpen, onClose, onNavigate }: ConciergeChatProps) => {
           {/* Quick prompts (show only at start) */}
           {messages.length <= 2 && !isLoading && messages.some(m => m.role === "assistant") && (
             <div className="px-4 pb-2">
-              <div className="flex gap-2 overflow-x-auto pb-1">
+              <div className="flex gap-2 overflow-x-auto scrollbar-none pb-1" style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}>
                 {QUICK_PROMPTS.map((prompt) => (
                   <button
                     key={prompt.label}
                     onClick={() => handleSend(prompt.label)}
-                    className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/10 hover:bg-primary/10 hover:border-primary/20 transition-all text-xs font-medium"
+                    className="shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/5 border border-primary/10 hover:bg-primary/10 hover:border-primary/20 transition-all text-xs font-medium whitespace-nowrap"
                   >
                     <span>{prompt.icon}</span>
                     {prompt.label}
