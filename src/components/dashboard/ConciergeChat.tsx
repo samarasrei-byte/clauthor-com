@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 interface ConciergeMessage {
   role: "user" | "assistant";
@@ -26,6 +27,7 @@ const QUICK_PROMPTS = [
 ];
 
 const ConciergeChat = ({ isOpen, onClose, onNavigate }: ConciergeChatProps) => {
+  const { i18n } = useTranslation();
   const [messages, setMessages] = useState<ConciergeMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -71,7 +73,7 @@ const ConciergeChat = ({ isOpen, onClose, onNavigate }: ConciergeChatProps) => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ messages: apiMessages }),
+          body: JSON.stringify({ messages: apiMessages, language: i18n.language }),
           signal: controller.signal,
         }
       );

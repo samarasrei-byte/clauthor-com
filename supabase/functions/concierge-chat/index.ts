@@ -34,7 +34,14 @@ serve(async (req) => {
       });
     }
 
-    const { messages } = await req.json();
+    const { messages, language } = await req.json();
+
+    const langMap: Record<string, string> = {
+      pt: "português do Brasil", en: "English", es: "español", fr: "français",
+      de: "Deutsch", it: "italiano", ja: "日本語", zh: "中文",
+      ar: "العربية", hi: "हिन्दी", ru: "русский", ko: "한국어", tr: "Türkçe",
+    };
+    const userLang = langMap[language] || langMap["pt"];
 
     // Fetch user's agents
     const { data: agents } = await adminClient
@@ -91,7 +98,7 @@ ${agentsList || "Nenhum agente ativo ainda."}
 5. **Seja ULTRA conciso** — Máximo 80 palavras por resposta. Use frases curtas e diretas.
 6. **Se o cliente não tiver agentes**, oriente para a Biblioteca (/library) para contratar.
 7. **Explique as seções do dashboard**: Command Center (visão geral), Meus Agentes (gerenciar), Reunião (falar com todos), Chat (falar com um agente), Analytics, Logs.
-8. **Responda em português do Brasil**.
+8. **IDIOMA OBRIGATÓRIO: Responda SEMPRE em ${userLang}**. Nunca responda em outro idioma.
 
 ## SEÇÕES DO DASHBOARD:
 - **Command Center**: Visão geral com KPIs, economia estimada, consumo de tokens
