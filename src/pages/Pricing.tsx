@@ -6,22 +6,26 @@ import { Check, Zap, Shield, Clock, Bot, ArrowRight, Sparkles, Coins, TrendingUp
 import SquadPlans from "@/components/pricing/SquadPlans";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { getRegion, formatPrice } from "@/lib/pricing";
 
 const Pricing = () => {
   const [showTokens, setShowTokens] = useState(false);
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+  const region = getRegion(lang);
+  const fp = (amount: number) => formatPrice(amount, lang);
 
   const plans = [
     {
       name: t("pricing_page.starter_name"), description: t("pricing_page.starter_desc"),
-      price: t("pricing_page.starter_price"), tokens: t("pricing_page.starter_tokens"),
+      price: fp(region.plans.starter), tokens: t("pricing_page.starter_tokens"),
       popular: false, equivalent: t("pricing_page.starter_equivalent"),
       cltCost: t("pricing_page.starter_cost"), savings: t("pricing_page.starter_savings"),
       features: [t("pricing_page.starter_f1"), t("pricing_page.starter_f2"), t("pricing_page.starter_f3"), t("pricing_page.starter_f4"), t("pricing_page.starter_f5"), t("pricing_page.starter_f6")],
     },
     {
       name: t("pricing_page.pro_name"), description: t("pricing_page.pro_desc"),
-      price: t("pricing_page.pro_price"), tokens: t("pricing_page.pro_tokens"),
+      price: fp(region.plans.growth), tokens: t("pricing_page.pro_tokens"),
       popular: true, equivalent: t("pricing_page.pro_equivalent"),
       cltCost: t("pricing_page.pro_cost"), savings: t("pricing_page.pro_savings"),
       features: [t("pricing_page.pro_f1"), t("pricing_page.pro_f2"), t("pricing_page.pro_f3"), t("pricing_page.pro_f4"), t("pricing_page.pro_f5"), t("pricing_page.pro_f6"), t("pricing_page.pro_f7")],
@@ -36,21 +40,21 @@ const Pricing = () => {
   ];
 
   const tokenPacks = [
-    { amount: t("pricing_page.token_pack1"), price: t("pricing_page.token_price1"), discount: null },
-    { amount: t("pricing_page.token_pack2"), price: t("pricing_page.token_price2"), discount: "11% off" },
-    { amount: t("pricing_page.token_pack3"), price: t("pricing_page.token_price3"), discount: "20% off" },
-    { amount: t("pricing_page.token_pack4"), price: t("pricing_page.token_price4"), discount: "33% off" },
+    { amount: t("pricing_page.token_pack1"), price: fp(region.tokenPacks.pack5m), discount: null },
+    { amount: t("pricing_page.token_pack2"), price: fp(region.tokenPacks.pack15m), discount: "11% off" },
+    { amount: t("pricing_page.token_pack3"), price: fp(region.tokenPacks.pack50m), discount: "20% off" },
+    { amount: t("pricing_page.token_pack4"), price: fp(region.tokenPacks.pack100m), discount: "33% off" },
   ];
 
   const cltComparison = [
-    { label: t("pricing_page.clt_row1"), clt: t("pricing_page.clt_row1_clt"), apex: t("pricing_page.clt_row1_apex") },
+    { label: t("pricing_page.clt_row1"), clt: `${fp(region.comparison.avgSalary)}/${t("pricing_page.per_month").replace("/", "")}`, apex: `${t("pricing_page.replaces").toLowerCase().includes("from") ? "" : t("pricing_page.clt_row1_apex").split(" ")[0] + " "}${fp(region.comparison.agentStarting)}/${t("pricing_page.per_month").replace("/", "")}` },
     { label: t("pricing_page.clt_row2"), clt: t("pricing_page.clt_row2_clt"), apex: t("pricing_page.clt_row2_apex") },
     { label: t("pricing_page.clt_row3"), clt: t("pricing_page.clt_row3_clt"), apex: t("pricing_page.clt_row3_apex") },
     { label: t("pricing_page.clt_row4"), clt: t("pricing_page.clt_row4_clt"), apex: t("pricing_page.clt_row4_apex") },
     { label: t("pricing_page.clt_row5"), clt: t("pricing_page.clt_row5_clt"), apex: t("pricing_page.clt_row5_apex") },
     { label: t("pricing_page.clt_row6"), clt: t("pricing_page.clt_row6_clt"), apex: t("pricing_page.clt_row6_apex") },
     { label: t("pricing_page.clt_row7"), clt: t("pricing_page.clt_row7_clt"), apex: t("pricing_page.clt_row7_apex") },
-    { label: t("pricing_page.clt_row8"), clt: t("pricing_page.clt_row8_clt"), apex: t("pricing_page.clt_row8_apex") },
+    { label: t("pricing_page.clt_row8"), clt: fp(region.comparison.avgSalaryYear3) + "+", apex: fp(region.comparison.agentYear3) },
   ];
 
   const isOnRequest = (price: string) => price === t("pricing_page.on_request") || price === "Sob consulta" || price === "On request";
@@ -129,7 +133,7 @@ const Pricing = () => {
           ))}
         </div>
 
-        {/* Squad Plans - Times de IA */}
+        {/* Squad Plans */}
         <SquadPlans />
 
         {/* CLT vs CLAUTHOR Comparison */}
@@ -174,9 +178,9 @@ const Pricing = () => {
             </div>
             <div className="mt-8 text-center">
               <p className="text-sm text-muted-foreground mb-4">
-                {t("pricing_page.comparison_footer1")} <span className="text-foreground font-bold">{t("pricing_page.comparison_footer1_value")}</span> {t("pricing_page.comparison_footer2")}
+                {t("pricing_page.comparison_footer1")} <span className="text-foreground font-bold">{fp(region.comparison.avgSalary * 1.68)}/{t("pricing_page.per_month").replace("/", "")}</span> {t("pricing_page.comparison_footer2")}
                 <br />
-                {t("pricing_page.comparison_footer3")} <span className="text-cyan-400 font-bold">{t("pricing_page.comparison_footer3_value")}</span>.
+                {t("pricing_page.comparison_footer3")} <span className="text-cyan-400 font-bold">{fp(region.comparison.agentStarting)}/{t("pricing_page.per_month").replace("/", "")}</span>.
               </p>
               <Link to="/auth" state={{ hireIntent: { type: "agent", label: "Plano CLAUTHOR", slugs: [] } }}>
                 <Button className="glow rounded-xl px-8 h-12 font-semibold">
