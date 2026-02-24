@@ -12,6 +12,8 @@ import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 import AnimatedCounter from "./AnimatedCounter";
 import MiniSparkline from "./MiniSparkline";
 import TokenUpgradeDialog from "./TokenUpgradeDialog";
+import GettingStartedGuide from "./GettingStartedGuide";
+import AgentSummaryCards from "./AgentSummaryCards";
 import { useTranslation } from "react-i18next";
 
 interface ClientCommandCenterProps {
@@ -79,7 +81,15 @@ const ClientCommandCenter = ({
 
   return (
     <div className="space-y-6">
-      {/* Status Banner */}
+      {/* Getting Started Guide */}
+      <GettingStartedGuide
+        hasAgents={activeAgents > 0}
+        hasSentMessage={recentLogs.length > 0}
+        hasConfiguredAgent={agents.some((a: any) => a.integrations || a.channels)}
+      />
+
+      {/* Agent Summary Cards */}
+      <AgentSummaryCards agents={agents} />
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
