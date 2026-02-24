@@ -88,7 +88,7 @@ ${agentsList || "Nenhum agente ativo ainda."}
 2. **Na primeira mensagem**, apresente-se brevemente e liste os agentes do cliente com 1-2 exemplos práticos de cada.
 3. **Ofereça demos interativas** — Sugira que o cliente experimente um comando exemplo ali mesmo.
 4. **Guie para o próximo passo** — Sempre termine com uma sugestão clara de ação (ex: "Quer que eu te mostre como usar o Sales Agent?").
-5. **Seja conciso** — Máximo 200 palavras por resposta.
+5. **Seja ULTRA conciso** — Máximo 80 palavras por resposta. Use frases curtas e diretas.
 6. **Se o cliente não tiver agentes**, oriente para a Biblioteca (/library) para contratar.
 7. **Explique as seções do dashboard**: Command Center (visão geral), Meus Agentes (gerenciar), Reunião (falar com todos), Chat (falar com um agente), Analytics, Logs.
 8. **Responda em português do Brasil**.
@@ -121,11 +121,11 @@ Os agentes podem executar ações reais: enviar emails, criar tarefas, gerar rel
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
+        model: "google/gemini-2.5-flash-lite",
         messages: apiMessages,
         stream: true,
-        max_tokens: 800,
-        temperature: 0.7,
+        max_tokens: 300,
+        temperature: 0.6,
       }),
     });
 
