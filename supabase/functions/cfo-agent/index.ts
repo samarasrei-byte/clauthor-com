@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { fetchAI } from "../_shared/ai-gateway.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -51,27 +52,22 @@ serve(async (req) => {
     const totalTokens = tokenUsage.reduce((a: number, t: any) => a + (t.tokens_used || 0), 0);
     const avgTicket = subs.length > 0 ? totalRevenue / subs.length : 0;
 
-    // Token cost estimation (approximate)
-    const estimatedTokenCostBRL = (totalTokens / 1000) * 0.002; // rough estimate
+    const estimatedTokenCostBRL = (totalTokens / 1000) * 0.002;
 
-    // Plan distribution
     const planDist: Record<string, { count: number; revenue: number }> = {};
     credits.forEach((c: any) => {
       if (!planDist[c.plan_type]) planDist[c.plan_type] = { count: 0, revenue: 0 };
       planDist[c.plan_type].count++;
     });
 
-    // Churn risk
     const highUsage = credits.filter((c: any) => c.total_credits > 0 && (c.used_credits / c.total_credits) > 0.8);
     const exhausted = credits.filter((c: any) => c.total_credits > 0 && c.used_credits >= c.total_credits);
 
-    // Growth metrics
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
     const newUsersWeek = users.filter((u: any) => u.created_at > weekAgo).length;
     const newUsersMonth = users.filter((u: any) => u.created_at > monthAgo).length;
 
-    // Token usage by day (last 7 days)
     const dailyTokens: Record<string, number> = {};
     tokenUsage.forEach((t: any) => {
       const day = t.created_at.slice(0, 10);
@@ -142,17 +138,10 @@ REGRAS:
 
 ${financialContext}`;
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
-
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [{ role: "system", content: systemPrompt }, ...messages],
-        stream: true,
-      }),
+    const response = await fetchAI({
+      model: "google/gemini-3-flash-preview",
+      messages: [{ role: "system", content: systemPrompt }, ...messages],
+      stream: true,
     });
 
     if (!response.ok) {

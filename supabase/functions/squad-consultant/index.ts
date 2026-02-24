@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { fetchAI } from "../_shared/ai-gateway.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -76,29 +77,16 @@ serve(async (req) => {
       );
     }
 
-    // Limit history to last 20 messages
     const trimmedMessages = messages.slice(-20);
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
-    }
-
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: SYSTEM_PROMPT },
-          ...trimmedMessages,
-        ],
-        max_tokens: 1024,
-        stream: false,
-      }),
+    const response = await fetchAI({
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: SYSTEM_PROMPT },
+        ...trimmedMessages,
+      ],
+      max_tokens: 1024,
+      stream: false,
     });
 
     if (!response.ok) {

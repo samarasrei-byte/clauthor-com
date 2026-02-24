@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { fetchAI } from "../_shared/ai-gateway.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -45,19 +46,15 @@ serve(async (req) => {
     const tenants = tenantsRes.data || [];
     const logs = logsRes.data || [];
 
-    // Compute security metrics
     const errorLogs = logs.filter((l: any) => l.status === "error");
     const errorRate = logs.length > 0 ? Math.round((errorLogs.length / logs.length) * 100) : 0;
 
-    // Detect suspicious patterns
     const userLogCounts: Record<string, number> = {};
     logs.forEach((l: any) => { userLogCounts[l.user_id] = (userLogCounts[l.user_id] || 0) + 1; });
     const highActivityUsers = Object.entries(userLogCounts).filter(([, count]) => count > 50).map(([uid, count]) => ({ user_id: uid, executions: count }));
 
-    // Users with exhausted credits (potential abuse)
     const exhaustedCredits = credits.filter((c: any) => c.total_credits > 0 && c.used_credits >= c.total_credits);
 
-    // Recent signups spike detection
     const hourAgo = new Date(Date.now() - 60 * 60 * 1000).toISOString();
     const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
     const newUsersLastHour = users.filter((u: any) => u.created_at > hourAgo).length;
@@ -118,17 +115,10 @@ REGRAS:
 
 ${securityContext}`;
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
-
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${LOVABLE_API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [{ role: "system", content: systemPrompt }, ...messages],
-        stream: true,
-      }),
+    const response = await fetchAI({
+      model: "google/gemini-3-flash-preview",
+      messages: [{ role: "system", content: systemPrompt }, ...messages],
+      stream: true,
     });
 
     if (!response.ok) {

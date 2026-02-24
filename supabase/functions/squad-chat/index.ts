@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { fetchAI } from "../_shared/ai-gateway.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -19,7 +20,6 @@ serve(async (req) => {
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY")!;
 
     const userClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!, {
       global: { headers: { Authorization: authHeader } },
@@ -37,7 +37,6 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "message and agentIds[] are required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Fetch all agents (verify ownership)
     const { data: agents, error: agentsError } = await adminClient
       .from("agents")
       .select("id, name, instructions, objective, tier, status")
@@ -49,7 +48,6 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "No active agents found" }), { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Check credits
     const { data: credits } = await adminClient
       .from("user_credits")
       .select("*")
@@ -60,7 +58,6 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "Credits exhausted" }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Send to all agents in parallel
     const responses = await Promise.allSettled(
       agents.map(async (agent) => {
         const systemPrompt = `${agent.instructions || "Você é um assistente profissional especializado."}
@@ -73,21 +70,14 @@ Você está em uma reunião de departamento com outros agentes de IA. O CEO/gest
 - Responda em português do Brasil
 - Comece sua resposta identificando-se brevemente`;
 
-        const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${LOVABLE_API_KEY}`,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            model: "google/gemini-3-flash-preview",
-            messages: [
-              { role: "system", content: systemPrompt },
-              { role: "user", content: message },
-            ],
-            max_tokens: 800,
-            stream: false,
-          }),
+        const aiResponse = await fetchAI({
+          model: "google/gemini-3-flash-preview",
+          messages: [
+            { role: "system", content: systemPrompt },
+            { role: "user", content: message },
+          ],
+          max_tokens: 800,
+          stream: false,
         });
 
         if (!aiResponse.ok) {
@@ -98,7 +88,6 @@ Você está em uma reunião de departamento com outros agentes de IA. O CEO/gest
         const content = aiData.choices?.[0]?.message?.content || "Sem resposta.";
         const tokensUsed = aiData.usage?.total_tokens || 150;
 
-        // Log token usage
         try {
           await adminClient.from("token_usage").insert({
             user_id: user.id,

@@ -1,4 +1,5 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { fetchAI } from "../_shared/ai-gateway.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -61,7 +62,6 @@ serve(async (req) => {
       );
     }
 
-    // Validate messages
     for (const msg of messages) {
       if (!msg.content || typeof msg.content !== "string" || msg.content.length > 2000) {
         return new Response(
@@ -71,39 +71,22 @@ serve(async (req) => {
       }
     }
 
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      return new Response(
-        JSON.stringify({ error: "AI service not configured" }),
-        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    // Build context-aware system prompt
     let systemPrompt = SUPPORT_SYSTEM_PROMPT;
     if (context) {
       systemPrompt += `\n\n## CONTEXTO DO USUÁRIO\n- Área: ${context.area || "site público"}\n- Rota: ${context.route || "/"}\n- Autenticado: ${context.authenticated ? "Sim" : "Não"}`;
     }
 
-    // Keep only last 10 messages
     const recentMessages = messages.slice(-10);
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...recentMessages.map((m: any) => ({ role: m.role, content: m.content })),
-        ],
-        max_tokens: 800,
-        temperature: 0.7,
-        stream: true,
-      }),
+    const response = await fetchAI({
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: systemPrompt },
+        ...recentMessages.map((m: any) => ({ role: m.role, content: m.content })),
+      ],
+      max_tokens: 800,
+      temperature: 0.7,
+      stream: true,
     });
 
     if (!response.ok) {
@@ -115,7 +98,6 @@ serve(async (req) => {
       );
     }
 
-    // Stream through
     return new Response(response.body, {
       headers: {
         ...corsHeaders,

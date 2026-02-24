@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { fetchAI } from "../_shared/ai-gateway.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -354,22 +355,15 @@ Execute a tarefa diretamente e retorne o resultado de forma clara e estruturada.
 Responda em português do Brasil.`;
 
   // Call AI for the delegated agent
-  const delegatedResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${LOVABLE_API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: "google/gemini-3-flash-preview",
-      messages: [
-        { role: "system", content: delegatedPrompt },
-        { role: "user", content: args.task_description },
-      ],
-      tools: AGENT_TOOLS,
-      max_tokens: 1024,
-      stream: false,
-    }),
+  const delegatedResponse = await fetchAI({
+    model: "google/gemini-3-flash-preview",
+    messages: [
+      { role: "system", content: delegatedPrompt },
+      { role: "user", content: args.task_description },
+    ],
+    tools: AGENT_TOOLS,
+    max_tokens: 1024,
+    stream: false,
   });
 
   if (!delegatedResponse.ok) {
@@ -406,23 +400,16 @@ Responda em português do Brasil.`;
       content: JSON.stringify(subToolResults[i]?.result || {}),
     }));
 
-    const finalResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: delegatedPrompt },
-          { role: "user", content: args.task_description },
-          delegatedChoice.message,
-          ...toolMessages,
-        ],
-        max_tokens: 1024,
-        stream: false,
-      }),
+    const finalResponse = await fetchAI({
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: delegatedPrompt },
+        { role: "user", content: args.task_description },
+        delegatedChoice.message,
+        ...toolMessages,
+      ],
+      max_tokens: 1024,
+      stream: false,
     });
 
     if (finalResponse.ok) {
@@ -814,29 +801,17 @@ Instruções: ${agent.instructions}`;
     const fullSystemPrompt = `${SAFETY_LAYER}\n${OPERATIONAL_SECURITY_PROTOCOL}\n${tenantContext}\n${memoryContext}\n${agentPrompt}\n${TOOL_USE_INSTRUCTION}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
 
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
-    }
-
-    const aiHeaders = {
-      Authorization: `Bearer ${LOVABLE_API_KEY}`,
-      "Content-Type": "application/json",
-    };
 
     // === FIRST CALL: non-streaming to detect tool calls ===
-    const firstResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: aiHeaders,
-      body: JSON.stringify({
-        model: "google/gemini-3-flash-preview",
-        messages: [
-          { role: "system", content: fullSystemPrompt },
-          ...optimizedMessages,
-        ],
-        tools: AGENT_TOOLS,
-        max_tokens: planLimits.maxResponseTokens,
-        stream: false,
-      }),
+    const firstResponse = await fetchAI({
+      model: "google/gemini-3-flash-preview",
+      messages: [
+        { role: "system", content: fullSystemPrompt },
+        ...optimizedMessages,
+      ],
+      tools: AGENT_TOOLS,
+      max_tokens: planLimits.maxResponseTokens,
+      stream: false,
     });
 
     if (!firstResponse.ok) {
@@ -890,15 +865,11 @@ Instruções: ${agent.instructions}`;
       // After tool use, stream or not based on client preference
       if (wantStream) {
         // Send tool results as an initial SSE event, then stream the AI response
-        const streamResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-          method: "POST",
-          headers: aiHeaders,
-          body: JSON.stringify({
-            model: "google/gemini-3-flash-preview",
-            messages: secondMessages,
-            max_tokens: planLimits.maxResponseTokens,
-            stream: true,
-          }),
+        const streamResponse = await fetchAI({
+          model: "google/gemini-3-flash-preview",
+          messages: secondMessages,
+          max_tokens: planLimits.maxResponseTokens,
+          stream: true,
         });
 
         if (!streamResponse.ok || !streamResponse.body) {
@@ -966,15 +937,11 @@ Instruções: ${agent.instructions}`;
         });
       } else {
         // Non-streaming fallback (original behavior)
-        const secondResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-          method: "POST",
-          headers: aiHeaders,
-          body: JSON.stringify({
-            model: "google/gemini-3-flash-preview",
-            messages: secondMessages,
-            max_tokens: planLimits.maxResponseTokens,
-            stream: false,
-          }),
+        const secondResponse = await fetchAI({
+          model: "google/gemini-3-flash-preview",
+          messages: secondMessages,
+          max_tokens: planLimits.maxResponseTokens,
+          stream: false,
         });
 
         let assistantMessage = firstChoice?.message?.content || "";
@@ -1005,18 +972,14 @@ Instruções: ${agent.instructions}`;
     // === NO TOOL CALLS ===
     if (wantStream) {
       // No tools detected but we want streaming — re-call with stream: true (no tools this time)
-      const streamResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-        method: "POST",
-        headers: aiHeaders,
-        body: JSON.stringify({
-          model: "google/gemini-3-flash-preview",
-          messages: [
-            { role: "system", content: fullSystemPrompt },
-            ...optimizedMessages,
-          ],
-          max_tokens: planLimits.maxResponseTokens,
-          stream: true,
-        }),
+      const streamResponse = await fetchAI({
+        model: "google/gemini-3-flash-preview",
+        messages: [
+          { role: "system", content: fullSystemPrompt },
+          ...optimizedMessages,
+        ],
+        max_tokens: planLimits.maxResponseTokens,
+        stream: true,
       });
 
       if (!streamResponse.ok || !streamResponse.body) {
