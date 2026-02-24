@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, ReactNode } from "react";
+import { createContext, useContext, useEffect, useState, forwardRef, ReactNode } from "react";
 
 type Theme = "dark" | "light";
 
@@ -10,33 +10,37 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window !== "undefined") {
-      return (localStorage.getItem("clauthor-theme") as Theme) || "dark";
-    }
-    return "dark";
-  });
+export const ThemeProvider = forwardRef<HTMLDivElement, { children: ReactNode }>(
+  ({ children }, _ref) => {
+    const [theme, setThemeState] = useState<Theme>(() => {
+      if (typeof window !== "undefined") {
+        return (localStorage.getItem("clauthor-theme") as Theme) || "dark";
+      }
+      return "dark";
+    });
 
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === "light") {
-      root.classList.add("light");
-    } else {
-      root.classList.remove("light");
-    }
-    localStorage.setItem("clauthor-theme", theme);
-  }, [theme]);
+    useEffect(() => {
+      const root = document.documentElement;
+      if (theme === "light") {
+        root.classList.add("light");
+      } else {
+        root.classList.remove("light");
+      }
+      localStorage.setItem("clauthor-theme", theme);
+    }, [theme]);
 
-  const toggleTheme = () => setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
-  const setTheme = (t: Theme) => setThemeState(t);
+    const toggleTheme = () => setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+    const setTheme = (t: Theme) => setThemeState(t);
 
-  return (
-    <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
-      {children}
-    </ThemeContext.Provider>
-  );
-};
+    return (
+      <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>
+        {children}
+      </ThemeContext.Provider>
+    );
+  }
+);
+
+ThemeProvider.displayName = "ThemeProvider";
 
 export const useTheme = () => {
   const ctx = useContext(ThemeContext);
