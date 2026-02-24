@@ -12,6 +12,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "./SquadConsultant";
+import { getRegion, formatPrice } from "@/lib/pricing";
 
 const squadPacks = [
   { id: "squad-3", agents: 3, discount: 10, icon: Users, recommended: false },
@@ -240,7 +241,10 @@ function AgentSelectionGrid({
 }
 
 export default function SquadPlans() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = i18n.language;
+  const region = getRegion(lang);
+  const fp = (amount: number) => formatPrice(amount, lang);
   const [selectedAgents, setSelectedAgents] = useState<string[]>([]);
   const [activeSquad, setActiveSquad] = useState<ActiveSquad | null>(null);
   const [squadSelectedAgents, setSquadSelectedAgents] = useState<string[]>([]);
@@ -511,15 +515,18 @@ export default function SquadPlans() {
           <TabsContent value="departments" className="mt-8">
             <div className="text-center mb-8">
               <p className="text-muted-foreground text-sm max-w-xl mx-auto">
-                Contrate departamentos completos com preço baseado no consumo real de tokens de cada agente. Quanto mais complexo o setor, mais poder de IA ele recebe.
+                {t("squads.dept_intro", { defaultValue: "Contrate departamentos completos com preço baseado no consumo real de tokens de cada agente. Quanto mais complexo o setor, mais poder de IA ele recebe." })}
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
               {departments.map((dept, i) => {
                 const DeptIcon = dept.icon;
-                const savings = dept.cltCost - dept.prometheusCost;
-                const savingsPercent = Math.round((savings / dept.cltCost) * 100);
+                const deptKey = dept.id as keyof typeof region.departments;
+                const deptPrice = region.departments[deptKey] ?? dept.prometheusCost;
+                const deptClt = region.departmentClt[deptKey] ?? dept.cltCost;
+                const savings = deptClt - deptPrice;
+                const savingsPercent = Math.round((savings / deptClt) * 100);
                 return (
                   <motion.div
                     key={dept.id}
@@ -536,7 +543,7 @@ export default function SquadPlans() {
                     {dept.popular && (
                       <div className="absolute top-0 right-0">
                         <Badge className="rounded-none rounded-bl-lg bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1">
-                          MAIS VENDIDO
+                          {t("squads.best_seller", { defaultValue: "MAIS VENDIDO" })}
                         </Badge>
                       </div>
                     )}
@@ -556,9 +563,9 @@ export default function SquadPlans() {
                       {/* Price highlight */}
                       <div className="mt-4 flex items-end gap-2">
                         <span className="font-display font-bold text-2xl text-foreground">
-                          R$ {dept.prometheusCost.toLocaleString("pt-BR")}
+                          {fp(deptPrice)}
                         </span>
-                        <span className="text-sm text-muted-foreground mb-0.5">/mês</span>
+                        <span className="text-sm text-muted-foreground mb-0.5">/{t("pricing_page.per_month").replace("/", "")}</span>
                         <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 text-[10px] font-bold ml-auto">
                           -{dept.discount}% pack
                         </Badge>
@@ -568,7 +575,7 @@ export default function SquadPlans() {
                     {/* Agents org-chart with token allocation */}
                     <div className="p-5 space-y-1.5">
                       <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-2">
-                        Agentes inclusos
+                        {t("squads.included_agents", { defaultValue: "Agentes inclusos" })}
                       </p>
                       {dept.agents.map((agent, idx) => {
                         const AgentIcon = agent.icon;
@@ -600,15 +607,15 @@ export default function SquadPlans() {
                     <div className="px-5 pb-5 space-y-3">
                       <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
                         <div>
-                          <p className="text-[10px] text-muted-foreground">CLT equivalente</p>
+                          <p className="text-[10px] text-muted-foreground">{t("pricing_page.equivalent_cost", { defaultValue: "CLT equivalente" })}</p>
                           <p className="text-sm font-bold line-through text-muted-foreground">
-                            R$ {dept.cltCost.toLocaleString("pt-BR")}/mês
+                            {fp(deptClt)}/{t("pricing_page.per_month").replace("/", "")}
                           </p>
                         </div>
                         <div className="text-right">
-                          <p className="text-[10px] text-emerald-400 font-semibold">Economia</p>
+                          <p className="text-[10px] text-emerald-400 font-semibold">{t("pricing_page.save_now", { defaultValue: "Economia" })}</p>
                           <p className="text-sm font-bold text-emerald-400">
-                            -{savingsPercent}% ({`R$ ${savings.toLocaleString("pt-BR")}`})
+                            -{savingsPercent}% ({fp(savings)})
                           </p>
                         </div>
                       </div>
@@ -619,7 +626,7 @@ export default function SquadPlans() {
                           <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/50 via-primary-glow/50 to-primary/50 rounded-xl blur-lg opacity-40 group-hover:opacity-90 transition-opacity duration-500" />
                           <div className="absolute inset-0 bg-white/[0.08] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl" />
                           <span className="relative z-10 flex items-center justify-center gap-2.5 text-primary-foreground font-bold">
-                            Contratar Departamento
+                            {t("squads.hire_dept", { defaultValue: "Contratar Departamento" })}
                             <ArrowRight className="h-4 w-4 group-hover:translate-x-1.5 transition-transform duration-300" />
                           </span>
                         </button>
@@ -639,27 +646,27 @@ export default function SquadPlans() {
             >
               <Flame className="h-8 w-8 text-primary mx-auto mb-3" />
               <h3 className="font-display font-bold text-xl mb-2">
-                Empresa completa por menos que 3 funcionários CLT
+                {t("squads.full_company_title", { defaultValue: "Empresa completa por menos que 3 funcionários CLT" })}
               </h3>
               <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-2">
-                7 departamentos · 28 agentes · 48M tokens/mês · operação 24/7
+                7 {t("squads.tab_departments", { defaultValue: "departamentos" }).toLowerCase()} · 28 {t("squads.agents_label", { defaultValue: "agentes" })} · 48M tokens/{t("pricing_page.per_month", { defaultValue: "/mês" }).replace("/", "")}  · 24/7
               </p>
               <div className="flex items-center justify-center gap-6 mb-4">
                 <div>
-                  <p className="text-xs text-muted-foreground">CLT total</p>
-                  <p className="font-display font-bold text-lg line-through text-muted-foreground">R$ 312.000/mês</p>
+                  <p className="text-xs text-muted-foreground">{t("pricing_page.clt_header_traditional", { defaultValue: "CLT total" })}</p>
+                  <p className="font-display font-bold text-lg line-through text-muted-foreground">{fp(Object.values(region.departmentClt).reduce((a, b) => a + b, 0))}/{t("pricing_page.per_month", { defaultValue: "/mês" }).replace("/", "")}</p>
                 </div>
                 <div>
                   <p className="text-xs text-emerald-400 font-medium">CLAUTHOR</p>
-                  <p className="font-display font-bold text-lg text-emerald-400">R$ 18.679/mês</p>
+                  <p className="font-display font-bold text-lg text-emerald-400">{fp(Object.values(region.departments).reduce((a, b) => a + b, 0))}/{t("pricing_page.per_month", { defaultValue: "/mês" }).replace("/", "")}</p>
                 </div>
                 <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 font-bold text-sm px-3 py-1">
-                  -93%
+                  -{Math.round((1 - Object.values(region.departments).reduce((a, b) => a + b, 0) / Object.values(region.departmentClt).reduce((a, b) => a + b, 0)) * 100)}%
                 </Badge>
               </div>
               <Link to="/auth">
                 <Button className="glow rounded-xl px-8 h-12 font-semibold gap-2">
-                  Montar Meu Time Completo
+                  {t("squads.build_full_team", { defaultValue: "Montar Meu Time Completo" })}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
