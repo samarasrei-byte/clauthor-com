@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -261,6 +261,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
 
               {/* Integrations — agent-specific */}
               <AgentIntegrationsPanel
+                agentId={agent.id}
                 agentName={agent.name}
                 integrations={integrations}
                 onToggle={toggleIntegration}
@@ -287,14 +288,18 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
 
 // === Agent-specific integrations panel ===
 interface AgentIntegrationsPanelProps {
+  agentId: string;
   agentName: string;
   integrations: string[];
   onToggle: (id: string) => void;
 }
 
-const AgentIntegrationsPanel = ({ agentName, integrations, onToggle }: AgentIntegrationsPanelProps) => {
+const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: AgentIntegrationsPanelProps) => {
+  const { user } = useAuth();
   const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({});
   const [credentials, setCredentials] = useState<Record<string, string>>({});
+  const [saving, setSaving] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   // Find matching integrations for this agent type
   const agentKey = getAgentIntegrationKey(agentName);
@@ -304,6 +309,47 @@ const AgentIntegrationsPanel = ({ agentName, integrations, onToggle }: AgentInte
   const displayIntegrations = specificIntegrations.length > 0
     ? specificIntegrations
     : ["Google Calendar", "Google Sheets", "Slack", "Zapier", "n8n"];
+
+  // Load saved credentials from DB
+  useEffect(() => {
+    if (!user || loaded) return;
+    (async () => {
+      const { data } = await supabase
+        .from("agent_credentials")
+        .select("integration_name, credential_key, credential_value")
+        .eq("agent_id", agentId)
+        .eq("user_id", user.id);
+      if (data) {
+        const creds: Record<string, string> = {};
+        data.forEach((row: any) => {
+          creds[`${row.integration_name}__${row.credential_key}`] = row.credential_value;
+        });
+        setCredentials(creds);
+      }
+      setLoaded(true);
+    })();
+  }, [agentId, user, loaded]);
+
+  const saveCredential = async (integrationName: string, credKey: string, value: string) => {
+    if (!user || !value.trim()) return;
+    setSaving(true);
+    try {
+      const { error } = await supabase.from("agent_credentials").upsert({
+        agent_id: agentId,
+        user_id: user.id,
+        integration_name: integrationName,
+        credential_key: credKey,
+        credential_value: value.trim(),
+        is_secret: true,
+      }, { onConflict: "agent_id,integration_name,credential_key" });
+      if (error) throw error;
+      toast.success("Credencial salva!");
+    } catch {
+      toast.error("Erro ao salvar credencial");
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const toggleSecret = (fieldKey: string) => {
     setShowSecrets(prev => ({ ...prev, [fieldKey]: !prev[fieldKey] }));
@@ -343,34 +389,42 @@ const AgentIntegrationsPanel = ({ agentName, integrations, onToggle }: AgentInte
               {/* Credential fields when active */}
               {active && credConfig && (
                 <div className="px-3 pb-3 space-y-2 bg-primary/[0.02]">
-                  {credConfig.fields.map((field) => (
-                    <div key={field.key}>
-                      <label className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
-                        <Key className="h-3 w-3" />
-                        {field.label}
-                      </label>
-                      <div className="relative">
-                        <Input
-                          type={field.secret && !showSecrets[field.key] ? "password" : "text"}
-                          value={credentials[field.key] || ""}
-                          onChange={(e) => setCredentials(prev => ({ ...prev, [field.key]: e.target.value }))}
-                          placeholder={field.placeholder}
-                          className="h-8 text-xs bg-background/50 border-border/30 pr-8"
-                        />
-                        {field.secret && (
-                          <button
-                            type="button"
-                            onClick={() => toggleSecret(field.key)}
-                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
-                          >
-                            {showSecrets[field.key] ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
-                          </button>
-                        )}
+                  {credConfig.fields.map((field) => {
+                    const credMapKey = `${intgName}__${field.key}`;
+                    return (
+                      <div key={field.key}>
+                        <label className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
+                          <Key className="h-3 w-3" />
+                          {field.label}
+                        </label>
+                        <div className="relative">
+                          <Input
+                            type={field.secret && !showSecrets[field.key] ? "password" : "text"}
+                            value={credentials[credMapKey] || ""}
+                            onChange={(e) => setCredentials(prev => ({ ...prev, [credMapKey]: e.target.value }))}
+                            onBlur={() => {
+                              const val = credentials[credMapKey];
+                              if (val?.trim()) saveCredential(intgName, field.key, val);
+                            }}
+                            placeholder={field.placeholder}
+                            className="h-8 text-xs bg-background/50 border-border/30 pr-8"
+                          />
+                          {field.secret && (
+                            <button
+                              type="button"
+                              onClick={() => toggleSecret(field.key)}
+                              className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                            >
+                              {showSecrets[field.key] ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                            </button>
+                          )}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                   <p className="text-[9px] text-muted-foreground/50">
-                    🔐 Credenciais salvas de forma segura no seu workspace
+                    🔐 Credenciais salvas automaticamente no seu workspace
+                    {saving && " • Salvando..."}
                   </p>
                 </div>
               )}

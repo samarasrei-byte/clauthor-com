@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useAgentChat, type ToolResult, type Message } from "@/hooks/useAgentChat";
 import ReactMarkdown from "react-markdown";
+import VoiceInput from "./VoiceInput";
 
 interface AgentChatProps {
   agentId?: string;
@@ -439,6 +440,14 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
             onChange={(e) => setInput(e.target.value)}
             placeholder={agentId ? "Peça uma ação: enviar email, criar tarefa, gerar relatório..." : "Selecione um agente primeiro"}
             className="flex-1 bg-white/5 border-white/10 focus:border-primary/50"
+            disabled={isLoading || !agentId}
+          />
+          <VoiceInput
+            onTranscript={(text) => {
+              setInput(text);
+              // Auto-send after voice input
+              setTimeout(() => sendMessage(text), 300);
+            }}
             disabled={isLoading || !agentId}
           />
           {isStreaming ? (
