@@ -7,6 +7,70 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// ── Server-side AES-256-GCM encryption ──
+const ALGO = "AES-GCM";
+const IV_LENGTH = 12;
+const ENC_PREFIX = "senc:v1:"; // server-encrypted prefix
+
+async function getEncryptionKey(): Promise<CryptoKey> {
+  const secret = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const encoder = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    "PBKDF2",
+    false,
+    ["deriveKey"]
+  );
+  return crypto.subtle.deriveKey(
+    {
+      name: "PBKDF2",
+      salt: encoder.encode("clauthor-server-credential-salt-v1"),
+      iterations: 100_000,
+      hash: "SHA-256",
+    },
+    keyMaterial,
+    { name: ALGO, length: 256 },
+    false,
+    ["encrypt", "decrypt"]
+  );
+}
+
+function arrayBufferToBase64(buffer: ArrayBuffer): string {
+  return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+}
+
+function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes.buffer;
+}
+
+async function encryptValue(plaintext: string): Promise<string> {
+  const key = await getEncryptionKey();
+  const iv = crypto.getRandomValues(new Uint8Array(IV_LENGTH));
+  const ciphertext = await crypto.subtle.encrypt(
+    { name: ALGO, iv },
+    key,
+    new TextEncoder().encode(plaintext)
+  );
+  return `${ENC_PREFIX}${arrayBufferToBase64(iv.buffer)}:${arrayBufferToBase64(ciphertext)}`;
+}
+
+async function decryptValue(encrypted: string): Promise<string> {
+  if (!encrypted.startsWith(ENC_PREFIX)) return encrypted; // legacy plaintext
+  const payload = encrypted.slice(ENC_PREFIX.length);
+  const [ivB64, cipherB64] = payload.split(":");
+  const key = await getEncryptionKey();
+  const plaintext = await crypto.subtle.decrypt(
+    { name: ALGO, iv: new Uint8Array(base64ToArrayBuffer(ivB64)) },
+    key,
+    base64ToArrayBuffer(cipherB64)
+  );
+  return new TextDecoder().decode(plaintext);
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -39,15 +103,14 @@ serve(async (req) => {
     }
 
     const userId = userData.user.id;
-
-    // Rate limit per user
     const rl = checkRateLimit(`cred:${userId}`, 20, 60_000);
     if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
 
     const adminClient = createClient(supabaseUrl, serviceKey);
-    const { action, agent_id, integration_name, credential_key } = await req.json();
+    const body = await req.json();
+    const { action, agent_id, integration_name, credential_key, credential_value, is_secret, expires_at } = body;
 
-    // === CRITICAL: Validate agent belongs to user ===
+    // Validate agent ownership
     if (agent_id) {
       const { data: agent } = await adminClient
         .from("agents")
@@ -66,14 +129,58 @@ serve(async (req) => {
 
     const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
     const ua = req.headers.get("user-agent") || "unknown";
+    const headers = { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" };
 
     switch (action) {
-      // ── REVOKE: Remove all credentials for an agent+integration ──
+      // ── SAVE: Encrypt and store a credential ──
+      case "save": {
+        if (!agent_id || !integration_name || !credential_key || !credential_value) {
+          return new Response(JSON.stringify({ error: "agent_id, integration_name, credential_key, and credential_value required" }), {
+            status: 400, headers,
+          });
+        }
+
+        const encryptedValue = await encryptValue(credential_value);
+
+        const { error } = await adminClient
+          .from("agent_credentials")
+          .upsert({
+            agent_id,
+            user_id: userId,
+            integration_name,
+            credential_key,
+            credential_value: encryptedValue,
+            is_secret: is_secret !== false,
+            expires_at: expires_at || null,
+            updated_at: new Date().toISOString(),
+          }, {
+            onConflict: "agent_id,credential_key",
+          });
+
+        if (error) throw error;
+
+        await adminClient.from("credential_audit_logs").insert({
+          user_id: userId,
+          agent_id,
+          integration_name,
+          credential_key,
+          action: "save",
+          ip_address: clientIp,
+          user_agent: ua.slice(0, 200),
+          metadata: { encrypted: true, version: "senc:v1" },
+        });
+
+        return new Response(JSON.stringify({
+          success: true,
+          message: `Credencial ${credential_key} salva com criptografia AES-256-GCM.`,
+        }), { headers });
+      }
+
+      // ── REVOKE ──
       case "revoke": {
         if (!agent_id || !integration_name) {
           return new Response(JSON.stringify({ error: "agent_id and integration_name required" }), {
-            status: 400,
-            headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
+            status: 400, headers,
           });
         }
 
@@ -87,12 +194,9 @@ serve(async (req) => {
 
         if (error) throw error;
 
-        // Audit log
         for (const cred of deleted || []) {
           await adminClient.from("credential_audit_logs").insert({
-            user_id: userId,
-            agent_id,
-            integration_name,
+            user_id: userId, agent_id, integration_name,
             credential_key: cred.credential_key,
             action: "revoke",
             ip_address: clientIp,
@@ -104,19 +208,14 @@ serve(async (req) => {
         return new Response(JSON.stringify({
           success: true,
           revoked_count: deleted?.length || 0,
-          message: `Credenciais de ${integration_name} revogadas para o agente.`,
-        }), {
-          headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
-        });
+          message: `Credenciais de ${integration_name} revogadas.`,
+        }), { headers });
       }
 
-      // ── REVOKE ALL: Remove ALL credentials for an agent ──
+      // ── REVOKE ALL ──
       case "revoke_all": {
         if (!agent_id) {
-          return new Response(JSON.stringify({ error: "agent_id required" }), {
-            status: 400,
-            headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
-          });
+          return new Response(JSON.stringify({ error: "agent_id required" }), { status: 400, headers });
         }
 
         const { data: deleted, error } = await adminClient
@@ -128,11 +227,9 @@ serve(async (req) => {
 
         if (error) throw error;
 
-        // Audit log
         for (const cred of deleted || []) {
           await adminClient.from("credential_audit_logs").insert({
-            user_id: userId,
-            agent_id,
+            user_id: userId, agent_id,
             integration_name: cred.integration_name,
             credential_key: cred.credential_key,
             action: "revoke_all",
@@ -145,18 +242,13 @@ serve(async (req) => {
           success: true,
           revoked_count: deleted?.length || 0,
           message: `Todas as credenciais do agente foram revogadas.`,
-        }), {
-          headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
-        });
+        }), { headers });
       }
 
-      // ── AUDIT: List access logs for an agent ──
+      // ── AUDIT ──
       case "audit": {
         if (!agent_id) {
-          return new Response(JSON.stringify({ error: "agent_id required" }), {
-            status: 400,
-            headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
-          });
+          return new Response(JSON.stringify({ error: "agent_id required" }), { status: 400, headers });
         }
 
         const { data: logs } = await adminClient
@@ -167,12 +259,10 @@ serve(async (req) => {
           .order("created_at", { ascending: false })
           .limit(100);
 
-        return new Response(JSON.stringify({ logs: logs || [] }), {
-          headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
-        });
+        return new Response(JSON.stringify({ logs: logs || [] }), { headers });
       }
 
-      // ── CHECK EXPIRATION: Find expired credentials ──
+      // ── CHECK EXPIRED ──
       case "check_expired": {
         const { data: expired } = await adminClient
           .from("agent_credentials")
@@ -189,18 +279,13 @@ serve(async (req) => {
             key: c.credential_key,
             expired_at: c.expires_at,
           })),
-        }), {
-          headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
-        });
+        }), { headers });
       }
 
-      // ── LIST: Show credentials (masked) for an agent ──
+      // ── LIST (masked, never returns values) ──
       case "list": {
         if (!agent_id) {
-          return new Response(JSON.stringify({ error: "agent_id required" }), {
-            status: 400,
-            headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
-          });
+          return new Response(JSON.stringify({ error: "agent_id required" }), { status: 400, headers });
         }
 
         const { data: creds } = await adminClient
@@ -209,7 +294,6 @@ serve(async (req) => {
           .eq("agent_id", agent_id)
           .eq("user_id", userId);
 
-        // NEVER return credential values via API
         return new Response(JSON.stringify({
           credentials: (creds || []).map(c => ({
             id: c.id,
@@ -220,19 +304,13 @@ serve(async (req) => {
             last_accessed_at: c.last_accessed_at,
             access_count: c.access_count,
             created_at: c.created_at,
-            // Value is NEVER returned
             value: "••••••••",
           })),
-        }), {
-          headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
-        });
+        }), { headers });
       }
 
       default:
-        return new Response(JSON.stringify({ error: `Unknown action: ${action}` }), {
-          status: 400,
-          headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
-        });
+        return new Response(JSON.stringify({ error: `Unknown action: ${action}` }), { status: 400, headers });
     }
   } catch (error) {
     console.error("credential-manager error:", error);
