@@ -41,3 +41,15 @@ verify_jwt = false
 
 [functions.monix-chat]
 verify_jwt = false
+
+[functions.credential-manager]
+verify_jwt = false
+
+[functions.concierge-chat]
+verify_jwt = false
+
+[functions.token-monitor]
+verify_jwt = false
+
+[functions.traffic-monitor]
+verify_jwt = false
