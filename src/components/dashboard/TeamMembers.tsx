@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Users, UserPlus, Shield, Eye, Crown, Mail, Loader2, Trash2 } from "lucide-react";
+import { Users, UserPlus, Shield, Eye, Crown, Mail, Loader2, Trash2, Zap, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -16,14 +17,34 @@ const roleConfig: Record<string, { label: string; icon: React.ElementType; color
   viewer: { label: "Visualizador", icon: Eye, color: "bg-muted text-muted-foreground" },
 };
 
+const areaOptions = [
+  { id: "geral", label: "Geral" },
+  { id: "financeiro", label: "Financeiro" },
+  { id: "comercial", label: "Comercial" },
+  { id: "marketing", label: "Marketing" },
+  { id: "tecnologia", label: "Tecnologia" },
+  { id: "rh", label: "RH" },
+  { id: "suporte", label: "Suporte" },
+  { id: "criacao", label: "Criação" },
+];
+
+const planLimits: Record<string, { members: number; label: string }> = {
+  free: { members: 3, label: "Básico" },
+  basic: { members: 3, label: "Básico" },
+  starter: { members: 5, label: "Starter" },
+  professional: { members: 10, label: "Profissional" },
+  business: { members: 25, label: "Business" },
+  enterprise: { members: 100, label: "Enterprise" },
+};
+
 const TeamMembers = () => {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("member");
+  const [inviteArea, setInviteArea] = useState("geral");
   const [isInviting, setIsInviting] = useState(false);
 
-  // Get user's tenant
   const { data: tenantId } = useQuery({
     queryKey: ["my-tenant", user?.id],
     queryFn: async () => {
@@ -34,7 +55,6 @@ const TeamMembers = () => {
     enabled: !!user,
   });
 
-  // Get tenant details
   const { data: tenant } = useQuery({
     queryKey: ["tenant-details", tenantId],
     queryFn: async () => {
@@ -49,7 +69,6 @@ const TeamMembers = () => {
     enabled: !!tenantId,
   });
 
-  // Get members
   const { data: members = [], isLoading } = useQuery({
     queryKey: ["tenant-members", tenantId],
     queryFn: async () => {
@@ -59,7 +78,6 @@ const TeamMembers = () => {
         .eq("tenant_id", tenantId!);
       
       if (error) {
-        // Fallback: fetch without join if FK doesn't exist
         const { data: membersOnly, error: err2 } = await supabase
           .from("tenant_members")
           .select("*")
@@ -72,17 +90,24 @@ const TeamMembers = () => {
     enabled: !!tenantId,
   });
 
-  // Check if current user is owner/admin
   const currentMember = members.find((m: any) => m.user_id === user?.id);
   const isAdmin = currentMember?.role === "owner" || currentMember?.role === "admin";
 
+  const planType = tenant?.plan_type || "free";
+  const limits = planLimits[planType] || planLimits.free;
+  const memberCount = members.length;
+  const canInvite = memberCount < limits.members;
+  const usagePct = Math.min((memberCount / limits.members) * 100, 100);
+
   const handleInvite = async () => {
     if (!inviteEmail.trim() || !tenantId) return;
+    if (!canInvite) {
+      toast.error(`Limite de ${limits.members} membros atingido no plano ${limits.label}. Faça upgrade para adicionar mais.`);
+      return;
+    }
     setIsInviting(true);
-
-    // For now, show that invite was sent (actual email invite would need an edge function)
     toast.success(`Convite enviado para ${inviteEmail}`, {
-      description: "O membro receberá acesso ao workspace quando aceitar o convite.",
+      description: `Área: ${areaOptions.find(a => a.id === inviteArea)?.label || inviteArea} • Função: ${roleConfig[inviteRole]?.label}`,
     });
     setInviteEmail("");
     setIsInviting(false);
@@ -95,10 +120,29 @@ const TeamMembers = () => {
         <div>
           <h2 className="font-display text-xl font-bold">Equipe</h2>
           <p className="text-sm text-muted-foreground">
-            {tenant?.name || "Meu Workspace"} • {members.length} membro{members.length !== 1 ? "s" : ""}
+            {tenant?.name || "Meu Workspace"} • {memberCount} de {limits.members} membro{limits.members !== 1 ? "s" : ""}
           </p>
         </div>
+        <Badge variant="secondary" className="self-start gap-1.5 text-xs">
+          <Zap className="h-3 w-3" />
+          Plano {limits.label}
+        </Badge>
       </div>
+
+      {/* Member Usage Bar */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl p-4 border border-border">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs text-muted-foreground">Membros utilizados</span>
+          <span className="text-xs font-semibold">{memberCount}/{limits.members}</span>
+        </div>
+        <Progress value={usagePct} className="h-2" />
+        {!canInvite && (
+          <div className="flex items-center gap-2 mt-2 p-2 rounded-lg bg-destructive/10">
+            <Lock className="h-3 w-3 text-destructive" />
+            <span className="text-[10px] text-destructive">Limite atingido. Faça upgrade para adicionar mais membros.</span>
+          </div>
+        )}
+      </motion.div>
 
       {/* Invite Section */}
       {isAdmin && (
@@ -110,6 +154,9 @@ const TeamMembers = () => {
           <div className="flex items-center gap-2 mb-4">
             <UserPlus className="h-4 w-4 text-accent-violet" />
             <span className="text-sm font-medium">Convidar Membro</span>
+            <Badge variant="secondary" className="text-[9px] ml-auto">
+              {memberCount}/{limits.members} vagas
+            </Badge>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <Input
@@ -117,11 +164,23 @@ const TeamMembers = () => {
               placeholder="email@empresa.com"
               value={inviteEmail}
               onChange={(e) => setInviteEmail(e.target.value)}
+              disabled={!canInvite}
               className="flex-1 bg-card border-border"
             />
             <select
+              value={inviteArea}
+              onChange={(e) => setInviteArea(e.target.value)}
+              disabled={!canInvite}
+              className="h-9 px-3 rounded-md border border-border bg-card text-sm text-foreground"
+            >
+              {areaOptions.map(a => (
+                <option key={a.id} value={a.id}>{a.label}</option>
+              ))}
+            </select>
+            <select
               value={inviteRole}
               onChange={(e) => setInviteRole(e.target.value)}
+              disabled={!canInvite}
               className="h-9 px-3 rounded-md border border-border bg-card text-sm text-foreground"
             >
               <option value="admin">Admin</option>
@@ -130,7 +189,7 @@ const TeamMembers = () => {
             </select>
             <Button
               onClick={handleInvite}
-              disabled={!inviteEmail.trim() || isInviting}
+              disabled={!inviteEmail.trim() || isInviting || !canInvite}
               className="neon-glow gap-1.5 shrink-0"
             >
               {isInviting ? (
@@ -144,7 +203,7 @@ const TeamMembers = () => {
             </Button>
           </div>
           <p className="text-[10px] text-muted-foreground mt-2">
-            Membros poderão ver agentes, logs e analytics. Admins podem gerenciar configurações.
+            Membros participam da reunião com agentes e acessam o dashboard de acordo com sua função e área.
           </p>
         </motion.div>
       )}
@@ -158,7 +217,7 @@ const TeamMembers = () => {
       >
         <div className="p-4 border-b border-border flex items-center gap-2">
           <Users className="h-4 w-4 text-primary" />
-          <span className="text-sm font-medium">Membros ({members.length})</span>
+          <span className="text-sm font-medium">Membros ({memberCount})</span>
         </div>
 
         {isLoading ? (
@@ -250,6 +309,31 @@ const TeamMembers = () => {
               </div>
             );
           })}
+        </div>
+      </motion.div>
+
+      {/* Plan Upgrade Info */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        className="glass-card rounded-2xl p-5 border border-border"
+      >
+        <h3 className="font-display font-semibold text-sm mb-3">Limites por Plano</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {Object.entries(planLimits).filter(([k]) => k !== "free").map(([key, plan]) => (
+            <div
+              key={key}
+              className={`p-3 rounded-xl text-center ${planType === key ? "bg-primary/10 border border-primary/30" : "bg-card/50 border border-border"}`}
+            >
+              <p className="text-[10px] text-muted-foreground">{plan.label}</p>
+              <p className="font-display font-bold text-lg">{plan.members}</p>
+              <p className="text-[10px] text-muted-foreground">membros</p>
+              {planType === key && (
+                <Badge variant="default" className="text-[8px] mt-1">Atual</Badge>
+              )}
+            </div>
+          ))}
         </div>
       </motion.div>
     </div>
