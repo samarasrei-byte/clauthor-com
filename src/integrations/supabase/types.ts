@@ -16,35 +16,44 @@ export type Database = {
     Tables: {
       agent_credentials: {
         Row: {
+          access_count: number
           agent_id: string
           created_at: string
           credential_key: string
           credential_value: string
+          expires_at: string | null
           id: string
           integration_name: string
           is_secret: boolean
+          last_accessed_at: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          access_count?: number
           agent_id: string
           created_at?: string
           credential_key: string
           credential_value: string
+          expires_at?: string | null
           id?: string
           integration_name: string
           is_secret?: boolean
+          last_accessed_at?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          access_count?: number
           agent_id?: string
           created_at?: string
           credential_key?: string
           credential_value?: string
+          expires_at?: string | null
           id?: string
           integration_name?: string
           is_secret?: boolean
+          last_accessed_at?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -347,6 +356,54 @@ export type Database = {
         }
         Relationships: []
       }
+      agent_tools: {
+        Row: {
+          agent_id: string
+          config: Json | null
+          created_at: string
+          id: string
+          is_enabled: boolean
+          tool_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          config?: Json | null
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          tool_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          config?: Json | null
+          created_at?: string
+          id?: string
+          is_enabled?: boolean
+          tool_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_tools_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_tools_tool_id_fkey"
+            columns: ["tool_id"]
+            isOneToOne: false
+            referencedRelation: "tools"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agents: {
         Row: {
           actions: Json | null
@@ -552,6 +609,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      credential_audit_logs: {
+        Row: {
+          action: string
+          agent_id: string
+          created_at: string
+          credential_key: string
+          id: string
+          integration_name: string
+          ip_address: string | null
+          metadata: Json | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          action?: string
+          agent_id: string
+          created_at?: string
+          credential_key: string
+          id?: string
+          integration_name: string
+          ip_address?: string | null
+          metadata?: Json | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          action?: string
+          agent_id?: string
+          created_at?: string
+          credential_key?: string
+          id?: string
+          integration_name?: string
+          ip_address?: string | null
+          metadata?: Json | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "credential_audit_logs_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       credit_plans: {
         Row: {
@@ -1060,6 +1164,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tools: {
+        Row: {
+          category: string
+          created_at: string
+          credential_fields: Json | null
+          description: string | null
+          display_name: string
+          id: string
+          is_active: boolean
+          name: string
+          requires_credential: boolean
+          updated_at: string
+        }
+        Insert: {
+          category?: string
+          created_at?: string
+          credential_fields?: Json | null
+          description?: string | null
+          display_name: string
+          id?: string
+          is_active?: boolean
+          name: string
+          requires_credential?: boolean
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          credential_fields?: Json | null
+          description?: string | null
+          display_name?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          requires_credential?: boolean
+          updated_at?: string
+        }
+        Relationships: []
       }
       user_credits: {
         Row: {
