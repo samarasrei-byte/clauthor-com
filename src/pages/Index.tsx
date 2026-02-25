@@ -166,40 +166,40 @@ const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index }: LiveA
       transition={{ delay: index * 0.12, duration: 0.6 }}
     >
       <Link to="/library" className="block group">
-        <div className="relative p-5 sm:p-6 rounded-2xl border border-border bg-card/50 backdrop-blur-sm hover:border-primary/20 transition-all duration-500 overflow-hidden">
+        <div className="relative p-6 sm:p-6 rounded-2xl border border-border bg-card/50 backdrop-blur-sm hover:border-primary/20 transition-all duration-500 overflow-hidden">
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 scan-line pointer-events-none" />
           
           {/* Top row */}
-          <div className="flex items-center justify-between mb-4 sm:mb-5">
+          <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
               <div className="relative">
-                <div className="w-2 h-2 rounded-full bg-emerald-500" />
-                <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-500 animate-ping opacity-75" />
+                <div className="w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500" />
+                <div className="absolute inset-0 w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-ping opacity-75" />
               </div>
-              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.2em] text-emerald-500/80">{status}</span>
+              <span className="font-mono text-xs sm:text-[10px] uppercase tracking-[0.2em] text-emerald-500/80">{status}</span>
             </div>
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-muted/50">
-              <Activity className="h-3 w-3 text-primary/60" />
-              <span className="font-mono text-[11px] text-muted-foreground">
+            <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-muted/50">
+              <Activity className="h-3.5 w-3.5 sm:h-3 sm:w-3 text-primary/60" />
+              <span className="font-mono text-xs sm:text-[11px] text-muted-foreground">
                 {currentActions.toLocaleString()} ações
               </span>
             </div>
           </div>
 
           {/* Agent identity */}
-          <div className="flex items-start gap-3 sm:gap-4">
-            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-500">
-              <Icon className="h-5 w-5 text-primary/70 group-hover:text-primary transition-colors" />
+          <div className="flex items-start gap-4">
+            <div className="w-14 h-14 sm:w-12 sm:h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-500">
+              <Icon className="h-6 w-6 sm:h-5 sm:w-5 text-primary/70 group-hover:text-primary transition-colors" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-display font-bold text-[15px] sm:text-base mb-1 group-hover:text-primary/90 transition-colors truncate">{name}</h3>
-              <p className="text-[13px] sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">{role}</p>
+              <h3 className="font-display font-bold text-base sm:text-base mb-1.5 group-hover:text-primary/90 transition-colors truncate">{name}</h3>
+              <p className="text-sm sm:text-sm text-muted-foreground leading-relaxed line-clamp-2">{role}</p>
             </div>
           </div>
 
           {/* Bottom CTA */}
-          <div className="mt-4 sm:mt-5 pt-3 sm:pt-4 border-t border-border/50 flex items-center justify-between">
-            <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground/60">
+          <div className="mt-5 pt-4 border-t border-border/50 flex items-center justify-between">
+            <span className="font-mono text-xs sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground/60">
               Detalhes →
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-1 transition-all" />
