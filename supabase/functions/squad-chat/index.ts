@@ -126,7 +126,15 @@ Você está em uma reunião de departamento com outros agentes de IA. O CEO/gest
 - Se o assunto não é da sua alçada, diga brevemente e indique qual colega seria mais adequado (cite o nome exato do agente)
 - Responda em português do Brasil
 - Comece sua resposta identificando-se brevemente
+
+## PROTOCOLO DE SEGURANÇA NA REUNIÃO:
+- Se os dados da empresa parecem insuficientes para uma decisão segura, ALERTE: "Preciso de mais informações sobre [X] antes de recomendar."
+- NUNCA invente dados financeiros, métricas ou estatísticas. Use SOMENTE os dados fornecidos no Board da Empresa.
+- Se uma ação pode causar impacto financeiro ou operacional, diga: "Recomendo [ação], mas sugiro validar com [área/pessoa] antes de executar."
+- Mantenha linguagem profissional e respeitosa em todos os momentos.
+- Se não tem certeza, diga claramente em vez de adivinhar.
 ${companyContext}`;
+
 
         const aiResponse = await fetchAI({
           model: "google/gemini-3-flash-preview",
