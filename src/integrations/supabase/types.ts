@@ -58,6 +58,72 @@ export type Database = {
           },
         ]
       }
+      agent_meetings: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          duration_minutes: number
+          id: string
+          meeting_date: string
+          meeting_time: string
+          meeting_type: string | null
+          notes: string | null
+          participants: string[] | null
+          status: string
+          tenant_id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          meeting_date: string
+          meeting_time: string
+          meeting_type?: string | null
+          notes?: string | null
+          participants?: string[] | null
+          status?: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          duration_minutes?: number
+          id?: string
+          meeting_date?: string
+          meeting_time?: string
+          meeting_type?: string | null
+          notes?: string | null
+          participants?: string[] | null
+          status?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_meetings_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_meetings_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agent_memory: {
         Row: {
           agent_id: string
@@ -109,6 +175,120 @@ export type Database = {
           },
           {
             foreignKeyName: "agent_memory_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_reports: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          id: string
+          period: string | null
+          report_type: string
+          sections: Json | null
+          tenant_id: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          id?: string
+          period?: string | null
+          report_type?: string
+          sections?: Json | null
+          tenant_id: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          id?: string
+          period?: string | null
+          report_type?: string
+          sections?: Json | null
+          tenant_id?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_reports_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_reports_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agent_tasks: {
+        Row: {
+          agent_id: string | null
+          assigned_to: string | null
+          category: string | null
+          created_at: string
+          description: string | null
+          due_date: string | null
+          id: string
+          priority: string
+          status: string
+          tenant_id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          assigned_to?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          assigned_to?: string | null
+          category?: string | null
+          created_at?: string
+          description?: string | null
+          due_date?: string | null
+          id?: string
+          priority?: string
+          status?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_tasks_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_tasks_tenant_id_fkey"
             columns: ["tenant_id"]
             isOneToOne: false
             referencedRelation: "tenants"
