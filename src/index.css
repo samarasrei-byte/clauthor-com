@@ -129,12 +129,12 @@
     @apply border-border;
   }
   html {
-    font-size: 16px;
+    font-size: 16.5px;
     overflow-x: hidden;
   }
   @media (max-width: 640px) {
     html {
-      font-size: 17px;
+      font-size: 18px;
     }
   }
   body {
@@ -158,16 +158,16 @@
     font-weight: 700;
   }
   @media (max-width: 640px) {
-    h1 { font-size: 1.85rem; }
-    h2 { font-size: 1.55rem; }
-    h3 { font-size: 1.25rem; }
+    h1 { font-size: 1.9rem; }
+    h2 { font-size: 1.6rem; }
+    h3 { font-size: 1.3rem; }
   }
   p {
     line-height: 1.65;
   }
   @media (max-width: 640px) {
     p, li, td, th, label, span {
-      font-size: 0.938rem;
+      font-size: 1rem;
     }
   }
   #root {
