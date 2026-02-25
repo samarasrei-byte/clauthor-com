@@ -18,7 +18,9 @@ export const agentKeys = [
   "seo_growth", "project_management", "supply_chain", "training",
   "concierge", "ceo", "startup_creator", "paid_traffic",
   "influencer_liveshop", "podcast_manager", "affiliate_manager", "community_mgr",
-  "whatsapp_commerce", "ai_cfo", "scheduler", "reputation", "proposal_gen"
+  "whatsapp_commerce", "ai_cfo", "scheduler", "reputation", "proposal_gen",
+  "creative_writer", "content_producer", "sales_channel", "support_channel",
+  "support_lead", "voice_support", "people_analytics"
 ] as const;
 
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo"] as const;
@@ -42,6 +44,13 @@ export const agentSlugs: Record<string, string> = {
   scheduler: "appointment-scheduler",
   reputation: "reputation-manager",
   proposal_gen: "proposal-generator",
+  creative_writer: "creative-writer",
+  content_producer: "content-producer",
+  sales_channel: "sales-channel",
+  support_channel: "support-channel",
+  support_lead: "support-lead",
+  voice_support: "voice-support",
+  people_analytics: "people-analytics",
 };
 
 export const agentIcons: Record<string, React.ElementType> = {
@@ -63,6 +72,13 @@ export const agentIcons: Record<string, React.ElementType> = {
   scheduler: Calendar,
   reputation: Award,
   proposal_gen: FileText,
+  creative_writer: Sparkles,
+  content_producer: Megaphone,
+  sales_channel: MessageSquare,
+  support_channel: MessageSquare,
+  support_lead: Star,
+  voice_support: Phone,
+  people_analytics: Eye,
 };
 
 export const agentTiers: Record<string, string> = {
@@ -84,6 +100,13 @@ export const agentTiers: Record<string, string> = {
   scheduler: "basic",
   reputation: "basic",
   proposal_gen: "basic",
+  creative_writer: "intermediate",
+  content_producer: "intermediate",
+  sales_channel: "advanced",
+  support_channel: "advanced",
+  support_lead: "advanced",
+  voice_support: "advanced",
+  people_analytics: "advanced",
 };
 
 export const agentPriceTiers: Record<string, PriceTier> = {
@@ -105,6 +128,13 @@ export const agentPriceTiers: Record<string, PriceTier> = {
   scheduler: "starter",
   reputation: "starter",
   proposal_gen: "starter",
+  creative_writer: "entry",
+  content_producer: "entry",
+  sales_channel: "mid",
+  support_channel: "mid",
+  support_lead: "mid",
+  voice_support: "mid",
+  people_analytics: "mid",
 };
 
 export const agentTags: Record<string, string[]> = {
@@ -145,6 +175,13 @@ export const agentTags: Record<string, string[]> = {
   scheduler: ["Agendamento", "WhatsApp", "No-show", "Clínica", "Salão"],
   reputation: ["Reviews", "Reclame Aqui", "Google Reviews", "Crise", "NPS"],
   proposal_gen: ["Proposta", "PDF", "Pricing", "Follow-up", "Assinatura"],
+  creative_writer: ["Redação", "Storytelling", "Copywriting", "Blog", "Newsletter"],
+  content_producer: ["Produção", "Redes Sociais", "UGC", "Conteúdo Visual", "Branding"],
+  sales_channel: ["WhatsApp", "Instagram", "Chat", "Outbound", "Pipeline"],
+  support_channel: ["Suporte N1", "Suporte N2", "Tickets", "Chat", "FAQ"],
+  support_lead: ["Retenção", "Health Score", "Onboarding", "Churn", "Escalação"],
+  voice_support: ["Call Center", "URA", "Atendimento", "Telefonia", "Inbound"],
+  people_analytics: ["People Analytics", "Indicadores RH", "Turnover", "Clima", "Dashboards"],
 };
 
 export const agentIntegrations: Record<string, string[]> = {
@@ -185,6 +222,13 @@ export const agentIntegrations: Record<string, string[]> = {
   scheduler: ["Google Calendar", "Calendly", "WhatsApp API", "iClinic", "Trinks"],
   reputation: ["Google Business", "Reclame Aqui", "Trustpilot", "Hootsuite", "Sprinklr"],
   proposal_gen: ["DocuSign", "PandaDoc", "HubSpot", "Google Docs", "Canva"],
+  creative_writer: ["WordPress", "Notion", "Google Docs", "Grammarly", "Medium"],
+  content_producer: ["Instagram API", "TikTok API", "Canva", "YouTube", "Hootsuite"],
+  sales_channel: ["WhatsApp Business API", "Instagram Graph", "HubSpot", "Pipedrive", "Apollo.io"],
+  support_channel: ["Zendesk", "Intercom", "Freshdesk", "WhatsApp API", "Telegram"],
+  support_lead: ["HubSpot", "Salesforce", "Mixpanel", "Intercom", "Gainsight"],
+  voice_support: ["Twilio", "VoIP SIP", "Zendesk Talk", "Five9", "URA"],
+  people_analytics: ["Google Workspace", "BambooHR", "Power BI", "Gupy", "Slack"],
 };
 
 export const agentSocialProof: Record<string, { companies: number; rating: number; savings: string }> = {
@@ -225,6 +269,13 @@ export const agentSocialProof: Record<string, { companies: number; rating: numbe
   scheduler: { companies: 534, rating: 4.8, savings: "R$ 8k" },
   reputation: { companies: 267, rating: 4.8, savings: "R$ 15k" },
   proposal_gen: { companies: 312, rating: 4.7, savings: "R$ 18k" },
+  creative_writer: { companies: 245, rating: 4.7, savings: "R$ 12k" },
+  content_producer: { companies: 198, rating: 4.6, savings: "R$ 10k" },
+  sales_channel: { companies: 312, rating: 4.9, savings: "R$ 20k" },
+  support_channel: { companies: 289, rating: 4.8, savings: "R$ 18k" },
+  support_lead: { companies: 178, rating: 4.8, savings: "R$ 16k" },
+  voice_support: { companies: 198, rating: 4.7, savings: "R$ 15k" },
+  people_analytics: { companies: 134, rating: 4.7, savings: "R$ 14k" },
 };
 
 export const agentCapabilities: Record<string, string[]> = {
@@ -265,6 +316,13 @@ export const agentCapabilities: Record<string, string[]> = {
   scheduler: ["📅 Agenda", "📲 WhatsApp", "🔔 Lembretes"],
   reputation: ["⭐ Reviews", "🛡️ Anti-Crise", "📊 Sentimento"],
   proposal_gen: ["📄 PDF Pro", "💲 Pricing", "✍️ Assinatura"],
+  creative_writer: ["✍️ Redação", "📝 Blog", "📧 Newsletter"],
+  content_producer: ["📱 Social Media", "🎥 UGC", "📣 Branding"],
+  sales_channel: ["💬 Omnichannel", "🎯 Pipeline", "📧 Outbound"],
+  support_channel: ["🎫 Tickets", "💬 Chat", "📋 FAQ"],
+  support_lead: ["📊 Health Score", "🔄 Anti-Churn", "🎯 Retenção"],
+  voice_support: ["📞 Call Center", "🤖 URA", "🎙️ Inbound"],
+  people_analytics: ["📊 Indicadores", "👥 Clima", "📈 Turnover"],
 };
 
 export const tierColors: Record<string, string> = {

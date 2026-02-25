@@ -71,17 +71,18 @@ ${contract.limits.map(l => `- ❌ ${l}`).join("\n")}
 export function inferAgentArea(name: string, objective?: string, instructions?: string): string {
   const text = `${name} ${objective || ""} ${instructions || ""}`.toLowerCase();
   const areaMap: Record<string, string[]> = {
-    marketing: ["marketing", "growth", "tráfego", "traffic", "seo", "ads", "campanha"],
-    vendas: ["vendas", "sales", "leads", "crm", "prospecção", "closer"],
+    marketing: ["marketing", "growth", "tráfego", "traffic", "seo", "ads", "campanha", "content_producer"],
+    vendas: ["vendas", "sales", "leads", "crm", "prospecção", "closer", "sales_channel"],
     financeiro: ["financeiro", "cfo", "contábil", "dre", "fluxo de caixa", "finance"],
-    suporte: ["suporte", "support", "atendimento", "customer", "helpdesk", "ticket"],
-    rh: ["rh", "recursos humanos", "hr", "people", "recrutamento", "talent"],
+    suporte: ["suporte", "support", "atendimento", "customer", "helpdesk", "ticket", "support_channel", "support_lead", "voice_support"],
+    rh: ["rh", "recursos humanos", "hr", "people", "recrutamento", "talent", "people_analytics"],
     juridico: ["jurídico", "legal", "compliance", "contrato", "regulatório"],
     tecnologia: ["tecnologia", "dev", "coding", "code", "software", "engineering", "cto"],
     seguranca: ["segurança", "security", "ciso", "cyber", "pentest", "auditoria"],
     operacoes: ["operações", "operations", "coo", "processos", "supply chain"],
     executivo: ["ceo", "executivo", "estratégia", "strategy", "board", "diretor"],
     concierge: ["concierge", "assistente", "secretário", "agenda"],
+    criacao: ["criação", "design", "creative", "creative_writer", "video", "arte", "visual"],
   };
 
   for (const [area, keywords] of Object.entries(areaMap)) {
