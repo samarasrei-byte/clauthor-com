@@ -235,7 +235,7 @@ const Departamentos = () => { // v2
             <span className="gradient-text">operada por IA</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
-            7 departamentos. 28 agentes autônomos. Cada um substitui um profissional CLT — 
+            7 departamentos. 44 agentes autônomos. Cada um substitui um profissional CLT — 
             por uma <span className="text-primary font-bold">fração do custo</span>.
           </p>
 
@@ -392,7 +392,7 @@ const Departamentos = () => { // v2
             Empresa completa por menos que 3 funcionários CLT
           </h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-4">
-            7 departamentos · 28 agentes · {totalTokens} tokens/mês · operação 24/7
+            7 departamentos · 44 agentes · {totalTokens} tokens/mês · operação 24/7
           </p>
           <div className="flex items-center justify-center gap-6 mb-6">
             <div>
