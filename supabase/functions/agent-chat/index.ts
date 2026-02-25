@@ -2,6 +2,7 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/security.ts";
+import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -464,6 +465,8 @@ async function executeTool(
   }
 
   try {
+    // Retry tool execution once on transient failures
+    return await withRetry(async () => {
     switch (toolName) {
       case "send_email": {
         // Queue email as a notification (real email requires integration)
@@ -655,9 +658,12 @@ async function executeTool(
       default:
         return { success: false, result: { error: `Tool ${toolName} not implemented` } };
     }
+    }, { maxRetries: 1, baseDelayMs: 500 });
   } catch (err) {
     console.error(`Tool ${toolName} error:`, err);
     await logExecution(adminClient, userId, agentId, toolName, args, startTime, "error");
+    // Alert user about failure
+    await alertFailure(adminClient, userId, agentId, toolName, err instanceof Error ? err.message : "unknown", { args });
     return { success: false, result: { error: `Erro ao executar ${toolName}: ${err instanceof Error ? err.message : "unknown"}` } };
   }
 }

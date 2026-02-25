@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
+import { checkRateLimit, rateLimitResponse } from "../_shared/security.ts";
+import { withRetry, alertFailure } from "../_shared/resilience.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,6 +15,10 @@ serve(async (req) => {
   }
 
   try {
+    const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const rl = checkRateLimit(`squad:${clientIP}`, 10, 60_000);
+    if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
+
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -136,19 +142,28 @@ Você está em uma reunião de departamento com outros agentes de IA. O CEO/gest
 ${companyContext}`;
 
 
-        const aiResponse = await fetchAI({
-          model: "google/gemini-3-flash-preview",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: message },
-          ],
-          max_tokens: 800,
-          stream: false,
-        });
-
-        if (!aiResponse.ok) {
-          throw new Error(`AI API error: ${aiResponse.status}`);
-        }
+        // Retry individual agent calls (max 2 retries)
+        const aiResponse = await withRetry(
+          async () => {
+            const res = await fetchAI({
+              model: "google/gemini-3-flash-preview",
+              messages: [
+                { role: "system", content: systemPrompt },
+                { role: "user", content: message },
+              ],
+              max_tokens: 800,
+              stream: false,
+            });
+            if (!res.ok && res.status >= 500) {
+              const err: any = new Error(`AI API error: ${res.status}`);
+              err.status = res.status;
+              throw err;
+            }
+            if (!res.ok) throw new Error(`AI API error: ${res.status}`);
+            return res;
+          },
+          { maxRetries: 2, baseDelayMs: 500 }
+        );
 
         const aiData = await aiResponse.json();
         const content = aiData.choices?.[0]?.message?.content || "Sem resposta.";
