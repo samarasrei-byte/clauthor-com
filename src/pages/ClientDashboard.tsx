@@ -191,7 +191,7 @@ const ClientDashboard = () => {
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
 
   const sidebarItems = [
-    { id: "monix", label: "MONIX", icon: Brain, badge: "AI" },
+    { id: "omnix", label: "OMNIX", icon: Brain, badge: "AI" },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard },
     { id: "concierge", label: t("dashboard.concierge"), icon: Wand2 },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined },
@@ -247,8 +247,8 @@ const ClientDashboard = () => {
           items={sidebarItems}
           activeItem={activeSection}
           onItemChange={(id) => {
-            if (id === "monix") {
-              navigate("/monix");
+            if (id === "omnix") {
+              navigate("/omnix");
             } else if (id === "concierge") {
               setShowConcierge(true);
             } else {
@@ -283,7 +283,7 @@ const ClientDashboard = () => {
                 key={item.id}
                 variant={activeSection === item.id ? "default" : "ghost"}
                 size="sm"
-                onClick={() => item.id === "monix" ? navigate("/monix") : item.id === "concierge" ? setShowConcierge(true) : setActiveSection(item.id)}
+                onClick={() => item.id === "omnix" ? navigate("/omnix") : item.id === "concierge" ? setShowConcierge(true) : setActiveSection(item.id)}
                 className="shrink-0 gap-1.5"
               >
                 <item.icon className="h-3.5 w-3.5" />

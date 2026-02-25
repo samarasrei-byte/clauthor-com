@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,6 +29,7 @@ import AdminInsightsPanel from "@/components/dashboard/AdminInsightsPanel";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { data: usersCount = 0 } = useQuery({
@@ -120,6 +122,7 @@ const AdminDashboard = () => {
   const waitingCount = waitlist.filter((w) => w.status === "waiting").length;
 
   const sidebarItems = [
+    { id: "omnix", label: "OMNIX", icon: Sparkles, badge: "AI" },
     { id: "overview", label: "Command Center", icon: LayoutDashboard },
     { id: "insights", label: "IA Preditiva", icon: Sparkles },
     { id: "war-room", label: "War Room", icon: Crown },
@@ -177,7 +180,7 @@ const AdminDashboard = () => {
     <div className="flex h-full">
       {/* Sidebar — fixed, full height */}
       <div className="hidden lg:block">
-        <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={setActiveTab} />
+        <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={(id) => id === "omnix" ? navigate("/omnix") : setActiveTab(id)} />
       </div>
 
       {/* Scrollable content area */}
@@ -204,7 +207,7 @@ const AdminDashboard = () => {
           {/* Mobile tabs */}
           <div className="flex gap-2 overflow-x-auto lg:hidden pb-2">
             {sidebarItems.map((item) => (
-              <Button key={item.id} variant={activeTab === item.id ? "default" : "ghost"} size="sm" onClick={() => setActiveTab(item.id)} className="shrink-0 gap-1.5 text-xs">
+              <Button key={item.id} variant={activeTab === item.id ? "default" : "ghost"} size="sm" onClick={() => item.id === "omnix" ? navigate("/omnix") : setActiveTab(item.id)} className="shrink-0 gap-1.5 text-xs">
                 <item.icon className="h-3.5 w-3.5" /> {item.label}
               </Button>
             ))}
