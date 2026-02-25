@@ -254,7 +254,7 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
     };
 
     runHealthCheck();
-    const interval = setInterval(runHealthCheck, 30_000);
+    const interval = setInterval(runHealthCheck, 60_000); // 60s instead of 30s to reduce overhead
     return () => clearInterval(interval);
   }, [user, location.pathname]);
 

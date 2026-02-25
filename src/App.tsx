@@ -27,7 +27,16 @@ const NotFound = lazy(() => import("./pages/NotFound"));
 const AgentLanding = lazy(() => import("./pages/AgentLanding"));
 const Departamentos = lazy(() => import("./pages/Departamentos"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 5 * 60 * 1000, // 5 min — reduce refetches
+      gcTime: 10 * 60 * 1000,
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 // Minimal loading fallback
 const PageLoader = () => (

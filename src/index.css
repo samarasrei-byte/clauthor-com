@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+/* Fonts loaded via index.html <link> for non-blocking render */
 
 @tailwind base;
 @tailwind components;
@@ -379,25 +379,25 @@
   width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: hsl(0 0% 3%);
+  background: hsl(var(--background));
 }
 ::-webkit-scrollbar-thumb {
-  background: hsl(0 0% 18%);
+  background: hsl(var(--border));
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: hsl(0 0% 25%);
+  background: hsl(var(--muted-foreground) / 0.4);
 }
 
 /* Selection */
 ::selection {
-  background: hsl(0 85% 55% / 0.2);
-  color: hsl(0 0% 100%);
+  background: hsl(var(--primary) / 0.2);
+  color: hsl(var(--foreground));
 }
 
 /* Focus styles */
 :focus-visible {
-  outline: 2px solid hsl(0 85% 55% / 0.3);
+  outline: 2px solid hsl(var(--primary) / 0.3);
   outline-offset: 2px;
 }
 
