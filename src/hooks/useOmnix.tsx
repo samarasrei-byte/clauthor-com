@@ -27,6 +27,18 @@ const DEFAULT_CONFIG: OmnixConfig = {
   autonomy: "analisar e sugerir",
 };
 
+function normalizeOmnixConfig(saved: Partial<OmnixConfig> | null): OmnixConfig {
+  const merged = { ...DEFAULT_CONFIG, ...(saved || {}) };
+  const legacyName = saved?.name?.trim().toUpperCase();
+
+  // Migrate legacy branding automatically (OMNIX -> THOR)
+  if (!legacyName || legacyName === "OMNIX") {
+    merged.name = "THOR";
+  }
+
+  return merged;
+}
+
 function extractKPIs(content: string) {
   const kpiRegex = /```kpi\n([\s\S]*?)```/g;
   const match = kpiRegex.exec(content);
@@ -45,7 +57,13 @@ export function useOmnix() {
   const [isStreaming, setIsStreaming] = useState(false);
   const [config, setConfig] = useState<OmnixConfig>(() => {
     const saved = localStorage.getItem("omnix_config");
-    return saved ? { ...DEFAULT_CONFIG, ...JSON.parse(saved) } : DEFAULT_CONFIG;
+    if (!saved) return DEFAULT_CONFIG;
+
+    try {
+      return normalizeOmnixConfig(JSON.parse(saved));
+    } catch {
+      return DEFAULT_CONFIG;
+    }
   });
   const abortRef = useRef<AbortController | null>(null);
 
