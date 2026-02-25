@@ -187,6 +187,8 @@
     "min_agents": "Selecciona {{remaining}} agente(s) más para desbloquear el descuento",
     "dept_vendas": "Dept. Ventas",
     "dept_vendas_desc": "Equipo completo de ventas automatizado",
+    "dept_comercial": "Dept. Comercial",
+    "dept_comercial_desc": "Equipo completo de ventas y relaciones",
     "dept_suporte": "Dept. Soporte",
     "dept_suporte_desc": "Atención omnichannel 24/7",
     "dept_financeiro": "Dept. Finanzas",
