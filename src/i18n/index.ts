@@ -2,19 +2,8 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
+// Only load PT (default) synchronously — others loaded on demand
 import pt from "./locales/pt.json";
-import en from "./locales/en.json";
-import es from "./locales/es.json";
-import fr from "./locales/fr.json";
-import de from "./locales/de.json";
-import it from "./locales/it.json";
-import ja from "./locales/ja.json";
-import zh from "./locales/zh.json";
-import ar from "./locales/ar.json";
-import hi from "./locales/hi.json";
-import ru from "./locales/ru.json";
-import ko from "./locales/ko.json";
-import tr from "./locales/tr.json";
 
 export const languages = [
   { code: "pt", name: "Português", flag: "🇧🇷" },
@@ -32,51 +21,67 @@ export const languages = [
   { code: "tr", name: "Türkçe", flag: "🇹🇷" },
 ];
 
-const resources = {
-  pt: { translation: pt },
-  en: { translation: en },
-  es: { translation: es },
-  fr: { translation: fr },
-  de: { translation: de },
-  it: { translation: it },
-  ja: { translation: ja },
-  zh: { translation: zh },
-  ar: { translation: ar },
-  hi: { translation: hi },
-  ru: { translation: ru },
-  ko: { translation: ko },
-  tr: { translation: tr },
+const supportedLngs = languages.map((l) => l.code);
+
+// Dynamic locale loaders — only fetched when needed
+const localeLoaders: Record<string, () => Promise<{ default: Record<string, any> }>> = {
+  en: () => import("./locales/en.json"),
+  es: () => import("./locales/es.json"),
+  fr: () => import("./locales/fr.json"),
+  de: () => import("./locales/de.json"),
+  it: () => import("./locales/it.json"),
+  ja: () => import("./locales/ja.json"),
+  zh: () => import("./locales/zh.json"),
+  ar: () => import("./locales/ar.json"),
+  hi: () => import("./locales/hi.json"),
+  ru: () => import("./locales/ru.json"),
+  ko: () => import("./locales/ko.json"),
+  tr: () => import("./locales/tr.json"),
 };
 
-// Map browser language codes (e.g. pt-BR, zh-CN) to our supported codes
-const supportedLngs = languages.map((l) => l.code);
+// Load a locale dynamically and add it to i18n
+async function loadLocale(lng: string) {
+  if (lng === "pt" || i18n.hasResourceBundle(lng, "translation")) return;
+  const loader = localeLoaders[lng];
+  if (!loader) return;
+  try {
+    const mod = await loader();
+    i18n.addResourceBundle(lng, "translation", mod.default, true, true);
+  } catch (e) {
+    console.warn(`Failed to load locale: ${lng}`, e);
+  }
+}
 
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    resources,
+    resources: {
+      pt: { translation: pt },
+    },
     fallbackLng: "pt",
     supportedLngs,
-    // Convert "pt-BR" → "pt", "zh-CN" → "zh", etc.
     load: "languageOnly",
     interpolation: {
       escapeValue: false,
     },
     detection: {
-      // Prioritize navigator (browser/OS language) on first visit,
-      // then cache to localStorage for subsequent visits
       order: ["localStorage", "navigator", "htmlTag"],
       caches: ["localStorage"],
-      // Strip region code: "pt-BR" → "pt"
       convertDetectedLanguage: (lng: string) => lng.split("-")[0],
     },
   });
 
-// Update HTML lang attribute when language changes
+// Load detected language if not PT
+if (i18n.language && i18n.language !== "pt") {
+  loadLocale(i18n.language);
+}
+
+// Load locale dynamically on language change
 i18n.on("languageChanged", (lng) => {
   document.documentElement.lang = lng;
   document.documentElement.dir = lng === "ar" ? "rtl" : "ltr";
+  loadLocale(lng);
 });
 
 // Set initial lang

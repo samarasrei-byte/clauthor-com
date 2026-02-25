@@ -225,8 +225,10 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
     setTimeout(() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }), 50);
   };
 
-  // System health monitor
+  // System health monitor — only runs when chat is open
   useEffect(() => {
+    if (!open) return;
+
     const runHealthCheck = async () => {
       const start = performance.now();
       const diag = runDiagnostics(user, location.pathname);
@@ -247,16 +249,15 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
       };
       setHealth(newHealth);
 
-      // Proactive prevention
       if (diag.issues.length > 0 && !prevention) {
         setPrevention(diag.issues[0]);
       }
     };
 
     runHealthCheck();
-    const interval = setInterval(runHealthCheck, 60_000); // 60s instead of 30s to reduce overhead
+    const interval = setInterval(runHealthCheck, 60_000);
     return () => clearInterval(interval);
-  }, [user, location.pathname]);
+  }, [open, user, location.pathname]);
 
   // Voice input → text
   useEffect(() => {
