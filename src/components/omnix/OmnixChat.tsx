@@ -24,7 +24,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [autoSpeak, setAutoSpeak] = useState(true);
+  const [autoSpeak, setAutoSpeak] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
@@ -44,25 +44,15 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   }, [messages, isStreaming, autoSpeak]);
 
-  // Auto-start listening in voice-first mode when idle
+  // Auto-start listening in voice-first mode ONLY on first load (no messages yet)
   useEffect(() => {
     if (!voiceFirst) return;
     if (messages.length === 0 && !isListening && !isLoading && !isStreaming && !isSpeaking) {
       const timer = setTimeout(() => startListening(), 800);
       return () => clearTimeout(timer);
     }
-  }, [voiceFirst, messages.length, isLoading, isStreaming, isSpeaking]);
-
-  // Auto-listen after assistant finishes speaking in voice-first mode
-  useEffect(() => {
-    if (!voiceFirst) return;
-    if (!isSpeaking && !isStreaming && !isLoading && messages.length > 0 && messages[messages.length - 1]?.role === "assistant") {
-      const timer = setTimeout(() => {
-        if (!isListening) startListening();
-      }, 600);
-      return () => clearTimeout(timer);
-    }
-  }, [voiceFirst, isSpeaking, isStreaming, isLoading, messages]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [voiceFirst]);
 
   const handleSend = () => {
     if (!input.trim() || isLoading) return;
