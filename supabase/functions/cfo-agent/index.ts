@@ -45,6 +45,23 @@ serve(async (req) => {
     }
     authStep.done();
 
+    // === CREDIT VALIDATION via Policy Engine ===
+    const creditStep = tracker.step("credit_validation");
+    const { data: credits } = await adminClient
+      .from("user_credits")
+      .select("*")
+      .eq("user_id", userData.user.id)
+      .single();
+
+    if (credits) {
+      const creditCheck = validateLimits(credits.used_credits, credits.total_credits);
+      if (!creditCheck.allowed) {
+        creditStep.done("blocked");
+        return new Response(JSON.stringify({ error: creditCheck.reason, suggest_upgrade: true }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+    }
+    creditStep.done();
+
     // === BUILD AGENT CONTRACT ===
     const contract: AgentContract = {
       agentId: "cfo-agent",
