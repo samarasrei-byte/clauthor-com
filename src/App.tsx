@@ -10,23 +10,38 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { lazy, Suspense } from "react";
 
+// Retry wrapper for stale chunk errors after deploys
+function lazyRetry(factory: () => Promise<any>) {
+  return lazy(() =>
+    factory().catch((err) => {
+      // Only reload once to avoid infinite loops
+      const key = "chunk_reload";
+      if (!sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, "1");
+        window.location.reload();
+      }
+      throw err;
+    })
+  );
+}
+
 // Lazy load all pages for faster initial load
-const Index = lazy(() => import("./pages/Index"));
-const ClientDashboard = lazy(() => import("./pages/ClientDashboard"));
-const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
-const Agents = lazy(() => import("./pages/Agents"));
-const Library = lazy(() => import("./pages/Library"));
-const Pricing = lazy(() => import("./pages/Pricing"));
-const HowItWorks = lazy(() => import("./pages/HowItWorks"));
-const Waitlist = lazy(() => import("./pages/Waitlist"));
-const Community = lazy(() => import("./pages/Community"));
-const CreateAgent = lazy(() => import("./pages/CreateAgent"));
-const Integrations = lazy(() => import("./pages/Integrations"));
-const Auth = lazy(() => import("./pages/Auth"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const AgentLanding = lazy(() => import("./pages/AgentLanding"));
-const Departamentos = lazy(() => import("./pages/Departamentos"));
-const MonixCommandCenter = lazy(() => import("./pages/MonixCommandCenter"));
+const Index = lazyRetry(() => import("./pages/Index"));
+const ClientDashboard = lazyRetry(() => import("./pages/ClientDashboard"));
+const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
+const Agents = lazyRetry(() => import("./pages/Agents"));
+const Library = lazyRetry(() => import("./pages/Library"));
+const Pricing = lazyRetry(() => import("./pages/Pricing"));
+const HowItWorks = lazyRetry(() => import("./pages/HowItWorks"));
+const Waitlist = lazyRetry(() => import("./pages/Waitlist"));
+const Community = lazyRetry(() => import("./pages/Community"));
+const CreateAgent = lazyRetry(() => import("./pages/CreateAgent"));
+const Integrations = lazyRetry(() => import("./pages/Integrations"));
+const Auth = lazyRetry(() => import("./pages/Auth"));
+const NotFound = lazyRetry(() => import("./pages/NotFound"));
+const AgentLanding = lazyRetry(() => import("./pages/AgentLanding"));
+const Departamentos = lazyRetry(() => import("./pages/Departamentos"));
+const MonixCommandCenter = lazyRetry(() => import("./pages/MonixCommandCenter"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
