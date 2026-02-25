@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -17,9 +17,10 @@ interface OmnixChatProps {
   onSend: (msg: string) => void;
   onStop: () => void;
   onClear: () => void;
+  voiceFirst?: boolean;
 }
 
-const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, onClear }: OmnixChatProps) => {
+const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, onClear, voiceFirst }: OmnixChatProps) => {
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -43,6 +44,26 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   }, [messages, isStreaming, autoSpeak]);
 
+  // Auto-start listening in voice-first mode when idle
+  useEffect(() => {
+    if (!voiceFirst) return;
+    if (messages.length === 0 && !isListening && !isLoading && !isStreaming && !isSpeaking) {
+      const timer = setTimeout(() => startListening(), 800);
+      return () => clearTimeout(timer);
+    }
+  }, [voiceFirst, messages.length, isLoading, isStreaming, isSpeaking]);
+
+  // Auto-listen after assistant finishes speaking in voice-first mode
+  useEffect(() => {
+    if (!voiceFirst) return;
+    if (!isSpeaking && !isStreaming && !isLoading && messages.length > 0 && messages[messages.length - 1]?.role === "assistant") {
+      const timer = setTimeout(() => {
+        if (!isListening) startListening();
+      }, 600);
+      return () => clearTimeout(timer);
+    }
+  }, [voiceFirst, isSpeaking, isStreaming, isLoading, messages]);
+
   const handleSend = () => {
     if (!input.trim() || isLoading) return;
     onSend(input);
@@ -56,15 +77,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     return "idle";
   };
 
-  // Voice input
-  const toggleVoice = () => {
+  const startListening = useCallback(() => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) return;
-
-    if (isListening) {
-      recognitionRef.current?.stop();
-      setIsListening(false);
-      return;
-    }
+    if (isListening) return;
 
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -75,7 +90,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     recognition.onresult = (e: any) => {
       const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join("");
       setInput(transcript);
-      // Auto-send on final result
       if (e.results[0]?.isFinal) {
         setTimeout(() => {
           onSend(transcript);
@@ -89,6 +103,15 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
+  }, [config.language, isListening, onSend]);
+
+  const toggleVoice = () => {
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+      return;
+    }
+    startListening();
   };
 
   // TTS output
@@ -112,9 +135,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   return (
     <div className="flex flex-col h-full">
-      {/* Header with Orb */}
-      <div className="shrink-0 flex flex-col items-center pt-6 pb-4 border-b border-border/10 bg-gradient-to-b from-primary/[0.03] to-transparent">
-        <OmnixOrb state={getOrbState()} name={config.name} />
+      {/* Orb area - centered and prominent */}
+      <div className="shrink-0 flex flex-col items-center pt-6 pb-3 bg-gradient-to-b from-primary/[0.03] to-transparent">
+        <OmnixOrb state={getOrbState()} name={config.name} className={voiceFirst ? "scale-125" : ""} />
         <h3 className="mt-8 font-display font-black text-sm tracking-widest uppercase text-foreground/80">
           {config.name}
         </h3>
@@ -147,25 +170,30 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
-              Olá, eu sou o <span className="text-primary font-bold">{config.name}</span>. 
-              Seu agente central de IA. Fale ou digite para começar.
+              {voiceFirst ? (
+                <>Olá, eu sou o <span className="text-primary font-bold">{config.name}</span>. Estou ouvindo você. Basta falar.</>
+              ) : (
+                <>Olá, eu sou o <span className="text-primary font-bold">{config.name}</span>. Seu agente central de IA. Fale ou digite para começar.</>
+              )}
             </p>
-            <div className="flex flex-wrap gap-2 mt-5 justify-center">
-              {[
-                `${config.name}, faça uma auditoria do sistema`,
-                "Briefing executivo do dia",
-                "Status de todos os agentes",
-                "Análise de riscos",
-              ].map(s => (
-                <button
-                  key={s}
-                  onClick={() => onSend(s)}
-                  className="px-3 py-1.5 rounded-full border border-border/30 text-[11px] text-muted-foreground/70 hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all"
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
+            {!voiceFirst && (
+              <div className="flex flex-wrap gap-2 mt-5 justify-center">
+                {[
+                  `${config.name}, faça uma auditoria do sistema`,
+                  "Briefing executivo do dia",
+                  "Status de todos os agentes",
+                  "Análise de riscos",
+                ].map(s => (
+                  <button
+                    key={s}
+                    onClick={() => onSend(s)}
+                    className="px-3 py-1.5 rounded-full border border-border/30 text-[11px] text-muted-foreground/70 hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all"
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         )}
 
@@ -220,14 +248,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           <Button
             variant="ghost"
             size="icon"
-            className={`shrink-0 h-10 w-10 rounded-full ${
+            className={`shrink-0 h-12 w-12 rounded-full ${
               isListening
-                ? "text-primary bg-primary/10 shadow-[0_0_12px_hsl(var(--primary)/0.2)]"
+                ? "text-primary bg-primary/10 shadow-[0_0_20px_hsl(var(--primary)/0.3)] animate-pulse"
                 : "text-muted-foreground/60 hover:text-foreground"
             }`}
             onClick={toggleVoice}
           >
-            {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+            {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
           </Button>
           <Input
             value={input}

@@ -192,7 +192,7 @@ const ClientDashboard = () => {
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
 
   const sidebarItems = [
-    { id: "omnix", label: "OMNIX", icon: Brain, badge: "AI" },
+    { id: "omnix", label: "THOR", icon: Brain, badge: "AI" },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard },
     { id: "concierge", label: t("dashboard.concierge"), icon: Wand2 },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined },

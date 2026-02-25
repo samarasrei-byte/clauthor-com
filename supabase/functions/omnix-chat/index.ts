@@ -63,7 +63,7 @@ serve(async (req) => {
     const highPriorityTasks = tasks.filter(t => t.priority === "high").length;
     const usagePct = credits ? Math.round((credits.used_credits / credits.total_credits) * 100) : 0;
 
-    const agentName = config?.name || "OMNIX";
+    const agentName = config?.name || "THOR";
     const tone = config?.tone || "estratégico";
     const personality = config?.personality || "futurista";
     const responseStyle = config?.responseStyle || "detalhado";

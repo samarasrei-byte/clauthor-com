@@ -40,7 +40,7 @@ const OmnixSettings = ({ config, onUpdate, onClose }: OmnixSettingsProps) => {
         <div className="space-y-4">
           <div>
             <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">Nome do Agente</label>
-            <Input value={config.name} onChange={e => onUpdate({ name: e.target.value })} placeholder="OMNIX" />
+            <Input value={config.name} onChange={e => onUpdate({ name: e.target.value })} placeholder="THOR" />
           </div>
 
           <div>
