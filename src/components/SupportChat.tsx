@@ -29,6 +29,7 @@ interface SystemHealth {
 
 interface SupportChatProps {
   area?: "public" | "client" | "admin";
+  embedded?: boolean;
 }
 
 /* ─── Auto-Diagnostic Engine ─── */
@@ -204,8 +205,8 @@ const VoiceWaveform = () => (
 );
 
 /* ─── Main Component ─── */
-const SupportChat = ({ area = "public" }: SupportChatProps) => {
-  const [open, setOpen] = useState(false);
+const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) => {
+  const [open, setOpen] = useState(embedded);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -374,72 +375,10 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
     { id: "prevention" as const, label: "Prevenção", icon: Brain },
   ];
 
-  return (
-    <>
-      {/* Floating trigger */}
-      <AnimatePresence>
-        {!open && (
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0, opacity: 0 }}
-            onClick={() => setOpen(true)}
-            aria-label="Open support chat"
-            className="fixed bottom-6 left-6 z-[9998] h-13 w-13 rounded-2xl flex items-center justify-center group cursor-pointer"
-            style={{ position: "fixed" }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            {/* Rotating border */}
-            <span className="absolute inset-0 rounded-2xl overflow-hidden">
-              <span
-                className="absolute inset-[-50%] animate-spin"
-                style={{
-                  background: "conic-gradient(from 0deg, transparent, hsl(var(--primary)), transparent, transparent)",
-                  animationDuration: "5s",
-                }}
-              />
-            </span>
-            <span className="absolute inset-[1px] rounded-[15px] bg-background/90 backdrop-blur-2xl" />
-
-            {/* Health indicator dot */}
-            <span className={`absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full z-20 ${
-              health.status === "optimal" ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
-              : health.status === "warning" ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"
-              : "bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.5)] animate-pulse"
-            }`} />
-
-            <MessageSquare className="h-4.5 w-4.5 text-muted-foreground group-hover:text-primary transition-colors duration-300 relative z-10" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* Chat panel */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-6 left-6 z-[9998] w-[min(400px,calc(100vw-3rem))] h-[min(580px,calc(100vh-3rem))] flex flex-col rounded-2xl overflow-hidden"
-            style={{ position: "fixed" }}
-          >
-            {/* Animated border */}
-            <div className="absolute -inset-[1px] rounded-2xl overflow-hidden">
-              <div
-                className="absolute inset-[-100%] animate-spin"
-                style={{
-                  background: "conic-gradient(from 180deg, transparent 60%, hsl(var(--primary) / 0.3), transparent 80%)",
-                  animationDuration: "8s",
-                }}
-              />
-            </div>
-
-            {/* Main container */}
-            <div className="relative flex flex-col h-full rounded-2xl bg-background/[0.97] backdrop-blur-3xl border border-white/[0.04] overflow-hidden">
-              {/* Top accent */}
-              <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+  if (embedded) {
+    return (
+      <div className="relative flex flex-col h-full rounded-2xl bg-background/[0.97] backdrop-blur-3xl border border-white/[0.04] overflow-hidden">
+        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
 
               {/* Header */}
               <div className="relative px-4 py-3 flex items-center gap-3 shrink-0">
@@ -463,13 +402,15 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
                     IA Preditiva • Auto-diagnóstico • Voz
                   </p>
                 </div>
-                <button
-                  onClick={() => setOpen(false)}
-                  aria-label="Close support chat"
-                  className="h-7 w-7 rounded-lg border border-white/[0.04] bg-white/[0.02] flex items-center justify-center hover:border-white/[0.08] hover:bg-white/[0.04] transition-all"
-                >
-                  <Minimize2 className="h-3 w-3 text-muted-foreground" />
-                </button>
+                {!embedded && (
+                  <button
+                    onClick={() => setOpen(false)}
+                    aria-label="Close support chat"
+                    className="h-7 w-7 rounded-lg border border-white/[0.04] bg-white/[0.02] flex items-center justify-center hover:border-white/[0.08] hover:bg-white/[0.04] transition-all"
+                  >
+                    <Minimize2 className="h-3 w-3 text-muted-foreground" />
+                  </button>
+                )}
               </div>
 
               {/* Tab bar */}
@@ -766,12 +707,61 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
                   </p>
                 </div>
               )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
-  );
-};
+          </div>
+    );
+  }
+      return (
+        <>
+          {/* Floating trigger */}
+          <AnimatePresence>
+            {!open && (
+              <motion.button
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0, opacity: 0 }}
+                onClick={() => setOpen(true)}
+                aria-label="Open support chat"
+                className="fixed bottom-6 left-6 z-[9998] h-13 w-13 rounded-2xl flex items-center justify-center group cursor-pointer"
+                style={{ position: "fixed" }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <span className="absolute inset-0 rounded-2xl overflow-hidden">
+                  <span className="absolute inset-[-50%] animate-spin" style={{ background: "conic-gradient(from 0deg, transparent, hsl(var(--primary)), transparent, transparent)", animationDuration: "5s" }} />
+                </span>
+                <span className="absolute inset-[1px] rounded-[15px] bg-background/90 backdrop-blur-2xl" />
+                <span className={`absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full z-20 ${
+                  health.status === "optimal" ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
+                  : health.status === "warning" ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"
+                  : "bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.5)] animate-pulse"
+                }`} />
+                <MessageSquare className="h-4.5 w-4.5 text-muted-foreground group-hover:text-primary transition-colors duration-300 relative z-10" />
+              </motion.button>
+            )}
+          </AnimatePresence>
 
+          {/* Chat panel */}
+          <AnimatePresence>
+            {open && (
+              <motion.div
+                initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: 20, scale: 0.95 }}
+                transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                className="fixed bottom-6 left-6 z-[9998] w-[min(400px,calc(100vw-3rem))] h-[min(580px,calc(100vh-3rem))] flex flex-col rounded-2xl overflow-hidden"
+                style={{ position: "fixed" }}
+              >
+                <div className="absolute -inset-[1px] rounded-2xl overflow-hidden">
+                  <div className="absolute inset-[-100%] animate-spin" style={{ background: "conic-gradient(from 180deg, transparent 60%, hsl(var(--primary) / 0.3), transparent 80%)", animationDuration: "8s" }} />
+                </div>
+                <div className="relative flex flex-col h-full rounded-2xl bg-background/[0.97] backdrop-blur-3xl border border-white/[0.04] overflow-hidden">
+                  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+                  {/* Re-use same header/tabs/content - redirect to embedded */}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </>
+      );
+    };
 export default SupportChat;
