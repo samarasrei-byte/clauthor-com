@@ -107,6 +107,11 @@ const SquadChat = ({ agents }: SquadChatProps) => {
         })
       );
 
+      // Show how many agents responded vs total
+      if (agentResponses.length < activeAgents.length) {
+        toast.info(`🎯 Roteamento inteligente: ${agentResponses.length} de ${activeAgents.length} agentes responderam (economia de créditos!)`, { duration: 4000 });
+      }
+
       setMessages((prev) => [...prev, ...agentResponses]);
     } catch (err) {
       console.error("Squad chat error:", err);

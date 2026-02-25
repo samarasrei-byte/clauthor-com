@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import {
   Bot, Settings, Save, ChevronRight, ChevronDown, Loader2,
   MessageSquare, Plug, Radio, Hash, FileText, Zap,
-  Globe, Mail, Phone, Webhook, Code, Check
+  Globe, Mail, Phone, Webhook, Code, Check, Key, Link2, Eye, EyeOff
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
+import { agentIntegrations } from "@/data/libraryAgentData";
 
 const CHANNEL_OPTIONS = [
   { id: "dashboard", label: "Dashboard Chat", icon: MessageSquare, desc: "Chat interno na plataforma" },
@@ -23,13 +24,37 @@ const CHANNEL_OPTIONS = [
   { id: "api", label: "API REST", icon: Code, desc: "Chamadas via API" },
 ];
 
-const INTEGRATION_OPTIONS = [
-  { id: "google_calendar", label: "Google Calendar", icon: Globe },
-  { id: "google_sheets", label: "Google Sheets", icon: FileText },
-  { id: "slack", label: "Slack", icon: Hash },
-  { id: "zapier", label: "Zapier", icon: Zap },
-  { id: "n8n", label: "n8n", icon: Plug },
-];
+// Map integration names to credential field hints
+const INTEGRATION_CREDENTIALS: Record<string, { fields: { key: string; label: string; placeholder: string; secret?: boolean }[] }> = {
+  "LinkedIn Sales Nav": { fields: [{ key: "linkedin_email", label: "Email LinkedIn", placeholder: "seu@email.com" }, { key: "linkedin_token", label: "Token de Acesso", placeholder: "li_at=...", secret: true }] },
+  "HubSpot": { fields: [{ key: "hubspot_api_key", label: "API Key HubSpot", placeholder: "pat-na1-...", secret: true }] },
+  "Salesforce": { fields: [{ key: "sf_client_id", label: "Client ID", placeholder: "3MVG9..." }, { key: "sf_client_secret", label: "Client Secret", placeholder: "...", secret: true }] },
+  "Apollo.io": { fields: [{ key: "apollo_api_key", label: "API Key Apollo", placeholder: "apollo_...", secret: true }] },
+  "Google Calendar": { fields: [{ key: "google_oauth", label: "Google OAuth Token", placeholder: "ya29...", secret: true }] },
+  "Google Sheets": { fields: [{ key: "google_sheets_id", label: "Spreadsheet ID", placeholder: "1BxiMVs..." }] },
+  "Slack": { fields: [{ key: "slack_webhook", label: "Webhook URL", placeholder: "https://hooks.slack.com/..." }] },
+  "Zapier": { fields: [{ key: "zapier_webhook", label: "Zapier Webhook URL", placeholder: "https://hooks.zapier.com/..." }] },
+  "WhatsApp Business API": { fields: [{ key: "wa_phone_id", label: "Phone Number ID", placeholder: "1234567890" }, { key: "wa_token", label: "Access Token", placeholder: "EAAG...", secret: true }] },
+  "Stripe": { fields: [{ key: "stripe_key", label: "Secret Key", placeholder: "sk_live_...", secret: true }] },
+  "Meta Business Suite": { fields: [{ key: "meta_token", label: "Access Token", placeholder: "EAAG...", secret: true }] },
+  "Google Ads API": { fields: [{ key: "gads_customer_id", label: "Customer ID", placeholder: "123-456-7890" }, { key: "gads_token", label: "Developer Token", placeholder: "...", secret: true }] },
+  "DocuSign": { fields: [{ key: "docusign_key", label: "Integration Key", placeholder: "...", secret: true }] },
+  "Twilio": { fields: [{ key: "twilio_sid", label: "Account SID", placeholder: "AC..." }, { key: "twilio_token", label: "Auth Token", placeholder: "...", secret: true }] },
+  "Instagram API": { fields: [{ key: "ig_token", label: "Access Token", placeholder: "IGQV...", secret: true }] },
+  "Shopify": { fields: [{ key: "shopify_store", label: "Store URL", placeholder: "mystore.myshopify.com" }, { key: "shopify_token", label: "Admin API Token", placeholder: "shpat_...", secret: true }] },
+};
+
+// Try to match agent name to a key in agentIntegrations
+function getAgentIntegrationKey(agentName: string): string | null {
+  const normalized = agentName.toLowerCase().trim();
+  for (const [key, _] of Object.entries(agentIntegrations)) {
+    const keyNorm = key.replace(/_/g, " ");
+    if (normalized.includes(keyNorm) || keyNorm.includes(normalized.split(" ")[0]?.toLowerCase() || "")) {
+      return key;
+    }
+  }
+  return null;
+}
 
 const AgentSettings = () => {
   const { user } = useAuth();
@@ -234,30 +259,12 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
                 </div>
               </div>
 
-              {/* Integrations */}
-              <div>
-                <label className="text-xs font-medium text-muted-foreground mb-2 block">Integrações</label>
-                <div className="flex flex-wrap gap-2">
-                  {INTEGRATION_OPTIONS.map((intg) => {
-                    const active = integrations.includes(intg.id);
-                    return (
-                      <button
-                        key={intg.id}
-                        onClick={() => toggleIntegration(intg.id)}
-                        className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
-                          active
-                            ? "border-primary/30 bg-primary/5"
-                            : "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]"
-                        }`}
-                      >
-                        <intg.icon className={`h-3.5 w-3.5 ${active ? "text-primary" : "text-muted-foreground"}`} />
-                        <span className={`text-xs ${active ? "text-foreground font-medium" : "text-muted-foreground"}`}>{intg.label}</span>
-                        {active && <Check className="h-3 w-3 text-primary" />}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
+              {/* Integrations — agent-specific */}
+              <AgentIntegrationsPanel
+                agentName={agent.name}
+                integrations={integrations}
+                onToggle={toggleIntegration}
+              />
 
               {/* Save */}
               <div className="flex justify-end pt-2">
@@ -275,6 +282,103 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
         )}
       </AnimatePresence>
     </motion.div>
+  );
+};
+
+// === Agent-specific integrations panel ===
+interface AgentIntegrationsPanelProps {
+  agentName: string;
+  integrations: string[];
+  onToggle: (id: string) => void;
+}
+
+const AgentIntegrationsPanel = ({ agentName, integrations, onToggle }: AgentIntegrationsPanelProps) => {
+  const [showSecrets, setShowSecrets] = useState<Record<string, boolean>>({});
+  const [credentials, setCredentials] = useState<Record<string, string>>({});
+
+  // Find matching integrations for this agent type
+  const agentKey = getAgentIntegrationKey(agentName);
+  const specificIntegrations = agentKey ? agentIntegrations[agentKey] || [] : [];
+
+  // Fallback generic if no match
+  const displayIntegrations = specificIntegrations.length > 0
+    ? specificIntegrations
+    : ["Google Calendar", "Google Sheets", "Slack", "Zapier", "n8n"];
+
+  const toggleSecret = (fieldKey: string) => {
+    setShowSecrets(prev => ({ ...prev, [fieldKey]: !prev[fieldKey] }));
+  };
+
+  return (
+    <div>
+      <label className="text-xs font-medium text-muted-foreground mb-1 block">
+        Integrações {agentKey ? `— ${agentName}` : "— Genéricas"}
+      </label>
+      <p className="text-[10px] text-muted-foreground/60 mb-3">
+        Ative e configure as credenciais das ferramentas que este agente precisa
+      </p>
+      <div className="space-y-2">
+        {displayIntegrations.map((intgName) => {
+          const intgId = intgName.toLowerCase().replace(/[^a-z0-9]/g, "_");
+          const active = integrations.includes(intgId);
+          const credConfig = INTEGRATION_CREDENTIALS[intgName];
+
+          return (
+            <div key={intgId} className="rounded-xl border border-border/40 overflow-hidden">
+              <button
+                onClick={() => onToggle(intgId)}
+                className={`w-full flex items-center gap-3 p-3 transition-all text-left ${
+                  active ? "bg-primary/5 border-primary/20" : "bg-card/30 hover:bg-card/50"
+                }`}
+              >
+                <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${active ? "bg-primary/15" : "bg-muted/30"}`}>
+                  <Link2 className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className={`text-xs font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}>{intgName}</p>
+                </div>
+                {active && <Check className="h-4 w-4 text-primary shrink-0" />}
+              </button>
+
+              {/* Credential fields when active */}
+              {active && credConfig && (
+                <div className="px-3 pb-3 space-y-2 bg-primary/[0.02]">
+                  {credConfig.fields.map((field) => (
+                    <div key={field.key}>
+                      <label className="text-[10px] text-muted-foreground mb-1 flex items-center gap-1">
+                        <Key className="h-3 w-3" />
+                        {field.label}
+                      </label>
+                      <div className="relative">
+                        <Input
+                          type={field.secret && !showSecrets[field.key] ? "password" : "text"}
+                          value={credentials[field.key] || ""}
+                          onChange={(e) => setCredentials(prev => ({ ...prev, [field.key]: e.target.value }))}
+                          placeholder={field.placeholder}
+                          className="h-8 text-xs bg-background/50 border-border/30 pr-8"
+                        />
+                        {field.secret && (
+                          <button
+                            type="button"
+                            onClick={() => toggleSecret(field.key)}
+                            className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                          >
+                            {showSecrets[field.key] ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                  <p className="text-[9px] text-muted-foreground/50">
+                    🔐 Credenciais salvas de forma segura no seu workspace
+                  </p>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
   );
 };
 
