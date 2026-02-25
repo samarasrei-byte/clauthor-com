@@ -30,6 +30,7 @@ import CompanyBoard from "@/components/dashboard/CompanyBoard";
 import TeamMembers from "@/components/dashboard/TeamMembers";
 import ConciergeChat from "@/components/dashboard/ConciergeChat";
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
+import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
@@ -45,6 +46,7 @@ const ClientDashboard = () => {
     return !localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
   });
   const { credits, remainingCredits, usagePercentage } = useCredits();
+  usePaypalCapture();
   const { data: tokenUsage = [] } = useTokenUsage();
 
   const { data: agents = [], isLoading: loadingAgents } = useQuery({

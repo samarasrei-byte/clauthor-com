@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -11,6 +11,7 @@ import {
   CreditCard, Globe, Smartphone
 } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Plan {
   id: string;
@@ -113,6 +114,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
   const [selectedPack, setSelectedPack] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
   const [showPayment, setShowPayment] = useState(false);
+  const [paypalLoading, setPaypalLoading] = useState(false);
 
   const currentPlan = credits?.plan_type || "free";
 
@@ -128,24 +130,6 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
     setShowPayment(true);
   };
 
-  const handlePayment = (method: PaymentMethod) => {
-    setPaymentMethod(method);
-    const item = selectedPlan
-      ? plans.find((p) => p.id === selectedPlan)?.name
-      : tokenPacks.find((p) => p.id === selectedPack)?.tokens;
-    
-    if (method === "pix") {
-      toast.success(`PIX para ${item} gerado! Copie o código abaixo.`);
-    } else {
-      toast.success(`Redirecionando para pagamento cripto de ${item}...`);
-    }
-  };
-
-  const copyPixCode = () => {
-    navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136clauthor-tokens@pix.com5204000053039865802BR5925CLAUTHOR TOKENS LTDA6009SAO PAULO62070503***6304ABCD");
-    toast.success("Código PIX copiado!");
-  };
-
   const selectedItemPrice = selectedPlan
     ? plans.find((p) => p.id === selectedPlan)?.price
     : tokenPacks.find((p) => p.id === selectedPack)?.price;
@@ -153,6 +137,68 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
   const selectedItemName = selectedPlan
     ? plans.find((p) => p.id === selectedPlan)?.name
     : `Pacote ${tokenPacks.find((p) => p.id === selectedPack)?.tokens}`;
+
+  const handlePayment = (method: PaymentMethod) => {
+    setPaymentMethod(method);
+    if (method === "pix") {
+      toast.success("PIX gerado! Copie o código abaixo.");
+    } else if (method === "paypal") {
+      // PayPal is handled by its own button
+    } else {
+      toast.info(`Pagamento via ${method} para ${selectedItemName} — em breve!`);
+    }
+  };
+
+  const handlePaypalCheckout = useCallback(async () => {
+    const priceNum = selectedPlan
+      ? plans.find((p) => p.id === selectedPlan)?.priceNum
+      : tokenPacks.find((p) => p.id === selectedPack)?.priceNum;
+
+    if (!priceNum || priceNum === 0) {
+      toast.error("Preço inválido para este item.");
+      return;
+    }
+
+    setPaypalLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+        body: {
+          action: "create_order",
+          amount: priceNum,
+          currency: "BRL",
+          description: selectedItemName || "Clauthor Upgrade",
+          metadata: {
+            type: selectedPlan ? "plan" : "token_pack",
+            item_id: selectedPlan || selectedPack,
+          },
+        },
+      });
+
+      if (error) throw error;
+      if (!data?.success || !data?.approve_url) {
+        throw new Error(data?.error || "Falha ao criar ordem PayPal");
+      }
+
+      sessionStorage.setItem("paypal_order", JSON.stringify({
+        order_id: data.order_id,
+        item_id: selectedPlan || selectedPack,
+        type: selectedPlan ? "plan" : "token_pack",
+        amount: priceNum,
+      }));
+
+      window.location.href = data.approve_url;
+    } catch (err: any) {
+      console.error("PayPal checkout error:", err);
+      toast.error(err.message || "Erro ao iniciar pagamento PayPal");
+    } finally {
+      setPaypalLoading(false);
+    }
+  }, [selectedPlan, selectedPack, selectedItemName]);
+
+  const copyPixCode = () => {
+    navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136clauthor-tokens@pix.com5204000053039865802BR5925CLAUTHOR TOKENS LTDA6009SAO PAULO62070503***6304ABCD");
+    toast.success("Código PIX copiado!");
+  };
 
   return (
     <Dialog onOpenChange={() => { setShowPayment(false); setPaymentMethod(null); }}>
@@ -464,11 +510,24 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                       </div>
                     ))}
                   </div>
-                  <Button className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white">
-                    <ExternalLink className="h-4 w-4" /> Pagar com PayPal
+                  <Button 
+                    className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+                    onClick={handlePaypalCheckout}
+                    disabled={paypalLoading}
+                  >
+                    {paypalLoading ? (
+                      <>
+                        <span className="animate-spin h-4 w-4 border-2 border-white/30 border-t-white rounded-full" />
+                        Processando...
+                      </>
+                    ) : (
+                      <>
+                        <ExternalLink className="h-4 w-4" /> Pagar com PayPal — {selectedItemPrice}
+                      </>
+                    )}
                   </Button>
                   <p className="text-[10px] text-muted-foreground text-center">
-                    Proteção ao comprador inclusa. Tokens creditados em até 5 minutos.
+                    Proteção ao comprador inclusa. Tokens creditados após confirmação.
                   </p>
                 </motion.div>
               )}
