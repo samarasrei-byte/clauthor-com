@@ -109,7 +109,7 @@ const HomePage = () => {
                   <div className="absolute inset-0 rounded-2xl border-2 border-white/20 group-hover:border-white/40 transition-colors duration-500" />
                   <span className="relative z-10 flex items-center gap-3 drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)]">
                     <Zap className="h-5 w-5" />
-                    <span className="tracking-wide">Começar Grátis</span>
+                    <span className="tracking-wide">Monte seu Time de IA</span>
                     <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
                   </span>
                 </motion.button>
@@ -323,7 +323,7 @@ const HomePage = () => {
                 <Link to="/auth">
                   <Button size="lg" className="glow font-semibold text-base px-12 h-14 rounded-xl group">
                     <Zap className="h-5 w-5 mr-2" />
-                    Começar Grátis
+                    Monte seu Time de IA
                     <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
