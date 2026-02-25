@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -29,6 +29,7 @@ import SquadChat from "@/components/dashboard/SquadChat";
 import CompanyBoard from "@/components/dashboard/CompanyBoard";
 import TeamMembers from "@/components/dashboard/TeamMembers";
 import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
+import SendGridSetupGuide from "@/components/dashboard/SendGridSetupGuide";
 
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
@@ -199,6 +200,7 @@ const ClientDashboard = () => {
     { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined },
     { id: "billing", label: t("dashboard.billing"), icon: CreditCard },
     { id: "whatsapp-setup", label: "WhatsApp Setup", icon: Phone },
+    { id: "sendgrid-setup", label: "E-mail Setup", icon: Mail },
     { id: "support", label: "Suporte", icon: MessageSquare },
   ];
 
@@ -326,6 +328,9 @@ const ClientDashboard = () => {
 
           {/* ═══ WHATSAPP SETUP GUIDE ═══ */}
           {activeSection === "whatsapp-setup" && <WhatsAppSetupGuide />}
+
+          {/* ═══ SENDGRID SETUP GUIDE ═══ */}
+          {activeSection === "sendgrid-setup" && <SendGridSetupGuide />}
 
           {/* ═══ AGENTS ═══ */}
           {activeSection === "agents" && (
