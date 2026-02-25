@@ -67,7 +67,7 @@ const Navbar = () => {
 
           {/* Desktop */}
           <div className="hidden md:flex items-center gap-1">
-            {/* Mega Menu — Soluções */}
+            {/* Mega Menu — Solutions */}
             <div ref={megaMenuRef} className="relative">
               <button
                 onClick={() => setMegaMenuOpen(!megaMenuOpen)}
@@ -77,7 +77,7 @@ const Navbar = () => {
                     : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 }`}
               >
-                Soluções
+                {t("navbar.solutions")}
                 <ChevronDown className={`h-3.5 w-3.5 transition-transform ${megaMenuOpen ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence>
@@ -98,8 +98,8 @@ const Navbar = () => {
                         <ShoppingCart className="h-5 w-5 text-accent-violet" />
                       </div>
                       <div>
-                        <p className="font-semibold text-sm text-foreground">Marketplace</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">37+ agentes individuais para contratar avulso</p>
+                        <p className="font-semibold text-sm text-foreground">{t("navbar.marketplace_label")}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{t("navbar.marketplace_desc")}</p>
                       </div>
                     </Link>
                     <Link
@@ -112,10 +112,10 @@ const Navbar = () => {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="font-semibold text-sm text-foreground">Times de IA</p>
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">NOVO</span>
+                          <p className="font-semibold text-sm text-foreground">{t("navbar.ai_teams_label")}</p>
+                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">{t("navbar.new_badge")}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5">7 departamentos completos com 28 agentes</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{t("navbar.ai_teams_desc")}</p>
                       </div>
                     </Link>
                   </motion.div>
@@ -217,7 +217,7 @@ const Navbar = () => {
                 location.pathname === "/marketplace" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
               }`}
             >
-              🛒 Marketplace
+              🛒 {t("navbar.marketplace_label")}
             </Link>
             <Link
               to="/departamentos"
@@ -226,8 +226,8 @@ const Navbar = () => {
                 location.pathname === "/departamentos" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
               }`}
             >
-              🏢 Times de IA
-              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">NOVO</span>
+              🏢 {t("navbar.ai_teams_label")}
+              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">{t("navbar.new_badge")}</span>
             </Link>
             {navItems.map((item) => (
               <Link
