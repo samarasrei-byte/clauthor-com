@@ -261,6 +261,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
   };
 
   useEffect(() => { scrollToBottom(); }, [messages]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => { clearMessages(); }, [agentId]);
 
   // Auto-speak when a new assistant message is complete (streaming done)
