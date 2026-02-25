@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { fetchAI } from "../_shared/ai-gateway.ts";
+import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/security.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -53,6 +54,11 @@ serve(async (req) => {
   }
 
   try {
+    // Rate limit by IP (public endpoint - stricter limit)
+    const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const rl = checkRateLimit(`support:${clientIP}`, 15, 60_000);
+    if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
+
     const { messages, context } = await req.json();
 
     if (!messages || !Array.isArray(messages) || messages.length === 0) {
@@ -101,6 +107,7 @@ serve(async (req) => {
     return new Response(response.body, {
       headers: {
         ...corsHeaders,
+        ...securityHeaders,
         "Content-Type": "text/event-stream",
         "Cache-Control": "no-cache",
         Connection: "keep-alive",

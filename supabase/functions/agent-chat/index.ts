@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
+import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/security.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -716,13 +717,18 @@ serve(async (req) => {
   }
 
   try {
+    // Rate limit by IP
+    const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const rl = checkRateLimit(`agent-chat:${clientIP}`, 20, 60_000);
+    if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
+
     const { messages, agentId, actionType = "chat", stream: wantStream = false } = await req.json();
 
     const validation = validateInput(messages);
     if (!validation.valid) {
       return new Response(JSON.stringify({ error: validation.error }), {
         status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -730,7 +736,7 @@ serve(async (req) => {
     if (!authHeader?.startsWith("Bearer ")) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" },
       });
     }
 
