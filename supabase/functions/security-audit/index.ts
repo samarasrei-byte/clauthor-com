@@ -248,15 +248,78 @@ serve(async (req) => {
     // ══════════════════════════════════════════
     // 5. DATA EXPOSURE CHECK
     // ══════════════════════════════════════════
-    // Check if public-facing tables have proper RLS
     const publicTables = ["waitlist", "community_posts", "community_comments", "community_likes"];
     findings.push({
       category: "data_exposure",
       severity: "info",
       title: "Verificação de tabelas públicas",
       description: `Tabelas com acesso público controlado: ${publicTables.join(", ")}. RLS está habilitado em todas as tabelas do sistema.`,
-      recommendation: "Audite periodicamente as políticas RLS para garantir que não haja over-permissioning. Use o linter de segurança do banco de dados.",
+      recommendation: "Audite periodicamente as políticas RLS para garantir que não haja over-permissioning.",
     });
+
+    // ══════════════════════════════════════════
+    // 6. CREDENTIAL ISOLATION CHECK
+    // ══════════════════════════════════════════
+    const { data: allCreds } = await adminClient
+      .from("agent_credentials")
+      .select("user_id, agent_id, integration_name, expires_at, access_count");
+
+    const creds = allCreds || [];
+    const expiredCreds = creds.filter((c: any) => c.expires_at && new Date(c.expires_at) < new Date());
+
+    if (expiredCreds.length > 0) {
+      findings.push({
+        category: "credentials",
+        severity: "medium",
+        title: `${expiredCreds.length} credencial(is) expirada(s)`,
+        description: `Existem credenciais com data de expiração vencida que devem ser renovadas ou removidas.`,
+        recommendation: "Revogue credenciais expiradas usando o endpoint de gerenciamento. Notifique os usuários afetados.",
+      });
+    }
+
+    // Check for cross-agent credential sharing (same user, same integration, different agents)
+    const credMap = new Map<string, Set<string>>();
+    for (const c of creds) {
+      const key = `${c.user_id}:${c.integration_name}`;
+      if (!credMap.has(key)) credMap.set(key, new Set());
+      credMap.get(key)!.add(c.agent_id);
+    }
+    const sharedCreds = Array.from(credMap.entries()).filter(([, agents]) => agents.size > 1);
+    if (sharedCreds.length > 0) {
+      findings.push({
+        category: "credentials",
+        severity: "info",
+        title: `${sharedCreds.length} integração(ões) com credenciais em múltiplos agentes`,
+        description: `Usuários configuraram a mesma integração em agentes diferentes. Cada agente mantém sua própria credencial criptografada (isolamento OK).`,
+        recommendation: "Verifique se os usuários estão cientes de que cada agente tem sua própria credencial. A arquitetura já garante isolamento por design.",
+      });
+    } else {
+      findings.push({
+        category: "credentials",
+        severity: "info",
+        title: "Isolamento de credenciais por agente confirmado",
+        description: `${creds.length} credencial(is) no sistema. Nenhuma compartilhada entre agentes.`,
+        recommendation: "Continue monitorando o isolamento de credenciais.",
+      });
+    }
+
+    // Check credential audit trail
+    const { data: auditLogs } = await adminClient
+      .from("credential_audit_logs")
+      .select("action, created_at")
+      .order("created_at", { ascending: false })
+      .limit(100);
+
+    const recentRevocations = (auditLogs || []).filter((l: any) => l.action === "revoke" || l.action === "revoke_all");
+    if (recentRevocations.length > 0) {
+      findings.push({
+        category: "credentials",
+        severity: "info",
+        title: `${recentRevocations.length} revogação(ões) recente(s)`,
+        description: "Credenciais estão sendo revogadas regularmente, indicando boa prática de segurança.",
+        recommendation: "Continue com a rotação e revogação regular de credenciais.",
+      });
+    }
 
     // ══════════════════════════════════════════
     // GENERATE REPORT

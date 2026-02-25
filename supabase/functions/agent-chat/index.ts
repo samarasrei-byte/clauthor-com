@@ -448,6 +448,21 @@ async function executeTool(
   const timestamp = new Date().toISOString();
   const startTime = Date.now();
 
+  // Audit credential access for tools that require credentials
+  const credentialTools = ["send_email", "search_leads", "schedule_meeting"];
+  if (credentialTools.includes(toolName)) {
+    try {
+      await adminClient.from("credential_audit_logs").insert({
+        user_id: userId,
+        agent_id: agentId,
+        integration_name: toolName,
+        credential_key: "tool_execution",
+        action: "tool_access",
+        metadata: { tool: toolName, args_keys: Object.keys(args), timestamp },
+      });
+    } catch {} // Non-blocking audit
+  }
+
   try {
     switch (toolName) {
       case "send_email": {
