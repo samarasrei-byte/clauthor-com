@@ -15,6 +15,8 @@ import {
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
 import clauthorLogo from "@/assets/clauthor-logo.png";
+import williamPhoto from "@/assets/william-monteiro.png";
+import gabrielPhoto from "@/assets/gabriel-gentile.png";
 
 /* ═══════════════════════════════════════════════════════
    TYPEWRITER HOOK — Text types itself like AI is writing
@@ -546,6 +548,80 @@ const HomePage = () => {
               </div>
             </div>
           </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          TEAM — Quem Somos
+          ═══════════════════════════════════════════════════════ */}
+      <section className="py-20 sm:py-28 px-4 relative">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-16"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary/60">Quem Somos</span>
+              <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
+            </div>
+            <h2 className="font-display text-3xl sm:text-5xl font-bold text-center">
+              A Equipe
+            </h2>
+            <p className="text-muted-foreground text-sm sm:text-base text-center mt-4 max-w-2xl mx-auto">
+              Liderança com décadas de experiência combinada em tecnologia, inovação e estratégia de marca.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            {[
+              {
+                name: "William Monteiro",
+                role: "Founder & CEO",
+                photo: williamPhoto,
+                bio: "Visionary founder with 20 years of internet experience and 8 years in technology. Leads strategy, architecture, and long-term innovation, building scalable AI-driven systems designed for global growth.",
+              },
+              {
+                name: "Gabriel Gentile",
+                role: "Co-Founder & CMO",
+                photo: gabrielPhoto,
+                bio: "With 19 years in advertising and brand strategy, Gabriel drives positioning, influence, and high-conversion growth. Responsible for market expansion and brand authority.",
+              },
+            ].map((member, i) => (
+              <motion.div
+                key={member.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.6 }}
+                className="group relative rounded-2xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden hover:border-primary/20 transition-all duration-500"
+              >
+                <div className="aspect-[3/4] overflow-hidden">
+                  <img
+                    src={member.photo}
+                    alt={member.name}
+                    className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+                </div>
+                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="relative">
+                      <div className="w-2 h-2 rounded-full bg-emerald-500" />
+                      <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-500 animate-ping opacity-75" />
+                    </div>
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/70">{member.role}</span>
+                  </div>
+                  <h3 className="font-display text-xl sm:text-2xl font-bold mb-2">{member.name}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed line-clamp-3 group-hover:line-clamp-none transition-all">
+                    {member.bio}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
