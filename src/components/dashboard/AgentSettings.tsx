@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { encryptCredential, decryptCredential } from "@/lib/crypto";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -321,9 +322,15 @@ const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: 
         .eq("user_id", user.id);
       if (data) {
         const creds: Record<string, string> = {};
-        data.forEach((row: any) => {
-          creds[`${row.integration_name}__${row.credential_key}`] = row.credential_value;
-        });
+        for (const row of data as any[]) {
+          try {
+            creds[`${row.integration_name}__${row.credential_key}`] = await decryptCredential(
+              row.credential_value, user.id, agentId
+            );
+          } catch {
+            creds[`${row.integration_name}__${row.credential_key}`] = row.credential_value;
+          }
+        }
         setCredentials(creds);
       }
       setLoaded(true);
@@ -334,12 +341,13 @@ const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: 
     if (!user || !value.trim()) return;
     setSaving(true);
     try {
+      const encryptedValue = await encryptCredential(value.trim(), user.id, agentId);
       const { error } = await supabase.from("agent_credentials").upsert({
         agent_id: agentId,
         user_id: user.id,
         integration_name: integrationName,
         credential_key: credKey,
-        credential_value: value.trim(),
+        credential_value: encryptedValue,
         is_secret: true,
       }, { onConflict: "agent_id,integration_name,credential_key" });
       if (error) throw error;
