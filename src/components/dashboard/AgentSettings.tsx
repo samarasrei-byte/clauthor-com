@@ -18,11 +18,11 @@ import { toast } from "sonner";
 import { agentIntegrations } from "@/data/libraryAgentData";
 
 const CHANNEL_OPTIONS = [
-  { id: "dashboard", label: "Dashboard Chat", icon: MessageSquare, desc: "Chat interno na plataforma" },
-  { id: "whatsapp", label: "WhatsApp", icon: Phone, desc: "Integração com WhatsApp Business" },
-  { id: "email", label: "E-mail", icon: Mail, desc: "Respostas automáticas por e-mail" },
-  { id: "webhook", label: "Webhook", icon: Webhook, desc: "Notificações via HTTP" },
-  { id: "api", label: "API REST", icon: Code, desc: "Chamadas via API" },
+  { id: "dashboard", label: "Dashboard Chat", icon: MessageSquare, desc: "Chat interno na plataforma", testable: false },
+  { id: "whatsapp", label: "WhatsApp", icon: Phone, desc: "Integração com WhatsApp Business", testable: true },
+  { id: "email", label: "E-mail", icon: Mail, desc: "Respostas automáticas por e-mail", testable: true },
+  { id: "webhook", label: "Webhook", icon: Webhook, desc: "Notificações via HTTP", testable: false },
+  { id: "api", label: "API REST", icon: Code, desc: "Chamadas via API", testable: false },
 ];
 
 // Map integration names to credential field hints
@@ -133,6 +133,9 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
     catch { return []; }
   });
   const [objective, setObjective] = useState(agent.objective || "");
+  const [channelCreds, setChannelCreds] = useState<Record<string, string>>({});
+  const [testingChannel, setTestingChannel] = useState<string | null>(null);
+  const [channelStatus, setChannelStatus] = useState<Record<string, "valid" | "invalid" | null>>({});
 
   const saveMutation = useMutation({
     mutationFn: async () => {
@@ -160,6 +163,47 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
 
   const toggleIntegration = (id: string) => {
     setIntegrations((prev) => prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]);
+  };
+
+  const testChannel = async (channelId: string) => {
+    setTestingChannel(channelId);
+    setChannelStatus(prev => ({ ...prev, [channelId]: null }));
+    try {
+      let credentials: Record<string, string> = {};
+      if (channelId === "whatsapp") {
+        credentials = {
+          phone_id: channelCreds["wa_phone_id"] || "",
+          access_token: channelCreds["wa_token"] || "",
+        };
+      } else if (channelId === "email") {
+        credentials = {
+          provider: channelCreds["email_provider"] || "",
+          api_key: channelCreds["email_api_key"] || "",
+          smtp_host: channelCreds["smtp_host"] || "",
+          smtp_port: channelCreds["smtp_port"] || "",
+          smtp_user: channelCreds["smtp_user"] || "",
+          smtp_pass: channelCreds["smtp_pass"] || "",
+        };
+      }
+
+      const { data, error } = await supabase.functions.invoke("validate-credentials", {
+        body: { channel: channelId, credentials },
+      });
+
+      if (error) throw error;
+      if (data?.valid) {
+        setChannelStatus(prev => ({ ...prev, [channelId]: "valid" }));
+        toast.success(data.message || "Conexão validada!");
+      } else {
+        setChannelStatus(prev => ({ ...prev, [channelId]: "invalid" }));
+        toast.error(data?.error || "Validação falhou");
+      }
+    } catch {
+      setChannelStatus(prev => ({ ...prev, [channelId]: "invalid" }));
+      toast.error("Erro ao testar conexão");
+    } finally {
+      setTestingChannel(null);
+    }
   };
 
   const tierColors: Record<string, string> = {
@@ -236,25 +280,102 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                   {CHANNEL_OPTIONS.map((ch) => {
                     const active = channels.includes(ch.id);
+                    const status = channelStatus[ch.id];
                     return (
-                      <button
-                        key={ch.id}
-                        onClick={() => toggleChannel(ch.id)}
-                        className={`flex items-center gap-3 p-3 rounded-xl border transition-all text-left ${
-                          active
-                            ? "border-primary/30 bg-primary/5"
-                            : "border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04]"
-                        }`}
-                      >
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${active ? "bg-primary/15" : "bg-accent/30"}`}>
-                          <ch.icon className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className={`text-xs font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}>{ch.label}</p>
-                          <p className="text-[10px] text-muted-foreground truncate">{ch.desc}</p>
-                        </div>
-                        {active && <Check className="h-4 w-4 text-primary shrink-0" />}
-                      </button>
+                      <div key={ch.id} className="rounded-xl border overflow-hidden transition-all" style={{ borderColor: active ? "hsl(var(--primary) / 0.3)" : "hsl(var(--border) / 0.2)" }}>
+                        <button
+                          onClick={() => toggleChannel(ch.id)}
+                          className={`w-full flex items-center gap-3 p-3 transition-all text-left ${
+                            active ? "bg-primary/5" : "bg-white/[0.02] hover:bg-white/[0.04]"
+                          }`}
+                        >
+                          <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${active ? "bg-primary/15" : "bg-accent/30"}`}>
+                            <ch.icon className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className={`text-xs font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}>{ch.label}</p>
+                            <p className="text-[10px] text-muted-foreground truncate">{ch.desc}</p>
+                          </div>
+                          {status === "valid" && <Check className="h-4 w-4 text-emerald-500 shrink-0" />}
+                          {active && !status && <Check className="h-4 w-4 text-primary shrink-0" />}
+                        </button>
+
+                        {/* Credential fields for WhatsApp */}
+                        {active && ch.id === "whatsapp" && (
+                          <div className="px-3 pb-3 space-y-2 border-t border-border/10 pt-2">
+                            <Input
+                              placeholder="Phone Number ID"
+                              value={channelCreds["wa_phone_id"] || ""}
+                              onChange={e => setChannelCreds(p => ({ ...p, wa_phone_id: e.target.value }))}
+                              className="h-8 text-xs bg-accent/20 border-white/[0.08]"
+                            />
+                            <Input
+                              placeholder="Access Token (Meta Business)"
+                              type="password"
+                              value={channelCreds["wa_token"] || ""}
+                              onChange={e => setChannelCreds(p => ({ ...p, wa_token: e.target.value }))}
+                              className="h-8 text-xs bg-accent/20 border-white/[0.08]"
+                            />
+                            <Button
+                              size="sm"
+                              variant="outline"
+                              className="w-full h-7 text-[10px] gap-1"
+                              onClick={() => testChannel("whatsapp")}
+                              disabled={testingChannel === "whatsapp"}
+                            >
+                              {testingChannel === "whatsapp" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Zap className="h-3 w-3" />}
+                              Testar Conexão WhatsApp
+                            </Button>
+                          </div>
+                        )}
+
+                        {/* Credential fields for Email */}
+                        {active && ch.id === "email" && (
+                          <div className="px-3 pb-3 space-y-2 border-t border-border/10 pt-2">
+                            <div className="flex gap-2">
+                              <select
+                                value={channelCreds["email_provider"] || ""}
+                                onChange={e => setChannelCreds(p => ({ ...p, email_provider: e.target.value }))}
+                                className="h-8 text-xs rounded-md border border-white/[0.08] bg-accent/20 px-2 flex-1 text-foreground"
+                              >
+                                <option value="">Provedor...</option>
+                                <option value="sendgrid">SendGrid</option>
+                                <option value="resend">Resend</option>
+                                <option value="smtp">SMTP Custom</option>
+                              </select>
+                            </div>
+                            {(channelCreds["email_provider"] === "sendgrid" || channelCreds["email_provider"] === "resend") && (
+                              <Input
+                                placeholder="API Key"
+                                type="password"
+                                value={channelCreds["email_api_key"] || ""}
+                                onChange={e => setChannelCreds(p => ({ ...p, email_api_key: e.target.value }))}
+                                className="h-8 text-xs bg-accent/20 border-white/[0.08]"
+                              />
+                            )}
+                            {channelCreds["email_provider"] === "smtp" && (
+                              <>
+                                <Input placeholder="SMTP Host" value={channelCreds["smtp_host"] || ""} onChange={e => setChannelCreds(p => ({ ...p, smtp_host: e.target.value }))} className="h-8 text-xs bg-accent/20 border-white/[0.08]" />
+                                <Input placeholder="Porta (587)" value={channelCreds["smtp_port"] || ""} onChange={e => setChannelCreds(p => ({ ...p, smtp_port: e.target.value }))} className="h-8 text-xs bg-accent/20 border-white/[0.08]" />
+                                <Input placeholder="Usuário" value={channelCreds["smtp_user"] || ""} onChange={e => setChannelCreds(p => ({ ...p, smtp_user: e.target.value }))} className="h-8 text-xs bg-accent/20 border-white/[0.08]" />
+                                <Input placeholder="Senha" type="password" value={channelCreds["smtp_pass"] || ""} onChange={e => setChannelCreds(p => ({ ...p, smtp_pass: e.target.value }))} className="h-8 text-xs bg-accent/20 border-white/[0.08]" />
+                              </>
+                            )}
+                            {channelCreds["email_provider"] && (
+                              <Button
+                                size="sm"
+                                variant="outline"
+                                className="w-full h-7 text-[10px] gap-1"
+                                onClick={() => testChannel("email")}
+                                disabled={testingChannel === "email"}
+                              >
+                                {testingChannel === "email" ? <Loader2 className="h-3 w-3 animate-spin" /> : <Zap className="h-3 w-3" />}
+                                Testar Conexão E-mail
+                              </Button>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
                 </div>
