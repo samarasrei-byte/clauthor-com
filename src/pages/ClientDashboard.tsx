@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -29,6 +29,7 @@ import SquadChat from "@/components/dashboard/SquadChat";
 import CompanyBoard from "@/components/dashboard/CompanyBoard";
 import TeamMembers from "@/components/dashboard/TeamMembers";
 import ConciergeChat from "@/components/dashboard/ConciergeChat";
+import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
@@ -39,6 +40,10 @@ const ClientDashboard = () => {
   const [activeSection, setActiveSection] = useState("overview");
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [showConcierge, setShowConcierge] = useState(false);
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    if (!user) return false;
+    return !localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
+  });
   const { credits, remainingCredits, usagePercentage } = useCredits();
   const { data: tokenUsage = [] } = useTokenUsage();
 
@@ -223,7 +228,15 @@ const ClientDashboard = () => {
   };
 
   return (
-    <div className="flex h-full">
+    <>
+      {/* Cinematic Onboarding */}
+      <AnimatePresence>
+        {showOnboarding && (
+          <PostSignupOnboarding onComplete={() => setShowOnboarding(false)} />
+        )}
+      </AnimatePresence>
+
+      <div className="flex h-full">
       {/* Sidebar */}
       <div className="hidden lg:block">
         <DashboardSidebar
@@ -521,6 +534,7 @@ const ClientDashboard = () => {
         }}
       />
     </div>
+    </>
   );
 };
 
