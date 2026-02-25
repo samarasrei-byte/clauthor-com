@@ -3,6 +3,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/security.ts";
 import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
+import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, type AgentContract } from "../_shared/agent-contract.ts";
+import { enforcePolicy, validateTenant, type PolicyContext } from "../_shared/policy-engine.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -444,10 +446,30 @@ Execute a tarefa e retorne o resultado de forma clara. Responda em português do
 // === REAL TOOL EXECUTION ===
 async function executeTool(
   toolName: string, args: any,
-  adminClient: any, userId: string, tenantId: string, agentId: string
+  adminClient: any, userId: string, tenantId: string, agentId: string,
+  policyContext?: PolicyContext, usedCredits?: number, totalCredits?: number
 ): Promise<{ success: boolean; result: any }> {
   const timestamp = new Date().toISOString();
   const startTime = Date.now();
+
+  // === POLICY ENGINE: Enforce before execution ===
+  if (policyContext && usedCredits !== undefined && totalCredits !== undefined) {
+    const policyResult = await enforcePolicy(adminClient, policyContext, toolName, usedCredits, totalCredits);
+    if (!policyResult.allowed) {
+      console.warn(`[PolicyEngine] BLOCKED tool=${toolName} reason=${policyResult.reason}`);
+      await logExecution(adminClient, userId, agentId, toolName, args, startTime, "blocked");
+      return {
+        success: false,
+        result: {
+          error: policyResult.reason,
+          suggest_upgrade: policyResult.suggestUpgrade || false,
+          required_tier: policyResult.requiredTier,
+          required_plan: policyResult.requiredPlan,
+          blocked_by: "policy_engine",
+        },
+      };
+    }
+  }
 
   // Audit credential access for tools that require credentials
   const credentialTools = ["send_email", "search_leads", "schedule_meeting"];
@@ -825,17 +847,52 @@ serve(async (req) => {
 
     // Build system prompt with Company Board data
     let agentPrompt = "Você é um assistente de IA útil e profissional. Responda em português do Brasil.";
+    let agentTier = "basic";
+    let agentArea = "geral";
+    let contractPrompt = "";
 
     if (agentId) {
       const { data: agent } = await adminClient
-        .from("agents").select("name, instructions, objective").eq("id", agentId).single();
+        .from("agents").select("name, instructions, objective, tier").eq("id", agentId).single();
 
-      if (agent?.instructions) {
-        agentPrompt = `Você é o agente "${agent.name}". 
+      if (agent) {
+        agentTier = agent.tier || "basic";
+        agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
+        const sla = getTierSLA(agentTier);
+        const limits = getAreaLimits(agentArea);
+
+        const contract: AgentContract = {
+          agentId,
+          agentName: agent.name,
+          tenantId,
+          userId,
+          tier: agentTier,
+          planType: credits.plan_type,
+          area: agentArea,
+          objective: agent.objective || "Ajudar o usuário",
+          limits,
+          sla,
+        };
+
+        contractPrompt = buildAgentContract(contract);
+
+        if (agent.instructions) {
+          agentPrompt = `Você é o agente "${agent.name}". 
 Objetivo: ${agent.objective || "Ajudar o usuário"}
 Instruções: ${agent.instructions}`;
+        }
       }
     }
+
+    // Build policy context for tool enforcement
+    const policyContext: PolicyContext = {
+      userId,
+      tenantId,
+      agentId: agentId || "general",
+      agentTier,
+      planType: credits.plan_type,
+      agentArea,
+    };
 
     // Load Company Board + memory in parallel
     const [companyContext, memoryContext] = await Promise.all([
@@ -850,7 +907,7 @@ Instruções: ${agent.instructions}`;
 - AGENT_ID: ${agentId || "general"}
 `;
 
-    const fullSystemPrompt = `${SAFETY_LAYER}\n${OPERATIONAL_SECURITY_PROTOCOL}\n${tenantContext}\n${companyContext}\n${memoryContext}\n${agentPrompt}\n${TOOL_USE_INSTRUCTION}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
+    const fullSystemPrompt = `${SAFETY_LAYER}\n${OPERATIONAL_SECURITY_PROTOCOL}\n${contractPrompt}\n${tenantContext}\n${companyContext}\n${memoryContext}\n${agentPrompt}\n${TOOL_USE_INSTRUCTION}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
 
     // === SINGLE CALL with tools — no more double call ===
     const firstResponse = await fetchAI({
@@ -889,7 +946,7 @@ Instruções: ${agent.instructions}`;
           const result = await delegateToAgent(fnArgs, adminClient, userId, tenantId, agentId || "general", 0);
           toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...result });
         } else {
-          const result = await executeTool(fnName, fnArgs, adminClient, userId, tenantId, agentId || "general");
+          const result = await executeTool(fnName, fnArgs, adminClient, userId, tenantId, agentId || "general", policyContext, credits.used_credits, credits.total_credits);
           toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...result });
         }
       }
