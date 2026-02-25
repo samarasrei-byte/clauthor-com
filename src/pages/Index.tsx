@@ -125,29 +125,10 @@ const HomePage = () => {
     <div className="relative">
       <FuturisticBackground />
 
-      {/* URGENCY BANNER — Departamentos */}
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.6 }}
-        className="sticky top-16 z-40 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 border-b border-primary/10 backdrop-blur-xl"
-      >
-        <div className="max-w-6xl mx-auto px-3 sm:px-4 py-2 sm:py-2.5 flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-xs sm:text-sm">
-          <Network className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary animate-pulse shrink-0" />
-          <span className="text-muted-foreground text-center">
-            <span className="font-semibold text-foreground">Times de IA</span> — <span className="hidden sm:inline">7 departamentos completos, </span>
-            <span className="text-primary font-bold">28 agentes</span> <span className="hidden sm:inline">prontos para operar</span>
-          </span>
-          <Link to="/departamentos">
-            <Button size="sm" variant="outline" className="h-6 sm:h-7 text-[9px] sm:text-[10px] border-primary/30 text-primary hover:bg-primary/10 rounded-lg px-2 sm:px-3">
-              Montar meu time <ArrowRight className="ml-1 h-2.5 w-2.5 sm:h-3 sm:w-3" />
-            </Button>
-          </Link>
-        </div>
-      </motion.div>
+      {/* Urgency info moved to Soluções mega-menu */}
 
       {/* HERO SECTION — with social proof */}
-      <section ref={heroRef} className="relative min-h-[90vh] flex items-center justify-center px-4 sm:px-6 pt-12 sm:pt-20 pb-8 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-[85vh] flex items-center justify-center px-4 sm:px-6 pt-8 sm:pt-16 pb-8 overflow-hidden">
         <div className="absolute inset-0 scan-line pointer-events-none" />
         <div className="absolute top-1/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/10 to-transparent" />
 
@@ -166,10 +147,9 @@ const HomePage = () => {
               </Badge>
             </motion.div>
 
-            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-8xl font-bold leading-[0.95] tracking-tight">
+            <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.8 }} className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight">
               <span className="block mb-2 text-foreground">{t("home.title1")}</span>
               <span className="block gradient-text">{t("home.title2")}</span>
-              <span className="block text-xl sm:text-3xl md:text-4xl lg:text-5xl text-muted-foreground/70 font-normal mt-3 sm:mt-4">{t("home.title3")}</span>
             </motion.h1>
 
             <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.7 }} className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2 sm:px-0">
@@ -374,30 +354,44 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* HOW IT WORKS — Compact */}
+      {/* HOW IT WORKS — Timeline */}
       <section className="py-24 px-4 relative">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
+        <div className="max-w-3xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-16">
             <h2 className="font-display text-3xl sm:text-4xl font-bold">
               {t("home.how_title")} <span className="gradient-text">{t("home.how_title_hl")}</span> {t("home.how_title_rest")}
             </h2>
           </motion.div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-3">
-            {[
-              { icon: Target, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
-              { icon: Users, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
-              { icon: BarChart3, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
-              { icon: Zap, title: t("home.how_step4"), desc: t("home.how_step4_desc") },
-              { icon: Shield, title: t("home.how_step5"), desc: t("home.how_step5_desc") },
-            ].map((item, i) => (
-              <motion.div key={i} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }} className="glass-card rounded-xl p-6 text-center glass-hover group">
-                <div className="w-10 h-10 rounded-lg bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
-                  <item.icon className="h-5 w-5 text-primary/70" />
-                </div>
-                <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
-                <p className="text-xs text-muted-foreground">{item.desc}</p>
-              </motion.div>
-            ))}
+          <div className="relative">
+            {/* Vertical connector line */}
+            <div className="absolute left-6 sm:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-primary/30 via-primary/10 to-transparent" />
+            <div className="space-y-8">
+              {[
+                { icon: Target, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
+                { icon: Users, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
+                { icon: BarChart3, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
+                { icon: Zap, title: t("home.how_step4"), desc: t("home.how_step4_desc") },
+                { icon: Shield, title: t("home.how_step5"), desc: t("home.how_step5_desc") },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1, duration: 0.5 }}
+                  className="flex items-start gap-5 sm:gap-6 group"
+                >
+                  <div className="relative z-10 shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-2xl bg-card border border-border flex items-center justify-center group-hover:border-primary/30 group-hover:bg-primary/5 transition-all duration-300">
+                    <item.icon className="h-5 w-5 sm:h-6 sm:w-6 text-primary/70 group-hover:text-primary transition-colors" />
+                    <span className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-[10px] font-bold text-primary">{i + 1}</span>
+                  </div>
+                  <div className="pt-1 sm:pt-3">
+                    <h4 className="font-display font-semibold text-base sm:text-lg mb-1 group-hover:text-primary/90 transition-colors">{item.title}</h4>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -416,9 +410,9 @@ const HomePage = () => {
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
-            {testimonials.map((t, i) => (
+            {testimonials.map((item, i) => (
               <motion.div
-                key={t.name}
+                key={item.name}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -428,14 +422,21 @@ const HomePage = () => {
                   <Quote className="h-8 w-8 text-primary/10 absolute top-6 right-6" />
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary-glow/20 flex items-center justify-center text-sm font-bold text-primary border border-primary/10">
-                      {t.avatar}
+                      {item.avatar}
                     </div>
                     <div>
-                      <p className="font-semibold text-sm">{t.name}</p>
-                      <p className="text-xs text-muted-foreground">{t.role}</p>
+                      <p className="font-semibold text-sm">{item.name}</p>
+                      <p className="text-xs text-muted-foreground">{item.role}</p>
                     </div>
                   </div>
-                  <p className="text-muted-foreground leading-relaxed text-sm italic">"{t.quote}"</p>
+                  {/* Key metric highlight */}
+                  <div className="mb-4 px-3 py-2 rounded-lg bg-primary/5 border border-primary/10 inline-flex items-center gap-2">
+                    <TrendingUp className="h-3.5 w-3.5 text-primary" />
+                    <span className="text-xs font-semibold text-primary">
+                      {i === 0 ? "-72% custos operacionais" : i === 1 ? "+340% conversão" : "ROI positivo em 1 semana"}
+                    </span>
+                  </div>
+                  <p className="text-muted-foreground leading-relaxed text-sm italic">"{item.quote}"</p>
                   <div className="flex gap-1 mt-4">
                     {[...Array(5)].map((_, j) => (
                       <Star key={j} className="h-3.5 w-3.5 fill-primary/80 text-primary/80" />
