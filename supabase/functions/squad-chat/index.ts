@@ -37,15 +37,59 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "message and agentIds[] are required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const { data: agents, error: agentsError } = await adminClient
+    // Fetch ALL active agents for this user in the provided list
+    const { data: allAgents, error: agentsError } = await adminClient
       .from("agents")
       .select("id, name, instructions, objective, tier, status")
       .eq("user_id", user.id)
       .eq("status", "active")
       .in("id", agentIds);
 
-    if (agentsError || !agents || agents.length === 0) {
+    if (agentsError || !allAgents || allAgents.length === 0) {
       return new Response(JSON.stringify({ error: "No active agents found" }), { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    // === SMART ROUTING: Use AI to select relevant agents ===
+    let agents = allAgents;
+    if (allAgents.length > 1) {
+      try {
+        const agentList = allAgents.map(a => `- ID: ${a.id} | Nome: ${a.name} | Objetivo: ${a.objective || a.name}`).join("\n");
+        const routingResponse = await fetchAI({
+          model: "google/gemini-2.5-flash-lite",
+          messages: [
+            {
+              role: "system",
+              content: `Você é um roteador de mensagens. Dado uma lista de agentes e uma mensagem do usuário, retorne APENAS os IDs dos agentes que são relevantes para responder à mensagem. Retorne um JSON array com os IDs. Se a mensagem for genérica (ex: "bom dia", "status geral"), retorne todos. Se for sobre um tema específico (ex: "melhorar vendas"), retorne apenas agentes daquela área.
+
+Agentes disponíveis:
+${agentList}
+
+Responda APENAS com um JSON array de IDs, sem explicação. Ex: ["id1","id2"]`
+            },
+            { role: "user", content: message },
+          ],
+          max_tokens: 200,
+          stream: false,
+        });
+
+        if (routingResponse.ok) {
+          const routingData = await routingResponse.json();
+          const routingContent = routingData.choices?.[0]?.message?.content || "";
+          // Extract JSON array from response
+          const match = routingContent.match(/\[[\s\S]*?\]/);
+          if (match) {
+            const selectedIds: string[] = JSON.parse(match[0]);
+            const filtered = allAgents.filter(a => selectedIds.includes(a.id));
+            if (filtered.length > 0) {
+              agents = filtered;
+              console.log(`Smart routing: ${allAgents.length} agents -> ${filtered.length} selected for: "${message.slice(0, 50)}"`);
+            }
+          }
+        }
+      } catch (routingErr) {
+        console.warn("Smart routing fallback to all agents:", routingErr);
+        // fallback: use all agents
+      }
     }
 
     const { data: credits } = await adminClient
