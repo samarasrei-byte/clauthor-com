@@ -964,6 +964,42 @@ export type Database = {
           },
         ]
       }
+      plan_limits: {
+        Row: {
+          created_at: string
+          features: Json | null
+          id: string
+          max_agents: number
+          max_monthly_executions: number
+          max_squads: number
+          max_team_members: number
+          max_tools_per_agent: number
+          plan_type: string
+        }
+        Insert: {
+          created_at?: string
+          features?: Json | null
+          id?: string
+          max_agents?: number
+          max_monthly_executions?: number
+          max_squads?: number
+          max_team_members?: number
+          max_tools_per_agent?: number
+          plan_type: string
+        }
+        Update: {
+          created_at?: string
+          features?: Json | null
+          id?: string
+          max_agents?: number
+          max_monthly_executions?: number
+          max_squads?: number
+          max_team_members?: number
+          max_tools_per_agent?: number
+          plan_type?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -1228,6 +1264,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      tool_tier_requirements: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          min_plan: string
+          min_tier: string
+          monthly_limit: number | null
+          tool_name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          min_plan?: string
+          min_tier?: string
+          monthly_limit?: number | null
+          tool_name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          min_plan?: string
+          min_tier?: string
+          monthly_limit?: number | null
+          tool_name?: string
+        }
+        Relationships: []
       }
       tools: {
         Row: {
