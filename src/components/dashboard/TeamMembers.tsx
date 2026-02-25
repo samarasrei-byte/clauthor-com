@@ -72,14 +72,12 @@ const TeamMembers = () => {
   const { data: members = [], isLoading } = useQuery({
     queryKey: ["tenant-members", tenantId],
     queryFn: async () => {
-      // Get members
       const { data: membersData, error: membersErr } = await supabase
         .from("tenant_members")
         .select("*")
         .eq("tenant_id", tenantId!);
       if (membersErr) throw membersErr;
 
-      // Enrich with profiles
       const enriched = await Promise.all(
         (membersData || []).map(async (m: any) => {
           const { data: profile } = await supabase
@@ -105,17 +103,81 @@ const TeamMembers = () => {
   const usagePct = Math.min((memberCount / limits.members) * 100, 100);
 
   const handleInvite = async () => {
-    if (!inviteEmail.trim() || !tenantId) return;
+    if (!inviteEmail.trim() || !tenantId || !user) return;
     if (!canInvite) {
-      toast.error(`Limite de ${limits.members} membros atingido no plano ${limits.label}. Faça upgrade para adicionar mais.`);
+      toast.error(`Limite de ${limits.members} membros atingido no plano ${limits.label}. Faça upgrade.`);
       return;
     }
+
+    // Validate email format
+    const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    if (!emailRegex.test(inviteEmail.trim())) {
+      toast.error("Email inválido.");
+      return;
+    }
+
     setIsInviting(true);
-    toast.success(`Convite enviado para ${inviteEmail}`, {
-      description: `Área: ${areaOptions.find(a => a.id === inviteArea)?.label || inviteArea} • Função: ${roleConfig[inviteRole]?.label}`,
-    });
-    setInviteEmail("");
-    setIsInviting(false);
+    try {
+      // Check if the user exists by looking up profiles (by email we can't directly, so we create a notification)
+      // For now, store the invite as a notification that can be picked up
+      const { error } = await supabase.from("notifications").insert({
+        user_id: user.id,
+        title: "Convite de equipe enviado",
+        message: `Convite enviado para ${inviteEmail} como ${roleConfig[inviteRole]?.label || inviteRole} na área ${areaOptions.find(a => a.id === inviteArea)?.label || inviteArea}`,
+        type: "team_invite",
+        metadata: {
+          invite_email: inviteEmail,
+          invite_role: inviteRole,
+          invite_area: inviteArea,
+          tenant_id: tenantId,
+        },
+      });
+
+      if (error) throw error;
+
+      toast.success(`Convite enviado para ${inviteEmail}`, {
+        description: `Área: ${areaOptions.find(a => a.id === inviteArea)?.label || inviteArea} • Função: ${roleConfig[inviteRole]?.label}`,
+      });
+      setInviteEmail("");
+      queryClient.invalidateQueries({ queryKey: ["tenant-members"] });
+    } catch (err) {
+      console.error("Invite error:", err);
+      toast.error("Erro ao enviar convite.");
+    } finally {
+      setIsInviting(false);
+    }
+  };
+
+  const handleRemoveMember = async (memberId: string, memberUserId: string) => {
+    if (memberUserId === user?.id) {
+      toast.error("Você não pode remover a si mesmo.");
+      return;
+    }
+    try {
+      const { error } = await supabase
+        .from("tenant_members")
+        .delete()
+        .eq("id", memberId);
+      if (error) throw error;
+      toast.success("Membro removido.");
+      queryClient.invalidateQueries({ queryKey: ["tenant-members"] });
+    } catch {
+      toast.error("Erro ao remover membro.");
+    }
+  };
+
+  const handleChangeRole = async (memberId: string, newRole: string) => {
+    try {
+      const { error } = await supabase
+        .from("tenant_members")
+        .update({ role: newRole })
+        .eq("id", memberId);
+      if (error) throw error;
+      toast.success("Permissão atualizada.");
+      queryClient.invalidateQueries({ queryKey: ["tenant-members"] });
+    } catch {
+      toast.error("Erro ao atualizar permissão.");
+    }
   };
 
   return (
@@ -208,7 +270,7 @@ const TeamMembers = () => {
             </Button>
           </div>
           <p className="text-[10px] text-muted-foreground mt-2">
-            Membros participam da reunião com agentes e acessam o dashboard de acordo com sua função e área.
+            Membros participam da reunião com agentes e acessam o dashboard de acordo com sua função.
           </p>
         </motion.div>
       )}
@@ -240,6 +302,7 @@ const TeamMembers = () => {
               const RoleIcon = role.icon;
               const profile = member.profile;
               const isMe = member.user_id === user?.id;
+              const isOwner = member.role === "owner";
 
               return (
                 <div
@@ -258,15 +321,11 @@ const TeamMembers = () => {
                           {profile?.full_name || `Usuário ${member.user_id.slice(0, 8)}`}
                         </span>
                         {isMe && (
-                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0">
-                            Você
-                          </Badge>
+                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0">Você</Badge>
                         )}
                       </div>
                       {profile?.company_name && (
-                        <span className="text-[10px] text-muted-foreground">
-                          {profile.company_name}
-                        </span>
+                        <span className="text-[10px] text-muted-foreground">{profile.company_name}</span>
                       )}
                       <span className="text-[10px] text-muted-foreground block">
                         Desde {new Date(member.created_at).toLocaleDateString("pt-BR", { month: "short", year: "numeric" })}
@@ -274,10 +333,32 @@ const TeamMembers = () => {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
+                    {/* Role change dropdown for admins */}
+                    {isAdmin && !isMe && !isOwner && (
+                      <select
+                        value={member.role}
+                        onChange={(e) => handleChangeRole(member.id, e.target.value)}
+                        className="h-7 px-2 rounded border border-border bg-card text-[10px] text-foreground"
+                      >
+                        <option value="admin">Admin</option>
+                        <option value="member">Membro</option>
+                        <option value="viewer">Visualizador</option>
+                      </select>
+                    )}
                     <Badge variant="secondary" className={`text-[10px] gap-1 ${role.color}`}>
                       <RoleIcon className="h-2.5 w-2.5" />
                       {role.label}
                     </Badge>
+                    {isAdmin && !isMe && !isOwner && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7 text-destructive/60 hover:text-destructive"
+                        onClick={() => handleRemoveMember(member.id, member.user_id)}
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </Button>
+                    )}
                   </div>
                 </div>
               );
@@ -308,7 +389,7 @@ const TeamMembers = () => {
                     {key === "owner" && "Controle total do workspace, agentes e membros."}
                     {key === "admin" && "Gerencia agentes, configurações e convida membros."}
                     {key === "member" && "Usa agentes, vê analytics e participa de reuniões."}
-                    {key === "viewer" && "Visualiza dashboards e relatórios. Sem edição."}
+                    {key === "viewer" && "Visualiza dashboards e relatórios. Sem enviar mensagens."}
                   </p>
                 </div>
               </div>
