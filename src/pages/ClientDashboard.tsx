@@ -31,6 +31,7 @@ import TeamMembers from "@/components/dashboard/TeamMembers";
 import ConciergeChat from "@/components/dashboard/ConciergeChat";
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
+import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
 import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
@@ -247,9 +248,7 @@ const ClientDashboard = () => {
           items={sidebarItems}
           activeItem={activeSection}
           onItemChange={(id) => {
-            if (id === "omnix") {
-              navigate("/omnix");
-            } else if (id === "concierge") {
+            if (id === "concierge") {
               setShowConcierge(true);
             } else {
               setActiveSection(id);
@@ -283,7 +282,7 @@ const ClientDashboard = () => {
                 key={item.id}
                 variant={activeSection === item.id ? "default" : "ghost"}
                 size="sm"
-                onClick={() => item.id === "omnix" ? navigate("/omnix") : item.id === "concierge" ? setShowConcierge(true) : setActiveSection(item.id)}
+                onClick={() => item.id === "concierge" ? setShowConcierge(true) : setActiveSection(item.id)}
                 className="shrink-0 gap-1.5"
               >
                 <item.icon className="h-3.5 w-3.5" />
@@ -291,6 +290,13 @@ const ClientDashboard = () => {
               </Button>
             ))}
           </div>
+
+          {/* ═══ OMNIX ═══ */}
+          {activeSection === "omnix" && (
+            <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
+              <OmnixCommandCenter />
+            </div>
+          )}
 
           {/* ═══ OVERVIEW ═══ */}
           {activeSection === "overview" && (
