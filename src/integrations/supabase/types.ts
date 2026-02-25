@@ -981,6 +981,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      increment_agent_executions: {
+        Args: { p_agent_id: string }
+        Returns: undefined
+      }
       is_tenant_admin: {
         Args: { _tenant_id: string; _user_id: string }
         Returns: boolean
