@@ -747,6 +747,8 @@
     "min_agents": "Select {{remaining}} more agent(s) to unlock the discount",
     "dept_vendas": "Sales Dept.",
     "dept_vendas_desc": "Complete automated sales team",
+    "dept_comercial": "Sales Dept.",
+    "dept_comercial_desc": "Complete sales and relationship team",
     "dept_suporte": "Support Dept.",
     "dept_suporte_desc": "24/7 omnichannel support",
     "dept_financeiro": "Finance Dept.",
