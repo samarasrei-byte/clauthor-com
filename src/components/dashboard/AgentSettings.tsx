@@ -122,6 +122,7 @@ interface AgentCardProps {
 }
 
 const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [instructions, setInstructions] = useState(agent.instructions || "");
   const [channels, setChannels] = useState<string[]>(() => {
@@ -136,6 +137,31 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
   const [channelCreds, setChannelCreds] = useState<Record<string, string>>({});
   const [testingChannel, setTestingChannel] = useState<string | null>(null);
   const [channelStatus, setChannelStatus] = useState<Record<string, "valid" | "invalid" | null>>({});
+
+  // Fetch saved credentials to show connection status
+  const { data: savedCredentials = [] } = useQuery({
+    queryKey: ["agent-saved-creds", agent.id, user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("agent_credentials")
+        .select("integration_name, credential_key")
+        .eq("agent_id", agent.id)
+        .eq("user_id", user!.id);
+      return data || [];
+    },
+    enabled: !!user && isExpanded,
+  });
+
+  // Map of which integrations have saved credentials
+  const connectedIntegrations = new Set(savedCredentials.map((c: any) => c.integration_name.toLowerCase()));
+
+  // Check if a channel has credentials saved
+  const isChannelConnected = (channelId: string): boolean => {
+    if (channelId === "whatsapp") return connectedIntegrations.has("whatsapp") || connectedIntegrations.has("whatsapp business api");
+    if (channelId === "email") return connectedIntegrations.has("email") || connectedIntegrations.has("sendgrid") || connectedIntegrations.has("resend");
+    if (channelId === "dashboard") return true; // always connected
+    return false;
+  };
 
   const saveMutation = useMutation({
     mutationFn: async () => {
@@ -293,7 +319,21 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
                             <ch.icon className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
                           </div>
                           <div className="flex-1 min-w-0">
-                            <p className={`text-xs font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}>{ch.label}</p>
+                            <div className="flex items-center gap-1.5">
+                              <p className={`text-xs font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}>{ch.label}</p>
+                              {isChannelConnected(ch.id) && ch.id !== "dashboard" && (
+                                <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                                  Conectado
+                                </span>
+                              )}
+                              {ch.id === "dashboard" && (
+                                <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                                  Nativo
+                                </span>
+                              )}
+                            </div>
                             <p className="text-[10px] text-muted-foreground truncate">{ch.desc}</p>
                           </div>
                           {status === "valid" && <Check className="h-4 w-4 text-emerald-500 shrink-0" />}
@@ -423,6 +463,22 @@ const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: 
   const [saving, setSaving] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
+  // Fetch saved credentials to show connection indicators
+  const { data: savedIntegrationCreds = [] } = useQuery({
+    queryKey: ["agent-integration-creds", agentId, user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("agent_credentials")
+        .select("integration_name, credential_key")
+        .eq("agent_id", agentId)
+        .eq("user_id", user!.id);
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  const connectedIntegrationNames = new Set(savedIntegrationCreds.map((c: any) => c.integration_name));
+
   // Find matching integrations for this agent type
   const agentKey = getAgentIntegrationKey(agentName);
   const specificIntegrations = agentKey ? agentIntegrations[agentKey] || [] : [];
@@ -510,7 +566,15 @@ const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: 
                   <Link2 className={`h-4 w-4 ${active ? "text-primary" : "text-muted-foreground"}`} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className={`text-xs font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}>{intgName}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className={`text-xs font-medium ${active ? "text-foreground" : "text-muted-foreground"}`}>{intgName}</p>
+                    {connectedIntegrationNames.has(intgName) && (
+                      <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                        Conectado
+                      </span>
+                    )}
+                  </div>
                 </div>
                 {active && <Check className="h-4 w-4 text-primary shrink-0" />}
               </button>
