@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -32,6 +32,7 @@ import TeamMembers from "@/components/dashboard/TeamMembers";
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
+import SupportChat from "@/components/SupportChat";
 import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
@@ -196,6 +197,7 @@ const ClientDashboard = () => {
     { id: "team", label: t("dashboard.team"), icon: UserPlus },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined },
     { id: "billing", label: t("dashboard.billing"), icon: CreditCard },
+    { id: "support", label: "Suporte", icon: MessageSquare },
   ];
 
   const mockChartData = [
@@ -517,6 +519,13 @@ const ClientDashboard = () => {
                   )}
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* ═══ SUPPORT ═══ */}
+          {activeSection === "support" && (
+            <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
+              <SupportChat area="client" embedded />
             </div>
           )}
         </div>

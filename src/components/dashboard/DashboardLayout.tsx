@@ -3,7 +3,7 @@ import { Bot, LogOut, Home, Shield, Coins, AlertTriangle, X } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageSelector } from "@/components/LanguageSelector";
-import SupportChat from "@/components/SupportChat";
+
 import { useTokenMonitor } from "@/hooks/useTokenMonitor";
 import TokenUpgradeDialog from "./TokenUpgradeDialog";
 import { AnimatePresence, motion } from "framer-motion";
@@ -99,7 +99,7 @@ const DashboardLayout = () => {
         <Outlet />
       </div>
 
-      <SupportChat area={isAdmin ? "admin" : "client"} />
+      
     </div>
   );
 };
