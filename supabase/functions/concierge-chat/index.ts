@@ -11,6 +11,90 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+// ── Credential extraction via AI tool-calling ──
+const CREDENTIAL_TOOL = {
+  type: "function" as const,
+  function: {
+    name: "save_credentials",
+    description: "Save user credentials/access info for an integration (WhatsApp, Email, LinkedIn, etc). Call this when the user provides login details, API keys, passwords, phone numbers, or access tokens for any service.",
+    parameters: {
+      type: "object",
+      properties: {
+        agent_id: {
+          type: "string",
+          description: "The agent ID to associate credentials with. Use the first active agent if not specified.",
+        },
+        credentials: {
+          type: "array",
+          items: {
+            type: "object",
+            properties: {
+              integration_name: {
+                type: "string",
+                description: "Service name: whatsapp, email, linkedin, instagram, hubspot, etc.",
+              },
+              credential_key: {
+                type: "string",
+                description: "Key name: api_key, password, phone_number, access_token, smtp_host, smtp_user, smtp_password, etc.",
+              },
+              credential_value: {
+                type: "string",
+                description: "The actual credential value provided by the user.",
+              },
+            },
+            required: ["integration_name", "credential_key", "credential_value"],
+          },
+          description: "Array of credentials to save.",
+        },
+      },
+      required: ["credentials"],
+    },
+  },
+};
+
+async function handleCredentialSave(
+  adminClient: ReturnType<typeof createClient>,
+  userId: string,
+  agentId: string,
+  credentials: Array<{ integration_name: string; credential_key: string; credential_value: string }>,
+  supabaseUrl: string,
+  authHeader: string,
+): Promise<{ saved: string[]; errors: string[] }> {
+  const saved: string[] = [];
+  const errors: string[] = [];
+
+  for (const cred of credentials) {
+    try {
+      const res = await fetch(`${supabaseUrl}/functions/v1/credential-manager`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: authHeader,
+        },
+        body: JSON.stringify({
+          action: "save",
+          agent_id: agentId,
+          integration_name: cred.integration_name.toLowerCase(),
+          credential_key: cred.credential_key.toLowerCase(),
+          credential_value: cred.credential_value,
+          is_secret: true,
+        }),
+      });
+
+      if (res.ok) {
+        saved.push(`${cred.integration_name}/${cred.credential_key}`);
+      } else {
+        const err = await res.json().catch(() => ({}));
+        errors.push(`${cred.integration_name}/${cred.credential_key}: ${err.error || "failed"}`);
+      }
+    } catch (e) {
+      errors.push(`${cred.integration_name}/${cred.credential_key}: ${e instanceof Error ? e.message : "error"}`);
+    }
+  }
+
+  return { saved, errors };
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -112,8 +196,12 @@ serve(async (req) => {
     const activeAgents = (agents || []).filter((a: any) => a.status === "active");
 
     const agentsList = activeAgents.map((a: any, i: number) => {
-      return `${i + 1}. **${a.name}** (${a.tier}) — ${a.objective || a.description || "Agente especializado"}`;
+      return `${i + 1}. **${a.name}** (${a.tier}) [ID: ${a.id}] — ${a.objective || a.description || "Agente especializado"}`;
     }).join("\n");
+
+    // Check if user seems to be providing credentials
+    const lastUserMsg = (messages || []).filter((m: any) => m.role === "user").pop()?.content || "";
+    const credentialIntent = /senha|password|api.?key|token|acesso|login|credencial|chave|phone|telefone|whatsapp|smtp|e-?mail.*acesso|linkedin.*senha/i.test(lastUserMsg);
 
     const systemPrompt = `${contractPrompt}
 
@@ -135,7 +223,16 @@ ${agentsList || "Nenhum agente ativo ainda."}
 - Command Center, Meus Agentes, Reunião, Assistente IA, Analytics, Logs
 
 ## DIFERENCIAL:
-Os agentes executam ações REAIS: emails, tarefas, relatórios, leads, reuniões.`;
+Os agentes executam ações REAIS: emails, tarefas, relatórios, leads, reuniões.
+
+## COLETA DE CREDENCIAIS:
+Quando o usuário fornecer dados de acesso (senhas, tokens, API keys, telefones, etc.) para integrar com WhatsApp, E-mail, LinkedIn, ou qualquer serviço:
+1. Use a ferramenta **save_credentials** para salvar IMEDIATAMENTE no cofre criptografado
+2. Se o usuário não especificar qual agente, use o primeiro agente ativo: ${activeAgents[0]?.id || "nenhum"}
+3. Confirme que salvou com sucesso e que os dados estão protegidos com criptografia AES-256
+4. NUNCA repita os valores das credenciais na sua resposta — apenas confirme que foram salvas
+5. Se o usuário quiser passar várias credenciais de uma vez, colete todas e salve em uma chamada
+6. Integrações suportadas: whatsapp, email, linkedin, instagram, hubspot, apollo, slack, google, meta_ads`;
 
     const apiMessages = [
       { role: "system", content: systemPrompt },
@@ -143,6 +240,114 @@ Os agentes executam ações REAIS: emails, tarefas, relatórios, leads, reuniõe
     ];
 
     const aiStep = tracker.step("ai_call");
+
+    // If credential intent detected, use tool-calling (non-streaming) first
+    if (credentialIntent && activeAgents.length > 0) {
+      const toolResponse = await fetchAI({
+        model: "google/gemini-2.5-flash",
+        messages: apiMessages,
+        stream: false,
+        max_tokens: 500,
+        temperature: 0.3,
+        tools: [CREDENTIAL_TOOL],
+        tool_choice: "auto",
+      });
+
+      if (!toolResponse.ok) {
+        aiStep.fail(`HTTP ${toolResponse.status}`);
+        throw new Error("AI Gateway failed");
+      }
+
+      const toolData = await toolResponse.json();
+      const choice = toolData.choices?.[0];
+      const toolCalls = choice?.message?.tool_calls;
+
+      if (toolCalls && toolCalls.length > 0) {
+        // Process tool calls
+        const toolResults: any[] = [];
+        for (const tc of toolCalls) {
+          if (tc.function.name === "save_credentials") {
+            const args = JSON.parse(tc.function.arguments);
+            const agentId = args.agent_id || activeAgents[0]?.id;
+            
+            if (!agentId) {
+              toolResults.push({
+                role: "tool",
+                tool_call_id: tc.id,
+                content: JSON.stringify({ error: "Nenhum agente ativo para associar credenciais." }),
+              });
+              continue;
+            }
+
+            const result = await handleCredentialSave(
+              adminClient, user.id, agentId, args.credentials,
+              supabaseUrl, authHeader,
+            );
+
+            toolResults.push({
+              role: "tool",
+              tool_call_id: tc.id,
+              content: JSON.stringify({
+                success: result.saved.length > 0,
+                saved: result.saved,
+                errors: result.errors,
+                agent_id: agentId,
+                agent_name: activeAgents.find((a: any) => a.id === agentId)?.name || "Agente",
+              }),
+            });
+          }
+        }
+
+        // Get final response with tool results (streaming)
+        const finalMessages = [
+          ...apiMessages,
+          choice.message,
+          ...toolResults,
+        ];
+
+        const finalResponse = await fetchAI({
+          model: "google/gemini-2.5-flash",
+          messages: finalMessages,
+          stream: true,
+          max_tokens: 300,
+          temperature: 0.6,
+        });
+
+        if (!finalResponse.ok) {
+          throw new Error("AI final response failed");
+        }
+
+        aiStep.done();
+
+        // Log
+        try {
+          await adminClient.from("execution_logs").insert({
+            user_id: user.id,
+            agent_id: "00000000-0000-0000-0000-000000000005",
+            action: "concierge_credential_save",
+            status: "success",
+            execution_time_ms: tracker.summary().totalMs,
+            details: { credentials_saved: true, tool_calls: toolCalls.length },
+          });
+        } catch {}
+
+        return new Response(finalResponse.body, {
+          headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+        });
+      }
+
+      // No tool call — fall through to normal streaming with the content
+      if (choice?.message?.content) {
+        aiStep.done();
+        // Convert to SSE format
+        const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
+        return new Response(sseData, {
+          headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+        });
+      }
+    }
+
+    // Normal streaming response (no credential intent)
     const response = await fetchAI({
       model: "google/gemini-2.5-flash-lite",
       messages: apiMessages,
