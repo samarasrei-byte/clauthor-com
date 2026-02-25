@@ -1,6 +1,7 @@
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import SmartAgentFinder from "@/components/library/SmartAgentFinder";
+import LiveDemoAgent from "@/components/landing/LiveDemoAgent";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
@@ -216,7 +217,7 @@ const HomePage = () => {
           HERO — "Sovereign AI Terminal"
           Mouse-reactive, self-typing, no clutter
           ═══════════════════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 overflow-hidden">
+      <section ref={heroRef} className="relative min-h-screen flex items-center px-4 sm:px-6 overflow-hidden py-20 sm:py-0">
         {/* Mouse-reactive field (desktop only) */}
         {!isMobile && <MouseReactiveField />}
 
@@ -226,99 +227,109 @@ const HomePage = () => {
           <div className="absolute top-2/3 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/5 to-transparent" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto">
-          {/* System status indicator */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2, duration: 0.8 }}
-            className="flex items-center gap-3 mb-8 sm:mb-12"
-          >
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/30 backdrop-blur-sm">
-              <div className="relative">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping opacity-75" />
-              </div>
-              <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Sistema ativo — 37 agentes operacionais
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Self-typing headline */}
-          <div className="mb-8 sm:mb-10">
-            <h1 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.92] tracking-tight">
-              <span className="text-foreground">{typedText}</span>
-              {!typingDone && (
-                <span className="inline-block w-[3px] h-[0.8em] bg-primary ml-1 align-middle" style={{ animation: "blink-cursor 0.8s step-end infinite" }} />
-              )}
-            </h1>
-          </div>
-
-          {/* Subtitle — monospace terminal feel */}
-          <AnimatePresence>
-            {typingDone && (
+        <div className="relative z-10 max-w-6xl mx-auto w-full">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+            {/* LEFT — Text content */}
+            <div className="flex-1 min-w-0">
+              {/* System status indicator */}
               <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.2, duration: 0.8 }}
+                className="flex items-center gap-3 mb-8"
               >
-                <p className="font-mono text-sm sm:text-base text-muted-foreground max-w-2xl leading-relaxed mb-10 sm:mb-12">
-                  <span className="text-primary/60">$</span>{" "}
-                  {t("home.subtitle")}
-                  <span className="text-foreground/80 font-medium"> {t("home.subtitle_highlight")}</span>
-                </p>
-
-                {/* CTA — Industrial, no fluff */}
-                <div className="flex flex-col sm:flex-row gap-4">
-                  <Link to="/departamentos">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group relative h-14 px-8 sm:px-12 rounded-xl font-display font-bold text-sm sm:text-base uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full sm:w-auto"
-                    >
-                      <div className="absolute inset-0 bg-primary rounded-xl" />
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                      <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
-                      <span className="relative z-10 flex items-center gap-3">
-                        <Network className="h-4 w-4" />
-                        Monte seu Time de IA
-                        <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                      </span>
-                    </motion.button>
-                  </Link>
-
-                  <Link to="/library">
-                    <motion.button
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="group h-14 px-8 sm:px-12 rounded-xl font-mono text-sm uppercase tracking-wider border border-border hover:border-primary/30 bg-card/30 backdrop-blur-sm text-muted-foreground hover:text-foreground transition-all duration-500 cursor-pointer w-full sm:w-auto"
-                    >
-                      <span className="flex items-center gap-3">
-                        <Terminal className="h-4 w-4 text-primary/50" />
-                        Explorar Agentes
-                        <ChevronRight className="h-4 w-4 text-primary/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
-                      </span>
-                    </motion.button>
-                  </Link>
-                </div>
-
-                {/* Trust — minimal, monospace */}
-                <div className="flex flex-wrap items-center gap-6 mt-10 sm:mt-14">
-                  {[
-                    { icon: Lock, label: "End-to-end encrypted" },
-                    { icon: Shield, label: "SOC 2 compliant" },
-                    { icon: Zap, label: "Setup 5min" },
-                  ].map((item) => (
-                    <div key={item.label} className="flex items-center gap-2 opacity-40">
-                      <item.icon className="h-3 w-3 text-primary/70" />
-                      <span className="font-mono text-[10px] uppercase tracking-[0.15em]">{item.label}</span>
-                    </div>
-                  ))}
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/30 backdrop-blur-sm">
+                  <div className="relative">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                    <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping opacity-75" />
+                  </div>
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                    Sistema ativo — 37 agentes operacionais
+                  </span>
                 </div>
               </motion.div>
-            )}
-          </AnimatePresence>
+
+              {/* Self-typing headline */}
+              <div className="mb-6 sm:mb-8">
+                <h1 className="font-display text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.92] tracking-tight">
+                  <span className="text-foreground">{typedText}</span>
+                  {!typingDone && (
+                    <span className="inline-block w-[3px] h-[0.8em] bg-primary ml-1 align-middle" style={{ animation: "blink-cursor 0.8s step-end infinite" }} />
+                  )}
+                </h1>
+              </div>
+
+              {/* Subtitle */}
+              <AnimatePresence>
+                {typingDone && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                  >
+                    <p className="font-mono text-sm sm:text-base text-muted-foreground max-w-lg leading-relaxed mb-8">
+                      <span className="text-primary/60">$</span>{" "}
+                      {t("home.subtitle")}
+                      <span className="text-foreground/80 font-medium"> {t("home.subtitle_highlight")}</span>
+                    </p>
+
+                    {/* CTAs */}
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Link to="/departamentos">
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="group relative h-13 px-8 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full sm:w-auto"
+                        >
+                          <div className="absolute inset-0 bg-primary rounded-xl" />
+                          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
+                          <span className="relative z-10 flex items-center gap-3">
+                            <Network className="h-4 w-4" />
+                            Monte seu Time de IA
+                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                          </span>
+                        </motion.button>
+                      </Link>
+
+                      <Link to="/library">
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          className="group h-13 px-8 rounded-xl font-mono text-sm uppercase tracking-wider border border-border hover:border-primary/30 bg-card/30 backdrop-blur-sm text-muted-foreground hover:text-foreground transition-all duration-500 cursor-pointer w-full sm:w-auto"
+                        >
+                          <span className="flex items-center gap-3">
+                            <Terminal className="h-4 w-4 text-primary/50" />
+                            Explorar Agentes
+                            <ChevronRight className="h-4 w-4 text-primary/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                          </span>
+                        </motion.button>
+                      </Link>
+                    </div>
+
+                    {/* Trust */}
+                    <div className="flex flex-wrap items-center gap-6 mt-8">
+                      {[
+                        { icon: Lock, label: "End-to-end encrypted" },
+                        { icon: Shield, label: "SOC 2 compliant" },
+                        { icon: Zap, label: "Setup 5min" },
+                      ].map((item) => (
+                        <div key={item.label} className="flex items-center gap-2 opacity-40">
+                          <item.icon className="h-3 w-3 text-primary/70" />
+                          <span className="font-mono text-[10px] uppercase tracking-[0.15em]">{item.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            {/* RIGHT — Live Demo Agent */}
+            <div className="w-full lg:w-[420px] shrink-0">
+              <LiveDemoAgent />
+            </div>
+          </div>
         </div>
       </section>
 
