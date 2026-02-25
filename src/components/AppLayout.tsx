@@ -15,7 +15,7 @@ const AppLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       <Navbar />
       <main className="pt-16">
         <Outlet />
