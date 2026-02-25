@@ -14,6 +14,50 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_credentials: {
+        Row: {
+          agent_id: string
+          created_at: string
+          credential_key: string
+          credential_value: string
+          id: string
+          integration_name: string
+          is_secret: boolean
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          credential_key: string
+          credential_value: string
+          id?: string
+          integration_name: string
+          is_secret?: boolean
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          credential_key?: string
+          credential_value?: string
+          id?: string
+          integration_name?: string
+          is_secret?: boolean
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_credentials_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agent_memory: {
         Row: {
           agent_id: string
