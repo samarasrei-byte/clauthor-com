@@ -12,7 +12,7 @@ import {
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
   Building, Zap, LayoutDashboard, CreditCard, Store,
-  ShieldCheck, Wallet, Rocket, Sparkles, Crown, Settings
+  ShieldCheck, Wallet, Rocket, Sparkles, Crown, Settings, Key
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { toast } from "sonner";
@@ -27,6 +27,7 @@ import AdminWarRoom from "@/components/dashboard/AdminWarRoom";
 import AdminAgentSettings from "@/components/dashboard/AdminAgentSettings";
 import AdminInsightsPanel from "@/components/dashboard/AdminInsightsPanel";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
+import PlatformCredentialsPanel from "@/components/dashboard/PlatformCredentialsPanel";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -128,6 +129,7 @@ const AdminDashboard = () => {
     { id: "insights", label: "IA Preditiva", icon: Sparkles },
     { id: "war-room", label: "War Room", icon: Crown },
     { id: "agent-settings", label: "Config. Agentes", icon: Settings },
+    { id: "platform-creds", label: "Credenciais Central", icon: Key },
     { id: "payments", label: "Pagamentos", icon: Wallet },
     { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
     { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined },
@@ -238,6 +240,9 @@ const AdminDashboard = () => {
 
           {/* ═══ AGENT SETTINGS — ADMIN ═══ */}
           {activeTab === "agent-settings" && <AdminAgentSettings />}
+
+          {/* ═══ PLATFORM CREDENTIALS ═══ */}
+          {activeTab === "platform-creds" && <PlatformCredentialsPanel />}
 
           {/* ═══ COMMAND CENTER (OVERVIEW) ═══ */}
           {activeTab === "overview" && (

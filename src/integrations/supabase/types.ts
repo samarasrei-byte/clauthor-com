@@ -1000,6 +1000,39 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_credentials: {
+        Row: {
+          created_at: string
+          credential_key: string
+          credential_value: string
+          description: string | null
+          id: string
+          integration_name: string
+          is_active: boolean
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          credential_key: string
+          credential_value: string
+          description?: string | null
+          id?: string
+          integration_name: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          credential_key?: string
+          credential_value?: string
+          description?: string | null
+          id?: string
+          integration_name?: string
+          is_active?: boolean
+          updated_at?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null

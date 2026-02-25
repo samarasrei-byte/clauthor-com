@@ -310,38 +310,58 @@ serve(async (req) => {
       }
 
       // ── DECRYPT FOR EXECUTION (internal use — agent execution bridge) ──
+      // Hybrid model: client credentials override platform defaults
       case "decrypt_for_execution": {
         if (!agent_id) {
           return new Response(JSON.stringify({ error: "agent_id required" }), { status: 400, headers });
         }
 
-        const { data: creds } = await adminClient
+        // 1. Fetch client-specific credentials
+        const { data: clientCreds } = await adminClient
           .from("agent_credentials")
           .select("integration_name, credential_key, credential_value")
           .eq("agent_id", agent_id)
           .eq("user_id", userId);
 
-        if (!creds || creds.length === 0) {
-          return new Response(JSON.stringify({ credentials: {} }), { headers });
-        }
+        // 2. Fetch platform-level default credentials (fallback)
+        const { data: platformCreds } = await adminClient
+          .from("platform_credentials")
+          .select("integration_name, credential_key, credential_value")
+          .eq("is_active", true);
 
+        // 3. Build merged map: platform first, then client overrides
         const decrypted: Record<string, Record<string, string>> = {};
-        for (const cred of creds) {
+
+        // Platform defaults
+        for (const cred of platformCreds || []) {
           try {
             const value = await decryptValue(cred.credential_value);
             if (!decrypted[cred.integration_name]) decrypted[cred.integration_name] = {};
             decrypted[cred.integration_name][cred.credential_key] = value;
           } catch (e) {
-            console.warn(`Failed to decrypt ${cred.credential_key}:`, e);
+            console.warn(`Failed to decrypt platform ${cred.credential_key}:`, e);
+          }
+        }
+
+        // Client overrides (takes precedence)
+        for (const cred of clientCreds || []) {
+          try {
+            const value = await decryptValue(cred.credential_value);
+            if (!decrypted[cred.integration_name]) decrypted[cred.integration_name] = {};
+            decrypted[cred.integration_name][cred.credential_key] = value;
+          } catch (e) {
+            console.warn(`Failed to decrypt client ${cred.credential_key}:`, e);
           }
         }
 
         // Update access tracking
-        await adminClient
-          .from("agent_credentials")
-          .update({ last_accessed_at: new Date().toISOString() })
-          .eq("agent_id", agent_id)
-          .eq("user_id", userId);
+        if (clientCreds && clientCreds.length > 0) {
+          await adminClient
+            .from("agent_credentials")
+            .update({ last_accessed_at: new Date().toISOString() })
+            .eq("agent_id", agent_id)
+            .eq("user_id", userId);
+        }
 
         await adminClient.from("credential_audit_logs").insert({
           user_id: userId,
@@ -351,10 +371,105 @@ serve(async (req) => {
           action: "decrypt_for_execution",
           ip_address: clientIp,
           user_agent: ua.slice(0, 200),
-          metadata: { integrations_decrypted: Object.keys(decrypted) },
+          metadata: {
+            integrations_decrypted: Object.keys(decrypted),
+            sources: {
+              platform: (platformCreds || []).length,
+              client: (clientCreds || []).length,
+            },
+          },
         });
 
         return new Response(JSON.stringify({ credentials: decrypted }), { headers });
+      }
+
+      // ── SAVE PLATFORM CREDENTIAL (admin only) ──
+      case "save_platform": {
+        // Check admin role
+        const { data: roleData } = await adminClient
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", userId)
+          .eq("role", "admin")
+          .single();
+
+        if (!roleData) {
+          return new Response(JSON.stringify({ error: "Admin access required" }), { status: 403, headers });
+        }
+
+        if (!integration_name || !credential_key || !credential_value) {
+          return new Response(JSON.stringify({ error: "integration_name, credential_key, and credential_value required" }), { status: 400, headers });
+        }
+
+        const encryptedPlatformValue = await encryptValue(credential_value);
+
+        const { error: platError } = await adminClient
+          .from("platform_credentials")
+          .upsert({
+            integration_name,
+            credential_key,
+            credential_value: encryptedPlatformValue,
+            is_active: true,
+            description: body.description || "",
+            updated_at: new Date().toISOString(),
+          }, { onConflict: "integration_name,credential_key" });
+
+        if (platError) throw platError;
+
+        return new Response(JSON.stringify({
+          success: true,
+          message: `Credencial de plataforma ${integration_name}/${credential_key} salva.`,
+        }), { headers });
+      }
+
+      // ── LIST PLATFORM CREDENTIALS (admin only) ──
+      case "list_platform": {
+        const { data: roleCheck } = await adminClient
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", userId)
+          .eq("role", "admin")
+          .single();
+
+        if (!roleCheck) {
+          return new Response(JSON.stringify({ error: "Admin access required" }), { status: 403, headers });
+        }
+
+        const { data: platCreds } = await adminClient
+          .from("platform_credentials")
+          .select("id, integration_name, credential_key, is_active, description, created_at, updated_at")
+          .order("integration_name");
+
+        return new Response(JSON.stringify({
+          credentials: (platCreds || []).map(c => ({ ...c, value: "••••••••" })),
+        }), { headers });
+      }
+
+      // ── DELETE PLATFORM CREDENTIAL (admin only) ──
+      case "delete_platform": {
+        const { data: roleCheck2 } = await adminClient
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", userId)
+          .eq("role", "admin")
+          .single();
+
+        if (!roleCheck2) {
+          return new Response(JSON.stringify({ error: "Admin access required" }), { status: 403, headers });
+        }
+
+        if (!body.credential_id) {
+          return new Response(JSON.stringify({ error: "credential_id required" }), { status: 400, headers });
+        }
+
+        const { error: delErr } = await adminClient
+          .from("platform_credentials")
+          .delete()
+          .eq("id", body.credential_id);
+
+        if (delErr) throw delErr;
+
+        return new Response(JSON.stringify({ success: true, message: "Credencial removida." }), { headers });
       }
 
       default:
