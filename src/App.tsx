@@ -26,6 +26,7 @@ const Auth = lazy(() => import("./pages/Auth"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const AgentLanding = lazy(() => import("./pages/AgentLanding"));
 const Departamentos = lazy(() => import("./pages/Departamentos"));
+const MonixCommandCenter = lazy(() => import("./pages/MonixCommandCenter"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -75,6 +76,7 @@ const App = () => (
                   <Route path="/agents" element={<Agents />} />
                   <Route path="/create-agent" element={<CreateAgent />} />
                   <Route path="/integrations" element={<Integrations />} />
+                  <Route path="/monix" element={<MonixCommandCenter />} />
                 </Route>
 
                 {/* Admin */}
