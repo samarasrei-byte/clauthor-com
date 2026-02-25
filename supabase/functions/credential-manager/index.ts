@@ -309,6 +309,54 @@ serve(async (req) => {
         }), { headers });
       }
 
+      // ── DECRYPT FOR EXECUTION (internal use — agent execution bridge) ──
+      case "decrypt_for_execution": {
+        if (!agent_id) {
+          return new Response(JSON.stringify({ error: "agent_id required" }), { status: 400, headers });
+        }
+
+        const { data: creds } = await adminClient
+          .from("agent_credentials")
+          .select("integration_name, credential_key, credential_value")
+          .eq("agent_id", agent_id)
+          .eq("user_id", userId);
+
+        if (!creds || creds.length === 0) {
+          return new Response(JSON.stringify({ credentials: {} }), { headers });
+        }
+
+        const decrypted: Record<string, Record<string, string>> = {};
+        for (const cred of creds) {
+          try {
+            const value = await decryptValue(cred.credential_value);
+            if (!decrypted[cred.integration_name]) decrypted[cred.integration_name] = {};
+            decrypted[cred.integration_name][cred.credential_key] = value;
+          } catch (e) {
+            console.warn(`Failed to decrypt ${cred.credential_key}:`, e);
+          }
+        }
+
+        // Update access tracking
+        await adminClient
+          .from("agent_credentials")
+          .update({ last_accessed_at: new Date().toISOString() })
+          .eq("agent_id", agent_id)
+          .eq("user_id", userId);
+
+        await adminClient.from("credential_audit_logs").insert({
+          user_id: userId,
+          agent_id,
+          integration_name: "all",
+          credential_key: "execution_decrypt",
+          action: "decrypt_for_execution",
+          ip_address: clientIp,
+          user_agent: ua.slice(0, 200),
+          metadata: { integrations_decrypted: Object.keys(decrypted) },
+        });
+
+        return new Response(JSON.stringify({ credentials: decrypted }), { headers });
+      }
+
       default:
         return new Response(JSON.stringify({ error: `Unknown action: ${action}` }), { status: 400, headers });
     }

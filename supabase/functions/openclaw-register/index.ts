@@ -153,6 +153,34 @@ serve(async (req) => {
       });
     }
 
+    // Fetch decrypted credentials for execution bridge
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const adminClient = createClient(supabaseUrl, serviceKey);
+
+    let agentCredentials: Record<string, Record<string, string>> = {};
+    try {
+      const credRes = await fetch(
+        `${supabaseUrl}/functions/v1/credential-manager`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: authHeader,
+          },
+          body: JSON.stringify({
+            action: "decrypt_for_execution",
+            agent_id: agentId,
+          }),
+        }
+      );
+      if (credRes.ok) {
+        const credData = await credRes.json();
+        agentCredentials = credData.credentials || {};
+      }
+    } catch (e) {
+      console.warn("Could not fetch agent credentials:", e);
+    }
+
     // Register with OpenClaw API (with retry)
     const webhookUrl = `${supabaseUrl}/functions/v1/openclaw-webhook`;
     
@@ -164,6 +192,7 @@ serve(async (req) => {
       channels: agent.channels || [],
       integrations: agent.integrations || [],
       actions: agent.actions || [],
+      credentials: agentCredentials,
       webhook_url: webhookUrl,
       metadata: {
         prometheus_agent_id: agentId,
