@@ -341,7 +341,7 @@ const ClientDashboard = () => {
               ) : (
                 <div className="grid sm:grid-cols-2 gap-4">
                   {agents.map((agent, i) => (
-                    <motion.div key={agent.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card rounded-2xl p-5 glass-hover cursor-pointer" onClick={() => agent.status === "active" && setSelectedAgent({ id: agent.id, name: agent.name })}>
+                    <motion.div key={agent.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card rounded-2xl p-5 glass-hover cursor-pointer" onClick={() => { if (agent.status === "active") { setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); } }}>
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
@@ -419,17 +419,17 @@ const ClientDashboard = () => {
                 <div className="grid grid-cols-3 gap-4 mt-6">
                   <div className="bg-white/[0.02] rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">{t("dashboard.this_month")}</p>
-                    <p className="font-display text-xl font-bold">1,800</p>
-                    <p className="text-xs text-emerald-500">+20%</p>
+                    <p className="font-display text-xl font-bold">{totalExecutions.toLocaleString(locale)}</p>
+                    <p className="text-xs text-emerald-500">{t("dashboard.executions")}</p>
                   </div>
                   <div className="bg-white/[0.02] rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_rate")}</p>
-                    <p className="font-display text-xl font-bold">97.2%</p>
+                    <p className="font-display text-xl font-bold">{recentLogs.length > 0 ? Math.round((recentLogs.filter(l => l.status === "success").length / recentLogs.length) * 100) : 100}%</p>
                     <p className="text-xs text-muted-foreground">{t("dashboard.of_success")}</p>
                   </div>
                   <div className="bg-white/[0.02] rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_time")}</p>
-                    <p className="font-display text-xl font-bold">1.2s</p>
+                    <p className="font-display text-xl font-bold">{recentLogs.length > 0 ? (recentLogs.reduce((a, l) => a + (l.execution_time_ms || 0), 0) / recentLogs.length / 1000).toFixed(1) : "0"}s</p>
                     <p className="text-xs text-muted-foreground">{t("dashboard.per_execution")}</p>
                   </div>
                 </div>
