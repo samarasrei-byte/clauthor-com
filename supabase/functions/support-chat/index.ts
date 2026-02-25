@@ -1,6 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/security.ts";
+import { createExecutionTracker } from "../_shared/resilience.ts";
+import { buildAgentContract, getTierSLA, getAreaLimits, type AgentContract } from "../_shared/agent-contract.ts";
+import { validateLimits } from "../_shared/policy-engine.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -54,17 +58,17 @@ CLAUTHOR é uma plataforma SaaS de agentes de IA autônomos para empresas. Ofere
 - Priorize resolução sobre explicação
 `;
 
-
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Rate limit by IP (public endpoint - stricter limit)
     const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
     const rl = checkRateLimit(`support:${clientIP}`, 15, 60_000);
     if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
+
+    const tracker = createExecutionTracker();
 
     const { messages, context } = await req.json();
 
@@ -84,7 +88,54 @@ serve(async (req) => {
       }
     }
 
-    let systemPrompt = SUPPORT_SYSTEM_PROMPT;
+    // === OPTIONAL AUTH + CREDIT VALIDATION ===
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    const adminClient = createClient(supabaseUrl, serviceKey);
+
+    const authHeader = req.headers.get("Authorization");
+    let userId: string | null = null;
+
+    if (authHeader?.startsWith("Bearer ")) {
+      const anonClient = createClient(supabaseUrl, Deno.env.get("SUPABASE_ANON_KEY")!);
+      const { data: { user } } = await anonClient.auth.getUser(authHeader.replace("Bearer ", ""));
+      if (user) {
+        userId = user.id;
+
+        // Credit validation for authenticated users
+        const { data: credits } = await adminClient
+          .from("user_credits")
+          .select("*")
+          .eq("user_id", user.id)
+          .single();
+
+        if (credits) {
+          const creditCheck = validateLimits(credits.used_credits, credits.total_credits);
+          if (!creditCheck.allowed) {
+            return new Response(JSON.stringify({ error: creditCheck.reason, suggest_upgrade: true }), {
+              status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
+          }
+        }
+      }
+    }
+
+    // === BUILD SUPPORT CONTRACT ===
+    const contract: AgentContract = {
+      agentId: "support-agent",
+      agentName: "CLAUTHOR Neural Support",
+      tenantId: "public",
+      userId: userId || "anonymous",
+      tier: "basic",
+      planType: "free",
+      area: "suporte",
+      objective: "Fornecer suporte técnico inteligente com auto-diagnóstico e resolução autônoma",
+      limits: getAreaLimits("suporte"),
+      sla: getTierSLA("basic"),
+    };
+    const contractPrompt = buildAgentContract(contract);
+
+    let systemPrompt = SUPPORT_SYSTEM_PROMPT + "\n" + contractPrompt;
     if (context) {
       systemPrompt += `\n\n## CONTEXTO DO USUÁRIO\n- Área: ${context.area || "site público"}\n- Rota: ${context.route || "/"}\n- Autenticado: ${context.authenticated ? "Sim" : "Não"}\n- Saúde do Sistema: ${context.systemHealth || "desconhecido"}`;
       if (context.diagnostics) {
@@ -94,6 +145,7 @@ serve(async (req) => {
 
     const recentMessages = messages.slice(-10);
 
+    const aiStep = tracker.step("ai_call");
     const response = await fetchAI({
       model: "google/gemini-3-flash-preview",
       messages: [
@@ -106,12 +158,26 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      const err = await response.text();
-      console.error("AI gateway error:", err);
+      aiStep.fail(`HTTP ${response.status}`);
       return new Response(
         JSON.stringify({ error: "AI service unavailable" }),
         { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
+    }
+    aiStep.done();
+
+    // Log execution for authenticated users
+    if (userId) {
+      try {
+        await adminClient.from("execution_logs").insert({
+          user_id: userId,
+          agent_id: "00000000-0000-0000-0000-000000000006",
+          action: "support_chat",
+          status: "success",
+          execution_time_ms: tracker.summary().totalMs,
+          details: { contract_applied: true, area: "suporte", tier: "basic" },
+        });
+      } catch {}
     }
 
     return new Response(response.body, {
