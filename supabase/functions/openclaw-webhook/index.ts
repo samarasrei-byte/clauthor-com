@@ -6,13 +6,55 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-openclaw-signature",
 };
 
+/** Verify HMAC-SHA256 signature from OpenClaw */
+async function verifySignature(body: string, signature: string | null, secret: string): Promise<boolean> {
+  if (!signature) return false;
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    "raw",
+    encoder.encode(secret),
+    { name: "HMAC", hash: "SHA-256" },
+    false,
+    ["sign"]
+  );
+  const sig = await crypto.subtle.sign("HMAC", key, encoder.encode(body));
+  const expected = Array.from(new Uint8Array(sig))
+    .map(b => b.toString(16).padStart(2, "0"))
+    .join("");
+  // Constant-time comparison
+  if (expected.length !== signature.length) return false;
+  let mismatch = 0;
+  for (let i = 0; i < expected.length; i++) {
+    mismatch |= expected.charCodeAt(i) ^ signature.charCodeAt(i);
+  }
+  return mismatch === 0;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const body = await req.json();
+    const rawBody = await req.text();
+    
+    // Validate HMAC signature
+    const webhookSecret = Deno.env.get("OPENCLAW_WEBHOOK_SECRET");
+    if (webhookSecret) {
+      const signature = req.headers.get("x-openclaw-signature");
+      const valid = await verifySignature(rawBody, signature, webhookSecret);
+      if (!valid) {
+        console.error("Invalid webhook signature");
+        return new Response(JSON.stringify({ error: "Invalid signature" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    } else {
+      console.warn("OPENCLAW_WEBHOOK_SECRET not set — skipping signature validation");
+    }
+
+    const body = JSON.parse(rawBody);
     const { event, agent_id: openclawAgentId, data, timestamp } = body;
 
     if (!event || !openclawAgentId) {
@@ -22,12 +64,10 @@ serve(async (req) => {
       });
     }
 
-    // Use service role to bypass RLS (webhook has no user context)
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const supabase = createClient(supabaseUrl, serviceKey);
 
-    // Find the registration by openclaw_agent_id
     const { data: registration, error: regError } = await supabase
       .from("openclaw_registrations")
       .select("*, agents(id, user_id, name)")
@@ -42,7 +82,6 @@ serve(async (req) => {
       });
     }
 
-    // Handle different webhook events
     switch (event) {
       case "agent.activated": {
         await supabase
@@ -57,7 +96,6 @@ serve(async (req) => {
       }
 
       case "agent.execution": {
-        // Log the execution
         if (registration.agents?.id && registration.agents?.user_id) {
           await supabase.from("execution_logs").insert({
             agent_id: registration.agents.id,
@@ -68,13 +106,13 @@ serve(async (req) => {
             details: data,
           });
 
-          // Increment total_executions
-          await supabase.rpc("increment_agent_executions", { 
+          // Use the new RPC
+          const { error: rpcError } = await supabase.rpc("increment_agent_executions", { 
             p_agent_id: registration.agents.id 
-          }).catch(() => {
-            // Fallback if RPC doesn't exist yet
-            console.log("increment_agent_executions RPC not available, skipping");
           });
+          if (rpcError) {
+            console.error("increment_agent_executions RPC error:", rpcError);
+          }
         }
 
         await supabase

@@ -6,6 +6,29 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
+/** Fetch with exponential backoff retry */
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  maxRetries = 3
+): Promise<Response> {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+      // Only retry on 5xx or network errors
+      if (response.ok || response.status < 500) return response;
+      if (attempt === maxRetries) return response;
+    } catch (error) {
+      if (attempt === maxRetries) throw error;
+    }
+    // Exponential backoff: 1s, 2s, 4s
+    const delay = Math.pow(2, attempt) * 1000;
+    await new Promise(r => setTimeout(r, delay));
+    console.log(`Retry attempt ${attempt + 1}/${maxRetries} for ${url}`);
+  }
+  throw new Error("Unreachable");
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -61,7 +84,7 @@ serve(async (req) => {
       });
     }
 
-    // Audit checks before registering
+    // Audit checks
     const audit = {
       has_instructions: !!agent.instructions && agent.instructions.length > 10,
       has_name: !!agent.name,
@@ -88,12 +111,11 @@ serve(async (req) => {
       });
     }
 
-    // Build OpenClaw registration payload
     const OPENCLAW_API_KEY = Deno.env.get("OPENCLAW_API_KEY");
     const OPENCLAW_BASE_URL = Deno.env.get("OPENCLAW_BASE_URL") || "https://api.openclaw.ai";
 
     if (!OPENCLAW_API_KEY) {
-      // If no API key yet, still create the registration record as pending
+      // No API key — register as pending
       const { data: registration, error: regError } = await supabase
         .from("openclaw_registrations")
         .insert({
@@ -131,7 +153,7 @@ serve(async (req) => {
       });
     }
 
-    // Register with OpenClaw API
+    // Register with OpenClaw API (with retry)
     const webhookUrl = `${supabaseUrl}/functions/v1/openclaw-webhook`;
     
     const openclawPayload = {
@@ -149,19 +171,22 @@ serve(async (req) => {
       },
     };
 
-    const openclawResponse = await fetch(`${OPENCLAW_BASE_URL}/v1/agents/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${OPENCLAW_API_KEY}`,
+    const openclawResponse = await fetchWithRetry(
+      `${OPENCLAW_BASE_URL}/v1/agents/register`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${OPENCLAW_API_KEY}`,
+        },
+        body: JSON.stringify(openclawPayload),
       },
-      body: JSON.stringify(openclawPayload),
-    });
+      3
+    );
 
     const openclawData = await openclawResponse.json();
 
     if (!openclawResponse.ok) {
-      // Record failed registration
       await supabase.from("openclaw_registrations").insert({
         agent_id: agentId,
         user_id: userId,
@@ -180,7 +205,6 @@ serve(async (req) => {
       });
     }
 
-    // Record successful registration
     const { data: registration, error: regError } = await supabase
       .from("openclaw_registrations")
       .insert({
