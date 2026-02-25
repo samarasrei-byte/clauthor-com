@@ -383,6 +383,7 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
             onClick={() => setOpen(true)}
+            aria-label="Open support chat"
             className="fixed bottom-6 left-6 z-[9998] h-13 w-13 rounded-2xl flex items-center justify-center group cursor-pointer"
             style={{ position: "fixed" }}
             whileHover={{ scale: 1.05 }}
@@ -420,7 +421,7 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-6 left-6 z-[9998] w-[400px] h-[580px] flex flex-col rounded-2xl overflow-hidden"
+            className="fixed bottom-6 left-6 z-[9998] w-[min(400px,calc(100vw-3rem))] h-[min(580px,calc(100vh-3rem))] flex flex-col rounded-2xl overflow-hidden"
             style={{ position: "fixed" }}
           >
             {/* Animated border */}
@@ -463,6 +464,7 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
                 </div>
                 <button
                   onClick={() => setOpen(false)}
+                  aria-label="Close support chat"
                   className="h-7 w-7 rounded-lg border border-white/[0.04] bg-white/[0.02] flex items-center justify-center hover:border-white/[0.08] hover:bg-white/[0.04] transition-all"
                 >
                   <Minimize2 className="h-3 w-3 text-muted-foreground" />
@@ -475,6 +477,8 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
                   <button
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
+                    aria-label={tab.label}
+                    aria-pressed={activeTab === tab.id}
                     className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-[9px] font-semibold tracking-[0.1em] uppercase transition-all duration-200 ${
                       activeTab === tab.id
                         ? "bg-primary/[0.1] text-primary border border-primary/20"
@@ -723,6 +727,7 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
                     {/* Voice button */}
                     <button
                       onClick={voice.isListening ? voice.stopListening : voice.startListening}
+                      aria-label={voice.isListening ? "Stop voice input" : "Start voice input"}
                       className={`h-9 w-9 rounded-xl border flex items-center justify-center transition-all duration-300 shrink-0 ${
                         voice.isListening
                           ? "border-primary/40 bg-primary/[0.1] text-primary"
@@ -745,6 +750,7 @@ const SupportChat = ({ area = "public" }: SupportChatProps) => {
                     <button
                       onClick={() => sendMessage()}
                       disabled={isLoading || !input.trim()}
+                      aria-label="Send message"
                       className="h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center hover:border-primary/20 hover:bg-primary/[0.06] disabled:opacity-30 transition-all duration-300 group shrink-0"
                     >
                       {isLoading ? (
