@@ -19,7 +19,7 @@ export interface OmnixMessage {
 }
 
 const DEFAULT_CONFIG: OmnixConfig = {
-  name: "OMNIX",
+  name: "THOR",
   tone: "estratégico",
   personality: "futurista",
   responseStyle: "detalhado",

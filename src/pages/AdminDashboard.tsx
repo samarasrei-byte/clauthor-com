@@ -123,7 +123,7 @@ const AdminDashboard = () => {
   const waitingCount = waitlist.filter((w) => w.status === "waiting").length;
 
   const sidebarItems = [
-    { id: "omnix", label: "OMNIX", icon: Sparkles, badge: "AI" },
+    { id: "omnix", label: "THOR", icon: Sparkles, badge: "AI" },
     { id: "overview", label: "Command Center", icon: LayoutDashboard },
     { id: "insights", label: "IA Preditiva", icon: Sparkles },
     { id: "war-room", label: "War Room", icon: Crown },
