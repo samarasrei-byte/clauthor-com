@@ -262,3 +262,47 @@ export async function enforcePolicy(
 
   return { allowed: true };
 }
+
+/**
+ * Backward-compatible helper used by orchestrator chats.
+ * Keeps legacy signature while routing through the central policy engine.
+ */
+export async function validateAndEnforcePolicy(
+  adminClient: any,
+  userId: string,
+  toolName: string,
+  _action: string
+): Promise<PolicyResult> {
+  const tenantCheck = await validateTenant(adminClient, userId);
+  if (!tenantCheck.valid || !tenantCheck.tenantId) {
+    return { allowed: false, reason: tenantCheck.error || "Acesso não autorizado." };
+  }
+
+  const { data: credits } = await adminClient
+    .from("user_credits")
+    .select("used_credits, total_credits, plan_type")
+    .eq("user_id", userId)
+    .maybeSingle();
+
+  // If credits are not initialized yet, avoid blocking chats.
+  if (!credits) {
+    return { allowed: true };
+  }
+
+  const context: PolicyContext = {
+    userId,
+    tenantId: tenantCheck.tenantId,
+    agentId: "orchestrator",
+    agentTier: "enterprise",
+    planType: credits.plan_type || "free",
+    agentArea: "executivo",
+  };
+
+  return enforcePolicy(
+    adminClient,
+    context,
+    toolName,
+    credits.used_credits || 0,
+    credits.total_credits || 0
+  );
+}
