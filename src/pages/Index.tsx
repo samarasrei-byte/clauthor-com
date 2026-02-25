@@ -1,8 +1,10 @@
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
-import SmartAgentFinder from "@/components/library/SmartAgentFinder";
-import LiveDemoAgent from "@/components/landing/LiveDemoAgent";
+import { lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
+
+const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
+const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, Shield, Zap,
@@ -331,7 +333,9 @@ const HomePage = () => {
 
             {/* RIGHT — Live Demo Agent */}
             <div className="w-full lg:w-[420px] shrink-0">
-              <LiveDemoAgent />
+              <Suspense fallback={<div className="h-[400px] rounded-2xl bg-card/30 animate-pulse" />}>
+                <LiveDemoAgent />
+              </Suspense>
             </div>
           </div>
         </div>
@@ -413,12 +417,14 @@ const HomePage = () => {
                 </p>
               </div>
 
-              <SmartAgentFinder
-                agentMeta={finderMeta}
-                onHire={() => navigate("/library")}
-                onPreview={() => {}}
-                hiringSlug={null}
-              />
+              <Suspense fallback={<div className="h-[200px] rounded-2xl bg-card/30 animate-pulse" />}>
+                <SmartAgentFinder
+                  agentMeta={finderMeta}
+                  onHire={() => navigate("/library")}
+                  onPreview={() => {}}
+                  hiringSlug={null}
+                />
+              </Suspense>
             </div>
           </motion.div>
         </div>
