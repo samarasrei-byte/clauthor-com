@@ -69,7 +69,7 @@ const AdminDashboard = () => {
   const { data: allSubscriptions = [] } = useQuery({
     queryKey: ["admin-subscriptions"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("subscriptions").select("*").eq("status", "active").order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("subscriptions").select("*, agent:agents(name)").eq("status", "active").order("created_at", { ascending: false });
       if (error) throw error;
       return data;
     },
@@ -485,7 +485,7 @@ const AdminDashboard = () => {
                       <tbody>
                         {allSubscriptions.map((sub: any) => (
                           <tr key={sub.id} className="border-b border-white/[0.05] hover:bg-accent/20">
-                            <td className="p-3 font-medium">{sub.agent_id ? sub.agent_id.slice(0, 8) : "—"}</td>
+                            <td className="p-3 font-medium">{(sub as any).agent?.name || (sub.agent_id ? sub.agent_id.slice(0, 8) : "—")}</td>
                             <td className="p-3">R$ {(sub.monthly_price / 100).toLocaleString("pt-BR")}/mês</td>
                             <td className="p-3 text-muted-foreground text-xs">{sub.current_period_start ? new Date(sub.current_period_start).toLocaleDateString("pt-BR") : "—"} → {sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString("pt-BR") : "—"}</td>
                             <td className="p-3"><Badge variant="secondary" className="bg-primary/20 text-primary">{sub.status}</Badge></td>
