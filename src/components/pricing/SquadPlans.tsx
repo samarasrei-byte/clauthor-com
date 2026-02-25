@@ -50,7 +50,7 @@ const departments = [
     agents: [
       { key: "sales", icon: Briefcase, role: "SDR / Closer de Vendas", tokens: "2.5M" },
       { key: "customer_success", icon: Star, role: "Customer Success Manager", tokens: "1.5M" },
-      { key: "omnichannel", icon: MessageSquare, role: "Atendente Multicanal", tokens: "2M" },
+      { key: "sales_channel", icon: MessageSquare, role: "Canal de Vendas Multicanal", tokens: "2M" },
       { key: "voice_ai", icon: Phone, role: "Operador de Telefonia", tokens: "2M" },
     ],
     headcount: 4, cltCost: 52000, prometheusCost: 3497, discount: 25,
@@ -98,8 +98,8 @@ const departments = [
     agents: [
       { key: "creative_design", icon: Palette, role: "Designer Gráfico Sênior", tokens: "2M" },
       { key: "video_production", icon: Video, role: "Editor de Vídeo / Motion", tokens: "2M" },
-      { key: "content", icon: Sparkles, role: "Redator Criativo", tokens: "1M" },
-      { key: "influencer", icon: Megaphone, role: "Produtor de Conteúdo", tokens: "1M" },
+      { key: "creative_writer", icon: Sparkles, role: "Redator Criativo", tokens: "1M" },
+      { key: "content_producer", icon: Megaphone, role: "Produtor de Conteúdo", tokens: "1M" },
     ],
     headcount: 4, cltCost: 36000, prometheusCost: 2197, discount: 20,
   },
@@ -112,9 +112,9 @@ const departments = [
     tokens: "5M",
     actions: "10.000",
     agents: [
-      { key: "omnichannel", icon: MessageSquare, role: "Atendente N1 / N2", tokens: "1.5M" },
-      { key: "customer_success", icon: Star, role: "CS Manager", tokens: "1.5M" },
-      { key: "voice_ai", icon: Phone, role: "Operador Call Center", tokens: "1M" },
+      { key: "support_channel", icon: MessageSquare, role: "Atendente N1 / N2", tokens: "1.5M" },
+      { key: "support_lead", icon: Star, role: "Líder de Suporte", tokens: "1.5M" },
+      { key: "voice_support", icon: Phone, role: "Operador Call Center", tokens: "1M" },
       { key: "rag", icon: FileText, role: "Base de Conhecimento", tokens: "1M" },
     ],
     headcount: 4, cltCost: 32000, prometheusCost: 1797, discount: 20,
@@ -130,7 +130,7 @@ const departments = [
     agents: [
       { key: "hr", icon: Star, role: "Recrutador / BP", tokens: "1.5M" },
       { key: "training", icon: GraduationCap, role: "T&D / Onboarding", tokens: "1M" },
-      { key: "customer_success", icon: Star, role: "People Analytics", tokens: "1M" },
+      { key: "people_analytics", icon: BarChart3, role: "People Analytics", tokens: "1M" },
       { key: "data_analytics", icon: BarChart3, role: "Analista de Dados RH", tokens: "0.5M" },
     ],
     headcount: 4, cltCost: 28000, prometheusCost: 1497, discount: 15,
@@ -139,7 +139,7 @@ const departments = [
 
 const availableAgents = [
   { key: "voice_ai", icon: Phone },
-  { key: "omnichannel", icon: MessageSquare },
+  { key: "sales_channel", icon: MessageSquare },
   { key: "sales", icon: Briefcase },
   { key: "revenue", icon: BarChart3 },
   { key: "customer_success", icon: Star },
@@ -162,6 +162,12 @@ const availableAgents = [
   { key: "project_management", icon: ClipboardList },
   { key: "supply_chain", icon: Truck },
   { key: "training", icon: GraduationCap },
+  { key: "creative_writer", icon: Sparkles },
+  { key: "content_producer", icon: Megaphone },
+  { key: "support_channel", icon: MessageSquare },
+  { key: "support_lead", icon: Star },
+  { key: "voice_support", icon: Phone },
+  { key: "people_analytics", icon: BarChart3 },
 ];
 
 function getTeamDiscount(count: number): number {
