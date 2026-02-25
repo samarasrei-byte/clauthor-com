@@ -24,6 +24,7 @@ import AdminCommandCenter from "@/components/dashboard/AdminCommandCenter";
 import PaymentsPanel from "@/components/dashboard/PaymentsPanel";
 import AdminWarRoom from "@/components/dashboard/AdminWarRoom";
 import AdminAgentSettings from "@/components/dashboard/AdminAgentSettings";
+import AdminInsightsPanel from "@/components/dashboard/AdminInsightsPanel";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -120,6 +121,7 @@ const AdminDashboard = () => {
 
   const sidebarItems = [
     { id: "overview", label: "Command Center", icon: LayoutDashboard },
+    { id: "insights", label: "IA Preditiva", icon: Sparkles },
     { id: "war-room", label: "War Room", icon: Crown },
     { id: "agent-settings", label: "Config. Agentes", icon: Settings },
     { id: "payments", label: "Pagamentos", icon: Wallet },
@@ -207,6 +209,18 @@ const AdminDashboard = () => {
               </Button>
             ))}
           </div>
+
+          {/* ═══ AI INSIGHTS ═══ */}
+          {activeTab === "insights" && (
+            <AdminInsightsPanel
+              allProfiles={allProfiles}
+              allAgents={allAgents}
+              allCredits={allCredits}
+              executionLogs={executionLogs}
+              totalRevenue={totalRevenue}
+              totalExecutions={totalExecutions}
+            />
+          )}
 
           {/* ═══ WAR ROOM — ALL AGENTS UNIFIED ═══ */}
           {activeTab === "war-room" && <AdminWarRoom />}
