@@ -26,6 +26,7 @@ import PaymentsPanel from "@/components/dashboard/PaymentsPanel";
 import AdminWarRoom from "@/components/dashboard/AdminWarRoom";
 import AdminAgentSettings from "@/components/dashboard/AdminAgentSettings";
 import AdminInsightsPanel from "@/components/dashboard/AdminInsightsPanel";
+import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -180,7 +181,7 @@ const AdminDashboard = () => {
     <div className="flex h-full">
       {/* Sidebar — fixed, full height */}
       <div className="hidden lg:block">
-        <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={(id) => id === "omnix" ? navigate("/omnix") : setActiveTab(id)} />
+        <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={setActiveTab} />
       </div>
 
       {/* Scrollable content area */}
@@ -207,11 +208,18 @@ const AdminDashboard = () => {
           {/* Mobile tabs */}
           <div className="flex gap-2 overflow-x-auto lg:hidden pb-2">
             {sidebarItems.map((item) => (
-              <Button key={item.id} variant={activeTab === item.id ? "default" : "ghost"} size="sm" onClick={() => item.id === "omnix" ? navigate("/omnix") : setActiveTab(item.id)} className="shrink-0 gap-1.5 text-xs">
+              <Button key={item.id} variant={activeTab === item.id ? "default" : "ghost"} size="sm" onClick={() => setActiveTab(item.id)} className="shrink-0 gap-1.5 text-xs">
                 <item.icon className="h-3.5 w-3.5" /> {item.label}
               </Button>
             ))}
           </div>
+
+          {/* ═══ OMNIX ═══ */}
+          {activeTab === "omnix" && (
+            <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
+              <OmnixCommandCenter />
+            </div>
+          )}
 
           {/* ═══ AI INSIGHTS ═══ */}
           {activeTab === "insights" && (
