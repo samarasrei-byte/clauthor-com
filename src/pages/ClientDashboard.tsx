@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,6 +28,7 @@ import AgentSettings from "@/components/dashboard/AgentSettings";
 import SquadChat from "@/components/dashboard/SquadChat";
 import CompanyBoard from "@/components/dashboard/CompanyBoard";
 import TeamMembers from "@/components/dashboard/TeamMembers";
+import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
 
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
@@ -197,6 +198,7 @@ const ClientDashboard = () => {
     { id: "team", label: t("dashboard.team"), icon: UserPlus },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined },
     { id: "billing", label: t("dashboard.billing"), icon: CreditCard },
+    { id: "whatsapp-setup", label: "WhatsApp Setup", icon: Phone },
     { id: "support", label: "Suporte", icon: MessageSquare },
   ];
 
@@ -321,6 +323,9 @@ const ClientDashboard = () => {
 
           {/* ═══ TEAM MEMBERS ═══ */}
           {activeSection === "team" && <TeamMembers />}
+
+          {/* ═══ WHATSAPP SETUP GUIDE ═══ */}
+          {activeSection === "whatsapp-setup" && <WhatsAppSetupGuide />}
 
           {/* ═══ AGENTS ═══ */}
           {activeSection === "agents" && (
