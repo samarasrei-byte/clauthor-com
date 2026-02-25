@@ -48,11 +48,11 @@ export function useCredits() {
   });
 
   const remainingCredits = credits 
-    ? credits.total_credits - credits.used_credits 
+    ? Math.max(0, credits.total_credits - credits.used_credits) 
     : 0;
 
-  const usagePercentage = credits 
-    ? Math.round((credits.used_credits / credits.total_credits) * 100) 
+  const usagePercentage = credits && credits.total_credits > 0
+    ? Math.min(100, Math.round((credits.used_credits / credits.total_credits) * 100)) 
     : 0;
 
   return {

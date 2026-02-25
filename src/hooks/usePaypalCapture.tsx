@@ -49,20 +49,25 @@ export function usePaypalCapture() {
 
         // Payment confirmed — update credits
         const tokensToAdd = getTokensForItem(order.type, order.item_id);
-        if (tokensToAdd > 0) {
+        const { data: { user: currentUser } } = await supabase.auth.getUser();
+        if (tokensToAdd > 0 && currentUser) {
           const { data: currentCredits } = await supabase
             .from("user_credits")
             .select("total_credits")
+            .eq("user_id", currentUser.id)
             .single();
 
           if (currentCredits) {
+            const updatePayload: Record<string, any> = {
+              total_credits: currentCredits.total_credits + tokensToAdd,
+            };
+            if (order.type === "plan") {
+              updatePayload.plan_type = order.item_id;
+            }
             await supabase
               .from("user_credits")
-              .update({
-                total_credits: currentCredits.total_credits + tokensToAdd,
-                plan_type: order.type === "plan" ? order.item_id : undefined,
-              })
-              .eq("user_id", (await supabase.auth.getUser()).data.user?.id!);
+              .update(updatePayload)
+              .eq("user_id", currentUser.id);
           }
         }
 

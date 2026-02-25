@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { CreditCard, Calendar, Receipt, ArrowUpRight, Bitcoin, Wallet, Globe, QrCode, Smartphone } from "lucide-react";
+import { CreditCard, Calendar, Receipt, ArrowUpRight, Wallet, Globe, QrCode, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -137,16 +137,10 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
                 <p className="text-[11px] font-medium">PayPal</p>
               </div>
             </Button>
-            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10">
-              <Smartphone className="h-3.5 w-3.5 text-cyan-500 shrink-0" />
+            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10 col-span-3">
+              <Wallet className="h-3.5 w-3.5 text-primary shrink-0" />
               <div className="text-left">
-                <p className="text-[11px] font-medium">Mercado Pago</p>
-              </div>
-            </Button>
-            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10 col-span-2">
-              <Bitcoin className="h-3.5 w-3.5 text-amber-500 shrink-0" />
-              <div className="text-left">
-                <p className="text-[11px] font-medium">Cripto (BTC, ETH, USDC)</p>
+                <p className="text-[11px] font-medium">Mais métodos em breve</p>
               </div>
             </Button>
           </div>

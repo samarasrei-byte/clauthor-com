@@ -7,8 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCredits } from "@/hooks/useCredits";
 import {
   Coins, Zap, Crown, Rocket, ArrowRight, CheckCircle,
-  QrCode, Bitcoin, Copy, ExternalLink, Sparkles, Package,
-  CreditCard, Globe, Smartphone
+  QrCode, Copy, ExternalLink, Sparkles, Package,
+  CreditCard, Globe, Smartphone, Clock
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -102,7 +102,7 @@ const tokenPacks: TokenPack[] = [
   { id: "pack-100m", tokens: "100M", tokensNum: 100000000, price: "R$ 14.997", priceNum: 14997, savings: "50% off" },
 ];
 
-type PaymentMethod = "pix" | "crypto" | "stripe" | "paypal" | "mercadopago";
+type PaymentMethod = "pix" | "stripe" | "paypal" | "mercadopago";
 
 interface TokenUpgradeDialogProps {
   trigger?: React.ReactNode;
@@ -119,6 +119,11 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
   const currentPlan = credits?.plan_type || "free";
 
   const handleSelectPlan = (planId: string) => {
+    const plan = plans.find(p => p.id === planId);
+    if (plan && plan.priceNum === 0) {
+      toast.info("Entre em contato com vendas para o plano Enterprise.");
+      return;
+    }
     setSelectedPlan(planId);
     setSelectedPack(null);
     setShowPayment(true);
@@ -414,24 +419,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     </div>
                   </motion.div>
 
-                  {/* Crypto */}
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
-                      paymentMethod === "crypto" ? "border-amber-500 bg-amber-500/10" : "border-white/10 bg-white/[0.02] hover:border-amber-500/30"
-                    }`}
-                    onClick={() => handlePayment("crypto")}
-                  >
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <div className="w-9 h-9 rounded-lg bg-amber-500/10 flex items-center justify-center">
-                        <Bitcoin className="h-4 w-4 text-amber-500" />
-                      </div>
-                      <div>
-                        <p className="font-display font-bold text-sm">Cripto</p>
-                        <p className="text-[9px] text-muted-foreground">BTC, ETH, USDC</p>
-                      </div>
-                    </div>
-                  </motion.div>
+                  {/* Crypto removido — será ativado via NOWPayments */}
                 </div>
               </div>
 
@@ -447,16 +435,19 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     <p className="font-display font-bold">Pagamento via PIX</p>
                   </div>
                   <div className="bg-background/60 rounded-lg p-4 text-center">
-                    <div className="w-40 h-40 mx-auto bg-white rounded-lg flex items-center justify-center mb-3">
-                      <QrCode className="h-24 w-24 text-background" />
+                    <div className="w-40 h-40 mx-auto bg-white/10 rounded-lg flex items-center justify-center mb-3 border-2 border-dashed border-emerald-500/30">
+                      <div className="text-center">
+                        <QrCode className="h-12 w-12 text-emerald-500/50 mx-auto mb-2" />
+                        <p className="text-[10px] text-muted-foreground">Integração em breve</p>
+                      </div>
                     </div>
-                    <p className="text-xs text-muted-foreground">Escaneie o QR Code ou copie o código</p>
+                    <p className="text-xs text-muted-foreground">PIX será ativado em breve via EfiPay/Gerencianet</p>
                   </div>
-                  <Button variant="outline" className="w-full gap-2 border-emerald-500/20" onClick={copyPixCode}>
-                    <Copy className="h-4 w-4" /> Copiar Código PIX
+                  <Button variant="outline" className="w-full gap-2 border-emerald-500/20" disabled>
+                    <Clock className="h-4 w-4" /> Em breve
                   </Button>
                   <p className="text-[10px] text-muted-foreground text-center">
-                    Seus tokens serão creditados automaticamente após a confirmação (1-5 min).
+                    Use PayPal enquanto o PIX está sendo configurado.
                   </p>
                 </motion.div>
               )}
@@ -561,35 +552,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                 </motion.div>
               )}
 
-              {paymentMethod === "crypto" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-5 space-y-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <Bitcoin className="h-5 w-5 text-amber-500" />
-                    <p className="font-display font-bold">Pagamento via Criptomoedas</p>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Pague com Bitcoin, Ethereum ou USDC via Coinbase Commerce.
-                  </p>
-                  <div className="flex gap-3">
-                    {[{ name: "BTC", label: "Bitcoin" }, { name: "ETH", label: "Ethereum" }, { name: "USDC", label: "USD Coin" }].map((c) => (
-                      <div key={c.name} className="flex-1 rounded-lg bg-background/60 p-3 text-center">
-                        <p className="font-bold text-sm">{c.name}</p>
-                        <p className="text-[10px] text-muted-foreground">{c.label}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <Button className="w-full gap-2 bg-amber-600 hover:bg-amber-700 text-white">
-                    <ExternalLink className="h-4 w-4" /> Pagar com Coinbase Commerce
-                  </Button>
-                  <p className="text-[10px] text-muted-foreground text-center">
-                    Tokens creditados em até 30 minutos após confirmação na blockchain.
-                  </p>
-                </motion.div>
-              )}
+              {/* Crypto section removed */}
 
               <Button variant="ghost" size="sm" className="text-xs" onClick={() => { setShowPayment(false); setPaymentMethod(null); }}>
                 ← Voltar para planos
