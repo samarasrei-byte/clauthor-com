@@ -69,7 +69,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   const startListening = useCallback(() => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) return;
-    if (isListening) return;
+    if (isListening || isSpeaking || isStreaming || isLoading) return;
 
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -81,6 +81,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join("");
       setInput(transcript);
       if (e.results[0]?.isFinal) {
+        if (isSpeaking || isStreaming || isLoading) return;
         setTimeout(() => {
           onSend(transcript);
           setInput("");
@@ -93,9 +94,10 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  }, [config.language, isListening, onSend]);
+  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend]);
 
   const toggleVoice = () => {
+    if (isSpeaking || isStreaming || isLoading) return;
     if (isListening) {
       recognitionRef.current?.stop();
       setIsListening(false);
@@ -107,9 +109,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   // TTS output — enhanced voice selection
   const speak = (text: string) => {
     if (!("speechSynthesis" in window)) return;
+
+    // Never keep mic open while the assistant is speaking (avoids echo loops)
+    recognitionRef.current?.stop?.();
+    setIsListening(false);
+
     window.speechSynthesis.cancel();
     const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "");
-    const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 800));
+    const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 500));
     utterance.lang = config.language || "pt-BR";
 
     // Pick the best available voice: prefer Google/Microsoft premium voices
