@@ -2,7 +2,9 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, rateLimitResponse, securityHeaders } from "../_shared/security.ts";
-import { alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
+import { createExecutionTracker } from "../_shared/resilience.ts";
+import { buildAgentContract, getTierSLA, getAreaLimits, type AgentContract } from "../_shared/agent-contract.ts";
+import { validateLimits } from "../_shared/policy-engine.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -15,7 +17,6 @@ serve(async (req) => {
   }
 
   try {
-    // Rate limit
     const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
     const rl = checkRateLimit(`concierge:${clientIP}`, 20, 60_000);
     if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
@@ -26,8 +27,7 @@ serve(async (req) => {
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
@@ -39,8 +39,7 @@ serve(async (req) => {
     const { data: { user }, error: authError } = await anonClient.auth.getUser(authHeader.replace("Bearer ", ""));
     if (authError || !user) {
       return new Response(JSON.stringify({ error: "Invalid token" }), {
-        status: 401,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
     authStep.done();
@@ -63,6 +62,40 @@ serve(async (req) => {
       }
     }
 
+    // === CREDIT VALIDATION via Policy Engine ===
+    const creditStep = tracker.step("credit_validation");
+    const { data: credits } = await adminClient
+      .from("user_credits")
+      .select("*")
+      .eq("user_id", user.id)
+      .single();
+
+    if (credits) {
+      const creditCheck = validateLimits(credits.used_credits, credits.total_credits);
+      if (!creditCheck.allowed) {
+        creditStep.done("blocked");
+        return new Response(JSON.stringify({ error: creditCheck.reason, suggest_upgrade: true }), {
+          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+    creditStep.done();
+
+    // === BUILD CONCIERGE CONTRACT ===
+    const contract: AgentContract = {
+      agentId: "concierge",
+      agentName: "CLAUTHOR Concierge",
+      tenantId: "client",
+      userId: user.id,
+      tier: credits?.plan_type === "enterprise" ? "enterprise" : credits?.plan_type === "pro" ? "advanced" : "basic",
+      planType: credits?.plan_type || "free",
+      area: "concierge",
+      objective: "Guiar o cliente pela plataforma e demonstrar o valor dos agentes contratados",
+      limits: getAreaLimits("concierge"),
+      sla: getTierSLA(credits?.plan_type === "enterprise" ? "enterprise" : "basic"),
+    };
+    const contractPrompt = buildAgentContract(contract);
+
     const langMap: Record<string, string> = {
       pt: "português do Brasil", en: "English", es: "español", fr: "français",
       de: "Deutsch", it: "italiano", ja: "日本語", zh: "中文",
@@ -79,69 +112,37 @@ serve(async (req) => {
     const activeAgents = (agents || []).filter((a: any) => a.status === "active");
 
     const agentsList = activeAgents.map((a: any, i: number) => {
-      const examples: Record<string, string[]> = {
-        sales: ["'Encontre 10 leads de SaaS em São Paulo'", "'Mande email de prospecção para o lead X'", "'Crie um pipeline de vendas para este mês'"],
-        omnichannel: ["'Responda os tickets pendentes'", "'Crie um template de resposta para dúvidas de preço'", "'Analise o sentimento dos últimos 50 atendimentos'"],
-        content: ["'Crie 5 posts para Instagram sobre nosso produto'", "'Escreva um blog post sobre tendências do setor'", "'Gere um calendário editorial para o mês'"],
-        revenue: ["'Gere o DRE deste mês'", "'Quais clientes estão com pagamento atrasado?'", "'Projete o faturamento para o próximo trimestre'"],
-        coding: ["'Revise este código e sugira melhorias'", "'Crie uma API REST para gerenciar usuários'", "'Automatize o deploy com CI/CD'"],
-        hr: ["'Crie uma descrição de vaga para desenvolvedor'", "'Analise os currículos recebidos'", "'Monte um programa de onboarding'"],
-        security: ["'Faça uma auditoria de segurança'", "'Verifique conformidade com LGPD'", "'Analise vulnerabilidades do sistema'"],
-        marketing_automation: ["'Crie um funil de email para novos leads'", "'Automatize o nurturing dos leads frios'", "'Analise as taxas de conversão do funil'"],
-        data_analytics: ["'Crie um dashboard com os KPIs do mês'", "'Analise as tendências de vendas'", "'Compare o desempenho dos últimos 3 meses'"],
-        customer_success: ["'Quais clientes estão em risco de churn?'", "'Envie pesquisa NPS para os clientes ativos'", "'Crie um playbook de retenção'"],
-        ai_cfo: ["'Gere o fluxo de caixa projetado'", "'Analise as despesas por categoria'", "'Qual o break-even point atual?'"],
-        seo_growth: ["'Analise o SEO do nosso site'", "'Encontre palavras-chave de oportunidade'", "'Crie meta descriptions otimizadas'"],
-        creative_design: ["'Crie um conceito visual para a campanha'", "'Sugira paletas de cores para o rebranding'", "'Gere ideias de banner para redes sociais'"],
-        project_management: ["'Crie um sprint para as próximas 2 semanas'", "'Quais tarefas estão atrasadas?'", "'Monte um cronograma para o lançamento'"],
-      };
-
-      const nameKey = Object.keys(examples).find(k => 
-        a.name.toLowerCase().includes(k.replace("_", " ")) || 
-        a.name.toLowerCase().includes(k)
-      );
-      const agentExamples = nameKey ? examples[nameKey] : ["'Me ajude com uma tarefa'", "'Gere um relatório'", "'Analise estes dados'"];
-
-      return `${i + 1}. **${a.name}** (${a.tier}) — ${a.objective || a.description || "Agente especializado"}
-   Exemplos de uso: ${agentExamples.join(", ")}`;
+      return `${i + 1}. **${a.name}** (${a.tier}) — ${a.objective || a.description || "Agente especializado"}`;
     }).join("\n");
 
-    const systemPrompt = `Você é o **CLAUTHOR Concierge** — o guia pessoal mais simpático e eficiente do mundo para novos clientes da plataforma CLAUTHOR.
+    const systemPrompt = `${contractPrompt}
 
-## SUA MISSÃO:
-Dar as boas-vindas ao cliente, mostrar o que seus agentes contratados podem fazer e guiá-lo para a primeira interação com confiança.
+Você é o **CLAUTHOR Concierge** — o guia pessoal mais simpático e eficiente para novos clientes.
 
 ## AGENTES DO CLIENTE (${activeAgents.length} ativos):
 ${agentsList || "Nenhum agente ativo ainda."}
 
-## REGRAS DE COMPORTAMENTO:
-1. **Seja caloroso e entusiasta** — Use emojis com moderação (2-3 por mensagem). Fale como um concierge 5 estrelas.
-2. **Na primeira mensagem**, apresente-se brevemente e liste os agentes do cliente com 1-2 exemplos práticos de cada.
-3. **Ofereça demos interativas** — Sugira que o cliente experimente um comando exemplo ali mesmo.
-4. **Guie para o próximo passo** — Sempre termine com uma sugestão clara de ação (ex: "Quer que eu te mostre como usar o Sales Agent?").
-5. **Seja ULTRA conciso** — Máximo 80 palavras por resposta. Use frases curtas e diretas.
-6. **Se o cliente não tiver agentes**, oriente para a Biblioteca (/library) para contratar.
-7. **Explique as seções do dashboard**: Command Center (visão geral), Meus Agentes (gerenciar), Reunião (falar com todos), Chat (falar com um agente), Analytics, Logs.
-8. **IDIOMA OBRIGATÓRIO: Responda SEMPRE em ${userLang}**. Nunca responda em outro idioma.
+## REGRAS:
+1. Seja caloroso e entusiasta (2-3 emojis por mensagem)
+2. Na primeira mensagem, apresente-se e liste os agentes
+3. Sugira demos interativas
+4. Sempre termine com sugestão de ação
+5. Máximo 80 palavras
+6. Se sem agentes, oriente para /library
+7. **IDIOMA: ${userLang}**
 
 ## SEÇÕES DO DASHBOARD:
-- **Command Center**: Visão geral com KPIs, economia estimada, consumo de tokens
-- **Meus Agentes**: Lista de agentes contratados, clique para conversar
-- **Reunião**: Chat simultâneo com todos os agentes ativos (como uma reunião de diretoria)
-- **Assistente IA**: Chat 1-a-1 com um agente específico
-- **Analytics**: Gráficos de execuções e performance
-- **Configurações**: Personalizar instruções, canais e integrações de cada agente
-- **Equipe**: Gerenciar membros do workspace
-- **Logs**: Histórico de todas as ações executadas pelos agentes
+- Command Center, Meus Agentes, Reunião, Assistente IA, Analytics, Logs
 
-## TOOL USE:
-Os agentes podem executar ações reais: enviar emails, criar tarefas, gerar relatórios, buscar leads, agendar reuniões e analisar dados. Mencione isso como diferencial!`;
+## DIFERENCIAL:
+Os agentes executam ações REAIS: emails, tarefas, relatórios, leads, reuniões.`;
 
     const apiMessages = [
       { role: "system", content: systemPrompt },
       ...(messages || [{ role: "user", content: "Olá! Acabei de chegar." }]),
     ];
 
+    const aiStep = tracker.step("ai_call");
     const response = await fetchAI({
       model: "google/gemini-2.5-flash-lite",
       messages: apiMessages,
@@ -151,31 +152,40 @@ Os agentes podem executar ações reais: enviar emails, criar tarefas, gerar rel
     });
 
     if (!response.ok) {
+      aiStep.fail(`HTTP ${response.status}`);
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Muitas requisições. Tente novamente em alguns segundos." }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        return new Response(JSON.stringify({ error: "Muitas requisições." }), {
+          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (response.status === 402) {
         return new Response(JSON.stringify({ error: "Créditos esgotados." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
+          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const errText = await response.text();
-      console.error("AI Gateway error:", response.status, errText);
       throw new Error("AI Gateway failed");
     }
+    aiStep.done();
+
+    // Log execution
+    try {
+      await adminClient.from("execution_logs").insert({
+        user_id: user.id,
+        agent_id: "00000000-0000-0000-0000-000000000005",
+        action: "concierge_chat",
+        status: "success",
+        execution_time_ms: tracker.summary().totalMs,
+        details: { contract_applied: true, area: "concierge", agents_count: activeAgents.length },
+      });
+    } catch {}
 
     return new Response(response.body, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (error) {
     console.error("Concierge error:", error);
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
+      status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
 });
