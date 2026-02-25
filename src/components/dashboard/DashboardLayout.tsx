@@ -7,17 +7,19 @@ import SupportChat from "@/components/SupportChat";
 import { useTokenMonitor } from "@/hooks/useTokenMonitor";
 import TokenUpgradeDialog from "./TokenUpgradeDialog";
 import { AnimatePresence, motion } from "framer-motion";
-
-const BANNER_CONFIG: Record<string, { bg: string; border: string; icon: string; text: string }> = {
-  caution: { bg: "bg-amber-500/10", border: "border-amber-500/20", icon: "text-amber-400", text: "Você utilizou 80% dos seus tokens. Considere fazer upgrade." },
-  warning: { bg: "bg-orange-500/10", border: "border-orange-500/20", icon: "text-orange-400", text: "90% dos tokens utilizados! Faça upgrade para evitar interrupções." },
-  critical: { bg: "bg-destructive/10", border: "border-destructive/20", icon: "text-destructive", text: "Limite de tokens atingido! Faça upgrade para continuar." },
-};
+import { useTranslation } from "react-i18next";
 
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
   const navigate = useNavigate();
   const { alertLevel, showUpgradePrompt, dismissUpgradePrompt } = useTokenMonitor();
+  const { t } = useTranslation();
+
+  const BANNER_CONFIG: Record<string, { bg: string; border: string; icon: string; text: string }> = {
+    caution: { bg: "bg-amber-500/10", border: "border-amber-500/20", icon: "text-amber-400", text: t("token_banner.caution") },
+    warning: { bg: "bg-orange-500/10", border: "border-orange-500/20", icon: "text-orange-400", text: t("token_banner.warning") },
+    critical: { bg: "bg-destructive/10", border: "border-destructive/20", icon: "text-destructive", text: t("token_banner.critical") },
+  };
 
   const handleSignOut = async () => {
     await signOut();
@@ -87,7 +89,7 @@ const DashboardLayout = () => {
             className="text-muted-foreground hover:text-foreground gap-1.5 text-xs"
           >
             <LogOut className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Sair</span>
+            <span className="hidden sm:inline">{t("nav.logout")}</span>
           </Button>
         </div>
       </header>

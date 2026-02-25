@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { MessageSquare, Layers, Sparkles, Megaphone, LayoutGrid } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 type CommunityCategory = "duvidas" | "templates" | "showcase" | "anuncios" | "geral";
 
@@ -8,15 +9,17 @@ interface CategoryFilterProps {
   onSelect: (category: CommunityCategory | "all") => void;
 }
 
-const categories: { value: CommunityCategory | "all"; label: string; icon: React.ElementType }[] = [
-  { value: "all", label: "Todos", icon: LayoutGrid },
-  { value: "duvidas", label: "Dúvidas", icon: MessageSquare },
-  { value: "templates", label: "Templates", icon: Layers },
-  { value: "showcase", label: "Showcase", icon: Sparkles },
-  { value: "anuncios", label: "Anúncios", icon: Megaphone },
-];
-
 const CategoryFilter = ({ selected, onSelect }: CategoryFilterProps) => {
+  const { t } = useTranslation();
+
+  const categories: { value: CommunityCategory | "all"; labelKey: string; icon: React.ElementType }[] = [
+    { value: "all", labelKey: "community.cat_all", icon: LayoutGrid },
+    { value: "duvidas", labelKey: "community.cat_duvidas", icon: MessageSquare },
+    { value: "templates", labelKey: "community.cat_templates", icon: Layers },
+    { value: "showcase", labelKey: "community.cat_showcase", icon: Sparkles },
+    { value: "anuncios", labelKey: "community.cat_anuncios", icon: Megaphone },
+  ];
+
   return (
     <div className="flex flex-wrap gap-2">
       {categories.map((cat) => {
@@ -36,7 +39,7 @@ const CategoryFilter = ({ selected, onSelect }: CategoryFilterProps) => {
             onClick={() => onSelect(cat.value)}
           >
             <Icon className="h-4 w-4" />
-            {cat.label}
+            {t(cat.labelKey)}
           </Button>
         );
       })}

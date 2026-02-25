@@ -3,7 +3,8 @@ import { Heart, MessageCircle, Clock, User } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
+import { useTranslation } from "react-i18next";
+import { useDateLocale } from "@/hooks/useDateLocale";
 
 type CommunityCategory = "duvidas" | "templates" | "showcase" | "anuncios" | "geral";
 
@@ -22,12 +23,12 @@ interface PostCardProps {
   onClick?: () => void;
 }
 
-const categoryConfig: Record<CommunityCategory, { label: string; color: string }> = {
-  duvidas: { label: "Dúvidas", color: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20" },
-  templates: { label: "Templates", color: "bg-primary/15 text-primary border-primary/20" },
-  showcase: { label: "Showcase", color: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20" },
-  anuncios: { label: "Anúncios", color: "bg-rose-500/15 text-rose-400 border-rose-500/20" },
-  geral: { label: "Geral", color: "bg-muted text-muted-foreground border-border" },
+const categoryColorMap: Record<CommunityCategory, string> = {
+  duvidas: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20",
+  templates: "bg-primary/15 text-primary border-primary/20",
+  showcase: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
+  anuncios: "bg-rose-500/15 text-rose-400 border-rose-500/20",
+  geral: "bg-muted text-muted-foreground border-border",
 };
 
 const PostCard = ({
@@ -43,7 +44,9 @@ const PostCard = ({
   onLike,
   onClick,
 }: PostCardProps) => {
-  const categoryInfo = categoryConfig[category];
+  const { t } = useTranslation();
+  const dateLocale = useDateLocale();
+  const catKey = `community.cat_${category}` as const;
 
   return (
     <motion.div
@@ -55,12 +58,12 @@ const PostCard = ({
       <div className="flex items-start justify-between gap-4 mb-4">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-2">
-            <Badge variant="outline" className={categoryInfo.color}>
-              {categoryInfo.label}
+            <Badge variant="outline" className={categoryColorMap[category]}>
+              {t(catKey)}
             </Badge>
             {isPinned && (
               <Badge variant="outline" className="bg-primary/20 text-primary border-primary/30">
-                Fixado
+                {t("community.pinned")}
               </Badge>
             )}
           </div>
@@ -78,14 +81,14 @@ const PostCard = ({
         <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <div className="flex items-center gap-1.5">
             <User className="h-4 w-4" />
-            <span>{authorName || "Anônimo"}</span>
+            <span>{authorName || t("community.anonymous")}</span>
           </div>
           <div className="flex items-center gap-1.5">
             <Clock className="h-4 w-4" />
             <span>
               {formatDistanceToNow(new Date(createdAt), { 
                 addSuffix: true, 
-                locale: ptBR 
+                locale: dateLocale 
               })}
             </span>
           </div>

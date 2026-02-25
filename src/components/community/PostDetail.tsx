@@ -4,12 +4,13 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
-import { Heart, MessageCircle, Clock, User, Send, ArrowLeft } from "lucide-react";
+import { Heart, MessageCircle, Clock, User, Send } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
-import { ptBR } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
+import { useDateLocale } from "@/hooks/useDateLocale";
 
 type CommunityCategory = "duvidas" | "templates" | "showcase" | "anuncios" | "geral";
 
@@ -37,16 +38,18 @@ interface Comment {
   user_id: string;
 }
 
-const categoryConfig: Record<CommunityCategory, { label: string; color: string }> = {
-  duvidas: { label: "Dúvidas", color: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20" },
-  templates: { label: "Templates", color: "bg-primary/15 text-primary border-primary/20" },
-  showcase: { label: "Showcase", color: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20" },
-  anuncios: { label: "Anúncios", color: "bg-rose-500/15 text-rose-400 border-rose-500/20" },
-  geral: { label: "Geral", color: "bg-muted text-muted-foreground border-border" },
+const categoryColorMap: Record<CommunityCategory, string> = {
+  duvidas: "bg-cyan-500/15 text-cyan-400 border-cyan-500/20",
+  templates: "bg-primary/15 text-primary border-primary/20",
+  showcase: "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
+  anuncios: "bg-rose-500/15 text-rose-400 border-rose-500/20",
+  geral: "bg-muted text-muted-foreground border-border",
 };
 
 const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
+  const dateLocale = useDateLocale();
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -86,7 +89,7 @@ const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
 
   const handleLike = async () => {
     if (!post || !user) {
-      toast.error("Faça login para curtir");
+      toast.error(t("community.login_to_like"));
       return;
     }
 
@@ -110,7 +113,7 @@ const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
 
   const handleComment = async () => {
     if (!post || !user) {
-      toast.error("Faça login para comentar");
+      toast.error(t("community.login_to_comment"));
       return;
     }
 
@@ -128,9 +131,9 @@ const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
 
       setNewComment("");
       fetchComments();
-      toast.success("Comentário adicionado!");
+      toast.success(t("community.comment_added"));
     } catch (error: any) {
-      toast.error("Erro ao comentar: " + error.message);
+      toast.error(t("community.comment_error") + error.message);
     } finally {
       setLoading(false);
     }
@@ -138,15 +141,15 @@ const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
 
   if (!post) return null;
 
-  const categoryInfo = categoryConfig[post.category];
+  const catKey = `community.cat_${post.category}` as const;
 
   return (
     <Dialog open={open} onOpenChange={() => onClose()}>
       <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-y-auto glass-card border-white/10">
         <DialogHeader>
           <div className="flex items-center gap-2 mb-2">
-            <Badge variant="outline" className={categoryInfo.color}>
-              {categoryInfo.label}
+            <Badge variant="outline" className={categoryColorMap[post.category]}>
+              {t(catKey)}
             </Badge>
           </div>
           <DialogTitle className="font-display text-2xl leading-tight">
@@ -155,29 +158,26 @@ const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
         </DialogHeader>
 
         <div className="space-y-6 mt-4">
-          {/* Post metadata */}
           <div className="flex items-center gap-4 text-sm text-muted-foreground">
             <div className="flex items-center gap-1.5">
               <User className="h-4 w-4" />
-              <span>{authorName || "Anônimo"}</span>
+              <span>{authorName || t("community.anonymous")}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Clock className="h-4 w-4" />
               <span>
                 {formatDistanceToNow(new Date(post.created_at), {
                   addSuffix: true,
-                  locale: ptBR,
+                  locale: dateLocale,
                 })}
               </span>
             </div>
           </div>
 
-          {/* Post content */}
           <div className="prose prose-invert max-w-none">
             <p className="text-foreground whitespace-pre-wrap">{post.content}</p>
           </div>
 
-          {/* Actions */}
           <div className="flex items-center gap-4 pt-4 border-t border-white/5">
             <Button
               variant="ghost"
@@ -186,25 +186,23 @@ const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
               onClick={handleLike}
             >
               <Heart className={`h-5 w-5 ${isLiked ? "fill-current" : ""}`} />
-              <span>{likesCount} curtidas</span>
+              <span>{likesCount} {t("community.likes")}</span>
             </Button>
             <div className="flex items-center gap-2 text-muted-foreground">
               <MessageCircle className="h-5 w-5" />
-              <span>{comments.length} comentários</span>
+              <span>{comments.length} {t("community.comments")}</span>
             </div>
           </div>
 
-          {/* Comments Section */}
           <div className="space-y-4 pt-4 border-t border-white/5">
-            <h4 className="font-semibold">Comentários</h4>
+            <h4 className="font-semibold">{t("community.comment_section")}</h4>
             
-            {/* New comment input */}
             {user && (
               <div className="flex gap-3">
                 <Textarea
                   value={newComment}
                   onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Escreva um comentário..."
+                  placeholder={t("community.write_comment")}
                   rows={2}
                   className="bg-background/50 border-white/10 resize-none flex-1"
                 />
@@ -218,11 +216,10 @@ const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
               </div>
             )}
 
-            {/* Comments list */}
             <div className="space-y-4">
               {comments.length === 0 ? (
                 <p className="text-muted-foreground text-sm text-center py-8">
-                  Nenhum comentário ainda. Seja o primeiro!
+                  {t("community.no_comments")}
                 </p>
               ) : (
                 comments.map((comment) => (
@@ -238,7 +235,7 @@ const PostDetail = ({ post, open, onClose, authorName }: PostDetailProps) => {
                       <span>
                         {formatDistanceToNow(new Date(comment.created_at), {
                           addSuffix: true,
-                          locale: ptBR,
+                          locale: dateLocale,
                         })}
                       </span>
                     </div>

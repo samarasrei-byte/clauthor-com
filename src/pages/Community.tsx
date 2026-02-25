@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Users, MessageSquare, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 import PostCard from "@/components/community/PostCard";
 import CategoryFilter from "@/components/community/CategoryFilter";
 import CreatePostDialog from "@/components/community/CreatePostDialog";
@@ -25,6 +26,7 @@ interface Post {
 
 const Community = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [posts, setPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState<CommunityCategory | "all">("all");
@@ -111,7 +113,6 @@ const Community = () => {
   return (
     <div className="min-h-screen pt-24 pb-16 px-4">
       <div className="max-w-5xl mx-auto">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -119,17 +120,16 @@ const Community = () => {
         >
           <Badge variant="outline" className="mb-6 border-primary/30 text-primary px-4 py-2">
             <Users className="h-4 w-4 mr-2" />
-            Comunidade CLAUTHOR
+            {t("community.badge")}
           </Badge>
           <h1 className="font-display text-4xl sm:text-5xl font-bold mb-4">
-            Fórum de <span className="gradient-text">IAs e Automação</span>
+            {t("community.title")} <span className="gradient-text">{t("community.title_hl")}</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Troque ideias, tire dúvidas e compartilhe experiências com outros usuários da plataforma.
+            {t("community.subtitle")}
           </p>
         </motion.div>
 
-        {/* Stats */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -137,9 +137,9 @@ const Community = () => {
           className="grid grid-cols-3 gap-4 mb-12"
         >
           {[
-            { icon: MessageSquare, label: "Posts", value: posts.length },
-            { icon: Users, label: "Membros Ativos", value: "847" },
-            { icon: TrendingUp, label: "Discussões Hoje", value: "23" },
+            { icon: MessageSquare, label: t("community.posts"), value: posts.length },
+            { icon: Users, label: t("community.active_members"), value: "847" },
+            { icon: TrendingUp, label: t("community.discussions_today"), value: "23" },
           ].map((stat) => (
             <div
               key={stat.label}
@@ -152,7 +152,6 @@ const Community = () => {
           ))}
         </motion.div>
 
-        {/* Filters and Actions */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -166,7 +165,6 @@ const Community = () => {
           {user && <CreatePostDialog onPostCreated={fetchPosts} />}
         </motion.div>
 
-        {/* Posts Grid */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -176,14 +174,14 @@ const Community = () => {
           {loading ? (
             <div className="text-center py-16">
               <div className="w-8 h-8 border-2 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4" />
-              <p className="text-muted-foreground">Carregando posts...</p>
+              <p className="text-muted-foreground">{t("community.loading")}</p>
             </div>
           ) : posts.length === 0 ? (
             <div className="text-center py-16 glass-card rounded-2xl">
               <MessageSquare className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-              <h3 className="font-display font-bold text-xl mb-2">Nenhum post ainda</h3>
+              <h3 className="font-display font-bold text-xl mb-2">{t("community.no_posts")}</h3>
               <p className="text-muted-foreground">
-                Seja o primeiro a iniciar uma discussão!
+                {t("community.no_posts_desc")}
               </p>
             </div>
           ) : (
@@ -206,7 +204,6 @@ const Community = () => {
           )}
         </motion.div>
 
-        {/* Post Detail Modal */}
         <PostDetail
           post={selectedPost}
           open={!!selectedPost}
