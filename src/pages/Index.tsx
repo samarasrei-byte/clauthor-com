@@ -208,7 +208,7 @@ const HomePage = () => {
   ];
 
   return (
-    <div className="relative">
+    <div className="relative overflow-x-hidden">
       {/* ═══ DEPTH LAYER — Background that shifts with scroll ═══ */}
       <motion.div
         className="fixed inset-0 pointer-events-none"
