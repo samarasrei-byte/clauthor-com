@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Wand2, Building2, Brain
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +28,7 @@ import AgentSettings from "@/components/dashboard/AgentSettings";
 import SquadChat from "@/components/dashboard/SquadChat";
 import CompanyBoard from "@/components/dashboard/CompanyBoard";
 import TeamMembers from "@/components/dashboard/TeamMembers";
-import ConciergeChat from "@/components/dashboard/ConciergeChat";
+
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
@@ -40,9 +40,16 @@ const ClientDashboard = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const hireProcessed = useRef(false);
-  const [activeSection, setActiveSection] = useState("overview");
+  const [activeSection, setActiveSection] = useState(() => {
+    if (!user) return "overview";
+    const key = `clauthor_concierge_seen_${user.id}`;
+    if (!localStorage.getItem(key)) {
+      localStorage.setItem(key, "true");
+      return "omnix"; // First visit → go to Thor
+    }
+    return "overview";
+  });
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
-  const [showConcierge, setShowConcierge] = useState(false);
   const [showOnboarding, setShowOnboarding] = useState(() => {
     if (!user) return false;
     return !localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
@@ -169,20 +176,6 @@ const ClientDashboard = () => {
     processHire();
   }, [user, queryClient, t]);
 
-  // Show concierge on first visit
-  useEffect(() => {
-    if (!user || loadingAgents) return;
-    const key = `clauthor_concierge_seen_${user.id}`;
-    if (!localStorage.getItem(key)) {
-      const timer = setTimeout(() => setShowConcierge(true), 1500);
-      return () => clearTimeout(timer);
-    }
-  }, [user, loadingAgents]);
-
-  const handleCloseConcierge = () => {
-    setShowConcierge(false);
-    if (user) localStorage.setItem(`clauthor_concierge_seen_${user.id}`, "true");
-  };
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
@@ -194,7 +187,6 @@ const ClientDashboard = () => {
   const sidebarItems = [
     { id: "omnix", label: "THOR", icon: Brain, badge: "AI" },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard },
-    { id: "concierge", label: t("dashboard.concierge"), icon: Wand2 },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users },
     { id: "board", label: "Board da Empresa", icon: Building2 },
@@ -247,13 +239,7 @@ const ClientDashboard = () => {
         <DashboardSidebar
           items={sidebarItems}
           activeItem={activeSection}
-          onItemChange={(id) => {
-            if (id === "concierge") {
-              setShowConcierge(true);
-            } else {
-              setActiveSection(id);
-            }
-          }}
+          onItemChange={setActiveSection}
         />
       </div>
 
@@ -282,7 +268,7 @@ const ClientDashboard = () => {
                 key={item.id}
                 variant={activeSection === item.id ? "default" : "ghost"}
                 size="sm"
-                onClick={() => item.id === "concierge" ? setShowConcierge(true) : setActiveSection(item.id)}
+                onClick={() => setActiveSection(item.id)}
                 className="shrink-0 gap-1.5"
               >
                 <item.icon className="h-3.5 w-3.5" />
@@ -536,15 +522,6 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-      {/* Concierge Chat */}
-      <ConciergeChat
-        isOpen={showConcierge}
-        onClose={handleCloseConcierge}
-        onNavigate={(section) => {
-          setActiveSection(section);
-          handleCloseConcierge();
-        }}
-      />
     </div>
     </>
   );
