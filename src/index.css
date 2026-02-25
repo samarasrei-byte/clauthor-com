@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -405,4 +405,31 @@
 @keyframes scan {
   0% { transform: translateY(0); }
   100% { transform: translateY(48px); }
+}
+
+/* Typewriter cursor blink */
+@keyframes blink-cursor {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Heartbeat pulse for live agents */
+@keyframes heartbeat {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  25% { transform: scale(1.3); opacity: 1; }
+  35% { transform: scale(1); opacity: 0.6; }
+  45% { transform: scale(1.15); opacity: 0.9; }
+  55% { transform: scale(1); opacity: 0.6; }
+}
+
+/* Grid line sweep */
+@keyframes grid-sweep {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Depth fade for scroll */
+@keyframes depth-pulse {
+  0%, 100% { opacity: 0.02; }
+  50% { opacity: 0.06; }
 }
