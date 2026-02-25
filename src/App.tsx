@@ -42,6 +42,7 @@ const NotFound = lazyRetry(() => import("./pages/NotFound"));
 const AgentLanding = lazyRetry(() => import("./pages/AgentLanding"));
 const Departamentos = lazyRetry(() => import("./pages/Departamentos"));
 const MonixCommandCenter = lazyRetry(() => import("./pages/MonixCommandCenter"));
+const OmnixCommandCenter = lazyRetry(() => import("./pages/OmnixCommandCenter"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -92,6 +93,7 @@ const App = () => (
                   <Route path="/create-agent" element={<CreateAgent />} />
                   <Route path="/integrations" element={<Integrations />} />
                   <Route path="/monix" element={<MonixCommandCenter />} />
+                  <Route path="/omnix" element={<OmnixCommandCenter />} />
                 </Route>
 
                 {/* Admin */}

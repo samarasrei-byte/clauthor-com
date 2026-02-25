@@ -1,0 +1,164 @@
+import { useState, useCallback, useRef, useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+
+export interface OmnixConfig {
+  name: string;
+  tone: string;
+  personality: string;
+  responseStyle: string;
+  language: string;
+  autonomy: string;
+}
+
+export interface OmnixMessage {
+  role: "user" | "assistant";
+  content: string;
+  timestamp: Date;
+  kpis?: Array<{ label: string; value: string; trend: string; delta: string }>;
+}
+
+const DEFAULT_CONFIG: OmnixConfig = {
+  name: "OMNIX",
+  tone: "estratégico",
+  personality: "futurista",
+  responseStyle: "detalhado",
+  language: "pt-BR",
+  autonomy: "analisar e sugerir",
+};
+
+function extractKPIs(content: string) {
+  const kpiRegex = /```kpi\n([\s\S]*?)```/g;
+  const match = kpiRegex.exec(content);
+  if (!match) return null;
+  try {
+    const parsed = JSON.parse(match[1]);
+    return parsed.kpis || null;
+  } catch {
+    return null;
+  }
+}
+
+export function useOmnix() {
+  const [messages, setMessages] = useState<OmnixMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [config, setConfig] = useState<OmnixConfig>(() => {
+    const saved = localStorage.getItem("omnix_config");
+    return saved ? { ...DEFAULT_CONFIG, ...JSON.parse(saved) } : DEFAULT_CONFIG;
+  });
+  const abortRef = useRef<AbortController | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem("omnix_config", JSON.stringify(config));
+  }, [config]);
+
+  const updateConfig = useCallback((partial: Partial<OmnixConfig>) => {
+    setConfig(prev => ({ ...prev, ...partial }));
+  }, []);
+
+  const sendMessage = useCallback(async (content: string) => {
+    if (!content.trim()) return;
+
+    const userMsg: OmnixMessage = { role: "user", content, timestamp: new Date() };
+    const updatedMessages = [...messages, userMsg];
+    setMessages(updatedMessages);
+    setIsLoading(true);
+    setIsStreaming(true);
+
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) {
+        toast.error("Você precisa estar logado.");
+        setIsLoading(false);
+        setIsStreaming(false);
+        return;
+      }
+
+      const controller = new AbortController();
+      abortRef.current = controller;
+
+      const apiMessages = updatedMessages.map(m => ({ role: m.role, content: m.content }));
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/omnix-chat`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ messages: apiMessages, config }),
+          signal: controller.signal,
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        if (response.status === 402) toast.error("Créditos esgotados! Faça upgrade.");
+        else if (response.status === 429) toast.error("Limite de requisições. Tente novamente.");
+        else toast.error(data.error || "Erro ao processar.");
+        setIsLoading(false);
+        setIsStreaming(false);
+        return;
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) throw new Error("No stream");
+
+      const decoder = new TextDecoder();
+      let buf = "";
+      let assistantText = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+
+        let idx: number;
+        while ((idx = buf.indexOf("\n")) !== -1) {
+          let line = buf.slice(0, idx);
+          buf = buf.slice(idx + 1);
+          if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "" || !line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") continue;
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const delta = parsed.choices?.[0]?.delta?.content;
+            if (delta) {
+              assistantText += delta;
+              const kpis = extractKPIs(assistantText);
+              setMessages(prev => {
+                const last = prev[prev.length - 1];
+                if (last?.role === "assistant") {
+                  return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantText, kpis: kpis || m.kpis } : m);
+                }
+                return [...prev, { role: "assistant", content: assistantText, timestamp: new Date(), kpis: kpis || undefined }];
+              });
+            }
+          } catch {
+            buf = line + "\n" + buf;
+            break;
+          }
+        }
+      }
+    } catch (err: any) {
+      if (err.name === "AbortError") return;
+      console.error("Omnix error:", err);
+      toast.error("Erro de conexão.");
+    } finally {
+      setIsLoading(false);
+      setIsStreaming(false);
+      abortRef.current = null;
+    }
+  }, [messages, config]);
+
+  const stopStreaming = useCallback(() => abortRef.current?.abort(), []);
+  const clearMessages = useCallback(() => setMessages([]), []);
+
+  return { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages };
+}

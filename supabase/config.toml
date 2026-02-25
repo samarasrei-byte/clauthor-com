@@ -53,3 +53,6 @@ verify_jwt = false
 
 [functions.traffic-monitor]
 verify_jwt = false
+
+[functions.omnix-chat]
+verify_jwt = false
