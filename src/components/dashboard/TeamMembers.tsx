@@ -72,20 +72,25 @@ const TeamMembers = () => {
   const { data: members = [], isLoading } = useQuery({
     queryKey: ["tenant-members", tenantId],
     queryFn: async () => {
-      const { data, error } = await supabase
+      // Get members
+      const { data: membersData, error: membersErr } = await supabase
         .from("tenant_members")
-        .select("*, profile:profiles!tenant_members_user_id_fkey(full_name, avatar_url, company_name)")
+        .select("*")
         .eq("tenant_id", tenantId!);
-      
-      if (error) {
-        const { data: membersOnly, error: err2 } = await supabase
-          .from("tenant_members")
-          .select("*")
-          .eq("tenant_id", tenantId!);
-        if (err2) throw err2;
-        return membersOnly || [];
-      }
-      return data || [];
+      if (membersErr) throw membersErr;
+
+      // Enrich with profiles
+      const enriched = await Promise.all(
+        (membersData || []).map(async (m: any) => {
+          const { data: profile } = await supabase
+            .from("profiles")
+            .select("full_name, avatar_url, company_name")
+            .eq("user_id", m.user_id)
+            .single();
+          return { ...m, profile: profile || null };
+        })
+      );
+      return enriched;
     },
     enabled: !!tenantId,
   });

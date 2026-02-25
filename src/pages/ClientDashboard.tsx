@@ -309,9 +309,6 @@ const ClientDashboard = () => {
           {/* ═══ TEAM MEMBERS ═══ */}
           {activeSection === "team" && <TeamMembers />}
 
-          {/* ═══ TEAM MEMBERS ═══ */}
-          {activeSection === "team" && <TeamMembers />}
-
           {/* ═══ AGENTS ═══ */}
           {activeSection === "agents" && (
             <div className="space-y-6">
