@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import {
   Bot, Zap, CheckCircle, DollarSign, Coins, Target,
   TrendingUp, ArrowUpRight, Sparkles, Clock, Activity,
-  Shield, Cpu, BarChart3, Flame
+  Shield, Cpu, BarChart3, Flame, HeartPulse, AlertTriangle
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import TokenUpgradeDialog from "./TokenUpgradeDialog";
 import GettingStartedGuide from "./GettingStartedGuide";
 import AgentSummaryCards from "./AgentSummaryCards";
 import { useTranslation } from "react-i18next";
+import { useExecutionHealth } from "@/hooks/useExecutionHealth";
 
 interface ClientCommandCenterProps {
   activeAgents: number;
@@ -45,6 +46,7 @@ const ClientCommandCenter = ({
 }: ClientCommandCenterProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
+  const { data: health } = useExecutionHealth();
 
   const successLogs = recentLogs.filter((l: any) => l.status === "success").length;
   const successRate = recentLogs.length > 0 ? Math.round((successLogs / recentLogs.length) * 100) : 100;
@@ -90,6 +92,103 @@ const ClientCommandCenter = ({
 
       {/* Agent Summary Cards */}
       <AgentSummaryCards agents={agents} />
+
+      {/* Agent Health Panel */}
+      {health && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="glass-card rounded-2xl p-5 border border-white/[0.06]"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              <HeartPulse className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium">Saúde dos Agentes</span>
+            </div>
+            <Badge
+              className={`text-[10px] border-0 ${
+                health.healthScore >= 80
+                  ? "bg-emerald-500/10 text-emerald-400"
+                  : health.healthScore >= 50
+                  ? "bg-amber-500/10 text-amber-400"
+                  : "bg-destructive/10 text-destructive"
+              }`}
+            >
+              Score: {health.healthScore}/100
+            </Badge>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+            <div className="rounded-xl bg-white/[0.03] p-3 text-center">
+              <p className="font-display text-lg font-bold">{health.totalExecutions}</p>
+              <p className="text-[10px] text-muted-foreground">Execuções</p>
+            </div>
+            <div className="rounded-xl bg-white/[0.03] p-3 text-center">
+              <p className="font-display text-lg font-bold text-emerald-400">{health.successRate}%</p>
+              <p className="text-[10px] text-muted-foreground">Taxa de Sucesso</p>
+            </div>
+            <div className="rounded-xl bg-white/[0.03] p-3 text-center">
+              <p className="font-display text-lg font-bold text-destructive">{health.errorRate}%</p>
+              <p className="text-[10px] text-muted-foreground">Taxa de Erro</p>
+            </div>
+            <div className="rounded-xl bg-white/[0.03] p-3 text-center">
+              <p className="font-display text-lg font-bold">{health.avgExecutionTimeMs}ms</p>
+              <p className="text-[10px] text-muted-foreground">Tempo Médio</p>
+            </div>
+          </div>
+
+          {/* Health Bar */}
+          <div className="relative h-3 rounded-full bg-white/[0.05] overflow-hidden mb-3">
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${health.healthScore}%` }}
+              transition={{ duration: 1, ease: "easeOut" }}
+              className={`absolute inset-y-0 left-0 rounded-full ${
+                health.healthScore >= 80
+                  ? "bg-gradient-to-r from-emerald-500 to-emerald-400"
+                  : health.healthScore >= 50
+                  ? "bg-gradient-to-r from-amber-500 to-amber-400"
+                  : "bg-gradient-to-r from-destructive to-red-400"
+              }`}
+            />
+          </div>
+
+          {/* Failure Alerts */}
+          {health.failureAlerts.length > 0 && (
+            <div className="space-y-1.5 mt-3">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider flex items-center gap-1">
+                <AlertTriangle className="h-3 w-3 text-destructive" /> Alertas Ativos
+              </p>
+              {health.failureAlerts.slice(0, 3).map((alert) => (
+                <div key={alert.id} className="flex items-center gap-2 p-2 rounded-lg bg-destructive/5 border border-destructive/10">
+                  <span className="w-1.5 h-1.5 rounded-full bg-destructive shrink-0" />
+                  <span className="text-[11px] truncate">{alert.title}</span>
+                  <span className="text-[10px] text-muted-foreground ml-auto shrink-0">
+                    {new Date(alert.created_at).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Recent Errors */}
+          {health.recentErrors.length > 0 && (
+            <div className="space-y-1.5 mt-3">
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Últimos Erros</p>
+              {health.recentErrors.slice(0, 3).map((err) => (
+                <div key={err.id} className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
+                  <span className="text-[11px] truncate flex-1">{err.action}</span>
+                  <span className="text-[10px] text-muted-foreground">
+                    {new Date(err.created_at).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </motion.div>
+      )}
+
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
