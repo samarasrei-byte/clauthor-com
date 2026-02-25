@@ -9,63 +9,116 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-// ── Credential tool for THOR ──
-const CREDENTIAL_TOOL = {
-  type: "function" as const,
-  function: {
-    name: "save_credentials",
-    description: "Save user credentials/access info for an integration (WhatsApp, Email, LinkedIn, etc). Call this when the user provides login details, API keys, passwords, phone numbers, or access tokens for any service.",
-    parameters: {
-      type: "object",
-      properties: {
-        agent_id: { type: "string", description: "The agent ID to associate credentials with. Use the first active agent if not specified." },
-        credentials: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              integration_name: { type: "string", description: "Service name: whatsapp, email, linkedin, instagram, hubspot, etc." },
-              credential_key: { type: "string", description: "Key name: api_key, password, phone_number, access_token, smtp_host, smtp_user, smtp_password, etc." },
-              credential_value: { type: "string", description: "The actual credential value provided by the user." },
+// ── Credential tools for THOR ──
+const CREDENTIAL_TOOLS = [
+  {
+    type: "function" as const,
+    function: {
+      name: "save_credentials",
+      description: "Save user credentials/access info for an integration (WhatsApp, Email, LinkedIn, etc). Call this when the user provides login details, API keys, passwords, phone numbers, or access tokens for any service.",
+      parameters: {
+        type: "object",
+        properties: {
+          agent_id: { type: "string", description: "The agent ID to associate credentials with. Use the first active agent if not specified." },
+          credentials: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                integration_name: { type: "string", description: "Service name: whatsapp, email, linkedin, instagram, hubspot, etc." },
+                credential_key: { type: "string", description: "Key name: api_key, password, phone_number, access_token, smtp_host, smtp_user, smtp_password, etc." },
+                credential_value: { type: "string", description: "The actual credential value provided by the user." },
+              },
+              required: ["integration_name", "credential_key", "credential_value"],
             },
-            required: ["integration_name", "credential_key", "credential_value"],
           },
         },
+        required: ["credentials"],
       },
-      required: ["credentials"],
     },
   },
-};
+  {
+    type: "function" as const,
+    function: {
+      name: "list_credentials",
+      description: "List all saved credentials for an agent. Shows integration names and keys (values are always masked). Call when the user asks to see, check, or verify their saved credentials.",
+      parameters: {
+        type: "object",
+        properties: {
+          agent_id: { type: "string", description: "The agent ID. Use the first active agent if not specified." },
+        },
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "revoke_credentials",
+      description: "Revoke/delete all credentials for a specific integration from an agent. Call when the user wants to remove, delete, or revoke access for a service.",
+      parameters: {
+        type: "object",
+        properties: {
+          agent_id: { type: "string", description: "The agent ID. Use the first active agent if not specified." },
+          integration_name: { type: "string", description: "Service name to revoke: whatsapp, email, linkedin, etc." },
+        },
+        required: ["integration_name"],
+      },
+    },
+  },
+];
 
-async function handleCredentialSave(
-  userId: string, agentId: string,
-  credentials: Array<{ integration_name: string; credential_key: string; credential_value: string }>,
+async function callCredentialManager(
+  action: string, body: Record<string, any>,
   supabaseUrl: string, authHeader: string,
-): Promise<{ saved: string[]; errors: string[] }> {
-  const saved: string[] = [];
-  const errors: string[] = [];
-  for (const cred of credentials) {
-    try {
-      const res = await fetch(`${supabaseUrl}/functions/v1/credential-manager`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: authHeader },
-        body: JSON.stringify({
-          action: "save", agent_id: agentId,
+): Promise<any> {
+  const res = await fetch(`${supabaseUrl}/functions/v1/credential-manager`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: authHeader },
+    body: JSON.stringify({ action, ...body }),
+  });
+  return res.json().catch(() => ({ error: "Parse error" }));
+}
+
+async function handleToolCall(
+  toolName: string, args: any,
+  userId: string, activeAgents: any[],
+  supabaseUrl: string, authHeader: string,
+): Promise<string> {
+  const agentId = args.agent_id || activeAgents[0]?.id;
+  if (!agentId) return JSON.stringify({ error: "Nenhum agente ativo encontrado." });
+  const agentName = activeAgents.find(a => a.id === agentId)?.name || "Agente";
+
+  switch (toolName) {
+    case "save_credentials": {
+      const saved: string[] = [];
+      const errors: string[] = [];
+      for (const cred of args.credentials || []) {
+        const result = await callCredentialManager("save", {
+          agent_id: agentId,
           integration_name: cred.integration_name.toLowerCase(),
           credential_key: cred.credential_key.toLowerCase(),
-          credential_value: cred.credential_value, is_secret: true,
-        }),
-      });
-      if (res.ok) saved.push(`${cred.integration_name}/${cred.credential_key}`);
-      else {
-        const err = await res.json().catch(() => ({}));
-        errors.push(`${cred.integration_name}: ${err.error || "failed"}`);
+          credential_value: cred.credential_value,
+          is_secret: true,
+        }, supabaseUrl, authHeader);
+        if (result.success) saved.push(`${cred.integration_name}/${cred.credential_key}`);
+        else errors.push(`${cred.integration_name}: ${result.error || "failed"}`);
       }
-    } catch (e) {
-      errors.push(`${cred.integration_name}: ${e instanceof Error ? e.message : "error"}`);
+      return JSON.stringify({ success: saved.length > 0, saved, errors, agent_name: agentName });
     }
+    case "list_credentials": {
+      const result = await callCredentialManager("list", { agent_id: agentId }, supabaseUrl, authHeader);
+      return JSON.stringify({ agent_name: agentName, credentials: result.credentials || [] });
+    }
+    case "revoke_credentials": {
+      const result = await callCredentialManager("revoke", {
+        agent_id: agentId,
+        integration_name: args.integration_name.toLowerCase(),
+      }, supabaseUrl, authHeader);
+      return JSON.stringify({ success: result.success, revoked_count: result.revoked_count || 0, integration: args.integration_name, agent_name: agentName });
+    }
+    default:
+      return JSON.stringify({ error: `Unknown tool: ${toolName}` });
   }
-  return { saved, errors };
 }
 
 serve(async (req) => {
@@ -177,15 +230,17 @@ SUAS RESPONSABILIDADES:
 5. Gerar briefings executivos quando solicitado
 6. Realizar auditorias de sistema quando solicitado
 7. Priorizar decisões com base em impacto
-8. **Coletar e salvar credenciais de integrações** quando o usuário fornecer dados de acesso
+8. **Gerenciar credenciais de integrações** (salvar, listar, revogar)
 
-COLETA DE CREDENCIAIS:
-Quando o usuário fornecer dados de acesso (senhas, tokens, API keys, telefones, etc.) para WhatsApp, E-mail, LinkedIn, ou qualquer serviço:
-1. Use a ferramenta **save_credentials** para salvar IMEDIATAMENTE no cofre criptografado
-2. Se o usuário não especificar qual agente, use o primeiro agente ativo: ${activeAgents[0]?.id || "nenhum"}
-3. Confirme que salvou com sucesso e que os dados estão protegidos com criptografia AES-256
-4. NUNCA repita os valores das credenciais na sua resposta
-5. Integrações suportadas: whatsapp, email, linkedin, instagram, hubspot, apollo, slack, google, meta_ads
+GESTÃO DE CREDENCIAIS:
+- **save_credentials**: Quando o usuário fornecer dados de acesso (senhas, tokens, API keys, telefones, etc.)
+- **list_credentials**: Quando o usuário pedir para ver, verificar ou listar suas credenciais salvas
+- **revoke_credentials**: Quando o usuário pedir para remover, deletar ou revogar acesso a um serviço
+Regras:
+1. Se o usuário não especificar qual agente, use o primeiro agente ativo: ${activeAgents[0]?.id || "nenhum"}
+2. Confirme o resultado da operação
+3. NUNCA repita os valores das credenciais na sua resposta
+4. Integrações suportadas: whatsapp, email, linkedin, instagram, hubspot, apollo, slack, google, meta_ads
 
 REGRAS:
 - Use APENAS os dados reais fornecidos acima, nunca invente métricas
@@ -203,9 +258,9 @@ Quando mencionar métricas, inclua um bloco JSON entre \`\`\`kpi e \`\`\` com fo
       ...messages.map((m: any) => ({ role: m.role, content: m.content })),
     ];
 
-    // Detect credential intent
+    // Detect credential intent (save, list, revoke)
     const lastUserMsg = (messages || []).filter((m: any) => m.role === "user").pop()?.content || "";
-    const credentialIntent = /senha|password|api.?key|token|acesso|login|credencial|chave|phone|telefone|whatsapp|smtp|e-?mail.*senha|linkedin.*senha/i.test(lastUserMsg);
+    const credentialIntent = /senha|password|api.?key|token|acesso|login|credencial|chave|phone|telefone|whatsapp|smtp|e-?mail.*senha|linkedin.*senha|listar|mostrar|ver.*credencia|revogar|remover|deletar.*credencia|quais.*credencia/i.test(lastUserMsg);
 
     if (credentialIntent && activeAgents.length > 0) {
       const toolResponse = await fetchAI({
@@ -214,7 +269,7 @@ Quando mencionar métricas, inclua um bloco JSON entre \`\`\`kpi e \`\`\` com fo
         stream: false,
         max_tokens: 500,
         temperature: 0.3,
-        tools: [CREDENTIAL_TOOL],
+        tools: CREDENTIAL_TOOLS,
         tool_choice: "auto",
       });
 
@@ -226,19 +281,9 @@ Quando mencionar métricas, inclua um bloco JSON entre \`\`\`kpi e \`\`\` com fo
         if (toolCalls && toolCalls.length > 0) {
           const toolResults: any[] = [];
           for (const tc of toolCalls) {
-            if (tc.function.name === "save_credentials") {
-              const args = JSON.parse(tc.function.arguments);
-              const agentId = args.agent_id || activeAgents[0]?.id;
-              if (!agentId) {
-                toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Nenhum agente ativo." }) });
-                continue;
-              }
-              const result = await handleCredentialSave(user.id, agentId, args.credentials, supabaseUrl, authHeader);
-              toolResults.push({
-                role: "tool", tool_call_id: tc.id,
-                content: JSON.stringify({ success: result.saved.length > 0, saved: result.saved, errors: result.errors, agent_name: activeAgents.find(a => a.id === agentId)?.name || "Agente" }),
-              });
-            }
+            const args = JSON.parse(tc.function.arguments);
+            const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader);
+            toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
           }
 
           const finalResponse = await fetchAI({
@@ -248,7 +293,7 @@ Quando mencionar métricas, inclua um bloco JSON entre \`\`\`kpi e \`\`\` com fo
           });
 
           if (finalResponse.ok) {
-            await supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_save", tokens_used: 800, model: "google/gemini-2.5-flash" });
+            await supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_mgmt", tokens_used: 800, model: "google/gemini-2.5-flash" });
             return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
           }
         }
