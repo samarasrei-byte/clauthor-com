@@ -520,7 +520,7 @@ const HomePage = () => {
                 </div>
                 <div>
                   <h4 className="font-display font-semibold text-base sm:text-lg mb-1.5 sm:mb-2 group-hover:text-primary/90 transition-colors">{item.title}</h4>
-                  <p className="text-[13px] sm:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                  <p className="text-sm sm:text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
@@ -529,40 +529,156 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          TESTIMONIAL
+          WHY CLAUTHOR — Key differentiators
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 px-4 relative">
-        <div className="max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <div className="rounded-2xl border border-border bg-card/30 backdrop-blur-sm p-6 sm:p-14 relative overflow-hidden">
-              <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-primary/10 rounded-tl-2xl" />
-              <div className="absolute bottom-0 right-0 w-8 h-8 border-b border-r border-primary/10 rounded-br-2xl" />
+      <section className="py-16 sm:py-24 px-4 relative border-y border-border/30">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10 sm:mb-14">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
+              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">Diferenciais</span>
+              <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
+            </div>
+            <h2 className="font-display text-2xl sm:text-4xl font-bold text-center">
+              Por que líderes escolhem a <span className="gradient-text">CLAUTHOR</span>
+            </h2>
+            <p className="text-sm sm:text-base text-muted-foreground text-center mt-3 max-w-xl mx-auto">
+              Não somos apenas mais uma ferramenta de IA. Somos a infraestrutura que substitui departamentos inteiros.
+            </p>
+          </motion.div>
 
-              <div className="text-center">
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/10 bg-primary/5 mb-6 sm:mb-8">
-                  <TrendingUp className="h-3.5 w-3.5 text-primary" />
-                  <span className="font-mono text-xs font-semibold text-primary">-72% custos operacionais</span>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+            {[
+              { icon: Shield, title: "Segurança Enterprise", desc: "Criptografia ponta a ponta, SOC 2, dados isolados por tenant. Sua operação blindada." },
+              { icon: Clock, title: "Setup em 5 minutos", desc: "Sem código, sem DevOps. Escolha seu time, configure e seus agentes já estão operando." },
+              { icon: DollarSign, title: "Economia de +88%", desc: "Cada agente custa menos que um estagiário e trabalha 24/7, sem férias, sem turnover." },
+              { icon: Network, title: "Orquestração inteligente", desc: "Agentes trabalham em squads coordenados. Um resolve, outro valida, outro escala." },
+              { icon: Globe, title: "Multi-idioma nativo", desc: "Atenda clientes em 13 idiomas simultaneamente. Expansão global sem barreiras." },
+              { icon: Rocket, title: "Escala infinita", desc: "De 10 a 10.000 atendimentos/dia sem contratar ninguém. Escale sem dor." },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, duration: 0.5 }}
+                className="group p-5 sm:p-6 rounded-2xl border border-border bg-card/30 backdrop-blur-sm hover:border-primary/20 hover:bg-card/50 transition-all duration-500"
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+                  <item.icon className="h-5 w-5 text-primary/70 group-hover:text-primary transition-colors" />
+                </div>
+                <h3 className="font-display font-bold text-base mb-2 group-hover:text-primary/90 transition-colors">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          TESTIMONIALS — Multiple cases
+          ═══════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 px-4 relative">
+        <div className="max-w-5xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10 sm:mb-14">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
+              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">Cases de Sucesso</span>
+              <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
+            </div>
+            <h2 className="font-display text-2xl sm:text-4xl font-bold text-center">
+              Resultados <span className="gradient-text">reais</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
+            {[
+              {
+                initials: "RM", name: "Rafael Mendes", role: "CEO — TechNova", sector: "SaaS B2B",
+                quote: "Reduzimos 72% dos custos operacionais em 3 meses. Os agentes trabalham 24/7 sem falhar.",
+                metric: "-72%", metricLabel: "custos operacionais",
+              },
+              {
+                initials: "CS", name: "Camila Santos", role: "COO — HealthPlus", sector: "Saúde",
+                quote: "Automatizamos 4.200 agendamentos/mês e zeramos o no-show. Pacientes adoraram a experiência.",
+                metric: "4.200", metricLabel: "agendamentos/mês",
+              },
+              {
+                initials: "LP", name: "Lucas Pereira", role: "CTO — FinEdge", sector: "Fintech",
+                quote: "O squad de compliance processa 800 contratos/dia com 99,2% de precisão. Antes levava 3 semanas.",
+                metric: "800", metricLabel: "contratos/dia",
+              },
+            ].map((testimonial, i) => (
+              <motion.div
+                key={testimonial.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.12, duration: 0.6 }}
+                className="rounded-2xl border border-border bg-card/30 backdrop-blur-sm p-5 sm:p-6 relative overflow-hidden flex flex-col"
+              >
+                <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-primary/10 rounded-tl-2xl" />
+                <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-primary/10 rounded-br-2xl" />
+
+                {/* Metric highlight */}
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/10 bg-primary/5 mb-4 w-fit">
+                  <TrendingUp className="h-3 w-3 text-primary" />
+                  <span className="font-mono text-xs font-bold text-primary">{testimonial.metric}</span>
+                  <span className="font-mono text-[10px] text-primary/60">{testimonial.metricLabel}</span>
                 </div>
 
-                <p className="text-base sm:text-xl text-foreground/90 leading-relaxed font-medium italic mb-8 sm:mb-10 max-w-2xl mx-auto">
-                  "Reduzimos 72% dos custos operacionais em 3 meses. Os agentes trabalham 24/7 sem falhar. A integração levou 15 minutos."
+                <p className="text-sm sm:text-[15px] text-foreground/90 leading-relaxed font-medium italic mb-5 flex-1">
+                  "{testimonial.quote}"
                 </p>
 
-                <div className="flex items-center justify-center gap-4 mb-4">
-                  <div className="w-11 h-11 rounded-full bg-primary/10 border border-primary/10 flex items-center justify-center font-mono text-xs font-bold text-primary">
-                    RM
+                <div className="flex items-center gap-3 pt-4 border-t border-border/50">
+                  <div className="w-10 h-10 rounded-full bg-primary/10 border border-primary/10 flex items-center justify-center font-mono text-[11px] font-bold text-primary shrink-0">
+                    {testimonial.initials}
                   </div>
-                  <div className="text-left">
-                    <p className="font-semibold text-sm">Rafael Mendes</p>
-                    <p className="font-mono text-[11px] text-muted-foreground">CEO — TechNova</p>
+                  <div className="min-w-0">
+                    <p className="font-semibold text-sm truncate">{testimonial.name}</p>
+                    <p className="font-mono text-[11px] text-muted-foreground truncate">{testimonial.role}</p>
+                  </div>
+                  <div className="ml-auto shrink-0">
+                    <div className="flex gap-0.5">
+                      {[...Array(5)].map((_, j) => (
+                        <Star key={j} className="h-3 w-3 fill-primary/80 text-primary/80" />
+                      ))}
+                    </div>
+                    <p className="font-mono text-[9px] text-muted-foreground/50 text-right mt-0.5">{testimonial.sector}</p>
                   </div>
                 </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-                <div className="flex gap-1 justify-center mt-3">
-                  {[...Array(5)].map((_, j) => (
-                    <Star key={j} className="h-3.5 w-3.5 fill-primary/80 text-primary/80" />
-                  ))}
-                </div>
+      {/* ═══════════════════════════════════════════════════════
+          GUARANTEE — Trust reinforcement
+          ═══════════════════════════════════════════════════════ */}
+      <section className="py-12 sm:py-16 px-4 relative">
+        <div className="max-w-3xl mx-auto">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="rounded-2xl border border-primary/10 bg-primary/[0.02] p-6 sm:p-10 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-5">
+                <Shield className="h-7 w-7 text-primary" />
+              </div>
+              <h3 className="font-display text-xl sm:text-2xl font-bold mb-3">Garantia de resultados</h3>
+              <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-lg mx-auto mb-6">
+                Se em 30 dias você não perceber redução de custos ou ganho de eficiência, devolvemos 100% do seu investimento. Sem burocracia.
+              </p>
+              <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
+                {[
+                  { icon: Lock, text: "Dados 100% criptografados" },
+                  { icon: Zap, text: "Cancele a qualquer momento" },
+                  { icon: Headphones, text: "Suporte humano + IA 24/7" },
+                ].map((g) => (
+                  <div key={g.text} className="flex items-center gap-2">
+                    <g.icon className="h-3.5 w-3.5 text-primary/60" />
+                    <span className="font-mono text-xs text-muted-foreground">{g.text}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>
