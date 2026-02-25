@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
+import { checkRateLimit, rateLimitResponse, securityHeaders } from "../_shared/security.ts";
+import { alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,6 +15,14 @@ serve(async (req) => {
   }
 
   try {
+    // Rate limit
+    const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const rl = checkRateLimit(`concierge:${clientIP}`, 20, 60_000);
+    if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
+
+    const tracker = createExecutionTracker();
+    const authStep = tracker.step("auth");
+
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
@@ -32,9 +42,25 @@ serve(async (req) => {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-    }
+    authStep.done();
 
     const { messages, language } = await req.json();
+
+    // Input validation
+    if (messages && Array.isArray(messages)) {
+      for (const msg of messages) {
+        if (!msg.content || typeof msg.content !== "string" || msg.content.length > 4000) {
+          return new Response(JSON.stringify({ error: "Invalid message format" }), {
+            status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+      }
+      if (messages.length > 50) {
+        return new Response(JSON.stringify({ error: "Too many messages" }), {
+          status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
 
     const langMap: Record<string, string> = {
       pt: "português do Brasil", en: "English", es: "español", fr: "français",
