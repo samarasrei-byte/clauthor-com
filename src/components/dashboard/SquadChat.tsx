@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Loader2, Trash2, Users, Zap } from "lucide-react";
+import { Send, Bot, User, Loader2, Trash2, Users, Zap, UserPlus, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
+import VoiceInput from "./VoiceInput";
 
 interface Agent {
   id: string;
@@ -17,15 +18,17 @@ interface Agent {
 
 interface SquadMessage {
   id: string;
-  role: "user" | "squad";
+  role: "user" | "squad" | "system";
   content: string;
   agentName?: string;
   agentTier?: string;
   timestamp: Date;
+  suggestedAgents?: Agent[];
 }
 
 interface SquadChatProps {
   agents: Agent[];
+  onRequestAgent?: (agentName: string) => void;
 }
 
 const tierColors: Record<string, string> = {
@@ -35,13 +38,53 @@ const tierColors: Record<string, string> = {
   enterprise: "bg-primary/15 text-primary",
 };
 
-const SquadChat = ({ agents }: SquadChatProps) => {
+const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
   const [messages, setMessages] = useState<SquadMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [includedAgentIds, setIncludedAgentIds] = useState<Set<string>>(new Set());
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const activeAgents = agents.filter((a) => a.status === "active");
+  const inactiveAgents = agents.filter((a) => a.status !== "active");
+
+  // Detect if a response suggests another agent and show upgrade option
+  const detectSuggestedAgents = (content: string): Agent[] => {
+    const suggested: Agent[] = [];
+    const lowerContent = content.toLowerCase();
+    for (const agent of agents) {
+      if (!includedAgentIds.has(agent.id) && !activeAgents.some(a => a.id === agent.id)) {
+        if (lowerContent.includes(agent.name.toLowerCase())) {
+          suggested.push(agent);
+        }
+      }
+    }
+    // Also check for inactive agents mentioned by active agents
+    for (const agent of inactiveAgents) {
+      if (lowerContent.includes(agent.name.toLowerCase())) {
+        suggested.push(agent);
+      }
+    }
+    return [...new Map(suggested.map(a => [a.id, a])).values()];
+  };
+
+  const includeAgent = async (agent: Agent) => {
+    // Activate the agent
+    const { error } = await supabase.from("agents").update({ status: "active" as any }).eq("id", agent.id);
+    if (error) {
+      toast.error("Erro ao ativar agente.");
+      return;
+    }
+    setIncludedAgentIds(prev => new Set([...prev, agent.id]));
+    toast.success(`${agent.name} incluído na reunião!`);
+    // Add system message
+    setMessages(prev => [...prev, {
+      id: crypto.randomUUID(),
+      role: "system",
+      content: `🔄 **${agent.name}** foi ativado e incluído na reunião. Envie uma nova mensagem para que ele participe.`,
+      timestamp: new Date(),
+    }]);
+  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -97,14 +140,18 @@ const SquadChat = ({ agents }: SquadChatProps) => {
 
       const data = await response.json();
       const agentResponses: SquadMessage[] = (data.responses || []).map(
-        (r: any) => ({
-          id: crypto.randomUUID(),
-          role: "squad" as const,
-          content: r.content,
-          agentName: r.agentName,
-          agentTier: r.tier,
-          timestamp: new Date(),
-        })
+        (r: any) => {
+          const suggested = detectSuggestedAgents(r.content);
+          return {
+            id: crypto.randomUUID(),
+            role: "squad" as const,
+            content: r.content,
+            agentName: r.agentName,
+            agentTier: r.tier,
+            timestamp: new Date(),
+            suggestedAgents: suggested.length > 0 ? suggested : undefined,
+          };
+        }
       );
 
       // Show how many agents responded vs total
@@ -191,44 +238,76 @@ const SquadChat = ({ agents }: SquadChatProps) => {
               exit={{ opacity: 0 }}
               className={`flex gap-3 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
             >
-              <div
-                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                  msg.role === "user" ? "bg-primary/20" : "bg-accent-violet/15"
-                }`}
-              >
-                {msg.role === "user" ? (
-                  <User className="h-4 w-4 text-primary" />
-                ) : (
-                  <Bot className="h-4 w-4 text-accent-violet" />
-                )}
-              </div>
-              <div className="max-w-[85%] min-w-0">
-                {msg.role === "squad" && msg.agentName && (
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-semibold text-accent-violet">{msg.agentName}</span>
-                    {msg.agentTier && (
-                      <Badge variant="secondary" className={`text-[9px] px-1 py-0 ${tierColors[msg.agentTier] || ""}`}>
-                        {msg.agentTier}
-                      </Badge>
-                    )}
-                  </div>
-                )}
-                <div
-                  className={`rounded-2xl px-4 py-3 ${
-                    msg.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-card border border-border"
-                  }`}
-                >
-                  {msg.role === "squad" ? (
-                    <div className="text-sm prose prose-sm prose-invert max-w-none">
+              {msg.role === "system" ? (
+                <div className="w-full text-center">
+                  <div className="inline-block bg-accent-violet/10 border border-accent-violet/20 rounded-xl px-4 py-2">
+                    <div className="text-xs prose prose-sm prose-invert max-w-none">
                       <ReactMarkdown>{msg.content}</ReactMarkdown>
                     </div>
-                  ) : (
-                    <p className="text-sm">{msg.content}</p>
-                  )}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <>
+                  <div
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
+                      msg.role === "user" ? "bg-primary/20" : "bg-accent-violet/15"
+                    }`}
+                  >
+                    {msg.role === "user" ? (
+                      <User className="h-4 w-4 text-primary" />
+                    ) : (
+                      <Bot className="h-4 w-4 text-accent-violet" />
+                    )}
+                  </div>
+                  <div className="max-w-[85%] min-w-0">
+                    {msg.role === "squad" && msg.agentName && (
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-semibold text-accent-violet">{msg.agentName}</span>
+                        {msg.agentTier && (
+                          <Badge variant="secondary" className={`text-[9px] px-1 py-0 ${tierColors[msg.agentTier] || ""}`}>
+                            {msg.agentTier}
+                          </Badge>
+                        )}
+                      </div>
+                    )}
+                    <div
+                      className={`rounded-2xl px-4 py-3 ${
+                        msg.role === "user"
+                          ? "bg-primary text-primary-foreground"
+                          : "bg-card border border-border"
+                      }`}
+                    >
+                      {msg.role === "squad" ? (
+                        <div className="text-sm prose prose-sm prose-invert max-w-none">
+                          <ReactMarkdown>{msg.content}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        <p className="text-sm">{msg.content}</p>
+                      )}
+                    </div>
+                    {/* Suggested agent upgrade */}
+                    {msg.suggestedAgents && msg.suggestedAgents.length > 0 && (
+                      <div className="mt-2 p-2 rounded-xl bg-accent-violet/5 border border-accent-violet/15 space-y-2">
+                        <p className="text-[10px] text-accent-violet font-medium flex items-center gap-1">
+                          <UserPlus className="h-3 w-3" /> Agentes sugeridos para esta conversa:
+                        </p>
+                        {msg.suggestedAgents.map(a => (
+                          <div key={a.id} className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Bot className="h-3 w-3 text-muted-foreground" />
+                              <span className="text-xs">{a.name}</span>
+                              <Badge variant="secondary" className={`text-[8px] ${tierColors[a.tier] || ""}`}>{a.tier}</Badge>
+                            </div>
+                            <Button size="sm" variant="outline" className="h-6 text-[10px] gap-1 border-accent-violet/30 text-accent-violet hover:bg-accent-violet/10" onClick={() => includeAgent(a)}>
+                              <UserPlus className="h-3 w-3" /> Incluir
+                            </Button>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </>
+              )}
             </motion.div>
           ))}
         </AnimatePresence>
@@ -272,6 +351,13 @@ const SquadChat = ({ agents }: SquadChatProps) => {
               placeholder="Envie uma mensagem para todo o time..."
               disabled={isLoading}
               className="flex-1 bg-card border-border"
+            />
+            <VoiceInput
+              onTranscript={(text) => {
+                setInput(text);
+                setTimeout(() => handleSend(), 300);
+              }}
+              disabled={isLoading}
             />
             <Button type="submit" disabled={!input.trim() || isLoading} className="shrink-0 neon-glow">
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}

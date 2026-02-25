@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Wand2
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Wand2, Building2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -26,6 +26,7 @@ import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import ClientCommandCenter from "@/components/dashboard/ClientCommandCenter";
 import AgentSettings from "@/components/dashboard/AgentSettings";
 import SquadChat from "@/components/dashboard/SquadChat";
+import CompanyBoard from "@/components/dashboard/CompanyBoard";
 import TeamMembers from "@/components/dashboard/TeamMembers";
 import ConciergeChat from "@/components/dashboard/ConciergeChat";
 import type { HireIntent } from "./Auth";
@@ -186,6 +187,7 @@ const ClientDashboard = () => {
     { id: "concierge", label: t("dashboard.concierge"), icon: Wand2 },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users },
+    { id: "board", label: "Board da Empresa", icon: Building2 },
     { id: "agent-settings", label: t("dashboard.settings"), icon: Settings },
     { id: "chat", label: t("dashboard.ai_assistant"), icon: Sparkles },
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3 },
@@ -300,6 +302,12 @@ const ClientDashboard = () => {
 
           {/* ═══ SQUAD CHAT (REUNIÃO) ═══ */}
           {activeSection === "squad-chat" && <SquadChat agents={agents} />}
+
+          {/* ═══ COMPANY BOARD ═══ */}
+          {activeSection === "board" && <CompanyBoard />}
+
+          {/* ═══ TEAM MEMBERS ═══ */}
+          {activeSection === "team" && <TeamMembers />}
 
           {/* ═══ TEAM MEMBERS ═══ */}
           {activeSection === "team" && <TeamMembers />}

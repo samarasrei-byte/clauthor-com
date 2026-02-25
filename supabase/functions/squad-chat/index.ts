@@ -102,6 +102,19 @@ Responda APENAS com um JSON array de IDs, sem explicação. Ex: ["id1","id2"]`
       return new Response(JSON.stringify({ error: "Credits exhausted" }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // Fetch company board data for context
+    const { data: boardData } = await adminClient
+      .from("company_board")
+      .select("category, title, content")
+      .eq("user_id", user.id)
+      .limit(20);
+
+    let companyContext = "";
+    if (boardData && boardData.length > 0) {
+      companyContext = "\n\n## INFORMAÇÕES DA EMPRESA DO CLIENTE:\n" +
+        boardData.map(b => `[${b.category.toUpperCase()}] ${b.title}: ${b.content}`).join("\n");
+    }
+
     const responses = await Promise.allSettled(
       agents.map(async (agent) => {
         const systemPrompt = `${agent.instructions || "Você é um assistente profissional especializado."}
@@ -110,9 +123,10 @@ Responda APENAS com um JSON array de IDs, sem explicação. Ex: ["id1","id2"]`
 Você está em uma reunião de departamento com outros agentes de IA. O CEO/gestor enviou uma mensagem para TODO o time.
 - Responda APENAS sobre sua área de especialidade: ${agent.objective || agent.name}
 - Seja CONCISO (máximo 3 parágrafos)
-- Se o assunto não é da sua alçada, diga brevemente e indique qual colega seria mais adequado
+- Se o assunto não é da sua alçada, diga brevemente e indique qual colega seria mais adequado (cite o nome exato do agente)
 - Responda em português do Brasil
-- Comece sua resposta identificando-se brevemente`;
+- Comece sua resposta identificando-se brevemente
+${companyContext}`;
 
         const aiResponse = await fetchAI({
           model: "google/gemini-3-flash-preview",
