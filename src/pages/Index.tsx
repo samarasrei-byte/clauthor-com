@@ -655,7 +655,7 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          GUARANTEE — Trust reinforcement
+          TRUST — Security & Support
           ═══════════════════════════════════════════════════════ */}
       <section className="py-12 sm:py-16 px-4 relative">
         <div className="max-w-3xl mx-auto">
@@ -664,9 +664,9 @@ const HomePage = () => {
               <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-5">
                 <Shield className="h-7 w-7 text-primary" />
               </div>
-              <h3 className="font-display text-xl sm:text-2xl font-bold mb-3">Garantia de resultados</h3>
+              <h3 className="font-display text-xl sm:text-2xl font-bold mb-3">Segurança & Confiança</h3>
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-lg mx-auto mb-6">
-                Se em 30 dias você não perceber redução de custos ou ganho de eficiência, devolvemos 100% do seu investimento. Sem burocracia.
+                Sua operação protegida com infraestrutura de nível enterprise. Criptografia de ponta a ponta, suporte dedicado e total flexibilidade.
               </p>
               <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
                 {[
