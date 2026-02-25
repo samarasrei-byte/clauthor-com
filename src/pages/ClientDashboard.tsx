@@ -7,12 +7,12 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Wand2, Building2
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Wand2, Building2, Brain
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -36,6 +36,7 @@ import type { HireIntent } from "./Auth";
 const ClientDashboard = () => {
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const hireProcessed = useRef(false);
   const [activeSection, setActiveSection] = useState("overview");
@@ -190,6 +191,7 @@ const ClientDashboard = () => {
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
 
   const sidebarItems = [
+    { id: "monix", label: "MONIX", icon: Brain, badge: "AI" },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard },
     { id: "concierge", label: t("dashboard.concierge"), icon: Wand2 },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined },
@@ -245,7 +247,9 @@ const ClientDashboard = () => {
           items={sidebarItems}
           activeItem={activeSection}
           onItemChange={(id) => {
-            if (id === "concierge") {
+            if (id === "monix") {
+              navigate("/monix");
+            } else if (id === "concierge") {
               setShowConcierge(true);
             } else {
               setActiveSection(id);
@@ -279,7 +283,7 @@ const ClientDashboard = () => {
                 key={item.id}
                 variant={activeSection === item.id ? "default" : "ghost"}
                 size="sm"
-                onClick={() => item.id === "concierge" ? setShowConcierge(true) : setActiveSection(item.id)}
+                onClick={() => item.id === "monix" ? navigate("/monix") : item.id === "concierge" ? setShowConcierge(true) : setActiveSection(item.id)}
                 className="shrink-0 gap-1.5"
               >
                 <item.icon className="h-3.5 w-3.5" />
