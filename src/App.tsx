@@ -14,10 +14,12 @@ import { lazy, Suspense } from "react";
 function lazyRetry(factory: () => Promise<any>) {
   return lazy(() =>
     factory().catch((err) => {
-      // Only reload once to avoid infinite loops
-      const key = "chunk_reload";
-      if (!sessionStorage.getItem(key)) {
-        sessionStorage.setItem(key, "1");
+      const key = "chunk_reload_" + Date.now().toString(36);
+      const lastReload = sessionStorage.getItem("chunk_last_reload");
+      const now = Date.now();
+      // Only reload if we haven't reloaded in the last 10 seconds
+      if (!lastReload || now - parseInt(lastReload) > 10000) {
+        sessionStorage.setItem("chunk_last_reload", now.toString());
         window.location.reload();
       }
       throw err;
