@@ -5,10 +5,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCredits } from "@/hooks/useCredits";
+import { useAuth } from "@/hooks/useAuth";
 import {
   Coins, Zap, Crown, Rocket, ArrowRight, CheckCircle,
   QrCode, Copy, ExternalLink, Sparkles, Package,
-  CreditCard, Globe, Smartphone, Clock
+  CreditCard, Globe, Smartphone, Clock, FlaskConical
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -110,11 +111,16 @@ interface TokenUpgradeDialogProps {
 
 export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps) {
   const { credits } = useCredits();
+  const { user } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [selectedPack, setSelectedPack] = useState<string | null>(null);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod | null>(null);
   const [showPayment, setShowPayment] = useState(false);
   const [paypalLoading, setPaypalLoading] = useState(false);
+
+  // Test emails that bypass PayPal and get tokens directly
+  const TEST_EMAILS = ["admin@clauthor.com", "teste3@clauthor.com"];
+  const isTestUser = user?.email ? TEST_EMAILS.includes(user.email) : false;
 
   const currentPlan = credits?.plan_type || "free";
 
@@ -199,6 +205,48 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
       setPaypalLoading(false);
     }
   }, [selectedPlan, selectedPack, selectedItemName]);
+
+  const handleTestBypass = useCallback(async () => {
+    const itemId = selectedPlan || selectedPack;
+    const type = selectedPlan ? "plan" : "token_pack";
+    if (!itemId) return;
+
+    const tokensMap: Record<string, number> = {
+      starter: 5000000, pro: 25000000,
+      "pack-5m": 5000000, "pack-10m": 10000000, "pack-25m": 25000000,
+      "pack-50m": 50000000, "pack-100m": 100000000,
+    };
+    const tokensToAdd = tokensMap[itemId] || 0;
+    if (tokensToAdd === 0) return;
+
+    setPaypalLoading(true);
+    try {
+      const { data: currentCredits } = await supabase
+        .from("user_credits")
+        .select("total_credits")
+        .eq("user_id", user!.id)
+        .single();
+
+      if (currentCredits) {
+        const updatePayload: Record<string, any> = {
+          total_credits: currentCredits.total_credits + tokensToAdd,
+        };
+        if (type === "plan") {
+          updatePayload.plan_type = itemId;
+        }
+        await supabase
+          .from("user_credits")
+          .update(updatePayload)
+          .eq("user_id", user!.id);
+      }
+
+      toast.success(`🧪 Modo teste: ${(tokensToAdd / 1000000).toFixed(0)}M tokens creditados!`, { duration: 5000 });
+    } catch (err: any) {
+      toast.error(err.message || "Erro no bypass de teste");
+    } finally {
+      setPaypalLoading(false);
+    }
+  }, [selectedPlan, selectedPack, user]);
 
   const copyPixCode = () => {
     navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136clauthor-tokens@pix.com5204000053039865802BR5925CLAUTHOR TOKENS LTDA6009SAO PAULO62070503***6304ABCD");
@@ -520,6 +568,16 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                   <p className="text-[10px] text-muted-foreground text-center">
                     Proteção ao comprador inclusa. Tokens creditados após confirmação.
                   </p>
+                  {isTestUser && (
+                    <Button 
+                      variant="outline"
+                      className="w-full gap-2 border-amber-500/30 text-amber-400 hover:bg-amber-500/10 mt-2"
+                      onClick={handleTestBypass}
+                      disabled={paypalLoading}
+                    >
+                      <FlaskConical className="h-4 w-4" /> Modo Teste — Creditar sem pagar
+                    </Button>
+                  )}
                 </motion.div>
               )}
 
