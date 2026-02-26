@@ -246,9 +246,9 @@ const HomePage = () => {
   }, []);
 
   const agents = [
-    { key: "customer_service", slug: "customer-service", icon: Headphones, name: t("agents.customer_service"), role: t("agents.customer_service_desc"), status: "ONLINE", actions: 12847 },
-    { key: "billing", slug: "billing", icon: Receipt, name: t("agents.billing"), role: t("agents.billing_desc"), status: "ONLINE", actions: 9432 },
-    { key: "developer", slug: "developer", icon: Code, name: t("agents.developer"), role: t("agents.developer_desc"), status: "ONLINE", actions: 15291 },
+    { key: "customer_service", slug: "support_channel", icon: Headphones, name: t("agents.customer_service"), role: t("agents.customer_service_desc"), status: "ONLINE", actions: 12847 },
+    { key: "billing", slug: "revenue", icon: Receipt, name: t("agents.billing"), role: t("agents.billing_desc"), status: "ONLINE", actions: 9432 },
+    { key: "developer", slug: "coding", icon: Code, name: t("agents.developer"), role: t("agents.developer_desc"), status: "ONLINE", actions: 15291 },
   ];
 
   return (
