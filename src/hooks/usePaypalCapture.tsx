@@ -71,9 +71,28 @@ export function usePaypalCapture() {
           }
         }
 
+        // Log to payment_history
+        const { data: { user: captureUser } } = await supabase.auth.getUser();
+        if (captureUser) {
+          await supabase.from("payment_history").insert({
+            user_id: captureUser.id,
+            type: "paypal",
+            item_id: order.item_id || order.type,
+            item_name: order.type === "plan"
+              ? `Plano ${order.item_id?.charAt(0).toUpperCase()}${order.item_id?.slice(1)}`
+              : `Pacote ${order.item_id}`,
+            tokens_amount: tokensToAdd,
+            amount_cents: order.amount || 0,
+            currency: "BRL",
+            status: "completed",
+            paypal_order_id: order.order_id,
+          });
+        }
+
         toast.dismiss(loadingToast);
         toast.success("🎉 Pagamento confirmado! Tokens creditados.", { duration: 5000 });
         queryClient.invalidateQueries({ queryKey: ["user-credits"] });
+        queryClient.invalidateQueries({ queryKey: ["payment-history"] });
       } catch (err: any) {
         toast.dismiss(loadingToast);
         toast.error(err.message || "Erro ao confirmar pagamento");

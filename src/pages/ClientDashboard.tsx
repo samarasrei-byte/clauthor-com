@@ -32,6 +32,7 @@ import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
 import SendGridSetupGuide from "@/components/dashboard/SendGridSetupGuide";
 
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
+import PaymentHistoryTable from "@/components/dashboard/PaymentHistoryTable";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
 import SupportChat from "@/components/SupportChat";
@@ -529,6 +530,9 @@ const ClientDashboard = () => {
                   )}
                 </div>
               </div>
+
+              {/* Payment History */}
+              <PaymentHistoryTable />
             </div>
           )}
 
