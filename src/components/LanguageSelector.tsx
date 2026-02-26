@@ -10,6 +10,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Globe } from "lucide-react";
 
+const FlagImg = ({ code, className = "" }: { code: string; className?: string }) => (
+  <img
+    src={`https://flagcdn.com/w40/${code}.png`}
+    srcSet={`https://flagcdn.com/w80/${code}.png 2x`}
+    alt={code}
+    className={`inline-block w-5 h-auto rounded-sm ${className}`}
+    loading="lazy"
+  />
+);
+
 export function LanguageSelector() {
   const { i18n } = useTranslation();
   const [open, setOpen] = useState(false);
@@ -29,7 +39,7 @@ export function LanguageSelector() {
           size="sm" 
           className="gap-2 text-muted-foreground hover:text-foreground"
         >
-          <span className="text-lg">{currentLang.flag}</span>
+          <FlagImg code={currentLang.flag} />
           <Globe className="h-4 w-4" />
         </Button>
       </DropdownMenuTrigger>
@@ -45,7 +55,7 @@ export function LanguageSelector() {
               i18n.language === lang.code ? "bg-primary/10 text-primary" : ""
             }`}
           >
-            <span className="text-lg">{lang.flag}</span>
+            <FlagImg code={lang.flag} />
             <span className="flex-1">{lang.name}</span>
             {i18n.language === lang.code && (
               <span className="text-xs text-primary">✓</span>

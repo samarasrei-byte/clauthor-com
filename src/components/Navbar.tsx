@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, LogOut, Shield, ChevronDown, Bot, Building2, ShoppingCart, Network, Zap } from "lucide-react";
+import { Menu, X, LogOut, Shield, ChevronDown, Bot, Building2, Store, Blocks, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -95,7 +95,7 @@ const Navbar = () => {
                       className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
                     >
                       <div className="w-10 h-10 rounded-xl bg-accent-violet/10 flex items-center justify-center shrink-0 group-hover:bg-accent-violet/20 transition-colors">
-                        <ShoppingCart className="h-5 w-5 text-accent-violet" />
+                        <Store className="h-5 w-5 text-accent-violet" />
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-foreground">{t("navbar.marketplace_label")}</p>
@@ -108,7 +108,7 @@ const Navbar = () => {
                       className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
                     >
                       <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                        <Network className="h-5 w-5 text-primary" />
+                        <Blocks className="h-5 w-5 text-primary" />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">

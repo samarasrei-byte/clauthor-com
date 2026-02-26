@@ -6,19 +6,19 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import pt from "./locales/pt.json";
 
 export const languages = [
-  { code: "pt", name: "Português", flag: "🇧🇷" },
-  { code: "en", name: "English", flag: "🇺🇸" },
-  { code: "es", name: "Español", flag: "🇪🇸" },
-  { code: "fr", name: "Français", flag: "🇫🇷" },
-  { code: "de", name: "Deutsch", flag: "🇩🇪" },
-  { code: "it", name: "Italiano", flag: "🇮🇹" },
-  { code: "ja", name: "日本語", flag: "🇯🇵" },
-  { code: "zh", name: "中文", flag: "🇨🇳" },
-  { code: "ar", name: "العربية", flag: "🇸🇦" },
-  { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
-  { code: "ru", name: "Русский", flag: "🇷🇺" },
-  { code: "ko", name: "한국어", flag: "🇰🇷" },
-  { code: "tr", name: "Türkçe", flag: "🇹🇷" },
+  { code: "pt", name: "Português", flag: "br" },
+  { code: "en", name: "English", flag: "us" },
+  { code: "es", name: "Español", flag: "es" },
+  { code: "fr", name: "Français", flag: "fr" },
+  { code: "de", name: "Deutsch", flag: "de" },
+  { code: "it", name: "Italiano", flag: "it" },
+  { code: "ja", name: "日本語", flag: "jp" },
+  { code: "zh", name: "中文", flag: "cn" },
+  { code: "ar", name: "العربية", flag: "sa" },
+  { code: "hi", name: "हिन्दी", flag: "in" },
+  { code: "ru", name: "Русский", flag: "ru" },
+  { code: "ko", name: "한국어", flag: "kr" },
+  { code: "tr", name: "Türkçe", flag: "tr" },
 ];
 
 const supportedLngs = languages.map((l) => l.code);
