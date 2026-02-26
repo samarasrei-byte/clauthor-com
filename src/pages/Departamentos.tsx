@@ -314,7 +314,7 @@ const Departamentos = () => { // v2
                     return (
                       <Link
                         key={`${dept.id}-${agent.key}-${idx}`}
-                        to={`/agente/${agent.key.replace(/_/g, "-")}`}
+                        to={`/agente/${agent.key}`}
                         className="flex items-center gap-3 p-2 rounded-xl bg-white/[0.02] border border-transparent hover:border-primary/20 transition-colors group/agent"
                       >
                         <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
