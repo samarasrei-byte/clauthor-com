@@ -372,7 +372,7 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
                 <Button
                   size="lg"
                   className="neon-glow font-semibold gap-2"
-                  onClick={() => navigate(`/criar-agente?objetivo=${encodeURIComponent(query)}`)}
+                  onClick={() => navigate(`/create-agent?objetivo=${encodeURIComponent(query)}`)}
                 >
                   <Plus className="h-4 w-4" />
                   {lang === "pt" ? "Criar Agente Personalizado" : "Create Custom Agent"}
