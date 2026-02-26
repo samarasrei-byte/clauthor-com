@@ -240,13 +240,25 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
           .eq("user_id", user!.id);
       }
 
+      // Log transaction
+      await supabase.from("payment_history").insert({
+        user_id: user!.id,
+        type: "test_bypass",
+        item_id: itemId,
+        item_name: selectedItemName || itemId,
+        tokens_amount: tokensToAdd,
+        amount_cents: 0,
+        currency: "BRL",
+        status: "completed",
+      });
+
       toast.success(`🧪 Modo teste: ${(tokensToAdd / 1000000).toFixed(0)}M tokens creditados!`, { duration: 5000 });
     } catch (err: any) {
       toast.error(err.message || "Erro no bypass de teste");
     } finally {
       setPaypalLoading(false);
     }
-  }, [selectedPlan, selectedPack, user]);
+  }, [selectedPlan, selectedPack, user, selectedItemName]);
 
   const copyPixCode = () => {
     navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136clauthor-tokens@pix.com5204000053039865802BR5925CLAUTHOR TOKENS LTDA6009SAO PAULO62070503***6304ABCD");
