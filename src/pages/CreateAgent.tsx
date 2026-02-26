@@ -1,6 +1,6 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Bot, Target, FileText, Zap, Globe, Database,
-  Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2
+  Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Sparkles
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -39,16 +39,49 @@ const integrationOptions = ["Gmail", "WhatsApp API", "Google Sheets", "Notion", 
 const auditLevels = ["Básico", "Detalhado", "Completo"];
 const weekDays = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sáb", "Dom"];
 
+// Template suggestions based on keywords
+const AGENT_TEMPLATES = [
+  { name: "Atendimento WhatsApp", sector: "Atendimento", tone: "Amigável", keywords: ["whatsapp", "atendimento", "suporte", "cliente", "chat"], icon: "💬", description: "Agente de atendimento automatizado via WhatsApp" },
+  { name: "SDR de Vendas", sector: "Vendas", tone: "Corporativo", keywords: ["venda", "lead", "prospecção", "sdr", "comercial", "pipeline"], icon: "🎯", description: "Qualificação e prospecção de leads automatizada" },
+  { name: "Gestor de Marketing", sector: "Marketing", tone: "Casual", keywords: ["marketing", "campanha", "tráfego", "conteúdo", "social", "ads"], icon: "📣", description: "Automação de campanhas e análise de métricas" },
+  { name: "Assistente Financeiro", sector: "Financeiro", tone: "Formal", keywords: ["financeiro", "contábil", "dre", "fluxo de caixa", "pagamento", "cobrança"], icon: "💰", description: "Gestão financeira e análise de relatórios" },
+  { name: "Recrutador IA", sector: "RH", tone: "Amigável", keywords: ["rh", "recrutamento", "vaga", "currículo", "contratação", "people"], icon: "👥", description: "Triagem de candidatos e processos seletivos" },
+  { name: "Agente Jurídico", sector: "Jurídico", tone: "Formal", keywords: ["jurídico", "contrato", "compliance", "legal", "regulatório"], icon: "⚖️", description: "Análise de contratos e conformidade legal" },
+  { name: "Suporte Técnico", sector: "TI", tone: "Técnico", keywords: ["ti", "técnico", "bug", "sistema", "software", "dev", "código"], icon: "🛠️", description: "Resolução de problemas técnicos e troubleshooting" },
+  { name: "Agendador Inteligente", sector: "Atendimento", tone: "Amigável", keywords: ["agenda", "agendamento", "consulta", "horário", "clínica", "médico"], icon: "📅", description: "Automação de agendamentos e confirmações" },
+];
+
+function matchTemplates(text: string): typeof AGENT_TEMPLATES {
+  if (!text.trim()) return [];
+  const lower = text.toLowerCase();
+  return AGENT_TEMPLATES
+    .map(t => ({ ...t, score: t.keywords.filter(k => lower.includes(k)).length }))
+    .filter(t => t.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3);
+}
+
 const CreateAgentPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const [currentStep, setCurrentStep] = useState(0);
   const [saving, setSaving] = useState(false);
+  const [showTemplateSuggestions, setShowTemplateSuggestions] = useState(false);
 
   // Form state
   const [name, setName] = useState("");
   const [objective, setObjective] = useState("");
+
+  // Pre-fill from query params (from Concierge fallback)
+  useEffect(() => {
+    const prefilledObjective = searchParams.get("objetivo");
+    if (prefilledObjective) {
+      setObjective(prefilledObjective);
+      setShowTemplateSuggestions(true);
+    }
+  }, [searchParams]);
   const [sector, setSector] = useState("");
   const [instructions, setInstructions] = useState("");
   const [tone, setTone] = useState("");
@@ -132,6 +165,58 @@ const CreateAgentPage = () => {
       </div>
 
       {/* Step Content */}
+      {/* Template suggestions wizard */}
+      <AnimatePresence>
+        {showTemplateSuggestions && objective.trim() && currentStep === 0 && matchTemplates(objective).length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+          >
+            <Card className="glass border-primary/20 mb-4 overflow-hidden">
+              <CardHeader className="pb-3">
+                <CardTitle className="font-display text-base flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-primary" />
+                  Templates sugeridos para você
+                </CardTitle>
+                <p className="text-xs text-muted-foreground">Baseado na sua descrição, esses modelos podem acelerar a criação:</p>
+              </CardHeader>
+              <CardContent className="space-y-2 pt-0">
+                {matchTemplates(objective).map((tpl, idx) => (
+                  <motion.button
+                    key={tpl.name}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.08 }}
+                    onClick={() => {
+                      setName(tpl.name);
+                      setSector(tpl.sector);
+                      setTone(tpl.tone);
+                      setShowTemplateSuggestions(false);
+                      toast.success(`Template "${tpl.name}" aplicado!`);
+                    }}
+                    className="w-full flex items-center gap-3 p-3 rounded-xl border border-border hover:border-primary/30 hover:bg-primary/5 transition-all text-left group"
+                  >
+                    <span className="text-2xl">{tpl.icon}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold group-hover:text-primary transition-colors">{tpl.name}</p>
+                      <p className="text-xs text-muted-foreground">{tpl.description}</p>
+                    </div>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+                  </motion.button>
+                ))}
+                <button
+                  onClick={() => setShowTemplateSuggestions(false)}
+                  className="text-xs text-muted-foreground hover:text-foreground transition-colors mt-1"
+                >
+                  Prefiro criar do zero →
+                </button>
+              </CardContent>
+            </Card>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div key={currentStep} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.3 }}>
         <Card className="glass border-border">
           <CardHeader>
@@ -149,7 +234,15 @@ const CreateAgentPage = () => {
                 </div>
                 <div className="space-y-2">
                   <Label>Objetivo Principal</Label>
-                  <Textarea placeholder="Descreva o que este agente deve fazer..." value={objective} onChange={e => setObjective(e.target.value)} className="glass min-h-[120px]" />
+                  <Textarea
+                    placeholder="Descreva o que este agente deve fazer..."
+                    value={objective}
+                    onChange={e => {
+                      setObjective(e.target.value);
+                      if (e.target.value.trim().length > 5) setShowTemplateSuggestions(true);
+                    }}
+                    className="glass min-h-[120px]"
+                  />
                 </div>
                 <div className="space-y-2">
                   <Label>Setor</Label>

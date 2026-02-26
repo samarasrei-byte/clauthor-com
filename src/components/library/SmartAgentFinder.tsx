@@ -1,11 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Send, Loader2, ArrowRight, Zap, Star, Bot, X } from "lucide-react";
+import { Sparkles, Send, Loader2, ArrowRight, Zap, Star, Bot, X, Plus, Wand2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 interface Recommendation {
   key: string;
@@ -40,6 +40,7 @@ const PLACEHOLDER_EXAMPLES = [
 const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAgentFinderProps) => {
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.split("-")[0] || "pt";
+  const navigate = useNavigate();
   const [query, setQuery] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [results, setResults] = useState<Recommendation[]>([]);
@@ -83,7 +84,9 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
 
       if (response.error) throw response.error;
       const recs = response.data?.recommendations || [];
-      setResults(recs.filter((r: Recommendation) => agentMeta[r.key]));
+      // Keep all results but filter to known agents
+      const filtered = recs.filter((r: Recommendation) => agentMeta[r.key]);
+      setResults(filtered);
     } catch (err) {
       console.error("Concierge search failed:", err);
       // Fallback
@@ -337,12 +340,53 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
           )}
         </AnimatePresence>
 
-        {/* No results fallback */}
-        {hasSearched && !isSearching && results.length === 0 && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-8">
-            <p className="text-sm text-muted-foreground">
-              {lang === "pt" ? "Nenhum agente encontrado. Tente descrever melhor sua necessidade." : "No agents found. Try describing your need better."}
-            </p>
+        {/* Fallback: no results OR all below 60% match */}
+        {hasSearched && !isSearching && (results.length === 0 || results.every(r => r.match < 60)) && (
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-2xl mx-auto mt-6"
+          >
+            <div className="relative rounded-2xl border border-dashed border-primary/30 bg-gradient-to-br from-primary/5 to-primary-glow/5 p-6 text-center overflow-hidden">
+              {/* Ambient glow */}
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/3 to-transparent pointer-events-none" />
+              
+              <div className="relative space-y-4">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/15 to-primary-glow/15 flex items-center justify-center mx-auto border border-primary/20">
+                  <Wand2 className="h-7 w-7 text-primary" />
+                </div>
+                
+                <div>
+                  <h3 className="font-display font-bold text-lg mb-1">
+                    {lang === "pt"
+                      ? "Nenhum agente ideal encontrado"
+                      : "No ideal agent found"}
+                  </h3>
+                  <p className="text-sm text-muted-foreground max-w-md mx-auto">
+                    {lang === "pt"
+                      ? "Que tal criar um agente personalizado? Vamos pré-preencher o objetivo com sua busca para facilitar."
+                      : "How about creating a custom agent? We'll pre-fill the objective with your search to make it easy."}
+                  </p>
+                </div>
+
+                <Button
+                  size="lg"
+                  className="neon-glow font-semibold gap-2"
+                  onClick={() => navigate(`/criar-agente?objetivo=${encodeURIComponent(query)}`)}
+                >
+                  <Plus className="h-4 w-4" />
+                  {lang === "pt" ? "Criar Agente Personalizado" : "Create Custom Agent"}
+                </Button>
+
+                {results.length > 0 && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    {lang === "pt"
+                      ? `${results.length} resultado(s) parcial(is) acima — mas nenhum com mais de 60% de match.`
+                      : `${results.length} partial result(s) above — but none above 60% match.`}
+                  </p>
+                )}
+              </div>
+            </div>
           </motion.div>
         )}
       </motion.div>
