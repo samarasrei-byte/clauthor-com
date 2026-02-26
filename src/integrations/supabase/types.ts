@@ -964,6 +964,51 @@ export type Database = {
           },
         ]
       }
+      payment_history: {
+        Row: {
+          amount_cents: number
+          created_at: string
+          currency: string
+          id: string
+          item_id: string
+          item_name: string
+          metadata: Json | null
+          paypal_order_id: string | null
+          status: string
+          tokens_amount: number
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          item_id: string
+          item_name: string
+          metadata?: Json | null
+          paypal_order_id?: string | null
+          status?: string
+          tokens_amount?: number
+          type?: string
+          user_id: string
+        }
+        Update: {
+          amount_cents?: number
+          created_at?: string
+          currency?: string
+          id?: string
+          item_id?: string
+          item_name?: string
+          metadata?: Json | null
+          paypal_order_id?: string | null
+          status?: string
+          tokens_amount?: number
+          type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       plan_limits: {
         Row: {
           created_at: string
