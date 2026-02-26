@@ -125,10 +125,20 @@ export function useAgentChat(agentId?: string) {
                     search_leads: "🔍 Leads encontrados",
                     schedule_meeting: "📅 Reunião agendada",
                     analyze_data: "📈 Análise concluída",
+                    delegate_to_agent: "🔀 Delegação A2A",
                   };
                   return names[t.tool_name] || t.tool_name;
                 });
-                toast.success(toolNames.join(" • "), { duration: 4000 });
+                // Only toast for successful tools
+                const successTools = toolNames.filter((_: string, i: number) => parsed.tool_results[i]?.success !== false);
+                if (successTools.length > 0) {
+                  toast.success(successTools.join(" • "), { duration: 4000 });
+                }
+                // Toast warning for blocked delegations
+                const blocked = parsed.tool_results.filter((t: ToolResult) => t.tool_name === "delegate_to_agent" && !t.success);
+                if (blocked.length > 0) {
+                  toast.info("🔀 Um agente recomendou outro especialista — veja a sugestão no chat", { duration: 5000 });
+                }
               }
               if (parsed.credit_warning) gotCreditWarning = true;
               continue;

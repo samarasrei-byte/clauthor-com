@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Loader2, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap, Square, Volume2, VolumeX, ArrowRightLeft, GitBranch } from "lucide-react";
+import { Send, Bot, User, Loader2, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap, Square, Volume2, VolumeX, ArrowRightLeft, GitBranch, Sparkles, ArrowUpRight, ShieldCheck, Crown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useAgentChat, type ToolResult, type Message } from "@/hooks/useAgentChat";
 import ReactMarkdown from "react-markdown";
 import VoiceInput from "./VoiceInput";
+import { Link } from "react-router-dom";
 
 interface AgentChatProps {
   agentId?: string;
@@ -28,7 +29,135 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
   const Icon = meta.icon;
   const result = toolResult.result;
 
-  // Special rendering for Agent-to-Agent delegation
+  // Handle failed delegation — show upgrade/hire card
+  if (toolResult.tool_name === "delegate_to_agent" && !toolResult.success) {
+    const reason = result.reason || "not_contracted";
+    const isUpgrade = reason === "plan_insufficient" || reason === "tier_insufficient";
+    const targetAgent = result.target_agent || "Agente Especialista";
+    const requiredPlan = result.required_plan;
+    const requiredTier = result.required_tier;
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 24 }}
+        className="rounded-2xl border mt-3 overflow-hidden"
+        style={{
+          borderColor: isUpgrade ? "hsl(var(--primary) / 0.3)" : "hsl(266 100% 65% / 0.3)",
+          background: isUpgrade
+            ? "linear-gradient(135deg, hsl(var(--primary) / 0.08), hsl(var(--primary) / 0.02))"
+            : "linear-gradient(135deg, hsl(266 100% 65% / 0.08), hsl(266 100% 65% / 0.02))",
+        }}
+      >
+        {/* Glow bar */}
+        <div className="h-1 w-full" style={{
+          background: isUpgrade
+            ? "linear-gradient(90deg, hsl(var(--primary)), hsl(var(--primary) / 0.3))"
+            : "linear-gradient(90deg, hsl(266 100% 65%), hsl(266 100% 65% / 0.3))"
+        }} />
+
+        <div className="p-4">
+          {/* Header */}
+          <div className="flex items-start gap-3 mb-3">
+            <div className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
+              isUpgrade ? "bg-primary/15" : "bg-accent-violet/15"
+            }`}>
+              {isUpgrade ? (
+                <Crown className="h-5 w-5 text-primary" />
+              ) : (
+                <Sparkles className="h-5 w-5 text-accent-violet" />
+              )}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2 mb-0.5">
+                <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                  {isUpgrade ? "Upgrade Necessário" : "Agente Recomendado"}
+                </span>
+                <Badge variant="secondary" className="text-[9px] px-1.5 py-0 bg-amber-500/20 text-amber-400 border-0">
+                  Delegação A2A
+                </Badge>
+              </div>
+              <p className="text-sm font-semibold">{targetAgent}</p>
+            </div>
+          </div>
+
+          {/* Context message */}
+          <div className="bg-black/20 rounded-xl p-3 mb-3">
+            <div className="flex items-start gap-2">
+              <GitBranch className="h-3.5 w-3.5 text-indigo-400 mt-0.5 shrink-0" />
+              <div className="text-[12px] text-muted-foreground leading-relaxed">
+                {isUpgrade ? (
+                  <>
+                    O agente tentou delegar uma tarefa para <span className="font-semibold text-foreground">{targetAgent}</span>, mas seu plano atual não inclui acesso a esse recurso.
+                    {requiredPlan && (
+                      <span className="block mt-1 text-primary/80">
+                        Plano necessário: <span className="font-bold">{requiredPlan}</span>
+                      </span>
+                    )}
+                    {requiredTier && (
+                      <span className="block mt-0.5 text-primary/80">
+                        Tier mínimo: <span className="font-bold capitalize">{requiredTier}</span>
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    O agente identificou que <span className="font-semibold text-foreground">{targetAgent}</span> é o especialista ideal para completar esta tarefa, mas você ainda não o contratou.
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Task that triggered the delegation */}
+          {result.task && (
+            <div className="text-[11px] text-muted-foreground mb-3 px-1">
+              <span className="opacity-60">Tarefa pendente:</span>{" "}
+              <span className="font-medium text-foreground/80">"{result.task}"</span>
+            </div>
+          )}
+
+          {/* Benefits / Trust signals */}
+          <div className="grid grid-cols-3 gap-2 mb-4">
+            {[
+              { icon: Zap, label: "Delegação automática" },
+              { icon: ShieldCheck, label: "Segurança A2A" },
+              { icon: ArrowRightLeft, label: "Colaboração IA" },
+            ].map(({ icon: I, label }) => (
+              <div key={label} className="flex items-center gap-1.5 text-[10px] text-muted-foreground bg-white/5 rounded-lg px-2 py-1.5">
+                <I className="h-3 w-3 text-primary/70 shrink-0" />
+                <span>{label}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA Buttons */}
+          <div className="flex gap-2">
+            {isUpgrade ? (
+              <Link to="/pricing" className="flex-1">
+                <Button size="sm" className="w-full glow rounded-xl font-semibold text-xs h-9 gap-1.5">
+                  <Crown className="h-3.5 w-3.5" />
+                  Fazer Upgrade
+                  <ArrowUpRight className="h-3 w-3" />
+                </Button>
+              </Link>
+            ) : (
+              <Link to="/marketplace" className="flex-1">
+                <Button size="sm" className="w-full glow rounded-xl font-semibold text-xs h-9 gap-1.5">
+                  <Sparkles className="h-3.5 w-3.5" />
+                  Contratar {targetAgent}
+                  <ArrowUpRight className="h-3 w-3" />
+                </Button>
+              </Link>
+            )}
+          </div>
+        </div>
+      </motion.div>
+    );
+  }
+
+  // Special rendering for successful Agent-to-Agent delegation
   if (toolResult.tool_name === "delegate_to_agent") {
     return (
       <motion.div
