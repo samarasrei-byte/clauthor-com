@@ -15,7 +15,7 @@ const FlagImg = ({ code, className = "" }: { code: string; className?: string })
     src={`https://flagcdn.com/w40/${code}.png`}
     srcSet={`https://flagcdn.com/w80/${code}.png 2x`}
     alt={code}
-    className={`inline-block w-5 h-auto rounded-sm ${className}`}
+    className={`inline-block w-5 h-3.5 object-cover rounded-[3px] shadow-sm ring-1 ring-black/10 ${className}`}
     loading="lazy"
   />
 );

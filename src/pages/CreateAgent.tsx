@@ -49,6 +49,13 @@ const AGENT_TEMPLATES = [
   { name: "Agente Jurídico", sector: "Jurídico", tone: "Formal", keywords: ["jurídico", "contrato", "compliance", "legal", "regulatório"], icon: "⚖️", description: "Análise de contratos e conformidade legal" },
   { name: "Suporte Técnico", sector: "TI", tone: "Técnico", keywords: ["ti", "técnico", "bug", "sistema", "software", "dev", "código"], icon: "🛠️", description: "Resolução de problemas técnicos e troubleshooting" },
   { name: "Agendador Inteligente", sector: "Atendimento", tone: "Amigável", keywords: ["agenda", "agendamento", "consulta", "horário", "clínica", "médico"], icon: "📅", description: "Automação de agendamentos e confirmações" },
+  // Novos templates
+  { name: "Gestor de Logística", sector: "Outro", tone: "Técnico", keywords: ["logística", "frete", "entrega", "estoque", "armazém", "frota", "transporte", "supply chain", "expedição"], icon: "🚛", description: "Otimização de rotas, rastreio e gestão de estoque" },
+  { name: "Tutor Educacional", sector: "Outro", tone: "Amigável", keywords: ["educação", "aluno", "curso", "aula", "escola", "universidade", "ensino", "professor", "treinamento", "ead"], icon: "🎓", description: "Suporte pedagógico, dúvidas e trilhas de aprendizado" },
+  { name: "Assistente de Saúde", sector: "Outro", tone: "Formal", keywords: ["saúde", "paciente", "hospital", "médico", "exame", "prontuário", "farmácia", "clínica", "nutrição", "bem-estar"], icon: "🏥", description: "Triagem de sintomas, agendamentos e acompanhamento" },
+  { name: "E-commerce Manager", sector: "Vendas", tone: "Casual", keywords: ["e-commerce", "ecommerce", "loja", "produto", "carrinho", "checkout", "shopify", "marketplace", "pedido", "catálogo"], icon: "🛒", description: "Gestão de pedidos, catálogo e atendimento de loja online" },
+  { name: "Analista de Dados", sector: "TI", tone: "Técnico", keywords: ["dados", "análise", "dashboard", "métricas", "kpi", "bi", "relatório", "excel", "planilha", "indicador"], icon: "📊", description: "Análise de dados, dashboards e insights automatizados" },
+  { name: "Gestor Imobiliário", sector: "Vendas", tone: "Corporativo", keywords: ["imobiliário", "imóvel", "aluguel", "corretor", "condomínio", "locação", "propriedade"], icon: "🏠", description: "Gestão de leads imobiliários e agendamento de visitas" },
 ];
 
 function matchTemplates(text: string): typeof AGENT_TEMPLATES {
