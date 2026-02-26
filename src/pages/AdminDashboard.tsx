@@ -28,6 +28,7 @@ import AdminAgentSettings from "@/components/dashboard/AdminAgentSettings";
 import AdminInsightsPanel from "@/components/dashboard/AdminInsightsPanel";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
 import PlatformCredentialsPanel from "@/components/dashboard/PlatformCredentialsPanel";
+import OpenClawStatusPanel from "@/components/dashboard/OpenClawStatusPanel";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -130,6 +131,7 @@ const AdminDashboard = () => {
     { id: "war-room", label: "War Room", icon: Crown },
     { id: "agent-settings", label: "Config. Agentes", icon: Settings },
     { id: "platform-creds", label: "Credenciais Central", icon: Key },
+    { id: "openclaw", label: "OpenClaw Motor", icon: Activity, badge: undefined },
     { id: "payments", label: "Pagamentos", icon: Wallet },
     { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
     { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined },
@@ -243,6 +245,9 @@ const AdminDashboard = () => {
 
           {/* ═══ PLATFORM CREDENTIALS ═══ */}
           {activeTab === "platform-creds" && <PlatformCredentialsPanel />}
+
+          {/* ═══ OPENCLAW STATUS ═══ */}
+          {activeTab === "openclaw" && <OpenClawStatusPanel />}
 
           {/* ═══ COMMAND CENTER (OVERVIEW) ═══ */}
           {activeTab === "overview" && (
