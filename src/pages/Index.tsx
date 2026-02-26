@@ -140,6 +140,8 @@ const AnimatedStat = ({ value, suffix = "", prefix = "", label, icon: Icon }: {
    LIVE AGENT CARD
    ═══════════════════════════════════════════════════════ */
 interface LiveAgentProps {
+  key?: string;
+  slug?: string;
   name: string;
   role: string;
   icon: React.ElementType;
@@ -148,7 +150,7 @@ interface LiveAgentProps {
   index: number;
 }
 
-const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index }: LiveAgentProps) => {
+const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index, slug }: LiveAgentProps) => {
   const [currentActions, setCurrentActions] = useState(actions);
 
   useEffect(() => {
@@ -165,7 +167,7 @@ const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index }: LiveA
       viewport={{ once: true }}
       transition={{ delay: index * 0.12, duration: 0.6 }}
     >
-      <Link to="/library" className="block group">
+      <Link to={slug ? `/agente/${slug}` : "/library"} className="block group">
         <div className="relative p-6 sm:p-6 rounded-2xl border border-border bg-card/50 backdrop-blur-sm hover:border-primary/20 transition-all duration-500 overflow-hidden">
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 scan-line pointer-events-none" />
           
@@ -244,9 +246,9 @@ const HomePage = () => {
   }, []);
 
   const agents = [
-    { key: "customer_service", icon: Headphones, name: t("agents.customer_service"), role: t("agents.customer_service_desc"), status: "ONLINE", actions: 12847 },
-    { key: "billing", icon: Receipt, name: t("agents.billing"), role: t("agents.billing_desc"), status: "ONLINE", actions: 9432 },
-    { key: "developer", icon: Code, name: t("agents.developer"), role: t("agents.developer_desc"), status: "ONLINE", actions: 15291 },
+    { key: "customer_service", slug: "customer-service", icon: Headphones, name: t("agents.customer_service"), role: t("agents.customer_service_desc"), status: "ONLINE", actions: 12847 },
+    { key: "billing", slug: "billing", icon: Receipt, name: t("agents.billing"), role: t("agents.billing_desc"), status: "ONLINE", actions: 9432 },
+    { key: "developer", slug: "developer", icon: Code, name: t("agents.developer"), role: t("agents.developer_desc"), status: "ONLINE", actions: 15291 },
   ];
 
   return (

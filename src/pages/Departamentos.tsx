@@ -312,15 +312,16 @@ const Departamentos = () => { // v2
                   {dept.agents.map((agent, idx) => {
                     const AgentIcon = agent.icon;
                     return (
-                      <div
+                      <Link
                         key={`${dept.id}-${agent.key}-${idx}`}
-                        className="flex items-center gap-3 p-2 rounded-xl bg-white/[0.02] border border-transparent hover:border-white/[0.06] transition-colors"
+                        to={`/agente/${agent.key.replace(/_/g, "-")}`}
+                        className="flex items-center gap-3 p-2 rounded-xl bg-white/[0.02] border border-transparent hover:border-primary/20 transition-colors group/agent"
                       >
                         <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0">
                           <AgentIcon className="h-3.5 w-3.5 text-primary-foreground" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[13px] font-medium truncate">
+                          <p className="text-[13px] font-medium truncate group-hover/agent:text-primary transition-colors">
                             {t(`library_page.agents.${agent.key}_title`)}
                           </p>
                           <p className="text-[10px] text-muted-foreground">
@@ -330,7 +331,7 @@ const Departamentos = () => { // v2
                         <span className="text-[10px] font-mono text-muted-foreground bg-white/[0.03] px-2 py-0.5 rounded-md shrink-0">
                           {agent.tokens}
                         </span>
-                      </div>
+                      </Link>
                     );
                   })}
                 </div>
