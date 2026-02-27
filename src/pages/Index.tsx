@@ -289,7 +289,7 @@ const HomePage = () => {
                     <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping opacity-75" />
                   </div>
                   <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                    Sistema ativo — 44 agentes operacionais
+                    Sistema ativo — 75 agentes operacionais
                   </span>
                 </div>
               </motion.div>
@@ -429,7 +429,7 @@ const HomePage = () => {
           >
             <Link to="/library">
               <Button variant="outline" className="rounded-xl border-border hover:border-primary/20 group font-mono text-xs sm:text-xs uppercase tracking-wider px-8 h-12 sm:h-11">
-                Ver todos os 44 agentes
+                Ver todos os 75 agentes
                 <ArrowRight className="ml-2 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
