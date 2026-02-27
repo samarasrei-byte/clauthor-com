@@ -216,7 +216,7 @@ const departments = [
 
 const totalPrometheusCost = departments.reduce((a, d) => a + d.prometheusCost, 0);
 const totalCltCost = departments.reduce((a, d) => a + d.cltCost, 0);
-const totalTokens = "48M";
+const totalTokens = "89M";
 const totalAgents = departments.reduce((set, d) => { d.agents.forEach(a => set.add(a.key)); return set; }, new Set<string>()).size;
 const totalSavingsPercent = Math.round(((totalCltCost - totalPrometheusCost) / totalCltCost) * 100);
 
@@ -316,15 +316,15 @@ const Departamentos = () => { // v2
             <span className="gradient-text">operada por IA</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
-            7 departamentos. 44 agentes autônomos. Cada um substitui um profissional CLT — 
+            {departments.length} departamentos. {totalAgents} agentes autônomos. Cada um substitui um profissional CLT — 
             por uma <span className="text-primary font-bold">fração do custo</span>.
           </p>
 
           {/* Hero Stats */}
           <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
             {[
-              { icon: Bot, value: "28", label: "Agentes" },
-              { icon: Building2, value: "7", label: "Departamentos" },
+              { icon: Bot, value: String(totalAgents), label: "Agentes" },
+              { icon: Building2, value: String(departments.length), label: "Departamentos" },
               { icon: Coins, value: totalTokens, label: "Tokens/mês" },
               { icon: Zap, value: "24/7", label: "Operação" },
             ].map((stat) => (
@@ -474,7 +474,7 @@ const Departamentos = () => { // v2
             Empresa completa por menos que 3 funcionários CLT
           </h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-4">
-            7 departamentos · 44 agentes · {totalTokens} tokens/mês · operação 24/7
+            {departments.length} departamentos · {totalAgents} agentes · {totalTokens} tokens/mês · operação 24/7
           </p>
           <div className="flex items-center justify-center gap-6 mb-6">
             <div>
@@ -498,7 +498,7 @@ const Departamentos = () => { // v2
             state={{ 
               hireIntent: { 
                 type: "department", 
-                label: "Empresa Completa (7 departamentos)",
+                label: `Empresa Completa (${departments.length} departamentos)`,
                 departmentId: "all",
                 slugs: departments.flatMap(d => d.agents.map(a => a.key)),
               } as HireIntent 
