@@ -145,6 +145,54 @@ const agentDemos: Record<string, ChatMessage[]> = {
     { role: "user", text: "Como está a expansão da base atual?" },
     { role: "agent", text: "Health score da carteira: 82/100. 12 upsells identificados (R$ 234k potencial). 3 renovações antecipadas. Churn previsto: 2.1% (meta: 3%). 🌱" },
   ],
+  contract_analyst: [
+    { role: "user", text: "Revisa esse contrato de licenciamento?" },
+    { role: "agent", text: "Analisado. 4 cláusulas de risco: multa abusiva (§3.1), renovação automática sem aviso (§8), IP cedida (§5.2), foro desfavorável (§12). Sugestões prontas. 📋" },
+  ],
+  compliance_officer: [
+    { role: "user", text: "Estamos em compliance com a LGPD?" },
+    { role: "agent", text: "Scan completo: 3 gaps identificados — consentimento de cookies incompleto, política de retenção ausente, DPO não nomeado. Plano de ação gerado. 🛡️" },
+  ],
+  labor_law: [
+    { role: "user", text: "Calcule a rescisão do funcionário João." },
+    { role: "agent", text: "Rescisão sem justa causa calculada: FGTS + multa 40% (R$ 12.340), aviso prévio (30d), férias prop. + 1/3, 13º prop. Total: R$ 18.720. eSocial gerado. ⚖️" },
+  ],
+  litigation: [
+    { role: "user", text: "Quantos processos ativos temos?" },
+    { role: "agent", text: "47 processos ativos. 3 com prazo essa semana (contestação). Risco financeiro total: R$ 890k. Petição de defesa para processo #23 já redigida. ⚖️" },
+  ],
+  procurement: [
+    { role: "user", text: "Preciso comprar 500 notebooks para o time." },
+    { role: "agent", text: "3 cotações obtidas: Dell (R$ 3.200/un), Lenovo (R$ 3.050/un), HP (R$ 3.380/un). Lenovo tem melhor TCO. Saving de 8% vs última compra. Pedido pronto. 📦" },
+  ],
+  supplier_mgr: [
+    { role: "user", text: "Como está o score dos nossos fornecedores?" },
+    { role: "agent", text: "45 fornecedores ativos. 38 com score > 80. 3 abaixo do SLA (entrega atrasada > 15%). Alerta enviado + reunião agendada com os 3. 🏭" },
+  ],
+  cost_analyst: [
+    { role: "user", text: "Onde estamos gastando mais que o orçado?" },
+    { role: "agent", text: "3 centros de custo acima do budget: TI (+18%), Marketing (+12%), Facilities (+7%). Principal driver: licenças SaaS não utilizadas (R$ 34k/mês). 💰" },
+  ],
+  contract_negotiator: [
+    { role: "user", text: "Preciso renegociar o contrato com a AWS." },
+    { role: "agent", text: "Benchmark: empresas similares pagam 22% menos. Playbook preparado: committed use discount + reserved instances. Economia projetada: R$ 180k/ano. 🤝" },
+  ],
+  logistics: [
+    { role: "user", text: "Como otimizar as entregas de São Paulo?" },
+    { role: "agent", text: "Roteirização otimizada: 23 rotas consolidadas em 15. Economia de 31% em combustível. Tempo médio de entrega: 2.1h → 1.4h. Rastreamento ativo. 🚛" },
+  ],
+  inventory: [
+    { role: "user", text: "Tem algum produto em risco de ruptura?" },
+    { role: "agent", text: "12 SKUs com estoque < 5 dias. 3 críticos (ABC classe A). Pedidos de reposição automáticos enviados. Previsão de demanda atualizada para 60 dias. 📦" },
+  ],
+  quality: [
+    { role: "user", text: "Quando é a próxima auditoria ISO?" },
+    { role: "agent", text: "Auditoria ISO 9001 em 45 dias. Checklist: 89% conforme. 4 não-conformidades abertas — 2 já com ação corretiva. Relatório pré-auditoria gerado. ✅" },
+  ],
+  process_analyst: [
+    { role: "user", text: "O processo de onboarding está muito lento." },
+    { role: "agent", text: "Mapeamento BPMN: 23 etapas, 5 gargalos identificados. Proposta Lean: eliminar 8 etapas, automatizar 4. Tempo estimado: 12 dias → 4 dias. ⚙️" },
+  ],
 };
 
 // Fallback for agents without custom demo
