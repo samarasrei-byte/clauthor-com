@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +35,7 @@ import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import PaymentHistoryTable from "@/components/dashboard/PaymentHistoryTable";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
+import OrchestrationDemo from "@/components/dashboard/OrchestrationDemo";
 import SupportChat from "@/components/SupportChat";
 import type { HireIntent } from "./Auth";
 
@@ -193,6 +194,7 @@ const ClientDashboard = () => {
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users },
+    { id: "a2a-demo", label: "Demo A2A", icon: GitBranch, badge: "NOVO" },
     { id: "board", label: "Board da Empresa", icon: Building2 },
     { id: "agent-settings", label: t("dashboard.settings"), icon: Settings },
     { id: "chat", label: t("dashboard.ai_assistant"), icon: Sparkles },
@@ -320,6 +322,9 @@ const ClientDashboard = () => {
 
           {/* ═══ SQUAD CHAT (REUNIÃO) ═══ */}
           {activeSection === "squad-chat" && <SquadChat agents={agents} />}
+
+          {/* ═══ A2A DEMO ═══ */}
+          {activeSection === "a2a-demo" && <OrchestrationDemo />}
 
           {/* ═══ COMPANY BOARD ═══ */}
           {activeSection === "board" && <CompanyBoard />}
