@@ -189,7 +189,7 @@ const LiveDemoAgent = () => {
                     <span className="font-display text-xs font-bold text-primary">Impressionado?</span>
                   </div>
                   <p className="text-[11px] text-muted-foreground mb-3">
-                    Esse é só 1 dos 44 agentes. Cada um é especialista em uma área diferente.
+                    Esse é só 1 dos 75 agentes. Cada um é especialista em uma área diferente.
                   </p>
                   <div className="flex items-center gap-2 text-primary font-mono text-[10px] uppercase tracking-wider">
                     Conhecer todos os agentes
