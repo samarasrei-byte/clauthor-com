@@ -13,7 +13,8 @@ import {
   Video, Globe, ClipboardList, GraduationCap, Bot, Zap,
   CheckCircle2, TrendingUp, Coins, Network, Lightbulb, ThumbsUp, Send,
   Crosshair, PenTool, Rocket, Store, Calendar, Award, Handshake,
-  Search, UserPlus, Repeat, Hash
+  Search, UserPlus, Repeat, Hash, Gavel, ShieldCheck, Scale,
+  Package, Factory, Receipt, Cog, ClipboardCheck, Truck
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
@@ -212,11 +213,75 @@ const departments = [
     ],
     headcount: 6, cltCost: 54000, prometheusCost: 3997, discount: 25,
   },
+  {
+    id: "juridico", icon: Gavel, color: "text-slate-400",
+    gradient: "from-slate-500/20 to-slate-500/5",
+    borderActive: "border-slate-500/40",
+    iconBg: "bg-slate-500/20",
+    popular: false,
+    tokens: "8M",
+    actions: "10.000",
+    agents: [
+      { key: "contract_analyst", icon: FileText, role: "Analista de Contratos", tokens: "2M" },
+      { key: "compliance_officer", icon: ShieldCheck, role: "Compliance / DPO", tokens: "2M" },
+      { key: "labor_law", icon: Scale, role: "Advogado Trabalhista", tokens: "2M" },
+      { key: "litigation", icon: Gavel, role: "Advogado Contencioso", tokens: "2M" },
+    ],
+    headcount: 4, cltCost: 60000, prometheusCost: 4497, discount: 30,
+  },
+  {
+    id: "compras", icon: Package, color: "text-lime-400",
+    gradient: "from-lime-500/20 to-lime-500/5",
+    borderActive: "border-lime-500/40",
+    iconBg: "bg-lime-500/20",
+    popular: false,
+    tokens: "7M",
+    actions: "9.000",
+    agents: [
+      { key: "procurement", icon: Package, role: "Comprador Sênior", tokens: "2M" },
+      { key: "supplier_mgr", icon: Factory, role: "Gestor de Fornecedores", tokens: "1.5M" },
+      { key: "cost_analyst", icon: Receipt, role: "Analista de Custos", tokens: "1.5M" },
+      { key: "contract_negotiator", icon: Handshake, role: "Negociador", tokens: "2M" },
+    ],
+    headcount: 4, cltCost: 44000, prometheusCost: 2997, discount: 25,
+  },
+  {
+    id: "logistica", icon: Truck, color: "text-sky-400",
+    gradient: "from-sky-500/20 to-sky-500/5",
+    borderActive: "border-sky-500/40",
+    iconBg: "bg-sky-500/20",
+    popular: false,
+    tokens: "8M",
+    actions: "10.000",
+    agents: [
+      { key: "logistics", icon: Truck, role: "Coordenador Logístico", tokens: "2M" },
+      { key: "inventory", icon: Package, role: "Analista de Estoque", tokens: "1.5M" },
+      { key: "supply_chain", icon: Network, role: "Supply Chain Manager", tokens: "2.5M" },
+      { key: "omnichannel", icon: MessageSquare, role: "Omnichannel / Rastreamento", tokens: "2M" },
+    ],
+    headcount: 4, cltCost: 48000, prometheusCost: 3497, discount: 25,
+  },
+  {
+    id: "qualidade", icon: ClipboardCheck, color: "text-yellow-400",
+    gradient: "from-yellow-500/20 to-yellow-500/5",
+    borderActive: "border-yellow-500/40",
+    iconBg: "bg-yellow-500/20",
+    popular: false,
+    tokens: "5M",
+    actions: "7.000",
+    agents: [
+      { key: "quality", icon: ClipboardCheck, role: "Analista de Qualidade", tokens: "1.5M" },
+      { key: "process_analyst", icon: Cog, role: "Analista de Processos", tokens: "1.5M" },
+      { key: "research", icon: Search, role: "Pesquisador / Auditor", tokens: "1M" },
+      { key: "community_mgr", icon: Users, role: "Gestão de Comunidade", tokens: "1M" },
+    ],
+    headcount: 4, cltCost: 32000, prometheusCost: 1997, discount: 20,
+  },
 ];
 
 const totalPrometheusCost = departments.reduce((a, d) => a + d.prometheusCost, 0);
 const totalCltCost = departments.reduce((a, d) => a + d.cltCost, 0);
-const totalTokens = "89M";
+const totalTokens = "110M";
 const totalAgents = departments.reduce((set, d) => { d.agents.forEach(a => set.add(a.key)); return set; }, new Set<string>()).size;
 const totalSavingsPercent = Math.round(((totalCltCost - totalPrometheusCost) / totalCltCost) * 100);
 

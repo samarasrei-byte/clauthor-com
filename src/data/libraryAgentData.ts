@@ -7,7 +7,8 @@ import {
   Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap,
   HeartHandshake, Crown, Play, TrendingUp, Award,
   Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays,
-  Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat
+  Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat,
+  Gavel, ShieldCheck, Scale, BookOpen, Package, Factory, Receipt, Cog, ClipboardCheck, ScanLine
 } from "lucide-react";
 import type { PriceTier } from "@/lib/pricing";
 
@@ -27,7 +28,10 @@ export const agentKeys = [
   "social_proof", "events_speaker",
   "sdr_social", "sdr_linkedin", "sdr_instagram", "sdr_whatsapp",
   "sdr_outbound", "sdr_inbound", "sdr_database", "sdr_events",
-  "sdr_partnerships", "pre_qualifier", "hunter", "farmer"
+  "sdr_partnerships", "pre_qualifier", "hunter", "farmer",
+  "contract_analyst", "compliance_officer", "labor_law", "litigation",
+  "procurement", "supplier_mgr", "cost_analyst", "contract_negotiator",
+  "logistics", "inventory", "quality", "process_analyst"
 ] as const;
 
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo"] as const;
@@ -77,6 +81,18 @@ export const agentSlugs: Record<string, string> = {
   pre_qualifier: "pre_qualifier",
   hunter: "hunter",
   farmer: "farmer",
+  contract_analyst: "contract_analyst",
+  compliance_officer: "compliance_officer",
+  labor_law: "labor_law",
+  litigation: "litigation",
+  procurement: "procurement",
+  supplier_mgr: "supplier_mgr",
+  cost_analyst: "cost_analyst",
+  contract_negotiator: "contract_negotiator",
+  logistics: "logistics",
+  inventory: "inventory",
+  quality: "quality",
+  process_analyst: "process_analyst",
 };
 
 export const agentIcons: Record<string, React.ElementType> = {
@@ -124,6 +140,18 @@ export const agentIcons: Record<string, React.ElementType> = {
   pre_qualifier: Crosshair,
   hunter: Search,
   farmer: Wheat,
+  contract_analyst: FileText,
+  compliance_officer: ShieldCheck,
+  labor_law: Scale,
+  litigation: Gavel,
+  procurement: Package,
+  supplier_mgr: Factory,
+  cost_analyst: Receipt,
+  contract_negotiator: Handshake,
+  logistics: Truck,
+  inventory: Package,
+  quality: ClipboardCheck,
+  process_analyst: Cog,
 };
 
 export const agentTiers: Record<string, string> = {
@@ -171,6 +199,18 @@ export const agentTiers: Record<string, string> = {
   pre_qualifier: "intermediate",
   hunter: "advanced",
   farmer: "advanced",
+  contract_analyst: "advanced",
+  compliance_officer: "enterprise",
+  labor_law: "advanced",
+  litigation: "enterprise",
+  procurement: "advanced",
+  supplier_mgr: "advanced",
+  cost_analyst: "intermediate",
+  contract_negotiator: "advanced",
+  logistics: "advanced",
+  inventory: "intermediate",
+  quality: "advanced",
+  process_analyst: "intermediate",
 };
 
 export const agentPriceTiers: Record<string, PriceTier> = {
@@ -218,6 +258,18 @@ export const agentPriceTiers: Record<string, PriceTier> = {
   pre_qualifier: "entry",
   hunter: "mid",
   farmer: "mid",
+  contract_analyst: "mid",
+  compliance_officer: "high",
+  labor_law: "mid",
+  litigation: "high",
+  procurement: "mid",
+  supplier_mgr: "mid",
+  cost_analyst: "entry",
+  contract_negotiator: "mid",
+  logistics: "mid",
+  inventory: "entry",
+  quality: "mid",
+  process_analyst: "entry",
 };
 
 export const agentTags: Record<string, string[]> = {
@@ -284,6 +336,18 @@ export const agentTags: Record<string, string[]> = {
   pre_qualifier: ["Qualificação", "BANT", "Lead Scoring", "Discovery", "Pipeline"],
   hunter: ["Hunter", "Prospecção Ativa", "New Business", "Outbound", "Pipeline"],
   farmer: ["Farmer", "Expansão", "Upsell", "Cross-sell", "Retenção"],
+  contract_analyst: ["Contratos", "Cláusulas", "Revisão", "Compliance", "Riscos"],
+  compliance_officer: ["LGPD", "SOX", "Auditoria", "Regulatório", "Compliance"],
+  labor_law: ["Trabalhista", "CLT", "eSocial", "Rescisão", "Férias"],
+  litigation: ["Contencioso", "Processos", "Prazos", "Jurisprudência", "Petições"],
+  procurement: ["Compras", "Cotação", "Licitação", "Saving", "Procurement"],
+  supplier_mgr: ["Fornecedores", "SLA", "Avaliação", "Homologação", "Qualidade"],
+  cost_analyst: ["Custos", "TCO", "Budget", "Redução", "Análise"],
+  contract_negotiator: ["Negociação", "Contratos", "Pricing", "SLA", "Termos"],
+  logistics: ["Logística", "Transporte", "Rotas", "Rastreamento", "Entrega"],
+  inventory: ["Estoque", "WMS", "Inventário", "Reposição", "Demanda"],
+  quality: ["Qualidade", "ISO", "Indicadores", "Auditoria", "Melhoria Contínua"],
+  process_analyst: ["Processos", "BPMN", "Lean", "Six Sigma", "Automação"],
 };
 
 export const agentIntegrations: Record<string, string[]> = {
@@ -350,6 +414,18 @@ export const agentIntegrations: Record<string, string[]> = {
   pre_qualifier: ["HubSpot", "Salesforce", "Pipedrive", "Calendly", "Zoom"],
   hunter: ["Apollo.io", "LinkedIn Sales Nav", "HubSpot", "Lemlist", "Salesforce"],
   farmer: ["HubSpot", "Salesforce", "Intercom", "Mixpanel", "Stripe"],
+  contract_analyst: ["DocuSign", "Google Drive", "SharePoint", "Notion", "SAP"],
+  compliance_officer: ["OneTrust", "Vanta", "Jira", "Slack", "Google Workspace"],
+  labor_law: ["eSocial", "TOTVS", "Google Workspace", "DocuSign", "Notion"],
+  litigation: ["PJe", "Projudi", "Google Drive", "Notion", "SAP"],
+  procurement: ["SAP Ariba", "Oracle", "TOTVS", "Google Sheets", "Slack"],
+  supplier_mgr: ["SAP", "TOTVS", "Google Sheets", "Notion", "Slack"],
+  cost_analyst: ["Power BI", "Google Sheets", "SAP", "Oracle", "Notion"],
+  contract_negotiator: ["DocuSign", "PandaDoc", "HubSpot", "Salesforce", "Slack"],
+  logistics: ["Google Maps API", "WMS", "SAP", "TOTVS", "Tracking API"],
+  inventory: ["WMS", "SAP", "TOTVS", "Bling", "Google Sheets"],
+  quality: ["Jira", "Notion", "Google Forms", "Power BI", "Slack"],
+  process_analyst: ["Miro", "Lucidchart", "Notion", "Jira", "Slack"],
 };
 
 export const agentSocialProof: Record<string, { companies: number; rating: number; savings: string }> = {
@@ -416,6 +492,18 @@ export const agentSocialProof: Record<string, { companies: number; rating: numbe
   pre_qualifier: { companies: 267, rating: 4.8, savings: "R$ 14k" },
   hunter: { companies: 198, rating: 4.9, savings: "R$ 18k" },
   farmer: { companies: 156, rating: 4.8, savings: "R$ 22k" },
+  contract_analyst: { companies: 145, rating: 4.8, savings: "R$ 20k" },
+  compliance_officer: { companies: 98, rating: 4.9, savings: "R$ 35k" },
+  labor_law: { companies: 112, rating: 4.7, savings: "R$ 18k" },
+  litigation: { companies: 78, rating: 4.8, savings: "R$ 30k" },
+  procurement: { companies: 167, rating: 4.8, savings: "R$ 22k" },
+  supplier_mgr: { companies: 134, rating: 4.7, savings: "R$ 16k" },
+  cost_analyst: { companies: 189, rating: 4.7, savings: "R$ 14k" },
+  contract_negotiator: { companies: 156, rating: 4.8, savings: "R$ 20k" },
+  logistics: { companies: 178, rating: 4.8, savings: "R$ 18k" },
+  inventory: { companies: 212, rating: 4.7, savings: "R$ 12k" },
+  quality: { companies: 134, rating: 4.8, savings: "R$ 16k" },
+  process_analyst: { companies: 198, rating: 4.7, savings: "R$ 14k" },
 };
 
 export const agentCapabilities: Record<string, string[]> = {
@@ -482,6 +570,18 @@ export const agentCapabilities: Record<string, string[]> = {
   pre_qualifier: ["🎯 BANT", "📊 Scoring", "🔍 Discovery"],
   hunter: ["🎯 New Business", "📧 Outbound", "🔍 Prospecção"],
   farmer: ["📈 Upsell", "🔄 Cross-sell", "🤝 Expansão"],
+  contract_analyst: ["📋 Contratos", "⚖️ Cláusulas", "🔍 Revisão"],
+  compliance_officer: ["🛡️ LGPD", "📋 SOX", "🔍 Auditoria"],
+  labor_law: ["⚖️ CLT", "📋 eSocial", "👥 Trabalhista"],
+  litigation: ["⚖️ Contencioso", "📄 Petições", "⏰ Prazos"],
+  procurement: ["📦 Compras", "💰 Cotação", "📊 Saving"],
+  supplier_mgr: ["🏭 Fornecedores", "📊 SLA", "✅ Homologação"],
+  cost_analyst: ["💰 Custos", "📊 TCO", "📉 Redução"],
+  contract_negotiator: ["🤝 Negociação", "📋 Contratos", "💲 Pricing"],
+  logistics: ["🚛 Logística", "📍 Rastreamento", "🗺️ Rotas"],
+  inventory: ["📦 Estoque", "🔄 Reposição", "📊 Demanda"],
+  quality: ["✅ ISO", "📊 Indicadores", "🔍 Auditoria"],
+  process_analyst: ["⚙️ BPMN", "📊 Lean", "🤖 Automação"],
 };
 
 export const tierColors: Record<string, string> = {
