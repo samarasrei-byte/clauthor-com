@@ -855,6 +855,14 @@
     "dept_tecnologia_desc": "Desenvolvimento, infraestrutura e segurança",
     "dept_rh": "Dept. RH & Pessoas",
     "dept_rh_desc": "Recrutamento, treinamento e gestão de talentos",
+    "dept_prospeccao": "Dept. Prospecção & SDR",
+    "dept_prospeccao_desc": "12 SDRs especializados para prospecção multicanal",
+    "dept_comunicacao": "Dept. Comunicação & Branding",
+    "dept_comunicacao_desc": "Copywriting, PR, posicionamento e prova social",
+    "dept_operacoes": "Dept. Operações & Estratégia",
+    "dept_operacoes_desc": "Orquestração, planejamento e concierge executivo",
+    "dept_ecommerce_growth": "Dept. E-commerce & Growth",
+    "dept_ecommerce_growth_desc": "Tráfego pago, afiliados, liveShop e reputação",
     "bundle_discount": "Desconto do departamento",
     "included_agents": "Agentes inclusos",
     "hire_department": "Contratar Departamento",
@@ -866,9 +874,9 @@
   "navbar": {
     "solutions": "Soluções",
     "marketplace_label": "Marketplace",
-    "marketplace_desc": "44 agentes individuais para contratar avulso",
+    "marketplace_desc": "63 agentes individuais para contratar avulso",
     "ai_teams_label": "Times de IA",
-    "ai_teams_desc": "7 departamentos completos com 44 agentes",
+    "ai_teams_desc": "11 departamentos completos com 63 agentes",
     "new_badge": "NOVO"
   },
   "community": {
