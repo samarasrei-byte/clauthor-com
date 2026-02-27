@@ -386,7 +386,7 @@ const HomePage = () => {
       <section className="py-12 sm:py-16 px-4 relative border-y border-border/50">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-            <AnimatedStat icon={Bot} value={44} suffix="+" label="Agentes Ativos" />
+            <AnimatedStat icon={Bot} value={75} suffix="+" label="Agentes Ativos" />
             <AnimatedStat icon={Building2} value={850} suffix="+" label="Empresas Atendidas" />
             <AnimatedStat icon={Clock} value={12400} suffix="h" label="Horas Economizadas" />
             <AnimatedStat icon={BarChart3} value={97} suffix="%" label="Eficiência Média" />
