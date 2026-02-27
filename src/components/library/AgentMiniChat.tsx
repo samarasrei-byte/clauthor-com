@@ -69,6 +69,82 @@ const agentDemos: Record<string, ChatMessage[]> = {
     { role: "user", text: "Como está a campanha de nutrição?" },
     { role: "agent", text: "Sequência ativa: 2.340 leads. Taxa abertura: 42% (acima do benchmark). 89 MQLs prontos para vendas. Disparando notificação ao time. 🎯" },
   ],
+  tax_content: [
+    { role: "user", text: "Preciso de conteúdo sobre o novo regime tributário." },
+    { role: "agent", text: "Criados: 3 artigos (Simples Nacional 2025, MEI atualizado, ICMS-ST). Linguagem acessível, referências legais incluídas. Agendados no blog. 📋" },
+  ],
+  copywriting: [
+    { role: "user", text: "Preciso de copy pra página de vendas do curso." },
+    { role: "agent", text: "Headline testada: 'De R$ 0 a R$ 50k/mês em 90 dias'. 3 variações de VSL, 5 CTAs com urgência progressiva. Taxa conversão estimada: 4.2%. ✍️" },
+  ],
+  positioning: [
+    { role: "user", text: "Como posicionar nossa marca no mercado premium?" },
+    { role: "agent", text: "Análise concorrencial pronta. 3 territórios de marca identificados. Recomendo: 'expertise + exclusividade'. Manifesto de marca e tom de voz criados. 🎯" },
+  ],
+  branding: [
+    { role: "user", text: "Precisamos atualizar nossa identidade visual." },
+    { role: "agent", text: "Auditoria de marca concluída. Proposta: paleta atualizada (3 cores), tipografia premium, guidelines de aplicação. Moodboard aprovado internamente. 🎨" },
+  ],
+  public_relations: [
+    { role: "user", text: "Saiu uma matéria negativa sobre nós." },
+    { role: "agent", text: "Monitoramento ativo. Nota oficial redigida e enviada a 12 veículos. 3 pautas positivas agendadas. Sentimento já revertendo nas redes. 📰" },
+  ],
+  social_proof: [
+    { role: "user", text: "Preciso de mais depoimentos de clientes." },
+    { role: "agent", text: "Disparei pesquisa NPS para 340 clientes. 47 respostas 9-10 coletadas. 12 cases formatados com antes/depois. Carrossel de provas prontos. ⭐" },
+  ],
+  events_speaker: [
+    { role: "user", text: "Temos um evento em 30 dias, preciso organizar tudo." },
+    { role: "agent", text: "Checklist criado: 84 itens. Palestrantes confirmados (3/5). Landing page publicada. Email marketing agendado em 3 ondas. Já vendemos 120 ingressos. 🎤" },
+  ],
+  sdr_social: [
+    { role: "user", text: "Preciso prospectar no Instagram e TikTok." },
+    { role: "agent", text: "247 perfis ICP mapeados. 89 DMs personalizadas enviadas. Taxa de resposta: 23%. 12 calls agendadas para essa semana. 📱" },
+  ],
+  sdr_linkedin: [
+    { role: "user", text: "Quero atingir decision-makers de tecnologia." },
+    { role: "agent", text: "Lista de 180 CTOs/VPs segmentada. Sequência de 4 touchpoints ativa. 34 conexões aceitas hoje. 8 interessados para call. 💼" },
+  ],
+  sdr_instagram: [
+    { role: "user", text: "Como está a prospecção pelo Instagram?" },
+    { role: "agent", text: "Stories com enquete: 1.2k respostas. 89 leads qualificados via DM. Funil ativo: 23 em negociação. Próximo: live com oferta exclusiva. 📸" },
+  ],
+  sdr_whatsapp: [
+    { role: "user", text: "Manda a lista de leads de hoje." },
+    { role: "agent", text: "142 leads contatados via WhatsApp. 67 responderam. 28 qualificados (BANT). 9 agendamentos confirmados. Follow-up automático em 2h. 💬" },
+  ],
+  sdr_outbound: [
+    { role: "user", text: "Preciso de 50 reuniões esse mês." },
+    { role: "agent", text: "Meta: 50 reuniões. Cadência ativa: 800 prospects. 340 emails enviados hoje. 12 respostas positivas. Projeção: 54 reuniões. 🎯" },
+  ],
+  sdr_inbound: [
+    { role: "user", text: "Quantos leads entraram pelo site hoje?" },
+    { role: "agent", text: "78 leads capturados. 45 qualificados automaticamente (score > 70). 12 encaminhados para closers. Tempo médio de resposta: 47 segundos. ⚡" },
+  ],
+  sdr_database: [
+    { role: "user", text: "Preciso enriquecer minha base de leads." },
+    { role: "agent", text: "Base atualizada: 4.200 contatos. 890 emails validados. 340 novos telefones encontrados. 67 empresas com fit ideal identificadas. 🔍" },
+  ],
+  sdr_events: [
+    { role: "user", text: "Tem uma feira de tecnologia semana que vem." },
+    { role: "agent", text: "Lista de participantes obtida: 2.300 empresas. 180 pré-agendamentos via email. QR code para captação no stand configurado. Follow-up D+1 programado. 🏢" },
+  ],
+  sdr_partnerships: [
+    { role: "user", text: "Quero expandir via canais de parceria." },
+    { role: "agent", text: "45 parceiros potenciais mapeados. 12 propostas de co-marketing enviadas. 3 acordos em negociação. Receita projetada: R$ 89k/mês via canal. 🤝" },
+  ],
+  pre_qualifier: [
+    { role: "user", text: "Muitos leads ruins chegando no closer." },
+    { role: "agent", text: "Filtro BANT+ICP ativado. De 200 leads, 34 passaram (17%). Economia de 40h/mês do time de vendas. Score médio dos qualificados: 87. ✅" },
+  ],
+  hunter: [
+    { role: "user", text: "Preciso abrir mercado no setor de saúde." },
+    { role: "agent", text: "340 clínicas/hospitais mapeados. ICP refinado: +50 leitos, faturamento > R$ 5M. 23 primeiros contatos feitos. 5 reuniões agendadas. 🏥" },
+  ],
+  farmer: [
+    { role: "user", text: "Como está a expansão da base atual?" },
+    { role: "agent", text: "Health score da carteira: 82/100. 12 upsells identificados (R$ 234k potencial). 3 renovações antecipadas. Churn previsto: 2.1% (meta: 3%). 🌱" },
+  ],
 };
 
 // Fallback for agents without custom demo
