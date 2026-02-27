@@ -4,7 +4,7 @@ import Navbar from "./Navbar";
 import CommandBar from "./CommandBar";
 import OnboardingWizard from "./onboarding/OnboardingWizard";
 import AgentLivePreview from "./library/AgentLivePreview";
-import SupportChat from "./SupportChat";
+
 
 const AppLayout = () => {
   const [wizardOpen, setWizardOpen] = useState(false);
@@ -21,7 +21,7 @@ const AppLayout = () => {
         <Outlet />
       </main>
       <CommandBar onOpenTestDrive={handleTestDrive} />
-      <SupportChat area="public" />
+      
       <OnboardingWizard isOpen={wizardOpen} onClose={() => setWizardOpen(false)} />
       <AgentLivePreview
         agentName={testDriveAgent?.name || ""}
