@@ -29,6 +29,7 @@ interface ClientCommandCenterProps {
   subscriptions: any[];
   recentLogs: any[];
   tokenUsage: any[];
+  onNavigate?: (section: string) => void;
 }
 
 const ClientCommandCenter = ({
@@ -43,6 +44,7 @@ const ClientCommandCenter = ({
   subscriptions,
   recentLogs,
   tokenUsage,
+  onNavigate,
 }: ClientCommandCenterProps) => {
   const { t, i18n } = useTranslation();
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
@@ -64,15 +66,29 @@ const ClientCommandCenter = ({
     { icon: Flame, label: t("dashboard.subscriptions"), value: subscriptions.length, spark: [0, 1, 1, 2, 2, subscriptions.length], color: "text-primary" },
   ];
 
-  const executionChartData = [
-    { name: t("dashboard.mon"), exec: 12, success: 11 },
-    { name: t("dashboard.tue"), exec: 18, success: 17 },
-    { name: t("dashboard.wed"), exec: 25, success: 24 },
-    { name: t("dashboard.thu"), exec: 22, success: 21 },
-    { name: t("dashboard.fri"), exec: 30, success: 29 },
-    { name: t("dashboard.sat"), exec: 15, success: 15 },
-    { name: t("dashboard.sun"), exec: 8, success: 8 },
-  ];
+  // Build real chart data from recent logs (last 7 days)
+  const executionChartData = (() => {
+    const days: { name: string; exec: number; success: number }[] = [];
+    const dayKeys = [
+      t("dashboard.sun"), t("dashboard.mon"), t("dashboard.tue"),
+      t("dashboard.wed"), t("dashboard.thu"), t("dashboard.fri"), t("dashboard.sat"),
+    ];
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date();
+      d.setDate(d.getDate() - i);
+      const dayName = dayKeys[d.getDay()];
+      const logsInDay = recentLogs.filter((l: any) => {
+        const ld = new Date(l.created_at);
+        return ld.toDateString() === d.toDateString();
+      });
+      days.push({
+        name: dayName,
+        exec: logsInDay.length,
+        success: logsInDay.filter((l: any) => l.status === "success").length,
+      });
+    }
+    return days;
+  })();
 
   const tierDistribution = [
     { name: "Basic", value: agents.filter(a => a.tier === "basic").length, color: "hsl(var(--muted-foreground))" },
@@ -88,6 +104,7 @@ const ClientCommandCenter = ({
         hasAgents={activeAgents > 0}
         hasSentMessage={recentLogs.length > 0}
         hasConfiguredAgent={agents.some((a: any) => a.integrations || a.channels)}
+        onNavigate={onNavigate}
       />
 
       {/* Agent Summary Cards */}
