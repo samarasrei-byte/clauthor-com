@@ -217,6 +217,7 @@ const ClientDashboard = () => {
   const sidebarItems = [
     { id: "omnix", label: "THOR", icon: Brain, badge: "AI" },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard },
+    { id: "live-timeline", label: "Live Timeline", icon: Eye, badge: "LIVE" },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users },
     { id: "a2a-demo", label: "Demo A2A", icon: GitBranch, badge: "NOVO" },
@@ -232,7 +233,6 @@ const ClientDashboard = () => {
     { id: "sendgrid-setup", label: "E-mail Setup", icon: Mail },
     { id: "linkedin-setup", label: "LinkedIn Setup", icon: GitBranch },
     { id: "meta-ads-setup", label: "Meta Ads Setup", icon: TrendingUp },
-    { id: "live-timeline", label: "Live Timeline", icon: Eye, badge: "LIVE" },
     { id: "support", label: "Suporte", icon: MessageSquare },
   ];
 
