@@ -8,7 +8,8 @@ import {
   HeartHandshake, Crown, Play, TrendingUp, Award,
   Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays,
   Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat,
-  Gavel, ShieldCheck, Scale, BookOpen, Package, Factory, Receipt, Cog, ClipboardCheck, ScanLine
+  Gavel, ShieldCheck, Scale, BookOpen, Package, Factory, Receipt, Cog, ClipboardCheck, ScanLine,
+  HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck
 } from "lucide-react";
 import type { PriceTier } from "@/lib/pricing";
 
@@ -31,7 +32,8 @@ export const agentKeys = [
   "sdr_partnerships", "pre_qualifier", "hunter", "farmer",
   "contract_analyst", "compliance_officer", "labor_law", "litigation",
   "procurement", "supplier_mgr", "cost_analyst", "contract_negotiator",
-  "logistics", "inventory", "quality", "process_analyst"
+  "logistics", "inventory", "quality", "process_analyst",
+  "data_engineer", "crm_manager", "ux_researcher", "media_buyer", "onboarding_specialist"
 ] as const;
 
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo"] as const;
@@ -93,6 +95,11 @@ export const agentSlugs: Record<string, string> = {
   inventory: "inventory",
   quality: "quality",
   process_analyst: "process_analyst",
+  data_engineer: "data_engineer",
+  crm_manager: "crm_manager",
+  ux_researcher: "ux_researcher",
+  media_buyer: "media_buyer",
+  onboarding_specialist: "onboarding_specialist",
 };
 
 export const agentIcons: Record<string, React.ElementType> = {
@@ -152,6 +159,11 @@ export const agentIcons: Record<string, React.ElementType> = {
   inventory: Package,
   quality: ClipboardCheck,
   process_analyst: Cog,
+  data_engineer: HardDrive,
+  crm_manager: ContactRound,
+  ux_researcher: Lightbulb,
+  media_buyer: CircleDollarSign,
+  onboarding_specialist: UserCheck,
 };
 
 export const agentTiers: Record<string, string> = {
@@ -211,6 +223,11 @@ export const agentTiers: Record<string, string> = {
   inventory: "intermediate",
   quality: "advanced",
   process_analyst: "intermediate",
+  data_engineer: "advanced",
+  crm_manager: "advanced",
+  ux_researcher: "intermediate",
+  media_buyer: "advanced",
+  onboarding_specialist: "basic",
 };
 
 export const agentPriceTiers: Record<string, PriceTier> = {
@@ -270,6 +287,11 @@ export const agentPriceTiers: Record<string, PriceTier> = {
   inventory: "entry",
   quality: "mid",
   process_analyst: "entry",
+  data_engineer: "mid",
+  crm_manager: "mid",
+  ux_researcher: "entry",
+  media_buyer: "mid",
+  onboarding_specialist: "starter",
 };
 
 export const agentTags: Record<string, string[]> = {
@@ -348,6 +370,11 @@ export const agentTags: Record<string, string[]> = {
   inventory: ["Estoque", "WMS", "Inventário", "Reposição", "Demanda"],
   quality: ["Qualidade", "ISO", "Indicadores", "Auditoria", "Melhoria Contínua"],
   process_analyst: ["Processos", "BPMN", "Lean", "Six Sigma", "Automação"],
+  data_engineer: ["ETL", "Pipeline", "BigQuery", "Data Lake", "dbt"],
+  crm_manager: ["CRM", "HubSpot", "Salesforce", "Pipeline", "Automação"],
+  ux_researcher: ["UX", "Pesquisa", "Testes", "Heurísticas", "Persona"],
+  media_buyer: ["Meta Ads", "Google Ads", "Budget", "ROAS", "Mídia"],
+  onboarding_specialist: ["Onboarding", "Retenção", "Ativação", "First Value", "Guia"],
 };
 
 export const agentIntegrations: Record<string, string[]> = {
@@ -426,6 +453,11 @@ export const agentIntegrations: Record<string, string[]> = {
   inventory: ["WMS", "SAP", "TOTVS", "Bling", "Google Sheets"],
   quality: ["Jira", "Notion", "Google Forms", "Power BI", "Slack"],
   process_analyst: ["Miro", "Lucidchart", "Notion", "Jira", "Slack"],
+  data_engineer: ["BigQuery", "Snowflake", "dbt", "Airflow", "Fivetran"],
+  crm_manager: ["HubSpot", "Salesforce", "Pipedrive", "RD Station", "ActiveCampaign"],
+  ux_researcher: ["Hotjar", "Maze", "Figma", "Google Analytics", "Notion"],
+  media_buyer: ["Meta Business Suite", "Google Ads", "TikTok Ads", "DV360", "GA4"],
+  onboarding_specialist: ["Intercom", "HubSpot", "Slack", "Loom", "Notion"],
 };
 
 export const agentSocialProof: Record<string, { companies: number; rating: number; savings: string }> = {
@@ -504,6 +536,11 @@ export const agentSocialProof: Record<string, { companies: number; rating: numbe
   inventory: { companies: 212, rating: 4.7, savings: "R$ 12k" },
   quality: { companies: 134, rating: 4.8, savings: "R$ 16k" },
   process_analyst: { companies: 198, rating: 4.7, savings: "R$ 14k" },
+  data_engineer: { companies: 112, rating: 4.8, savings: "R$ 25k" },
+  crm_manager: { companies: 234, rating: 4.8, savings: "R$ 18k" },
+  ux_researcher: { companies: 145, rating: 4.7, savings: "R$ 12k" },
+  media_buyer: { companies: 267, rating: 4.9, savings: "R$ 22k" },
+  onboarding_specialist: { companies: 189, rating: 4.7, savings: "R$ 10k" },
 };
 
 export const agentCapabilities: Record<string, string[]> = {
@@ -582,6 +619,11 @@ export const agentCapabilities: Record<string, string[]> = {
   inventory: ["Estoque", "Reposição", "Demanda"],
   quality: ["ISO", "Indicadores", "Auditoria"],
   process_analyst: ["BPMN", "Lean", "Automação"],
+  data_engineer: ["ETL", "Data Lake", "Pipeline"],
+  crm_manager: ["CRM", "Pipeline", "Automação"],
+  ux_researcher: ["UX", "Pesquisa", "Heurística"],
+  media_buyer: ["Budget", "ROAS", "Mídia"],
+  onboarding_specialist: ["Onboarding", "Ativação", "Retenção"],
 };
 
 export const tierColors: Record<string, string> = {

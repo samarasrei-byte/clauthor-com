@@ -371,7 +371,27 @@
       "process_analyst_title": "Process Analyst Agent — BPMN & Lean AI",
       "process_analyst_desc": "Maps and optimizes processes: BPMN, Lean Six Sigma, bottleneck identification and workflow automation.",
       "process_analyst_highlight": "⚙️ Optimized Processes",
-      "process_analyst_replaces": "1 process analyst"
+      "process_analyst_replaces": "1 process analyst",
+      "data_engineer_title": "Data Engineer Agent — AI Data Engineering",
+      "data_engineer_desc": "Builds and maintains data pipelines, ETL, data lakes and integrates heterogeneous sources with quality and governance.",
+      "data_engineer_highlight": "🔧 Autonomous Pipelines",
+      "data_engineer_replaces": "1 data engineer",
+      "crm_manager_title": "CRM Manager Agent — AI CRM Management",
+      "crm_manager_desc": "Manages CRM end-to-end: automations, segmentation, database cleanup, pipeline reports and integrations.",
+      "crm_manager_highlight": "📊 Smart CRM",
+      "crm_manager_replaces": "1 CRM analyst",
+      "ux_researcher_title": "UX Researcher Agent — AI UX Research",
+      "ux_researcher_desc": "Conducts usability research, A/B tests, heuristic analysis, heatmaps and generates actionable product insights.",
+      "ux_researcher_highlight": "🔍 Data-Driven UX",
+      "ux_researcher_replaces": "1 UX researcher",
+      "media_buyer_title": "Media Buyer Agent — AI Media Buying",
+      "media_buyer_desc": "Plans, executes and optimizes media buying across platforms: budget allocation, bid management and ROAS analysis.",
+      "media_buyer_highlight": "💰 Maximized ROAS",
+      "media_buyer_replaces": "1 senior media buyer",
+      "onboarding_specialist_title": "Onboarding Specialist Agent — AI Customer Activation",
+      "onboarding_specialist_desc": "Guides new customers from first login to first value: checklists, interactive tours, follow-ups and activation metrics.",
+      "onboarding_specialist_highlight": "🚀 3x Time-to-Value",
+      "onboarding_specialist_replaces": "1 onboarding specialist"
     }
   },
   "home": {
