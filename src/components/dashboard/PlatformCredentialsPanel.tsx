@@ -5,7 +5,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Key, Plus, Trash2, Loader2, Shield, Globe, Mail, Phone, Check } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";
+import { Key, Plus, Trash2, Loader2, Shield, Globe, Mail, Phone, Check, Lock } from "lucide-react";
 import { toast } from "sonner";
 
 const PRESET_INTEGRATIONS = [
@@ -25,6 +27,12 @@ const PlatformCredentialsPanel = () => {
   const [newValue, setNewValue] = useState("");
   const [newDesc, setNewDesc] = useState("");
   const [saving, setSaving] = useState(false);
+
+  // Modal state for preset credential input
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalIntegration, setModalIntegration] = useState("");
+  const [modalKey, setModalKey] = useState("");
+  const [modalValue, setModalValue] = useState("");
 
   const { data: credentials = [], isLoading } = useQuery({
     queryKey: ["platform-credentials"],
@@ -76,10 +84,23 @@ const PlatformCredentialsPanel = () => {
     onError: () => toast.error("Erro ao remover"),
   });
 
-  const handlePresetSave = async (integration: string, key: string) => {
-    const value = prompt(`Valor para ${integration}/${key}:`);
-    if (!value?.trim()) return;
-    saveMutation.mutate({ integration, key, value, desc: `${integration} - ${key}` });
+  const handlePresetSave = (integration: string, key: string) => {
+    setModalIntegration(integration);
+    setModalKey(key);
+    setModalValue("");
+    setModalOpen(true);
+  };
+
+  const confirmPresetSave = () => {
+    if (!modalValue.trim()) return;
+    saveMutation.mutate({
+      integration: modalIntegration,
+      key: modalKey,
+      value: modalValue,
+      desc: `${modalIntegration} - ${modalKey}`,
+    });
+    setModalOpen(false);
+    setModalValue("");
   };
 
   // Group credentials by integration
@@ -224,6 +245,49 @@ const PlatformCredentialsPanel = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Credential input modal */}
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2 font-display">
+              <Lock className="h-4 w-4 text-primary" />
+              {modalIntegration} / {modalKey}
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3 py-2">
+            <Label className="text-sm text-muted-foreground">
+              Insira o valor para <span className="font-semibold text-foreground">{modalKey}</span> da integração <span className="font-semibold text-foreground">{modalIntegration}</span>
+            </Label>
+            <Input
+              placeholder={`Valor de ${modalKey}`}
+              type="password"
+              value={modalValue}
+              onChange={(e) => setModalValue(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && confirmPresetSave()}
+              autoFocus
+              className="text-sm"
+            />
+            <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+              <Shield className="h-3 w-3" /> Criptografado com AES-256-GCM no cofre seguro
+            </p>
+          </div>
+          <DialogFooter className="gap-2">
+            <DialogClose asChild>
+              <Button variant="ghost" size="sm">Cancelar</Button>
+            </DialogClose>
+            <Button
+              size="sm"
+              className="gap-1.5"
+              disabled={!modalValue.trim() || saveMutation.isPending}
+              onClick={confirmPresetSave}
+            >
+              {saveMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Key className="h-3.5 w-3.5" />}
+              Salvar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
