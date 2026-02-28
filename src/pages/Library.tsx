@@ -419,148 +419,6 @@ const LibraryPage = () => {
         </div>
       </section>
 
-      {/* ============ ROI Calculator ============ */}
-      <ROICalculator />
-
-      {/* ============ Squad Consultant ============ */}
-      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-        <div className="glass-card rounded-2xl p-8 md:p-10 relative overflow-hidden">
-          <div className="absolute top-0 left-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
-          <div className="relative z-10">
-            <SquadConsultant />
-          </div>
-        </div>
-      </motion.div>
-
-      {/* ============ DEPARTMENTS — Rich Experience Cards ============ */}
-      <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
-          <h2 className="text-lg font-bold tracking-tight">
-            Times de IA · Departamentos
-          </h2>
-          <div className="flex-1 h-px bg-border/30" />
-          <Badge variant="outline" className="text-xs border-primary/20 text-primary/70">
-            4 agentes orquestrados cada
-          </Badge>
-        </div>
-        
-        <div className="grid md:grid-cols-2 gap-5">
-          {(["comercial", "tecnologia", "marketing", "suporte", "financeiro", "criacao", "rh"] as const).map((deptId, i) => {
-            const regionData = getRegion(lang);
-            const deptPrice = (regionData.departments as Record<string, number>)[deptId] ?? 0;
-            const deptClt = (regionData.departmentClt as Record<string, number>)[deptId] ?? 0;
-            const savingsPercent = deptClt > 0 ? Math.round((1 - deptPrice / deptClt) * 100) : 0;
-            const deptName = t(`squads.dept_${deptId}`);
-            const deptDesc = t(`squads.dept_${deptId}_desc`);
-
-            const dept = deptDetails[deptId];
-            if (!dept) return null;
-            const DeptIcon = dept.icon;
-
-            return (
-              <motion.div
-                key={deptId}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04 }}
-              >
-                <div className="group relative h-full flex flex-col rounded-2xl overflow-hidden ring-1 ring-border/50 hover:ring-primary/30 bg-card/30 hover:bg-card/60 transition-all duration-500 hover:translate-y-[-2px]">
-                  <div className="h-1 bg-gradient-to-r from-primary/60 via-primary to-primary/60" />
-
-                  <div className="relative p-6 flex flex-col flex-1">
-                    <div className="flex items-start gap-4 mb-4">
-                      <div className="w-14 h-14 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center shrink-0 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.15)]">
-                        <DeptIcon className="h-6 w-6 text-primary" strokeWidth={1.5} />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-base leading-tight mb-1">{deptName}</h3>
-                        <p className="text-[12px] text-muted-foreground/60 leading-relaxed">{deptDesc}</p>
-                      </div>
-                      <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg shrink-0">
-                        -{savingsPercent}% vs CLT
-                      </span>
-                    </div>
-
-                    <div className="mb-4">
-                      <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40 font-semibold mb-2 block">Agentes do time</span>
-                      <div className="grid grid-cols-2 gap-2">
-                        {dept.agents.map((agent, j) => (
-                          <div key={agent} className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-muted/20 ring-1 ring-border/30">
-                            <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
-                              <Bot className="h-3 w-3 text-primary/60" />
-                            </div>
-                            <div className="min-w-0">
-                              <span className="text-[11px] font-medium block leading-tight truncate">{agent}</span>
-                              <span className="text-[9px] text-muted-foreground/40">Substitui: {dept.replaces[j]}</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    <DepartmentMiniChat departmentId={deptId} autoPlay compact />
-
-                    <div className="mt-4 space-y-1">
-                      <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40 font-semibold mb-1.5 block">Dúvidas frequentes</span>
-                      {dept.faq.map((item, idx) => (
-                        <details key={idx} className="group/faq rounded-lg ring-1 ring-border/20 overflow-hidden">
-                          <summary className="px-3 py-2 text-[11px] font-medium cursor-pointer hover:bg-muted/20 transition-colors flex items-center justify-between list-none">
-                            <span>{item.q}</span>
-                            <ChevronRight className="h-3 w-3 text-muted-foreground/30 transition-transform group-open/faq:rotate-90" />
-                          </summary>
-                          <div className="px-3 pb-2.5 pt-0.5 text-[11px] text-muted-foreground/60 leading-relaxed">
-                            {item.a}
-                          </div>
-                        </details>
-                      ))}
-                    </div>
-
-                    <div className="flex-1" />
-
-                    <div className="pt-4 mt-4">
-                      <div className="h-px w-full bg-border/30 mb-4" />
-                      <div className="flex items-end justify-between gap-4">
-                        <div>
-                          <div className="flex items-baseline gap-2">
-                            <p className="font-bold text-xl tracking-tight">{formatPrice(deptPrice, lang)}</p>
-                            <span className="text-xs text-muted-foreground/40">/mês</span>
-                          </div>
-                          <div className="flex items-center gap-1.5 mt-1">
-                            <TrendingUp className="h-3 w-3 text-emerald-400" />
-                            <span className="text-[11px] text-emerald-400 font-medium">vs {formatPrice(deptClt, lang)}/mês CLT</span>
-                          </div>
-                        </div>
-                        <Link to="/pricing">
-                          <Button size="sm" className="h-10 px-5 rounded-xl text-xs font-bold uppercase tracking-wider gap-1.5">
-                            <Flame className="h-3.5 w-3.5" />
-                            Contratar Time
-                          </Button>
-                        </Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.section>
-
-      {/* ============ VISUAL SEPARATOR ============ */}
-      <div className="relative py-6">
-        <div className="absolute inset-0 flex items-center">
-          <div className="w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-        </div>
-        <div className="relative flex justify-center">
-          <span className="bg-background px-6 text-[10px] tracking-[0.3em] uppercase text-primary/50 font-semibold flex items-center gap-2">
-            <Bot className="h-3.5 w-3.5" />
-            Agentes Individuais · Avulsos
-            <Bot className="h-3.5 w-3.5" />
-          </span>
-        </div>
-      </div>
-
       {/* ============ AGENT GRID — Premium Marketplace Cards ============ */}
       <section>
         <div className="flex items-center gap-3 mb-6">
@@ -738,6 +596,148 @@ const LibraryPage = () => {
           })}
         </div>
       </section>
+
+      {/* ============ VISUAL SEPARATOR ============ */}
+      <div className="relative py-6">
+        <div className="absolute inset-0 flex items-center">
+          <div className="w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+        </div>
+        <div className="relative flex justify-center">
+          <span className="bg-background px-6 text-[10px] tracking-[0.3em] uppercase text-primary/50 font-semibold flex items-center gap-2">
+            <Users className="h-3.5 w-3.5" />
+            Times de IA · Departamentos
+            <Users className="h-3.5 w-3.5" />
+          </span>
+        </div>
+      </div>
+
+      {/* ============ ROI Calculator ============ */}
+      <ROICalculator />
+
+      {/* ============ Squad Consultant ============ */}
+      <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <div className="glass-card rounded-2xl p-8 md:p-10 relative overflow-hidden">
+          <div className="absolute top-0 left-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
+          <div className="relative z-10">
+            <SquadConsultant />
+          </div>
+        </div>
+      </motion.div>
+
+      {/* ============ DEPARTMENTS — Rich Experience Cards ============ */}
+      <motion.section initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-2.5 h-2.5 rounded-full bg-primary animate-pulse" />
+          <h2 className="text-lg font-bold tracking-tight">
+            Times de IA · Departamentos
+          </h2>
+          <div className="flex-1 h-px bg-border/30" />
+          <Badge variant="outline" className="text-xs border-primary/20 text-primary/70">
+            4 agentes orquestrados cada
+          </Badge>
+        </div>
+        
+        <div className="grid md:grid-cols-2 gap-5">
+          {(["comercial", "tecnologia", "marketing", "suporte", "financeiro", "criacao", "rh"] as const).map((deptId, i) => {
+            const regionData = getRegion(lang);
+            const deptPrice = (regionData.departments as Record<string, number>)[deptId] ?? 0;
+            const deptClt = (regionData.departmentClt as Record<string, number>)[deptId] ?? 0;
+            const savingsPercent = deptClt > 0 ? Math.round((1 - deptPrice / deptClt) * 100) : 0;
+            const deptName = t(`squads.dept_${deptId}`);
+            const deptDesc = t(`squads.dept_${deptId}_desc`);
+
+            const dept = deptDetails[deptId];
+            if (!dept) return null;
+            const DeptIcon = dept.icon;
+
+            return (
+              <motion.div
+                key={deptId}
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04 }}
+              >
+                <div className="group relative h-full flex flex-col rounded-2xl overflow-hidden ring-1 ring-border/50 hover:ring-primary/30 bg-card/30 hover:bg-card/60 transition-all duration-500 hover:translate-y-[-2px]">
+                  <div className="h-1 bg-gradient-to-r from-primary/60 via-primary to-primary/60" />
+
+                  <div className="relative p-6 flex flex-col flex-1">
+                    <div className="flex items-start gap-4 mb-4">
+                      <div className="w-14 h-14 rounded-2xl bg-primary/15 border border-primary/25 flex items-center justify-center shrink-0 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.15)]">
+                        <DeptIcon className="h-6 w-6 text-primary" strokeWidth={1.5} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-base leading-tight mb-1">{deptName}</h3>
+                        <p className="text-[12px] text-muted-foreground/60 leading-relaxed">{deptDesc}</p>
+                      </div>
+                      <span className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-lg shrink-0">
+                        -{savingsPercent}% vs CLT
+                      </span>
+                    </div>
+
+                    <div className="mb-4">
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40 font-semibold mb-2 block">Agentes do time</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {dept.agents.map((agent, j) => (
+                          <div key={agent} className="flex items-center gap-2 px-2.5 py-2 rounded-lg bg-muted/20 ring-1 ring-border/30">
+                            <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center shrink-0">
+                              <Bot className="h-3 w-3 text-primary/60" />
+                            </div>
+                            <div className="min-w-0">
+                              <span className="text-[11px] font-medium block leading-tight truncate">{agent}</span>
+                              <span className="text-[9px] text-muted-foreground/40">Substitui: {dept.replaces[j]}</span>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <DepartmentMiniChat departmentId={deptId} autoPlay compact />
+
+                    <div className="mt-4 space-y-1">
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40 font-semibold mb-1.5 block">Dúvidas frequentes</span>
+                      {dept.faq.map((item, idx) => (
+                        <details key={idx} className="group/faq rounded-lg ring-1 ring-border/20 overflow-hidden">
+                          <summary className="px-3 py-2 text-[11px] font-medium cursor-pointer hover:bg-muted/20 transition-colors flex items-center justify-between list-none">
+                            <span>{item.q}</span>
+                            <ChevronRight className="h-3 w-3 text-muted-foreground/30 transition-transform group-open/faq:rotate-90" />
+                          </summary>
+                          <div className="px-3 pb-2.5 pt-0.5 text-[11px] text-muted-foreground/60 leading-relaxed">
+                            {item.a}
+                          </div>
+                        </details>
+                      ))}
+                    </div>
+
+                    <div className="flex-1" />
+
+                    <div className="pt-4 mt-4">
+                      <div className="h-px w-full bg-border/30 mb-4" />
+                      <div className="flex items-end justify-between gap-4">
+                        <div>
+                          <div className="flex items-baseline gap-2">
+                            <p className="font-bold text-xl tracking-tight">{formatPrice(deptPrice, lang)}</p>
+                            <span className="text-xs text-muted-foreground/40">/mês</span>
+                          </div>
+                          <div className="flex items-center gap-1.5 mt-1">
+                            <TrendingUp className="h-3 w-3 text-emerald-400" />
+                            <span className="text-[11px] text-emerald-400 font-medium">vs {formatPrice(deptClt, lang)}/mês CLT</span>
+                          </div>
+                        </div>
+                        <Link to="/pricing">
+                          <Button size="sm" className="h-10 px-5 rounded-xl text-xs font-bold uppercase tracking-wider gap-1.5">
+                            <Flame className="h-3.5 w-3.5" />
+                            Contratar Time
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </motion.section>
 
       {/* Agent Live Preview Modal */}
       <AgentLivePreview
