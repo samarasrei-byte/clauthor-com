@@ -408,7 +408,7 @@
     "hr": "HR & Recruiting", "hr_desc": "Screening CV, pianificazione e onboarding.",
     "research": "Ricerca & Analisi", "research_desc": "Raccolta dati, report e insights."
   },
-  "navbar": { "solutions": "Soluzioni", "marketplace_label": "Marketplace", "marketplace_desc": "75 agenti individuali da assumere su richiesta", "ai_teams_label": "Team IA", "ai_teams_desc": "15 dipartimenti completi con 75 agenti", "new_badge": "NUOVO" },
+  "navbar": { "solutions": "Soluzioni", "marketplace_label": "Marketplace", "marketplace_desc": "80 agenti individuali da assumere su richiesta", "ai_teams_label": "Team IA", "ai_teams_desc": "15 dipartimenti completi con 80 agenti", "new_badge": "NUOVO" },
   "community": {
     "badge": "Community CLAUTHOR", "title": "Forum per", "title_hl": "IA & Automazione",
     "subtitle": "Scambia idee, fai domande e condividi esperienze.",
