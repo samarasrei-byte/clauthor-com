@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +30,8 @@ import CompanyBoard from "@/components/dashboard/CompanyBoard";
 import TeamMembers from "@/components/dashboard/TeamMembers";
 import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
 import SendGridSetupGuide from "@/components/dashboard/SendGridSetupGuide";
+import UserProfileEditor from "@/components/dashboard/UserProfileEditor";
+import NotificationPanel from "@/components/dashboard/NotificationPanel";
 
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import PaymentHistoryTable from "@/components/dashboard/PaymentHistoryTable";
@@ -189,6 +191,26 @@ const ClientDashboard = () => {
 
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
 
+  // Build real chart data from execution logs
+  const realChartData = (() => {
+    const now = new Date();
+    const months: { name: string; execucoes: number; sucesso: number }[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const monthName = d.toLocaleDateString(locale, { month: "short" });
+      const logsInMonth = recentLogs.filter((l) => {
+        const ld = new Date(l.created_at);
+        return ld.getMonth() === d.getMonth() && ld.getFullYear() === d.getFullYear();
+      });
+      months.push({
+        name: monthName,
+        execucoes: logsInMonth.length,
+        sucesso: logsInMonth.filter((l) => l.status === "success").length,
+      });
+    }
+    return months;
+  })();
+
   const sidebarItems = [
     { id: "omnix", label: "THOR", icon: Brain, badge: "AI" },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard },
@@ -196,6 +218,7 @@ const ClientDashboard = () => {
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users },
     { id: "a2a-demo", label: "Demo A2A", icon: GitBranch, badge: "NOVO" },
     { id: "board", label: "Board da Empresa", icon: Building2 },
+    { id: "profile", label: "Meu Perfil", icon: User },
     { id: "agent-settings", label: t("dashboard.settings"), icon: Settings },
     { id: "chat", label: t("dashboard.ai_assistant"), icon: Sparkles },
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3 },
@@ -207,14 +230,6 @@ const ClientDashboard = () => {
     { id: "support", label: "Suporte", icon: MessageSquare },
   ];
 
-  const mockChartData = [
-    { name: t("dashboard.jan"), execucoes: 400, sucesso: 380 },
-    { name: t("dashboard.feb"), execucoes: 600, sucesso: 580 },
-    { name: t("dashboard.mar"), execucoes: 800, sucesso: 770 },
-    { name: t("dashboard.apr"), execucoes: 1200, sucesso: 1150 },
-    { name: t("dashboard.may"), execucoes: 1500, sucesso: 1460 },
-    { name: t("dashboard.jun"), execucoes: 1800, sucesso: 1750 },
-  ];
 
   const tierColors: Record<string, string> = {
     basic: "bg-muted text-muted-foreground",
@@ -267,7 +282,10 @@ const ClientDashboard = () => {
                 {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
               </p>
             </div>
-            <QuickActions />
+            <div className="flex items-center gap-2">
+              <NotificationPanel />
+              <QuickActions />
+            </div>
           </motion.div>
 
           {/* Mobile tabs */}
@@ -329,6 +347,9 @@ const ClientDashboard = () => {
           {/* ═══ COMPANY BOARD ═══ */}
           {activeSection === "board" && <CompanyBoard />}
 
+          {/* ═══ PROFILE ═══ */}
+          {activeSection === "profile" && <UserProfileEditor />}
+
           {/* ═══ TEAM MEMBERS ═══ */}
           {activeSection === "team" && <TeamMembers />}
 
@@ -355,9 +376,9 @@ const ClientDashboard = () => {
               ) : (
                 <div className="grid sm:grid-cols-2 gap-4">
                   {agents.map((agent, i) => (
-                    <motion.div key={agent.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card rounded-2xl p-5 glass-hover cursor-pointer" onClick={() => { if (agent.status === "active") { setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); } }}>
+                    <motion.div key={agent.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card rounded-2xl p-5 glass-hover">
                       <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-3 cursor-pointer" onClick={() => { if (agent.status === "active") { setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); } }}>
                           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                             <Bot className="h-5 w-5 text-primary" />
                           </div>
@@ -368,7 +389,23 @@ const ClientDashboard = () => {
                             </div>
                           </div>
                         </div>
-                        <Badge variant="secondary" className={`text-[10px] ${agent.status === "active" ? "bg-emerald-500/20 text-emerald-500" : ""}`}>{agent.status}</Badge>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className={`h-7 text-[10px] gap-1 ${agent.status === "active" ? "border-emerald-500/30 text-emerald-500" : "border-muted"}`}
+                            onClick={async (e) => {
+                              e.stopPropagation();
+                              const newStatus = agent.status === "active" ? "paused" : "active";
+                              const { error } = await supabase.from("agents").update({ status: newStatus as any }).eq("id", agent.id);
+                              if (error) { toast.error("Erro ao atualizar status."); return; }
+                              toast.success(`${agent.name} ${newStatus === "active" ? "ativado" : "pausado"}!`);
+                              queryClient.invalidateQueries({ queryKey: ["my-agents"] });
+                            }}
+                          >
+                            {agent.status === "active" ? <><Pause className="h-3 w-3" /> Pausar</> : <><Play className="h-3 w-3" /> Ativar</>}
+                          </Button>
+                        </div>
                       </div>
                       <div className="grid grid-cols-3 gap-3">
                         <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
@@ -410,7 +447,7 @@ const ClientDashboard = () => {
                 </div>
                 <div className="h-[300px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={mockChartData}>
+                    <AreaChart data={realChartData}>
                       <defs>
                         <linearGradient id="cExec" x1="0" y1="0" x2="0" y2="1">
                           <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />

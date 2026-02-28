@@ -22,6 +22,8 @@ import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import AdminCommandCenter from "@/components/dashboard/AdminCommandCenter";
+import AdminUserManager from "@/components/dashboard/AdminUserManager";
+import NotificationPanel from "@/components/dashboard/NotificationPanel";
 import PaymentsPanel from "@/components/dashboard/PaymentsPanel";
 import AdminWarRoom from "@/components/dashboard/AdminWarRoom";
 import AdminAgentSettings from "@/components/dashboard/AdminAgentSettings";
@@ -116,6 +118,15 @@ const AdminDashboard = () => {
     },
   });
 
+  const { data: paymentHistory = [] } = useQuery({
+    queryKey: ["admin-payment-history"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("payment_history").select("*").order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+  });
+
   const totalRevenue = allSubscriptions.reduce((acc, s) => acc + (s.monthly_price || 0), 0);
   const activeAgents = allAgents.filter((a) => a.status === "active").length;
   const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + (t.tokens_used || 0), 0);
@@ -142,14 +153,22 @@ const AdminDashboard = () => {
     { id: "subscriptions", label: "Assinaturas", icon: CreditCard },
   ];
 
-  const revenueData = [
-    { name: "Jan", receita: Math.round(totalRevenue * 0.4 / 100) },
-    { name: "Fev", receita: Math.round(totalRevenue * 0.5 / 100) },
-    { name: "Mar", receita: Math.round(totalRevenue * 0.65 / 100) },
-    { name: "Abr", receita: Math.round(totalRevenue * 0.8 / 100) },
-    { name: "Mai", receita: Math.round(totalRevenue * 0.9 / 100) },
-    { name: "Jun", receita: Math.round(totalRevenue / 100) },
-  ];
+  // Real revenue data from payment history
+  const revenueData = (() => {
+    const now = new Date();
+    const months: { name: string; receita: number }[] = [];
+    for (let i = 5; i >= 0; i--) {
+      const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+      const monthName = d.toLocaleDateString("pt-BR", { month: "short" });
+      const paymentsInMonth = paymentHistory.filter((p: any) => {
+        const pd = new Date(p.created_at);
+        return pd.getMonth() === d.getMonth() && pd.getFullYear() === d.getFullYear() && p.status === "completed";
+      });
+      const total = paymentsInMonth.reduce((acc: number, p: any) => acc + (p.amount_cents || 0), 0);
+      months.push({ name: monthName, receita: Math.round(total / 100) });
+    }
+    return months;
+  })();
 
   const planDistribution = [
     { name: "Free", value: allCredits.filter(c => c.plan_type === "free").length, color: "hsl(var(--muted-foreground))" },
@@ -200,11 +219,14 @@ const AdminDashboard = () => {
               </div>
               <h1 className="font-display text-2xl font-bold">PROMETHEUS</h1>
               <Badge variant="outline" className="border-primary/20 text-primary text-[10px] font-mono">ADMIN MASTER</Badge>
-              <TokenUpgradeDialog trigger={
-                <Button size="sm" variant="outline" className="gap-1.5 border-primary/20 text-primary ml-auto text-xs">
-                  <Coins className="h-3.5 w-3.5" /> Tokens
-                </Button>
-              } />
+              <div className="flex items-center gap-2 ml-auto">
+                <NotificationPanel />
+                <TokenUpgradeDialog trigger={
+                  <Button size="sm" variant="outline" className="gap-1.5 border-primary/20 text-primary text-xs">
+                    <Coins className="h-3.5 w-3.5" /> Tokens
+                  </Button>
+                } />
+              </div>
             </div>
             <p className="text-xs text-muted-foreground">Command Center — Controle total da plataforma</p>
           </motion.div>
@@ -279,38 +301,7 @@ const AdminDashboard = () => {
 
           {/* ═══ USERS ═══ */}
           {activeTab === "users" && (
-            <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-              <CardHeader>
-                <CardTitle className="font-display text-lg flex items-center gap-2"><Users className="h-5 w-5 text-cyan-400" /> Todos os Usuários ({allProfiles.length})</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead><tr className="border-b border-white/[0.08]">
-                      <th className="text-left p-3 text-muted-foreground font-medium">Nome</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Empresa</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Plano</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Créditos</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Cadastro</th>
-                    </tr></thead>
-                    <tbody>
-                      {allProfiles.map((profile: any) => {
-                        const userCredit = allCredits.find((c: any) => c.user_id === profile.user_id);
-                        return (
-                          <tr key={profile.id} className="border-b border-white/[0.05] hover:bg-accent/20">
-                            <td className="p-3 font-medium">{profile.full_name || "—"}</td>
-                            <td className="p-3 text-muted-foreground">{profile.company_name || "—"}</td>
-                            <td className="p-3"><Badge variant="secondary" className="text-[10px]">{userCredit?.plan_type || "free"}</Badge></td>
-                            <td className="p-3">{userCredit ? (<div className="flex items-center gap-2"><Progress value={Math.round((userCredit.used_credits / userCredit.total_credits) * 100)} className="h-1.5 w-16" /><span className="text-xs text-muted-foreground">{Math.round((userCredit.used_credits / userCredit.total_credits) * 100)}%</span></div>) : "—"}</td>
-                            <td className="p-3 text-muted-foreground text-xs">{new Date(profile.created_at).toLocaleDateString("pt-BR")}</td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
+            <AdminUserManager allProfiles={allProfiles} allCredits={allCredits} />
           )}
 
           {/* ═══ AGENTS ═══ */}
