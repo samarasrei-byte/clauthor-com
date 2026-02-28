@@ -426,7 +426,7 @@ const LibraryPage = () => {
       <section>
         <div className="flex items-center gap-3 mb-6">
           <h2 className="text-lg font-bold tracking-tight">
-            {filteredAgents.length} Agentes Disponíveis
+            {filter === "all" ? agentKeys.length : filteredAgents.length} Agentes Disponíveis
           </h2>
           <div className="flex-1" />
           <Badge variant="outline" className="text-xs border-primary/20 text-primary/70">
