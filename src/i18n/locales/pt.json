@@ -390,7 +390,27 @@
       "process_analyst_title": "Agente de Processos — BPMN & Lean IA",
       "process_analyst_desc": "Mapeia e otimiza processos: BPMN, Lean Six Sigma, identificação de gargalos e automação de workflows.",
       "process_analyst_highlight": "⚙️ Processos Otimizados",
-      "process_analyst_replaces": "1 analista de processos"
+      "process_analyst_replaces": "1 analista de processos",
+      "data_engineer_title": "Data Engineer Agent — Engenharia de Dados IA",
+      "data_engineer_desc": "Constrói e mantém pipelines de dados, ETL, data lakes e integra fontes heterogêneas com qualidade e governança.",
+      "data_engineer_highlight": "🔧 Pipelines Autônomos",
+      "data_engineer_replaces": "1 engenheiro de dados",
+      "crm_manager_title": "CRM Manager Agent — Gestão de CRM IA",
+      "crm_manager_desc": "Gerencia o CRM de ponta a ponta: automações, segmentação, limpeza de base, relatórios de pipeline e integrações.",
+      "crm_manager_highlight": "📊 CRM Inteligente",
+      "crm_manager_replaces": "1 analista de CRM",
+      "ux_researcher_title": "UX Researcher Agent — Pesquisa de UX IA",
+      "ux_researcher_desc": "Conduz pesquisas de usabilidade, testes A/B, análise heurística, mapas de calor e gera insights acionáveis de produto.",
+      "ux_researcher_highlight": "🔍 UX Data-Driven",
+      "ux_researcher_replaces": "1 UX researcher",
+      "media_buyer_title": "Media Buyer Agent — Compra de Mídia IA",
+      "media_buyer_desc": "Planeja, executa e otimiza compra de mídia em múltiplas plataformas: budget allocation, bid management e análise de ROAS.",
+      "media_buyer_highlight": "💰 ROAS Maximizado",
+      "media_buyer_replaces": "1 media buyer sênior",
+      "onboarding_specialist_title": "Onboarding Specialist Agent — Ativação de Clientes IA",
+      "onboarding_specialist_desc": "Guia novos clientes desde o primeiro login até o primeiro valor: checklists, tours interativos, follow-ups e métricas de ativação.",
+      "onboarding_specialist_highlight": "🚀 Time-to-Value 3x",
+      "onboarding_specialist_replaces": "1 especialista de onboarding"
     }
   },
   "home": {
