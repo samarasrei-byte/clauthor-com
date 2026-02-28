@@ -98,6 +98,29 @@ const MetaAdsSetupGuide = () => {
   const [accessToken, setAccessToken] = useState("");
   const [adAccountId, setAdAccountId] = useState("");
 
+  const validateMutation = useMutation({
+    mutationFn: async () => {
+      const { data, error } = await supabase.functions.invoke("validate-credentials", {
+        body: {
+          channel: "meta_ads",
+          credentials: { access_token: accessToken, ad_account_id: adAccountId },
+        },
+      });
+      if (error) throw error;
+      return data;
+    },
+    onSuccess: (data) => {
+      if (data.valid) {
+        toast.success(data.message || "Meta Ads conectado com sucesso!");
+        markComplete(5);
+        saveMutation.mutate();
+      } else {
+        toast.error(data.error || "Falha na validação");
+      }
+    },
+    onError: () => toast.error("Erro ao validar credenciais"),
+  });
+
   const saveMutation = useMutation({
     mutationFn: async () => {
       const credentials = [
@@ -116,10 +139,7 @@ const MetaAdsSetupGuide = () => {
         });
       }
     },
-    onSuccess: () => {
-      toast.success("Meta Ads conectado! Credenciais salvas no cofre. 🎉");
-      markComplete(5);
-    },
+    onSuccess: () => toast.success("Credenciais salvas no cofre criptografado!"),
     onError: () => toast.error("Erro ao salvar credenciais"),
   });
 
@@ -237,12 +257,23 @@ const MetaAdsSetupGuide = () => {
                   <Input placeholder="Ad Account ID (act_XXXXXXXXX)" value={adAccountId} onChange={(e) => setAdAccountId(e.target.value)} className="text-sm" />
                   <Button
                     className="w-full gap-2"
-                    disabled={!accessToken || !adAccountId || saveMutation.isPending}
-                    onClick={() => saveMutation.mutate()}
+                    disabled={!accessToken || !adAccountId || validateMutation.isPending}
+                    onClick={() => validateMutation.mutate()}
                   >
-                    {saveMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
-                    Salvar e Conectar Meta Ads
+                    {validateMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle className="h-4 w-4" />}
+                    Validar e Conectar Meta Ads
                   </Button>
+                  {validateMutation.data && !validateMutation.data.valid && (
+                    <div className="flex items-start gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-sm">
+                      <AlertTriangle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+                      <div>
+                        <p className="font-medium text-destructive">{validateMutation.data.error}</p>
+                        {validateMutation.data.hint && (
+                          <p className="text-muted-foreground text-xs mt-1">{validateMutation.data.hint}</p>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 
