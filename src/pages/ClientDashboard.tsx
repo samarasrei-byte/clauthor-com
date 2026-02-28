@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause, Eye
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -41,6 +41,7 @@ import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
 import OrchestrationDemo from "@/components/dashboard/OrchestrationDemo";
 import SupportChat from "@/components/SupportChat";
+import AgentLiveTimeline from "@/components/dashboard/AgentLiveTimeline";
 import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
@@ -231,6 +232,7 @@ const ClientDashboard = () => {
     { id: "sendgrid-setup", label: "E-mail Setup", icon: Mail },
     { id: "linkedin-setup", label: "LinkedIn Setup", icon: GitBranch },
     { id: "meta-ads-setup", label: "Meta Ads Setup", icon: TrendingUp },
+    { id: "live-timeline", label: "Live Timeline", icon: Eye, badge: "LIVE" },
     { id: "support", label: "Suporte", icon: MessageSquare },
   ];
 
@@ -369,6 +371,10 @@ const ClientDashboard = () => {
 
           {/* ═══ META ADS SETUP GUIDE ═══ */}
           {activeSection === "meta-ads-setup" && <MetaAdsSetupGuide />}
+
+          {/* ═══ LIVE TIMELINE ═══ */}
+          {activeSection === "live-timeline" && <AgentLiveTimeline />}
+
           {/* ═══ AGENTS ═══ */}
           {activeSection === "agents" && (
             <div className="space-y-6">
