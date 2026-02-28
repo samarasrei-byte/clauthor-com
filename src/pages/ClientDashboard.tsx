@@ -325,6 +325,7 @@ const ClientDashboard = () => {
               subscriptions={subscriptions}
               recentLogs={recentLogs}
               tokenUsage={tokenUsage}
+              onNavigate={setActiveSection}
             />
           )}
 
