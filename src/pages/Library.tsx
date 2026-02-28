@@ -143,81 +143,54 @@ const LibraryPage = () => {
     setHiringSlug(slug);
 
     try {
-      const { data: template, error: tplError } = await supabase
-        .from("agent_templates")
-        .select("*")
-        .eq("slug", slug)
-        .eq("is_active", true)
-        .single();
+      const agentName = t(`library_page.agents.${key}_title`);
+      const priceTier = agentPriceTiers[key];
+      const region = getRegion(lang);
+      const price = getPrice(lang, priceTier);
 
-      if (tplError || !template) {
-        toast.error("Template não encontrado");
+      if (!price || price <= 0) {
+        toast.error("Preço inválido para este agente.");
         return;
       }
 
-      const tier = template.tier as "basic" | "intermediate" | "advanced" | "enterprise";
-      const priceTier = agentPriceTiers[key];
-      const priceInCents = getPrice(lang, priceTier) * 100;
+      const loadingToast = toast.loading("Criando assinatura PayPal...");
 
-      const { data: agent, error: agentError } = await supabase
-        .from("agents")
-        .insert({
-          user_id: user.id,
-          name: template.name,
-          description: template.description,
-          instructions: template.system_prompt || template.instructions,
-          objective: template.description,
-          tier,
-          monthly_price: priceInCents,
-          status: "active",
-          channels: template.default_channels,
-          integrations: template.default_integrations,
-          actions: template.default_actions,
-        })
-        .select()
-        .single();
+      const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+        body: {
+          action: "create_subscription",
+          agent_slug: slug,
+          agent_name: agentName,
+          amount: price,
+          currency: region.currency,
+          return_url: `${window.location.origin}/dashboard?subscription=success`,
+          cancel_url: `${window.location.origin}/library?subscription=cancelled`,
+        },
+      });
 
-      if (agentError) throw agentError;
+      toast.dismiss(loadingToast);
 
-      toast.info("Executando auditoria do agente...", { duration: 2000 });
-
-      try {
-        const { data: sessionData } = await supabase.auth.getSession();
-        const token = sessionData?.session?.access_token;
-
-        const registerResponse = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/openclaw-register`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify({ agentId: agent.id }),
-          }
-        );
-
-        const registerData = await registerResponse.json();
-
-        if (!registerResponse.ok) {
-          console.error("OpenClaw register error:", registerData);
-          if (registerResponse.status === 422) {
-            toast.warning(`Auditoria: ${registerData.issues?.join(", ") || "Verifique as configurações do agente"}`, { duration: 5000 });
-          } else {
-            toast.warning("Agente contratado, mas registro no OpenClaw pendente.", { duration: 4000 });
-          }
-        } else {
-          toast.success(`${template.name} contratado e registrado! 🚀`, { duration: 3000 });
-        }
-      } catch (openclawErr) {
-        console.error("OpenClaw registration failed:", openclawErr);
-        toast.warning("Agente contratado! Registro OpenClaw será feito em breve.", { duration: 3000 });
+      if (error) throw error;
+      if (!data?.success || !data?.approve_url) {
+        throw new Error(data?.error || "Falha ao criar assinatura PayPal");
       }
 
-      navigate("/agents");
+      // Persist subscription intent so we can provision the agent on return
+      sessionStorage.setItem("paypal_subscription", JSON.stringify({
+        subscription_id: data.subscription_id,
+        agent_slug: slug,
+        agent_key: key,
+        agent_name: agentName,
+        price,
+        currency: region.currency,
+        tier: agentTiers[key],
+        price_tier: priceTier,
+      }));
+
+      // Redirect to PayPal approval page
+      window.location.href = data.approve_url;
     } catch (err: any) {
-      console.error(err);
-      toast.error("Erro ao contratar agente. Tente novamente.");
+      console.error("Subscription error:", err);
+      toast.error(err.message || "Erro ao criar assinatura. Tente novamente.");
     } finally {
       setHiringSlug(null);
     }

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -7,9 +7,161 @@ import { toast } from "sonner";
 export function usePaypalCapture() {
   const [searchParams, setSearchParams] = useSearchParams();
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const captured = useRef(false);
 
   useEffect(() => {
+    // ── Handle subscription cancellation ──
+    const subStatus = searchParams.get("subscription");
+    if (subStatus === "cancelled") {
+      toast.error("Assinatura cancelada.");
+      sessionStorage.removeItem("paypal_subscription");
+      searchParams.delete("subscription");
+      setSearchParams(searchParams, { replace: true });
+      return;
+    }
+
+    // ── Handle subscription success ──
+    if (subStatus === "success") {
+      if (captured.current) return;
+      const raw = sessionStorage.getItem("paypal_subscription");
+      if (!raw) {
+        searchParams.delete("subscription");
+        setSearchParams(searchParams, { replace: true });
+        return;
+      }
+
+      captured.current = true;
+      const subIntent = JSON.parse(raw);
+      sessionStorage.removeItem("paypal_subscription");
+
+      const activateSubscription = async () => {
+        const loadingToast = toast.loading("Verificando assinatura...");
+        try {
+          // 1. Verify subscription status with PayPal
+          const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+            body: {
+              action: "verify_subscription",
+              subscription_id: subIntent.subscription_id,
+            },
+          });
+
+          if (error) throw error;
+          if (!data?.success) throw new Error("Falha ao verificar assinatura");
+
+          const status = data.status;
+          if (status !== "ACTIVE" && status !== "APPROVED") {
+            throw new Error(`Assinatura não ativa. Status: ${status}`);
+          }
+
+          // 2. Get current user
+          const { data: { user } } = await supabase.auth.getUser();
+          if (!user) throw new Error("Usuário não autenticado");
+
+          // 3. Provision the agent from template
+          const { data: template } = await supabase
+            .from("agent_templates")
+            .select("*")
+            .eq("slug", subIntent.agent_slug)
+            .eq("is_active", true)
+            .single();
+
+          if (!template) throw new Error("Template do agente não encontrado");
+
+          const tier = (subIntent.tier || template.tier) as "basic" | "intermediate" | "advanced" | "enterprise";
+          const priceInCents = (subIntent.price || 0) * 100;
+
+          const { data: agent, error: agentError } = await supabase
+            .from("agents")
+            .insert({
+              user_id: user.id,
+              name: template.name,
+              description: template.description,
+              instructions: template.system_prompt || template.instructions,
+              objective: template.description,
+              tier,
+              monthly_price: priceInCents,
+              status: "active",
+              channels: template.default_channels,
+              integrations: template.default_integrations,
+              actions: template.default_actions,
+            })
+            .select()
+            .single();
+
+          if (agentError) throw agentError;
+
+          // 4. Create subscription record
+          const now = new Date();
+          const periodEnd = new Date(now);
+          periodEnd.setMonth(periodEnd.getMonth() + 1);
+
+          await supabase.from("subscriptions").insert({
+            user_id: user.id,
+            agent_id: agent.id,
+            monthly_price: priceInCents,
+            status: "active",
+            stripe_subscription_id: subIntent.subscription_id, // PayPal sub ID stored here
+            current_period_start: now.toISOString(),
+            current_period_end: periodEnd.toISOString(),
+          });
+
+          // 5. Log to payment_history
+          await supabase.from("payment_history").insert({
+            user_id: user.id,
+            type: "paypal_subscription",
+            item_id: subIntent.agent_slug,
+            item_name: `Assinatura: ${subIntent.agent_name}`,
+            tokens_amount: 0,
+            amount_cents: priceInCents,
+            currency: subIntent.currency || "BRL",
+            status: "completed",
+            paypal_order_id: subIntent.subscription_id,
+          });
+
+          // 6. Register agent with OpenClaw (non-blocking)
+          try {
+            const { data: sessionData } = await supabase.auth.getSession();
+            await fetch(
+              `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/openclaw-register`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${sessionData?.session?.access_token}`,
+                },
+                body: JSON.stringify({ agentId: agent.id }),
+              }
+            );
+          } catch (e) {
+            console.warn("OpenClaw registration deferred:", e);
+          }
+
+          toast.dismiss(loadingToast);
+          toast.success(`🎉 ${template.name} contratado com sucesso! Assinatura mensal ativa.`, { duration: 6000 });
+          
+          queryClient.invalidateQueries({ queryKey: ["user-agents"] });
+          queryClient.invalidateQueries({ queryKey: ["payment-history"] });
+          queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
+
+        } catch (err: any) {
+          toast.dismiss(loadingToast);
+          toast.error(err.message || "Erro ao ativar assinatura");
+          console.error("Subscription activation error:", err);
+        } finally {
+          searchParams.delete("subscription");
+          searchParams.delete("subscription_id");
+          searchParams.delete("ba_token");
+          searchParams.delete("token");
+          setSearchParams(searchParams, { replace: true });
+        }
+      };
+
+      activateSubscription();
+      return;
+    }
+
+    // ── Legacy: Handle one-time payment (token packs) ──
     const paymentStatus = searchParams.get("payment");
     if (paymentStatus === "cancelled") {
       toast.error("Pagamento cancelado.");
@@ -36,10 +188,7 @@ export function usePaypalCapture() {
       const loadingToast = toast.loading("Confirmando pagamento...");
       try {
         const { data, error } = await supabase.functions.invoke("paypal-checkout", {
-          body: {
-            action: "capture_order",
-            order_id: order.order_id,
-          },
+          body: { action: "capture_order", order_id: order.order_id },
         });
 
         if (error) throw error;
@@ -47,7 +196,6 @@ export function usePaypalCapture() {
           throw new Error("Pagamento não foi confirmado pelo PayPal");
         }
 
-        // Payment confirmed — update credits
         const tokensToAdd = getTokensForItem(order.type, order.item_id);
         const { data: { user: currentUser } } = await supabase.auth.getUser();
         if (tokensToAdd > 0 && currentUser) {
@@ -71,7 +219,6 @@ export function usePaypalCapture() {
           }
         }
 
-        // Log to payment_history
         const { data: { user: captureUser } } = await supabase.auth.getUser();
         if (captureUser) {
           await supabase.from("payment_history").insert({
@@ -104,25 +251,19 @@ export function usePaypalCapture() {
     };
 
     captureOrder();
-  }, [searchParams, setSearchParams, queryClient]);
+  }, [searchParams, setSearchParams, queryClient, navigate]);
 }
 
 function getTokensForItem(type: string, itemId: string): number {
   if (type === "plan") {
     const planTokens: Record<string, number> = {
-      starter: 5000000,
-      pro: 25000000,
-      enterprise: 100000000,
+      starter: 5000000, pro: 25000000, enterprise: 100000000,
     };
     return planTokens[itemId] || 0;
   }
-  
   const packTokens: Record<string, number> = {
-    "pack-5m": 5000000,
-    "pack-10m": 10000000,
-    "pack-25m": 25000000,
-    "pack-50m": 50000000,
-    "pack-100m": 100000000,
+    "pack-5m": 5000000, "pack-10m": 10000000, "pack-25m": 25000000,
+    "pack-50m": 50000000, "pack-100m": 100000000,
   };
   return packTokens[itemId] || 0;
 }
