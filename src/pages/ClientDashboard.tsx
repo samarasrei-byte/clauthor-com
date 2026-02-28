@@ -30,6 +30,8 @@ import CompanyBoard from "@/components/dashboard/CompanyBoard";
 import TeamMembers from "@/components/dashboard/TeamMembers";
 import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
 import SendGridSetupGuide from "@/components/dashboard/SendGridSetupGuide";
+import LinkedInSetupGuide from "@/components/dashboard/LinkedInSetupGuide";
+import MetaAdsSetupGuide from "@/components/dashboard/MetaAdsSetupGuide";
 import UserProfileEditor from "@/components/dashboard/UserProfileEditor";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
 
@@ -227,6 +229,8 @@ const ClientDashboard = () => {
     { id: "billing", label: t("dashboard.billing"), icon: CreditCard },
     { id: "whatsapp-setup", label: "WhatsApp Setup", icon: Phone },
     { id: "sendgrid-setup", label: "E-mail Setup", icon: Mail },
+    { id: "linkedin-setup", label: "LinkedIn Setup", icon: GitBranch },
+    { id: "meta-ads-setup", label: "Meta Ads Setup", icon: TrendingUp },
     { id: "support", label: "Suporte", icon: MessageSquare },
   ];
 
@@ -360,6 +364,11 @@ const ClientDashboard = () => {
           {/* ═══ SENDGRID SETUP GUIDE ═══ */}
           {activeSection === "sendgrid-setup" && <SendGridSetupGuide />}
 
+          {/* ═══ LINKEDIN SETUP GUIDE ═══ */}
+          {activeSection === "linkedin-setup" && <LinkedInSetupGuide />}
+
+          {/* ═══ META ADS SETUP GUIDE ═══ */}
+          {activeSection === "meta-ads-setup" && <MetaAdsSetupGuide />}
           {/* ═══ AGENTS ═══ */}
           {activeSection === "agents" && (
             <div className="space-y-6">
