@@ -165,6 +165,105 @@ serve(async (req) => {
         }), { headers });
       }
 
+      // ── LinkedIn API validation ──
+      case "linkedin": {
+        const { access_token, client_id } = credentials;
+        if (!access_token) {
+          return new Response(JSON.stringify({
+            valid: false,
+            error: "access_token é obrigatório",
+          }), { headers });
+        }
+
+        try {
+          const res = await fetch("https://api.linkedin.com/v2/userinfo", {
+            headers: { Authorization: `Bearer ${access_token}` },
+          });
+
+          if (res.ok) {
+            const data = await res.json();
+            return new Response(JSON.stringify({
+              valid: true,
+              message: "Conexão LinkedIn validada com sucesso! ✅",
+              details: {
+                name: data.name || data.given_name || "OK",
+                email: data.email || "não disponível",
+              },
+            }), { headers });
+          }
+
+          const errData = await res.json().catch(() => ({}));
+          return new Response(JSON.stringify({
+            valid: false,
+            error: errData?.message || `LinkedIn API retornou ${res.status}`,
+            hint: res.status === 401
+              ? "Token expirado ou inválido. Gere um novo no LinkedIn Developer Portal."
+              : "Verifique se o Access Token possui os escopos corretos (r_liteprofile, r_emailaddress).",
+          }), { headers });
+        } catch (err) {
+          return new Response(JSON.stringify({
+            valid: false,
+            error: "Falha ao conectar com a LinkedIn API",
+            hint: "Verifique sua conexão e tente novamente.",
+          }), { headers });
+        }
+      }
+
+      // ── Meta Ads (Marketing API) validation ──
+      case "meta_ads": {
+        const { access_token, ad_account_id } = credentials;
+        if (!access_token || !ad_account_id) {
+          return new Response(JSON.stringify({
+            valid: false,
+            error: "access_token e ad_account_id são obrigatórios",
+          }), { headers });
+        }
+
+        try {
+          const accountId = ad_account_id.startsWith("act_") ? ad_account_id : `act_${ad_account_id}`;
+          const res = await fetch(
+            `https://graph.facebook.com/v18.0/${accountId}?fields=name,account_status,currency,balance&access_token=${access_token}`
+          );
+
+          if (res.ok) {
+            const data = await res.json();
+            const statusMap: Record<number, string> = {
+              1: "Ativa",
+              2: "Desativada",
+              3: "Não aprovada",
+              7: "Revisão pendente",
+              9: "Em período de carência",
+              100: "Suspendia",
+              101: "Fechada",
+            };
+            return new Response(JSON.stringify({
+              valid: true,
+              message: "Conexão Meta Ads validada com sucesso! ✅",
+              details: {
+                account_name: data.name || accountId,
+                status: statusMap[data.account_status] || `Status ${data.account_status}`,
+                currency: data.currency || "N/A",
+              },
+            }), { headers });
+          }
+
+          const errData = await res.json().catch(() => ({}));
+          return new Response(JSON.stringify({
+            valid: false,
+            error: errData?.error?.message || `Meta Ads API retornou ${res.status}`,
+            hint: res.status === 190
+              ? "Token expirado. Gere um novo no Graph API Explorer."
+              : "Verifique se o Ad Account ID e Access Token estão corretos.",
+          }), { headers });
+        } catch (err) {
+          return new Response(JSON.stringify({
+            valid: false,
+            error: "Falha ao conectar com a Meta Ads API",
+            hint: "Verifique sua conexão e tente novamente.",
+          }), { headers });
+        }
+      }
+
       default:
         return new Response(JSON.stringify({
           valid: false,
