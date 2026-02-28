@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -33,6 +34,7 @@ const PlatformCredentialsPanel = () => {
   const [modalIntegration, setModalIntegration] = useState("");
   const [modalKey, setModalKey] = useState("");
   const [modalValue, setModalValue] = useState("");
+  const [modalSuccess, setModalSuccess] = useState(false);
 
   const { data: credentials = [], isLoading } = useQuery({
     queryKey: ["platform-credentials"],
@@ -93,14 +95,24 @@ const PlatformCredentialsPanel = () => {
 
   const confirmPresetSave = () => {
     if (!modalValue.trim()) return;
-    saveMutation.mutate({
-      integration: modalIntegration,
-      key: modalKey,
-      value: modalValue,
-      desc: `${modalIntegration} - ${modalKey}`,
-    });
-    setModalOpen(false);
-    setModalValue("");
+    saveMutation.mutate(
+      {
+        integration: modalIntegration,
+        key: modalKey,
+        value: modalValue,
+        desc: `${modalIntegration} - ${modalKey}`,
+      },
+      {
+        onSuccess: () => {
+          setModalSuccess(true);
+          setTimeout(() => {
+            setModalOpen(false);
+            setModalSuccess(false);
+            setModalValue("");
+          }, 1500);
+        },
+      }
+    );
   };
 
   // Group credentials by integration
@@ -249,43 +261,80 @@ const PlatformCredentialsPanel = () => {
       {/* Credential input modal */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogContent className="sm:max-w-md">
-          <DialogHeader>
-            <DialogTitle className="flex items-center gap-2 font-display">
-              <Lock className="h-4 w-4 text-primary" />
-              {modalIntegration} / {modalKey}
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-3 py-2">
-            <Label className="text-sm text-muted-foreground">
-              Insira o valor para <span className="font-semibold text-foreground">{modalKey}</span> da integração <span className="font-semibold text-foreground">{modalIntegration}</span>
-            </Label>
-            <Input
-              placeholder={`Valor de ${modalKey}`}
-              type="password"
-              value={modalValue}
-              onChange={(e) => setModalValue(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && confirmPresetSave()}
-              autoFocus
-              className="text-sm"
-            />
-            <p className="text-[10px] text-muted-foreground flex items-center gap-1">
-              <Shield className="h-3 w-3" /> Criptografado com AES-256-GCM no cofre seguro
-            </p>
-          </div>
-          <DialogFooter className="gap-2">
-            <DialogClose asChild>
-              <Button variant="ghost" size="sm">Cancelar</Button>
-            </DialogClose>
-            <Button
-              size="sm"
-              className="gap-1.5"
-              disabled={!modalValue.trim() || saveMutation.isPending}
-              onClick={confirmPresetSave}
-            >
-              {saveMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Key className="h-3.5 w-3.5" />}
-              Salvar
-            </Button>
-          </DialogFooter>
+          {modalSuccess ? (
+            <div className="flex flex-col items-center justify-center py-10 gap-3">
+              <motion.div
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                className="w-16 h-16 rounded-full bg-emerald-500/15 flex items-center justify-center"
+              >
+                <motion.div
+                  initial={{ opacity: 0, scale: 0 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.15, type: "spring", stiffness: 400, damping: 12 }}
+                >
+                  <Check className="h-8 w-8 text-emerald-500" />
+                </motion.div>
+              </motion.div>
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="text-sm font-medium text-foreground"
+              >
+                Credencial salva com sucesso!
+              </motion.p>
+              <motion.p
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.45 }}
+                className="text-[10px] text-muted-foreground"
+              >
+                {modalIntegration} / {modalKey}
+              </motion.p>
+            </div>
+          ) : (
+            <>
+              <DialogHeader>
+                <DialogTitle className="flex items-center gap-2 font-display">
+                  <Lock className="h-4 w-4 text-primary" />
+                  {modalIntegration} / {modalKey}
+                </DialogTitle>
+              </DialogHeader>
+              <div className="space-y-3 py-2">
+                <Label className="text-sm text-muted-foreground">
+                  Insira o valor para <span className="font-semibold text-foreground">{modalKey}</span> da integração <span className="font-semibold text-foreground">{modalIntegration}</span>
+                </Label>
+                <Input
+                  placeholder={`Valor de ${modalKey}`}
+                  type="password"
+                  value={modalValue}
+                  onChange={(e) => setModalValue(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && confirmPresetSave()}
+                  autoFocus
+                  className="text-sm"
+                />
+                <p className="text-[10px] text-muted-foreground flex items-center gap-1">
+                  <Shield className="h-3 w-3" /> Criptografado com AES-256-GCM no cofre seguro
+                </p>
+              </div>
+              <DialogFooter className="gap-2">
+                <DialogClose asChild>
+                  <Button variant="ghost" size="sm">Cancelar</Button>
+                </DialogClose>
+                <Button
+                  size="sm"
+                  className="gap-1.5"
+                  disabled={!modalValue.trim() || saveMutation.isPending}
+                  onClick={confirmPresetSave}
+                >
+                  {saveMutation.isPending ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Key className="h-3.5 w-3.5" />}
+                  Salvar
+                </Button>
+              </DialogFooter>
+            </>
+          )}
         </DialogContent>
       </Dialog>
     </div>
