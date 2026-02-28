@@ -304,8 +304,11 @@ const LibraryPage = () => {
                     </p>
 
                     <div className="flex flex-wrap gap-2 mb-5 justify-center md:justify-start">
-                      {agentCapabilities[featuredAgent].map((cap) => (
-                        <span key={cap} className="text-xs px-3 py-1.5 rounded-lg bg-card/80 border border-border text-foreground font-medium">
+                      {agentCapabilities[featuredAgent].map((cap, capIdx) => (
+                        <span key={cap} className="text-xs px-3 py-1.5 rounded-lg bg-card/80 border border-border text-foreground font-medium flex items-center gap-2">
+                          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                            capIdx % 3 === 0 ? 'bg-emerald-400' : capIdx % 3 === 1 ? 'bg-accent-blue' : 'bg-primary/70'
+                          }`} />
                           {cap}
                         </span>
                       ))}
@@ -504,8 +507,11 @@ const LibraryPage = () => {
                     <p className="text-[13px] text-muted-foreground/70 leading-relaxed mb-4">{agentDesc}</p>
 
                     <div className="flex flex-wrap gap-1.5 mb-4">
-                      {capabilities.map((cap) => (
-                        <span key={cap} className="text-[10px] px-2 py-1 rounded-md bg-muted/30 ring-1 ring-border/40 text-foreground/60 font-medium">
+                      {capabilities.map((cap, capIdx) => (
+                        <span key={cap} className="text-[10px] px-2.5 py-1 rounded-md bg-muted/20 ring-1 ring-border/30 text-foreground/70 font-medium flex items-center gap-1.5">
+                          <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+                            capIdx % 3 === 0 ? 'bg-emerald-400' : capIdx % 3 === 1 ? 'bg-accent-blue' : 'bg-primary/70'
+                          }`} />
                           {cap}
                         </span>
                       ))}
