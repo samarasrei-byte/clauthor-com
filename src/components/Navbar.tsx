@@ -18,6 +18,12 @@ const Navbar = () => {
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useTranslation();
 
+  // Close menus on route change
+  useEffect(() => {
+    setMegaMenuOpen(false);
+    setMobileOpen(false);
+  }, [location.pathname]);
+
   // Close mega menu on outside click
   useEffect(() => {
     const handler = (e: MouseEvent) => {
