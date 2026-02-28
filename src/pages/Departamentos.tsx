@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -14,12 +14,14 @@ import {
   CheckCircle2, TrendingUp, Coins, Network, Lightbulb, ThumbsUp, Send,
   Crosshair, PenTool, Rocket, Store, Calendar, Award, Handshake,
   Search, UserPlus, Repeat, Hash, Gavel, ShieldCheck, Scale,
-  Package, Factory, Receipt, Cog, ClipboardCheck, Truck
+  Package, Factory, Receipt, Cog, ClipboardCheck, Truck, Loader2
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { getRegion } from "@/lib/pricing";
 
 const departments = [
   { 
@@ -286,12 +288,79 @@ const totalAgents = departments.reduce((set, d) => { d.agents.forEach(a => set.a
 const totalSavingsPercent = Math.round(((totalCltCost - totalPrometheusCost) / totalCltCost) * 100);
 
 const Departamentos = () => { // v2
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const lang = i18n.language?.split("-")[0] || "pt";
+  const [hiringDeptId, setHiringDeptId] = useState<string | null>(null);
   const [suggestionName, setSuggestionName] = useState("");
   const [suggestionReason, setSuggestionReason] = useState("");
   const [suggestionEmail, setSuggestionEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [suggestions, setSuggestions] = useState<{ department_name: string; votes: number }[]>([]);
+
+  const handleHireDepartment = useCallback(async (dept: typeof departments[0]) => {
+    const hireIntent: HireIntent = {
+      type: "department",
+      label: t(`squads.dept_${dept.id}`),
+      departmentId: dept.id,
+      slugs: dept.agents.map(a => a.key),
+    };
+
+    if (!user) {
+      navigate("/auth", { state: { hireIntent } });
+      return;
+    }
+
+    setHiringDeptId(dept.id);
+
+    try {
+      const region = getRegion(lang);
+      const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
+
+      const loadingToast = toast.loading("Criando assinatura do departamento...");
+
+      const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+        body: {
+          action: "create_subscription",
+          agent_slug: `dept-${dept.id}`,
+          agent_name: `Departamento ${t(`squads.dept_${dept.id}`)}`,
+          amount: deptPrice,
+          currency: region.currency,
+          return_url: `${window.location.origin}/dashboard?subscription=success`,
+          cancel_url: `${window.location.origin}/departamentos?subscription=cancelled`,
+        },
+      });
+
+      toast.dismiss(loadingToast);
+
+      if (error) throw error;
+      if (!data?.success || !data?.approve_url) {
+        throw new Error(data?.error || "Falha ao criar assinatura");
+      }
+
+      sessionStorage.setItem("paypal_subscription", JSON.stringify({
+        subscription_id: data.subscription_id,
+        agent_slug: `dept-${dept.id}`,
+        agent_key: dept.id,
+        agent_name: `Departamento ${t(`squads.dept_${dept.id}`)}`,
+        price: deptPrice,
+        currency: region.currency,
+        tier: "advanced",
+        price_tier: "mid",
+        is_department: true,
+        department_id: dept.id,
+        department_slugs: dept.agents.map(a => a.key),
+      }));
+
+      window.location.href = data.approve_url;
+    } catch (err: any) {
+      console.error("Department subscription error:", err);
+      toast.error(err.message || "Erro ao criar assinatura.");
+    } finally {
+      setHiringDeptId(null);
+    }
+  }, [user, navigate, t, lang]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -498,29 +567,23 @@ const Departamentos = () => { // v2
                     </div>
                   </div>
 
-                  <Link 
-                    to="/auth" 
-                    state={{ 
-                      hireIntent: { 
-                        type: "department", 
-                        label: t(`squads.dept_${dept.id}`),
-                        departmentId: dept.id,
-                        slugs: dept.agents.map(a => a.key),
-                      } as HireIntent 
-                    }}
+                  <button 
+                    onClick={() => handleHireDepartment(dept)}
+                    disabled={hiringDeptId === dept.id}
+                    className="group relative w-full h-16 rounded-2xl font-display font-bold text-base uppercase tracking-widest overflow-hidden transition-all duration-500 hover:scale-[1.04] active:scale-[0.96] cursor-pointer disabled:opacity-60 disabled:pointer-events-none"
                   >
-                    <button className="group relative w-full h-16 rounded-2xl font-display font-bold text-base uppercase tracking-widest overflow-hidden transition-all duration-500 hover:scale-[1.04] active:scale-[0.96] cursor-pointer">
-                      <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-2xl" />
-                      <div className="absolute -inset-1 bg-gradient-to-r from-primary/60 via-primary-glow/60 to-primary/60 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-                      <div className="absolute inset-0 bg-white/[0.06] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
-                      <div className="absolute inset-0 rounded-2xl border border-white/[0.15] group-hover:border-white/[0.3] transition-colors duration-500" />
-                      <span className="relative z-10 flex items-center justify-center gap-3 text-primary-foreground font-bold text-[15px] drop-shadow-[0_0_12px_hsl(var(--primary)/0.5)]">
-                        <Flame className="h-5 w-5 animate-pulse" />
-                        Contratar Departamento
-                        <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" />
-                      </span>
-                    </button>
-                  </Link>
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-2xl" />
+                    <div className="absolute -inset-1 bg-gradient-to-r from-primary/60 via-primary-glow/60 to-primary/60 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-white/[0.06] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
+                    <div className="absolute inset-0 rounded-2xl border border-white/[0.15] group-hover:border-white/[0.3] transition-colors duration-500" />
+                    <span className="relative z-10 flex items-center justify-center gap-3 text-primary-foreground font-bold text-[15px] drop-shadow-[0_0_12px_hsl(var(--primary)/0.5)]">
+                      {hiringDeptId === dept.id ? (
+                        <><Loader2 className="h-5 w-5 animate-spin" /> Processando...</>
+                      ) : (
+                        <><Flame className="h-5 w-5 animate-pulse" /> Assinar Departamento <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" /></>
+                      )}
+                    </span>
+                  </button>
                 </div>
               </motion.div>
             );
@@ -558,22 +621,15 @@ const Departamentos = () => { // v2
               -{totalSavingsPercent}%
             </Badge>
           </div>
-          <Link 
-            to="/auth" 
-            state={{ 
-              hireIntent: { 
-                type: "department", 
-                label: `Empresa Completa (${departments.length} departamentos)`,
-                departmentId: "all",
-                slugs: departments.flatMap(d => d.agents.map(a => a.key)),
-              } as HireIntent 
+          <Button 
+            className="glow rounded-xl px-10 h-14 font-semibold gap-2 text-lg"
+            onClick={() => {
+              toast.info("Para a empresa completa, entre em contato com nosso time comercial.", { duration: 5000 });
             }}
           >
-            <Button className="glow rounded-xl px-10 h-14 font-semibold gap-2 text-lg">
-              Montar Meu Time Completo
-              <ArrowRight className="h-5 w-5" />
-            </Button>
-          </Link>
+            Falar com Consultor
+            <ArrowRight className="h-5 w-5" />
+          </Button>
         </motion.div>
 
         {/* AI Consultant */}

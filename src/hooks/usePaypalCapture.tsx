@@ -58,50 +58,70 @@ export function usePaypalCapture() {
           const { data: { user } } = await supabase.auth.getUser();
           if (!user) throw new Error("Usuário não autenticado");
 
-          // 3. Provision the agent from template
-          const { data: template } = await supabase
-            .from("agent_templates")
-            .select("*")
-            .eq("slug", subIntent.agent_slug)
-            .eq("is_active", true)
-            .single();
+          // 3. Provision agent(s) based on type
+          const slugsToProvision = subIntent.is_department 
+            ? (subIntent.department_slugs || []) 
+            : [subIntent.agent_slug];
 
-          if (!template) throw new Error("Template do agente não encontrado");
+          const provisionedAgents: string[] = [];
 
-          const tier = (subIntent.tier || template.tier) as "basic" | "intermediate" | "advanced" | "enterprise";
-          const priceInCents = (subIntent.price || 0) * 100;
+          for (const slug of slugsToProvision) {
+            const { data: template } = await supabase
+              .from("agent_templates")
+              .select("*")
+              .eq("slug", slug)
+              .eq("is_active", true)
+              .single();
 
-          const { data: agent, error: agentError } = await supabase
-            .from("agents")
-            .insert({
-              user_id: user.id,
-              name: template.name,
-              description: template.description,
-              instructions: template.system_prompt || template.instructions,
-              objective: template.description,
-              tier,
-              monthly_price: priceInCents,
-              status: "active",
-              channels: template.default_channels,
-              integrations: template.default_integrations,
-              actions: template.default_actions,
-            })
-            .select()
-            .single();
+            if (!template) {
+              console.warn(`Template not found for slug: ${slug}`);
+              continue;
+            }
 
-          if (agentError) throw agentError;
+            const tier = (template.tier || "basic") as "basic" | "intermediate" | "advanced" | "enterprise";
+            const priceInCents = subIntent.is_department ? 0 : (subIntent.price || 0) * 100;
 
-          // 4. Create subscription record
+            const { data: agent, error: agentError } = await supabase
+              .from("agents")
+              .insert({
+                user_id: user.id,
+                name: template.name,
+                description: template.description,
+                instructions: template.system_prompt || template.instructions,
+                objective: template.description,
+                tier,
+                monthly_price: priceInCents,
+                status: "active",
+                channels: template.default_channels,
+                integrations: template.default_integrations,
+                actions: template.default_actions,
+              })
+              .select()
+              .single();
+
+            if (agentError) {
+              console.error(`Error provisioning ${slug}:`, agentError);
+              continue;
+            }
+            provisionedAgents.push(agent.id);
+          }
+
+          if (provisionedAgents.length === 0) {
+            throw new Error("Nenhum agente pôde ser provisionado");
+          }
+
+          // 4. Create subscription record (linked to first agent for individual, null for dept)
           const now = new Date();
           const periodEnd = new Date(now);
           periodEnd.setMonth(periodEnd.getMonth() + 1);
+          const priceInCents = (subIntent.price || 0) * 100;
 
           await supabase.from("subscriptions").insert({
             user_id: user.id,
-            agent_id: agent.id,
+            agent_id: subIntent.is_department ? null : provisionedAgents[0],
             monthly_price: priceInCents,
             status: "active",
-            stripe_subscription_id: subIntent.subscription_id, // PayPal sub ID stored here
+            stripe_subscription_id: subIntent.subscription_id,
             current_period_start: now.toISOString(),
             current_period_end: periodEnd.toISOString(),
           });
@@ -110,8 +130,10 @@ export function usePaypalCapture() {
           await supabase.from("payment_history").insert({
             user_id: user.id,
             type: "paypal_subscription",
-            item_id: subIntent.agent_slug,
-            item_name: `Assinatura: ${subIntent.agent_name}`,
+            item_id: subIntent.is_department ? `dept-${subIntent.department_id}` : subIntent.agent_slug,
+            item_name: subIntent.is_department 
+              ? `Assinatura: Dept. ${subIntent.agent_name}` 
+              : `Assinatura: ${subIntent.agent_name}`,
             tokens_amount: 0,
             amount_cents: priceInCents,
             currency: subIntent.currency || "BRL",
@@ -119,26 +141,31 @@ export function usePaypalCapture() {
             paypal_order_id: subIntent.subscription_id,
           });
 
-          // 6. Register agent with OpenClaw (non-blocking)
+          // 6. Register agents with OpenClaw (non-blocking)
           try {
             const { data: sessionData } = await supabase.auth.getSession();
-            await fetch(
-              `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/openclaw-register`,
-              {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${sessionData?.session?.access_token}`,
-                },
-                body: JSON.stringify({ agentId: agent.id }),
-              }
-            );
+            for (const agentId of provisionedAgents) {
+              fetch(
+                `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/openclaw-register`,
+                {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${sessionData?.session?.access_token}`,
+                  },
+                  body: JSON.stringify({ agentId }),
+                }
+              ).catch(console.warn);
+            }
           } catch (e) {
             console.warn("OpenClaw registration deferred:", e);
           }
 
           toast.dismiss(loadingToast);
-          toast.success(`🎉 ${template.name} contratado com sucesso! Assinatura mensal ativa.`, { duration: 6000 });
+          const successMsg = subIntent.is_department
+            ? `🎉 Departamento ${subIntent.agent_name} ativado! ${provisionedAgents.length} agentes provisionados.`
+            : `🎉 ${subIntent.agent_name} contratado com sucesso! Assinatura mensal ativa.`;
+          toast.success(successMsg, { duration: 6000 });
           
           queryClient.invalidateQueries({ queryKey: ["user-agents"] });
           queryClient.invalidateQueries({ queryKey: ["payment-history"] });
