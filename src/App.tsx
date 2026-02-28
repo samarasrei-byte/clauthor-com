@@ -44,6 +44,8 @@ const NotFound = lazyRetry(() => import("./pages/NotFound"));
 const AgentLanding = lazyRetry(() => import("./pages/AgentLanding"));
 const Departamentos = lazyRetry(() => import("./pages/Departamentos"));
 const Pitch = lazyRetry(() => import("./pages/Pitch"));
+const Terms = lazyRetry(() => import("./pages/Terms"));
+const Privacy = lazyRetry(() => import("./pages/Privacy"));
 const MonixCommandCenter = lazyRetry(() => import("./pages/MonixCommandCenter"));
 const OmnixCommandCenter = lazyRetry(() => import("./pages/OmnixCommandCenter"));
 
@@ -88,6 +90,8 @@ const App = () => (
                   <Route path="/departamentos" element={<Departamentos />} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />
                   <Route path="/pitch" element={<Pitch />} />
+                  <Route path="/termos" element={<Terms />} />
+                  <Route path="/privacidade" element={<Privacy />} />
                 </Route>
 
                 {/* Dashboard pages with minimal header + sidebar only */}
