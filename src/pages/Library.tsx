@@ -126,12 +126,20 @@ const LibraryPage = () => {
   }), [filter, searchQuery, t]);
 
   const handleHire = async (key: string) => {
+    const slug = agentSlugs[key];
     if (!user) {
-      navigate("/auth");
+      navigate("/auth", {
+        state: {
+          hireIntent: {
+            type: "agent" as const,
+            label: t(`library_page.agents.${key}_title`),
+            slugs: [slug],
+          },
+        },
+      });
       return;
     }
 
-    const slug = agentSlugs[key];
     setHiringSlug(slug);
 
     try {
