@@ -7,13 +7,13 @@ const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinde
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 import { Button } from "@/components/ui/button";
 import {
-  ArrowRight, Shield, Zap,
-  Code, Users, TrendingUp,
-  Lock, Network,
-  Headphones, Bot, PenTool, ShoppingCart, Megaphone, LineChart,
+  ArrowRight, ShieldCheck, Bolt,
+  Code, UsersRound, TrendingUp,
+  LockKeyhole, Workflow,
+  Headphones, BotMessageSquare, PenTool, ShoppingCart, Megaphone, LineChart,
   Star, Receipt, Globe, Briefcase, DollarSign, MessageSquare,
-  Activity, Terminal, ChevronRight, Cpu, Target,
-  Building2, Clock, Rocket, BarChart3
+  Activity, Terminal, ChevronRight, Cpu, Crosshair,
+  Building2, Clock, Rocket, BarChart3, Fingerprint, Sparkles, Layers3, Signal
 } from "lucide-react";
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import { useTranslation } from "react-i18next";
@@ -125,8 +125,8 @@ const AnimatedStat = ({ value, suffix = "", prefix = "", label, icon: Icon }: {
       }}
       className="text-center p-4 sm:p-5"
     >
-      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center mx-auto mb-3">
-        <Icon className="h-5 w-5 text-primary" />
+      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center mx-auto mb-3 icon-container-glow">
+        <Icon className="h-5 w-5 text-primary icon-lift" strokeWidth={1.5} />
       </div>
       <p className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1">
         {prefix}{count.toLocaleString("pt-BR")}{suffix}
@@ -181,7 +181,7 @@ const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index, slug }:
               <span className="font-mono text-xs sm:text-[10px] uppercase tracking-[0.2em] text-emerald-500/80">{status}</span>
             </div>
             <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-muted/50">
-              <Activity className="h-3.5 w-3.5 sm:h-3 sm:w-3 text-primary/60" />
+              <Activity className="h-3.5 w-3.5 sm:h-3 sm:w-3 text-primary/60" strokeWidth={1.5} />
               <span className="font-mono text-xs sm:text-[11px] text-muted-foreground">
                 {currentActions.toLocaleString()} ações
               </span>
@@ -190,8 +190,8 @@ const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index, slug }:
 
           {/* Agent identity */}
           <div className="flex items-start gap-4">
-            <div className="w-14 h-14 sm:w-12 sm:h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-500">
-              <Icon className="h-6 w-6 sm:h-5 sm:w-5 text-primary/70 group-hover:text-primary transition-colors" />
+            <div className="w-14 h-14 sm:w-12 sm:h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center shrink-0 icon-container-glow">
+              <Icon className="h-6 w-6 sm:h-5 sm:w-5 text-primary/70 icon-lift" strokeWidth={1.5} />
             </div>
             <div className="flex-1 min-w-0">
               <h3 className="font-display font-bold text-base sm:text-base mb-1.5 group-hover:text-primary/90 transition-colors truncate">{name}</h3>
@@ -229,7 +229,7 @@ const HomePage = () => {
 
   const finderIcons: Record<string, React.ElementType> = {
     customer_service: Headphones, sales: DollarSign, billing: Receipt,
-    developer: Code, sdr: Megaphone, hr: Users, security: Shield,
+    developer: Code, sdr: Megaphone, hr: UsersRound, security: ShieldCheck,
     omnichannel: MessageSquare, content: PenTool, social_media: Globe,
     ecommerce: ShoppingCart, traffic_manager: LineChart, legal: Briefcase,
   };
@@ -330,7 +330,7 @@ const HomePage = () => {
                           <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                           <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
                           <span className="relative z-10 flex items-center justify-center gap-3">
-                            <Network className="h-4 w-4" />
+                            <Workflow className="h-4 w-4" strokeWidth={1.5} />
                             Monte seu Time de IA
                             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                           </span>
@@ -344,7 +344,7 @@ const HomePage = () => {
                           className="group h-[52px] sm:h-13 px-8 rounded-xl font-mono text-sm uppercase tracking-wider border border-border hover:border-primary/30 bg-card/30 backdrop-blur-sm text-muted-foreground hover:text-foreground transition-all duration-500 cursor-pointer w-full sm:w-auto"
                         >
                           <span className="flex items-center justify-center gap-3">
-                            <Terminal className="h-4 w-4 text-primary/50" />
+                            <Terminal className="h-4 w-4 text-primary/50" strokeWidth={1.5} />
                             Explorar Agentes
                             <ChevronRight className="h-4 w-4 text-primary/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
                           </span>
@@ -355,12 +355,12 @@ const HomePage = () => {
                     {/* Trust badges */}
                     <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-8">
                       {[
-                        { icon: Lock, label: "End-to-end encrypted" },
-                        { icon: Shield, label: "SOC 2 compliant" },
-                        { icon: Zap, label: "Setup 5min" },
+                        { icon: LockKeyhole, label: "End-to-end encrypted" },
+                        { icon: Fingerprint, label: "SOC 2 compliant" },
+                        { icon: Bolt, label: "Setup 5min" },
                       ].map((item) => (
                         <div key={item.label} className="flex items-center gap-2 opacity-40">
-                          <item.icon className="h-3 w-3 text-primary/70" />
+                          <item.icon className="h-3 w-3 text-primary/70" strokeWidth={1.5} />
                           <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.15em]">{item.label}</span>
                         </div>
                       ))}
@@ -386,10 +386,10 @@ const HomePage = () => {
       <section className="py-12 sm:py-16 px-4 relative border-y border-border/50">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-            <AnimatedStat icon={Bot} value={75} suffix="+" label="Agentes Ativos" />
+            <AnimatedStat icon={BotMessageSquare} value={75} suffix="+" label="Agentes Ativos" />
             <AnimatedStat icon={Building2} value={850} suffix="+" label="Empresas Atendidas" />
             <AnimatedStat icon={Clock} value={12400} suffix="h" label="Horas Economizadas" />
-            <AnimatedStat icon={BarChart3} value={97} suffix="%" label="Eficiência Média" />
+            <AnimatedStat icon={Signal} value={97} suffix="%" label="Eficiência Média" />
           </div>
         </div>
       </section>
@@ -505,9 +505,9 @@ const HomePage = () => {
 
           <div className="space-y-4 sm:space-y-6">
             {[
-              { step: "01", icon: Target, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
-              { step: "02", icon: Users, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
-              { step: "03", icon: Zap, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
+              { step: "01", icon: Crosshair, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
+              { step: "02", icon: Layers3, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
+              { step: "03", icon: Bolt, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
             ].map((item, i) => (
               <motion.div
                 key={i}
@@ -551,10 +551,10 @@ const HomePage = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {[
-              { icon: Shield, title: "Segurança Enterprise", desc: "Criptografia ponta a ponta, SOC 2, dados isolados por tenant. Sua operação blindada." },
-              { icon: Clock, title: "Setup em 5 minutos", desc: "Sem código, sem DevOps. Escolha seu time, configure e seus agentes já estão operando." },
+              { icon: Fingerprint, title: "Segurança Enterprise", desc: "Criptografia ponta a ponta, SOC 2, dados isolados por tenant. Sua operação blindada." },
+              { icon: Bolt, title: "Setup em 5 minutos", desc: "Sem código, sem DevOps. Escolha seu time, configure e seus agentes já estão operando." },
               { icon: DollarSign, title: "Economia de +88%", desc: "Cada agente custa menos que um estagiário e trabalha 24/7, sem férias, sem turnover." },
-              { icon: Network, title: "Orquestração inteligente", desc: "Agentes trabalham em squads coordenados. Um resolve, outro valida, outro escala." },
+              { icon: Workflow, title: "Orquestração inteligente", desc: "Agentes trabalham em squads coordenados. Um resolve, outro valida, outro escala." },
               { icon: Globe, title: "Multi-idioma nativo", desc: "Atenda clientes em 13 idiomas simultaneamente. Expansão global sem barreiras." },
               { icon: Rocket, title: "Escala infinita", desc: "De 10 a 10.000 atendimentos/dia sem contratar ninguém. Escale sem dor." },
             ].map((item, i) => (
@@ -566,8 +566,8 @@ const HomePage = () => {
                 transition={{ delay: i * 0.08, duration: 0.5 }}
                 className="group p-5 sm:p-6 rounded-2xl border border-border bg-card/30 backdrop-blur-sm hover:border-primary/20 hover:bg-card/50 transition-all duration-500"
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
-                  <item.icon className="h-5 w-5 text-primary/70 group-hover:text-primary transition-colors" />
+                <div className="w-12 h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center mb-4 icon-container-glow">
+                  <item.icon className="h-5 w-5 text-primary/70 icon-lift" strokeWidth={1.5} />
                 </div>
                 <h3 className="font-display font-bold text-base mb-2 group-hover:text-primary/90 transition-colors">{item.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
@@ -624,7 +624,7 @@ const HomePage = () => {
 
                 {/* Metric highlight */}
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/10 bg-primary/5 mb-4 w-fit">
-                  <TrendingUp className="h-3 w-3 text-primary" />
+                  <TrendingUp className="h-3 w-3 text-primary" strokeWidth={1.5} />
                   <span className="font-mono text-xs font-bold text-primary">{testimonial.metric}</span>
                   <span className="font-mono text-[10px] text-primary/60">{testimonial.metricLabel}</span>
                 </div>
@@ -663,8 +663,8 @@ const HomePage = () => {
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="rounded-2xl border border-primary/10 bg-primary/[0.02] p-6 sm:p-10 text-center">
-              <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-5">
-                <Shield className="h-7 w-7 text-primary" />
+              <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-5 icon-container-glow">
+                <ShieldCheck className="h-7 w-7 text-primary icon-lift" strokeWidth={1.5} />
               </div>
               <h3 className="font-display text-xl sm:text-2xl font-bold mb-3">Segurança & Confiança</h3>
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-lg mx-auto mb-6">
@@ -672,12 +672,12 @@ const HomePage = () => {
               </p>
               <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
                 {[
-                  { icon: Lock, text: "Dados 100% criptografados" },
-                  { icon: Zap, text: "Cancele a qualquer momento" },
+                  { icon: LockKeyhole, text: "Dados 100% criptografados" },
+                  { icon: Bolt, text: "Cancele a qualquer momento" },
                   { icon: Headphones, text: "Suporte humano + IA 24/7" },
                 ].map((g) => (
                   <div key={g.text} className="flex items-center gap-2">
-                    <g.icon className="h-3.5 w-3.5 text-primary/60" />
+                    <g.icon className="h-3.5 w-3.5 text-primary/60" strokeWidth={1.5} />
                     <span className="font-mono text-xs text-muted-foreground">{g.text}</span>
                   </div>
                 ))}
@@ -713,7 +713,7 @@ const HomePage = () => {
                     <div className="absolute inset-0 bg-primary rounded-xl" />
                     <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
                     <span className="relative z-10 flex items-center justify-center gap-3">
-                      <Network className="h-4 w-4" />
+                      <Workflow className="h-4 w-4" strokeWidth={1.5} />
                       Monte seu Time de IA
                       <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                     </span>
@@ -838,11 +838,11 @@ const HomePage = () => {
           <div className="flex flex-col items-center gap-4 pt-8 border-t border-border">
             <div className="flex flex-wrap items-center justify-center gap-4">
               {[
-                { icon: Lock, label: "SSL 256-bit" },
-                { icon: Shield, label: "SOC 2" },
+                { icon: LockKeyhole, label: "SSL 256-bit" },
+                { icon: Fingerprint, label: "SOC 2" },
               ].map((badge) => (
                 <div key={badge.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/50 border border-border">
-                  <badge.icon className="h-3 w-3 text-primary/50" />
+                  <badge.icon className="h-3 w-3 text-primary/50" strokeWidth={1.5} />
                   <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{badge.label}</span>
                 </div>
               ))}

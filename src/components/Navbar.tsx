@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, LogOut, Shield, ChevronDown, Bot, Building2, Store, Blocks, Zap } from "lucide-react";
+import { Menu, X, LogOut, ShieldCheck, ChevronDown, Bot, Sparkles, Layers3, Bolt } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -100,8 +100,8 @@ const Navbar = () => {
                       onClick={() => setMegaMenuOpen(false)}
                       className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-accent-violet/10 flex items-center justify-center shrink-0 group-hover:bg-accent-violet/20 transition-colors">
-                        <Store className="h-5 w-5 text-accent-violet" />
+                      <div className="w-10 h-10 rounded-xl bg-accent-violet/10 flex items-center justify-center shrink-0 icon-container-glow">
+                        <Sparkles className="h-5 w-5 text-accent-violet icon-lift" strokeWidth={1.5} />
                       </div>
                       <div>
                         <p className="font-semibold text-sm text-foreground">{t("navbar.marketplace_label")}</p>
@@ -113,8 +113,8 @@ const Navbar = () => {
                       onClick={() => setMegaMenuOpen(false)}
                       className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 group-hover:bg-primary/20 transition-colors">
-                        <Blocks className="h-5 w-5 text-primary" />
+                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 icon-container-glow">
+                        <Layers3 className="h-5 w-5 text-primary icon-lift" strokeWidth={1.5} />
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
@@ -151,7 +151,7 @@ const Navbar = () => {
                     : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 }`}
               >
-                <Shield className="h-3.5 w-3.5" />
+                <ShieldCheck className="h-3.5 w-3.5" strokeWidth={1.5} />
                 Admin
               </Link>
             )}
@@ -168,7 +168,7 @@ const Navbar = () => {
                   onClick={handleSignOut} 
                   className="text-muted-foreground hover:text-foreground"
                 >
-                  <LogOut className="h-4 w-4 mr-2" />
+                   <LogOut className="h-4 w-4 mr-2" strokeWidth={1.5} />
                   {t("nav.logout")}
                 </Button>
                 <Link to="/create-agent">
@@ -188,7 +188,7 @@ const Navbar = () => {
                   <Button size="sm" className="relative overflow-hidden glow font-semibold rounded-lg group">
                     <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift" />
                     <span className="relative z-10 flex items-center gap-1.5">
-                      <Zap className="h-3.5 w-3.5" />
+                      <Bolt className="h-3.5 w-3.5" strokeWidth={1.5} />
                       {t("auth.create_account")}
                     </span>
                   </Button>
@@ -255,7 +255,7 @@ const Navbar = () => {
                 onClick={() => setMobileOpen(false)}
                 className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5"
               >
-                <Shield className="h-4 w-4" />
+                <ShieldCheck className="h-4 w-4" strokeWidth={1.5} />
                 Admin
               </Link>
             )}
@@ -270,7 +270,7 @@ const Navbar = () => {
                       setMobileOpen(false);
                     }}
                   >
-                   <LogOut className="h-4 w-4 mr-2" />
+                   <LogOut className="h-4 w-4 mr-2" strokeWidth={1.5} />
                     {t("nav.logout")}
                   </Button>
                   <Link to="/create-agent" onClick={() => setMobileOpen(false)}>
