@@ -8,17 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Globe } from "lucide-react";
-
-const FlagImg = ({ code, className = "" }: { code: string; className?: string }) => (
-  <img
-    src={`https://flagcdn.com/w40/${code}.png`}
-    srcSet={`https://flagcdn.com/w80/${code}.png 2x`}
-    alt={code}
-    className={`inline-block w-5 h-3.5 object-cover rounded-[3px] shadow-sm ring-1 ring-black/10 ${className}`}
-    loading="lazy"
-  />
-);
+import { Languages, Check } from "lucide-react";
 
 export function LanguageSelector() {
   const { i18n } = useTranslation();
@@ -37,15 +27,17 @@ export function LanguageSelector() {
         <Button 
           variant="ghost" 
           size="sm" 
-          className="gap-2 text-muted-foreground hover:text-foreground"
+          className="gap-1.5 text-muted-foreground hover:text-foreground px-2.5"
         >
-          <FlagImg code={currentLang.flag} />
-          <Globe className="h-4 w-4" />
+          <Languages className="h-4 w-4" strokeWidth={1.5} />
+          <span className="font-mono text-[10px] uppercase tracking-wider hidden sm:inline">
+            {currentLang.code}
+          </span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="w-48 max-h-80 overflow-y-auto glass-card border-white/10"
+        className="w-44 max-h-80 overflow-y-auto glass-card border-white/10"
       >
         {languages.map((lang) => (
           <DropdownMenuItem
@@ -55,10 +47,12 @@ export function LanguageSelector() {
               i18n.language === lang.code ? "bg-primary/10 text-primary" : ""
             }`}
           >
-            <FlagImg code={lang.flag} />
-            <span className="flex-1">{lang.name}</span>
+            <span className="font-mono text-[10px] uppercase tracking-wider w-5 text-muted-foreground">
+              {lang.code}
+            </span>
+            <span className="flex-1 text-sm">{lang.name}</span>
             {i18n.language === lang.code && (
-              <span className="text-xs text-primary">✓</span>
+              <Check className="h-3.5 w-3.5 text-primary" strokeWidth={2} />
             )}
           </DropdownMenuItem>
         ))}
