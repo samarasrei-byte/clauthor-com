@@ -177,19 +177,19 @@ export function formatPriceShort(amount: number, lang: string): string {
 export type PriceTier = "starter" | "entry" | "mid" | "high" | "premium";
 
 const priceTierValues: Record<string, Record<PriceTier, number>> = {
-  pt: { starter: 497, entry: 697, mid: 997, high: 1497, premium: 1997 },
-  en: { starter: 97, entry: 147, mid: 197, high: 297, premium: 397 },
-  es: { starter: 97, entry: 147, mid: 197, high: 297, premium: 397 },
-  fr: { starter: 89, entry: 139, mid: 179, high: 269, premium: 369 },
-  de: { starter: 89, entry: 139, mid: 179, high: 269, premium: 369 },
-  it: { starter: 89, entry: 139, mid: 179, high: 269, premium: 369 },
-  ja: { starter: 14800, entry: 22800, mid: 29800, high: 44800, premium: 59800 },
-  zh: { starter: 680, entry: 980, mid: 1380, high: 2080, premium: 2780 },
-  ar: { starter: 370, entry: 550, mid: 740, high: 1120, premium: 1490 },
-  hi: { starter: 8200, entry: 12000, mid: 16500, high: 24800, premium: 33000 },
-  ru: { starter: 8900, entry: 13200, mid: 17900, high: 26900, premium: 35900 },
-  ko: { starter: 129000, entry: 189000, mid: 259000, high: 389000, premium: 519000 },
-  tr: { starter: 3190, entry: 4790, mid: 6390, high: 9590, premium: 12790 },
+  pt: { starter: 697, entry: 897, mid: 1297, high: 1797, premium: 2197 },
+  en: { starter: 147, entry: 197, mid: 297, high: 397, premium: 497 },
+  es: { starter: 147, entry: 197, mid: 297, high: 397, premium: 497 },
+  fr: { starter: 129, entry: 179, mid: 269, high: 369, premium: 459 },
+  de: { starter: 129, entry: 179, mid: 269, high: 369, premium: 459 },
+  it: { starter: 129, entry: 179, mid: 269, high: 369, premium: 459 },
+  ja: { starter: 19800, entry: 29800, mid: 44800, high: 59800, premium: 74800 },
+  zh: { starter: 980, entry: 1380, mid: 2080, high: 2780, premium: 3480 },
+  ar: { starter: 550, entry: 740, mid: 1120, high: 1490, premium: 1870 },
+  hi: { starter: 12000, entry: 16500, mid: 24800, high: 33000, premium: 41200 },
+  ru: { starter: 13200, entry: 17900, mid: 26900, high: 35900, premium: 44900 },
+  ko: { starter: 189000, entry: 259000, mid: 389000, high: 519000, premium: 649000 },
+  tr: { starter: 4790, entry: 6390, mid: 9590, high: 12790, premium: 15990 },
 };
 
 export function getPrice(lang: string, priceTier: PriceTier): number {
