@@ -369,7 +369,7 @@ const ClientDashboard = () => {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="font-display text-2xl font-bold">{t("dashboard.control_panel")}</h1>
-                <HelpTooltip text="Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções: THOR (IA), Agentes, Analytics, Configurações e mais." position="bottom" />
+                <HelpTooltip id="dashboard-intro" text="Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções: THOR (IA), Agentes, Analytics, Configurações e mais." position="bottom" />
               </div>
               <p className="text-sm text-muted-foreground">
                 {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}

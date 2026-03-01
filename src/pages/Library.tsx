@@ -245,7 +245,7 @@ const LibraryPage = () => {
             {t("library_page.subtitle")}
           </p>
           <p className="text-center mb-10">
-            <HelpTooltip text="Explore nossos 80 agentes de IA. Use a busca ou filtros para encontrar o ideal. Clique em 'Contratar' para ativar ou em 'Testar 60s' para experimentar antes." position="bottom" size={16} />
+            <HelpTooltip id="library-intro" text="Explore nossos 80 agentes de IA. Use a busca ou filtros para encontrar o ideal. Clique em 'Contratar' para ativar ou em 'Testar 60s' para experimentar antes." position="bottom" size={16} />
           </p>
 
           {/* Featured agent — cinematic card */}

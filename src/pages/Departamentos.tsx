@@ -460,7 +460,7 @@ const Departamentos = () => { // v2
               {departments.length} departamentos. {totalAgents} agentes autônomos. Cada um substitui um profissional CLT — 
               por uma <span className="text-primary font-bold">fração do custo</span>.
             </p>
-            <HelpTooltip text="Escolha um departamento inteiro para contratar todos os agentes de uma vez com desconto, ou clique em um departamento para ver os agentes individuais." position="bottom" size={16} />
+            <HelpTooltip id="departamentos-intro" text="Escolha um departamento inteiro para contratar todos os agentes de uma vez com desconto, ou clique em um departamento para ver os agentes individuais." position="bottom" size={16} />
           </div>
 
           {/* Hero Stats */}
