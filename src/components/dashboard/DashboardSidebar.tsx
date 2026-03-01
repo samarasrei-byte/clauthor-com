@@ -8,6 +8,7 @@ interface SidebarItem {
   label: string;
   icon: React.ElementType;
   badge?: string | number;
+  group?: string;
 }
 
 interface DashboardSidebarProps {
@@ -39,10 +40,24 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       </button>
 
       {/* Nav Items */}
-      <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
-        {items.map((item) => {
+      <nav className="flex-1 py-4 px-2 space-y-0.5 overflow-y-auto">
+        {items.map((item, idx) => {
+          const showGroupHeader = item.group && (idx === 0 || items[idx - 1].group !== item.group);
           const isActive = activeItem === item.id;
           return (
+            <div key={item.id}>
+              {showGroupHeader && !collapsed && (
+                <div className="px-3 pt-4 pb-1.5 first:pt-0">
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-muted-foreground/60">
+                    {item.group}
+                  </span>
+                </div>
+              )}
+              {showGroupHeader && collapsed && (
+                <div className="w-full flex justify-center py-2">
+                  <div className="w-6 h-px bg-border/30" />
+                </div>
+              )}
             <button
               key={item.id}
               onClick={() => onItemChange(item.id)}
@@ -95,6 +110,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 </div>
               )}
             </button>
+            </div>
           );
         })}
       </nav>
