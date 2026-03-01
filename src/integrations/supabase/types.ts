@@ -1572,7 +1572,59 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      agent_credentials_safe: {
+        Row: {
+          access_count: number | null
+          agent_id: string | null
+          created_at: string | null
+          credential_key: string | null
+          credential_value: string | null
+          expires_at: string | null
+          id: string | null
+          integration_name: string | null
+          is_secret: boolean | null
+          last_accessed_at: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_count?: number | null
+          agent_id?: string | null
+          created_at?: string | null
+          credential_key?: string | null
+          credential_value?: never
+          expires_at?: string | null
+          id?: string | null
+          integration_name?: string | null
+          is_secret?: boolean | null
+          last_accessed_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_count?: number | null
+          agent_id?: string | null
+          created_at?: string | null
+          credential_key?: string | null
+          credential_value?: never
+          expires_at?: string | null
+          id?: string | null
+          integration_name?: string | null
+          is_secret?: boolean | null
+          last_accessed_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_credentials_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       get_user_tenant_id: { Args: { _user_id: string }; Returns: string }
