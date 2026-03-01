@@ -229,11 +229,6 @@ const ClientDashboard = () => {
     { id: "team", label: t("dashboard.team"), icon: UserPlus },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined },
     { id: "billing", label: t("dashboard.billing"), icon: CreditCard },
-    // Integrações group
-    { id: "whatsapp-setup", label: "WhatsApp", icon: Phone, group: "Integrações" },
-    { id: "sendgrid-setup", label: "E-mail (SendGrid)", icon: Mail, group: "Integrações" },
-    { id: "linkedin-setup", label: "LinkedIn", icon: GitBranch, group: "Integrações" },
-    { id: "meta-ads-setup", label: "Meta Ads", icon: TrendingUp, group: "Integrações" },
     // Suporte
     { id: "support", label: "Suporte", icon: MessageSquare, group: "Ajuda" },
   ];
