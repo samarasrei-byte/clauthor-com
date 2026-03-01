@@ -233,8 +233,7 @@ const ClientDashboard = () => {
     { id: "profile", label: "Meu Perfil", icon: User, group: "Configurações" },
     { id: "team", label: t("dashboard.team"), icon: UserPlus, group: "Configurações" },
     { id: "billing", label: t("dashboard.billing"), icon: CreditCard, group: "Configurações" },
-    // Ajuda
-    { id: "support", label: "Suporte", icon: MessageSquare, group: "Ajuda" },
+    { id: "support", label: "Suporte", icon: MessageSquare, group: "Configurações" },
   ];
 
 
