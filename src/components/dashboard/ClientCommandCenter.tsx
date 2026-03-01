@@ -56,15 +56,22 @@ const ClientCommandCenter = ({
 
   const currencyPrefix = locale.startsWith("pt") ? "R$ " : "$ ";
 
-  const kpiCards = [
+  type KpiItem = { icon: any; label: string; value: number; suffix?: string; prefix?: string; color: string; spark?: number[] };
+
+  // Hero KPIs (top 3, large)
+  const heroKpis: KpiItem[] = [
     { icon: Bot, label: t("dashboard.active_agents"), value: activeAgents, spark: [1, 2, 2, 3, 3, activeAgents], color: "text-primary" },
     { icon: Zap, label: t("dashboard.executions"), value: totalExecutions, spark: [100, 200, 350, 500, 800, totalExecutions || 0], color: "text-cyan-400" },
-    { icon: CheckCircle, label: t("dashboard.success_rate_short"), value: successRate, suffix: "%", spark: [95, 96, 97, 97.5, 98, successRate], color: "text-emerald-500" },
     { icon: DollarSign, label: t("dashboard.savings_month"), value: estimatedSavings, prefix: currencyPrefix, spark: [2000, 4000, 5000, 6000, 7000, estimatedSavings || 0], color: "text-cyan-400" },
-    { icon: Coins, label: t("dashboard.tokens_used"), value: totalTokensUsed, spark: [0, 100, 300, 500, 800, totalTokensUsed || 0], color: "text-primary" },
-    { icon: Target, label: t("dashboard.plan_usage"), value: usagePercentage, suffix: "%", spark: [10, 20, 30, 40, 50, usagePercentage], color: usagePercentage > 80 ? "text-destructive" : "text-cyan-400" },
-    { icon: Shield, label: t("dashboard.uptime_label"), value: 99.9, suffix: "%", spark: [99.5, 99.7, 99.8, 99.9, 99.9, 99.9], color: "text-emerald-500" },
-    { icon: Flame, label: t("dashboard.subscriptions"), value: subscriptions.length, spark: [0, 1, 1, 2, 2, subscriptions.length], color: "text-primary" },
+  ];
+
+  // Secondary KPIs (smaller, below)
+  const secondaryKpis: { icon: any; label: string; value: number; suffix?: string; prefix?: string; color: string }[] = [
+    { icon: CheckCircle, label: t("dashboard.success_rate_short"), value: successRate, suffix: "%", color: "text-emerald-500" },
+    { icon: Coins, label: t("dashboard.tokens_used"), value: totalTokensUsed, color: "text-primary" },
+    { icon: Target, label: t("dashboard.plan_usage"), value: usagePercentage, suffix: "%", color: usagePercentage > 80 ? "text-destructive" : "text-cyan-400" },
+    { icon: Shield, label: t("dashboard.uptime_label"), value: 99.9, suffix: "%", color: "text-emerald-500" },
+    { icon: Flame, label: t("dashboard.subscriptions"), value: subscriptions.length, color: "text-primary" },
   ];
 
   // Build real chart data from recent logs (last 7 days)
@@ -116,7 +123,7 @@ const ClientCommandCenter = ({
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-card rounded-2xl p-5 border border-white/[0.06]"
+          className="rounded-2xl p-5 border border-border/40 bg-card/60"
         >
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
@@ -211,7 +218,7 @@ const ClientCommandCenter = ({
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="glass-card rounded-2xl p-4 border border-emerald-500/10 bg-gradient-to-r from-emerald-500/[0.03] to-transparent"
+        className="rounded-2xl p-4 border border-emerald-500/10 bg-gradient-to-r from-emerald-500/[0.03] to-transparent"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -232,33 +239,52 @@ const ClientCommandCenter = ({
         </div>
       </motion.div>
 
-      {/* KPI Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {kpiCards.map((kpi, i) => (
+      {/* Hero KPI Grid — 3 large cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        {heroKpis.map((kpi, i) => (
           <motion.div
             key={kpi.label}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.04 }}
-            className="glass-card rounded-2xl p-4 glass-hover group"
+            transition={{ delay: i * 0.06 }}
+            className="rounded-2xl p-5 border border-border/40 bg-card/60 group"
           >
-            <div className="flex items-start justify-between mb-2">
-              <div className="w-8 h-8 rounded-xl bg-white/5 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                <kpi.icon className={`h-4 w-4 ${kpi.color}`} />
+            <div className="flex items-start justify-between mb-3">
+              <div className="w-10 h-10 rounded-xl bg-muted/50 flex items-center justify-center group-hover:bg-muted transition-colors">
+                <kpi.icon className={`h-5 w-5 ${kpi.color}`} />
               </div>
-              <MiniSparkline data={kpi.spark} color={kpi.color.includes("primary") ? "hsl(var(--primary))" : kpi.color.includes("cyan") ? "#22d3ee" : "#10b981"} />
+              <MiniSparkline data={kpi.spark} color={kpi.color.includes("primary") ? "hsl(var(--primary))" : "#22d3ee"} />
             </div>
-            <p className="font-display text-xl font-bold">
+            <p className="font-display text-2xl sm:text-3xl font-bold">
               <AnimatedCounter value={kpi.value} prefix={kpi.prefix} suffix={kpi.suffix} />
             </p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">{kpi.label}</p>
+            <p className="text-xs text-muted-foreground mt-1">{kpi.label}</p>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Secondary KPIs — 5 compact */}
+      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+        {secondaryKpis.map((kpi, i) => (
+          <motion.div
+            key={kpi.label}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2 + i * 0.03 }}
+            className="rounded-xl p-3 border border-border/30 bg-card/40 text-center"
+          >
+            <kpi.icon className={`h-3.5 w-3.5 ${kpi.color} mx-auto mb-1.5`} />
+            <p className="font-display text-sm font-bold">
+              <AnimatedCounter value={kpi.value} prefix={kpi.prefix} suffix={kpi.suffix} />
+            </p>
+            <p className="text-[9px] text-muted-foreground mt-0.5 truncate">{kpi.label}</p>
           </motion.div>
         ))}
       </div>
 
       {/* Token Usage Premium */}
       {credits && (
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl p-5 border border-white/[0.06]">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl p-5 border border-border/40 bg-card/60">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
               <Cpu className="h-4 w-4 text-primary" />
@@ -287,7 +313,7 @@ const ClientCommandCenter = ({
       {/* Charts Row */}
       <div className="grid lg:grid-cols-5 gap-4">
         {/* Executions Chart */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-3 glass-card rounded-2xl p-5 border border-white/[0.06]">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-3 rounded-2xl p-5 border border-border/40 bg-card/60">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <BarChart3 className="h-4 w-4 text-cyan-400" />
@@ -314,7 +340,7 @@ const ClientCommandCenter = ({
         </motion.div>
 
         {/* Tier Distribution */}
-        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-2 glass-card rounded-2xl p-5 border border-white/[0.06]">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="lg:col-span-2 rounded-2xl p-5 border border-border/40 bg-card/60">
           <div className="flex items-center gap-2 mb-4">
             <Bot className="h-4 w-4 text-primary" />
             <span className="text-sm font-medium">{t("dashboard.my_agents_chart")}</span>
@@ -350,7 +376,7 @@ const ClientCommandCenter = ({
       </div>
 
       {/* Recent Activity */}
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl p-5 border border-white/[0.06]">
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="rounded-2xl p-5 border border-border/40 bg-card/60">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <Activity className="h-4 w-4 text-primary" />

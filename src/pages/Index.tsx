@@ -320,13 +320,13 @@ const HomePage = () => {
                       {" "}<HelpTooltip id="home-intro" text="Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo. Use os botões abaixo para começar." position="bottom" size={14} />
                     </p>
 
-                    {/* CTAs — larger touch targets on mobile */}
+                    {/* CTAs — clear hierarchy */}
                     <div className="flex flex-col sm:flex-row gap-3">
                       <Link to="/departamentos" className="block">
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
-                          className="group relative h-[52px] sm:h-13 px-8 rounded-xl font-display font-bold text-sm sm:text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full sm:w-auto"
+                          className="group relative h-14 sm:h-14 px-10 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full sm:w-auto"
                         >
                           <div className="absolute inset-0 bg-primary rounded-xl" />
                           <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -341,14 +341,13 @@ const HomePage = () => {
 
                       <Link to="/library" className="block">
                         <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          className="group h-[52px] sm:h-13 px-8 rounded-xl font-mono text-sm uppercase tracking-wider border border-border hover:border-primary/30 bg-card/30 backdrop-blur-sm text-muted-foreground hover:text-foreground transition-all duration-500 cursor-pointer w-full sm:w-auto"
+                          whileHover={{ scale: 1.01 }}
+                          whileTap={{ scale: 0.99 }}
+                          className="group h-11 sm:h-11 px-6 rounded-lg font-mono text-xs uppercase tracking-wider border border-border/50 text-muted-foreground hover:text-foreground transition-all duration-300 cursor-pointer w-full sm:w-auto"
                         >
-                          <span className="flex items-center justify-center gap-3">
-                            <Terminal className="h-4 w-4 text-primary/50" strokeWidth={1.5} />
+                          <span className="flex items-center justify-center gap-2">
                             Explorar Agentes
-                            <ChevronRight className="h-4 w-4 text-primary/30 group-hover:text-primary group-hover:translate-x-1 transition-all" />
+                            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/50 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
                           </span>
                         </motion.button>
                       </Link>

@@ -37,15 +37,11 @@ const Navbar = () => {
 
   const publicNavItems = [
     { label: t("nav.pricing"), href: "/pricing" },
-    { label: t("nav.how_it_works"), href: "/how-it-works" },
   ];
 
   const authNavItems = [
     { label: t("nav.dashboard"), href: "/dashboard" },
     { label: t("nav.my_agents"), href: "/agents" },
-    { label: t("nav.pricing"), href: "/pricing" },
-    { label: t("nav.integrations"), href: "/integrations" },
-    { label: t("nav.how_it_works"), href: "/how-it-works", mobileOnly: true },
   ];
 
   const navItems = user ? authNavItems : publicNavItems;
@@ -125,6 +121,13 @@ const Navbar = () => {
                         <p className="text-xs text-muted-foreground mt-0.5">{t("navbar.ai_teams_desc")}</p>
                       </div>
                     </Link>
+                    <div className="border-t border-border/30 mx-3 my-1" />
+                    <div className="grid grid-cols-2 gap-1 px-1">
+                      <Link to="/how-it-works" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.how_it_works")}</Link>
+                      <Link to="/pricing" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.pricing")}</Link>
+                      <Link to="/community" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">Comunidade</Link>
+                      {user && <Link to="/integrations" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.integrations")}</Link>}
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>

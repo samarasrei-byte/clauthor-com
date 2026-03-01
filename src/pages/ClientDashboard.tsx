@@ -357,24 +357,44 @@ const ClientDashboard = () => {
       {/* Scrollable content area */}
       <div className="flex-1 min-w-0 overflow-y-auto">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-6">
-          {/* Header */}
+          {/* Breadcrumb + Header */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            className="space-y-1"
           >
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="font-display text-2xl font-bold">{t("dashboard.control_panel")}</h1>
-                <HelpTooltip id="dashboard-intro" text="Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções: THOR (IA), Agentes, Analytics, Configurações e mais." position="bottom" />
-              </div>
-              <p className="text-sm text-muted-foreground">
-                {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
-              </p>
+            {/* Breadcrumb */}
+            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
+              <span>Dashboard</span>
+              <span>/</span>
+              <span className="text-foreground/80 font-medium capitalize">
+                {activeSection === "overview" ? t("dashboard.command_center")
+                  : activeSection === "omnix" ? "THOR"
+                  : activeSection === "agents" ? t("dashboard.agents_tab")
+                  : activeSection === "analytics" ? t("dashboard.analytics")
+                  : activeSection === "logs" ? t("dashboard.logs")
+                  : activeSection === "settings" ? t("dashboard.settings")
+                  : activeSection === "chat" ? t("dashboard.ai_assistant")
+                  : activeSection === "squad-chat" ? t("dashboard.meeting")
+                  : activeSection === "live-timeline" ? "Timeline"
+                  : activeSection}
+              </span>
             </div>
-            <div className="flex items-center gap-2">
-              <NotificationPanel />
-              <QuickActions />
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h1 className="font-display text-2xl font-bold">{t("dashboard.control_panel")}</h1>
+                  <HelpTooltip id="dashboard-intro" text="Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções: THOR (IA), Agentes, Analytics, Configurações e mais." position="bottom" />
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <NotificationPanel />
+                <QuickActions />
+              </div>
             </div>
           </motion.div>
 
