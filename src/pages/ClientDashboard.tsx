@@ -24,23 +24,21 @@ import QuickActions from "@/components/dashboard/QuickActions";
 import AgentChat from "@/components/dashboard/AgentChat";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import ClientCommandCenter from "@/components/dashboard/ClientCommandCenter";
-import AgentSettings from "@/components/dashboard/AgentSettings";
 import SquadChat from "@/components/dashboard/SquadChat";
 import CompanyBoard from "@/components/dashboard/CompanyBoard";
-import TeamMembers from "@/components/dashboard/TeamMembers";
 import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
 import SendGridSetupGuide from "@/components/dashboard/SendGridSetupGuide";
 import LinkedInSetupGuide from "@/components/dashboard/LinkedInSetupGuide";
 import MetaAdsSetupGuide from "@/components/dashboard/MetaAdsSetupGuide";
-import UserProfileEditor from "@/components/dashboard/UserProfileEditor";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
+import SettingsPage from "@/components/dashboard/SettingsPage";
 
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import PaymentHistoryTable from "@/components/dashboard/PaymentHistoryTable";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
 import OrchestrationDemo from "@/components/dashboard/OrchestrationDemo";
-import SupportChat from "@/components/SupportChat";
+
 import AgentLiveTimeline from "@/components/dashboard/AgentLiveTimeline";
 import type { HireIntent } from "./Auth";
 
@@ -228,15 +226,9 @@ const ClientDashboard = () => {
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: "Análise" },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined, group: "Análise" },
     { id: "board", label: "Board", icon: Building2, group: "Análise" },
-    // Configurações
-    { id: "agent-settings", label: t("dashboard.settings"), icon: Settings, group: "Configurações" },
-    { id: "profile", label: "Meu Perfil", icon: User, group: "Configurações" },
-    { id: "team", label: t("dashboard.team"), icon: UserPlus, group: "Configurações" },
-    { id: "billing", label: t("dashboard.billing"), icon: CreditCard, group: "Configurações" },
-    { id: "support", label: "Suporte", icon: MessageSquare, group: "Configurações" },
+    // Configurações (single entry — opens tabbed page)
+    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: "Configurações" },
   ];
-
-
   const tierColors: Record<string, string> = {
     basic: "bg-muted text-muted-foreground",
     intermediate: "bg-cyan-500/15 text-cyan-400",
@@ -342,8 +334,60 @@ const ClientDashboard = () => {
             </div>
           )}
 
-          {/* ═══ AGENT SETTINGS ═══ */}
-          {activeSection === "agent-settings" && <AgentSettings />}
+          {/* ═══ SETTINGS (unified) ═══ */}
+          {activeSection === "settings" && (
+            <SettingsPage
+              billingContent={
+                <div className="space-y-6">
+                  <h2 className="font-display text-xl font-bold">{t("dashboard.subscription_credits")}</h2>
+                  <div className="grid lg:grid-cols-2 gap-6">
+                    <div className="glass-card rounded-2xl p-6 space-y-5">
+                      <div className="flex items-center gap-3">
+                        <Coins className="h-5 w-5 text-primary" />
+                        <h3 className="font-display font-semibold">{t("dashboard.credits_label")}</h3>
+                        <Badge variant="secondary">{credits?.plan_type || "free"}</Badge>
+                      </div>
+                      <div>
+                        <div className="flex justify-between text-sm mb-2">
+                          <span>{credits?.used_credits?.toLocaleString(locale) || 0} {t("dashboard.used_label")}</span>
+                          <span>{credits?.total_credits?.toLocaleString(locale) || 0} {t("dashboard.total_label")}</span>
+                        </div>
+                        <Progress value={usagePercentage} className="h-3" />
+                        <p className="text-xs text-muted-foreground mt-2">{t("dashboard.pct_remaining", { pct: 100 - usagePercentage })}</p>
+                      </div>
+                      <TokenUpgradeDialog trigger={<Button className="w-full glow">{t("dashboard.token_upgrade")} <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
+                    </div>
+                    <div className="glass-card rounded-2xl p-6 space-y-5">
+                      <div className="flex items-center gap-3">
+                        <CreditCard className="h-5 w-5 text-primary" />
+                        <h3 className="font-display font-semibold">{t("dashboard.active_subscriptions")}</h3>
+                      </div>
+                      {subscriptions.length === 0 ? (
+                        <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.no_subscriptions")}</p>
+                      ) : (
+                        <div className="space-y-2">
+                          {subscriptions.map((sub) => (
+                            <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02]">
+                              <div className="flex items-center gap-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                                <span className="text-sm">{sub.agent_name}</span>
+                              </div>
+                              <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{locale.startsWith("pt") ? "mês" : "mo"}</span>
+                            </div>
+                          ))}
+                          <div className="pt-3 border-t border-white/5 flex justify-between">
+                            <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
+                            <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                  <PaymentHistoryTable />
+                </div>
+              }
+            />
+          )}
 
           {/* ═══ SQUAD CHAT (REUNIÃO) ═══ */}
           {activeSection === "squad-chat" && <SquadChat agents={agents} />}
@@ -353,12 +397,6 @@ const ClientDashboard = () => {
 
           {/* ═══ COMPANY BOARD ═══ */}
           {activeSection === "board" && <CompanyBoard />}
-
-          {/* ═══ PROFILE ═══ */}
-          {activeSection === "profile" && <UserProfileEditor />}
-
-          {/* ═══ TEAM MEMBERS ═══ */}
-          {activeSection === "team" && <TeamMembers />}
 
           {/* ═══ WHATSAPP SETUP GUIDE ═══ */}
           {activeSection === "whatsapp-setup" && <WhatsAppSetupGuide />}
@@ -538,68 +576,6 @@ const ClientDashboard = () => {
             </div>
           )}
 
-          {/* ═══ BILLING ═══ */}
-          {activeSection === "billing" && (
-            <div className="space-y-6">
-              <h2 className="font-display text-xl font-bold">{t("dashboard.subscription_credits")}</h2>
-              <div className="grid lg:grid-cols-2 gap-6">
-                {/* Credits */}
-                <div className="glass-card rounded-2xl p-6 space-y-5">
-                  <div className="flex items-center gap-3">
-                    <Coins className="h-5 w-5 text-primary" />
-                    <h3 className="font-display font-semibold">{t("dashboard.credits_label")}</h3>
-                    <Badge variant="secondary">{credits?.plan_type || "free"}</Badge>
-                  </div>
-                  <div>
-                    <div className="flex justify-between text-sm mb-2">
-                      <span>{credits?.used_credits?.toLocaleString(locale) || 0} {t("dashboard.used_label")}</span>
-                      <span>{credits?.total_credits?.toLocaleString(locale) || 0} {t("dashboard.total_label")}</span>
-                    </div>
-                    <Progress value={usagePercentage} className="h-3" />
-                    <p className="text-xs text-muted-foreground mt-2">{t("dashboard.pct_remaining", { pct: 100 - usagePercentage })}</p>
-                  </div>
-                  <TokenUpgradeDialog trigger={<Button className="w-full glow">{t("dashboard.token_upgrade")} <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
-                </div>
-
-                {/* Subscriptions */}
-                <div className="glass-card rounded-2xl p-6 space-y-5">
-                  <div className="flex items-center gap-3">
-                    <CreditCard className="h-5 w-5 text-primary" />
-                    <h3 className="font-display font-semibold">{t("dashboard.active_subscriptions")}</h3>
-                  </div>
-                  {subscriptions.length === 0 ? (
-                    <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.no_subscriptions")}</p>
-                  ) : (
-                    <div className="space-y-2">
-                      {subscriptions.map((sub) => (
-                        <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02]">
-                          <div className="flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                            <span className="text-sm">{sub.agent_name}</span>
-                          </div>
-                          <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{locale.startsWith("pt") ? "mês" : "mo"}</span>
-                        </div>
-                      ))}
-                      <div className="pt-3 border-t border-white/5 flex justify-between">
-                        <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
-                        <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Payment History */}
-              <PaymentHistoryTable />
-            </div>
-          )}
-
-          {/* ═══ SUPPORT ═══ */}
-          {activeSection === "support" && (
-            <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
-              <SupportChat area="client" embedded />
-            </div>
-          )}
         </div>
       </div>
 
