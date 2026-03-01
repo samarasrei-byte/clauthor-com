@@ -19,6 +19,7 @@ interface HelpTooltipProps {
 }
 
 const STORAGE_KEY = "clauthor_seen_tooltips";
+const SESSION_KEY = "clauthor_session_tooltip_shown";
 
 const getSeenTooltips = (): Set<string> => {
   try {
@@ -33,6 +34,15 @@ const markTooltipSeen = (id: string) => {
   const seen = getSeenTooltips();
   seen.add(id);
   localStorage.setItem(STORAGE_KEY, JSON.stringify([...seen]));
+};
+
+// Only allow ONE auto-show tooltip per browser session
+const hasSessionTooltipShown = (): boolean => {
+  return sessionStorage.getItem(SESSION_KEY) === "true";
+};
+
+const markSessionTooltipShown = () => {
+  sessionStorage.setItem(SESSION_KEY, "true");
 };
 
 const HelpTooltip = ({
@@ -54,11 +64,14 @@ const HelpTooltip = ({
 
     const seen = getSeenTooltips();
     if (seen.has(id)) return;
+    // Only 1 tooltip auto-shows per session across all pages
+    if (hasSessionTooltipShown()) return;
 
     setIsFirstVisit(true);
     const timer = setTimeout(() => {
       setOpen(true);
       setHasAutoShown(true);
+      markSessionTooltipShown();
 
       // Auto-dismiss after 5 seconds
       const dismissTimer = setTimeout(() => {

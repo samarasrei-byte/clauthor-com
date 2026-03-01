@@ -96,7 +96,7 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
       <button
         ref={btnRef}
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-[9999] h-14 w-14 rounded-2xl flex items-center justify-center group cursor-pointer"
+        className="fixed bottom-6 right-6 sm:bottom-6 z-[9999] h-14 w-14 rounded-2xl flex items-center justify-center group cursor-pointer"
         style={{ position: "fixed" }}
       >
         {/* Animated rotating border */}
