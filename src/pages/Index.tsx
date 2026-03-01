@@ -354,7 +354,7 @@ const HomePage = () => {
                     </div>
 
                     {/* Trust badges */}
-                    <div className="flex flex-wrap items-center gap-5 sm:gap-6 mt-8">
+                    <div className="grid grid-cols-3 sm:flex sm:flex-wrap items-center gap-2 sm:gap-5 mt-8">
                       {[
                         { icon: LockKeyhole, label: "End-to-end encrypted" },
                         { icon: Fingerprint, label: "SOC 2 compliant" },
