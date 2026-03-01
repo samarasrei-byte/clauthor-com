@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
+import type { SidebarItem, SidebarChild } from "@/components/dashboard/DashboardSidebar";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import QuickActions from "@/components/dashboard/QuickActions";
@@ -40,6 +41,8 @@ import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
 import OrchestrationDemo from "@/components/dashboard/OrchestrationDemo";
 
 import AgentLiveTimeline from "@/components/dashboard/AgentLiveTimeline";
+import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
+import { agentIcons } from "@/data/libraryAgentData";
 import type { HireIntent } from "./Auth";
 
 const ClientDashboard = () => {
@@ -79,6 +82,17 @@ const ClientDashboard = () => {
     },
     enabled: !!user,
   });
+
+  // Fetch templates to map agent names → slugs for department grouping
+  const { data: templates = [] } = useQuery({
+    queryKey: ["agent-templates-slugs"],
+    queryFn: async () => {
+      const { data } = await supabase.from("agent_templates").select("name, slug").eq("is_active", true);
+      return data || [];
+    },
+    staleTime: Infinity,
+  });
+
 
   const { data: subscriptions = [] } = useQuery({
     queryKey: ["my-subscriptions", user?.id],
@@ -212,11 +226,53 @@ const ClientDashboard = () => {
     return months;
   })();
 
-  const sidebarItems = [
+  // Build name→slug reverse map from templates
+  const nameToSlug = useMemo(() => {
+    const map: Record<string, string> = {};
+    templates.forEach(t => { map[t.name] = t.slug; });
+    return map;
+  }, [templates]);
+
+  // Group contracted agents by department for sidebar
+  const departmentSidebarItems = useMemo((): SidebarItem[] => {
+    if (agents.length === 0) return [];
+    const groups: Record<string, { dept: typeof DEPARTMENTS[string]; children: SidebarChild[] }> = {};
+    
+    for (const agent of agents) {
+      const slug = nameToSlug[agent.name];
+      if (!slug) continue;
+      const deptId = SLUG_TO_DEPT[slug];
+      if (!deptId || !DEPARTMENTS[deptId]) continue;
+      
+      if (!groups[deptId]) {
+        groups[deptId] = { dept: DEPARTMENTS[deptId], children: [] };
+      }
+      const AgentIcon = agentIcons[slug] || Bot;
+      groups[deptId].children.push({
+        id: `agent-chat-${agent.id}`,
+        label: agent.name,
+        icon: AgentIcon,
+      });
+    }
+
+    return Object.entries(groups).map(([, { dept, children }]) => ({
+      id: `dept-${dept.id}`,
+      label: dept.label,
+      icon: Bot,
+      badge: children.length,
+      group: "Departamentos",
+      colorClass: dept.color,
+      children,
+    }));
+  }, [agents, nameToSlug]);
+
+  const sidebarItems: SidebarItem[] = [
     // Principal
     { id: "omnix", label: "THOR", icon: Brain, badge: "AI", group: "Principal" },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: "Principal" },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: "Principal" },
+    // Departamentos (dynamic)
+    ...departmentSidebarItems,
     // Operações
     { id: "live-timeline", label: "Timeline", icon: Eye, badge: "LIVE", group: "Operações" },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: "Operações" },
@@ -261,7 +317,19 @@ const ClientDashboard = () => {
         <DashboardSidebar
           items={sidebarItems}
           activeItem={activeSection}
-          onItemChange={setActiveSection}
+          onItemChange={(id) => {
+            // Handle clicking a department agent child → open its chat
+            if (id.startsWith("agent-chat-")) {
+              const agentId = id.replace("agent-chat-", "");
+              const agent = agents.find(a => a.id === agentId);
+              if (agent) {
+                setSelectedAgent({ id: agent.id, name: agent.name });
+                setActiveSection("chat");
+                return;
+              }
+            }
+            setActiveSection(id);
+          }}
         />
       </div>
 
