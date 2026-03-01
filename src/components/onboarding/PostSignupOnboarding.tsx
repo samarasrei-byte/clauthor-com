@@ -310,6 +310,7 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: subtitle.done ? 1 : 0 }}
                   transition={{ duration: 0.5 }}
+                  className="flex flex-col items-center gap-3"
                 >
                   <Button
                     onClick={() => setPhase(1)}
@@ -317,6 +318,13 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
                   >
                     Começar Setup
                     <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    onClick={finishOnboarding}
+                    className="text-xs text-muted-foreground hover:text-foreground"
+                  >
+                    Pular e ir direto ao painel →
                   </Button>
                 </motion.div>
               </motion.div>
