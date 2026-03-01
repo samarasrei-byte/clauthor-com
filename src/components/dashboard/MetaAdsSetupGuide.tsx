@@ -11,6 +11,7 @@ import {
   ArrowRight, ArrowLeft, AlertTriangle, Sparkles
 } from "lucide-react";
 import { toast } from "sonner";
+import { TermTooltip, TutorialBanner } from "./SetupGlossary";
 
 const STEPS = [
   {
@@ -206,6 +207,13 @@ const MetaAdsSetupGuide = () => {
         ))}
       </div>
 
+      {/* Tutorial banner */}
+      <TutorialBanner
+        label="Precisa de ajuda com Meta Ads? Veja o guia completo."
+        videoUrl="https://www.youtube.com/results?search_query=meta+ads+api+setup+tutorial"
+        docsUrl="https://developers.facebook.com/docs/marketing-apis/get-started"
+      />
+
       {/* Current step */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -253,8 +261,18 @@ const MetaAdsSetupGuide = () => {
                     <Shield className="h-4 w-4 text-primary" />
                     <span className="text-sm font-medium">Suas credenciais Meta Ads</span>
                   </div>
-                  <Input placeholder="Access Token" type="password" value={accessToken} onChange={(e) => setAccessToken(e.target.value)} className="text-sm" />
-                  <Input placeholder="Ad Account ID (act_XXXXXXXXX)" value={adAccountId} onChange={(e) => setAdAccountId(e.target.value)} className="text-sm" />
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                      <TermTooltip term="Access Token" /> — gerado no Graph API Explorer
+                    </label>
+                    <Input placeholder="Access Token" type="password" value={accessToken} onChange={(e) => setAccessToken(e.target.value)} className="text-sm" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                      <TermTooltip term="Ad Account ID" /> — formato: act_XXXXXXXXX
+                    </label>
+                    <Input placeholder="Ad Account ID (act_XXXXXXXXX)" value={adAccountId} onChange={(e) => setAdAccountId(e.target.value)} className="text-sm" />
+                  </div>
                   <Button
                     className="w-full gap-2"
                     disabled={!accessToken || !adAccountId || validateMutation.isPending}

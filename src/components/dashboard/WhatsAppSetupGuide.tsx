@@ -11,6 +11,7 @@ import {
   ArrowRight, ArrowLeft, Copy, AlertTriangle, Sparkles
 } from "lucide-react";
 import { toast } from "sonner";
+import { TermTooltip, TutorialBanner } from "./SetupGlossary";
 
 const STEPS = [
   {
@@ -222,6 +223,13 @@ const WhatsAppSetupGuide = () => {
         ))}
       </div>
 
+      {/* Tutorial banner */}
+      <TutorialBanner
+        label="Precisa de ajuda? Veja o tutorial completo."
+        videoUrl="https://www.youtube.com/results?search_query=whatsapp+business+api+setup+tutorial"
+        docsUrl="https://developers.facebook.com/docs/whatsapp/cloud-api/get-started"
+      />
+
       {/* Current step detail */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -274,19 +282,29 @@ const WhatsAppSetupGuide = () => {
                     <Shield className="h-4 w-4 text-primary" />
                     <span className="text-sm font-medium">Suas credenciais</span>
                   </div>
-                  <Input
-                    placeholder="Phone Number ID"
-                    value={phoneId}
-                    onChange={(e) => setPhoneId(e.target.value)}
-                    className="text-sm"
-                  />
-                  <Input
-                    placeholder="Access Token"
-                    type="password"
-                    value={accessToken}
-                    onChange={(e) => setAccessToken(e.target.value)}
-                    className="text-sm"
-                  />
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                      <TermTooltip term="Phone Number ID" /> — encontrado no painel do WhatsApp
+                    </label>
+                    <Input
+                      placeholder="Phone Number ID"
+                      value={phoneId}
+                      onChange={(e) => setPhoneId(e.target.value)}
+                      className="text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                      <TermTooltip term="Access Token" /> — gerado nas configurações do app
+                    </label>
+                    <Input
+                      placeholder="Access Token"
+                      type="password"
+                      value={accessToken}
+                      onChange={(e) => setAccessToken(e.target.value)}
+                      className="text-sm"
+                    />
+                  </div>
                   <Input
                     placeholder="Business Account ID (opcional)"
                     value={businessAccountId}
