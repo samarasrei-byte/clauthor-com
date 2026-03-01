@@ -44,6 +44,7 @@ import AgentLiveTimeline from "@/components/dashboard/AgentLiveTimeline";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
 import type { HireIntent } from "./Auth";
+import Library from "./Library";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -233,16 +234,24 @@ const ClientDashboard = () => {
     return map;
   }, [templates]);
 
-  // Group contracted agents by department for sidebar
-  const departmentSidebarItems = useMemo((): SidebarItem[] => {
-    if (agents.length === 0) return [];
+  // Group contracted agents by department for sidebar + collect solo agents
+  const { departmentSidebarItems, soloAgentItems } = useMemo(() => {
+    if (agents.length === 0) return { departmentSidebarItems: [] as SidebarItem[], soloAgentItems: [] as SidebarItem[] };
     const groups: Record<string, { dept: typeof DEPARTMENTS[string]; children: SidebarChild[] }> = {};
+    const soloChildren: SidebarChild[] = [];
     
     for (const agent of agents) {
       const slug = nameToSlug[agent.name];
-      if (!slug) continue;
+      if (!slug) {
+        // Agent without template match → solo
+        soloChildren.push({ id: `agent-chat-${agent.id}`, label: agent.name, icon: Bot });
+        continue;
+      }
       const deptId = SLUG_TO_DEPT[slug];
-      if (!deptId || !DEPARTMENTS[deptId]) continue;
+      if (!deptId || !DEPARTMENTS[deptId]) {
+        soloChildren.push({ id: `agent-chat-${agent.id}`, label: agent.name, icon: agentIcons[slug] || Bot });
+        continue;
+      }
       
       if (!groups[deptId]) {
         groups[deptId] = { dept: DEPARTMENTS[deptId], children: [] };
@@ -255,7 +264,7 @@ const ClientDashboard = () => {
       });
     }
 
-    return Object.entries(groups).map(([, { dept, children }]) => ({
+    const deptItems = Object.entries(groups).map(([, { dept, children }]) => ({
       id: `dept-${dept.id}`,
       label: dept.label,
       icon: Bot,
@@ -263,7 +272,19 @@ const ClientDashboard = () => {
       group: "Departamentos",
       colorClass: dept.color,
       children,
-    }));
+    } as SidebarItem));
+
+    // Solo agents group (agents not in any department)
+    const soloItems: SidebarItem[] = soloChildren.length > 0 ? [{
+      id: "solo-agents",
+      label: "Agentes Avulsos",
+      icon: Sparkles,
+      badge: soloChildren.length,
+      group: "Departamentos",
+      children: soloChildren,
+    }] : [];
+
+    return { departmentSidebarItems: deptItems, soloAgentItems: soloItems };
   }, [agents, nameToSlug]);
 
   const sidebarItems: SidebarItem[] = [
@@ -271,8 +292,10 @@ const ClientDashboard = () => {
     { id: "omnix", label: "THOR", icon: Brain, badge: "AI", group: "Principal" },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: "Principal" },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: "Principal" },
-    // Departamentos (dynamic)
+    { id: "library", label: "Biblioteca", icon: Sparkles, group: "Principal" },
+    // Departamentos (dynamic) + solo agents
     ...departmentSidebarItems,
+    ...soloAgentItems,
     // Operações
     { id: "live-timeline", label: "Timeline", icon: Eye, badge: "LIVE", group: "Operações" },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: "Operações" },
@@ -481,19 +504,25 @@ const ClientDashboard = () => {
           {/* ═══ LIVE TIMELINE ═══ */}
           {activeSection === "live-timeline" && <AgentLiveTimeline />}
 
+          {/* ═══ LIBRARY (embedded) ═══ */}
+          {activeSection === "library" && <Library />}
+
           {/* ═══ AGENTS ═══ */}
           {activeSection === "agents" && (
             <div className="space-y-6">
               <div className="flex items-center justify-between">
                 <h2 className="font-display text-xl font-bold">{t("dashboard.agents_tab")} ({agents.length})</h2>
-                <Link to="/create-agent"><Button className="glow gap-1.5"><Plus className="h-4 w-4" /> {t("dashboard.new_agent")}</Button></Link>
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={() => setActiveSection("library")} className="gap-1.5"><Sparkles className="h-4 w-4" /> Biblioteca</Button>
+                  <Link to="/create-agent"><Button className="glow gap-1.5"><Plus className="h-4 w-4" /> {t("dashboard.new_agent")}</Button></Link>
+                </div>
               </div>
               {agents.length === 0 ? (
                 <div className="glass-card rounded-2xl p-12 text-center">
                   <Sparkles className="h-12 w-12 text-primary/30 mx-auto mb-4" />
                   <h3 className="font-display text-lg font-bold mb-2">{t("dashboard.no_agent_created")}</h3>
                   <p className="text-muted-foreground text-sm mb-6">{t("dashboard.start_creating")}</p>
-                  <Link to="/library"><Button className="glow">{t("dashboard.explore_library")}</Button></Link>
+                  <Button className="glow" onClick={() => setActiveSection("library")}>{t("dashboard.explore_library")}</Button>
                 </div>
               ) : (
                 <div className="grid sm:grid-cols-2 gap-4">
