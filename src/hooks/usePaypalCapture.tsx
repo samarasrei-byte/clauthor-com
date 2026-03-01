@@ -167,6 +167,13 @@ export function usePaypalCapture() {
             : `🎉 ${subIntent.agent_name} contratado com sucesso! Assinatura mensal ativa.`;
           toast.success(successMsg, { duration: 6000 });
           
+          // Signal dashboard to open THOR for guided onboarding
+          sessionStorage.setItem("clauthor_post_payment_onboarding", JSON.stringify({
+            agentName: subIntent.agent_name,
+            isDepartment: !!subIntent.is_department,
+            agentCount: provisionedAgents.length,
+          }));
+
           queryClient.invalidateQueries({ queryKey: ["user-agents"] });
           queryClient.invalidateQueries({ queryKey: ["payment-history"] });
           queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
