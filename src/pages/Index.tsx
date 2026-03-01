@@ -700,7 +700,6 @@ const HomePage = () => {
         </div>
       </section>
 
-
       {/* ═══════════════════════════════════════════════════════
           TEAM — Quem Somos
           ═══════════════════════════════════════════════════════ */}
@@ -776,6 +775,31 @@ const HomePage = () => {
               </motion.div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          CTA FINAL
+          ═══════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-24 px-4 relative">
+        <div className="max-w-2xl mx-auto text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
+            <Link to="/departamentos">
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="group relative h-14 px-14 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer"
+              >
+                <div className="absolute inset-0 bg-primary rounded-xl" />
+                <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
+                <span className="relative z-10 flex items-center justify-center gap-3">
+                  <Workflow className="h-4 w-4" strokeWidth={1.5} />
+                  Monte seu Time de IA
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </span>
+              </motion.button>
+            </Link>
+          </motion.div>
         </div>
       </section>
 
