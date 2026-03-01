@@ -71,11 +71,18 @@ const ClientDashboard = () => {
   usePaypalCapture();
   const { data: tokenUsage = [] } = useTokenUsage();
 
+  // Post-payment onboarding context for THOR
+  const [postPaymentContext, setPostPaymentContext] = useState<{ agentName: string; isDepartment: boolean; agentCount: number } | null>(null);
+
   // Post-payment: redirect to THOR for guided onboarding
   useEffect(() => {
     const raw = sessionStorage.getItem("clauthor_post_payment_onboarding");
     if (!raw) return;
     sessionStorage.removeItem("clauthor_post_payment_onboarding");
+    try {
+      const ctx = JSON.parse(raw);
+      setPostPaymentContext(ctx);
+    } catch { /* ignore */ }
     // Small delay to let the dashboard render first
     const timer = setTimeout(() => setActiveSection("omnix"), 800);
     return () => clearTimeout(timer);
@@ -427,7 +434,10 @@ const ClientDashboard = () => {
           {/* ═══ OMNIX ═══ */}
           {activeSection === "omnix" && (
             <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
-              <OmnixCommandCenter />
+              <OmnixCommandCenter
+                postPaymentContext={postPaymentContext}
+                onPostPaymentHandled={() => setPostPaymentContext(null)}
+              />
             </div>
           )}
 

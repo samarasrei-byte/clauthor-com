@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,19 +7,41 @@ import OmnixChat from "@/components/omnix/OmnixChat";
 import OmnixDashboard from "@/components/omnix/OmnixDashboard";
 import OmnixSettings from "@/components/omnix/OmnixSettings";
 
-const OmnixCommandCenter = () => {
+interface OmnixCommandCenterProps {
+  postPaymentContext?: { agentName: string; isDepartment: boolean; agentCount: number } | null;
+  onPostPaymentHandled?: () => void;
+}
+
+const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled }: OmnixCommandCenterProps) => {
   const { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages } = useOmnix();
   const [showSettings, setShowSettings] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
+  const postPaymentSent = useRef(false);
+
+  // Auto-send contextual welcome message after payment
+  useEffect(() => {
+    if (!postPaymentContext || postPaymentSent.current || isLoading || isStreaming) return;
+    if (messages.length > 0) return;
+    postPaymentSent.current = true;
+
+    const { agentName, isDepartment, agentCount } = postPaymentContext;
+    const prompt = isDepartment
+      ? `Acabei de contratar o departamento ${agentName} com ${agentCount} agentes. Me ajude a configurar tudo para começar a usar. Quais são os próximos passos?`
+      : `Acabei de contratar o agente ${agentName}. Me ajude a configurar para começar a usar. Quais são os próximos passos e quais integrações eu preciso configurar?`;
+
+    const timer = setTimeout(() => {
+      sendMessage(prompt);
+      onPostPaymentHandled?.();
+    }, 1200);
+    return () => clearTimeout(timer);
+  }, [postPaymentContext, messages.length, isLoading, isStreaming, sendMessage, onPostPaymentHandled]);
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">
-      {/* KPIs bar on top */}
       <div className="shrink-0 border-b border-border/10">
         <OmnixDashboard messages={messages} isSpeaking={isSpeaking} compact />
       </div>
 
-      {/* Full-screen chat below */}
       <div className="flex-1 min-h-0 relative">
         <OmnixChat
           messages={messages}
@@ -32,7 +54,6 @@ const OmnixCommandCenter = () => {
           voiceFirst
         />
         
-        {/* Settings button floating */}
         <Button
           variant="ghost"
           size="icon"
@@ -43,7 +64,6 @@ const OmnixCommandCenter = () => {
         </Button>
       </div>
 
-      {/* Settings modal */}
       <AnimatePresence>
         {showSettings && (
           <OmnixSettings config={config} onUpdate={updateConfig} onClose={() => setShowSettings(false)} />
