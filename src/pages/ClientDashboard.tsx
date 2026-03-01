@@ -71,6 +71,16 @@ const ClientDashboard = () => {
   usePaypalCapture();
   const { data: tokenUsage = [] } = useTokenUsage();
 
+  // Post-payment: redirect to THOR for guided onboarding
+  useEffect(() => {
+    const raw = sessionStorage.getItem("clauthor_post_payment_onboarding");
+    if (!raw) return;
+    sessionStorage.removeItem("clauthor_post_payment_onboarding");
+    // Small delay to let the dashboard render first
+    const timer = setTimeout(() => setActiveSection("omnix"), 800);
+    return () => clearTimeout(timer);
+  }, []);
+
   const { data: agents = [], isLoading: loadingAgents } = useQuery({
     queryKey: ["my-agents", user?.id],
     queryFn: async () => {

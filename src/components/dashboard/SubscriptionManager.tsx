@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { CreditCard, Calendar, Receipt, ArrowUpRight, Wallet, Globe, QrCode, Smartphone } from "lucide-react";
+import { CreditCard, Calendar, Receipt, ArrowUpRight, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useCredits } from "@/hooks/useCredits";
+import TokenUpgradeDialog from "./TokenUpgradeDialog";
 
 interface Subscription {
   id: string;
@@ -115,42 +116,28 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
           )}
         </div>
 
-        {/* Payment Methods */}
+        {/* Payment Method */}
         <div className="pt-4 border-t border-white/5">
-          <h3 className="text-sm font-medium mb-3">Formas de Pagamento Aceitas</h3>
-          <div className="grid grid-cols-3 gap-2">
-            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10">
-              <QrCode className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
-              <div className="text-left">
-                <p className="text-[11px] font-medium">PIX</p>
-              </div>
-            </Button>
-            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10">
-              <CreditCard className="h-3.5 w-3.5 text-violet-500 shrink-0" />
-              <div className="text-left">
-                <p className="text-[11px] font-medium">Stripe</p>
-              </div>
-            </Button>
-            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10">
-              <Globe className="h-3.5 w-3.5 text-blue-500 shrink-0" />
-              <div className="text-left">
-                <p className="text-[11px] font-medium">PayPal</p>
-              </div>
-            </Button>
-            <Button variant="outline" className="justify-start gap-2 h-auto py-2.5 px-3 border-white/10 col-span-3">
-              <Wallet className="h-3.5 w-3.5 text-primary shrink-0" />
-              <div className="text-left">
-                <p className="text-[11px] font-medium">Mais métodos em breve</p>
-              </div>
-            </Button>
+          <h3 className="text-sm font-medium mb-3">Método de Pagamento</h3>
+          <div className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02]">
+            <Globe className="h-4 w-4 text-blue-500" />
+            <div>
+              <p className="text-sm font-medium">PayPal</p>
+              <p className="text-[10px] text-muted-foreground">Cobrança recorrente mensal</p>
+            </div>
+            <Badge variant="secondary" className="ml-auto bg-blue-500/10 text-blue-400 text-[10px]">
+              Ativo
+            </Badge>
           </div>
         </div>
 
         {/* Upgrade Button */}
-        <Button className="w-full glow group">
-          Upgrade de Plano
-          <ArrowUpRight className="h-4 w-4 ml-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
-        </Button>
+        <TokenUpgradeDialog trigger={
+          <Button className="w-full glow group">
+            Upgrade de Plano
+            <ArrowUpRight className="h-4 w-4 ml-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+          </Button>
+        } />
       </div>
     </motion.div>
   );
