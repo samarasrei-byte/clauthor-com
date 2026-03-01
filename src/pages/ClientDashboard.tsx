@@ -215,21 +215,25 @@ const ClientDashboard = () => {
   })();
 
   const sidebarItems = [
-    { id: "omnix", label: "THOR", icon: Brain, badge: "AI" },
-    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard },
-    { id: "live-timeline", label: "Live Timeline", icon: Eye, badge: "LIVE" },
-    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined },
-    { id: "squad-chat", label: t("dashboard.meeting"), icon: Users },
-    { id: "a2a-demo", label: "Demo A2A", icon: GitBranch, badge: "NOVO" },
-    { id: "board", label: "Board da Empresa", icon: Building2 },
-    { id: "profile", label: "Meu Perfil", icon: User },
-    { id: "agent-settings", label: t("dashboard.settings"), icon: Settings },
-    { id: "chat", label: t("dashboard.ai_assistant"), icon: Sparkles },
-    { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3 },
-    { id: "team", label: t("dashboard.team"), icon: UserPlus },
-    { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined },
-    { id: "billing", label: t("dashboard.billing"), icon: CreditCard },
-    // Suporte
+    // Principal
+    { id: "omnix", label: "THOR", icon: Brain, badge: "AI", group: "Principal" },
+    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: "Principal" },
+    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: "Principal" },
+    // Operações
+    { id: "live-timeline", label: "Timeline", icon: Eye, badge: "LIVE", group: "Operações" },
+    { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: "Operações" },
+    { id: "a2a-demo", label: "Orquestração A2A", icon: GitBranch, group: "Operações" },
+    { id: "chat", label: t("dashboard.ai_assistant"), icon: Sparkles, group: "Operações" },
+    // Análise
+    { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: "Análise" },
+    { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined, group: "Análise" },
+    { id: "board", label: "Board", icon: Building2, group: "Análise" },
+    // Configurações
+    { id: "agent-settings", label: t("dashboard.settings"), icon: Settings, group: "Configurações" },
+    { id: "profile", label: "Meu Perfil", icon: User, group: "Configurações" },
+    { id: "team", label: t("dashboard.team"), icon: UserPlus, group: "Configurações" },
+    { id: "billing", label: t("dashboard.billing"), icon: CreditCard, group: "Configurações" },
+    // Ajuda
     { id: "support", label: "Suporte", icon: MessageSquare, group: "Ajuda" },
   ];
 
