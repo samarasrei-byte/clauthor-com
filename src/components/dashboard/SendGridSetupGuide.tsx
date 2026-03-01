@@ -11,6 +11,7 @@ import {
   ArrowRight, ArrowLeft, AlertTriangle, Sparkles
 } from "lucide-react";
 import { toast } from "sonner";
+import { TermTooltip, TutorialBanner } from "./SetupGlossary";
 
 const STEPS = [
   {
@@ -183,6 +184,13 @@ const SendGridSetupGuide = () => {
         ))}
       </div>
 
+      {/* Tutorial banner */}
+      <TutorialBanner
+        label="Primeira vez configurando e-mail? Veja o guia."
+        videoUrl="https://www.youtube.com/results?search_query=sendgrid+setup+tutorial"
+        docsUrl="https://docs.sendgrid.com/for-developers/sending-email/api-getting-started"
+      />
+
       {/* Current step */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -234,13 +242,18 @@ const SendGridSetupGuide = () => {
                     <Shield className="h-4 w-4 text-primary" />
                     <span className="text-sm font-medium">Suas credenciais</span>
                   </div>
-                  <Input
-                    placeholder="API Key (SG.xxxxxxx...)"
-                    type="password"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    className="text-sm"
-                  />
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                      <TermTooltip term="API Key" /> — copiada do painel do SendGrid
+                    </label>
+                    <Input
+                      placeholder="API Key (SG.xxxxxxx...)"
+                      type="password"
+                      value={apiKey}
+                      onChange={(e) => setApiKey(e.target.value)}
+                      className="text-sm"
+                    />
+                  </div>
                   <Input
                     placeholder="E-mail remetente (ex: noreply@suaempresa.com)"
                     type="email"

@@ -11,6 +11,7 @@ import {
   ArrowRight, ArrowLeft, AlertTriangle, Sparkles
 } from "lucide-react";
 import { toast } from "sonner";
+import { TermTooltip, TutorialBanner } from "./SetupGlossary";
 
 const STEPS = [
   {
@@ -206,6 +207,13 @@ const LinkedInSetupGuide = () => {
         ))}
       </div>
 
+      {/* Tutorial banner */}
+      <TutorialBanner
+        label="Precisa de ajuda com o LinkedIn API? Veja o guia."
+        videoUrl="https://www.youtube.com/results?search_query=linkedin+api+setup+tutorial"
+        docsUrl="https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access"
+      />
+
       {/* Current step */}
       <AnimatePresence mode="wait">
         <motion.div
@@ -253,9 +261,24 @@ const LinkedInSetupGuide = () => {
                     <Shield className="h-4 w-4 text-primary" />
                     <span className="text-sm font-medium">Suas credenciais LinkedIn</span>
                   </div>
-                  <Input placeholder="Client ID" value={clientId} onChange={(e) => setClientId(e.target.value)} className="text-sm" />
-                  <Input placeholder="Client Secret" type="password" value={clientSecret} onChange={(e) => setClientSecret(e.target.value)} className="text-sm" />
-                  <Input placeholder="Access Token" type="password" value={accessToken} onChange={(e) => setAccessToken(e.target.value)} className="text-sm" />
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                      <TermTooltip term="Client ID" /> — encontrado na aba Auth do app
+                    </label>
+                    <Input placeholder="Client ID" value={clientId} onChange={(e) => setClientId(e.target.value)} className="text-sm" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                      <TermTooltip term="Client Secret" /> — gerado na aba Auth
+                    </label>
+                    <Input placeholder="Client Secret" type="password" value={clientSecret} onChange={(e) => setClientSecret(e.target.value)} className="text-sm" />
+                  </div>
+                  <div>
+                    <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+                      <TermTooltip term="Access Token" /> — gerado pelo Token Generator
+                    </label>
+                    <Input placeholder="Access Token" type="password" value={accessToken} onChange={(e) => setAccessToken(e.target.value)} className="text-sm" />
+                  </div>
                   <Button
                     className="w-full gap-2"
                     disabled={!clientId || !accessToken || validateMutation.isPending}
