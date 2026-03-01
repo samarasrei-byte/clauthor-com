@@ -289,25 +289,22 @@ const ClientDashboard = () => {
   }, [agents, nameToSlug]);
 
   const sidebarItems: SidebarItem[] = [
-    // Principal
-    { id: "omnix", label: "THOR", icon: Brain, badge: "AI", group: "Principal" },
-    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: "Principal" },
-    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: "Principal" },
-    { id: "library", label: "Biblioteca", icon: Sparkles, group: "Principal" },
-    // Departamentos (dynamic) + solo agents
+    // ── Núcleo ──
+    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: "Núcleo" },
+    { id: "omnix", label: "THOR", icon: Brain, badge: "AI", group: "Núcleo" },
+    // ── Agentes ──
+    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: "Agentes" },
     ...departmentSidebarItems,
     ...soloAgentItems,
-    // Operações
+    // ── Operações ──
     { id: "live-timeline", label: "Timeline", icon: Eye, badge: "LIVE", group: "Operações" },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: "Operações" },
-    { id: "a2a-demo", label: "Orquestração A2A", icon: GitBranch, group: "Operações" },
     { id: "chat", label: t("dashboard.ai_assistant"), icon: Sparkles, group: "Operações" },
-    // Análise
+    // ── Análise ──
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: "Análise" },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined, group: "Análise" },
-    { id: "board", label: "Board", icon: Building2, group: "Análise" },
-    // Configurações (single entry — opens tabbed page)
-    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: "Configurações" },
+    // ── Sistema ──
+    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: "Sistema" },
   ];
   const tierColors: Record<string, string> = {
     basic: "bg-muted text-muted-foreground",
