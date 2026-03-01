@@ -16,6 +16,7 @@ import {
   Building2, Clock, Rocket, BarChart3, Fingerprint, Sparkles, Layers3, Signal
 } from "lucide-react";
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
+import HelpTooltip from "@/components/HelpTooltip";
 import { useTranslation } from "react-i18next";
 import clauthorLogo from "@/assets/clauthor-logo.png";
 import williamPhoto from "@/assets/william-monteiro.png";
@@ -316,6 +317,7 @@ const HomePage = () => {
                       <span className="text-primary/60">$</span>{" "}
                       {t("home.subtitle")}
                       <span className="text-foreground/80 font-medium"> {t("home.subtitle_highlight")}</span>
+                      {" "}<HelpTooltip id="home-intro" text="Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo. Use os botões abaixo para começar." position="bottom" size={14} />
                     </p>
 
                     {/* CTAs — larger touch targets on mobile */}

@@ -127,7 +127,7 @@ const Community = () => {
             {t("community.title")} <span className="gradient-text">{t("community.title_hl")}</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {t("community.subtitle")} <HelpTooltip text="Crie posts, comente e curta. Use as categorias para filtrar por tema. Faça login para participar." size={14} />
+            {t("community.subtitle")} <HelpTooltip id="community-intro" text="Crie posts, comente e curta. Use as categorias para filtrar por tema. Faça login para participar." size={14} />
           </p>
         </motion.div>
 

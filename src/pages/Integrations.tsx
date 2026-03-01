@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import HelpTooltip from "@/components/HelpTooltip";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -53,7 +54,10 @@ const IntegrationsPage = () => {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="font-display text-3xl font-bold mb-1">Integrações</h1>
+        <h1 className="font-display text-3xl font-bold mb-1 flex items-center gap-2">
+          Integrações
+          <HelpTooltip id="integrations-intro" text="Conecte seus agentes com WhatsApp, E-mail, LinkedIn, Meta Ads e mais. Clique em 'Configurar' para ativar cada integração." position="bottom" size={16} />
+        </h1>
         <p className="text-muted-foreground">Conecte seus agentes com as ferramentas que você já usa.</p>
       </motion.div>
 

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart } from "lucide-react";
+import HelpTooltip from "@/components/HelpTooltip";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
@@ -92,7 +93,10 @@ const AuthPage = () => {
             <Bot className="h-8 w-8 text-primary" />
           </motion.div>
           <h1 className="font-display text-3xl font-bold mb-2">{isLogin ? t("auth.welcome") : t("auth.create_account")}</h1>
-          <p className="text-muted-foreground">{isLogin ? t("auth.login_subtitle") : t("auth.register_subtitle")}</p>
+          <p className="text-muted-foreground">
+            {isLogin ? t("auth.login_subtitle") : t("auth.register_subtitle")}
+            {" "}<HelpTooltip id="auth-intro" text="Crie sua conta ou faça login para acessar o painel de controle, contratar agentes e gerenciar seu time de IA." position="bottom" size={14} />
+          </p>
         </div>
 
         {/* Show hire intent banner */}

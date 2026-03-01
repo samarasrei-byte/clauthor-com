@@ -53,7 +53,7 @@ const HowItWorks = () => {
             {t("how_it_works_page.title")} <span className="gradient-text">{t("how_it_works_page.title_hl")}</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            {t("how_it_works_page.subtitle")} <HelpTooltip text="Veja os 4 passos para começar: escolher agentes, configurar, ativar e acompanhar os resultados no painel." size={14} />
+            {t("how_it_works_page.subtitle")} <HelpTooltip id="howitworks-intro" text="Veja os 4 passos para começar: escolher agentes, configurar, ativar e acompanhar os resultados no painel." size={14} />
           </p>
         </motion.div>
 

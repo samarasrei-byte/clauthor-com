@@ -78,7 +78,7 @@ const Pricing = () => {
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-2">{t("pricing_page.subtitle")}</p>
           <p className="text-center mb-4">
-            <HelpTooltip text="Escolha um plano base ou contrate agentes individualmente. Cada plano inclui tokens mensais para uso dos agentes. Tokens extras podem ser comprados separadamente." position="bottom" size={16} />
+            <HelpTooltip id="pricing-intro" text="Escolha um plano base ou contrate agentes individualmente. Cada plano inclui tokens mensais para uso dos agentes. Tokens extras podem ser comprados separadamente." position="bottom" size={16} />
           </p>
           <p className="text-sm text-foreground/70 font-medium">
             {t("pricing_page.tip")} <span className="text-primary font-bold">{t("pricing_page.tip_hl")}</span> {t("pricing_page.tip_rest")}

@@ -30,7 +30,7 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
         <h2 className="font-display text-xl font-bold flex items-center gap-2">
           <Settings className="h-5 w-5 text-primary" />
           Configurações
-          <HelpTooltip text="Gerencie seus agentes, perfil, equipe, assinatura e suporte. Use as abas abaixo para navegar entre cada seção." size={14} />
+          <HelpTooltip id="settings-intro" text="Gerencie seus agentes, perfil, equipe, assinatura e suporte. Use as abas abaixo para navegar entre cada seção." size={14} />
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
           Gerencie agentes, perfil, equipe, assinatura e suporte.

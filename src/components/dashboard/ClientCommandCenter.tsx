@@ -122,7 +122,7 @@ const ClientCommandCenter = ({
             <div className="flex items-center gap-2">
               <HeartPulse className="h-4 w-4 text-primary" />
               <span className="text-sm font-medium">Saúde dos Agentes</span>
-              <HelpTooltip text="Mostra o status em tempo real dos seus agentes: taxa de sucesso, erros e latência média. Clique em um agente para detalhes." size={12} />
+              <HelpTooltip id="health-panel" text="Mostra o status em tempo real dos seus agentes: taxa de sucesso, erros e latência média. Clique em um agente para detalhes." size={12} />
             </div>
             <Badge
               className={`text-[10px] border-0 ${

@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import {
   Bot, Plus, MoreHorizontal, Activity, Zap, Settings, Sparkles
 } from "lucide-react";
+import HelpTooltip from "@/components/HelpTooltip";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -52,7 +53,10 @@ const AgentsPage = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-3xl font-bold mb-1">Meus Agentes</h1>
+          <h1 className="font-display text-3xl font-bold mb-1 flex items-center gap-2">
+            Meus Agentes
+            <HelpTooltip id="agents-intro" text="Aqui ficam seus agentes contratados. Veja o status, tier e total de execuções de cada um. Clique para gerenciar ou crie um novo." position="bottom" size={16} />
+          </h1>
           <p className="text-muted-foreground">Gerencie seus funcionários de IA</p>
         </div>
         <Link to="/create-agent">
