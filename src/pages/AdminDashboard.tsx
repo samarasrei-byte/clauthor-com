@@ -12,7 +12,7 @@ import {
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
   Building, Zap, LayoutDashboard, CreditCard, Store,
-  ShieldCheck, Wallet, Rocket, Sparkles, Crown, Settings, Key
+  ShieldCheck, Wallet, Rocket, Sparkles, Crown, Settings, Key, Gift
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { toast } from "sonner";
@@ -31,6 +31,7 @@ import AdminInsightsPanel from "@/components/dashboard/AdminInsightsPanel";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
 import PlatformCredentialsPanel from "@/components/dashboard/PlatformCredentialsPanel";
 import OpenClawStatusPanel from "@/components/dashboard/OpenClawStatusPanel";
+import { AdminCouponManager } from "@/components/dashboard/AdminCouponManager";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -144,6 +145,7 @@ const AdminDashboard = () => {
     { id: "platform-creds", label: "Credenciais Central", icon: Key },
     { id: "openclaw", label: "OpenClaw Motor", icon: Activity, badge: undefined },
     { id: "payments", label: "Pagamentos", icon: Wallet },
+    { id: "coupons", label: "Cupons", icon: Gift },
     { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
     { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined },
     { id: "revenue", label: "Receita", icon: BarChart3 },
@@ -267,6 +269,9 @@ const AdminDashboard = () => {
 
           {/* ═══ PLATFORM CREDENTIALS ═══ */}
           {activeTab === "platform-creds" && <PlatformCredentialsPanel />}
+
+          {/* ═══ COUPONS ═══ */}
+          {activeTab === "coupons" && <AdminCouponManager />}
 
           {/* ═══ OPENCLAW STATUS ═══ */}
           {activeTab === "openclaw" && <OpenClawStatusPanel />}
