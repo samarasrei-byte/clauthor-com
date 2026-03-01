@@ -6,6 +6,7 @@ import AgentSettings from "./AgentSettings";
 import UserProfileEditor from "./UserProfileEditor";
 import TeamMembers from "./TeamMembers";
 import SupportChat from "@/components/SupportChat";
+import { CouponRedeemer } from "./CouponRedeemer";
 
 interface SettingsPageProps {
   /** Billing content rendered by parent (needs access to credits/subscriptions state) */
@@ -60,7 +61,10 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
         </TabsContent>
 
         <TabsContent value="billing">
-          {billingContent}
+          <div className="space-y-4">
+            {billingContent}
+            <CouponRedeemer />
+          </div>
         </TabsContent>
 
         <TabsContent value="support">
