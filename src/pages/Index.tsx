@@ -700,43 +700,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          CTA FINAL
-          ═══════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-32 px-4 relative">
-        <div className="max-w-3xl mx-auto text-center relative">
-          <motion.div initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
-            <div className="rounded-2xl border border-border bg-card/30 backdrop-blur-sm p-8 sm:p-16 md:p-20 relative overflow-hidden">
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[80px]" />
-              
-              <div className="relative z-10">
-                <div className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60 mb-5 sm:mb-6">
-                  // ready to deploy
-                </div>
-                <h2 className="font-display text-2xl sm:text-5xl md:text-6xl font-bold mb-5 sm:mb-6">
-                  {t("home.cta_ready")} <span className="gradient-text">{t("home.cta_ready_hl")}</span>
-                </h2>
-                <p className="text-muted-foreground text-sm sm:text-base mb-8 sm:mb-10 max-w-md mx-auto">{t("home.cta_desc")}</p>
-                <Link to="/departamentos">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="group relative h-[52px] sm:h-14 px-8 sm:px-14 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full sm:w-auto"
-                  >
-                    <div className="absolute inset-0 bg-primary rounded-xl" />
-                    <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
-                    <span className="relative z-10 flex items-center justify-center gap-3">
-                      <Workflow className="h-4 w-4" strokeWidth={1.5} />
-                      Monte seu Time de IA
-                      <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                    </span>
-                  </motion.button>
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* ═══════════════════════════════════════════════════════
           TEAM — Quem Somos
