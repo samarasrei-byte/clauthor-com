@@ -45,6 +45,7 @@ const Navbar = () => {
     { label: t("nav.my_agents"), href: "/agents" },
     { label: t("nav.pricing"), href: "/pricing" },
     { label: t("nav.integrations"), href: "/integrations" },
+    { label: t("nav.how_it_works"), href: "/how-it-works", mobileOnly: true },
   ];
 
   const navItems = user ? authNavItems : publicNavItems;
@@ -129,7 +130,7 @@ const Navbar = () => {
               </AnimatePresence>
             </div>
 
-            {navItems.map((item) => (
+            {navItems.filter((item: any) => !item.mobileOnly).map((item) => (
               <Link
                 key={item.href}
                 to={item.href}
@@ -249,6 +250,17 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+            {user && (
+              <Link
+                to="/community"
+                onClick={() => setMobileOpen(false)}
+                className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                  location.pathname === "/community" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                }`}
+              >
+                💬 Comunidade
+              </Link>
+            )}
             {isAdmin && (
               <Link
                 to="/admin"

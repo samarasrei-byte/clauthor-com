@@ -85,7 +85,7 @@ const LiveDemoAgent = () => {
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ delay: 1.5, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-      className="w-full max-w-md mx-auto lg:mx-0"
+      className="w-full max-w-md mx-auto lg:mx-0 relative z-10"
     >
       <div className="rounded-2xl border border-border bg-card/40 backdrop-blur-xl overflow-hidden relative">
         {/* Header */}
