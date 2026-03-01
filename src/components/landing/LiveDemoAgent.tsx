@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, User, Zap, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { Bot, User, Zap, CheckCircle2, ArrowRight, Sparkles, Minimize2, Maximize2, X } from "lucide-react";
 import { Link } from "react-router-dom";
-
+import { useIsMobile } from "@/hooks/use-mobile";
 /* ═══════════════════════════════════════════════════════
    LIVE DEMO AGENT
    Auto-playing conversation that shows an AI agent
@@ -38,7 +38,9 @@ const LiveDemoAgent = () => {
   const [isTyping, setIsTyping] = useState(false);
   const [started, setStarted] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [minimized, setMinimized] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
 
   // Auto-start after 2 seconds
   useEffect(() => {
@@ -80,6 +82,40 @@ const LiveDemoAgent = () => {
     }
   }, [messages, isTyping]);
 
+  // On mobile, show minimized pill by default after a few seconds
+  useEffect(() => {
+    if (isMobile) {
+      const timer = setTimeout(() => setMinimized(true), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [isMobile]);
+
+  // Minimized pill for mobile
+  if (minimized && isMobile) {
+    return (
+      <motion.button
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        onClick={() => setMinimized(false)}
+        className="w-full max-w-md mx-auto flex items-center gap-3 p-3 rounded-xl border border-border bg-card/60 backdrop-blur-xl relative z-10"
+      >
+        <div className="relative shrink-0">
+          <div className="w-9 h-9 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <Bot className="h-4 w-4 text-primary" />
+          </div>
+          <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-500 border-2 border-card" />
+        </div>
+        <div className="flex-1 text-left">
+          <p className="font-display text-xs font-bold">Ana — Atendimento</p>
+          <p className="text-[10px] text-muted-foreground truncate">
+            {messages.length > 0 ? messages[messages.length - 1].content.slice(0, 40) + "..." : "Demo ao vivo"}
+          </p>
+        </div>
+        <Maximize2 className="h-4 w-4 text-muted-foreground shrink-0" />
+      </motion.button>
+    );
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 30, scale: 0.95 }}
@@ -104,9 +140,19 @@ const LiveDemoAgent = () => {
               <p className="font-mono text-[9px] text-emerald-500/80 uppercase tracking-wider">Online agora</p>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-muted/50">
-            <Zap className="h-2.5 w-2.5 text-primary/60" />
-            <span className="font-mono text-[9px] text-muted-foreground">DEMO AO VIVO</span>
+          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-muted/50">
+              <Zap className="h-2.5 w-2.5 text-primary/60" />
+              <span className="font-mono text-[9px] text-muted-foreground">DEMO AO VIVO</span>
+            </div>
+            {isMobile && (
+              <button
+                onClick={() => setMinimized(true)}
+                className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors"
+              >
+                <Minimize2 className="h-3.5 w-3.5 text-muted-foreground" />
+              </button>
+            )}
           </div>
         </div>
 
