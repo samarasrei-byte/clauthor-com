@@ -17,6 +17,7 @@ import {
   Package, Factory, Receipt, Cog, ClipboardCheck, Truck, Loader2
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import HelpTooltip from "@/components/HelpTooltip";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -454,10 +455,13 @@ const Departamentos = () => { // v2
             Sua empresa inteira<br />
             <span className="gradient-text">operada por IA</span>
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-8">
-            {departments.length} departamentos. {totalAgents} agentes autônomos. Cada um substitui um profissional CLT — 
-            por uma <span className="text-primary font-bold">fração do custo</span>.
-          </p>
+          <div className="flex items-center justify-center gap-2 mb-2">
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              {departments.length} departamentos. {totalAgents} agentes autônomos. Cada um substitui um profissional CLT — 
+              por uma <span className="text-primary font-bold">fração do custo</span>.
+            </p>
+            <HelpTooltip text="Escolha um departamento inteiro para contratar todos os agentes de uma vez com desconto, ou clique em um departamento para ver os agentes individuais." position="bottom" size={16} />
+          </div>
 
           {/* Hero Stats */}
           <div className="flex flex-wrap items-center justify-center gap-6 mb-8">

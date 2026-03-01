@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause, Eye
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause, Eye, HelpCircle
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,6 +45,7 @@ import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
 import type { HireIntent } from "./Auth";
 import Library from "./Library";
+import HelpTooltip from "@/components/HelpTooltip";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -366,7 +367,10 @@ const ClientDashboard = () => {
             className="flex flex-col sm:flex-row sm:items-center justify-between gap-4"
           >
             <div>
-              <h1 className="font-display text-2xl font-bold">{t("dashboard.control_panel")}</h1>
+              <div className="flex items-center gap-2">
+                <h1 className="font-display text-2xl font-bold">{t("dashboard.control_panel")}</h1>
+                <HelpTooltip text="Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções: THOR (IA), Agentes, Analytics, Configurações e mais." position="bottom" />
+              </div>
               <p className="text-sm text-muted-foreground">
                 {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
               </p>

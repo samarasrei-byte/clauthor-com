@@ -8,6 +8,7 @@ import {
   Network, Eye, Cpu, Users, Clock, TrendingUp
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import HelpTooltip from "@/components/HelpTooltip";
 
 const HowItWorks = () => {
   const { t } = useTranslation();
@@ -51,7 +52,9 @@ const HowItWorks = () => {
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
             {t("how_it_works_page.title")} <span className="gradient-text">{t("how_it_works_page.title_hl")}</span>
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">{t("how_it_works_page.subtitle")}</p>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+            {t("how_it_works_page.subtitle")} <HelpTooltip text="Veja os 4 passos para começar: escolher agentes, configurar, ativar e acompanhar os resultados no painel." size={14} />
+          </p>
         </motion.div>
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-20">

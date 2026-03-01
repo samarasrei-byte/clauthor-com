@@ -11,6 +11,7 @@ import {
   Code, Megaphone, HeartHandshake, DollarSign, Palette,
   Briefcase
 } from "lucide-react";
+import HelpTooltip from "@/components/HelpTooltip";
 import ROICalculator from "@/components/library/ROICalculator";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 import AgentLivePreview from "@/components/library/AgentLivePreview";
@@ -240,8 +241,11 @@ const LibraryPage = () => {
           <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-3 tracking-tight">
             {t("library_page.title")}
           </h1>
-          <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-10 text-base md:text-lg">
+          <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-2 text-base md:text-lg">
             {t("library_page.subtitle")}
+          </p>
+          <p className="text-center mb-10">
+            <HelpTooltip text="Explore nossos 80 agentes de IA. Use a busca ou filtros para encontrar o ideal. Clique em 'Contratar' para ativar ou em 'Testar 60s' para experimentar antes." position="bottom" size={16} />
           </p>
 
           {/* Featured agent — cinematic card */}

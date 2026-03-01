@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Settings, User, Users, CreditCard, MessageSquare, Bot } from "lucide-react";
+import HelpTooltip from "@/components/HelpTooltip";
 import AgentSettings from "./AgentSettings";
 import UserProfileEditor from "./UserProfileEditor";
 import TeamMembers from "./TeamMembers";
@@ -29,6 +30,7 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
         <h2 className="font-display text-xl font-bold flex items-center gap-2">
           <Settings className="h-5 w-5 text-primary" />
           Configurações
+          <HelpTooltip text="Gerencie seus agentes, perfil, equipe, assinatura e suporte. Use as abas abaixo para navegar entre cada seção." size={14} />
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
           Gerencie agentes, perfil, equipe, assinatura e suporte.
