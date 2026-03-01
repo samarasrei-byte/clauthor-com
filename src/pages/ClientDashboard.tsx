@@ -46,6 +46,7 @@ import { agentIcons } from "@/data/libraryAgentData";
 import type { HireIntent } from "./Auth";
 import Library from "./Library";
 import HelpTooltip from "@/components/HelpTooltip";
+import AgentSetupChecklist from "@/components/dashboard/AgentSetupChecklist";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -558,6 +559,15 @@ const ClientDashboard = () => {
                   <Link to="/create-agent"><Button className="glow gap-1.5"><Plus className="h-4 w-4" /> {t("dashboard.new_agent")}</Button></Link>
                 </div>
               </div>
+
+              {/* Setup Checklist */}
+              {agents.length > 0 && (
+                <AgentSetupChecklist
+                  agents={agents}
+                  nameToSlug={nameToSlug}
+                  onOpenThor={() => setActiveSection("omnix")}
+                />
+              )}
               {agents.length === 0 ? (
                 <div className="glass-card rounded-2xl p-12 text-center">
                   <Sparkles className="h-12 w-12 text-primary/30 mx-auto mb-4" />
