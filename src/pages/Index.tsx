@@ -265,7 +265,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           HERO
           ═══════════════════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-screen flex items-center px-4 sm:px-6 overflow-hidden py-20 sm:py-0">
+      <section ref={heroRef} className="relative min-h-[85vh] flex items-center px-4 sm:px-6 overflow-hidden py-16 sm:py-0">
         {!isMobile && <MouseReactiveField />}
 
         <div className="absolute inset-0 pointer-events-none">
@@ -292,6 +292,7 @@ const HomePage = () => {
                   <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                     Sistema ativo — 80 agentes operacionais
                   </span>
+                  <HelpTooltip id="home-intro" text="Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo." position="bottom" size={12} autoShowDelay={3000} />
                 </div>
               </motion.div>
 
@@ -317,7 +318,6 @@ const HomePage = () => {
                       <span className="text-primary/60">$</span>{" "}
                       {t("home.subtitle")}
                       <span className="text-foreground/80 font-medium"> {t("home.subtitle_highlight")}</span>
-                      {" "}<HelpTooltip id="home-intro" text="Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo. Use os botões abaixo para começar." position="bottom" size={14} />
                     </p>
 
                     {/* CTAs — clear hierarchy */}
@@ -354,15 +354,29 @@ const HomePage = () => {
                     </div>
 
                     {/* Trust badges */}
-                    <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-8">
+                    <div className="flex flex-wrap items-center gap-5 sm:gap-6 mt-8">
                       {[
                         { icon: LockKeyhole, label: "End-to-end encrypted" },
                         { icon: Fingerprint, label: "SOC 2 compliant" },
                         { icon: Bolt, label: "Setup 5min" },
                       ].map((item) => (
-                        <div key={item.label} className="flex items-center gap-2 opacity-40">
-                          <item.icon className="h-3 w-3 text-primary/70" strokeWidth={1.5} />
-                          <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.15em]">{item.label}</span>
+                        <div key={item.label} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-border/30 bg-card/20">
+                          <item.icon className="h-4 w-4 text-primary/80" strokeWidth={1.5} />
+                          <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground/70">{item.label}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* Social proof — above the fold */}
+                    <div className="flex flex-wrap items-center gap-6 mt-6">
+                      {[
+                        { value: "850+", label: "Empresas" },
+                        { value: "97%", label: "Eficiência" },
+                        { value: "12.4k", label: "Horas salvas" },
+                      ].map((stat) => (
+                        <div key={stat.label} className="text-center">
+                          <p className="font-display text-lg font-bold text-foreground">{stat.value}</p>
+                          <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">{stat.label}</p>
                         </div>
                       ))}
                     </div>
