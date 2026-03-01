@@ -19,8 +19,6 @@ import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import HelpTooltip from "@/components/HelpTooltip";
 import { useTranslation } from "react-i18next";
 import clauthorLogo from "@/assets/clauthor-logo.png";
-import williamPhoto from "@/assets/william-monteiro.png";
-import gabrielPhoto from "@/assets/gabriel-gentile.png";
 import helixaPhoto from "@/assets/helixa-ai.png";
 import kaelisPhoto from "@/assets/kaelis-ai.png";
 
@@ -764,34 +762,20 @@ const HomePage = () => {
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-12 max-w-3xl mx-auto">
             {[
               {
-                name: "William Monteiro",
-                role: "Founder & CEO",
-                photo: williamPhoto,
-                bio: "Visionary founder with 20 years of internet experience and 8 years in technology. Leads strategy, architecture, and long-term innovation, building scalable AI-driven systems designed for global growth.",
-                isAI: false,
-              },
-              {
-                name: "Gabriel Gentile",
-                role: "Co-Founder & CMO",
-                photo: gabrielPhoto,
-                bio: "With 19 years in advertising and brand strategy, Gabriel drives positioning, influence, and high-conversion growth. Responsible for market expansion and brand authority.",
-                isAI: false,
+                name: "KAELIS AI",
+                role: "Chief Executive Officer (CEO)",
+                photo: kaelisPhoto,
+                bio: "KAELIS AI is the supreme command center of the platform. He orchestrates all operations, coordinates every department, and guarantees disciplined execution at scale. The visionary intelligence that turns multiple AI agents into a synchronized, enterprise-grade execution machine.",
+                isAI: true,
               },
               {
                 name: "HELIXA AI",
                 role: "Chief AI Evolution Officer",
                 photo: helixaPhoto,
                 bio: "HELIXA AI is the platform's self-improving intelligence core. She continuously optimizes agents, refines performance, and ensures adaptive evolution based on real-time data. Transforms the system into a living, continuously advancing AI ecosystem.",
-                isAI: true,
-              },
-              {
-                name: "KAELIS AI",
-                role: "Chief Operations Officer (COO)",
-                photo: kaelisPhoto,
-                bio: "KAELIS AI is the operational command center of the platform. He orchestrates workflows, prevents conflicts between agents, and guarantees disciplined execution at scale. Turns multiple AI agents into a synchronized, enterprise-grade execution machine.",
                 isAI: true,
               },
             ].map((member, i) => (
