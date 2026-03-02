@@ -233,6 +233,18 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                         <p className="text-sm">{msg2.displayed}{msg1.done && !msg2.done && <span className="animate-pulse text-primary">|</span>}</p>
                       </div>
+
+                      {/* Expert shortcut */}
+                      <div className="flex justify-center mt-4 gap-3">
+                        <Button
+                          variant="ghost"
+                          onClick={() => { onClose(); navigate("/library"); }}
+                          className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
+                        >
+                          Já sei o que preciso — ir direto aos agentes
+                          <ArrowRight className="h-3 w-3" />
+                        </Button>
+                      </div>
                     </motion.div>
                   )}
 
