@@ -35,6 +35,7 @@ import AdminLogsTable from "@/components/dashboard/AdminLogsTable";
 import AdminMarketplacePanel from "@/components/dashboard/AdminMarketplacePanel";
 import AdminRevenuePanel from "@/components/dashboard/AdminRevenuePanel";
 import AdminSubscriptionsTable from "@/components/dashboard/AdminSubscriptionsTable";
+import AdminSignupMetrics from "@/components/dashboard/AdminSignupMetrics";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -179,6 +180,7 @@ const AdminDashboard = () => {
     { id: "platform-creds", label: t("dashboard.platform_creds", { defaultValue: "Credenciais Central" }), icon: Key, group: t("dashboard.system", { defaultValue: "Sistema" }) },
     { id: "openclaw", label: "OpenClaw Motor", icon: Activity, group: t("dashboard.system", { defaultValue: "Sistema" }) },
     { id: "coupons", label: t("dashboard.coupons", { defaultValue: "Cupons" }), icon: Gift, group: t("dashboard.system", { defaultValue: "Sistema" }) },
+    { id: "signup-metrics", label: "Signups", icon: Users, badge: undefined, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: t("dashboard.system", { defaultValue: "Sistema" }) },
   ];
 
@@ -296,6 +298,7 @@ const AdminDashboard = () => {
           {activeTab === "logs" && <AdminLogsTable executionLogs={executionLogs} locale={locale} />}
           {activeTab === "marketplace" && <AdminMarketplacePanel pendingAgents={pendingAgents} locale={locale} />}
           {activeTab === "subscriptions" && <AdminSubscriptionsTable allSubscriptions={allSubscriptions} locale={locale} />}
+          {activeTab === "signup-metrics" && <AdminSignupMetrics allProfiles={allProfiles} locale={locale} />}
         </div>
       </div>
     </div>
