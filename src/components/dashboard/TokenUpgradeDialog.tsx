@@ -8,8 +8,8 @@ import { useCredits } from "@/hooks/useCredits";
 import { useAuth } from "@/hooks/useAuth";
 import {
   Coins, Zap, Crown, Rocket, ArrowRight, CheckCircle,
-  QrCode, Copy, ExternalLink, Sparkles, Package,
-  CreditCard, Globe, Smartphone, Clock, FlaskConical
+  ExternalLink, Sparkles, Package,
+  Globe, FlaskConical
 } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -103,7 +103,7 @@ const tokenPacks: TokenPack[] = [
   { id: "pack-100m", tokens: "100M", tokensNum: 100000000, price: "R$ 14.997", priceNum: 14997, savings: "50% off" },
 ];
 
-type PaymentMethod = "pix" | "stripe" | "paypal" | "mercadopago";
+type PaymentMethod = "paypal";
 
 interface TokenUpgradeDialogProps {
   trigger?: React.ReactNode;
@@ -151,13 +151,6 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
 
   const handlePayment = (method: PaymentMethod) => {
     setPaymentMethod(method);
-    if (method === "pix") {
-      toast.success("PIX gerado! Copie o código abaixo.");
-    } else if (method === "paypal") {
-      // PayPal is handled by its own button
-    } else {
-      toast.info(`Pagamento via ${method} para ${selectedItemName} — em breve!`);
-    }
   };
 
   const handlePaypalCheckout = useCallback(async () => {
@@ -260,10 +253,6 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
     }
   }, [selectedPlan, selectedPack, user, selectedItemName]);
 
-  const copyPixCode = () => {
-    navigator.clipboard.writeText("00020126580014BR.GOV.BCB.PIX0136clauthor-tokens@pix.com5204000053039865802BR5925CLAUTHOR TOKENS LTDA6009SAO PAULO62070503***6304ABCD");
-    toast.success("Código PIX copiado!");
-  };
 
   return (
     <Dialog onOpenChange={() => { setShowPayment(false); setPaymentMethod(null); }}>
@@ -399,230 +388,76 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                 </div>
               </div>
 
-              {/* Payment Methods */}
+              {/* Payment Method — PayPal only */}
               <div>
-                <p className="text-sm font-medium mb-3">Escolha o método de pagamento:</p>
-                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {/* PIX */}
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
-                      paymentMethod === "pix" ? "border-emerald-500 bg-emerald-500/10" : "border-white/10 bg-white/[0.02] hover:border-emerald-500/30"
-                    }`}
-                    onClick={() => handlePayment("pix")}
-                  >
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <div className="w-9 h-9 rounded-lg bg-emerald-500/10 flex items-center justify-center">
-                        <QrCode className="h-4 w-4 text-emerald-500" />
-                      </div>
-                      <div>
-                        <p className="font-display font-bold text-sm">PIX</p>
-                        <p className="text-[9px] text-muted-foreground">Instantâneo • 0% taxa</p>
-                      </div>
+                <p className="text-sm font-medium mb-3">Método de pagamento:</p>
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  className="rounded-xl border border-blue-500 bg-blue-500/10 p-4 cursor-pointer transition-all"
+                  onClick={() => handlePayment("paypal")}
+                >
+                  <div className="flex items-center gap-2.5 mb-2">
+                    <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center">
+                      <Globe className="h-4 w-4 text-blue-500" />
                     </div>
-                  </motion.div>
-
-                  {/* Stripe (Cartão) */}
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
-                      paymentMethod === "stripe" ? "border-violet-500 bg-violet-500/10" : "border-white/10 bg-white/[0.02] hover:border-violet-500/30"
-                    }`}
-                    onClick={() => handlePayment("stripe")}
-                  >
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <div className="w-9 h-9 rounded-lg bg-violet-500/10 flex items-center justify-center">
-                        <CreditCard className="h-4 w-4 text-violet-500" />
-                      </div>
-                      <div>
-                        <p className="font-display font-bold text-sm">Cartão</p>
-                        <p className="text-[9px] text-muted-foreground">Visa, Master, Amex</p>
-                      </div>
+                    <div>
+                      <p className="font-display font-bold text-sm">PayPal</p>
+                      <p className="text-[9px] text-muted-foreground">Internacional • Multi-moeda</p>
                     </div>
-                  </motion.div>
-
-                  {/* PayPal */}
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
-                      paymentMethod === "paypal" ? "border-blue-500 bg-blue-500/10" : "border-white/10 bg-white/[0.02] hover:border-blue-500/30"
-                    }`}
-                    onClick={() => handlePayment("paypal")}
-                  >
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <div className="w-9 h-9 rounded-lg bg-blue-500/10 flex items-center justify-center">
-                        <Globe className="h-4 w-4 text-blue-500" />
-                      </div>
-                      <div>
-                        <p className="font-display font-bold text-sm">PayPal</p>
-                        <p className="text-[9px] text-muted-foreground">Internacional</p>
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  {/* Mercado Pago */}
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    className={`rounded-xl border p-4 cursor-pointer transition-all ${
-                      paymentMethod === "mercadopago" ? "border-cyan-500 bg-cyan-500/10" : "border-white/10 bg-white/[0.02] hover:border-cyan-500/30"
-                    }`}
-                    onClick={() => handlePayment("mercadopago")}
-                  >
-                    <div className="flex items-center gap-2.5 mb-2">
-                      <div className="w-9 h-9 rounded-lg bg-cyan-500/10 flex items-center justify-center">
-                        <Smartphone className="h-4 w-4 text-cyan-500" />
-                      </div>
-                      <div>
-                        <p className="font-display font-bold text-sm">Mercado Pago</p>
-                        <p className="text-[9px] text-muted-foreground">PIX, Boleto, Cartão</p>
-                      </div>
-                    </div>
-                  </motion.div>
-
-                  {/* Crypto removido — será ativado via NOWPayments */}
-                </div>
+                  </div>
+                </motion.div>
               </div>
 
-              {/* Payment Details */}
-              {paymentMethod === "pix" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="rounded-xl border border-emerald-500/20 bg-emerald-500/5 p-5 space-y-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <QrCode className="h-5 w-5 text-emerald-500" />
-                    <p className="font-display font-bold">Pagamento via PIX</p>
-                  </div>
-                  <div className="bg-background/60 rounded-lg p-4 text-center">
-                    <div className="w-40 h-40 mx-auto bg-white/10 rounded-lg flex items-center justify-center mb-3 border-2 border-dashed border-emerald-500/30">
-                      <div className="text-center">
-                        <QrCode className="h-12 w-12 text-emerald-500/50 mx-auto mb-2" />
-                        <p className="text-[10px] text-muted-foreground">Integração em breve</p>
-                      </div>
+              {/* PayPal Details — always shown */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-5 space-y-4"
+              >
+                <div className="flex items-center gap-2">
+                  <Globe className="h-5 w-5 text-blue-500" />
+                  <p className="font-display font-bold">Pagamento via PayPal</p>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Pagamentos internacionais com proteção ao comprador. Multi-moeda com conversão automática.
+                </p>
+                <div className="flex gap-2">
+                  {["USD", "EUR", "GBP", "BRL"].map((cur) => (
+                    <div key={cur} className="flex-1 rounded-lg bg-background/60 p-2.5 text-center">
+                      <p className="font-bold text-xs">{cur}</p>
                     </div>
-                    <p className="text-xs text-muted-foreground">PIX será ativado em breve via EfiPay/Gerencianet</p>
-                  </div>
-                  <Button variant="outline" className="w-full gap-2 border-emerald-500/20" disabled>
-                    <Clock className="h-4 w-4" /> Em breve
-                  </Button>
-                  <p className="text-[10px] text-muted-foreground text-center">
-                    Use PayPal enquanto o PIX está sendo configurado.
-                  </p>
-                </motion.div>
-              )}
-
-              {paymentMethod === "stripe" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="rounded-xl border border-violet-500/20 bg-violet-500/5 p-5 space-y-4"
+                  ))}
+                </div>
+                <Button 
+                  className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={handlePaypalCheckout}
+                  disabled={paypalLoading}
                 >
-                  <div className="flex items-center gap-2">
-                    <CreditCard className="h-5 w-5 text-violet-500" />
-                    <p className="font-display font-bold">Pagamento via Cartão (Stripe)</p>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Checkout seguro via Stripe. Aceita Visa, Mastercard, Amex, Elo e cartões internacionais.
-                  </p>
-                  <div className="flex gap-2">
-                    {["Visa", "Master", "Amex", "Elo"].map((card) => (
-                      <div key={card} className="flex-1 rounded-lg bg-background/60 p-2.5 text-center">
-                        <p className="font-bold text-xs">{card}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <Button className="w-full gap-2 bg-violet-600 hover:bg-violet-700 text-white">
-                    <ExternalLink className="h-4 w-4" /> Pagar com Stripe
-                  </Button>
-                  <p className="text-[10px] text-muted-foreground text-center">
-                    Parcelamento em até 12x. Tokens creditados instantaneamente.
-                  </p>
-                </motion.div>
-              )}
-
-              {paymentMethod === "paypal" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="rounded-xl border border-blue-500/20 bg-blue-500/5 p-5 space-y-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <Globe className="h-5 w-5 text-blue-500" />
-                    <p className="font-display font-bold">Pagamento via PayPal</p>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Pagamentos internacionais com proteção ao comprador. Multi-moeda com conversão automática.
-                  </p>
-                  <div className="flex gap-2">
-                    {["USD", "EUR", "GBP", "BRL"].map((cur) => (
-                      <div key={cur} className="flex-1 rounded-lg bg-background/60 p-2.5 text-center">
-                        <p className="font-bold text-xs">{cur}</p>
-                      </div>
-                    ))}
-                  </div>
+                  {paypalLoading ? (
+                    <>
+                      <span className="animate-spin h-4 w-4 border-2 border-white/30 border-t-white rounded-full" />
+                      Processando...
+                    </>
+                  ) : (
+                    <>
+                      <ExternalLink className="h-4 w-4" /> Pagar com PayPal — {selectedItemPrice}
+                    </>
+                  )}
+                </Button>
+                <p className="text-[10px] text-muted-foreground text-center">
+                  Proteção ao comprador inclusa. Tokens creditados após confirmação.
+                </p>
+                {isTestUser && (
                   <Button 
-                    className="w-full gap-2 bg-blue-600 hover:bg-blue-700 text-white"
-                    onClick={handlePaypalCheckout}
+                    variant="outline"
+                    className="w-full gap-2 border-amber-500/30 text-amber-400 hover:bg-amber-500/10 mt-2"
+                    onClick={handleTestBypass}
                     disabled={paypalLoading}
                   >
-                    {paypalLoading ? (
-                      <>
-                        <span className="animate-spin h-4 w-4 border-2 border-white/30 border-t-white rounded-full" />
-                        Processando...
-                      </>
-                    ) : (
-                      <>
-                        <ExternalLink className="h-4 w-4" /> Pagar com PayPal — {selectedItemPrice}
-                      </>
-                    )}
+                    <FlaskConical className="h-4 w-4" /> Modo Teste — Creditar sem pagar
                   </Button>
-                  <p className="text-[10px] text-muted-foreground text-center">
-                    Proteção ao comprador inclusa. Tokens creditados após confirmação.
-                  </p>
-                  {isTestUser && (
-                    <Button 
-                      variant="outline"
-                      className="w-full gap-2 border-amber-500/30 text-amber-400 hover:bg-amber-500/10 mt-2"
-                      onClick={handleTestBypass}
-                      disabled={paypalLoading}
-                    >
-                      <FlaskConical className="h-4 w-4" /> Modo Teste — Creditar sem pagar
-                    </Button>
-                  )}
-                </motion.div>
-              )}
-
-              {paymentMethod === "mercadopago" && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-5 space-y-4"
-                >
-                  <div className="flex items-center gap-2">
-                    <Smartphone className="h-5 w-5 text-cyan-500" />
-                    <p className="font-display font-bold">Pagamento via Mercado Pago</p>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    PIX, boleto bancário ou cartão de crédito pelo Mercado Pago. Parcelamento facilitado.
-                  </p>
-                  <div className="flex gap-2">
-                    {["PIX", "Boleto", "Cartão", "Saldo MP"].map((m) => (
-                      <div key={m} className="flex-1 rounded-lg bg-background/60 p-2.5 text-center">
-                        <p className="font-bold text-xs">{m}</p>
-                      </div>
-                    ))}
-                  </div>
-                  <Button className="w-full gap-2 bg-cyan-600 hover:bg-cyan-700 text-white">
-                    <ExternalLink className="h-4 w-4" /> Pagar com Mercado Pago
-                  </Button>
-                  <p className="text-[10px] text-muted-foreground text-center">
-                    Parcelamento em até 12x sem juros. Tokens creditados em até 5 minutos.
-                  </p>
-                </motion.div>
-              )}
-
-              {/* Crypto section removed */}
+                )}
+              </motion.div>
 
               <Button variant="ghost" size="sm" className="text-xs" onClick={() => { setShowPayment(false); setPaymentMethod(null); }}>
                 ← Voltar para planos
