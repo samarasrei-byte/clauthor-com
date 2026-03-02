@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, LogOut, ShieldCheck, ChevronDown, Bot, Sparkles, Layers3, Bolt } from "lucide-react";
+import { Menu, X, LogOut, ShieldCheck, ChevronDown, Bot, Sparkles, Layers3, Bolt, ShoppingCart, Building2, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -223,11 +223,12 @@ const Navbar = () => {
             <Link
               to="/marketplace"
               onClick={() => setMobileOpen(false)}
-              className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
                 location.pathname === "/marketplace" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
               }`}
             >
-              🛒 {t("navbar.marketplace_label")}
+              <ShoppingCart className="h-4 w-4" strokeWidth={1.5} />
+              {t("navbar.marketplace_label")}
             </Link>
             <Link
               to="/departamentos"
@@ -236,7 +237,8 @@ const Navbar = () => {
                 location.pathname === "/departamentos" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
               }`}
             >
-              🏢 {t("navbar.ai_teams_label")}
+              <Building2 className="h-4 w-4" strokeWidth={1.5} />
+              {t("navbar.ai_teams_label")}
               <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">{t("navbar.new_badge")}</span>
             </Link>
             {navItems.map((item) => (
@@ -257,11 +259,12 @@ const Navbar = () => {
               <Link
                 to="/community"
                 onClick={() => setMobileOpen(false)}
-                className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
                   location.pathname === "/community" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 }`}
               >
-                💬 Comunidade
+                <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
+                {t("home.footer_community_link")}
               </Link>
             )}
             {isAdmin && (
