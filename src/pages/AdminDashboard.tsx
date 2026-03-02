@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -12,9 +13,11 @@ import {
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
   Building, Zap, LayoutDashboard, CreditCard, Store,
-  ShieldCheck, Wallet, Rocket, Sparkles, Crown, Settings, Key, Gift
+  ShieldCheck, Wallet, Rocket, Sparkles, Crown, Settings, Key, Gift, ChevronDown
 } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
+import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -37,6 +40,8 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
   const navigate = useNavigate();
   const queryClient = useQueryClient();
+  const { i18n } = useTranslation();
+  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
 
   const { data: usersCount = 0 } = useQuery({
     queryKey: ["admin-users-count"],
@@ -137,22 +142,26 @@ const AdminDashboard = () => {
   const waitingCount = waitlist.filter((w) => w.status === "waiting").length;
 
   const sidebarItems = [
-    { id: "omnix", label: "THOR", icon: Sparkles, badge: "AI" },
-    { id: "overview", label: "Command Center", icon: LayoutDashboard },
-    { id: "insights", label: "IA Preditiva", icon: Sparkles },
-    { id: "war-room", label: "War Room", icon: Crown },
-    { id: "agent-settings", label: "Config. Agentes", icon: Settings },
-    { id: "platform-creds", label: "Credenciais Central", icon: Key },
-    { id: "openclaw", label: "OpenClaw Motor", icon: Activity, badge: undefined },
-    { id: "payments", label: "Pagamentos", icon: Wallet },
-    { id: "coupons", label: "Cupons", icon: Gift },
-    { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined },
-    { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined },
-    { id: "revenue", label: "Receita", icon: BarChart3 },
-    { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined },
-    { id: "logs", label: "Logs", icon: Activity, badge: totalExecutions || undefined },
-    { id: "marketplace", label: "Marketplace", icon: Store, badge: pendingAgents.length || undefined },
-    { id: "subscriptions", label: "Assinaturas", icon: CreditCard },
+    // ── Núcleo ──
+    { id: "omnix", label: "THOR", icon: Sparkles, badge: "AI", group: "Núcleo" },
+    { id: "overview", label: "Command Center", icon: LayoutDashboard, group: "Núcleo" },
+    { id: "insights", label: "IA Preditiva", icon: Sparkles, group: "Núcleo" },
+    // ── Gestão ──
+    { id: "war-room", label: "War Room", icon: Crown, group: "Gestão" },
+    { id: "agent-settings", label: "Config. Agentes", icon: Settings, group: "Gestão" },
+    { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined, group: "Gestão" },
+    { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined, group: "Gestão" },
+    { id: "marketplace", label: "Marketplace", icon: Store, badge: pendingAgents.length || undefined, group: "Gestão" },
+    // ── Análise ──
+    { id: "revenue", label: "Receita", icon: BarChart3, group: "Análise" },
+    { id: "payments", label: "Pagamentos", icon: Wallet, group: "Análise" },
+    { id: "subscriptions", label: "Assinaturas", icon: CreditCard, group: "Análise" },
+    { id: "logs", label: "Logs", icon: Activity, badge: totalExecutions || undefined, group: "Análise" },
+    // ── Sistema ──
+    { id: "platform-creds", label: "Credenciais Central", icon: Key, group: "Sistema" },
+    { id: "openclaw", label: "OpenClaw Motor", icon: Activity, group: "Sistema" },
+    { id: "coupons", label: "Cupons", icon: Gift, group: "Sistema" },
+    { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: "Sistema" },
   ];
 
   // Real revenue data from payment history
@@ -161,7 +170,7 @@ const AdminDashboard = () => {
     const months: { name: string; receita: number }[] = [];
     for (let i = 5; i >= 0; i--) {
       const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const monthName = d.toLocaleDateString("pt-BR", { month: "short" });
+      const monthName = d.toLocaleDateString(locale, { month: "short" });
       const paymentsInMonth = paymentHistory.filter((p: any) => {
         const pd = new Date(p.created_at);
         return pd.getMonth() === d.getMonth() && pd.getFullYear() === d.getFullYear() && p.status === "completed";
@@ -212,9 +221,17 @@ const AdminDashboard = () => {
       {/* Scrollable content area */}
       <div className="flex-1 min-w-0 overflow-y-auto">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-6">
-          {/* Header */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-            <div className="flex items-center gap-3 mb-1">
+          {/* Header + Breadcrumb */}
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
+            {/* Breadcrumb */}
+            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
+              <span>Admin</span>
+              <span>/</span>
+              <span className="text-foreground/80 font-medium capitalize">
+                {sidebarItems.find(i => i.id === activeTab)?.label || activeTab}
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
               <div className="relative">
                 <Shield className="h-6 w-6 text-primary" />
                 <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-background" />
@@ -233,13 +250,49 @@ const AdminDashboard = () => {
             <p className="text-xs text-muted-foreground">Command Center — Controle total da plataforma</p>
           </motion.div>
 
-          {/* Mobile tabs */}
-          <div className="flex gap-2 overflow-x-auto lg:hidden pb-2">
-            {sidebarItems.map((item) => (
-              <Button key={item.id} variant={activeTab === item.id ? "default" : "ghost"} size="sm" onClick={() => setActiveTab(item.id)} className="shrink-0 gap-1.5 text-xs">
-                <item.icon className="h-3.5 w-3.5" /> {item.label}
-              </Button>
-            ))}
+          {/* Mobile nav trigger */}
+          <div className="lg:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-1.5 text-xs w-full justify-start">
+                  <LayoutDashboard className="h-3.5 w-3.5" />
+                  {sidebarItems.find(i => i.id === activeTab)?.label || "Menu"}
+                  <ChevronDown className="h-3 w-3 ml-auto" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-72 p-0">
+                <SheetHeader className="p-4 border-b border-border/10">
+                  <SheetTitle className="font-display text-sm">Navegação Admin</SheetTitle>
+                </SheetHeader>
+                <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-6rem)]">
+                  {sidebarItems.map((item, idx) => {
+                    const showGroup = item.group && (idx === 0 || sidebarItems[idx - 1].group !== item.group);
+                    return (
+                      <div key={item.id}>
+                        {showGroup && (
+                          <div className="px-3 pt-4 pb-1.5 first:pt-1">
+                            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">{item.group}</span>
+                          </div>
+                        )}
+                        <SheetClose asChild>
+                          <button
+                            onClick={() => setActiveTab(item.id)}
+                            className={cn(
+                              "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
+                              activeTab === item.id ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                            )}
+                          >
+                            <item.icon className="h-4 w-4 shrink-0" />
+                            <span className="flex-1 text-left">{item.label}</span>
+                            {item.badge && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">{item.badge}</span>}
+                          </button>
+                        </SheetClose>
+                      </div>
+                    );
+                  })}
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
 
           {/* ═══ OMNIX ═══ */}
@@ -329,10 +382,10 @@ const AdminDashboard = () => {
                         <tr key={agent.id} className="border-b border-white/[0.05] hover:bg-accent/20">
                           <td className="p-3 font-medium">{agent.name}</td>
                           <td className="p-3"><Badge variant="secondary">{agent.tier}</Badge></td>
-                          <td className="p-3">R$ {(agent.monthly_price / 100).toLocaleString("pt-BR")}</td>
+                          <td className="p-3">R$ {(agent.monthly_price / 100).toLocaleString(locale)}</td>
                           <td className="p-3">{agent.total_executions}</td>
                           <td className="p-3"><Badge variant="secondary" className={agent.status === "active" ? "bg-primary/20 text-primary" : ""}>{agent.status}</Badge></td>
-                          <td className="p-3 text-muted-foreground text-xs">{new Date(agent.created_at).toLocaleDateString("pt-BR")}</td>
+                          <td className="p-3 text-muted-foreground text-xs">{new Date(agent.created_at).toLocaleDateString(locale)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -366,11 +419,11 @@ const AdminDashboard = () => {
                 <CardContent className="space-y-4">
                   <div className="bg-white/[0.02] rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">MRR</p>
-                    <p className="font-display text-2xl font-bold gradient-text">R$ {(totalRevenue / 100).toLocaleString("pt-BR")}</p>
+                    <p className="font-display text-2xl font-bold gradient-text">R$ {(totalRevenue / 100).toLocaleString(locale)}</p>
                   </div>
                   <div className="bg-white/[0.02] rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">ARR</p>
-                    <p className="font-display text-2xl font-bold">R$ {((totalRevenue * 12) / 100).toLocaleString("pt-BR")}</p>
+                    <p className="font-display text-2xl font-bold">R$ {((totalRevenue * 12) / 100).toLocaleString(locale)}</p>
                   </div>
                   <div className="bg-white/[0.02] rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">Assinaturas Ativas</p>
@@ -378,7 +431,7 @@ const AdminDashboard = () => {
                   </div>
                   <div className="bg-white/[0.02] rounded-xl p-4">
                     <p className="text-xs text-muted-foreground mb-1">Ticket Médio</p>
-                    <p className="font-display text-2xl font-bold">R$ {allSubscriptions.length > 0 ? ((totalRevenue / allSubscriptions.length) / 100).toLocaleString("pt-BR") : "0"}</p>
+                    <p className="font-display text-2xl font-bold">R$ {allSubscriptions.length > 0 ? ((totalRevenue / allSubscriptions.length) / 100).toLocaleString(locale) : "0"}</p>
                   </div>
                 </CardContent>
               </Card>
@@ -413,7 +466,7 @@ const AdminDashboard = () => {
                           <td className="p-3 text-muted-foreground"><span className="flex items-center gap-1"><Phone className="h-3 w-3" /> {entry.whatsapp}</span></td>
                           <td className="p-3 text-muted-foreground"><span className="flex items-center gap-1"><Building className="h-3 w-3" /> {entry.company || "—"}</span></td>
                           <td className="p-3"><Badge variant="secondary" className={entry.status === "waiting" ? "bg-cyan-500/10 text-cyan-400" : "bg-primary/20 text-primary"}>{entry.status === "waiting" ? "Aguardando" : entry.status}</Badge></td>
-                          <td className="p-3 text-muted-foreground text-xs">{new Date(entry.created_at).toLocaleDateString("pt-BR")}</td>
+                          <td className="p-3 text-muted-foreground text-xs">{new Date(entry.created_at).toLocaleDateString(locale)}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -446,7 +499,7 @@ const AdminDashboard = () => {
                           <td className="p-3 text-muted-foreground">{log.action}</td>
                           <td className="p-3"><Badge variant="secondary" className={log.status === "success" ? "bg-cyan-500/10 text-cyan-400" : log.status === "error" ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary/80"}>{log.status}</Badge></td>
                           <td className="p-3 text-muted-foreground">{log.execution_time_ms ? `${log.execution_time_ms}ms` : "—"}</td>
-                          <td className="p-3 text-muted-foreground text-xs">{new Date(log.created_at).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</td>
+                          <td className="p-3 text-muted-foreground text-xs">{new Date(log.created_at).toLocaleString(locale, { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -469,7 +522,7 @@ const AdminDashboard = () => {
                       <div key={agent.id} className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
                         <div>
                           <p className="font-medium">{agent.title}</p>
-                          <p className="text-xs text-muted-foreground mt-1">{agent.short_description || "Sem descrição"} • {agent.tier} • R$ {(agent.monthly_price / 100).toLocaleString("pt-BR")}/mês</p>
+                          <p className="text-xs text-muted-foreground mt-1">{agent.short_description || "Sem descrição"} • {agent.tier} • R$ {(agent.monthly_price / 100).toLocaleString(locale)}/mês</p>
                         </div>
                         <div className="flex gap-2">
                           <Button size="sm" onClick={() => approveAgent(agent.id)} className="gap-1"><CheckCircle className="h-4 w-4" /> Aprovar</Button>
@@ -503,8 +556,8 @@ const AdminDashboard = () => {
                         {allSubscriptions.map((sub: any) => (
                           <tr key={sub.id} className="border-b border-white/[0.05] hover:bg-accent/20">
                             <td className="p-3 font-medium">{(sub as any).agent?.name || (sub.agent_id ? sub.agent_id.slice(0, 8) : "—")}</td>
-                            <td className="p-3">R$ {(sub.monthly_price / 100).toLocaleString("pt-BR")}/mês</td>
-                            <td className="p-3 text-muted-foreground text-xs">{sub.current_period_start ? new Date(sub.current_period_start).toLocaleDateString("pt-BR") : "—"} → {sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString("pt-BR") : "—"}</td>
+                            <td className="p-3">R$ {(sub.monthly_price / 100).toLocaleString(locale)}/mês</td>
+                            <td className="p-3 text-muted-foreground text-xs">{sub.current_period_start ? new Date(sub.current_period_start).toLocaleDateString(locale) : "—"} → {sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString(locale) : "—"}</td>
                             <td className="p-3"><Badge variant="secondary" className="bg-primary/20 text-primary">{sub.status}</Badge></td>
                           </tr>
                         ))}

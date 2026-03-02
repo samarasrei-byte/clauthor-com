@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,8 +8,9 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause, Eye, HelpCircle, BookOpen, Plug
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause, Eye, HelpCircle, BookOpen, Plug, ChevronDown, Loader2
 } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -307,6 +309,14 @@ const ClientDashboard = () => {
     return { departmentSidebarItems: deptItems, soloAgentItems: soloItems };
   }, [agents, nameToSlug]);
 
+  // Dynamic chat item when agent is selected
+  const chatSidebarItem: SidebarItem | null = selectedAgent ? {
+    id: "chat",
+    label: selectedAgent.name,
+    icon: MessageSquare,
+    group: "Operações",
+  } : null;
+
   const sidebarItems: SidebarItem[] = [
     // ── Núcleo ──
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: "Núcleo" },
@@ -317,6 +327,7 @@ const ClientDashboard = () => {
     ...departmentSidebarItems,
     ...soloAgentItems,
     // ── Operações ──
+    ...(chatSidebarItem ? [chatSidebarItem] : []),
     { id: "live-timeline", label: "Timeline", icon: Eye, badge: "LIVE", group: "Operações" },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: "Operações" },
     { id: "integrations", label: "Integrações", icon: Plug, group: "Operações" },
@@ -419,22 +430,57 @@ const ClientDashboard = () => {
             </div>
           </motion.div>
 
-          {/* Mobile tabs */}
-          <div className="flex gap-2 overflow-x-auto lg:hidden pb-2">
-            {sidebarItems.map((item) => (
-              <Button
-                key={item.id}
-                variant={activeSection === item.id ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setActiveSection(item.id)}
-                className="shrink-0 gap-1.5"
-              >
-                <item.icon className="h-3.5 w-3.5" />
-                {item.label}
-              </Button>
-            ))}
+          {/* Mobile nav trigger */}
+          <div className="lg:hidden">
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button variant="outline" size="sm" className="gap-1.5 text-xs w-full justify-start">
+                  <LayoutDashboard className="h-3.5 w-3.5" />
+                  {sidebarItems.find(i => i.id === activeSection)?.label || "Menu"}
+                  <ChevronDown className="h-3 w-3 ml-auto" />
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="left" className="w-72 p-0">
+                <SheetHeader className="p-4 border-b border-border/10">
+                  <SheetTitle className="font-display text-sm">Navegação</SheetTitle>
+                </SheetHeader>
+                <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-6rem)]">
+                  {sidebarItems.filter(i => !i.children).map((item, idx) => {
+                    const showGroup = item.group && (idx === 0 || sidebarItems.filter(i => !i.children)[idx - 1]?.group !== item.group);
+                    return (
+                      <div key={item.id}>
+                        {showGroup && (
+                          <div className="px-3 pt-4 pb-1.5 first:pt-1">
+                            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">{item.group}</span>
+                          </div>
+                        )}
+                        <SheetClose asChild>
+                          <button
+                            onClick={() => setActiveSection(item.id)}
+                            className={cn(
+                              "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
+                              activeSection === item.id ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                            )}
+                          >
+                            <item.icon className="h-4 w-4 shrink-0" />
+                            <span className="flex-1 text-left">{item.label}</span>
+                            {item.badge && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">{item.badge}</span>}
+                          </button>
+                        </SheetClose>
+                      </div>
+                    );
+                  })}
+                </nav>
+              </SheetContent>
+            </Sheet>
           </div>
 
+          {/* Loading state */}
+          {loadingAgents && activeSection === "overview" && (
+            <div className="flex items-center justify-center py-12">
+              <Loader2 className="h-6 w-6 animate-spin text-primary/50" />
+            </div>
+          )}
           {/* ═══ OMNIX ═══ */}
           {activeSection === "omnix" && (
             <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
@@ -695,7 +741,14 @@ const ClientDashboard = () => {
               <h2 className="font-display text-xl font-bold">{t("dashboard.execution_logs")} ({recentLogs.length})</h2>
               <div className="glass-card rounded-2xl overflow-hidden">
                 {recentLogs.length === 0 ? (
-                  <div className="p-12 text-center text-muted-foreground">{t("dashboard.no_logs_found")}</div>
+                  <div className="p-12 text-center space-y-3">
+                    <Activity className="h-10 w-10 text-muted-foreground/30 mx-auto" />
+                    <p className="text-muted-foreground font-medium">{t("dashboard.no_logs_found")}</p>
+                    <p className="text-xs text-muted-foreground/60">Os logs aparecerão aqui quando seus agentes começarem a executar ações.</p>
+                    <Button variant="outline" size="sm" onClick={() => setActiveSection("agents")} className="mt-2 gap-1.5">
+                      <Bot className="h-3.5 w-3.5" /> Ver Agentes
+                    </Button>
+                  </div>
                 ) : (
                   <div className="divide-y divide-white/5 max-h-[600px] overflow-y-auto">
                     {recentLogs.map((log) => (
