@@ -423,7 +423,7 @@ Dados da plataforma CLAUTHOR:
                 <div className="flex items-center gap-2 mb-1">
                   <h4 className="text-xs font-semibold">{insight.title}</h4>
                   <Badge variant="secondary" className="text-[8px] px-1.5 py-0 border-0">
-                    {insight.impact === "high" ? "⚡ Alto" : insight.impact === "medium" ? "📊 Médio" : "ℹ️ Baixo"}
+                    {insight.impact === "high" ? "Alto" : insight.impact === "medium" ? "Médio" : "Baixo"}
                   </Badge>
                 </div>
                 <p className="text-[10px] opacity-80">{insight.description}</p>

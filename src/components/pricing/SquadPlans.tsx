@@ -552,7 +552,7 @@ export default function SquadPlans() {
                     {dept.popular && (
                       <div className="absolute top-3 right-3 z-10">
                         <Badge className="bg-primary text-primary-foreground text-[9px] font-bold px-2.5 py-1 shadow-[0_0_20px_hsl(var(--primary)/0.4)]">
-                          🔥 {t("squads.best_seller", { defaultValue: "MAIS VENDIDO" })}
+                          {t("squads.best_seller", { defaultValue: "MAIS VENDIDO" })}
                         </Badge>
                       </div>
                     )}
