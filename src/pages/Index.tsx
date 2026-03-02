@@ -22,7 +22,7 @@ import HelpTooltip from "@/components/HelpTooltip";
 import { useTranslation } from "react-i18next";
 import clauthorLogo from "@/assets/clauthor-logo.png";
 import helixaPhoto from "@/assets/helixa-ai.png";
-import kaelisPhoto from "@/assets/kaelis-ai.png";
+import thorPhoto from "@/assets/kaelis-ai.png";
 
 /* ═══════════════════════════════════════════════════════
    TYPEWRITER HOOK
@@ -731,7 +731,7 @@ const HomePage = () => {
               {
                 name: "THOR",
                 role: "Chief Executive Officer (CEO)",
-                photo: kaelisPhoto,
+                photo: thorPhoto,
                 bio: "THOR is the supreme command center of the platform. He orchestrates all operations, coordinates every department, and guarantees disciplined execution at scale. The visionary intelligence that turns multiple AI agents into a synchronized, enterprise-grade execution machine.",
                 isAI: true,
               },
