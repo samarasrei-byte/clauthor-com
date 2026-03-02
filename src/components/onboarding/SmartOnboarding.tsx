@@ -6,10 +6,12 @@ import {
   GraduationCap, Factory, Rocket, Target, Zap, Shield,
   Users, MessageSquare, BarChart3, Headphones, PenTool,
   Receipt, Globe, DollarSign, Megaphone, LineChart, Cpu,
+  HelpCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import SquadConsultant from "@/components/pricing/SquadConsultant";
 
 /* ─── Typing Hook ─── */
 const useTyping = (text: string, speed = 30, delay = 0) => {
@@ -233,18 +235,6 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                         <p className="text-sm">{msg2.displayed}{msg1.done && !msg2.done && <span className="animate-pulse text-primary">|</span>}</p>
                       </div>
-
-                      {/* Expert shortcut */}
-                      <div className="flex justify-center mt-4 gap-3">
-                        <Button
-                          variant="ghost"
-                          onClick={() => { onClose(); navigate("/library"); }}
-                          className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
-                        >
-                          Já sei o que preciso — ir direto aos agentes
-                          <ArrowRight className="h-3 w-3" />
-                        </Button>
-                      </div>
                     </motion.div>
                   )}
 
@@ -271,6 +261,26 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                             <p className="text-[11px] font-medium leading-tight">{ind.label}</p>
                           </motion.button>
                         ))}
+                      </div>
+
+                      {/* Shortcuts */}
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-5">
+                        <Button
+                          variant="outline"
+                          onClick={() => setPhase(5)}
+                          className="gap-2 rounded-xl border-primary/20 bg-primary/5 hover:bg-primary/10 text-sm h-11 px-5"
+                        >
+                          <HelpCircle className="h-4 w-4 text-primary" />
+                          Não sei o que preciso — falar com IA
+                        </Button>
+                        <Button
+                          variant="ghost"
+                          onClick={() => { onClose(); navigate("/library"); }}
+                          className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
+                        >
+                          Já sei o que preciso — ir direto
+                          <ArrowRight className="h-3 w-3" />
+                        </Button>
                       </div>
                     </motion.div>
                   )}
@@ -523,6 +533,54 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       ← Recomeçar
                     </Button>
                   </motion.div>
+                </motion.div>
+              )}
+
+              {/* ═══ PHASE 5: SQUAD CONSULTANT (IA REAL) ═══ */}
+              {phase === 5 && (
+                <motion.div
+                  key="p5"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  className="space-y-4"
+                >
+                  {/* Bot intro */}
+                  <div className="flex gap-3">
+                    <div className="w-8 h-8 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 mt-1">
+                      <Bot className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
+                      <p className="text-sm">
+                        Sem problema! 😊 Nosso <strong>Consultor de IA</strong> vai te ajudar.
+                        Conte sobre sua empresa e ele monta o squad ideal para você.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Embedded SquadConsultant */}
+                  <div className="rounded-2xl border border-border bg-card/40 p-4">
+                    <SquadConsultant />
+                  </div>
+
+                  {/* Back / human contact */}
+                  <div className="flex flex-col items-center gap-2 pt-2">
+                    <Button
+                      variant="outline"
+                      onClick={() => { onClose(); navigate("/auth"); }}
+                      className="gap-2 rounded-xl text-xs border-border/50"
+                    >
+                      <Users className="h-3.5 w-3.5" />
+                      Prefiro falar com um humano — criar conta
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      onClick={() => setPhase(0)}
+                      className="text-xs text-muted-foreground"
+                    >
+                      ← Voltar ao início
+                    </Button>
+                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
