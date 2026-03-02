@@ -3,6 +3,8 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import { lazy, Suspense } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
+const SmartOnboarding = lazy(() => import("@/components/onboarding/SmartOnboarding"));
+
 const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 import { Button } from "@/components/ui/button";
@@ -219,6 +221,7 @@ const HomePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
+  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
 
   const { scrollYProgress } = useScroll();
   const bgOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
@@ -320,10 +323,10 @@ const HomePage = () => {
 
                     {/* CTAs — clear hierarchy */}
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <Link to="/departamentos" className="block">
-                        <motion.button
+                      <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
+                          onClick={() => setShowSmartOnboarding(true)}
                           className="group relative h-14 sm:h-14 px-10 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full sm:w-auto"
                         >
                           <div className="absolute inset-0 bg-primary rounded-xl" />
@@ -335,7 +338,6 @@ const HomePage = () => {
                             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                           </span>
                         </motion.button>
-                      </Link>
 
                       <Link to="/library" className="block">
                         <motion.button
@@ -837,6 +839,10 @@ const HomePage = () => {
           </div>
         </div>
       </footer>
+      {/* Smart Onboarding */}
+      <Suspense fallback={null}>
+        <SmartOnboarding isOpen={showSmartOnboarding} onClose={() => setShowSmartOnboarding(false)} />
+      </Suspense>
     </div>
   );
 };
