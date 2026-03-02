@@ -367,19 +367,7 @@ const HomePage = () => {
                       ))}
                     </div>
 
-                    {/* Social proof — above the fold */}
-                    <div className="flex flex-wrap items-center gap-6 mt-6">
-                      {[
-                        { value: "850+", label: "Empresas" },
-                        { value: "97%", label: "Eficiência" },
-                        { value: "12.4k", label: "Horas salvas" },
-                      ].map((stat) => (
-                        <div key={stat.label} className="text-center">
-                          <p className="font-display text-lg font-bold text-foreground">{stat.value}</p>
-                          <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-muted-foreground/50">{stat.label}</p>
-                        </div>
-                      ))}
-                    </div>
+                    {/* Social proof moved to dedicated stats section below */}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -732,14 +720,14 @@ const HomePage = () => {
                 name: "THOR",
                 role: "Chief Executive Officer (CEO)",
                 photo: thorPhoto,
-                bio: "THOR is the supreme command center of the platform. He orchestrates all operations, coordinates every department, and guarantees disciplined execution at scale. The visionary intelligence that turns multiple AI agents into a synchronized, enterprise-grade execution machine.",
+                bio: "THOR é o centro de comando supremo da plataforma. Ele orquestra todas as operações, coordena cada departamento e garante execução disciplinada em escala. A inteligência visionária que transforma múltiplos agentes de IA em uma máquina de execução sincronizada de nível enterprise.",
                 isAI: true,
               },
               {
                 name: "HELIXA AI",
                 role: "Chief AI Evolution Officer",
                 photo: helixaPhoto,
-                bio: "HELIXA AI is the platform's self-improving intelligence core. She continuously optimizes agents, refines performance, and ensures adaptive evolution based on real-time data. Transforms the system into a living, continuously advancing AI ecosystem.",
+                bio: "HELIXA AI é o núcleo de inteligência auto-evolutiva da plataforma. Ela otimiza continuamente os agentes, refina a performance e garante evolução adaptativa com base em dados em tempo real. Transforma o sistema em um ecossistema de IA vivo, em constante avanço.",
                 isAI: true,
               },
             ].map((member, i) => (
@@ -781,26 +769,44 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          CTA FINAL
+          PRICING PREVIEW
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24 px-4 relative">
-        <div className="max-w-2xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}>
-            <Link to="/departamentos">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="group relative h-14 px-14 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer"
-              >
-                <div className="absolute inset-0 bg-primary rounded-xl" />
-                <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
-                <span className="relative z-10 flex items-center justify-center gap-3">
-                  <Workflow className="h-4 w-4" strokeWidth={1.5} />
-                  Monte seu Time de IA
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </span>
-              </motion.button>
-            </Link>
+      <section className="py-12 sm:py-16 px-4 relative border-y border-border/30">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary/60">Investimento</span>
+            <h2 className="font-display text-2xl sm:text-4xl font-bold mt-3 mb-4">
+              A partir de <span className="gradient-text">R$ 697/mês</span> por agente
+            </h2>
+            <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto mb-6">
+              Squads com desconto progressivo de até 35%. Cada agente custa menos que um estagiário e trabalha 24/7.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3 mb-8">
+              {[
+                { label: "3 agentes", discount: "10% off" },
+                { label: "5 agentes", discount: "20% off" },
+                { label: "7 agentes", discount: "30% off" },
+                { label: "10+ agentes", discount: "35% off" },
+              ].map(tier => (
+                <div key={tier.label} className="px-4 py-2.5 rounded-xl border border-border bg-card/30 text-center">
+                  <p className="font-mono text-xs text-muted-foreground">{tier.label}</p>
+                  <p className="font-display font-bold text-sm text-primary">{tier.discount}</p>
+                </div>
+              ))}
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button onClick={() => setShowSmartOnboarding(true)} className="glow rounded-xl h-13 px-10 gap-2 font-display font-bold text-sm uppercase tracking-wider">
+                <Workflow className="h-4 w-4" strokeWidth={1.5} />
+                Monte seu Time de IA
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+              <Link to="/pricing">
+                <Button variant="outline" className="rounded-xl h-11 px-8 font-mono text-xs uppercase tracking-wider border-border/50">
+                  Ver preços detalhados
+                  <ChevronRight className="ml-1 h-3.5 w-3.5" />
+                </Button>
+              </Link>
+            </div>
           </motion.div>
         </div>
       </section>
@@ -810,21 +816,39 @@ const HomePage = () => {
           ═══════════════════════════════════════════════════════ */}
       <footer className="border-t border-border py-12 sm:py-16 px-4">
         <div className="max-w-5xl mx-auto">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6 sm:gap-8 mb-8 sm:mb-10">
-            <div className="flex items-center gap-3">
-              <img src={clauthorLogo} alt="CLAUTHOR" className="w-8 h-8 object-contain mix-blend-lighten" />
-              <span className="font-display font-bold text-base tracking-wider">CLAUTHOR</span>
+          <div className="flex flex-col md:flex-row items-start justify-between gap-8 sm:gap-10 mb-8 sm:mb-10">
+            <div>
+              <div className="flex items-center gap-3 mb-3">
+                <img src={clauthorLogo} alt="CLAUTHOR" className="w-8 h-8 object-contain mix-blend-lighten" />
+                <span className="font-display font-bold text-base tracking-wider">CLAUTHOR</span>
+              </div>
+              <p className="text-sm text-muted-foreground max-w-xs">
+                Força de trabalho de IA que orquestra 80 agentes autônomos em 15 departamentos corporativos.
+              </p>
             </div>
-            <div className="flex flex-wrap justify-center gap-5 sm:gap-10">
-              <Link to="/library" className="font-mono text-xs uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">Agentes</Link>
-              <Link to="/departamentos" className="font-mono text-xs uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">Times</Link>
-              <Link to="/pricing" className="font-mono text-xs uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">{t("nav.pricing")}</Link>
-              <Link to="/how-it-works" className="font-mono text-xs uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors">{t("nav.how_it_works")}</Link>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-4">
+              <div className="space-y-2.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">Produto</p>
+                <Link to="/library" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Agentes</Link>
+                <Link to="/departamentos" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Departamentos</Link>
+                <Link to="/pricing" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("nav.pricing")}</Link>
+                <Link to="/how-it-works" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("nav.how_it_works")}</Link>
+              </div>
+              <div className="space-y-2.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">Comunidade</p>
+                <Link to="/community" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Comunidade</Link>
+                <Link to="/pitch" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Pitch</Link>
+              </div>
+              <div className="space-y-2.5">
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">Legal</p>
+                <Link to="/termos" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Termos de Uso</Link>
+                <Link to="/privacidade" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Privacidade</Link>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-col items-center gap-4 pt-8 border-t border-border">
-            <div className="flex flex-wrap items-center justify-center gap-4">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border">
+            <div className="flex flex-wrap items-center gap-4">
               {[
                 { icon: LockKeyhole, label: "SSL 256-bit" },
                 { icon: Fingerprint, label: "SOC 2" },
