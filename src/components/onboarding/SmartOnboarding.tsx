@@ -154,7 +154,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
   const handleViewLibrary = () => {
     onClose();
-    navigate("/library");
+    navigate("/marketplace");
   };
 
   const totalPhases = 4;
@@ -291,7 +291,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         <div className="flex gap-2">
                           <Button
                             variant="ghost"
-                            onClick={() => { onClose(); navigate("/library"); }}
+                            onClick={() => { onClose(); navigate("/marketplace"); }}
                             className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
                           >
                             Já sei — ver Agentes
