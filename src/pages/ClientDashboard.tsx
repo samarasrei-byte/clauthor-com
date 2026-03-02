@@ -7,41 +7,33 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause, Eye, HelpCircle, BookOpen, Plug, ChevronDown, Loader2
+  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, Loader2
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Link, useNavigate } from "react-router-dom";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar } from "recharts";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import type { SidebarItem, SidebarChild } from "@/components/dashboard/DashboardSidebar";
-import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
-import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import QuickActions from "@/components/dashboard/QuickActions";
 import AgentChat from "@/components/dashboard/AgentChat";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import ClientCommandCenter from "@/components/dashboard/ClientCommandCenter";
 import SquadChat from "@/components/dashboard/SquadChat";
-import CompanyBoard from "@/components/dashboard/CompanyBoard";
-import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
-import SendGridSetupGuide from "@/components/dashboard/SendGridSetupGuide";
-import LinkedInSetupGuide from "@/components/dashboard/LinkedInSetupGuide";
-import MetaAdsSetupGuide from "@/components/dashboard/MetaAdsSetupGuide";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
 import SettingsPage from "@/components/dashboard/SettingsPage";
+import AgentsSection from "@/components/dashboard/AgentsSection";
+import AnalyticsSection from "@/components/dashboard/AnalyticsSection";
+import LogsSection from "@/components/dashboard/LogsSection";
+import PaymentHistoryTable from "@/components/dashboard/PaymentHistoryTable";
 
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
-import PaymentHistoryTable from "@/components/dashboard/PaymentHistoryTable";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
-import OrchestrationDemo from "@/components/dashboard/OrchestrationDemo";
-
 import AgentLiveTimeline from "@/components/dashboard/AgentLiveTimeline";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
@@ -49,7 +41,6 @@ import type { HireIntent } from "./Auth";
 import Library from "./Library";
 import Integrations from "./Integrations";
 import HelpTooltip from "@/components/HelpTooltip";
-import AgentSetupChecklist from "@/components/dashboard/AgentSetupChecklist";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -62,7 +53,7 @@ const ClientDashboard = () => {
     const key = `clauthor_concierge_seen_${user.id}`;
     if (!localStorage.getItem(key)) {
       localStorage.setItem(key, "true");
-      return "omnix"; // First visit → go to Thor
+      return "omnix";
     }
     return "overview";
   });
@@ -75,19 +66,13 @@ const ClientDashboard = () => {
   usePaypalCapture();
   const { data: tokenUsage = [] } = useTokenUsage();
 
-  // Post-payment onboarding context for THOR
   const [postPaymentContext, setPostPaymentContext] = useState<{ agentName: string; isDepartment: boolean; agentCount: number } | null>(null);
 
-  // Post-payment: redirect to THOR for guided onboarding
   useEffect(() => {
     const raw = sessionStorage.getItem("clauthor_post_payment_onboarding");
     if (!raw) return;
     sessionStorage.removeItem("clauthor_post_payment_onboarding");
-    try {
-      const ctx = JSON.parse(raw);
-      setPostPaymentContext(ctx);
-    } catch { /* ignore */ }
-    // Small delay to let the dashboard render first
+    try { setPostPaymentContext(JSON.parse(raw)); } catch { /* ignore */ }
     const timer = setTimeout(() => setActiveSection("omnix"), 800);
     return () => clearTimeout(timer);
   }, []);
@@ -95,18 +80,13 @@ const ClientDashboard = () => {
   const { data: agents = [], isLoading: loadingAgents } = useQuery({
     queryKey: ["my-agents", user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("agents")
-        .select("*")
-        .eq("user_id", user!.id)
-        .order("created_at", { ascending: false });
+      const { data, error } = await supabase.from("agents").select("*").eq("user_id", user!.id).order("created_at", { ascending: false });
       if (error) throw error;
       return data;
     },
     enabled: !!user,
   });
 
-  // Fetch templates to map agent names → slugs for department grouping
   const { data: templates = [] } = useQuery({
     queryKey: ["agent-templates-slugs"],
     queryFn: async () => {
@@ -116,15 +96,10 @@ const ClientDashboard = () => {
     staleTime: Infinity,
   });
 
-
   const { data: subscriptions = [] } = useQuery({
     queryKey: ["my-subscriptions", user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("subscriptions")
-        .select("*, agent:agents(*)")
-        .eq("user_id", user!.id)
-        .eq("status", "active");
+      const { data, error } = await supabase.from("subscriptions").select("*, agent:agents(*)").eq("user_id", user!.id).eq("status", "active");
       if (error) throw error;
       return data.map((sub: any) => ({
         id: sub.id,
@@ -137,15 +112,11 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
+  // Increased limit to 200 for better analytics charts
   const { data: recentLogs = [] } = useQuery({
     queryKey: ["execution-logs", user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from("execution_logs")
-        .select("*, agent:agents(name)")
-        .eq("user_id", user!.id)
-        .order("created_at", { ascending: false })
-        .limit(50);
+      const { data, error } = await supabase.from("execution_logs").select("*, agent:agents(name)").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(200);
       if (error) throw error;
       return data.map((log: any) => ({
         id: log.id,
@@ -164,73 +135,44 @@ const ClientDashboard = () => {
     if (!user || hireProcessed.current) return;
     const raw = sessionStorage.getItem("hireIntent");
     if (!raw) return;
-    
     hireProcessed.current = true;
     sessionStorage.removeItem("hireIntent");
-    
     const intent: HireIntent = JSON.parse(raw);
     if (!intent.slugs || intent.slugs.length === 0) return;
 
     const processHire = async () => {
       const uniqueSlugs = [...new Set(intent.slugs)];
       toast.info(t("dashboard.hiring_agents", { label: intent.label }), { duration: 3000 });
-
       let hired = 0;
       for (const slug of uniqueSlugs) {
         try {
-          const { data: template } = await supabase
-            .from("agent_templates")
-            .select("*")
-            .eq("slug", slug)
-            .eq("is_active", true)
-            .single();
-
+          const { data: template } = await supabase.from("agent_templates").select("*").eq("slug", slug).eq("is_active", true).single();
           if (!template) continue;
-
-          const { error } = await supabase
-            .from("agents")
-            .insert({
-              user_id: user.id,
-              name: template.name,
-              description: template.description,
-              instructions: template.system_prompt || template.instructions,
-              objective: template.description,
-              tier: template.tier as any,
-              monthly_price: 0,
-              status: "active",
-              channels: template.default_channels,
-              integrations: template.default_integrations,
-              actions: template.default_actions,
-            });
-
+          const { error } = await supabase.from("agents").insert({
+            user_id: user.id, name: template.name, description: template.description,
+            instructions: template.system_prompt || template.instructions, objective: template.description,
+            tier: template.tier as any, monthly_price: 0, status: "active",
+            channels: template.default_channels, integrations: template.default_integrations, actions: template.default_actions,
+          });
           if (!error) hired++;
-        } catch (err) {
-          console.error(`Failed to hire ${slug}:`, err);
-        }
+        } catch (err) { console.error(`Failed to hire ${slug}:`, err); }
       }
-
       if (hired > 0) {
         toast.success(t("dashboard.agents_hired", { count: hired }));
         queryClient.invalidateQueries({ queryKey: ["my-agents"] });
         setActiveSection("agents");
-      } else {
-        toast.error(t("dashboard.hire_failed"));
-      }
+      } else { toast.error(t("dashboard.hire_failed")); }
     };
-
     processHire();
   }, [user, queryClient, t]);
-
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
   const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);
   const estimatedSavings = activeAgents * 7560;
-
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
 
-  // Build real chart data from execution logs
-  const realChartData = (() => {
+  const realChartData = useMemo(() => {
     const now = new Date();
     const months: { name: string; execucoes: number; sucesso: number }[] = [];
     for (let i = 5; i >= 0; i--) {
@@ -240,103 +182,67 @@ const ClientDashboard = () => {
         const ld = new Date(l.created_at);
         return ld.getMonth() === d.getMonth() && ld.getFullYear() === d.getFullYear();
       });
-      months.push({
-        name: monthName,
-        execucoes: logsInMonth.length,
-        sucesso: logsInMonth.filter((l) => l.status === "success").length,
-      });
+      months.push({ name: monthName, execucoes: logsInMonth.length, sucesso: logsInMonth.filter((l) => l.status === "success").length });
     }
     return months;
-  })();
+  }, [recentLogs, locale]);
 
-  // Build name→slug reverse map from templates
   const nameToSlug = useMemo(() => {
     const map: Record<string, string> = {};
     templates.forEach(t => { map[t.name] = t.slug; });
     return map;
   }, [templates]);
 
-  // Group contracted agents by department for sidebar + collect solo agents
   const { departmentSidebarItems, soloAgentItems } = useMemo(() => {
     if (agents.length === 0) return { departmentSidebarItems: [] as SidebarItem[], soloAgentItems: [] as SidebarItem[] };
     const groups: Record<string, { dept: typeof DEPARTMENTS[string]; children: SidebarChild[] }> = {};
     const soloChildren: SidebarChild[] = [];
-    
     for (const agent of agents) {
       const slug = nameToSlug[agent.name];
-      if (!slug) {
-        // Agent without template match → solo
-        soloChildren.push({ id: `agent-chat-${agent.id}`, label: agent.name, icon: Bot });
-        continue;
-      }
+      if (!slug) { soloChildren.push({ id: `agent-chat-${agent.id}`, label: agent.name, icon: Bot }); continue; }
       const deptId = SLUG_TO_DEPT[slug];
-      if (!deptId || !DEPARTMENTS[deptId]) {
-        soloChildren.push({ id: `agent-chat-${agent.id}`, label: agent.name, icon: agentIcons[slug] || Bot });
-        continue;
-      }
-      
-      if (!groups[deptId]) {
-        groups[deptId] = { dept: DEPARTMENTS[deptId], children: [] };
-      }
-      const AgentIcon = agentIcons[slug] || Bot;
-      groups[deptId].children.push({
-        id: `agent-chat-${agent.id}`,
-        label: agent.name,
-        icon: AgentIcon,
-      });
+      if (!deptId || !DEPARTMENTS[deptId]) { soloChildren.push({ id: `agent-chat-${agent.id}`, label: agent.name, icon: agentIcons[slug] || Bot }); continue; }
+      if (!groups[deptId]) groups[deptId] = { dept: DEPARTMENTS[deptId], children: [] };
+      groups[deptId].children.push({ id: `agent-chat-${agent.id}`, label: agent.name, icon: agentIcons[slug] || Bot });
     }
-
     const deptItems = Object.entries(groups).map(([, { dept, children }]) => ({
-      id: `dept-${dept.id}`,
-      label: dept.label,
-      icon: Bot,
-      badge: children.length,
-      group: "Departamentos",
-      colorClass: dept.color,
-      children,
+      id: `dept-${dept.id}`, label: dept.label, icon: Bot, badge: children.length,
+      group: t("dashboard.departments", { defaultValue: "Departamentos" }), colorClass: dept.color, children,
     } as SidebarItem));
-
-    // Solo agents group (agents not in any department)
     const soloItems: SidebarItem[] = soloChildren.length > 0 ? [{
-      id: "solo-agents",
-      label: "Agentes Avulsos",
-      icon: Sparkles,
-      badge: soloChildren.length,
-      group: "Departamentos",
-      children: soloChildren,
+      id: "solo-agents", label: t("dashboard.solo_agents", { defaultValue: "Agentes Avulsos" }),
+      icon: Sparkles, badge: soloChildren.length,
+      group: t("dashboard.departments", { defaultValue: "Departamentos" }), children: soloChildren,
     }] : [];
-
     return { departmentSidebarItems: deptItems, soloAgentItems: soloItems };
-  }, [agents, nameToSlug]);
+  }, [agents, nameToSlug, t]);
 
-  // Dynamic chat item when agent is selected
   const chatSidebarItem: SidebarItem | null = selectedAgent ? {
-    id: "chat",
-    label: selectedAgent.name,
-    icon: MessageSquare,
-    group: "Operações",
+    id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.operations", { defaultValue: "Operações" }),
   } : null;
 
+  const operationsGroup = t("dashboard.operations", { defaultValue: "Operações" });
+  const analysisGroup = t("dashboard.analysis", { defaultValue: "Análise" });
+  const systemGroup = t("dashboard.system", { defaultValue: "Sistema" });
+  const coreGroup = t("dashboard.core", { defaultValue: "Núcleo" });
+  const agentsGroup = t("dashboard.agents_group", { defaultValue: "Agentes" });
+
   const sidebarItems: SidebarItem[] = [
-    // ── Núcleo ──
-    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: "Núcleo" },
-    { id: "omnix", label: "THOR", icon: Brain, badge: "AI", group: "Núcleo" },
-    // ── Agentes ──
-    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: "Agentes" },
-    { id: "library", label: "Biblioteca", icon: BookOpen, group: "Agentes" },
+    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: coreGroup },
+    { id: "omnix", label: "THOR", icon: Brain, badge: "AI", group: coreGroup },
+    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: agentsGroup },
+    { id: "library", label: t("dashboard.library", { defaultValue: "Biblioteca" }), icon: BookOpen, group: agentsGroup },
     ...departmentSidebarItems,
     ...soloAgentItems,
-    // ── Operações ──
     ...(chatSidebarItem ? [chatSidebarItem] : []),
-    { id: "live-timeline", label: "Timeline", icon: Eye, badge: "LIVE", group: "Operações" },
-    { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: "Operações" },
-    { id: "integrations", label: "Integrações", icon: Plug, group: "Operações" },
-    // ── Análise ──
-    { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: "Análise" },
-    { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined, group: "Análise" },
-    // ── Sistema ──
-    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: "Sistema" },
+    { id: "live-timeline", label: "Timeline", icon: Eye, badge: "LIVE", group: operationsGroup },
+    { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: operationsGroup },
+    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: operationsGroup },
+    { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: analysisGroup },
+    { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined, group: analysisGroup },
+    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
+
   const tierColors: Record<string, string> = {
     basic: "bg-muted text-muted-foreground",
     intermediate: "bg-cyan-500/15 text-cyan-400",
@@ -344,178 +250,161 @@ const ClientDashboard = () => {
     enterprise: "bg-primary/15 text-primary",
   };
 
-  const getStatusIcon = (status: string) => {
-    if (status === "success") return <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />;
-    if (status === "error") return <Activity className="h-3.5 w-3.5 text-destructive" />;
-    return <Clock className="h-3.5 w-3.5 text-yellow-500" />;
-  };
-
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(value / 100);
   };
 
+  const handleSidebarNav = (id: string) => {
+    if (id.startsWith("agent-chat-")) {
+      const agentId = id.replace("agent-chat-", "");
+      const agent = agents.find(a => a.id === agentId);
+      if (agent) { setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); return; }
+    }
+    setActiveSection(id);
+  };
+
+  const breadcrumbLabel = activeSection === "overview" ? t("dashboard.command_center")
+    : activeSection === "omnix" ? "THOR"
+    : activeSection === "agents" ? t("dashboard.agents_tab")
+    : activeSection === "analytics" ? t("dashboard.analytics")
+    : activeSection === "logs" ? t("dashboard.logs")
+    : activeSection === "settings" ? t("dashboard.settings")
+    : activeSection === "library" ? t("dashboard.library", { defaultValue: "Biblioteca" })
+    : activeSection === "integrations" ? t("dashboard.integrations", { defaultValue: "Integrações" })
+    : activeSection === "squad-chat" ? t("dashboard.meeting")
+    : activeSection === "live-timeline" ? "Timeline"
+    : activeSection === "chat" ? selectedAgent?.name || "Chat"
+    : activeSection;
+
+  // Flatten sidebar for mobile (including children)
+  const flatMobileItems = useMemo(() => {
+    const flat: { id: string; label: string; icon: React.ElementType; group?: string; badge?: string | number }[] = [];
+    for (const item of sidebarItems) {
+      if (item.children && item.children.length > 0) {
+        // Add parent as a header-like item, then children
+        for (const child of item.children) {
+          flat.push({ id: child.id, label: `${item.label} › ${child.label}`, icon: child.icon || Bot, group: item.group });
+        }
+      } else {
+        flat.push({ id: item.id, label: item.label, icon: item.icon, group: item.group, badge: item.badge });
+      }
+    }
+    return flat;
+  }, [sidebarItems]);
+
   return (
     <>
-      {/* Cinematic Onboarding */}
       <AnimatePresence>
-        {showOnboarding && (
-          <PostSignupOnboarding onComplete={() => setShowOnboarding(false)} />
-        )}
+        {showOnboarding && <PostSignupOnboarding onComplete={() => setShowOnboarding(false)} />}
       </AnimatePresence>
 
       <div className="flex h-full">
-      {/* Sidebar */}
-      <div className="hidden lg:block">
-        <DashboardSidebar
-          items={sidebarItems}
-          activeItem={activeSection}
-          onItemChange={(id) => {
-            // Handle clicking a department agent child → open its chat
-            if (id.startsWith("agent-chat-")) {
-              const agentId = id.replace("agent-chat-", "");
-              const agent = agents.find(a => a.id === agentId);
-              if (agent) {
-                setSelectedAgent({ id: agent.id, name: agent.name });
-                setActiveSection("chat");
-                return;
-              }
-            }
-            setActiveSection(id);
-          }}
-        />
-      </div>
+        <div className="hidden lg:block">
+          <DashboardSidebar items={sidebarItems} activeItem={activeSection} onItemChange={handleSidebarNav} />
+        </div>
 
-      {/* Scrollable content area */}
-      <div className="flex-1 min-w-0 overflow-y-auto">
-        <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-6">
-          {/* Breadcrumb + Header */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="space-y-1"
-          >
-            {/* Breadcrumb */}
-            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
-              <span>Dashboard</span>
-              <span>/</span>
-              <span className="text-foreground/80 font-medium capitalize">
-                {activeSection === "overview" ? t("dashboard.command_center")
-                  : activeSection === "omnix" ? "THOR"
-                  : activeSection === "agents" ? t("dashboard.agents_tab")
-                  : activeSection === "analytics" ? t("dashboard.analytics")
-                  : activeSection === "logs" ? t("dashboard.logs")
-                  : activeSection === "settings" ? t("dashboard.settings")
-                  : activeSection === "library" ? "Biblioteca"
-                  : activeSection === "integrations" ? "Integrações"
-                  : activeSection === "squad-chat" ? t("dashboard.meeting")
-                  : activeSection === "live-timeline" ? "Timeline"
-                  : activeSection}
-              </span>
-            </div>
-
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="font-display text-2xl font-bold">{t("dashboard.control_panel")}</h1>
-                  <HelpTooltip id="dashboard-intro" text="Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções: THOR (IA), Agentes, Analytics, Configurações e mais." position="bottom" />
+        <div className="flex-1 min-w-0 overflow-y-auto">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-6">
+            {/* Breadcrumb + Header */}
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
+              <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
+                <span>Dashboard</span><span>/</span>
+                <span className="text-foreground/80 font-medium capitalize">{breadcrumbLabel}</span>
+              </div>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <div className="flex items-center gap-2">
+                    <h1 className="font-display text-2xl font-bold">{t("dashboard.control_panel")}</h1>
+                    <HelpTooltip id="dashboard-intro" text={t("dashboard.help_intro", { defaultValue: "Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções." })} position="bottom" />
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
+                  </p>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
-                </p>
+                <div className="flex items-center gap-2">
+                  <NotificationPanel />
+                  <QuickActions />
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <NotificationPanel />
-                <QuickActions />
+            </motion.div>
+
+            {/* Mobile nav — includes flattened department children */}
+            <div className="lg:hidden">
+              <Sheet>
+                <SheetTrigger asChild>
+                  <Button variant="outline" size="sm" className="gap-1.5 text-xs w-full justify-start">
+                    <LayoutDashboard className="h-3.5 w-3.5" />
+                    {breadcrumbLabel}
+                    <ChevronDown className="h-3 w-3 ml-auto" />
+                  </Button>
+                </SheetTrigger>
+                <SheetContent side="left" className="w-72 p-0">
+                  <SheetHeader className="p-4 border-b border-border/10">
+                    <SheetTitle className="font-display text-sm">{t("dashboard.navigation", { defaultValue: "Navegação" })}</SheetTitle>
+                  </SheetHeader>
+                  <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-6rem)]">
+                    {flatMobileItems.map((item, idx) => {
+                      const showGroup = item.group && (idx === 0 || flatMobileItems[idx - 1]?.group !== item.group);
+                      return (
+                        <div key={item.id}>
+                          {showGroup && (
+                            <div className="px-3 pt-4 pb-1.5 first:pt-1">
+                              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">{item.group}</span>
+                            </div>
+                          )}
+                          <SheetClose asChild>
+                            <button
+                              onClick={() => handleSidebarNav(item.id)}
+                              className={cn(
+                                "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
+                                activeSection === item.id || (item.id.startsWith("agent-chat-") && activeSection === "chat")
+                                  ? "bg-primary/10 text-primary font-medium"
+                                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                              )}
+                            >
+                              <item.icon className="h-4 w-4 shrink-0" />
+                              <span className="flex-1 text-left truncate">{item.label}</span>
+                              {item.badge && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">{item.badge}</span>}
+                            </button>
+                          </SheetClose>
+                        </div>
+                      );
+                    })}
+                  </nav>
+                </SheetContent>
+              </Sheet>
+            </div>
+
+            {/* Loading state */}
+            {loadingAgents && activeSection === "overview" && (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="h-6 w-6 animate-spin text-primary/50" />
               </div>
-            </div>
-          </motion.div>
+            )}
 
-          {/* Mobile nav trigger */}
-          <div className="lg:hidden">
-            <Sheet>
-              <SheetTrigger asChild>
-                <Button variant="outline" size="sm" className="gap-1.5 text-xs w-full justify-start">
-                  <LayoutDashboard className="h-3.5 w-3.5" />
-                  {sidebarItems.find(i => i.id === activeSection)?.label || "Menu"}
-                  <ChevronDown className="h-3 w-3 ml-auto" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent side="left" className="w-72 p-0">
-                <SheetHeader className="p-4 border-b border-border/10">
-                  <SheetTitle className="font-display text-sm">Navegação</SheetTitle>
-                </SheetHeader>
-                <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-6rem)]">
-                  {sidebarItems.filter(i => !i.children).map((item, idx) => {
-                    const showGroup = item.group && (idx === 0 || sidebarItems.filter(i => !i.children)[idx - 1]?.group !== item.group);
-                    return (
-                      <div key={item.id}>
-                        {showGroup && (
-                          <div className="px-3 pt-4 pb-1.5 first:pt-1">
-                            <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">{item.group}</span>
-                          </div>
-                        )}
-                        <SheetClose asChild>
-                          <button
-                            onClick={() => setActiveSection(item.id)}
-                            className={cn(
-                              "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
-                              activeSection === item.id ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                            )}
-                          >
-                            <item.icon className="h-4 w-4 shrink-0" />
-                            <span className="flex-1 text-left">{item.label}</span>
-                            {item.badge && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">{item.badge}</span>}
-                          </button>
-                        </SheetClose>
-                      </div>
-                    );
-                  })}
-                </nav>
-              </SheetContent>
-            </Sheet>
-          </div>
+            {/* ═══ OMNIX ═══ */}
+            {activeSection === "omnix" && (
+              <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
+                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={() => setPostPaymentContext(null)} />
+              </div>
+            )}
 
-          {/* Loading state */}
-          {loadingAgents && activeSection === "overview" && (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="h-6 w-6 animate-spin text-primary/50" />
-            </div>
-          )}
-          {/* ═══ OMNIX ═══ */}
-          {activeSection === "omnix" && (
-            <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
-              <OmnixCommandCenter
-                postPaymentContext={postPaymentContext}
-                onPostPaymentHandled={() => setPostPaymentContext(null)}
+            {/* ═══ OVERVIEW ═══ */}
+            {activeSection === "overview" && (
+              <ClientCommandCenter
+                activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={setActiveSection}
               />
-            </div>
-          )}
+            )}
 
-          {/* ═══ OVERVIEW ═══ */}
-          {activeSection === "overview" && (
-            <ClientCommandCenter
-              activeAgents={activeAgents}
-              totalExecutions={totalExecutions}
-              totalTokensUsed={totalTokensUsed}
-              usagePercentage={usagePercentage}
-              estimatedSavings={estimatedSavings}
-              credits={credits}
-              remainingCredits={remainingCredits}
-              agents={agents}
-              subscriptions={subscriptions}
-              recentLogs={recentLogs}
-              tokenUsage={tokenUsage}
-              onNavigate={setActiveSection}
-            />
-          )}
+            {/* ═══ INTEGRATIONS ═══ */}
+            {activeSection === "integrations" && <Integrations />}
 
-          {/* ═══ INTEGRATIONS (embedded) ═══ */}
-          {activeSection === "integrations" && <Integrations />}
-
-          {/* ═══ SETTINGS (unified) ═══ */}
-          {activeSection === "settings" && (
-            <SettingsPage
-              billingContent={
+            {/* ═══ SETTINGS ═══ */}
+            {activeSection === "settings" && (
+              <SettingsPage billingContent={
                 <div className="space-y-6">
                   <h2 className="font-display text-xl font-bold">{t("dashboard.subscription_credits")}</h2>
                   <div className="grid lg:grid-cols-2 gap-6">
@@ -563,223 +452,59 @@ const ClientDashboard = () => {
                   </div>
                   <PaymentHistoryTable />
                 </div>
-              }
-            />
-          )}
+              } />
+            )}
 
-          {/* ═══ SQUAD CHAT (REUNIÃO) ═══ */}
-          {activeSection === "squad-chat" && <SquadChat agents={agents} />}
+            {/* ═══ SQUAD CHAT ═══ */}
+            {activeSection === "squad-chat" && <SquadChat agents={agents} />}
 
-          {/* ═══ A2A DEMO ═══ */}
-          {activeSection === "a2a-demo" && <OrchestrationDemo />}
+            {/* ═══ LIVE TIMELINE ═══ */}
+            {activeSection === "live-timeline" && <AgentLiveTimeline />}
 
-          {/* ═══ COMPANY BOARD ═══ */}
-          {activeSection === "board" && <CompanyBoard />}
+            {/* ═══ LIBRARY ═══ */}
+            {activeSection === "library" && <Library />}
 
-          {/* ═══ WHATSAPP SETUP GUIDE ═══ */}
-          {activeSection === "whatsapp-setup" && <WhatsAppSetupGuide />}
+            {/* ═══ AGENTS ═══ */}
+            {activeSection === "agents" && (
+              <AgentsSection
+                agents={agents}
+                isLoading={loadingAgents}
+                nameToSlug={nameToSlug}
+                tierColors={tierColors}
+                formatCurrency={formatCurrency}
+                onOpenLibrary={() => setActiveSection("library")}
+                onOpenThor={() => setActiveSection("omnix")}
+                onOpenChat={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
+              />
+            )}
 
-          {/* ═══ SENDGRID SETUP GUIDE ═══ */}
-          {activeSection === "sendgrid-setup" && <SendGridSetupGuide />}
+            {/* ═══ ANALYTICS ═══ */}
+            {activeSection === "analytics" && (
+              <AnalyticsSection
+                chartData={realChartData}
+                totalExecutions={totalExecutions}
+                recentLogs={recentLogs}
+                locale={locale}
+                onGoToAgents={() => setActiveSection("agents")}
+              />
+            )}
 
-          {/* ═══ LINKEDIN SETUP GUIDE ═══ */}
-          {activeSection === "linkedin-setup" && <LinkedInSetupGuide />}
+            {/* ═══ LOGS ═══ */}
+            {activeSection === "logs" && (
+              <LogsSection
+                recentLogs={recentLogs}
+                locale={locale}
+                onGoToAgents={() => setActiveSection("agents")}
+              />
+            )}
 
-          {/* ═══ META ADS SETUP GUIDE ═══ */}
-          {activeSection === "meta-ads-setup" && <MetaAdsSetupGuide />}
-
-          {/* ═══ LIVE TIMELINE ═══ */}
-          {activeSection === "live-timeline" && <AgentLiveTimeline />}
-
-          {/* ═══ LIBRARY (embedded) ═══ */}
-          {activeSection === "library" && <Library />}
-
-          {/* ═══ AGENTS ═══ */}
-          {activeSection === "agents" && (
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <h2 className="font-display text-xl font-bold">{t("dashboard.agents_tab")} ({agents.length})</h2>
-                <div className="flex gap-2">
-                  <Button variant="outline" onClick={() => setActiveSection("library")} className="gap-1.5"><Sparkles className="h-4 w-4" /> Biblioteca</Button>
-                  <Link to="/create-agent"><Button className="glow gap-1.5"><Plus className="h-4 w-4" /> {t("dashboard.new_agent")}</Button></Link>
-                </div>
-              </div>
-
-              {/* Setup Checklist */}
-              {agents.length > 0 && (
-                <AgentSetupChecklist
-                  agents={agents}
-                  nameToSlug={nameToSlug}
-                  onOpenThor={() => setActiveSection("omnix")}
-                />
-              )}
-              {agents.length === 0 ? (
-                <div className="glass-card rounded-2xl p-12 text-center">
-                  <Sparkles className="h-12 w-12 text-primary/30 mx-auto mb-4" />
-                  <h3 className="font-display text-lg font-bold mb-2">{t("dashboard.no_agent_created")}</h3>
-                  <p className="text-muted-foreground text-sm mb-6">{t("dashboard.start_creating")}</p>
-                  <Button className="glow" onClick={() => setActiveSection("library")}>{t("dashboard.explore_library")}</Button>
-                </div>
-              ) : (
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {agents.map((agent, i) => (
-                    <motion.div key={agent.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card rounded-2xl p-5 glass-hover">
-                      <div className="flex items-start justify-between mb-4">
-                        <div className="flex items-center gap-3 cursor-pointer" onClick={() => { if (agent.status === "active") { setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); } }}>
-                          <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                            <Bot className="h-5 w-5 text-primary" />
-                          </div>
-                          <div>
-                            <p className="font-display font-semibold">{agent.name}</p>
-                            <div className="flex gap-1.5 mt-1">
-                              <Badge variant="secondary" className={`text-[9px] ${tierColors[agent.tier] || ""}`}>{agent.tier}</Badge>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className={`h-7 text-[10px] gap-1 ${agent.status === "active" ? "border-emerald-500/30 text-emerald-500" : "border-muted"}`}
-                            onClick={async (e) => {
-                              e.stopPropagation();
-                              const newStatus = agent.status === "active" ? "paused" : "active";
-                              const { error } = await supabase.from("agents").update({ status: newStatus as any }).eq("id", agent.id);
-                              if (error) { toast.error("Erro ao atualizar status."); return; }
-                              toast.success(`${agent.name} ${newStatus === "active" ? "ativado" : "pausado"}!`);
-                              queryClient.invalidateQueries({ queryKey: ["my-agents"] });
-                            }}
-                          >
-                            {agent.status === "active" ? <><Pause className="h-3 w-3" /> Pausar</> : <><Play className="h-3 w-3" /> Ativar</>}
-                          </Button>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-3 gap-3">
-                        <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
-                          <p className="text-xs text-muted-foreground">{t("dashboard.price")}</p>
-                          <p className="font-display font-bold text-sm">{formatCurrency(agent.monthly_price)}</p>
-                        </div>
-                        <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
-                          <p className="text-xs text-muted-foreground">{t("dashboard.executions")}</p>
-                          <p className="font-display font-bold text-sm">{agent.total_executions}</p>
-                        </div>
-                        <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
-                          <p className="text-xs text-muted-foreground">{t("dashboard.status")}</p>
-                          <p className={`font-bold text-sm ${agent.status === "active" ? "text-emerald-500" : "text-muted-foreground"}`}>
-                            {agent.status === "active" ? "●" : "○"} {agent.status}
-                          </p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-
-          {/* ═══ ANALYTICS ═══ */}
-          {activeSection === "analytics" && (
-            <div className="space-y-6">
-              <h2 className="font-display text-xl font-bold">{t("dashboard.analytics")}</h2>
-              <div className="glass-card rounded-2xl p-6">
-                <div className="flex items-center justify-between mb-6">
-                  <div className="flex items-center gap-3">
-                    <BarChart3 className="h-5 w-5 text-primary" />
-                    <span className="font-display font-semibold">{t("dashboard.exec_vs_success")}</span>
-                  </div>
-                  <div className="flex gap-4">
-                    <div className="flex items-center gap-2"><span className="w-3 h-1 rounded bg-primary" /><span className="text-xs text-muted-foreground">{t("dashboard.executions")}</span></div>
-                    <div className="flex items-center gap-2"><span className="w-3 h-1 rounded bg-emerald-500" /><span className="text-xs text-muted-foreground">{t("dashboard.success_rate_short")}</span></div>
-                  </div>
-                </div>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <AreaChart data={realChartData}>
-                      <defs>
-                        <linearGradient id="cExec" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
-                        </linearGradient>
-                        <linearGradient id="cSucc" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                          <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
-                        </linearGradient>
-                      </defs>
-                      <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                      <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
-                      <YAxis stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
-                      <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }} />
-                      <Area type="monotone" dataKey="execucoes" stroke="hsl(var(--primary))" strokeWidth={2} fillOpacity={1} fill="url(#cExec)" />
-                      <Area type="monotone" dataKey="sucesso" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#cSucc)" />
-                    </AreaChart>
-                  </ResponsiveContainer>
-                </div>
-                <div className="grid grid-cols-3 gap-4 mt-6">
-                  <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">{t("dashboard.this_month")}</p>
-                    <p className="font-display text-xl font-bold">{totalExecutions.toLocaleString(locale)}</p>
-                    <p className="text-xs text-emerald-500">{t("dashboard.executions")}</p>
-                  </div>
-                  <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_rate")}</p>
-                    <p className="font-display text-xl font-bold">{recentLogs.length > 0 ? Math.round((recentLogs.filter(l => l.status === "success").length / recentLogs.length) * 100) : 100}%</p>
-                    <p className="text-xs text-muted-foreground">{t("dashboard.of_success")}</p>
-                  </div>
-                  <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_time")}</p>
-                    <p className="font-display text-xl font-bold">{recentLogs.length > 0 ? (recentLogs.reduce((a, l) => a + (l.execution_time_ms || 0), 0) / recentLogs.length / 1000).toFixed(1) : "0"}s</p>
-                    <p className="text-xs text-muted-foreground">{t("dashboard.per_execution")}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* ═══ LOGS ═══ */}
-          {activeSection === "logs" && (
-            <div className="space-y-6">
-              <h2 className="font-display text-xl font-bold">{t("dashboard.execution_logs")} ({recentLogs.length})</h2>
-              <div className="glass-card rounded-2xl overflow-hidden">
-                {recentLogs.length === 0 ? (
-                  <div className="p-12 text-center space-y-3">
-                    <Activity className="h-10 w-10 text-muted-foreground/30 mx-auto" />
-                    <p className="text-muted-foreground font-medium">{t("dashboard.no_logs_found")}</p>
-                    <p className="text-xs text-muted-foreground/60">Os logs aparecerão aqui quando seus agentes começarem a executar ações.</p>
-                    <Button variant="outline" size="sm" onClick={() => setActiveSection("agents")} className="mt-2 gap-1.5">
-                      <Bot className="h-3.5 w-3.5" /> Ver Agentes
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="divide-y divide-white/5 max-h-[600px] overflow-y-auto">
-                    {recentLogs.map((log) => (
-                      <div key={log.id} className="p-4 hover:bg-white/[0.02] transition-colors flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          {getStatusIcon(log.status)}
-                          <div>
-                            <p className="text-sm font-medium">{log.agent_name}</p>
-                            <p className="text-xs text-muted-foreground">{log.action}</p>
-                          </div>
-                        </div>
-                        <div className="text-right">
-                          <Badge variant="secondary" className={`text-[10px] ${log.status === "success" ? "bg-emerald-500/10 text-emerald-500" : log.status === "error" ? "bg-destructive/10 text-destructive" : "bg-yellow-500/10 text-yellow-500"}`}>
-                            {log.status}
-                          </Badge>
-                          <p className="text-[10px] text-muted-foreground mt-1">
-                            {new Date(log.created_at).toLocaleString(locale, { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
-                          </p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-
+            {/* ═══ CHAT ═══ */}
+            {activeSection === "chat" && selectedAgent && (
+              <AgentChat agentId={selectedAgent.id} agentName={selectedAgent.name} />
+            )}
+          </div>
         </div>
       </div>
-
-    </div>
     </>
   );
 };
