@@ -729,10 +729,10 @@ const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 lg:gap-12 max-w-3xl mx-auto">
             {[
               {
-                name: "KAELIS AI",
+                name: "THOR",
                 role: "Chief Executive Officer (CEO)",
                 photo: kaelisPhoto,
-                bio: "KAELIS AI is the supreme command center of the platform. He orchestrates all operations, coordinates every department, and guarantees disciplined execution at scale. The visionary intelligence that turns multiple AI agents into a synchronized, enterprise-grade execution machine.",
+                bio: "THOR is the supreme command center of the platform. He orchestrates all operations, coordinates every department, and guarantees disciplined execution at scale. The visionary intelligence that turns multiple AI agents into a synchronized, enterprise-grade execution machine.",
                 isAI: true,
               },
               {
