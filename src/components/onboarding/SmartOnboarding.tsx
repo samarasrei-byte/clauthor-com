@@ -563,16 +563,8 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     <SquadConsultant />
                   </div>
 
-                  {/* Back / human contact */}
+                  {/* Back */}
                   <div className="flex flex-col items-center gap-2 pt-2">
-                    <Button
-                      variant="outline"
-                      onClick={() => { onClose(); navigate("/auth"); }}
-                      className="gap-2 rounded-xl text-xs border-border/50"
-                    >
-                      <Users className="h-3.5 w-3.5" />
-                      Prefiro falar com um humano — criar conta
-                    </Button>
                     <Button
                       variant="ghost"
                       onClick={() => setPhase(0)}
