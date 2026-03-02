@@ -7,14 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { HireIntent } from "./Auth";
 import {
-  Users, Building2, ArrowRight, Flame, Sparkles,
-  Phone, MessageSquare, Briefcase, BarChart3, Star, FileText,
-  ShoppingCart, Shield, Wrench, Megaphone, Target, Palette,
-  Video, Globe, ClipboardList, GraduationCap, Bot, Zap,
+  Building2, ArrowRight, Flame, Bot, Zap,
   CheckCircle2, TrendingUp, Coins, Network, Lightbulb, ThumbsUp, Send,
-  Crosshair, PenTool, Rocket, Store, Calendar, Award, Handshake,
-  Search, UserPlus, Repeat, Hash, Gavel, ShieldCheck, Scale,
-  Package, Factory, Receipt, Cog, ClipboardCheck, Truck, Loader2
+  Loader2
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import HelpTooltip from "@/components/HelpTooltip";
@@ -22,278 +17,13 @@ import SquadConsultant from "@/components/pricing/SquadConsultant";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
-import { getRegion } from "@/lib/pricing";
+import { getRegion, formatPrice } from "@/lib/pricing";
+import {
+  departments, totalPrometheusCost, totalCltCost, totalTokens,
+  totalAgents, totalSavingsPercent
+} from "@/data/departmentData";
 
-const departments = [
-  { 
-    id: "tecnologia", icon: Wrench, color: "text-blue-400", 
-    gradient: "from-blue-500/20 to-blue-500/5",
-    borderActive: "border-blue-500/40",
-    iconBg: "bg-blue-500/20",
-    popular: false,
-    tokens: "12M",
-    actions: "15.000",
-    agents: [
-      { key: "coding", icon: Wrench, role: "Dev Full-Stack Sênior", tokens: "4M" },
-      { key: "computer", icon: Building2, role: "DevOps / SRE", tokens: "3M" },
-      { key: "project_management", icon: ClipboardList, role: "Gerente de Projetos", tokens: "2M" },
-      { key: "security", icon: Shield, role: "CISO / Eng. Segurança", tokens: "3M" },
-      { key: "data_engineer", icon: Building2, role: "Engenheiro de Dados", tokens: "2M" },
-    ],
-    headcount: 5, cltCost: 100000, prometheusCost: 5497, discount: 30,
-  },
-  { 
-    id: "comercial", icon: Briefcase, color: "text-cyan-400", 
-    gradient: "from-cyan-500/20 to-cyan-500/5",
-    borderActive: "border-cyan-500/40",
-    iconBg: "bg-cyan-500/20",
-    popular: true,
-    tokens: "8M",
-    actions: "12.000",
-    agents: [
-      { key: "sales", icon: Briefcase, role: "SDR / Closer de Vendas", tokens: "2.5M" },
-      { key: "customer_success", icon: Star, role: "Customer Success Manager", tokens: "1.5M" },
-      { key: "sales_channel", icon: MessageSquare, role: "Canal de Vendas Multicanal", tokens: "2M" },
-      { key: "voice_ai", icon: Phone, role: "Operador de Telefonia", tokens: "2M" },
-      { key: "crm_manager", icon: Star, role: "Gestor de CRM", tokens: "1.5M" },
-    ],
-    headcount: 5, cltCost: 56000, prometheusCost: 4497, discount: 25,
-  },
-  { 
-    id: "marketing", icon: Megaphone, color: "text-primary", 
-    gradient: "from-primary/20 to-primary/5",
-    borderActive: "border-primary/40",
-    iconBg: "bg-primary/20",
-    popular: false,
-    tokens: "7M",
-    actions: "10.000",
-    agents: [
-      { key: "content", icon: Sparkles, role: "Copywriter Sênior", tokens: "2M" },
-      { key: "marketing_automation", icon: Target, role: "Growth / Automação", tokens: "2M" },
-      { key: "seo_growth", icon: Globe, role: "Analista SEO / Tráfego", tokens: "1.5M" },
-      { key: "influencer", icon: Megaphone, role: "Social Media Manager", tokens: "1.5M" },
-      { key: "media_buyer", icon: Target, role: "Media Buyer", tokens: "1.5M" },
-    ],
-    headcount: 5, cltCost: 48000, prometheusCost: 3497, discount: 25,
-  },
-  { 
-    id: "financeiro", icon: BarChart3, color: "text-amber-400", 
-    gradient: "from-amber-500/20 to-amber-500/5",
-    borderActive: "border-amber-500/40",
-    iconBg: "bg-amber-500/20",
-    popular: false,
-    tokens: "6M",
-    actions: "8.000",
-    agents: [
-      { key: "revenue", icon: BarChart3, role: "CFO / Controller", tokens: "2M" },
-      { key: "legal", icon: FileText, role: "Analista Fiscal / Jurídico", tokens: "1.5M" },
-      { key: "data_analytics", icon: BarChart3, role: "Analista de BI", tokens: "1.5M" },
-      { key: "ecommerce", icon: ShoppingCart, role: "Gestor Financeiro", tokens: "1M" },
-    ],
-    headcount: 4, cltCost: 44000, prometheusCost: 2997, discount: 20,
-  },
-  { 
-    id: "criacao", icon: Palette, color: "text-violet-400", 
-    gradient: "from-violet-500/20 to-violet-500/5",
-    borderActive: "border-violet-500/40",
-    iconBg: "bg-violet-500/20",
-    popular: false,
-    tokens: "6M",
-    actions: "8.000",
-    agents: [
-      { key: "creative_design", icon: Palette, role: "Designer Gráfico Sênior", tokens: "2M" },
-      { key: "video_production", icon: Video, role: "Editor de Vídeo / Motion", tokens: "2M" },
-      { key: "creative_writer", icon: Sparkles, role: "Redator Criativo", tokens: "1M" },
-      { key: "content_producer", icon: Megaphone, role: "Produtor de Conteúdo", tokens: "1M" },
-      { key: "ux_researcher", icon: Sparkles, role: "UX Researcher", tokens: "1M" },
-    ],
-    headcount: 5, cltCost: 42000, prometheusCost: 2997, discount: 20,
-  },
-  { 
-    id: "suporte", icon: MessageSquare, color: "text-emerald-400", 
-    gradient: "from-emerald-500/20 to-emerald-500/5",
-    borderActive: "border-emerald-500/40",
-    iconBg: "bg-emerald-500/20",
-    popular: false,
-    tokens: "5M",
-    actions: "10.000",
-    agents: [
-      { key: "support_channel", icon: MessageSquare, role: "Atendente N1 / N2", tokens: "1.5M" },
-      { key: "support_lead", icon: Star, role: "Líder de Suporte", tokens: "1.5M" },
-      { key: "voice_support", icon: Phone, role: "Operador Call Center", tokens: "1M" },
-      { key: "rag", icon: FileText, role: "Base de Conhecimento", tokens: "1M" },
-      { key: "onboarding_specialist", icon: Star, role: "Especialista Onboarding", tokens: "1M" },
-    ],
-    headcount: 5, cltCost: 30000, prometheusCost: 2497, discount: 20,
-  },
-  { 
-    id: "rh", icon: GraduationCap, color: "text-pink-400", 
-    gradient: "from-pink-500/20 to-pink-500/5",
-    borderActive: "border-pink-500/40",
-    iconBg: "bg-pink-500/20",
-    popular: false,
-    tokens: "4M",
-    actions: "6.000",
-    agents: [
-      { key: "hr", icon: Star, role: "Recrutador / BP", tokens: "1.5M" },
-      { key: "training", icon: GraduationCap, role: "T&D / Onboarding", tokens: "1M" },
-      { key: "people_analytics", icon: BarChart3, role: "People Analytics", tokens: "1M" },
-      { key: "data_analytics", icon: BarChart3, role: "Analista de Dados RH", tokens: "0.5M" },
-    ],
-    headcount: 4, cltCost: 28000, prometheusCost: 1797, discount: 15,
-  },
-  {
-    id: "prospeccao", icon: Crosshair, color: "text-orange-400",
-    gradient: "from-orange-500/20 to-orange-500/5",
-    borderActive: "border-orange-500/40",
-    iconBg: "bg-orange-500/20",
-    popular: true,
-    tokens: "14M",
-    actions: "18.000",
-    agents: [
-      { key: "sdr_outbound", icon: Crosshair, role: "SDR Outbound", tokens: "2M" },
-      { key: "sdr_inbound", icon: UserPlus, role: "SDR Inbound", tokens: "1.5M" },
-      { key: "sdr_linkedin", icon: Hash, role: "SDR LinkedIn B2B", tokens: "1.5M" },
-      { key: "sdr_whatsapp", icon: MessageSquare, role: "SDR WhatsApp", tokens: "1.5M" },
-      { key: "sdr_instagram", icon: Target, role: "SDR Instagram", tokens: "1M" },
-      { key: "sdr_social", icon: Globe, role: "SDR Social Selling", tokens: "1M" },
-      { key: "sdr_database", icon: Search, role: "SDR Base de Dados", tokens: "1M" },
-      { key: "sdr_events", icon: Calendar, role: "SDR Eventos", tokens: "1M" },
-      { key: "sdr_partnerships", icon: Handshake, role: "SDR Parcerias", tokens: "1M" },
-      { key: "pre_qualifier", icon: CheckCircle2, role: "Pré-Qualificador", tokens: "1M" },
-      { key: "hunter", icon: Crosshair, role: "Hunter de Negócios", tokens: "1M" },
-      { key: "farmer", icon: Repeat, role: "Farmer / Expansão", tokens: "1M" },
-    ],
-    headcount: 12, cltCost: 96000, prometheusCost: 6997, discount: 35,
-  },
-  {
-    id: "comunicacao", icon: PenTool, color: "text-rose-400",
-    gradient: "from-rose-500/20 to-rose-500/5",
-    borderActive: "border-rose-500/40",
-    iconBg: "bg-rose-500/20",
-    popular: false,
-    tokens: "8M",
-    actions: "10.000",
-    agents: [
-      { key: "copywriting", icon: PenTool, role: "Copywriter de Conversão", tokens: "1.5M" },
-      { key: "branding", icon: Award, role: "Brand Strategist", tokens: "1.5M" },
-      { key: "positioning", icon: Target, role: "Estrategista de Mercado", tokens: "1M" },
-      { key: "public_relations", icon: Megaphone, role: "Assessor de Imprensa", tokens: "1.5M" },
-      { key: "social_proof", icon: ThumbsUp, role: "Gestor de Prova Social", tokens: "1M" },
-      { key: "events_speaker", icon: Calendar, role: "Produtor de Eventos", tokens: "1M" },
-      { key: "tax_content", icon: FileText, role: "Conteúdo Tributário", tokens: "0.5M" },
-    ],
-    headcount: 7, cltCost: 56000, prometheusCost: 4497, discount: 30,
-  },
-  {
-    id: "operacoes", icon: Rocket, color: "text-indigo-400",
-    gradient: "from-indigo-500/20 to-indigo-500/5",
-    borderActive: "border-indigo-500/40",
-    iconBg: "bg-indigo-500/20",
-    popular: false,
-    tokens: "10M",
-    actions: "12.000",
-    agents: [
-      { key: "orchestrator", icon: Network, role: "Orquestrador Multi-Agente", tokens: "3M" },
-      { key: "concierge", icon: Star, role: "Concierge Executivo", tokens: "2M" },
-      { key: "ceo", icon: Building2, role: "CEO / Estrategista", tokens: "2M" },
-      { key: "startup_creator", icon: Rocket, role: "Startup Creator", tokens: "1.5M" },
-      { key: "scheduler", icon: Calendar, role: "Agendador Inteligente", tokens: "0.5M" },
-      { key: "proposal_gen", icon: FileText, role: "Gerador de Propostas", tokens: "1M" },
-    ],
-    headcount: 6, cltCost: 72000, prometheusCost: 4997, discount: 30,
-  },
-  {
-    id: "ecommerce_growth", icon: Store, color: "text-teal-400",
-    gradient: "from-teal-500/20 to-teal-500/5",
-    borderActive: "border-teal-500/40",
-    iconBg: "bg-teal-500/20",
-    popular: false,
-    tokens: "9M",
-    actions: "11.000",
-    agents: [
-      { key: "paid_traffic", icon: TrendingUp, role: "Gestor de Tráfego Pago", tokens: "2M" },
-      { key: "whatsapp_commerce", icon: MessageSquare, role: "WhatsApp Commerce", tokens: "1.5M" },
-      { key: "influencer_liveshop", icon: Zap, role: "LiveShop & Influencer", tokens: "1.5M" },
-      { key: "affiliate_manager", icon: Handshake, role: "Gestor de Afiliados", tokens: "1.5M" },
-      { key: "podcast_manager", icon: Megaphone, role: "Podcast Manager", tokens: "1M" },
-      { key: "reputation", icon: Award, role: "Gestor de Reputação", tokens: "1.5M" },
-    ],
-    headcount: 6, cltCost: 54000, prometheusCost: 3997, discount: 25,
-  },
-  {
-    id: "juridico", icon: Gavel, color: "text-slate-400",
-    gradient: "from-slate-500/20 to-slate-500/5",
-    borderActive: "border-slate-500/40",
-    iconBg: "bg-slate-500/20",
-    popular: false,
-    tokens: "8M",
-    actions: "10.000",
-    agents: [
-      { key: "contract_analyst", icon: FileText, role: "Analista de Contratos", tokens: "2M" },
-      { key: "compliance_officer", icon: ShieldCheck, role: "Compliance / DPO", tokens: "2M" },
-      { key: "labor_law", icon: Scale, role: "Advogado Trabalhista", tokens: "2M" },
-      { key: "litigation", icon: Gavel, role: "Advogado Contencioso", tokens: "2M" },
-    ],
-    headcount: 4, cltCost: 60000, prometheusCost: 4497, discount: 30,
-  },
-  {
-    id: "compras", icon: Package, color: "text-lime-400",
-    gradient: "from-lime-500/20 to-lime-500/5",
-    borderActive: "border-lime-500/40",
-    iconBg: "bg-lime-500/20",
-    popular: false,
-    tokens: "7M",
-    actions: "9.000",
-    agents: [
-      { key: "procurement", icon: Package, role: "Comprador Sênior", tokens: "2M" },
-      { key: "supplier_mgr", icon: Factory, role: "Gestor de Fornecedores", tokens: "1.5M" },
-      { key: "cost_analyst", icon: Receipt, role: "Analista de Custos", tokens: "1.5M" },
-      { key: "contract_negotiator", icon: Handshake, role: "Negociador", tokens: "2M" },
-    ],
-    headcount: 4, cltCost: 44000, prometheusCost: 2997, discount: 25,
-  },
-  {
-    id: "logistica", icon: Truck, color: "text-sky-400",
-    gradient: "from-sky-500/20 to-sky-500/5",
-    borderActive: "border-sky-500/40",
-    iconBg: "bg-sky-500/20",
-    popular: false,
-    tokens: "8M",
-    actions: "10.000",
-    agents: [
-      { key: "logistics", icon: Truck, role: "Coordenador Logístico", tokens: "2M" },
-      { key: "inventory", icon: Package, role: "Analista de Estoque", tokens: "1.5M" },
-      { key: "supply_chain", icon: Network, role: "Supply Chain Manager", tokens: "2.5M" },
-      { key: "omnichannel", icon: MessageSquare, role: "Omnichannel / Rastreamento", tokens: "2M" },
-    ],
-    headcount: 4, cltCost: 48000, prometheusCost: 3497, discount: 25,
-  },
-  {
-    id: "qualidade", icon: ClipboardCheck, color: "text-yellow-400",
-    gradient: "from-yellow-500/20 to-yellow-500/5",
-    borderActive: "border-yellow-500/40",
-    iconBg: "bg-yellow-500/20",
-    popular: false,
-    tokens: "5M",
-    actions: "7.000",
-    agents: [
-      { key: "quality", icon: ClipboardCheck, role: "Analista de Qualidade", tokens: "1.5M" },
-      { key: "process_analyst", icon: Cog, role: "Analista de Processos", tokens: "1.5M" },
-      { key: "research", icon: Search, role: "Pesquisador / Auditor", tokens: "1M" },
-      { key: "community_mgr", icon: Users, role: "Gestão de Comunidade", tokens: "1M" },
-    ],
-    headcount: 4, cltCost: 32000, prometheusCost: 1997, discount: 20,
-  },
-];
-
-const totalPrometheusCost = departments.reduce((a, d) => a + d.prometheusCost, 0);
-const totalCltCost = departments.reduce((a, d) => a + d.cltCost, 0);
-const totalTokens = "110M";
-const totalAgents = departments.reduce((set, d) => { d.agents.forEach(a => set.add(a.key)); return set; }, new Set<string>()).size;
-const totalSavingsPercent = Math.round(((totalCltCost - totalPrometheusCost) / totalCltCost) * 100);
-
-const Departamentos = () => { // v2
+const Departamentos = () => {
   const { t, i18n } = useTranslation();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -304,6 +34,8 @@ const Departamentos = () => { // v2
   const [suggestionEmail, setSuggestionEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [suggestions, setSuggestions] = useState<{ department_name: string; votes: number }[]>([]);
+
+  const region = getRegion(lang);
 
   const handleHireDepartment = useCallback(async (dept: typeof departments[0]) => {
     const hireIntent: HireIntent = {
@@ -321,7 +53,6 @@ const Departamentos = () => { // v2
     setHiringDeptId(dept.id);
 
     try {
-      const region = getRegion(lang);
       const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
 
       const loadingToast = toast.loading("Criando assinatura do departamento...");
@@ -366,7 +97,7 @@ const Departamentos = () => { // v2
     } finally {
       setHiringDeptId(null);
     }
-  }, [user, navigate, t, lang]);
+  }, [user, navigate, t, lang, region]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -376,7 +107,6 @@ const Departamentos = () => { // v2
         .order("votes", { ascending: false })
         .limit(10);
       if (data) {
-        // Aggregate by name
         const map = new Map<string, number>();
         data.forEach((s) => {
           const name = s.department_name.toLowerCase().trim();
@@ -409,7 +139,6 @@ const Departamentos = () => { // v2
       setSuggestionName("");
       setSuggestionReason("");
       setSuggestionEmail("");
-      // Refresh suggestions
       const { data } = await supabase
         .from("department_suggestions")
         .select("department_name, votes")
@@ -464,7 +193,7 @@ const Departamentos = () => { // v2
           </div>
 
           {/* Hero Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-8">
             {[
               { icon: Bot, value: String(totalAgents), label: "Agentes" },
               { icon: Building2, value: String(departments.length), label: "Departamentos" },
@@ -481,11 +210,13 @@ const Departamentos = () => { // v2
         </motion.div>
 
         {/* Department Cards Grid */}
-        <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
           {departments.map((dept, i) => {
             const DeptIcon = dept.icon;
-            const savings = dept.cltCost - dept.prometheusCost;
-            const savingsPercent = Math.round((savings / dept.cltCost) * 100);
+            const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
+            const deptClt = (region.departmentClt as Record<string, number>)[dept.id] || dept.cltCost;
+            const savings = deptClt - deptPrice;
+            const savingsPercent = deptClt > 0 ? Math.round((savings / deptClt) * 100) : 0;
             return (
               <motion.div
                 key={dept.id}
@@ -520,7 +251,7 @@ const Departamentos = () => { // v2
 
                   <div className="mt-4 flex items-end gap-2">
                     <span className="font-display font-bold text-2xl text-foreground">
-                      R$ {dept.prometheusCost.toLocaleString("pt-BR")}
+                      {formatPrice(deptPrice, lang)}
                     </span>
                     <span className="text-sm text-muted-foreground mb-0.5">/mês</span>
                     <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 text-[10px] font-bold ml-auto">
@@ -565,13 +296,13 @@ const Departamentos = () => { // v2
                     <div>
                       <p className="text-[10px] text-muted-foreground">CLT equivalente</p>
                       <p className="text-sm font-bold line-through text-muted-foreground">
-                        R$ {dept.cltCost.toLocaleString("pt-BR")}/mês
+                        {formatPrice(deptClt, lang)}/mês
                       </p>
                     </div>
                     <div className="text-right">
                       <p className="text-[10px] text-emerald-400 font-semibold">Economia</p>
                       <p className="text-sm font-bold text-emerald-400">
-                        -{savingsPercent}% ({`R$ ${savings.toLocaleString("pt-BR")}`})
+                        -{savingsPercent}% ({formatPrice(savings, lang)})
                       </p>
                     </div>
                   </div>
@@ -617,13 +348,13 @@ const Departamentos = () => { // v2
             <div>
               <p className="text-xs text-muted-foreground">CLT total</p>
               <p className="font-display font-bold text-xl line-through text-muted-foreground">
-                R$ {totalCltCost.toLocaleString("pt-BR")}/mês
+                {formatPrice(totalCltCost, lang)}/mês
               </p>
             </div>
             <div>
               <p className="text-xs text-emerald-400 font-medium">CLAUTHOR</p>
               <p className="font-display font-bold text-xl text-emerald-400">
-                R$ {totalPrometheusCost.toLocaleString("pt-BR")}/mês
+                {formatPrice(totalPrometheusCost, lang)}/mês
               </p>
             </div>
             <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 font-bold text-sm px-3 py-1">
@@ -748,7 +479,7 @@ const Departamentos = () => { // v2
           <h2 className="font-display text-2xl font-bold text-center mb-8">
             Por que contratar <span className="gradient-text">departamentos inteiros</span>?
           </h2>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
               { icon: TrendingUp, title: "93% mais barato", desc: "Que uma equipe CLT equivalente" },
               { icon: Zap, title: "Operação 24/7", desc: "Sem férias, sem faltas, sem hora extra" },
