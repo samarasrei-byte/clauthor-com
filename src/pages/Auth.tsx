@@ -32,9 +32,16 @@ const AuthPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const state = location.state as { from?: { pathname: string }; hireIntent?: HireIntent } | null;
+  const state = location.state as { from?: { pathname: string }; hireIntent?: HireIntent; signup?: boolean } | null;
   const from = state?.from?.pathname || "/dashboard";
   const hireIntent = state?.hireIntent || null;
+
+  // If redirected with signup=true, show signup form
+  useEffect(() => {
+    if (state?.signup) {
+      setIsLogin(false);
+    }
+  }, [state?.signup]);
 
   // If user is already logged in, redirect immediately
   useEffect(() => {
