@@ -2,9 +2,11 @@ import { motion } from "framer-motion";
 import { Plus, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import NotificationPanel from "./NotificationPanel";
+import { useTranslation } from "react-i18next";
 
 const QuickActions = () => {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -15,16 +17,15 @@ const QuickActions = () => {
       <Link to="/create-agent">
         <Button size="sm" className="glow gap-1.5 font-medium">
           <Plus className="h-3.5 w-3.5" />
-          Novo Agente
+          {t("dashboard.new_agent", { defaultValue: "Novo Agente" })}
         </Button>
       </Link>
       <Link to="/library">
         <Button size="sm" variant="outline" className="gap-1.5 border-white/10">
           <Search className="h-3.5 w-3.5" />
-          Biblioteca
+          {t("dashboard.library", { defaultValue: "Biblioteca" })}
         </Button>
       </Link>
-      <NotificationPanel />
     </motion.div>
   );
 };

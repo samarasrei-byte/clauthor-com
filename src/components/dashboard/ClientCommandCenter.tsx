@@ -116,7 +116,16 @@ const ClientCommandCenter = ({
       />
 
       {/* Agent Summary Cards */}
-      <AgentSummaryCards agents={agents} />
+      <AgentSummaryCards
+        agents={agents}
+        onChatWith={(agentId) => {
+          const agent = agents.find(a => a.id === agentId);
+          if (agent && onNavigate) {
+            // Navigate to chat — parent handles setting selectedAgent
+            onNavigate(`agent-chat-${agentId}`);
+          }
+        }}
+      />
 
       {/* Agent Health Panel */}
       {health && (
