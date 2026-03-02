@@ -6,7 +6,7 @@ import {
   GraduationCap, Factory, Rocket, Target, Zap, Shield,
   Users, MessageSquare, BarChart3, Headphones, PenTool,
   Receipt, Globe, DollarSign, Megaphone, LineChart, Cpu,
-  HelpCircle,
+  HelpCircle, Plus,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -78,6 +78,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
   const [industry, setIndustry] = useState("");
   const [selectedChallenges, setSelectedChallenges] = useState<string[]>([]);
   const [teamSize, setTeamSize] = useState("");
+  const [extraAgents, setExtraAgents] = useState<string[]>([]);
   const navigate = useNavigate();
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -133,8 +134,19 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
   };
 
   const handleFinish = () => {
+    const slugs = getRecommendedAgents();
+    const allSlugs = [...new Set([...slugs, ...extraAgents])];
     onClose();
-    navigate("/auth");
+    navigate("/auth", {
+      state: {
+        signup: true,
+        hireIntent: allSlugs.length > 0 ? {
+          type: "agent" as const,
+          label: `Squad ${industries.find(i => i.id === industry)?.label || "IA"} (${allSlugs.length} agentes)`,
+          slugs: allSlugs,
+        } : undefined,
+      },
+    });
   };
 
   const handleViewLibrary = () => {
@@ -504,9 +516,58 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       </div>
 
                       <p className="text-sm text-muted-foreground">
-                        Crie sua conta gratuita para ativar esses agentes, ou explore a biblioteca completa com 80+ agentes.
+                        Você também pode adicionar agentes individuais abaixo, ou criar sua conta para explorar todos.
                       </p>
                     </div>
+                  </div>
+
+                  {/* Individual agent picker */}
+                  <div className="space-y-2">
+                    <p className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5 px-1">
+                      <Plus className="h-3 w-3" />
+                      Adicionar agentes individuais
+                    </p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 max-h-48 overflow-y-auto pr-1">
+                      {[
+                        "voice_ai", "orchestrator", "coding", "content", "seo_growth", 
+                        "sales", "omnichannel", "hr", "legal", "ecommerce", 
+                        "creative_design", "video_production", "data_analytics",
+                        "marketing_automation", "paid_traffic", "customer_success",
+                        "ai_cfo", "scheduler", "branding", "media_buyer"
+                      ]
+                        .filter(a => !getRecommendedAgents().includes(a))
+                        .map((agent, i) => {
+                          const isSelected = extraAgents.includes(agent);
+                          return (
+                            <motion.button
+                              key={agent}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              transition={{ delay: 0.02 * i }}
+                              onClick={() => setExtraAgents(prev => 
+                                prev.includes(agent) ? prev.filter(a => a !== agent) : [...prev, agent]
+                              )}
+                              className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all text-[11px] ${
+                                isSelected
+                                  ? "border-primary/40 bg-primary/5"
+                                  : "border-border/50 bg-card/30 hover:border-primary/20"
+                              }`}
+                            >
+                              {isSelected ? (
+                                <CheckCircle2 className="h-3 w-3 text-primary shrink-0" />
+                              ) : (
+                                <Bot className="h-3 w-3 text-muted-foreground shrink-0" />
+                              )}
+                              <span className="capitalize truncate">{agent.replace(/_/g, " ")}</span>
+                            </motion.button>
+                          );
+                        })}
+                    </div>
+                    {extraAgents.length > 0 && (
+                      <p className="text-[10px] text-primary px-1">
+                        +{extraAgents.length} agente{extraAgents.length > 1 ? "s" : ""} individual{extraAgents.length > 1 ? "is" : ""} adicionado{extraAgents.length > 1 ? "s" : ""}
+                      </p>
+                    )}
                   </div>
 
                   {/* CTAs */}
@@ -529,7 +590,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         Ver preços
                       </Button>
                     </div>
-                    <Button variant="ghost" onClick={() => { setPhase(0); setIndustry(""); setSelectedChallenges([]); setTeamSize(""); }} className="w-full text-xs text-muted-foreground">
+                    <Button variant="ghost" onClick={() => { setPhase(0); setIndustry(""); setSelectedChallenges([]); setTeamSize(""); setExtraAgents([]); }} className="w-full text-xs text-muted-foreground">
                       ← Recomeçar
                     </Button>
                   </motion.div>
