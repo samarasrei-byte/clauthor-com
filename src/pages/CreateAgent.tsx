@@ -115,6 +115,20 @@ const CreateAgentPage = () => {
     }
     setSaving(true);
     try {
+      // Build config with steps 6-7 data
+      const agentConfig = {
+        exec_limit: parseInt(execLimit) || 500,
+        timeout_seconds: parseInt(timeout) || 30,
+        audit_level: auditLevel,
+        schedule: is24h
+          ? { mode: "24/7" }
+          : { mode: "scheduled", start: startTime, end: endTime, days: selectedDays },
+      };
+
+      const kbEntries: any[] = [];
+      if (knowledgeBase) kbEntries.push({ type: "text", content: knowledgeBase });
+      kbEntries.push({ type: "config", content: agentConfig });
+
       const { error } = await supabase.from("agents").insert({
         user_id: user.id,
         name: name.trim(),
@@ -124,7 +138,7 @@ const CreateAgentPage = () => {
         channels: selectedChannels.length > 0 ? selectedChannels : null,
         integrations: selectedIntegrations.length > 0 ? selectedIntegrations : null,
         actions: selectedActions.length > 0 ? selectedActions : null,
-        knowledge_base: knowledgeBase ? [{ type: "text", content: knowledgeBase }] : null,
+        knowledge_base: kbEntries,
         status: "active",
         tier: "basic",
         monthly_price: 0,
@@ -313,10 +327,13 @@ const CreateAgentPage = () => {
                   <Label>Base de Conhecimento</Label>
                   <Textarea placeholder="Cole textos, FAQs, documentos ou links que o agente deve usar como referência." value={knowledgeBase} onChange={e => setKnowledgeBase(e.target.value)} className="glass min-h-[150px]" />
                 </div>
-                <div className="glass rounded-lg p-4 neon-border text-center cursor-pointer hover:bg-accent/30 transition-colors">
+                <div
+                  className="glass rounded-lg p-4 neon-border text-center cursor-pointer hover:bg-accent/30 transition-colors opacity-60"
+                  onClick={() => toast.info("Upload de arquivos estará disponível em breve!")}
+                >
                   <Database className="h-8 w-8 text-primary mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">Arraste arquivos ou clique para upload</p>
-                  <p className="text-xs text-muted-foreground mt-1">PDF, DOCX, TXT, CSV (até 50MB)</p>
+                  <p className="text-xs text-muted-foreground mt-1">PDF, DOCX, TXT, CSV — Em breve</p>
                 </div>
               </div>
             )}

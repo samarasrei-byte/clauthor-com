@@ -3,6 +3,7 @@ import { Bot, MessageSquare, Sparkles, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface ContractedAgent {
   id: string;
@@ -18,6 +19,9 @@ interface ContractedAgentsProps {
 }
 
 const ContractedAgents = ({ subscriptions, onSelectAgent }: ContractedAgentsProps) => {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -31,14 +35,16 @@ const ContractedAgents = ({ subscriptions, onSelectAgent }: ContractedAgentsProp
             <Sparkles className="h-4 w-4 text-emerald-500" />
           </div>
           <div>
-            <h2 className="font-display font-semibold">Agentes Contratados</h2>
-            <p className="text-xs text-muted-foreground">{subscriptions.length} ativo{subscriptions.length !== 1 ? "s" : ""}</p>
+            <h2 className="font-display font-semibold">{t("dashboard.contracted_agents", { defaultValue: "Agentes Contratados" })}</h2>
+            <p className="text-xs text-muted-foreground">
+              {subscriptions.length} {t("dashboard.active_count", { defaultValue: "ativo", count: subscriptions.length })}{subscriptions.length !== 1 ? "s" : ""}
+            </p>
           </div>
         </div>
         <Link to="/library">
           <Button size="sm" variant="outline" className="gap-1 border-white/10">
             <ShoppingCart className="h-3.5 w-3.5" />
-            Contratar
+            {t("dashboard.hire", { defaultValue: "Contratar" })}
           </Button>
         </Link>
       </div>
@@ -49,13 +55,13 @@ const ContractedAgents = ({ subscriptions, onSelectAgent }: ContractedAgentsProp
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <Bot className="h-7 w-7 text-primary" />
             </div>
-            <h3 className="font-display font-semibold mb-1 text-sm">Nenhum agente contratado</h3>
+            <h3 className="font-display font-semibold mb-1 text-sm">{t("dashboard.no_contracted", { defaultValue: "Nenhum agente contratado" })}</h3>
             <p className="text-xs text-muted-foreground mb-4">
-              Explore nossa biblioteca e contrate seu primeiro funcionário de IA
+              {t("dashboard.explore_hire_cta", { defaultValue: "Explore nossa biblioteca e contrate seu primeiro funcionário de IA" })}
             </p>
             <Link to="/library">
               <Button size="sm" className="glow">
-                Ver Agentes Disponíveis
+                {t("dashboard.view_available", { defaultValue: "Ver Agentes Disponíveis" })}
               </Button>
             </Link>
           </div>
@@ -72,11 +78,11 @@ const ContractedAgents = ({ subscriptions, onSelectAgent }: ContractedAgentsProp
                     <p className="font-medium text-sm">{sub.agent_name}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <Badge variant="secondary" className="text-[10px] bg-emerald-500/10 text-emerald-500">
-                        Ativo
+                        {t("dashboard.active_label", { defaultValue: "Ativo" })}
                       </Badge>
                       {sub.current_period_end && (
                         <span className="text-[10px] text-muted-foreground">
-                          até {new Date(sub.current_period_end).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })}
+                          {t("dashboard.until", { defaultValue: "até" })} {new Date(sub.current_period_end).toLocaleDateString(locale, { day: "2-digit", month: "short" })}
                         </span>
                       )}
                     </div>
@@ -84,8 +90,8 @@ const ContractedAgents = ({ subscriptions, onSelectAgent }: ContractedAgentsProp
                 </div>
                 <div className="flex items-center gap-3">
                   <p className="text-sm font-medium">
-                    R$ {(sub.monthly_price / 100).toLocaleString("pt-BR")}
-                    <span className="text-xs text-muted-foreground">/mês</span>
+                    {new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(sub.monthly_price / 100)}
+                    <span className="text-xs text-muted-foreground">/{t("dashboard.month_short", { defaultValue: "mês" })}</span>
                   </p>
                   {onSelectAgent && (
                     <Button

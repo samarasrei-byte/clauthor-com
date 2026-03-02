@@ -3,6 +3,7 @@ import { Bot, Plus, ArrowRight, Sparkles, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 interface Agent {
   id: string;
@@ -19,13 +20,6 @@ interface AgentsListProps {
   onSelectAgent?: (agentId: string, agentName: string) => void;
 }
 
-const tierLabels: Record<string, string> = {
-  basic: "Starter",
-  intermediate: "Intermediário",
-  advanced: "Avançado",
-  enterprise: "Enterprise",
-};
-
 const tierColors: Record<string, string> = {
   basic: "bg-emerald-500/15 text-emerald-400",
   intermediate: "bg-cyan-500/15 text-cyan-400",
@@ -33,21 +27,31 @@ const tierColors: Record<string, string> = {
   enterprise: "bg-primary/15 text-primary",
 };
 
-const statusLabels: Record<string, string> = {
-  draft: "Rascunho",
-  active: "Ativo",
-  paused: "Pausado",
-  archived: "Arquivado",
-};
-
-const statusColors: Record<string, string> = {
-  draft: "bg-muted text-muted-foreground",
-  active: "bg-emerald-500/20 text-emerald-500",
-  paused: "bg-yellow-500/20 text-yellow-400",
-  archived: "bg-destructive/20 text-destructive",
-};
-
 const AgentsList = ({ agents, isLoading, onSelectAgent }: AgentsListProps) => {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
+
+  const tierLabels: Record<string, string> = {
+    basic: "Starter",
+    intermediate: t("agents.intermediate", { defaultValue: "Intermediário" }),
+    advanced: t("agents.advanced", { defaultValue: "Avançado" }),
+    enterprise: "Enterprise",
+  };
+
+  const statusLabels: Record<string, string> = {
+    draft: t("agents.draft", { defaultValue: "Rascunho" }),
+    active: t("agents.active", { defaultValue: "Ativo" }),
+    paused: t("agents.paused", { defaultValue: "Pausado" }),
+    archived: t("agents.archived", { defaultValue: "Arquivado" }),
+  };
+
+  const statusColors: Record<string, string> = {
+    draft: "bg-muted text-muted-foreground",
+    active: "bg-emerald-500/20 text-emerald-500",
+    paused: "bg-yellow-500/20 text-yellow-400",
+    archived: "bg-destructive/20 text-destructive",
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -60,18 +64,18 @@ const AgentsList = ({ agents, isLoading, onSelectAgent }: AgentsListProps) => {
           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
             <Bot className="h-4 w-4 text-primary" />
           </div>
-          <h2 className="font-display font-semibold">Meus Agentes</h2>
+          <h2 className="font-display font-semibold">{t("agents.my_agents", { defaultValue: "Meus Agentes" })}</h2>
         </div>
         <div className="flex items-center gap-2">
           <Link to="/agents">
             <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary">
-              Ver todos <ArrowRight className="h-4 w-4 ml-1" />
+              {t("agents.view_all", { defaultValue: "Ver todos" })} <ArrowRight className="h-4 w-4 ml-1" />
             </Button>
           </Link>
           <Link to="/create-agent">
             <Button size="sm" className="gap-1">
               <Plus className="h-4 w-4" />
-              Novo
+              {t("agents.new_short", { defaultValue: "Novo" })}
             </Button>
           </Link>
         </div>
@@ -80,20 +84,20 @@ const AgentsList = ({ agents, isLoading, onSelectAgent }: AgentsListProps) => {
       <div className="p-4">
         {isLoading ? (
           <div className="py-8 text-center text-muted-foreground">
-            Carregando...
+            {t("common.loading", { defaultValue: "Carregando..." })}
           </div>
         ) : agents.length === 0 ? (
           <div className="text-center py-12">
             <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
               <Sparkles className="h-8 w-8 text-primary" />
             </div>
-            <h3 className="font-display font-semibold mb-2">Crie seu primeiro agente</h3>
+            <h3 className="font-display font-semibold mb-2">{t("agents.create_first", { defaultValue: "Crie seu primeiro agente" })}</h3>
             <p className="text-sm text-muted-foreground mb-6">
-              Explore a biblioteca e ative um funcionário de IA
+              {t("agents.explore_activate", { defaultValue: "Explore a biblioteca e ative um funcionário de IA" })}
             </p>
             <Link to="/library">
               <Button className="glow">
-                Explorar Templates
+                {t("agents.explore_templates", { defaultValue: "Explorar Templates" })}
               </Button>
             </Link>
           </div>
@@ -121,8 +125,8 @@ const AgentsList = ({ agents, isLoading, onSelectAgent }: AgentsListProps) => {
                 <div className="flex items-center gap-3">
                   <div className="text-right">
                     <p className="font-medium text-sm">
-                      R$ {(agent.monthly_price / 100).toLocaleString("pt-BR")}
-                      <span className="text-muted-foreground text-xs">/mês</span>
+                      {new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(agent.monthly_price / 100)}
+                      <span className="text-muted-foreground text-xs">/{t("dashboard.month_short", { defaultValue: "mês" })}</span>
                     </p>
                     <p className="text-xs text-muted-foreground">
                       {agent.total_executions} exec
