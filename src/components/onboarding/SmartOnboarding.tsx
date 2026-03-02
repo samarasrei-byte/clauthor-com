@@ -288,14 +288,24 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                           <HelpCircle className="h-4 w-4 text-primary" />
                           Não sei o que preciso — falar com IA
                         </Button>
-                        <Button
-                          variant="ghost"
-                          onClick={() => { onClose(); navigate("/library"); }}
-                          className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
-                        >
-                          Já sei o que preciso — ir direto
-                          <ArrowRight className="h-3 w-3" />
-                        </Button>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="ghost"
+                            onClick={() => { onClose(); navigate("/library"); }}
+                            className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
+                          >
+                            Já sei — ver Agentes
+                            <ArrowRight className="h-3 w-3" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            onClick={() => { onClose(); navigate("/departamentos"); }}
+                            className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
+                          >
+                            Já sei — ver Departamentos
+                            <ArrowRight className="h-3 w-3" />
+                          </Button>
+                        </div>
                       </div>
                     </motion.div>
                   )}
