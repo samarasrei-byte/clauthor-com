@@ -87,9 +87,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
   // Chat-like messages
   const messages = [
-    "Olá! 👋 Sou o consultor de IA da CLAUTHOR.",
-    "Vou te ajudar a montar o time de IA perfeito para sua empresa em menos de 1 minuto.",
-    "Primeiro, me conta: qual é o segmento da sua empresa?",
+    "Olá! Bem-vindo à CLAUTHOR.",
+    "Vamos montar o time ideal para sua empresa em menos de 1 minuto.",
+    "Para começar, qual é o segmento da sua empresa?",
   ];
 
   const msg0 = useTyping(messages[0], 25, 400);
@@ -183,7 +183,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
               </div>
               <div>
                 <span className="font-display font-bold text-xs tracking-wider uppercase text-foreground">
-                  Consultor IA
+                  Monte seu time
                 </span>
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -335,9 +335,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                       <p className="text-sm">
-                        Ótimo! {industries.find(i => i.id === industry)?.label} é um setor que se beneficia muito de IA. 🔥
+                        Boa escolha! {industries.find(i => i.id === industry)?.label} é um setor com grande potencial de automação.
                         <br /><br />
-                        Agora me diz: <strong>quais são seus maiores desafios?</strong> Selecione todos que se aplicam:
+                        Agora selecione: <strong>quais são seus maiores desafios?</strong>
                       </p>
                     </div>
                   </div>
@@ -408,9 +408,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                       <p className="text-sm">
-                        Perfeito! Já consigo ver um squad poderoso se formando. ⚡
+                        Excelente seleção. Já temos um time forte para montar.
                         <br /><br />
-                        Última pergunta: <strong>quantas pessoas tem na sua empresa?</strong> Isso ajuda a dimensionar o time de IA ideal.
+                        Última pergunta: <strong>quantas pessoas tem na sua empresa?</strong> Isso define o tamanho do time.
                       </p>
                     </div>
                   </div>
@@ -471,7 +471,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[90%] space-y-4">
                       <p className="text-sm">
-                        🎯 <strong>Pronto! Aqui está o seu Squad de IA personalizado:</strong>
+                        <strong>Pronto! Aqui está o seu time personalizado:</strong>
                       </p>
 
                       {/* Squad card */}
@@ -485,7 +485,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                           </div>
                           {getDiscount().pct > 0 && (
                             <Badge className="bg-emerald-500/10 text-emerald-400 border-emerald-500/20 text-[10px]">
-                              🔥 {getDiscount().label}
+                              {getDiscount().label}
                             </Badge>
                           )}
                         </div>
@@ -640,8 +640,8 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                       <p className="text-sm">
-                        Sem problema! 😊 Nosso <strong>Consultor de IA</strong> vai te ajudar.
-                        Conte sobre sua empresa e ele monta o squad ideal para você.
+                        Sem problema! Nosso <strong>consultor especializado</strong> vai te orientar.
+                        Conte sobre sua empresa e montamos o time ideal para você.
                       </p>
                     </div>
                   </div>

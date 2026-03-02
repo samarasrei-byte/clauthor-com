@@ -353,7 +353,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
     } catch {
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "⚠️ Falha na conexão neural. Auto-recuperação ativada. Tente novamente em instantes ou contate suporte@clauthor.ai",
+        content: "Falha na conexão. Auto-recuperação ativada. Tente novamente em instantes ou contate suporte@clauthor.ai",
         type: "diagnostic",
       }]);
     } finally {
@@ -394,7 +394,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                 <div className="flex-1">
                   <div className="flex items-center gap-1.5">
                     <p className="text-[12px] font-semibold tracking-[0.15em] uppercase text-foreground/80">
-                      Suporte Neural
+                      Suporte CLAUTHOR
                     </p>
                     <Radio className="h-2.5 w-2.5 text-emerald-400 animate-pulse" />
                   </div>
@@ -459,10 +459,10 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                           <div className="bg-white/[0.03] border border-white/[0.04] rounded-xl rounded-tl-sm px-3 py-2 max-w-[85%]">
                             <p className="text-[12px] text-foreground/70 leading-relaxed">
                               {area === "admin"
-                                ? "🧠 Sistema Neural ativo. Monitorando todos os tenants em tempo real. Como posso otimizar sua operação?"
+                                ? "Sistema ativo. Monitorando todos os tenants em tempo real. Como posso ajudar?"
                                 : area === "client"
-                                ? "⚡ Olá! Seus sistemas estão sendo monitorados. Detectei 0 anomalias. Como posso ajudar?"
-                                : "🌐 Bem-vindo ao CLAUTHOR. Suporte neural com auto-diagnóstico e prevenção inteligente ativo."}
+                                ? "Olá! Seus sistemas estão sendo monitorados. 0 anomalias detectadas. Como posso ajudar?"
+                                : "Bem-vindo ao CLAUTHOR. Suporte com auto-diagnóstico e prevenção inteligente ativo."}
                             </p>
                           </div>
                         </motion.div>
@@ -526,7 +526,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         <div className="bg-white/[0.03] border border-white/[0.04] rounded-xl rounded-tl-sm px-3 py-2.5">
                           <div className="flex gap-1 items-center">
                             <Sparkles className="h-3 w-3 text-primary/40 animate-pulse" />
-                            <span className="text-[10px] text-muted-foreground/40">Processando via rede neural...</span>
+                            <span className="text-[10px] text-muted-foreground/40">Processando...</span>
                           </div>
                         </div>
                       </motion.div>
@@ -587,7 +587,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                             {[
                               { label: "Uptime", value: "99.97%", color: "text-emerald-400" },
                               { label: "Resp. Média", value: `${health.latency}ms`, color: "text-primary" },
-                              { label: "Rede Neural", value: "Online", color: "text-emerald-400" },
+                              { label: "Sistema", value: "Online", color: "text-emerald-400" },
                               { label: "Último Scan", value: new Date(health.lastScan).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), color: "text-muted-foreground" },
                             ].map(m => (
                               <div key={m.label} className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-2 text-center">
@@ -703,7 +703,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                     </button>
                   </div>
                   <p className="text-center text-[8px] tracking-[0.15em] uppercase text-muted-foreground/20 mt-2">
-                    Suporte Neural • CLAUTHOR AI
+                    Suporte • CLAUTHOR
                   </p>
                 </div>
               )}

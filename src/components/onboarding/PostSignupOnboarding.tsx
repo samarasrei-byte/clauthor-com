@@ -106,7 +106,7 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
 
   // Phase 0 typing
   const greeting = useTypingEffect(
-    `Bem-vindo(a), ${userName}. Sua equipe de IA está pronta para ser montada.`,
+    `Bem-vindo(a), ${userName}. Sua equipe está pronta para ser montada.`,
     35,
     600
   );
@@ -235,7 +235,7 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
       localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
     }
     onComplete();
-    toast.success("🚀 Sua equipe de IA está pronta!");
+    toast.success("Sua equipe está pronta!");
   };
 
   return (
@@ -612,7 +612,7 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
                 </motion.div>
 
                 <div>
-                  <h2 className="font-display text-3xl font-bold mb-2">Squad Ativo! 🚀</h2>
+                  <h2 className="font-display text-3xl font-bold mb-2">Squad Ativo!</h2>
                   <p className="text-muted-foreground text-sm">
                     {deployedAgents.length} agentes prontos para trabalhar pela{" "}
                     <span className="text-foreground font-medium">{companyName || "sua empresa"}</span>
@@ -662,7 +662,7 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
       {/* Bottom branding */}
       <div className="relative z-10 pb-4 text-center">
         <p className="text-[10px] text-muted-foreground/50 tracking-widest uppercase">
-          Powered by CLAUTHOR AI
+          CLAUTHOR
         </p>
       </div>
     </motion.div>
