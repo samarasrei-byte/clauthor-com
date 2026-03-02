@@ -1,10 +1,9 @@
 import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const SmartOnboarding = lazy(() => import("@/components/onboarding/SmartOnboarding"));
-
 const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 import { Button } from "@/components/ui/button";
@@ -15,9 +14,10 @@ import {
   Headphones, BotMessageSquare, PenTool, ShoppingCart, Megaphone, LineChart,
   Star, Receipt, Globe, Briefcase, DollarSign, MessageSquare,
   Activity, Terminal, ChevronRight, Cpu, Crosshair,
-  Building2, Clock, Rocket, BarChart3, Fingerprint, Sparkles, Layers3, Signal
+  Building2, Clock, Rocket, BarChart3, Fingerprint, Sparkles, Layers3, Signal,
+  Linkedin, Twitter, Github
 } from "lucide-react";
-import { useRef, useMemo, useState, useEffect, useCallback } from "react";
+import { useRef, useMemo, useState, useCallback } from "react";
 import HelpTooltip from "@/components/HelpTooltip";
 import { useTranslation } from "react-i18next";
 import clauthorLogo from "@/assets/clauthor-logo.png";
@@ -130,7 +130,7 @@ const AnimatedStat = ({ value, suffix = "", prefix = "", label, icon: Icon }: {
         <Icon className="h-5 w-5 text-primary icon-lift" strokeWidth={1.5} />
       </div>
       <p className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1">
-        {prefix}{count.toLocaleString("pt-BR")}{suffix}
+        {prefix}{count.toLocaleString()}{suffix}
       </p>
       <p className="font-mono text-[11px] sm:text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
     </motion.div>
@@ -149,9 +149,11 @@ interface LiveAgentProps {
   status: string;
   actions: number;
   index: number;
+  actionsLabel: string;
+  detailsLabel: string;
 }
 
-const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index, slug }: LiveAgentProps) => {
+const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index, slug, actionsLabel, detailsLabel }: LiveAgentProps) => {
   const [currentActions, setCurrentActions] = useState(actions);
 
   useEffect(() => {
@@ -168,28 +170,26 @@ const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index, slug }:
       viewport={{ once: true }}
       transition={{ delay: index * 0.12, duration: 0.6 }}
     >
-      <Link to={slug ? `/agente/${slug}` : "/library"} className="block group">
+      <Link to={slug ? `/agente/${slug}` : "/library"} className="block group" aria-label={`${name} — ${role}`}>
         <div className="relative p-6 sm:p-6 rounded-2xl border border-border bg-card/50 backdrop-blur-sm hover:border-primary/20 transition-all duration-500 overflow-hidden">
           <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 scan-line pointer-events-none" />
           
-          {/* Top row */}
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-2">
               <div className="relative">
-                <div className="w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500" />
-                <div className="absolute inset-0 w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 animate-ping opacity-75" />
+                <div className="w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full bg-accent-emerald" />
+                <div className="absolute inset-0 w-2.5 h-2.5 sm:w-2 sm:h-2 rounded-full bg-accent-emerald animate-ping opacity-75" />
               </div>
-              <span className="font-mono text-xs sm:text-[10px] uppercase tracking-[0.2em] text-emerald-500/80">{status}</span>
+              <span className="font-mono text-xs sm:text-[10px] uppercase tracking-[0.2em] text-accent-emerald/80">{status}</span>
             </div>
             <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md bg-muted/50">
               <Activity className="h-3.5 w-3.5 sm:h-3 sm:w-3 text-primary/60" strokeWidth={1.5} />
               <span className="font-mono text-xs sm:text-[11px] text-muted-foreground">
-                {currentActions.toLocaleString()} ações
+                {currentActions.toLocaleString()} {actionsLabel}
               </span>
             </div>
           </div>
 
-          {/* Agent identity */}
           <div className="flex items-start gap-4">
             <div className="w-14 h-14 sm:w-12 sm:h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center shrink-0 icon-container-glow">
               <Icon className="h-6 w-6 sm:h-5 sm:w-5 text-primary/70 icon-lift" strokeWidth={1.5} />
@@ -200,10 +200,9 @@ const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index, slug }:
             </div>
           </div>
 
-          {/* Bottom CTA */}
           <div className="mt-5 pt-4 border-t border-border/50 flex items-center justify-between">
             <span className="font-mono text-xs sm:text-[10px] uppercase tracking-[0.15em] text-muted-foreground/60">
-              Detalhes →
+              {detailsLabel}
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-1 transition-all" />
           </div>
@@ -228,6 +227,41 @@ const HomePage = () => {
 
   const headline = t("home.title1") + " " + t("home.title2");
   const { displayed: typedText, done: typingDone } = useTypewriter(headline, 35, 600);
+
+  // SEO meta tags
+  useEffect(() => {
+    document.title = t("home.seo_title");
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      metaDesc.setAttribute("content", t("home.seo_description"));
+    } else {
+      const meta = document.createElement("meta");
+      meta.name = "description";
+      meta.content = t("home.seo_description");
+      document.head.appendChild(meta);
+    }
+    // JSON-LD
+    let script = document.getElementById("jsonld-org") as HTMLScriptElement;
+    if (!script) {
+      script = document.createElement("script");
+      script.id = "jsonld-org";
+      script.type = "application/ld+json";
+      document.head.appendChild(script);
+    }
+    script.textContent = JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "CLAUTHOR",
+      url: "https://clauthor-com.lovable.app",
+      logo: "https://clauthor-com.lovable.app/favicon.png",
+      description: t("home.seo_description"),
+      sameAs: ["https://linkedin.com/company/clauthor", "https://twitter.com/clauthor"],
+    });
+    return () => {
+      const el = document.getElementById("jsonld-org");
+      if (el) el.remove();
+    };
+  }, [t]);
 
   const finderIcons: Record<string, React.ElementType> = {
     customer_service: Headphones, sales: DollarSign, billing: Receipt,
@@ -266,7 +300,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           HERO
           ═══════════════════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-[85vh] flex items-center px-4 sm:px-6 overflow-hidden py-16 sm:py-0">
+      <section ref={heroRef} className="relative min-h-[85vh] flex items-center px-4 sm:px-6 overflow-hidden py-16 sm:py-0" aria-label="Hero">
         {!isMobile && <MouseReactiveField />}
 
         <div className="absolute inset-0 pointer-events-none">
@@ -287,11 +321,11 @@ const HomePage = () => {
               >
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/30 backdrop-blur-sm">
                   <div className="relative">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                    <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping opacity-75" />
+                    <div className="w-1.5 h-1.5 rounded-full bg-accent-emerald" />
+                    <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-accent-emerald animate-ping opacity-75" />
                   </div>
                   <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                    Sistema ativo — 80 agentes operacionais
+                    {t("home.system_status")}
                   </span>
                   <HelpTooltip id="home-intro" text="Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo." position="bottom" size={12} autoShowDelay={3000} />
                 </div>
@@ -327,6 +361,7 @@ const HomePage = () => {
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
                           onClick={() => setShowSmartOnboarding(true)}
+                          aria-label={t("home.cta_build_team")}
                           className="group relative h-14 sm:h-14 px-10 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full sm:w-auto"
                         >
                           <div className="absolute inset-0 bg-primary rounded-xl" />
@@ -334,7 +369,7 @@ const HomePage = () => {
                           <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
                           <span className="relative z-10 flex items-center justify-center gap-3">
                             <Workflow className="h-4 w-4" strokeWidth={1.5} />
-                            Monte seu Time de IA
+                            {t("home.cta_build_team")}
                             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                           </span>
                         </motion.button>
@@ -343,10 +378,11 @@ const HomePage = () => {
                         <motion.button
                           whileHover={{ scale: 1.01 }}
                           whileTap={{ scale: 0.99 }}
+                          aria-label={t("home.cta_explore_agents")}
                           className="group h-11 sm:h-11 px-6 rounded-lg font-mono text-xs uppercase tracking-wider border border-border/50 text-muted-foreground hover:text-foreground transition-all duration-300 cursor-pointer w-full sm:w-auto"
                         >
                           <span className="flex items-center justify-center gap-2">
-                            Explorar Agentes
+                            {t("home.cta_explore_agents")}
                             <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/50 group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
                           </span>
                         </motion.button>
@@ -356,9 +392,9 @@ const HomePage = () => {
                     {/* Trust badges */}
                     <div className="grid grid-cols-3 sm:flex sm:flex-wrap items-center gap-2 sm:gap-5 mt-8">
                       {[
-                        { icon: LockKeyhole, label: "End-to-end encrypted" },
-                        { icon: Fingerprint, label: "SOC 2 compliant" },
-                        { icon: Bolt, label: "Setup 5min" },
+                        { icon: LockKeyhole, label: t("home.trust_e2e") },
+                        { icon: Fingerprint, label: t("home.trust_soc2") },
+                        { icon: Bolt, label: t("home.trust_setup") },
                       ].map((item) => (
                         <div key={item.label} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-border/30 bg-card/20">
                           <item.icon className="h-4 w-4 text-primary/80" strokeWidth={1.5} />
@@ -366,8 +402,6 @@ const HomePage = () => {
                         </div>
                       ))}
                     </div>
-
-                    {/* Social proof moved to dedicated stats section below */}
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -386,13 +420,13 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           SOCIAL PROOF — Authority numbers
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-16 px-4 relative border-y border-border/50">
+      <section className="py-12 sm:py-16 px-4 relative border-y border-border/50" aria-label="Social proof">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-            <AnimatedStat icon={BotMessageSquare} value={80} suffix="+" label="Agentes Ativos" />
-            <AnimatedStat icon={Building2} value={850} suffix="+" label="Empresas Atendidas" />
-            <AnimatedStat icon={Clock} value={12400} suffix="h" label="Horas Economizadas" />
-            <AnimatedStat icon={Signal} value={97} suffix="%" label="Eficiência Média" />
+            <AnimatedStat icon={BotMessageSquare} value={80} suffix="+" label={t("home.stats_active_agents")} />
+            <AnimatedStat icon={Building2} value={850} suffix="+" label={t("home.stats_companies_served")} />
+            <AnimatedStat icon={Clock} value={12400} suffix="h" label={t("home.stats_hours_saved")} />
+            <AnimatedStat icon={Signal} value={97} suffix="%" label={t("home.stats_avg_efficiency")} />
           </div>
         </div>
       </section>
@@ -400,7 +434,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           LIVE AGENTS — Entities with heartbeat
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-28 px-4 relative">
+      <section className="py-16 sm:py-28 px-4 relative" aria-label="Live agents">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -410,7 +444,7 @@ const HomePage = () => {
           >
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
-              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">Agentes Ativos</span>
+              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_active_agents")}</span>
               <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
             </div>
             <h2 className="font-display text-2xl sm:text-5xl font-bold text-center">
@@ -420,7 +454,7 @@ const HomePage = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             {agents.map((agent, i) => (
-              <LiveAgentCard key={agent.key} {...agent} index={i} />
+              <LiveAgentCard key={agent.key} {...agent} index={i} actionsLabel={t("home.actions_label")} detailsLabel={t("home.details_arrow")} />
             ))}
           </div>
 
@@ -431,8 +465,8 @@ const HomePage = () => {
             className="text-center mt-8 sm:mt-10"
           >
             <Link to="/library">
-              <Button variant="outline" className="rounded-xl border-border hover:border-primary/20 group font-mono text-xs sm:text-xs uppercase tracking-wider px-8 h-12 sm:h-11">
-                Ver todos os 80 agentes
+              <Button variant="outline" className="rounded-xl border-border hover:border-primary/20 group font-mono text-xs sm:text-xs uppercase tracking-wider px-8 h-12 sm:h-11" aria-label={t("home.view_all_80")}>
+                {t("home.view_all_80")}
                 <ArrowRight className="ml-2 h-3.5 w-3.5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
@@ -443,7 +477,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           CONCIERGE IA
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 px-4 relative">
+      <section className="py-16 sm:py-20 px-4 relative" aria-label="AI Concierge">
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -452,12 +486,11 @@ const HomePage = () => {
           >
             <div className="flex items-center gap-3 mb-8 sm:mb-10">
               <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
-              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">Concierge IA</span>
+              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_concierge")}</span>
               <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
             </div>
 
             <div className="rounded-2xl border border-border bg-card/30 backdrop-blur-sm p-5 sm:p-10 relative overflow-hidden">
-              {/* Corner accents */}
               <div className="absolute top-0 left-0 w-8 h-8 border-t border-l border-primary/20 rounded-tl-2xl" />
               <div className="absolute top-0 right-0 w-8 h-8 border-t border-r border-primary/20 rounded-tr-2xl" />
               <div className="absolute bottom-0 left-0 w-8 h-8 border-b border-l border-primary/20 rounded-bl-2xl" />
@@ -465,10 +498,10 @@ const HomePage = () => {
 
               <div className="text-center mb-6 sm:mb-8">
                 <h2 className="font-display text-xl sm:text-3xl font-bold mb-3">
-                  Descreva seu problema. <span className="gradient-text">A IA resolve.</span>
+                  {t("home.concierge_title")} <span className="gradient-text">{t("home.concierge_title_hl")}</span>
                 </h2>
                 <p className="font-mono text-xs sm:text-xs text-muted-foreground">
-                  Nosso concierge analisa seu cenário e recomenda o agente ou time ideal.
+                  {t("home.concierge_desc")}
                 </p>
               </div>
 
@@ -488,7 +521,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           HOW IT WORKS — 3 steps
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-20 px-4 relative">
+      <section className="py-16 sm:py-20 px-4 relative" aria-label="How it works">
         <div className="max-w-3xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -498,11 +531,11 @@ const HomePage = () => {
           >
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
-              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">Protocolo</span>
+              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_protocol")}</span>
               <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
             </div>
             <h2 className="font-display text-2xl sm:text-4xl font-bold text-center">
-              {t("home.how_title")} <span className="gradient-text">3 passos</span>
+              {t("home.how_title")} <span className="gradient-text">{t("home.how_steps_count")}</span>
             </h2>
           </motion.div>
 
@@ -536,33 +569,33 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           WHY CLAUTHOR — Key differentiators
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24 px-4 relative border-y border-border/30">
+      <section className="py-16 sm:py-24 px-4 relative border-y border-border/30" aria-label="Why CLAUTHOR">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10 sm:mb-14">
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
-              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">Diferenciais</span>
+              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_differentials")}</span>
               <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
             </div>
             <h2 className="font-display text-2xl sm:text-4xl font-bold text-center">
-              Por que líderes escolhem a <span className="gradient-text">CLAUTHOR</span>
+              {t("home.why_title")} <span className="gradient-text">CLAUTHOR</span>
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground text-center mt-3 max-w-xl mx-auto">
-              Não somos apenas mais uma ferramenta de IA. Somos a infraestrutura que substitui departamentos inteiros.
+              {t("home.why_subtitle")}
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {[
-              { icon: Fingerprint, title: "Segurança Enterprise", desc: "Criptografia ponta a ponta, SOC 2, dados isolados por tenant. Sua operação blindada." },
-              { icon: Bolt, title: "Setup em 5 minutos", desc: "Sem código, sem DevOps. Escolha seu time, configure e seus agentes já estão operando." },
-              { icon: DollarSign, title: "Economia de +88%", desc: "Cada agente custa menos que um estagiário e trabalha 24/7, sem férias, sem turnover." },
-              { icon: Workflow, title: "Orquestração inteligente", desc: "Agentes trabalham em squads coordenados. Um resolve, outro valida, outro escala." },
-              { icon: Globe, title: "Multi-idioma nativo", desc: "Atenda clientes em 13 idiomas simultaneamente. Expansão global sem barreiras." },
-              { icon: Rocket, title: "Escala infinita", desc: "De 10 a 10.000 atendimentos/dia sem contratar ninguém. Escale sem dor." },
+              { icon: Fingerprint, title: t("home.diff_security"), desc: t("home.diff_security_desc") },
+              { icon: Bolt, title: t("home.diff_setup"), desc: t("home.diff_setup_desc") },
+              { icon: DollarSign, title: t("home.diff_savings"), desc: t("home.diff_savings_desc") },
+              { icon: Workflow, title: t("home.diff_orchestration"), desc: t("home.diff_orchestration_desc") },
+              { icon: Globe, title: t("home.diff_multilang"), desc: t("home.diff_multilang_desc") },
+              { icon: Rocket, title: t("home.diff_scale"), desc: t("home.diff_scale_desc") },
             ].map((item, i) => (
               <motion.div
-                key={item.title}
+                key={i}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -583,35 +616,32 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           TESTIMONIALS — Multiple cases
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-24 px-4 relative">
+      <section className="py-16 sm:py-24 px-4 relative" aria-label="Testimonials">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10 sm:mb-14">
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
-              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">Cases de Sucesso</span>
+              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_cases")}</span>
               <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
             </div>
             <h2 className="font-display text-2xl sm:text-4xl font-bold text-center">
-              Resultados <span className="gradient-text">reais</span>
+              {t("home.cases_title")} <span className="gradient-text">{t("home.cases_title_hl")}</span>
             </h2>
           </motion.div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-5">
             {[
               {
-                initials: "RM", name: "Rafael Mendes", role: "CEO — TechNova", sector: "SaaS B2B",
-                quote: "Reduzimos 72% dos custos operacionais em 3 meses. Os agentes trabalham 24/7 sem falhar.",
-                metric: "-72%", metricLabel: "custos operacionais",
+                initials: "RM", name: t("home.case1_name"), role: t("home.case1_role"), sector: t("home.case1_sector"),
+                quote: t("home.case1_quote"), metric: t("home.case1_metric"), metricLabel: t("home.case1_metric_label"),
               },
               {
-                initials: "CS", name: "Camila Santos", role: "COO — HealthPlus", sector: "Saúde",
-                quote: "Automatizamos 4.200 agendamentos/mês e zeramos o no-show. Pacientes adoraram a experiência.",
-                metric: "4.200", metricLabel: "agendamentos/mês",
+                initials: "CS", name: t("home.case2_name"), role: t("home.case2_role"), sector: t("home.case2_sector"),
+                quote: t("home.case2_quote"), metric: t("home.case2_metric"), metricLabel: t("home.case2_metric_label"),
               },
               {
-                initials: "LP", name: "Lucas Pereira", role: "CTO — FinEdge", sector: "Fintech",
-                quote: "O squad de compliance processa 800 contratos/dia com 99,2% de precisão. Antes levava 3 semanas.",
-                metric: "800", metricLabel: "contratos/dia",
+                initials: "LP", name: t("home.case3_name"), role: t("home.case3_role"), sector: t("home.case3_sector"),
+                quote: t("home.case3_quote"), metric: t("home.case3_metric"), metricLabel: t("home.case3_metric_label"),
               },
             ].map((testimonial, i) => (
               <motion.div
@@ -625,7 +655,6 @@ const HomePage = () => {
                 <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-primary/10 rounded-tl-2xl" />
                 <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-primary/10 rounded-br-2xl" />
 
-                {/* Metric highlight */}
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary/10 bg-primary/5 mb-4 w-fit">
                   <TrendingUp className="h-3 w-3 text-primary" strokeWidth={1.5} />
                   <span className="font-mono text-xs font-bold text-primary">{testimonial.metric}</span>
@@ -662,22 +691,22 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           TRUST — Security & Support
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-16 px-4 relative">
+      <section className="py-12 sm:py-16 px-4 relative" aria-label="Trust">
         <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="rounded-2xl border border-primary/10 bg-primary/[0.02] p-6 sm:p-10 text-center">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-5 icon-container-glow">
                 <ShieldCheck className="h-7 w-7 text-primary icon-lift" strokeWidth={1.5} />
               </div>
-              <h3 className="font-display text-xl sm:text-2xl font-bold mb-3">Segurança & Confiança</h3>
+              <h3 className="font-display text-xl sm:text-2xl font-bold mb-3">{t("home.trust_section_title")}</h3>
               <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-lg mx-auto mb-6">
-                Sua operação protegida com infraestrutura de nível enterprise. Criptografia de ponta a ponta, suporte dedicado e total flexibilidade.
+                {t("home.trust_section_desc")}
               </p>
               <div className="flex flex-wrap justify-center gap-3 sm:gap-6">
                 {[
-                  { icon: LockKeyhole, text: "Dados 100% criptografados" },
-                  { icon: Bolt, text: "Cancele a qualquer momento" },
-                  { icon: Headphones, text: "Suporte humano + IA 24/7" },
+                  { icon: LockKeyhole, text: t("home.trust_encrypted") },
+                  { icon: Bolt, text: t("home.trust_cancel") },
+                  { icon: Headphones, text: t("home.trust_support") },
                 ].map((g) => (
                   <div key={g.text} className="flex items-center gap-2">
                     <g.icon className="h-3.5 w-3.5 text-primary/60" strokeWidth={1.5} />
@@ -693,7 +722,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           TEAM — Quem Somos
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-16 sm:py-28 px-4 relative">
+      <section className="py-16 sm:py-28 px-4 relative" aria-label="Team">
         <div className="max-w-5xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -703,14 +732,14 @@ const HomePage = () => {
           >
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
-              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">Quem Somos</span>
+              <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_team")}</span>
               <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
             </div>
             <h2 className="font-display text-2xl sm:text-5xl font-bold text-center">
-              A Equipe
+              {t("home.team_title")}
             </h2>
             <p className="text-muted-foreground text-sm sm:text-base text-center mt-4 max-w-2xl mx-auto">
-              Liderança com décadas de experiência combinada em tecnologia, inovação e estratégia de marca.
+              {t("home.team_subtitle")}
             </p>
           </motion.div>
 
@@ -718,16 +747,16 @@ const HomePage = () => {
             {[
               {
                 name: "THOR",
-                role: "Chief Executive Officer (CEO)",
+                role: t("home.thor_role"),
                 photo: thorPhoto,
-                bio: "THOR é o centro de comando supremo da plataforma. Ele orquestra todas as operações, coordena cada departamento e garante execução disciplinada em escala. A inteligência visionária que transforma múltiplos agentes de IA em uma máquina de execução sincronizada de nível enterprise.",
+                bio: t("home.thor_bio"),
                 isAI: true,
               },
               {
                 name: "HELIXA AI",
-                role: "Chief AI Evolution Officer",
+                role: t("home.helixa_role"),
                 photo: helixaPhoto,
-                bio: "HELIXA AI é o núcleo de inteligência auto-evolutiva da plataforma. Ela otimiza continuamente os agentes, refina a performance e garante evolução adaptativa com base em dados em tempo real. Transforma o sistema em um ecossistema de IA vivo, em constante avanço.",
+                bio: t("home.helixa_bio"),
                 isAI: true,
               },
             ].map((member, i) => (
@@ -744,6 +773,8 @@ const HomePage = () => {
                     src={member.photo}
                     alt={member.name}
                     loading="lazy"
+                    width={400}
+                    height={533}
                     className="w-full h-full object-cover object-top group-hover:scale-[1.03] transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
@@ -751,8 +782,8 @@ const HomePage = () => {
                 <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="relative">
-                      <div className={`w-2 h-2 rounded-full ${member.isAI ? 'bg-primary' : 'bg-emerald-500'}`} />
-                      <div className={`absolute inset-0 w-2 h-2 rounded-full ${member.isAI ? 'bg-primary' : 'bg-emerald-500'} animate-ping opacity-75`} />
+                      <div className={`w-2 h-2 rounded-full ${member.isAI ? 'bg-primary' : 'bg-accent-emerald'}`} />
+                      <div className={`absolute inset-0 w-2 h-2 rounded-full ${member.isAI ? 'bg-primary' : 'bg-accent-emerald'} animate-ping opacity-75`} />
                     </div>
                     {member.isAI && <span className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-primary/10 border border-primary/20 text-primary">AI</span>}
                     <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/70">{member.role}</span>
@@ -771,22 +802,22 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           PRICING PREVIEW
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-16 px-4 relative border-y border-border/30">
+      <section className="py-12 sm:py-16 px-4 relative border-y border-border/30" aria-label="Pricing">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary/60">Investimento</span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_pricing")}</span>
             <h2 className="font-display text-2xl sm:text-4xl font-bold mt-3 mb-4">
-              A partir de <span className="gradient-text">R$ 697/mês</span> por agente
+              {t("home.pricing_from")} <span className="gradient-text">{t("home.pricing_amount")}</span> {t("home.pricing_per_agent")}
             </h2>
             <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto mb-6">
-              Squads com desconto progressivo de até 35%. Cada agente custa menos que um estagiário e trabalha 24/7.
+              {t("home.pricing_desc")}
             </p>
             <div className="flex flex-wrap justify-center gap-3 mb-8">
               {[
-                { label: "3 agentes", discount: "10% off" },
-                { label: "5 agentes", discount: "20% off" },
-                { label: "7 agentes", discount: "30% off" },
-                { label: "10+ agentes", discount: "35% off" },
+                { label: t("home.pricing_tier_3"), discount: t("home.pricing_off_10") },
+                { label: t("home.pricing_tier_5"), discount: t("home.pricing_off_20") },
+                { label: t("home.pricing_tier_7"), discount: t("home.pricing_off_30") },
+                { label: t("home.pricing_tier_10"), discount: t("home.pricing_off_35") },
               ].map(tier => (
                 <div key={tier.label} className="px-4 py-2.5 rounded-xl border border-border bg-card/30 text-center">
                   <p className="font-mono text-xs text-muted-foreground">{tier.label}</p>
@@ -795,14 +826,14 @@ const HomePage = () => {
               ))}
             </div>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button onClick={() => setShowSmartOnboarding(true)} className="glow rounded-xl h-13 px-10 gap-2 font-display font-bold text-sm uppercase tracking-wider">
+              <Button onClick={() => setShowSmartOnboarding(true)} className="glow rounded-xl h-13 px-10 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label={t("home.cta_build_team")}>
                 <Workflow className="h-4 w-4" strokeWidth={1.5} />
-                Monte seu Time de IA
+                {t("home.cta_build_team")}
                 <ArrowRight className="h-4 w-4" />
               </Button>
               <Link to="/pricing">
-                <Button variant="outline" className="rounded-xl h-11 px-8 font-mono text-xs uppercase tracking-wider border-border/50">
-                  Ver preços detalhados
+                <Button variant="outline" className="rounded-xl h-11 px-8 font-mono text-xs uppercase tracking-wider border-border/50" aria-label={t("home.cta_see_pricing")}>
+                  {t("home.cta_see_pricing")}
                   <ChevronRight className="ml-1 h-3.5 w-3.5" />
                 </Button>
               </Link>
@@ -819,30 +850,42 @@ const HomePage = () => {
           <div className="flex flex-col md:flex-row items-start justify-between gap-8 sm:gap-10 mb-8 sm:mb-10">
             <div>
               <div className="flex items-center gap-3 mb-3">
-                <img src={clauthorLogo} alt="CLAUTHOR" className="w-8 h-8 object-contain mix-blend-lighten" />
+                <img src={clauthorLogo} alt="CLAUTHOR" className="w-8 h-8 object-contain mix-blend-lighten" width={32} height={32} />
                 <span className="font-display font-bold text-base tracking-wider">CLAUTHOR</span>
               </div>
-              <p className="text-sm text-muted-foreground max-w-xs">
-                Força de trabalho de IA que orquestra 80 agentes autônomos em 15 departamentos corporativos.
+              <p className="text-sm text-muted-foreground max-w-xs mb-4">
+                {t("home.footer_desc")}
               </p>
+              {/* Social links */}
+              <div className="flex items-center gap-3">
+                <a href="https://linkedin.com/company/clauthor" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-8 h-8 rounded-lg border border-border bg-card/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-colors">
+                  <Linkedin className="h-3.5 w-3.5" strokeWidth={1.5} />
+                </a>
+                <a href="https://twitter.com/clauthor" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="w-8 h-8 rounded-lg border border-border bg-card/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-colors">
+                  <Twitter className="h-3.5 w-3.5" strokeWidth={1.5} />
+                </a>
+                <a href="https://github.com/clauthor" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="w-8 h-8 rounded-lg border border-border bg-card/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-colors">
+                  <Github className="h-3.5 w-3.5" strokeWidth={1.5} />
+                </a>
+              </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-4">
               <div className="space-y-2.5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">Produto</p>
-                <Link to="/library" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Agentes</Link>
-                <Link to="/departamentos" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Departamentos</Link>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">{t("home.footer_product")}</p>
+                <Link to="/library" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_agents")}</Link>
+                <Link to="/departamentos" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_departments")}</Link>
                 <Link to="/pricing" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("nav.pricing")}</Link>
                 <Link to="/how-it-works" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("nav.how_it_works")}</Link>
               </div>
               <div className="space-y-2.5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">Comunidade</p>
-                <Link to="/community" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Comunidade</Link>
-                <Link to="/pitch" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Pitch</Link>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">{t("home.footer_community_label")}</p>
+                <Link to="/community" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_community_link")}</Link>
+                <Link to="/pitch" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_pitch")}</Link>
               </div>
               <div className="space-y-2.5">
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">Legal</p>
-                <Link to="/termos" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Termos de Uso</Link>
-                <Link to="/privacidade" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Privacidade</Link>
+                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">{t("home.footer_legal")}</p>
+                <Link to="/termos" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_terms_label")}</Link>
+                <Link to="/privacidade" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_privacy_label")}</Link>
               </div>
             </div>
           </div>
