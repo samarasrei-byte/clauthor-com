@@ -7,7 +7,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Clock, Zap, CheckCircle, DollarSign,
-  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause, Eye, HelpCircle
+  TrendingUp, Coins, Target, Settings, Users, UserPlus, Building2, Brain, MessageSquare, Phone, Mail, GitBranch, User, Play, Pause, Eye, HelpCircle, BookOpen, Plug
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -45,6 +45,7 @@ import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
 import type { HireIntent } from "./Auth";
 import Library from "./Library";
+import Integrations from "./Integrations";
 import HelpTooltip from "@/components/HelpTooltip";
 import AgentSetupChecklist from "@/components/dashboard/AgentSetupChecklist";
 
@@ -312,12 +313,13 @@ const ClientDashboard = () => {
     { id: "omnix", label: "THOR", icon: Brain, badge: "AI", group: "Núcleo" },
     // ── Agentes ──
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: "Agentes" },
+    { id: "library", label: "Biblioteca", icon: BookOpen, group: "Agentes" },
     ...departmentSidebarItems,
     ...soloAgentItems,
     // ── Operações ──
     { id: "live-timeline", label: "Timeline", icon: Eye, badge: "LIVE", group: "Operações" },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: "Operações" },
-    { id: "chat", label: t("dashboard.ai_assistant"), icon: Sparkles, group: "Operações" },
+    { id: "integrations", label: "Integrações", icon: Plug, group: "Operações" },
     // ── Análise ──
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: "Análise" },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined, group: "Análise" },
@@ -392,7 +394,8 @@ const ClientDashboard = () => {
                   : activeSection === "analytics" ? t("dashboard.analytics")
                   : activeSection === "logs" ? t("dashboard.logs")
                   : activeSection === "settings" ? t("dashboard.settings")
-                  : activeSection === "chat" ? t("dashboard.ai_assistant")
+                  : activeSection === "library" ? "Biblioteca"
+                  : activeSection === "integrations" ? "Integrações"
                   : activeSection === "squad-chat" ? t("dashboard.meeting")
                   : activeSection === "live-timeline" ? "Timeline"
                   : activeSection}
@@ -460,12 +463,8 @@ const ClientDashboard = () => {
             />
           )}
 
-          {/* ═══ CHAT ═══ */}
-          {activeSection === "chat" && (
-            <div className="h-[calc(100vh-14rem)]">
-              <AgentChat agentId={selectedAgent?.id} agentName={selectedAgent?.name || t("dashboard.ai_assistant")} />
-            </div>
-          )}
+          {/* ═══ INTEGRATIONS (embedded) ═══ */}
+          {activeSection === "integrations" && <Integrations />}
 
           {/* ═══ SETTINGS (unified) ═══ */}
           {activeSection === "settings" && (
