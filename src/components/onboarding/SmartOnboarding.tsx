@@ -279,31 +279,31 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       </div>
 
                       {/* Shortcuts */}
-                      <div className="flex flex-col sm:flex-row items-center justify-center gap-2 mt-5">
+                      <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6 p-4 rounded-2xl border border-border/40 bg-card/20 backdrop-blur-sm">
                         <Button
                           variant="outline"
                           onClick={() => setPhase(5)}
-                          className="gap-2 rounded-xl border-primary/20 bg-primary/5 hover:bg-primary/10 text-sm h-11 px-5"
+                          className="gap-2 rounded-xl border-primary/30 bg-primary/10 hover:bg-primary/20 text-sm h-12 px-6 font-semibold shadow-[0_0_20px_hsl(var(--primary)/0.1)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)] transition-all"
                         >
                           <HelpCircle className="h-4 w-4 text-primary" />
                           Não sei o que preciso — falar com IA
                         </Button>
                         <div className="flex gap-2">
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             onClick={() => { onClose(); navigate("/marketplace"); }}
-                            className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
+                            className="text-sm gap-1.5 rounded-xl h-12 px-5 border-border/60 hover:border-primary/30 hover:bg-primary/5"
                           >
                             Já sei — ver Agentes
-                            <ArrowRight className="h-3 w-3" />
+                            <ArrowRight className="h-3.5 w-3.5" />
                           </Button>
                           <Button
-                            variant="ghost"
+                            variant="outline"
                             onClick={() => { onClose(); navigate("/departamentos"); }}
-                            className="text-xs text-muted-foreground hover:text-foreground gap-1.5"
+                            className="text-sm gap-1.5 rounded-xl h-12 px-5 border-border/60 hover:border-primary/30 hover:bg-primary/5"
                           >
                             Já sei — ver Departamentos
-                            <ArrowRight className="h-3 w-3" />
+                            <ArrowRight className="h-3.5 w-3.5" />
                           </Button>
                         </div>
                       </div>
