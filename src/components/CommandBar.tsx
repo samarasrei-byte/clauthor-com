@@ -139,15 +139,7 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
         </span>
       </button>
 
-      {/* Keyframe for scan line */}
-      <style>{`
-        @keyframes commandScan {
-          0%, 100% { top: 10%; opacity: 0; }
-          10% { opacity: 1; }
-          50% { top: 85%; opacity: 1; }
-          60% { opacity: 0; }
-        }
-      `}</style>
+      {/* commandScan keyframe moved to index.css for performance */}
 
       {/* ── FUTURISTIC COMMAND DIALOG ── */}
       <AnimatePresence>

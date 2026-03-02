@@ -17,30 +17,39 @@ import { Link, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
+import { lazy, Suspense } from "react";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import type { SidebarItem, SidebarChild } from "@/components/dashboard/DashboardSidebar";
 import QuickActions from "@/components/dashboard/QuickActions";
-import AgentChat from "@/components/dashboard/AgentChat";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
-import ClientCommandCenter from "@/components/dashboard/ClientCommandCenter";
-import SquadChat from "@/components/dashboard/SquadChat";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
-import SettingsPage from "@/components/dashboard/SettingsPage";
-import AgentsSection from "@/components/dashboard/AgentsSection";
-import AnalyticsSection from "@/components/dashboard/AnalyticsSection";
-import LogsSection from "@/components/dashboard/LogsSection";
-import PaymentHistoryTable from "@/components/dashboard/PaymentHistoryTable";
 
 import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
-import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
-import AgentLiveTimeline from "@/components/dashboard/AgentLiveTimeline";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
 import type { HireIntent } from "./Auth";
-import Library from "./Library";
-import Integrations from "./Integrations";
 import HelpTooltip from "@/components/HelpTooltip";
+
+// Lazy-load heavy section components — only loaded when the user navigates to them
+const AgentChat = lazy(() => import("@/components/dashboard/AgentChat"));
+const ClientCommandCenter = lazy(() => import("@/components/dashboard/ClientCommandCenter"));
+const SquadChat = lazy(() => import("@/components/dashboard/SquadChat"));
+const SettingsPage = lazy(() => import("@/components/dashboard/SettingsPage"));
+const AgentsSection = lazy(() => import("@/components/dashboard/AgentsSection"));
+const AnalyticsSection = lazy(() => import("@/components/dashboard/AnalyticsSection"));
+const LogsSection = lazy(() => import("@/components/dashboard/LogsSection"));
+const PaymentHistoryTable = lazy(() => import("@/components/dashboard/PaymentHistoryTable"));
+const OmnixCommandCenter = lazy(() => import("@/pages/OmnixCommandCenter"));
+const AgentLiveTimeline = lazy(() => import("@/components/dashboard/AgentLiveTimeline"));
+const Library = lazy(() => import("./Library"));
+const Integrations = lazy(() => import("./Integrations"));
+
+const SectionLoader = () => (
+  <div className="flex items-center justify-center py-16">
+    <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+  </div>
+);
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -384,123 +393,137 @@ const ClientDashboard = () => {
 
             {/* ═══ OMNIX ═══ */}
             {activeSection === "omnix" && (
-              <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
-                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={() => setPostPaymentContext(null)} />
-              </div>
+              <Suspense fallback={<SectionLoader />}>
+                <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
+                  <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={() => setPostPaymentContext(null)} />
+                </div>
+              </Suspense>
             )}
 
             {/* ═══ OVERVIEW ═══ */}
             {activeSection === "overview" && (
-              <ClientCommandCenter
-                activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={setActiveSection}
-              />
+              <Suspense fallback={<SectionLoader />}>
+                <ClientCommandCenter
+                  activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                  usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                  remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                  recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={setActiveSection}
+                />
+              </Suspense>
             )}
 
             {/* ═══ INTEGRATIONS ═══ */}
-            {activeSection === "integrations" && <Integrations />}
+            {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
 
             {/* ═══ SETTINGS ═══ */}
             {activeSection === "settings" && (
-              <SettingsPage billingContent={
-                <div className="space-y-6">
-                  <h2 className="font-display text-xl font-bold">{t("dashboard.subscription_credits")}</h2>
-                  <div className="grid lg:grid-cols-2 gap-6">
-                    <div className="glass-card rounded-2xl p-6 space-y-5">
-                      <div className="flex items-center gap-3">
-                        <Coins className="h-5 w-5 text-primary" />
-                        <h3 className="font-display font-semibold">{t("dashboard.credits_label")}</h3>
-                        <Badge variant="secondary">{credits?.plan_type || "free"}</Badge>
-                      </div>
-                      <div>
-                        <div className="flex justify-between text-sm mb-2">
-                          <span>{credits?.used_credits?.toLocaleString(locale) || 0} {t("dashboard.used_label")}</span>
-                          <span>{credits?.total_credits?.toLocaleString(locale) || 0} {t("dashboard.total_label")}</span>
+              <Suspense fallback={<SectionLoader />}>
+                <SettingsPage billingContent={
+                  <div className="space-y-6">
+                    <h2 className="font-display text-xl font-bold">{t("dashboard.subscription_credits")}</h2>
+                    <div className="grid lg:grid-cols-2 gap-6">
+                      <div className="glass-card rounded-2xl p-6 space-y-5">
+                        <div className="flex items-center gap-3">
+                          <Coins className="h-5 w-5 text-primary" />
+                          <h3 className="font-display font-semibold">{t("dashboard.credits_label")}</h3>
+                          <Badge variant="secondary">{credits?.plan_type || "free"}</Badge>
                         </div>
-                        <Progress value={usagePercentage} className="h-3" />
-                        <p className="text-xs text-muted-foreground mt-2">{t("dashboard.pct_remaining", { pct: 100 - usagePercentage })}</p>
-                      </div>
-                      <TokenUpgradeDialog trigger={<Button className="w-full glow">{t("dashboard.token_upgrade")} <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
-                    </div>
-                    <div className="glass-card rounded-2xl p-6 space-y-5">
-                      <div className="flex items-center gap-3">
-                        <CreditCard className="h-5 w-5 text-primary" />
-                        <h3 className="font-display font-semibold">{t("dashboard.active_subscriptions")}</h3>
-                      </div>
-                      {subscriptions.length === 0 ? (
-                        <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.no_subscriptions")}</p>
-                      ) : (
-                        <div className="space-y-2">
-                          {subscriptions.map((sub) => (
-                            <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02]">
-                              <div className="flex items-center gap-2">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                                <span className="text-sm">{sub.agent_name}</span>
-                              </div>
-                              <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{locale.startsWith("pt") ? "mês" : "mo"}</span>
-                            </div>
-                          ))}
-                          <div className="pt-3 border-t border-white/5 flex justify-between">
-                            <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
-                            <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
+                        <div>
+                          <div className="flex justify-between text-sm mb-2">
+                            <span>{credits?.used_credits?.toLocaleString(locale) || 0} {t("dashboard.used_label")}</span>
+                            <span>{credits?.total_credits?.toLocaleString(locale) || 0} {t("dashboard.total_label")}</span>
                           </div>
+                          <Progress value={usagePercentage} className="h-3" />
+                          <p className="text-xs text-muted-foreground mt-2">{t("dashboard.pct_remaining", { pct: 100 - usagePercentage })}</p>
                         </div>
-                      )}
+                        <TokenUpgradeDialog trigger={<Button className="w-full glow">{t("dashboard.token_upgrade")} <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
+                      </div>
+                      <div className="glass-card rounded-2xl p-6 space-y-5">
+                        <div className="flex items-center gap-3">
+                          <CreditCard className="h-5 w-5 text-primary" />
+                          <h3 className="font-display font-semibold">{t("dashboard.active_subscriptions")}</h3>
+                        </div>
+                        {subscriptions.length === 0 ? (
+                          <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.no_subscriptions")}</p>
+                        ) : (
+                          <div className="space-y-2">
+                            {subscriptions.map((sub) => (
+                              <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02]">
+                                <div className="flex items-center gap-2">
+                                  <span className="w-2 h-2 rounded-full bg-accent-emerald" />
+                                  <span className="text-sm">{sub.agent_name}</span>
+                                </div>
+                                <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{locale.startsWith("pt") ? "mês" : "mo"}</span>
+                              </div>
+                            ))}
+                            <div className="pt-3 border-t border-white/5 flex justify-between">
+                              <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
+                              <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
+                    <Suspense fallback={<SectionLoader />}><PaymentHistoryTable /></Suspense>
                   </div>
-                  <PaymentHistoryTable />
-                </div>
-              } />
+                } />
+              </Suspense>
             )}
 
             {/* ═══ SQUAD CHAT ═══ */}
-            {activeSection === "squad-chat" && <SquadChat agents={agents} />}
+            {activeSection === "squad-chat" && <Suspense fallback={<SectionLoader />}><SquadChat agents={agents} /></Suspense>}
 
             {/* ═══ LIVE TIMELINE ═══ */}
-            {activeSection === "live-timeline" && <AgentLiveTimeline />}
+            {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
 
             {/* ═══ LIBRARY ═══ */}
-            {activeSection === "library" && <Library />}
+            {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
 
             {/* ═══ AGENTS ═══ */}
             {activeSection === "agents" && (
-              <AgentsSection
-                agents={agents}
-                isLoading={loadingAgents}
-                nameToSlug={nameToSlug}
-                tierColors={tierColors}
-                formatCurrency={formatCurrency}
-                onOpenLibrary={() => setActiveSection("library")}
-                onOpenThor={() => setActiveSection("omnix")}
-                onOpenChat={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
-              />
+              <Suspense fallback={<SectionLoader />}>
+                <AgentsSection
+                  agents={agents}
+                  isLoading={loadingAgents}
+                  nameToSlug={nameToSlug}
+                  tierColors={tierColors}
+                  formatCurrency={formatCurrency}
+                  onOpenLibrary={() => setActiveSection("library")}
+                  onOpenThor={() => setActiveSection("omnix")}
+                  onOpenChat={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
+                />
+              </Suspense>
             )}
 
             {/* ═══ ANALYTICS ═══ */}
             {activeSection === "analytics" && (
-              <AnalyticsSection
-                chartData={realChartData}
-                totalExecutions={totalExecutions}
-                recentLogs={recentLogs}
-                locale={locale}
-                onGoToAgents={() => setActiveSection("agents")}
-              />
+              <Suspense fallback={<SectionLoader />}>
+                <AnalyticsSection
+                  chartData={realChartData}
+                  totalExecutions={totalExecutions}
+                  recentLogs={recentLogs}
+                  locale={locale}
+                  onGoToAgents={() => setActiveSection("agents")}
+                />
+              </Suspense>
             )}
 
             {/* ═══ LOGS ═══ */}
             {activeSection === "logs" && (
-              <LogsSection
-                recentLogs={recentLogs}
-                locale={locale}
-                onGoToAgents={() => setActiveSection("agents")}
-              />
+              <Suspense fallback={<SectionLoader />}>
+                <LogsSection
+                  recentLogs={recentLogs}
+                  locale={locale}
+                  onGoToAgents={() => setActiveSection("agents")}
+                />
+              </Suspense>
             )}
 
             {/* ═══ CHAT ═══ */}
             {activeSection === "chat" && selectedAgent && (
-              <AgentChat agentId={selectedAgent.id} agentName={selectedAgent.name} />
+              <Suspense fallback={<SectionLoader />}>
+                <AgentChat agentId={selectedAgent.id} agentName={selectedAgent.name} />
+              </Suspense>
             )}
           </div>
         </div>
