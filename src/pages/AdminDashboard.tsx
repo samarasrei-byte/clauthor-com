@@ -1,28 +1,22 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
 import {
   Users, Bot, DollarSign, TrendingUp, ShoppingBag,
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
   Building, Zap, LayoutDashboard, CreditCard, Store,
-  ShieldCheck, Wallet, Rocket, Sparkles, Crown, Settings, Key, Gift, ChevronDown
+  Wallet, Sparkles, Crown, Settings, Key, Gift, ChevronDown
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie, Cell } from "recharts";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
-import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
-import MiniSparkline from "@/components/dashboard/MiniSparkline";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import AdminCommandCenter from "@/components/dashboard/AdminCommandCenter";
 import AdminUserManager from "@/components/dashboard/AdminUserManager";
@@ -35,12 +29,17 @@ import OmnixCommandCenter from "@/pages/OmnixCommandCenter";
 import PlatformCredentialsPanel from "@/components/dashboard/PlatformCredentialsPanel";
 import OpenClawStatusPanel from "@/components/dashboard/OpenClawStatusPanel";
 import { AdminCouponManager } from "@/components/dashboard/AdminCouponManager";
+import AdminAgentsTable from "@/components/dashboard/AdminAgentsTable";
+import AdminWaitlistTable from "@/components/dashboard/AdminWaitlistTable";
+import AdminLogsTable from "@/components/dashboard/AdminLogsTable";
+import AdminMarketplacePanel from "@/components/dashboard/AdminMarketplacePanel";
+import AdminRevenuePanel from "@/components/dashboard/AdminRevenuePanel";
+import AdminSubscriptionsTable from "@/components/dashboard/AdminSubscriptionsTable";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
 
   const { data: usersCount = 0 } = useQuery({
@@ -100,7 +99,7 @@ const AdminDashboard = () => {
   const { data: executionLogs = [] } = useQuery({
     queryKey: ["admin-execution-logs"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("execution_logs").select("*, agent:agents(name)").order("created_at", { ascending: false }).limit(100);
+      const { data, error } = await supabase.from("execution_logs").select("*, agent:agents(name)").order("created_at", { ascending: false }).limit(200);
       if (error) throw error;
       return data;
     },
@@ -141,31 +140,7 @@ const AdminDashboard = () => {
   const successRate = totalExecutions > 0 ? Math.round((successLogs / totalExecutions) * 100) : 0;
   const waitingCount = waitlist.filter((w) => w.status === "waiting").length;
 
-  const sidebarItems = [
-    // ── Núcleo ──
-    { id: "omnix", label: "THOR", icon: Sparkles, badge: "AI", group: "Núcleo" },
-    { id: "overview", label: "Command Center", icon: LayoutDashboard, group: "Núcleo" },
-    { id: "insights", label: "IA Preditiva", icon: Sparkles, group: "Núcleo" },
-    // ── Gestão ──
-    { id: "war-room", label: "War Room", icon: Crown, group: "Gestão" },
-    { id: "agent-settings", label: "Config. Agentes", icon: Settings, group: "Gestão" },
-    { id: "users", label: "Usuários", icon: Users, badge: usersCount || undefined, group: "Gestão" },
-    { id: "agents", label: "Agentes", icon: Bot, badge: allAgents.length || undefined, group: "Gestão" },
-    { id: "marketplace", label: "Marketplace", icon: Store, badge: pendingAgents.length || undefined, group: "Gestão" },
-    // ── Análise ──
-    { id: "revenue", label: "Receita", icon: BarChart3, group: "Análise" },
-    { id: "payments", label: "Pagamentos", icon: Wallet, group: "Análise" },
-    { id: "subscriptions", label: "Assinaturas", icon: CreditCard, group: "Análise" },
-    { id: "logs", label: "Logs", icon: Activity, badge: totalExecutions || undefined, group: "Análise" },
-    // ── Sistema ──
-    { id: "platform-creds", label: "Credenciais Central", icon: Key, group: "Sistema" },
-    { id: "openclaw", label: "OpenClaw Motor", icon: Activity, group: "Sistema" },
-    { id: "coupons", label: "Cupons", icon: Gift, group: "Sistema" },
-    { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: "Sistema" },
-  ];
-
-  // Real revenue data from payment history
-  const revenueData = (() => {
+  const revenueData = useMemo(() => {
     const now = new Date();
     const months: { name: string; receita: number }[] = [];
     for (let i = 5; i >= 0; i--) {
@@ -179,57 +154,49 @@ const AdminDashboard = () => {
       months.push({ name: monthName, receita: Math.round(total / 100) });
     }
     return months;
-  })();
+  }, [paymentHistory, locale]);
 
-  const planDistribution = [
+  const planDistribution = useMemo(() => [
     { name: "Free", value: allCredits.filter(c => c.plan_type === "free").length, color: "hsl(var(--muted-foreground))" },
     { name: "Starter", value: allCredits.filter(c => c.plan_type === "starter").length || 0, color: "hsl(var(--primary))" },
     { name: "Pro", value: allCredits.filter(c => c.plan_type === "pro").length || 0, color: "#22d3ee" },
     { name: "Enterprise", value: allCredits.filter(c => c.plan_type === "enterprise").length || 0, color: "#f59e0b" },
-  ].filter(d => d.value > 0);
+  ].filter(d => d.value > 0), [allCredits]);
 
-  const approveAgent = async (id: string) => {
-    const { error } = await supabase.from("marketplace_agents").update({ is_approved: true }).eq("id", id);
-    if (!error) { toast.success("Agente aprovado!"); queryClient.invalidateQueries({ queryKey: ["admin-pending-marketplace"] }); }
-  };
-
-  const rejectAgent = async (id: string) => {
-    const { error } = await supabase.from("marketplace_agents").delete().eq("id", id);
-    if (!error) { toast.success("Agente rejeitado."); queryClient.invalidateQueries({ queryKey: ["admin-pending-marketplace"] }); }
-  };
-
-  const kpiCards = [
-    { icon: Users, label: "Total Usuários", value: usersCount, spark: [1, 3, 5, 8, 12, usersCount], color: "text-cyan-400" },
-    { icon: Bot, label: "Agentes Ativos", value: activeAgents, spark: [0, 1, 2, 3, 4, activeAgents], color: "text-primary" },
-    { icon: DollarSign, label: "MRR", value: totalRevenue / 100, prefix: "R$ ", spark: [0, 100, 300, 500, 700, totalRevenue / 100], color: "text-cyan-400" },
-    { icon: ShoppingBag, label: "Pendentes", value: pendingAgents.length, spark: [0, 1, 2, 1, 3, pendingAgents.length], color: "text-primary/80" },
-    { icon: Coins, label: "Tokens Consumidos", value: totalTokensUsed, spark: [0, 1000, 3000, 5000, 8000, totalTokensUsed], color: "text-cyan-400" },
-    { icon: Zap, label: "Execuções", value: totalExecutions, spark: [0, 10, 30, 50, 70, totalExecutions], color: "text-primary" },
-    { icon: CheckCircle, label: "Taxa Sucesso", value: successRate, suffix: "%", spark: [90, 92, 94, 96, 97, successRate], color: "text-emerald-500" },
-    { icon: ListOrdered, label: "Na Waitlist", value: waitingCount, spark: [0, 2, 5, 8, 10, waitingCount], color: "text-primary/80" },
+  const sidebarItems = [
+    { id: "omnix", label: "THOR", icon: Sparkles, badge: "AI", group: t("dashboard.core", { defaultValue: "Núcleo" }) },
+    { id: "overview", label: "Command Center", icon: LayoutDashboard, group: t("dashboard.core", { defaultValue: "Núcleo" }) },
+    { id: "insights", label: t("dashboard.predictive_ai", { defaultValue: "IA Preditiva" }), icon: Sparkles, group: t("dashboard.core", { defaultValue: "Núcleo" }) },
+    { id: "war-room", label: "War Room", icon: Crown, group: t("dashboard.management", { defaultValue: "Gestão" }) },
+    { id: "agent-settings", label: t("dashboard.agent_config", { defaultValue: "Config. Agentes" }), icon: Settings, group: t("dashboard.management", { defaultValue: "Gestão" }) },
+    { id: "users", label: t("dashboard.users", { defaultValue: "Usuários" }), icon: Users, badge: usersCount || undefined, group: t("dashboard.management", { defaultValue: "Gestão" }) },
+    { id: "agents", label: t("dashboard.agents_tab", { defaultValue: "Agentes" }), icon: Bot, badge: allAgents.length || undefined, group: t("dashboard.management", { defaultValue: "Gestão" }) },
+    { id: "marketplace", label: "Marketplace", icon: Store, badge: pendingAgents.length || undefined, group: t("dashboard.management", { defaultValue: "Gestão" }) },
+    { id: "revenue", label: t("dashboard.revenue", { defaultValue: "Receita" }), icon: BarChart3, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
+    { id: "payments", label: t("dashboard.payments", { defaultValue: "Pagamentos" }), icon: Wallet, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
+    { id: "subscriptions", label: t("dashboard.subscriptions", { defaultValue: "Assinaturas" }), icon: CreditCard, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
+    { id: "logs", label: "Logs", icon: Activity, badge: totalExecutions || undefined, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
+    { id: "platform-creds", label: t("dashboard.platform_creds", { defaultValue: "Credenciais Central" }), icon: Key, group: t("dashboard.system", { defaultValue: "Sistema" }) },
+    { id: "openclaw", label: "OpenClaw Motor", icon: Activity, group: t("dashboard.system", { defaultValue: "Sistema" }) },
+    { id: "coupons", label: t("dashboard.coupons", { defaultValue: "Cupons" }), icon: Gift, group: t("dashboard.system", { defaultValue: "Sistema" }) },
+    { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: t("dashboard.system", { defaultValue: "Sistema" }) },
   ];
 
-  const formatTokens = (n: number) => n > 1000000 ? `${(n / 1000000).toFixed(1)}M` : n > 1000 ? `${(n / 1000).toFixed(0)}k` : n.toString();
+  const breadcrumbLabel = sidebarItems.find(i => i.id === activeTab)?.label || activeTab;
 
   return (
     <div className="flex h-full">
-      {/* Sidebar — fixed, full height */}
       <div className="hidden lg:block">
         <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={setActiveTab} />
       </div>
 
-      {/* Scrollable content area */}
       <div className="flex-1 min-w-0 overflow-y-auto">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-6">
-          {/* Header + Breadcrumb */}
+          {/* Header */}
           <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
-            {/* Breadcrumb */}
             <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
-              <span>Admin</span>
-              <span>/</span>
-              <span className="text-foreground/80 font-medium capitalize">
-                {sidebarItems.find(i => i.id === activeTab)?.label || activeTab}
-              </span>
+              <span>Admin</span><span>/</span>
+              <span className="text-foreground/80 font-medium capitalize">{breadcrumbLabel}</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="relative">
@@ -247,22 +214,22 @@ const AdminDashboard = () => {
                 } />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">Command Center — Controle total da plataforma</p>
+            <p className="text-xs text-muted-foreground">Command Center — {t("dashboard.full_control", { defaultValue: "Controle total da plataforma" })}</p>
           </motion.div>
 
-          {/* Mobile nav trigger */}
+          {/* Mobile nav */}
           <div className="lg:hidden">
             <Sheet>
               <SheetTrigger asChild>
                 <Button variant="outline" size="sm" className="gap-1.5 text-xs w-full justify-start">
                   <LayoutDashboard className="h-3.5 w-3.5" />
-                  {sidebarItems.find(i => i.id === activeTab)?.label || "Menu"}
+                  {breadcrumbLabel}
                   <ChevronDown className="h-3 w-3 ml-auto" />
                 </Button>
               </SheetTrigger>
               <SheetContent side="left" className="w-72 p-0">
                 <SheetHeader className="p-4 border-b border-border/10">
-                  <SheetTitle className="font-display text-sm">Navegação Admin</SheetTitle>
+                  <SheetTitle className="font-display text-sm">{t("dashboard.admin_nav", { defaultValue: "Navegação Admin" })}</SheetTitle>
                 </SheetHeader>
                 <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-6rem)]">
                   {sidebarItems.map((item, idx) => {
@@ -295,279 +262,40 @@ const AdminDashboard = () => {
             </Sheet>
           </div>
 
-          {/* ═══ OMNIX ═══ */}
           {activeTab === "omnix" && (
             <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
               <OmnixCommandCenter />
             </div>
           )}
 
-          {/* ═══ AI INSIGHTS ═══ */}
           {activeTab === "insights" && (
-            <AdminInsightsPanel
-              allProfiles={allProfiles}
-              allAgents={allAgents}
-              allCredits={allCredits}
-              executionLogs={executionLogs}
-              totalRevenue={totalRevenue}
-              totalExecutions={totalExecutions}
-            />
+            <AdminInsightsPanel allProfiles={allProfiles} allAgents={allAgents} allCredits={allCredits} executionLogs={executionLogs} totalRevenue={totalRevenue} totalExecutions={totalExecutions} />
           )}
 
-          {/* ═══ WAR ROOM — ALL AGENTS UNIFIED ═══ */}
           {activeTab === "war-room" && <AdminWarRoom />}
-
-          {/* ═══ AGENT SETTINGS — ADMIN ═══ */}
           {activeTab === "agent-settings" && <AdminAgentSettings />}
-
-          {/* ═══ PLATFORM CREDENTIALS ═══ */}
           {activeTab === "platform-creds" && <PlatformCredentialsPanel />}
-
-          {/* ═══ COUPONS ═══ */}
           {activeTab === "coupons" && <AdminCouponManager />}
-
-          {/* ═══ OPENCLAW STATUS ═══ */}
           {activeTab === "openclaw" && <OpenClawStatusPanel />}
 
-          {/* ═══ COMMAND CENTER (OVERVIEW) ═══ */}
           {activeTab === "overview" && (
             <AdminCommandCenter
-              usersCount={usersCount}
-              activeAgents={activeAgents}
-              totalRevenue={totalRevenue}
-              pendingCount={pendingAgents.length}
-              totalTokensUsed={totalTokensUsed}
-              totalExecutions={totalExecutions}
-              successRate={successRate}
-              waitingCount={waitingCount}
-              allAgents={allAgents}
-              allCredits={allCredits}
-              allProfiles={allProfiles}
-              executionLogs={executionLogs}
-              revenueData={revenueData}
-              onTabChange={setActiveTab}
+              usersCount={usersCount} activeAgents={activeAgents} totalRevenue={totalRevenue}
+              pendingCount={pendingAgents.length} totalTokensUsed={totalTokensUsed} totalExecutions={totalExecutions}
+              successRate={successRate} waitingCount={waitingCount} allAgents={allAgents} allCredits={allCredits}
+              allProfiles={allProfiles} executionLogs={executionLogs} revenueData={revenueData}
+              planDistribution={planDistribution} onTabChange={setActiveTab}
             />
           )}
 
-          {/* ═══ PAYMENTS ═══ */}
-          {activeTab === "payments" && (
-            <PaymentsPanel
-              totalRevenue={totalRevenue}
-              subscriptionCount={allSubscriptions.length}
-            />
-          )}
-
-          {/* ═══ USERS ═══ */}
-          {activeTab === "users" && (
-            <AdminUserManager allProfiles={allProfiles} allCredits={allCredits} />
-          )}
-
-          {/* ═══ AGENTS ═══ */}
-          {activeTab === "agents" && (
-            <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-              <CardHeader><CardTitle className="font-display text-lg">Todos os Agentes ({allAgents.length})</CardTitle></CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead><tr className="border-b border-white/[0.08]">
-                      <th className="text-left p-3 text-muted-foreground font-medium">Nome</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Tier</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Preço</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Execuções</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Status</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Criado</th>
-                    </tr></thead>
-                    <tbody>
-                      {allAgents.map((agent: any) => (
-                        <tr key={agent.id} className="border-b border-white/[0.05] hover:bg-accent/20">
-                          <td className="p-3 font-medium">{agent.name}</td>
-                          <td className="p-3"><Badge variant="secondary">{agent.tier}</Badge></td>
-                          <td className="p-3">R$ {(agent.monthly_price / 100).toLocaleString(locale)}</td>
-                          <td className="p-3">{agent.total_executions}</td>
-                          <td className="p-3"><Badge variant="secondary" className={agent.status === "active" ? "bg-primary/20 text-primary" : ""}>{agent.status}</Badge></td>
-                          <td className="p-3 text-muted-foreground text-xs">{new Date(agent.created_at).toLocaleDateString(locale)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* ═══ REVENUE ═══ */}
-          {activeTab === "revenue" && (
-            <div className="grid lg:grid-cols-3 gap-6">
-              <Card className="lg:col-span-2 bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-                <CardHeader><CardTitle className="font-display text-lg flex items-center gap-2"><BarChart3 className="h-5 w-5 text-primary" /> Evolução da Receita</CardTitle></CardHeader>
-                <CardContent>
-                  <div className="h-[300px]">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={revenueData}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                        <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
-                        <YAxis stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
-                        <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }} />
-                        <Bar dataKey="receita" fill="hsl(var(--primary))" radius={[8, 8, 0, 0]} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-              <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-                <CardHeader><CardTitle className="font-display text-lg">Resumo</CardTitle></CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">MRR</p>
-                    <p className="font-display text-2xl font-bold gradient-text">R$ {(totalRevenue / 100).toLocaleString(locale)}</p>
-                  </div>
-                  <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">ARR</p>
-                    <p className="font-display text-2xl font-bold">R$ {((totalRevenue * 12) / 100).toLocaleString(locale)}</p>
-                  </div>
-                  <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">Assinaturas Ativas</p>
-                    <p className="font-display text-2xl font-bold">{allSubscriptions.length}</p>
-                  </div>
-                  <div className="bg-white/[0.02] rounded-xl p-4">
-                    <p className="text-xs text-muted-foreground mb-1">Ticket Médio</p>
-                    <p className="font-display text-2xl font-bold">R$ {allSubscriptions.length > 0 ? ((totalRevenue / allSubscriptions.length) / 100).toLocaleString(locale) : "0"}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          )}
-
-          {/* ═══ WAITLIST ═══ */}
-          {activeTab === "waitlist" && (
-            <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle className="font-display text-lg flex items-center gap-2"><ListOrdered className="h-5 w-5 text-cyan-400" /> Waitlist ({waitlist.length})</CardTitle>
-                <Badge variant="outline" className="border-cyan-500/20 text-cyan-400">{waitingCount} aguardando</Badge>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead><tr className="border-b border-white/[0.08]">
-                      <th className="text-left p-3 text-muted-foreground font-medium">#</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Nome</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Email</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">WhatsApp</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Empresa</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Status</th>
-                      <th className="text-left p-3 text-muted-foreground font-medium">Data</th>
-                    </tr></thead>
-                    <tbody>
-                      {waitlist.map((entry: any) => (
-                        <tr key={entry.id} className="border-b border-white/[0.05] hover:bg-accent/20">
-                          <td className="p-3"><span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">{entry.position}</span></td>
-                          <td className="p-3 font-medium">{entry.name || "—"}</td>
-                          <td className="p-3 text-muted-foreground"><span className="flex items-center gap-1"><Mail className="h-3 w-3" /> {entry.email}</span></td>
-                          <td className="p-3 text-muted-foreground"><span className="flex items-center gap-1"><Phone className="h-3 w-3" /> {entry.whatsapp}</span></td>
-                          <td className="p-3 text-muted-foreground"><span className="flex items-center gap-1"><Building className="h-3 w-3" /> {entry.company || "—"}</span></td>
-                          <td className="p-3"><Badge variant="secondary" className={entry.status === "waiting" ? "bg-cyan-500/10 text-cyan-400" : "bg-primary/20 text-primary"}>{entry.status === "waiting" ? "Aguardando" : entry.status}</Badge></td>
-                          <td className="p-3 text-muted-foreground text-xs">{new Date(entry.created_at).toLocaleDateString(locale)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* ═══ LOGS ═══ */}
-          {activeTab === "logs" && (
-            <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-              <CardHeader><CardTitle className="font-display text-lg flex items-center gap-2"><Activity className="h-5 w-5 text-primary" /> Logs de Execução ({executionLogs.length})</CardTitle></CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto max-h-[500px] overflow-y-auto">
-                  <table className="w-full text-sm">
-                    <thead className="sticky top-0 bg-background/90 backdrop-blur">
-                      <tr className="border-b border-white/[0.08]">
-                        <th className="text-left p-3 text-muted-foreground font-medium">Agente</th>
-                        <th className="text-left p-3 text-muted-foreground font-medium">Ação</th>
-                        <th className="text-left p-3 text-muted-foreground font-medium">Status</th>
-                        <th className="text-left p-3 text-muted-foreground font-medium">Tempo</th>
-                        <th className="text-left p-3 text-muted-foreground font-medium">Data</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {executionLogs.map((log: any) => (
-                        <tr key={log.id} className="border-b border-white/[0.05] hover:bg-accent/20">
-                          <td className="p-3 font-medium">{log.agent?.name || "—"}</td>
-                          <td className="p-3 text-muted-foreground">{log.action}</td>
-                          <td className="p-3"><Badge variant="secondary" className={log.status === "success" ? "bg-cyan-500/10 text-cyan-400" : log.status === "error" ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary/80"}>{log.status}</Badge></td>
-                          <td className="p-3 text-muted-foreground">{log.execution_time_ms ? `${log.execution_time_ms}ms` : "—"}</td>
-                          <td className="p-3 text-muted-foreground text-xs">{new Date(log.created_at).toLocaleString(locale, { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* ═══ MARKETPLACE ═══ */}
-          {activeTab === "marketplace" && (
-            <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-              <CardHeader><CardTitle className="font-display text-lg">Agentes no Marketplace</CardTitle></CardHeader>
-              <CardContent>
-                {pendingAgents.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">O marketplace será populado quando usuários publicarem seus agentes.</p>
-                ) : (
-                  <div className="space-y-3">
-                    {pendingAgents.map((agent: any) => (
-                      <div key={agent.id} className="flex items-center justify-between p-4 rounded-xl bg-accent/30">
-                        <div>
-                          <p className="font-medium">{agent.title}</p>
-                          <p className="text-xs text-muted-foreground mt-1">{agent.short_description || "Sem descrição"} • {agent.tier} • R$ {(agent.monthly_price / 100).toLocaleString(locale)}/mês</p>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button size="sm" onClick={() => approveAgent(agent.id)} className="gap-1"><CheckCircle className="h-4 w-4" /> Aprovar</Button>
-                          <Button size="sm" variant="destructive" onClick={() => rejectAgent(agent.id)} className="gap-1"><XCircle className="h-4 w-4" /> Rejeitar</Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
-
-          {/* ═══ SUBSCRIPTIONS ═══ */}
-          {activeTab === "subscriptions" && (
-            <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
-              <CardHeader><CardTitle className="font-display text-lg">Assinaturas Ativas ({allSubscriptions.length})</CardTitle></CardHeader>
-              <CardContent>
-                {allSubscriptions.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">Nenhuma assinatura ativa.</p>
-                ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead><tr className="border-b border-white/[0.08]">
-                        <th className="text-left p-3 text-muted-foreground font-medium">Agente</th>
-                        <th className="text-left p-3 text-muted-foreground font-medium">Valor</th>
-                        <th className="text-left p-3 text-muted-foreground font-medium">Período</th>
-                        <th className="text-left p-3 text-muted-foreground font-medium">Status</th>
-                      </tr></thead>
-                      <tbody>
-                        {allSubscriptions.map((sub: any) => (
-                          <tr key={sub.id} className="border-b border-white/[0.05] hover:bg-accent/20">
-                            <td className="p-3 font-medium">{(sub as any).agent?.name || (sub.agent_id ? sub.agent_id.slice(0, 8) : "—")}</td>
-                            <td className="p-3">R$ {(sub.monthly_price / 100).toLocaleString(locale)}/mês</td>
-                            <td className="p-3 text-muted-foreground text-xs">{sub.current_period_start ? new Date(sub.current_period_start).toLocaleDateString(locale) : "—"} → {sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString(locale) : "—"}</td>
-                            <td className="p-3"><Badge variant="secondary" className="bg-primary/20 text-primary">{sub.status}</Badge></td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
+          {activeTab === "payments" && <PaymentsPanel totalRevenue={totalRevenue} subscriptionCount={allSubscriptions.length} />}
+          {activeTab === "users" && <AdminUserManager allProfiles={allProfiles} allCredits={allCredits} />}
+          {activeTab === "agents" && <AdminAgentsTable allAgents={allAgents} locale={locale} />}
+          {activeTab === "revenue" && <AdminRevenuePanel revenueData={revenueData} totalRevenue={totalRevenue} allSubscriptions={allSubscriptions} locale={locale} />}
+          {activeTab === "waitlist" && <AdminWaitlistTable waitlist={waitlist} waitingCount={waitingCount} locale={locale} />}
+          {activeTab === "logs" && <AdminLogsTable executionLogs={executionLogs} locale={locale} />}
+          {activeTab === "marketplace" && <AdminMarketplacePanel pendingAgents={pendingAgents} locale={locale} />}
+          {activeTab === "subscriptions" && <AdminSubscriptionsTable allSubscriptions={allSubscriptions} locale={locale} />}
         </div>
       </div>
     </div>

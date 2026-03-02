@@ -8,11 +8,12 @@ import { Textarea } from "@/components/ui/textarea";
 import {
   Users, Bot, DollarSign, TrendingUp, Coins, Zap,
   CheckCircle, ListOrdered, Globe, Cpu, Signal,
-  ArrowUpRight, ArrowDownRight, Clock, Eye,
+  Clock, Eye,
   Shield, Rocket, Wallet, ShieldCheck, Send, Loader2,
   RotateCcw, Sparkles, Activity, Server, Database,
   MessageSquare, Store, BarChart3, Radio, Brain
 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from "recharts";
 import AnimatedCounter from "./AnimatedCounter";
 import MiniSparkline from "./MiniSparkline";
@@ -36,6 +37,7 @@ interface AdminCommandCenterProps {
   allProfiles: any[];
   executionLogs: any[];
   revenueData: any[];
+  planDistribution: { name: string; value: number; color: string }[];
   onTabChange: (tab: string) => void;
 }
 
@@ -43,8 +45,10 @@ const AdminCommandCenter = ({
   usersCount, activeAgents, totalRevenue, pendingCount,
   totalTokensUsed, totalExecutions, successRate, waitingCount,
   allAgents, allCredits, allProfiles, executionLogs, revenueData,
-  onTabChange
+  planDistribution, onTabChange
 }: AdminCommandCenterProps) => {
+  const { i18n } = useTranslation();
+  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -132,29 +136,22 @@ const AdminCommandCenter = ({
     if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(input); }
   };
 
-  const planDistribution = [
-    { name: "Free", value: allCredits.filter(c => c.plan_type === "free").length, color: "#6b7280" },
-    { name: "Starter", value: allCredits.filter(c => c.plan_type === "starter").length || 1, color: "hsl(0, 72%, 58%)" },
-    { name: "Pro", value: allCredits.filter(c => c.plan_type === "pro").length || 1, color: "#22d3ee" },
-    { name: "Enterprise", value: allCredits.filter(c => c.plan_type === "enterprise").length || 1, color: "#f59e0b" },
-  ];
-
   const kpiCards = [
-    { icon: Users, label: "Usuários", value: usersCount, spark: [1, 3, 5, 8, 12, usersCount], trend: "+12%", up: true, gradient: "from-cyan-500/20 to-blue-500/10", ic: "text-cyan-400", bc: "border-cyan-500/20" },
-    { icon: Bot, label: "Agentes Ativos", value: activeAgents, spark: [0, 1, 2, 3, 4, activeAgents], trend: "+8%", up: true, gradient: "from-primary/20 to-rose-500/10", ic: "text-primary", bc: "border-primary/20" },
-    { icon: DollarSign, label: "MRR", value: totalRevenue / 100, prefix: "R$ ", spark: [0, 100, 300, 500, 700, totalRevenue / 100], trend: "+23%", up: true, gradient: "from-emerald-500/20 to-green-500/10", ic: "text-emerald-400", bc: "border-emerald-500/20" },
-    { icon: Coins, label: "Tokens", value: totalTokensUsed, spark: [0, 1000, 3000, 5000, 8000, totalTokensUsed], trend: "+45%", up: true, gradient: "from-amber-500/20 to-orange-500/10", ic: "text-amber-400", bc: "border-amber-500/20" },
-    { icon: Zap, label: "Execuções", value: totalExecutions, spark: [0, 10, 30, 50, 70, totalExecutions], trend: "+18%", up: true, gradient: "from-violet-500/20 to-purple-500/10", ic: "text-violet-400", bc: "border-violet-500/20" },
-    { icon: CheckCircle, label: "Sucesso", value: successRate, suffix: "%", spark: [90, 92, 94, 96, 97, successRate], trend: "+2%", up: true, gradient: "from-emerald-500/20 to-teal-500/10", ic: "text-emerald-400", bc: "border-emerald-500/20" },
-    { icon: ListOrdered, label: "Waitlist", value: waitingCount, spark: [0, 2, 5, 8, 10, waitingCount], trend: "+5", up: true, gradient: "from-blue-500/20 to-indigo-500/10", ic: "text-blue-400", bc: "border-blue-500/20" },
-    { icon: Eye, label: "Pendentes", value: pendingCount, spark: [0, 1, 2, 1, 3, pendingCount], trend: "0", up: false, gradient: "from-rose-500/20 to-red-500/10", ic: "text-rose-400", bc: "border-rose-500/20" },
+    { icon: Users, label: "Usuários", value: usersCount, spark: [1, 3, 5, 8, 12, usersCount], gradient: "from-cyan-500/20 to-blue-500/10", ic: "text-cyan-400", bc: "border-cyan-500/20" },
+    { icon: Bot, label: "Agentes Ativos", value: activeAgents, spark: [0, 1, 2, 3, 4, activeAgents], gradient: "from-primary/20 to-rose-500/10", ic: "text-primary", bc: "border-primary/20" },
+    { icon: DollarSign, label: "MRR", value: totalRevenue / 100, prefix: "R$ ", spark: [0, 100, 300, 500, 700, totalRevenue / 100], gradient: "from-emerald-500/20 to-green-500/10", ic: "text-emerald-400", bc: "border-emerald-500/20" },
+    { icon: Coins, label: "Tokens", value: totalTokensUsed, spark: [0, 1000, 3000, 5000, 8000, totalTokensUsed], gradient: "from-amber-500/20 to-orange-500/10", ic: "text-amber-400", bc: "border-amber-500/20" },
+    { icon: Zap, label: "Execuções", value: totalExecutions, spark: [0, 10, 30, 50, 70, totalExecutions], gradient: "from-violet-500/20 to-purple-500/10", ic: "text-violet-400", bc: "border-violet-500/20" },
+    { icon: CheckCircle, label: "Sucesso", value: successRate, suffix: "%", spark: [90, 92, 94, 96, 97, successRate], gradient: "from-emerald-500/20 to-teal-500/10", ic: "text-emerald-400", bc: "border-emerald-500/20" },
+    { icon: ListOrdered, label: "Waitlist", value: waitingCount, spark: [0, 2, 5, 8, 10, waitingCount], gradient: "from-blue-500/20 to-indigo-500/10", ic: "text-blue-400", bc: "border-blue-500/20" },
+    { icon: Eye, label: "Pendentes", value: pendingCount, spark: [0, 1, 2, 1, 3, pendingCount], gradient: "from-rose-500/20 to-red-500/10", ic: "text-rose-400", bc: "border-rose-500/20" },
   ];
 
   const departments = [
-    { id: "cyber-group", label: "Cyber Security", icon: ShieldCheck, color: "text-red-400", bg: "bg-red-500/10", status: "🟢 Operacional", desc: "CISO + 6 agentes online" },
-    { id: "cfo-agent", label: "Financeiro", icon: Wallet, color: "text-emerald-400", bg: "bg-emerald-500/10", status: "🟢 Operacional", desc: "CFO Digital ativo" },
-    { id: "growth-agent", label: "Growth", icon: Rocket, color: "text-blue-400", bg: "bg-blue-500/10", status: "🟢 Operacional", desc: "CGO Digital ativo" },
-    { id: "ai-agent", label: "Operações", icon: Cpu, color: "text-violet-400", bg: "bg-violet-500/10", status: "🟢 Operacional", desc: "COO Digital ativo" },
+    { id: "war-room", label: "Cyber Security", icon: ShieldCheck, color: "text-red-400", bg: "bg-red-500/10", status: "🟢 Operacional", desc: "CISO + 6 agentes online" },
+    { id: "insights", label: "Financeiro", icon: Wallet, color: "text-emerald-400", bg: "bg-emerald-500/10", status: "🟢 Operacional", desc: "CFO Digital ativo" },
+    { id: "agents", label: "Growth", icon: Rocket, color: "text-blue-400", bg: "bg-blue-500/10", status: "🟢 Operacional", desc: "CGO Digital ativo" },
+    { id: "logs", label: "Operações", icon: Cpu, color: "text-violet-400", bg: "bg-violet-500/10", status: "🟢 Operacional", desc: "COO Digital ativo" },
   ];
 
   const recentLogs = executionLogs.slice(0, 5);
@@ -188,7 +185,7 @@ const AdminCommandCenter = ({
           <span className="flex items-center gap-1"><Cpu className="h-3 w-3" /> Edge: OK</span>
           <span className="flex items-center gap-1"><Globe className="h-3 w-3" /> API: 42ms</span>
           <span className="flex items-center gap-1"><Database className="h-3 w-3" /> DB: OK</span>
-          <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+          <span className="flex items-center gap-1"><Clock className="h-3 w-3" /> {new Date().toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}</span>
         </div>
       </motion.div>
 
@@ -206,10 +203,6 @@ const AdminCommandCenter = ({
             <div className="flex items-start justify-between mb-2">
               <div className="w-8 h-8 rounded-xl bg-background/40 backdrop-blur flex items-center justify-center border border-white/[0.06]">
                 <kpi.icon className={`h-3.5 w-3.5 ${kpi.ic}`} />
-              </div>
-              <div className="flex items-center gap-1">
-                {kpi.up ? <ArrowUpRight className="h-3 w-3 text-emerald-400" /> : <ArrowDownRight className="h-3 w-3 text-muted-foreground" />}
-                <span className={`text-[9px] font-medium ${kpi.up ? "text-emerald-400" : "text-muted-foreground"}`}>{kpi.trend}</span>
               </div>
             </div>
             <p className="font-display text-xl font-bold tracking-tight">
@@ -423,8 +416,8 @@ const AdminCommandCenter = ({
               </CardHeader>
               <CardContent className="space-y-2 px-4 pb-3">
                 {[
-                  { label: "MRR", value: `R$ ${(totalRevenue / 100).toLocaleString("pt-BR")}`, color: "border-l-emerald-500" },
-                  { label: "ARR", value: `R$ ${((totalRevenue * 12) / 100).toLocaleString("pt-BR")}`, color: "border-l-cyan-500" },
+                  { label: "MRR", value: new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(totalRevenue / 100), color: "border-l-emerald-500" },
+                  { label: "ARR", value: new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format((totalRevenue * 12) / 100), color: "border-l-cyan-500" },
                   { label: "ARPU", value: `R$ ${usersCount > 0 ? ((totalRevenue / usersCount) / 100).toFixed(2) : "0"}`, color: "border-l-amber-500" },
                   { label: "LTV 12m", value: `R$ ${usersCount > 0 ? (((totalRevenue / usersCount) * 12) / 100).toFixed(0) : "0"}`, color: "border-l-violet-500" },
                 ].map((stat) => (
@@ -465,7 +458,7 @@ const AdminCommandCenter = ({
                   <div className={`w-1.5 h-6 rounded-full ${log.status === "success" ? "bg-emerald-500" : "bg-red-500"}`} />
                   <div className="flex-1 min-w-0">
                     <p className="text-[10px] font-medium truncate">{log.agent?.name || log.action}</p>
-                    <p className="text-[9px] text-muted-foreground">{new Date(log.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</p>
+                    <p className="text-[9px] text-muted-foreground">{new Date(log.created_at).toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" })}</p>
                   </div>
                   <Badge variant="secondary" className={`text-[8px] ${log.status === "success" ? "bg-emerald-500/10 text-emerald-400" : "bg-red-500/10 text-red-400"}`}>{log.status}</Badge>
                 </div>

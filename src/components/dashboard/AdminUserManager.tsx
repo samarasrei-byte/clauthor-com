@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Users, Coins, Edit, Save, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,8 @@ interface AdminUserManagerProps {
 }
 
 export default function AdminUserManager({ allProfiles, allCredits }: AdminUserManagerProps) {
+  const { t, i18n } = useTranslation();
+  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
   const queryClient = useQueryClient();
   const [editingUser, setEditingUser] = useState<any>(null);
   const [newCredits, setNewCredits] = useState("");
@@ -115,7 +118,7 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
                         ) : "—"}
                       </td>
                       <td className="p-3 text-muted-foreground text-xs">
-                        {new Date(profile.created_at).toLocaleDateString("pt-BR")}
+                        {new Date(profile.created_at).toLocaleDateString(locale)}
                       </td>
                       <td className="p-3">
                         <Button size="sm" variant="outline" className="h-7 text-xs gap-1" onClick={() => openEdit(profile)}>
@@ -165,7 +168,7 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
             {editingUser?.credit && (
               <div className="p-3 rounded-lg bg-muted/30 text-xs space-y-1">
                 <p>Usados: <strong>{editingUser.credit.used_credits.toLocaleString()}</strong></p>
-                <p>Reset em: <strong>{new Date(editingUser.credit.credits_reset_at).toLocaleDateString("pt-BR")}</strong></p>
+                <p>Reset em: <strong>{new Date(editingUser.credit.credits_reset_at).toLocaleDateString(locale)}</strong></p>
               </div>
             )}
             <Button variant="outline" size="sm" onClick={resetCredits} disabled={saving} className="w-full text-xs">
