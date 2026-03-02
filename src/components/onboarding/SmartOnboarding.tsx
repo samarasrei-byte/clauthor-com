@@ -10,7 +10,9 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 
 /* ─── Typing Hook ─── */
@@ -80,6 +82,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
   const [teamSize, setTeamSize] = useState("");
   const [extraAgents, setExtraAgents] = useState<string[]>([]);
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   // Chat-like messages
@@ -489,20 +492,27 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         {/* Agents */}
                         <div className="grid grid-cols-2 gap-2">
                           {getRecommendedAgents().map((agent, i) => (
-                            <motion.div
-                              key={agent}
-                              initial={{ opacity: 0, scale: 0.8 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              transition={{ delay: 0.1 * i }}
-                              className="flex items-center gap-2 p-2.5 rounded-lg bg-background/50 border border-border/50"
-                            >
-                              <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center">
-                                <Bot className="h-3 w-3 text-primary" />
-                              </div>
-                              <span className="text-[11px] font-medium capitalize truncate">
-                                {agent.replace(/_/g, " ")}
-                              </span>
-                            </motion.div>
+                            <Tooltip key={agent}>
+                              <TooltipTrigger asChild>
+                                <motion.div
+                                  initial={{ opacity: 0, scale: 0.8 }}
+                                  animate={{ opacity: 1, scale: 1 }}
+                                  transition={{ delay: 0.1 * i }}
+                                  className="flex items-center gap-2 p-2.5 rounded-lg bg-background/50 border border-border/50 cursor-help"
+                                >
+                                  <div className="w-6 h-6 rounded-md bg-primary/10 flex items-center justify-center">
+                                    <Bot className="h-3 w-3 text-primary" />
+                                  </div>
+                                  <span className="text-[11px] font-medium capitalize truncate">
+                                    {agent.replace(/_/g, " ")}
+                                  </span>
+                                </motion.div>
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className="max-w-[250px] text-xs">
+                                <p className="font-semibold mb-0.5">{t(`library_page.agents.${agent}_title`, { defaultValue: agent.replace(/_/g, " ") })}</p>
+                                <p className="text-muted-foreground">{t(`library_page.agents.${agent}_desc`, { defaultValue: "Agente de IA especializado" })}</p>
+                              </TooltipContent>
+                            </Tooltip>
                           ))}
                         </div>
 
@@ -539,27 +549,34 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         .map((agent, i) => {
                           const isSelected = extraAgents.includes(agent);
                           return (
-                            <motion.button
-                              key={agent}
-                              initial={{ opacity: 0 }}
-                              animate={{ opacity: 1 }}
-                              transition={{ delay: 0.02 * i }}
-                              onClick={() => setExtraAgents(prev => 
-                                prev.includes(agent) ? prev.filter(a => a !== agent) : [...prev, agent]
-                              )}
-                              className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all text-[11px] ${
-                                isSelected
-                                  ? "border-primary/40 bg-primary/5"
-                                  : "border-border/50 bg-card/30 hover:border-primary/20"
-                              }`}
-                            >
-                              {isSelected ? (
-                                <CheckCircle2 className="h-3 w-3 text-primary shrink-0" />
-                              ) : (
-                                <Bot className="h-3 w-3 text-muted-foreground shrink-0" />
-                              )}
-                              <span className="capitalize truncate">{agent.replace(/_/g, " ")}</span>
-                            </motion.button>
+                            <Tooltip key={agent}>
+                              <TooltipTrigger asChild>
+                                <motion.button
+                                  initial={{ opacity: 0 }}
+                                  animate={{ opacity: 1 }}
+                                  transition={{ delay: 0.02 * i }}
+                                  onClick={() => setExtraAgents(prev => 
+                                    prev.includes(agent) ? prev.filter(a => a !== agent) : [...prev, agent]
+                                  )}
+                                  className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all text-[11px] ${
+                                    isSelected
+                                      ? "border-primary/40 bg-primary/5"
+                                      : "border-border/50 bg-card/30 hover:border-primary/20"
+                                  }`}
+                                >
+                                  {isSelected ? (
+                                    <CheckCircle2 className="h-3 w-3 text-primary shrink-0" />
+                                  ) : (
+                                    <Bot className="h-3 w-3 text-muted-foreground shrink-0" />
+                                  )}
+                                  <span className="capitalize truncate">{agent.replace(/_/g, " ")}</span>
+                                </motion.button>
+                              </TooltipTrigger>
+                              <TooltipContent side="top" className="max-w-[250px] text-xs">
+                                <p className="font-semibold mb-0.5">{t(`library_page.agents.${agent}_title`, { defaultValue: agent.replace(/_/g, " ") })}</p>
+                                <p className="text-muted-foreground">{t(`library_page.agents.${agent}_desc`, { defaultValue: "Agente de IA especializado" })}</p>
+                              </TooltipContent>
+                            </Tooltip>
                           );
                         })}
                     </div>
