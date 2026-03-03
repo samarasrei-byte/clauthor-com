@@ -92,14 +92,14 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
             <Building2 className="h-3.5 w-3.5" />
             <span>Nome da sua empresa (opcional)</span>
           </div>
-          <Input
-            placeholder="Ex: Minha Empresa Ltda"
-            value={companyName}
-            onChange={(e) => setCompanyName(e.target.value)}
-            className="h-13 text-center text-base bg-white/[0.03] border-white/[0.08] rounded-xl focus:border-primary/40"
-            autoFocus
-            onKeyDown={(e) => e.key === "Enter" && handleFinish()}
-          />
+            <Input
+              placeholder="Ex: Minha Empresa Ltda"
+              value={companyName}
+              onChange={(e) => setCompanyName(e.target.value)}
+              className="h-12 text-center text-base text-foreground bg-muted/50 border-border rounded-xl focus:border-primary/40 placeholder:text-muted-foreground"
+              autoFocus
+              onKeyDown={(e) => e.key === "Enter" && handleFinish()}
+            />
         </div>
 
         {/* Actions */}
