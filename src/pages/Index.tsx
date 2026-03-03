@@ -300,7 +300,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           HERO
           ═══════════════════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-[85vh] flex items-center px-4 sm:px-6 overflow-hidden py-16 sm:py-0" aria-label="Hero">
+      <section ref={heroRef} className="relative min-h-[70vh] flex items-center px-4 sm:px-6 overflow-hidden pt-8 pb-12 sm:pt-12 sm:pb-16" aria-label="Hero">
         {!isMobile && <MouseReactiveField />}
 
         <div className="absolute inset-0 pointer-events-none">
@@ -409,7 +409,29 @@ const HomePage = () => {
 
             {/* RIGHT — Live Demo Agent */}
             <div className="w-full max-w-[420px] lg:w-[420px] shrink-0">
-              <Suspense fallback={<div className="h-[400px] rounded-2xl bg-card/30 animate-pulse" />}>
+              <Suspense fallback={
+                <div className="rounded-2xl border border-border bg-card/40 backdrop-blur-xl overflow-hidden">
+                  <div className="px-4 py-3 border-b border-border flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-primary/10 animate-pulse" />
+                    <div className="space-y-1.5">
+                      <div className="w-28 h-3 rounded bg-muted/50 animate-pulse" />
+                      <div className="w-16 h-2 rounded bg-emerald-500/20 animate-pulse" />
+                    </div>
+                  </div>
+                  <div className="h-[280px] sm:h-[320px] px-4 py-4 space-y-3">
+                    <div className="flex items-center justify-center">
+                      <span className="font-mono text-[10px] text-muted-foreground/50 px-3 py-1.5 rounded-full bg-muted/20 border border-border/30">Conectando agente...</span>
+                    </div>
+                    <div className="flex items-start gap-2.5 max-w-[85%]">
+                      <div className="w-6 h-6 rounded-md bg-primary/10 animate-pulse shrink-0" />
+                      <div className="flex-1 space-y-2">
+                        <div className="h-3 rounded bg-muted/30 animate-pulse w-full" />
+                        <div className="h-3 rounded bg-muted/30 animate-pulse w-3/4" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }>
                 <LiveDemoAgent />
               </Suspense>
             </div>
@@ -809,9 +831,24 @@ const HomePage = () => {
             <h2 className="font-display text-2xl sm:text-4xl font-bold mt-3 mb-4">
               {t("home.pricing_from")} <span className="gradient-text">{t("home.pricing_amount")}</span> {t("home.pricing_per_agent")}
             </h2>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto mb-6">
+            <p className="text-sm sm:text-base text-muted-foreground max-w-lg mx-auto mb-4">
               {t("home.pricing_desc")}
             </p>
+
+            {/* Value comparison */}
+            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6">
+              {[
+                { label: t("home.pricing_val_human", { defaultValue: "Funcionário CLT" }), value: "R$ 4.500/mês", sub: t("home.pricing_val_human_sub", { defaultValue: "8h/dia, férias, encargos" }), muted: true },
+                { label: t("home.pricing_val_agent", { defaultValue: "Agente CLAUTHOR" }), value: "R$ 147/mês", sub: t("home.pricing_val_agent_sub", { defaultValue: "24/7, sem encargos, escala infinita" }), muted: false },
+              ].map((item) => (
+                <div key={item.label} className={`px-5 py-3 rounded-xl border text-center ${item.muted ? "border-border/30 bg-card/20 opacity-60" : "border-primary/20 bg-primary/5"}`}>
+                  <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{item.label}</p>
+                  <p className={`font-display text-lg font-bold ${item.muted ? "line-through text-muted-foreground" : "text-primary"}`}>{item.value}</p>
+                  <p className="font-mono text-[9px] text-muted-foreground/60 mt-0.5">{item.sub}</p>
+                </div>
+              ))}
+            </div>
+
             <div className="flex flex-wrap justify-center gap-3 mb-8">
               {[
                 { label: t("home.pricing_tier_3"), discount: t("home.pricing_off_10") },
