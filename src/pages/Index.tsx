@@ -300,7 +300,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           HERO
           ═══════════════════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-[70vh] flex items-center px-4 sm:px-6 overflow-hidden pt-8 pb-12 sm:pt-12 sm:pb-16" aria-label="Hero">
+      <section ref={heroRef} className="relative min-h-[70vh] flex items-center px-4 sm:px-6 overflow-hidden pt-2 pb-10 sm:pt-4 sm:pb-14" aria-label="Hero">
         {!isMobile && <MouseReactiveField />}
 
         <div className="absolute inset-0 pointer-events-none">
@@ -327,7 +327,7 @@ const HomePage = () => {
                   <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                     {t("home.system_status")}
                   </span>
-                  <HelpTooltip id="home-intro" text="Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo." position="bottom" size={12} autoShowDelay={3000} />
+                  <HelpTooltip id="home-intro" text="Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo." position="bottom" size={12} autoShow={false} />
                 </div>
               </motion.div>
 
@@ -450,6 +450,9 @@ const HomePage = () => {
             <AnimatedStat icon={Clock} value={12400} suffix="h" label={t("home.stats_hours_saved")} />
             <AnimatedStat icon={Signal} value={97} suffix="%" label={t("home.stats_avg_efficiency")} />
           </div>
+          <p className="font-mono text-[9px] text-muted-foreground/40 text-center mt-3 uppercase tracking-wider">
+            {t("home.stats_disclaimer", { defaultValue: "* Metas projetadas com base em simulações internas e benchmarks do setor" })}
+          </p>
         </div>
       </section>
 
@@ -607,11 +610,33 @@ const HomePage = () => {
             </p>
           </motion.div>
 
+          {/* HERO CARD — Savings (highlighted) */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-6 group p-6 sm:p-8 rounded-2xl border-2 border-primary/30 bg-primary/[0.04] backdrop-blur-sm relative overflow-hidden"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-primary/60 to-transparent" />
+            <div className="absolute top-4 right-4">
+              <span className="font-mono text-[9px] font-bold uppercase px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary tracking-wider">{t("home.diff_savings_badge", { defaultValue: "MAIOR IMPACTO" })}</span>
+            </div>
+            <div className="flex flex-col sm:flex-row items-start gap-5">
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0 icon-container-glow">
+                <DollarSign className="h-8 w-8 text-primary icon-lift" strokeWidth={1.5} />
+              </div>
+              <div className="flex-1">
+                <p className="font-display text-4xl sm:text-5xl font-bold gradient-text mb-2">+88%</p>
+                <h3 className="font-display font-bold text-lg sm:text-xl mb-2">{t("home.diff_savings")}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{t("home.diff_savings_desc")}</p>
+              </div>
+            </div>
+          </motion.div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
             {[
               { icon: Fingerprint, title: t("home.diff_security"), desc: t("home.diff_security_desc") },
               { icon: Bolt, title: t("home.diff_setup"), desc: t("home.diff_setup_desc") },
-              { icon: DollarSign, title: t("home.diff_savings"), desc: t("home.diff_savings_desc") },
               { icon: Workflow, title: t("home.diff_orchestration"), desc: t("home.diff_orchestration_desc") },
               { icon: Globe, title: t("home.diff_multilang"), desc: t("home.diff_multilang_desc") },
               { icon: Rocket, title: t("home.diff_scale"), desc: t("home.diff_scale_desc") },
@@ -874,6 +899,44 @@ const HomePage = () => {
                   <ChevronRight className="ml-1 h-3.5 w-3.5" />
                 </Button>
               </Link>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          PRE-FOOTER CTA
+          ═══════════════════════════════════════════════════════ */}
+      <section className="py-20 sm:py-28 px-4 relative" aria-label="Final CTA">
+        <div className="max-w-3xl mx-auto text-center">
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <div className="relative rounded-3xl border border-primary/20 bg-primary/[0.03] backdrop-blur-sm p-10 sm:p-16 overflow-hidden">
+              <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+              <div className="relative z-10">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-6 icon-container-glow">
+                  <Rocket className="h-8 w-8 text-primary icon-lift" strokeWidth={1.5} />
+                </div>
+                <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4">
+                  {t("home.final_cta_title", { defaultValue: "Pronto para automatizar?" })}
+                </h2>
+                <p className="text-sm sm:text-lg text-muted-foreground max-w-lg mx-auto mb-8 leading-relaxed">
+                  {t("home.final_cta_desc", { defaultValue: "Monte seu time de agentes em 5 minutos. Sem código, sem cartão de crédito. Comece agora e veja resultados no primeiro dia." })}
+                </p>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  <Button onClick={() => setShowSmartOnboarding(true)} className="glow rounded-xl h-14 px-10 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label={t("home.cta_build_team")}>
+                    <Workflow className="h-4 w-4" strokeWidth={1.5} />
+                    {t("home.cta_build_team")}
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                  <Link to="/library">
+                    <Button variant="outline" className="rounded-xl h-12 px-8 font-mono text-xs uppercase tracking-wider border-border/50 hover:border-primary/20" aria-label={t("home.cta_explore_agents")}>
+                      {t("home.cta_explore_agents")}
+                      <ChevronRight className="ml-1 h-3.5 w-3.5" />
+                    </Button>
+                  </Link>
+                </div>
+              </div>
             </div>
           </motion.div>
         </div>
