@@ -25,6 +25,7 @@ import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
 
 import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
+import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
@@ -96,6 +97,7 @@ const ClientDashboard = () => {
   const { data: tokenUsage = [] } = useTokenUsage();
 
   const [postPaymentContext, setPostPaymentContext] = useState<{ agentName: string; isDepartment: boolean; agentCount: number } | null>(null);
+  const [showCelebration, setShowCelebration] = useState(false);
   const [checkoutSummary, setCheckoutSummary] = useState<CheckoutSummaryData | null>(null);
   const [pendingCheckoutIntent, setPendingCheckoutIntent] = useState<{ intent: HireIntent; uniqueSlugs: string[] } | null>(null);
 
@@ -103,9 +105,10 @@ const ClientDashboard = () => {
     const raw = sessionStorage.getItem("clauthor_post_payment_onboarding");
     if (!raw) return;
     sessionStorage.removeItem("clauthor_post_payment_onboarding");
-    try { setPostPaymentContext(JSON.parse(raw)); } catch { /* ignore */ }
-    const timer = setTimeout(() => setActiveSection("omnix"), 800);
-    return () => clearTimeout(timer);
+    try {
+      setPostPaymentContext(JSON.parse(raw));
+      setShowCelebration(true);
+    } catch { /* ignore */ }
   }, []);
 
   const { data: agents = [], isLoading: loadingAgents } = useQuery({
@@ -368,6 +371,19 @@ const ClientDashboard = () => {
 
   return (
     <>
+      {/* Post-payment celebration animation */}
+      {showCelebration && postPaymentContext && (
+        <PostPaymentCelebration
+          agentName={postPaymentContext.agentName}
+          isDepartment={postPaymentContext.isDepartment}
+          agentCount={postPaymentContext.agentCount}
+          onComplete={() => {
+            setShowCelebration(false);
+            setActiveSection("omnix");
+          }}
+        />
+      )}
+
       {/* Flow 4: No hireIntent → show SmartOnboarding wizard instead of empty dashboard */}
       {showSmartOnboarding && (
         <SmartOnboarding 
@@ -378,7 +394,6 @@ const ClientDashboard = () => {
           }} 
         />
       )}
-      
 
       <CheckoutSummaryDialog
         data={checkoutSummary}
