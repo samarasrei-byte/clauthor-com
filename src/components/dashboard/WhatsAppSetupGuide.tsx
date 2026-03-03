@@ -103,6 +103,7 @@ const STEPS = [
 
 const WhatsAppSetupGuide = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const skipToCredentials = () => setCurrentStep(STEPS.length - 1);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [phoneId, setPhoneId] = useState("");
   const [accessToken, setAccessToken] = useState("");
@@ -229,6 +230,20 @@ const WhatsAppSetupGuide = () => {
         videoUrl="https://www.youtube.com/results?search_query=whatsapp+business+api+setup+tutorial"
         docsUrl="https://developers.facebook.com/docs/whatsapp/cloud-api/get-started"
       />
+
+      {/* Skip to credentials shortcut */}
+      {currentStep < STEPS.length - 1 && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full gap-2 border-dashed border-primary/30 text-primary hover:bg-primary/5"
+          onClick={skipToCredentials}
+        >
+          <Sparkles className="h-3.5 w-3.5" />
+          Já tenho as credenciais — pular para o último passo
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Button>
+      )}
 
       {/* Current step detail */}
       <AnimatePresence mode="wait">

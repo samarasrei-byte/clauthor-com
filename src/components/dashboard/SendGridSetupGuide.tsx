@@ -68,6 +68,7 @@ const STEPS = [
 
 const SendGridSetupGuide = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const skipToCredentials = () => setCurrentStep(STEPS.length - 1);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [apiKey, setApiKey] = useState("");
   const [fromEmail, setFromEmail] = useState("");
@@ -190,6 +191,19 @@ const SendGridSetupGuide = () => {
         videoUrl="https://www.youtube.com/results?search_query=sendgrid+setup+tutorial"
         docsUrl="https://docs.sendgrid.com/for-developers/sending-email/api-getting-started"
       />
+
+      {currentStep < STEPS.length - 1 && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full gap-2 border-dashed border-primary/30 text-primary hover:bg-primary/5"
+          onClick={skipToCredentials}
+        >
+          <Sparkles className="h-3.5 w-3.5" />
+          Já tenho a API Key — pular para o último passo
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Button>
+      )}
 
       {/* Current step */}
       <AnimatePresence mode="wait">

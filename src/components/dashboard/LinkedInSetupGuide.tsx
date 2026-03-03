@@ -93,6 +93,7 @@ const STEPS = [
 
 const LinkedInSetupGuide = () => {
   const [currentStep, setCurrentStep] = useState(0);
+  const skipToCredentials = () => setCurrentStep(STEPS.length - 1);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [clientId, setClientId] = useState("");
   const [clientSecret, setClientSecret] = useState("");
@@ -213,6 +214,19 @@ const LinkedInSetupGuide = () => {
         videoUrl="https://www.youtube.com/results?search_query=linkedin+api+setup+tutorial"
         docsUrl="https://learn.microsoft.com/en-us/linkedin/shared/authentication/getting-access"
       />
+
+      {currentStep < STEPS.length - 1 && (
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full gap-2 border-dashed border-primary/30 text-primary hover:bg-primary/5"
+          onClick={skipToCredentials}
+        >
+          <Sparkles className="h-3.5 w-3.5" />
+          Já tenho as credenciais — pular para o último passo
+          <ArrowRight className="h-3.5 w-3.5" />
+        </Button>
+      )}
 
       {/* Current step */}
       <AnimatePresence mode="wait">
