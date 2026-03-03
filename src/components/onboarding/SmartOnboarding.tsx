@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Bot, Sparkles, ArrowRight, X, CheckCircle2, ChevronRight,
+  Bot, Sparkles, ArrowRight, X, CheckCircle2, ChevronRight, ChevronLeft,
   Building2, ShoppingCart, Code, Briefcase, HeartHandshake,
   GraduationCap, Factory, Rocket, Target, Zap, Shield,
   Users, MessageSquare, BarChart3, Headphones, PenTool,
@@ -408,14 +408,17 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     })}
                   </div>
 
-                  {selectedChallenges.length > 0 && (
-                    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pt-2">
-                      <Button onClick={() => setPhase(2)} className="w-full h-12 glow rounded-xl gap-2">
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2 pt-2">
+                    <Button variant="outline" onClick={() => setPhase(0)} className="h-12 rounded-xl gap-1.5 px-4">
+                      <ChevronLeft className="h-4 w-4" /> Voltar
+                    </Button>
+                    {selectedChallenges.length > 0 && (
+                      <Button onClick={() => setPhase(2)} className="flex-1 h-12 glow rounded-xl gap-2">
                         Continuar ({selectedChallenges.length} selecionados)
                         <ChevronRight className="h-4 w-4" />
                       </Button>
-                    </motion.div>
-                  )}
+                    )}
+                  </motion.div>
                 </motion.div>
               )}
 
@@ -479,6 +482,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       </motion.button>
                     ))}
                   </div>
+                  <Button variant="outline" onClick={() => setPhase(1)} className="h-10 rounded-xl gap-1.5 px-4 mt-2">
+                    <ChevronLeft className="h-4 w-4" /> Voltar
+                  </Button>
                 </motion.div>
               )}
 
@@ -644,6 +650,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                     <div className="flex gap-2">
+                      <Button variant="outline" onClick={() => setPhase(2)} className="h-10 rounded-xl gap-1.5 px-4 text-xs">
+                        <ChevronLeft className="h-3.5 w-3.5" /> Voltar
+                      </Button>
                       <Button variant="outline" onClick={handleViewLibrary} className="flex-1 h-10 rounded-xl text-xs border-border/50">
                         Explorar 80+ agentes
                       </Button>
