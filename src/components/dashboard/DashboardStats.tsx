@@ -18,33 +18,36 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
   const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);
   const estimatedSavings = activeAgents * 7560; // 3 CLT employees per agent × R$7,560/mo avg
 
+  const successLogs = totalExecutions > 0 ? Math.round(successRate) : 0;
+  const execTrend = totalExecutions > 100 ? `+${Math.min(99, Math.round(totalExecutions * 0.12))}` : totalExecutions > 0 ? `+${totalExecutions}` : "0";
+
   const stats = [
     { 
       icon: Bot, 
       label: "Agentes Ativos", 
       value: activeAgents.toString(), 
-      trend: `+${monthlyGrowth} este mês`,
+      trend: monthlyGrowth > 0 ? `+${monthlyGrowth} este mês` : activeAgents > 0 ? "estável" : "nenhum",
       color: "text-primary"
     },
     { 
       icon: Zap, 
       label: "Execuções Totais", 
       value: totalExecutions.toLocaleString("pt-BR"), 
-      trend: "+12%",
+      trend: execTrend,
       color: "text-cyan-400"
     },
     { 
       icon: CheckCircle, 
       label: "Taxa de Sucesso", 
-      value: `${successRate}%`, 
-      trend: "+0.5%",
+      value: totalExecutions > 0 ? `${successRate}%` : "—", 
+      trend: totalExecutions > 0 ? `${totalExecutions} execuções` : "sem dados",
       color: "text-primary/80"
     },
     { 
       icon: DollarSign, 
       label: "Economia Estimada", 
-      value: `R$ ${estimatedSavings.toLocaleString("pt-BR")}`, 
-      trend: "vs CLT/mês",
+      value: activeAgents > 0 ? `R$ ${estimatedSavings.toLocaleString("pt-BR")}` : "—", 
+      trend: activeAgents > 0 ? "vs CLT/mês" : "contrate agentes",
       color: "text-cyan-400"
     },
     { 
@@ -67,16 +70,16 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
     },
     { 
       icon: Clock, 
-      label: "Uptime", 
-      value: "99.9%", 
-      trend: "últimos 30 dias",
+      label: "Horas Economizadas", 
+      value: activeAgents > 0 ? `${Math.round(totalExecutions * 0.03)}h` : "—",
+      trend: activeAgents > 0 ? "este período" : "sem dados",
       color: "text-primary/80"
     },
     { 
       icon: TrendingUp, 
       label: "ROI Estimado", 
-      value: activeAgents > 0 ? `${Math.round(((estimatedSavings - (activeAgents * 3997)) / (activeAgents * 3997)) * 100)}%` : "—",
-      trend: "retorno/mês",
+      value: activeAgents > 0 ? `${Math.round(((estimatedSavings - (activeAgents * 3997)) / Math.max(activeAgents * 3997, 1)) * 100)}%` : "—",
+      trend: activeAgents > 0 ? "retorno/mês" : "contrate agentes",
       color: "text-cyan-400"
     },
   ];
