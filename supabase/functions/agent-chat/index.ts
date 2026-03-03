@@ -567,39 +567,87 @@ async function executeTool(
             } catch {}
           }
 
-          // 2. Try SendGrid first
-          const sgCreds = credMap["sendgrid"] || credMap["email"] || credMap["smtp"];
-          const sgApiKey = sgCreds?.["api_key"] || sgCreds?.["SENDGRID_API_KEY"] || sgCreds?.["sendgrid_api_key"];
-          const fromEmail = sgCreds?.["from_email"] || sgCreds?.["sender_email"] || "noreply@clauthor.com";
-          const fromName = sgCreds?.["from_name"] || sgCreds?.["sender_name"] || "Clauthor AI";
+          // 2. Try providers in priority order: SendGrid → Resend → Mailgun → SMTP
+          const fromEmail = credMap["sendgrid"]?.["from_email"] || credMap["resend"]?.["from_email"]
+            || credMap["email"]?.["from_email"] || credMap["smtp"]?.["from_email"] || "noreply@clauthor.com";
+          const fromName = credMap["sendgrid"]?.["from_name"] || credMap["resend"]?.["from_name"]
+            || credMap["email"]?.["from_name"] || credMap["smtp"]?.["from_name"] || "Clauthor AI";
+          let providerUsed = "";
 
-          if (sgApiKey) {
-            const sgResponse = await fetch("https://api.sendgrid.com/v3/mail/send", {
+          // --- SENDGRID ---
+          const sgKey = credMap["sendgrid"]?.["api_key"] || credMap["sendgrid"]?.["SENDGRID_API_KEY"] || credMap["sendgrid"]?.["sendgrid_api_key"];
+          if (!emailSent && sgKey) {
+            const r = await fetch("https://api.sendgrid.com/v3/mail/send", {
               method: "POST",
-              headers: {
-                "Authorization": `Bearer ${sgApiKey}`,
-                "Content-Type": "application/json",
-              },
+              headers: { "Authorization": `Bearer ${sgKey}`, "Content-Type": "application/json" },
               body: JSON.stringify({
                 personalizations: [{ to: [{ email: args.to }] }],
                 from: { email: fromEmail, name: fromName },
                 subject: args.subject,
-                content: [
-                  { type: "text/plain", value: args.body },
-                  { type: "text/html", value: args.body.replace(/\n/g, "<br/>") },
-                ],
+                content: [{ type: "text/plain", value: args.body }, { type: "text/html", value: args.body.replace(/\n/g, "<br/>") }],
               }),
             });
+            if (r.ok || r.status === 202) { emailSent = true; providerUsed = "SendGrid"; }
+            else { sendError = `SendGrid ${r.status}: ${(await r.text()).slice(0, 200)}`; }
+          }
 
-            if (sgResponse.ok || sgResponse.status === 202) {
-              emailSent = true;
-            } else {
-              const errBody = await sgResponse.text();
-              sendError = `SendGrid ${sgResponse.status}: ${errBody.slice(0, 200)}`;
-              console.warn(`[SendEmail] SendGrid error:`, sendError);
-            }
-          } else {
-            sendError = "Nenhuma credencial de email (SendGrid) configurada.";
+          // --- RESEND ---
+          const resendKey = credMap["resend"]?.["api_key"] || credMap["resend"]?.["RESEND_API_KEY"];
+          if (!emailSent && resendKey) {
+            const r = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "Authorization": `Bearer ${resendKey}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                from: `${fromName} <${fromEmail}>`,
+                to: [args.to],
+                subject: args.subject,
+                text: args.body,
+                html: args.body.replace(/\n/g, "<br/>"),
+              }),
+            });
+            if (r.ok) { emailSent = true; providerUsed = "Resend"; }
+            else { sendError = `Resend ${r.status}: ${(await r.text()).slice(0, 200)}`; }
+          }
+
+          // --- MAILGUN ---
+          const mgKey = credMap["mailgun"]?.["api_key"] || credMap["mailgun"]?.["MAILGUN_API_KEY"];
+          const mgDomain = credMap["mailgun"]?.["domain"] || credMap["mailgun"]?.["MAILGUN_DOMAIN"];
+          if (!emailSent && mgKey && mgDomain) {
+            const form = new URLSearchParams();
+            form.set("from", `${fromName} <${fromEmail}>`);
+            form.set("to", args.to);
+            form.set("subject", args.subject);
+            form.set("text", args.body);
+            form.set("html", args.body.replace(/\n/g, "<br/>"));
+            const r = await fetch(`https://api.mailgun.net/v3/${mgDomain}/messages`, {
+              method: "POST",
+              headers: { "Authorization": `Basic ${btoa(`api:${mgKey}`)}` },
+              body: form,
+            });
+            if (r.ok) { emailSent = true; providerUsed = "Mailgun"; }
+            else { sendError = `Mailgun ${r.status}: ${(await r.text()).slice(0, 200)}`; }
+          }
+
+          // --- GENERIC EMAIL (fallback key detection) ---
+          const genericKey = credMap["email"]?.["api_key"] || credMap["smtp"]?.["api_key"];
+          if (!emailSent && genericKey) {
+            // Try as Resend-compatible API
+            const r = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: { "Authorization": `Bearer ${genericKey}`, "Content-Type": "application/json" },
+              body: JSON.stringify({
+                from: `${fromName} <${fromEmail}>`,
+                to: [args.to],
+                subject: args.subject,
+                text: args.body,
+              }),
+            });
+            if (r.ok) { emailSent = true; providerUsed = "Email API"; }
+            else { sendError = `Email API ${r.status}: ${(await r.text()).slice(0, 200)}`; }
+          }
+
+          if (!emailSent && !sendError) {
+            sendError = "Nenhuma credencial de email configurada (SendGrid, Resend, ou Mailgun).";
           }
         } catch (e) {
           sendError = e instanceof Error ? e.message : "Erro desconhecido ao enviar email";
@@ -615,7 +663,7 @@ async function executeTool(
           metadata: {
             to: args.to, subject: args.subject, priority: args.priority || "normal",
             agent_id: agentId, message_id: messageId,
-            sent: emailSent, error: sendError || undefined,
+            sent: emailSent, provider: providerUsed || undefined, error: sendError || undefined,
           },
         });
 
@@ -630,8 +678,9 @@ async function executeTool(
             sent_at: emailSent ? timestamp : undefined,
             queued_at: !emailSent ? timestamp : undefined,
             note: emailSent
-              ? "Email enviado com sucesso via SendGrid."
+              ? `Email enviado com sucesso via ${providerUsed}.`
               : `Email registrado como notificação. ${sendError}`,
+            provider: providerUsed || undefined,
           },
         };
       }
