@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, Loader2
+  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,7 @@ import { useTranslation } from "react-i18next";
 import { lazy, Suspense } from "react";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import type { SidebarItem, SidebarChild } from "@/components/dashboard/DashboardSidebar";
+import MobileBottomNav from "@/components/dashboard/MobileBottomNav";
 import QuickActions from "@/components/dashboard/QuickActions";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
@@ -63,6 +64,7 @@ const ClientDashboard = () => {
   const queryClient = useQueryClient();
   const hireProcessed = useRef(false);
   const [activeSection, setActiveSection] = useState("overview");
+  const [previousSection, setPreviousSection] = useState<string | null>(null);
 
   // Redirect first-time user to THOR (concierge)
   useEffect(() => {
@@ -341,9 +343,15 @@ const ClientDashboard = () => {
     if (id.startsWith("agent-chat-")) {
       const agentId = id.replace("agent-chat-", "");
       const agent = agents.find(a => a.id === agentId);
-      if (agent) { setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); return; }
+      if (agent) { setPreviousSection(activeSection); setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); return; }
     }
+    if (id === "chat") { setPreviousSection(activeSection); }
     setActiveSection(id);
+  };
+
+  const handleBack = () => {
+    setActiveSection(previousSection || "overview");
+    setPreviousSection(null);
   };
 
   const breadcrumbLabel = activeSection === "overview" ? t("dashboard.command_center")
@@ -413,7 +421,7 @@ const ClientDashboard = () => {
         </div>
 
         <div className="flex-1 min-w-0 overflow-y-auto">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-6">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 space-y-6">
             {/* Breadcrumb + Header */}
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
               <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
@@ -657,12 +665,28 @@ const ClientDashboard = () => {
             {/* ═══ CHAT ═══ */}
             {activeSection === "chat" && selectedAgent && (
               <Suspense fallback={<SectionLoader />}>
-                <AgentChat agentId={selectedAgent.id} agentName={selectedAgent.name} />
+                <div className="space-y-3">
+                  <button
+                    onClick={handleBack}
+                    className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                  >
+                    <ChevronLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+                    <span>{t("dashboard.back", { defaultValue: "Voltar" })}</span>
+                  </button>
+                  <AgentChat agentId={selectedAgent.id} agentName={selectedAgent.name} />
+                </div>
               </Suspense>
             )}
           </div>
         </div>
       </div>
+
+      {/* Persistent mobile bottom navigation */}
+      <MobileBottomNav
+        activeSection={activeSection}
+        onNavigate={handleSidebarNav}
+        agentCount={agents.length || undefined}
+      />
     </>
   );
 };
