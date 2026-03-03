@@ -48,7 +48,7 @@ const Terms = lazyRetry(() => import("./pages/Terms"));
 const Privacy = lazyRetry(() => import("./pages/Privacy"));
 const MonixCommandCenter = lazyRetry(() => import("./pages/MonixCommandCenter"));
 const OmnixCommandCenter = lazyRetry(() => import("./pages/OmnixCommandCenter"));
-
+const ResetPassword = lazyRetry(() => import("./pages/ResetPassword"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -92,6 +92,7 @@ const App = () => (
                   <Route path="/pitch" element={<Pitch />} />
                   <Route path="/termos" element={<Terms />} />
                   <Route path="/privacidade" element={<Privacy />} />
+                  <Route path="/reset-password" element={<ResetPassword />} />
                 </Route>
 
                 {/* Dashboard pages with minimal header + sidebar only */}

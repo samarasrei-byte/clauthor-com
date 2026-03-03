@@ -8,6 +8,7 @@ import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart } from "lucide-reac
 import HelpTooltip from "@/components/HelpTooltip";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { supabase } from "@/integrations/supabase/client";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 
@@ -150,6 +151,20 @@ const AuthPage = () => {
             <Button type="submit" className="w-full h-12 glow font-semibold rounded-xl shine group" disabled={isLoading}>
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (<>{isLogin ? t("auth.login") : t("auth.register")}<ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" /></>)}
             </Button>
+            {isLogin && (
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!email) { toast.error(t("auth.enter_email_first", { defaultValue: "Digite seu e-mail primeiro" })); return; }
+                  const { error } = await supabase.auth.resetPasswordForEmail(email, { redirectTo: `${window.location.origin}/reset-password` });
+                  if (error) toast.error(error.message);
+                  else toast.success(t("auth.reset_email_sent", { defaultValue: "E-mail de redefinição enviado! Verifique sua caixa de entrada." }));
+                }}
+                className="w-full text-center text-sm text-muted-foreground hover:text-primary transition-colors"
+              >
+                {t("auth.forgot_password", { defaultValue: "Esqueceu sua senha?" })}
+              </button>
+            )}
           </form>
           <div className="mt-6 pt-6 border-t border-white/5 text-center">
             <p className="text-sm text-muted-foreground">

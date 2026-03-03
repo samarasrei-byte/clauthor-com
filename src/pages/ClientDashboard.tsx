@@ -417,7 +417,9 @@ const ClientDashboard = () => {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2">
-                    <h1 className="font-display text-2xl font-bold">{t("dashboard.control_panel")}</h1>
+                    <h1 className="font-display text-2xl font-bold">
+                      {t("dashboard.welcome_back", { defaultValue: "Olá, {{name}} 👋", name: user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel") })}
+                    </h1>
                     <HelpTooltip id="dashboard-intro" text={t("dashboard.help_intro", { defaultValue: "Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções." })} position="bottom" />
                   </div>
                   <p className="text-sm text-muted-foreground">
