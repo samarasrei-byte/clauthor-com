@@ -26,14 +26,21 @@ const Navbar = () => {
 
   // Close mega menu on outside click
   useEffect(() => {
+    if (!megaMenuOpen) return;
     const handler = (e: MouseEvent) => {
       if (megaMenuRef.current && !megaMenuRef.current.contains(e.target as Node)) {
         setMegaMenuOpen(false);
       }
     };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
+    // Use setTimeout to avoid the same click event that opened the menu from closing it
+    const timer = setTimeout(() => {
+      document.addEventListener("click", handler);
+    }, 0);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("click", handler);
+    };
+  }, [megaMenuOpen]);
 
   const publicNavItems = [
     { label: t("nav.pricing"), href: "/pricing" },
