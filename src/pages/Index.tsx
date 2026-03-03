@@ -458,8 +458,9 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
-          LIVE AGENTS — Entities with heartbeat
+          LIVE AGENTS — Temporariamente oculto (guardado para lançamento)
           ═══════════════════════════════════════════════════════ */}
+      {/* 
       <section className="py-16 sm:py-28 px-4 relative" aria-label="Live agents">
         <div className="max-w-5xl mx-auto">
           <motion.div
@@ -499,6 +500,7 @@ const HomePage = () => {
           </motion.div>
         </div>
       </section>
+      */}
 
       {/* ═══════════════════════════════════════════════════════
           CONCIERGE IA
