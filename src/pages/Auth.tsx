@@ -103,7 +103,7 @@ const AuthPage = () => {
           <h1 className="font-display text-3xl font-bold mb-2">{isLogin ? t("auth.welcome") : t("auth.create_account")}</h1>
           <p className="text-muted-foreground">
             {isLogin ? t("auth.login_subtitle") : t("auth.register_subtitle")}
-            {" "}<HelpTooltip id="auth-intro" text="Crie sua conta ou faça login para acessar o painel de controle, contratar agentes e gerenciar seu time de IA." position="bottom" size={14} />
+            {" "}<HelpTooltip id="auth-intro" text={t("auth.help_tooltip", { defaultValue: "Crie sua conta ou faça login para acessar o painel de controle, contratar agentes e gerenciar seu time de IA." })} position="bottom" size={14} />
           </p>
         </div>
 
@@ -117,12 +117,12 @@ const AuthPage = () => {
             <ShoppingCart className="h-4 w-4 text-primary shrink-0" />
             <div className="flex-1 min-w-0">
               <p className="text-xs text-muted-foreground">
-                {hireIntent.type === "department" ? "Departamento selecionado" : "Agente selecionado"}
+                {hireIntent.type === "department" ? t("auth.department_selected", { defaultValue: "Departamento selecionado" }) : t("auth.agent_selected", { defaultValue: "Agente selecionado" })}
               </p>
               <p className="text-sm font-semibold text-foreground truncate">{hireIntent.label}</p>
             </div>
             <Badge variant="outline" className="shrink-0 border-primary/20 text-primary text-[10px]">
-              Auto-contrata
+              {t("auth.auto_hire", { defaultValue: "Auto-contrata" })}
             </Badge>
           </motion.div>
         )}
