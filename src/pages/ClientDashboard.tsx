@@ -24,7 +24,7 @@ import QuickActions from "@/components/dashboard/QuickActions";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
 
-import PostSignupOnboarding from "@/components/onboarding/PostSignupOnboarding";
+import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
@@ -59,24 +59,36 @@ const ClientDashboard = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const hireProcessed = useRef(false);
-  const [activeSection, setActiveSection] = useState(() => {
-    if (!user) return "overview";
+  const [activeSection, setActiveSection] = useState("overview");
+
+  // Redirect first-time user to THOR (concierge)
+  useEffect(() => {
+    if (!user) return;
     const key = `clauthor_concierge_seen_${user.id}`;
     if (!localStorage.getItem(key)) {
       localStorage.setItem(key, "true");
-      return "omnix";
+      setActiveSection("omnix");
     }
-    return "overview";
-  });
+  }, [user]);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
 
-  // Make onboarding reactive to user state (user is null on first render)
+  // Show PostSignupOnboarding ONLY when there's no hireIntent (flow 4).
+  // Flows 1-3 skip it and go straight to CheckoutSummaryDialog.
   useEffect(() => {
     if (!user) return;
     const done = localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
-    if (!done) {
-      setShowOnboarding(true);
+    if (done) return;
+
+    const hasHireIntent = !!sessionStorage.getItem("hireIntent");
+
+    if (hasHireIntent) {
+      // Flows 1-3: user already selected agents → skip onboarding, mark as done, proceed to checkout
+      localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
+    } else {
+      // Flow 4: no selection → show SmartOnboarding instead of empty dashboard
+      setShowSmartOnboarding(true);
     }
   }, [user]);
   const { credits, remainingCredits, usagePercentage } = useCredits();
@@ -149,9 +161,9 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
-  // Auto-hire from sessionStorage intent → show checkout summary (only AFTER onboarding is dismissed)
+  // Auto-hire from sessionStorage intent → show checkout summary immediately (no onboarding gate for flows 1-3)
   useEffect(() => {
-    if (!user || hireProcessed.current || showOnboarding) return;
+    if (!user || hireProcessed.current) return;
     const raw = sessionStorage.getItem("hireIntent");
     if (!raw) return;
     hireProcessed.current = true;
@@ -192,7 +204,7 @@ const ClientDashboard = () => {
 
     setPendingCheckoutIntent({ intent, uniqueSlugs });
     setCheckoutSummary({ label: intent.label, slugs: uniqueSlugs, isDepartment, departmentId: deptId, price, currency: region.currency, lang });
-  }, [user, i18n.language, showOnboarding]);
+  }, [user, i18n.language]);
 
   const handleConfirmCheckout = useCallback(async () => {
     if (!checkoutSummary || !pendingCheckoutIntent) return;
@@ -356,9 +368,17 @@ const ClientDashboard = () => {
 
   return (
     <>
-      <AnimatePresence>
-        {showOnboarding && <PostSignupOnboarding onComplete={() => setShowOnboarding(false)} />}
-      </AnimatePresence>
+      {/* Flow 4: No hireIntent → show SmartOnboarding wizard instead of empty dashboard */}
+      {showSmartOnboarding && (
+        <SmartOnboarding 
+          isOpen={showSmartOnboarding} 
+          onClose={() => {
+            setShowSmartOnboarding(false);
+            if (user) localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
+          }} 
+        />
+      )}
+      
 
       <CheckoutSummaryDialog
         data={checkoutSummary}
