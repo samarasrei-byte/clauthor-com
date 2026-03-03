@@ -5,6 +5,7 @@ import { Bot, Users, ShieldCheck, CreditCard, Loader2, Sparkles, CheckCircle2, A
 import { formatPrice } from "@/lib/pricing";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import FlowProgressBar from "./FlowProgressBar";
 
 export interface CheckoutSummaryData {
   label: string;
@@ -60,6 +61,7 @@ const CheckoutSummaryDialog = ({ data, onConfirm, onCancel }: Props) => {
               <h2 className="font-display text-xl font-bold">Resumo do seu time</h2>
               <p className="text-sm text-muted-foreground mt-1">Confira antes de prosseguir</p>
             </div>
+            <FlowProgressBar currentStep="payment" className="mt-4" />
           </div>
         </div>
 
