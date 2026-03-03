@@ -407,7 +407,7 @@ const ClientDashboard = () => {
                   activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
                   usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
                   remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                  recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={setActiveSection}
+                  recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
                 />
               </Suspense>
             )}
