@@ -70,8 +70,6 @@ const ClientCommandCenter = ({
     { icon: CheckCircle, label: t("dashboard.success_rate_short"), value: successRate, suffix: "%", color: "text-emerald-500" },
     { icon: Coins, label: t("dashboard.tokens_used"), value: totalTokensUsed, color: "text-primary" },
     { icon: Target, label: t("dashboard.plan_usage"), value: usagePercentage, suffix: "%", color: usagePercentage > 80 ? "text-destructive" : "text-cyan-400" },
-    { icon: Shield, label: t("dashboard.uptime_label"), value: 99.9, suffix: "%", color: "text-emerald-500" },
-    { icon: Flame, label: t("dashboard.subscriptions"), value: subscriptions.length, color: "text-primary" },
   ];
 
   // Build real chart data from recent logs (last 7 days)
@@ -137,8 +135,8 @@ const ClientCommandCenter = ({
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-2">
               <HeartPulse className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium">Saúde dos Agentes</span>
-              <HelpTooltip id="health-panel" text="Mostra o status em tempo real dos seus agentes: taxa de sucesso, erros e latência média. Clique em um agente para detalhes." size={12} />
+              <span className="text-sm font-medium">{t("dashboard.agent_health")}</span>
+              <HelpTooltip id="health-panel" text={t("dashboard.agent_health_help")} size={12} />
             </div>
             <Badge
               className={`text-[10px] border-0 ${
@@ -156,19 +154,19 @@ const ClientCommandCenter = ({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
             <div className="rounded-xl bg-white/[0.03] p-3 text-center">
               <p className="font-display text-lg font-bold">{health.totalExecutions}</p>
-              <p className="text-[10px] text-muted-foreground">Execuções</p>
+              <p className="text-[10px] text-muted-foreground">{t("dashboard.executions_label")}</p>
             </div>
             <div className="rounded-xl bg-white/[0.03] p-3 text-center">
               <p className="font-display text-lg font-bold text-emerald-400">{health.successRate}%</p>
-              <p className="text-[10px] text-muted-foreground">Taxa de Sucesso</p>
+              <p className="text-[10px] text-muted-foreground">{t("dashboard.success_rate_label")}</p>
             </div>
             <div className="rounded-xl bg-white/[0.03] p-3 text-center">
               <p className="font-display text-lg font-bold text-destructive">{health.errorRate}%</p>
-              <p className="text-[10px] text-muted-foreground">Taxa de Erro</p>
+              <p className="text-[10px] text-muted-foreground">{t("dashboard.error_rate_label")}</p>
             </div>
             <div className="rounded-xl bg-white/[0.03] p-3 text-center">
               <p className="font-display text-lg font-bold">{health.avgExecutionTimeMs}ms</p>
-              <p className="text-[10px] text-muted-foreground">Tempo Médio</p>
+              <p className="text-[10px] text-muted-foreground">{t("dashboard.avg_time_label")}</p>
             </div>
           </div>
 
@@ -192,7 +190,7 @@ const ClientCommandCenter = ({
           {health.failureAlerts.length > 0 && (
             <div className="space-y-1.5 mt-3">
               <p className="text-[10px] text-muted-foreground uppercase tracking-wider flex items-center gap-1">
-                <AlertTriangle className="h-3 w-3 text-destructive" /> Alertas Ativos
+                <AlertTriangle className="h-3 w-3 text-destructive" /> {t("dashboard.active_alerts")}
               </p>
               {health.failureAlerts.slice(0, 3).map((alert) => (
                 <div key={alert.id} className="flex items-center gap-2 p-2 rounded-lg bg-destructive/5 border border-destructive/10">
@@ -209,7 +207,7 @@ const ClientCommandCenter = ({
           {/* Recent Errors */}
           {health.recentErrors.length > 0 && (
             <div className="space-y-1.5 mt-3">
-              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Últimos Erros</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("dashboard.recent_errors")}</p>
               {health.recentErrors.slice(0, 3).map((err) => (
                 <div key={err.id} className="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02]">
                   <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
@@ -273,7 +271,7 @@ const ClientCommandCenter = ({
       </div>
 
       {/* Secondary KPIs — 5 compact */}
-      <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+      <div className="grid grid-cols-3 gap-2">
         {secondaryKpis.map((kpi, i) => (
           <motion.div
             key={kpi.label}
