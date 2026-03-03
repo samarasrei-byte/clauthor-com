@@ -32,13 +32,13 @@ const Navbar = () => {
         setMegaMenuOpen(false);
       }
     };
-    // Use setTimeout to avoid the same click event that opened the menu from closing it
-    const timer = setTimeout(() => {
-      document.addEventListener("click", handler);
-    }, 0);
+    // Use requestAnimationFrame to skip the current event loop tick
+    const raf = requestAnimationFrame(() => {
+      document.addEventListener("mousedown", handler, true);
+    });
     return () => {
-      clearTimeout(timer);
-      document.removeEventListener("click", handler);
+      cancelAnimationFrame(raf);
+      document.removeEventListener("mousedown", handler, true);
     };
   }, [megaMenuOpen]);
 
