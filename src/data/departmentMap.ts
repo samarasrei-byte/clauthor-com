@@ -34,9 +34,9 @@ const SLUG_TO_DEPT: Record<string, string> = {
   // Comercial
   sales: "comercial", customer_success: "comercial", sales_channel: "comercial", voice_ai: "comercial", crm_manager: "comercial",
   // Marketing
-  content: "marketing", marketing_automation: "marketing", seo_growth: "marketing", influencer: "marketing", media_buyer: "marketing",
+  content: "marketing", marketing_automation: "marketing", seo_growth: "marketing", influencer: "marketing", media_buyer: "marketing", community_mgr: "marketing",
   // Financeiro
-  revenue: "financeiro", legal: "financeiro", data_analytics: "financeiro", ecommerce: "financeiro", ai_cfo: "financeiro",
+  revenue: "financeiro", data_analytics: "financeiro", ai_cfo: "financeiro", tax_content: "financeiro",
   // Criação
   creative_design: "criacao", video_production: "criacao", creative_writer: "criacao", content_producer: "criacao", ux_researcher: "criacao",
   // Suporte
@@ -49,21 +49,23 @@ const SLUG_TO_DEPT: Record<string, string> = {
   sdr_partnerships: "prospeccao", pre_qualifier: "prospeccao", hunter: "prospeccao", farmer: "prospeccao",
   // Comunicação & Branding
   copywriting: "comunicacao", branding: "comunicacao", positioning: "comunicacao", public_relations: "comunicacao",
-  social_proof: "comunicacao", events_speaker: "comunicacao", tax_content: "comunicacao",
+  social_proof: "comunicacao", events_speaker: "comunicacao",
   // Operações & Estratégia
   orchestrator: "operacoes", concierge: "operacoes", ceo: "operacoes", startup_creator: "operacoes",
-  scheduler: "operacoes", proposal_gen: "operacoes",
+  scheduler: "operacoes", proposal_gen: "operacoes", research: "operacoes",
   // E-commerce & Growth
   paid_traffic: "ecommerce_growth", whatsapp_commerce: "ecommerce_growth", influencer_liveshop: "ecommerce_growth",
-  affiliate_manager: "ecommerce_growth", podcast_manager: "ecommerce_growth", reputation: "ecommerce_growth",
+  affiliate_manager: "ecommerce_growth", podcast_manager: "ecommerce_growth", reputation: "ecommerce_growth", ecommerce: "ecommerce_growth",
   // Jurídico & Compliance
-  contract_analyst: "juridico", compliance_officer: "juridico", labor_law: "juridico", litigation: "juridico",
+  contract_analyst: "juridico", compliance_officer: "juridico", labor_law: "juridico", litigation: "juridico", legal: "juridico",
   // Compras & Procurement
   procurement: "compras", supplier_mgr: "compras", cost_analyst: "compras", contract_negotiator: "compras",
   // Logística & Supply Chain
-  logistics: "logistica", inventory: "logistica", supply_chain: "logistica", omnichannel: "logistica",
+  logistics: "logistica", inventory: "logistica", supply_chain: "logistica",
+  // Suporte (+ omnichannel movido de logística)
+  omnichannel: "suporte",
   // Qualidade & Processos
-  quality: "qualidade", process_analyst: "qualidade", research: "qualidade", community_mgr: "qualidade",
+  quality: "qualidade", process_analyst: "qualidade",
 };
 
 export function getDepartmentForSlug(slug: string): DepartmentInfo | null {
