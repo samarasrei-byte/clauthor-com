@@ -8,11 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import type { HireIntent } from "./Auth";
 import {
   Building2, ArrowRight, Flame, Bot, Zap,
-  CheckCircle2, TrendingUp, Coins, Network, Lightbulb, ThumbsUp, Send,
-  Loader2
+  CheckCircle2, TrendingUp, Network, Lightbulb, ThumbsUp, Send,
+  Loader2, Clock, Users, Shield, Rocket, X, Filter
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import HelpTooltip from "@/components/HelpTooltip";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -22,6 +21,17 @@ import {
   departments, totalPrometheusCost, totalCltCost, totalTokens,
   totalAgents, totalSavingsPercent
 } from "@/data/departmentData";
+
+// Category definitions for filters
+const categories = [
+  { id: "all", label: "Todos", icon: Filter },
+  { id: "popular", label: "Populares", icon: Flame },
+  { id: "tech", label: "Tech & Dados", ids: ["tecnologia", "qualidade"] },
+  { id: "vendas", label: "Vendas & SDR", ids: ["comercial", "prospeccao", "ecommerce_growth"] },
+  { id: "ops", label: "Operações", ids: ["operacoes", "logistica", "compras"] },
+  { id: "criativo", label: "Criativo & MKT", ids: ["marketing", "criacao", "comunicacao"] },
+  { id: "corp", label: "Corporativo", ids: ["financeiro", "juridico", "rh", "suporte"] },
+];
 
 const Departamentos = () => {
   const { t, i18n } = useTranslation();
@@ -34,8 +44,18 @@ const Departamentos = () => {
   const [suggestionEmail, setSuggestionEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [suggestions, setSuggestions] = useState<{ department_name: string; votes: number }[]>([]);
+  const [activeFilter, setActiveFilter] = useState("all");
 
   const region = getRegion(lang);
+
+  // Filter departments based on active category
+  const filteredDepartments = departments.filter((dept) => {
+    if (activeFilter === "all") return true;
+    if (activeFilter === "popular") return dept.popular;
+    const cat = categories.find((c) => c.id === activeFilter);
+    if (cat && "ids" in cat) return cat.ids.includes(dept.id);
+    return true;
+  });
 
   const handleHireDepartment = useCallback(async (dept: typeof departments[0]) => {
     const hireIntent: HireIntent = {
@@ -161,44 +181,41 @@ const Departamentos = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4 relative">
+    <div className="min-h-screen pt-20 pb-16 px-4 relative">
       {/* Background effects */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[600px] bg-gradient-to-b from-primary/[0.04] to-transparent rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-gradient-to-t from-primary/[0.03] to-transparent rounded-full blur-[100px]" />
       </div>
 
       <div className="max-w-7xl mx-auto relative">
-        {/* Hero Header */}
+        {/* Hero Header — compact */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center mb-16"
+          className="text-center mb-8"
         >
-          <Badge variant="outline" className="mb-6 border-primary/15 text-primary/80 px-5 py-2.5">
+          <Badge variant="outline" className="mb-4 border-primary/15 text-primary/80 px-5 py-2.5">
             <Network className="h-4 w-4 mr-2" />
             Times de IA por Departamento
           </Badge>
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-7xl font-bold mb-6 leading-tight">
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
             Sua empresa inteira<br />
             <span className="gradient-text">operada por IA</span>
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-2">
-              {departments.length} departamentos. {totalAgents} agentes autônomos. Cada um substitui um profissional CLT — 
-              por uma <span className="text-primary font-bold">fração do custo</span>.
-              <span className="text-xs text-muted-foreground/60 ml-1">(Clique em um departamento para ver os agentes individuais)</span>
+          <p className="text-muted-foreground text-base max-w-xl mx-auto mb-4">
+            {departments.length} departamentos. {totalAgents} agentes autônomos. Cada um substitui um profissional CLT — por uma <span className="text-primary font-bold">fração do custo</span>.
           </p>
 
           {/* Hero Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-4">
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
             {[
               { icon: Bot, value: String(totalAgents), label: "Agentes" },
               { icon: Building2, value: String(departments.length), label: "Departamentos" },
               { icon: Zap, value: "24/7", label: "Operação" },
             ].map((stat) => (
-              <div key={stat.label} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card/30 border border-border">
-                <stat.icon className="h-4 w-4 text-primary/70" />
+              <div key={stat.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/30 border border-border text-sm">
+                <stat.icon className="h-3.5 w-3.5 text-primary/70" />
                 <span className="font-display font-bold text-foreground">{stat.value}</span>
                 <span className="text-xs text-muted-foreground">{stat.label}</span>
               </div>
@@ -206,9 +223,37 @@ const Departamentos = () => {
           </div>
         </motion.div>
 
+        {/* Category Filters */}
+        <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+          {categories.map((cat) => (
+            <button
+              key={cat.id}
+              onClick={() => setActiveFilter(cat.id)}
+              className={`px-4 py-2 rounded-xl text-sm font-medium transition-all cursor-pointer ${
+                activeFilter === cat.id
+                  ? "bg-primary text-primary-foreground shadow-[0_0_20px_-5px_hsl(var(--primary)/0.4)]"
+                  : "bg-card/40 border border-border text-muted-foreground hover:border-primary/30 hover:text-foreground"
+              }`}
+            >
+              {cat.label}
+              {cat.id !== "all" && cat.id !== "popular" && "ids" in cat && (
+                <span className="ml-1.5 text-xs opacity-60">({cat.ids.length})</span>
+              )}
+            </button>
+          ))}
+          {activeFilter !== "all" && (
+            <button
+              onClick={() => setActiveFilter("all")}
+              className="p-2 rounded-lg text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          )}
+        </div>
+
         {/* Department Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
-          {departments.map((dept, i) => {
+          {filteredDepartments.map((dept, i) => {
             const DeptIcon = dept.icon;
             const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
             const deptClt = (region.departmentClt as Record<string, number>)[dept.id] || dept.cltCost;
@@ -220,7 +265,7 @@ const Departamentos = () => {
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08 }}
+                transition={{ delay: i * 0.06 }}
                 className={`group relative rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-12px_hsl(var(--primary)/0.15)] ${
                   dept.popular 
                     ? "border-primary/40 bg-primary/[0.03] ring-2 ring-primary/20 shadow-[0_0_60px_-15px_hsl(var(--primary)/0.2)] md:scale-[1.03] md:-my-2 z-10" 
@@ -245,7 +290,9 @@ const Departamentos = () => {
                     </div>
                     <div className="flex-1">
                       <h3 className="font-display font-bold text-lg">{t(`squads.dept_${dept.id}`)}</h3>
-                      <p className="text-[11px] text-muted-foreground">{dept.headcount} agentes · {dept.tokens} tokens · {dept.actions} ações/mês</p>
+                      <p className="text-[11px] text-muted-foreground">
+                        {dept.headcount} agentes · {dept.actions} ações/mês · 24/7
+                      </p>
                     </div>
                   </div>
 
@@ -264,7 +311,7 @@ const Departamentos = () => {
                   <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-2">
                     Agentes inclusos
                   </p>
-                  {dept.agents.map((agent, idx) => {
+                  {dept.agents.slice(0, 4).map((agent, idx) => {
                     const AgentIcon = agent.icon;
                     return (
                       <Link
@@ -283,12 +330,14 @@ const Departamentos = () => {
                             Substitui: {agent.role}
                           </p>
                         </div>
-                        <span className="text-[10px] font-mono text-muted-foreground bg-white/[0.03] px-2 py-0.5 rounded-md shrink-0">
-                          {agent.tokens}
-                        </span>
                       </Link>
                     );
                   })}
+                  {dept.agents.length > 4 && (
+                    <p className="text-xs text-muted-foreground text-center pt-1">
+                      +{dept.agents.length - 4} agentes inclusos
+                    </p>
+                  )}
                 </div>
 
                 <div className="px-5 pb-5 space-y-3">
@@ -309,13 +358,13 @@ const Departamentos = () => {
                   <button 
                     onClick={() => handleHireDepartment(dept)}
                     disabled={hiringDeptId === dept.id}
-                    className="group relative w-full h-16 rounded-2xl font-display font-bold text-base uppercase tracking-widest overflow-hidden transition-all duration-500 hover:scale-[1.04] active:scale-[0.96] cursor-pointer disabled:opacity-60 disabled:pointer-events-none"
+                    className="group relative w-full h-14 rounded-2xl font-display font-bold text-base uppercase tracking-widest overflow-hidden transition-all duration-500 hover:scale-[1.04] active:scale-[0.96] cursor-pointer disabled:opacity-60 disabled:pointer-events-none"
                   >
                     <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-2xl" />
                     <div className="absolute -inset-1 bg-gradient-to-r from-primary/60 via-primary-glow/60 to-primary/60 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
                     <div className="absolute inset-0 bg-white/[0.06] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
                     <div className="absolute inset-0 rounded-2xl border border-white/[0.15] group-hover:border-white/[0.3] transition-colors duration-500" />
-                    <span className="relative z-10 flex items-center justify-center gap-3 text-primary-foreground font-bold text-[15px] drop-shadow-[0_0_12px_hsl(var(--primary)/0.5)]">
+                    <span className="relative z-10 flex items-center justify-center gap-3 text-primary-foreground font-bold text-[14px] drop-shadow-[0_0_12px_hsl(var(--primary)/0.5)]">
                       {hiringDeptId === dept.id ? (
                         <><Loader2 className="h-5 w-5 animate-spin" /> Processando...</>
                       ) : (
@@ -329,6 +378,94 @@ const Departamentos = () => {
           })}
         </div>
 
+        {filteredDepartments.length === 0 && (
+          <div className="text-center py-16 mb-16">
+            <p className="text-muted-foreground">Nenhum departamento encontrado nesta categoria.</p>
+            <Button variant="outline" className="mt-4" onClick={() => setActiveFilter("all")}>
+              Ver todos
+            </Button>
+          </div>
+        )}
+
+        {/* ═══════════════════════════════════════════
+            SECTION: CLT vs CLAUTHOR Comparison Table
+            ═══════════════════════════════════════════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="rounded-2xl border border-border bg-card/30 overflow-hidden mb-16"
+        >
+          <div className="text-center p-8 pb-4">
+            <h2 className="font-display font-bold text-2xl sm:text-3xl mb-2">
+              Equipe CLT <span className="text-muted-foreground">vs</span> <span className="gradient-text">CLAUTHOR</span>
+            </h2>
+            <p className="text-sm text-muted-foreground">A mesma entrega, uma fração do custo</p>
+          </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-t border-border">
+                  <th className="text-left px-6 py-4 text-muted-foreground font-medium">Critério</th>
+                  <th className="px-6 py-4 text-muted-foreground font-medium text-center">Equipe CLT</th>
+                  <th className="px-6 py-4 text-center">
+                    <span className="text-primary font-bold">CLAUTHOR</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border">
+                {[
+                  { criteria: "Custo médio mensal (5 pessoas)", clt: formatPrice(Math.round(totalCltCost / 3), lang), clauthor: formatPrice(Math.round(totalPrometheusCost / 3), lang), highlight: true },
+                  { criteria: "Disponibilidade", clt: "8h/dia, 22 dias/mês", clauthor: "24/7/365", highlight: false },
+                  { criteria: "Tempo de onboarding", clt: "30-90 dias", clauthor: "< 5 minutos", highlight: false },
+                  { criteria: "Escala sob demanda", clt: "Meses (recrutamento)", clauthor: "Instantâneo", highlight: false },
+                  { criteria: "Encargos trabalhistas", clt: "~80% sobre salário", clauthor: "Zero", highlight: true },
+                  { criteria: "Férias, 13º, FGTS", clt: "Obrigatório", clauthor: "Não se aplica", highlight: false },
+                  { criteria: "Risco trabalhista", clt: "Alto", clauthor: "Nenhum", highlight: false },
+                  { criteria: "Consistência de qualidade", clt: "Variável", clauthor: "Padronizado", highlight: false },
+                ].map((row) => (
+                  <tr key={row.criteria} className={row.highlight ? "bg-primary/[0.03]" : ""}>
+                    <td className="px-6 py-3.5 font-medium text-foreground">{row.criteria}</td>
+                    <td className="px-6 py-3.5 text-center text-muted-foreground">{row.clt}</td>
+                    <td className="px-6 py-3.5 text-center font-semibold text-emerald-400">{row.clauthor}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </motion.div>
+
+        {/* ═══════════════════════════════════════════
+            SECTION: Why hire entire departments
+            ═══════════════════════════════════════════ */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          className="rounded-2xl border border-border bg-card/30 p-8 md:p-12 mb-16"
+        >
+          <h2 className="font-display text-2xl font-bold text-center mb-8">
+            Por que contratar <span className="gradient-text">departamentos inteiros</span>?
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { icon: TrendingUp, title: `${totalSavingsPercent}% mais barato`, desc: "Que uma equipe CLT equivalente" },
+              { icon: Clock, title: "Operação 24/7", desc: "Sem férias, sem faltas, sem hora extra" },
+              { icon: Network, title: "Agentes orquestrados", desc: "Times que se comunicam entre si" },
+              { icon: Rocket, title: "Setup em minutos", desc: "Sem recrutamento, sem onboarding" },
+            ].map((item) => (
+              <div key={item.title} className="text-center group">
+                <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
+                  <item.icon className="h-6 w-6 text-primary/70" />
+                </div>
+                <h3 className="font-semibold mb-1">{item.title}</h3>
+                <p className="text-sm text-muted-foreground">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+
         {/* Full Company CTA */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -341,7 +478,7 @@ const Departamentos = () => {
             Empresa completa por menos que 3 funcionários CLT
           </h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-4">
-            {departments.length} departamentos · {totalAgents} agentes · {totalTokens} tokens/mês · operação 24/7
+            {departments.length} departamentos · {totalAgents} agentes · operação 24/7 · setup em minutos
           </p>
           <div className="flex items-center justify-center gap-6 mb-6">
             <div>
@@ -360,15 +497,22 @@ const Departamentos = () => {
               -{totalSavingsPercent}%
             </Badge>
           </div>
-          <Button 
-            className="glow rounded-xl px-10 h-14 font-semibold gap-2 text-lg"
-            onClick={() => {
-              toast.info("Para a empresa completa, entre em contato com nosso time comercial.", { duration: 5000 });
-            }}
-          >
-            Falar com Consultor
-            <ArrowRight className="h-5 w-5" />
-          </Button>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+            <Button 
+              className="glow rounded-xl px-10 h-14 font-semibold gap-2 text-lg"
+              onClick={() => {
+                toast.info("Para a empresa completa, entre em contato com nosso time comercial.", { duration: 5000 });
+              }}
+            >
+              Falar com Consultor
+              <ArrowRight className="h-5 w-5" />
+            </Button>
+            <Link to="/pricing">
+              <Button variant="outline" className="rounded-xl px-8 h-14 font-semibold gap-2">
+                Ver planos individuais
+              </Button>
+            </Link>
+          </div>
         </motion.div>
 
         {/* AI Consultant */}
@@ -376,7 +520,7 @@ const Departamentos = () => {
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-card rounded-2xl p-8 md:p-12 relative overflow-hidden mb-16"
+          className="rounded-2xl border border-border bg-card/30 p-8 md:p-12 relative overflow-hidden mb-16"
         >
           <div className="absolute top-0 left-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
           <div className="relative z-10">
@@ -396,7 +540,7 @@ const Departamentos = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="glass-card rounded-2xl p-8 md:p-12 mb-16"
+          className="rounded-2xl border border-border bg-card/30 p-8 md:p-12"
         >
           <div className="text-center mb-8">
             <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
@@ -406,13 +550,13 @@ const Departamentos = () => {
               Qual departamento você <span className="gradient-text">gostaria de ver</span>?
             </h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              Sugira novos departamentos e ajude a moldar o futuro da plataforma. Sua voz define o que construímos.
+              Sugira novos departamentos e ajude a moldar o futuro da plataforma.
             </p>
           </div>
 
           <div className="max-w-xl mx-auto space-y-4">
             <Input
-              placeholder="Nome do departamento (ex: Jurídico, Operações, Data Science...)"
+              placeholder="Nome do departamento (ex: Data Science, ESG...)"
               value={suggestionName}
               onChange={(e) => setSuggestionName(e.target.value)}
               maxLength={100}
@@ -466,34 +610,6 @@ const Departamentos = () => {
               </div>
             </div>
           )}
-        </motion.div>
-
-        {/* Bottom comparison */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="glass-card rounded-2xl p-8 md:p-12"
-        >
-          <h2 className="font-display text-2xl font-bold text-center mb-8">
-            Por que contratar <span className="gradient-text">departamentos inteiros</span>?
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: TrendingUp, title: "93% mais barato", desc: "Que uma equipe CLT equivalente" },
-              { icon: Zap, title: "Operação 24/7", desc: "Sem férias, sem faltas, sem hora extra" },
-              { icon: Network, title: "Agentes orquestrados", desc: "Times que se comunicam entre si" },
-              { icon: CheckCircle2, title: "Setup em minutos", desc: "Sem recrutamento, sem onboarding" },
-            ].map((item) => (
-              <div key={item.title} className="text-center group">
-                <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
-                  <item.icon className="h-6 w-6 text-primary/70" />
-                </div>
-                <h3 className="font-semibold mb-1">{item.title}</h3>
-                <p className="text-sm text-muted-foreground">{item.desc}</p>
-              </div>
-            ))}
-          </div>
         </motion.div>
       </div>
     </div>
