@@ -297,29 +297,33 @@ const ClientDashboard = () => {
   }, [agents, nameToSlug, t]);
 
   const chatSidebarItem: SidebarItem | null = selectedAgent ? {
-    id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.operations", { defaultValue: "Operações" }),
+    id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.nav_main", { defaultValue: "Principal" }),
   } : null;
 
-  const operationsGroup = t("dashboard.operations", { defaultValue: "Operações" });
-  const analysisGroup = t("dashboard.analysis", { defaultValue: "Análise" });
-  const systemGroup = t("dashboard.system", { defaultValue: "Sistema" });
-  const coreGroup = t("dashboard.core", { defaultValue: "Núcleo" });
-  const agentsGroup = t("dashboard.agents_group", { defaultValue: "Agentes" });
+  // Human-readable group names — no developer jargon
+  const mainGroup = t("dashboard.nav_main", { defaultValue: "Principal" });
+  const agentsGroup = t("dashboard.nav_my_agents", { defaultValue: "Meus Agentes" });
+  const moreGroup = t("dashboard.nav_more", { defaultValue: "Mais" });
 
   const sidebarItems: SidebarItem[] = [
-    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: coreGroup },
-    { id: "omnix", label: "THOR", icon: Brain, badge: "AI", group: coreGroup },
-    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: agentsGroup },
+    // Main — the 4 most important items
+    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
+    { id: "omnix", label: t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" }), icon: Brain, group: mainGroup },
+    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
+    ...(chatSidebarItem ? [chatSidebarItem] : []),
+
+    // My Agents — departments + solo
     { id: "library", label: t("dashboard.library", { defaultValue: "Biblioteca" }), icon: BookOpen, group: agentsGroup },
     ...departmentSidebarItems,
     ...soloAgentItems,
-    ...(chatSidebarItem ? [chatSidebarItem] : []),
-    { id: "live-timeline", label: "Timeline", icon: Eye, badge: "LIVE", group: operationsGroup },
-    { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: operationsGroup },
-    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: operationsGroup },
-    { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: analysisGroup },
-    { id: "logs", label: t("dashboard.logs"), icon: Activity, badge: recentLogs.length || undefined, group: analysisGroup },
-    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
+
+    // More — secondary features grouped together
+    { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
+    { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: moreGroup },
+    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: moreGroup },
+    { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
+    { id: "logs", label: t("dashboard.logs"), icon: Activity, group: moreGroup },
+    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
   ];
 
   const tierColors: Record<string, string> = {
@@ -343,7 +347,7 @@ const ClientDashboard = () => {
   };
 
   const breadcrumbLabel = activeSection === "overview" ? t("dashboard.command_center")
-    : activeSection === "omnix" ? "THOR"
+    : activeSection === "omnix" ? t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" })
     : activeSection === "agents" ? t("dashboard.agents_tab")
     : activeSection === "analytics" ? t("dashboard.analytics")
     : activeSection === "logs" ? t("dashboard.logs")
@@ -446,25 +450,46 @@ const ClientDashboard = () => {
               </div>
             </motion.div>
 
-            {/* Mobile nav — includes flattened department children */}
+            {/* Mobile nav — improved with search and cleaner hierarchy */}
             <div className="lg:hidden">
               <Sheet>
                 <SheetTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-1.5 text-xs w-full justify-start">
-                    <LayoutDashboard className="h-3.5 w-3.5" />
-                    {breadcrumbLabel}
-                    <ChevronDown className="h-3 w-3 ml-auto" />
+                  <Button variant="outline" size="sm" className="gap-2 text-xs w-full justify-start border-border/30">
+                    <LayoutDashboard className="h-3.5 w-3.5 text-primary" />
+                    <span className="font-medium text-foreground">{breadcrumbLabel}</span>
+                    <ChevronDown className="h-3 w-3 ml-auto text-muted-foreground" />
                   </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="w-72 p-0">
                   <SheetHeader className="p-4 border-b border-border/10">
                     <SheetTitle className="font-display text-sm">{t("dashboard.navigation", { defaultValue: "Navegação" })}</SheetTitle>
                   </SheetHeader>
-                  <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-6rem)]">
+
+                  {/* Mobile search */}
+                  {flatMobileItems.length > 8 && (
+                    <div className="px-3 pt-3">
+                      <input
+                        type="text"
+                        placeholder={t("dashboard.search_nav", { defaultValue: "Buscar..." })}
+                        className="w-full h-8 px-3 text-xs rounded-lg bg-muted/30 border border-border/20 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30"
+                        onChange={(e) => {
+                          const val = e.target.value.toLowerCase();
+                          const items = document.querySelectorAll("[data-mobile-nav-item]");
+                          items.forEach((el) => {
+                            const text = el.getAttribute("data-label")?.toLowerCase() || "";
+                            (el as HTMLElement).style.display = text.includes(val) ? "" : "none";
+                          });
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-8rem)]">
                     {flatMobileItems.map((item, idx) => {
                       const showGroup = item.group && (idx === 0 || flatMobileItems[idx - 1]?.group !== item.group);
+                      const isActive = activeSection === item.id || (item.id.startsWith("agent-chat-") && activeSection === "chat");
                       return (
-                        <div key={item.id}>
+                        <div key={item.id} data-mobile-nav-item data-label={item.label}>
                           {showGroup && (
                             <div className="px-3 pt-4 pb-1.5 first:pt-1">
                               <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">{item.group}</span>
@@ -475,14 +500,15 @@ const ClientDashboard = () => {
                               onClick={() => handleSidebarNav(item.id)}
                               className={cn(
                                 "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
-                                activeSection === item.id || (item.id.startsWith("agent-chat-") && activeSection === "chat")
-                                  ? "bg-primary/10 text-primary font-medium"
+                                isActive
+                                  ? "bg-primary/10 text-primary font-medium border border-primary/15"
                                   : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
                               )}
                             >
-                              <item.icon className="h-4 w-4 shrink-0" />
+                              <item.icon className={cn("h-4 w-4 shrink-0", isActive && "text-primary")} />
                               <span className="flex-1 text-left truncate">{item.label}</span>
-                              {item.badge && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">{item.badge}</span>}
+                              {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
+                              {item.badge && !isActive && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">{item.badge}</span>}
                             </button>
                           </SheetClose>
                         </div>
