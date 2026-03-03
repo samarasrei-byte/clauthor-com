@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useCredits } from "@/hooks/useCredits";
 import TokenUpgradeDialog from "./TokenUpgradeDialog";
+import { useTranslation } from "react-i18next";
 
 interface Subscription {
   id: string;
@@ -20,6 +21,10 @@ interface SubscriptionManagerProps {
 
 const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
   const { credits, usagePercentage } = useCredits();
+  const { i18n, t } = useTranslation();
+  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
+  const currency = locale.startsWith("pt") ? "BRL" : "USD";
+  const fmt = (v: number) => new Intl.NumberFormat(locale, { style: "currency", currency, minimumFractionDigits: 0 }).format(v / 100);
 
   const totalMonthly = subscriptions.reduce((acc, sub) => acc + sub.monthly_price, 0);
   const nextBilling = subscriptions[0]?.current_period_end
@@ -68,7 +73,7 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
               <span className="text-xs text-muted-foreground">Total Mensal</span>
             </div>
             <p className="font-display text-xl font-bold">
-              R$ {(totalMonthly / 100).toLocaleString("pt-BR")}
+              {fmt(totalMonthly)}
             </p>
           </div>
           <div className="bg-white/[0.02] rounded-xl p-4">
@@ -104,7 +109,7 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-muted-foreground">
-                      R$ {(sub.monthly_price / 100).toLocaleString("pt-BR")}/mês
+                      {fmt(sub.monthly_price)}/{t("dashboard.month_short", { defaultValue: "mês" })}
                     </span>
                     <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 text-[10px]">
                       Ativo

@@ -18,6 +18,12 @@ const typeConfig: Record<string, { icon: typeof Bell; color: string }> = {
   agent_execution: { icon: Zap, color: "text-cyan-400" },
   team_invite: { icon: UserPlus, color: "text-primary" },
   agent_hired: { icon: Bot, color: "text-emerald-400" },
+  email_sent: { icon: Zap, color: "text-emerald-400" },
+  email_queued: { icon: Bell, color: "text-yellow-400" },
+  token_limit_80: { icon: Info, color: "text-yellow-400" },
+  token_limit_90: { icon: Info, color: "text-orange-400" },
+  token_limit_100: { icon: Info, color: "text-destructive" },
+  new_user_signup: { icon: UserPlus, color: "text-primary" },
   info: { icon: Info, color: "text-muted-foreground" },
 };
 
