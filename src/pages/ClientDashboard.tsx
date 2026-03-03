@@ -143,9 +143,9 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
-  // Auto-hire from sessionStorage intent → show checkout summary
+  // Auto-hire from sessionStorage intent → show checkout summary (only AFTER onboarding is dismissed)
   useEffect(() => {
-    if (!user || hireProcessed.current) return;
+    if (!user || hireProcessed.current || showOnboarding) return;
     const raw = sessionStorage.getItem("hireIntent");
     if (!raw) return;
     hireProcessed.current = true;
@@ -186,7 +186,7 @@ const ClientDashboard = () => {
 
     setPendingCheckoutIntent({ intent, uniqueSlugs });
     setCheckoutSummary({ label: intent.label, slugs: uniqueSlugs, isDepartment, departmentId: deptId, price, currency: region.currency, lang });
-  }, [user, i18n.language]);
+  }, [user, i18n.language, showOnboarding]);
 
   const handleConfirmCheckout = useCallback(async () => {
     if (!checkoutSummary || !pendingCheckoutIntent) return;
