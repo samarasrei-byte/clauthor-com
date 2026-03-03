@@ -181,22 +181,12 @@ const LibraryPage = () => {
           animate={{ opacity: 1, y: 0 }}
           className="relative"
         >
-          <div className="flex items-center justify-center mb-6">
+          <div className="flex items-center justify-center mb-4">
             <Badge variant="outline" className="border-primary/20 text-primary/90 px-4 py-1.5 text-sm">
               <Flame className="h-3.5 w-3.5 mr-1.5" />
               {t("library_page.badge_count", { count: agentKeys.length })}
             </Badge>
           </div>
-
-          <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-3 tracking-tight">
-            {t("library_page.title")}
-          </h1>
-          <p className="text-muted-foreground text-center max-w-2xl mx-auto mb-2 text-base md:text-lg">
-            {t("library_page.subtitle")}
-          </p>
-          <p className="text-center mb-10">
-            <HelpTooltip id="library-intro" text="Explore nossos 80 agentes de IA. Use a busca ou filtros para encontrar o ideal. Clique em 'Contratar' para ativar ou em 'Testar 60s' para experimentar antes." position="bottom" size={16} />
-          </p>
 
           {/* Featured agent — cinematic card */}
           <div className="relative max-w-4xl mx-auto">
@@ -433,8 +423,6 @@ const LibraryPage = () => {
 
               const agentFaq = [
                 { q: `O que o ${agentTitle.split("—")[0].trim()} faz?`, a: agentDesc },
-                { q: "Precisa de configuração?", a: "Setup em 3 minutos. O agente já vem pré-configurado com as melhores práticas do mercado." },
-                { q: "Posso cancelar a qualquer momento?", a: "Sim. Sem fidelidade, sem multa. Cancele quando quiser." },
               ];
 
               return (
@@ -497,13 +485,6 @@ const LibraryPage = () => {
                         ))}
                       </div>
 
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {tags.slice(0, 5).map((tag) => (
-                          <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded bg-primary/[0.04] text-primary/50 ring-1 ring-primary/[0.08]">
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
                       <div className="flex items-center gap-1.5 mb-4">
                         <span className="text-[9px] text-muted-foreground/30 uppercase tracking-wider font-medium shrink-0">Integra:</span>
                         <div className="flex flex-wrap gap-1">
@@ -520,20 +501,15 @@ const LibraryPage = () => {
 
                       <AgentMiniChat agentKey={key} agentName={agentTitle} />
 
-                      <div className="mt-4 space-y-1">
-                        <span className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/40 font-semibold mb-1.5 block">Dúvidas frequentes</span>
-                        {agentFaq.map((item, idx) => (
-                          <details key={idx} className="group/faq rounded-lg ring-1 ring-border/20 overflow-hidden">
-                            <summary className="px-3 py-2 text-[11px] font-medium cursor-pointer hover:bg-muted/20 transition-colors flex items-center justify-between list-none">
-                              <span>{item.q}</span>
-                              <ChevronRight className="h-3 w-3 text-muted-foreground/30 transition-transform group-open/faq:rotate-90" />
-                            </summary>
-                            <div className="px-3 pb-2.5 pt-0.5 text-[11px] text-muted-foreground/60 leading-relaxed">
-                              {item.a}
-                            </div>
-                          </details>
-                        ))}
-                      </div>
+                      <details className="mt-3 group/faq rounded-lg ring-1 ring-border/20 overflow-hidden">
+                        <summary className="px-3 py-2 text-[11px] font-medium cursor-pointer hover:bg-muted/20 transition-colors flex items-center justify-between list-none">
+                          <span>{agentFaq[0].q}</span>
+                          <ChevronRight className="h-3 w-3 text-muted-foreground/30 transition-transform group-open/faq:rotate-90" />
+                        </summary>
+                        <div className="px-3 pb-2.5 pt-0.5 text-[11px] text-muted-foreground/60 leading-relaxed">
+                          {agentFaq[0].a}
+                        </div>
+                      </details>
 
                       <div className="flex-1" />
 

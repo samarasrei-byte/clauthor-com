@@ -193,11 +193,10 @@ const Departamentos = () => {
           </div>
 
           {/* Hero Stats */}
-          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-8">
+          <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-4">
             {[
               { icon: Bot, value: String(totalAgents), label: "Agentes" },
               { icon: Building2, value: String(departments.length), label: "Departamentos" },
-              { icon: Coins, value: totalTokens, label: "Tokens/mês" },
               { icon: Zap, value: "24/7", label: "Operação" },
             ].map((stat) => (
               <div key={stat.label} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-card/30 border border-border">
@@ -226,14 +225,17 @@ const Departamentos = () => {
                 transition={{ delay: i * 0.08 }}
                 className={`group relative rounded-2xl border overflow-hidden transition-all duration-300 hover:shadow-[0_0_40px_-12px_hsl(var(--primary)/0.15)] ${
                   dept.popular 
-                    ? "border-primary/40 bg-primary/[0.03]" 
+                    ? "border-primary/40 bg-primary/[0.03] ring-2 ring-primary/20 shadow-[0_0_60px_-15px_hsl(var(--primary)/0.2)] md:scale-[1.03] md:-my-2 z-10" 
                     : "border-border bg-card/20 hover:border-primary/30"
                 }`}
               >
                 {dept.popular && (
-                  <div className="absolute top-0 right-0">
-                    <Badge className="rounded-none rounded-bl-lg bg-primary text-primary-foreground text-[10px] font-bold px-3 py-1">
-                      MAIS VENDIDO
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-primary/60 via-primary to-primary/60" />
+                )}
+                {dept.popular && (
+                  <div className="absolute top-3 right-3">
+                    <Badge className="rounded-lg bg-primary text-primary-foreground text-[11px] font-bold px-3 py-1.5 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.4)]">
+                      ⚡ MAIS VENDIDO
                     </Badge>
                   </div>
                 )}
@@ -294,15 +296,14 @@ const Departamentos = () => {
                 <div className="px-5 pb-5 space-y-3">
                   <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
                     <div>
-                      <p className="text-[10px] text-muted-foreground">CLT equivalente</p>
-                      <p className="text-sm font-bold line-through text-muted-foreground">
-                        {formatPrice(deptClt, lang)}/mês
+                      <p className="text-[10px] text-muted-foreground">vs equipe CLT</p>
+                      <p className="text-sm font-bold text-emerald-400">
+                        -{savingsPercent}% de economia
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="text-[10px] text-emerald-400 font-semibold">Economia</p>
-                      <p className="text-sm font-bold text-emerald-400">
-                        -{savingsPercent}% ({formatPrice(savings, lang)})
+                      <p className="text-[10px] text-muted-foreground line-through">
+                        {formatPrice(deptClt, lang)}/mês
                       </p>
                     </div>
                   </div>
