@@ -3,6 +3,7 @@ import { Bot, Zap, CheckCircle, TrendingUp, Coins, Clock, Target, DollarSign } f
 import { useCredits } from "@/hooks/useCredits";
 import { useTokenUsage } from "@/hooks/useCredits";
 import { Progress } from "@/components/ui/progress";
+import { useTranslation } from "react-i18next";
 
 interface DashboardStatsProps {
   activeAgents: number;
@@ -14,9 +15,13 @@ interface DashboardStatsProps {
 const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGrowth }: DashboardStatsProps) => {
   const { credits, remainingCredits, usagePercentage } = useCredits();
   const { data: tokenUsage = [] } = useTokenUsage();
+  const { i18n } = useTranslation();
+  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
+  const currencyCode = locale.startsWith("pt") ? "BRL" : "USD";
+  const formatNum = (n: number) => n.toLocaleString(locale);
 
   const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);
-  const estimatedSavings = activeAgents * 7560; // 3 CLT employees per agent × R$7,560/mo avg
+  const estimatedSavings = activeAgents * 7560;
 
   const successLogs = totalExecutions > 0 ? Math.round(successRate) : 0;
   const execTrend = totalExecutions > 100 ? `+${Math.min(99, Math.round(totalExecutions * 0.12))}` : totalExecutions > 0 ? `+${totalExecutions}` : "0";
@@ -32,7 +37,7 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
     { 
       icon: Zap, 
       label: "Execuções Totais", 
-      value: totalExecutions.toLocaleString("pt-BR"), 
+      value: formatNum(totalExecutions), 
       trend: execTrend,
       color: "text-cyan-400"
     },
@@ -46,7 +51,7 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
     { 
       icon: DollarSign, 
       label: "Economia Estimada", 
-      value: activeAgents > 0 ? `R$ ${estimatedSavings.toLocaleString("pt-BR")}` : "—", 
+      value: activeAgents > 0 ? new Intl.NumberFormat(locale, { style: "currency", currency: currencyCode, minimumFractionDigits: 0 }).format(estimatedSavings) : "—", 
       trend: activeAgents > 0 ? "vs CLT/mês" : "contrate agentes",
       color: "text-cyan-400"
     },
@@ -58,7 +63,7 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
         : totalTokensUsed > 1000 
         ? `${(totalTokensUsed / 1000).toFixed(0)}k` 
         : totalTokensUsed.toString(),
-      trend: `${remainingCredits.toLocaleString("pt-BR")} restantes`,
+      trend: `${formatNum(remainingCredits)} restantes`,
       color: "text-primary"
     },
     { 
@@ -122,16 +127,16 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
               <span className="text-sm font-medium">Consumo de Tokens</span>
             </div>
             <span className="text-xs text-muted-foreground">
-              {credits.used_credits.toLocaleString("pt-BR")} / {credits.total_credits.toLocaleString("pt-BR")}
+              {formatNum(credits.used_credits)} / {formatNum(credits.total_credits)}
             </span>
           </div>
           <Progress value={usagePercentage} className="h-2.5" />
           <div className="flex justify-between mt-2">
             <span className="text-xs text-muted-foreground">
-              {remainingCredits.toLocaleString("pt-BR")} tokens restantes
+              {formatNum(remainingCredits)} tokens restantes
             </span>
             <span className="text-xs text-muted-foreground">
-              Reset em {credits.credits_reset_at ? new Date(credits.credits_reset_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" }) : "—"}
+              Reset em {credits.credits_reset_at ? new Date(credits.credits_reset_at).toLocaleDateString(locale, { day: "2-digit", month: "short" }) : "—"}
             </span>
           </div>
         </motion.div>

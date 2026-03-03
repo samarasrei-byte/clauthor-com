@@ -111,7 +111,7 @@ const ClientCommandCenter = ({
       <GettingStartedGuide
         hasAgents={activeAgents > 0}
         hasSentMessage={recentLogs.length > 0}
-        hasConfiguredAgent={agents.some((a: any) => a.integrations || a.channels)}
+        hasConfiguredAgent={agents.some((a: any) => (Array.isArray(a.integrations) ? a.integrations.length > 0 : !!a.integrations) || (Array.isArray(a.channels) ? a.channels.length > 0 : !!a.channels))}
         onNavigate={onNavigate}
       />
 
