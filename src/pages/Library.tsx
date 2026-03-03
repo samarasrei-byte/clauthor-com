@@ -82,6 +82,7 @@ const LibraryPage = () => {
     if (!user) {
       navigate("/auth", {
         state: {
+          signup: true,
           hireIntent: {
             type: "agent" as const,
             label: t(`library_page.agents.${key}_title`),

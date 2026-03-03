@@ -46,7 +46,7 @@ const Departamentos = () => {
     };
 
     if (!user) {
-      navigate("/auth", { state: { hireIntent } });
+      navigate("/auth", { state: { hireIntent, signup: true } });
       return;
     }
 
