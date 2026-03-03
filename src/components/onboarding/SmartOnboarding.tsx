@@ -50,6 +50,8 @@ const industries = [
   { id: "other", label: "Outro", icon: Sparkles, gradient: "from-muted to-muted-foreground" },
 ];
 
+const popularChallenges = new Set(["sales", "support", "marketing"]);
+
 const challenges = [
   { id: "sales", label: "Vender mais e prospectar clientes", icon: DollarSign, agents: ["sales", "sdr_outbound", "voice_ai", "crm_manager"], dept: "Comercial" },
   { id: "support", label: "Atender clientes 24/7", icon: Headphones, agents: ["support_channel", "omnichannel", "voice_support", "rag"], dept: "Suporte" },
@@ -256,7 +258,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   {/* Industry selection */}
                   {msg2.done && (
                     <motion.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}>
-                      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mt-4">
+                      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5 mt-4">
                         {industries.map((ind, i) => (
                           <motion.button
                             key={ind.id}
@@ -264,13 +266,13 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                             animate={{ opacity: 1, scale: 1 }}
                             transition={{ delay: 0.05 * i }}
                             onClick={() => { setIndustry(ind.id); setPhase(1); }}
-                            className={`group p-3 rounded-xl border transition-all text-center hover:scale-[1.03] ${
+                            className={`group p-3 rounded-xl border transition-all text-center hover:scale-[1.04] hover:shadow-[0_0_20px_hsl(var(--primary)/0.12)] ${
                               industry === ind.id
-                                ? "border-primary/40 bg-primary/5"
-                                : "border-border/50 bg-card/30 hover:border-primary/20"
+                                ? "border-primary/50 bg-primary/10 shadow-[0_0_25px_hsl(var(--primary)/0.15)]"
+                                : "border-white/[0.08] bg-white/[0.06] hover:border-primary/30 hover:bg-white/[0.09]"
                             }`}
                           >
-                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${ind.gradient} flex items-center justify-center mx-auto mb-2 opacity-80 group-hover:opacity-100 transition-opacity`}>
+                            <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${ind.gradient} flex items-center justify-center mx-auto mb-2 opacity-85 group-hover:opacity-100 transition-opacity`}>
                               <ind.icon className="h-5 w-5 text-white" />
                             </div>
                             <p className="text-[11px] font-medium leading-tight">{ind.label}</p>
@@ -366,35 +368,44 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   </div>
 
                   {/* Challenge cards */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-3">
-                    {challenges.map((ch, i) => (
-                      <motion.button
-                        key={ch.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.04 * i }}
-                        onClick={() => toggleChallenge(ch.id)}
-                        className={`flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all ${
-                          selectedChallenges.includes(ch.id)
-                            ? "border-primary/40 bg-primary/5 ring-1 ring-primary/20"
-                            : "border-border/50 bg-card/30 hover:border-primary/20"
-                        }`}
-                      >
-                        <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-                          selectedChallenges.includes(ch.id) ? "bg-primary/15" : "bg-muted/50"
-                        }`}>
-                          {selectedChallenges.includes(ch.id) ? (
-                            <CheckCircle2 className="h-4 w-4 text-primary" />
-                          ) : (
-                            <ch.icon className="h-4 w-4 text-muted-foreground" />
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3">
+                    {challenges.map((ch, i) => {
+                      const isSelected = selectedChallenges.includes(ch.id);
+                      const isPopular = popularChallenges.has(ch.id);
+                      return (
+                        <motion.button
+                          key={ch.id}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.04 * i }}
+                          onClick={() => toggleChallenge(ch.id)}
+                          className={`relative flex items-center gap-3 p-3.5 rounded-xl border text-left transition-all hover:scale-[1.02] hover:shadow-[0_0_20px_hsl(var(--primary)/0.1)] ${
+                            isSelected
+                              ? "border-primary/50 bg-primary/10 ring-1 ring-primary/25 shadow-[0_0_25px_hsl(var(--primary)/0.12)]"
+                              : "border-white/[0.08] bg-white/[0.06] hover:border-primary/30 hover:bg-white/[0.09]"
+                          }`}
+                        >
+                          {isPopular && !isSelected && (
+                            <span className="absolute -top-1.5 right-2 text-[8px] font-bold uppercase tracking-wider bg-primary/90 text-primary-foreground px-1.5 py-0.5 rounded-full">
+                              Popular
+                            </span>
                           )}
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-xs font-medium leading-tight">{ch.label}</p>
-                          <p className="text-[10px] text-muted-foreground mt-0.5">{ch.dept}</p>
-                        </div>
-                      </motion.button>
-                    ))}
+                          <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${
+                            isSelected ? "bg-primary/20" : "bg-white/[0.06]"
+                          }`}>
+                            {isSelected ? (
+                              <CheckCircle2 className="h-4 w-4 text-primary" />
+                            ) : (
+                              <ch.icon className="h-4 w-4 text-muted-foreground" />
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-xs font-medium leading-tight">{ch.label}</p>
+                            <p className="text-[10px] text-muted-foreground mt-0.5">{ch.dept}</p>
+                          </div>
+                        </motion.button>
+                      );
+                    })}
                   </div>
 
                   {selectedChallenges.length > 0 && (
