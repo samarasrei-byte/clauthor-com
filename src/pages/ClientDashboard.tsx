@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -30,6 +30,7 @@ import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
 import type { HireIntent } from "./Auth";
 import HelpTooltip from "@/components/HelpTooltip";
+import { getRegion, getPrice } from "@/lib/pricing";
 
 // Lazy-load heavy section components — only loaded when the user navigates to them
 const AgentChat = lazy(() => import("@/components/dashboard/AgentChat"));
@@ -139,7 +140,7 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
-  // Auto-hire from sessionStorage intent
+  // Auto-hire from sessionStorage intent → redirect to PayPal checkout
   useEffect(() => {
     if (!user || hireProcessed.current) return;
     const raw = sessionStorage.getItem("hireIntent");
@@ -149,31 +150,113 @@ const ClientDashboard = () => {
     const intent: HireIntent = JSON.parse(raw);
     if (!intent.slugs || intent.slugs.length === 0) return;
 
-    const processHire = async () => {
+    const startCheckout = async () => {
       const uniqueSlugs = [...new Set(intent.slugs)];
-      toast.info(t("dashboard.hiring_agents", { label: intent.label }), { duration: 3000 });
-      let hired = 0;
-      for (const slug of uniqueSlugs) {
+      const lang = i18n.language || "pt";
+      const region = getRegion(lang);
+
+      // Determine if this is a department (multiple agents) or individual
+      const isDepartment = intent.type === "department" || uniqueSlugs.length > 1;
+
+      if (isDepartment) {
+        // Find the matching department for pricing
+        const deptId = (intent as any).departmentId || SLUG_TO_DEPT[uniqueSlugs[0]] || "comercial";
+        const deptPrice = (region.departments as Record<string, number>)[deptId] || region.departments.comercial;
+
+        const loadingToast = toast.loading("Criando assinatura do squad...");
         try {
-          const { data: template } = await supabase.from("agent_templates").select("*").eq("slug", slug).eq("is_active", true).single();
-          if (!template) continue;
-          const { error } = await supabase.from("agents").insert({
-            user_id: user.id, name: template.name, description: template.description,
-            instructions: template.system_prompt || template.instructions, objective: template.description,
-            tier: template.tier as any, monthly_price: 0, status: "active",
-            channels: template.default_channels, integrations: template.default_integrations, actions: template.default_actions,
+          const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+            body: {
+              action: "create_subscription",
+              agent_slug: `dept-${deptId}`,
+              agent_name: intent.label,
+              amount: deptPrice,
+              currency: region.currency,
+              return_url: `${window.location.origin}/dashboard?subscription=success`,
+              cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
+            },
           });
-          if (!error) hired++;
-        } catch (err) { console.error(`Failed to hire ${slug}:`, err); }
+          toast.dismiss(loadingToast);
+          if (error) throw error;
+          if (!data?.success || !data?.approve_url) throw new Error(data?.error || "Falha ao criar assinatura");
+
+          sessionStorage.setItem("paypal_subscription", JSON.stringify({
+            subscription_id: data.subscription_id,
+            agent_slug: `dept-${deptId}`,
+            agent_name: intent.label,
+            price: deptPrice,
+            currency: region.currency,
+            tier: "advanced",
+            is_department: true,
+            department_id: deptId,
+            department_slugs: uniqueSlugs,
+          }));
+
+          window.location.href = data.approve_url;
+        } catch (err: any) {
+          toast.dismiss(loadingToast);
+          toast.error(err.message || "Erro ao criar assinatura. Tente novamente.");
+        }
+      } else {
+        // Single agent – use individual pricing
+        const slug = uniqueSlugs[0];
+        const agentPriceTierMap: Record<string, string> = {
+          sdr_outbound: "entry", sales: "mid", voice_ai: "high", crm_manager: "entry",
+          support_channel: "entry", omnichannel: "mid", voice_support: "high", rag: "mid",
+          content: "entry", seo_growth: "mid", marketing_automation: "mid", media_buyer: "high",
+          revenue: "mid", ai_cfo: "high", data_analytics: "mid",
+          orchestrator: "high", project_management: "mid", scheduler: "entry",
+          hr: "entry", training: "entry", people_analytics: "mid",
+          coding: "premium", computer: "premium", data_engineer: "high",
+          creative_design: "mid", video_production: "high", branding: "mid",
+          legal: "high", contract_analyst: "mid", compliance_officer: "mid",
+          ecommerce: "mid", paid_traffic: "high", affiliate_manager: "entry",
+        };
+        const priceTier = (agentPriceTierMap[slug] || "starter") as any;
+        const price = getPrice(lang, priceTier);
+
+        if (!price || price <= 0) {
+          toast.error("Preço inválido para este agente.");
+          return;
+        }
+
+        const loadingToast = toast.loading("Criando assinatura PayPal...");
+        try {
+          const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+            body: {
+              action: "create_subscription",
+              agent_slug: slug,
+              agent_name: intent.label,
+              amount: price,
+              currency: region.currency,
+              return_url: `${window.location.origin}/dashboard?subscription=success`,
+              cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
+            },
+          });
+          toast.dismiss(loadingToast);
+          if (error) throw error;
+          if (!data?.success || !data?.approve_url) throw new Error(data?.error || "Falha ao criar assinatura");
+
+          sessionStorage.setItem("paypal_subscription", JSON.stringify({
+            subscription_id: data.subscription_id,
+            agent_slug: slug,
+            agent_name: intent.label,
+            price,
+            currency: region.currency,
+            tier: "basic",
+          }));
+
+          window.location.href = data.approve_url;
+        } catch (err: any) {
+          toast.dismiss(loadingToast);
+          toast.error(err.message || "Erro ao criar assinatura. Tente novamente.");
+        }
       }
-      if (hired > 0) {
-        toast.success(t("dashboard.agents_hired", { count: hired }));
-        queryClient.invalidateQueries({ queryKey: ["my-agents"] });
-        setActiveSection("agents");
-      } else { toast.error(t("dashboard.hire_failed")); }
     };
-    processHire();
-  }, [user, queryClient, t]);
+
+    toast.info(`Preparando checkout para: ${intent.label}`, { duration: 3000 });
+    startCheckout();
+  }, [user, queryClient, t, i18n.language]);
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
