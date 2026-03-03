@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 const SmartOnboarding = lazy(() => import("@/components/onboarding/SmartOnboarding"));
 const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
+const InnovationRoadmap = lazy(() => import("@/components/landing/InnovationRoadmap"));
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, ShieldCheck, Bolt,
@@ -903,6 +904,13 @@ const HomePage = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          INNOVATION ROADMAP — COMING SOON
+          ═══════════════════════════════════════════════════════ */}
+      <Suspense fallback={null}>
+        <InnovationRoadmap />
+      </Suspense>
 
       {/* ═══════════════════════════════════════════════════════
           PRE-FOOTER CTA
