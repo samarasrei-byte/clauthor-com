@@ -163,8 +163,8 @@ export function usePaypalCapture() {
 
           toast.dismiss(loadingToast);
           const successMsg = subIntent.is_department
-            ? `🎉 Departamento ${subIntent.agent_name} ativado! ${provisionedAgents.length} agentes provisionados.`
-            : `🎉 ${subIntent.agent_name} contratado com sucesso! Assinatura mensal ativa.`;
+            ? `Departamento ${subIntent.agent_name} ativado! ${provisionedAgents.length} agentes provisionados.`
+            : `${subIntent.agent_name} contratado com sucesso! Assinatura mensal ativa.`;
           toast.success(successMsg, { duration: 6000 });
           
           // Signal dashboard to open THOR for guided onboarding
@@ -173,6 +173,18 @@ export function usePaypalCapture() {
             isDepartment: !!subIntent.is_department,
             agentCount: provisionedAgents.length,
           }));
+
+          // Send post-payment notification (non-blocking)
+          supabase.functions.invoke("post-payment-notify", {
+            body: {
+              agent_name: subIntent.agent_name,
+              is_department: !!subIntent.is_department,
+              agent_count: provisionedAgents.length,
+              price: subIntent.price,
+              currency: subIntent.currency || "BRL",
+              subscription_id: subIntent.subscription_id,
+            },
+          }).catch(console.warn);
 
           queryClient.invalidateQueries({ queryKey: ["user-agents"] });
           queryClient.invalidateQueries({ queryKey: ["payment-history"] });

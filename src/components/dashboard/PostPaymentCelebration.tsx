@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PartyPopper, Rocket, CheckCircle2, Sparkles } from "lucide-react";
+import FlowProgressBar from "./FlowProgressBar";
 
 interface PostPaymentCelebrationProps {
   agentName: string;
@@ -135,9 +136,18 @@ const PostPaymentCelebration = ({ agentName, isDepartment, agentCount, onComplet
               </h2>
               <p className="text-lg text-muted-foreground">
                 {isDepartment
-                  ? `🚀 ${agentName} ativado com ${agentCount} agentes`
-                  : `🚀 ${agentName} está pronto para trabalhar`}
+                  ? `${agentName} ativado com ${agentCount} agentes`
+                  : `${agentName} está pronto para trabalhar`}
               </p>
+            </motion.div>
+
+            {/* Progress bar showing activation step */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.9 }}
+            >
+              <FlowProgressBar currentStep="activation" />
             </motion.div>
 
             {/* Redirect hint */}
