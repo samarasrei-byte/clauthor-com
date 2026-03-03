@@ -48,6 +48,8 @@ const AgentLiveTimeline = lazy(() => import("@/components/dashboard/AgentLiveTim
 const Library = lazy(() => import("./Library"));
 const Integrations = lazy(() => import("./Integrations"));
 
+const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
+
 const SectionLoader = () => (
   <div className="flex items-center justify-center py-16">
     <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
@@ -418,12 +420,23 @@ const ClientDashboard = () => {
                 <div>
                   <div className="flex items-center gap-2">
                     <h1 className="font-display text-2xl font-bold">
-                      {t("dashboard.welcome_back", { defaultValue: "Olá, {{name}} 👋", name: user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel") })}
+                      {(() => {
+                        const hour = new Date().getHours();
+                        const firstName = user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel");
+                        if (hour < 12) return t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}} ☀️", name: firstName });
+                        if (hour < 18) return t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}} 👋", name: firstName });
+                        return t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}} 🌙", name: firstName });
+                      })()}
                     </h1>
                     <HelpTooltip id="dashboard-intro" text={t("dashboard.help_intro", { defaultValue: "Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções." })} position="bottom" />
                   </div>
                   <p className="text-sm text-muted-foreground">
                     {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
+                    {credits && (
+                      <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                        {remainingCredits.toLocaleString(locale)} {t("dashboard.credits_short", { defaultValue: "créditos" })}
+                      </span>
+                    )}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
@@ -480,11 +493,11 @@ const ClientDashboard = () => {
               </Sheet>
             </div>
 
-            {/* Loading state */}
+            {/* Loading state — premium skeleton */}
             {loadingAgents && activeSection === "overview" && (
-              <div className="flex items-center justify-center py-12">
-                <Loader2 className="h-6 w-6 animate-spin text-primary/50" />
-              </div>
+              <Suspense fallback={<SectionLoader />}>
+                <DashboardSkeleton />
+              </Suspense>
             )}
 
             {/* ═══ OMNIX ═══ */}
