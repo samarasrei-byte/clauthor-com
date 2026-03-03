@@ -30,7 +30,8 @@ import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
 import type { HireIntent } from "./Auth";
 import HelpTooltip from "@/components/HelpTooltip";
-import { getRegion, getPrice } from "@/lib/pricing";
+import { getRegion, getPrice, formatPrice } from "@/lib/pricing";
+import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
 
 // Lazy-load heavy section components — only loaded when the user navigates to them
 const AgentChat = lazy(() => import("@/components/dashboard/AgentChat"));
@@ -77,6 +78,8 @@ const ClientDashboard = () => {
   const { data: tokenUsage = [] } = useTokenUsage();
 
   const [postPaymentContext, setPostPaymentContext] = useState<{ agentName: string; isDepartment: boolean; agentCount: number } | null>(null);
+  const [checkoutSummary, setCheckoutSummary] = useState<CheckoutSummaryData | null>(null);
+  const [pendingCheckoutIntent, setPendingCheckoutIntent] = useState<{ intent: HireIntent; uniqueSlugs: string[] } | null>(null);
 
   useEffect(() => {
     const raw = sessionStorage.getItem("clauthor_post_payment_onboarding");
@@ -140,7 +143,7 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
-  // Auto-hire from sessionStorage intent → redirect to PayPal checkout
+  // Auto-hire from sessionStorage intent → show checkout summary
   useEffect(() => {
     if (!user || hireProcessed.current) return;
     const raw = sessionStorage.getItem("hireIntent");
@@ -150,113 +153,74 @@ const ClientDashboard = () => {
     const intent: HireIntent = JSON.parse(raw);
     if (!intent.slugs || intent.slugs.length === 0) return;
 
-    const startCheckout = async () => {
-      const uniqueSlugs = [...new Set(intent.slugs)];
-      const lang = i18n.language || "pt";
-      const region = getRegion(lang);
+    const uniqueSlugs = [...new Set(intent.slugs)];
+    const lang = i18n.language || "pt";
+    const region = getRegion(lang);
+    const isDepartment = intent.type === "department" || uniqueSlugs.length > 1;
 
-      // Determine if this is a department (multiple agents) or individual
-      const isDepartment = intent.type === "department" || uniqueSlugs.length > 1;
+    let price: number;
+    let deptId: string | undefined;
 
-      if (isDepartment) {
-        // Find the matching department for pricing
-        const deptId = (intent as any).departmentId || SLUG_TO_DEPT[uniqueSlugs[0]] || "comercial";
-        const deptPrice = (region.departments as Record<string, number>)[deptId] || region.departments.comercial;
+    if (isDepartment) {
+      deptId = (intent as any).departmentId || SLUG_TO_DEPT[uniqueSlugs[0]] || "comercial";
+      price = (region.departments as Record<string, number>)[deptId] || region.departments.comercial;
+    } else {
+      const slug = uniqueSlugs[0];
+      const agentPriceTierMap: Record<string, string> = {
+        sdr_outbound: "entry", sales: "mid", voice_ai: "high", crm_manager: "entry",
+        support_channel: "entry", omnichannel: "mid", voice_support: "high", rag: "mid",
+        content: "entry", seo_growth: "mid", marketing_automation: "mid", media_buyer: "high",
+        revenue: "mid", ai_cfo: "high", data_analytics: "mid",
+        orchestrator: "high", project_management: "mid", scheduler: "entry",
+        hr: "entry", training: "entry", people_analytics: "mid",
+        coding: "premium", computer: "premium", data_engineer: "high",
+        creative_design: "mid", video_production: "high", branding: "mid",
+        legal: "high", contract_analyst: "mid", compliance_officer: "mid",
+        ecommerce: "mid", paid_traffic: "high", affiliate_manager: "entry",
+      };
+      const priceTier = (agentPriceTierMap[slug] || "starter") as any;
+      price = getPrice(lang, priceTier);
+    }
 
-        const loadingToast = toast.loading("Criando assinatura do squad...");
-        try {
-          const { data, error } = await supabase.functions.invoke("paypal-checkout", {
-            body: {
-              action: "create_subscription",
-              agent_slug: `dept-${deptId}`,
-              agent_name: intent.label,
-              amount: deptPrice,
-              currency: region.currency,
-              return_url: `${window.location.origin}/dashboard?subscription=success`,
-              cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
-            },
-          });
-          toast.dismiss(loadingToast);
-          if (error) throw error;
-          if (!data?.success || !data?.approve_url) throw new Error(data?.error || "Falha ao criar assinatura");
+    if (!price || price <= 0) { toast.error("Preço inválido para este agente."); return; }
 
-          sessionStorage.setItem("paypal_subscription", JSON.stringify({
-            subscription_id: data.subscription_id,
-            agent_slug: `dept-${deptId}`,
-            agent_name: intent.label,
-            price: deptPrice,
-            currency: region.currency,
-            tier: "advanced",
-            is_department: true,
-            department_id: deptId,
-            department_slugs: uniqueSlugs,
-          }));
+    setPendingCheckoutIntent({ intent, uniqueSlugs });
+    setCheckoutSummary({ label: intent.label, slugs: uniqueSlugs, isDepartment, departmentId: deptId, price, currency: region.currency, lang });
+  }, [user, i18n.language]);
 
-          window.location.href = data.approve_url;
-        } catch (err: any) {
-          toast.dismiss(loadingToast);
-          toast.error(err.message || "Erro ao criar assinatura. Tente novamente.");
-        }
-      } else {
-        // Single agent – use individual pricing
-        const slug = uniqueSlugs[0];
-        const agentPriceTierMap: Record<string, string> = {
-          sdr_outbound: "entry", sales: "mid", voice_ai: "high", crm_manager: "entry",
-          support_channel: "entry", omnichannel: "mid", voice_support: "high", rag: "mid",
-          content: "entry", seo_growth: "mid", marketing_automation: "mid", media_buyer: "high",
-          revenue: "mid", ai_cfo: "high", data_analytics: "mid",
-          orchestrator: "high", project_management: "mid", scheduler: "entry",
-          hr: "entry", training: "entry", people_analytics: "mid",
-          coding: "premium", computer: "premium", data_engineer: "high",
-          creative_design: "mid", video_production: "high", branding: "mid",
-          legal: "high", contract_analyst: "mid", compliance_officer: "mid",
-          ecommerce: "mid", paid_traffic: "high", affiliate_manager: "entry",
-        };
-        const priceTier = (agentPriceTierMap[slug] || "starter") as any;
-        const price = getPrice(lang, priceTier);
+  const handleConfirmCheckout = useCallback(async () => {
+    if (!checkoutSummary || !pendingCheckoutIntent) return;
+    const { label, slugs, isDepartment, departmentId, price, currency } = checkoutSummary;
+    const region = getRegion(checkoutSummary.lang);
 
-        if (!price || price <= 0) {
-          toast.error("Preço inválido para este agente.");
-          return;
-        }
+    const agentSlug = isDepartment ? `dept-${departmentId}` : slugs[0];
 
-        const loadingToast = toast.loading("Criando assinatura PayPal...");
-        try {
-          const { data, error } = await supabase.functions.invoke("paypal-checkout", {
-            body: {
-              action: "create_subscription",
-              agent_slug: slug,
-              agent_name: intent.label,
-              amount: price,
-              currency: region.currency,
-              return_url: `${window.location.origin}/dashboard?subscription=success`,
-              cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
-            },
-          });
-          toast.dismiss(loadingToast);
-          if (error) throw error;
-          if (!data?.success || !data?.approve_url) throw new Error(data?.error || "Falha ao criar assinatura");
+    const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+      body: {
+        action: "create_subscription",
+        agent_slug: agentSlug,
+        agent_name: label,
+        amount: price,
+        currency,
+        return_url: `${window.location.origin}/dashboard?subscription=success`,
+        cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
+      },
+    });
+    if (error) throw error;
+    if (!data?.success || !data?.approve_url) throw new Error(data?.error || "Falha ao criar assinatura");
 
-          sessionStorage.setItem("paypal_subscription", JSON.stringify({
-            subscription_id: data.subscription_id,
-            agent_slug: slug,
-            agent_name: intent.label,
-            price,
-            currency: region.currency,
-            tier: "basic",
-          }));
+    sessionStorage.setItem("paypal_subscription", JSON.stringify({
+      subscription_id: data.subscription_id,
+      agent_slug: agentSlug,
+      agent_name: label,
+      price,
+      currency,
+      tier: isDepartment ? "advanced" : "basic",
+      ...(isDepartment ? { is_department: true, department_id: departmentId, department_slugs: slugs } : {}),
+    }));
 
-          window.location.href = data.approve_url;
-        } catch (err: any) {
-          toast.dismiss(loadingToast);
-          toast.error(err.message || "Erro ao criar assinatura. Tente novamente.");
-        }
-      }
-    };
-
-    toast.info(`Preparando checkout para: ${intent.label}`, { duration: 3000 });
-    startCheckout();
-  }, [user, queryClient, t, i18n.language]);
+    window.location.href = data.approve_url;
+  }, [checkoutSummary, pendingCheckoutIntent]);
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
@@ -389,6 +353,12 @@ const ClientDashboard = () => {
       <AnimatePresence>
         {showOnboarding && <PostSignupOnboarding onComplete={() => setShowOnboarding(false)} />}
       </AnimatePresence>
+
+      <CheckoutSummaryDialog
+        data={checkoutSummary}
+        onConfirm={handleConfirmCheckout}
+        onCancel={() => { setCheckoutSummary(null); setPendingCheckoutIntent(null); }}
+      />
 
       <div className="flex h-full">
         <div className="hidden lg:block">
