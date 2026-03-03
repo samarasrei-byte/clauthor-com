@@ -6,6 +6,43 @@ import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resi
 import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, type AgentContract } from "../_shared/agent-contract.ts";
 import { enforcePolicy, validateTenant, type PolicyContext } from "../_shared/policy-engine.ts";
 
+// ── AES-256-GCM decryption for credential bridge ──
+const ALGO = "AES-GCM";
+const IV_LENGTH = 12;
+const ENC_PREFIX = "senc:v1:";
+
+async function getEncryptionKey(): Promise<CryptoKey> {
+  const secret = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+  const encoder = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey("raw", encoder.encode(secret), "PBKDF2", false, ["deriveKey"]);
+  return crypto.subtle.deriveKey(
+    { name: "PBKDF2", salt: encoder.encode("clauthor-server-credential-salt-v1"), iterations: 100_000, hash: "SHA-256" },
+    keyMaterial,
+    { name: ALGO, length: 256 },
+    false,
+    ["decrypt"]
+  );
+}
+
+function base64ToArrayBuffer(base64: string): ArrayBuffer {
+  const binary = atob(base64);
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return bytes.buffer;
+}
+
+async function decryptValueForExecution(encrypted: string): Promise<string> {
+  if (!encrypted.startsWith(ENC_PREFIX)) return encrypted;
+  const payload = encrypted.slice(ENC_PREFIX.length);
+  const [ivB64, cipherB64] = payload.split(":");
+  const key = await getEncryptionKey();
+  const plaintext = await crypto.subtle.decrypt(
+    { name: ALGO, iv: new Uint8Array(base64ToArrayBuffer(ivB64)) },
+    key,
+    base64ToArrayBuffer(cipherB64)
+  );
+  return new TextDecoder().decode(plaintext);
+}
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
@@ -491,13 +528,95 @@ async function executeTool(
     return await withRetry(async () => {
     switch (toolName) {
       case "send_email": {
-        // Queue email as a notification (real email requires integration)
+        // === REAL EMAIL BRIDGE via credential-manager ===
+        let emailSent = false;
+        let sendError = "";
+        const messageId = crypto.randomUUID().slice(0, 8);
+
+        try {
+          // 1. Fetch decrypted credentials (hybrid: client > platform fallback)
+          const { data: clientCreds } = await adminClient
+            .from("agent_credentials")
+            .select("integration_name, credential_key, credential_value")
+            .eq("agent_id", agentId)
+            .eq("user_id", userId);
+
+          const { data: platformCreds } = await adminClient
+            .from("platform_credentials")
+            .select("integration_name, credential_key, credential_value")
+            .eq("is_active", true);
+
+          // Build merged credentials map (platform defaults, client overrides)
+          const credMap: Record<string, Record<string, string>> = {};
+          for (const cred of platformCreds || []) {
+            try {
+              const val = cred.credential_value.startsWith("senc:v1:")
+                ? await decryptValueForExecution(cred.credential_value)
+                : cred.credential_value;
+              if (!credMap[cred.integration_name]) credMap[cred.integration_name] = {};
+              credMap[cred.integration_name][cred.credential_key] = val;
+            } catch {}
+          }
+          for (const cred of clientCreds || []) {
+            try {
+              const val = cred.credential_value.startsWith("senc:v1:")
+                ? await decryptValueForExecution(cred.credential_value)
+                : cred.credential_value;
+              if (!credMap[cred.integration_name]) credMap[cred.integration_name] = {};
+              credMap[cred.integration_name][cred.credential_key] = val;
+            } catch {}
+          }
+
+          // 2. Try SendGrid first
+          const sgCreds = credMap["sendgrid"] || credMap["email"] || credMap["smtp"];
+          const sgApiKey = sgCreds?.["api_key"] || sgCreds?.["SENDGRID_API_KEY"] || sgCreds?.["sendgrid_api_key"];
+          const fromEmail = sgCreds?.["from_email"] || sgCreds?.["sender_email"] || "noreply@clauthor.com";
+          const fromName = sgCreds?.["from_name"] || sgCreds?.["sender_name"] || "Clauthor AI";
+
+          if (sgApiKey) {
+            const sgResponse = await fetch("https://api.sendgrid.com/v3/mail/send", {
+              method: "POST",
+              headers: {
+                "Authorization": `Bearer ${sgApiKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                personalizations: [{ to: [{ email: args.to }] }],
+                from: { email: fromEmail, name: fromName },
+                subject: args.subject,
+                content: [
+                  { type: "text/plain", value: args.body },
+                  { type: "text/html", value: args.body.replace(/\n/g, "<br/>") },
+                ],
+              }),
+            });
+
+            if (sgResponse.ok || sgResponse.status === 202) {
+              emailSent = true;
+            } else {
+              const errBody = await sgResponse.text();
+              sendError = `SendGrid ${sgResponse.status}: ${errBody.slice(0, 200)}`;
+              console.warn(`[SendEmail] SendGrid error:`, sendError);
+            }
+          } else {
+            sendError = "Nenhuma credencial de email (SendGrid) configurada.";
+          }
+        } catch (e) {
+          sendError = e instanceof Error ? e.message : "Erro desconhecido ao enviar email";
+          console.error("[SendEmail] Bridge error:", e);
+        }
+
+        // 3. Always create notification as audit trail
         await adminClient.from("notifications").insert({
           user_id: userId,
-          title: `📧 Email para ${args.to}`,
+          title: emailSent ? `✅ Email enviado para ${args.to}` : `📧 Email para ${args.to}`,
           message: `Assunto: ${args.subject}\n\n${args.body}`,
-          type: "email_queued",
-          metadata: { to: args.to, subject: args.subject, priority: args.priority || "normal", agent_id: agentId },
+          type: emailSent ? "email_sent" : "email_queued",
+          metadata: {
+            to: args.to, subject: args.subject, priority: args.priority || "normal",
+            agent_id: agentId, message_id: messageId,
+            sent: emailSent, error: sendError || undefined,
+          },
         });
 
         await logExecution(adminClient, userId, agentId, toolName, args, startTime);
@@ -505,11 +624,14 @@ async function executeTool(
         return {
           success: true,
           result: {
-            status: "queued",
-            message_id: crypto.randomUUID().slice(0, 8),
+            status: emailSent ? "sent" : "queued",
+            message_id: messageId,
             to: args.to, subject: args.subject, priority: args.priority || "normal",
-            queued_at: timestamp,
-            note: "Email registrado como notificação. Configure integração com serviço de email para envio automático.",
+            sent_at: emailSent ? timestamp : undefined,
+            queued_at: !emailSent ? timestamp : undefined,
+            note: emailSent
+              ? "Email enviado com sucesso via SendGrid."
+              : `Email registrado como notificação. ${sendError}`,
           },
         };
       }
