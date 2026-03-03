@@ -573,6 +573,21 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                             Economia estimada: <strong className="text-foreground">{teamSizes.find(t => t.id === teamSize)?.savings}/mês</strong> vs. equipe CLT
                           </span>
                         </div>
+
+                        {/* Price */}
+                        <div className="flex items-center justify-between pt-2 border-t border-primary/10">
+                          <span className="text-xs text-muted-foreground">Investimento mensal:</span>
+                          <div className="text-right">
+                            {getDiscount().pct > 0 && (
+                              <span className="text-[10px] text-muted-foreground line-through mr-2">
+                                R$ {(getRecommendedAgents().length * 697).toLocaleString("pt-BR")}
+                              </span>
+                            )}
+                            <span className="font-display font-bold text-sm text-primary">
+                              R$ {Math.round(getRecommendedAgents().length * 697 * (1 - getDiscount().pct / 100)).toLocaleString("pt-BR")}/mês
+                            </span>
+                          </div>
+                        </div>
                       </div>
 
                       <p className="text-sm text-muted-foreground">
