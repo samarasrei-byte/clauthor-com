@@ -519,3 +519,8 @@
   0%, 100% { opacity: 0.02; }
   50% { opacity: 0.06; }
 }
+
+/* Shimmer effect for loading skeletons */
+@keyframes shimmer {
+  100% { transform: translateX(100%); }
+}
