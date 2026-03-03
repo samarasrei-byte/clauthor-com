@@ -69,10 +69,16 @@ const ClientDashboard = () => {
     return "overview";
   });
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
-  const [showOnboarding, setShowOnboarding] = useState(() => {
-    if (!user) return false;
-    return !localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
-  });
+  const [showOnboarding, setShowOnboarding] = useState(false);
+
+  // Make onboarding reactive to user state (user is null on first render)
+  useEffect(() => {
+    if (!user) return;
+    const done = localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
+    if (!done) {
+      setShowOnboarding(true);
+    }
+  }, [user]);
   const { credits, remainingCredits, usagePercentage } = useCredits();
   usePaypalCapture();
   const { data: tokenUsage = [] } = useTokenUsage();

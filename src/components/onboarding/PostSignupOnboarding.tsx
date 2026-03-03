@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, ArrowRight, Building2, CheckCircle2 } from "lucide-react";
+import { Sparkles, ArrowRight, Building2, CheckCircle2, Rocket } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,7 +21,6 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
   const handleFinish = async () => {
     setSaving(true);
     try {
-      // Update profile with company name
       if (companyName.trim()) {
         await supabase.from("profiles").upsert({
           user_id: user!.id,
@@ -53,6 +52,7 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
+      transition={{ duration: 0.4 }}
       className="fixed inset-0 z-[100] bg-background overflow-hidden flex items-center justify-center"
     >
       {/* Background */}
@@ -77,33 +77,48 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
         </motion.div>
 
         {/* Title */}
-        <div className="space-y-2">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="space-y-2"
+        >
           <h1 className="font-display text-2xl sm:text-3xl font-bold">
             Bem-vindo, {userName}! 👋
           </h1>
           <p className="text-sm text-muted-foreground">
             Só uma coisa rápida antes de começar
           </p>
-        </div>
+        </motion.div>
 
         {/* Company input */}
-        <div className="space-y-3">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 }}
+          className="space-y-3"
+        >
           <div className="flex items-center gap-2 justify-center text-xs text-muted-foreground">
             <Building2 className="h-3.5 w-3.5" />
             <span>Nome da sua empresa (opcional)</span>
           </div>
-            <Input
-              placeholder="Ex: Minha Empresa Ltda"
-              value={companyName}
-              onChange={(e) => setCompanyName(e.target.value)}
-              className="h-12 text-center text-base text-foreground bg-muted/50 border-border rounded-xl focus:border-primary/40 placeholder:text-muted-foreground"
-              autoFocus
-              onKeyDown={(e) => e.key === "Enter" && handleFinish()}
-            />
-        </div>
+          <Input
+            placeholder="Ex: Minha Empresa Ltda"
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+            className="h-12 text-center text-base text-foreground bg-muted/50 border-border rounded-xl focus:border-primary/40 placeholder:text-muted-foreground"
+            autoFocus
+            onKeyDown={(e) => e.key === "Enter" && handleFinish()}
+          />
+        </motion.div>
 
         {/* Actions */}
-        <div className="space-y-3">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55 }}
+          className="space-y-3"
+        >
           <Button
             onClick={handleFinish}
             disabled={saving}
@@ -113,7 +128,7 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
               <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
             ) : (
               <>
-                <CheckCircle2 className="h-4 w-4" />
+                <Rocket className="h-4 w-4" />
                 Entrar no Painel
                 <ArrowRight className="h-4 w-4" />
               </>
@@ -126,12 +141,20 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
           >
             Pular →
           </Button>
-        </div>
+        </motion.div>
+
+        {/* Trust signal */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.7 }}
+          className="text-[10px] text-muted-foreground/40"
+        >
+          Seus dados estão seguros e protegidos
+        </motion.p>
       </motion.div>
     </motion.div>
   );
 };
-
-const wait = (ms: number) => new Promise(r => setTimeout(r, ms));
 
 export default PostSignupOnboarding;
