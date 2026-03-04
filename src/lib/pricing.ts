@@ -53,6 +53,14 @@ export const regionalPricing: Record<string, RegionalPricing> = {
     departments: { tecnologia: 5997, comercial: 4497, marketing: 3997, financeiro: 3497, criacao: 3297, suporte: 2997, rh: 2497 },
     departmentClt: { tecnologia: 72000, comercial: 52000, marketing: 44000, financeiro: 48000, criacao: 36000, suporte: 32000, rh: 28000 },
   },
+  "pt-pt": {
+    currency: "EUR", symbol: "€", locale: "pt-PT",
+    plans: { starter: 129, growth: 239 },
+    tokenPacks: { pack5m: 9, pack15m: 23, pack50m: 64, pack100m: 109 },
+    comparison: { avgSalary: 1400, avgSalaryYear3: 50400, agentStarting: 129, agentYear3: 4644 },
+    departments: { tecnologia: 1099, comercial: 829, marketing: 739, financeiro: 649, criacao: 609, suporte: 549, rh: 459 },
+    departmentClt: { tecnologia: 15000, comercial: 11000, marketing: 9000, financeiro: 10000, criacao: 7500, suporte: 6500, rh: 5500 },
+  },
   en: {
     currency: "USD", symbol: "$", locale: "en-US",
     plans: { starter: 139, growth: 259 },
@@ -178,6 +186,7 @@ export type PriceTier = "starter" | "entry" | "mid" | "high" | "premium";
 
 const priceTierValues: Record<string, Record<PriceTier, number>> = {
   pt: { starter: 697, entry: 897, mid: 1297, high: 1797, premium: 2197 },
+  "pt-pt": { starter: 129, entry: 165, mid: 239, high: 329, premium: 399 },
   en: { starter: 139, entry: 179, mid: 259, high: 359, premium: 439 },
   es: { starter: 139, entry: 179, mid: 259, high: 359, premium: 439 },
   fr: { starter: 129, entry: 165, mid: 239, high: 329, premium: 399 },
