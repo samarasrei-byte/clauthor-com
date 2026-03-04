@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { PartyPopper, Rocket, CheckCircle2, Sparkles } from "lucide-react";
 import FlowProgressBar from "./FlowProgressBar";
+import { useTranslation } from "react-i18next";
 
 interface PostPaymentCelebrationProps {
   agentName: string;
@@ -53,6 +54,7 @@ const ConfettiParticle = ({ delay, x }: { delay: number; x: number }) => {
 
 const PostPaymentCelebration = ({ agentName, isDepartment, agentCount, onComplete }: PostPaymentCelebrationProps) => {
   const [phase, setPhase] = useState<"explode" | "message" | "exit">("explode");
+  const { t } = useTranslation();
 
   useEffect(() => {
     const t1 = setTimeout(() => setPhase("message"), 800);
@@ -132,12 +134,12 @@ const PostPaymentCelebration = ({ agentName, isDepartment, agentCount, onComplet
               transition={{ delay: 0.6 }}
             >
               <h2 className="text-3xl font-display font-bold text-foreground">
-                Pagamento Confirmado!
+                {t("payment.confirmed", { defaultValue: "Pagamento Confirmado!" })}
               </h2>
               <p className="text-lg text-muted-foreground">
                 {isDepartment
-                  ? `${agentName} ativado com ${agentCount} agentes`
-                  : `${agentName} está pronto para trabalhar`}
+                  ? t("payment.dept_activated", { name: agentName, count: agentCount, defaultValue: `${agentName} ativado com ${agentCount} agentes` })
+                  : t("payment.agent_ready", { name: agentName, defaultValue: `${agentName} está pronto para trabalhar` })}
               </p>
             </motion.div>
 
@@ -158,7 +160,7 @@ const PostPaymentCelebration = ({ agentName, isDepartment, agentCount, onComplet
               transition={{ delay: 1.5 }}
             >
               <Rocket className="w-4 h-4 animate-pulse" />
-              <span>Redirecionando para o THOR para configuração guiada...</span>
+              <span>{t("payment.redirecting", { defaultValue: "Redirecionando para o THOR para configuração guiada..." })}</span>
             </motion.div>
           </motion.div>
         </motion.div>

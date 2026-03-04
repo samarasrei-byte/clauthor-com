@@ -25,21 +25,21 @@ const agentQuickList = [
   { key: "creative_design", name: "Creative Design", icon: "🎨", tier: "basic" },
 ];
 
-const navigationItems = [
+const getNavigationItems = (t: any) => [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Marketplace", href: "/marketplace", icon: Library },
-  { name: "Preços & Planos", href: "/pricing", icon: CreditCard },
-  { name: "Como Funciona", href: "/how-it-works", icon: Sparkles },
-  { name: "Comunidade", href: "/community", icon: Users },
-  { name: "Criar Agente", href: "/create-agent", icon: Plus },
-  { name: "Meus Agentes", href: "/agents", icon: Bot },
-  { name: "Integrações", href: "/integrations", icon: Settings },
+  { name: t("nav.pricing", { defaultValue: "Preços & Planos" }), href: "/pricing", icon: CreditCard },
+  { name: t("nav.how_it_works", { defaultValue: "Como Funciona" }), href: "/how-it-works", icon: Sparkles },
+  { name: t("command.community", { defaultValue: "Comunidade" }), href: "/community", icon: Users },
+  { name: t("command.create_agent", { defaultValue: "Criar Agente" }), href: "/create-agent", icon: Plus },
+  { name: t("nav.my_agents", { defaultValue: "Meus Agentes" }), href: "/agents", icon: Bot },
+  { name: t("nav.integrations", { defaultValue: "Integrações" }), href: "/integrations", icon: Settings },
 ];
 
-const quickActions = [
-  { name: "Criar novo agente", action: "/create-agent", icon: Rocket },
-  { name: "Falar com consultor IA", action: "consultant", icon: MessageSquare },
-  { name: "Ver squads de IA", action: "/pricing", icon: Users },
+const getQuickActions = (t: any) => [
+  { name: t("command.create_new", { defaultValue: "Criar novo agente" }), action: "/create-agent", icon: Rocket },
+  { name: t("command.talk_consultant", { defaultValue: "Falar com consultor IA" }), action: "consultant", icon: MessageSquare },
+  { name: t("command.view_squads", { defaultValue: "Ver squads de IA" }), action: "/pricing", icon: Users },
 ];
 
 interface CommandBarProps {
@@ -84,11 +84,14 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
     const labels: Record<string, string> = {
       basic: "Starter",
       intermediate: "Pro",
-      advanced: "Avançado",
+      advanced: t("command.tier_advanced", { defaultValue: "Avançado" }),
       enterprise: "Enterprise",
     };
     return labels[tier] || tier;
   };
+
+  const navigationItems = getNavigationItems(t);
+  const quickActions = getQuickActions(t);
 
   return (
     <>
@@ -195,7 +198,7 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
                     <div className="relative mx-5 mb-2">
                       <div className="absolute inset-0 rounded-xl bg-white/[0.02] border border-white/[0.05]" />
                       <CommandInput
-                        placeholder="O que você precisa?"
+                        placeholder={t("command.search_placeholder", { defaultValue: "O que você precisa?" })}
                         className="text-[13px] tracking-wide relative z-10"
                       />
                     </div>
@@ -218,16 +221,16 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
                           </div>
                           <div>
                             <p className="text-[12px] text-muted-foreground/40 tracking-wider font-medium">
-                              Nenhum resultado
+                              {t("command.no_results", { defaultValue: "Nenhum resultado" })}
                             </p>
                             <p className="text-[10px] text-muted-foreground/20 tracking-wider mt-1">
-                              Tente "vendas", "criar" ou "marketing"
+                              {t("command.try_search", { defaultValue: "Tente \"vendas\", \"criar\" ou \"marketing\"" })}
                             </p>
                           </div>
                         </motion.div>
                       </CommandEmpty>
 
-                      <CommandGroup heading="Ações">
+                      <CommandGroup heading={t("command.actions_heading", { defaultValue: "Ações" })}>
                         {quickActions.map((action) => (
                           <CommandItem
                             key={action.name}
@@ -275,7 +278,7 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
 
                       <div className="mx-3 my-2 h-px bg-gradient-to-r from-transparent via-white/[0.04] to-transparent" />
 
-                      <CommandGroup heading="Navegar">
+                      <CommandGroup heading={t("command.navigate_heading", { defaultValue: "Navegar" })}>
                         {navigationItems.map((item) => (
                           <CommandItem
                             key={item.href}
@@ -300,7 +303,7 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
                           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/50 opacity-75" style={{ animationDuration: "3s" }} />
                           <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary/70" />
                         </span>
-                        <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/25 font-medium">Sistema ativo</span>
+                        <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/25 font-medium">{t("command.system_active", { defaultValue: "Sistema ativo" })}</span>
                       </div>
                       <div className="flex-1" />
                       <div className="flex items-center gap-2.5 text-[9px] tracking-wider text-muted-foreground/15">
