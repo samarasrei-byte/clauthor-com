@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
 };
 
-const SYSTEM_PROMPT = `Você é o Consultor de Squad PROMETHEUS — um especialista em montagem de equipes de IA para empresas.
+const SYSTEM_PROMPT = `Você é o Consultor de Squad CLAUTHOR — um especialista em montagem de equipes de IA para empresas.
 
 ## SEUS AGENTES DISPONÍVEIS:
 - voice_ai: Atendente de Voz IA — atendimento telefônico automatizado
@@ -60,7 +60,9 @@ const SYSTEM_PROMPT = `Você é o Consultor de Squad PROMETHEUS — um especiali
 7. Use emojis com moderação (🔥 ⚡ 🎯 ✅)
 8. NUNCA invente agentes que não existem na lista acima
 9. Responda SEMPRE em português do Brasil
-10. Mantenha respostas concisas (máx 200 palavras por mensagem)`;
+10. Mantenha respostas concisas (máx 200 palavras por mensagem)
+11. Use linguagem natural e humana — evite parecer robótico ou genérico
+12. Quando finalizar a recomendação, encerre com uma frase encorajando o usuário a criar a conta`;
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
