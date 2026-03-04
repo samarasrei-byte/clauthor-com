@@ -37,7 +37,7 @@ const departments = [
       { key: "project_management", icon: ClipboardList, role: "Gerente de Projetos", tokens: "2M" },
       { key: "security", icon: Shield, role: "CISO / Eng. Segurança", tokens: "3M" },
     ],
-    headcount: 4, cltCost: 72000, prometheusCost: 4497, discount: 30,
+    headcount: 4, cltCost: 72000, prometheusCost: 1, discount: 30,
   },
   { 
     id: "comercial", icon: Briefcase, color: "text-cyan-400", 
@@ -53,7 +53,7 @@ const departments = [
       { key: "sales_channel", icon: MessageSquare, role: "Canal de Vendas Multicanal", tokens: "2M" },
       { key: "voice_ai", icon: Phone, role: "Operador de Telefonia", tokens: "2M" },
     ],
-    headcount: 4, cltCost: 52000, prometheusCost: 3497, discount: 25,
+    headcount: 4, cltCost: 52000, prometheusCost: 1, discount: 25,
   },
   { 
     id: "marketing", icon: Megaphone, color: "text-primary", 
@@ -69,7 +69,7 @@ const departments = [
       { key: "seo_growth", icon: Globe, role: "Analista SEO / Tráfego", tokens: "1.5M" },
       { key: "influencer", icon: Megaphone, role: "Social Media Manager", tokens: "1.5M" },
     ],
-    headcount: 4, cltCost: 44000, prometheusCost: 2697, discount: 25,
+    headcount: 4, cltCost: 44000, prometheusCost: 1, discount: 25,
   },
   { 
     id: "financeiro", icon: BarChart3, color: "text-amber-400", 
@@ -85,7 +85,7 @@ const departments = [
       { key: "data_analytics", icon: BarChart3, role: "Analista de BI", tokens: "1.5M" },
       { key: "ecommerce", icon: ShoppingCart, role: "Gestor Financeiro", tokens: "1M" },
     ],
-    headcount: 4, cltCost: 48000, prometheusCost: 2497, discount: 20,
+    headcount: 4, cltCost: 48000, prometheusCost: 1, discount: 20,
   },
   { 
     id: "criacao", icon: Palette, color: "text-violet-400", 
@@ -101,7 +101,7 @@ const departments = [
       { key: "creative_writer", icon: Sparkles, role: "Redator Criativo", tokens: "1M" },
       { key: "content_producer", icon: Megaphone, role: "Produtor de Conteúdo", tokens: "1M" },
     ],
-    headcount: 4, cltCost: 36000, prometheusCost: 2197, discount: 20,
+    headcount: 4, cltCost: 36000, prometheusCost: 1, discount: 20,
   },
   { 
     id: "suporte", icon: MessageSquare, color: "text-emerald-400", 
@@ -117,7 +117,7 @@ const departments = [
       { key: "voice_support", icon: Phone, role: "Operador Call Center", tokens: "1M" },
       { key: "rag", icon: FileText, role: "Base de Conhecimento", tokens: "1M" },
     ],
-    headcount: 4, cltCost: 32000, prometheusCost: 1797, discount: 20,
+    headcount: 4, cltCost: 32000, prometheusCost: 1, discount: 20,
   },
   { 
     id: "rh", icon: GraduationCap, color: "text-pink-400", 
@@ -133,7 +133,7 @@ const departments = [
       { key: "people_analytics", icon: BarChart3, role: "People Analytics", tokens: "1M" },
       { key: "data_analytics", icon: BarChart3, role: "Analista de Dados RH", tokens: "0.5M" },
     ],
-    headcount: 4, cltCost: 28000, prometheusCost: 1497, discount: 15,
+    headcount: 4, cltCost: 28000, prometheusCost: 1, discount: 15,
   },
 ];
 
