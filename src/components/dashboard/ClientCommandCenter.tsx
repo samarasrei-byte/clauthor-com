@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import GettingStartedGuide from "./GettingStartedGuide";
+import AgentTrainingTips from "./AgentTrainingTips";
 import AgentSummaryCards from "./AgentSummaryCards";
 import ConsolidatedMetrics from "./ConsolidatedMetrics";
 import SmartActivityFeed from "./SmartActivityFeed";
@@ -121,6 +122,11 @@ const ClientCommandCenter = ({
           )}
           onNavigate={onNavigate}
         />
+      )}
+
+      {/* Training tips — show for users with agents */}
+      {hasAgents && (
+        <AgentTrainingTips onNavigate={onNavigate} />
       )}
 
       {/* CONTEXTUAL: New user gets epic empty state */}
