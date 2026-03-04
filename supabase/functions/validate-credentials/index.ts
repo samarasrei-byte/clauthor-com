@@ -44,7 +44,7 @@ serve(async (req) => {
     }
 
     switch (channel) {
-      // ── WhatsApp Business API validation ──
+      // ── WhatsApp Business API validation (Meta official) ──
       case "whatsapp": {
         const { phone_id, access_token } = credentials;
         if (!phone_id || !access_token) {
@@ -57,16 +57,14 @@ serve(async (req) => {
         try {
           const res = await fetch(
             `https://graph.facebook.com/v18.0/${phone_id}`,
-            {
-              headers: { Authorization: `Bearer ${access_token}` },
-            }
+            { headers: { Authorization: `Bearer ${access_token}` } }
           );
 
           if (res.ok) {
             const data = await res.json();
             return new Response(JSON.stringify({
               valid: true,
-              message: "Conexão WhatsApp validada com sucesso! ✅",
+              message: "Conexão WhatsApp (Meta) validada com sucesso! ✅",
               details: {
                 verified_name: data.verified_name || data.display_phone_number || "OK",
                 quality_rating: data.quality_rating || "unknown",
@@ -84,6 +82,52 @@ serve(async (req) => {
           return new Response(JSON.stringify({
             valid: false,
             error: "Falha ao conectar com a Meta API",
+            hint: "Verifique sua conexão e tente novamente.",
+          }), { headers });
+        }
+      }
+
+      // ── WhatsApp via WZAP API validation ──
+      case "wzap_whatsapp": {
+        const { id_instancia, token: wzapToken } = credentials;
+        if (!id_instancia || !wzapToken) {
+          return new Response(JSON.stringify({
+            valid: false,
+            error: "id_instancia e token são obrigatórios",
+          }), { headers });
+        }
+
+        try {
+          const res = await fetch(
+            `https://api2.wzap-api.com/instances/${encodeURIComponent(id_instancia)}/token/${encodeURIComponent(wzapToken)}/status`,
+            { headers: { "Content-Type": "application/json" } }
+          );
+
+          if (res.ok) {
+            const data = await res.json();
+            return new Response(JSON.stringify({
+              valid: true,
+              message: "Conexão WhatsApp (WZAP API) validada com sucesso! ✅",
+              details: {
+                instance_id: id_instancia,
+                status: data.status || data.state || "connected",
+                ...(data.phone ? { phone: data.phone } : {}),
+              },
+            }), { headers });
+          }
+
+          const errData = await res.json().catch(() => ({}));
+          return new Response(JSON.stringify({
+            valid: false,
+            error: errData?.message || errData?.error || `WZAP API retornou ${res.status}`,
+            hint: res.status === 401
+              ? "Token inválido. Verifique o token gerado ao criar a instância."
+              : "Verifique se o ID da instância e token estão corretos.",
+          }), { headers });
+        } catch (err) {
+          return new Response(JSON.stringify({
+            valid: false,
+            error: "Falha ao conectar com a WZAP API",
             hint: "Verifique sua conexão e tente novamente.",
           }), { headers });
         }
