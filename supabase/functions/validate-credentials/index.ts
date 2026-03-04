@@ -87,51 +87,6 @@ serve(async (req) => {
         }
       }
 
-      // ── WhatsApp via WZAP API validation ──
-      case "wzap_whatsapp": {
-        const { id_instancia, token: wzapToken } = credentials;
-        if (!id_instancia || !wzapToken) {
-          return new Response(JSON.stringify({
-            valid: false,
-            error: "id_instancia e token são obrigatórios",
-          }), { headers });
-        }
-
-        try {
-          const res = await fetch(
-            `https://api2.wzap-api.com/instances/${encodeURIComponent(id_instancia)}/token/${encodeURIComponent(wzapToken)}/status`,
-            { headers: { "Content-Type": "application/json" } }
-          );
-
-          if (res.ok) {
-            const data = await res.json();
-            return new Response(JSON.stringify({
-              valid: true,
-              message: "Conexão WhatsApp (WZAP API) validada com sucesso! ✅",
-              details: {
-                instance_id: id_instancia,
-                status: data.status || data.state || "connected",
-                ...(data.phone ? { phone: data.phone } : {}),
-              },
-            }), { headers });
-          }
-
-          const errData = await res.json().catch(() => ({}));
-          return new Response(JSON.stringify({
-            valid: false,
-            error: errData?.message || errData?.error || `WZAP API retornou ${res.status}`,
-            hint: res.status === 401
-              ? "Token inválido. Verifique o token gerado ao criar a instância."
-              : "Verifique se o ID da instância e token estão corretos.",
-          }), { headers });
-        } catch (err) {
-          return new Response(JSON.stringify({
-            valid: false,
-            error: "Falha ao conectar com a WZAP API",
-            hint: "Verifique sua conexão e tente novamente.",
-          }), { headers });
-        }
-      }
 
       // ── Email / SMTP validation ──
       case "email": {

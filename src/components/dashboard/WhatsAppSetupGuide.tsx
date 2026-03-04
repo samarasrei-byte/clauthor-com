@@ -101,29 +101,20 @@ const STEPS = [
   },
 ];
 
-type WhatsAppProvider = "meta" | "wzap";
-
 const WhatsAppSetupGuide = () => {
-  const [provider, setProvider] = useState<WhatsAppProvider | null>(null);
   const [currentStep, setCurrentStep] = useState(0);
   const skipToCredentials = () => setCurrentStep(STEPS.length - 1);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [phoneId, setPhoneId] = useState("");
   const [accessToken, setAccessToken] = useState("");
   const [businessAccountId, setBusinessAccountId] = useState("");
-  // WZAP fields
-  const [wzapInstanceId, setWzapInstanceId] = useState("");
-  const [wzapToken, setWzapToken] = useState("");
 
   const validateMutation = useMutation({
     mutationFn: async () => {
-      const isWzap = provider === "wzap";
       const { data, error } = await supabase.functions.invoke("validate-credentials", {
         body: {
-          channel: isWzap ? "wzap_whatsapp" : "whatsapp",
-          credentials: isWzap
-            ? { id_instancia: wzapInstanceId, token: wzapToken }
-            : { phone_id: phoneId, access_token: accessToken },
+          channel: "whatsapp",
+          credentials: { phone_id: phoneId, access_token: accessToken },
         },
       });
       if (error) throw error;
@@ -132,7 +123,7 @@ const WhatsAppSetupGuide = () => {
     onSuccess: (data) => {
       if (data.valid) {
         toast.success(data.message || "WhatsApp conectado com sucesso!");
-        markComplete(provider === "wzap" ? 0 : 6);
+        markComplete(6);
         saveMutation.mutate();
       } else {
         toast.error(data.error || "Falha na validação");
@@ -143,26 +134,19 @@ const WhatsAppSetupGuide = () => {
 
   const saveMutation = useMutation({
     mutationFn: async () => {
-      const isWzap = provider === "wzap";
-      const integrationName = isWzap ? "wzap_whatsapp" : "whatsapp";
-      const credentials = isWzap
-        ? [
-            { key: "id_instancia", value: wzapInstanceId },
-            { key: "token", value: wzapToken },
-          ]
-        : [
-            { key: "phone_id", value: phoneId },
-            { key: "access_token", value: accessToken },
-            ...(businessAccountId ? [{ key: "business_account_id", value: businessAccountId }] : []),
-          ];
+      const credentials = [
+        { key: "phone_id", value: phoneId },
+        { key: "access_token", value: accessToken },
+        ...(businessAccountId ? [{ key: "business_account_id", value: businessAccountId }] : []),
+      ];
       for (const cred of credentials) {
         await supabase.functions.invoke("credential-manager", {
           body: {
             action: "save_platform",
-            integration_name: integrationName,
+            integration_name: "whatsapp",
             credential_key: cred.key,
             credential_value: cred.value,
-            description: `WhatsApp (${isWzap ? "WZAP" : "Meta"}) - ${cred.key}`,
+            description: `WhatsApp - ${cred.key}`,
           },
         });
       }
@@ -189,127 +173,10 @@ const WhatsAppSetupGuide = () => {
           Configurar WhatsApp Business API
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Escolha o provedor e conecte o WhatsApp aos seus agentes.
+          Siga os 7 passos abaixo para conectar o WhatsApp aos seus agentes.
         </p>
       </div>
 
-      {/* Provider selection */}
-      <div className="grid sm:grid-cols-2 gap-3">
-        <button
-          onClick={() => { setProvider("meta"); setCurrentStep(0); }}
-          className={`p-4 rounded-xl border text-left transition-all ${
-            provider === "meta"
-              ? "border-primary/40 bg-primary/5 ring-1 ring-primary/20"
-              : "border-border/20 bg-background/40 hover:border-border/40"
-          }`}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Phone className="h-4 w-4 text-primary" />
-            <span className="font-display font-semibold text-sm">Meta API Oficial</span>
-            {provider === "meta" && <Badge variant="secondary" className="text-[8px] ml-auto">Selecionado</Badge>}
-          </div>
-          <p className="text-xs text-muted-foreground">
-            API oficial do WhatsApp Business. Mais estável, requer verificação da empresa na Meta.
-          </p>
-        </button>
-        <button
-          onClick={() => setProvider("wzap")}
-          className={`p-4 rounded-xl border text-left transition-all ${
-            provider === "wzap"
-              ? "border-primary/40 bg-primary/5 ring-1 ring-primary/20"
-              : "border-border/20 bg-background/40 hover:border-border/40"
-          }`}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="h-4 w-4 text-primary" />
-            <span className="font-display font-semibold text-sm">WZAP API</span>
-            <Badge variant="outline" className="text-[8px] ml-auto border-emerald-500/30 text-emerald-500">Fácil</Badge>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Alternativa rápida. Basta o ID da instância e token — sem verificação da Meta.
-          </p>
-        </button>
-      </div>
-
-      {/* WZAP Quick Form */}
-      {provider === "wzap" && (
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-          <Card className="bg-background/40 backdrop-blur-xl border border-border/20">
-            <CardHeader className="pb-3">
-              <CardTitle className="text-base font-display flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-primary" />
-                Conectar via WZAP API
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <p className="text-sm text-muted-foreground">
-                Cole o ID da instância e o token gerados ao criar sua instância na WZAP.
-              </p>
-              <div className="space-y-3 p-4 rounded-xl bg-muted/10 border border-border/20">
-                <div className="flex items-center gap-2 mb-2">
-                  <Shield className="h-4 w-4 text-primary" />
-                  <span className="text-sm font-medium">Suas credenciais WZAP</span>
-                </div>
-                <div>
-                  <label className="text-xs text-muted-foreground mb-1 block">
-                    ID da Instância
-                  </label>
-                  <Input
-                    placeholder="Ex: 123456"
-                    value={wzapInstanceId}
-                    onChange={(e) => setWzapInstanceId(e.target.value)}
-                    className="text-sm"
-                  />
-                </div>
-                <div>
-                  <label className="text-xs text-muted-foreground mb-1 block">
-                    Token de Autenticação
-                  </label>
-                  <Input
-                    placeholder="Ex: abc123def456"
-                    type="password"
-                    value={wzapToken}
-                    onChange={(e) => setWzapToken(e.target.value)}
-                    className="text-sm"
-                  />
-                </div>
-                <Button
-                  className="w-full gap-2"
-                  disabled={!wzapInstanceId || !wzapToken || validateMutation.isPending}
-                  onClick={() => validateMutation.mutate()}
-                >
-                  {validateMutation.isPending ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  ) : (
-                    <CheckCircle className="h-4 w-4" />
-                  )}
-                  Validar e Conectar WZAP
-                </Button>
-                {validateMutation.data && !validateMutation.data.valid && (
-                  <div className="flex items-start gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/20 text-sm">
-                    <AlertTriangle className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
-                    <div>
-                      <p className="font-medium text-destructive">{validateMutation.data.error}</p>
-                      {validateMutation.data.hint && (
-                        <p className="text-muted-foreground text-xs mt-1">{validateMutation.data.hint}</p>
-                      )}
-                    </div>
-                  </div>
-                )}
-              </div>
-              <div className="flex items-start gap-3 p-3 rounded-lg bg-muted/10 border border-border/10">
-                <AlertTriangle className="h-4 w-4 text-amber-500 shrink-0 mt-0.5" />
-                <p className="text-xs text-muted-foreground">
-                  API endpoint: <code className="text-[10px] bg-muted/20 px-1 rounded">https://api2.wzap-api.com/instances/&#123;id&#125;/token/&#123;token&#125;/&#123;action&#125;</code>
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-        </motion.div>
-      )}
-
-      {/* Meta API official flow */}
-      {provider === "meta" && (<>
       {/* Progress */}
       <Card className="bg-background/40 backdrop-blur-xl border border-border/20">
         <CardContent className="pt-5 pb-4">
@@ -559,7 +426,7 @@ const WhatsAppSetupGuide = () => {
           </div>
         </CardContent>
       </Card>
-      </>)}
+      
     </div>
   );
 };
