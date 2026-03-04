@@ -1,4 +1,4 @@
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useState, useMemo } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -195,22 +195,26 @@ const AdminDashboard = () => {
       <div className="flex-1 min-w-0 overflow-y-auto">
         <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 space-y-6">
           {/* Header */}
-          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
+          <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1 relative">
+            {/* Premium admin glow accent */}
+            <div className="absolute -top-4 -left-4 w-32 h-32 bg-primary/5 rounded-full blur-[60px] pointer-events-none" />
+            
             <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
               <span>Admin</span><span>/</span>
               <span className="text-foreground/80 font-medium capitalize">{breadcrumbLabel}</span>
             </div>
             <div className="flex items-center gap-3">
               <div className="relative">
-                <Shield className="h-6 w-6 text-primary" />
+                <div className="absolute inset-0 rounded-lg bg-primary/20 blur-md animate-pulse" />
+                <Shield className="h-6 w-6 text-primary relative" />
                 <div className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 border-2 border-background" />
               </div>
-              <h1 className="font-display text-2xl font-bold">PROMETHEUS</h1>
-              <Badge variant="outline" className="border-primary/20 text-primary text-[10px] font-mono">ADMIN MASTER</Badge>
+              <h1 className="font-display text-2xl font-bold bg-gradient-to-r from-foreground via-foreground to-primary bg-clip-text">PROMETHEUS</h1>
+              <Badge variant="outline" className="border-primary/30 text-primary text-[10px] font-mono shadow-[0_0_8px_hsl(var(--primary)/0.15)]">ADMIN MASTER</Badge>
               <div className="flex items-center gap-2 ml-auto">
                 <NotificationPanel />
                 <TokenUpgradeDialog trigger={
-                  <Button size="sm" variant="outline" className="gap-1.5 border-primary/20 text-primary text-xs">
+                  <Button size="sm" variant="outline" className="gap-1.5 border-primary/20 text-primary text-xs hover:shadow-[0_0_12px_hsl(var(--primary)/0.2)] transition-shadow">
                     <Coins className="h-3.5 w-3.5" /> Tokens
                   </Button>
                 } />
@@ -264,41 +268,51 @@ const AdminDashboard = () => {
             </Sheet>
           </div>
 
-          {activeTab === "omnix" && (
-            <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
-              <OmnixCommandCenter />
-            </div>
-          )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            >
+              {activeTab === "omnix" && (
+                <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
+                  <OmnixCommandCenter />
+                </div>
+              )}
 
-          {activeTab === "insights" && (
-            <AdminInsightsPanel allProfiles={allProfiles} allAgents={allAgents} allCredits={allCredits} executionLogs={executionLogs} totalRevenue={totalRevenue} totalExecutions={totalExecutions} />
-          )}
+              {activeTab === "insights" && (
+                <AdminInsightsPanel allProfiles={allProfiles} allAgents={allAgents} allCredits={allCredits} executionLogs={executionLogs} totalRevenue={totalRevenue} totalExecutions={totalExecutions} />
+              )}
 
-          {activeTab === "war-room" && <AdminWarRoom />}
-          {activeTab === "agent-settings" && <AdminAgentSettings />}
-          {activeTab === "platform-creds" && <PlatformCredentialsPanel />}
-          {activeTab === "coupons" && <AdminCouponManager />}
-          {activeTab === "openclaw" && <OpenClawStatusPanel />}
+              {activeTab === "war-room" && <AdminWarRoom />}
+              {activeTab === "agent-settings" && <AdminAgentSettings />}
+              {activeTab === "platform-creds" && <PlatformCredentialsPanel />}
+              {activeTab === "coupons" && <AdminCouponManager />}
+              {activeTab === "openclaw" && <OpenClawStatusPanel />}
 
-          {activeTab === "overview" && (
-            <AdminCommandCenter
-              usersCount={usersCount} activeAgents={activeAgents} totalRevenue={totalRevenue}
-              pendingCount={pendingAgents.length} totalTokensUsed={totalTokensUsed} totalExecutions={totalExecutions}
-              successRate={successRate} waitingCount={waitingCount} allAgents={allAgents} allCredits={allCredits}
-              allProfiles={allProfiles} executionLogs={executionLogs} revenueData={revenueData}
-              planDistribution={planDistribution} onTabChange={setActiveTab}
-            />
-          )}
+              {activeTab === "overview" && (
+                <AdminCommandCenter
+                  usersCount={usersCount} activeAgents={activeAgents} totalRevenue={totalRevenue}
+                  pendingCount={pendingAgents.length} totalTokensUsed={totalTokensUsed} totalExecutions={totalExecutions}
+                  successRate={successRate} waitingCount={waitingCount} allAgents={allAgents} allCredits={allCredits}
+                  allProfiles={allProfiles} executionLogs={executionLogs} revenueData={revenueData}
+                  planDistribution={planDistribution} onTabChange={setActiveTab}
+                />
+              )}
 
-          {activeTab === "payments" && <PaymentsPanel totalRevenue={totalRevenue} subscriptionCount={allSubscriptions.length} />}
-          {activeTab === "users" && <AdminUserManager allProfiles={allProfiles} allCredits={allCredits} />}
-          {activeTab === "agents" && <AdminAgentsTable allAgents={allAgents} locale={locale} />}
-          {activeTab === "revenue" && <AdminRevenuePanel revenueData={revenueData} totalRevenue={totalRevenue} allSubscriptions={allSubscriptions} locale={locale} />}
-          {activeTab === "waitlist" && <AdminWaitlistTable waitlist={waitlist} waitingCount={waitingCount} locale={locale} />}
-          {activeTab === "logs" && <AdminLogsTable executionLogs={executionLogs} locale={locale} />}
-          {activeTab === "marketplace" && <AdminMarketplacePanel pendingAgents={pendingAgents} locale={locale} />}
-          {activeTab === "subscriptions" && <AdminSubscriptionsTable allSubscriptions={allSubscriptions} locale={locale} />}
-          {activeTab === "signup-metrics" && <AdminSignupMetrics allProfiles={allProfiles} locale={locale} />}
+              {activeTab === "payments" && <PaymentsPanel totalRevenue={totalRevenue} subscriptionCount={allSubscriptions.length} />}
+              {activeTab === "users" && <AdminUserManager allProfiles={allProfiles} allCredits={allCredits} />}
+              {activeTab === "agents" && <AdminAgentsTable allAgents={allAgents} locale={locale} />}
+              {activeTab === "revenue" && <AdminRevenuePanel revenueData={revenueData} totalRevenue={totalRevenue} allSubscriptions={allSubscriptions} locale={locale} />}
+              {activeTab === "waitlist" && <AdminWaitlistTable waitlist={waitlist} waitingCount={waitingCount} locale={locale} />}
+              {activeTab === "logs" && <AdminLogsTable executionLogs={executionLogs} locale={locale} />}
+              {activeTab === "marketplace" && <AdminMarketplacePanel pendingAgents={pendingAgents} locale={locale} />}
+              {activeTab === "subscriptions" && <AdminSubscriptionsTable allSubscriptions={allSubscriptions} locale={locale} />}
+              {activeTab === "signup-metrics" && <AdminSignupMetrics allProfiles={allProfiles} locale={locale} />}
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
     </div>
