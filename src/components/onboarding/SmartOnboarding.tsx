@@ -682,7 +682,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                 </motion.div>
               )}
 
-              {/* ═══ PHASE 5: SQUAD CONSULTANT (IA REAL) ═══ */}
+               {/* ═══ PHASE 5: SQUAD CONSULTANT (IA REAL) ═══ */}
               {phase === 5 && (
                 <motion.div
                   key="p5"
@@ -709,16 +709,50 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     <SquadConsultant />
                   </div>
 
-                  {/* Back */}
-                  <div className="flex flex-col items-center gap-2 pt-2">
+                  {/* Prominent CTA to signup */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="space-y-3 pt-2"
+                  >
                     <Button
-                      variant="ghost"
-                      onClick={() => setPhase(0)}
-                      className="text-xs text-muted-foreground"
+                      onClick={() => {
+                        onClose();
+                        navigate("/auth", {
+                          state: {
+                            signup: true,
+                            hireIntent: {
+                              type: "agent" as const,
+                              label: "Squad recomendado pelo consultor IA",
+                              slugs: ["sales", "omnichannel", "customer_success"],
+                            },
+                          },
+                        });
+                      }}
+                      className="w-full h-13 glow rounded-xl gap-2 text-sm font-semibold"
                     >
-                      ← Voltar ao início
+                      <Rocket className="h-4 w-4" />
+                      Criar conta e contratar meu Squad
+                      <ArrowRight className="h-4 w-4" />
                     </Button>
-                  </div>
+                    <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        onClick={() => setPhase(0)}
+                        className="h-10 rounded-xl gap-1.5 px-4 text-xs"
+                      >
+                        <ChevronLeft className="h-3.5 w-3.5" /> Voltar ao início
+                      </Button>
+                      <Button
+                        variant="outline"
+                        onClick={() => { onClose(); navigate("/marketplace"); }}
+                        className="flex-1 h-10 rounded-xl text-xs border-border/50"
+                      >
+                        Explorar todos os agentes
+                      </Button>
+                    </div>
+                  </motion.div>
                 </motion.div>
               )}
             </AnimatePresence>

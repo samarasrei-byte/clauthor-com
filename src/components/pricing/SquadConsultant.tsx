@@ -275,14 +275,24 @@ export default function SquadConsultant() {
             </Button>
           </form>
 
-          <div className="text-center mt-3">
-            <Link to="/auth">
-              <Button variant="link" size="sm" className="text-xs text-muted-foreground gap-1">
-                {t("squads.consultant_cta", { defaultValue: "Criar conta para contratar seu squad" })}
-                <ArrowRight className="h-3 w-3" />
-              </Button>
-            </Link>
-          </div>
+          {messages.length >= 4 && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center mt-3 space-y-2"
+            >
+              <p className="text-[11px] text-muted-foreground">
+                Gostou da recomendação? Crie sua conta para ativar o squad.
+              </p>
+              <Link to="/auth" state={{ signup: true }}>
+                <Button size="sm" className="gap-1.5 rounded-xl glow text-xs h-9 px-5">
+                  <Sparkles className="h-3 w-3" />
+                  {t("squads.consultant_cta", { defaultValue: "Criar conta e contratar" })}
+                  <ArrowRight className="h-3 w-3" />
+                </Button>
+              </Link>
+            </motion.div>
+          )}
         </motion.div>
       )}
     </div>
