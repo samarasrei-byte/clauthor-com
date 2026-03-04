@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -110,6 +111,7 @@ interface TokenUpgradeDialogProps {
 }
 
 export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps) {
+  const { t, i18n } = useTranslation();
   const { credits } = useCredits();
   const { user } = useAuth();
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
@@ -127,7 +129,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
   const handleSelectPlan = (planId: string) => {
     const plan = plans.find(p => p.id === planId);
     if (plan && plan.priceNum === 0) {
-      toast.info("Entre em contato com vendas para o plano Enterprise.");
+      toast.info(t("token_upgrade.contact_enterprise", { defaultValue: "Entre em contato com vendas para o plano Enterprise." }));
       return;
     }
     setSelectedPlan(planId);
@@ -159,7 +161,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
       : tokenPacks.find((p) => p.id === selectedPack)?.priceNum;
 
     if (!priceNum || priceNum === 0) {
-      toast.error("Preço inválido para este item.");
+      toast.error(t("token_upgrade.invalid_price", { defaultValue: "Preço inválido para este item." }));
       return;
     }
 
@@ -193,7 +195,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
       window.location.href = data.approve_url;
     } catch (err: any) {
       console.error("PayPal checkout error:", err);
-      toast.error(err.message || "Erro ao iniciar pagamento PayPal");
+      toast.error(err.message || t("token_upgrade.paypal_error", { defaultValue: "Erro ao iniciar pagamento PayPal" }));
     } finally {
       setPaypalLoading(false);
     }
@@ -245,9 +247,9 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
         status: "completed",
       });
 
-      toast.success(`🧪 Modo teste: ${(tokensToAdd / 1000000).toFixed(0)}M tokens creditados!`, { duration: 5000 });
+      toast.success(t("token_upgrade.test_credited", { amount: (tokensToAdd / 1000000).toFixed(0), defaultValue: "Modo teste: tokens creditados!" }), { duration: 5000 });
     } catch (err: any) {
-      toast.error(err.message || "Erro no bypass de teste");
+      toast.error(err.message || t("token_upgrade.test_error", { defaultValue: "Erro no bypass de teste" }));
     } finally {
       setPaypalLoading(false);
     }
@@ -259,7 +261,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
       <DialogTrigger asChild>
         {trigger || (
           <Button className="glow gap-2">
-            <Coins className="h-4 w-4" /> Upgrade de Tokens
+            <Coins className="h-4 w-4" /> {t("token_upgrade.title", { defaultValue: "Upgrade de Tokens" })}
           </Button>
         )}
       </DialogTrigger>
@@ -267,7 +269,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
         <DialogHeader>
           <DialogTitle className="font-display text-xl flex items-center gap-2">
             <Sparkles className="h-5 w-5 text-primary" />
-            {showPayment ? "Finalizar Pagamento" : "Upgrade de Tokens"}
+            {showPayment ? t("token_upgrade.finalize_payment", { defaultValue: "Finalizar Pagamento" }) : t("token_upgrade.title", { defaultValue: "Upgrade de Tokens" })}
           </DialogTitle>
         </DialogHeader>
 
@@ -275,10 +277,10 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
           <Tabs defaultValue="plans" className="mt-2">
             <TabsList className="grid w-full grid-cols-2 bg-white/5">
               <TabsTrigger value="plans" className="gap-2 data-[state=active]:bg-primary/20">
-                <Crown className="h-3.5 w-3.5" /> Planos Mensais
+                <Crown className="h-3.5 w-3.5" /> {t("token_upgrade.monthly_plans", { defaultValue: "Planos Mensais" })}
               </TabsTrigger>
               <TabsTrigger value="packs" className="gap-2 data-[state=active]:bg-primary/20">
-                <Package className="h-3.5 w-3.5" /> Pacotes Avulsos
+                <Package className="h-3.5 w-3.5" /> {t("token_upgrade.token_packs", { defaultValue: "Pacotes Avulsos" })}
               </TabsTrigger>
             </TabsList>
 
@@ -299,7 +301,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     >
                       {plan.popular && (
                         <Badge className="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground text-[10px]">
-                          Mais Popular
+                          {t("token_upgrade.most_popular", { defaultValue: "Mais Popular" })}
                         </Badge>
                       )}
                       <div className="flex items-center gap-2 mb-3">
@@ -310,7 +312,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                         <span className="font-display text-2xl font-bold">{plan.price}</span>
                         {plan.priceNum > 0 && <span className="text-xs text-muted-foreground">/mês</span>}
                       </div>
-                      <p className="text-xs text-cyan-400 mb-4">{plan.replaces}</p>
+                      <p className="text-xs text-cyan-400 mb-4">{plan.replaces.replace("Substitui", t("token_upgrade.replaces", { defaultValue: "Substitui" }))}</p>
                       <div className="space-y-2">
                         {plan.features.map((f) => (
                           <div key={f} className="flex items-start gap-2">
@@ -325,7 +327,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                         size="sm"
                         disabled={isCurrentPlan}
                       >
-                        {isCurrentPlan ? "Plano Atual" : plan.priceNum === 0 ? "Falar com Vendas" : "Selecionar"}
+                        {isCurrentPlan ? t("token_upgrade.current_plan", { defaultValue: "Plano Atual" }) : plan.priceNum === 0 ? t("token_upgrade.talk_sales", { defaultValue: "Falar com Vendas" }) : t("token_upgrade.select", { defaultValue: "Selecionar" })}
                         {!isCurrentPlan && <ArrowRight className="h-3.5 w-3.5" />}
                       </Button>
                     </motion.div>
@@ -337,7 +339,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
             {/* TOKEN PACKS */}
             <TabsContent value="packs" className="mt-4">
               <p className="text-sm text-muted-foreground mb-4">
-                Compre tokens extras sem mudar de plano. Os tokens adicionais não expiram.
+                {t("token_upgrade.buy_extra", { defaultValue: "Compre tokens extras sem mudar de plano. Os tokens adicionais não expiram." })}
               </p>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {tokenPacks.map((pack) => (
@@ -360,7 +362,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     </div>
                     <p className="font-display text-xl font-bold mb-3">{pack.price}</p>
                     <Button variant="outline" size="sm" className="w-full gap-1.5 border-white/10">
-                      Comprar <ArrowRight className="h-3.5 w-3.5" />
+                      {t("token_upgrade.buy", { defaultValue: "Comprar" })} <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </motion.div>
                 ))}
@@ -381,7 +383,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
               <div className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-muted-foreground">Selecionado</p>
+                    <p className="text-sm text-muted-foreground">{t("token_upgrade.selected", { defaultValue: "Selecionado" })}</p>
                     <p className="font-display font-bold text-lg">{selectedItemName}</p>
                   </div>
                   <p className="font-display text-2xl font-bold gradient-text">{selectedItemPrice}</p>
@@ -390,7 +392,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
 
               {/* Payment Method — PayPal only */}
               <div>
-                <p className="text-sm font-medium mb-3">Método de pagamento:</p>
+                <p className="text-sm font-medium mb-3">{t("token_upgrade.payment_method", { defaultValue: "Método de pagamento:" })}</p>
                 <motion.div
                   whileHover={{ scale: 1.02 }}
                   className="rounded-xl border border-blue-500 bg-blue-500/10 p-4 cursor-pointer transition-all"
@@ -402,7 +404,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     </div>
                     <div>
                       <p className="font-display font-bold text-sm">PayPal</p>
-                      <p className="text-[9px] text-muted-foreground">Internacional • Multi-moeda</p>
+                      <p className="text-[9px] text-muted-foreground">{t("token_upgrade.international", { defaultValue: "Internacional • Multi-moeda" })}</p>
                     </div>
                   </div>
                 </motion.div>
@@ -416,10 +418,10 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
               >
                 <div className="flex items-center gap-2">
                   <Globe className="h-5 w-5 text-blue-500" />
-                  <p className="font-display font-bold">Pagamento via PayPal</p>
+                  <p className="font-display font-bold">{t("token_upgrade.pay_with_paypal", { defaultValue: "Pagamento via PayPal" })}</p>
                 </div>
                 <p className="text-sm text-muted-foreground">
-                  Pagamentos internacionais com proteção ao comprador. Multi-moeda com conversão automática.
+                  {t("token_upgrade.paypal_desc", { defaultValue: "Pagamentos internacionais com proteção ao comprador. Multi-moeda com conversão automática." })}
                 </p>
                 <div className="flex gap-2">
                   {["USD", "EUR", "GBP", "BRL"].map((cur) => (
@@ -436,16 +438,16 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                   {paypalLoading ? (
                     <>
                       <span className="animate-spin h-4 w-4 border-2 border-white/30 border-t-white rounded-full" />
-                      Processando...
+                      {t("token_upgrade.processing", { defaultValue: "Processando..." })}
                     </>
                   ) : (
                     <>
-                      <ExternalLink className="h-4 w-4" /> Pagar com PayPal — {selectedItemPrice}
+                      <ExternalLink className="h-4 w-4" /> {t("token_upgrade.pay_with_paypal", { defaultValue: "Pagar com PayPal" })} — {selectedItemPrice}
                     </>
                   )}
                 </Button>
                 <p className="text-[10px] text-muted-foreground text-center">
-                  Proteção ao comprador inclusa. Tokens creditados após confirmação.
+                  {t("token_upgrade.buyer_protection", { defaultValue: "Proteção ao comprador inclusa. Tokens creditados após confirmação." })}
                 </p>
                 {isTestUser && (
                   <Button 
@@ -454,7 +456,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     onClick={handleTestBypass}
                     disabled={paypalLoading}
                   >
-                    <FlaskConical className="h-4 w-4" /> Modo Teste — Creditar sem pagar
+                    <FlaskConical className="h-4 w-4" /> {t("token_upgrade.test_bypass", { defaultValue: "Modo Teste — Creditar sem pagar" })}
                   </Button>
                 )}
               </motion.div>
