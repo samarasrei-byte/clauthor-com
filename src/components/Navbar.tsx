@@ -195,7 +195,7 @@ const Navbar = () => {
                     {t("nav.login")}
                   </Button>
                 </Link>
-                <Link to="/auth">
+                <Link to="/auth" state={{ signup: true }}>
                   <Button size="sm" className="relative overflow-hidden glow font-semibold rounded-lg group">
                     <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift" />
                     <span className="relative z-10 flex items-center gap-1.5">
@@ -311,7 +311,7 @@ const Navbar = () => {
                       {t("nav.login")}
                     </Button>
                   </Link>
-                  <Link to="/auth" onClick={() => setMobileOpen(false)}>
+                   <Link to="/auth" state={{ signup: true }} onClick={() => setMobileOpen(false)}>
                     <Button className="w-full glow">
                       {t("auth.create_account")}
                     </Button>
