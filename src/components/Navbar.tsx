@@ -284,7 +284,11 @@ const Navbar = () => {
                 Admin
               </Link>
             )}
-            <div className="pt-4 space-y-2">
+            <div className="flex items-center gap-3 px-4 py-2">
+              <LanguageSelector />
+              <ThemeToggle />
+            </div>
+            <div className="pt-2 space-y-2">
               {user ? (
                 <>
                   <Button
