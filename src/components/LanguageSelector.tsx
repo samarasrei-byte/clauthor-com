@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { languages } from "@/i18n";
+import { languages, changeLanguageSafe } from "@/i18n";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Languages, Check } from "lucide-react";
+import { Check } from "lucide-react";
 
 export function LanguageSelector() {
   const { i18n } = useTranslation();
@@ -25,9 +25,9 @@ export function LanguageSelector() {
       .join("");
   };
 
-  const changeLanguage = (code: string) => {
-    i18n.changeLanguage(code);
+  const handleChangeLanguage = async (code: string) => {
     setOpen(false);
+    await changeLanguageSafe(code);
   };
 
   return (
@@ -46,12 +46,12 @@ export function LanguageSelector() {
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="w-48 max-h-80 overflow-y-auto glass-card border-white/10"
+        className="w-48 max-h-80 overflow-y-auto glass-card border-white/10 z-[100]"
       >
         {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
-            onClick={() => changeLanguage(lang.code)}
+            onClick={() => handleChangeLanguage(lang.code)}
             className={`cursor-pointer gap-3 ${
               i18n.language === lang.code ? "bg-primary/10 text-primary" : ""
             }`}

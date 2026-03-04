@@ -6,7 +6,8 @@ import LanguageDetector from "i18next-browser-languagedetector";
 import pt from "./locales/pt.json";
 
 export const languages = [
-  { code: "pt", name: "Português", flag: "br" },
+  { code: "pt", name: "Português (BR)", flag: "br" },
+  { code: "pt-pt", name: "Português (PT)", flag: "pt" },
   { code: "en", name: "English", flag: "us" },
   { code: "es", name: "Español", flag: "es" },
   { code: "fr", name: "Français", flag: "fr" },
@@ -25,6 +26,7 @@ const supportedLngs = languages.map((l) => l.code);
 
 // Dynamic locale loaders — only fetched when needed
 const localeLoaders: Record<string, () => Promise<{ default: Record<string, any> }>> = {
+  "pt-pt": () => import("./locales/pt.json"),
   en: () => import("./locales/en.json"),
   es: () => import("./locales/es.json"),
   fr: () => import("./locales/fr.json"),
@@ -52,6 +54,12 @@ async function loadLocale(lng: string) {
   }
 }
 
+// Pre-load a locale before switching — ensures translations are available immediately
+export async function changeLanguageSafe(lng: string) {
+  await loadLocale(lng);
+  await i18n.changeLanguage(lng);
+}
+
 i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -68,7 +76,12 @@ i18n
     detection: {
       order: ["localStorage", "navigator", "htmlTag"],
       caches: ["localStorage"],
-      convertDetectedLanguage: (lng: string) => lng.split("-")[0],
+      convertDetectedLanguage: (lng: string) => {
+        const lower = lng.toLowerCase();
+        // Preserve pt-PT distinction
+        if (lower === "pt-pt") return "pt-pt";
+        return lng.split("-")[0];
+      },
     },
   });
 
