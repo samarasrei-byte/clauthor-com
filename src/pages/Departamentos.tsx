@@ -23,14 +23,14 @@ import {
 } from "@/data/departmentData";
 
 // Category definitions for filters
-const categories = [
-  { id: "all", label: "Todos", icon: Filter },
-  { id: "popular", label: "Populares", icon: Flame },
-  { id: "tech", label: "Tech & Dados", ids: ["tecnologia", "qualidade"] },
-  { id: "vendas", label: "Vendas & SDR", ids: ["comercial", "prospeccao", "ecommerce_growth"] },
-  { id: "ops", label: "Operações", ids: ["operacoes", "logistica", "compras"] },
-  { id: "criativo", label: "Criativo & MKT", ids: ["marketing", "criacao", "comunicacao"] },
-  { id: "corp", label: "Corporativo", ids: ["financeiro", "juridico", "rh", "suporte"] },
+const getCategoryLabels = (t: any) => [
+  { id: "all", label: t("departments_page.cat_all"), icon: Filter },
+  { id: "popular", label: t("departments_page.cat_popular"), icon: Flame },
+  { id: "tech", label: t("departments_page.cat_tech"), ids: ["tecnologia", "qualidade"] },
+  { id: "vendas", label: t("departments_page.cat_sales"), ids: ["comercial", "prospeccao", "ecommerce_growth"] },
+  { id: "ops", label: t("departments_page.cat_ops"), ids: ["operacoes", "logistica", "compras"] },
+  { id: "criativo", label: t("departments_page.cat_creative"), ids: ["marketing", "criacao", "comunicacao"] },
+  { id: "corp", label: t("departments_page.cat_corp"), ids: ["financeiro", "juridico", "rh", "suporte"] },
 ];
 
 const Departamentos = () => {
@@ -45,6 +45,7 @@ const Departamentos = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [suggestions, setSuggestions] = useState<{ department_name: string; votes: number }[]>([]);
   const [activeFilter, setActiveFilter] = useState("all");
+  const categories = getCategoryLabels(t);
 
   const region = getRegion(lang);
 
@@ -75,7 +76,7 @@ const Departamentos = () => {
     try {
       const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
 
-      const loadingToast = toast.loading("Criando assinatura do departamento...");
+      const loadingToast = toast.loading(t("departments_page.creating_subscription"));
 
       const { data, error } = await supabase.functions.invoke("paypal-checkout", {
         body: {
@@ -93,7 +94,7 @@ const Departamentos = () => {
 
       if (error) throw error;
       if (!data?.success || !data?.approve_url) {
-        throw new Error(data?.error || "Falha ao criar assinatura");
+        throw new Error(data?.error || t("departments_page.subscription_error"));
       }
 
       sessionStorage.setItem("paypal_subscription", JSON.stringify({
@@ -113,7 +114,7 @@ const Departamentos = () => {
       window.location.href = data.approve_url;
     } catch (err: any) {
       console.error("Department subscription error:", err);
-      toast.error(err.message || "Erro ao criar assinatura.");
+      toast.error(err.message || t("departments_page.subscription_error"));
     } finally {
       setHiringDeptId(null);
     }
@@ -153,9 +154,9 @@ const Departamentos = () => {
     });
     setIsSubmitting(false);
     if (error) {
-      toast.error("Erro ao enviar sugestão. Tente novamente.");
+      toast.error(t("departments_page.suggest_error"));
     } else {
-      toast.success("Sugestão enviada! Obrigado pelo feedback.");
+      toast.success(t("departments_page.suggest_success"));
       setSuggestionName("");
       setSuggestionReason("");
       setSuggestionEmail("");
@@ -197,22 +198,22 @@ const Departamentos = () => {
         >
           <Badge variant="outline" className="mb-4 border-primary/15 text-primary/80 px-5 py-2.5">
             <Network className="h-4 w-4 mr-2" />
-            Times de IA por Departamento
+            {t("departments_page.badge")}
           </Badge>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-4 leading-tight">
-            Sua empresa inteira<br />
-            <span className="gradient-text">operada por IA</span>
+            {t("departments_page.title1")}<br />
+            <span className="gradient-text">{t("departments_page.title2")}</span>
           </h1>
           <p className="text-muted-foreground text-base max-w-xl mx-auto mb-4">
-            {departments.length} departamentos. {totalAgents} agentes autônomos. Cada um substitui um profissional CLT — por uma <span className="text-primary font-bold">fração do custo</span>.
+            {t("departments_page.subtitle", { deptCount: departments.length, agentCount: totalAgents })} <span className="text-primary font-bold">{t("departments_page.subtitle_highlight")}</span>.
           </p>
 
           {/* Hero Stats */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
             {[
-              { icon: Bot, value: String(totalAgents), label: "Agentes" },
-              { icon: Building2, value: String(departments.length), label: "Departamentos" },
-              { icon: Zap, value: "24/7", label: "Operação" },
+              { icon: Bot, value: String(totalAgents), label: t("departments_page.stat_agents") },
+              { icon: Building2, value: String(departments.length), label: t("departments_page.stat_departments") },
+              { icon: Zap, value: "24/7", label: t("departments_page.stat_operation") },
             ].map((stat) => (
               <div key={stat.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/30 border border-border text-sm">
                 <stat.icon className="h-3.5 w-3.5 text-primary/70" />
@@ -278,7 +279,7 @@ const Departamentos = () => {
                 {dept.popular && (
                   <div className="absolute top-3 right-3">
                     <Badge className="rounded-lg bg-primary text-primary-foreground text-[11px] font-bold px-3 py-1.5 shadow-[0_0_20px_-5px_hsl(var(--primary)/0.4)]">
-                      ⚡ MAIS VENDIDO
+                      ⚡ {t("departments_page.best_seller")}
                     </Badge>
                   </div>
                 )}
@@ -291,7 +292,7 @@ const Departamentos = () => {
                     <div className="flex-1">
                       <h3 className="font-display font-bold text-lg">{t(`squads.dept_${dept.id}`)}</h3>
                       <p className="text-[11px] text-muted-foreground">
-                        {dept.headcount} agentes · {dept.actions} ações/mês · 24/7
+                        {dept.headcount} {t("departments_page.agents_label")} · {dept.actions} {t("departments_page.actions_month")} · 24/7
                       </p>
                     </div>
                   </div>
@@ -300,16 +301,16 @@ const Departamentos = () => {
                     <span className="font-display font-bold text-2xl text-foreground">
                       {formatPrice(deptPrice, lang)}
                     </span>
-                    <span className="text-sm text-muted-foreground mb-0.5">/mês</span>
+                    <span className="text-sm text-muted-foreground mb-0.5">{t("departments_page.month")}</span>
                     <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 text-[10px] font-bold ml-auto">
-                      -{dept.discount}% pack
+                      -{dept.discount}% {t("departments_page.pack_discount")}
                     </Badge>
                   </div>
                 </div>
 
                 <div className="p-5 space-y-1.5">
                   <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground font-semibold mb-2">
-                    Agentes inclusos
+                    {t("departments_page.included_agents")}
                   </p>
                   {dept.agents.slice(0, 4).map((agent, idx) => {
                     const AgentIcon = agent.icon;
@@ -327,7 +328,7 @@ const Departamentos = () => {
                             {t(`library_page.agents.${agent.key}_title`)}
                           </p>
                           <p className="text-[10px] text-muted-foreground">
-                            Substitui: {agent.role}
+                            {t("departments_page.replaces", { role: agent.role })}
                           </p>
                         </div>
                       </Link>
@@ -335,7 +336,7 @@ const Departamentos = () => {
                   })}
                   {dept.agents.length > 4 && (
                     <p className="text-xs text-muted-foreground text-center pt-1">
-                      +{dept.agents.length - 4} agentes inclusos
+                      {t("departments_page.more_agents", { count: dept.agents.length - 4 })}
                     </p>
                   )}
                 </div>
@@ -343,14 +344,14 @@ const Departamentos = () => {
                 <div className="px-5 pb-5 space-y-3">
                   <div className="flex items-center justify-between p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
                     <div>
-                      <p className="text-[10px] text-muted-foreground">vs equipe CLT</p>
+                     <p className="text-[10px] text-muted-foreground">{t("departments_page.vs_clt")}</p>
                       <p className="text-sm font-bold text-emerald-400">
-                        -{savingsPercent}% de economia
+                        -{savingsPercent}% {t("departments_page.savings")}
                       </p>
                     </div>
                     <div className="text-right">
                       <p className="text-[10px] text-muted-foreground line-through">
-                        {formatPrice(deptClt, lang)}/mês
+                        {formatPrice(deptClt, lang)}{t("departments_page.month")}
                       </p>
                     </div>
                   </div>
@@ -366,9 +367,9 @@ const Departamentos = () => {
                     <div className="absolute inset-0 rounded-2xl border border-white/[0.15] group-hover:border-white/[0.3] transition-colors duration-500" />
                     <span className="relative z-10 flex items-center justify-center gap-3 text-primary-foreground font-bold text-[14px] drop-shadow-[0_0_12px_hsl(var(--primary)/0.5)]">
                       {hiringDeptId === dept.id ? (
-                        <><Loader2 className="h-5 w-5 animate-spin" /> Processando...</>
+                        <><Loader2 className="h-5 w-5 animate-spin" /> {t("departments_page.processing")}</>
                       ) : (
-                        <><Flame className="h-5 w-5 animate-pulse" /> Assinar Departamento <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" /></>
+                        <><Flame className="h-5 w-5 animate-pulse" /> {t("departments_page.subscribe_dept")} <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" /></>
                       )}
                     </span>
                   </button>
@@ -380,9 +381,9 @@ const Departamentos = () => {
 
         {filteredDepartments.length === 0 && (
           <div className="text-center py-16 mb-16">
-            <p className="text-muted-foreground">Nenhum departamento encontrado nesta categoria.</p>
+            <p className="text-muted-foreground">{t("departments_page.no_dept_found")}</p>
             <Button variant="outline" className="mt-4" onClick={() => setActiveFilter("all")}>
-              Ver todos
+              {t("departments_page.view_all")}
             </Button>
           </div>
         )}
@@ -398,17 +399,17 @@ const Departamentos = () => {
         >
           <div className="text-center p-8 pb-4">
             <h2 className="font-display font-bold text-2xl sm:text-3xl mb-2">
-              Equipe CLT <span className="text-muted-foreground">vs</span> <span className="gradient-text">CLAUTHOR</span>
+              {t("departments_page.clt_vs_title")} <span className="text-muted-foreground">vs</span> <span className="gradient-text">CLAUTHOR</span>
             </h2>
-            <p className="text-sm text-muted-foreground">A mesma entrega, uma fração do custo</p>
+            <p className="text-sm text-muted-foreground">{t("departments_page.clt_vs_subtitle")}</p>
           </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-t border-border">
-                  <th className="text-left px-6 py-4 text-muted-foreground font-medium">Critério</th>
-                  <th className="px-6 py-4 text-muted-foreground font-medium text-center">Equipe CLT</th>
+                  <th className="text-left px-6 py-4 text-muted-foreground font-medium">{t("departments_page.criteria")}</th>
+                  <th className="px-6 py-4 text-muted-foreground font-medium text-center">{t("departments_page.clt_team")}</th>
                   <th className="px-6 py-4 text-center">
                     <span className="text-primary font-bold">CLAUTHOR</span>
                   </th>
@@ -416,14 +417,14 @@ const Departamentos = () => {
               </thead>
               <tbody className="divide-y divide-border">
                 {[
-                  { criteria: "Custo médio mensal (5 pessoas)", clt: formatPrice(Math.round(totalCltCost / 3), lang), clauthor: formatPrice(Math.round(totalPrometheusCost / 3), lang), highlight: true },
-                  { criteria: "Disponibilidade", clt: "8h/dia, 22 dias/mês", clauthor: "24/7/365", highlight: false },
-                  { criteria: "Tempo de onboarding", clt: "30-90 dias", clauthor: "< 5 minutos", highlight: false },
-                  { criteria: "Escala sob demanda", clt: "Meses (recrutamento)", clauthor: "Instantâneo", highlight: false },
-                  { criteria: "Encargos trabalhistas", clt: "~80% sobre salário", clauthor: "Zero", highlight: true },
-                  { criteria: "Férias, 13º, FGTS", clt: "Obrigatório", clauthor: "Não se aplica", highlight: false },
-                  { criteria: "Risco trabalhista", clt: "Alto", clauthor: "Nenhum", highlight: false },
-                  { criteria: "Consistência de qualidade", clt: "Variável", clauthor: "Padronizado", highlight: false },
+                  { criteria: t("departments_page.clt_cost"), clt: formatPrice(Math.round(totalCltCost / 3), lang), clauthor: formatPrice(Math.round(totalPrometheusCost / 3), lang), highlight: true },
+                  { criteria: t("departments_page.clt_availability"), clt: t("departments_page.clt_availability_val"), clauthor: t("departments_page.clauthor_availability"), highlight: false },
+                  { criteria: t("departments_page.clt_onboarding"), clt: t("departments_page.clt_onboarding_val"), clauthor: t("departments_page.clauthor_onboarding"), highlight: false },
+                  { criteria: t("departments_page.clt_scale"), clt: t("departments_page.clt_scale_val"), clauthor: t("departments_page.clauthor_scale"), highlight: false },
+                  { criteria: t("departments_page.clt_charges"), clt: t("departments_page.clt_charges_val"), clauthor: t("departments_page.clauthor_charges"), highlight: true },
+                  { criteria: t("departments_page.clt_benefits"), clt: t("departments_page.clt_benefits_val"), clauthor: t("departments_page.clauthor_benefits"), highlight: false },
+                  { criteria: t("departments_page.clt_risk"), clt: t("departments_page.clt_risk_val"), clauthor: t("departments_page.clauthor_risk"), highlight: false },
+                  { criteria: t("departments_page.clt_quality"), clt: t("departments_page.clt_quality_val"), clauthor: t("departments_page.clauthor_quality"), highlight: false },
                 ].map((row) => (
                   <tr key={row.criteria} className={row.highlight ? "bg-primary/[0.03]" : ""}>
                     <td className="px-6 py-3.5 font-medium text-foreground">{row.criteria}</td>
@@ -446,14 +447,14 @@ const Departamentos = () => {
           className="rounded-2xl border border-border bg-card/30 p-8 md:p-12 mb-16"
         >
           <h2 className="font-display text-2xl font-bold text-center mb-8">
-            Por que contratar <span className="gradient-text">departamentos inteiros</span>?
+            {t("departments_page.why_title")} <span className="gradient-text">{t("departments_page.why_title_highlight")}</span>?
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: TrendingUp, title: `${totalSavingsPercent}% mais barato`, desc: "Que uma equipe CLT equivalente" },
-              { icon: Clock, title: "Operação 24/7", desc: "Sem férias, sem faltas, sem hora extra" },
-              { icon: Network, title: "Agentes orquestrados", desc: "Times que se comunicam entre si" },
-              { icon: Rocket, title: "Setup em minutos", desc: "Sem recrutamento, sem onboarding" },
+              { icon: TrendingUp, title: t("departments_page.why_cheaper", { percent: totalSavingsPercent }), desc: t("departments_page.why_cheaper_desc") },
+              { icon: Clock, title: t("departments_page.why_247"), desc: t("departments_page.why_247_desc") },
+              { icon: Network, title: t("departments_page.why_orchestrated"), desc: t("departments_page.why_orchestrated_desc") },
+              { icon: Rocket, title: t("departments_page.why_setup"), desc: t("departments_page.why_setup_desc") },
             ].map((item) => (
               <div key={item.title} className="text-center group">
                 <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
@@ -475,22 +476,22 @@ const Departamentos = () => {
         >
           <Flame className="h-10 w-10 text-primary mx-auto mb-4" />
           <h2 className="font-display font-bold text-2xl sm:text-3xl mb-3">
-            Empresa completa por menos que 3 funcionários CLT
+            {t("departments_page.full_cta_title")}
           </h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-4">
-            {departments.length} departamentos · {totalAgents} agentes · operação 24/7 · setup em minutos
+            {t("departments_page.full_cta_subtitle", { deptCount: departments.length, agentCount: totalAgents })}
           </p>
           <div className="flex items-center justify-center gap-6 mb-6">
             <div>
-              <p className="text-xs text-muted-foreground">CLT total</p>
+              <p className="text-xs text-muted-foreground">{t("departments_page.clt_total")}</p>
               <p className="font-display font-bold text-xl line-through text-muted-foreground">
-                {formatPrice(totalCltCost, lang)}/mês
+                {formatPrice(totalCltCost, lang)}{t("departments_page.month")}
               </p>
             </div>
             <div>
               <p className="text-xs text-emerald-400 font-medium">CLAUTHOR</p>
               <p className="font-display font-bold text-xl text-emerald-400">
-                {formatPrice(totalPrometheusCost, lang)}/mês
+                {formatPrice(totalPrometheusCost, lang)}{t("departments_page.month")}
               </p>
             </div>
             <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 font-bold text-sm px-3 py-1">
@@ -501,15 +502,15 @@ const Departamentos = () => {
             <Button 
               className="glow rounded-xl px-10 h-14 font-semibold gap-2 text-lg"
               onClick={() => {
-                toast.info("Para a empresa completa, entre em contato com nosso time comercial.", { duration: 5000 });
+                toast.info(t("departments_page.consultant_toast"), { duration: 5000 });
               }}
             >
-              Falar com Consultor
+              {t("departments_page.talk_consultant")}
               <ArrowRight className="h-5 w-5" />
             </Button>
             <Link to="/pricing">
               <Button variant="outline" className="rounded-xl px-8 h-14 font-semibold gap-2">
-                Ver planos individuais
+                {t("departments_page.view_individual")}
               </Button>
             </Link>
           </div>
@@ -527,9 +528,9 @@ const Departamentos = () => {
             <div className="text-center mb-6">
               <h2 className="font-display text-2xl font-bold mb-2 flex items-center justify-center gap-3">
                 <Bot className="h-6 w-6 text-primary" />
-                Consultor IA de Squads
+                {t("departments_page.ai_consultant_title")}
               </h2>
-              <p className="text-sm text-muted-foreground">Descreva sua empresa e receba uma recomendação personalizada de departamentos</p>
+              <p className="text-sm text-muted-foreground">{t("departments_page.ai_consultant_desc")}</p>
             </div>
             <SquadConsultant />
           </div>
@@ -547,23 +548,23 @@ const Departamentos = () => {
               <Lightbulb className="h-7 w-7 text-primary" />
             </div>
             <h2 className="font-display text-2xl font-bold mb-2">
-              Qual departamento você <span className="gradient-text">gostaria de ver</span>?
+              {t("departments_page.suggest_title")} <span className="gradient-text">{t("departments_page.suggest_title_highlight")}</span>?
             </h2>
             <p className="text-sm text-muted-foreground max-w-lg mx-auto">
-              Sugira novos departamentos e ajude a moldar o futuro da plataforma.
+              {t("departments_page.suggest_desc")}
             </p>
           </div>
 
           <div className="max-w-xl mx-auto space-y-4">
             <Input
-              placeholder="Nome do departamento (ex: Data Science, ESG...)"
+              placeholder={t("departments_page.suggest_name_placeholder")}
               value={suggestionName}
               onChange={(e) => setSuggestionName(e.target.value)}
               maxLength={100}
               className="bg-card/40 border-border"
             />
             <Textarea
-              placeholder="Por que esse departamento seria útil para sua empresa? (opcional)"
+              placeholder={t("departments_page.suggest_reason_placeholder")}
               value={suggestionReason}
               onChange={(e) => setSuggestionReason(e.target.value)}
               maxLength={500}
@@ -572,7 +573,7 @@ const Departamentos = () => {
             />
             <Input
               type="email"
-              placeholder="Seu e-mail (opcional — avisamos quando lançar)"
+              placeholder={t("departments_page.suggest_email_placeholder")}
               value={suggestionEmail}
               onChange={(e) => setSuggestionEmail(e.target.value)}
               maxLength={255}
@@ -584,14 +585,14 @@ const Departamentos = () => {
               className="w-full h-12 gap-2 text-sm font-bold"
             >
               <Send className="h-4 w-4" />
-              {isSubmitting ? "Enviando..." : "Enviar Sugestão"}
+              {isSubmitting ? t("departments_page.suggest_submitting") : t("departments_page.suggest_submit")}
             </Button>
           </div>
 
           {suggestions.length > 0 && (
             <div className="mt-8 pt-6 border-t border-border">
               <p className="text-xs uppercase tracking-[0.15em] text-muted-foreground font-semibold text-center mb-4">
-                Mais votados pela comunidade
+                {t("departments_page.most_voted")}
               </p>
               <div className="flex flex-wrap justify-center gap-3">
                 {suggestions.map((s) => (
