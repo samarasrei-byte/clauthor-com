@@ -534,5 +534,14 @@
     "suggest_name_placeholder": "Nome dipartimento (es: Data Science, ESG...)", "suggest_reason_placeholder": "Perché sarebbe utile? (opzionale)",
     "suggest_email_placeholder": "La tua email (opzionale)", "suggest_submit": "Invia Suggerimento", "suggest_submitting": "Invio...",
     "suggest_error": "Errore nell'invio.", "suggest_success": "Suggerimento inviato! Grazie!", "most_voted": "Più votati dalla community"
-  }
+  },
+  "settings": { "title": "Impostazioni", "subtitle": "Gestisci agenti, profilo, team, abbonamento e supporto.", "tab_agents": "Agenti", "tab_profile": "Il Mio Profilo", "tab_team": "Team", "tab_billing": "Abbonamento", "tab_support": "Supporto" },
+  "command": { "community": "Comunità", "create_agent": "Crea Agente", "create_new": "Crea nuovo agente", "talk_consultant": "Parla con consulente IA", "view_squads": "Vedi squad IA", "search_placeholder": "Di cosa hai bisogno?", "no_results": "Nessun risultato", "actions_heading": "Azioni", "navigate_heading": "Naviga", "system_active": "Sistema attivo", "tier_advanced": "Avanzato" },
+  "payment": { "confirmed": "Pagamento Confermato!", "dept_activated": "{{name}} attivato con {{count}} agenti", "agent_ready": "{{name}} è pronto a lavorare", "redirecting": "Reindirizzamento a THOR per la configurazione guidata..." },
+  "omnix": { "agents": "Agenti", "executions": "Esecuzioni", "success": "Successo", "time": "Tempo", "credits": "Crediti", "tasks": "Attività", "exec_7days": "Esecuzioni — 7 giorni" },
+  "integrations": { "back": "Torna alle Integrazioni", "subtitle": "Collega i tuoi agenti con gli strumenti che usi già.", "connected": "connessa", "tab_all": "Tutte", "tab_comm": "Comunicazione", "tab_prod": "Produttività", "tab_others": "Altro", "status_connected": "Connesso", "status_partial": "Parziale", "status_available": "Disponibile", "status_soon": "In Arrivo", "close": "Chiudi", "quick_connect": "Connessione Rapida", "step_by_step": "Passo dopo passo", "connect": "Connetti" },
+  "create_agent": { "title": "Crea Nuovo Agente", "subtitle": "Configura il tuo dipendente digitale passo dopo passo.", "name_required": "Nome dell'agente obbligatorio", "created_success": "Agente creato con successo!", "create_error": "Errore nella creazione" },
+  "agent_landing": { "view_all": "Vedi tutti gli agenti", "problem_badge": "Il Problema", "solution_badge": "La Soluzione", "results_title": "Risultati Reali", "how_it_works": "Come Funziona", "traditional": "Tradizionale", "testimonials_title": "Cosa dicono i nostri clienti", "faq_title": "Domande Frequenti", "native_integrations": "Integrazioni Native", "no_commitment": "Senza impegno · Setup in minuti · Cancella quando vuoi" },
+  "privacy": { "legal_doc": "Documento Legale", "title": "Politica sulla Privacy", "last_updated": "Ultimo aggiornamento:", "rights_reserved": "Tutti i diritti riservati." },
+  "terms": { "legal_doc": "Documento Legale", "title": "Termini e Condizioni d'Uso", "last_updated": "Ultimo aggiornamento:", "rights_reserved": "Tutti i diritti riservati." }
 }

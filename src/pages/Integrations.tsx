@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import HelpTooltip from "@/components/HelpTooltip";
+import { useTranslation } from "react-i18next";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -310,6 +311,7 @@ const IntegrationsPage = () => {
   const [expandedCard, setExpandedCard] = useState<string | null>(null);
   const queryClient = useQueryClient();
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   // Fetch connected integrations from platform_credentials
   const { data: connectedCreds = [], refetch: refetchCreds } = useQuery({
@@ -343,7 +345,7 @@ const IntegrationsPage = () => {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <Button variant="ghost" size="sm" onClick={() => setActiveSetup(null)} className="gap-1 mb-2">
-          ← Voltar para Integrações
+          ← {t("integrations.back", { defaultValue: "Voltar para Integrações" })}
         </Button>
         {activeSetup === "whatsapp" && <WhatsAppSetupGuide />}
         {activeSetup === "email" && <SendGridSetupGuide />}
@@ -360,21 +362,20 @@ const IntegrationsPage = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="font-display text-3xl font-bold mb-1 flex items-center gap-2">
-          Integrações
-          <HelpTooltip id="integrations-intro" text="Conecte seus agentes com WhatsApp, E-mail, LinkedIn, Meta Ads e mais. Cole suas chaves direto no card ou clique 'Passo a passo' para o tutorial completo." position="bottom" size={16} />
+          {t("nav.integrations", { defaultValue: "Integrações" })}
+          <HelpTooltip id="integrations-intro" text={t("integrations.help", { defaultValue: "Conecte seus agentes com WhatsApp, E-mail, LinkedIn, Meta Ads e mais. Cole suas chaves direto no card ou clique 'Passo a passo' para o tutorial completo." })} position="bottom" size={16} />
         </h1>
         <div className="flex items-center gap-3">
-          <p className="text-muted-foreground">Conecte seus agentes com as ferramentas que você já usa.</p>
+          <p className="text-muted-foreground">{t("integrations.subtitle", { defaultValue: "Conecte seus agentes com as ferramentas que você já usa." })}</p>
           {connectedCount > 0 && (
             <Badge className="bg-emerald-500/15 text-emerald-500 border-emerald-500/20">
               <CheckCircle className="h-3 w-3 mr-1" />
-              {connectedCount} conectada{connectedCount > 1 ? "s" : ""}
+              {connectedCount} {t("integrations.connected", { defaultValue: "conectada" })}{connectedCount > 1 ? "s" : ""}
             </Badge>
           )}
         </div>
       </motion.div>
 
-      {/* Quick tip */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -383,20 +384,19 @@ const IntegrationsPage = () => {
       >
         <Sparkles className="h-5 w-5 text-primary shrink-0" />
         <p className="text-xs text-muted-foreground">
-          <strong className="text-foreground">Dica:</strong> Já tem as credenciais? Clique no card e cole direto — sem precisar seguir o tutorial inteiro. 
-          Para integrações complexas, use o botão <strong>"Passo a passo"</strong>.
+          <strong className="text-foreground">{t("integrations.tip_label", { defaultValue: "Dica:" })}</strong> {t("integrations.tip_text", { defaultValue: "Já tem as credenciais? Clique no card e cole direto — sem precisar seguir o tutorial inteiro. Para integrações complexas, use o botão \"Passo a passo\"." })}
         </p>
       </motion.div>
 
       <Tabs defaultValue="all" className="space-y-6">
         <TabsList className="flex-wrap h-auto gap-1">
-          <TabsTrigger value="all">Todas</TabsTrigger>
-          <TabsTrigger value="Comunicação">Comunicação</TabsTrigger>
+          <TabsTrigger value="all">{t("integrations.tab_all", { defaultValue: "Todas" })}</TabsTrigger>
+          <TabsTrigger value="Comunicação">{t("integrations.tab_comm", { defaultValue: "Comunicação" })}</TabsTrigger>
           <TabsTrigger value="Social">Social</TabsTrigger>
           <TabsTrigger value="Ads">Ads</TabsTrigger>
           <TabsTrigger value="CRM">CRM</TabsTrigger>
-          <TabsTrigger value="Produtividade">Produtividade</TabsTrigger>
-          <TabsTrigger value="outros">Outros</TabsTrigger>
+          <TabsTrigger value="Produtividade">{t("integrations.tab_prod", { defaultValue: "Produtividade" })}</TabsTrigger>
+          <TabsTrigger value="outros">{t("integrations.tab_others", { defaultValue: "Outros" })}</TabsTrigger>
         </TabsList>
 
         {["all", "Comunicação", "Social", "Ads", "CRM", "Produtividade", "outros"].map((tab) => {
@@ -437,12 +437,12 @@ const IntegrationsPage = () => {
                               {connectionStatus === "connected" && (
                                 <Badge className="bg-emerald-500/15 text-emerald-500 border-emerald-500/20 text-[10px]">
                                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1" />
-                                  Conectado
+                                  {t("integrations.status_connected", { defaultValue: "Conectado" })}
                                 </Badge>
                               )}
                               {connectionStatus === "partial" && (
                                 <Badge className="bg-amber-500/15 text-amber-500 border-amber-500/20 text-[10px]">
-                                  Parcial
+                                  {t("integrations.status_partial", { defaultValue: "Parcial" })}
                                 </Badge>
                               )}
                               {connectionStatus === "none" && (
@@ -450,7 +450,7 @@ const IntegrationsPage = () => {
                                   variant="secondary"
                                   className={ig.status === "Disponível" ? "bg-primary/15 text-primary" : ""}
                                 >
-                                  {ig.status}
+                                  {ig.status === "Disponível" ? t("integrations.status_available", { defaultValue: "Disponível" }) : t("integrations.status_soon", { defaultValue: "Em Breve" })}
                                 </Badge>
                               )}
                             </div>
@@ -512,11 +512,11 @@ const IntegrationsPage = () => {
                                 onClick={() => setExpandedCard(isExpanded ? null : ig.integrationKey)}
                               >
                                 {isExpanded ? (
-                                  <>Fechar <ChevronUp className="h-3.5 w-3.5" /></>
+                                  <>{t("integrations.close", { defaultValue: "Fechar" })} <ChevronUp className="h-3.5 w-3.5" /></>
                                 ) : (
                                   <>
                                     <Zap className="h-3.5 w-3.5" />
-                                    Conectar Rápido
+                                    {t("integrations.quick_connect", { defaultValue: "Conectar Rápido" })}
                                   </>
                                 )}
                               </Button>
@@ -529,19 +529,19 @@ const IntegrationsPage = () => {
                                 className={`gap-1.5 ${!hasQuickFields || connectionStatus === "connected" ? "flex-1 neon-glow" : ""}`}
                                 onClick={() => setActiveSetup(ig.setupKey!)}
                               >
-                                Passo a passo <ArrowRight className="h-3.5 w-3.5" />
+                                {t("integrations.step_by_step", { defaultValue: "Passo a passo" })} <ArrowRight className="h-3.5 w-3.5" />
                               </Button>
                             )}
                             {/* Non-setup available */}
                             {!ig.hasSetup && ig.status === "Disponível" && !hasQuickFields && (
                               <Button size="sm" variant="default" className="flex-1 neon-glow" disabled>
-                                Conectar
+                                {t("integrations.connect", { defaultValue: "Conectar" })}
                               </Button>
                             )}
                             {/* Coming soon */}
                             {ig.status !== "Disponível" && (
                               <Button size="sm" variant="secondary" className="flex-1" disabled>
-                                Em Breve
+                                {t("integrations.status_soon", { defaultValue: "Em Breve" })}
                               </Button>
                             )}
                           </div>

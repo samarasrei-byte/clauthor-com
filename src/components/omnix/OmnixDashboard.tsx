@@ -11,6 +11,7 @@ import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, CartesianGrid, Tool
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import AudioSpectrum from "./AudioSpectrum";
 import type { OmnixMessage } from "@/hooks/useOmnix";
+import { useTranslation } from "react-i18next";
 
 interface OmnixDashboardProps {
   messages: OmnixMessage[];
@@ -21,6 +22,7 @@ interface OmnixDashboardProps {
 const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) => {
   const { user } = useAuth();
   const { credits, remainingCredits, usagePercentage } = useCredits();
+  const { t } = useTranslation();
 
   const { data: agents = [] } = useQuery({
     queryKey: ["omnix-agents", user?.id],
@@ -58,13 +60,22 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
 
   const lastKpis = [...messages].reverse().find(m => m.kpis)?.kpis || null;
 
+  const kpiLabels = {
+    agents: t("omnix.agents", { defaultValue: "Agentes" }),
+    executions: t("omnix.executions", { defaultValue: "Execuções" }),
+    success: t("omnix.success", { defaultValue: "Sucesso" }),
+    time: t("omnix.time", { defaultValue: "Tempo" }),
+    credits: t("omnix.credits", { defaultValue: "Créditos" }),
+    tasks: t("omnix.tasks", { defaultValue: "Tarefas" }),
+  };
+
   const kpiCards = [
-    { label: "Agentes", value: activeAgents, icon: Bot, color: "text-primary" },
-    { label: "Execuções", value: totalExecs, icon: Zap, color: "text-cyan-400" },
-    { label: "Sucesso", value: `${successRate}%`, icon: CheckCircle, color: "text-emerald-400" },
-    { label: "Tempo", value: `${avgTime}ms`, icon: Clock, color: "text-amber-400" },
-    { label: "Créditos", value: remainingCredits, icon: Coins, color: "text-violet-400" },
-    { label: "Tarefas", value: openTasks, icon: Target, color: "text-orange-400" },
+    { label: kpiLabels.agents, value: activeAgents, icon: Bot, color: "text-primary" },
+    { label: kpiLabels.executions, value: totalExecs, icon: Zap, color: "text-cyan-400" },
+    { label: kpiLabels.success, value: `${successRate}%`, icon: CheckCircle, color: "text-emerald-400" },
+    { label: kpiLabels.time, value: `${avgTime}ms`, icon: Clock, color: "text-amber-400" },
+    { label: kpiLabels.credits, value: remainingCredits, icon: Coins, color: "text-violet-400" },
+    { label: kpiLabels.tasks, value: openTasks, icon: Target, color: "text-orange-400" },
   ];
 
   // Compact mode: just KPIs in a horizontal bar
@@ -100,7 +111,7 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
           {usagePercentage > 80 && (
             <div className="flex items-center gap-1.5 shrink-0 bg-destructive/5 border border-destructive/10 rounded-lg px-2.5 py-1.5">
               <AlertTriangle className="h-3 w-3 text-destructive" />
-              <span className="text-[10px] text-destructive/70">Créditos {usagePercentage}%</span>
+              <span className="text-[10px] text-destructive/70">{kpiLabels.credits} {usagePercentage}%</span>
             </div>
           )}
         </div>
@@ -178,7 +189,7 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
       <div className="bg-card/30 border border-border/20 rounded-xl p-3">
         <div className="flex items-center gap-2 mb-2">
           <TrendingUp className="h-3.5 w-3.5 text-primary" />
-          <span className="text-[10px] font-semibold uppercase tracking-wider">Execuções — 7 dias</span>
+          <span className="text-[10px] font-semibold uppercase tracking-wider">{t("omnix.exec_7days", { defaultValue: "Execuções — 7 dias" })}</span>
         </div>
         <div className="h-[120px]">
           <ResponsiveContainer width="100%" height="100%">

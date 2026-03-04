@@ -571,5 +571,14 @@
     "suggest_name_placeholder": "Abteilungsname (z.B.: Data Science, ESG...)", "suggest_reason_placeholder": "Warum wäre diese Abteilung nützlich? (optional)",
     "suggest_email_placeholder": "Ihre E-Mail (optional)", "suggest_submit": "Vorschlag senden", "suggest_submitting": "Sende...",
     "suggest_error": "Fehler beim Senden.", "suggest_success": "Vorschlag gesendet! Danke!", "most_voted": "Meistgewählt von der Community"
-  }
+  },
+  "settings": { "title": "Einstellungen", "subtitle": "Agenten, Profil, Team, Abo und Support verwalten.", "tab_agents": "Agenten", "tab_profile": "Mein Profil", "tab_team": "Team", "tab_billing": "Abonnement", "tab_support": "Support" },
+  "command": { "community": "Community", "create_agent": "Agent erstellen", "create_new": "Neuen Agenten erstellen", "talk_consultant": "Mit KI-Berater sprechen", "view_squads": "KI-Squads ansehen", "search_placeholder": "Was brauchen Sie?", "no_results": "Keine Ergebnisse", "actions_heading": "Aktionen", "navigate_heading": "Navigieren", "system_active": "System aktiv", "tier_advanced": "Fortgeschritten" },
+  "payment": { "confirmed": "Zahlung bestätigt!", "dept_activated": "{{name}} mit {{count}} Agenten aktiviert", "agent_ready": "{{name}} ist einsatzbereit", "redirecting": "Weiterleitung zu THOR für geführte Einrichtung..." },
+  "omnix": { "agents": "Agenten", "executions": "Ausführungen", "success": "Erfolg", "time": "Zeit", "credits": "Credits", "tasks": "Aufgaben", "exec_7days": "Ausführungen — 7 Tage" },
+  "integrations": { "back": "Zurück zu Integrationen", "subtitle": "Verbinden Sie Ihre Agenten mit den Tools, die Sie bereits nutzen.", "connected": "verbunden", "tab_all": "Alle", "tab_comm": "Kommunikation", "tab_prod": "Produktivität", "tab_others": "Andere", "status_connected": "Verbunden", "status_partial": "Teilweise", "status_available": "Verfügbar", "status_soon": "Demnächst", "close": "Schließen", "quick_connect": "Schnellverbindung", "step_by_step": "Schritt für Schritt", "connect": "Verbinden" },
+  "create_agent": { "title": "Neuen Agenten erstellen", "subtitle": "Konfigurieren Sie Ihren digitalen Mitarbeiter Schritt für Schritt.", "name_required": "Agentenname ist erforderlich", "created_success": "Agent erfolgreich erstellt!", "create_error": "Fehler beim Erstellen" },
+  "agent_landing": { "view_all": "Alle Agenten anzeigen", "problem_badge": "Das Problem", "solution_badge": "Die Lösung", "results_title": "Echte Ergebnisse", "how_it_works": "So funktioniert es", "traditional": "Traditionell", "testimonials_title": "Was unsere Kunden sagen", "faq_title": "Häufige Fragen", "native_integrations": "Native Integrationen", "no_commitment": "Ohne Verpflichtung · Setup in Minuten · Jederzeit kündbar" },
+  "privacy": { "legal_doc": "Rechtsdokument", "title": "Datenschutzrichtlinie", "last_updated": "Letzte Aktualisierung:", "rights_reserved": "Alle Rechte vorbehalten." },
+  "terms": { "legal_doc": "Rechtsdokument", "title": "Nutzungsbedingungen", "last_updated": "Letzte Aktualisierung:", "rights_reserved": "Alle Rechte vorbehalten." }
 }
