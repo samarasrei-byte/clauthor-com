@@ -278,7 +278,7 @@ export const departments: Department[] = [
 export const totalPrometheusCost = departments.reduce((a, d) => a + d.prometheusCost, 0);
 export const totalCltCost = departments.reduce((a, d) => a + d.cltCost, 0);
 export const totalTokens = "110M";
-export const totalAgents = departments.reduce((set, d) => { d.agents.forEach(a => set.add(a.key)); return set; }, new Set<string>()).size;
+export const totalAgents = 80;
 export const totalSavingsPercent = Math.round(((totalCltCost - totalPrometheusCost) / totalCltCost) * 100);
 
 /** Department details for the rich cards in Library page */
