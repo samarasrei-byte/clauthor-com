@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { classifyAction, formatActionForApproval } from "../_shared/autonomy-engine.ts";
+import { autonomousExecute } from "../_shared/tool-executor.ts";
 
 /**
  * Event Loop — Autonomous Agent Triggers
@@ -47,7 +48,7 @@ serve(async (req) => {
 
       if (staleTasks && staleTasks.length > 0) {
         for (const task of staleTasks) {
-          // Check if we already notified about this task
+          // Check if we already handled this task
           const { count } = await supabase
             .from("notifications")
             .select("*", { count: "exact", head: true })
@@ -56,28 +57,35 @@ serve(async (req) => {
             .contains("metadata", { task_id: task.id });
 
           if ((count || 0) === 0) {
-            const classification = classifyAction("send_followup");
-
-            if (classification.requiresApproval) {
-              await supabase.from("pending_actions").insert({
-                user_id: task.user_id,
-                agent_id: task.agent_id,
-                tenant_id: task.tenant_id,
-                action_type: "send_followup",
-                risk_level: classification.riskLevel,
-                title: `🔄 Follow-up: Lead "${task.title}" inativo há 3+ dias`,
-                description: `O lead está sem atividade desde a criação. Deseja que o agente envie um follow-up?`,
-                payload: { task_id: task.id, task_title: task.title },
-              });
-            } else {
-              await supabase.from("notifications").insert({
-                user_id: task.user_id,
-                type: "lead_followup",
-                title: "🔄 Follow-up Automático Enviado",
-                message: `O agente enviou follow-up para o lead "${task.title}" (inativo há 3+ dias).`,
-                metadata: { task_id: task.id, autonomous: true },
-              });
-            }
+            // Execute follow-up through autonomy engine
+            const result = await autonomousExecute(
+              "send_followup",
+              { task_id: task.id, task_title: task.title, reason: "Lead inativo há 3+ dias" },
+              supabase, task.user_id, task.tenant_id, task.agent_id || "system", "Event Loop",
+              async () => {
+                // Create a follow-up task automatically
+                await supabase.from("agent_tasks").insert({
+                  user_id: task.user_id,
+                  agent_id: task.agent_id,
+                  tenant_id: task.tenant_id,
+                  title: `Follow-up: ${task.title}`,
+                  description: `Follow-up automático para lead "${task.title}" inativo há 3+ dias.`,
+                  priority: "high",
+                  category: "lead",
+                  assigned_to: task.assigned_to,
+                });
+                // Notify
+                await supabase.from("notifications").insert({
+                  user_id: task.user_id,
+                  type: "lead_followup",
+                  title: "🔄 Follow-up Automático Criado",
+                  message: `Tarefa de follow-up criada para o lead "${task.title}" (inativo há 3+ dias).`,
+                  metadata: { task_id: task.id, autonomous: true },
+                });
+                return { success: true, result: { task_title: task.title, action: "follow_up_created" } };
+              }
+            );
+            console.log(`[EventLoop] Lead follow-up for "${task.title}": executed=${result.executed}, queued=${result.queued || false}`);
           }
         }
         results.push({ trigger: "inactive_leads", actions: staleTasks.length, details: `${staleTasks.length} leads inativos processados` });

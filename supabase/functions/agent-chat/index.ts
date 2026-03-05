@@ -5,6 +5,7 @@ import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/s
 import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
 import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, type AgentContract } from "../_shared/agent-contract.ts";
 import { enforcePolicy, validateTenant, type PolicyContext } from "../_shared/policy-engine.ts";
+import { autonomousExecute } from "../_shared/tool-executor.ts";
 
 // ── AES-256-GCM decryption for credential bridge ──
 const ALGO = "AES-GCM";
@@ -923,23 +924,32 @@ async function loadRecentMemory(adminClient: any, tenantId: string, userId: stri
 }
 
 const TOOL_USE_INSTRUCTION = `
-## TOOL USE (Uso de Ferramentas)
+## TOOL USE (Uso de Ferramentas) — MODO AUTÔNOMO
 
-Você tem ferramentas para EXECUTAR ações reais que PERSISTEM no banco de dados:
+Você tem ferramentas para EXECUTAR ações reais que PERSISTEM no banco de dados.
+Todas as ferramentas passam pelo **Motor de Autonomia** que classifica o risco:
 
-- **send_email**: Registra email como notificação (integração de envio configurável)
-- **create_task**: Cria tarefa REAL no banco de dados (persiste!)
-- **generate_report**: Gera e SALVA relatório estruturado no banco
+🟢 **BAIXO** (auto-executa): create_task, search_leads, analyze_data, generate_report
+🟡 **MÉDIO** (auto-executa + notifica dono): send_email, schedule_meeting, delegate_to_agent
+🔴 **ALTO** (requer aprovação): send_email_bulk, delete_data, modify_credentials
+⛔ **CRÍTICO** (sempre requer aprovação): mass_notification, data_export, billing_change
+
+**FERRAMENTAS DISPONÍVEIS:**
+- **send_email**: Envia email real via SendGrid/Resend/Mailgun
+- **create_task**: Cria tarefa REAL no banco de dados
+- **generate_report**: Gera e SALVA relatório estruturado
 - **search_leads**: Pesquisa leads nos DADOS REAIS do Company Board
-- **schedule_meeting**: Agenda reunião REAL no banco de dados
-- **analyze_data**: Analisa dados REAIS do Company Board + logs de execução
+- **schedule_meeting**: Agenda reunião REAL no banco
+- **analyze_data**: Analisa dados REAIS + logs de execução
 - **delegate_to_agent**: 🔗 Delegar para outro agente do workspace
 
-**REGRAS:**
-1. Quando o usuário pedir uma AÇÃO, USE a ferramenta
-2. Após executar, explique o resultado ao usuário
-3. NUNCA simule — as ferramentas produzem resultados reais
-4. Se não tem certeza dos parâmetros, pergunte antes
+**REGRAS DE AUTONOMIA:**
+1. Quando o usuário pedir uma AÇÃO, USE a ferramenta imediatamente
+2. Para ações de BAIXO risco, execute SEM pedir confirmação
+3. Para ações de MÉDIO risco, execute e informe o que foi feito
+4. Se a ação foi ENFILEIRADA para aprovação, informe ao usuário
+5. NUNCA simule — as ferramentas produzem resultados reais
+6. Se não tem certeza dos parâmetros, pergunte antes
 `;
 
 serve(async (req) => {
@@ -1020,6 +1030,7 @@ serve(async (req) => {
     let agentPrompt = "Você é um assistente de IA útil e profissional. Responda em português do Brasil.";
     let agentTier = "basic";
     let agentArea = "geral";
+    let agentName = "Agente AI";
     let contractPrompt = "";
 
     if (agentId) {
@@ -1028,6 +1039,7 @@ serve(async (req) => {
 
       if (agent) {
         agentTier = agent.tier || "basic";
+        agentName = agent.name || "Agente AI";
         agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
         const sla = getTierSLA(agentTier);
         const limits = getAreaLimits(agentArea);
@@ -1105,20 +1117,28 @@ Instruções: ${agent.instructions}`;
     const toolCalls = firstChoice?.message?.tool_calls;
     const toolResults: any[] = [];
 
-    // If there are tool calls, execute them and get final response
+    // If there are tool calls, execute them through autonomy engine
     if (toolCalls && toolCalls.length > 0) {
       for (const toolCall of toolCalls) {
         const fnName = toolCall.function?.name;
         let fnArgs: any = {};
         try { fnArgs = JSON.parse(toolCall.function?.arguments || "{}"); } catch { fnArgs = {}; }
-        console.log(`Executing tool: ${fnName}`, fnArgs);
+        console.log(`[Autonomy] Tool requested: ${fnName}`, fnArgs);
 
         if (fnName === "delegate_to_agent") {
-          const result = await delegateToAgent(fnArgs, adminClient, userId, tenantId, agentId || "general", 0);
-          toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...result });
+          // Delegation goes through autonomy engine
+          const autonomyResult = await autonomousExecute(
+            fnName, fnArgs, adminClient, userId, tenantId, agentId || "general", agentName,
+            () => delegateToAgent(fnArgs, adminClient, userId, tenantId, agentId || "general", 0)
+          );
+          toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...autonomyResult });
         } else {
-          const result = await executeTool(fnName, fnArgs, adminClient, userId, tenantId, agentId || "general", policyContext, credits.used_credits, credits.total_credits);
-          toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...result });
+          // All tools go through autonomy engine for risk classification
+          const autonomyResult = await autonomousExecute(
+            fnName, fnArgs, adminClient, userId, tenantId, agentId || "general", agentName,
+            () => executeTool(fnName, fnArgs, adminClient, userId, tenantId, agentId || "general", policyContext, credits.used_credits, credits.total_credits)
+          );
+          toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...autonomyResult });
         }
       }
 
