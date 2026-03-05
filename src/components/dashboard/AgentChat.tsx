@@ -411,9 +411,9 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
   };
 
   return (
-    <div className="glass-card rounded-2xl overflow-hidden flex flex-col h-[500px]">
+    <div className="flex flex-col h-full bg-background">
       {/* Header */}
-      <div className="p-4 border-b border-white/5 flex items-center justify-between">
+      <div className="px-5 py-3 border-b border-border/10 flex items-center justify-between shrink-0 bg-background/80 backdrop-blur-sm">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
             <Bot className="h-5 w-5 text-primary" />
@@ -456,9 +456,9 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
       </div>
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto px-4 py-6">
         {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center">
+          <div className="flex flex-col items-center justify-center h-full text-center max-w-lg mx-auto">
             <div className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
               <Zap className="h-8 w-8 text-primary" />
             </div>
@@ -492,61 +492,65 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className={`flex gap-3 ${message.role === "user" ? "flex-row-reverse" : ""}`}
+              className={`max-w-3xl mx-auto w-full py-4 ${idx > 0 ? "border-t border-border/5" : ""}`}
             >
-              <div
-                className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-                  message.role === "user" ? "bg-primary/20" : "bg-white/5"
-                }`}
-              >
-                {message.role === "user" ? (
-                  <User className="h-4 w-4 text-primary" />
-                ) : (
-                  <Bot className="h-4 w-4 text-muted-foreground" />
-                )}
-              </div>
-              <div className="max-w-[80%]">
+              <div className={`flex gap-4 ${message.role === "user" ? "flex-row-reverse" : ""}`}>
                 <div
-                  className={`rounded-2xl px-4 py-3 ${
-                    message.role === "user"
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-white/5 text-foreground"
+                  className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
+                    message.role === "user" ? "bg-primary/20" : "bg-accent/60 border border-border/10"
                   }`}
                 >
-                  {message.role === "assistant" ? (
-                    <div className="text-sm prose prose-sm prose-invert max-w-none">
-                      <ReactMarkdown>{message.content}</ReactMarkdown>
-                      {/* Streaming cursor */}
-                      {isStreaming && idx === messages.length - 1 && (
-                        <span className="inline-block w-2 h-4 bg-primary/80 animate-pulse ml-0.5 rounded-sm" />
-                      )}
-                    </div>
+                  {message.role === "user" ? (
+                    <User className="h-4 w-4 text-primary" />
                   ) : (
-                    <p className="text-sm">{message.content}</p>
+                    <Bot className="h-4 w-4 text-foreground/70" />
                   )}
                 </div>
-                {/* Tool Results */}
-                {message.tool_results && message.tool_results.length > 0 && (
-                  <div className="space-y-2 mt-2">
-                    {message.tool_results.map((tr, i) => (
-                      <ToolResultCard key={i} toolResult={tr} />
-                    ))}
+                <div className={`flex-1 min-w-0 ${message.role === "user" ? "text-right" : ""}`}>
+                  <div
+                    className={`inline-block text-left rounded-2xl px-5 py-3.5 ${
+                      message.role === "user"
+                        ? "bg-primary text-primary-foreground"
+                        : "bg-card border border-border/10"
+                    }`}
+                    style={{ maxWidth: message.role === "user" ? "85%" : "100%" }}
+                  >
+                    {message.role === "assistant" ? (
+                      <div className="text-[15px] leading-relaxed prose prose-sm prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                        <ReactMarkdown>{message.content}</ReactMarkdown>
+                        {isStreaming && idx === messages.length - 1 && (
+                          <span className="inline-block w-2 h-5 bg-primary/80 animate-pulse ml-0.5 rounded-sm align-middle" />
+                        )}
+                      </div>
+                    ) : (
+                      <p className="text-[15px] leading-relaxed">{message.content}</p>
+                    )}
                   </div>
-                )}
+                  {/* Tool Results */}
+                  {message.tool_results && message.tool_results.length > 0 && (
+                    <div className="space-y-2 mt-3">
+                      {message.tool_results.map((tr, i) => (
+                        <ToolResultCard key={i} toolResult={tr} />
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </motion.div>
           ))}
         </AnimatePresence>
 
         {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-3">
-            <div className="w-8 h-8 rounded-lg bg-white/5 flex items-center justify-center">
-              <Bot className="h-4 w-4 text-muted-foreground" />
-            </div>
-            <div className="bg-white/5 rounded-2xl px-4 py-3">
-              <div className="flex items-center gap-2">
-                <Loader2 className="h-3.5 w-3.5 animate-spin text-primary" />
-                <span className="text-xs text-muted-foreground">Processando ações...</span>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-3xl mx-auto w-full py-4">
+            <div className="flex gap-4">
+              <div className="w-9 h-9 rounded-xl bg-accent/60 border border-border/10 flex items-center justify-center shrink-0">
+                <Bot className="h-4 w-4 text-foreground/70" />
+              </div>
+              <div className="bg-card border border-border/10 rounded-2xl px-5 py-3.5">
+                <div className="flex items-center gap-2">
+                  <Loader2 className="h-4 w-4 animate-spin text-primary" />
+                  <span className="text-sm text-muted-foreground">Processando ações...</span>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -556,36 +560,35 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
       </div>
 
       {/* AI Disclaimer */}
-      <div className="px-4 pt-2">
-        <p className="text-[10px] text-muted-foreground/60 text-center">
-          🤖 Agente autônomo com IA — streaming em tempo real + voz. Não substitui aconselhamento profissional.
+      <div className="px-4 pt-2 shrink-0">
+        <p className="text-[10px] text-muted-foreground/50 text-center">
+          IA com streaming em tempo real + voz. Não substitui aconselhamento profissional.
         </p>
       </div>
 
       {/* Input */}
-      <div className="px-4 pb-4 pt-1 border-t border-white/5">
-        <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="flex gap-2">
+      <div className="px-4 pb-4 pt-2 shrink-0 border-t border-border/10 bg-background/80 backdrop-blur-sm">
+        <form onSubmit={(e) => { e.preventDefault(); handleSend(); }} className="max-w-3xl mx-auto flex gap-2">
           <Input
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder={agentId ? "Peça uma ação: enviar email, criar tarefa, gerar relatório..." : "Selecione um agente primeiro"}
-            className="flex-1 bg-white/5 border-white/10 focus:border-primary/50"
+            className="flex-1 h-12 text-[15px] bg-card border-border/20 focus:border-primary/50 rounded-xl"
             disabled={isLoading || !agentId}
           />
           <VoiceInput
             onTranscript={(text) => {
               setInput(text);
-              // Auto-send after voice input
               setTimeout(() => sendMessage(text), 300);
             }}
             disabled={isLoading || !agentId}
           />
           {isStreaming ? (
-            <Button type="button" size="icon" variant="destructive" onClick={stopStreaming} className="shrink-0" title="Parar streaming">
+            <Button type="button" size="icon" variant="destructive" onClick={stopStreaming} className="shrink-0 h-12 w-12 rounded-xl" title="Parar streaming">
               <Square className="h-4 w-4" />
             </Button>
           ) : (
-            <Button type="submit" size="icon" disabled={!input.trim() || isLoading || !agentId} className="shrink-0">
+            <Button type="submit" size="icon" disabled={!input.trim() || isLoading || !agentId} className="shrink-0 h-12 w-12 rounded-xl">
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             </Button>
           )}

@@ -187,18 +187,18 @@ const AdminAgentChat = ({
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
-                className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+                className={`max-w-[85%] rounded-2xl px-5 py-3.5 ${
                   msg.role === "user"
                     ? "bg-primary text-primary-foreground"
-                    : "bg-accent/40 border border-white/[0.06]"
+                    : "bg-card border border-border/10"
                 }`}
               >
                 {msg.role === "assistant" ? (
-                  <div className="prose prose-sm prose-invert max-w-none text-sm [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                  <div className="prose prose-sm prose-invert max-w-none text-[15px] leading-relaxed [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                     <ReactMarkdown>{msg.content}</ReactMarkdown>
                   </div>
                 ) : (
-                  <p className="text-sm">{msg.content}</p>
+                  <p className="text-[15px] leading-relaxed">{msg.content}</p>
                 )}
               </div>
             </motion.div>
