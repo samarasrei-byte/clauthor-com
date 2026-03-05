@@ -26,6 +26,7 @@ import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
 
 import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
+const CompanyBoardAlert = lazy(() => import("@/components/dashboard/CompanyBoardAlert"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
@@ -597,12 +598,15 @@ const ClientDashboard = () => {
             {/* ═══ OVERVIEW ═══ */}
             {activeSection === "overview" && (
               <Suspense fallback={<SectionLoader />}>
-                <ClientCommandCenter
-                  activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                  usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                  remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                  recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
-                />
+                <div className="space-y-4">
+                  <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                  <ClientCommandCenter
+                    activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                    usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                    remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                    recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
+                  />
+                </div>
               </Suspense>
             )}
 
