@@ -1,0 +1,1 @@
+UPDATE public.user_credits SET used_credits = 0 WHERE used_credits >= total_credits
