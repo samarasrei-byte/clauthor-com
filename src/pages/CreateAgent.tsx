@@ -15,19 +15,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
-
-  const { t } = useTranslation();
-
-  const steps = [
-    { icon: Bot, label: t("create_agent.step_name", { defaultValue: "Nome & Objetivo" }) },
-    { icon: FileText, label: t("create_agent.step_instructions", { defaultValue: "Instruções" }) },
-    { icon: Zap, label: t("create_agent.step_actions", { defaultValue: "Ações" }) },
-    { icon: Globe, label: t("create_agent.step_channels", { defaultValue: "Canais" }) },
-    { icon: Database, label: t("create_agent.step_knowledge", { defaultValue: "Conhecimento" }) },
-    { icon: Plug, label: t("create_agent.step_integrations", { defaultValue: "Integrações" }) },
-    { icon: Shield, label: t("create_agent.step_limits", { defaultValue: "Limites" }) },
-    { icon: Clock, label: t("create_agent.step_schedule", { defaultValue: "Agendamento" }) },
-  ];
+import { useTranslation } from "react-i18next";
 
 const sectorOptions = ["Atendimento", "Vendas", "Marketing", "Financeiro", "RH", "Jurídico", "TI", "Outro"];
 const toneOptions = ["Formal", "Amigável", "Técnico", "Casual", "Corporativo"];
@@ -70,14 +58,24 @@ function matchTemplates(text: string): typeof AGENT_TEMPLATES {
     .slice(0, 3);
 }
 
-import { useTranslation } from "react-i18next";
-
 const CreateAgentPage = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const queryClient = useQueryClient();
   const [currentStep, setCurrentStep] = useState(0);
+
+  const steps = [
+    { icon: Bot, label: t("create_agent.step_name", { defaultValue: "Nome & Objetivo" }) },
+    { icon: FileText, label: t("create_agent.step_instructions", { defaultValue: "Instruções" }) },
+    { icon: Zap, label: t("create_agent.step_actions", { defaultValue: "Ações" }) },
+    { icon: Globe, label: t("create_agent.step_channels", { defaultValue: "Canais" }) },
+    { icon: Database, label: t("create_agent.step_knowledge", { defaultValue: "Conhecimento" }) },
+    { icon: Plug, label: t("create_agent.step_integrations", { defaultValue: "Integrações" }) },
+    { icon: Shield, label: t("create_agent.step_limits", { defaultValue: "Limites" }) },
+    { icon: Clock, label: t("create_agent.step_schedule", { defaultValue: "Agendamento" }) },
+  ];
   const [saving, setSaving] = useState(false);
   const [showTemplateSuggestions, setShowTemplateSuggestions] = useState(false);
 
