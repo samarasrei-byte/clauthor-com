@@ -353,4 +353,84 @@ export const deptDetails: Record<string, DeptDetail> = {
       { q: "Mede clima organizacional?", a: "Pesquisas de eNPS automáticas, análise de sentimento e alertas de risco." },
     ],
   },
+  prospeccao: {
+    icon: Crosshair,
+    agents: ["SDR Outbound", "SDR Inbound", "SDR LinkedIn B2B", "SDR WhatsApp", "SDR Instagram", "SDR Social Selling", "SDR Base de Dados", "SDR Eventos", "SDR Parcerias", "Pré-Qualificador", "Hunter", "Farmer"],
+    replaces: ["4 SDRs Outbound", "2 SDRs Inbound", "2 SDRs Sociais", "1 Pré-Qualificador", "1 Hunter", "1 Farmer", "1 SDR Eventos"],
+    faq: [
+      { q: "Quantos leads prospecta por dia?", a: "Até 1.000 leads/dia com abordagem multicanal simultânea — LinkedIn, WhatsApp, Instagram, email e telefone." },
+      { q: "Faz cold outreach automatizado?", a: "Sim. Sequências personalizadas com IA por LinkedIn, e-mail e WhatsApp com follow-up inteligente." },
+      { q: "Como qualifica os leads?", a: "Scoring automático com BANT/MEDDIC, enriquecimento de dados e distribuição inteligente para closers." },
+    ],
+  },
+  comunicacao: {
+    icon: PenTool,
+    agents: ["Copywriter de Conversão", "Brand Strategist", "Estrategista de Mercado", "Assessor de Imprensa", "Gestor de Prova Social", "Produtor de Eventos"],
+    replaces: ["1 Copywriter Sênior", "1 Brand Manager", "1 Estrategista", "1 Assessor de Imprensa", "1 Social Proof Manager", "1 Produtor de Eventos"],
+    faq: [
+      { q: "Mantém o tom de voz da marca?", a: "Sim. Aprende o brandbook, guidelines e histórico de comunicação para manter 100% de consistência." },
+      { q: "Faz assessoria de imprensa?", a: "Sim. Gera press releases, media kits, pitch para jornalistas e monitora menções na mídia." },
+      { q: "Gerencia prova social?", a: "Coleta, organiza e publica depoimentos, cases e reviews automaticamente nos canais certos." },
+    ],
+  },
+  operacoes: {
+    icon: Rocket,
+    agents: ["Orquestrador Multi-Agente", "Concierge Executivo", "CEO / Estrategista", "Startup Creator", "Agendador Inteligente", "Gerador de Propostas", "Pesquisador / Analista"],
+    replaces: ["1 COO", "1 Assistente Executivo", "1 Estrategista", "1 PM", "1 Agendador", "1 Analista de Propostas", "1 Pesquisador"],
+    faq: [
+      { q: "O que o Orquestrador faz?", a: "Coordena todos os outros agentes, distribui tarefas, prioriza ações e garante que nada fique parado." },
+      { q: "Gera propostas comerciais?", a: "Sim. Propostas personalizadas com precificação, escopo, cronograma e design profissional em minutos." },
+      { q: "Faz pesquisa de mercado?", a: "Análise competitiva, tendências, benchmarks e insights estratégicos com dados em tempo real." },
+    ],
+  },
+  ecommerce_growth: {
+    icon: Store,
+    agents: ["Gestor de Tráfego Pago", "WhatsApp Commerce", "LiveShop & Influencer", "Gestor de Afiliados", "Podcast Manager", "Gestor de Reputação", "E-commerce Operations"],
+    replaces: ["1 Media Buyer", "1 WhatsApp Closer", "1 Influencer Manager", "1 Gestor Afiliados", "1 Podcast Producer", "1 Reputation Manager", "1 E-commerce Manager"],
+    faq: [
+      { q: "Gerencia campanhas de tráfego pago?", a: "Sim. Meta Ads, Google Ads, TikTok Ads com otimização de ROAS automática e A/B testing contínuo." },
+      { q: "Faz vendas por WhatsApp?", a: "Catálogo, carrinho, pagamento e pós-venda — tudo dentro do WhatsApp com automação completa." },
+      { q: "Gerencia afiliados?", a: "Recrutamento, onboarding, tracking de comissões e relatórios de performance por afiliado." },
+    ],
+  },
+  juridico: {
+    icon: Gavel,
+    agents: ["Analista de Contratos", "Compliance / DPO", "Advogado Trabalhista", "Advogado Contencioso", "Analista Jurídico Geral"],
+    replaces: ["1 Analista Contratos", "1 DPO / Compliance", "1 Advogado Trabalhista", "1 Advogado Contencioso", "1 Analista Jurídico"],
+    faq: [
+      { q: "Analisa contratos automaticamente?", a: "Sim. Identifica cláusulas de risco, sugere alterações e compara com templates padrão em segundos." },
+      { q: "Faz compliance LGPD?", a: "Mapeamento de dados, termos de consentimento, DPIA, relatórios de impacto e alertas de conformidade." },
+      { q: "Atua em contencioso?", a: "Pesquisa jurisprudência, prepara peças processuais, acompanha prazos e gera relatórios de casos." },
+    ],
+  },
+  compras: {
+    icon: Package,
+    agents: ["Comprador Sênior", "Gestor de Fornecedores", "Analista de Custos", "Negociador"],
+    replaces: ["1 Comprador Sênior", "1 Gestor de Fornecedores", "1 Analista de Custos", "1 Negociador"],
+    faq: [
+      { q: "Negocia com fornecedores?", a: "Sim. Cotações automáticas, comparação multicriterial e negociação baseada em dados históricos." },
+      { q: "Reduz custos operacionais?", a: "Análise de TCO, identificação de savings, consolidação de compras e renegociação automática." },
+      { q: "Gerencia fornecedores?", a: "Cadastro, avaliação de performance, SLA monitoring e gestão de contratos — tudo centralizado." },
+    ],
+  },
+  logistica: {
+    icon: Truck,
+    agents: ["Coordenador Logístico", "Analista de Estoque", "Supply Chain Manager"],
+    replaces: ["1 Coordenador Logístico", "1 Analista de Estoque", "1 Supply Chain Manager"],
+    faq: [
+      { q: "Otimiza rotas de entrega?", a: "Sim. Roteirização inteligente com redução de até 30% no custo de frete e tempo de entrega." },
+      { q: "Controla estoque?", a: "Previsão de demanda, ponto de reposição automático, curva ABC e alertas de ruptura." },
+      { q: "Integra com transportadoras?", a: "Sim. Correios, Jadlog, Total Express, Loggi e qualquer transportadora via API." },
+    ],
+  },
+  qualidade: {
+    icon: ClipboardCheck,
+    agents: ["Analista de Qualidade", "Analista de Processos"],
+    replaces: ["1 Analista de Qualidade", "1 Analista de Processos"],
+    faq: [
+      { q: "Faz auditoria de processos?", a: "Sim. Mapeamento, análise de gaps, sugestões de melhoria e acompanhamento de indicadores." },
+      { q: "Implementa ISO/Lean?", a: "Checklists automáticos, documentação de processos, PDCA e Kaizen com tracking de resultados." },
+      { q: "Monitora KPIs de qualidade?", a: "Dashboard em tempo real com OEE, taxa de defeito, CSAT interno e alertas de desvio." },
+    ],
+  },
 };
