@@ -1,15 +1,14 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
   Building2, ArrowRight, ArrowLeft, Sparkles, CheckCircle,
-  MessageSquare, Package, Users, Mic, Shield, Loader2,
-  Globe, Phone, Target
+  MessageSquare, Package, Mic, Shield, Loader2,
+  Globe, Wand2, FileText, ClipboardPaste, Zap, Brain
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -32,38 +31,25 @@ interface CompanyData {
   contactInfo: string;
 }
 
+const EMPTY: CompanyData = {
+  companyName: "", industry: "", description: "", products: "",
+  targetAudience: "", toneOfVoice: "amigavel", commonQuestions: "",
+  rules: "", contactInfo: "",
+};
+
 const STEPS = [
-  {
-    id: "identity",
-    title: "Identidade da Empresa",
-    subtitle: "Seus agentes precisam saber quem são",
-    icon: Building2,
-  },
-  {
-    id: "offering",
-    title: "Produtos & Público",
-    subtitle: "O que você vende e para quem",
-    icon: Package,
-  },
-  {
-    id: "personality",
-    title: "Tom de Voz & Regras",
-    subtitle: "Como seus agentes devem se comportar",
-    icon: Mic,
-  },
-  {
-    id: "support",
-    title: "FAQ & Contato",
-    subtitle: "Perguntas frequentes e informações de contato",
-    icon: MessageSquare,
-  },
+  { id: "smart", title: "Importação Inteligente", subtitle: "Escolha como alimentar seus agentes", icon: Brain },
+  { id: "identity", title: "Identidade da Empresa", subtitle: "Confirme os dados extraídos", icon: Building2 },
+  { id: "offering", title: "Produtos & Público", subtitle: "O que você vende e para quem", icon: Package },
+  { id: "personality", title: "Tom de Voz & Regras", subtitle: "Como seus agentes devem se comportar", icon: Mic },
+  { id: "support", title: "FAQ & Contato", subtitle: "Perguntas frequentes e informações de contato", icon: MessageSquare },
 ];
 
 const TONE_OPTIONS = [
-  { value: "profissional", label: "Profissional", description: "Formal, corporativo, sério" },
-  { value: "amigavel", label: "Amigável", description: "Casual, acolhedor, próximo" },
-  { value: "tecnico", label: "Técnico", description: "Preciso, detalhado, especialista" },
-  { value: "vendedor", label: "Persuasivo", description: "Focado em vendas, entusiasmado" },
+  { value: "profissional", label: "Profissional", description: "Formal, corporativo, sério", emoji: "👔" },
+  { value: "amigavel", label: "Amigável", description: "Casual, acolhedor, próximo", emoji: "😊" },
+  { value: "tecnico", label: "Técnico", description: "Preciso, detalhado, especialista", emoji: "🔬" },
+  { value: "vendedor", label: "Persuasivo", description: "Focado em vendas, entusiasmado", emoji: "🚀" },
 ];
 
 const INDUSTRY_OPTIONS = [
@@ -76,39 +62,97 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
   const { user } = useAuth();
   const [currentStep, setCurrentStep] = useState(0);
   const [saving, setSaving] = useState(false);
-  const [data, setData] = useState<CompanyData>({
-    companyName: "",
-    industry: "",
-    description: "",
-    products: "",
-    targetAudience: "",
-    toneOfVoice: "amigavel",
-    commonQuestions: "",
-    rules: "",
-    contactInfo: "",
-  });
+  const [scanning, setScanning] = useState(false);
+  const [scanMethod, setScanMethod] = useState<"url" | "paste" | "manual" | null>(null);
+  const [urlInput, setUrlInput] = useState("");
+  const [pasteInput, setPasteInput] = useState("");
+  const [aiExtracted, setAiExtracted] = useState(false);
+  const [data, setData] = useState<CompanyData>({ ...EMPTY });
 
-  const progress = Math.round(((currentStep + 1) / STEPS.length) * 100);
+  const progress = Math.round(((currentStep) / (STEPS.length - 1)) * 100);
   const step = STEPS[currentStep];
 
   const update = (key: keyof CompanyData, value: string) => {
     setData(prev => ({ ...prev, [key]: value }));
   };
 
-  const canProceed = () => {
-    switch (currentStep) {
-      case 0: return data.companyName.trim().length > 0;
-      case 1: return data.products.trim().length > 0;
-      case 2: return data.toneOfVoice.length > 0;
-      case 3: return true;
-      default: return true;
+  const handleScanUrl = useCallback(async () => {
+    if (!urlInput.trim()) return;
+    let url = urlInput.trim();
+    if (!url.startsWith("http")) url = "https://" + url;
+
+    setScanning(true);
+    try {
+      const { data: result, error } = await supabase.functions.invoke("company-scanner", {
+        body: { action: "scan_url", url },
+      });
+      if (error) throw error;
+      if (result?.error) { toast.error(result.error); return; }
+      if (result?.data) {
+        setData(prev => ({
+          ...prev,
+          companyName: result.data.companyName || prev.companyName,
+          industry: result.data.industry || prev.industry,
+          description: result.data.description || prev.description,
+          products: result.data.products || prev.products,
+          targetAudience: result.data.targetAudience || prev.targetAudience,
+          toneOfVoice: result.data.toneOfVoice || prev.toneOfVoice,
+          commonQuestions: result.data.commonQuestions || prev.commonQuestions,
+          contactInfo: result.data.contactInfo || prev.contactInfo,
+        }));
+        setAiExtracted(true);
+        toast.success("Site analisado! Revise os dados extraídos. 🎯");
+        setCurrentStep(1);
+      }
+    } catch (err) {
+      toast.error("Erro ao analisar o site. Tente novamente.");
+    } finally {
+      setScanning(false);
     }
+  }, [urlInput]);
+
+  const handleScanPaste = useCallback(async () => {
+    if (!pasteInput.trim()) return;
+    setScanning(true);
+    try {
+      const { data: result, error } = await supabase.functions.invoke("company-scanner", {
+        body: { action: "analyze_text", text: pasteInput },
+      });
+      if (error) throw error;
+      if (result?.error) { toast.error(result.error); return; }
+      if (result?.data) {
+        setData(prev => ({
+          ...prev,
+          companyName: result.data.companyName || prev.companyName,
+          industry: result.data.industry || prev.industry,
+          description: result.data.description || prev.description,
+          products: result.data.products || prev.products,
+          targetAudience: result.data.targetAudience || prev.targetAudience,
+          toneOfVoice: result.data.toneOfVoice || prev.toneOfVoice,
+          commonQuestions: result.data.commonQuestions || prev.commonQuestions,
+          contactInfo: result.data.contactInfo || prev.contactInfo,
+        }));
+        setAiExtracted(true);
+        toast.success("Texto analisado! Revise os dados extraídos. 🎯");
+        setCurrentStep(1);
+      }
+    } catch {
+      toast.error("Erro ao analisar o texto.");
+    } finally {
+      setScanning(false);
+    }
+  }, [pasteInput]);
+
+  const canProceed = () => {
+    if (currentStep === 0) return false; // Must choose a method
+    if (currentStep === 1) return data.companyName.trim().length > 0;
+    if (currentStep === 2) return data.products.trim().length > 0;
+    return true;
   };
 
   const handleSave = async () => {
     if (!user) return;
     setSaving(true);
-
     try {
       const boardEntries = [
         { category: "identidade", title: "Nome da Empresa", content: data.companyName },
@@ -124,20 +168,13 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
 
       for (const entry of boardEntries) {
         await supabase.from("company_board").upsert(
-          {
-            user_id: user.id,
-            category: entry.category,
-            title: entry.title,
-            content: entry.content,
-          },
+          { user_id: user.id, category: entry.category, title: entry.title, content: entry.content },
           { onConflict: "user_id,title" }
         );
       }
-
       toast.success("Informações da empresa salvas! Seus agentes agora conhecem seu negócio. 🎯");
       onComplete();
-    } catch (err) {
-      console.error("Error saving company data:", err);
+    } catch {
       toast.error("Erro ao salvar. Tente novamente.");
     } finally {
       setSaving(false);
@@ -145,265 +182,296 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
   };
 
   const next = () => {
-    if (currentStep < STEPS.length - 1) {
-      setCurrentStep(prev => prev + 1);
-    } else {
-      handleSave();
-    }
+    if (currentStep < STEPS.length - 1) setCurrentStep(prev => prev + 1);
+    else handleSave();
   };
-
   const back = () => {
     if (currentStep > 0) setCurrentStep(prev => prev - 1);
   };
 
   return (
     <div className="fixed inset-0 z-50 bg-background/95 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="w-full max-w-2xl space-y-6"
-      >
+      <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="w-full max-w-2xl space-y-5">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-medium">
-            <Sparkles className="h-3 w-3" />
+          <motion.div
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold"
+          >
+            <Sparkles className="h-3.5 w-3.5" />
             Passo essencial — Ensine seus agentes sobre sua empresa
-          </div>
+          </motion.div>
           <h1 className="font-display text-2xl font-bold">
-            Seus agentes precisam conhecer sua empresa
+            {currentStep === 0 ? "Como você quer ensinar seus agentes?" : "Seus agentes estão aprendendo"}
           </h1>
-          <p className="text-sm text-muted-foreground max-w-md mx-auto">
-            Sem essas informações, os agentes não sabem o que responder.
-            Preencha agora para que eles trabalhem com contexto real.
-          </p>
+          {currentStep === 0 && (
+            <p className="text-sm text-muted-foreground max-w-lg mx-auto">
+              Escolha a forma mais rápida: cole a URL do seu site e a IA extrai tudo automaticamente,
+              ou cole qualquer texto sobre sua empresa.
+            </p>
+          )}
         </div>
 
-        {/* Progress */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-xs text-muted-foreground">
-            <span>Etapa {currentStep + 1} de {STEPS.length}: {step.title}</span>
-            <span>{progress}%</span>
+        {/* Progress (only after step 0) */}
+        {currentStep > 0 && (
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                {aiExtracted && <Zap className="h-3 w-3 text-primary" />}
+                {aiExtracted ? "Dados extraídos por IA — revise e ajuste" : `Etapa ${currentStep} de ${STEPS.length - 1}`}
+              </span>
+              <span>{progress}%</span>
+            </div>
+            <Progress value={progress} className="h-2" />
           </div>
-          <Progress value={progress} className="h-2" />
-          <div className="flex gap-1">
-            {STEPS.map((s, i) => (
-              <button
-                key={s.id}
-                onClick={() => i <= currentStep && setCurrentStep(i)}
-                className={`flex-1 h-1 rounded-full transition-all ${
-                  i <= currentStep ? "bg-primary" : "bg-muted"
-                } ${i < currentStep ? "cursor-pointer" : ""}`}
-              />
-            ))}
-          </div>
-        </div>
+        )}
 
         {/* Step Content */}
         <AnimatePresence mode="wait">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.2 }}
-          >
-            <Card className="border-border/50">
-              <CardContent className="p-6 space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                    <step.icon className="h-5 w-5 text-primary" />
+          <motion.div key={currentStep} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.2 }}>
+            {/* STEP 0: Smart Import */}
+            {currentStep === 0 && (
+              <div className="space-y-3">
+                {/* URL Scan Card */}
+                <Card className={`border-2 transition-all cursor-pointer ${scanMethod === "url" ? "border-primary bg-primary/5" : "border-border/50 hover:border-primary/30"}`}
+                  onClick={() => setScanMethod("url")}>
+                  <CardContent className="p-5">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center shrink-0">
+                        <Globe className="h-6 w-6 text-primary" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-semibold">Escanear meu site</h3>
+                          <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold">RECOMENDADO</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Cole a URL do seu site e a IA extrai nome, serviços, preços, contato — tudo automaticamente.
+                        </p>
+                        {scanMethod === "url" && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} className="mt-3 space-y-2">
+                            <div className="flex gap-2">
+                              <Input
+                                placeholder="www.suaempresa.com.br"
+                                value={urlInput}
+                                onChange={e => setUrlInput(e.target.value)}
+                                className="h-10 flex-1"
+                                onKeyDown={e => e.key === "Enter" && handleScanUrl()}
+                              />
+                              <Button onClick={handleScanUrl} disabled={scanning || !urlInput.trim()} className="gap-2 shrink-0">
+                                {scanning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
+                                {scanning ? "Analisando..." : "Escanear"}
+                              </Button>
+                            </div>
+                            {scanning && (
+                              <div className="flex items-center gap-2 text-xs text-primary animate-pulse">
+                                <Brain className="h-3.5 w-3.5" />
+                                A IA está lendo seu site e extraindo informações...
+                              </div>
+                            )}
+                          </motion.div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Paste Text Card */}
+                <Card className={`border-2 transition-all cursor-pointer ${scanMethod === "paste" ? "border-primary bg-primary/5" : "border-border/50 hover:border-primary/30"}`}
+                  onClick={() => setScanMethod("paste")}>
+                  <CardContent className="p-5">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500/20 to-amber-500/5 flex items-center justify-center shrink-0">
+                        <ClipboardPaste className="h-6 w-6 text-amber-500" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold">Colar texto ou documento</h3>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Cole qualquer texto: apresentação, proposta comercial, bio do Instagram, PDF copiado — a IA organiza tudo.
+                        </p>
+                        {scanMethod === "paste" && (
+                          <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} className="mt-3 space-y-2">
+                            <Textarea
+                              placeholder="Cole aqui qualquer informação sobre sua empresa: texto do site, proposta comercial, lista de serviços, bio do Instagram..."
+                              value={pasteInput}
+                              onChange={e => setPasteInput(e.target.value)}
+                              rows={5}
+                              className="resize-none text-sm"
+                            />
+                            <Button onClick={handleScanPaste} disabled={scanning || !pasteInput.trim()} className="w-full gap-2">
+                              {scanning ? <Loader2 className="h-4 w-4 animate-spin" /> : <Wand2 className="h-4 w-4" />}
+                              {scanning ? "Analisando com IA..." : "Extrair informações"}
+                            </Button>
+                          </motion.div>
+                        )}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Manual Card */}
+                <Card className={`border-2 transition-all cursor-pointer ${scanMethod === "manual" ? "border-primary bg-primary/5" : "border-border/50 hover:border-primary/30"}`}
+                  onClick={() => { setScanMethod("manual"); setCurrentStep(1); }}>
+                  <CardContent className="p-5">
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center shrink-0">
+                        <FileText className="h-6 w-6 text-muted-foreground" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold">Preencher manualmente</h3>
+                        <p className="text-xs text-muted-foreground mt-1">
+                          Preencha campo por campo — ideal para quem ainda não tem site.
+                        </p>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground mt-1" />
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            )}
+
+            {/* STEP 1: Identity */}
+            {currentStep === 1 && (
+              <Card className="border-border/50">
+                <CardContent className="p-6 space-y-4">
+                  <StepHeader icon={step.icon} title={step.title} subtitle={step.subtitle} extracted={aiExtracted} />
+                  <div>
+                    <label className="text-sm font-medium mb-1.5 block">Nome da empresa <span className="text-destructive">*</span></label>
+                    <Input placeholder="Ex: Clínica Odonto Smile" value={data.companyName} onChange={e => update("companyName", e.target.value)} className="h-10" />
                   </div>
                   <div>
-                    <h2 className="font-semibold">{step.title}</h2>
-                    <p className="text-xs text-muted-foreground">{step.subtitle}</p>
+                    <label className="text-sm font-medium mb-1.5 block">Segmento</label>
+                    <div className="flex flex-wrap gap-2">
+                      {INDUSTRY_OPTIONS.map(ind => (
+                        <button key={ind} onClick={() => update("industry", ind)}
+                          className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${data.industry === ind ? "bg-primary text-primary-foreground border-primary" : "bg-muted/50 text-muted-foreground border-border hover:border-primary/50"}`}>
+                          {ind}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                </div>
+                  <div>
+                    <label className="text-sm font-medium mb-1.5 block">Descrição curta</label>
+                    <Textarea placeholder="Ex: Clínica odontológica especializada em ortodontia..." value={data.description} onChange={e => update("description", e.target.value)} rows={3} className="resize-none" />
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
-                {currentStep === 0 && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">
-                        Nome da empresa <span className="text-destructive">*</span>
-                      </label>
-                      <Input
-                        placeholder="Ex: Clínica Odonto Smile"
-                        value={data.companyName}
-                        onChange={e => update("companyName", e.target.value)}
-                        className="h-10"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">Segmento</label>
-                      <div className="flex flex-wrap gap-2">
-                        {INDUSTRY_OPTIONS.map(ind => (
-                          <button
-                            key={ind}
-                            onClick={() => update("industry", ind)}
-                            className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                              data.industry === ind
-                                ? "bg-primary text-primary-foreground border-primary"
-                                : "bg-muted/50 text-muted-foreground border-border hover:border-primary/50"
-                            }`}
-                          >
-                            {ind}
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">Descrição curta da empresa</label>
-                      <Textarea
-                        placeholder="Ex: Clínica odontológica especializada em ortodontia e implantes, atendendo em São Paulo desde 2015..."
-                        value={data.description}
-                        onChange={e => update("description", e.target.value)}
-                        rows={3}
-                        className="resize-none"
-                      />
-                    </div>
+            {/* STEP 2: Products */}
+            {currentStep === 2 && (
+              <Card className="border-border/50">
+                <CardContent className="p-6 space-y-4">
+                  <StepHeader icon={step.icon} title={step.title} subtitle={step.subtitle} extracted={aiExtracted} />
+                  <div>
+                    <label className="text-sm font-medium mb-1.5 block">Produtos / Serviços <span className="text-destructive">*</span></label>
+                    <Textarea placeholder={"Ex:\n- Limpeza dental: R$ 200\n- Clareamento: R$ 800\n- Implante: a partir de R$ 3.000"} value={data.products} onChange={e => update("products", e.target.value)} rows={5} className="resize-none" />
+                    <p className="text-[10px] text-muted-foreground mt-1">Liste seus serviços com preços. Os agentes usarão isso para responder clientes.</p>
                   </div>
-                )}
+                  <div>
+                    <label className="text-sm font-medium mb-1.5 block">Público-alvo</label>
+                    <Input placeholder="Ex: Adultos 25-55 anos, classe B/C, região Sul de SP" value={data.targetAudience} onChange={e => update("targetAudience", e.target.value)} className="h-10" />
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
-                {currentStep === 1 && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">
-                        Produtos / Serviços <span className="text-destructive">*</span>
-                      </label>
-                      <Textarea
-                        placeholder={"Ex:\n- Limpeza dental: R$ 200\n- Clareamento: R$ 800\n- Implante: a partir de R$ 3.000\n- Ortodontia: consulta gratuita"}
-                        value={data.products}
-                        onChange={e => update("products", e.target.value)}
-                        rows={5}
-                        className="resize-none"
-                      />
-                      <p className="text-[10px] text-muted-foreground mt-1">
-                        Liste seus principais produtos/serviços com preços. Os agentes usarão isso para responder consultas.
-                      </p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">Público-alvo</label>
-                      <Input
-                        placeholder="Ex: Adultos 25-55 anos, classe B/C, região Sul de SP"
-                        value={data.targetAudience}
-                        onChange={e => update("targetAudience", e.target.value)}
-                        className="h-10"
-                      />
+            {/* STEP 3: Personality */}
+            {currentStep === 3 && (
+              <Card className="border-border/50">
+                <CardContent className="p-6 space-y-4">
+                  <StepHeader icon={step.icon} title={step.title} subtitle={step.subtitle} />
+                  <div>
+                    <label className="text-sm font-medium mb-1.5 block">Tom de voz dos agentes</label>
+                    <div className="grid grid-cols-2 gap-2">
+                      {TONE_OPTIONS.map(tone => (
+                        <button key={tone.value} onClick={() => update("toneOfVoice", tone.value)}
+                          className={`p-3 rounded-xl border text-left transition-all ${data.toneOfVoice === tone.value ? "bg-primary/10 border-primary ring-1 ring-primary/20" : "bg-muted/30 border-border hover:border-primary/40"}`}>
+                          <span className="text-sm font-medium">{tone.emoji} {tone.label}</span>
+                          <p className="text-[10px] text-muted-foreground mt-0.5">{tone.description}</p>
+                        </button>
+                      ))}
                     </div>
                   </div>
-                )}
+                  <div>
+                    <label className="text-sm font-medium mb-1.5 block">Regras e restrições</label>
+                    <Textarea placeholder={"Ex:\n- Nunca oferecer desconto sem aprovação\n- Não marcar consultas para sábado\n- Não falar de concorrentes"} value={data.rules} onChange={e => update("rules", e.target.value)} rows={4} className="resize-none" />
+                  </div>
+                </CardContent>
+              </Card>
+            )}
 
-                {currentStep === 2 && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">Tom de voz dos agentes</label>
-                      <div className="grid grid-cols-2 gap-2">
-                        {TONE_OPTIONS.map(tone => (
-                          <button
-                            key={tone.value}
-                            onClick={() => update("toneOfVoice", tone.value)}
-                            className={`p-3 rounded-xl border text-left transition-all ${
-                              data.toneOfVoice === tone.value
-                                ? "bg-primary/10 border-primary ring-1 ring-primary/20"
-                                : "bg-muted/30 border-border hover:border-primary/40"
-                            }`}
-                          >
-                            <span className="text-sm font-medium">{tone.label}</span>
-                            <p className="text-[10px] text-muted-foreground mt-0.5">{tone.description}</p>
-                          </button>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">
-                        Regras e restrições
-                      </label>
-                      <Textarea
-                        placeholder={"Ex:\n- Nunca oferecer desconto sem aprovação\n- Não marcar consultas para sábado\n- Sempre encaminhar emergências para o WhatsApp do Dr. João\n- Não falar de concorrentes"}
-                        value={data.rules}
-                        onChange={e => update("rules", e.target.value)}
-                        rows={4}
-                        className="resize-none"
-                      />
-                    </div>
+            {/* STEP 4: Support */}
+            {currentStep === 4 && (
+              <Card className="border-border/50">
+                <CardContent className="p-6 space-y-4">
+                  <StepHeader icon={step.icon} title={step.title} subtitle={step.subtitle} />
+                  <div>
+                    <label className="text-sm font-medium mb-1.5 block">Perguntas frequentes</label>
+                    <Textarea placeholder={"Ex:\nP: Qual o horário?\nR: Seg-Sex, 8h às 18h\n\nP: Aceitam convênio?\nR: Sim, Amil e Bradesco"} value={data.commonQuestions} onChange={e => update("commonQuestions", e.target.value)} rows={5} className="resize-none" />
                   </div>
-                )}
-
-                {currentStep === 3 && (
-                  <div className="space-y-4">
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">
-                        Perguntas frequentes dos seus clientes
-                      </label>
-                      <Textarea
-                        placeholder={"Ex:\nP: Qual o horário de funcionamento?\nR: Segunda a sexta, 8h às 18h\n\nP: Aceitam convênio?\nR: Sim, Amil, Bradesco e SulAmérica\n\nP: Tem estacionamento?\nR: Sim, gratuito para pacientes"}
-                        value={data.commonQuestions}
-                        onChange={e => update("commonQuestions", e.target.value)}
-                        rows={5}
-                        className="resize-none"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium mb-1.5 block">
-                        Informações de contato
-                      </label>
-                      <Textarea
-                        placeholder={"Ex:\nEndereço: Rua X, 123 - São Paulo\nTelefone: (11) 99999-9999\nEmail: contato@clinica.com\nHorário: Seg-Sex 8h-18h"}
-                        value={data.contactInfo}
-                        onChange={e => update("contactInfo", e.target.value)}
-                        rows={3}
-                        className="resize-none"
-                      />
-                    </div>
+                  <div>
+                    <label className="text-sm font-medium mb-1.5 block">Informações de contato</label>
+                    <Textarea placeholder={"Ex:\nEndereço: Rua X, 123 - SP\nTel: (11) 99999-9999\nEmail: contato@clinica.com"} value={data.contactInfo} onChange={e => update("contactInfo", e.target.value)} rows={3} className="resize-none" />
                   </div>
-                )}
-              </CardContent>
-            </Card>
+                </CardContent>
+              </Card>
+            )}
           </motion.div>
         </AnimatePresence>
 
         {/* Navigation */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {currentStep > 0 && (
+        {currentStep > 0 && (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
               <Button variant="ghost" size="sm" onClick={back} className="gap-1.5">
-                <ArrowLeft className="h-4 w-4" />
-                Voltar
+                <ArrowLeft className="h-4 w-4" /> Voltar
               </Button>
-            )}
-            {onSkip && (
-              <Button variant="ghost" size="sm" onClick={onSkip} className="text-xs text-muted-foreground">
-                Pular por agora
-              </Button>
-            )}
+              {onSkip && (
+                <Button variant="ghost" size="sm" onClick={onSkip} className="text-xs text-muted-foreground">Pular por agora</Button>
+              )}
+            </div>
+            <Button onClick={next} disabled={!canProceed() || saving} className="gap-2">
+              {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : currentStep === STEPS.length - 1 ? (
+                <><CheckCircle className="h-4 w-4" /> Salvar e continuar</>
+              ) : (<>Próximo <ArrowRight className="h-4 w-4" /></>)}
+            </Button>
           </div>
+        )}
 
-          <Button
-            onClick={next}
-            disabled={!canProceed() || saving}
-            className="gap-2"
-          >
-            {saving ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : currentStep === STEPS.length - 1 ? (
-              <>
-                <CheckCircle className="h-4 w-4" />
-                Salvar e continuar
-              </>
-            ) : (
-              <>
-                Próximo
-                <ArrowRight className="h-4 w-4" />
-              </>
-            )}
-          </Button>
-        </div>
+        {currentStep === 0 && onSkip && (
+          <div className="text-center">
+            <Button variant="ghost" size="sm" onClick={onSkip} className="text-xs text-muted-foreground">Pular por agora</Button>
+          </div>
+        )}
 
-        {/* Trust indicator */}
         <div className="flex items-center justify-center gap-1.5 text-[10px] text-muted-foreground">
           <Shield className="h-3 w-3" />
           Dados armazenados com segurança e usados apenas pelos seus agentes
         </div>
       </motion.div>
+    </div>
+  );
+}
+
+function StepHeader({ icon: Icon, title, subtitle, extracted }: { icon: any; title: string; subtitle: string; extracted?: boolean }) {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+        <Icon className="h-5 w-5 text-primary" />
+      </div>
+      <div className="flex-1">
+        <div className="flex items-center gap-2">
+          <h2 className="font-semibold">{title}</h2>
+          {extracted && (
+            <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[9px] font-bold flex items-center gap-1">
+              <Zap className="h-2.5 w-2.5" /> Preenchido por IA
+            </span>
+          )}
+        </div>
+        <p className="text-xs text-muted-foreground">{subtitle}</p>
+      </div>
     </div>
   );
 }
