@@ -65,3 +65,6 @@ verify_jwt = false
 
 [functions.agent-autonomy]
 verify_jwt = false
+
+[functions.event-loop]
+verify_jwt = false
