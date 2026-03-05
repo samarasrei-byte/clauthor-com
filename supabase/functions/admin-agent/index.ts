@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, rateLimitResponse, securityHeaders } from "../_shared/security.ts";
 import { createExecutionTracker } from "../_shared/resilience.ts";
-import { buildAgentContract, getTierSLA, getAreaLimits, type AgentContract } from "../_shared/agent-contract.ts";
+import { validateLimits } from "../_shared/policy-engine.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -59,6 +59,23 @@ serve(async (req) => {
       });
     }
     authStep.done();
+
+    // === CREDIT VALIDATION ===
+    const creditStep = tracker.step("credit_validation");
+    const { data: userCredits } = await adminClient
+      .from("user_credits")
+      .select("*")
+      .eq("user_id", userData.user.id)
+      .single();
+
+    if (userCredits) {
+      const creditCheck = validateLimits(userCredits.used_credits, userCredits.total_credits);
+      if (!creditCheck.allowed) {
+        creditStep.done("blocked");
+        return new Response(JSON.stringify({ error: creditCheck.reason, suggest_upgrade: true }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      }
+    }
+    creditStep.done();
 
     // === BUILD AGENT CONTRACT ===
     const contract: AgentContract = {
