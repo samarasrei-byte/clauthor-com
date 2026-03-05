@@ -13,6 +13,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const startTime = Date.now();
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.replace("Bearer ", "");
     if (!token) {
@@ -149,13 +150,22 @@ Quando mencionar métricas, inclua um bloco JSON entre \`\`\`kpi e \`\`\` com fo
       return new Response(JSON.stringify({ error: "AI gateway error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Track token usage
-    await supabase.from("token_usage").insert({
-      user_id: user.id,
-      action_type: "monix_chat",
-      tokens_used: 500, // estimate
-      model: "google/gemini-2.5-flash",
-    });
+    await Promise.all([
+      supabase.from("token_usage").insert({
+        user_id: user.id,
+        action_type: "monix_chat",
+        tokens_used: 500,
+        model: "google/gemini-2.5-flash",
+      }),
+      supabase.from("execution_logs").insert({
+        user_id: user.id,
+        agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+        action: "chat",
+        status: "success",
+        execution_time_ms: Date.now() - startTime,
+        details: { type: "monix_chat", model: "google/gemini-2.5-flash" },
+      }),
+    ]);
 
     return new Response(response.body, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },

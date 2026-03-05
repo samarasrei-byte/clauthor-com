@@ -125,6 +125,7 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    const startTime = Date.now();
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.replace("Bearer ", "");
     if (!token) {
@@ -381,14 +382,34 @@ Quando mencionar métricas, inclua um bloco JSON entre \`\`\`kpi e \`\`\` com fo
           });
 
           if (finalResponse.ok) {
-            await supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_mgmt", tokens_used: 800, model: "google/gemini-2.5-flash" });
+            await Promise.all([
+              supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_mgmt", tokens_used: 800, model: "google/gemini-2.5-flash" }),
+              supabase.from("execution_logs").insert({
+                user_id: user.id,
+                agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+                action: "chat",
+                status: "success",
+                execution_time_ms: Date.now() - startTime,
+                details: { type: "omnix_credential_mgmt", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
+              }),
+            ]);
             return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
           }
         }
 
         if (choice?.message?.content) {
           const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
-          await supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: 500, model: "google/gemini-2.5-flash" });
+          await Promise.all([
+            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: 500, model: "google/gemini-2.5-flash" }),
+            supabase.from("execution_logs").insert({
+              user_id: user.id,
+              agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+              action: "chat",
+              status: "success",
+              execution_time_ms: Date.now() - startTime,
+              details: { type: "omnix_tool_response" },
+            }),
+          ]);
           return new Response(sseData, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
         }
       }
@@ -411,7 +432,17 @@ Quando mencionar métricas, inclua um bloco JSON entre \`\`\`kpi e \`\`\` com fo
       return new Response(JSON.stringify({ error: "AI gateway error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    await supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: 500, model: "google/gemini-2.5-flash" });
+    await Promise.all([
+      supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: 500, model: "google/gemini-2.5-flash" }),
+      supabase.from("execution_logs").insert({
+        user_id: user.id,
+        agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+        action: "chat",
+        status: "success",
+        execution_time_ms: Date.now() - startTime,
+        details: { type: "omnix_chat", model: "google/gemini-2.5-flash" },
+      }),
+    ]);
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
   } catch (e) {
