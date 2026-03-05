@@ -82,7 +82,7 @@ const AnimatedBar = ({ label, pct, color }: { label: string; pct: number; color:
 /* ── Investor Agent Chat (auto-plays conversation) ── */
 const investorConversation = [
   { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-  { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 80 agentes já operacionais, infraestrutura pronta e um mercado de US$ 1.8T até 2030. Você entra antes da escala explodir." },
+  { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 83 agentes já operacionais, infraestrutura pronta e um mercado de US$ 1.8T até 2030. Você entra antes da escala explodir." },
   { role: "investor" as const, text: "Mas o mercado de IA está saturado. Qual o diferencial?" },
   { role: "agent" as const, text: "Ninguém faz o que fazemos: substituir departamentos inteiros com squads de IA coordenados. Não vendemos chatbot — vendemos operação completa. Atendimento, financeiro, compliance, tudo rodando 24/7." },
   { role: "investor" as const, text: "Como vocês monetizam?" },
@@ -176,7 +176,7 @@ const Pitch = () => {
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   const indicators = [
-    { icon: Bot, label: "80 agentes operacionais" },
+    { icon: Bot, label: "83 agentes operacionais" },
     { icon: Clock, label: "Setup em 5 minutos" },
     { icon: Shield, label: "SOC 2 compliant" },
     { icon: Globe, label: "Multi-idioma nativo" },
@@ -192,7 +192,7 @@ const Pitch = () => {
   ];
 
   const advantages = [
-    { icon: Bot, text: "80 agentes já operacionais" },
+    { icon: Bot, text: "83 agentes já operacionais" },
     { icon: Users, text: "Banco de 200 mil leads" },
     { icon: TrendingUp, text: "Estrutura própria de aquisição" },
     { icon: Globe, text: "Multi-idioma" },

@@ -94,14 +94,17 @@ export const departments: Department[] = [
     gradient: "from-amber-500/20 to-amber-500/5",
     borderActive: "border-amber-500/40",
     iconBg: "bg-amber-500/20",
-    popular: false, tokens: "6M", actions: "8.000",
+    popular: false, tokens: "10M", actions: "12.000",
     agents: [
       { key: "revenue", icon: BarChart3, role: "CFO / Controller", tokens: "2M" },
       { key: "data_analytics", icon: BarChart3, role: "Analista de BI", tokens: "1.5M" },
       { key: "ai_cfo", icon: DollarSign, role: "CFO Virtual / Controller", tokens: "1.5M" },
       { key: "tax_content", icon: FileText, role: "Conteúdo Tributário", tokens: "1M" },
+      { key: "digital_accountant", icon: FileText, role: "Contador Digital", tokens: "1.5M" },
+      { key: "tax_compliance", icon: Shield, role: "Analista Fiscal", tokens: "1.5M" },
+      { key: "credit_recovery", icon: Star, role: "Regularizador de Crédito", tokens: "1M" },
     ],
-    headcount: 4, cltCost: 44000, prometheusCost: 2997, discount: 20,
+    headcount: 7, cltCost: 66000, prometheusCost: 4497, discount: 25,
   },
   {
     id: "criacao", icon: Palette, color: "text-violet-400",
@@ -277,8 +280,8 @@ export const departments: Department[] = [
 
 export const totalPrometheusCost = departments.reduce((a, d) => a + d.prometheusCost, 0);
 export const totalCltCost = departments.reduce((a, d) => a + d.cltCost, 0);
-export const totalTokens = "110M";
-export const totalAgents = 80;
+export const totalTokens = "114M";
+export const totalAgents = 83;
 export const totalSavingsPercent = Math.round(((totalCltCost - totalPrometheusCost) / totalCltCost) * 100);
 
 /** Department details for the rich cards in Library page */
@@ -325,12 +328,12 @@ export const deptDetails: Record<string, DeptDetail> = {
   },
   financeiro: {
     icon: DollarSign,
-    agents: ["CFO Virtual", "BI Financeiro", "AI CFO Controller", "Conteúdo Tributário"],
-    replaces: ["1 Analista Financeiro", "1 Analista BI", "1 Controller", "1 Conteudista Fiscal"],
+    agents: ["CFO Virtual", "BI Financeiro", "AI CFO Controller", "Conteúdo Tributário", "Contador Digital", "Analista Fiscal", "Regularizador de Crédito"],
+    replaces: ["1 Analista Financeiro", "1 Analista BI", "1 Controller", "1 Conteudista Fiscal", "1 Contador", "1 Analista Fiscal", "1 Analista de Crédito"],
     faq: [
       { q: "Emite nota fiscal?", a: "Integra com SEFAZ, Conta Azul, Omie e ERPs para emissão e conciliação automática." },
       { q: "Faz previsão de caixa?", a: "Sim. Forecast de 30, 60 e 90 dias com cenários otimista, neutro e pessimista." },
-      { q: "E tributário?", a: "Análise tributária automática, alertas de vencimento e sugestões de economia fiscal." },
+      { q: "E contabilidade e impostos?", a: "Escrituração completa, DAS, DCTF, SPED, EFD, apuração fiscal e regularização de crédito — tudo automatizado." },
     ],
   },
   criacao: {
