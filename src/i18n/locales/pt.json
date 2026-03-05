@@ -504,7 +504,7 @@
     "footer_copyright": "© 2026 CLAUTHOR. Todos os direitos reservados.",
     "per_month": "/mês",
     "popular": "Popular",
-    "system_status": "Sistema ativo — 80 agentes operacionais",
+    "system_status": "Sistema ativo — 83 agentes operacionais",
     "cta_build_team": "Monte seu Time de IA",
     "cta_explore_agents": "Explorar Agentes",
     "trust_e2e": "End-to-end encrypted",
@@ -593,12 +593,12 @@
     "footer_legal": "Legal",
     "footer_terms_label": "Termos de Uso",
     "footer_privacy_label": "Privacidade",
-    "footer_desc": "Força de trabalho de IA que orquestra 80 agentes autônomos em 15 departamentos corporativos.",
+    "footer_desc": "Força de trabalho de IA que orquestra 83 agentes autônomos em 15 departamentos corporativos.",
     "details_arrow": "Detalhes →",
     "actions_label": "ações",
-    "view_all_80": "Ver todos os 80 agentes",
+    "view_all_80": "Ver todos os 83 agentes",
     "seo_title": "CLAUTHOR — Funcionários de IA para sua Empresa",
-    "seo_description": "Plataforma de agentes autônomos de IA que substituem departamentos inteiros. 80 agentes, 15 departamentos, 24/7."
+    "seo_description": "Plataforma de agentes autônomos de IA que substituem departamentos inteiros. 83 agentes, 15 departamentos, 24/7."
   },
   "pricing_page": {
     "badge": "Planos e Preços",
@@ -1078,9 +1078,9 @@
   "navbar": {
     "solutions": "Soluções",
     "marketplace_label": "Marketplace",
-    "marketplace_desc": "80 agentes individuais para contratar avulso",
+    "marketplace_desc": "83 agentes individuais para contratar avulso",
     "ai_teams_label": "Times de IA",
-    "ai_teams_desc": "15 departamentos completos com 80 agentes",
+    "ai_teams_desc": "15 departamentos completos com 83 agentes",
     "new_badge": "NOVO"
   },
   "community": {
@@ -1428,7 +1428,7 @@
     "sys_ticket3_done": "✅ Ticket #1249 — Resolvido em 6 segundos",
     "agent_summary": "Pronto! 3 tickets resolvidos em 26 segundos. Satisfação do cliente: 98%. Tempo médio que um humano levaria: 45 minutos.",
     "impressed": "Impressionado?",
-    "cta_desc": "Esse é só 1 dos 80 agentes. Cada um é especialista em uma área diferente.",
+    "cta_desc": "Esse é só 1 dos 83 agentes. Cada um é especialista em uma área diferente.",
     "cta_link": "Conhecer todos os agentes",
     "auto_label": "Demonstração automática — sem input necessário"
   }

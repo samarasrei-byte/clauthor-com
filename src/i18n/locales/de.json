@@ -205,7 +205,7 @@
     "footer_copyright": "© 2026 CLAUTHOR. Alle Rechte vorbehalten.",
     "per_month": "/Monat",
     "popular": "Beliebt",
-    "system_status": "System aktiv — 80 Agenten in Betrieb",
+    "system_status": "System aktiv — 83 Agenten in Betrieb",
     "cta_build_team": "Bauen Sie Ihr KI-Team",
     "cta_explore_agents": "Agenten erkunden",
     "trust_e2e": "Ende-zu-Ende verschlüsselt",
@@ -273,10 +273,10 @@
     "footer_community_label": "Community", "footer_community_link": "Community",
     "footer_pitch": "Pitch", "footer_legal": "Rechtliches",
     "footer_terms_label": "Nutzungsbedingungen", "footer_privacy_label": "Datenschutz",
-    "footer_desc": "KI-Belegschaft, die 80 autonome Agenten in 15 Unternehmensabteilungen orchestriert.",
-    "details_arrow": "Details →", "actions_label": "Aktionen", "view_all_80": "Alle 80 Agenten anzeigen",
+    "footer_desc": "KI-Belegschaft, die 83 autonome Agenten in 15 Unternehmensabteilungen orchestriert.",
+    "details_arrow": "Details →", "actions_label": "Aktionen", "view_all_80": "Alle 83 Agenten anzeigen",
     "seo_title": "CLAUTHOR — KI-Mitarbeiter für Ihr Unternehmen",
-    "seo_description": "Autonome KI-Agenten-Plattform, die ganze Abteilungen ersetzt. 80 Agenten, 15 Abteilungen, 24/7.",
+    "seo_description": "Autonome KI-Agenten-Plattform, die ganze Abteilungen ersetzt. 83 Agenten, 15 Abteilungen, 24/7.",
     "final_cta_desc": "Bauen Sie Ihr Agenten-Team in 5 Minuten auf. Ohne Code, ohne Kreditkarte. Starten Sie jetzt und sehen Sie Ergebnisse am ersten Tag."
   },
   "pricing_page": {
@@ -510,9 +510,9 @@
   "navbar": {
     "solutions": "Lösungen",
     "marketplace_label": "Marketplace",
-    "marketplace_desc": "80 individuelle Agenten auf Abruf",
+    "marketplace_desc": "83 individuelle Agenten auf Abruf",
     "ai_teams_label": "KI-Teams",
-    "ai_teams_desc": "15 komplette Abteilungen mit 80 Agenten",
+    "ai_teams_desc": "15 komplette Abteilungen mit 83 Agenten",
     "new_badge": "NEU"
   },
   "community": {

@@ -204,7 +204,7 @@
     "footer_copyright": "© 2026 CLAUTHOR. Tutti i diritti riservati.",
     "per_month": "/mese",
     "popular": "Popolare",
-    "system_status": "Sistema attivo — 80 agenti operativi",
+    "system_status": "Sistema attivo — 83 agenti operativi",
     "cta_build_team": "Crea il tuo Team IA",
     "cta_explore_agents": "Esplora Agenti",
     "trust_e2e": "Crittografia end-to-end",
@@ -272,10 +272,10 @@
     "footer_community_label": "Comunità", "footer_community_link": "Comunità",
     "footer_pitch": "Pitch", "footer_legal": "Legale",
     "footer_terms_label": "Termini di Utilizzo", "footer_privacy_label": "Privacy",
-    "footer_desc": "Forza lavoro IA che orchestra 80 agenti autonomi in 15 dipartimenti aziendali.",
-    "details_arrow": "Dettagli →", "actions_label": "azioni", "view_all_80": "Vedi tutti gli 80 agenti",
+    "footer_desc": "Forza lavoro IA che orchestra 83 agenti autonomi in 15 dipartimenti aziendali.",
+    "details_arrow": "Dettagli →", "actions_label": "azioni", "view_all_80": "Vedi tutti gli 83 agenti",
     "seo_title": "CLAUTHOR — Dipendenti IA per la tua Azienda",
-    "seo_description": "Piattaforma di agenti autonomi IA che sostituiscono interi dipartimenti. 80 agenti, 15 dipartimenti, 24/7.",
+    "seo_description": "Piattaforma di agenti autonomi IA che sostituiscono interi dipartimenti. 83 agenti, 15 dipartimenti, 24/7.",
     "final_cta_desc": "Crea il tuo team di agenti in 5 minuti. Senza codice, senza carta di credito. Inizia ora e vedi i risultati dal primo giorno."
   },
   "pricing_page": {
@@ -481,7 +481,7 @@
     "hr": "HR & Recruiting", "hr_desc": "Screening CV, pianificazione e onboarding.",
     "research": "Ricerca & Analisi", "research_desc": "Raccolta dati, report e insights."
   },
-  "navbar": { "solutions": "Soluzioni", "marketplace_label": "Marketplace", "marketplace_desc": "80 agenti individuali da assumere su richiesta", "ai_teams_label": "Team IA", "ai_teams_desc": "15 dipartimenti completi con 80 agenti", "new_badge": "NUOVO" },
+  "navbar": { "solutions": "Soluzioni", "marketplace_label": "Marketplace", "marketplace_desc": "83 agenti individuali da assumere su richiesta", "ai_teams_label": "Team IA", "ai_teams_desc": "15 dipartimenti completi con 83 agenti", "new_badge": "NUOVO" },
   "community": {
     "badge": "Community CLAUTHOR", "title": "Forum per", "title_hl": "IA & Automazione",
     "subtitle": "Scambia idee, fai domande e condividi esperienze.",

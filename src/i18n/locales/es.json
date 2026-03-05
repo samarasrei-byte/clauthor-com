@@ -359,7 +359,7 @@
     "footer_terms": "Términos", "footer_privacy": "Privacidad", "footer_contact": "Contacto", "footer_blog": "Blog",
     "footer_security_label": "Seguridad y pagos verificados", "footer_copyright": "© 2026 CLAUTHOR. Todos los derechos reservados.",
     "per_month": "/mes", "popular": "Popular",
-    "system_status": "Sistema activo — 80 agentes operacionales",
+    "system_status": "Sistema activo — 83 agentes operacionales",
     "cta_build_team": "Arma tu Equipo de IA",
     "cta_explore_agents": "Explorar Agentes",
     "trust_e2e": "Cifrado de extremo a extremo",
@@ -447,12 +447,12 @@
     "footer_legal": "Legal",
     "footer_terms_label": "Términos de Uso",
     "footer_privacy_label": "Privacidad",
-    "footer_desc": "Fuerza laboral de IA que orquesta 80 agentes autónomos en 15 departamentos corporativos.",
+    "footer_desc": "Fuerza laboral de IA que orquesta 83 agentes autónomos en 15 departamentos corporativos.",
     "details_arrow": "Detalles →",
     "actions_label": "acciones",
-    "view_all_80": "Ver todos los 80 agentes",
+    "view_all_80": "Ver todos los 83 agentes",
     "seo_title": "CLAUTHOR — Empleados de IA para tu Empresa",
-    "seo_description": "Plataforma de agentes autónomos de IA que reemplazan departamentos enteros. 80 agentes, 15 departamentos, 24/7.",
+    "seo_description": "Plataforma de agentes autónomos de IA que reemplazan departamentos enteros. 83 agentes, 15 departamentos, 24/7.",
     "final_cta_desc": "Arma tu equipo de agentes en 5 minutos. Sin código, sin tarjeta de crédito. Empieza ahora y ve resultados el primer día."
   },
   "pricing_page": {
@@ -653,8 +653,8 @@
   },
   "navbar": {
     "solutions": "Soluciones", "marketplace_label": "Marketplace",
-    "marketplace_desc": "80 agentes individuales para contratar", "ai_teams_label": "Equipos de IA",
-    "ai_teams_desc": "15 departamentos completos con 80 agentes", "new_badge": "NUEVO"
+    "marketplace_desc": "83 agentes individuales para contratar", "ai_teams_label": "Equipos de IA",
+    "ai_teams_desc": "15 departamentos completos con 83 agentes", "new_badge": "NUEVO"
   },
   "community": {
     "badge": "Comunidad CLAUTHOR", "title": "Foro de", "title_hl": "IA y Automatización",

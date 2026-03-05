@@ -33,7 +33,8 @@ export const agentKeys = [
   "contract_analyst", "compliance_officer", "labor_law", "litigation",
   "procurement", "supplier_mgr", "cost_analyst", "contract_negotiator",
   "logistics", "inventory", "quality", "process_analyst",
-  "data_engineer", "crm_manager", "ux_researcher", "media_buyer", "onboarding_specialist"
+  "data_engineer", "crm_manager", "ux_researcher", "media_buyer", "onboarding_specialist",
+  "digital_accountant", "tax_compliance", "credit_recovery"
 ] as const;
 
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo"] as const;
@@ -100,6 +101,9 @@ export const agentSlugs: Record<string, string> = {
   ux_researcher: "ux_researcher",
   media_buyer: "media_buyer",
   onboarding_specialist: "onboarding_specialist",
+  digital_accountant: "digital_accountant",
+  tax_compliance: "tax_compliance",
+  credit_recovery: "credit_recovery",
 };
 
 export const agentIcons: Record<string, React.ElementType> = {
@@ -164,6 +168,9 @@ export const agentIcons: Record<string, React.ElementType> = {
   ux_researcher: Lightbulb,
   media_buyer: CircleDollarSign,
   onboarding_specialist: UserCheck,
+  digital_accountant: FileText,
+  tax_compliance: Shield,
+  credit_recovery: Star,
 };
 
 export const agentTiers: Record<string, string> = {
@@ -228,6 +235,9 @@ export const agentTiers: Record<string, string> = {
   ux_researcher: "intermediate",
   media_buyer: "advanced",
   onboarding_specialist: "basic",
+  digital_accountant: "advanced",
+  tax_compliance: "advanced",
+  credit_recovery: "intermediate",
 };
 
 export const agentPriceTiers: Record<string, PriceTier> = {
@@ -292,6 +302,9 @@ export const agentPriceTiers: Record<string, PriceTier> = {
   ux_researcher: "entry",
   media_buyer: "mid",
   onboarding_specialist: "starter",
+  digital_accountant: "mid",
+  tax_compliance: "mid",
+  credit_recovery: "entry",
 };
 
 export const agentTags: Record<string, string[]> = {
@@ -375,6 +388,9 @@ export const agentTags: Record<string, string[]> = {
   ux_researcher: ["UX", "Pesquisa", "Testes", "Heurísticas", "Persona"],
   media_buyer: ["Meta Ads", "Google Ads", "Budget", "ROAS", "Mídia"],
   onboarding_specialist: ["Onboarding", "Retenção", "Ativação", "First Value", "Guia"],
+  digital_accountant: ["Contabilidade", "DAS", "DCTF", "Escrituração", "Conciliação"],
+  tax_compliance: ["SPED", "EFD", "Impostos", "Apuração", "Obrigações"],
+  credit_recovery: ["Serasa", "SPC", "Negociação", "Regularização", "Score"],
 };
 
 export const agentIntegrations: Record<string, string[]> = {
@@ -458,6 +474,9 @@ export const agentIntegrations: Record<string, string[]> = {
   ux_researcher: ["Hotjar", "Maze", "Figma", "Google Analytics", "Notion"],
   media_buyer: ["Meta Business Suite", "Google Ads", "TikTok Ads", "DV360", "GA4"],
   onboarding_specialist: ["Intercom", "HubSpot", "Slack", "Loom", "Notion"],
+  digital_accountant: ["Conta Azul", "Omie", "SEFAZ", "eSocial", "Google Sheets"],
+  tax_compliance: ["SPED", "EFD", "SEFAZ", "TOTVS", "SAP"],
+  credit_recovery: ["Serasa API", "SPC", "Boa Vista", "CRM", "WhatsApp API"],
 };
 
 export const agentSocialProof: Record<string, { companies: number; rating: number; savings: string }> = {
@@ -541,6 +560,9 @@ export const agentSocialProof: Record<string, { companies: number; rating: numbe
   ux_researcher: { companies: 145, rating: 4.7, savings: "R$ 12k" },
   media_buyer: { companies: 267, rating: 4.9, savings: "R$ 22k" },
   onboarding_specialist: { companies: 189, rating: 4.7, savings: "R$ 10k" },
+  digital_accountant: { companies: 156, rating: 4.8, savings: "R$ 18k" },
+  tax_compliance: { companies: 134, rating: 4.8, savings: "R$ 20k" },
+  credit_recovery: { companies: 212, rating: 4.7, savings: "R$ 12k" },
 };
 
 export const agentCapabilities: Record<string, string[]> = {
@@ -624,6 +646,9 @@ export const agentCapabilities: Record<string, string[]> = {
   ux_researcher: ["UX", "Pesquisa", "Heurística"],
   media_buyer: ["Budget", "ROAS", "Mídia"],
   onboarding_specialist: ["Onboarding", "Ativação", "Retenção"],
+  digital_accountant: ["Escrituração", "Conciliação", "DAS"],
+  tax_compliance: ["SPED", "EFD", "Apuração"],
+  credit_recovery: ["Serasa", "Negociação", "Score"],
 };
 
 export const tierColors: Record<string, string> = {

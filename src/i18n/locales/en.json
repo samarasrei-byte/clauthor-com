@@ -486,7 +486,7 @@
     "footer_copyright": "© 2026 CLAUTHOR. All rights reserved.",
     "per_month": "/mo",
     "popular": "Popular",
-    "system_status": "System active — 80 agents operational",
+    "system_status": "System active — 83 agents operational",
     "cta_build_team": "Build your AI Team",
     "cta_explore_agents": "Explore Agents",
     "trust_e2e": "End-to-end encrypted",
@@ -575,12 +575,12 @@
     "footer_legal": "Legal",
     "footer_terms_label": "Terms of Use",
     "footer_privacy_label": "Privacy",
-    "footer_desc": "AI workforce orchestrating 80 autonomous agents across 15 corporate departments.",
+    "footer_desc": "AI workforce orchestrating 83 autonomous agents across 15 corporate departments.",
     "details_arrow": "Details →",
     "actions_label": "actions",
-    "view_all_80": "View all 80 agents",
+    "view_all_80": "View all 83 agents",
     "seo_title": "CLAUTHOR — AI Employees for your Business",
-    "seo_description": "Autonomous AI agent platform that replaces entire departments. 80 agents, 15 departments, 24/7."
+    "seo_description": "Autonomous AI agent platform that replaces entire departments. 83 agents, 15 departments, 24/7."
   },
   "pricing_page": {
     "badge": "Plans & Pricing",
@@ -1060,9 +1060,9 @@
   "navbar": {
     "solutions": "Solutions",
     "marketplace_label": "Marketplace",
-    "marketplace_desc": "80 individual agents to hire on demand",
+    "marketplace_desc": "83 individual agents to hire on demand",
     "ai_teams_label": "AI Teams",
-    "ai_teams_desc": "15 complete departments with 80 agents",
+    "ai_teams_desc": "15 complete departments with 83 agents",
     "new_badge": "NEW"
   },
   "community": {
@@ -1410,7 +1410,7 @@
     "sys_ticket3_done": "✅ Ticket #1249 — Resolved in 6 seconds",
     "agent_summary": "Done! 3 tickets resolved in 26 seconds. Customer satisfaction: 98%. Average time a human would take: 45 minutes.",
     "impressed": "Impressed?",
-    "cta_desc": "That's just 1 of 80 agents. Each one specializes in a different area.",
+    "cta_desc": "That's just 1 of 83 agents. Each one specializes in a different area.",
     "cta_link": "Meet all agents",
     "auto_label": "Automatic demo — no input needed"
   }

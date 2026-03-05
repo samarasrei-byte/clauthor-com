@@ -37,6 +37,7 @@ const SLUG_TO_DEPT: Record<string, string> = {
   content: "marketing", marketing_automation: "marketing", seo_growth: "marketing", influencer: "marketing", media_buyer: "marketing", community_mgr: "marketing",
   // Financeiro
   revenue: "financeiro", data_analytics: "financeiro", ai_cfo: "financeiro", tax_content: "financeiro",
+  digital_accountant: "financeiro", tax_compliance: "financeiro", credit_recovery: "financeiro",
   // Criação
   creative_design: "criacao", video_production: "criacao", creative_writer: "criacao", content_producer: "criacao", ux_researcher: "criacao",
   // Suporte
