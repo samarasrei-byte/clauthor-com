@@ -29,12 +29,12 @@ serve(async (req) => {
         
         // Strip HTML tags, scripts, styles — keep text content
         contentToAnalyze = html
-          .replace(/<script[^>]*>[\\s\\S]*?<\\/script>/gi, "")
-          .replace(/<style[^>]*>[\\s\\S]*?<\\/style>/gi, "")
+          .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
+          .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")
           .replace(/<[^>]+>/g, " ")
-          .replace(/\\s+/g, " ")
+          .replace(/\s+/g, " ")
           .trim()
-          .slice(0, 8000); // Limit to prevent token overflow
+          .slice(0, 8000);
       } catch (fetchErr) {
         return new Response(JSON.stringify({ error: "Não foi possível acessar o site. Verifique a URL." }), {
           status: 400,
