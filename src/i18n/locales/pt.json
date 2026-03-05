@@ -1411,5 +1411,25 @@
     "s8_title": "8. Propriedade Intelectual",
     "s9_title": "9. Limitação de Responsabilidade",
     "s10_title": "10. Contato e Foro"
+  },
+  "demo_chat": {
+    "agent_name": "Ana — Atendimento",
+    "online_now": "Online agora",
+    "live_badge": "DEMO AO VIVO",
+    "live_label": "Demo ao vivo",
+    "sys_connected": "Agente de Atendimento conectado",
+    "agent_greeting": "Olá! Sou a Ana, sua agente de atendimento. Detectei 3 tickets abertos com clientes insatisfeitos. Posso resolver agora?",
+    "user_confirm": "Sim, pode resolver.",
+    "agent_analyzing": "Analisando os tickets...",
+    "sys_ticket1": "🔍 Processando ticket #1247 — Cliente: Maria Silva",
+    "agent_resolved1": "Ticket #1247 resolvido: cliente queria reembolso por atraso na entrega. Apliquei 15% de desconto + frete grátis no próximo pedido. Cliente respondeu: \"Obrigada, adorei o atendimento!\"",
+    "sys_ticket1_done": "✅ Ticket #1247 — Resolvido em 8 segundos",
+    "sys_ticket2_done": "✅ Ticket #1248 — Resolvido em 12 segundos",
+    "sys_ticket3_done": "✅ Ticket #1249 — Resolvido em 6 segundos",
+    "agent_summary": "Pronto! 3 tickets resolvidos em 26 segundos. Satisfação do cliente: 98%. Tempo médio que um humano levaria: 45 minutos.",
+    "impressed": "Impressionado?",
+    "cta_desc": "Esse é só 1 dos 80 agentes. Cada um é especialista em uma área diferente.",
+    "cta_link": "Conhecer todos os agentes",
+    "auto_label": "Demonstração automática — sem input necessário"
   }
 }

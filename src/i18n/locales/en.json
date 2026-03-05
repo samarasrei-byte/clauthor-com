@@ -1393,5 +1393,25 @@
     "s8_title": "8. Intellectual Property",
     "s9_title": "9. Limitation of Liability",
     "s10_title": "10. Contact and Jurisdiction"
+  },
+  "demo_chat": {
+    "agent_name": "Ana — Customer Service",
+    "online_now": "Online now",
+    "live_badge": "LIVE DEMO",
+    "live_label": "Live demo",
+    "sys_connected": "Customer Service Agent connected",
+    "agent_greeting": "Hi! I'm Ana, your customer service agent. I detected 3 open tickets from unhappy customers. Shall I resolve them now?",
+    "user_confirm": "Yes, go ahead.",
+    "agent_analyzing": "Analyzing the tickets...",
+    "sys_ticket1": "🔍 Processing ticket #1247 — Customer: Maria Silva",
+    "agent_resolved1": "Ticket #1247 resolved: customer wanted a refund for late delivery. Applied 15% discount + free shipping on next order. Customer replied: \"Thank you, I loved the service!\"",
+    "sys_ticket1_done": "✅ Ticket #1247 — Resolved in 8 seconds",
+    "sys_ticket2_done": "✅ Ticket #1248 — Resolved in 12 seconds",
+    "sys_ticket3_done": "✅ Ticket #1249 — Resolved in 6 seconds",
+    "agent_summary": "Done! 3 tickets resolved in 26 seconds. Customer satisfaction: 98%. Average time a human would take: 45 minutes.",
+    "impressed": "Impressed?",
+    "cta_desc": "That's just 1 of 80 agents. Each one specializes in a different area.",
+    "cta_link": "Meet all agents",
+    "auto_label": "Automatic demo — no input needed"
   }
 }

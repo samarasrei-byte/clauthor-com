@@ -105,9 +105,10 @@ const AnimatedStat = ({ value, suffix = "", prefix = "", label, icon: Icon }: {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
       onViewportEnter={() => {
         if (hasAnimated) return;
         setHasAnimated(true);
@@ -166,10 +167,10 @@ const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index, slug, a
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.12, duration: 0.6 }}
+      transition={{ delay: index * 0.12, duration: 0.5 }}
     >
       <Link to={slug ? `/agente/${slug}` : "/library"} className="block group" aria-label={`${name} — ${role}`}>
         <div className="relative p-6 sm:p-6 rounded-2xl border border-border bg-card/50 backdrop-blur-sm hover:border-primary/20 transition-all duration-500 overflow-hidden">
@@ -290,13 +291,15 @@ const HomePage = () => {
 
   return (
     <div className="relative overflow-x-hidden">
-      {/* Background depth layer */}
-      <motion.div
-        className="fixed inset-0 pointer-events-none"
-        style={{ opacity: bgOpacity }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-primary/[0.04]" />
-      </motion.div>
+      {/* Background depth layer — disabled on mobile for scroll performance */}
+      {!isMobile && (
+        <motion.div
+          className="fixed inset-0 pointer-events-none"
+          style={{ opacity: bgOpacity }}
+        >
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-primary/[0.04]" />
+        </motion.div>
+      )}
 
       {/* ═══════════════════════════════════════════════════════
           HERO
@@ -328,7 +331,7 @@ const HomePage = () => {
                   <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                     {t("home.system_status")}
                   </span>
-                  <HelpTooltip id="home-intro" text="Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo." position="bottom" size={12} autoShow={false} />
+                  <HelpTooltip id="home-intro" text={t("home.help_tooltip", { defaultValue: "Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo." })} position="bottom" size={12} autoShow={false} />
                 </div>
               </motion.div>
 
@@ -508,8 +511,8 @@ const HomePage = () => {
       <section className="py-16 sm:py-20 px-4 relative" aria-label="AI Concierge">
         <div className="max-w-4xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
           >
             <div className="flex items-center gap-3 mb-8 sm:mb-10">
@@ -551,12 +554,12 @@ const HomePage = () => {
           ═══════════════════════════════════════════════════════ */}
       <section className="py-16 sm:py-20 px-4 relative" aria-label="How it works">
         <div className="max-w-3xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-10 sm:mb-14"
-          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="mb-10 sm:mb-14"
+            >
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
               <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_protocol")}</span>
@@ -575,10 +578,10 @@ const HomePage = () => {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.5 }}
+                transition={{ delay: i * 0.15, duration: 0.4 }}
                 className="flex items-start gap-4 sm:gap-6 group p-4 sm:p-5 rounded-xl border border-transparent hover:border-border hover:bg-card/30 transition-all duration-500"
               >
                 <div className="shrink-0 flex flex-col items-center">
@@ -599,7 +602,7 @@ const HomePage = () => {
           ═══════════════════════════════════════════════════════ */}
       <section className="py-16 sm:py-24 px-4 relative border-y border-border/30" aria-label="Why CLAUTHOR">
         <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10 sm:mb-14">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10 sm:mb-14">
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
               <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_differentials")}</span>
@@ -615,8 +618,8 @@ const HomePage = () => {
 
           {/* HERO CARD — Savings (highlighted) */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="mb-6 group p-6 sm:p-8 rounded-2xl border-2 border-primary/30 bg-primary/[0.04] backdrop-blur-sm relative overflow-hidden"
           >
@@ -646,10 +649,10 @@ const HomePage = () => {
             ].map((item, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.08, duration: 0.5 }}
+                transition={{ delay: i * 0.08, duration: 0.4 }}
                 className="group p-5 sm:p-6 rounded-2xl border border-border bg-card/30 backdrop-blur-sm hover:border-primary/20 hover:bg-card/50 transition-all duration-500"
               >
                 <div className="w-12 h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center mb-4 icon-container-glow">
@@ -668,7 +671,7 @@ const HomePage = () => {
           ═══════════════════════════════════════════════════════ */}
       <section className="py-16 sm:py-24 px-4 relative" aria-label="Testimonials">
         <div className="max-w-5xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-10 sm:mb-14">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10 sm:mb-14">
             <div className="flex items-center gap-3 mb-3">
               <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
               <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_cases")}</span>
@@ -696,10 +699,10 @@ const HomePage = () => {
             ].map((testimonial, i) => (
               <motion.div
                 key={testimonial.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.12, duration: 0.6 }}
+                transition={{ delay: i * 0.12, duration: 0.5 }}
                 className="rounded-2xl border border-border bg-card/30 backdrop-blur-sm p-5 sm:p-6 relative overflow-hidden flex flex-col"
               >
                 <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-primary/10 rounded-tl-2xl" />
@@ -743,7 +746,7 @@ const HomePage = () => {
           ═══════════════════════════════════════════════════════ */}
       <section className="py-12 sm:py-16 px-4 relative" aria-label="Trust">
         <div className="max-w-3xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
             <div className="rounded-2xl border border-primary/10 bg-primary/[0.02] p-6 sm:p-10 text-center">
               <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-5 icon-container-glow">
                 <ShieldCheck className="h-7 w-7 text-primary icon-lift" strokeWidth={1.5} />
@@ -775,8 +778,8 @@ const HomePage = () => {
       <section className="py-16 sm:py-28 px-4 relative" aria-label="Team">
         <div className="max-w-5xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             className="mb-12 sm:mb-16"
           >
@@ -812,10 +815,10 @@ const HomePage = () => {
             ].map((member, i) => (
               <motion.div
                 key={member.name}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.6 }}
+                transition={{ delay: i * 0.15, duration: 0.5 }}
                 className="group relative rounded-2xl border border-border bg-card/50 backdrop-blur-sm overflow-hidden hover:border-primary/20 transition-all duration-500"
               >
                 <div className="aspect-[3/4] overflow-hidden">
@@ -854,7 +857,7 @@ const HomePage = () => {
           ═══════════════════════════════════════════════════════ */}
       <section className="py-12 sm:py-16 px-4 relative border-y border-border/30" aria-label="Pricing">
         <div className="max-w-3xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
             <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary/60">{t("home.section_pricing")}</span>
             <h2 className="font-display text-2xl sm:text-4xl font-bold mt-3 mb-4">
               {t("home.pricing_from")} <span className="gradient-text">{t("home.pricing_amount")}</span> {t("home.pricing_per_agent")}
@@ -919,7 +922,7 @@ const HomePage = () => {
           ═══════════════════════════════════════════════════════ */}
       <section className="py-20 sm:py-28 px-4 relative" aria-label="Final CTA">
         <div className="max-w-3xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
             <div className="relative rounded-3xl border border-primary/20 bg-primary/[0.03] backdrop-blur-sm p-10 sm:p-16 overflow-hidden">
               <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
