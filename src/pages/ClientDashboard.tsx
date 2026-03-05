@@ -27,6 +27,7 @@ import NotificationPanel from "@/components/dashboard/NotificationPanel";
 
 import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
+const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
@@ -104,6 +105,7 @@ const ClientDashboard = () => {
   const [postPaymentContext, setPostPaymentContext] = useState<{ agentName: string; isDepartment: boolean; agentCount: number; departmentId?: string } | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
   const [showDeptSetup, setShowDeptSetup] = useState(false);
+  const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
   const [checkoutSummary, setCheckoutSummary] = useState<CheckoutSummaryData | null>(null);
   const [pendingCheckoutIntent, setPendingCheckoutIntent] = useState<{ intent: HireIntent; uniqueSlugs: string[] } | null>(null);
 
@@ -395,17 +397,37 @@ const ClientDashboard = () => {
           agentCount={postPaymentContext.agentCount}
           onComplete={() => {
             setShowCelebration(false);
-            // If department purchase, show setup wizard
-            if (postPaymentContext.isDepartment && postPaymentContext.departmentId) {
-              setShowDeptSetup(true);
-            } else {
-              setActiveSection("omnix");
-            }
+            // Always show company onboarding first
+            setShowCompanyOnboarding(true);
           }}
         />
       )}
 
-      {/* Department Setup after payment */}
+      {/* Company Onboarding — teach agents about the business */}
+      {showCompanyOnboarding && (
+        <Suspense fallback={<SectionLoader />}>
+          <CompanyOnboardingWizard
+            onComplete={() => {
+              setShowCompanyOnboarding(false);
+              if (postPaymentContext?.isDepartment && postPaymentContext?.departmentId) {
+                setShowDeptSetup(true);
+              } else {
+                setActiveSection("omnix");
+              }
+            }}
+            onSkip={() => {
+              setShowCompanyOnboarding(false);
+              if (postPaymentContext?.isDepartment && postPaymentContext?.departmentId) {
+                setShowDeptSetup(true);
+              } else {
+                setActiveSection("omnix");
+              }
+            }}
+          />
+        </Suspense>
+      )}
+
+      {/* Department Setup after company onboarding */}
       {showDeptSetup && postPaymentContext?.departmentId && (
         <div className="fixed inset-0 z-50 bg-background flex items-center justify-center p-4 overflow-y-auto">
           <div className="w-full max-w-2xl">
