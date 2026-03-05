@@ -172,6 +172,7 @@ export function usePaypalCapture() {
             agentName: subIntent.agent_name,
             isDepartment: !!subIntent.is_department,
             agentCount: provisionedAgents.length,
+            departmentId: subIntent.department_id || null,
           }));
 
           // Send post-payment notification (non-blocking)

@@ -26,6 +26,7 @@ import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
 
 import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
+const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
@@ -100,8 +101,9 @@ const ClientDashboard = () => {
   usePaypalCapture();
   const { data: tokenUsage = [] } = useTokenUsage();
 
-  const [postPaymentContext, setPostPaymentContext] = useState<{ agentName: string; isDepartment: boolean; agentCount: number } | null>(null);
+  const [postPaymentContext, setPostPaymentContext] = useState<{ agentName: string; isDepartment: boolean; agentCount: number; departmentId?: string } | null>(null);
   const [showCelebration, setShowCelebration] = useState(false);
+  const [showDeptSetup, setShowDeptSetup] = useState(false);
   const [checkoutSummary, setCheckoutSummary] = useState<CheckoutSummaryData | null>(null);
   const [pendingCheckoutIntent, setPendingCheckoutIntent] = useState<{ intent: HireIntent; uniqueSlugs: string[] } | null>(null);
 
@@ -393,9 +395,36 @@ const ClientDashboard = () => {
           agentCount={postPaymentContext.agentCount}
           onComplete={() => {
             setShowCelebration(false);
-            setActiveSection("omnix");
+            // If department purchase, show setup wizard
+            if (postPaymentContext.isDepartment && postPaymentContext.departmentId) {
+              setShowDeptSetup(true);
+            } else {
+              setActiveSection("omnix");
+            }
           }}
         />
+      )}
+
+      {/* Department Setup after payment */}
+      {showDeptSetup && postPaymentContext?.departmentId && (
+        <div className="fixed inset-0 z-50 bg-background flex items-center justify-center p-4 overflow-y-auto">
+          <div className="w-full max-w-2xl">
+            <Suspense fallback={<SectionLoader />}>
+              <DepartmentSetup
+                departmentId={postPaymentContext.departmentId}
+                departmentName={postPaymentContext.agentName}
+                onComplete={() => {
+                  setShowDeptSetup(false);
+                  setActiveSection("omnix");
+                }}
+                onSkip={() => {
+                  setShowDeptSetup(false);
+                  setActiveSection("omnix");
+                }}
+              />
+            </Suspense>
+          </div>
+        </div>
       )}
 
       {/* Flow 4: No hireIntent → show SmartOnboarding wizard instead of empty dashboard */}
