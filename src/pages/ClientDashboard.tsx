@@ -473,268 +473,274 @@ const ClientDashboard = () => {
           <DashboardSidebar items={sidebarItems} activeItem={activeSection} onItemChange={handleSidebarNav} />
         </div>
 
-        <div className="flex-1 min-w-0 overflow-y-auto">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 space-y-6">
-            {/* Breadcrumb + Header */}
-            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
-              <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
-                <span>Dashboard</span><span>/</span>
-                <span className="text-foreground/80 font-medium capitalize">{breadcrumbLabel}</span>
+        <div className="flex-1 min-w-0 overflow-hidden">
+          {/* ═══ IMMERSIVE MODE — chat/omnix fill the viewport ═══ */}
+          {activeSection === "omnix" && (
+            <Suspense fallback={<SectionLoader />}>
+              <div className="h-full">
+                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={() => setPostPaymentContext(null)} />
               </div>
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h1 className="font-display text-2xl font-bold">
-                      {(() => {
-                        const hour = new Date().getHours();
-                        const firstName = user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel");
-                        if (hour < 12) return t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}} ☀️", name: firstName });
-                        if (hour < 18) return t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}} 👋", name: firstName });
-                        return t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}} 🌙", name: firstName });
-                      })()}
-                    </h1>
-                    <HelpTooltip id="dashboard-intro" text={t("dashboard.help_intro", { defaultValue: "Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções." })} position="bottom" />
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
-                    {credits && (
-                      <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
-                        {remainingCredits.toLocaleString(locale)} {t("dashboard.credits_short", { defaultValue: "créditos" })}
-                      </span>
-                    )}
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <NotificationPanel />
-                  <QuickActions />
-                </div>
-              </div>
-            </motion.div>
+            </Suspense>
+          )}
 
-            {/* Mobile nav — improved with search and cleaner hierarchy */}
-            <div className="lg:hidden">
-              <Sheet>
-                <SheetTrigger asChild>
-                  <Button variant="outline" size="sm" className="gap-2 text-xs w-full justify-start border-border/30">
-                    <LayoutDashboard className="h-3.5 w-3.5 text-primary" />
-                    <span className="font-medium text-foreground">{breadcrumbLabel}</span>
-                    <ChevronDown className="h-3 w-3 ml-auto text-muted-foreground" />
-                  </Button>
-                </SheetTrigger>
-                <SheetContent side="left" className="w-72 p-0">
-                  <SheetHeader className="p-4 border-b border-border/10">
-                    <SheetTitle className="font-display text-sm">{t("dashboard.navigation", { defaultValue: "Navegação" })}</SheetTitle>
-                  </SheetHeader>
-
-                  {/* Mobile search */}
-                  {flatMobileItems.length > 8 && (
-                    <div className="px-3 pt-3">
-                      <input
-                        type="text"
-                        placeholder={t("dashboard.search_nav", { defaultValue: "Buscar..." })}
-                        className="w-full h-8 px-3 text-xs rounded-lg bg-muted/30 border border-border/20 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30"
-                        onChange={(e) => {
-                          const val = e.target.value.toLowerCase();
-                          const items = document.querySelectorAll("[data-mobile-nav-item]");
-                          items.forEach((el) => {
-                            const text = el.getAttribute("data-label")?.toLowerCase() || "";
-                            (el as HTMLElement).style.display = text.includes(val) ? "" : "none";
-                          });
-                        }}
-                      />
-                    </div>
-                  )}
-
-                  <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-8rem)]">
-                    {flatMobileItems.map((item, idx) => {
-                      const showGroup = item.group && (idx === 0 || flatMobileItems[idx - 1]?.group !== item.group);
-                      const isActive = activeSection === item.id || (item.id.startsWith("agent-chat-") && activeSection === "chat");
-                      return (
-                        <div key={item.id} data-mobile-nav-item data-label={item.label}>
-                          {showGroup && (
-                            <div className="px-3 pt-4 pb-1.5 first:pt-1">
-                              <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">{item.group}</span>
-                            </div>
-                          )}
-                          <SheetClose asChild>
-                            <button
-                              onClick={() => handleSidebarNav(item.id)}
-                              className={cn(
-                                "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
-                                isActive
-                                  ? "bg-primary/10 text-primary font-medium border border-primary/15"
-                                  : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                              )}
-                            >
-                              <item.icon className={cn("h-4 w-4 shrink-0", isActive && "text-primary")} />
-                              <span className="flex-1 text-left truncate">{item.label}</span>
-                              {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
-                              {item.badge && !isActive && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">{item.badge}</span>}
-                            </button>
-                          </SheetClose>
-                        </div>
-                      );
-                    })}
-                  </nav>
-                </SheetContent>
-              </Sheet>
-            </div>
-
-            {/* Loading state — premium skeleton */}
-            {loadingAgents && activeSection === "overview" && (
-              <Suspense fallback={<SectionLoader />}>
-                <DashboardSkeleton />
-              </Suspense>
-            )}
-
-            {/* ═══ OMNIX ═══ */}
-            {activeSection === "omnix" && (
-              <Suspense fallback={<SectionLoader />}>
-                <div className="h-[calc(100vh-14rem)] rounded-2xl overflow-hidden border border-border/10">
-                  <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={() => setPostPaymentContext(null)} />
-                </div>
-              </Suspense>
-            )}
-
-            {/* ═══ OVERVIEW ═══ */}
-            {activeSection === "overview" && (
-              <Suspense fallback={<SectionLoader />}>
-                <div className="space-y-4">
-                  <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
-                  <PendingActionsPanel />
-                  <ClientCommandCenter
-                    activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                    usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                    remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                    recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
-                  />
-                </div>
-              </Suspense>
-            )}
-
-            {/* ═══ INTEGRATIONS ═══ */}
-            {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
-
-            {/* ═══ SETTINGS ═══ */}
-            {activeSection === "settings" && (
-              <Suspense fallback={<SectionLoader />}>
-                <SettingsPage billingContent={
-                  <div className="space-y-6">
-                    <h2 className="font-display text-xl font-bold">{t("dashboard.subscription_credits")}</h2>
-                    <div className="grid lg:grid-cols-2 gap-6">
-                      <div className="glass-card rounded-2xl p-6 space-y-5">
-                        <div className="flex items-center gap-3">
-                          <Coins className="h-5 w-5 text-primary" />
-                          <h3 className="font-display font-semibold">{t("dashboard.credits_label")}</h3>
-                          <Badge variant="secondary">{credits?.plan_type || "free"}</Badge>
-                        </div>
-                        <div>
-                          <div className="flex justify-between text-sm mb-2">
-                            <span>{credits?.used_credits?.toLocaleString(locale) || 0} {t("dashboard.used_label")}</span>
-                            <span>{credits?.total_credits?.toLocaleString(locale) || 0} {t("dashboard.total_label")}</span>
-                          </div>
-                          <Progress value={usagePercentage} className="h-3" />
-                          <p className="text-xs text-muted-foreground mt-2">{t("dashboard.pct_remaining", { pct: 100 - usagePercentage })}</p>
-                        </div>
-                        <TokenUpgradeDialog trigger={<Button className="w-full glow">{t("dashboard.token_upgrade")} <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
-                      </div>
-                      <div className="glass-card rounded-2xl p-6 space-y-5">
-                        <div className="flex items-center gap-3">
-                          <CreditCard className="h-5 w-5 text-primary" />
-                          <h3 className="font-display font-semibold">{t("dashboard.active_subscriptions")}</h3>
-                        </div>
-                        {subscriptions.length === 0 ? (
-                          <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.no_subscriptions")}</p>
-                        ) : (
-                          <div className="space-y-2">
-                            {subscriptions.map((sub) => (
-                              <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02]">
-                                <div className="flex items-center gap-2">
-                                  <span className="w-2 h-2 rounded-full bg-accent-emerald" />
-                                  <span className="text-sm">{sub.agent_name}</span>
-                                </div>
-                                <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{locale.startsWith("pt") ? "mês" : "mo"}</span>
-                              </div>
-                            ))}
-                            <div className="pt-3 border-t border-white/5 flex justify-between">
-                              <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
-                              <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <Suspense fallback={<SectionLoader />}><PaymentHistoryTable /></Suspense>
-                  </div>
-                } />
-              </Suspense>
-            )}
-
-            {/* ═══ SQUAD CHAT ═══ */}
-            {activeSection === "squad-chat" && <Suspense fallback={<SectionLoader />}><SquadChat agents={agents} /></Suspense>}
-
-            {/* ═══ LIVE TIMELINE ═══ */}
-            {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
-
-            {/* ═══ LIBRARY ═══ */}
-            {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
-
-            {/* ═══ AGENTS ═══ */}
-            {activeSection === "agents" && (
-              <Suspense fallback={<SectionLoader />}>
-                <AgentsSection
-                  agents={agents}
-                  isLoading={loadingAgents}
-                  nameToSlug={nameToSlug}
-                  tierColors={tierColors}
-                  formatCurrency={formatCurrency}
-                  onOpenLibrary={() => setActiveSection("library")}
-                  onOpenThor={() => setActiveSection("omnix")}
-                  onOpenChat={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
-                />
-              </Suspense>
-            )}
-
-            {/* ═══ ANALYTICS ═══ */}
-            {activeSection === "analytics" && (
-              <Suspense fallback={<SectionLoader />}>
-                <AnalyticsSection
-                  chartData={realChartData}
-                  totalExecutions={totalExecutions}
-                  recentLogs={recentLogs}
-                  locale={locale}
-                  onGoToAgents={() => setActiveSection("agents")}
-                />
-              </Suspense>
-            )}
-
-            {/* ═══ LOGS ═══ */}
-            {activeSection === "logs" && (
-              <Suspense fallback={<SectionLoader />}>
-                <LogsSection
-                  recentLogs={recentLogs}
-                  locale={locale}
-                  onGoToAgents={() => setActiveSection("agents")}
-                />
-              </Suspense>
-            )}
-
-            {/* ═══ CHAT ═══ */}
-            {activeSection === "chat" && selectedAgent && (
-              <Suspense fallback={<SectionLoader />}>
-                <div className="space-y-3">
+          {activeSection === "chat" && selectedAgent && (
+            <Suspense fallback={<SectionLoader />}>
+              <div className="h-full flex flex-col">
+                {/* Slim back bar */}
+                <div className="shrink-0 flex items-center gap-2 px-4 py-2 border-b border-border/10 bg-background/50 backdrop-blur-sm">
                   <button
                     onClick={handleBack}
-                    className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+                    className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
                   >
-                    <ChevronLeft className="h-4 w-4 group-hover:-translate-x-0.5 transition-transform" />
+                    <ChevronLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
                     <span>{t("dashboard.back", { defaultValue: "Voltar" })}</span>
                   </button>
+                  <span className="text-xs text-muted-foreground/40">•</span>
+                  <span className="text-xs font-medium text-foreground">{selectedAgent.name}</span>
+                </div>
+                <div className="flex-1 min-h-0">
                   <AgentChat agentId={selectedAgent.id} agentName={selectedAgent.name} />
                 </div>
-              </Suspense>
-            )}
-          </div>
+              </div>
+            </Suspense>
+          )}
+
+          {/* ═══ STANDARD MODE — padded content with header ═══ */}
+          {activeSection !== "omnix" && activeSection !== "chat" && (
+            <div className="h-full overflow-y-auto">
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 space-y-6">
+                {/* Breadcrumb + Header */}
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
+                  <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
+                    <span>Dashboard</span><span>/</span>
+                    <span className="text-foreground/80 font-medium capitalize">{breadcrumbLabel}</span>
+                  </div>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h1 className="font-display text-2xl font-bold">
+                          {(() => {
+                            const hour = new Date().getHours();
+                            const firstName = user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel");
+                            if (hour < 12) return t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}} ☀️", name: firstName });
+                            if (hour < 18) return t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}} 👋", name: firstName });
+                            return t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}} 🌙", name: firstName });
+                          })()}
+                        </h1>
+                        <HelpTooltip id="dashboard-intro" text={t("dashboard.help_intro", { defaultValue: "Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções." })} position="bottom" />
+                      </div>
+                      <p className="text-sm text-muted-foreground">
+                        {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
+                        {credits && (
+                          <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                            {remainingCredits.toLocaleString(locale)} {t("dashboard.credits_short", { defaultValue: "créditos" })}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <NotificationPanel />
+                      <QuickActions />
+                    </div>
+                  </div>
+                </motion.div>
+
+                {/* Mobile nav */}
+                <div className="lg:hidden">
+                  <Sheet>
+                    <SheetTrigger asChild>
+                      <Button variant="outline" size="sm" className="gap-2 text-xs w-full justify-start border-border/30">
+                        <LayoutDashboard className="h-3.5 w-3.5 text-primary" />
+                        <span className="font-medium text-foreground">{breadcrumbLabel}</span>
+                        <ChevronDown className="h-3 w-3 ml-auto text-muted-foreground" />
+                      </Button>
+                    </SheetTrigger>
+                    <SheetContent side="left" className="w-72 p-0">
+                      <SheetHeader className="p-4 border-b border-border/10">
+                        <SheetTitle className="font-display text-sm">{t("dashboard.navigation", { defaultValue: "Navegação" })}</SheetTitle>
+                      </SheetHeader>
+                      {flatMobileItems.length > 8 && (
+                        <div className="px-3 pt-3">
+                          <input
+                            type="text"
+                            placeholder={t("dashboard.search_nav", { defaultValue: "Buscar..." })}
+                            className="w-full h-8 px-3 text-xs rounded-lg bg-muted/30 border border-border/20 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30"
+                            onChange={(e) => {
+                              const val = e.target.value.toLowerCase();
+                              const items = document.querySelectorAll("[data-mobile-nav-item]");
+                              items.forEach((el) => {
+                                const text = el.getAttribute("data-label")?.toLowerCase() || "";
+                                (el as HTMLElement).style.display = text.includes(val) ? "" : "none";
+                              });
+                            }}
+                          />
+                        </div>
+                      )}
+                      <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-8rem)]">
+                        {flatMobileItems.map((item, idx) => {
+                          const showGroup = item.group && (idx === 0 || flatMobileItems[idx - 1]?.group !== item.group);
+                          const isActive = activeSection === item.id || (item.id.startsWith("agent-chat-") && activeSection === "chat");
+                          return (
+                            <div key={item.id} data-mobile-nav-item data-label={item.label}>
+                              {showGroup && (
+                                <div className="px-3 pt-4 pb-1.5 first:pt-1">
+                                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">{item.group}</span>
+                                </div>
+                              )}
+                              <SheetClose asChild>
+                                <button
+                                  onClick={() => handleSidebarNav(item.id)}
+                                  className={cn(
+                                    "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
+                                    isActive
+                                      ? "bg-primary/10 text-primary font-medium border border-primary/15"
+                                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                                  )}
+                                >
+                                  <item.icon className={cn("h-4 w-4 shrink-0", isActive && "text-primary")} />
+                                  <span className="flex-1 text-left truncate">{item.label}</span>
+                                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
+                                  {item.badge && !isActive && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">{item.badge}</span>}
+                                </button>
+                              </SheetClose>
+                            </div>
+                          );
+                        })}
+                      </nav>
+                    </SheetContent>
+                  </Sheet>
+                </div>
+
+                {/* Loading state */}
+                {loadingAgents && activeSection === "overview" && (
+                  <Suspense fallback={<SectionLoader />}><DashboardSkeleton /></Suspense>
+                )}
+
+                {/* ═══ OVERVIEW ═══ */}
+                {activeSection === "overview" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <div className="space-y-4">
+                      <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                      <PendingActionsPanel />
+                      <ClientCommandCenter
+                        activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                        usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                        remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                        recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
+                      />
+                    </div>
+                  </Suspense>
+                )}
+
+                {/* ═══ INTEGRATIONS ═══ */}
+                {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
+
+                {/* ═══ SETTINGS ═══ */}
+                {activeSection === "settings" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <SettingsPage billingContent={
+                      <div className="space-y-6">
+                        <h2 className="font-display text-xl font-bold">{t("dashboard.subscription_credits")}</h2>
+                        <div className="grid lg:grid-cols-2 gap-6">
+                          <div className="glass-card rounded-2xl p-6 space-y-5">
+                            <div className="flex items-center gap-3">
+                              <Coins className="h-5 w-5 text-primary" />
+                              <h3 className="font-display font-semibold">{t("dashboard.credits_label")}</h3>
+                              <Badge variant="secondary">{credits?.plan_type || "free"}</Badge>
+                            </div>
+                            <div>
+                              <div className="flex justify-between text-sm mb-2">
+                                <span>{credits?.used_credits?.toLocaleString(locale) || 0} {t("dashboard.used_label")}</span>
+                                <span>{credits?.total_credits?.toLocaleString(locale) || 0} {t("dashboard.total_label")}</span>
+                              </div>
+                              <Progress value={usagePercentage} className="h-3" />
+                              <p className="text-xs text-muted-foreground mt-2">{t("dashboard.pct_remaining", { pct: 100 - usagePercentage })}</p>
+                            </div>
+                            <TokenUpgradeDialog trigger={<Button className="w-full glow">{t("dashboard.token_upgrade")} <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
+                          </div>
+                          <div className="glass-card rounded-2xl p-6 space-y-5">
+                            <div className="flex items-center gap-3">
+                              <CreditCard className="h-5 w-5 text-primary" />
+                              <h3 className="font-display font-semibold">{t("dashboard.active_subscriptions")}</h3>
+                            </div>
+                            {subscriptions.length === 0 ? (
+                              <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.no_subscriptions")}</p>
+                            ) : (
+                              <div className="space-y-2">
+                                {subscriptions.map((sub) => (
+                                  <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02]">
+                                    <div className="flex items-center gap-2">
+                                      <span className="w-2 h-2 rounded-full bg-accent-emerald" />
+                                      <span className="text-sm">{sub.agent_name}</span>
+                                    </div>
+                                    <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{locale.startsWith("pt") ? "mês" : "mo"}</span>
+                                  </div>
+                                ))}
+                                <div className="pt-3 border-t border-white/5 flex justify-between">
+                                  <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
+                                  <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
+                                </div>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                        <Suspense fallback={<SectionLoader />}><PaymentHistoryTable /></Suspense>
+                      </div>
+                    } />
+                  </Suspense>
+                )}
+
+                {/* ═══ SQUAD CHAT ═══ */}
+                {activeSection === "squad-chat" && <Suspense fallback={<SectionLoader />}><SquadChat agents={agents} /></Suspense>}
+
+                {/* ═══ LIVE TIMELINE ═══ */}
+                {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
+
+                {/* ═══ LIBRARY ═══ */}
+                {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
+
+                {/* ═══ AGENTS ═══ */}
+                {activeSection === "agents" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <AgentsSection
+                      agents={agents}
+                      isLoading={loadingAgents}
+                      nameToSlug={nameToSlug}
+                      tierColors={tierColors}
+                      formatCurrency={formatCurrency}
+                      onOpenLibrary={() => setActiveSection("library")}
+                      onOpenThor={() => setActiveSection("omnix")}
+                      onOpenChat={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
+                    />
+                  </Suspense>
+                )}
+
+                {/* ═══ ANALYTICS ═══ */}
+                {activeSection === "analytics" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <AnalyticsSection
+                      chartData={realChartData}
+                      totalExecutions={totalExecutions}
+                      recentLogs={recentLogs}
+                      locale={locale}
+                      onGoToAgents={() => setActiveSection("agents")}
+                    />
+                  </Suspense>
+                )}
+
+                {/* ═══ LOGS ═══ */}
+                {activeSection === "logs" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <LogsSection
+                      recentLogs={recentLogs}
+                      locale={locale}
+                      onGoToAgents={() => setActiveSection("agents")}
+                    />
+                  </Suspense>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

@@ -247,17 +247,17 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               animate={{ opacity: 1, y: 0 }}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
-              <div className={`max-w-[85%] rounded-2xl px-4 py-3 ${
+              <div className={`max-w-[85%] rounded-2xl px-5 py-3.5 ${
                 msg.role === "user"
                   ? "bg-primary/90 text-primary-foreground shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
-                  : "bg-card/50 border border-border/20 backdrop-blur-sm"
+                  : "bg-card border border-border/20 backdrop-blur-sm"
               }`}>
                 {msg.role === "assistant" ? (
-                  <div className="prose prose-sm prose-invert max-w-none">
+                  <div className="prose prose-sm prose-invert max-w-none text-[15px] leading-relaxed [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                     <ReactMarkdown>{msg.content.replace(/```kpi[\s\S]*?```/g, "")}</ReactMarkdown>
                   </div>
                 ) : (
-                  <p className="text-sm">{msg.content}</p>
+                  <p className="text-[15px] leading-relaxed">{msg.content}</p>
                 )}
                 {msg.role === "assistant" && !isStreaming && (
                   <div className="flex gap-2 mt-2">
