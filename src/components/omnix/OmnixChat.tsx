@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
@@ -67,9 +68,27 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     return "idle";
   };
 
-  const startListening = useCallback(() => {
-    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) return;
+  const startListening = useCallback(async () => {
+    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+      toast.error("Seu navegador não suporta reconhecimento de voz. Tente o Google Chrome.");
+      return;
+    }
     if (isListening || isSpeaking || isStreaming || isLoading) return;
+
+    // Request microphone permission explicitly
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (err: any) {
+      console.error("Microphone permission error:", err);
+      if (err.name === "NotAllowedError") {
+        toast.error("Permissão do microfone negada. Habilite o microfone nas configurações do navegador.");
+      } else if (err.name === "NotFoundError") {
+        toast.error("Nenhum microfone detectado. Conecte um microfone e tente novamente.");
+      } else {
+        toast.error("Erro ao acessar o microfone: " + (err.message || "Desconhecido"));
+      }
+      return;
+    }
 
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     const recognition = new SpeechRecognition();
@@ -89,7 +108,19 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       }
     };
     recognition.onend = () => setIsListening(false);
-    recognition.onerror = () => setIsListening(false);
+    recognition.onerror = (e: any) => {
+      setIsListening(false);
+      console.error("SpeechRecognition error:", e.error, e.message);
+      if (e.error === "not-allowed") {
+        toast.error("Permissão do microfone negada.");
+      } else if (e.error === "no-speech") {
+        toast.info("Nenhuma fala detectada. Tente novamente.");
+      } else if (e.error === "network") {
+        toast.error("Erro de rede no reconhecimento de voz.");
+      } else if (e.error !== "aborted") {
+        toast.error(`Erro de voz: ${e.error}`);
+      }
+    };
 
     recognitionRef.current = recognition;
     recognition.start();
