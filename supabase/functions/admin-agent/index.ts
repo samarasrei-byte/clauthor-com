@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, rateLimitResponse, securityHeaders } from "../_shared/security.ts";
 import { createExecutionTracker } from "../_shared/resilience.ts";
+import { buildAgentContract, getTierSLA, getAreaLimits, type AgentContract } from "../_shared/agent-contract.ts";
 import { validateLimits } from "../_shared/policy-engine.ts";
 
 const corsHeaders = {
