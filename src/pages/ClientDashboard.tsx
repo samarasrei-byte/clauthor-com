@@ -29,6 +29,7 @@ import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
 const CompanyBoardAlert = lazy(() => import("@/components/dashboard/CompanyBoardAlert"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
+const PendingActionsPanel = lazy(() => import("@/components/dashboard/PendingActionsPanel").then(m => ({ default: m.PendingActionsPanel })));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
@@ -600,6 +601,7 @@ const ClientDashboard = () => {
               <Suspense fallback={<SectionLoader />}>
                 <div className="space-y-4">
                   <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                  <PendingActionsPanel />
                   <ClientCommandCenter
                     activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
                     usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}

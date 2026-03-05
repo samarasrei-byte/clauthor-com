@@ -1080,6 +1080,78 @@ export type Database = {
         }
         Relationships: []
       }
+      pending_actions: {
+        Row: {
+          action_type: string
+          agent_id: string | null
+          created_at: string
+          decided_at: string | null
+          decided_by: string | null
+          description: string
+          expires_at: string | null
+          id: string
+          payload: Json
+          rejection_reason: string | null
+          risk_level: string
+          status: string
+          tenant_id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          agent_id?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          description?: string
+          expires_at?: string | null
+          id?: string
+          payload?: Json
+          rejection_reason?: string | null
+          risk_level?: string
+          status?: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          agent_id?: string | null
+          created_at?: string
+          decided_at?: string | null
+          decided_by?: string | null
+          description?: string
+          expires_at?: string | null
+          id?: string
+          payload?: Json
+          rejection_reason?: string | null
+          risk_level?: string
+          status?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pending_actions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pending_actions_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       plan_limits: {
         Row: {
           created_at: string
