@@ -94,6 +94,10 @@ const HelpTooltip = ({
     setOpen(prev => !prev);
   }, []);
 
+  // On mobile, always show tooltip above to prevent horizontal overflow
+  const isMobileView = typeof window !== "undefined" && window.innerWidth < 640;
+  const effectivePosition = isMobileView && (position === "left" || position === "right") ? "top" : position;
+
   const positionClasses: Record<string, string> = {
     top: "bottom-full left-1/2 -translate-x-1/2 mb-2",
     bottom: "top-full left-1/2 -translate-x-1/2 mt-2",
@@ -136,7 +140,7 @@ const HelpTooltip = ({
             animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
             exit={{ opacity: 0, scale: 0.88 }}
             transition={{ type: "spring", stiffness: 400, damping: 25 }}
-            className={`absolute z-50 w-64 max-w-xs ${positionClasses[position]}`}
+            className={`absolute z-50 w-64 max-w-[calc(100vw-2rem)] ${positionClasses[effectivePosition]}`}
           >
             {/* Glassmorphism card */}
             <div className="relative rounded-xl bg-popover/95 backdrop-blur-xl border border-border/60 shadow-2xl shadow-primary/5 overflow-hidden">
@@ -164,7 +168,7 @@ const HelpTooltip = ({
             </div>
 
             {/* Arrow */}
-            <div className={`absolute w-0 h-0 border-4 ${arrowClasses[position]}`} />
+            <div className={`absolute w-0 h-0 border-4 ${arrowClasses[effectivePosition]}`} />
           </motion.div>
         )}
       </AnimatePresence>

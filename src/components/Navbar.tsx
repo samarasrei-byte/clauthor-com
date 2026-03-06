@@ -222,10 +222,10 @@ const Navbar = () => {
       {/* Mobile menu */}
       {mobileOpen && (
         <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          exit={{ opacity: 0, height: 0 }}
-          className="md:hidden bg-background/95 backdrop-blur-2xl border-t border-white/[0.05]"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          className="md:hidden fixed inset-x-0 top-16 bottom-0 z-[9990] bg-background backdrop-blur-2xl border-t border-white/[0.05] overflow-y-auto"
         >
           <div className="px-4 py-6 space-y-2">
             <Link
