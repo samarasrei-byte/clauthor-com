@@ -354,7 +354,7 @@ const HomePage = () => {
 
               {/* Self-typing headline */}
               <div className="mb-6 sm:mb-8">
-                <h1 className="font-display text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight">
+                <h1 className="font-display text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight min-h-[2.4rem] sm:min-h-[3.6rem] md:min-h-[4.5rem] lg:min-h-[5.25rem]">
                   <span className="text-foreground">{typedText}</span>
                   <span className="inline-block w-[3px] h-[0.8em] bg-primary ml-1 align-middle" style={{ animation: "blink-cursor 0.8s step-end infinite" }} />
                 </h1>

@@ -99,7 +99,7 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
       <button
         ref={btnRef}
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 sm:bottom-6 z-[9999] h-14 w-14 rounded-2xl flex items-center justify-center group cursor-pointer"
+        className="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-[9999] h-11 w-11 sm:h-14 sm:w-14 rounded-xl sm:rounded-2xl flex items-center justify-center group cursor-pointer"
         style={{ position: "fixed" }}
       >
         {/* Animated rotating border */}
@@ -114,7 +114,7 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
         </span>
 
         {/* Inner glass surface */}
-        <span className="absolute inset-[1px] rounded-[15px] bg-background/90 backdrop-blur-2xl" />
+        <span className="absolute inset-[1px] rounded-[11px] sm:rounded-[15px] bg-background/90 backdrop-blur-2xl" />
 
         {/* Primary glow pulse behind */}
         <span className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700 shadow-[0_0_50px_hsl(var(--primary)/0.3),0_0_100px_hsl(var(--primary)/0.1)]" />

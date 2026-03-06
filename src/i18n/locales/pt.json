@@ -525,7 +525,7 @@
     "why_title": "Por que líderes escolhem a",
     "why_subtitle": "Não somos apenas mais uma ferramenta de IA. Somos a infraestrutura que substitui departamentos inteiros.",
     "diff_security": "Segurança Enterprise",
-    "diff_security_desc": "Criptografia ponta a ponta, SOC 2, dados isolados por tenant. Sua operação blindada.",
+    "diff_security_desc": "Criptografia ponta a ponta, dados isolados por tenant, auditoria completa. Sua operação blindada.",
     "diff_setup": "Setup em 5 minutos",
     "diff_setup_desc": "Sem código, sem DevOps. Escolha seu time, configure e seus agentes já estão operando.",
     "diff_savings": "Economia de +88%",
