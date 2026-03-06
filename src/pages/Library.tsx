@@ -515,7 +515,7 @@ const LibraryPage = () => {
 
                       <div className="pt-4 mt-4">
                         <div className="h-px w-full bg-border/30 mb-4" />
-                        <div className="flex items-end justify-between gap-4">
+                      <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
                           <div>
                             <div className="flex items-baseline gap-2">
                               <p className="font-bold text-xl tracking-tight">{priceDisplay}</p>
@@ -526,16 +526,16 @@ const LibraryPage = () => {
                               <span className="text-[11px] text-emerald-400 font-medium">Economia de {social.savings}/mês</span>
                             </div>
                           </div>
-                          <div className="flex gap-2">
-                            <Link to={`/agente/${agentSlugs[key]}`}>
-                              <Button variant="outline" size="sm" className="h-10 px-4 rounded-xl border-border/50 hover:border-primary/30 text-xs gap-1.5">
+                          <div className="flex gap-2 w-full sm:w-auto">
+                            <Link to={`/agente/${agentSlugs[key]}`} className="flex-1 sm:flex-initial">
+                              <Button variant="outline" size="sm" className="h-10 w-full sm:w-auto px-4 rounded-xl border-border/50 hover:border-primary/30 text-xs gap-1.5">
                                 <Eye className="h-3.5 w-3.5" />
                                 Detalhes
                               </Button>
                             </Link>
                             <Button
                               size="sm"
-                              className="h-10 px-5 rounded-xl text-xs font-bold uppercase tracking-wider gap-1.5"
+                              className="h-10 flex-1 sm:flex-initial px-5 rounded-xl text-xs font-bold uppercase tracking-wider gap-1.5"
                               disabled={isHiring}
                               onClick={() => handleHire(key)}
                             >
