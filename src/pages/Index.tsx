@@ -374,24 +374,25 @@ const HomePage = () => {
                       <span className="text-foreground/80 font-medium"> {t("home.subtitle_highlight")}</span>
                     </p>
 
-                    {/* CTAs — clear hierarchy */}
+                    {/* CTAs — Waitlist focused for launch */}
                     <div className="flex flex-col sm:flex-row gap-3">
-                      <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => setShowSmartOnboarding(true)}
-                          aria-label={t("home.cta_build_team")}
-                          className="group relative h-14 sm:h-14 px-10 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full sm:w-auto"
-                        >
-                          <div className="absolute inset-0 bg-primary rounded-xl" />
-                          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                          <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
-                          <span className="relative z-10 flex items-center justify-center gap-3">
-                            <Workflow className="h-4 w-4" strokeWidth={1.5} />
-                            {t("home.cta_build_team")}
-                            <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                          </span>
-                        </motion.button>
+                      <Link to="/waitlist" className="block w-full sm:w-auto">
+                        <motion.button
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            aria-label="Garantir meu lugar"
+                            className="group relative h-14 sm:h-14 px-10 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full"
+                          >
+                            <div className="absolute inset-0 bg-primary rounded-xl" />
+                            <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
+                            <span className="relative z-10 flex items-center justify-center gap-3">
+                              <Rocket className="h-4 w-4" strokeWidth={1.5} />
+                              {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                              <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                            </span>
+                          </motion.button>
+                      </Link>
 
                       <Link to="/library" className="block">
                         <motion.button
@@ -906,11 +907,13 @@ const HomePage = () => {
               ))}
             </div>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
-              <Button onClick={() => setShowSmartOnboarding(true)} className="glow rounded-xl h-13 px-10 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label={t("home.cta_build_team")}>
-                <Workflow className="h-4 w-4" strokeWidth={1.5} />
-                {t("home.cta_build_team")}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+              <Link to="/waitlist">
+                <Button className="glow rounded-xl h-13 px-10 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label="Entrar na waitlist">
+                  <Rocket className="h-4 w-4" strokeWidth={1.5} />
+                  {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
               <Link to="/pricing">
                 <Button variant="outline" className="rounded-xl h-11 px-8 font-mono text-xs uppercase tracking-wider border-border/50" aria-label={t("home.cta_see_pricing")}>
                   {t("home.cta_see_pricing")}
@@ -918,6 +921,44 @@ const HomePage = () => {
                 </Button>
               </Link>
             </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          WAITLIST BANNER — High-conversion interstitial
+          ═══════════════════════════════════════════════════════ */}
+      <section className="py-12 sm:py-16 px-4 relative overflow-hidden" aria-label="Waitlist CTA">
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.06] via-transparent to-primary/[0.06] pointer-events-none" />
+        <div className="max-w-4xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col sm:flex-row items-center gap-6 sm:gap-10 p-6 sm:p-10 rounded-2xl border border-primary/20 bg-card/40 backdrop-blur-sm"
+          >
+            <div className="flex-1 text-center sm:text-left">
+              <div className="flex items-center gap-2 justify-center sm:justify-start mb-3">
+                <div className="relative">
+                  <div className="w-2 h-2 rounded-full bg-accent-emerald" />
+                  <div className="absolute inset-0 w-2 h-2 rounded-full bg-accent-emerald animate-ping opacity-75" />
+                </div>
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-accent-emerald">{t("home.waitlist_banner_live", { defaultValue: "LANÇAMENTO EM BREVE" })}</span>
+              </div>
+              <h3 className="font-display text-xl sm:text-2xl font-bold mb-2">
+                {t("home.waitlist_banner_title", { defaultValue: "Não fique de fora do futuro." })}
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                {t("home.waitlist_banner_desc", { defaultValue: "Entre na fila agora e seja dos primeiros a ter acesso exclusivo à plataforma com desconto de lançamento." })}
+              </p>
+            </div>
+            <Link to="/waitlist" className="shrink-0">
+              <Button className="glow rounded-xl h-13 px-8 gap-2 font-display font-bold text-sm uppercase tracking-wider">
+                <Rocket className="h-4 w-4" strokeWidth={1.5} />
+                {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
           </motion.div>
         </div>
       </section>
@@ -1008,21 +1049,21 @@ const HomePage = () => {
                   <Rocket className="h-8 w-8 text-primary icon-lift" strokeWidth={1.5} />
                 </div>
                 <h2 className="font-display text-3xl sm:text-5xl font-bold mb-4">
-                  {t("home.final_cta_title", { defaultValue: "Pronto para automatizar?" })}
+                  {t("home.final_cta_title_v2", { defaultValue: "Vagas limitadas. Garanta a sua." })}
                 </h2>
-                <p className="text-sm sm:text-lg text-muted-foreground max-w-lg mx-auto mb-8 leading-relaxed">
-                  {t("home.final_cta_desc", { defaultValue: "Monte seu time de agentes em 5 minutos. Sem código, sem cartão de crédito. Comece agora e veja resultados no primeiro dia." })}
+                <p className="text-sm sm:text-lg text-muted-foreground max-w-lg mx-auto mb-4 leading-relaxed">
+                  {t("home.final_cta_desc_v2", { defaultValue: "Os primeiros a entrar ganham acesso antecipado, desconto exclusivo de lançamento e onboarding personalizado." })}
                 </p>
+                <div className="flex items-center justify-center gap-4 mb-8 font-mono text-xs text-muted-foreground">
+                  <div className="flex items-center gap-1.5"><Star className="h-3.5 w-3.5 text-primary" /> 50% OFF lançamento</div>
+                  <div className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-primary" /> Acesso prioritário</div>
+                </div>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                  <Button onClick={() => setShowSmartOnboarding(true)} className="glow rounded-xl h-14 px-10 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label={t("home.cta_build_team")}>
-                    <Workflow className="h-4 w-4" strokeWidth={1.5} />
-                    {t("home.cta_build_team")}
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Link to="/library">
-                    <Button variant="outline" className="rounded-xl h-12 px-8 font-mono text-xs uppercase tracking-wider border-border/50 hover:border-primary/20" aria-label={t("home.cta_explore_agents")}>
-                      {t("home.cta_explore_agents")}
-                      <ChevronRight className="ml-1 h-3.5 w-3.5" />
+                  <Link to="/waitlist">
+                    <Button className="glow rounded-xl h-14 px-12 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label="Entrar na waitlist">
+                      <Rocket className="h-4 w-4" strokeWidth={1.5} />
+                      {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                      <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
                 </div>
