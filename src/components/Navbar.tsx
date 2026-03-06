@@ -133,6 +133,7 @@ const Navbar = () => {
                       <Link to="/how-it-works" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.how_it_works")}</Link>
                       <Link to="/pricing" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.pricing")}</Link>
                       <Link to="/community" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">Comunidade</Link>
+                      <Link to="/api-docs" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">API Docs</Link>
                       {user && <Link to="/integrations" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.integrations")}</Link>}
                     </div>
                   </motion.div>
