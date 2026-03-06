@@ -446,17 +446,14 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           SOCIAL PROOF — Authority numbers
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-16 px-4 relative border-y border-border/50" aria-label="Social proof">
+      <section className="py-12 sm:py-16 px-4 relative border-y border-border/50" aria-label="Platform capabilities">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-            <AnimatedStat icon={BotMessageSquare} value={80} suffix="+" label={t("home.stats_active_agents")} />
-            <AnimatedStat icon={Building2} value={850} suffix="+" label={t("home.stats_companies_served")} />
-            <AnimatedStat icon={Clock} value={12400} suffix="h" label={t("home.stats_hours_saved")} />
-            <AnimatedStat icon={Signal} value={97} suffix="%" label={t("home.stats_avg_efficiency")} />
+            <AnimatedStat icon={BotMessageSquare} value={83} suffix="" label={t("home.stats_active_agents", { defaultValue: "AI AGENTS READY" })} />
+            <AnimatedStat icon={Layers3} value={15} suffix="" label={t("home.stats_departments", { defaultValue: "DEPARTMENTS" })} />
+            <AnimatedStat icon={Fingerprint} value={7} suffix="" label={t("home.stats_tools", { defaultValue: "BUILT-IN TOOLS" })} />
+            <AnimatedStat icon={Signal} value={100} suffix="%" label={t("home.stats_uptime", { defaultValue: "PLATFORM UPTIME" })} />
           </div>
-          <p className="font-mono text-[9px] text-muted-foreground/40 text-center mt-3 uppercase tracking-wider">
-            {t("home.stats_disclaimer", { defaultValue: "* Metas projetadas com base em simulações internas e benchmarks do setor" })}
-          </p>
         </div>
       </section>
 
