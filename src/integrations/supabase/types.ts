@@ -461,6 +461,60 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_feedback: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          feedback_text: string | null
+          id: string
+          message_content: string
+          metadata: Json | null
+          rating: string
+          response_content: string
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          feedback_text?: string | null
+          id?: string
+          message_content?: string
+          metadata?: Json | null
+          rating?: string
+          response_content?: string
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          feedback_text?: string | null
+          id?: string
+          message_content?: string
+          metadata?: Json | null
+          rating?: string
+          response_content?: string
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_feedback_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "chat_feedback_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_messages: {
         Row: {
           agent_id: string | null
@@ -883,6 +937,63 @@ export type Database = {
             columns: ["agent_id"]
             isOneToOne: false
             referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      knowledge_documents: {
+        Row: {
+          agent_id: string | null
+          category: string
+          content: string
+          created_at: string
+          id: string
+          metadata: Json | null
+          search_vector: unknown
+          tenant_id: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id?: string | null
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          search_vector?: unknown
+          tenant_id: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string | null
+          category?: string
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          search_vector?: unknown
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "knowledge_documents_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "knowledge_documents_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
             referencedColumns: ["id"]
           },
         ]
@@ -1718,6 +1829,21 @@ export type Database = {
       is_tenant_member: {
         Args: { _tenant_id: string; _user_id: string }
         Returns: boolean
+      }
+      search_knowledge: {
+        Args: {
+          _agent_id?: string
+          _limit?: number
+          _query: string
+          _user_id: string
+        }
+        Returns: {
+          category: string
+          content: string
+          id: string
+          rank: number
+          title: string
+        }[]
       }
     }
     Enums: {

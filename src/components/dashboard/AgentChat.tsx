@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { useAgentChat, type ToolResult, type Message } from "@/hooks/useAgentChat";
 import ReactMarkdown from "react-markdown";
+import ChatFeedback from "./ChatFeedback";
 import VoiceInput from "./VoiceInput";
 import { Link } from "react-router-dom";
 
@@ -533,6 +534,14 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
                         <ToolResultCard key={i} toolResult={tr} />
                       ))}
                     </div>
+                  )}
+                  {/* Feedback buttons for assistant messages */}
+                  {message.role === "assistant" && !isStreaming && idx > 0 && (
+                    <ChatFeedback
+                      userMessage={messages[idx - 1]?.content || ""}
+                      assistantMessage={message.content}
+                      agentId={agentId}
+                    />
                   )}
                 </div>
               </div>
