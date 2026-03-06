@@ -4,7 +4,7 @@ import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, rateLimitResponse } from "../_shared/security.ts";
 import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
 import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, type AgentContract } from "../_shared/agent-contract.ts";
-import { validateLimits, type PolicyContext } from "../_shared/policy-engine.ts";
+import { validateLimits } from "../_shared/policy-engine.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -52,13 +52,13 @@ serve(async (req) => {
     }
     authStep.done();
 
-    const { message, agentIds } = await req.json();
+    const { message, agentIds, mentionedAgent, conversationHistory } = await req.json();
 
     if (!message || !agentIds || !Array.isArray(agentIds) || agentIds.length === 0) {
       return new Response(JSON.stringify({ error: "message and agentIds[] are required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // === CREDIT VALIDATION via Policy Engine ===
+    // === CREDIT VALIDATION ===
     const creditStep = tracker.step("credit_validation");
     const { data: credits } = await adminClient
       .from("user_credits")
@@ -91,7 +91,7 @@ serve(async (req) => {
     const tenantId = membership.tenant_id;
     tenantStep.done();
 
-    // Fetch ALL active agents for this user in the provided list
+    // Fetch active agents
     const { data: allAgents, error: agentsError } = await adminClient
       .from("agents")
       .select("id, name, instructions, objective, tier, status")
@@ -101,42 +101,6 @@ serve(async (req) => {
 
     if (agentsError || !allAgents || allAgents.length === 0) {
       return new Response(JSON.stringify({ error: "No active agents found" }), { status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-    }
-
-    // === SMART ROUTING ===
-    let agents = allAgents;
-    if (allAgents.length > 1) {
-      try {
-        const agentList = allAgents.map(a => `- ID: ${a.id} | Nome: ${a.name} | Objetivo: ${a.objective || a.name}`).join("\n");
-        const routingResponse = await fetchAI({
-          model: "google/gemini-2.5-flash-lite",
-          messages: [
-            {
-              role: "system",
-              content: `Você é um roteador de mensagens. Dado uma lista de agentes e uma mensagem do usuário, retorne APENAS os IDs dos agentes relevantes como JSON array. Se genérica, retorne todos.\n\nAgentes:\n${agentList}\n\nResponda APENAS com JSON array de IDs.`
-            },
-            { role: "user", content: message },
-          ],
-          max_tokens: 200,
-          stream: false,
-        });
-
-        if (routingResponse.ok) {
-          const routingData = await routingResponse.json();
-          const routingContent = routingData.choices?.[0]?.message?.content || "";
-          const match = routingContent.match(/\[[\s\S]*?\]/);
-          if (match) {
-            const selectedIds: string[] = JSON.parse(match[0]);
-            const filtered = allAgents.filter(a => selectedIds.includes(a.id));
-            if (filtered.length > 0) {
-              agents = filtered;
-              console.log(`Smart routing: ${allAgents.length} agents -> ${filtered.length} selected`);
-            }
-          }
-        }
-      } catch (routingErr) {
-        console.warn("Smart routing fallback:", routingErr);
-      }
     }
 
     // Fetch company board data
@@ -152,59 +116,138 @@ serve(async (req) => {
         boardData.map(b => `[${b.category.toUpperCase()}] ${b.title}: ${b.content}`).join("\n");
     }
 
+    // === TURN-BASED LOGIC ===
+    let respondingAgents = allAgents;
+
+    if (mentionedAgent) {
+      const mentioned = allAgents.find(a => 
+        a.name.toLowerCase() === mentionedAgent.toLowerCase() ||
+        a.id === mentionedAgent
+      );
+      if (mentioned) {
+        respondingAgents = [mentioned];
+      }
+    } else if (allAgents.length > 2) {
+      // Moderator picks 1-2 most relevant agents
+      try {
+        const agentList = allAgents.map(a => `- "${a.name}" (${a.objective || 'assistente geral'})`).join("\n");
+        
+        const recentContext = (conversationHistory || [])
+          .slice(-6)
+          .map((m: any) => `${m.agentName || 'Usuário'}: ${m.content.slice(0, 100)}`)
+          .join("\n");
+
+        const routingResponse = await fetchAI({
+          model: "google/gemini-2.5-flash-lite",
+          messages: [
+            {
+              role: "system",
+              content: `Você é o moderador de uma reunião corporativa. Dado uma mensagem e a lista de agentes disponíveis, escolha APENAS 1 ou 2 agentes que DEVEM responder. Os outros devem ficar em silêncio.
+
+Regras:
+- Se a pergunta é específica de uma área, escolha APENAS 1 agente
+- Se é uma pergunta que cruza áreas (ex: "qual o impacto financeiro da nova campanha?"), escolha no máximo 2
+- Se é uma saudação ou pergunta genérica, escolha apenas 1 (o mais sênior ou CEO se existir)
+- NUNCA escolha mais de 2 agentes
+
+Agentes disponíveis:
+${agentList}
+
+${recentContext ? `Contexto recente da conversa:\n${recentContext}` : ''}
+
+Responda APENAS com um JSON array dos nomes EXATOS dos agentes escolhidos. Exemplo: ["Nome Agente 1"]`
+            },
+            { role: "user", content: message },
+          ],
+          max_tokens: 150,
+          stream: false,
+        });
+
+        if (routingResponse.ok) {
+          const routingData = await routingResponse.json();
+          const routingContent = routingData.choices?.[0]?.message?.content || "";
+          const match = routingContent.match(/\[[\s\S]*?\]/);
+          if (match) {
+            const selectedNames: string[] = JSON.parse(match[0]);
+            const filtered = allAgents.filter(a => 
+              selectedNames.some(name => a.name.toLowerCase() === name.toLowerCase())
+            );
+            if (filtered.length > 0) {
+              respondingAgents = filtered.slice(0, 2);
+              console.log(`Moderator: ${allAgents.length} -> ${respondingAgents.length}: ${respondingAgents.map(a=>a.name).join(', ')}`);
+            }
+          }
+        }
+      } catch (routingErr) {
+        respondingAgents = allAgents.slice(0, 2);
+        console.warn("Moderator fallback:", routingErr);
+      }
+    }
+
     const agentStep = tracker.step("agent_execution");
 
-    const responses = await Promise.allSettled(
-      agents.map(async (agent) => {
-        // === BUILD AGENT CONTRACT ===
-        const agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
-        const sla = getTierSLA(agent.tier || "basic");
-        const limits = getAreaLimits(agentArea);
+    // Execute agents SEQUENTIALLY
+    const results: any[] = [];
+    for (const agent of respondingAgents) {
+      const agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
+      const sla = getTierSLA(agent.tier || "basic");
+      const limits = getAreaLimits(agentArea);
 
-        const contract: AgentContract = {
-          agentId: agent.id,
-          agentName: agent.name,
-          tenantId,
-          userId: user.id,
-          tier: agent.tier || "basic",
-          planType: credits?.plan_type || "free",
-          area: agentArea,
-          objective: agent.objective || "Ajudar o usuário",
-          limits,
-          sla,
-        };
+      const contract: AgentContract = {
+        agentId: agent.id,
+        agentName: agent.name,
+        tenantId,
+        userId: user.id,
+        tier: agent.tier || "basic",
+        planType: credits?.plan_type || "free",
+        area: agentArea,
+        objective: agent.objective || "Ajudar o usuário",
+        limits,
+        sla,
+      };
 
-        const contractPrompt = buildAgentContract(contract);
+      const contractPrompt = buildAgentContract(contract);
 
-        const systemPrompt = `${SAFETY_LAYER}\n${contractPrompt}\n${agent.instructions || "Você é um assistente profissional especializado."}
+      const historyMessages = (conversationHistory || []).slice(-10).map((m: any) => ({
+        role: m.role === "user" ? "user" as const : "assistant" as const,
+        content: m.role === "user" 
+          ? m.content 
+          : `[${m.agentName || 'Agente'}]: ${m.content}`,
+      }));
 
-## PROTOCOLO MESTRE DE EXECUÇÃO:
-Você é um agente executor especializado da área "${agentArea}".
-- O Cérebro define estratégia. Você EXECUTA com precisão dentro da sua área.
-- NUNCA responda perguntas de outros departamentos — redirecione educadamente.
-- Use APENAS a base de conhecimento do seu departamento.
-- NUNCA invente dados. Se não sabe, diga claramente.
-- Comporte-se como um especialista humano: claro, objetivo, profissional.
-- SEMPRE considere o contexto completo da conversa.
+      const otherAgentNames = allAgents
+        .filter(a => a.id !== agent.id)
+        .map(a => a.name)
+        .join(", ");
 
-## CONTEXTO DE REUNIÃO DE DEPARTAMENTO:
-Você está em uma reunião de departamento com outros agentes de IA. O CEO/gestor enviou uma mensagem para TODO o time.
-- Responda APENAS sobre sua área de especialidade: ${agent.objective || agent.name}
-- Seja CONCISO (máximo 3 parágrafos)
-- Se o assunto não é da sua alçada, diga brevemente e indique qual colega seria mais adequado
-- Responda em português do Brasil
-- Comece sua resposta identificando-se brevemente
+      const systemPrompt = `${SAFETY_LAYER}\n${contractPrompt}\n${agent.instructions || "Você é um assistente profissional especializado."}
+
+## PROTOCOLO DE REUNIÃO (TURN-BASED):
+Você é **${agent.name}**, especialista em "${agentArea}". 
+Você está em uma reunião com outros colegas: ${otherAgentNames || 'nenhum'}.
+
+REGRAS DA REUNIÃO:
+- Responda APENAS quando o assunto for relevante para sua área
+- Seja CONCISO: máximo 2-3 parágrafos curtos
+- NÃO repita o que outros agentes já disseram na conversa
+- Se outro agente já cobriu o tema, apenas complemente com algo NOVO da sua perspectiva
+- Se o assunto NÃO é da sua área, responda brevemente: "Isso está mais na área do [colega]. Posso ajudar com [sua área]."
+- Fale de forma natural, como um profissional em reunião — sem formalidade excessiva
+- NÃO comece com "Olá" ou "Boa tarde" a cada mensagem, vá direto ao ponto
+- Use português do Brasil
 ${companyContext}`;
 
+      try {
         const aiResponse = await withRetry(
           async () => {
             const res = await fetchAI({
               model: "google/gemini-3-flash-preview",
               messages: [
                 { role: "system", content: systemPrompt },
+                ...historyMessages,
                 { role: "user", content: message },
               ],
-              max_tokens: 800,
+              max_tokens: 600,
               stream: false,
             });
             if (!res.ok && res.status >= 500) {
@@ -222,54 +265,66 @@ ${companyContext}`;
         const content = aiData.choices?.[0]?.message?.content || "Sem resposta.";
         const tokensUsed = aiData.usage?.total_tokens || 150;
 
-        // Log execution + track tokens
-        try {
-          await Promise.all([
-            adminClient.from("token_usage").insert({
-              user_id: user.id, agent_id: agent.id,
-              tokens_used: tokensUsed, action_type: "squad_chat",
-              model: "google/gemini-3-flash-preview",
-            }),
-            adminClient.from("execution_logs").insert({
-              user_id: user.id, agent_id: agent.id,
-              action: "squad_chat", status: "success",
-              execution_time_ms: 0,
-              details: { area: agentArea, tier: agent.tier, contract_applied: true },
-            }),
-            adminClient.from("user_credits")
-              .update({ used_credits: (credits?.used_credits || 0) + tokensUsed })
-              .eq("user_id", user.id),
-          ]);
-        } catch {}
+        Promise.all([
+          adminClient.from("token_usage").insert({
+            user_id: user.id, agent_id: agent.id,
+            tokens_used: tokensUsed, action_type: "squad_chat",
+            model: "google/gemini-3-flash-preview",
+          }),
+          adminClient.from("execution_logs").insert({
+            user_id: user.id, agent_id: agent.id,
+            action: "squad_chat", status: "success",
+            execution_time_ms: 0,
+            details: { area: agentArea, tier: agent.tier, turn_based: true },
+          }),
+        ]).catch(() => {});
 
-        return {
+        results.push({
           agentId: agent.id,
           agentName: agent.name,
           tier: agent.tier,
+          area: agentArea,
           content,
-        };
-      })
-    );
+          speakingOrder: results.length,
+        });
+      } catch (err: any) {
+        try {
+          alertFailure(adminClient, user.id, agent.id, "squad_chat", err?.message || "unknown");
+        } catch {}
+        results.push({
+          agentId: agent.id,
+          agentName: agent.name,
+          tier: agent.tier,
+          area: agentArea,
+          content: "⚠️ Não consegui processar neste momento.",
+          speakingOrder: results.length,
+        });
+      }
+    }
+
+    // Update credits once
+    const totalTokens = results.length * 150;
+    if (credits) {
+      adminClient.from("user_credits")
+        .update({ used_credits: (credits.used_credits || 0) + totalTokens })
+        .eq("user_id", user.id)
+        .then(() => {})
+        .catch(() => {});
+    }
+
     agentStep.done();
 
-    const results = responses.map((r, i) => {
-      if (r.status === "fulfilled") return r.value;
-      // Log failure
-      try {
-        alertFailure(adminClient, user.id, agents[i]?.id || "unknown", "squad_chat", r.reason?.message || "unknown");
-      } catch {}
-      return {
-        agentId: agents[i]?.id || "unknown",
-        agentName: agents[i]?.name || "Agente",
-        tier: agents[i]?.tier || "basic",
-        content: "⚠️ Não consegui processar neste momento. Tente novamente.",
-      };
-    });
-
     const summary = tracker.summary();
-    console.log(`[squad-chat] Completed in ${summary.totalMs}ms, ${results.length} agents, errors: ${summary.hasErrors}`);
+    console.log(`[squad-chat] ${summary.totalMs}ms, ${results.length}/${allAgents.length} spoke`);
 
-    return new Response(JSON.stringify({ responses: results }), {
+    return new Response(JSON.stringify({ 
+      responses: results,
+      totalAgents: allAgents.length,
+      respondingCount: results.length,
+      silentAgents: allAgents
+        .filter(a => !respondingAgents.some(r => r.id === a.id))
+        .map(a => ({ id: a.id, name: a.name, tier: a.tier })),
+    }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
