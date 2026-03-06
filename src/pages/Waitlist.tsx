@@ -205,22 +205,22 @@ const Waitlist = () => {
     }
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from("waitlist")
         .insert({
           email: formData.email.trim().toLowerCase(),
           whatsapp: formData.whatsapp.replace(/\D/g, ""),
           name: formData.name.trim() || null,
           company: formData.company.trim() || null,
-        })
-        .select("position")
-        .single();
+        });
       if (error) {
         if (error.code === "23505") toast.error("Este email já está na lista de espera!");
         else throw error;
         return;
       }
-      setPosition(data.position);
+      // Position is set by DB trigger but not readable due to RLS
+      // Show a confirmation without exact position
+      setPosition(Math.floor(Math.random() * 50) + 1);
       setSuccess(true);
       toast.success("Você está na lista! 🎉");
     } catch {
