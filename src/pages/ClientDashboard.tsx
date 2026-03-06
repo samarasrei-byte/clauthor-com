@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database
+  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database, Star
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -53,6 +53,7 @@ const AgentLiveTimeline = lazy(() => import("@/components/dashboard/AgentLiveTim
 const Library = lazy(() => import("./Library"));
 const Integrations = lazy(() => import("./Integrations"));
 const KnowledgeBase = lazy(() => import("./KnowledgeBase"));
+const AIQualityDashboard = lazy(() => import("@/components/dashboard/AIQualityDashboard"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -328,6 +329,7 @@ const ClientDashboard = () => {
 
     // More — secondary features grouped together
     { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
+    { id: "ai-quality", label: "Qualidade IA", icon: Star, group: moreGroup },
     { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: moreGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: moreGroup },
@@ -371,6 +373,7 @@ const ClientDashboard = () => {
     : activeSection === "library" ? t("dashboard.library", { defaultValue: "Biblioteca" })
     : activeSection === "integrations" ? t("dashboard.integrations", { defaultValue: "Integrações" })
     : activeSection === "knowledge-base" ? "Base de Conhecimento"
+    : activeSection === "ai-quality" ? "Qualidade IA"
     : activeSection === "squad-chat" ? t("dashboard.meeting")
     : activeSection === "live-timeline" ? "Timeline"
     : activeSection === "chat" ? selectedAgent?.name || "Chat"
@@ -640,6 +643,9 @@ const ClientDashboard = () => {
 
                 {/* ═══ KNOWLEDGE BASE ═══ */}
                 {activeSection === "knowledge-base" && <Suspense fallback={<SectionLoader />}><KnowledgeBase /></Suspense>}
+
+                {/* ═══ AI QUALITY ═══ */}
+                {activeSection === "ai-quality" && <Suspense fallback={<SectionLoader />}><AIQualityDashboard /></Suspense>}
 
                 {/* ═══ SETTINGS ═══ */}
                 {activeSection === "settings" && (
