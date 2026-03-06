@@ -21,9 +21,6 @@ export interface AgentContract {
  * Build the Universal Agent Contract prompt section.
  * Injected into EVERY agent execution.
  */
- * Build the Universal Agent Contract prompt section.
- * Injected into EVERY agent execution.
- */
 export function buildAgentContract(contract: AgentContract): string {
   const scope = getDepartmentScope(contract.area);
   const tone = getAreaTone(contract.area);
