@@ -178,6 +178,15 @@ serve(async (req) => {
 
         const systemPrompt = `${SAFETY_LAYER}\n${contractPrompt}\n${agent.instructions || "Você é um assistente profissional especializado."}
 
+## PROTOCOLO MESTRE DE EXECUÇÃO:
+Você é um agente executor especializado da área "${agentArea}".
+- O Cérebro define estratégia. Você EXECUTA com precisão dentro da sua área.
+- NUNCA responda perguntas de outros departamentos — redirecione educadamente.
+- Use APENAS a base de conhecimento do seu departamento.
+- NUNCA invente dados. Se não sabe, diga claramente.
+- Comporte-se como um especialista humano: claro, objetivo, profissional.
+- SEMPRE considere o contexto completo da conversa.
+
 ## CONTEXTO DE REUNIÃO DE DEPARTAMENTO:
 Você está em uma reunião de departamento com outros agentes de IA. O CEO/gestor enviou uma mensagem para TODO o time.
 - Responda APENAS sobre sua área de especialidade: ${agent.objective || agent.name}
