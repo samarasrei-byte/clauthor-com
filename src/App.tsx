@@ -48,6 +48,7 @@ const Terms = lazyRetry(() => import("./pages/Terms"));
 const Privacy = lazyRetry(() => import("./pages/Privacy"));
 const MonixCommandCenter = lazyRetry(() => import("./pages/MonixCommandCenter"));
 const OmnixCommandCenter = lazyRetry(() => import("./pages/OmnixCommandCenter"));
+const KnowledgeBase = lazyRetry(() => import("./pages/KnowledgeBase"));
 const ResetPassword = lazyRetry(() => import("./pages/ResetPassword"));
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -101,6 +102,7 @@ const App = () => (
                   <Route path="/agents" element={<Agents />} />
                   <Route path="/create-agent" element={<CreateAgent />} />
                   <Route path="/integrations" element={<Integrations />} />
+                  <Route path="/knowledge-base" element={<KnowledgeBase />} />
                   <Route path="/monix" element={<MonixCommandCenter />} />
                   <Route path="/omnix" element={<OmnixCommandCenter />} />
                 </Route>

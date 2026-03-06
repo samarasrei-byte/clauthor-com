@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2
+  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -52,6 +52,7 @@ const OmnixCommandCenter = lazy(() => import("@/pages/OmnixCommandCenter"));
 const AgentLiveTimeline = lazy(() => import("@/components/dashboard/AgentLiveTimeline"));
 const Library = lazy(() => import("./Library"));
 const Integrations = lazy(() => import("./Integrations"));
+const KnowledgeBase = lazy(() => import("./KnowledgeBase"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -326,6 +327,7 @@ const ClientDashboard = () => {
     ...soloAgentItems,
 
     // More — secondary features grouped together
+    { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
     { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
     { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: moreGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: moreGroup },
@@ -368,6 +370,7 @@ const ClientDashboard = () => {
     : activeSection === "settings" ? t("dashboard.settings")
     : activeSection === "library" ? t("dashboard.library", { defaultValue: "Biblioteca" })
     : activeSection === "integrations" ? t("dashboard.integrations", { defaultValue: "Integrações" })
+    : activeSection === "knowledge-base" ? "Base de Conhecimento"
     : activeSection === "squad-chat" ? t("dashboard.meeting")
     : activeSection === "live-timeline" ? "Timeline"
     : activeSection === "chat" ? selectedAgent?.name || "Chat"
@@ -634,6 +637,9 @@ const ClientDashboard = () => {
 
                 {/* ═══ INTEGRATIONS ═══ */}
                 {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
+
+                {/* ═══ KNOWLEDGE BASE ═══ */}
+                {activeSection === "knowledge-base" && <Suspense fallback={<SectionLoader />}><KnowledgeBase /></Suspense>}
 
                 {/* ═══ SETTINGS ═══ */}
                 {activeSection === "settings" && (
