@@ -63,7 +63,7 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="fixed top-0 left-0 right-0 z-50 bg-background/70 backdrop-blur-2xl border-b border-white/[0.05]"
+      className={`fixed top-0 left-0 right-0 border-b border-white/[0.05] ${mobileOpen ? "z-[9999] bg-background" : "z-50 bg-background/70 backdrop-blur-2xl"}`}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -226,7 +226,7 @@ const Navbar = () => {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
-          className="md:hidden fixed inset-x-0 top-16 bottom-0 z-[9990] bg-background backdrop-blur-2xl border-t border-white/[0.05] overflow-y-auto"
+          className="md:hidden fixed inset-x-0 top-16 bottom-0 z-[9990] bg-background border-t border-white/[0.05] overflow-y-auto"
         >
           <div className="px-4 py-6 space-y-2">
             <Link
