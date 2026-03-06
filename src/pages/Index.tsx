@@ -237,7 +237,7 @@ const HomePage = () => {
   const bgOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
   const cyclingRoles = useMemo(() => [
-    t("home.title1", { defaultValue: "Funcionários" }) + " " + t("home.title2", { defaultValue: "de IA" }),
+    "AI Employees",
     "AI Sales Rep",
     "AI Support Agent",
     "AI Growth Hacker",
