@@ -3,7 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/security.ts";
 import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
-import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, type AgentContract } from "../_shared/agent-contract.ts";
+import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, getDepartmentScope, getAreaTone, type AgentContract } from "../_shared/agent-contract.ts";
 import { enforcePolicy, validateTenant, type PolicyContext } from "../_shared/policy-engine.ts";
 import { autonomousExecute } from "../_shared/tool-executor.ts";
 
@@ -72,9 +72,13 @@ const SAFETY_LAYER = `
    - Se o cliente já forneceu todas as informações necessárias, EXECUTE diretamente.
    - Para ações DESTRUTIVAS, SEMPRE peça confirmação explícita.
    
-9. **ESCOPO DO AGENTE**: Você só pode agir dentro da sua área de especialidade.
+9. **ESCOPO DO AGENTE**: Você só pode agir dentro da sua área de especialidade. Se a pergunta estiver fora do seu escopo, NÃO tente responder — redirecione educadamente para o departamento correto.
 
 10. **LINGUAGEM APROPRIADA**: Mantenha sempre linguagem profissional e respeitosa.
+
+11. **CONSISTÊNCIA**: Ao responder perguntas similares, mantenha consistência. Não contradiga respostas anteriores.
+
+12. **BASE DE CONHECIMENTO**: Use APENAS dados do Company Board e informações do seu departamento. NÃO misture informações de áreas diferentes.
 `;
 
 const OPERATIONAL_SECURITY_PROTOCOL = `

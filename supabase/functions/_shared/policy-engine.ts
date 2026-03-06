@@ -188,23 +188,22 @@ export function validateArea(
   toolName: string,
   agentArea: string
 ): PolicyResult {
-  // Tools restricted to specific areas
+  // Tools restricted to specific areas (empty array = all areas allowed)
   const areaRestrictions: Record<string, string[]> = {
-    // tool → allowed areas (empty = all areas)
-    generate_report: [],
-    analyze_data: [],
-    send_email: [],
-    create_task: [],
-    schedule_meeting: [],
-    search_leads: ["vendas", "marketing", "geral", "executivo"],
-    delegate_to_agent: [],
+    generate_report: [],  // All areas can generate reports
+    analyze_data: [],     // All areas can analyze data
+    send_email: ["vendas", "marketing", "suporte", "rh", "comunicacao", "prospeccao", "executivo", "operacoes", "ecommerce", "geral"],
+    create_task: [],      // All areas can create tasks
+    schedule_meeting: [], // All areas can schedule meetings
+    search_leads: ["vendas", "marketing", "prospeccao", "ecommerce", "executivo", "geral"],
+    delegate_to_agent: ["executivo", "operacoes", "geral"], // Only orchestrators/executives can delegate
   };
 
   const allowed = areaRestrictions[toolName];
   if (allowed && allowed.length > 0 && !allowed.includes(agentArea)) {
     return {
       allowed: false,
-      reason: `A ferramenta "${toolName}" não é permitida na área "${agentArea}".`,
+      reason: `A ferramenta "${toolName}" não é permitida na área "${agentArea}". Essa ferramenta é restrita às áreas: ${allowed.join(", ")}.`,
     };
   }
 
