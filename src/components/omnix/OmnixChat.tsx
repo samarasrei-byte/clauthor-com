@@ -128,7 +128,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend]);
 
   const toggleVoice = () => {
-    if (isSpeaking || isStreaming || isLoading) return;
+    if (isStreaming || isLoading) return;
+    // If THOR is speaking, stop him first so the user can talk
+    if (isSpeaking) {
+      stopSpeaking();
+      // Small delay to let TTS fully stop before opening mic
+      setTimeout(() => startListening(), 300);
+      return;
+    }
     if (isListening) {
       recognitionRef.current?.stop();
       setIsListening(false);
