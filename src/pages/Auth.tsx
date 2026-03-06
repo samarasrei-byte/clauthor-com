@@ -49,7 +49,7 @@ const AuthPage = () => {
     if (user) {
       if (hireIntent) {
         // Store intent for post-login processing
-        sessionStorage.setItem("hireIntent", JSON.stringify(hireIntent));
+        localStorage.setItem("hireIntent", JSON.stringify(hireIntent));
       }
       navigate(from, { replace: true });
     }
@@ -66,7 +66,7 @@ const AuthPage = () => {
         } else {
           toast.success(t("auth.login_success"));
           if (hireIntent) {
-            sessionStorage.setItem("hireIntent", JSON.stringify(hireIntent));
+            localStorage.setItem("hireIntent", JSON.stringify(hireIntent));
           }
           navigate(from, { replace: true });
         }
@@ -77,7 +77,7 @@ const AuthPage = () => {
         } else {
           toast.success(t("auth.signup_success"));
           if (hireIntent) {
-            sessionStorage.setItem("hireIntent", JSON.stringify(hireIntent));
+            localStorage.setItem("hireIntent", JSON.stringify(hireIntent));
           }
           // Redirect after signup (auto-confirm is enabled)
           navigate(from, { replace: true });
