@@ -491,39 +491,41 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
               </div>
             </div>
           ) : !hasMessages ? (
-            /* === EMPTY STATE — Round Table Visual === */
+            /* === EMPTY STATE — Compact with visible input hint === */
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5 }}
-              className="flex flex-col items-center justify-center min-h-[60vh]"
+              className="flex flex-col items-center justify-center py-6"
             >
-              {/* The Round Table */}
-              <MeetingTable
-                agents={tableAgents}
-                onMention={(name) => {
-                  setInput(prev => prev + `@${name} `);
-                  inputRef.current?.focus();
-                }}
-                canSend={canSend}
-              />
+              {/* The Round Table — smaller to leave room for input */}
+              <div className="max-w-[320px] w-full">
+                <MeetingTable
+                  agents={tableAgents}
+                  onMention={(name) => {
+                    setInput(prev => prev + `@${name} `);
+                    inputRef.current?.focus();
+                  }}
+                  canSend={canSend}
+                />
+              </div>
 
               {/* Info text below table */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 }}
-                className="text-center mt-4 max-w-sm"
+                className="text-center mt-3 max-w-sm"
               >
-                <h3 className="font-display font-bold text-lg mb-1.5">Mesa de Reunião</h3>
+                <h3 className="font-display font-bold text-base mb-1">Mesa de Reunião</h3>
                 <p className="text-xs text-muted-foreground mb-3">
-                  Seus agentes estão sentados e prontos. Use{" "}
+                  Clique num avatar ou digite{" "}
                   <span className="font-mono text-primary bg-primary/5 px-1 py-0.5 rounded">@nome</span>{" "}
-                  para chamar alguém — ou fale com todos e o moderador escolhe quem responde.
+                  abaixo para começar.
                 </p>
 
                 {/* Quick prompts */}
-                <div className="grid grid-cols-2 gap-1.5 mt-4">
+                <div className="grid grid-cols-2 gap-1.5 mt-3">
                   {[
                     { label: "Briefing geral", icon: Sparkles },
                     { label: "Status do time", icon: Users },
@@ -543,6 +545,16 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                     </button>
                   ))}
                 </div>
+
+                {/* Arrow pointing down to input */}
+                <motion.div
+                  className="mt-4 flex flex-col items-center"
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                >
+                  <ChevronDown className="h-5 w-5 text-primary/40" />
+                  <span className="text-[10px] text-primary/50 font-medium">Digite aqui embaixo</span>
+                </motion.div>
               </motion.div>
             </motion.div>
           ) : null}
