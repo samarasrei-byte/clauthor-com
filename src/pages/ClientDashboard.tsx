@@ -92,7 +92,7 @@ const ClientDashboard = () => {
     const done = localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
     if (done) return;
 
-    const hasHireIntent = !!sessionStorage.getItem("hireIntent");
+    const hasHireIntent = !!localStorage.getItem("hireIntent");
 
     if (hasHireIntent) {
       // Flows 1-3: user already selected agents → skip onboarding, mark as done, proceed to checkout
@@ -179,10 +179,10 @@ const ClientDashboard = () => {
   // Auto-hire from sessionStorage intent → show checkout summary immediately (no onboarding gate for flows 1-3)
   useEffect(() => {
     if (!user || hireProcessed.current) return;
-    const raw = sessionStorage.getItem("hireIntent");
+    const raw = localStorage.getItem("hireIntent");
     if (!raw) return;
     hireProcessed.current = true;
-    sessionStorage.removeItem("hireIntent");
+    localStorage.removeItem("hireIntent");
     const intent: HireIntent = JSON.parse(raw);
     if (!intent.slugs || intent.slugs.length === 0) return;
 
