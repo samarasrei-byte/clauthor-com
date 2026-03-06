@@ -2,7 +2,8 @@ import { useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, Bot, User, Loader2, Trash2, Users, Zap, UserPlus, Wifi,
-  Eye, Shield, Crown, Lock, AtSign, ChevronDown, Mic, Volume2
+  Eye, Shield, Crown, Lock, AtSign, ChevronDown, Mic, Volume2,
+  Radio, Sparkles, RotateCcw, MessageSquare
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ import { useQuery } from "@tanstack/react-query";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 import VoiceInput from "./VoiceInput";
+import MeetingTable from "./MeetingTable";
 
 interface Agent {
   id: string;
@@ -73,7 +75,6 @@ const roleIcons: Record<string, React.ElementType> = {
   viewer: Eye,
 };
 
-// Generate a stable color for each agent based on name hash
 function agentColor(name: string): string {
   let hash = 0;
   for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
@@ -280,16 +281,26 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
     activeAgents.filter(a => a.name.toLowerCase().includes(mentionFilter)),
   [activeAgents, mentionFilter]);
 
-  // Extract @mentioned agent from message
   const extractMention = (text: string): string | null => {
     const match = text.match(/@([^\s]+(?:\s[^\s@]+)?)/);
     if (!match) return null;
     const mentioned = match[1].trim();
-    const agent = activeAgents.find(a => 
+    const agent = activeAgents.find(a =>
       a.name.toLowerCase().startsWith(mentioned.toLowerCase())
     );
     return agent?.name || null;
   };
+
+  // Prepare table agents for MeetingTable
+  const tableAgents = useMemo(() => activeAgents.map(a => ({
+    id: a.id,
+    name: a.name,
+    tier: a.tier,
+    initials: agentInitials(a.name),
+    colorClass: agentColor(a.name),
+    isSpeaking: speakingAgent === a.name,
+    isSilent: silentAgents.some(s => s.id === a.id),
+  })), [activeAgents, speakingAgent, silentAgents]);
 
   // Send message
   const handleSend = useCallback(async () => {
@@ -312,7 +323,6 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
     setSpeakingAgent(null);
     setSilentAgents([]);
 
-    // Persist user message
     if (tenantId && user) {
       await supabase.from("chat_messages").insert({
         tenant_id: tenantId,
@@ -328,7 +338,6 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
       const token = sessionData?.session?.access_token;
       if (!token) { toast.error("Faça login."); setIsLoading(false); return; }
 
-      // Build conversation history for context
       const conversationHistory = messages.slice(-10).map(m => ({
         role: m.role,
         content: m.content,
@@ -358,11 +367,8 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
       }
 
       const data = await response.json();
-
-      // Set silent agents info
       if (data.silentAgents) setSilentAgents(data.silentAgents);
 
-      // Deliver responses with staggered timing for natural feel
       const agentResponses: ChatMsg[] = (data.responses || []).map((r: any) => ({
         id: crypto.randomUUID(),
         role: "squad" as const,
@@ -373,17 +379,12 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
         timestamp: new Date(),
       }));
 
-      // Stagger agent responses for natural turn-taking
       for (let i = 0; i < agentResponses.length; i++) {
         const resp = agentResponses[i];
         setSpeakingAgent(resp.agentName || null);
-        
-        // Brief delay between agents for natural rhythm
         if (i > 0) await new Promise(r => setTimeout(r, 800));
-        
         setMessages((prev) => [...prev, resp]);
 
-        // Persist
         if (tenantId && user) {
           void supabase.from("chat_messages").insert({
             tenant_id: tenantId,
@@ -398,7 +399,6 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
       }
 
       setSpeakingAgent(null);
-
     } catch (err) {
       console.error("Squad chat error:", err);
       toast.error("Erro de conexão.");
@@ -419,400 +419,379 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
     }
   };
 
+  const hasMessages = messages.length > 0;
+
   return (
-    <div className="flex h-[calc(100vh-6rem)] overflow-hidden rounded-2xl border border-border/50 bg-background">
-      {/* === LEFT: Agent Round Table === */}
-      <div className="hidden md:flex flex-col w-64 border-r border-border/50 bg-card/30">
-        {/* Meeting header */}
-        <div className="p-4 border-b border-border/30">
-          <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
-            <h3 className="font-display font-bold text-sm tracking-tight">Sala de Reunião</h3>
+    <div className="flex flex-col h-[calc(100vh-6rem)] overflow-hidden rounded-2xl border border-border/30 bg-background relative">
+      {/* === TOP BAR — Command Center Header === */}
+      <div className="flex items-center justify-between px-5 py-3 border-b border-border/30 bg-card/20 backdrop-blur-sm">
+        <div className="flex items-center gap-3">
+          <div className="relative">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center">
+              <Users className="h-4 w-4 text-primary" />
+            </div>
+            <motion.div
+              className="absolute -top-0.5 -right-0.5 w-3 h-3 rounded-full bg-accent-emerald border-2 border-background"
+              animate={{ scale: [1, 1.2, 1] }}
+              transition={{ repeat: Infinity, duration: 2 }}
+            />
           </div>
-          <p className="text-[10px] text-muted-foreground">
-            {activeAgents.length} agentes na mesa • Turno por turno
-          </p>
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="font-display font-bold text-sm tracking-tight">Sala de Reunião</h2>
+              <Badge className="bg-accent-emerald/10 text-accent-emerald text-[8px] border-0 gap-1 px-1.5">
+                <Radio className="h-2 w-2" /> LIVE
+              </Badge>
+            </div>
+            <p className="text-[10px] text-muted-foreground">
+              {activeAgents.length} agentes na mesa • Turno por turno
+              {onlineUsers.length > 0 && ` • ${onlineUsers.length} membro${onlineUsers.length > 1 ? 's' : ''} online`}
+            </p>
+          </div>
         </div>
 
-        {/* Agent seats */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
-          <p className="text-[9px] uppercase tracking-widest text-muted-foreground/50 font-bold px-2 mb-2">
-            Na Mesa
-          </p>
-          {activeAgents.map((agent) => {
-            const isSpeaking = speakingAgent === agent.name;
-            const isSilent = silentAgents.some(s => s.id === agent.id);
-            return (
-              <motion.div
-                key={agent.id}
-                layout
-                className={`flex items-center gap-2.5 px-2.5 py-2 rounded-xl transition-all cursor-pointer group ${
-                  isSpeaking
-                    ? "bg-primary/10 ring-1 ring-primary/30"
-                    : isSilent
-                      ? "opacity-40"
-                      : "hover:bg-muted/50"
-                }`}
-                onClick={() => {
-                  if (canSend) {
-                    setInput(prev => prev + `@${agent.name} `);
-                    inputRef.current?.focus();
-                  }
-                }}
-              >
-                <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${agentColor(agent.name)} flex items-center justify-center shrink-0 relative`}>
-                  <span className="text-[10px] font-bold text-white">{agentInitials(agent.name)}</span>
-                  {isSpeaking && (
-                    <motion.div
-                      className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-primary flex items-center justify-center"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ repeat: Infinity, duration: 1 }}
-                    >
-                      <Volume2 className="h-1.5 w-1.5 text-primary-foreground" />
-                    </motion.div>
-                  )}
-                  {!isSpeaking && !isSilent && (
-                    <span className={`absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full ${tierDot[agent.tier] || tierDot.basic} border border-background`} />
-                  )}
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium truncate">{agent.name}</p>
-                  <p className={`text-[9px] ${isSpeaking ? "text-primary font-medium" : "text-muted-foreground"}`}>
-                    {isSpeaking ? "Falando..." : isSilent ? "Em silêncio" : agent.tier}
-                  </p>
-                </div>
-                {!isSpeaking && !isSilent && (
-                  <AtSign className="h-3 w-3 text-muted-foreground/0 group-hover:text-muted-foreground/60 transition-colors shrink-0" />
-                )}
-              </motion.div>
-            );
-          })}
-
-          {/* Online humans */}
+        <div className="flex items-center gap-2">
+          {/* Online humans avatars */}
           {onlineUsers.length > 0 && (
-            <>
-              <p className="text-[9px] uppercase tracking-widest text-muted-foreground/50 font-bold px-2 mt-4 mb-2">
-                Membros Online
-              </p>
-              {onlineUsers.map((u) => {
-                const RoleIcon = roleIcons[u.role] || Users;
-                return (
-                  <div key={u.user_id} className="flex items-center gap-2.5 px-2.5 py-2 rounded-xl">
-                    <div className="w-8 h-8 rounded-lg bg-accent-emerald/10 flex items-center justify-center shrink-0 relative">
-                      <span className="text-[10px] font-bold text-accent-emerald">
-                        {u.name.charAt(0).toUpperCase()}
-                      </span>
-                      <span className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full bg-accent-emerald border border-background" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs font-medium truncate">{u.name}</p>
-                      <p className="text-[9px] text-muted-foreground flex items-center gap-1">
-                        <RoleIcon className="h-2.5 w-2.5" /> {u.role}
-                      </p>
-                    </div>
+            <div className="hidden md:flex items-center gap-1.5 mr-2">
+              <div className="flex -space-x-2">
+                {onlineUsers.slice(0, 4).map((u) => (
+                  <div key={u.user_id} className="w-6 h-6 rounded-full bg-accent-emerald/10 border-2 border-background flex items-center justify-center">
+                    <span className="text-[8px] font-bold text-accent-emerald">{u.name.charAt(0).toUpperCase()}</span>
                   </div>
-                );
-              })}
-            </>
+                ))}
+              </div>
+              {onlineUsers.length > 4 && (
+                <span className="text-[9px] text-muted-foreground">+{onlineUsers.length - 4}</span>
+              )}
+            </div>
           )}
-        </div>
 
-        {/* Meeting info */}
-        <div className="p-3 border-t border-border/30">
-          <p className="text-[9px] text-muted-foreground/60 text-center">
-            Use @nome para chamar um agente específico
-          </p>
-        </div>
-      </div>
-
-      {/* === RIGHT: Chat Area === */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Mobile header with agent count */}
-        <div className="md:hidden p-3 border-b border-border/30 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-accent-emerald animate-pulse" />
-            <span className="text-xs font-bold">Reunião</span>
-            <Badge variant="secondary" className="text-[9px] h-4">{activeAgents.length} agentes</Badge>
-          </div>
-          <div className="flex items-center gap-1">
-            {isViewer && (
-              <Badge variant="secondary" className="text-[9px] gap-1 bg-muted">
-                <Eye className="h-2.5 w-2.5" /> Leitura
-              </Badge>
-            )}
-            {messages.length > 0 && canSend && (
-              <Button variant="ghost" size="icon" onClick={clearMessages} className="h-7 w-7">
-                <Trash2 className="h-3 w-3 text-muted-foreground" />
-              </Button>
-            )}
-          </div>
-        </div>
-
-        {/* Mobile agent strip */}
-        <div className="md:hidden px-3 py-2 border-b border-border/30 flex gap-1.5 overflow-x-auto">
-          {activeAgents.map((agent) => {
-            const isSpeaking = speakingAgent === agent.name;
-            return (
-              <button
-                key={agent.id}
-                onClick={() => {
-                  if (canSend) {
-                    setInput(prev => prev + `@${agent.name} `);
-                    inputRef.current?.focus();
-                  }
-                }}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg shrink-0 transition-all ${
-                  isSpeaking ? "bg-primary/10 ring-1 ring-primary/30" : "bg-muted/30"
-                }`}
-              >
-                <div className={`w-5 h-5 rounded bg-gradient-to-br ${agentColor(agent.name)} flex items-center justify-center`}>
-                  <span className="text-[8px] font-bold text-white">{agentInitials(agent.name)}</span>
-                </div>
-                <span className="text-[10px] font-medium max-w-[80px] truncate">{agent.name}</span>
-                {isSpeaking && <Volume2 className="h-2.5 w-2.5 text-primary animate-pulse" />}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Desktop clear button */}
-        <div className="hidden md:flex p-3 border-b border-border/30 items-center justify-between">
-          <div className="flex items-center gap-2">
-            {isViewer && (
-              <Badge variant="secondary" className="text-[9px] gap-1 bg-muted">
-                <Eye className="h-2.5 w-2.5" /> Somente leitura
-              </Badge>
-            )}
-          </div>
-          {messages.length > 0 && canSend && (
-            <Button variant="ghost" size="sm" onClick={clearMessages} className="h-7 text-[10px] gap-1 text-muted-foreground">
-              <Trash2 className="h-3 w-3" /> Limpar
+          {isViewer && (
+            <Badge variant="secondary" className="text-[9px] gap-1 bg-muted">
+              <Eye className="h-2.5 w-2.5" /> Leitura
+            </Badge>
+          )}
+          {hasMessages && canSend && (
+            <Button variant="ghost" size="sm" onClick={clearMessages} className="h-7 text-[10px] gap-1 text-muted-foreground hover:text-destructive">
+              <RotateCcw className="h-3 w-3" /> Nova sessão
             </Button>
           )}
         </div>
+      </div>
 
-        {/* Messages area */}
-        <div className="flex-1 overflow-y-auto">
-          <div className="max-w-3xl mx-auto px-4 py-6 space-y-5">
-            {!historyLoaded ? (
-              <div className="flex items-center justify-center h-64">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      {/* === MAIN CONTENT === */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="max-w-3xl mx-auto px-4 py-6">
+          {!historyLoaded ? (
+            <div className="flex items-center justify-center h-[60vh]">
+              <div className="text-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto mb-3" />
+                <p className="text-xs text-muted-foreground">Preparando a sala...</p>
               </div>
-            ) : messages.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-64 text-center">
-                <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-primary/20 to-accent-violet/20 flex items-center justify-center mb-5 relative">
-                  <Users className="h-9 w-9 text-primary/80" />
-                  <motion.div
-                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-accent-emerald flex items-center justify-center"
-                    animate={{ scale: [1, 1.15, 1] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                  >
-                    <Wifi className="h-2.5 w-2.5 text-white" />
-                  </motion.div>
+            </div>
+          ) : !hasMessages ? (
+            /* === EMPTY STATE — Round Table Visual === */
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="flex flex-col items-center justify-center min-h-[60vh]"
+            >
+              {/* The Round Table */}
+              <MeetingTable
+                agents={tableAgents}
+                onMention={(name) => {
+                  setInput(prev => prev + `@${name} `);
+                  inputRef.current?.focus();
+                }}
+                canSend={canSend}
+              />
+
+              {/* Info text below table */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.4 }}
+                className="text-center mt-4 max-w-sm"
+              >
+                <h3 className="font-display font-bold text-lg mb-1.5">Mesa de Reunião</h3>
+                <p className="text-xs text-muted-foreground mb-3">
+                  Seus agentes estão sentados e prontos. Use{" "}
+                  <span className="font-mono text-primary bg-primary/5 px-1 py-0.5 rounded">@nome</span>{" "}
+                  para chamar alguém — ou fale com todos e o moderador escolhe quem responde.
+                </p>
+
+                {/* Quick prompts */}
+                <div className="grid grid-cols-2 gap-1.5 mt-4">
+                  {[
+                    { label: "Briefing geral", icon: Sparkles },
+                    { label: "Status do time", icon: Users },
+                    { label: "Próximos passos", icon: Zap },
+                    { label: "Análise de riscos", icon: Shield },
+                  ].map((cmd) => (
+                    <button
+                      key={cmd.label}
+                      onClick={() => {
+                        setInput(cmd.label);
+                        inputRef.current?.focus();
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-card/50 hover:bg-card border border-border/30 hover:border-border/60 text-[11px] text-muted-foreground hover:text-foreground transition-all text-left"
+                    >
+                      <cmd.icon className="h-3 w-3 text-primary/60 shrink-0" />
+                      {cmd.label}
+                    </button>
+                  ))}
                 </div>
-                <h3 className="font-display font-bold text-lg mb-2">Sala de Reunião</h3>
-                <p className="text-sm text-muted-foreground mb-1 max-w-md">
-                  Converse com seu time de agentes. Use <span className="font-mono text-primary">@nome</span> para chamar alguém específico — senão, o moderador escolhe quem responde.
-                </p>
-                <p className="text-[10px] text-muted-foreground/50 mt-2">
-                  {activeAgents.length} agentes • Turnos naturais • Contexto persistente
-                </p>
-              </div>
-            ) : null}
+              </motion.div>
+            </motion.div>
+          ) : null}
 
-            <AnimatePresence mode="popLayout">
-              {messages.map((msg) => (
-                <motion.div
-                  key={msg.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                >
-                  {msg.role === "system" ? (
-                    <div className="flex justify-center py-2">
-                      <div className="bg-muted/50 border border-border/30 rounded-full px-4 py-1.5">
-                        <p className="text-[11px] text-muted-foreground">
-                          <ReactMarkdown components={{ p: ({ children }) => <span>{children}</span> }}>
-                            {msg.content}
-                          </ReactMarkdown>
-                        </p>
+          {/* === MESSAGES === */}
+          <AnimatePresence mode="popLayout">
+            {messages.map((msg) => (
+              <motion.div
+                key={msg.id}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                className="mb-5"
+              >
+                {msg.role === "system" ? (
+                  <div className="flex justify-center py-2">
+                    <div className="bg-muted/50 border border-border/30 rounded-full px-4 py-1.5">
+                      <p className="text-[11px] text-muted-foreground">
+                        <ReactMarkdown components={{ p: ({ children }) => <span>{children}</span> }}>
+                          {msg.content}
+                        </ReactMarkdown>
+                      </p>
+                    </div>
+                  </div>
+                ) : msg.role === "user" ? (
+                  <div className="flex justify-end">
+                    <div className="max-w-[80%]">
+                      <div className="flex items-center justify-end gap-2 mb-1">
+                        <span className="text-[10px] text-muted-foreground">
+                          {msg.timestamp.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                        <span className="text-xs font-semibold text-foreground">
+                          {msg.userName}{msg.userId === user?.id ? " (você)" : ""}
+                        </span>
+                      </div>
+                      <div className="bg-primary text-primary-foreground rounded-2xl rounded-br-md px-4 py-3">
+                        <p className="text-[15px] leading-relaxed">{msg.content}</p>
                       </div>
                     </div>
-                  ) : msg.role === "user" ? (
-                    <div className="flex justify-end">
-                      <div className="max-w-[80%]">
-                        <div className="flex items-center justify-end gap-2 mb-1">
-                          <span className="text-[10px] text-muted-foreground">
-                            {msg.timestamp.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
-                          </span>
-                          <span className="text-xs font-semibold text-foreground">
-                            {msg.userName}{msg.userId === user?.id ? " (você)" : ""}
-                          </span>
-                        </div>
-                        <div className="bg-primary text-primary-foreground rounded-2xl rounded-br-md px-4 py-3">
-                          <p className="text-[15px] leading-relaxed">{msg.content}</p>
-                        </div>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="flex gap-3">
-                      <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${agentColor(msg.agentName || '')} flex items-center justify-center shrink-0 mt-0.5`}>
+                  </div>
+                ) : (
+                  <div className="flex gap-3">
+                    <div className="relative shrink-0 mt-0.5">
+                      <div className={`w-9 h-9 rounded-full bg-gradient-to-br ${agentColor(msg.agentName || '')} flex items-center justify-center shadow-lg`}>
                         <span className="text-[10px] font-bold text-white">{agentInitials(msg.agentName || 'AI')}</span>
                       </div>
-                      <div className="flex-1 min-w-0 max-w-[85%]">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-bold text-foreground">{msg.agentName}</span>
-                          {msg.agentTier && (
-                            <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded-md border ${tierColors[msg.agentTier] || ""} ${tierBg[msg.agentTier] || ""}`}>
-                              {msg.agentTier}
-                            </span>
-                          )}
-                          <span className="text-[10px] text-muted-foreground">
-                            {msg.timestamp.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                      {/* Connection line to table feel */}
+                      <div className="absolute top-full left-1/2 -translate-x-1/2 w-px h-3 bg-border/20" />
+                    </div>
+                    <div className="flex-1 min-w-0 max-w-[85%]">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs font-bold text-foreground">{msg.agentName}</span>
+                        {msg.agentTier && (
+                          <span className={`text-[9px] font-medium px-1.5 py-0.5 rounded-md border ${tierColors[msg.agentTier] || ""} ${tierBg[msg.agentTier] || ""}`}>
+                            {msg.agentTier}
                           </span>
-                        </div>
-                        <div className="bg-card border border-border/50 rounded-2xl rounded-tl-md px-4 py-3">
-                          <div className="text-[15px] leading-relaxed prose prose-sm prose-invert max-w-none [&>p]:mb-2 [&>p:last-child]:mb-0">
-                            <ReactMarkdown>{msg.content}</ReactMarkdown>
-                          </div>
+                        )}
+                        <span className="text-[10px] text-muted-foreground">
+                          {msg.timestamp.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      </div>
+                      <div className="bg-card border border-border/40 rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
+                        <div className="text-[15px] leading-relaxed prose prose-sm prose-invert max-w-none [&>p]:mb-2 [&>p:last-child]:mb-0">
+                          <ReactMarkdown>{msg.content}</ReactMarkdown>
                         </div>
                       </div>
                     </div>
-                  )}
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </AnimatePresence>
 
-            {/* Typing indicator */}
-            {isLoading && (
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="flex gap-3"
-              >
-                <div className={`w-9 h-9 rounded-xl ${speakingAgent ? `bg-gradient-to-br ${agentColor(speakingAgent)}` : 'bg-primary/15'} flex items-center justify-center shrink-0`}>
-                  {speakingAgent ? (
-                    <span className="text-[10px] font-bold text-white">{agentInitials(speakingAgent)}</span>
-                  ) : (
-                    <Users className="h-4 w-4 text-primary" />
-                  )}
+          {/* Typing indicator */}
+          {isLoading && (
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="flex gap-3 mb-5"
+            >
+              <div className={`w-9 h-9 rounded-full ${speakingAgent ? `bg-gradient-to-br ${agentColor(speakingAgent)}` : 'bg-primary/15'} flex items-center justify-center shrink-0 shadow-lg relative`}>
+                {speakingAgent ? (
+                  <span className="text-[10px] font-bold text-white">{agentInitials(speakingAgent)}</span>
+                ) : (
+                  <Users className="h-4 w-4 text-primary" />
+                )}
+                <motion.div
+                  className="absolute -inset-1 rounded-full border border-primary/30"
+                  animate={{ scale: [1, 1.3, 1], opacity: [0.5, 0, 0.5] }}
+                  transition={{ repeat: Infinity, duration: 1.5 }}
+                />
+              </div>
+              <div className="bg-card border border-border/40 rounded-2xl rounded-tl-md px-4 py-3 shadow-sm">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex gap-1">
+                    <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0 }} />
+                    <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0.2 }} />
+                    <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0.4 }} />
+                  </div>
+                  <span className="text-xs text-muted-foreground">
+                    {speakingAgent ? `${speakingAgent} está respondendo...` : "Moderador selecionando quem responde..."}
+                  </span>
                 </div>
-                <div className="bg-card border border-border/50 rounded-2xl px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <div className="flex gap-1">
-                      <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0 }} />
-                      <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0.2 }} />
-                      <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0.4 }} />
+              </div>
+            </motion.div>
+          )}
+
+          {/* Silent agents notice */}
+          {!isLoading && silentAgents.length > 0 && hasMessages && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="flex justify-center mb-4"
+            >
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/20 border border-border/20">
+                <div className="flex -space-x-1.5">
+                  {silentAgents.slice(0, 3).map(a => (
+                    <div key={a.id} className={`w-4 h-4 rounded-full bg-gradient-to-br ${agentColor(a.name)} border border-background flex items-center justify-center`}>
+                      <span className="text-[6px] font-bold text-white">{agentInitials(a.name).charAt(0)}</span>
                     </div>
-                    <span className="text-xs text-muted-foreground">
-                      {speakingAgent ? `${speakingAgent} está digitando...` : "Escolhendo quem responde..."}
-                    </span>
-                  </div>
+                  ))}
                 </div>
-              </motion.div>
-            )}
-
-            {/* Silent agents notice */}
-            {!isLoading && silentAgents.length > 0 && messages.length > 0 && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="flex justify-center"
-              >
-                <p className="text-[10px] text-muted-foreground/50 px-3 py-1 rounded-full bg-muted/30">
-                  {silentAgents.map(a => a.name).join(", ")} {silentAgents.length === 1 ? "está" : "estão"} ouvindo em silêncio
+                <p className="text-[10px] text-muted-foreground">
+                  {silentAgents.map(a => a.name.split(" ")[0]).join(", ")} {silentAgents.length === 1 ? "ouvindo" : "ouvindo"} em silêncio
                 </p>
-              </motion.div>
-            )}
+              </div>
+            </motion.div>
+          )}
 
-            <div ref={messagesEndRef} />
-          </div>
+          <div ref={messagesEndRef} />
         </div>
+      </div>
 
-        {/* Input area */}
-        <div className="border-t border-border/50 bg-card/30">
-          <div className="max-w-3xl mx-auto px-4 py-3">
-            {isViewer ? (
-              <div className="flex items-center justify-center gap-2 py-2 text-muted-foreground">
-                <Lock className="h-4 w-4" />
-                <span className="text-xs">Modo visualizador — peça ao admin para alterar sua permissão.</span>
-              </div>
-            ) : activeAgents.length === 0 ? (
-              <p className="text-xs text-muted-foreground text-center py-2">
-                Nenhum agente ativo. Contrate agentes no Marketplace.
-              </p>
-            ) : (
-              <div className="relative">
-                {/* Mention autocomplete */}
-                <AnimatePresence>
-                  {showMentions && filteredMentionAgents.length > 0 && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 8 }}
-                      className="absolute bottom-full mb-2 left-0 right-0 bg-card border border-border rounded-xl shadow-xl overflow-hidden z-10"
-                    >
-                      {filteredMentionAgents.slice(0, 5).map((agent) => (
-                        <button
-                          key={agent.id}
-                          onClick={() => insertMention(agent.name)}
-                          className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 transition-colors text-left"
-                        >
-                          <div className={`w-6 h-6 rounded bg-gradient-to-br ${agentColor(agent.name)} flex items-center justify-center`}>
-                            <span className="text-[8px] font-bold text-white">{agentInitials(agent.name)}</span>
-                          </div>
-                          <span className="text-xs font-medium">{agent.name}</span>
-                          <Badge variant="secondary" className={`text-[8px] ml-auto ${tierColors[agent.tier] || ""}`}>{agent.tier}</Badge>
-                        </button>
-                      ))}
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-
-                <form
-                  onSubmit={(e) => { e.preventDefault(); handleSend(); }}
-                  className="flex items-end gap-2"
-                >
-                  <div className="flex-1 relative">
-                    <textarea
-                      ref={inputRef}
-                      value={input}
-                      onChange={handleInputChange}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSend();
-                        }
-                      }}
-                      placeholder="Mensagem para o time... (@ para mencionar)"
-                      disabled={isLoading}
-                      rows={1}
-                      className="w-full resize-none bg-background border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30 placeholder:text-muted-foreground/50 min-h-[44px] max-h-[120px]"
-                      style={{ height: "44px" }}
-                      onInput={(e) => {
-                        const target = e.target as HTMLTextAreaElement;
-                        target.style.height = "44px";
-                        target.style.height = Math.min(target.scrollHeight, 120) + "px";
-                      }}
-                    />
-                  </div>
-                  <VoiceInput
-                    onTranscript={(text) => { setInput(text); }}
-                    disabled={isLoading}
-                  />
-                  <Button
-                    type="submit"
-                    disabled={!input.trim() || isLoading}
-                    size="icon"
-                    className="h-11 w-11 rounded-xl shrink-0"
+      {/* === INPUT AREA === */}
+      <div className="border-t border-border/30 bg-card/20 backdrop-blur-sm">
+        <div className="max-w-3xl mx-auto px-4 py-3">
+          {isViewer ? (
+            <div className="flex items-center justify-center gap-2 py-2 text-muted-foreground">
+              <Lock className="h-4 w-4" />
+              <span className="text-xs">Modo visualizador — peça ao admin para alterar sua permissão.</span>
+            </div>
+          ) : activeAgents.length === 0 ? (
+            <p className="text-xs text-muted-foreground text-center py-2">
+              Nenhum agente ativo. Contrate agentes no Marketplace.
+            </p>
+          ) : (
+            <div className="relative">
+              {/* Mention autocomplete */}
+              <AnimatePresence>
+                {showMentions && filteredMentionAgents.length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    className="absolute bottom-full mb-2 left-0 right-0 bg-card border border-border rounded-xl shadow-xl overflow-hidden z-10"
                   >
-                    {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                  </Button>
-                </form>
-              </div>
-            )}
-          </div>
+                    {filteredMentionAgents.slice(0, 5).map((agent) => (
+                      <button
+                        key={agent.id}
+                        onClick={() => insertMention(agent.name)}
+                        className="w-full flex items-center gap-2.5 px-3 py-2 hover:bg-muted/50 transition-colors text-left"
+                      >
+                        <div className={`w-6 h-6 rounded-full bg-gradient-to-br ${agentColor(agent.name)} flex items-center justify-center`}>
+                          <span className="text-[8px] font-bold text-white">{agentInitials(agent.name)}</span>
+                        </div>
+                        <span className="text-xs font-medium">{agent.name}</span>
+                        <Badge variant="secondary" className={`text-[8px] ml-auto ${tierColors[agent.tier] || ""}`}>{agent.tier}</Badge>
+                      </button>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              <form
+                onSubmit={(e) => { e.preventDefault(); handleSend(); }}
+                className="flex items-end gap-2"
+              >
+                {/* Agent presence strip */}
+                <div className="hidden md:flex items-center gap-0.5 shrink-0 mr-1">
+                  {activeAgents.slice(0, 5).map(a => (
+                    <TooltipProvider key={a.id}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setInput(prev => prev + `@${a.name} `);
+                              inputRef.current?.focus();
+                            }}
+                            className={`w-7 h-7 rounded-full bg-gradient-to-br ${agentColor(a.name)} flex items-center justify-center border-2 transition-all ${
+                              speakingAgent === a.name
+                                ? "border-primary scale-110"
+                                : "border-background hover:border-primary/40 hover:scale-105"
+                            }`}
+                          >
+                            <span className="text-[8px] font-bold text-white">{agentInitials(a.name)}</span>
+                          </button>
+                        </TooltipTrigger>
+                        <TooltipContent side="top" className="text-[10px]">
+                          @{a.name}
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
+                  ))}
+                </div>
+
+                <div className="flex-1 relative">
+                  <textarea
+                    ref={inputRef}
+                    value={input}
+                    onChange={handleInputChange}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSend();
+                      }
+                    }}
+                    placeholder="Fale com o time... (@ para mencionar)"
+                    disabled={isLoading}
+                    rows={1}
+                    className="w-full resize-none bg-background border border-border/40 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-1 focus:ring-primary/30 placeholder:text-muted-foreground/50 min-h-[44px] max-h-[120px]"
+                    style={{ height: "44px" }}
+                    onInput={(e) => {
+                      const target = e.target as HTMLTextAreaElement;
+                      target.style.height = "44px";
+                      target.style.height = Math.min(target.scrollHeight, 120) + "px";
+                    }}
+                  />
+                </div>
+                <VoiceInput
+                  onTranscript={(text) => { setInput(text); }}
+                  disabled={isLoading}
+                />
+                <Button
+                  type="submit"
+                  disabled={!input.trim() || isLoading}
+                  size="icon"
+                  className="h-11 w-11 rounded-xl shrink-0"
+                >
+                  {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                </Button>
+              </form>
+
+              <p className="text-[9px] text-muted-foreground/40 text-center mt-1.5">
+                Moderador IA seleciona automaticamente quem responde • @nome para chamar diretamente
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
