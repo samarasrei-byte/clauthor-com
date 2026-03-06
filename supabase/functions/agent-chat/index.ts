@@ -1081,10 +1081,29 @@ Instruções: ${agent.instructions}`;
       agentArea,
     };
 
-    // Load Company Board + memory in parallel
-    const [companyContext, memoryContext] = await Promise.all([
+    // Load Company Board + memory + RAG knowledge in parallel
+    const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop()?.content || "";
+    const [companyContext, memoryContext, ragContext] = await Promise.all([
       loadCompanyBoard(adminClient, userId),
       agentId ? loadRecentMemory(adminClient, tenantId, userId, agentId) : Promise.resolve(""),
+      // RAG: Full-text search on knowledge_documents
+      (async () => {
+        try {
+          if (!lastUserMsg || lastUserMsg.length < 3) return "";
+          const { data: docs } = await adminClient.rpc("search_knowledge", {
+            _user_id: userId,
+            _query: lastUserMsg,
+            _agent_id: agentId || null,
+            _limit: 5,
+          });
+          if (!docs || docs.length === 0) return "";
+          return "\n\n## BASE DE CONHECIMENTO (RAG — DOCUMENTOS RELEVANTES):\n" +
+            docs.map((d: any) => `[${d.category.toUpperCase()}] ${d.title}:\n${d.content}`).join("\n\n");
+        } catch (e) {
+          console.warn("RAG search error:", e);
+          return "";
+        }
+      })(),
     ]);
 
     const tenantContext = `
@@ -1143,7 +1162,7 @@ Exemplo de redirecionamento:
 - A consistência entre agentes é fundamental para o sistema
 `;
 
-    const fullSystemPrompt = `${SAFETY_LAYER}\n${OPERATIONAL_SECURITY_PROTOCOL}\n${contractPrompt}\n${MASTER_EXECUTION_PROTOCOL}\n${tenantContext}\n${companyContext}\n${memoryContext}\n${agentPrompt}\n${TOOL_USE_INSTRUCTION}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
+    const fullSystemPrompt = `${SAFETY_LAYER}\n${OPERATIONAL_SECURITY_PROTOCOL}\n${contractPrompt}\n${MASTER_EXECUTION_PROTOCOL}\n${tenantContext}\n${companyContext}\n${ragContext}\n${memoryContext}\n${agentPrompt}\n${TOOL_USE_INSTRUCTION}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
 
     // === SINGLE CALL with tools — no more double call ===
     const firstResponse = await fetchAI({
