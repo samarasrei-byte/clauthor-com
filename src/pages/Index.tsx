@@ -409,15 +409,15 @@ const HomePage = () => {
                     </div>
 
                     {/* Trust badges — honest claims only */}
-                    <div className="grid grid-cols-3 sm:flex sm:flex-wrap items-center gap-2 sm:gap-5 mt-8">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-5 mt-8">
                       {[
                         { icon: LockKeyhole, label: t("home.trust_e2e", { defaultValue: "END-TO-END ENCRYPTED" }) },
                         { icon: ShieldCheck, label: t("home.trust_enterprise", { defaultValue: "ENTERPRISE-GRADE" }) },
                         { icon: Bolt, label: t("home.trust_setup", { defaultValue: "SETUP 5MIN" }) },
                       ].map((item) => (
-                        <div key={item.label} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-border/30 bg-card/20">
-                          <item.icon className="h-4 w-4 text-primary/80" strokeWidth={1.5} />
-                          <span className="font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground/70">{item.label}</span>
+                        <div key={item.label} className="flex items-center gap-1.5 sm:gap-2.5 px-2 sm:px-3 py-1.5 rounded-lg border border-border/30 bg-card/20">
+                          <item.icon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-primary/80 shrink-0" strokeWidth={1.5} />
+                          <span className="font-mono text-[9px] sm:text-[11px] uppercase tracking-[0.08em] sm:tracking-[0.12em] text-muted-foreground/70">{item.label}</span>
                         </div>
                       ))}
                     </div>
@@ -879,28 +879,28 @@ const HomePage = () => {
             </p>
 
             {/* Value comparison */}
-            <div className="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6">
+            <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-3 sm:gap-6 mb-6">
               {[
                 { label: t("home.pricing_val_human", { defaultValue: "Funcionário CLT" }), value: "R$ 4.500/mês", sub: t("home.pricing_val_human_sub", { defaultValue: "8h/dia, férias, encargos" }), muted: true },
                 { label: t("home.pricing_val_agent", { defaultValue: "Agente CLAUTHOR" }), value: "R$ 147/mês", sub: t("home.pricing_val_agent_sub", { defaultValue: "24/7, sem encargos, escala infinita" }), muted: false },
               ].map((item) => (
-                <div key={item.label} className={`px-5 py-3 rounded-xl border text-center ${item.muted ? "border-border/30 bg-card/20 opacity-60" : "border-primary/20 bg-primary/5"}`}>
-                  <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{item.label}</p>
-                  <p className={`font-display text-lg font-bold ${item.muted ? "line-through text-muted-foreground" : "text-primary"}`}>{item.value}</p>
-                  <p className="font-mono text-[9px] text-muted-foreground/60 mt-0.5">{item.sub}</p>
+                <div key={item.label} className={`px-3 sm:px-5 py-3 rounded-xl border text-center min-w-0 ${item.muted ? "border-border/30 bg-card/20 opacity-60" : "border-primary/20 bg-primary/5"}`}>
+                  <p className="font-mono text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mb-1 truncate">{item.label}</p>
+                  <p className={`font-display text-base sm:text-lg font-bold ${item.muted ? "line-through text-muted-foreground" : "text-primary"}`}>{item.value}</p>
+                  <p className="font-mono text-[8px] sm:text-[9px] text-muted-foreground/60 mt-0.5 truncate">{item.sub}</p>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-wrap justify-center gap-3 mb-8">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 mb-8">
               {[
                 { label: t("home.pricing_tier_3"), discount: t("home.pricing_off_10") },
                 { label: t("home.pricing_tier_5"), discount: t("home.pricing_off_20") },
                 { label: t("home.pricing_tier_7"), discount: t("home.pricing_off_30") },
                 { label: t("home.pricing_tier_10"), discount: t("home.pricing_off_35") },
               ].map(tier => (
-                <div key={tier.label} className="px-4 py-2.5 rounded-xl border border-border bg-card/30 text-center">
-                  <p className="font-mono text-xs text-muted-foreground">{tier.label}</p>
+                <div key={tier.label} className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-border bg-card/30 text-center">
+                  <p className="font-mono text-[10px] sm:text-xs text-muted-foreground truncate">{tier.label}</p>
                   <p className="font-display font-bold text-sm text-primary">{tier.discount}</p>
                 </div>
               ))}
