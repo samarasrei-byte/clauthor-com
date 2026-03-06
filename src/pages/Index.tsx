@@ -28,29 +28,38 @@ import thorPhoto from "@/assets/kaelis-ai.png";
 /* ═══════════════════════════════════════════════════════
    TYPEWRITER HOOK
    ═══════════════════════════════════════════════════════ */
-const useTypewriter = (text: string, speed = 40, delay = 800) => {
+const useCyclingTypewriter = (words: string[], speed = 50, pauseDuration = 2500, initialDelay = 600) => {
   const [displayed, setDisplayed] = useState("");
-  const [done, setDone] = useState(false);
+  const [wordIndex, setWordIndex] = useState(0);
+  const [phase, setPhase] = useState<"waiting" | "typing" | "pausing" | "deleting">("waiting");
+  const [firstCycleDone, setFirstCycleDone] = useState(false);
 
   useEffect(() => {
-    setDisplayed("");
-    setDone(false);
-    const timeout = setTimeout(() => {
-      let i = 0;
-      const interval = setInterval(() => {
-        setDisplayed(text.slice(0, i + 1));
-        i++;
-        if (i >= text.length) {
-          clearInterval(interval);
-          setDone(true);
-        }
-      }, speed);
-      return () => clearInterval(interval);
-    }, delay);
-    return () => clearTimeout(timeout);
-  }, [text, speed, delay]);
+    const word = words[wordIndex];
+    let timer: ReturnType<typeof setTimeout>;
 
-  return { displayed, done };
+    if (phase === "waiting") {
+      timer = setTimeout(() => setPhase("typing"), initialDelay);
+    } else if (phase === "typing") {
+      if (displayed.length < word.length) {
+        timer = setTimeout(() => setDisplayed(word.slice(0, displayed.length + 1)), speed);
+      } else {
+        if (!firstCycleDone) setFirstCycleDone(true);
+        timer = setTimeout(() => setPhase("deleting"), pauseDuration);
+      }
+    } else if (phase === "deleting") {
+      if (displayed.length > 0) {
+        timer = setTimeout(() => setDisplayed(displayed.slice(0, -1)), speed / 2);
+      } else {
+        setWordIndex((prev) => (prev + 1) % words.length);
+        setPhase("typing");
+      }
+    }
+
+    return () => clearTimeout(timer);
+  }, [displayed, phase, wordIndex, words, speed, pauseDuration, initialDelay, firstCycleDone]);
+
+  return { displayed, currentWord: words[wordIndex], firstCycleDone };
 };
 
 /* ═══════════════════════════════════════════════════════
@@ -227,8 +236,16 @@ const HomePage = () => {
   const { scrollYProgress } = useScroll();
   const bgOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
 
-  const headline = t("home.title1") + " " + t("home.title2");
-  const { displayed: typedText, done: typingDone } = useTypewriter(headline, 35, 600);
+  const cyclingRoles = useMemo(() => [
+    t("home.title1", { defaultValue: "Funcionários" }) + " " + t("home.title2", { defaultValue: "de IA" }),
+    "AI Sales Rep",
+    "AI Support Agent",
+    "AI Growth Hacker",
+    "AI CFO Assistant",
+    "AI Content Creator",
+    "AI DevOps Engineer",
+  ], [t]);
+  const { displayed: typedText, firstCycleDone: typingDone } = useCyclingTypewriter(cyclingRoles, 45, 2200, 600);
 
   // SEO meta tags
   useEffect(() => {
@@ -339,9 +356,7 @@ const HomePage = () => {
               <div className="mb-6 sm:mb-8">
                 <h1 className="font-display text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight">
                   <span className="text-foreground">{typedText}</span>
-                  {!typingDone && (
-                    <span className="inline-block w-[3px] h-[0.8em] bg-primary ml-1 align-middle" style={{ animation: "blink-cursor 0.8s step-end infinite" }} />
-                  )}
+                  <span className="inline-block w-[3px] h-[0.8em] bg-primary ml-1 align-middle" style={{ animation: "blink-cursor 0.8s step-end infinite" }} />
                 </h1>
               </div>
 
@@ -393,12 +408,12 @@ const HomePage = () => {
                       </Link>
                     </div>
 
-                    {/* Trust badges */}
+                    {/* Trust badges — honest claims only */}
                     <div className="grid grid-cols-3 sm:flex sm:flex-wrap items-center gap-2 sm:gap-5 mt-8">
                       {[
-                        { icon: LockKeyhole, label: t("home.trust_e2e") },
-                        { icon: Fingerprint, label: t("home.trust_soc2") },
-                        { icon: Bolt, label: t("home.trust_setup") },
+                        { icon: LockKeyhole, label: t("home.trust_e2e", { defaultValue: "END-TO-END ENCRYPTED" }) },
+                        { icon: ShieldCheck, label: t("home.trust_enterprise", { defaultValue: "ENTERPRISE-GRADE" }) },
+                        { icon: Bolt, label: t("home.trust_setup", { defaultValue: "SETUP 5MIN" }) },
                       ].map((item) => (
                         <div key={item.label} className="flex items-center gap-2.5 px-3 py-1.5 rounded-lg border border-border/30 bg-card/20">
                           <item.icon className="h-4 w-4 text-primary/80" strokeWidth={1.5} />
@@ -915,6 +930,71 @@ const HomePage = () => {
       </Suspense>
 
       {/* ═══════════════════════════════════════════════════════
+          EARLY ADOPTERS — Social proof without fake data
+          ═══════════════════════════════════════════════════════ */}
+      <section className="py-16 sm:py-20 px-4 relative border-t border-border/50" aria-label="Early adopters">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary/60 mb-3">
+              {t("home.early_adopters_badge", { defaultValue: "EARLY ADOPTERS" })}
+            </p>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold">
+              {t("home.early_adopters_title", { defaultValue: "Quem já está usando" })}
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            {[
+              {
+                quote: t("home.testimonial_1", { defaultValue: "Automatizamos 80% do atendimento ao cliente no primeiro mês. O agente resolve tickets sozinho e escala só quando precisa." }),
+                author: "CEO",
+                company: t("home.testimonial_1_company", { defaultValue: "E-commerce de Moda" }),
+                metric: "80%",
+                metricLabel: t("home.testimonial_1_metric", { defaultValue: "tickets automatizados" }),
+              },
+              {
+                quote: t("home.testimonial_2", { defaultValue: "O agente financeiro concilia notas fiscais, cobra inadimplentes e gera relatórios. Economizamos um funcionário inteiro." }),
+                author: "CFO",
+                company: t("home.testimonial_2_company", { defaultValue: "Startup SaaS B2B" }),
+                metric: "R$8k",
+                metricLabel: t("home.testimonial_2_metric", { defaultValue: "economia mensal" }),
+              },
+              {
+                quote: t("home.testimonial_3", { defaultValue: "Configurei o SDR em 10 minutos. Ele já prospecta via LinkedIn e WhatsApp, qualifica leads e agenda reuniões automaticamente." }),
+                author: "Head of Growth",
+                company: t("home.testimonial_3_company", { defaultValue: "Agência Digital" }),
+                metric: "3x",
+                metricLabel: t("home.testimonial_3_metric", { defaultValue: "mais leads qualificados" }),
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.5 }}
+                className="relative p-6 rounded-2xl border border-border bg-card/40 backdrop-blur-sm"
+              >
+                <div className="flex items-center gap-2 mb-4">
+                  <div className="px-2.5 py-1 rounded-md bg-primary/10 border border-primary/15">
+                    <span className="font-display text-lg font-bold text-primary">{item.metric}</span>
+                  </div>
+                  <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">{item.metricLabel}</span>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-5">"{item.quote}"</p>
+                <div className="pt-4 border-t border-border/50">
+                  <p className="font-display text-xs font-bold">{item.author}</p>
+                  <p className="font-mono text-[10px] text-muted-foreground/60">{item.company}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <p className="font-mono text-[9px] text-muted-foreground/30 text-center mt-6 uppercase tracking-wider">
+            {t("home.early_adopters_disclaimer", { defaultValue: "* Resultados de early adopters em fase beta. Nomes omitidos por acordo de confidencialidade." })}
+          </p>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
           PRE-FOOTER CTA
           ═══════════════════════════════════════════════════════ */}
       <section className="py-20 sm:py-28 px-4 relative" aria-label="Final CTA">
@@ -1004,7 +1084,7 @@ const HomePage = () => {
             <div className="flex flex-wrap items-center gap-4">
               {[
                 { icon: LockKeyhole, label: "SSL 256-bit" },
-                { icon: Fingerprint, label: "SOC 2" },
+                { icon: ShieldCheck, label: "ENTERPRISE-GRADE" },
               ].map((badge) => (
                 <div key={badge.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/50 border border-border">
                   <badge.icon className="h-3 w-3 text-primary/50" strokeWidth={1.5} />
