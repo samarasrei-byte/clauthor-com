@@ -68,3 +68,6 @@ verify_jwt = false
 
 [functions.event-loop]
 verify_jwt = false
+
+[functions.public-api]
+verify_jwt = false
