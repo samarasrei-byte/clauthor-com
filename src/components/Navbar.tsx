@@ -281,6 +281,17 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+            <Link
+              to="/team-builder"
+              onClick={() => setMobileOpen(false)}
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                location.pathname === "/team-builder" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              }`}
+            >
+              <ShoppingCart className="h-4 w-4" strokeWidth={1.5} />
+              Montar Time
+              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">Novo</span>
+            </Link>
             {user && (
               <Link
                 to="/community"
