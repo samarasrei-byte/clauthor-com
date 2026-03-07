@@ -51,6 +51,7 @@ const OmnixCommandCenter = lazyRetry(() => import("./pages/OmnixCommandCenter"))
 const KnowledgeBase = lazyRetry(() => import("./pages/KnowledgeBase"));
 const ResetPassword = lazyRetry(() => import("./pages/ResetPassword"));
 const ApiDocs = lazyRetry(() => import("./pages/ApiDocs"));
+const TeamBuilder = lazyRetry(() => import("./pages/TeamBuilder"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -96,6 +97,7 @@ const App = () => (
                   <Route path="/privacidade" element={<Privacy />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/api-docs" element={<ApiDocs />} />
+                  <Route path="/team-builder" element={<TeamBuilder />} />
                 </Route>
 
                 {/* Dashboard pages with minimal header + sidebar only */}

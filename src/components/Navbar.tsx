@@ -129,6 +129,23 @@ const Navbar = () => {
                       </div>
                     </Link>
                     <div className="border-t border-border/30 mx-3 my-1" />
+                    <Link
+                      to="/team-builder"
+                      onClick={() => setMegaMenuOpen(false)}
+                      className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-accent-emerald/10 flex items-center justify-center shrink-0 icon-container-glow">
+                        <ShoppingCart className="h-5 w-5 text-accent-emerald icon-lift" strokeWidth={1.5} />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-sm text-foreground">Montar Time</p>
+                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">Novo</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-0.5">Escolha agentes e veja o custo em tempo real</p>
+                      </div>
+                    </Link>
+                    <div className="border-t border-border/30 mx-3 my-1" />
                     <div className="grid grid-cols-2 gap-1 px-1">
                       <Link to="/how-it-works" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.how_it_works")}</Link>
                       <Link to="/pricing" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.pricing")}</Link>
@@ -264,6 +281,17 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+            <Link
+              to="/team-builder"
+              onClick={() => setMobileOpen(false)}
+              className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                location.pathname === "/team-builder" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+              }`}
+            >
+              <ShoppingCart className="h-4 w-4" strokeWidth={1.5} />
+              Montar Time
+              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">Novo</span>
+            </Link>
             {user && (
               <Link
                 to="/community"
