@@ -51,6 +51,7 @@ const OmnixCommandCenter = lazyRetry(() => import("./pages/OmnixCommandCenter"))
 const KnowledgeBase = lazyRetry(() => import("./pages/KnowledgeBase"));
 const ResetPassword = lazyRetry(() => import("./pages/ResetPassword"));
 const ApiDocs = lazyRetry(() => import("./pages/ApiDocs"));
+const TeamBuilder = lazyRetry(() => import("./pages/TeamBuilder"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

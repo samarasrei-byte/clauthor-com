@@ -13,7 +13,7 @@ import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 
 export interface HireIntent {
-  type: "agent" | "department";
+  type: "agent" | "department" | "squad";
   label: string;
   // For agent: slug to hire from templates
   slugs?: string[];
