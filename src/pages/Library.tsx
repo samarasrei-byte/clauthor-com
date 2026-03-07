@@ -95,59 +95,74 @@ const LibraryPage = () => {
       return;
     }
 
+    // Logged in → show checkout summary dialog instead of going directly to PayPal
+    const agentName = t(`library_page.agents.${key}_title`);
+    const priceTier = agentPriceTiers[key];
+    const region = getRegion(lang);
+    const price = getPrice(lang, priceTier);
+
+    if (!price || price <= 0) {
+      toast.error("Preço inválido para este agente.");
+      return;
+    }
+
+    setCheckoutData({
+      label: agentName,
+      slugs: [slug],
+      isDepartment: false,
+      price,
+      currency: region.currency,
+      lang,
+    });
+  }, [user, navigate, t, lang]);
+
+  const handleConfirmCheckout = useCallback(async () => {
+    if (!checkoutData) return;
+    const { label, slugs, price, currency } = checkoutData;
+    const slug = slugs[0];
+    const region = getRegion(lang);
+
     setHiringSlug(slug);
 
     try {
-      const agentName = t(`library_page.agents.${key}_title`);
-      const priceTier = agentPriceTiers[key];
-      const region = getRegion(lang);
-      const price = getPrice(lang, priceTier);
-
-      if (!price || price <= 0) {
-        toast.error("Preço inválido para este agente.");
-        return;
-      }
-
-      const loadingToast = toast.loading("Criando assinatura PayPal...");
-
       const { data, error } = await supabase.functions.invoke("paypal-checkout", {
         body: {
           action: "create_subscription",
           agent_slug: slug,
-          agent_name: agentName,
+          agent_name: label,
           amount: price,
-          currency: region.currency,
+          currency,
           return_url: `${window.location.origin}/dashboard?subscription=success`,
           cancel_url: `${window.location.origin}/library?subscription=cancelled`,
         },
       });
-
-      toast.dismiss(loadingToast);
 
       if (error) throw error;
       if (!data?.success || !data?.approve_url) {
         throw new Error(data?.error || "Falha ao criar assinatura PayPal");
       }
 
+      // Find the key from slug
+      const key = Object.entries(agentSlugs).find(([, s]) => s === slug)?.[0] || slug;
+
       sessionStorage.setItem("paypal_subscription", JSON.stringify({
         subscription_id: data.subscription_id,
         agent_slug: slug,
         agent_key: key,
-        agent_name: agentName,
+        agent_name: label,
         price,
-        currency: region.currency,
-        tier: agentTiers[key],
-        price_tier: priceTier,
+        currency,
+        tier: agentTiers[key] || "basic",
+        price_tier: agentPriceTiers[key] || "entry",
       }));
 
       window.location.href = data.approve_url;
     } catch (err: any) {
       console.error("Subscription error:", err);
       toast.error(err.message || "Erro ao criar assinatura. Tente novamente.");
-    } finally {
       setHiringSlug(null);
     }
-  }, [user, navigate, t, lang]);
+  }, [checkoutData, lang]);
 
   const featuredAgent = featuredKeys[activeFeatured];
   const FeaturedIcon = agentIcons[featuredAgent];
