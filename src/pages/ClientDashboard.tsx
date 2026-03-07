@@ -28,6 +28,8 @@ import NotificationPanel from "@/components/dashboard/NotificationPanel";
 
 import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
 const CompanyBoardAlert = lazy(() => import("@/components/dashboard/CompanyBoardAlert"));
+const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
+const SmartAgentRouter = lazy(() => import("@/components/dashboard/SmartAgentRouter"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 const PendingActionsPanel = lazy(() => import("@/components/dashboard/PendingActionsPanel").then(m => ({ default: m.PendingActionsPanel })));
@@ -83,6 +85,24 @@ const ClientDashboard = () => {
   }, [user]);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
+  const [showBoardGate, setShowBoardGate] = useState(false);
+  const [boardGateSkipped, setBoardGateSkipped] = useState(false);
+
+  // Check if Company Board has data
+  const { data: boardCount = 0 } = useQuery({
+    queryKey: ["company-board-count-gate", user?.id],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("company_board")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user!.id);
+      return count || 0;
+    },
+    enabled: !!user,
+    staleTime: 60_000,
+  });
+
+  const needsBoardSetup = boardCount === 0 && !boardGateSkipped;
 
   // Extracted hooks for business logic
   const { checkoutSummary, handleConfirmCheckout, cancelCheckout } = useHireIntentFlow(user);
@@ -401,23 +421,31 @@ const ClientDashboard = () => {
 
           {activeSection === "chat" && selectedAgent && (
             <Suspense fallback={<SectionLoader />}>
-              <div className="h-full flex flex-col">
-                {/* Slim back bar */}
-                <div className="shrink-0 flex items-center gap-2 px-4 py-2 border-b border-border/10 bg-background/50 backdrop-blur-sm">
-                  <button
-                    onClick={handleBack}
-                    className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
-                  >
-                    <ChevronLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
-                    <span>{t("dashboard.back", { defaultValue: "Voltar" })}</span>
-                  </button>
-                  <span className="text-xs text-muted-foreground/40">•</span>
-                  <span className="text-xs font-medium text-foreground">{selectedAgent.name}</span>
+              {needsBoardSetup ? (
+                <CompanyBoardGate
+                  agentName={selectedAgent.name}
+                  onSetupCompany={() => setShowCompanyOnboarding(true)}
+                  onSkip={() => setBoardGateSkipped(true)}
+                />
+              ) : (
+                <div className="h-full flex flex-col">
+                  {/* Slim back bar */}
+                  <div className="shrink-0 flex items-center gap-2 px-4 py-2 border-b border-border/10 bg-background/50 backdrop-blur-sm">
+                    <button
+                      onClick={handleBack}
+                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
+                    >
+                      <ChevronLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
+                      <span>{t("dashboard.back", { defaultValue: "Voltar" })}</span>
+                    </button>
+                    <span className="text-xs text-muted-foreground/40">•</span>
+                    <span className="text-xs font-medium text-foreground">{selectedAgent.name}</span>
+                  </div>
+                  <div className="flex-1 min-h-0">
+                    <AgentChat agentId={selectedAgent.id} agentName={selectedAgent.name} />
+                  </div>
                 </div>
-                <div className="flex-1 min-h-0">
-                  <AgentChat agentId={selectedAgent.id} agentName={selectedAgent.name} />
-                </div>
-              </div>
+              )}
             </Suspense>
           )}
 
@@ -538,6 +566,21 @@ const ClientDashboard = () => {
                     <Suspense fallback={<SectionLoader />}>
                       <div className="space-y-4">
                         <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                        <SmartAgentRouter
+                          contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
+                          onSelectAgent={(slug) => {
+                            const agent = agents.find(a => nameToSlug[a.name] === slug);
+                            if (agent) {
+                              setPreviousSection(activeSection);
+                              setSelectedAgent({ id: agent.id, name: agent.name });
+                              setActiveSection("chat");
+                            } else {
+                              // Agent not contracted — go to library
+                              setActiveSection("library");
+                            }
+                          }}
+                          onAskThor={(msg) => setActiveSection("omnix")}
+                        />
                         <PendingActionsPanel />
                         <ClientCommandCenter
                           activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}

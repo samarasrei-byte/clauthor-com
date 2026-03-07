@@ -27,6 +27,7 @@ import {
   agentPriceTiers, agentTags, agentIntegrations, agentSocialProof,
   agentCapabilities, tierColors, tiers
 } from "@/data/libraryAgentData";
+import { getSimplifiedAgentKeys } from "@/data/agentConsolidation";
 import { deptDetails } from "@/data/departmentData";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -63,7 +64,8 @@ const LibraryPage = () => {
     return () => clearTimeout(t);
   }, [filter, searchQuery]);
 
-  const filteredAgents = useMemo(() => agentKeys.filter((k) => {
+  const simplifiedKeys = useMemo(() => getSimplifiedAgentKeys(agentKeys), []);
+  const filteredAgents = useMemo(() => simplifiedKeys.filter((k) => {
     if ((featuredKeys as readonly string[]).includes(k)) return false;
     if (filter !== "all" && agentTiers[k] !== filter) return false;
     if (searchQuery.trim()) {
