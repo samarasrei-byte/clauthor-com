@@ -561,7 +561,7 @@ const LibraryPage = () => {
                               ) : (
                                 <>
                                   <Zap className="h-3.5 w-3.5" />
-                                  Contratar
+                                  {priceDisplay}/{t("library.per_month")}
                                 </>
                               )}
                             </Button>
@@ -740,6 +740,13 @@ const LibraryPage = () => {
         agentDesc={previewAgent?.desc || ""}
         isOpen={!!previewAgent}
         onClose={() => setPreviewAgent(null)}
+      />
+
+      {/* Checkout Summary Dialog for logged-in users */}
+      <CheckoutSummaryDialog
+        data={checkoutData}
+        onConfirm={handleConfirmCheckout}
+        onCancel={() => { setCheckoutData(null); setHiringSlug(null); }}
       />
     </div>
   );
