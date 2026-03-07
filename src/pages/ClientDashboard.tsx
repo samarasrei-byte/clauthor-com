@@ -534,18 +534,20 @@ const ClientDashboard = () => {
 
                 {/* ═══ OVERVIEW ═══ */}
                 {activeSection === "overview" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <div className="space-y-4">
-                      <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
-                      <PendingActionsPanel />
-                      <ClientCommandCenter
-                        activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                        usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                        remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                        recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
-                      />
-                    </div>
-                  </Suspense>
+                  <ErrorBoundary>
+                    <Suspense fallback={<SectionLoader />}>
+                      <div className="space-y-4">
+                        <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                        <PendingActionsPanel />
+                        <ClientCommandCenter
+                          activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                          usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                          remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                          recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
+                        />
+                      </div>
+                    </Suspense>
+                  </ErrorBoundary>
                 )}
 
                 {/* ═══ INTEGRATIONS ═══ */}
