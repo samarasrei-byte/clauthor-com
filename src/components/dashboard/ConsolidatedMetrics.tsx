@@ -88,9 +88,11 @@ const ConsolidatedMetrics = ({
       label: t("dashboard.savings_month"),
       value: estimatedSavings,
       prefix: currencyPrefix,
+      suffix: "*",
       spark: [2000, 4000, 5000, 6000, 7000, estimatedSavings || 0],
       color: "text-emerald-400",
       sparkColor: "#10b981",
+      tooltip: t("dashboard.savings_tooltip", { defaultValue: "Estimativa baseada na média de economia por agente ativo" }),
     },
   ];
 
