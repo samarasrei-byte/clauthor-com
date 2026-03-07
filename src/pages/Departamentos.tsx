@@ -382,7 +382,7 @@ const Departamentos = () => {
                       {hiringDeptId === dept.id ? (
                         <><Loader2 className="h-5 w-5 animate-spin" /> {t("departments_page.processing")}</>
                       ) : (
-                        <><Flame className="h-5 w-5 animate-pulse" /> {t("departments_page.subscribe_dept")} <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" /></>
+                        <><Flame className="h-5 w-5 animate-pulse" /> {formatPrice(deptPrice, lang)}/{t("departments_page.month")} <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" /></>
                       )}
                     </span>
                   </button>
@@ -626,6 +626,13 @@ const Departamentos = () => {
           )}
         </motion.div>
       </div>
+
+      {/* Checkout Summary Dialog for logged-in users */}
+      <CheckoutSummaryDialog
+        data={checkoutData}
+        onConfirm={handleConfirmDeptCheckout}
+        onCancel={() => { setCheckoutData(null); setHiringDeptId(null); }}
+      />
     </div>
   );
 };
