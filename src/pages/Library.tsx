@@ -17,6 +17,7 @@ import AgentLivePreview from "@/components/library/AgentLivePreview";
 import SmartAgentFinder from "@/components/library/SmartAgentFinder";
 import AgentMiniChat from "@/components/library/AgentMiniChat";
 import DepartmentMiniChat from "@/components/pricing/DepartmentMiniChat";
+import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
 import { getPriceDisplay, getPrice, getRegion, formatPrice } from "@/lib/pricing";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -40,6 +41,7 @@ const LibraryPage = () => {
   const [activeFeatured, setActiveFeatured] = useState(0);
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
   const [isFiltering, setIsFiltering] = useState(false);
+  const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.split("-")[0] || "pt";
   const { user } = useAuth();
@@ -93,59 +95,74 @@ const LibraryPage = () => {
       return;
     }
 
+    // Logged in → show checkout summary dialog instead of going directly to PayPal
+    const agentName = t(`library_page.agents.${key}_title`);
+    const priceTier = agentPriceTiers[key];
+    const region = getRegion(lang);
+    const price = getPrice(lang, priceTier);
+
+    if (!price || price <= 0) {
+      toast.error("Preço inválido para este agente.");
+      return;
+    }
+
+    setCheckoutData({
+      label: agentName,
+      slugs: [slug],
+      isDepartment: false,
+      price,
+      currency: region.currency,
+      lang,
+    });
+  }, [user, navigate, t, lang]);
+
+  const handleConfirmCheckout = useCallback(async () => {
+    if (!checkoutData) return;
+    const { label, slugs, price, currency } = checkoutData;
+    const slug = slugs[0];
+    const region = getRegion(lang);
+
     setHiringSlug(slug);
 
     try {
-      const agentName = t(`library_page.agents.${key}_title`);
-      const priceTier = agentPriceTiers[key];
-      const region = getRegion(lang);
-      const price = getPrice(lang, priceTier);
-
-      if (!price || price <= 0) {
-        toast.error("Preço inválido para este agente.");
-        return;
-      }
-
-      const loadingToast = toast.loading("Criando assinatura PayPal...");
-
       const { data, error } = await supabase.functions.invoke("paypal-checkout", {
         body: {
           action: "create_subscription",
           agent_slug: slug,
-          agent_name: agentName,
+          agent_name: label,
           amount: price,
-          currency: region.currency,
+          currency,
           return_url: `${window.location.origin}/dashboard?subscription=success`,
           cancel_url: `${window.location.origin}/library?subscription=cancelled`,
         },
       });
-
-      toast.dismiss(loadingToast);
 
       if (error) throw error;
       if (!data?.success || !data?.approve_url) {
         throw new Error(data?.error || "Falha ao criar assinatura PayPal");
       }
 
+      // Find the key from slug
+      const key = Object.entries(agentSlugs).find(([, s]) => s === slug)?.[0] || slug;
+
       sessionStorage.setItem("paypal_subscription", JSON.stringify({
         subscription_id: data.subscription_id,
         agent_slug: slug,
         agent_key: key,
-        agent_name: agentName,
+        agent_name: label,
         price,
-        currency: region.currency,
-        tier: agentTiers[key],
-        price_tier: priceTier,
+        currency,
+        tier: agentTiers[key] || "basic",
+        price_tier: agentPriceTiers[key] || "entry",
       }));
 
       window.location.href = data.approve_url;
     } catch (err: any) {
       console.error("Subscription error:", err);
       toast.error(err.message || "Erro ao criar assinatura. Tente novamente.");
-    } finally {
       setHiringSlug(null);
     }
-  }, [user, navigate, t, lang]);
+  }, [checkoutData, lang]);
 
   const featuredAgent = featuredKeys[activeFeatured];
   const FeaturedIcon = agentIcons[featuredAgent];
@@ -544,7 +561,7 @@ const LibraryPage = () => {
                               ) : (
                                 <>
                                   <Zap className="h-3.5 w-3.5" />
-                                  Contratar
+                                  {priceDisplay}/{t("library.per_month")}
                                 </>
                               )}
                             </Button>
@@ -723,6 +740,13 @@ const LibraryPage = () => {
         agentDesc={previewAgent?.desc || ""}
         isOpen={!!previewAgent}
         onClose={() => setPreviewAgent(null)}
+      />
+
+      {/* Checkout Summary Dialog for logged-in users */}
+      <CheckoutSummaryDialog
+        data={checkoutData}
+        onConfirm={handleConfirmCheckout}
+        onCancel={() => { setCheckoutData(null); setHiringSlug(null); }}
       />
     </div>
   );

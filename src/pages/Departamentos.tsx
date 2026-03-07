@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
 import type { HireIntent } from "./Auth";
 import {
   Building2, ArrowRight, Flame, Bot, Zap,
@@ -45,6 +46,7 @@ const Departamentos = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [suggestions, setSuggestions] = useState<{ department_name: string; votes: number }[]>([]);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
   const categories = getCategoryLabels(t);
 
   const region = getRegion(lang);
@@ -71,26 +73,38 @@ const Departamentos = () => {
       return;
     }
 
-    setHiringDeptId(dept.id);
+    // Logged in → show checkout summary
+    const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
+
+    setCheckoutData({
+      label: t(`squads.dept_${dept.id}`),
+      slugs: dept.agents.map(a => a.key),
+      isDepartment: true,
+      departmentId: dept.id,
+      price: deptPrice,
+      currency: region.currency,
+      lang,
+    });
+  }, [user, navigate, t, lang, region]);
+
+  const handleConfirmDeptCheckout = useCallback(async () => {
+    if (!checkoutData) return;
+    const { label, slugs, departmentId, price, currency } = checkoutData;
+
+    setHiringDeptId(departmentId || "");
 
     try {
-      const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
-
-      const loadingToast = toast.loading(t("departments_page.creating_subscription"));
-
       const { data, error } = await supabase.functions.invoke("paypal-checkout", {
         body: {
           action: "create_subscription",
-          agent_slug: `dept-${dept.id}`,
-          agent_name: `Departamento ${t(`squads.dept_${dept.id}`)}`,
-          amount: deptPrice,
-          currency: region.currency,
+          agent_slug: `dept-${departmentId}`,
+          agent_name: `Departamento ${label}`,
+          amount: price,
+          currency,
           return_url: `${window.location.origin}/dashboard?subscription=success`,
           cancel_url: `${window.location.origin}/departamentos?subscription=cancelled`,
         },
       });
-
-      toast.dismiss(loadingToast);
 
       if (error) throw error;
       if (!data?.success || !data?.approve_url) {
@@ -99,26 +113,25 @@ const Departamentos = () => {
 
       sessionStorage.setItem("paypal_subscription", JSON.stringify({
         subscription_id: data.subscription_id,
-        agent_slug: `dept-${dept.id}`,
-        agent_key: dept.id,
-        agent_name: `Departamento ${t(`squads.dept_${dept.id}`)}`,
-        price: deptPrice,
-        currency: region.currency,
+        agent_slug: `dept-${departmentId}`,
+        agent_key: departmentId,
+        agent_name: `Departamento ${label}`,
+        price,
+        currency,
         tier: "advanced",
         price_tier: "mid",
         is_department: true,
-        department_id: dept.id,
-        department_slugs: dept.agents.map(a => a.key),
+        department_id: departmentId,
+        department_slugs: slugs,
       }));
 
       window.location.href = data.approve_url;
     } catch (err: any) {
       console.error("Department subscription error:", err);
       toast.error(err.message || t("departments_page.subscription_error"));
-    } finally {
       setHiringDeptId(null);
     }
-  }, [user, navigate, t, lang, region]);
+  }, [checkoutData, t]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -369,7 +382,7 @@ const Departamentos = () => {
                       {hiringDeptId === dept.id ? (
                         <><Loader2 className="h-5 w-5 animate-spin" /> {t("departments_page.processing")}</>
                       ) : (
-                        <><Flame className="h-5 w-5 animate-pulse" /> {t("departments_page.subscribe_dept")} <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" /></>
+                        <><Flame className="h-5 w-5 animate-pulse" /> {formatPrice(deptPrice, lang)}/{t("departments_page.month")} <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" /></>
                       )}
                     </span>
                   </button>
@@ -613,6 +626,13 @@ const Departamentos = () => {
           )}
         </motion.div>
       </div>
+
+      {/* Checkout Summary Dialog for logged-in users */}
+      <CheckoutSummaryDialog
+        data={checkoutData}
+        onConfirm={handleConfirmDeptCheckout}
+        onCancel={() => { setCheckoutData(null); setHiringDeptId(null); }}
+      />
     </div>
   );
 };
