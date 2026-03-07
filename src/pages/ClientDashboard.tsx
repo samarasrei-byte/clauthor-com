@@ -85,6 +85,24 @@ const ClientDashboard = () => {
   }, [user]);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
+  const [showBoardGate, setShowBoardGate] = useState(false);
+  const [boardGateSkipped, setBoardGateSkipped] = useState(false);
+
+  // Check if Company Board has data
+  const { data: boardCount = 0 } = useQuery({
+    queryKey: ["company-board-count-gate", user?.id],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("company_board")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user!.id);
+      return count || 0;
+    },
+    enabled: !!user,
+    staleTime: 60_000,
+  });
+
+  const needsBoardSetup = boardCount === 0 && !boardGateSkipped;
 
   // Extracted hooks for business logic
   const { checkoutSummary, handleConfirmCheckout, cancelCheckout } = useHireIntentFlow(user);
