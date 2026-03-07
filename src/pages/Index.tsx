@@ -360,14 +360,12 @@ const HomePage = () => {
                 </h1>
               </div>
 
-              {/* Subtitle */}
-              <AnimatePresence>
-                {typingDone && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                  >
+              {/* Subtitle — shows after short delay, not after full typewriter cycle */}
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 1.2 }}
+              >
                     <p className="font-mono text-sm sm:text-base text-muted-foreground max-w-lg leading-relaxed mb-8">
                       <span className="text-primary/60">$</span>{" "}
                       {t("home.subtitle")}
@@ -422,9 +420,7 @@ const HomePage = () => {
                         </div>
                       ))}
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              </motion.div>
             </div>
 
             {/* RIGHT — Live Demo Agent */}
