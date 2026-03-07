@@ -566,6 +566,21 @@ const ClientDashboard = () => {
                     <Suspense fallback={<SectionLoader />}>
                       <div className="space-y-4">
                         <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                        <SmartAgentRouter
+                          contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
+                          onSelectAgent={(slug) => {
+                            const agent = agents.find(a => nameToSlug[a.name] === slug);
+                            if (agent) {
+                              setPreviousSection(activeSection);
+                              setSelectedAgent({ id: agent.id, name: agent.name });
+                              setActiveSection("chat");
+                            } else {
+                              // Agent not contracted — go to library
+                              setActiveSection("library");
+                            }
+                          }}
+                          onAskThor={(msg) => setActiveSection("omnix")}
+                        />
                         <PendingActionsPanel />
                         <ClientCommandCenter
                           activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
