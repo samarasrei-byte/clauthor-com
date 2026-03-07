@@ -155,11 +155,14 @@ Quando mencionar métricas, inclua um bloco JSON entre \`\`\`kpi e \`\`\` com fo
       return new Response(JSON.stringify({ error: "AI gateway error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // Estimate tokens from message sizes (input chars/4 + system prompt + estimated output)
+    const monixInputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
+    const monixEstimatedTokens = monixInputTokens + Math.ceil(systemPrompt.length / 4) + 500;
     await Promise.all([
       supabase.from("token_usage").insert({
         user_id: user.id,
         action_type: "monix_chat",
-        tokens_used: 500,
+        tokens_used: monixEstimatedTokens,
         model: "google/gemini-2.5-flash",
       }),
       supabase.from("execution_logs").insert({

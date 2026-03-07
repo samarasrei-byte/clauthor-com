@@ -75,7 +75,32 @@ export async function validatePlan(
     .single();
 
   if (!limits) {
-    return { allowed: true }; // No limits configured = allow (fail open for now)
+    // Fail-closed: apply conservative defaults when plan_limits not configured
+    const defaultLimits: Record<string, number> = {
+      agent_creation: 5,
+      tool_execution: 500,
+      squad_creation: 2,
+      member_invite: 3,
+    };
+    const defaultMax = defaultLimits[action] || 100;
+    console.warn(`[PolicyEngine] No plan_limits for "${planType}", applying default: ${action}=${defaultMax}`);
+    
+    if (action === "agent_creation") {
+      const { count } = await adminClient.from("agents").select("*", { count: "exact", head: true }).eq("user_id", userId);
+      if ((count || 0) >= defaultMax) {
+        return { allowed: false, reason: `Limite padrão de ${defaultMax} agentes atingido.`, suggestUpgrade: true };
+      }
+    }
+    if (action === "tool_execution") {
+      const monthStart = new Date();
+      monthStart.setDate(1);
+      monthStart.setHours(0, 0, 0, 0);
+      const { count } = await adminClient.from("execution_logs").select("*", { count: "exact", head: true }).eq("user_id", userId).gte("created_at", monthStart.toISOString());
+      if ((count || 0) >= defaultMax) {
+        return { allowed: false, reason: `Limite mensal padrão de ${defaultMax} execuções atingido.`, suggestUpgrade: true };
+      }
+    }
+    return { allowed: true };
   }
 
   if (action === "agent_creation") {

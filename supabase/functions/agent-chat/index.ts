@@ -913,18 +913,44 @@ async function saveMemory(adminClient: any, tenantId: string, userId: string, ag
 }
 
 async function loadRecentMemory(adminClient: any, tenantId: string, userId: string, agentId: string, limit: number = 5): Promise<string> {
+  // Load all memory types: conversation, semantic, procedural, delegation
   const { data, error } = await adminClient
-    .from("agent_memory").select("content")
-    .eq("tenant_id", tenantId).eq("user_id", userId).eq("agent_id", agentId).eq("memory_type", "conversation")
-    .order("created_at", { ascending: false }).limit(limit);
+    .from("agent_memory").select("content, memory_type")
+    .eq("tenant_id", tenantId).eq("user_id", userId).eq("agent_id", agentId)
+    .order("created_at", { ascending: false }).limit(limit + 10);
 
   if (error || !data || data.length === 0) return "";
 
-  const memories = data.reverse().map((m: any) =>
-    `[Memória] Usuário: ${m.content.user?.slice(0, 200)} | Agente: ${m.content.assistant?.slice(0, 200)}`
-  ).join("\n");
+  const conversations = data.filter((m: any) => m.memory_type === "conversation").slice(0, limit);
+  const semantic = data.filter((m: any) => m.memory_type === "semantic");
+  const procedural = data.filter((m: any) => m.memory_type === "procedural");
+  const delegations = data.filter((m: any) => m.memory_type === "delegation").slice(0, 3);
 
-  return `\n## MEMÓRIA RECENTE:\n${memories}\n`;
+  let memoryBlock = "\n## MEMÓRIA DO AGENTE:\n";
+
+  if (semantic.length > 0) {
+    memoryBlock += "### Conhecimento Consolidado:\n" +
+      semantic.map((m: any) => `- ${m.content.fact || m.content.summary || JSON.stringify(m.content).slice(0, 200)}`).join("\n") + "\n";
+  }
+
+  if (procedural.length > 0) {
+    memoryBlock += "### Procedimentos Aprendidos:\n" +
+      procedural.map((m: any) => `- ${m.content.procedure || m.content.learning || JSON.stringify(m.content).slice(0, 200)}`).join("\n") + "\n";
+  }
+
+  if (conversations.length > 0) {
+    const convMemories = conversations.reverse().map((m: any) =>
+      `[Conversa] Usuário: ${m.content.user?.slice(0, 150)} | Agente: ${m.content.assistant?.slice(0, 150)}`
+    ).join("\n");
+    memoryBlock += `### Conversas Recentes:\n${convMemories}\n`;
+  }
+
+  if (delegations.length > 0) {
+    memoryBlock += "### Delegações Recentes:\n" +
+      delegations.map((m: any) => `- Delegou para ${m.content.target_agent || "?"}: ${(m.content.task || "").slice(0, 100)}`).join("\n") + "\n";
+  }
+
+  return memoryBlock;
 }
 
 const TOOL_USE_INSTRUCTION = `

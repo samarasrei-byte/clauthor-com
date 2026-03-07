@@ -280,8 +280,9 @@ REGRAS:
           });
 
           if (finalResponse.ok) {
-            await Promise.all([
-              supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_mgmt", tokens_used: 800, model: "google/gemini-2.5-flash" }),
+          const credMgmtTokens = (toolData.usage?.total_tokens || 400) + 400; // estimate for second call
+          await Promise.all([
+              supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_mgmt", tokens_used: credMgmtTokens, model: "google/gemini-2.5-flash" }),
               supabase.from("execution_logs").insert({
                 user_id: user.id,
                 agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
@@ -297,8 +298,9 @@ REGRAS:
 
         if (choice?.message?.content) {
           const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
+          const toolRespTokens = toolData.usage?.total_tokens || 300;
           await Promise.all([
-            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: 500, model: "google/gemini-2.5-flash" }),
+            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: toolRespTokens, model: "google/gemini-2.5-flash" }),
             supabase.from("execution_logs").insert({
               user_id: user.id,
               agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
@@ -330,8 +332,11 @@ REGRAS:
       return new Response(JSON.stringify({ error: "AI gateway error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
+    // Estimate tokens from message sizes (input chars/4 + estimated output)
+    const omnixInputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
+    const omnixEstimatedTokens = omnixInputTokens + Math.ceil(systemPrompt.length / 4) + 500; // 500 for output estimate
     await Promise.all([
-      supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: 500, model: "google/gemini-2.5-flash" }),
+      supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash" }),
       supabase.from("execution_logs").insert({
         user_id: user.id,
         agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
