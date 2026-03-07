@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
 import type { HireIntent } from "./Auth";
 import {
   Building2, ArrowRight, Flame, Bot, Zap,
@@ -45,6 +46,7 @@ const Departamentos = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [suggestions, setSuggestions] = useState<{ department_name: string; votes: number }[]>([]);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
   const categories = getCategoryLabels(t);
 
   const region = getRegion(lang);
