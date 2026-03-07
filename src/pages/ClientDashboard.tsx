@@ -312,11 +312,7 @@ const ClientDashboard = () => {
           agentName={postPaymentContext.agentName}
           isDepartment={postPaymentContext.isDepartment}
           agentCount={postPaymentContext.agentCount}
-          onComplete={() => {
-            setShowCelebration(false);
-            // Always show company onboarding first
-            setShowCompanyOnboarding(true);
-          }}
+          onComplete={onCelebrationComplete}
         />
       )}
 
@@ -325,18 +321,20 @@ const ClientDashboard = () => {
         <Suspense fallback={<SectionLoader />}>
           <CompanyOnboardingWizard
             onComplete={() => {
-              setShowCompanyOnboarding(false);
-              if (postPaymentContext?.isDepartment && postPaymentContext?.departmentId) {
-                setShowDeptSetup(true);
-              } else {
+              onCompanyOnboardingDone(
+                !!postPaymentContext?.isDepartment && !!postPaymentContext?.departmentId,
+                postPaymentContext?.departmentId
+              );
+              if (!postPaymentContext?.isDepartment || !postPaymentContext?.departmentId) {
                 setActiveSection("omnix");
               }
             }}
             onSkip={() => {
-              setShowCompanyOnboarding(false);
-              if (postPaymentContext?.isDepartment && postPaymentContext?.departmentId) {
-                setShowDeptSetup(true);
-              } else {
+              onCompanyOnboardingDone(
+                !!postPaymentContext?.isDepartment && !!postPaymentContext?.departmentId,
+                postPaymentContext?.departmentId
+              );
+              if (!postPaymentContext?.isDepartment || !postPaymentContext?.departmentId) {
                 setActiveSection("omnix");
               }
             }}
@@ -353,11 +351,11 @@ const ClientDashboard = () => {
                 departmentId={postPaymentContext.departmentId}
                 departmentName={postPaymentContext.agentName}
                 onComplete={() => {
-                  setShowDeptSetup(false);
+                  onDeptSetupDone();
                   setActiveSection("omnix");
                 }}
                 onSkip={() => {
-                  setShowDeptSetup(false);
+                  onDeptSetupDone();
                   setActiveSection("omnix");
                 }}
               />
@@ -380,7 +378,7 @@ const ClientDashboard = () => {
       <CheckoutSummaryDialog
         data={checkoutSummary}
         onConfirm={handleConfirmCheckout}
-        onCancel={() => { setCheckoutSummary(null); setPendingCheckoutIntent(null); }}
+        onCancel={cancelCheckout}
       />
 
       <div className="flex h-full">
