@@ -97,6 +97,7 @@ const App = () => (
                   <Route path="/privacidade" element={<Privacy />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/api-docs" element={<ApiDocs />} />
+                  <Route path="/team-builder" element={<TeamBuilder />} />
                 </Route>
 
                 {/* Dashboard pages with minimal header + sidebar only */}
