@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
 import { lazy, Suspense } from "react";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import type { SidebarItem, SidebarChild } from "@/components/dashboard/DashboardSidebar";
 import MobileBottomNav from "@/components/dashboard/MobileBottomNav";
@@ -32,12 +33,12 @@ const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/Compan
 const PendingActionsPanel = lazy(() => import("@/components/dashboard/PendingActionsPanel").then(m => ({ default: m.PendingActionsPanel })));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
+import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
+import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
-import type { HireIntent } from "./Auth";
 import HelpTooltip from "@/components/HelpTooltip";
-import { getRegion, getPrice, formatPrice } from "@/lib/pricing";
-import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
+import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
 
 // Lazy-load heavy section components — only loaded when the user navigates to them
 const AgentChat = lazy(() => import("@/components/dashboard/AgentChat"));
@@ -68,7 +69,6 @@ const ClientDashboard = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const hireProcessed = useRef(false);
   const [activeSection, setActiveSection] = useState("overview");
   const [previousSection, setPreviousSection] = useState<string | null>(null);
 
@@ -82,11 +82,17 @@ const ClientDashboard = () => {
     }
   }, [user]);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
 
+  // Extracted hooks for business logic
+  const { checkoutSummary, handleConfirmCheckout, cancelCheckout } = useHireIntentFlow(user);
+  const {
+    postPaymentContext, showCelebration, showDeptSetup, showCompanyOnboarding,
+    setShowCompanyOnboarding, onCelebrationComplete, onCompanyOnboardingDone,
+    onDeptSetupDone, clearPostPayment,
+  } = usePostPaymentFlow();
+
   // Show PostSignupOnboarding ONLY when there's no hireIntent (flow 4).
-  // Flows 1-3 skip it and go straight to CheckoutSummaryDialog.
   useEffect(() => {
     if (!user) return;
     const done = localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
@@ -95,7 +101,6 @@ const ClientDashboard = () => {
     const hasHireIntent = !!localStorage.getItem("hireIntent");
 
     if (hasHireIntent) {
-      // Flows 1-3: user already selected agents → skip onboarding, mark as done, proceed to checkout
       localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
     } else {
       // Flow 4: no selection → show SmartOnboarding instead of empty dashboard
