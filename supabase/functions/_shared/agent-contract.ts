@@ -98,31 +98,115 @@ ${contract.limits.map(l => `- ❌ ${l}`).join("\n")}
  */
 export function inferAgentArea(name: string, objective?: string, instructions?: string): string {
   const text = `${name} ${objective || ""} ${instructions || ""}`.toLowerCase();
-  const areaMap: Record<string, string[]> = {
-    marketing: ["marketing", "growth", "tráfego", "traffic", "seo", "ads", "campanha", "content_producer", "media_buyer", "community"],
-    vendas: ["vendas", "sales", "leads", "crm", "prospecção", "closer", "sales_channel", "sdr", "hunter", "farmer", "pre_qualifier"],
-    financeiro: ["financeiro", "cfo", "contábil", "dre", "fluxo de caixa", "finance", "accountant", "contador", "fiscal", "tax", "credit_recovery"],
-    suporte: ["suporte", "support", "atendimento", "customer", "helpdesk", "ticket", "support_channel", "support_lead", "voice_support", "onboarding", "omnichannel"],
-    rh: ["rh", "recursos humanos", "hr", "people", "recrutamento", "talent", "people_analytics", "training"],
-    juridico: ["jurídico", "legal", "compliance", "contrato", "regulatório", "contract_analyst", "labor_law", "litigation"],
-    tecnologia: ["tecnologia", "dev", "coding", "code", "software", "engineering", "cto", "data_engineer", "devops"],
-    seguranca: ["segurança", "security", "ciso", "cyber", "pentest", "auditoria"],
-    operacoes: ["operações", "operations", "coo", "processos", "supply chain", "logistics", "inventory", "quality", "process_analyst"],
-    executivo: ["ceo", "executivo", "estratégia", "strategy", "board", "diretor", "orchestrator", "startup_creator"],
-    concierge: ["concierge", "assistente", "secretário", "agenda", "scheduler"],
-    criacao: ["criação", "design", "creative", "creative_writer", "video", "arte", "visual", "ux_researcher", "content_producer"],
-    prospeccao: ["prospecção", "sdr", "outbound", "inbound", "hunter", "farmer", "pre_qualifier", "cold"],
-    comunicacao: ["comunicação", "branding", "copywriting", "positioning", "public_relations", "social_proof", "events_speaker"],
-    ecommerce: ["ecommerce", "e-commerce", "paid_traffic", "whatsapp_commerce", "liveshop", "affiliate", "podcast", "reputation"],
-    compras: ["compras", "procurement", "supplier", "cost_analyst", "contract_negotiator", "fornecedor"],
-    logistica: ["logística", "logistics", "inventory", "supply_chain", "estoque", "transporte"],
-    qualidade: ["qualidade", "quality", "processo", "process_analyst", "iso", "lean", "six sigma"],
+
+  // Weighted keyword map: each keyword has a weight (higher = more specific)
+  const areaMap: Record<string, Array<{ keyword: string; weight: number }>> = {
+    marketing: [
+      { keyword: "marketing", weight: 10 }, { keyword: "growth", weight: 5 }, { keyword: "tráfego", weight: 6 },
+      { keyword: "traffic", weight: 6 }, { keyword: "seo", weight: 8 }, { keyword: "ads", weight: 6 },
+      { keyword: "campanha", weight: 5 }, { keyword: "content_producer", weight: 4 }, { keyword: "media_buyer", weight: 8 },
+      { keyword: "community", weight: 3 },
+    ],
+    vendas: [
+      { keyword: "vendas", weight: 10 }, { keyword: "sales", weight: 10 }, { keyword: "crm", weight: 8 },
+      { keyword: "closer", weight: 9 }, { keyword: "sales_channel", weight: 8 }, { keyword: "negociação comercial", weight: 7 },
+    ],
+    prospeccao: [
+      { keyword: "prospecção", weight: 10 }, { keyword: "sdr", weight: 10 }, { keyword: "outbound", weight: 9 },
+      { keyword: "inbound", weight: 7 }, { keyword: "hunter", weight: 9 }, { keyword: "farmer", weight: 8 },
+      { keyword: "pre_qualifier", weight: 9 }, { keyword: "cold", weight: 6 }, { keyword: "leads", weight: 5 },
+    ],
+    financeiro: [
+      { keyword: "financeiro", weight: 10 }, { keyword: "cfo", weight: 10 }, { keyword: "contábil", weight: 9 },
+      { keyword: "dre", weight: 9 }, { keyword: "fluxo de caixa", weight: 9 }, { keyword: "finance", weight: 8 },
+      { keyword: "accountant", weight: 8 }, { keyword: "contador", weight: 9 }, { keyword: "fiscal", weight: 8 },
+      { keyword: "tax", weight: 7 }, { keyword: "credit_recovery", weight: 7 },
+    ],
+    suporte: [
+      { keyword: "suporte", weight: 10 }, { keyword: "support", weight: 10 }, { keyword: "atendimento", weight: 8 },
+      { keyword: "customer", weight: 5 }, { keyword: "helpdesk", weight: 9 }, { keyword: "ticket", weight: 7 },
+      { keyword: "support_channel", weight: 8 }, { keyword: "support_lead", weight: 8 }, { keyword: "voice_support", weight: 8 },
+      { keyword: "onboarding", weight: 5 }, { keyword: "omnichannel", weight: 6 },
+    ],
+    rh: [
+      { keyword: "rh", weight: 10 }, { keyword: "recursos humanos", weight: 10 }, { keyword: "hr", weight: 9 },
+      { keyword: "people", weight: 5 }, { keyword: "recrutamento", weight: 9 }, { keyword: "talent", weight: 7 },
+      { keyword: "people_analytics", weight: 8 }, { keyword: "training", weight: 5 },
+    ],
+    juridico: [
+      { keyword: "jurídico", weight: 10 }, { keyword: "legal", weight: 8 }, { keyword: "compliance", weight: 8 },
+      { keyword: "contrato", weight: 6 }, { keyword: "regulatório", weight: 9 }, { keyword: "contract_analyst", weight: 9 },
+      { keyword: "labor_law", weight: 9 }, { keyword: "litigation", weight: 9 },
+    ],
+    tecnologia: [
+      { keyword: "tecnologia", weight: 10 }, { keyword: "dev", weight: 7 }, { keyword: "coding", weight: 8 },
+      { keyword: "code", weight: 6 }, { keyword: "software", weight: 8 }, { keyword: "engineering", weight: 7 },
+      { keyword: "cto", weight: 10 }, { keyword: "data_engineer", weight: 9 }, { keyword: "devops", weight: 9 },
+    ],
+    seguranca: [
+      { keyword: "segurança", weight: 10 }, { keyword: "security", weight: 9 }, { keyword: "ciso", weight: 10 },
+      { keyword: "cyber", weight: 9 }, { keyword: "pentest", weight: 10 }, { keyword: "auditoria", weight: 6 },
+    ],
+    operacoes: [
+      { keyword: "operações", weight: 10 }, { keyword: "operations", weight: 9 }, { keyword: "coo", weight: 10 },
+      { keyword: "processos", weight: 5 }, { keyword: "supply chain", weight: 8 },
+    ],
+    executivo: [
+      { keyword: "ceo", weight: 10 }, { keyword: "executivo", weight: 9 }, { keyword: "estratégia", weight: 7 },
+      { keyword: "strategy", weight: 7 }, { keyword: "board", weight: 4 }, { keyword: "diretor", weight: 8 },
+      { keyword: "orchestrator", weight: 8 }, { keyword: "startup_creator", weight: 7 },
+    ],
+    concierge: [
+      { keyword: "concierge", weight: 10 }, { keyword: "assistente", weight: 6 }, { keyword: "secretário", weight: 8 },
+      { keyword: "agenda", weight: 5 }, { keyword: "scheduler", weight: 7 },
+    ],
+    criacao: [
+      { keyword: "criação", weight: 10 }, { keyword: "design", weight: 8 }, { keyword: "creative", weight: 7 },
+      { keyword: "creative_writer", weight: 9 }, { keyword: "video", weight: 6 }, { keyword: "arte", weight: 7 },
+      { keyword: "visual", weight: 5 }, { keyword: "ux_researcher", weight: 8 },
+    ],
+    comunicacao: [
+      { keyword: "comunicação", weight: 10 }, { keyword: "branding", weight: 8 }, { keyword: "copywriting", weight: 9 },
+      { keyword: "positioning", weight: 7 }, { keyword: "public_relations", weight: 9 }, { keyword: "social_proof", weight: 7 },
+      { keyword: "events_speaker", weight: 7 },
+    ],
+    ecommerce: [
+      { keyword: "ecommerce", weight: 10 }, { keyword: "e-commerce", weight: 10 }, { keyword: "paid_traffic", weight: 8 },
+      { keyword: "whatsapp_commerce", weight: 9 }, { keyword: "liveshop", weight: 9 }, { keyword: "affiliate", weight: 8 },
+      { keyword: "podcast", weight: 4 }, { keyword: "reputation", weight: 4 },
+    ],
+    compras: [
+      { keyword: "compras", weight: 10 }, { keyword: "procurement", weight: 10 }, { keyword: "supplier", weight: 8 },
+      { keyword: "cost_analyst", weight: 8 }, { keyword: "contract_negotiator", weight: 8 }, { keyword: "fornecedor", weight: 8 },
+    ],
+    logistica: [
+      { keyword: "logística", weight: 10 }, { keyword: "logistics", weight: 9 }, { keyword: "inventory", weight: 7 },
+      { keyword: "supply_chain", weight: 8 }, { keyword: "estoque", weight: 8 }, { keyword: "transporte", weight: 8 },
+    ],
+    qualidade: [
+      { keyword: "qualidade", weight: 10 }, { keyword: "quality", weight: 7 }, { keyword: "processo", weight: 3 },
+      { keyword: "process_analyst", weight: 8 }, { keyword: "iso", weight: 9 }, { keyword: "lean", weight: 7 },
+      { keyword: "six sigma", weight: 9 },
+    ],
   };
 
+  // Score each area by summing weights of matched keywords
+  const scores: Record<string, number> = {};
   for (const [area, keywords] of Object.entries(areaMap)) {
-    if (keywords.some(k => text.includes(k))) return area;
+    let score = 0;
+    for (const { keyword, weight } of keywords) {
+      if (text.includes(keyword)) {
+        // Bonus for name match (more specific than instructions)
+        const nameMatch = name.toLowerCase().includes(keyword);
+        score += nameMatch ? weight * 2 : weight;
+      }
+    }
+    if (score > 0) scores[area] = score;
   }
-  return "geral";
+
+  // Return area with highest score
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  return sorted.length > 0 ? sorted[0][0] : "geral";
 }
 
 /**
