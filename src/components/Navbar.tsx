@@ -139,18 +139,18 @@ const Navbar = () => {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <p className="font-semibold text-sm text-foreground">Montar Time</p>
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">Novo</span>
+                          <p className="font-semibold text-sm text-foreground">{t("navbar.team_builder_label", { defaultValue: "Build Team" })}</p>
+                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">{t("navbar.new_badge")}</span>
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5">Escolha agentes e veja o custo em tempo real</p>
+                        <p className="text-xs text-muted-foreground mt-0.5">{t("navbar.team_builder_desc", { defaultValue: "Pick agents and see costs in real time" })}</p>
                       </div>
                     </Link>
                     <div className="border-t border-border/30 mx-3 my-1" />
                     <div className="grid grid-cols-2 gap-1 px-1">
                       <Link to="/how-it-works" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.how_it_works")}</Link>
                       <Link to="/pricing" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.pricing")}</Link>
-                      <Link to="/community" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">Comunidade</Link>
-                      <Link to="/api-docs" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">API Docs</Link>
+                      <Link to="/community" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("navbar.community", { defaultValue: "Community" })}</Link>
+                      <Link to="/api-docs" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("navbar.api_docs", { defaultValue: "API Docs" })}</Link>
                       {user && <Link to="/integrations" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.integrations")}</Link>}
                     </div>
                   </motion.div>
@@ -289,8 +289,8 @@ const Navbar = () => {
               }`}
             >
               <ShoppingCart className="h-4 w-4" strokeWidth={1.5} />
-              Montar Time
-              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">Novo</span>
+              {t("navbar.team_builder_label", { defaultValue: "Build Team" })}
+              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">{t("navbar.new_badge")}</span>
             </Link>
             {user && (
               <Link

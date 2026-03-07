@@ -1108,7 +1108,11 @@
     "marketplace_desc": "83 agentes individuais para contratar avulso",
     "ai_teams_label": "Times de IA",
     "ai_teams_desc": "15 departamentos completos com 83 agentes",
-    "new_badge": "NOVO"
+    "new_badge": "NOVO",
+    "team_builder_label": "Montar Time",
+    "team_builder_desc": "Escolha agentes e veja o custo em tempo real",
+    "community": "Comunidade",
+    "api_docs": "API Docs"
   },
   "community": {
     "badge": "Comunidade CLAUTHOR",

@@ -39,7 +39,7 @@ const LiveDemoAgent = () => {
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const timer = setTimeout(() => setStarted(true), 2000);
+    const timer = setTimeout(() => setStarted(true), 800);
     return () => clearTimeout(timer);
   }, []);
 

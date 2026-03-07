@@ -1089,7 +1089,11 @@
     "marketplace_desc": "83 individual agents to hire on demand",
     "ai_teams_label": "AI Teams",
     "ai_teams_desc": "15 complete departments with 83 agents",
-    "new_badge": "NEW"
+    "new_badge": "NEW",
+    "team_builder_label": "Build Team",
+    "team_builder_desc": "Pick agents and see costs in real time",
+    "community": "Community",
+    "api_docs": "API Docs"
   },
   "community": {
     "badge": "CLAUTHOR Community",
