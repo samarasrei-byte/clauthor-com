@@ -675,9 +675,9 @@ async function executeTool(
         await logExecution(adminClient, userId, agentId, toolName, args, startTime);
 
         return {
-          success: true,
+          success: emailSent,
           result: {
-            status: emailSent ? "sent" : "queued",
+            status: emailSent ? "sent" : "no_provider",
             message_id: messageId,
             to: args.to, subject: args.subject, priority: args.priority || "normal",
             sent_at: emailSent ? timestamp : undefined,

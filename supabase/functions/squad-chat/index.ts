@@ -265,19 +265,13 @@ ${companyContext}`;
         const content = aiData.choices?.[0]?.message?.content || "Sem resposta.";
         const tokensUsed = aiData.usage?.total_tokens || 150;
 
-        Promise.all([
-          adminClient.from("token_usage").insert({
-            user_id: user.id, agent_id: agent.id,
-            tokens_used: tokensUsed, action_type: "squad_chat",
-            model: "google/gemini-3-flash-preview",
-          }),
-          adminClient.from("execution_logs").insert({
-            user_id: user.id, agent_id: agent.id,
-            action: "squad_chat", status: "success",
-            execution_time_ms: 0,
-            details: { area: agentArea, tier: agent.tier, turn_based: true },
-          }),
-        ]).catch(() => {});
+        // Log execution only (token_usage logged after loop with real values)
+        adminClient.from("execution_logs").insert({
+          user_id: user.id, agent_id: agent.id,
+          action: "squad_chat", status: "success",
+          execution_time_ms: 0,
+          details: { area: agentArea, tier: agent.tier, turn_based: true, tokens: tokensUsed },
+        }).catch(() => {});
 
         results.push({
           agentId: agent.id,
@@ -285,6 +279,7 @@ ${companyContext}`;
           tier: agent.tier,
           area: agentArea,
           content,
+          tokensUsed,
           speakingOrder: results.length,
         });
       } catch (err: any) {
@@ -302,8 +297,8 @@ ${companyContext}`;
       }
     }
 
-    // Update credits once
-    const totalTokens = results.length * 150;
+    // Update credits using real token counts from AI responses
+    const totalTokens = results.reduce((sum: number, r: any) => sum + (r.tokensUsed || 150), 0);
     if (credits) {
       adminClient.from("user_credits")
         .update({ used_credits: (credits.used_credits || 0) + totalTokens })
@@ -311,6 +306,19 @@ ${companyContext}`;
         .then(() => {})
         .catch(() => {});
     }
+
+    // Log token usage per agent
+    Promise.all(
+      results.map((r: any) =>
+        adminClient.from("token_usage").insert({
+          user_id: user.id,
+          agent_id: r.agentId,
+          tokens_used: r.tokensUsed || 150,
+          action_type: "squad_chat",
+          model: "google/gemini-3-flash-preview",
+        })
+      )
+    ).catch(() => {});
 
     agentStep.done();
 

@@ -372,16 +372,26 @@ Quando o usuário fornecer dados de acesso (senhas, tokens, API keys, telefones,
     }
     aiStep.done();
 
-    // Log execution
+    // Log execution + token usage
     try {
-      await adminClient.from("execution_logs").insert({
-        user_id: user.id,
-        agent_id: "00000000-0000-0000-0000-000000000005",
-        action: "concierge_chat",
-        status: "success",
-        execution_time_ms: tracker.summary().totalMs,
-        details: { contract_applied: true, area: "concierge", agents_count: activeAgents.length },
-      });
+      const estimatedTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0) + 75;
+      await Promise.all([
+        adminClient.from("execution_logs").insert({
+          user_id: user.id,
+          agent_id: "00000000-0000-0000-0000-000000000005",
+          action: "concierge_chat",
+          status: "success",
+          execution_time_ms: tracker.summary().totalMs,
+          details: { contract_applied: true, area: "concierge", agents_count: activeAgents.length },
+        }),
+        adminClient.from("token_usage").insert({
+          user_id: user.id,
+          agent_id: null,
+          tokens_used: estimatedTokens,
+          action_type: "concierge_chat",
+          model: "google/gemini-2.5-flash-lite",
+        }),
+      ]);
     } catch {}
 
     return new Response(response.body, {
