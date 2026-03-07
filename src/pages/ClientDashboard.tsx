@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
 import { lazy, Suspense } from "react";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import type { SidebarItem, SidebarChild } from "@/components/dashboard/DashboardSidebar";
 import MobileBottomNav from "@/components/dashboard/MobileBottomNav";
@@ -32,12 +33,12 @@ const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/Compan
 const PendingActionsPanel = lazy(() => import("@/components/dashboard/PendingActionsPanel").then(m => ({ default: m.PendingActionsPanel })));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
+import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
+import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { agentIcons } from "@/data/libraryAgentData";
-import type { HireIntent } from "./Auth";
 import HelpTooltip from "@/components/HelpTooltip";
-import { getRegion, getPrice, formatPrice } from "@/lib/pricing";
-import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
+import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
 
 // Lazy-load heavy section components — only loaded when the user navigates to them
 const AgentChat = lazy(() => import("@/components/dashboard/AgentChat"));
@@ -68,7 +69,6 @@ const ClientDashboard = () => {
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const hireProcessed = useRef(false);
   const [activeSection, setActiveSection] = useState("overview");
   const [previousSection, setPreviousSection] = useState<string | null>(null);
 
@@ -82,11 +82,17 @@ const ClientDashboard = () => {
     }
   }, [user]);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
-  const [showOnboarding, setShowOnboarding] = useState(false);
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
 
+  // Extracted hooks for business logic
+  const { checkoutSummary, handleConfirmCheckout, cancelCheckout } = useHireIntentFlow(user);
+  const {
+    postPaymentContext, showCelebration, showDeptSetup, showCompanyOnboarding,
+    setShowCompanyOnboarding, onCelebrationComplete, onCompanyOnboardingDone,
+    onDeptSetupDone, clearPostPayment,
+  } = usePostPaymentFlow();
+
   // Show PostSignupOnboarding ONLY when there's no hireIntent (flow 4).
-  // Flows 1-3 skip it and go straight to CheckoutSummaryDialog.
   useEffect(() => {
     if (!user) return;
     const done = localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
@@ -95,7 +101,6 @@ const ClientDashboard = () => {
     const hasHireIntent = !!localStorage.getItem("hireIntent");
 
     if (hasHireIntent) {
-      // Flows 1-3: user already selected agents → skip onboarding, mark as done, proceed to checkout
       localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
     } else {
       // Flow 4: no selection → show SmartOnboarding instead of empty dashboard
@@ -106,22 +111,6 @@ const ClientDashboard = () => {
   usePaypalCapture();
   const { data: tokenUsage = [] } = useTokenUsage();
 
-  const [postPaymentContext, setPostPaymentContext] = useState<{ agentName: string; isDepartment: boolean; agentCount: number; departmentId?: string } | null>(null);
-  const [showCelebration, setShowCelebration] = useState(false);
-  const [showDeptSetup, setShowDeptSetup] = useState(false);
-  const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
-  const [checkoutSummary, setCheckoutSummary] = useState<CheckoutSummaryData | null>(null);
-  const [pendingCheckoutIntent, setPendingCheckoutIntent] = useState<{ intent: HireIntent; uniqueSlugs: string[] } | null>(null);
-
-  useEffect(() => {
-    const raw = sessionStorage.getItem("clauthor_post_payment_onboarding");
-    if (!raw) return;
-    sessionStorage.removeItem("clauthor_post_payment_onboarding");
-    try {
-      setPostPaymentContext(JSON.parse(raw));
-      setShowCelebration(true);
-    } catch { /* ignore */ }
-  }, []);
 
   const { data: agents = [], isLoading: loadingAgents } = useQuery({
     queryKey: ["my-agents", user?.id],
@@ -158,7 +147,6 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
-  // Increased limit to 200 for better analytics charts
   const { data: recentLogs = [] } = useQuery({
     queryKey: ["execution-logs", user?.id],
     queryFn: async () => {
@@ -175,85 +163,6 @@ const ClientDashboard = () => {
     },
     enabled: !!user,
   });
-
-  // Auto-hire from sessionStorage intent → show checkout summary immediately (no onboarding gate for flows 1-3)
-  useEffect(() => {
-    if (!user || hireProcessed.current) return;
-    const raw = localStorage.getItem("hireIntent");
-    if (!raw) return;
-    hireProcessed.current = true;
-    localStorage.removeItem("hireIntent");
-    const intent: HireIntent = JSON.parse(raw);
-    if (!intent.slugs || intent.slugs.length === 0) return;
-
-    const uniqueSlugs = [...new Set(intent.slugs)];
-    const lang = i18n.language || "pt";
-    const region = getRegion(lang);
-    const isDepartment = intent.type === "department" || uniqueSlugs.length > 1;
-
-    let price: number;
-    let deptId: string | undefined;
-
-    if (isDepartment) {
-      deptId = (intent as any).departmentId || SLUG_TO_DEPT[uniqueSlugs[0]] || "comercial";
-      price = (region.departments as Record<string, number>)[deptId] || region.departments.comercial;
-    } else {
-      const slug = uniqueSlugs[0];
-      const agentPriceTierMap: Record<string, string> = {
-        sdr_outbound: "entry", sales: "mid", voice_ai: "high", crm_manager: "entry",
-        support_channel: "entry", omnichannel: "mid", voice_support: "high", rag: "mid",
-        content: "entry", seo_growth: "mid", marketing_automation: "mid", media_buyer: "high",
-        revenue: "mid", ai_cfo: "high", data_analytics: "mid",
-        orchestrator: "high", project_management: "mid", scheduler: "entry",
-        hr: "entry", training: "entry", people_analytics: "mid",
-        coding: "premium", computer: "premium", data_engineer: "high",
-        creative_design: "mid", video_production: "high", branding: "mid",
-        legal: "high", contract_analyst: "mid", compliance_officer: "mid",
-        ecommerce: "mid", paid_traffic: "high", affiliate_manager: "entry",
-      };
-      const priceTier = (agentPriceTierMap[slug] || "starter") as any;
-      price = getPrice(lang, priceTier);
-    }
-
-    if (!price || price <= 0) { toast.error("Preço inválido para este agente."); return; }
-
-    setPendingCheckoutIntent({ intent, uniqueSlugs });
-    setCheckoutSummary({ label: intent.label, slugs: uniqueSlugs, isDepartment, departmentId: deptId, price, currency: region.currency, lang });
-  }, [user, i18n.language]);
-
-  const handleConfirmCheckout = useCallback(async () => {
-    if (!checkoutSummary || !pendingCheckoutIntent) return;
-    const { label, slugs, isDepartment, departmentId, price, currency } = checkoutSummary;
-    const region = getRegion(checkoutSummary.lang);
-
-    const agentSlug = isDepartment ? `dept-${departmentId}` : slugs[0];
-
-    const { data, error } = await supabase.functions.invoke("paypal-checkout", {
-      body: {
-        action: "create_subscription",
-        agent_slug: agentSlug,
-        agent_name: label,
-        amount: price,
-        currency,
-        return_url: `${window.location.origin}/dashboard?subscription=success`,
-        cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
-      },
-    });
-    if (error) throw error;
-    if (!data?.success || !data?.approve_url) throw new Error(data?.error || "Falha ao criar assinatura");
-
-    sessionStorage.setItem("paypal_subscription", JSON.stringify({
-      subscription_id: data.subscription_id,
-      agent_slug: agentSlug,
-      agent_name: label,
-      price,
-      currency,
-      tier: isDepartment ? "advanced" : "basic",
-      ...(isDepartment ? { is_department: true, department_id: departmentId, department_slugs: slugs } : {}),
-    }));
-
-    window.location.href = data.approve_url;
-  }, [checkoutSummary, pendingCheckoutIntent]);
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
@@ -364,20 +273,23 @@ const ClientDashboard = () => {
     setPreviousSection(null);
   };
 
-  const breadcrumbLabel = activeSection === "overview" ? t("dashboard.command_center")
-    : activeSection === "omnix" ? t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" })
-    : activeSection === "agents" ? t("dashboard.agents_tab")
-    : activeSection === "analytics" ? t("dashboard.analytics")
-    : activeSection === "logs" ? t("dashboard.logs")
-    : activeSection === "settings" ? t("dashboard.settings")
-    : activeSection === "library" ? t("dashboard.library", { defaultValue: "Biblioteca" })
-    : activeSection === "integrations" ? t("dashboard.integrations", { defaultValue: "Integrações" })
-    : activeSection === "knowledge-base" ? "Base de Conhecimento"
-    : activeSection === "ai-quality" ? "Qualidade IA"
-    : activeSection === "squad-chat" ? t("dashboard.meeting")
-    : activeSection === "live-timeline" ? "Timeline"
-    : activeSection === "chat" ? selectedAgent?.name || "Chat"
-    : activeSection;
+  const breadcrumbMap: Record<string, string> = useMemo(() => ({
+    overview: t("dashboard.command_center"),
+    omnix: t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" }),
+    agents: t("dashboard.agents_tab"),
+    analytics: t("dashboard.analytics"),
+    logs: t("dashboard.logs"),
+    settings: t("dashboard.settings"),
+    library: t("dashboard.library", { defaultValue: "Biblioteca" }),
+    integrations: t("dashboard.integrations", { defaultValue: "Integrações" }),
+    "knowledge-base": "Base de Conhecimento",
+    "ai-quality": "Qualidade IA",
+    "squad-chat": t("dashboard.meeting"),
+    "live-timeline": "Timeline",
+    chat: selectedAgent?.name || "Chat",
+  }), [t, selectedAgent]);
+
+  const breadcrumbLabel = breadcrumbMap[activeSection] || activeSection;
 
   // Flatten sidebar for mobile (including children)
   const flatMobileItems = useMemo(() => {
@@ -403,11 +315,7 @@ const ClientDashboard = () => {
           agentName={postPaymentContext.agentName}
           isDepartment={postPaymentContext.isDepartment}
           agentCount={postPaymentContext.agentCount}
-          onComplete={() => {
-            setShowCelebration(false);
-            // Always show company onboarding first
-            setShowCompanyOnboarding(true);
-          }}
+          onComplete={onCelebrationComplete}
         />
       )}
 
@@ -416,18 +324,20 @@ const ClientDashboard = () => {
         <Suspense fallback={<SectionLoader />}>
           <CompanyOnboardingWizard
             onComplete={() => {
-              setShowCompanyOnboarding(false);
-              if (postPaymentContext?.isDepartment && postPaymentContext?.departmentId) {
-                setShowDeptSetup(true);
-              } else {
+              onCompanyOnboardingDone(
+                !!postPaymentContext?.isDepartment && !!postPaymentContext?.departmentId,
+                postPaymentContext?.departmentId
+              );
+              if (!postPaymentContext?.isDepartment || !postPaymentContext?.departmentId) {
                 setActiveSection("omnix");
               }
             }}
             onSkip={() => {
-              setShowCompanyOnboarding(false);
-              if (postPaymentContext?.isDepartment && postPaymentContext?.departmentId) {
-                setShowDeptSetup(true);
-              } else {
+              onCompanyOnboardingDone(
+                !!postPaymentContext?.isDepartment && !!postPaymentContext?.departmentId,
+                postPaymentContext?.departmentId
+              );
+              if (!postPaymentContext?.isDepartment || !postPaymentContext?.departmentId) {
                 setActiveSection("omnix");
               }
             }}
@@ -444,11 +354,11 @@ const ClientDashboard = () => {
                 departmentId={postPaymentContext.departmentId}
                 departmentName={postPaymentContext.agentName}
                 onComplete={() => {
-                  setShowDeptSetup(false);
+                  onDeptSetupDone();
                   setActiveSection("omnix");
                 }}
                 onSkip={() => {
-                  setShowDeptSetup(false);
+                  onDeptSetupDone();
                   setActiveSection("omnix");
                 }}
               />
@@ -471,7 +381,7 @@ const ClientDashboard = () => {
       <CheckoutSummaryDialog
         data={checkoutSummary}
         onConfirm={handleConfirmCheckout}
-        onCancel={() => { setCheckoutSummary(null); setPendingCheckoutIntent(null); }}
+        onCancel={cancelCheckout}
       />
 
       <div className="flex h-full">
@@ -484,7 +394,7 @@ const ClientDashboard = () => {
           {activeSection === "omnix" && (
             <Suspense fallback={<SectionLoader />}>
               <div className="h-full">
-                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={() => setPostPaymentContext(null)} />
+                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} />
               </div>
             </Suspense>
           )}
@@ -624,18 +534,20 @@ const ClientDashboard = () => {
 
                 {/* ═══ OVERVIEW ═══ */}
                 {activeSection === "overview" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <div className="space-y-4">
-                      <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
-                      <PendingActionsPanel />
-                      <ClientCommandCenter
-                        activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                        usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                        remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                        recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
-                      />
-                    </div>
-                  </Suspense>
+                  <ErrorBoundary>
+                    <Suspense fallback={<SectionLoader />}>
+                      <div className="space-y-4">
+                        <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                        <PendingActionsPanel />
+                        <ClientCommandCenter
+                          activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                          usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                          remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                          recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
+                        />
+                      </div>
+                    </Suspense>
+                  </ErrorBoundary>
                 )}
 
                 {/* ═══ INTEGRATIONS ═══ */}

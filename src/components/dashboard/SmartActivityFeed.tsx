@@ -103,16 +103,19 @@ const SmartActivityFeed = ({ logs, agents }: SmartActivityFeedProps) => {
         ))}
 
         {uniqueAgentNames.length > 1 && (
-          <select
-            value={agentFilter}
-            onChange={(e) => setAgentFilter(e.target.value)}
-            className="h-7 px-2 text-[10px] rounded-md border border-border/40 bg-transparent text-foreground"
-          >
-            <option value="all">{t("dashboard.filter_all_agents", { defaultValue: "Todos agentes" })}</option>
-            {uniqueAgentNames.map((name) => (
-              <option key={name} value={name!}>{name}</option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={agentFilter}
+              onChange={(e) => setAgentFilter(e.target.value)}
+              className="h-7 px-2.5 pr-6 text-[10px] rounded-lg border border-border/40 bg-card/60 text-foreground appearance-none cursor-pointer focus:outline-none focus:ring-1 focus:ring-primary/30 transition-colors"
+            >
+              <option value="all">{t("dashboard.filter_all_agents", { defaultValue: "Todos agentes" })}</option>
+              {uniqueAgentNames.map((name) => (
+                <option key={name} value={name!}>{name}</option>
+              ))}
+            </select>
+            <Filter className="absolute right-1.5 top-1/2 -translate-y-1/2 h-2.5 w-2.5 text-muted-foreground pointer-events-none" />
+          </div>
         )}
       </div>
 

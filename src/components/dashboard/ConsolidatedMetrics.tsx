@@ -88,9 +88,11 @@ const ConsolidatedMetrics = ({
       label: t("dashboard.savings_month"),
       value: estimatedSavings,
       prefix: currencyPrefix,
+      suffix: "*",
       spark: [2000, 4000, 5000, 6000, 7000, estimatedSavings || 0],
       color: "text-emerald-400",
       sparkColor: "#10b981",
+      tooltip: t("dashboard.savings_tooltip", { defaultValue: "Estimativa baseada na média de economia por agente ativo" }),
     },
   ];
 
@@ -135,8 +137,14 @@ const ConsolidatedMetrics = ({
             </div>
             <p className="font-display text-2xl font-bold">
               <AnimatedCounter value={kpi.value} prefix={kpi.prefix} />
+              {(kpi as any).suffix && <span className="text-xs text-muted-foreground ml-0.5">{(kpi as any).suffix}</span>}
             </p>
-            <p className="text-[10px] text-muted-foreground mt-0.5">{kpi.label}</p>
+            <p className="text-[10px] text-muted-foreground mt-0.5">
+              {kpi.label}
+              {(kpi as any).tooltip && (
+                <span className="ml-1 opacity-60" title={(kpi as any).tooltip}>ⓘ</span>
+              )}
+            </p>
           </motion.div>
         ))}
       </div>
