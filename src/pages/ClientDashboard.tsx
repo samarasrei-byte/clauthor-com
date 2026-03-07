@@ -391,7 +391,7 @@ const ClientDashboard = () => {
           {activeSection === "omnix" && (
             <Suspense fallback={<SectionLoader />}>
               <div className="h-full">
-                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={() => setPostPaymentContext(null)} />
+                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} />
               </div>
             </Suspense>
           )}
