@@ -41,6 +41,7 @@ const LibraryPage = () => {
   const [activeFeatured, setActiveFeatured] = useState(0);
   const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
   const [isFiltering, setIsFiltering] = useState(false);
+  const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.split("-")[0] || "pt";
   const { user } = useAuth();
