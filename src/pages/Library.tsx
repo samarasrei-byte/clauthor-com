@@ -17,6 +17,7 @@ import AgentLivePreview from "@/components/library/AgentLivePreview";
 import SmartAgentFinder from "@/components/library/SmartAgentFinder";
 import AgentMiniChat from "@/components/library/AgentMiniChat";
 import DepartmentMiniChat from "@/components/pricing/DepartmentMiniChat";
+import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
 import { getPriceDisplay, getPrice, getRegion, formatPrice } from "@/lib/pricing";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
