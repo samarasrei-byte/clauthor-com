@@ -273,20 +273,23 @@ const ClientDashboard = () => {
     setPreviousSection(null);
   };
 
-  const breadcrumbLabel = activeSection === "overview" ? t("dashboard.command_center")
-    : activeSection === "omnix" ? t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" })
-    : activeSection === "agents" ? t("dashboard.agents_tab")
-    : activeSection === "analytics" ? t("dashboard.analytics")
-    : activeSection === "logs" ? t("dashboard.logs")
-    : activeSection === "settings" ? t("dashboard.settings")
-    : activeSection === "library" ? t("dashboard.library", { defaultValue: "Biblioteca" })
-    : activeSection === "integrations" ? t("dashboard.integrations", { defaultValue: "Integrações" })
-    : activeSection === "knowledge-base" ? "Base de Conhecimento"
-    : activeSection === "ai-quality" ? "Qualidade IA"
-    : activeSection === "squad-chat" ? t("dashboard.meeting")
-    : activeSection === "live-timeline" ? "Timeline"
-    : activeSection === "chat" ? selectedAgent?.name || "Chat"
-    : activeSection;
+  const breadcrumbMap: Record<string, string> = useMemo(() => ({
+    overview: t("dashboard.command_center"),
+    omnix: t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" }),
+    agents: t("dashboard.agents_tab"),
+    analytics: t("dashboard.analytics"),
+    logs: t("dashboard.logs"),
+    settings: t("dashboard.settings"),
+    library: t("dashboard.library", { defaultValue: "Biblioteca" }),
+    integrations: t("dashboard.integrations", { defaultValue: "Integrações" }),
+    "knowledge-base": "Base de Conhecimento",
+    "ai-quality": "Qualidade IA",
+    "squad-chat": t("dashboard.meeting"),
+    "live-timeline": "Timeline",
+    chat: selectedAgent?.name || "Chat",
+  }), [t, selectedAgent]);
+
+  const breadcrumbLabel = breadcrumbMap[activeSection] || activeSection;
 
   // Flatten sidebar for mobile (including children)
   const flatMobileItems = useMemo(() => {
