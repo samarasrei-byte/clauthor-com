@@ -113,7 +113,56 @@ const ClientDashboard = () => {
 
 
   const { data: agents = [], isLoading: loadingAgents } = useQuery({
-  }, [checkoutSummary, pendingCheckoutIntent]);
+    queryKey: ["my-agents", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("agents").select("*").eq("user_id", user!.id).order("created_at", { ascending: false });
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!user,
+  });
+
+  const { data: templates = [] } = useQuery({
+    queryKey: ["agent-templates-slugs"],
+    queryFn: async () => {
+      const { data } = await supabase.from("agent_templates").select("name, slug").eq("is_active", true);
+      return data || [];
+    },
+    staleTime: Infinity,
+  });
+
+  const { data: subscriptions = [] } = useQuery({
+    queryKey: ["my-subscriptions", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("subscriptions").select("*, agent:agents(*)").eq("user_id", user!.id).eq("status", "active");
+      if (error) throw error;
+      return data.map((sub: any) => ({
+        id: sub.id,
+        agent_name: sub.agent?.name || t("dashboard.ai_assistant"),
+        monthly_price: sub.monthly_price,
+        status: sub.status,
+        current_period_end: sub.current_period_end,
+      }));
+    },
+    enabled: !!user,
+  });
+
+  const { data: recentLogs = [] } = useQuery({
+    queryKey: ["execution-logs", user?.id],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("execution_logs").select("*, agent:agents(name)").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(200);
+      if (error) throw error;
+      return data.map((log: any) => ({
+        id: log.id,
+        agent_name: log.agent?.name || t("dashboard.ai_assistant"),
+        action: log.action,
+        status: log.status,
+        execution_time_ms: log.execution_time_ms,
+        created_at: log.created_at,
+      }));
+    },
+    enabled: !!user,
+  });
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
