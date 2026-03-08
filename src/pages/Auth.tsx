@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart } from "lucide-react";
+import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart, Shield, Zap, Users } from "lucide-react";
 import HelpTooltip from "@/components/HelpTooltip";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -106,20 +106,27 @@ const AuthPage = () => {
     }
   };
 
+  const trustSignals = [
+    { icon: Shield, text: t("auth.trust_secure", { defaultValue: "Dados criptografados" }) },
+    { icon: Zap, text: t("auth.trust_fast", { defaultValue: "Acesso em segundos" }) },
+    { icon: Users, text: t("auth.trust_companies", { defaultValue: "Empresas confiam" }) },
+  ];
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 -mt-16 relative">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/10 blur-[150px] rounded-full" />
       </div>
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-full max-w-md relative z-10">
-        <div className="text-center mb-10">
-          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }} className="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-6">
-            <Bot className="h-8 w-8 text-primary" />
+        <div className="text-center mb-8">
+          <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }} className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
+            <Bot className="h-7 w-7 text-primary" />
           </motion.div>
-          <h1 className="font-display text-3xl font-bold mb-2">{isLogin ? t("auth.welcome") : t("auth.create_account")}</h1>
-          <p className="text-muted-foreground">
-            {isLogin ? t("auth.login_subtitle") : t("auth.register_subtitle")}
-            {" "}<HelpTooltip id="auth-intro" text={t("auth.help_tooltip", { defaultValue: "Crie sua conta ou faça login para acessar o painel de controle, contratar agentes e gerenciar seu time de IA." })} position="bottom" size={14} />
+          <h1 className="font-display text-2xl sm:text-3xl font-bold mb-2">{isLogin ? t("auth.welcome") : t("auth.create_account")}</h1>
+          <p className="text-sm text-muted-foreground max-w-xs mx-auto">
+            {isLogin
+              ? t("auth.login_subtitle")
+              : t("auth.register_subtitle_enhanced", { defaultValue: "Crie sua conta gratuita e tenha acesso imediato a 83 agentes de IA." })}
           </p>
         </div>
 
@@ -143,14 +150,14 @@ const AuthPage = () => {
           </motion.div>
         )}
 
-        <div className="glass-card rounded-2xl p-8">
-          {/* Google OAuth */}
+        <div className="glass-card rounded-2xl p-6 sm:p-8">
+          {/* Google OAuth — primary action */}
           <Button
             type="button"
             variant="outline"
             onClick={handleGoogleSignIn}
             disabled={isGoogleLoading || isLoading}
-            className="w-full h-12 rounded-xl gap-3 border-border/30 hover:bg-accent/50 mb-4"
+            className="w-full h-12 rounded-xl gap-3 border-border/40 hover:bg-accent/50 mb-5 text-sm font-medium"
           >
             {isGoogleLoading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
@@ -165,33 +172,33 @@ const AuthPage = () => {
             {t("auth.google_signin", { defaultValue: "Continuar com Google" })}
           </Button>
 
-          <div className="flex items-center gap-3 mb-4">
+          <div className="flex items-center gap-3 mb-5">
             <Separator className="flex-1" />
             <span className="text-xs text-muted-foreground">{t("auth.or_email", { defaultValue: "ou com e-mail" })}</span>
             <Separator className="flex-1" />
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
-              <div className="space-y-2">
-                <Label className="text-sm font-medium">{t("auth.full_name")}</Label>
-                <Input placeholder={t("auth.your_name")} value={fullName} onChange={(e) => setFullName(e.target.value)} className="h-12 bg-background/50 border-white/10 rounded-xl focus:border-primary/50 transition-colors" required />
+              <div className="space-y-1.5">
+                <Label className="text-xs font-medium text-muted-foreground">{t("auth.full_name")}</Label>
+                <Input placeholder={t("auth.your_name")} value={fullName} onChange={(e) => setFullName(e.target.value)} className="h-11 bg-background/50 border-border/40 rounded-xl focus:border-primary/50 transition-colors" required autoFocus={!isLogin} />
               </div>
             )}
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">{t("auth.email")}</Label>
-              <Input type="email" placeholder={t("auth.your_email")} value={email} onChange={(e) => setEmail(e.target.value)} className="h-12 bg-background/50 border-white/10 rounded-xl focus:border-primary/50 transition-colors" required />
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium text-muted-foreground">{t("auth.email")}</Label>
+              <Input type="email" placeholder={t("auth.your_email")} value={email} onChange={(e) => setEmail(e.target.value)} className="h-11 bg-background/50 border-border/40 rounded-xl focus:border-primary/50 transition-colors" required autoFocus={isLogin} />
             </div>
-            <div className="space-y-2">
-              <Label className="text-sm font-medium">{t("auth.password")}</Label>
+            <div className="space-y-1.5">
+              <Label className="text-xs font-medium text-muted-foreground">{t("auth.password")}</Label>
               <div className="relative">
-                <Input type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="h-12 bg-background/50 border-white/10 rounded-xl pr-12 focus:border-primary/50 transition-colors" required minLength={6} />
+                <Input type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="h-11 bg-background/50 border-border/40 rounded-xl pr-12 focus:border-primary/50 transition-colors" required minLength={6} />
                 <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
-            <Button type="submit" className="w-full h-12 glow font-semibold rounded-xl shine group" disabled={isLoading || isGoogleLoading}>
+            <Button type="submit" className="w-full h-11 glow font-semibold rounded-xl group" disabled={isLoading || isGoogleLoading}>
               {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (<>{isLogin ? t("auth.login") : t("auth.register")}<ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" /></>)}
             </Button>
             {isLogin && (
@@ -203,13 +210,13 @@ const AuthPage = () => {
                   if (error) toast.error(error.message);
                   else toast.success(t("auth.reset_email_sent", { defaultValue: "E-mail de redefinição enviado! Verifique sua caixa de entrada." }));
                 }}
-                className="w-full text-center text-sm text-muted-foreground hover:text-primary transition-colors"
+                className="w-full text-center text-xs text-muted-foreground hover:text-primary transition-colors"
               >
                 {t("auth.forgot_password", { defaultValue: "Esqueceu sua senha?" })}
               </button>
             )}
           </form>
-          <div className="mt-6 pt-6 border-t border-white/5 text-center">
+          <div className="mt-5 pt-5 border-t border-border/30 text-center">
             <p className="text-sm text-muted-foreground">
               {isLogin ? t("auth.no_account") : t("auth.has_account")}{" "}
               <button onClick={() => setIsLogin(!isLogin)} className="text-primary hover:underline font-medium">
@@ -218,7 +225,21 @@ const AuthPage = () => {
             </p>
           </div>
         </div>
-        <p className="text-center text-xs text-muted-foreground mt-6">{t("auth.terms_agree")}</p>
+
+        {/* Trust signals below card */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4 }}
+          className="flex items-center justify-center gap-4 sm:gap-6 mt-6"
+        >
+          {trustSignals.map((signal) => (
+            <div key={signal.text} className="flex items-center gap-1.5">
+              <signal.icon className="h-3 w-3 text-muted-foreground/50" strokeWidth={1.5} />
+              <span className="text-[10px] text-muted-foreground/50">{signal.text}</span>
+            </div>
+          ))}
+        </motion.div>
       </motion.div>
     </div>
   );

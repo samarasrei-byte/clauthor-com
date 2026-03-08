@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Circle, MessageSquare, Settings, BookOpen, Bot, ArrowRight, X, Sparkles } from "lucide-react";
+import { CheckCircle2, MessageSquare, Settings, Bot, ArrowRight, X, Sparkles, Building2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
@@ -39,6 +39,14 @@ const GettingStartedGuide = ({
 
   const steps: Step[] = [
     {
+      id: "company",
+      icon: Building2,
+      label: t("dashboard.guide_step0", { defaultValue: "Configure sua empresa" }),
+      description: t("dashboard.guide_step0_desc", { defaultValue: "Seus agentes dão respostas 10x melhores com contexto." }),
+      action: t("dashboard.guide_step0_action", { defaultValue: "Configurar" }),
+      actionRoute: "company",
+    },
+    {
       id: "agents",
       icon: Bot,
       label: t("dashboard.guide_step1", { defaultValue: "Conheça seus agentes" }),
@@ -52,7 +60,7 @@ const GettingStartedGuide = ({
       label: t("dashboard.guide_step2", { defaultValue: "Envie sua primeira mensagem" }),
       description: t("dashboard.guide_step2_desc", { defaultValue: "Converse com um agente e veja a IA em ação." }),
       action: t("dashboard.guide_step2_action", { defaultValue: "Abrir chat" }),
-      actionRoute: "chat",
+      actionRoute: "omnix",
     },
     {
       id: "configure",
@@ -64,7 +72,9 @@ const GettingStartedGuide = ({
     },
   ];
 
-  const completedSteps = [hasAgents, hasSentMessage, hasConfiguredAgent].filter(Boolean).length;
+  // Company step counts as the first one (always true if they have agents)
+  const completionFlags = [true, hasAgents, hasSentMessage, hasConfiguredAgent];
+  const completedSteps = completionFlags.filter(Boolean).length;
   const progress = Math.round((completedSteps / steps.length) * 100);
   const isComplete = completedSteps === steps.length;
 
@@ -107,29 +117,33 @@ const GettingStartedGuide = ({
 
       <Progress value={progress} className="h-1.5 mb-4" />
 
-      <div className="space-y-2.5">
+      <div className="space-y-2">
         {steps.map((step, i) => {
-          const completed = [hasAgents, hasSentMessage, hasConfiguredAgent][i];
+          const completed = completionFlags[i];
           return (
-            <div
+            <motion.div
               key={step.id}
-              className={`flex items-center gap-3 p-3 rounded-xl transition-all ${
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.05 }}
+              className={`flex items-center gap-3 p-2.5 rounded-xl transition-all ${
                 completed
-                  ? "bg-emerald-500/5 border border-emerald-500/10"
-                  : "bg-white/[0.02] border border-white/[0.04] hover:bg-white/[0.04]"
+                  ? "bg-accent-emerald/5 border border-accent-emerald/10"
+                  : "bg-muted/20 border border-border/30 hover:bg-muted/40 cursor-pointer"
               }`}
+              onClick={() => !completed && step.actionRoute && onNavigate?.(step.actionRoute)}
             >
               <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 ${
-                completed ? "bg-emerald-500/15" : "bg-white/5"
+                completed ? "bg-accent-emerald/15" : "bg-muted/50"
               }`}>
                 {completed ? (
-                  <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                  <CheckCircle2 className="h-3.5 w-3.5 text-accent-emerald" />
                 ) : (
-                  <step.icon className="h-4 w-4 text-muted-foreground" />
+                  <step.icon className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.5} />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className={`text-xs font-medium ${completed ? "text-emerald-400 line-through opacity-70" : ""}`}>
+                <p className={`text-xs font-medium ${completed ? "text-accent-emerald line-through opacity-70" : ""}`}>
                   {step.label}
                 </p>
                 <p className="text-[10px] text-muted-foreground truncate">{step.description}</p>
@@ -138,14 +152,14 @@ const GettingStartedGuide = ({
                 <Button
                   size="sm"
                   variant="ghost"
-                  className="text-[10px] h-7 px-2.5 text-primary shrink-0 gap-1"
-                  onClick={() => onNavigate?.(step.actionRoute || "")}
+                  className="text-[10px] h-6 px-2 text-primary shrink-0 gap-1"
+                  onClick={(e) => { e.stopPropagation(); onNavigate?.(step.actionRoute || ""); }}
                 >
                   {step.action}
-                  <ArrowRight className="h-3 w-3" />
+                  <ArrowRight className="h-2.5 w-2.5" />
                 </Button>
               )}
-            </div>
+            </motion.div>
           );
         })}
       </div>
