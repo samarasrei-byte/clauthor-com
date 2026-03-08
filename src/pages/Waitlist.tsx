@@ -534,6 +534,7 @@ const Waitlist = () => {
           </div>
         </motion.div>
       </div>
+      </div>
     </div>
   );
 };
