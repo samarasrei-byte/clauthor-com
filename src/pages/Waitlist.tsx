@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
+const SplineShowcase = lazy(() => import("@/components/landing/SplineShowcase"));
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -233,8 +234,15 @@ const Waitlist = () => {
   if (success) return <SuccessView position={position} />;
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 py-20 relative overflow-hidden">
+    <div className="min-h-screen px-4 py-20 relative overflow-hidden">
       <WaitlistBackground />
+
+      {/* 3D Showcase */}
+      <Suspense fallback={null}>
+        <SplineShowcase variant="waitlist" />
+      </Suspense>
+
+      <div className="flex items-center justify-center min-h-[calc(100vh-520px)]">
 
       {/* Pulsing AI rings */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
@@ -525,6 +533,7 @@ const Waitlist = () => {
             </div>
           </div>
         </motion.div>
+      </div>
       </div>
     </div>
   );

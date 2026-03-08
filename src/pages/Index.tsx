@@ -7,6 +7,7 @@ const SmartOnboarding = lazy(() => import("@/components/onboarding/SmartOnboardi
 const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 const InnovationRoadmap = lazy(() => import("@/components/landing/InnovationRoadmap"));
+const SplineShowcase = lazy(() => import("@/components/landing/SplineShowcase"));
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, ShieldCheck, Bolt,
@@ -454,6 +455,13 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          3D SHOWCASE — Spline immersive section
+          ═══════════════════════════════════════════════════════ */}
+      <Suspense fallback={null}>
+        <SplineShowcase variant="home" />
+      </Suspense>
 
       {/* ═══════════════════════════════════════════════════════
           SOCIAL PROOF — Authority numbers
