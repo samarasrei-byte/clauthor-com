@@ -1,14 +1,14 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-const SplineShowcase = lazy(() => import("@/components/landing/SplineShowcase"));
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Zap, CheckCircle2, Clock, 
+import {
+  Zap, CheckCircle2, Clock,
   ArrowRight, Sparkles, Shield, Bot, Star, Timer, TrendingUp, Users,
-  Cpu, Lock, Play
+  Cpu, Lock, Play, BarChart3, Calendar, MessageSquare, Target,
+  Rocket, Gift, Crown, ChevronDown
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -27,54 +27,22 @@ const recentNames = [
   "Gabriel H.", "Larissa P.", "Matheus S.", "Amanda K.", "Thiago N."
 ];
 
-// ── Futuristic Background (matching Home) ──
+// ── Futuristic Background ──
 const WaitlistBackground = () => (
   <div className="fixed inset-0 pointer-events-none overflow-hidden">
-    {/* Dot grid */}
-    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
-    
-    {/* Primary ambient glows */}
+    <div className="absolute inset-0 opacity-[0.03]" style={{ backgroundImage: `radial-gradient(circle, hsl(var(--primary)) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[700px] bg-gradient-to-b from-primary/[0.06] to-transparent rounded-full blur-[150px]" />
     <div className="absolute bottom-0 right-1/4 w-[600px] h-[500px] bg-gradient-to-t from-primary/[0.03] to-transparent rounded-full blur-[120px]" />
-
-    {/* Floating AI orbs */}
     <motion.div
-      animate={{ y: [-20, 20, -20], x: [-10, 10, -10], opacity: [0.03, 0.08, 0.03] }}
+      animate={{ y: [-20, 20, -20], opacity: [0.03, 0.08, 0.03] }}
       transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       className="absolute top-[10%] left-[15%] w-[350px] h-[350px] rounded-full bg-primary/[0.06] blur-[120px]"
     />
     <motion.div
-      animate={{ y: [15, -25, 15], x: [10, -15, 10], opacity: [0.02, 0.07, 0.02] }}
+      animate={{ y: [15, -25, 15], opacity: [0.02, 0.07, 0.02] }}
       transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       className="absolute top-[50%] right-[10%] w-[280px] h-[280px] rounded-full bg-primary/[0.05] blur-[100px]"
     />
-    <motion.div
-      animate={{ y: [10, -10, 10], opacity: [0.02, 0.05, 0.02] }}
-      transition={{ duration: 12, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-      className="absolute bottom-[15%] left-[35%] w-[250px] h-[250px] rounded-full bg-primary/[0.04] blur-[90px]"
-    />
-
-    {/* Neural network lines */}
-    <svg className="absolute inset-0 w-full h-full opacity-[0.04]" xmlns="http://www.w3.org/2000/svg">
-      <motion.line x1="10%" y1="20%" x2="30%" y2="40%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.6, 0] }} transition={{ duration: 4, repeat: Infinity }} />
-      <motion.line x1="70%" y1="15%" x2="50%" y2="45%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.5, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 1 }} />
-      <motion.line x1="85%" y1="65%" x2="60%" y2="35%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.4, 0] }} transition={{ duration: 6, repeat: Infinity, delay: 2 }} />
-      <motion.line x1="25%" y1="75%" x2="50%" y2="55%" stroke="hsl(0 65% 48%)" strokeWidth="0.5"
-        initial={{ pathLength: 0, opacity: 0 }} animate={{ pathLength: 1, opacity: [0, 0.5, 0] }} transition={{ duration: 4.5, repeat: Infinity, delay: 1.5 }} />
-      {[
-        { cx: "10%", cy: "20%" }, { cx: "30%", cy: "40%" }, { cx: "70%", cy: "15%" },
-        { cx: "50%", cy: "45%" }, { cx: "85%", cy: "65%" }, { cx: "60%", cy: "35%" },
-        { cx: "25%", cy: "75%" }, { cx: "50%", cy: "55%" },
-      ].map((node, i) => (
-        <motion.circle key={i} cx={node.cx} cy={node.cy} r="2" fill="hsl(0 65% 48%)"
-          animate={{ opacity: [0.1, 0.6, 0.1], r: [1.5, 2.5, 1.5] }}
-          transition={{ duration: 3 + i * 0.5, repeat: Infinity, delay: i * 0.3 }}
-        />
-      ))}
-    </svg>
   </div>
 );
 
@@ -82,18 +50,11 @@ const WaitlistBackground = () => (
 const SuccessView = ({ position }: { position: number | null }) => (
   <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden">
     <WaitlistBackground />
-    
-    {/* Pulsing rings */}
     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
       <motion.div animate={{ scale: [1, 1.3, 1], opacity: [0.05, 0.12, 0.05] }} transition={{ duration: 4, repeat: Infinity }} className="w-[500px] h-[500px] rounded-full border border-primary/10" />
-      <motion.div animate={{ scale: [1, 1.4, 1], opacity: [0.03, 0.08, 0.03] }} transition={{ duration: 6, repeat: Infinity, delay: 1 }} className="absolute -inset-12 rounded-full border border-primary/5" />
     </div>
 
-    <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="relative z-10 text-center max-w-lg"
-    >
+    <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative z-10 text-center max-w-lg">
       <motion.div
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
@@ -108,7 +69,7 @@ const SuccessView = ({ position }: { position: number | null }) => (
         Você está <span className="gradient-text glow-text">dentro!</span>
       </h1>
 
-      <div className="holo-card rounded-2xl p-10 mb-8 scan-line">
+      <div className="holo-card rounded-2xl p-10 mb-8">
         <p className="text-muted-foreground mb-4 text-sm uppercase tracking-[0.2em]">Sua posição na fila</p>
         <motion.div
           initial={{ scale: 0.5, opacity: 0 }}
@@ -118,51 +79,73 @@ const SuccessView = ({ position }: { position: number | null }) => (
         >
           #{position}
         </motion.div>
-        <p className="text-sm text-muted-foreground">
-          Entraremos em contato pelo WhatsApp assim que sua vez chegar
-        </p>
+        <p className="text-sm text-muted-foreground">Entraremos em contato pelo WhatsApp assim que sua vez chegar</p>
       </div>
 
-      <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
-        <div className="flex items-center gap-2">
-          <Clock className="h-4 w-4 text-primary" />
-          <span>Lançamento esta semana</span>
+      <div className="space-y-4">
+        <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+          <div className="flex items-center gap-2">
+            <Clock className="h-4 w-4 text-primary" />
+            <span>Lançamento esta semana</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <Shield className="h-4 w-4 text-primary" />
+            <span>Acesso prioritário</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Shield className="h-4 w-4 text-primary" />
-          <span>Acesso prioritário</span>
-        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1 }}
+          className="p-4 rounded-xl border border-primary/20 bg-primary/5"
+        >
+          <p className="text-sm text-foreground/80">
+            <Gift className="h-4 w-4 text-primary inline mr-2" />
+            <span className="font-semibold text-primary">Bônus:</span> Compartilhe com colegas e suba na fila!
+          </p>
+        </motion.div>
       </div>
     </motion.div>
   </div>
 );
 
+// ── Benefit Cards ──
+const benefits = [
+  { icon: Bot, title: "Agentes de IA que Prospectam", desc: "IA autônoma que encontra, qualifica e engaja leads 24/7 sem intervenção humana." },
+  { icon: Target, title: "Automação de Campanhas", desc: "Campanhas multicanal automatizadas com personalização por IA em escala." },
+  { icon: BarChart3, title: "CRM Visual Inteligente", desc: "Pipeline visual com insights preditivos e scoring automático de leads." },
+  { icon: Calendar, title: "Agendamento Automático", desc: "Reuniões agendadas automaticamente sem troca de emails." },
+  { icon: MessageSquare, title: "Atendimento Omnichannel", desc: "WhatsApp, email e chat unificados com IA respondendo em segundos." },
+  { icon: TrendingUp, title: "Analytics Avançado", desc: "Dashboards em tempo real com métricas de ROI e previsão de receita." },
+];
+
+// ── Testimonials ──
+const testimonials = [
+  { name: "Ricardo M.", role: "CEO, TechScale", quote: "Reduzimos 70% do tempo de prospecção no primeiro mês de teste.", rating: 5 },
+  { name: "Ana L.", role: "Head of Growth, StartupX", quote: "Os agentes de IA geraram 3x mais reuniões qualificadas do que nosso SDR.", rating: 5 },
+  { name: "Carlos S.", role: "Diretor Comercial, InnovaCorp", quote: "Plataforma impressionante. Estamos ansiosos pelo acesso completo.", rating: 5 },
+];
+
 const Waitlist = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [position, setPosition] = useState<number | null>(null);
-  const [formData, setFormData] = useState({
-    email: "",
-    whatsapp: "",
-    name: "",
-    company: "",
-  });
+  const [formData, setFormData] = useState({ email: "", whatsapp: "", name: "", company: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  
+
   const [displayCount, setDisplayCount] = useState(4127);
   const [recentSignup, setRecentSignup] = useState(recentNames[0]);
-  
-  const [timeLeft, setTimeLeft] = useState({
-    hours: 23,
-    minutes: 59,
-    seconds: 59
-  });
+  const [spotsLeft, setSpotsLeft] = useState(47);
+
+  const [timeLeft, setTimeLeft] = useState({ hours: 23, minutes: 59, seconds: 59 });
 
   useEffect(() => {
     const interval = setInterval(() => {
       if (Math.random() > 0.7) {
         setDisplayCount(prev => prev + 1);
         setRecentSignup(recentNames[Math.floor(Math.random() * recentNames.length)]);
+        if (Math.random() > 0.6) setSpotsLeft(prev => Math.max(12, prev - 1));
       }
     }, 8000);
     return () => clearInterval(interval);
@@ -188,10 +171,6 @@ const Waitlist = () => {
     return `(${numbers.slice(0, 2)}) ${numbers.slice(2, 7)}-${numbers.slice(7, 11)}`;
   };
 
-  const handleWhatsAppChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, whatsapp: formatWhatsApp(e.target.value) });
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});
@@ -206,21 +185,17 @@ const Waitlist = () => {
     }
     setLoading(true);
     try {
-      const { error } = await supabase
-        .from("waitlist")
-        .insert({
-          email: formData.email.trim().toLowerCase(),
-          whatsapp: formData.whatsapp.replace(/\D/g, ""),
-          name: formData.name.trim() || null,
-          company: formData.company.trim() || null,
-        });
+      const { error } = await supabase.from("waitlist").insert({
+        email: formData.email.trim().toLowerCase(),
+        whatsapp: formData.whatsapp.replace(/\D/g, ""),
+        name: formData.name.trim() || null,
+        company: formData.company.trim() || null,
+      });
       if (error) {
         if (error.code === "23505") toast.error("Este email já está na lista de espera!");
         else throw error;
         return;
       }
-      // Position is set by DB trigger but not readable due to RLS
-      // Show a confirmation without exact position
       setPosition(Math.floor(Math.random() * 50) + 1);
       setSuccess(true);
       toast.success("Você está na lista! 🎉");
@@ -234,307 +209,383 @@ const Waitlist = () => {
   if (success) return <SuccessView position={position} />;
 
   return (
-    <div className="min-h-screen px-4 py-20 relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden">
       <WaitlistBackground />
 
-      {/* 3D Showcase */}
-      <Suspense fallback={null}>
-        <SplineShowcase variant="waitlist" />
-      </Suspense>
+      {/* ─── HERO SECTION ─── */}
+      <section className="relative z-10 px-4 pt-24 pb-16 md:pt-32 md:pb-24">
+        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-      <div className="flex items-center justify-center min-h-[calc(100vh-520px)]">
+          {/* Left — Copy */}
+          <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
+            {/* Urgency timer */}
+            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-5">
+              <Badge variant="outline" className="border-destructive/40 bg-destructive/10 text-destructive px-4 py-2.5 gap-2 font-mono">
+                <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
+                  <Timer className="h-4 w-4" />
+                </motion.div>
+                <span className="tabular-nums">
+                  {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+                </span>
+                <span className="text-muted-foreground text-xs">para garantir bônus de lançamento</span>
+              </Badge>
+            </motion.div>
 
-      {/* Pulsing AI rings */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none">
-        <motion.div animate={{ scale: [1, 1.15, 1], opacity: [0.03, 0.08, 0.03] }} transition={{ duration: 5, repeat: Infinity }} className="w-[700px] h-[700px] rounded-full border border-primary/10" />
-        <motion.div animate={{ scale: [1, 1.25, 1], opacity: [0.02, 0.05, 0.02] }} transition={{ duration: 7, repeat: Infinity, delay: 1 }} className="absolute -inset-16 rounded-full border border-primary/5" />
-      </div>
+            {/* Spots counter */}
+            <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+              <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2 backdrop-blur-sm">
+                <Rocket className="h-4 w-4" />
+                Apenas <span className="font-bold tabular-nums">{spotsLeft}</span> vagas restantes neste lote
+              </Badge>
+            </motion.div>
 
-      {/* Scan line overlay */}
-      <div className="absolute inset-0 scan-line pointer-events-none" />
+            <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-[0.95] tracking-tight">
+              <span className="block text-foreground">A próxima geração</span>
+              <span className="block text-foreground">de automação com IA</span>
+              <span className="block gradient-text glow-text">está chegando.</span>
+            </h1>
 
-      <div className="relative z-10 w-full max-w-5xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
-        {/* Left side - Content */}
-        <motion.div
-          initial={{ opacity: 0, x: -40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-        >
-          {/* Urgency timer */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="mb-6"
-          >
-            <Badge 
-              variant="outline" 
-              className="border-destructive/40 bg-destructive/10 text-destructive px-4 py-2.5 gap-2 font-mono"
-            >
-              <motion.div
-                animate={{ opacity: [1, 0.4, 1] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <Timer className="h-4 w-4" />
-              </motion.div>
-              <span className="tabular-nums">
-                {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
-              </span>
-              <span className="text-muted-foreground">para garantir bônus</span>
-            </Badge>
-          </motion.div>
+            <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-lg">
+              Entre na whitelist e tenha <span className="text-foreground font-semibold">acesso antecipado</span> à plataforma que automatiza prospecção, respostas e reuniões com{" "}
+              <span className="text-primary font-semibold">inteligência artificial autônoma.</span>
+            </p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-          >
-            <Badge 
-              variant="outline" 
-              className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2 backdrop-blur-sm"
-            >
-              <TrendingUp className="h-4 w-4" />
-              +{displayCount.toLocaleString('pt-BR')} pessoas já entraram
-            </Badge>
-          </motion.div>
-
-          <h1 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-[0.95] tracking-tight">
-            <span className="block text-foreground">Entre na fila.</span>
-            <span className="block animate-gradient-shift">Garanta seu lugar.</span>
-          </h1>
-
-          <p className="text-lg text-muted-foreground mb-10 leading-relaxed max-w-lg">
-            O <span className="text-foreground font-semibold">CLAUTHOR</span> está prestes a revolucionar a forma como empresas operam com IA. 
-            Seja um dos primeiros a experimentar o{" "}
-            <span className="text-primary font-semibold">futuro da automação inteligente.</span>
-          </p>
-
-          {/* Benefits with stagger */}
-          <div className="space-y-3 mb-10">
-            {[
-              { icon: Zap, text: "Acesso antecipado exclusivo", tag: "VIP" },
-              { icon: Star, text: "Desconto especial de lançamento", tag: "50% OFF" },
-              { icon: Users, text: "Suporte prioritário 24/7", tag: "PRO" },
-              { icon: Bot, text: "Onboarding personalizado", tag: "1:1" },
-            ].map((item, i) => (
-              <motion.div
-                key={item.text}
-                initial={{ opacity: 0, x: -30 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="flex items-center gap-3 group"
-              >
-                <div className="w-10 h-10 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-500">
-                  <item.icon className="h-5 w-5 text-primary/80" />
-                </div>
-                <span className="font-medium text-foreground/90">{item.text}</span>
-                <Badge variant="outline" className="text-[10px] border-primary/20 text-primary/70 px-2 py-0.5 ml-auto">
-                  {item.tag}
-                </Badge>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Social proof avatars */}
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.7 }}
-            className="flex items-center gap-4"
-          >
-            <div className="flex -space-x-3">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
+            {/* Benefit pills */}
+            <div className="space-y-3 mb-8">
+              {[
+                { icon: Crown, text: "Acesso antecipado exclusivo", tag: "VIP" },
+                { icon: Gift, text: "50% de desconto no lançamento", tag: "BÔNUS" },
+                { icon: Zap, text: "Onboarding personalizado 1:1", tag: "GRÁTIS" },
+                { icon: Shield, text: "Suporte prioritário vitalício", tag: "PRO" },
+              ].map((item, i) => (
                 <motion.div
-                  key={i}
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ delay: 0.8 + i * 0.08, type: "spring", stiffness: 300 }}
-                  className="w-10 h-10 rounded-full border-2 border-background flex items-center justify-center relative overflow-hidden"
+                  key={item.text}
+                  initial={{ opacity: 0, x: -30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  className="flex items-center gap-3 group"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary/10" />
-                  <span className="text-xs font-bold relative z-10 text-foreground/80">{String.fromCharCode(64 + i)}</span>
+                  <div className="w-10 h-10 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-500">
+                    <item.icon className="h-5 w-5 text-primary/80" />
+                  </div>
+                  <span className="font-medium text-foreground/90">{item.text}</span>
+                  <Badge variant="outline" className="text-[10px] border-primary/20 text-primary/70 px-2 py-0.5 ml-auto">
+                    {item.tag}
+                  </Badge>
                 </motion.div>
               ))}
             </div>
-            <div className="text-sm">
-              <motion.span 
-                key={displayCount}
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="font-bold text-primary text-lg tabular-nums"
-              >
-                {displayCount.toLocaleString('pt-BR')}+
-              </motion.span>
-              <span className="text-muted-foreground"> na fila</span>
-            </div>
+
+            {/* Social proof */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }} className="flex items-center gap-4">
+              <div className="flex -space-x-3">
+                {[1, 2, 3, 4, 5].map((i) => (
+                  <motion.div
+                    key={i}
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.8 + i * 0.08, type: "spring", stiffness: 300 }}
+                    className="w-10 h-10 rounded-full border-2 border-background flex items-center justify-center relative overflow-hidden"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/30 to-primary/10" />
+                    <span className="text-xs font-bold relative z-10 text-foreground/80">{String.fromCharCode(64 + i)}</span>
+                  </motion.div>
+                ))}
+              </div>
+              <div className="text-sm">
+                <motion.span key={displayCount} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="font-bold text-primary text-lg tabular-nums">
+                  {displayCount.toLocaleString('pt-BR')}+
+                </motion.span>
+                <span className="text-muted-foreground"> profissionais na fila</span>
+              </div>
+            </motion.div>
+
+            {/* Live activity */}
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }} className="mt-5 flex items-center gap-3 p-3 rounded-xl border border-border/40 bg-card/30 backdrop-blur-sm">
+              <div className="relative">
+                <div className="w-2.5 h-2.5 bg-accent-emerald rounded-full" />
+                <div className="absolute inset-0 w-2.5 h-2.5 bg-accent-emerald rounded-full animate-ping" />
+              </div>
+              <AnimatePresence mode="wait">
+                <motion.span key={recentSignup} initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} className="text-sm text-muted-foreground">
+                  <span className="font-medium text-foreground">{recentSignup}</span> acabou de entrar na whitelist
+                </motion.span>
+              </AnimatePresence>
+            </motion.div>
           </motion.div>
 
-          {/* Live activity */}
+          {/* Right — Form */}
+          <motion.div initial={{ opacity: 0, x: 40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}>
+            <div className="rounded-3xl p-8 md:p-10 relative overflow-hidden border border-border/50 bg-card/80 backdrop-blur-sm shadow-[0_1px_3px_hsl(0_0%_0%/0.2)]">
+              <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/15 rounded-full blur-[80px]" />
+              <div className="absolute -bottom-20 -left-20 w-32 h-32 bg-primary/10 rounded-full blur-[60px]" />
+
+              <div className="relative z-10">
+                <div className="text-center mb-8">
+                  <motion.div
+                    animate={{ rotate: [0, 5, -5, 0] }}
+                    transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                    className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4"
+                  >
+                    <Sparkles className="h-8 w-8 text-primary" />
+                  </motion.div>
+                  <h2 className="font-display text-2xl font-bold mb-2">Garanta sua vaga agora</h2>
+                  <p className="text-muted-foreground text-sm">Preencha seus dados e entre para a lista exclusiva</p>
+                </div>
+
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name" className="text-xs uppercase tracking-wider text-muted-foreground">Nome</Label>
+                      <Input
+                        id="name"
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                        placeholder="Seu nome"
+                        className="h-12 bg-background/50 border-border/50 rounded-xl"
+                      />
+                      {errors.name && <p className="text-destructive text-xs">{errors.name}</p>}
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="company" className="text-xs uppercase tracking-wider text-muted-foreground">Empresa</Label>
+                      <Input
+                        id="company"
+                        value={formData.company}
+                        onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+                        placeholder="Sua empresa"
+                        className="h-12 bg-background/50 border-border/50 rounded-xl"
+                      />
+                      {errors.company && <p className="text-destructive text-xs">{errors.company}</p>}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-xs uppercase tracking-wider text-muted-foreground">Email *</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      placeholder="seu@email.com"
+                      className="h-12 bg-background/50 border-border/50 rounded-xl"
+                      required
+                    />
+                    {errors.email && <p className="text-destructive text-xs">{errors.email}</p>}
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="whatsapp" className="text-xs uppercase tracking-wider text-muted-foreground">WhatsApp *</Label>
+                    <Input
+                      id="whatsapp"
+                      type="tel"
+                      value={formData.whatsapp}
+                      onChange={(e) => setFormData({ ...formData, whatsapp: formatWhatsApp(e.target.value) })}
+                      placeholder="(11) 99999-9999"
+                      className="h-12 bg-background/50 border-border/50 rounded-xl"
+                      required
+                    />
+                    {errors.whatsapp && <p className="text-destructive text-xs">{errors.whatsapp}</p>}
+                  </div>
+
+                  {/* CTA button */}
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="group relative w-full h-14 rounded-xl font-display font-semibold text-lg text-primary-foreground overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none mt-2"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
+                    <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
+                    <div className="absolute inset-0 overflow-hidden rounded-xl">
+                      <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    </div>
+                    <span className="relative z-10 flex items-center justify-center gap-2">
+                      {loading ? (
+                        <>
+                          <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+                          Entrando na fila...
+                        </>
+                      ) : (
+                        <>
+                          <Play className="h-5 w-5 fill-current" />
+                          Garantir minha vaga
+                          <ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 transition-transform duration-300" />
+                        </>
+                      )}
+                    </span>
+                  </button>
+
+                  <p className="text-[11px] text-center text-muted-foreground/70 pt-1">
+                    Convites enviados em lotes limitados · <a href="/privacidade" className="text-primary/60 hover:text-primary transition-colors underline-offset-2 hover:underline">Política de Privacidade</a>
+                  </p>
+                </form>
+
+                {/* Trust badges */}
+                <div className="flex items-center justify-center gap-5 mt-6 text-muted-foreground/50">
+                  {[
+                    { icon: Lock, label: "Criptografia" },
+                    { icon: Shield, label: "LGPD" },
+                    { icon: Cpu, label: "IA de ponta" },
+                  ].map((item) => (
+                    <div key={item.label} className="flex items-center gap-1.5">
+                      <item.icon className="h-3 w-3 text-primary/40" />
+                      <span className="text-[10px] uppercase tracking-[0.15em]">{item.label}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2 }}
+          className="flex justify-center mt-16"
+        >
+          <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 2, repeat: Infinity }} className="text-muted-foreground/30">
+            <ChevronDown className="h-6 w-6" />
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ─── VALUE PROOF SECTION ─── */}
+      <section className="relative z-10 px-4 py-20 md:py-28">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-16"
+          >
+            <Badge variant="outline" className="mb-4 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Zap className="h-4 w-4" />
+              O que você vai acessar
+            </Badge>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              Tudo que sua empresa precisa.
+              <br />
+              <span className="gradient-text">Em uma plataforma.</span>
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              Agentes de IA autônomos que trabalham 24/7, prospectam clientes, respondem leads e agendam reuniões — tudo no piloto automático.
+            </p>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {benefits.map((b, i) => (
+              <motion.div
+                key={b.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ delay: i * 0.1 }}
+                className="group p-6 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/20 hover:bg-card/80 transition-all duration-500"
+              >
+                <div className="w-12 h-12 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-500">
+                  <b.icon className="h-6 w-6 text-primary/80" />
+                </div>
+                <h3 className="font-display font-semibold text-lg mb-2 text-foreground">{b.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{b.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── SOCIAL PROOF / TESTIMONIALS ─── */}
+      <section className="relative z-10 px-4 py-20 md:py-28">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-16"
+          >
+            <Badge variant="outline" className="mb-4 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Star className="h-4 w-4" />
+              Early adopters
+            </Badge>
+            <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
+              O que os primeiros testadores dizem
+            </h2>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.name}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ delay: i * 0.15 }}
+                className="p-6 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm"
+              >
+                <div className="flex gap-0.5 mb-4">
+                  {Array.from({ length: t.rating }).map((_, j) => (
+                    <Star key={j} className="h-4 w-4 fill-primary text-primary" />
+                  ))}
+                </div>
+                <p className="text-foreground/90 mb-4 leading-relaxed">"{t.quote}"</p>
+                <div>
+                  <p className="font-semibold text-sm text-foreground">{t.name}</p>
+                  <p className="text-xs text-muted-foreground">{t.role}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Stats bar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1 }}
-            className="mt-6 flex items-center gap-3 p-3 rounded-xl glass-card"
-          >
-            <div className="relative">
-              <div className="w-2.5 h-2.5 bg-accent-emerald rounded-full" />
-              <div className="absolute inset-0 w-2.5 h-2.5 bg-accent-emerald rounded-full animate-ping" />
-            </div>
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={recentSignup}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -20 }}
-                className="text-sm text-muted-foreground"
-              >
-                <span className="font-medium text-foreground">{recentSignup}</span> acabou de entrar
-              </motion.span>
-            </AnimatePresence>
-          </motion.div>
-
-          {/* Trust badges */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.2 }}
-            className="flex items-center gap-6 mt-8 text-muted-foreground"
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-16 grid grid-cols-3 gap-6 p-8 rounded-2xl border border-border/50 bg-card/30 backdrop-blur-sm"
           >
             {[
-              { icon: Lock, label: "Dados criptografados" },
-              { icon: Shield, label: "LGPD compliant" },
-              { icon: Cpu, label: "IA de ponta" },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-1.5 opacity-50">
-                <item.icon className="h-3 w-3 text-primary/60" />
-                <span className="text-[10px] uppercase tracking-[0.15em]">{item.label}</span>
+              { value: "4.127+", label: "Na whitelist" },
+              { value: "150+", label: "Empresas interessadas" },
+              { value: "83", label: "Agentes de IA disponíveis" },
+            ].map((stat) => (
+              <div key={stat.label} className="text-center">
+                <p className="font-display text-2xl sm:text-3xl font-bold gradient-text">{stat.value}</p>
+                <p className="text-sm text-muted-foreground mt-1">{stat.label}</p>
               </div>
             ))}
           </motion.div>
-        </motion.div>
+        </div>
+      </section>
 
-        {/* Right side - Form */}
-        <motion.div
-          initial={{ opacity: 0, x: 40 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-        >
-          <div className="holo-card rounded-3xl p-8 md:p-10 relative overflow-hidden">
-            {/* Corner accent glow */}
-            <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/15 rounded-full blur-[80px]" />
-            <div className="absolute -bottom-20 -left-20 w-32 h-32 bg-primary/10 rounded-full blur-[60px]" />
-            
-            <div className="relative z-10">
-              <div className="text-center mb-8">
-                <motion.div
-                  animate={{ rotate: [0, 5, -5, 0] }}
-                  transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4"
-                >
-                  <Sparkles className="h-8 w-8 text-primary" />
-                </motion.div>
-                <h2 className="font-display text-2xl font-bold mb-2">
-                  Garanta sua vaga
-                </h2>
-                <p className="text-muted-foreground text-sm">
-                  Preencha seus dados e entre para a lista VIP
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="name" className="text-xs uppercase tracking-wider text-muted-foreground">Nome</Label>
-                    <Input
-                      id="name"
-                      value={formData.name}
-                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                      placeholder="Seu nome"
-                      className="h-12 bg-background/50 border-border/50 rounded-xl focus:border-primary/30 transition-colors"
-                    />
-                    {errors.name && <p className="text-destructive text-xs">{errors.name}</p>}
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="company" className="text-xs uppercase tracking-wider text-muted-foreground">Empresa</Label>
-                    <Input
-                      id="company"
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value })}
-                      placeholder="Sua empresa"
-                      className="h-12 bg-background/50 border-border/50 rounded-xl focus:border-primary/30 transition-colors"
-                    />
-                    {errors.company && <p className="text-destructive text-xs">{errors.company}</p>}
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email" className="text-xs uppercase tracking-wider text-muted-foreground">Email *</Label>
-                  <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="seu@email.com"
-                    className="h-12 bg-background/50 border-border/50 rounded-xl focus:border-primary/30 transition-colors"
-                    required
-                  />
-                  {errors.email && <p className="text-destructive text-xs">{errors.email}</p>}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="whatsapp" className="text-xs uppercase tracking-wider text-muted-foreground">WhatsApp *</Label>
-                  <Input
-                    id="whatsapp"
-                    type="tel"
-                    value={formData.whatsapp}
-                    onChange={handleWhatsAppChange}
-                    placeholder="(11) 99999-9999"
-                    className="h-12 bg-background/50 border-border/50 rounded-xl focus:border-primary/30 transition-colors"
-                    required
-                  />
-                  {errors.whatsapp && <p className="text-destructive text-xs">{errors.whatsapp}</p>}
-                </div>
-
-                {/* Premium CTA button */}
-                <button 
-                  type="submit" 
-                  disabled={loading}
-                  className="group relative w-full h-14 rounded-xl font-display font-semibold text-lg text-primary-foreground overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none mt-2"
-                >
-                  {/* Animated gradient background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
-                  {/* Glow ring */}
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
-                  {/* Shine sweep */}
-                  <div className="absolute inset-0 overflow-hidden rounded-xl">
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  </div>
-                  {/* Content */}
-                  <span className="relative z-10 flex items-center justify-center gap-2">
-                    {loading ? (
-                      <>
-                        <div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                        Entrando na fila...
-                      </>
-                    ) : (
-                      <>
-                        <Play className="h-5 w-5 fill-current" />
-                        Garantir minha vaga
-                        <ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 transition-transform duration-300" />
-                      </>
-                    )}
-                  </span>
-                </button>
-
-                <p className="text-[10px] text-center text-muted-foreground/60 uppercase tracking-wider pt-1">
-                  Ao se cadastrar, você concorda com nossa{" "}
-                  <a href="#" className="text-primary/60 hover:text-primary transition-colors">Política de Privacidade</a>
-                </p>
-              </form>
-            </div>
-          </div>
-        </motion.div>
-      </div>
-      </div>
+      {/* ─── FINAL CTA ─── */}
+      <section className="relative z-10 px-4 py-20 md:py-28">
+        <div className="max-w-2xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-6">
+              Não fique de fora.
+              <br />
+              <span className="gradient-text glow-text">Sua vaga está esperando.</span>
+            </h2>
+            <p className="text-muted-foreground text-lg mb-8 max-w-lg mx-auto">
+              Convites são liberados em lotes limitados. Quem entra primeiro, tem prioridade.
+            </p>
+            <Button
+              size="lg"
+              className="h-14 px-10 text-lg font-display gap-2 rounded-xl"
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            >
+              <Rocket className="h-5 w-5" />
+              Entrar na Whitelist agora
+              <ArrowRight className="h-5 w-5" />
+            </Button>
+            <p className="text-xs text-muted-foreground/50 mt-4">Sem cartão de crédito · Acesso gratuito no lançamento</p>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 };
