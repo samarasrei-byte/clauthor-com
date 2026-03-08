@@ -8,7 +8,6 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
 interface SplineShowcaseProps {
-  /** "home" shows CTA to waitlist, "waitlist" shows no CTA */
   variant?: "home" | "waitlist";
 }
 
@@ -33,7 +32,6 @@ const SplineShowcase = ({ variant = "home" }: SplineShowcaseProps) => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6 }}
               >
-                {/* Section tag */}
                 <div className="flex items-center gap-2 mb-5">
                   <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/10 flex items-center justify-center">
                     <Sparkles className="h-4 w-4 text-primary" strokeWidth={1.5} />
@@ -43,7 +41,6 @@ const SplineShowcase = ({ variant = "home" }: SplineShowcaseProps) => {
                   </span>
                 </div>
 
-                {/* Impact phrase */}
                 <h2 className="font-display text-2xl sm:text-3xl lg:text-4xl font-bold leading-[1.1] mb-4">
                   <span className="text-foreground">
                     {t("spline.title_1", { defaultValue: "O futuro não espera." })}
@@ -69,32 +66,28 @@ const SplineShowcase = ({ variant = "home" }: SplineShowcaseProps) => {
                         <ArrowRight className="h-4 w-4" />
                       </Button>
                     </Link>
-                    <Link to="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
                       <Button variant="outline" className="gap-2 border-border/40">
                         {t("spline.cta_meeting", { defaultValue: "Agendar reunião" })}
                       </Button>
-                    </Link>
+                    </a>
                   </div>
                 )}
 
                 {variant === "waitlist" && (
-                  <Link to="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
+                  <a href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="gap-2 border-primary/20 text-primary hover:bg-primary/5">
                       {t("spline.cta_meeting", { defaultValue: "Agendar reunião" })}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
-                  </Link>
+                  </a>
                 )}
               </motion.div>
             </div>
 
-            {/* Right content — 3D Scene */}
+            {/* Right content — Animated Visual */}
             <div className="flex-1 relative min-h-[300px] lg:min-h-0">
-              <SplineScene
-                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                className="w-full h-full"
-              />
-              {/* Fade overlay for seamless blend */}
+              <SplineScene className="w-full h-full" />
               <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-card/60 via-transparent to-transparent lg:bg-gradient-to-r lg:from-card/40 lg:via-transparent lg:to-transparent" />
             </div>
           </div>
