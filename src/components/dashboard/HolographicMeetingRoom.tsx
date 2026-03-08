@@ -128,13 +128,6 @@ const HolographicMeetingRoom = () => {
       await new Promise(resolve => setTimeout(resolve, 1500));
       setSpeakingAgent(null);
       await new Promise(resolve => setTimeout(resolve, 500));
-        type: point.type,
-        timestamp: new Date(),
-      }]);
-      
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setSpeakingAgent(null);
-      await new Promise(resolve => setTimeout(resolve: 500));
     }
 
     // Conclusion
