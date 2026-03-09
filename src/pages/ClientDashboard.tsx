@@ -55,6 +55,7 @@ const LogsSection = lazy(() => import("@/components/dashboard/LogsSection"));
 const PaymentHistoryTable = lazy(() => import("@/components/dashboard/PaymentHistoryTable"));
 const OmnixCommandCenter = lazy(() => import("@/pages/OmnixCommandCenter"));
 const AgentLiveTimeline = lazy(() => import("@/components/dashboard/AgentLiveTimeline"));
+const HolographicMeetingRoom = lazy(() => import("@/components/dashboard/HolographicMeetingRoom"));
 const Library = lazy(() => import("./Library"));
 const Integrations = lazy(() => import("./Integrations"));
 const KnowledgeBase = lazy(() => import("./KnowledgeBase"));
