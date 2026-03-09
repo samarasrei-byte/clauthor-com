@@ -307,7 +307,7 @@ const ClientDashboard = () => {
     integrations: t("dashboard.integrations", { defaultValue: "Integrações" }),
     "knowledge-base": "Base de Conhecimento",
     "ai-quality": "Qualidade IA",
-    "war-room": "War Room",
+    "war-room": "Sala de Reunião",
     "live-timeline": "Timeline",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);

@@ -21,7 +21,7 @@ const SettingsPage = ({ billingContent, defaultTab = "meeting" }: SettingsPagePr
   const { t } = useTranslation();
 
   const tabs = [
-    { id: "meeting", label: t("settings.tab_meeting", { defaultValue: "War Room" }), icon: Presentation },
+    { id: "meeting", label: t("settings.tab_meeting", { defaultValue: "Sala de Reunião" }), icon: Presentation },
     { id: "agents", label: t("settings.tab_agents", { defaultValue: "Configurações" }), icon: Bot },
     { id: "credentials", label: t("settings.tab_credentials", { defaultValue: "Conexões" }), icon: Link2 },
     { id: "profile", label: t("settings.tab_profile", { defaultValue: "Meu Perfil" }), icon: User },

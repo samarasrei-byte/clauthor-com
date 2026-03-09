@@ -545,7 +545,7 @@ const HolographicMeetingRoom = () => {
                 className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/10 border border-primary/20"
               >
                 <Users className="h-4 w-4 text-primary" />
-                <span className="text-xs font-bold text-primary tracking-widest uppercase">War Room de IA</span>
+                <span className="text-xs font-bold text-primary tracking-widest uppercase">Sala de Reunião</span>
               </motion.div>
               
               <motion.h1
