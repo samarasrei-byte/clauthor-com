@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database, Star
+  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database, Star, Presentation
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -55,6 +55,7 @@ const LogsSection = lazy(() => import("@/components/dashboard/LogsSection"));
 const PaymentHistoryTable = lazy(() => import("@/components/dashboard/PaymentHistoryTable"));
 const OmnixCommandCenter = lazy(() => import("@/pages/OmnixCommandCenter"));
 const AgentLiveTimeline = lazy(() => import("@/components/dashboard/AgentLiveTimeline"));
+const HolographicMeetingRoom = lazy(() => import("@/components/dashboard/HolographicMeetingRoom"));
 const Library = lazy(() => import("./Library"));
 const Integrations = lazy(() => import("./Integrations"));
 const KnowledgeBase = lazy(() => import("./KnowledgeBase"));
@@ -259,6 +260,7 @@ const ClientDashboard = () => {
     ...soloAgentItems,
 
     // More — secondary features grouped together
+    { id: "war-room", label: "War Room", icon: Presentation, group: moreGroup },
     { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
     { id: "ai-quality", label: "Qualidade IA", icon: Star, group: moreGroup },
     { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
@@ -306,6 +308,7 @@ const ClientDashboard = () => {
     integrations: t("dashboard.integrations", { defaultValue: "Integrações" }),
     "knowledge-base": "Base de Conhecimento",
     "ai-quality": "Qualidade IA",
+    "war-room": "War Room",
     "squad-chat": t("dashboard.meeting"),
     "live-timeline": "Timeline",
     chat: selectedAgent?.name || "Chat",
@@ -699,6 +702,9 @@ const ClientDashboard = () => {
                     } />
                   </Suspense>
                 )}
+
+                {/* ═══ WAR ROOM — Holographic Meeting ═══ */}
+                {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
 
                 {/* ═══ SQUAD CHAT ═══ */}
                 {activeSection === "squad-chat" && <Suspense fallback={<SectionLoader />}><SquadChat agents={agents} /></Suspense>}
