@@ -38,10 +38,6 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled }: OmnixC
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">
-      <div className="shrink-0 border-b border-border/10">
-        <OmnixDashboard messages={messages} isSpeaking={isSpeaking} compact />
-      </div>
-
       <div className="flex-1 min-h-0 relative">
         <OmnixChat
           messages={messages}
