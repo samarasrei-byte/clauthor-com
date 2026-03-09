@@ -25,6 +25,7 @@ const AIQualityDashboard = () => {
   const { user } = useAuth();
   const [feedback, setFeedback] = useState<FeedbackRow[]>([]);
   const [agents, setAgents] = useState<AgentInfo[]>([]);
+  const [execLogs, setExecLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<"7d" | "30d" | "all">("30d");
 
@@ -37,23 +38,35 @@ const AIQualityDashboard = () => {
     setLoading(true);
     const userId = user!.id;
 
-    let query = supabase.from("chat_feedback").select("*").eq("user_id", userId).order("created_at", { ascending: false });
+    let fbQuery = supabase.from("chat_feedback").select("*").eq("user_id", userId).order("created_at", { ascending: false });
 
     if (period === "7d") {
       const d = new Date(); d.setDate(d.getDate() - 7);
-      query = query.gte("created_at", d.toISOString());
+      fbQuery = fbQuery.gte("created_at", d.toISOString());
     } else if (period === "30d") {
       const d = new Date(); d.setDate(d.getDate() - 30);
-      query = query.gte("created_at", d.toISOString());
+      fbQuery = fbQuery.gte("created_at", d.toISOString());
     }
 
-    const [{ data: fb }, { data: ag }] = await Promise.all([
-      query.limit(500),
+    // Also fetch execution_logs for auto-quality scoring
+    let logsQuery = supabase.from("execution_logs").select("agent_id, status, execution_time_ms, created_at").eq("user_id", userId);
+    if (period === "7d") {
+      const d = new Date(); d.setDate(d.getDate() - 7);
+      logsQuery = logsQuery.gte("created_at", d.toISOString());
+    } else if (period === "30d") {
+      const d = new Date(); d.setDate(d.getDate() - 30);
+      logsQuery = logsQuery.gte("created_at", d.toISOString());
+    }
+
+    const [{ data: fb }, { data: ag }, { data: logs }] = await Promise.all([
+      fbQuery.limit(500),
       supabase.from("agents").select("id, name").eq("user_id", userId),
+      logsQuery.limit(500),
     ]);
 
     setFeedback((fb as FeedbackRow[]) || []);
     setAgents(ag || []);
+    setExecLogs(logs || []);
     setLoading(false);
   };
 
@@ -100,6 +113,35 @@ const AIQualityDashboard = () => {
 
     return { total, positive, negative, rate, agentStats, trend, last7Rate };
   }, [feedback, agentMap]);
+
+  // Auto-quality: scores per agent based on execution success rate + avg response time
+  const autoQuality = useMemo(() => {
+    const byAgent: Record<string, { success: number; fail: number; totalTime: number; count: number }> = {};
+    execLogs.forEach(log => {
+      const key = log.agent_id || "general";
+      if (!byAgent[key]) byAgent[key] = { success: 0, fail: 0, totalTime: 0, count: 0 };
+      byAgent[key].count++;
+      if (log.status === "success") byAgent[key].success++;
+      else byAgent[key].fail++;
+      if (log.execution_time_ms) byAgent[key].totalTime += log.execution_time_ms;
+    });
+
+    return Object.entries(byAgent).map(([id, s]) => {
+      const successRate = s.count > 0 ? Math.round((s.success / s.count) * 100) : 0;
+      const avgTime = s.count > 0 ? Math.round(s.totalTime / s.count) : 0;
+      // Score: 60% success rate + 40% speed (under 3s = 100%)
+      const speedScore = Math.min(100, Math.round((3000 / Math.max(avgTime, 500)) * 100));
+      const score = Math.round(successRate * 0.6 + speedScore * 0.4);
+      return {
+        id,
+        name: id === "general" ? "Geral" : (agentMap[id] || "Agente"),
+        successRate,
+        avgTime,
+        score,
+        executions: s.count,
+      };
+    }).sort((a, b) => b.executions - a.executions);
+  }, [execLogs, agentMap]);
 
   const recentNegative = useMemo(() => {
     return feedback
@@ -207,7 +249,46 @@ const AIQualityDashboard = () => {
         </div>
       )}
 
-      {/* Recent Negative Feedback */}
+      {/* Auto-Quality Score per Agent */}
+      {autoQuality.length > 0 && (
+        <div className="glass-card rounded-2xl p-5 space-y-4">
+          <h3 className="font-display font-semibold text-sm flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-primary" /> Score Automático de Qualidade
+          </h3>
+          <p className="text-[10px] text-muted-foreground">Baseado em taxa de sucesso das execuções e tempo médio de resposta</p>
+          <div className="space-y-3">
+            {autoQuality.map((agent, i) => (
+              <motion.div
+                key={agent.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.04 }}
+                className="flex items-center gap-3"
+              >
+                <div className="w-32 truncate">
+                  <p className="text-xs font-semibold truncate">{agent.name}</p>
+                  <p className="text-[10px] text-muted-foreground">{agent.executions} execuções</p>
+                </div>
+                <div className="flex-1">
+                  <Progress value={agent.score} className="h-2" />
+                </div>
+                <div className="flex items-center gap-2 w-36 justify-end">
+                  <Badge variant="secondary" className="text-[9px] gap-0.5 px-1">
+                    ✅ {agent.successRate}%
+                  </Badge>
+                  <Badge variant="secondary" className="text-[9px] gap-0.5 px-1">
+                    <Clock className="h-2 w-2" /> {agent.avgTime > 1000 ? `${(agent.avgTime / 1000).toFixed(1)}s` : `${agent.avgTime}ms`}
+                  </Badge>
+                  <span className={`text-xs font-bold ${agent.score >= 80 ? "text-accent-emerald" : agent.score >= 50 ? "text-yellow-500" : "text-destructive"}`}>
+                    {agent.score}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {recentNegative.length > 0 && (
         <div className="glass-card rounded-2xl p-5 space-y-3">
           <h3 className="font-display font-semibold text-sm flex items-center gap-2">

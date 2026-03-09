@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { supabase } from "@/integrations/supabase/client";
 import { 
   Bot, Brain, Link as LinkIcon, Sparkles, 
   Send, Activity, Database, CheckCircle2,
@@ -72,47 +73,62 @@ const ClientCommandCenter = ({
 
   const isDemo = agents.length === 0;
 
-  const handleCommand = (cmd: string) => {
+  const handleCommand = async (cmd: string) => {
     if (!cmd.trim()) return;
     setCommand(cmd);
     setIsExecuting(true);
     setCurrentStep(0);
     setProgress(0);
-  };
 
-  useEffect(() => {
-    if (isExecuting && currentStep < executionSteps.length) {
-      const stepDuration = 2000;
-      const interval = 50; 
-      const increments = stepDuration / interval;
-      let currentIncrement = 0;
+    // Run real AI processing in background while showing steps
+    const stepDuration = 1800;
+    let step = 0;
+    const stepInterval = setInterval(() => {
+      step++;
+      setCurrentStep(step);
+      setProgress((step / executionSteps.length) * 100);
+      if (step >= executionSteps.length) {
+        clearInterval(stepInterval);
+      }
+    }, stepDuration);
 
-      const timer = setInterval(() => {
-        currentIncrement++;
-        setProgress(() => {
-          const baseProgress = (currentStep / executionSteps.length) * 100;
-          const stepProgress = (currentIncrement / increments) * (100 / executionSteps.length);
-          return Math.min(baseProgress + stepProgress, 100);
-        });
-
-        if (currentIncrement >= increments) {
-          clearInterval(timer);
-          if (currentStep < executionSteps.length - 1) {
-            setCurrentStep(s => s + 1);
-          } else {
-            setTimeout(() => {
-              setIsExecuting(false);
-              setCommand("");
-              setProgress(0);
-              setCurrentStep(0);
-            }, 3000);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      
+      if (token && agents.length > 0) {
+        // Send mission to real AI via squad-chat
+        await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/squad-chat`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({
+              message: `Missão do Command Center: ${cmd}. Analise e execute de forma coordenada.`,
+              conversationHistory: [],
+            }),
           }
-        }
-      }, interval);
-
-      return () => clearInterval(timer);
+        );
+      }
+    } catch (err) {
+      console.error("Command center error:", err);
     }
-  }, [isExecuting, currentStep]);
+
+    // Wait for animation to finish, then redirect to results
+    setTimeout(() => {
+      clearInterval(stepInterval);
+      setProgress(100);
+      setCurrentStep(executionSteps.length);
+      setTimeout(() => {
+        setIsExecuting(false);
+        setCommand("");
+        setProgress(0);
+        setCurrentStep(0);
+        // Navigate to Omnix for the full AI response
+        onNavigate?.("omnix");
+      }, 2000);
+    }, stepDuration * executionSteps.length);
+  };
 
   return (
     <div className="w-full max-w-6xl mx-auto space-y-4 pb-6">

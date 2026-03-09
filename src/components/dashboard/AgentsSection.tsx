@@ -1,17 +1,18 @@
 import { motion } from "framer-motion";
-import { Bot, Plus, Sparkles, Play, Pause, Zap, Eye, Handshake, Rocket, MessageSquare } from "lucide-react";
+import { Bot, Plus, Sparkles, Play, Pause, Zap, Eye, Handshake, Rocket, MessageSquare, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import AgentSetupChecklist from "./AgentSetupChecklist";
 import AutonomyStatusBar, { type AutonomyLevel } from "./AutonomyStatusBar";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
 
 interface AgentsSectionProps {
   agents: any[];
@@ -54,8 +55,32 @@ const AgentsSection = ({
   onOpenLibrary, onOpenThor, onOpenChat,
 }: AgentsSectionProps) => {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [expandedAgent, setExpandedAgent] = useState<string | null>(null);
+
+  // Fetch last activity per agent from execution_logs
+  const { data: lastActivity = {} } = useQuery({
+    queryKey: ["agent-last-activity", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("execution_logs")
+        .select("agent_id, created_at, action")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(200);
+      
+      const result: Record<string, { date: string; action: string }> = {};
+      for (const log of data || []) {
+        if (log.agent_id && !result[log.agent_id]) {
+          result[log.agent_id] = { date: log.created_at, action: log.action };
+        }
+      }
+      return result;
+    },
+    enabled: !!user,
+    staleTime: 60000,
+  });
 
   if (isLoading) {
     return (
@@ -209,6 +234,16 @@ const AgentsSection = ({
                     </p>
                   </div>
                 </div>
+
+                {/* Last Activity */}
+                {lastActivity[agent.id] && (
+                  <div className="flex items-center gap-2 text-[10px] text-muted-foreground bg-muted/20 rounded-lg px-3 py-2">
+                    <Clock className="h-3 w-3 shrink-0" />
+                    <span className="truncate">
+                      Última atividade: {lastActivity[agent.id].action} — {new Date(lastActivity[agent.id].date).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                    </span>
+                  </div>
+                )}
 
                 {/* Actions */}
                 <div className="flex gap-2">
