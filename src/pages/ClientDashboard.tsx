@@ -260,7 +260,7 @@ const ClientDashboard = () => {
     ...soloAgentItems,
 
     // More — secondary features grouped together
-    { id: "war-room", label: "War Room", icon: Presentation, group: moreGroup },
+    { id: "war-room", label: "Sala de Reunião", icon: Presentation, group: moreGroup },
     { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
     { id: "ai-quality", label: "Qualidade IA", icon: Star, group: moreGroup },
     { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
@@ -307,7 +307,7 @@ const ClientDashboard = () => {
     integrations: t("dashboard.integrations", { defaultValue: "Integrações" }),
     "knowledge-base": "Base de Conhecimento",
     "ai-quality": "Qualidade IA",
-    "war-room": "War Room",
+    "war-room": "Sala de Reunião",
     "live-timeline": "Timeline",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);

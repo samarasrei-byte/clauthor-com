@@ -99,7 +99,7 @@ const ClientCommandCenter = ({
   }, [isExecuting, currentStep]);
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-8 pb-12 pt-4">
+    <div className="w-full max-w-6xl mx-auto space-y-4 pb-6">
       {/* Teach Agents Modal */}
       <TeachAgentsModal
         open={showTeachModal}
@@ -108,68 +108,26 @@ const ClientCommandCenter = ({
       />
 
       {/* Status Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="bg-card/40 border border-primary/20 rounded-xl p-5 backdrop-blur-md flex flex-col gap-3 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent" />
-          <div className="flex items-center justify-between text-muted-foreground">
-            <span className="text-[10px] font-mono uppercase tracking-widest font-semibold">Agentes Ativos</span>
-            <Bot className="h-4 w-4 text-primary" />
-          </div>
-          <div className="text-4xl font-display font-bold text-foreground tracking-tight">{activeAgents}</div>
-          <div className="text-xs text-primary/80 flex items-center gap-1.5 font-medium">
-            <Activity className="h-3 w-3" /> Operando nominalmente
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="bg-card/40 border border-border/50 rounded-xl p-5 backdrop-blur-md flex flex-col gap-3 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-transparent" />
-          <div className="flex items-center justify-between text-muted-foreground">
-            <span className="text-[10px] font-mono uppercase tracking-widest font-semibold">Base de Conhecimento</span>
-            <Brain className="h-4 w-4 text-accent-foreground" />
-          </div>
-          <div className="text-3xl font-display font-bold text-foreground tracking-tight">
-            {hasKnowledge ? "Ativa" : "Vazia"}
-          </div>
-          <div className="text-xs text-muted-foreground flex items-center gap-1.5 font-medium">
-            <Database className="h-3 w-3" /> {hasKnowledge ? "Sincronizada" : "Requer atenção"}
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          className="bg-card/40 border border-border/50 rounded-xl p-5 backdrop-blur-md flex flex-col gap-3 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-transparent" />
-          <div className="flex items-center justify-between text-muted-foreground">
-            <span className="text-[10px] font-mono uppercase tracking-widest font-semibold">Integrações</span>
-            <LinkIcon className="h-4 w-4 text-accent-foreground" />
-          </div>
-          <div className="text-4xl font-display font-bold text-foreground tracking-tight">0</div>
-          <div className="text-xs text-muted-foreground flex items-center gap-1.5 font-medium">
-            <Terminal className="h-3 w-3" /> Prontas para conexão
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-          className="bg-card/40 border border-border/50 rounded-xl p-5 backdrop-blur-md flex flex-col gap-3 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent" />
-          <div className="flex items-center justify-between text-muted-foreground">
-            <span className="text-[10px] font-mono uppercase tracking-widest font-semibold">Status da Rede</span>
-            <Cpu className="h-4 w-4 text-primary" />
-          </div>
-          <div className="text-4xl font-display font-bold text-foreground tracking-tight">100%</div>
-          <div className="text-xs text-primary/80 flex items-center gap-1.5 font-medium">
-            <ShieldCheck className="h-3 w-3" /> Sistemas otimizados
-          </div>
-        </motion.div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: "Agentes Ativos", value: String(activeAgents), icon: Bot, sub: "Operando", color: "primary" },
+          { label: "Conhecimento", value: hasKnowledge ? "Ativa" : "Vazia", icon: Brain, sub: hasKnowledge ? "Sincronizada" : "Requer atenção", color: "muted" },
+          { label: "Integrações", value: "0", icon: LinkIcon, sub: "Prontas", color: "muted" },
+          { label: "Rede", value: "100%", icon: Cpu, sub: "Otimizada", color: "primary" },
+        ].map((card, i) => (
+          <motion.div 
+            key={card.label}
+            initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+            className="bg-card/40 border border-border/40 rounded-xl p-4 backdrop-blur-md flex flex-col gap-1.5 relative overflow-hidden"
+          >
+            <div className="flex items-center justify-between text-muted-foreground">
+              <span className="text-[9px] font-mono uppercase tracking-widest font-semibold">{card.label}</span>
+              <card.icon className="h-3.5 w-3.5 text-primary/70" />
+            </div>
+            <div className="text-2xl font-display font-bold text-foreground tracking-tight">{card.value}</div>
+            <div className="text-[10px] text-muted-foreground font-medium">{card.sub}</div>
+          </motion.div>
+        ))}
       </div>
 
       {/* Teach Agents Alert */}
@@ -197,7 +155,7 @@ const ClientCommandCenter = ({
       )}
 
       {/* Main Command Area */}
-      <div className="relative mt-16 mb-12">
+      <div className="relative mt-6 mb-4">
         <AnimatePresence mode="wait">
           {!isExecuting ? (
             <motion.div 
@@ -206,11 +164,11 @@ const ClientCommandCenter = ({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
               transition={{ duration: 0.4 }}
-              className="flex flex-col items-center justify-center space-y-10"
+              className="flex flex-col items-center justify-center space-y-5"
             >
               {/* Proactive AI Tip */}
               <div 
-                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-sm text-primary shadow-[0_0_20px_hsl(var(--primary)/0.15)] cursor-pointer hover:bg-primary/15 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-xs text-primary cursor-pointer hover:bg-primary/15 transition-colors"
                 onClick={() => handleCommand("Reativar 120 leads parados")}
               >
                 <Sparkles className="h-4 w-4 animate-pulse" />
@@ -219,11 +177,11 @@ const ClientCommandCenter = ({
               </div>
 
               {/* The Giant Input */}
-              <div className="w-full max-w-4xl relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 via-accent/30 to-primary/30 rounded-[2rem] blur-2xl opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200" />
-                <div className="relative flex items-center bg-card/80 backdrop-blur-xl border border-primary/30 rounded-[2rem] p-3 shadow-2xl">
-                  <div className="p-5">
-                    <Terminal className="h-8 w-8 text-primary/80" />
+              <div className="w-full max-w-3xl relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition duration-500" />
+                <div className="relative flex items-center bg-card/80 backdrop-blur-xl border border-primary/30 rounded-2xl p-2 shadow-xl">
+                  <div className="p-3">
+                    <Terminal className="h-5 w-5 text-primary/80" />
                   </div>
                   <input 
                     type="text"
@@ -231,27 +189,27 @@ const ClientCommandCenter = ({
                     onChange={(e) => setCommand(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleCommand(command)}
                     placeholder="O que você quer que sua empresa faça agora?"
-                    className="flex-1 bg-transparent border-none outline-none text-2xl md:text-3xl font-display font-medium text-foreground placeholder:text-muted-foreground/40 px-2 h-24"
+                    className="flex-1 bg-transparent border-none outline-none text-base md:text-lg font-display font-medium text-foreground placeholder:text-muted-foreground/40 px-2 h-14"
                   />
                   <Button 
                     size="lg" 
-                    className="h-20 px-10 rounded-2xl text-xl shadow-[0_0_20px_hsl(var(--primary)/0.4)] hover:scale-105 transition-transform"
+                    className="h-12 px-6 rounded-xl text-sm shadow-lg hover:scale-105 transition-transform"
                     onClick={() => handleCommand(command)}
                   >
-                    Executar <Send className="ml-3 h-6 w-6" />
+                    <Send className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
 
               {/* Quick Actions */}
-              <div className="flex flex-wrap items-center justify-center gap-3 max-w-4xl pt-4">
+              <div className="flex flex-wrap items-center justify-center gap-2 max-w-3xl">
                 {suggestions.map((sug, idx) => (
                   <button 
                     key={idx}
                     onClick={() => handleCommand(sug.text)}
-                    className="flex items-center gap-2.5 px-5 py-3 rounded-xl border border-border/50 bg-card/40 hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-all duration-300 text-sm font-medium text-muted-foreground hover:shadow-[0_0_15px_hsl(var(--primary)/0.1)]"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border/40 bg-card/40 hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all text-xs font-medium text-muted-foreground"
                   >
-                    <sug.icon className="h-4 w-4" />
+                    <sug.icon className="h-3.5 w-3.5" />
                     {sug.text}
                   </button>
                 ))}
@@ -262,7 +220,7 @@ const ClientCommandCenter = ({
               key="execution-view"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="w-full max-w-4xl mx-auto bg-card/90 backdrop-blur-xl border border-primary/40 rounded-3xl p-10 shadow-[0_0_50px_hsl(var(--primary)/0.15)] relative overflow-hidden"
+              className="w-full max-w-4xl mx-auto bg-card/90 backdrop-blur-xl border border-primary/40 rounded-2xl p-6 shadow-xl relative overflow-hidden"
             >
               {/* Scanline effect */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
