@@ -4,7 +4,6 @@ import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOmnix } from "@/hooks/useOmnix";
 import OmnixChat from "@/components/omnix/OmnixChat";
-import OmnixDashboard from "@/components/omnix/OmnixDashboard";
 import OmnixSettings from "@/components/omnix/OmnixSettings";
 
 interface OmnixCommandCenterProps {
@@ -15,7 +14,6 @@ interface OmnixCommandCenterProps {
 const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled }: OmnixCommandCenterProps) => {
   const { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages } = useOmnix();
   const [showSettings, setShowSettings] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const postPaymentSent = useRef(false);
 
   // Auto-send contextual welcome message after payment
@@ -38,10 +36,6 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled }: OmnixC
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">
-      <div className="shrink-0 border-b border-border/10">
-        <OmnixDashboard messages={messages} isSpeaking={isSpeaking} compact />
-      </div>
-
       <div className="flex-1 min-h-0 relative">
         <OmnixChat
           messages={messages}

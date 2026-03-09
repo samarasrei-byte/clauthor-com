@@ -202,20 +202,21 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
         />
       )}
 
-      {/* Main orb — bigger, more dramatic */}
+      {/* Main orb — transparent center, only waveform effects visible */}
       <motion.div
         className={cn(
           "relative w-24 h-24 rounded-full flex items-center justify-center overflow-hidden z-10",
-          "bg-gradient-to-br",
+          "border-2",
           state === "listening"
-            ? "from-emerald-500 via-emerald-400/80 to-teal-500/60"
+            ? "border-emerald-500/50"
             : state === "speaking"
-            ? "from-primary via-primary/90 to-primary/60"
+            ? "border-primary/50"
             : state === "processing"
-            ? "from-amber-500 via-orange-500/80 to-amber-400/60"
-            : "from-primary via-primary/80 to-primary/50",
-          isActive && "shadow-[0_0_60px_hsl(var(--primary)/0.5)]"
+            ? "border-amber-500/50"
+            : "border-muted-foreground/20",
+          isActive && "shadow-[0_0_40px_hsl(var(--primary)/0.3)]"
         )}
+        style={{ background: "transparent" }}
         animate={
           state === "processing"
             ? { scale: [1, 1.08, 1, 1.04, 1] }
@@ -230,34 +231,12 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
           repeat: Infinity,
         }}
       >
-        {/* Inner rotating shimmer — double layer */}
+        {/* Inner shimmer effects only */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-tr from-white/20 via-transparent to-white/5"
+          className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/3"
           animate={{ rotate: [0, 360] }}
           transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
         />
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-bl from-transparent via-white/10 to-transparent"
-          animate={{ rotate: [360, 0] }}
-          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-        />
-
-        {/* Concentric rings inside */}
-        <motion.div
-          className="absolute inset-2 rounded-full border border-white/15"
-          animate={isActive ? { scale: [1, 1.06, 1], opacity: [0.2, 0.5, 0.2] } : {}}
-          transition={{ duration: 1.2, repeat: Infinity }}
-        />
-        <motion.div
-          className="absolute inset-4 rounded-full border border-white/8"
-          animate={isActive ? { scale: [1, 1.04, 1], opacity: [0.15, 0.3, 0.15] } : {}}
-          transition={{ duration: 1.5, repeat: Infinity, delay: 0.3 }}
-        />
-
-        {/* Core text */}
-        <span className="relative text-xl font-display font-black text-primary-foreground tracking-wider z-10 drop-shadow-lg">
-          {name.slice(0, 2).toUpperCase()}
-        </span>
       </motion.div>
 
       {/* State label — enhanced */}
