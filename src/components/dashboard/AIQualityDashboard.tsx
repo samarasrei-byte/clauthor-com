@@ -249,7 +249,46 @@ const AIQualityDashboard = () => {
         </div>
       )}
 
-      {/* Recent Negative Feedback */}
+      {/* Auto-Quality Score per Agent */}
+      {autoQuality.length > 0 && (
+        <div className="glass-card rounded-2xl p-5 space-y-4">
+          <h3 className="font-display font-semibold text-sm flex items-center gap-2">
+            <BarChart3 className="h-4 w-4 text-primary" /> Score Automático de Qualidade
+          </h3>
+          <p className="text-[10px] text-muted-foreground">Baseado em taxa de sucesso das execuções e tempo médio de resposta</p>
+          <div className="space-y-3">
+            {autoQuality.map((agent, i) => (
+              <motion.div
+                key={agent.id}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.04 }}
+                className="flex items-center gap-3"
+              >
+                <div className="w-32 truncate">
+                  <p className="text-xs font-semibold truncate">{agent.name}</p>
+                  <p className="text-[10px] text-muted-foreground">{agent.executions} execuções</p>
+                </div>
+                <div className="flex-1">
+                  <Progress value={agent.score} className="h-2" />
+                </div>
+                <div className="flex items-center gap-2 w-36 justify-end">
+                  <Badge variant="secondary" className="text-[9px] gap-0.5 px-1">
+                    ✅ {agent.successRate}%
+                  </Badge>
+                  <Badge variant="secondary" className="text-[9px] gap-0.5 px-1">
+                    <Clock className="h-2 w-2" /> {agent.avgTime > 1000 ? `${(agent.avgTime / 1000).toFixed(1)}s` : `${agent.avgTime}ms`}
+                  </Badge>
+                  <span className={`text-xs font-bold ${agent.score >= 80 ? "text-accent-emerald" : agent.score >= 50 ? "text-yellow-500" : "text-destructive"}`}>
+                    {agent.score}
+                  </span>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {recentNegative.length > 0 && (
         <div className="glass-card rounded-2xl p-5 space-y-3">
           <h3 className="font-display font-semibold text-sm flex items-center gap-2">
