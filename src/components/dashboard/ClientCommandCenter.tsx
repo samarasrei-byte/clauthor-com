@@ -177,11 +177,11 @@ const ClientCommandCenter = ({
               </div>
 
               {/* The Giant Input */}
-              <div className="w-full max-w-4xl relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 via-accent/30 to-primary/30 rounded-[2rem] blur-2xl opacity-40 group-hover:opacity-70 transition duration-1000 group-hover:duration-200" />
-                <div className="relative flex items-center bg-card/80 backdrop-blur-xl border border-primary/30 rounded-[2rem] p-3 shadow-2xl">
-                  <div className="p-5">
-                    <Terminal className="h-8 w-8 text-primary/80" />
+              <div className="w-full max-w-3xl relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20 rounded-2xl blur-xl opacity-40 group-hover:opacity-60 transition duration-500" />
+                <div className="relative flex items-center bg-card/80 backdrop-blur-xl border border-primary/30 rounded-2xl p-2 shadow-xl">
+                  <div className="p-3">
+                    <Terminal className="h-5 w-5 text-primary/80" />
                   </div>
                   <input 
                     type="text"
@@ -189,14 +189,14 @@ const ClientCommandCenter = ({
                     onChange={(e) => setCommand(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleCommand(command)}
                     placeholder="O que você quer que sua empresa faça agora?"
-                    className="flex-1 bg-transparent border-none outline-none text-2xl md:text-3xl font-display font-medium text-foreground placeholder:text-muted-foreground/40 px-2 h-24"
+                    className="flex-1 bg-transparent border-none outline-none text-base md:text-lg font-display font-medium text-foreground placeholder:text-muted-foreground/40 px-2 h-14"
                   />
                   <Button 
                     size="lg" 
-                    className="h-20 px-10 rounded-2xl text-xl shadow-[0_0_20px_hsl(var(--primary)/0.4)] hover:scale-105 transition-transform"
+                    className="h-12 px-6 rounded-xl text-sm shadow-lg hover:scale-105 transition-transform"
                     onClick={() => handleCommand(command)}
                   >
-                    Executar <Send className="ml-3 h-6 w-6" />
+                    <Send className="h-4 w-4" />
                   </Button>
                 </div>
               </div>
