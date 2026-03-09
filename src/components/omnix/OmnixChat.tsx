@@ -185,19 +185,20 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   return (
     <div className="flex flex-col h-full">
       {/* Orb area - centered and prominent */}
-      <div className="shrink-0 flex flex-col items-center pt-6 pb-3 bg-gradient-to-b from-primary/[0.03] to-transparent">
+      <div className="shrink-0 flex flex-col items-center pt-8 pb-6 bg-gradient-to-b from-primary/[0.03] to-transparent">
         <OmnixOrb state={getOrbState()} name={config.name} className={voiceFirst ? "scale-125" : ""} />
-        <h3 className="mt-8 font-display font-black text-sm tracking-widest uppercase text-foreground/80">
+        
+        <h3 className="mt-12 font-display font-black text-sm tracking-widest uppercase text-foreground/80">
           {config.name}
         </h3>
-        <p className="text-[10px] text-muted-foreground/60 font-mono tracking-wider mt-0.5">
+        <p className="text-[10px] text-muted-foreground/60 font-mono tracking-wider mt-1">
           CENTRAL AI AGENT • v2.0
         </p>
 
         {/* Auto-speak toggle */}
         <button
           onClick={() => { setAutoSpeak(!autoSpeak); if (isSpeaking) stopSpeaking(); }}
-          className="mt-2 flex items-center gap-1.5 text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+          className="mt-3 flex items-center gap-1.5 text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors"
         >
           {autoSpeak ? <Volume2 className="h-3 w-3" /> : <VolumeX className="h-3 w-3" />}
           Auto-voice {autoSpeak ? "ON" : "OFF"}
