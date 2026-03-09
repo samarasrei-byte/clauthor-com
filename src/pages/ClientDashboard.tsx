@@ -30,6 +30,8 @@ import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
 const CompanyBoardAlert = lazy(() => import("@/components/dashboard/CompanyBoardAlert"));
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
 const SmartAgentRouter = lazy(() => import("@/components/dashboard/SmartAgentRouter"));
+const TaskRequestPanel = lazy(() => import("@/components/dashboard/TaskRequestPanel"));
+const AgentCollaborationPanel = lazy(() => import("@/components/dashboard/AgentCollaborationPanel"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 const PendingActionsPanel = lazy(() => import("@/components/dashboard/PendingActionsPanel").then(m => ({ default: m.PendingActionsPanel })));
