@@ -310,6 +310,7 @@ const ClientDashboard = () => {
   };
 
   const breadcrumbMap: Record<string, string> = useMemo(() => ({
+    "results": "Resultados",
     overview: t("dashboard.command_center"),
     omnix: t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" }),
     agents: t("dashboard.agents_tab"),
