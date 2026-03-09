@@ -126,7 +126,7 @@ const ClientCommandCenter = ({
       {/* Status Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { label: "Agentes Ativos", value: String(activeAgents), icon: Bot, sub: "Operando", color: "primary" },
+          { label: "Agentes Ativos", value: isDemo ? "5 (demo)" : String(activeAgents), icon: Bot, sub: isDemo ? "Modo demonstração" : "Operando", color: "primary" },
           { label: "Conhecimento", value: hasKnowledge ? "Ativa" : "Vazia", icon: Brain, sub: hasKnowledge ? "Sincronizada" : "Requer atenção", color: "muted" },
           { label: "Integrações", value: "0", icon: LinkIcon, sub: "Prontas", color: "muted" },
           { label: "Rede", value: "100%", icon: Cpu, sub: "Otimizada", color: "primary" },
@@ -145,6 +145,19 @@ const ClientCommandCenter = ({
           </motion.div>
         ))}
       </div>
+
+      {/* Demo Mode Banner */}
+      {isDemo && !isExecuting && (
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          className="bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 flex items-center gap-3"
+        >
+          <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+          <p className="text-xs text-muted-foreground">
+            <strong className="text-primary">Modo demonstração</strong> — Você está vendo agentes simulados. Contrate agentes reais na <button onClick={() => onNavigate?.("library")} className="underline text-primary hover:text-primary/80 transition-colors">Biblioteca</button>.
+          </p>
+        </motion.div>
+      )}
 
       {/* Teach Agents Alert */}
       {!hasKnowledge && !isExecuting && (
