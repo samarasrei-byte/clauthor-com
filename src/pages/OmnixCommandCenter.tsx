@@ -14,7 +14,6 @@ interface OmnixCommandCenterProps {
 const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled }: OmnixCommandCenterProps) => {
   const { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages } = useOmnix();
   const [showSettings, setShowSettings] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const postPaymentSent = useRef(false);
 
   // Auto-send contextual welcome message after payment
