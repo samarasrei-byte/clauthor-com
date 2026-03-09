@@ -93,9 +93,11 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 className={cn(
                   "w-full flex items-center gap-3 rounded-xl transition-all duration-200 group relative",
                   collapsed ? "px-3 py-3 justify-center" : "px-3 py-2.5",
-                  isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]"
+                  item.badge === "Em breve"
+                    ? "text-muted-foreground/50 hover:text-muted-foreground/70 hover:bg-white/[0.02]"
+                    : isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]"
                 )}
               >
                 {/* Active indicator */}
