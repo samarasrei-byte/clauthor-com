@@ -239,9 +239,9 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
         />
       </motion.div>
 
-      {/* State label — enhanced */}
+      {/* State label — positioned below orb with proper spacing */}
       <motion.div
-        className="absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap z-10"
+        className="absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap z-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       >
