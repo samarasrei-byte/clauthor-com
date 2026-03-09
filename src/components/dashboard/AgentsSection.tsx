@@ -55,8 +55,32 @@ const AgentsSection = ({
   onOpenLibrary, onOpenThor, onOpenChat,
 }: AgentsSectionProps) => {
   const { t } = useTranslation();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [expandedAgent, setExpandedAgent] = useState<string | null>(null);
+
+  // Fetch last activity per agent from execution_logs
+  const { data: lastActivity = {} } = useQuery({
+    queryKey: ["agent-last-activity", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("execution_logs")
+        .select("agent_id, created_at, action")
+        .eq("user_id", user!.id)
+        .order("created_at", { ascending: false })
+        .limit(200);
+      
+      const result: Record<string, { date: string; action: string }> = {};
+      for (const log of data || []) {
+        if (log.agent_id && !result[log.agent_id]) {
+          result[log.agent_id] = { date: log.created_at, action: log.action };
+        }
+      }
+      return result;
+    },
+    enabled: !!user,
+    staleTime: 60000,
+  });
 
   if (isLoading) {
     return (

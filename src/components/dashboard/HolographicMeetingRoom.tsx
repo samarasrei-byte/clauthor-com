@@ -352,57 +352,127 @@ const HolographicMeetingRoom = () => {
     return [...new Set(relevant)].slice(0, 5);
   };
 
-  // Run meeting simulation
+  // Run meeting with REAL AI responses
   const runMeeting = async () => {
     if (!topic || agents.length === 0) return;
     const ids = selectRelevantAgents(topic);
     setSelectedAgents(ids);
     setPhase("discussion");
-    await delay(1200);
+    await delay(800);
 
     const active = agents.filter((a) => ids.includes(a.id));
-    const script: Array<{ role: HolographicAgent["role"]; type: MeetingMessage["type"]; content: string }> = [
-      { role: "ceo", type: "analysis", content: `Analisando o objetivo: "${topic}". Vamos estruturar uma abordagem coordenada entre os especialistas.` },
-      { role: "analytics", type: "analysis", content: "Dados históricos indicam oportunidades significativas de otimização nesse contexto. Identificando padrões de sucesso." },
-      { role: "marketing", type: "strategy", content: "Recomendo estratégia multicanal com narrativa focada em engajamento do público-alvo. Podemos criar uma campanha de alto impacto." },
-      { role: "sales", type: "strategy", content: "Integrar pontos de conversão em cada etapa do funil é essencial. Vou preparar sequências de follow-up personalizadas." },
-      { role: "design", type: "creative", content: "Vou desenvolver conceitos visuais impactantes para comunicar a proposta de valor de forma memorável." },
-      { role: "automation", type: "action", content: "Configuro automações para escalar e garantir consistência nos pontos de contato. Integrando com CRM e email marketing." },
-      { role: "ceo", type: "action", content: "Consolidando todas as estratégias em um plano de ação executável com métricas de sucesso claramente definidas." },
-    ];
+    const { data: sessionData } = await supabase.auth.getSession();
+    const token = sessionData?.session?.access_token;
+    if (!token) return;
 
-    for (const s of script) {
-      const agent = active.find((a) => a.role === s.role) || active[0];
-      if (!agent) continue;
+    // Each agent contributes one real AI response
+    const conversationHistory: { role: string; content: string }[] = [];
+
+    for (const agent of active) {
       setSpeakingAgentId(agent.id);
-      await delay(600);
-      setMessages((prev) => [
-        ...prev,
-        {
+      await delay(400);
+
+      try {
+        const roleInfo = AGENT_ROLES[agent.role];
+        const contextPrompt = `Você é ${agent.name} (${roleInfo.label} - ${roleInfo.specialty}). 
+Estamos em uma reunião estratégica sobre: "${topic}".
+${conversationHistory.length > 0 ? "Contexto da discussão até agora:\n" + conversationHistory.map(m => m.content).join("\n") : ""}
+Dê sua contribuição profissional em 2-3 frases, focando na sua especialidade. Seja direto e estratégico.`;
+
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({
+              message: contextPrompt,
+              agentId: agent.id,
+              conversationHistory: [],
+            }),
+          }
+        );
+
+        let content = `Analisando "${topic}" pela perspectiva de ${roleInfo.specialty}...`;
+        if (response.ok) {
+          const data = await response.json();
+          content = data.response || data.content || content;
+        }
+
+        const msgType: MeetingMessage["type"] = 
+          agent.role === "analytics" ? "analysis" :
+          agent.role === "ceo" ? "strategy" :
+          agent.role === "design" ? "creative" : "action";
+
+        const msg: MeetingMessage = {
           id: `msg-${Date.now()}-${Math.random()}`,
           agentId: agent.id,
           agentName: agent.name,
-          agentRole: AGENT_ROLES[agent.role].label,
-          content: s.content,
-          type: s.type,
+          agentRole: roleInfo.label,
+          content,
+          type: msgType,
           timestamp: new Date(),
-        },
-      ]);
-      await delay(2500);
+        };
+
+        conversationHistory.push({ role: "assistant", content: `[${agent.name}]: ${content}` });
+        setMessages((prev) => [...prev, msg]);
+        await delay(1500);
+      } catch (err) {
+        console.error("Meeting agent error:", err);
+      }
+
       setSpeakingAgentId(null);
-      await delay(400);
+      await delay(300);
     }
 
     setPhase("planning");
-    await delay(1000);
-    setPhase("conclusion");
-    setActionItems([
-      { id: "1", task: "Criar estratégia multicanal completa", assignedTo: "Marketing AI", priority: "high" },
-      { id: "2", task: "Desenvolver assets visuais de campanha", assignedTo: "Design AI", priority: "high" },
-      { id: "3", task: "Configurar funil automatizado", assignedTo: "Automation AI", priority: "medium" },
-      { id: "4", task: "Dashboard de métricas real-time", assignedTo: "Data Analyst AI", priority: "medium" },
-      { id: "5", task: "Sequência de follow-up para leads", assignedTo: "Sales AI", priority: "high" },
+    await delay(800);
+
+    // Generate action items from the last agent (CEO or first)
+    const ceoAgent = active.find(a => a.role === "ceo") || active[0];
+    if (ceoAgent) {
+      try {
+        const planResponse = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({
+              message: `Com base na reunião sobre "${topic}", liste exatamente 5 ações prioritárias no formato:
+1. [ALTA] Ação - Responsável
+2. [MÉDIA] Ação - Responsável
+Apenas o texto, sem introduções.`,
+              agentId: ceoAgent.id,
+              conversationHistory: conversationHistory.slice(-3),
+            }),
+          }
+        );
+        if (planResponse.ok) {
+          const planData = await planResponse.json();
+          const text = planData.response || planData.content || "";
+          const lines = text.split("\n").filter((l: string) => l.trim());
+          const parsed: ActionItem[] = lines.slice(0, 5).map((line: string, i: number) => {
+            const priority = line.includes("[ALTA]") ? "high" : line.includes("[MÉDIA]") ? "medium" : "low";
+            const clean = line.replace(/^\d+\.\s*/, "").replace(/\[(ALTA|MÉDIA|BAIXA)\]\s*/i, "");
+            const parts = clean.split(" - ");
+            return {
+              id: String(i + 1),
+              task: parts[0]?.trim() || clean,
+              assignedTo: parts[1]?.trim() || active[i % active.length]?.name || "Equipe",
+              priority,
+            };
+          });
+          if (parsed.length > 0) setActionItems(parsed);
+        }
+      } catch {}
+    }
+
+    // Fallback action items if none generated
+    setActionItems(prev => prev.length > 0 ? prev : [
+      { id: "1", task: "Executar plano estratégico", assignedTo: active[0]?.name || "Equipe", priority: "high" },
+      { id: "2", task: "Preparar relatório de resultados", assignedTo: active[1]?.name || "Equipe", priority: "medium" },
     ]);
+
+    setPhase("conclusion");
   };
 
   const startMeeting = () => {
