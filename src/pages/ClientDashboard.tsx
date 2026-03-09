@@ -308,7 +308,6 @@ const ClientDashboard = () => {
     "knowledge-base": "Base de Conhecimento",
     "ai-quality": "Qualidade IA",
     "war-room": "War Room",
-    "squad-chat": t("dashboard.meeting"),
     "live-timeline": "Timeline",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
