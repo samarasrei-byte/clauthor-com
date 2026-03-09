@@ -703,6 +703,9 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {/* ═══ WAR ROOM — Holographic Meeting ═══ */}
+                {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
+
                 {/* ═══ SQUAD CHAT ═══ */}
                 {activeSection === "squad-chat" && <Suspense fallback={<SectionLoader />}><SquadChat agents={agents} /></Suspense>}
 
