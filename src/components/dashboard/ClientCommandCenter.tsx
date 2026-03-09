@@ -43,6 +43,15 @@ const executionSteps = [
   "Finalizando e preparando relatório"
 ];
 
+// Simulated agents when user has none yet — gives a preview of the experience
+const DEMO_AGENTS = [
+  { name: "SDR Outbound", role: "Prospecção & Vendas", status: "active" },
+  { name: "Copywriter IA", role: "Criação de Conteúdo", status: "active" },
+  { name: "Analista Financeiro", role: "Relatórios & Dados", status: "active" },
+  { name: "Suporte Premium", role: "Atendimento ao Cliente", status: "active" },
+  { name: "Growth Hacker", role: "Marketing & Growth", status: "standby" },
+];
+
 const ClientCommandCenter = ({
   activeAgents,
   agents = [],
@@ -55,6 +64,13 @@ const ClientCommandCenter = ({
   const [showTeachModal, setShowTeachModal] = useState(false);
   
   const hasKnowledge = agents.some(a => a.knowledge_base || (a.integrations && a.integrations.length > 0));
+
+  // Use real agents if available, otherwise show demo agents for preview
+  const displayAgents = agents.length > 0 
+    ? agents.slice(0, 5).map(a => ({ name: a.name, role: a.description || a.objective || "Agente IA", status: a.status }))
+    : DEMO_AGENTS;
+
+  const isDemo = agents.length === 0;
 
   const handleCommand = (cmd: string) => {
     if (!cmd.trim()) return;
@@ -110,7 +126,7 @@ const ClientCommandCenter = ({
       {/* Status Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { label: "Agentes Ativos", value: String(activeAgents), icon: Bot, sub: "Operando", color: "primary" },
+          { label: "Agentes Ativos", value: isDemo ? "5 (demo)" : String(activeAgents), icon: Bot, sub: isDemo ? "Modo demonstração" : "Operando", color: "primary" },
           { label: "Conhecimento", value: hasKnowledge ? "Ativa" : "Vazia", icon: Brain, sub: hasKnowledge ? "Sincronizada" : "Requer atenção", color: "muted" },
           { label: "Integrações", value: "0", icon: LinkIcon, sub: "Prontas", color: "muted" },
           { label: "Rede", value: "100%", icon: Cpu, sub: "Otimizada", color: "primary" },
@@ -129,6 +145,19 @@ const ClientCommandCenter = ({
           </motion.div>
         ))}
       </div>
+
+      {/* Demo Mode Banner */}
+      {isDemo && !isExecuting && (
+        <motion.div 
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+          className="bg-primary/5 border border-primary/20 rounded-xl px-4 py-3 flex items-center gap-3"
+        >
+          <Sparkles className="h-4 w-4 text-primary animate-pulse" />
+          <p className="text-xs text-muted-foreground">
+            <strong className="text-primary">Modo demonstração</strong> — Você está vendo agentes simulados. Contrate agentes reais na <button onClick={() => onNavigate?.("library")} className="underline text-primary hover:text-primary/80 transition-colors">Biblioteca</button>.
+          </p>
+        </motion.div>
+      )}
 
       {/* Teach Agents Alert */}
       {!hasKnowledge && !isExecuting && (
@@ -302,37 +331,42 @@ const ClientCommandCenter = ({
 
                   {/* Agents Involved */}
                   <div className="space-y-5">
-                    <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-widest font-semibold">Esquadrão Alocado</h3>
-                    <div className="flex flex-col gap-4">
-                      {[1, 2, 3].map((_, i) => (
+                    <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-widest font-semibold">
+                      Esquadrão Alocado {isDemo && <span className="text-primary/60 ml-1">(demo)</span>}
+                    </h3>
+                    <div className="flex flex-col gap-3">
+                      {displayAgents.slice(0, 4).map((agent, i) => (
                         <motion.div 
                           key={i}
                           initial={{ opacity: 0, x: 20 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.2 }}
-                          className="flex items-center justify-between p-4 rounded-xl bg-card border border-border/50 shadow-sm relative overflow-hidden"
+                          transition={{ delay: i * 0.15 }}
+                          className="flex items-center justify-between p-3 rounded-xl bg-card border border-border/50 shadow-sm relative overflow-hidden"
                         >
-                          {i <= currentStep % 3 && (
+                          {i <= currentStep % 4 && (
                             <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary shadow-[0_0_10px_hsl(var(--primary)/0.8)]" />
                           )}
-                          <div className="flex items-center gap-4 pl-2">
-                            <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 flex items-center justify-center">
-                              <Bot className="h-6 w-6 text-primary" />
+                          <div className="flex items-center gap-3 pl-2">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/30 flex items-center justify-center">
+                              <Bot className="h-5 w-5 text-primary" />
                             </div>
                             <div>
-                              <div className="font-semibold text-sm">Agente Especialista 0{i+1}</div>
-                              <div className="text-xs text-muted-foreground font-mono mt-1">
-                                {i <= currentStep % 3 ? "Processando..." : "Aguardando"}
+                              <div className="font-semibold text-sm">{agent.name}</div>
+                              <div className="text-[10px] text-muted-foreground font-mono mt-0.5">
+                                {i <= currentStep % 4 ? "Processando..." : "Aguardando"}
                               </div>
                             </div>
                           </div>
-                          {i <= currentStep % 3 && (
-                            <div className="flex gap-1.5">
-                              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '0ms' }} />
-                              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '150ms' }} />
-                              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '300ms' }} />
-                            </div>
-                          )}
+                          <div className="flex items-center gap-2">
+                            <span className="text-[9px] text-muted-foreground/60 hidden md:block">{agent.role}</span>
+                            {i <= currentStep % 4 && (
+                              <div className="flex gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '0ms' }} />
+                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '150ms' }} />
+                                <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" style={{ animationDelay: '300ms' }} />
+                              </div>
+                            )}
+                          </div>
                         </motion.div>
                       ))}
                     </div>
