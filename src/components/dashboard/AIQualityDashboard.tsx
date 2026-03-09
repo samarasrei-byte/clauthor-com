@@ -25,6 +25,7 @@ const AIQualityDashboard = () => {
   const { user } = useAuth();
   const [feedback, setFeedback] = useState<FeedbackRow[]>([]);
   const [agents, setAgents] = useState<AgentInfo[]>([]);
+  const [execLogs, setExecLogs] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [period, setPeriod] = useState<"7d" | "30d" | "all">("30d");
 
