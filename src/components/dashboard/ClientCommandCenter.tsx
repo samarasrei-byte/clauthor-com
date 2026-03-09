@@ -155,7 +155,7 @@ const ClientCommandCenter = ({
       )}
 
       {/* Main Command Area */}
-      <div className="relative mt-16 mb-12">
+      <div className="relative mt-6 mb-4">
         <AnimatePresence mode="wait">
           {!isExecuting ? (
             <motion.div 
