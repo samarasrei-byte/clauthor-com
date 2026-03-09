@@ -7,7 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database, Star, Presentation
+  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database, Star, Presentation,
+  Rocket, Network, Target, Mic, Store
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -60,6 +61,7 @@ const Library = lazy(() => import("./Library"));
 const Integrations = lazy(() => import("./Integrations"));
 const KnowledgeBase = lazy(() => import("./KnowledgeBase"));
 const AIQualityDashboard = lazy(() => import("@/components/dashboard/AIQualityDashboard"));
+const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -269,6 +271,13 @@ const ClientDashboard = () => {
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, group: moreGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
+
+    // Coming soon features
+    { id: "mission-control", label: "Mission Control", icon: Rocket, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "agent-memory", label: "Agent Memory", icon: Network, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "voice-first", label: "Voice-First", icon: Mic, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "marketplace-p2p", label: "Marketplace P2P", icon: Store, badge: "Em breve", group: "🚀 Próximas Features" },
   ];
 
   const tierColors: Record<string, string> = {
@@ -756,6 +765,11 @@ const ClientDashboard = () => {
                       onGoToAgents={() => setActiveSection("agents")}
                     />
                   </Suspense>
+                )}
+
+                {/* ═══ COMING SOON FEATURES ═══ */}
+                {["mission-control", "agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
+                  <ComingSoonSection feature={activeSection} />
                 )}
               </div>
             </div>

@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Globe, FileUp, Link2, X, CheckCircle2, Loader2, Brain, ArrowRight } from "lucide-react";
+import { Globe, FileUp, Link2, CheckCircle2, Loader2, Brain, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 interface TeachAgentsModalProps {
   open: boolean;
@@ -12,10 +14,9 @@ interface TeachAgentsModalProps {
 }
 
 const scanSteps = [
-  { label: "Analisando site", duration: 2000 },
-  { label: "Mapeando páginas", duration: 2500 },
-  { label: "Extraindo conteúdo", duration: 3000 },
-  { label: "Criando base de conhecimento", duration: 2000 },
+  { label: "Analisando site", key: "fetching" },
+  { label: "Extraindo conteúdo com IA", key: "analyzing" },
+  { label: "Criando base de conhecimento", key: "saving" },
 ];
 
 type Mode = "select" | "url" | "documents" | "crm";
@@ -26,20 +27,78 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
   const [scanning, setScanning] = useState(false);
   const [scanStep, setScanStep] = useState(0);
   const [scanDone, setScanDone] = useState(false);
+  const [scanResult, setScanResult] = useState<any>(null);
+  const [scanError, setScanError] = useState("");
 
   const handleScanUrl = async () => {
     if (!url.trim()) return;
     setScanning(true);
     setScanStep(0);
     setScanDone(false);
+    setScanError("");
+    setScanResult(null);
 
-    for (let i = 0; i < scanSteps.length; i++) {
-      setScanStep(i);
-      await new Promise(r => setTimeout(r, scanSteps[i].duration));
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) { toast.error("Faça login primeiro."); setScanning(false); return; }
+
+      setScanStep(0); // Fetching
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/company-scanner`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ action: "scan_url", url: url.trim() }),
+        }
+      );
+
+      setScanStep(1); // Analyzing
+
+      if (!response.ok) {
+        const errData = await response.json().catch(() => ({}));
+        throw new Error(errData.error || "Erro ao analisar o site");
+      }
+
+      const data = await response.json();
+      setScanStep(2); // Saving
+
+      if (data.success && data.data) {
+        // Save to company_board
+        const extracted = data.data;
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const entries = [
+            { title: "Nome da Empresa", content: extracted.companyName || "", category: "company_info" },
+            { title: "Segmento", content: extracted.industry || "", category: "company_info" },
+            { title: "Descrição", content: extracted.description || "", category: "company_info" },
+            { title: "Produtos/Serviços", content: extracted.products || "", category: "products" },
+            { title: "Público-Alvo", content: extracted.targetAudience || "", category: "audience" },
+            { title: "Tom de Voz", content: extracted.toneOfVoice || "", category: "brand" },
+            { title: "Perguntas Frequentes", content: extracted.commonQuestions || "", category: "faq" },
+            { title: "Contato", content: extracted.contactInfo || "", category: "contact" },
+          ].filter(e => e.content);
+
+          for (const entry of entries) {
+            await supabase.from("company_board").upsert(
+              { user_id: user.id, title: entry.title, content: entry.content, category: entry.category },
+              { onConflict: "user_id,title" }
+            ).select();
+          }
+        }
+
+        setScanResult(extracted);
+        setScanDone(true);
+        toast.success("Base de conhecimento criada com sucesso!");
+      } else {
+        throw new Error("Não foi possível extrair informações.");
+      }
+    } catch (err: any) {
+      setScanError(err.message || "Erro desconhecido");
+      toast.error(err.message || "Erro ao analisar site");
+    } finally {
+      setScanning(false);
     }
-
-    setScanDone(true);
-    setScanning(false);
   };
 
   const handleReset = () => {
@@ -48,6 +107,8 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
     setScanning(false);
     setScanStep(0);
     setScanDone(false);
+    setScanResult(null);
+    setScanError("");
   };
 
   const handleClose = () => {
@@ -148,7 +209,7 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
               </motion.div>
             )}
 
-            {/* URL scan */}
+            {/* URL scan — REAL scraping */}
             {mode === "url" && (
               <motion.div
                 key="url"
@@ -157,7 +218,7 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
                 exit={{ opacity: 0, y: -10 }}
                 className="space-y-5 pt-2"
               >
-                {!scanning && !scanDone && (
+                {!scanning && !scanDone && !scanError && (
                   <>
                     <div className="relative">
                       <Globe className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
@@ -179,14 +240,14 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
                   </>
                 )}
 
-                {(scanning || scanDone) && (
+                {scanning && (
                   <div className="space-y-4 py-4">
                     <div className="text-center mb-6">
                       <p className="text-sm text-muted-foreground font-mono">{url}</p>
                     </div>
                     {scanSteps.map((step, i) => {
-                      const isDone = scanDone || i < scanStep;
-                      const isActive = scanning && i === scanStep;
+                      const isDone = i < scanStep;
+                      const isActive = i === scanStep;
                       return (
                         <motion.div
                           key={i}
@@ -216,22 +277,53 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
                         </motion.div>
                       );
                     })}
-                    {scanDone && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        className="text-center pt-4"
-                      >
-                        <div className="text-lg font-display font-bold text-emerald-400 mb-2">
-                          ✓ Base de conhecimento criada!
-                        </div>
-                        <p className="text-sm text-muted-foreground mb-4">
-                          Seus agentes agora conhecem sua empresa.
-                        </p>
-                        <Button onClick={handleClose}>Fechar</Button>
-                      </motion.div>
-                    )}
                   </div>
+                )}
+
+                {scanDone && scanResult && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="space-y-4 py-4"
+                  >
+                    <div className="text-center">
+                      <div className="text-lg font-display font-bold text-emerald-400 mb-2">
+                        ✓ Base de conhecimento criada!
+                      </div>
+                      <p className="text-sm text-muted-foreground mb-4">
+                        Seus agentes agora conhecem sua empresa.
+                      </p>
+                    </div>
+                    
+                    {/* Show extracted info summary */}
+                    <div className="bg-card/50 border border-border/30 rounded-xl p-4 space-y-2 text-sm">
+                      {scanResult.companyName && (
+                        <div><span className="text-muted-foreground">Empresa:</span> <strong>{scanResult.companyName}</strong></div>
+                      )}
+                      {scanResult.industry && (
+                        <div><span className="text-muted-foreground">Segmento:</span> {scanResult.industry}</div>
+                      )}
+                      {scanResult.description && (
+                        <div><span className="text-muted-foreground">Sobre:</span> {scanResult.description}</div>
+                      )}
+                    </div>
+
+                    <Button onClick={handleClose} className="w-full">Fechar</Button>
+                  </motion.div>
+                )}
+
+                {scanError && !scanning && (
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    className="text-center py-4 space-y-3"
+                  >
+                    <p className="text-sm text-destructive">{scanError}</p>
+                    <div className="flex gap-3">
+                      <Button variant="outline" onClick={handleReset} className="flex-1">Voltar</Button>
+                      <Button onClick={handleScanUrl} className="flex-1">Tentar novamente</Button>
+                    </div>
+                  </motion.div>
                 )}
               </motion.div>
             )}

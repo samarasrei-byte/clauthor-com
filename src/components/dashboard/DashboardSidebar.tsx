@@ -93,9 +93,11 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 className={cn(
                   "w-full flex items-center gap-3 rounded-xl transition-all duration-200 group relative",
                   collapsed ? "px-3 py-3 justify-center" : "px-3 py-2.5",
-                  isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]"
+                  item.badge === "Em breve"
+                    ? "text-muted-foreground/50 hover:text-muted-foreground/70 hover:bg-white/[0.02]"
+                    : isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]"
                 )}
               >
                 {/* Active indicator */}
@@ -129,7 +131,12 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
                 {/* Badge */}
                 {item.badge && !collapsed && !hasChildren && (
-                  <span className="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">
+                  <span className={cn(
+                    "ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md",
+                    item.badge === "Em breve" 
+                      ? "bg-muted/30 text-muted-foreground/60 italic font-medium"
+                      : "bg-primary/15 text-primary"
+                  )}>
                     {item.badge}
                   </span>
                 )}
