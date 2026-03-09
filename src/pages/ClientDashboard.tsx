@@ -676,6 +676,13 @@ const ClientDashboard = () => {
                 {/* ═══ AI QUALITY ═══ */}
                 {activeSection === "ai-quality" && <Suspense fallback={<SectionLoader />}><AIQualityDashboard /></Suspense>}
 
+                {/* ═══ EXECUTION RESULTS ═══ */}
+                {activeSection === "results" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ExecutionResultsPanel onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
+
                 {/* ═══ SETTINGS ═══ */}
                 {activeSection === "settings" && (
                   <Suspense fallback={<SectionLoader />}>
