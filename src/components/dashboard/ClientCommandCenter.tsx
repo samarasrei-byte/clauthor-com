@@ -43,6 +43,15 @@ const executionSteps = [
   "Finalizando e preparando relatório"
 ];
 
+// Simulated agents when user has none yet — gives a preview of the experience
+const DEMO_AGENTS = [
+  { name: "SDR Outbound", role: "Prospecção & Vendas", status: "active" },
+  { name: "Copywriter IA", role: "Criação de Conteúdo", status: "active" },
+  { name: "Analista Financeiro", role: "Relatórios & Dados", status: "active" },
+  { name: "Suporte Premium", role: "Atendimento ao Cliente", status: "active" },
+  { name: "Growth Hacker", role: "Marketing & Growth", status: "standby" },
+];
+
 const ClientCommandCenter = ({
   activeAgents,
   agents = [],
