@@ -638,8 +638,8 @@ const ClientDashboard = () => {
                   </ErrorBoundary>
                 )}
 
-                {/* ═══ GRUPO (SQUAD CHAT) ═══ */}
-                {activeSection === "grupo" && (
+                {/* ═══ EQUIPE (AGENT CONTACTS) ═══ */}
+                {activeSection === "equipe" && (
                   <Suspense fallback={<SectionLoader />}>
                     <SquadChat agents={agents} onRequestAgent={(name) => handleSidebarNav("library")} />
                   </Suspense>
