@@ -108,68 +108,26 @@ const ClientCommandCenter = ({
       />
 
       {/* Status Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-          className="bg-card/40 border border-primary/20 rounded-xl p-5 backdrop-blur-md flex flex-col gap-3 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent" />
-          <div className="flex items-center justify-between text-muted-foreground">
-            <span className="text-[10px] font-mono uppercase tracking-widest font-semibold">Agentes Ativos</span>
-            <Bot className="h-4 w-4 text-primary" />
-          </div>
-          <div className="text-4xl font-display font-bold text-foreground tracking-tight">{activeAgents}</div>
-          <div className="text-xs text-primary/80 flex items-center gap-1.5 font-medium">
-            <Activity className="h-3 w-3" /> Operando nominalmente
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-          className="bg-card/40 border border-border/50 rounded-xl p-5 backdrop-blur-md flex flex-col gap-3 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-transparent" />
-          <div className="flex items-center justify-between text-muted-foreground">
-            <span className="text-[10px] font-mono uppercase tracking-widest font-semibold">Base de Conhecimento</span>
-            <Brain className="h-4 w-4 text-accent-foreground" />
-          </div>
-          <div className="text-3xl font-display font-bold text-foreground tracking-tight">
-            {hasKnowledge ? "Ativa" : "Vazia"}
-          </div>
-          <div className="text-xs text-muted-foreground flex items-center gap-1.5 font-medium">
-            <Database className="h-3 w-3" /> {hasKnowledge ? "Sincronizada" : "Requer atenção"}
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}
-          className="bg-card/40 border border-border/50 rounded-xl p-5 backdrop-blur-md flex flex-col gap-3 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-transparent" />
-          <div className="flex items-center justify-between text-muted-foreground">
-            <span className="text-[10px] font-mono uppercase tracking-widest font-semibold">Integrações</span>
-            <LinkIcon className="h-4 w-4 text-accent-foreground" />
-          </div>
-          <div className="text-4xl font-display font-bold text-foreground tracking-tight">0</div>
-          <div className="text-xs text-muted-foreground flex items-center gap-1.5 font-medium">
-            <Terminal className="h-3 w-3" /> Prontas para conexão
-          </div>
-        </motion.div>
-
-        <motion.div 
-          initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
-          className="bg-card/40 border border-border/50 rounded-xl p-5 backdrop-blur-md flex flex-col gap-3 relative overflow-hidden"
-        >
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary to-transparent" />
-          <div className="flex items-center justify-between text-muted-foreground">
-            <span className="text-[10px] font-mono uppercase tracking-widest font-semibold">Status da Rede</span>
-            <Cpu className="h-4 w-4 text-primary" />
-          </div>
-          <div className="text-4xl font-display font-bold text-foreground tracking-tight">100%</div>
-          <div className="text-xs text-primary/80 flex items-center gap-1.5 font-medium">
-            <ShieldCheck className="h-3 w-3" /> Sistemas otimizados
-          </div>
-        </motion.div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+        {[
+          { label: "Agentes Ativos", value: String(activeAgents), icon: Bot, sub: "Operando", color: "primary" },
+          { label: "Conhecimento", value: hasKnowledge ? "Ativa" : "Vazia", icon: Brain, sub: hasKnowledge ? "Sincronizada" : "Requer atenção", color: "muted" },
+          { label: "Integrações", value: "0", icon: LinkIcon, sub: "Prontas", color: "muted" },
+          { label: "Rede", value: "100%", icon: Cpu, sub: "Otimizada", color: "primary" },
+        ].map((card, i) => (
+          <motion.div 
+            key={card.label}
+            initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+            className="bg-card/40 border border-border/40 rounded-xl p-4 backdrop-blur-md flex flex-col gap-1.5 relative overflow-hidden"
+          >
+            <div className="flex items-center justify-between text-muted-foreground">
+              <span className="text-[9px] font-mono uppercase tracking-widest font-semibold">{card.label}</span>
+              <card.icon className="h-3.5 w-3.5 text-primary/70" />
+            </div>
+            <div className="text-2xl font-display font-bold text-foreground tracking-tight">{card.value}</div>
+            <div className="text-[10px] text-muted-foreground font-medium">{card.sub}</div>
+          </motion.div>
+        ))}
       </div>
 
       {/* Teach Agents Alert */}
