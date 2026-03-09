@@ -8,7 +8,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database, Star, Presentation,
-  Rocket, Network, Target, Mic, Store
+  Rocket, Network, Target, Mic, Store, FileText
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -62,6 +62,8 @@ const Integrations = lazy(() => import("./Integrations"));
 const KnowledgeBase = lazy(() => import("./KnowledgeBase"));
 const AIQualityDashboard = lazy(() => import("@/components/dashboard/AIQualityDashboard"));
 const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
+const ExecutionResultsPanel = lazy(() => import("@/components/dashboard/ExecutionResultsPanel"));
+import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -266,6 +268,7 @@ const ClientDashboard = () => {
     { id: "war-room", label: "Sala de Reunião", icon: Presentation, group: moreGroup },
     { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
     { id: "ai-quality", label: "Qualidade IA", icon: Star, group: moreGroup },
+    { id: "results", label: "Resultados", icon: FileText, group: moreGroup },
     { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: moreGroup },
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
@@ -307,6 +310,7 @@ const ClientDashboard = () => {
   };
 
   const breadcrumbMap: Record<string, string> = useMemo(() => ({
+    "results": "Resultados",
     overview: t("dashboard.command_center"),
     omnix: t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" }),
     agents: t("dashboard.agents_tab"),
@@ -578,6 +582,15 @@ const ClientDashboard = () => {
                   <ErrorBoundary>
                     <Suspense fallback={<SectionLoader />}>
                       <div className="space-y-4">
+                        <GuidedOnboarding
+                          hasCompanyData={boardCount > 0}
+                          hasAgents={agents.length > 0}
+                          hasSentCommand={recentLogs.length > 0}
+                          onTeach={() => setShowCompanyOnboarding(true)}
+                          onHire={() => setActiveSection("library")}
+                          onCommand={() => setActiveSection("overview")}
+                          onDismiss={() => {}}
+                        />
                         <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
                         
                         {/* Smart task entry — simple or strategic modes */}
@@ -662,6 +675,13 @@ const ClientDashboard = () => {
 
                 {/* ═══ AI QUALITY ═══ */}
                 {activeSection === "ai-quality" && <Suspense fallback={<SectionLoader />}><AIQualityDashboard /></Suspense>}
+
+                {/* ═══ EXECUTION RESULTS ═══ */}
+                {activeSection === "results" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ExecutionResultsPanel onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
 
                 {/* ═══ SETTINGS ═══ */}
                 {activeSection === "settings" && (

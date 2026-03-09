@@ -43,56 +43,70 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
       const token = sessionData?.session?.access_token;
       if (!token) { toast.error("Faça login primeiro."); setScanning(false); return; }
 
-      setScanStep(0); // Fetching
+      setScanStep(0); // Fetching via Firecrawl
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/company-scanner`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/firecrawl-scrape`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ action: "scan_url", url: url.trim() }),
+          body: JSON.stringify({ url: url.trim(), options: { formats: ["markdown"] } }),
         }
       );
 
-      setScanStep(1); // Analyzing
+      setScanStep(1); // Analyzing with AI
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
         throw new Error(errData.error || "Erro ao analisar o site");
       }
 
-      const data = await response.json();
+      const scrapeData = await response.json();
+      const markdown = scrapeData.data?.markdown || scrapeData.markdown || "";
+      const metadata = scrapeData.data?.metadata || scrapeData.metadata || {};
+
+      if (!markdown) throw new Error("Não foi possível extrair conteúdo da página.");
+
+      // Use AI to extract structured company info from markdown
+      const aiResponse = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/company-scanner`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ action: "analyze_content", content: markdown, url: url.trim(), title: metadata.title }),
+        }
+      );
+
+      const aiData = await aiResponse.json();
       setScanStep(2); // Saving
 
-      if (data.success && data.data) {
-        // Save to company_board
-        const extracted = data.data;
-        const { data: { user } } = await supabase.auth.getUser();
-        if (user) {
-          const entries = [
-            { title: "Nome da Empresa", content: extracted.companyName || "", category: "company_info" },
-            { title: "Segmento", content: extracted.industry || "", category: "company_info" },
-            { title: "Descrição", content: extracted.description || "", category: "company_info" },
-            { title: "Produtos/Serviços", content: extracted.products || "", category: "products" },
-            { title: "Público-Alvo", content: extracted.targetAudience || "", category: "audience" },
-            { title: "Tom de Voz", content: extracted.toneOfVoice || "", category: "brand" },
-            { title: "Perguntas Frequentes", content: extracted.commonQuestions || "", category: "faq" },
-            { title: "Contato", content: extracted.contactInfo || "", category: "contact" },
-          ].filter(e => e.content);
+      const extracted = aiData.success && aiData.data ? aiData.data : {
+        companyName: metadata.title || url.trim(),
+        description: markdown.substring(0, 500),
+      };
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const entries = [
+          { title: "Nome da Empresa", content: extracted.companyName || "", category: "company_info" },
+          { title: "Segmento", content: extracted.industry || "", category: "company_info" },
+          { title: "Descrição", content: extracted.description || "", category: "company_info" },
+          { title: "Produtos/Serviços", content: extracted.products || "", category: "products" },
+          { title: "Público-Alvo", content: extracted.targetAudience || "", category: "audience" },
+          { title: "Tom de Voz", content: extracted.toneOfVoice || "", category: "brand" },
+          { title: "Perguntas Frequentes", content: extracted.commonQuestions || "", category: "faq" },
+          { title: "Contato", content: extracted.contactInfo || "", category: "contact" },
+        ].filter(e => e.content);
 
-          for (const entry of entries) {
-            await supabase.from("company_board").upsert(
-              { user_id: user.id, title: entry.title, content: entry.content, category: entry.category },
-              { onConflict: "user_id,title" }
-            ).select();
-          }
+        for (const entry of entries) {
+          await supabase.from("company_board").upsert(
+            { user_id: user.id, title: entry.title, content: entry.content, category: entry.category },
+            { onConflict: "user_id,title" }
+          ).select();
         }
-
-        setScanResult(extracted);
-        setScanDone(true);
-        toast.success("Base de conhecimento criada com sucesso!");
-      } else {
-        throw new Error("Não foi possível extrair informações.");
       }
+
+      setScanResult(extracted);
+      setScanDone(true);
+      toast.success("Base de conhecimento criada com sucesso!");
     } catch (err: any) {
       setScanError(err.message || "Erro desconhecido");
       toast.error(err.message || "Erro ao analisar site");
