@@ -4,7 +4,7 @@ import {
   Bot, Brain, Link as LinkIcon, Sparkles, 
   Send, Activity, Database, CheckCircle2,
   Terminal, Cpu, ArrowRight, ShieldCheck,
-  Zap, Workflow, MessageSquare, LineChart, Users
+  Zap, Workflow, MessageSquare, LineChart, Users, ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
