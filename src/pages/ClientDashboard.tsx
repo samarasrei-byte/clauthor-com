@@ -260,7 +260,7 @@ const ClientDashboard = () => {
     ...soloAgentItems,
 
     // More — secondary features grouped together
-    { id: "grupo", label: "Grupo", icon: Users, group: moreGroup },
+    { id: "equipe", label: "Equipe", icon: Users, group: moreGroup },
     { id: "war-room", label: "Sala de Reunião", icon: Presentation, group: moreGroup },
     { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
     { id: "ai-quality", label: "Qualidade IA", icon: Star, group: moreGroup },
@@ -638,8 +638,8 @@ const ClientDashboard = () => {
                   </ErrorBoundary>
                 )}
 
-                {/* ═══ GRUPO (SQUAD CHAT) ═══ */}
-                {activeSection === "grupo" && (
+                {/* ═══ EQUIPE (AGENT CONTACTS) ═══ */}
+                {activeSection === "equipe" && (
                   <Suspense fallback={<SectionLoader />}>
                     <SquadChat agents={agents} onRequestAgent={(name) => handleSidebarNav("library")} />
                   </Suspense>
