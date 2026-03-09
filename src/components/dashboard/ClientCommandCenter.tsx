@@ -99,7 +99,7 @@ const ClientCommandCenter = ({
   }, [isExecuting, currentStep]);
 
   return (
-    <div className="w-full max-w-6xl mx-auto space-y-8 pb-12 pt-4">
+    <div className="w-full max-w-6xl mx-auto space-y-4 pb-6">
       {/* Teach Agents Modal */}
       <TeachAgentsModal
         open={showTeachModal}
