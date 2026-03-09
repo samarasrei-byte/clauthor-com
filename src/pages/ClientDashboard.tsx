@@ -270,6 +270,13 @@ const ClientDashboard = () => {
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, group: moreGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
+
+    // Coming soon features
+    { id: "mission-control", label: "Mission Control", icon: Rocket, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "agent-memory", label: "Agent Memory", icon: Network, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "voice-first", label: "Voice-First", icon: Mic, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "marketplace-p2p", label: "Marketplace P2P", icon: Store, badge: "Em breve", group: "🚀 Próximas Features" },
   ];
 
   const tierColors: Record<string, string> = {
