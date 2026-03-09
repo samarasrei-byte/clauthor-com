@@ -4,7 +4,6 @@ import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOmnix } from "@/hooks/useOmnix";
 import OmnixChat from "@/components/omnix/OmnixChat";
-import OmnixDashboard from "@/components/omnix/OmnixDashboard";
 import OmnixSettings from "@/components/omnix/OmnixSettings";
 
 interface OmnixCommandCenterProps {
