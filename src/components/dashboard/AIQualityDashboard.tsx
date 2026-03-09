@@ -37,23 +37,35 @@ const AIQualityDashboard = () => {
     setLoading(true);
     const userId = user!.id;
 
-    let query = supabase.from("chat_feedback").select("*").eq("user_id", userId).order("created_at", { ascending: false });
+    let fbQuery = supabase.from("chat_feedback").select("*").eq("user_id", userId).order("created_at", { ascending: false });
 
     if (period === "7d") {
       const d = new Date(); d.setDate(d.getDate() - 7);
-      query = query.gte("created_at", d.toISOString());
+      fbQuery = fbQuery.gte("created_at", d.toISOString());
     } else if (period === "30d") {
       const d = new Date(); d.setDate(d.getDate() - 30);
-      query = query.gte("created_at", d.toISOString());
+      fbQuery = fbQuery.gte("created_at", d.toISOString());
     }
 
-    const [{ data: fb }, { data: ag }] = await Promise.all([
-      query.limit(500),
+    // Also fetch execution_logs for auto-quality scoring
+    let logsQuery = supabase.from("execution_logs").select("agent_id, status, execution_time_ms, created_at").eq("user_id", userId);
+    if (period === "7d") {
+      const d = new Date(); d.setDate(d.getDate() - 7);
+      logsQuery = logsQuery.gte("created_at", d.toISOString());
+    } else if (period === "30d") {
+      const d = new Date(); d.setDate(d.getDate() - 30);
+      logsQuery = logsQuery.gte("created_at", d.toISOString());
+    }
+
+    const [{ data: fb }, { data: ag }, { data: logs }] = await Promise.all([
+      fbQuery.limit(500),
       supabase.from("agents").select("id, name").eq("user_id", userId),
+      logsQuery.limit(500),
     ]);
 
     setFeedback((fb as FeedbackRow[]) || []);
     setAgents(ag || []);
+    setExecLogs(logs || []);
     setLoading(false);
   };
 
