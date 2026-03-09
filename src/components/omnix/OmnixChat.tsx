@@ -185,15 +185,17 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   return (
     <div className="flex flex-col h-full">
       {/* Orb area - centered and prominent */}
-      <div className="shrink-0 flex flex-col items-center pt-8 pb-6 bg-gradient-to-b from-primary/[0.03] to-transparent">
+      <div className="shrink-0 flex flex-col items-center pt-8 pb-6 gap-3 bg-gradient-to-b from-primary/[0.03] to-transparent">
         <OmnixOrb state={getOrbState()} name={config.name} className={voiceFirst ? "scale-125" : ""} />
         
-        <h3 className="mt-12 font-display font-black text-sm tracking-widest uppercase text-foreground/80">
-          {config.name}
-        </h3>
-        <p className="text-[10px] text-muted-foreground/60 font-mono tracking-wider mt-1">
-          CENTRAL AI AGENT • v2.0
-        </p>
+        <div className="flex flex-col items-center gap-1 mt-2">
+          <h3 className="font-display font-black text-sm tracking-widest uppercase text-foreground/80">
+            {config.name}
+          </h3>
+          <p className="text-[10px] text-muted-foreground/60 font-mono tracking-wider">
+            CENTRAL AI AGENT • v2.0
+          </p>
+        </div>
 
         {/* Auto-speak toggle */}
         <button

@@ -24,7 +24,7 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
     : "hsl(var(--primary))";
 
   return (
-    <div className={cn("relative w-32 h-32 flex items-center justify-center", className)}>
+    <div className={cn("relative w-32 h-32 flex items-center justify-center mb-2", className)}>
 
       {/* Ambient field — radial gradient background */}
       <motion.div
