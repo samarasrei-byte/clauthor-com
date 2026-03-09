@@ -8,7 +8,6 @@ import TeamMembers from "./TeamMembers";
 import SupportChat from "@/components/SupportChat";
 import { CouponRedeemer } from "./CouponRedeemer";
 import CredentialsHub from "./CredentialsHub";
-import AgentRoom from "./AgentRoom";
 import HolographicMeetingRoom from "./HolographicMeetingRoom";
 import { useTranslation } from "react-i18next";
 
@@ -17,15 +16,14 @@ interface SettingsPageProps {
   defaultTab?: string;
 }
 
-const SettingsPage = ({ billingContent, defaultTab = "room" }: SettingsPageProps) => {
+const SettingsPage = ({ billingContent, defaultTab = "meeting" }: SettingsPageProps) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
   const { t } = useTranslation();
 
   const tabs = [
-    { id: "room", label: t("settings.tab_room", { defaultValue: "Sala de Agentes" }), icon: Users },
+    { id: "meeting", label: t("settings.tab_meeting", { defaultValue: "War Room" }), icon: Presentation },
     { id: "agents", label: t("settings.tab_agents", { defaultValue: "Configurações" }), icon: Bot },
     { id: "credentials", label: t("settings.tab_credentials", { defaultValue: "Conexões" }), icon: Link2 },
-    { id: "meeting", label: t("settings.tab_meeting", { defaultValue: "War Room" }), icon: Presentation },
     { id: "profile", label: t("settings.tab_profile", { defaultValue: "Meu Perfil" }), icon: User },
     { id: "team", label: t("settings.tab_team", { defaultValue: "Equipe" }), icon: Users },
     { id: "billing", label: t("settings.tab_billing", { defaultValue: "Assinatura" }), icon: CreditCard },
@@ -55,8 +53,8 @@ const SettingsPage = ({ billingContent, defaultTab = "room" }: SettingsPageProps
           ))}
         </TabsList>
 
-        <TabsContent value="room">
-          <AgentRoom />
+        <TabsContent value="meeting">
+          <HolographicMeetingRoom />
         </TabsContent>
 
         <TabsContent value="agents">
@@ -65,10 +63,6 @@ const SettingsPage = ({ billingContent, defaultTab = "room" }: SettingsPageProps
 
         <TabsContent value="credentials">
           <CredentialsHub />
-        </TabsContent>
-
-        <TabsContent value="meeting">
-          <HolographicMeetingRoom />
         </TabsContent>
 
         <TabsContent value="profile">

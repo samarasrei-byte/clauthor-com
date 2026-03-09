@@ -264,7 +264,6 @@ const ClientDashboard = () => {
     { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
     { id: "ai-quality", label: "Qualidade IA", icon: Star, group: moreGroup },
     { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
-    { id: "squad-chat", label: t("dashboard.meeting"), icon: Users, group: moreGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: moreGroup },
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, group: moreGroup },
@@ -309,7 +308,6 @@ const ClientDashboard = () => {
     "knowledge-base": "Base de Conhecimento",
     "ai-quality": "Qualidade IA",
     "war-room": "War Room",
-    "squad-chat": t("dashboard.meeting"),
     "live-timeline": "Timeline",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
@@ -703,11 +701,8 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
-                {/* ═══ WAR ROOM — Holographic Meeting ═══ */}
+                {/* ═══ WAR ROOM — Unified Meeting Room ═══ */}
                 {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
-
-                {/* ═══ SQUAD CHAT ═══ */}
-                {activeSection === "squad-chat" && <Suspense fallback={<SectionLoader />}><SquadChat agents={agents} /></Suspense>}
 
                 {/* ═══ LIVE TIMELINE ═══ */}
                 {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
