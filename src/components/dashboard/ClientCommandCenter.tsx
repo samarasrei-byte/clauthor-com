@@ -124,8 +124,8 @@ const ClientCommandCenter = ({
         setCommand("");
         setProgress(0);
         setCurrentStep(0);
-        // Navigate to Omnix for the full AI response
-        onNavigate?.("omnix");
+        // Navigate to results panel to see execution output
+        onNavigate?.("results");
       }, 2000);
     }, stepDuration * executionSteps.length);
   };
