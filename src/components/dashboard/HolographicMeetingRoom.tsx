@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,22 +7,22 @@ import {
   Bot, Sparkles, Play, RotateCcw, Mic, MicOff,
   Send, Lightbulb, Target, ListChecks,
   Loader2, Zap, Brain, Users, Workflow, BarChart3,
-  Palette, ChevronRight, Volume2,
+  Palette, ChevronRight, Volume2, MessageSquare,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 
-/* ── Types ─────────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════
+   TYPES
+   ═══════════════════════════════════════════════════════ */
 
 interface HolographicAgent {
   id: string;
   name: string;
   specialty: string;
-  tier: string;
   role: "ceo" | "sales" | "marketing" | "analytics" | "design" | "automation";
   state: "idle" | "listening" | "processing" | "speaking";
-  color: string;
 }
 
 interface MeetingMessage {
@@ -42,156 +42,152 @@ interface ActionItem {
   priority: "high" | "medium" | "low";
 }
 
-/* ── Constants ─────────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════
+   CONSTANTS
+   ═══════════════════════════════════════════════════════ */
 
 const AGENT_ROLES: Record<
   HolographicAgent["role"],
   { label: string; color: string; icon: typeof Brain; specialty: string }
 > = {
   ceo: { label: "CEO AI", color: "hsl(var(--primary))", icon: Brain, specialty: "Estratégia Geral" },
-  sales: { label: "Sales AI", color: "hsl(142,76%,36%)", icon: Target, specialty: "Vendas & Prospecção" },
-  marketing: { label: "Marketing AI", color: "hsl(280,70%,50%)", icon: Sparkles, specialty: "Campanhas & Branding" },
-  analytics: { label: "Data Analyst AI", color: "hsl(200,80%,50%)", icon: BarChart3, specialty: "Análise de Dados" },
-  design: { label: "Design AI", color: "hsl(330,70%,50%)", icon: Palette, specialty: "Criação Visual" },
-  automation: { label: "Automation AI", color: "hsl(45,90%,50%)", icon: Workflow, specialty: "Automação" },
+  sales: { label: "Sales AI", color: "hsl(142 76% 36%)", icon: Target, specialty: "Vendas & Prospecção" },
+  marketing: { label: "Marketing AI", color: "hsl(280 70% 50%)", icon: Sparkles, specialty: "Campanhas & Branding" },
+  analytics: { label: "Data Analyst AI", color: "hsl(200 80% 50%)", icon: BarChart3, specialty: "Análise de Dados" },
+  design: { label: "Design AI", color: "hsl(330 70% 50%)", icon: Palette, specialty: "Criação Visual" },
+  automation: { label: "Automation AI", color: "hsl(45 90% 50%)", icon: Workflow, specialty: "Automação" },
 };
 
-/* ── Sub-components ────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════
+   SUB-COMPONENTS
+   ═══════════════════════════════════════════════════════ */
 
-/** Ambient floating particle */
-const Particle = ({ i }: { i: number }) => {
-  const x = Math.random() * 100;
-  const dur = 6 + Math.random() * 6;
-  return (
-    <motion.div
-      className="absolute w-[2px] h-[2px] rounded-full bg-primary/20"
-      style={{ left: `${x}%`, bottom: 0 }}
-      animate={{ y: [0, -800], opacity: [0, 0.5, 0] }}
-      transition={{ duration: dur, delay: i * 0.4, repeat: Infinity, ease: "linear" }}
-    />
-  );
-};
+/** Floating particle for ambient effect */
+const AmbientParticle = ({ delay }: { delay: number }) => (
+  <motion.div
+    className="absolute w-1 h-1 rounded-full bg-primary/30"
+    style={{ left: `${Math.random() * 100}%`, bottom: 0 }}
+    animate={{ y: [0, -600], opacity: [0, 0.6, 0], scale: [0.5, 1, 0.5] }}
+    transition={{ duration: 8 + Math.random() * 4, delay, repeat: Infinity, ease: "linear" }}
+  />
+);
 
-/** Single agent seat around the table */
-const AgentSeat = ({
+/** Holographic agent silhouette sitting at the table */
+const AgentHologram = ({
   agent,
-  angle,
-  radius,
-  isSelected,
+  position,
+  isActive,
+  isSpeaking,
 }: {
   agent: HolographicAgent;
-  angle: number; // radians
-  radius: number; // px from center
-  isSelected: boolean;
+  position: { x: number; y: number; scale: number };
+  isActive: boolean;
+  isSpeaking: boolean;
 }) => {
   const roleInfo = AGENT_ROLES[agent.role];
   const Icon = roleInfo.icon;
-  const x = Math.cos(angle) * radius;
-  const y = Math.sin(angle) * radius * 0.55; // squash for perspective
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0 }}
-      animate={{ opacity: 1, scale: 1, x, y }}
-      transition={{ type: "spring", stiffness: 80, damping: 14 }}
-      className="absolute cursor-pointer group"
-      style={{ zIndex: y > 0 ? 10 : 30 }} // depth sorting
+      initial={{ opacity: 0, scale: 0, y: 20 }}
+      animate={{ 
+        opacity: isActive ? 1 : 0.3, 
+        scale: 1, 
+        y: 0,
+        x: position.x,
+      }}
+      transition={{ type: "spring", stiffness: 100, damping: 15 }}
+      className="absolute flex flex-col items-center"
+      style={{ 
+        bottom: `${position.y}%`,
+        left: "50%",
+        transform: `translateX(-50%) scale(${position.scale})`,
+        zIndex: isSpeaking ? 50 : Math.round(position.scale * 30),
+      }}
     >
-      {/* Outer glow pulses */}
+      {/* Outer glow ring */}
       <motion.div
-        className="absolute -inset-6 rounded-full blur-2xl pointer-events-none"
+        className="absolute -inset-8 rounded-full blur-2xl pointer-events-none"
         style={{ backgroundColor: roleInfo.color }}
         animate={{
-          opacity:
-            agent.state === "speaking" ? [0.25, 0.5, 0.25] :
-            agent.state === "processing" ? [0.08, 0.2, 0.08] : 0.06,
+          opacity: isSpeaking ? [0.3, 0.6, 0.3] : isActive ? [0.1, 0.2, 0.1] : 0.05,
+          scale: isSpeaking ? [1, 1.2, 1] : 1,
         }}
-        transition={{ duration: 2, repeat: Infinity }}
+        transition={{ duration: isSpeaking ? 1 : 2, repeat: Infinity }}
       />
 
-      {/* Speaking rings */}
-      {agent.state === "speaking" && (
+      {/* Speaking pulse rings */}
+      {isSpeaking && (
         <>
-          {[0, 0.4].map((d) => (
+          {[0, 0.3, 0.6].map((d) => (
             <motion.div
               key={d}
-              className="absolute -inset-5 rounded-full border"
+              className="absolute -inset-4 rounded-full border-2 pointer-events-none"
               style={{ borderColor: roleInfo.color }}
-              animate={{ scale: [1, 1.8], opacity: [0.5, 0] }}
-              transition={{ duration: 1.6, repeat: Infinity, delay: d }}
+              animate={{ scale: [1, 2.5], opacity: [0.6, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, delay: d }}
             />
           ))}
         </>
       )}
 
-      {/* Processing orbit */}
-      {agent.state === "processing" && (
-        <motion.svg className="absolute -inset-5 w-full h-full pointer-events-none" viewBox="0 0 80 80">
-          <motion.circle
-            cx="40" cy="40" r="34"
-            fill="none" stroke={roleInfo.color} strokeWidth="1"
-            strokeDasharray="6,8" opacity={0.5}
-            animate={{ rotate: 360 }}
-            transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-            style={{ transformOrigin: "center" }}
-          />
-        </motion.svg>
-      )}
-
       {/* Head orb */}
       <motion.div
-        className="relative w-14 h-14 rounded-full flex items-center justify-center mx-auto"
+        className="relative w-16 h-16 md:w-20 md:h-20 rounded-full flex items-center justify-center"
         style={{
-          background: `radial-gradient(circle at 35% 35%, ${roleInfo.color}, ${roleInfo.color}40 70%, transparent)`,
-          boxShadow:
-            agent.state === "speaking"
-              ? `0 0 40px ${roleInfo.color}, 0 0 80px ${roleInfo.color}40`
-              : `0 0 20px ${roleInfo.color}30`,
+          background: `radial-gradient(circle at 30% 30%, ${roleInfo.color}, ${roleInfo.color}60 50%, transparent 80%)`,
+          boxShadow: isSpeaking
+            ? `0 0 60px ${roleInfo.color}, 0 0 120px ${roleInfo.color}50`
+            : `0 0 30px ${roleInfo.color}40`,
         }}
         animate={{
-          scale: agent.state === "speaking" ? [1, 1.12, 1] : 1,
+          scale: isSpeaking ? [1, 1.1, 1] : 1,
         }}
-        transition={{ duration: 1, repeat: agent.state === "speaking" ? Infinity : 0 }}
+        transition={{ duration: 0.6, repeat: isSpeaking ? Infinity : 0 }}
       >
-        <Icon className="w-6 h-6 text-white/90" strokeWidth={1.5} />
+        <Icon className="w-7 h-7 md:w-9 md:h-9 text-white/90" strokeWidth={1.5} />
 
-        {/* Inner particle sparkle when speaking */}
-        {agent.state === "speaking" &&
-          [...Array(6)].map((_, i) => (
-            <motion.span
-              key={i}
-              className="absolute w-1 h-1 rounded-full bg-white/80"
-              style={{
-                left: `${25 + Math.random() * 50}%`,
-                top: `${15 + Math.random() * 70}%`,
-              }}
-              animate={{ opacity: [0, 1, 0], scale: [0.5, 1.2, 0.5] }}
-              transition={{ duration: 0.6 + Math.random() * 0.4, repeat: Infinity, delay: i * 0.12 }}
-            />
-          ))}
+        {/* Speaking particles */}
+        {isSpeaking && (
+          <>
+            {[...Array(8)].map((_, i) => (
+              <motion.span
+                key={i}
+                className="absolute w-1.5 h-1.5 rounded-full bg-white/80"
+                style={{
+                  left: `${20 + Math.random() * 60}%`,
+                  top: `${10 + Math.random() * 80}%`,
+                }}
+                animate={{ opacity: [0, 1, 0], scale: [0.3, 1.5, 0.3] }}
+                transition={{ duration: 0.5 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.1 }}
+              />
+            ))}
+          </>
+        )}
       </motion.div>
 
-      {/* Body trapezoid */}
+      {/* Body silhouette */}
       <motion.div
-        className="relative w-12 h-8 mx-auto -mt-1"
+        className="w-14 h-12 md:w-18 md:h-14 -mt-2"
         style={{
-          background: `linear-gradient(180deg, ${roleInfo.color}35 0%, transparent 100%)`,
-          clipPath: "polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%)",
+          background: `linear-gradient(180deg, ${roleInfo.color}50 0%, ${roleInfo.color}10 50%, transparent 100%)`,
+          clipPath: "polygon(10% 0%, 90% 0%, 100% 100%, 0% 100%)",
         }}
       />
 
-      {/* Name tag */}
+      {/* Name badge */}
       <motion.div
-        className="mt-2 text-center whitespace-nowrap"
-        animate={{ y: [0, -2, 0] }}
-        transition={{ duration: 3, repeat: Infinity }}
+        className="mt-3 text-center"
+        animate={{ y: isSpeaking ? [0, -4, 0] : 0 }}
+        transition={{ duration: 0.8, repeat: isSpeaking ? Infinity : 0 }}
       >
         <span
-          className="inline-block px-3 py-1 rounded-full text-[10px] font-semibold tracking-wide backdrop-blur-md border"
+          className="inline-block px-3 py-1.5 rounded-full text-[10px] md:text-xs font-bold tracking-wide backdrop-blur-xl border"
           style={{
-            backgroundColor: `${roleInfo.color}12`,
-            borderColor: `${roleInfo.color}30`,
+            backgroundColor: `${roleInfo.color}20`,
+            borderColor: `${roleInfo.color}40`,
             color: roleInfo.color,
+            boxShadow: isSpeaking ? `0 0 20px ${roleInfo.color}30` : "none",
           }}
         >
           {roleInfo.label}
@@ -199,15 +195,15 @@ const AgentSeat = ({
       </motion.div>
 
       {/* Speaking waveform */}
-      {agent.state === "speaking" && (
-        <div className="flex justify-center gap-[2px] mt-1">
-          {[0, 1, 2, 3].map((i) => (
+      {isSpeaking && (
+        <div className="flex justify-center gap-[3px] mt-2">
+          {[0, 1, 2, 3, 4].map((i) => (
             <motion.div
               key={i}
-              className="w-[3px] rounded-full"
+              className="w-1 rounded-full"
               style={{ backgroundColor: roleInfo.color }}
-              animate={{ height: [4, 14, 4] }}
-              transition={{ duration: 0.35, repeat: Infinity, delay: i * 0.08 }}
+              animate={{ height: [4, 16, 4] }}
+              transition={{ duration: 0.4, repeat: Infinity, delay: i * 0.08 }}
             />
           ))}
         </div>
@@ -216,42 +212,49 @@ const AgentSeat = ({
   );
 };
 
-/** SVG energy line between two agents */
-const EnergyLine = ({
-  x1, y1, x2, y2, active, color,
+/** Energy connection line between collaborating agents */
+const CollaborationLine = ({
+  from,
+  to,
+  active,
+  color,
 }: {
-  x1: number; y1: number; x2: number; y2: number; active: boolean; color: string;
+  from: { x: number; y: number };
+  to: { x: number; y: number };
+  active: boolean;
+  color: string;
 }) => {
-  const cx = (x1 + x2) / 2;
-  const cy = (y1 + y2) / 2 - 30;
-  const pathD = `M${x1},${y1} Q${cx},${cy} ${x2},${y2}`;
+  const midY = (from.y + to.y) / 2 + 15;
 
   return (
-    <g>
+    <svg className="absolute inset-0 pointer-events-none overflow-visible" style={{ zIndex: 5 }}>
       <motion.path
-        d={pathD}
+        d={`M ${from.x} ${from.y} Q ${(from.x + to.x) / 2} ${midY * 0.8} ${to.x} ${to.y}`}
         fill="none"
         stroke={active ? color : "hsl(var(--border))"}
         strokeWidth={active ? 2 : 0.5}
-        strokeDasharray={active ? "none" : "4,6"}
+        strokeDasharray={active ? "0" : "6 8"}
         initial={{ pathLength: 0 }}
-        animate={{ pathLength: 1, opacity: active ? 0.7 : 0.15 }}
-        transition={{ duration: 0.8 }}
+        animate={{ pathLength: 1, opacity: active ? 0.8 : 0.15 }}
+        transition={{ duration: 0.6 }}
       />
       {active && (
         <motion.circle
-          r="3"
+          r="4"
           fill={color}
+          filter={`drop-shadow(0 0 6px ${color})`}
           animate={{ offsetDistance: ["0%", "100%"] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-          style={{ offsetPath: `path('${pathD}')` } as any}
+          transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+          style={{ offsetPath: `path('M ${from.x} ${from.y} Q ${(from.x + to.x) / 2} ${midY * 0.8} ${to.x} ${to.y}')` } as any}
         />
       )}
-    </g>
+    </svg>
   );
 };
 
-/* ── Main Component ────────────────────────────────── */
+/* ═══════════════════════════════════════════════════════
+   MAIN COMPONENT
+   ═══════════════════════════════════════════════════════ */
 
 const HolographicMeetingRoom = () => {
   const { user } = useAuth();
@@ -266,7 +269,6 @@ const HolographicMeetingRoom = () => {
   const [inputValue, setInputValue] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
-  const chatContainerRef = useRef<HTMLDivElement>(null);
 
   const { data: dbAgents = [], isLoading } = useQuery({
     queryKey: ["holographic-meeting-agents", user?.id],
@@ -301,16 +303,12 @@ const HolographicMeetingRoom = () => {
       id: a.id,
       name: a.name,
       specialty: AGENT_ROLES[role].specialty,
-      tier: a.tier,
       role,
-      state:
-        speakingAgentId === a.id ? "speaking" :
-        selectedAgents.includes(a.id) ? "processing" : "idle",
-      color: AGENT_ROLES[role].color,
+      state: speakingAgentId === a.id ? "speaking" : selectedAgents.includes(a.id) ? "processing" : "idle",
     };
   });
 
-  /* ── Voice ──────────────────────────────────────── */
+  // Voice recognition setup
   useEffect(() => {
     if (typeof window !== "undefined" && "webkitSpeechRecognition" in window) {
       const SR = (window as any).webkitSpeechRecognition;
@@ -328,11 +326,16 @@ const HolographicMeetingRoom = () => {
   }, [meetingActive]);
 
   const toggleVoice = () => {
-    if (isListening) { recognitionRef.current?.stop(); setIsListening(false); }
-    else { recognitionRef.current?.start(); setIsListening(true); }
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    } else {
+      recognitionRef.current?.start();
+      setIsListening(true);
+    }
   };
 
-  /* ── Agent selection ────────────────────────────── */
+  // Select relevant agents based on topic
   const selectRelevantAgents = (text: string) => {
     const t = text.toLowerCase();
     const relevant: string[] = [];
@@ -349,7 +352,7 @@ const HolographicMeetingRoom = () => {
     return [...new Set(relevant)].slice(0, 5);
   };
 
-  /* ── Simulation ─────────────────────────────────── */
+  // Run meeting simulation
   const runMeeting = async () => {
     if (!topic || agents.length === 0) return;
     const ids = selectRelevantAgents(topic);
@@ -359,20 +362,20 @@ const HolographicMeetingRoom = () => {
 
     const active = agents.filter((a) => ids.includes(a.id));
     const script: Array<{ role: HolographicAgent["role"]; type: MeetingMessage["type"]; content: string }> = [
-      { role: "ceo", type: "analysis", content: `Analisando: "${topic}". Vamos estruturar uma abordagem coordenada.` },
-      { role: "analytics", type: "analysis", content: "Dados históricos indicam oportunidades significativas de otimização nesse contexto." },
-      { role: "marketing", type: "strategy", content: "Recomendo estratégia multicanal com narrativa focada em engajamento do público-alvo." },
-      { role: "sales", type: "strategy", content: "Integrar pontos de conversão em cada etapa do funil é essencial." },
-      { role: "design", type: "creative", content: "Vou desenvolver conceitos visuais impactantes para comunicar a proposta de valor." },
-      { role: "automation", type: "action", content: "Configuro automações para escalar e garantir consistência nos pontos de contato." },
-      { role: "ceo", type: "action", content: "Consolidando estratégias em plano de ação executável com métricas de sucesso." },
+      { role: "ceo", type: "analysis", content: `Analisando o objetivo: "${topic}". Vamos estruturar uma abordagem coordenada entre os especialistas.` },
+      { role: "analytics", type: "analysis", content: "Dados históricos indicam oportunidades significativas de otimização nesse contexto. Identificando padrões de sucesso." },
+      { role: "marketing", type: "strategy", content: "Recomendo estratégia multicanal com narrativa focada em engajamento do público-alvo. Podemos criar uma campanha de alto impacto." },
+      { role: "sales", type: "strategy", content: "Integrar pontos de conversão em cada etapa do funil é essencial. Vou preparar sequências de follow-up personalizadas." },
+      { role: "design", type: "creative", content: "Vou desenvolver conceitos visuais impactantes para comunicar a proposta de valor de forma memorável." },
+      { role: "automation", type: "action", content: "Configuro automações para escalar e garantir consistência nos pontos de contato. Integrando com CRM e email marketing." },
+      { role: "ceo", type: "action", content: "Consolidando todas as estratégias em um plano de ação executável com métricas de sucesso claramente definidas." },
     ];
 
     for (const s of script) {
       const agent = active.find((a) => a.role === s.role) || active[0];
       if (!agent) continue;
       setSpeakingAgentId(agent.id);
-      await delay(500);
+      await delay(600);
       setMessages((prev) => [
         ...prev,
         {
@@ -385,17 +388,17 @@ const HolographicMeetingRoom = () => {
           timestamp: new Date(),
         },
       ]);
-      await delay(2200);
+      await delay(2500);
       setSpeakingAgentId(null);
-      await delay(350);
+      await delay(400);
     }
 
     setPhase("planning");
-    await delay(800);
+    await delay(1000);
     setPhase("conclusion");
     setActionItems([
-      { id: "1", task: "Criar estratégia multicanal", assignedTo: "Marketing AI", priority: "high" },
-      { id: "2", task: "Desenvolver assets visuais", assignedTo: "Design AI", priority: "high" },
+      { id: "1", task: "Criar estratégia multicanal completa", assignedTo: "Marketing AI", priority: "high" },
+      { id: "2", task: "Desenvolver assets visuais de campanha", assignedTo: "Design AI", priority: "high" },
       { id: "3", task: "Configurar funil automatizado", assignedTo: "Automation AI", priority: "medium" },
       { id: "4", task: "Dashboard de métricas real-time", assignedTo: "Data Analyst AI", priority: "medium" },
       { id: "5", task: "Sequência de follow-up para leads", assignedTo: "Sales AI", priority: "high" },
@@ -442,29 +445,22 @@ const HolographicMeetingRoom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-[80vh]">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
-      </div>
-    );
-  }
+  // Calculate agent positions around the table (semi-circular arrangement)
+  const getAgentPosition = (idx: number, total: number) => {
+    const spread = 0.7; // How spread out the agents are (0-1)
+    const startAngle = Math.PI * (0.5 - spread / 2);
+    const endAngle = Math.PI * (0.5 + spread / 2);
+    const angle = startAngle + (endAngle - startAngle) * (idx / Math.max(total - 1, 1));
+    
+    const radiusX = 280; // Horizontal spread
+    const x = Math.cos(angle) * radiusX;
+    const y = 15 + (1 - Math.sin(angle)) * 35; // Base Y + depth
+    const scale = 0.7 + Math.sin(angle) * 0.3; // Closer = larger
+    
+    return { x, y, scale };
+  };
 
-  /* ── Positions for agents around the table ────── */
-  const TABLE_RADIUS = 200; // px from visual center
-  const getAngle = (idx: number, total: number) =>
-    (idx / total) * 2 * Math.PI - Math.PI / 2;
-
-  const agentPositions = agents.map((_, idx) => {
-    const angle = getAngle(idx, agents.length);
-    return {
-      x: Math.cos(angle) * TABLE_RADIUS,
-      y: Math.sin(angle) * TABLE_RADIUS * 0.55,
-    };
-  });
-
-  /* ── Message styling ────────────────────────────── */
-  const msgStyle = (t: MeetingMessage["type"]) => {
+  const msgTypeStyle = (t: MeetingMessage["type"]) => {
     switch (t) {
       case "analysis": return "border-l-[hsl(200,80%,50%)] bg-[hsl(200,80%,50%)]/5";
       case "strategy": return "border-l-[hsl(280,70%,50%)] bg-[hsl(280,70%,50%)]/5";
@@ -474,7 +470,7 @@ const HolographicMeetingRoom = () => {
     }
   };
 
-  const priorityBadge = (p: string) => {
+  const priorityStyle = (p: string) => {
     switch (p) {
       case "high": return "bg-destructive/10 text-destructive border-destructive/20";
       case "medium": return "bg-accent-amber/10 text-accent-amber border-accent-amber/20";
@@ -482,101 +478,157 @@ const HolographicMeetingRoom = () => {
     }
   };
 
-  /* ── RENDER ─────────────────────────────────────── */
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-[80vh]">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  /* ═══════════════════════════════════════════════════════
+     RENDER
+     ═══════════════════════════════════════════════════════ */
   return (
-    <div className="relative flex flex-col h-[calc(100vh-8rem)] bg-gradient-to-b from-background via-background/95 to-background overflow-hidden">
-      {/* ── Ambient layer ─────────────────────────── */}
+    <div className="relative flex flex-col h-[calc(100vh-6rem)] min-h-[600px] bg-gradient-to-b from-background via-background/98 to-background overflow-hidden rounded-2xl border border-border/20">
+      
+      {/* ═══ AMBIENT LAYER ═══ */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(30)].map((_, i) => <Particle key={i} i={i} />)}
-        {/* Central glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[400px] rounded-full bg-primary/[0.04] blur-[120px]" />
-        {/* Grid floor */}
+        {/* Floating particles */}
+        {[...Array(25)].map((_, i) => (
+          <AmbientParticle key={i} delay={i * 0.3} />
+        ))}
+        
+        {/* Central dramatic glow */}
+        <motion.div
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[500px] rounded-full"
+          style={{ background: "radial-gradient(ellipse, hsl(var(--primary)/0.08) 0%, transparent 70%)" }}
+          animate={{ opacity: [0.5, 0.8, 0.5], scale: [1, 1.1, 1] }}
+          transition={{ duration: 6, repeat: Infinity }}
+        />
+
+        {/* Floor grid */}
         <div
-          className="absolute bottom-0 left-0 right-0 h-1/2 opacity-[0.04]"
+          className="absolute bottom-0 left-0 right-0 h-2/3 opacity-[0.04]"
           style={{
-            backgroundImage:
-              "linear-gradient(hsl(var(--primary)/0.5) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)/0.5) 1px, transparent 1px)",
-            backgroundSize: "60px 60px",
+            backgroundImage: `
+              linear-gradient(hsl(var(--primary)/0.6) 1px, transparent 1px),
+              linear-gradient(90deg, hsl(var(--primary)/0.6) 1px, transparent 1px)
+            `,
+            backgroundSize: "80px 80px",
             maskImage: "linear-gradient(to top, black 0%, transparent 100%)",
             WebkitMaskImage: "linear-gradient(to top, black 0%, transparent 100%)",
+            perspective: "500px",
+            transform: "rotateX(60deg)",
           }}
         />
       </div>
 
       <AnimatePresence mode="wait">
         {!meetingActive ? (
-          /* ════════════════════════════════════════════
+          /* ═══════════════════════════════════════════
              SETUP SCREEN
-             ════════════════════════════════════════════ */
+             ═══════════════════════════════════════════ */
           <motion.div
             key="setup"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            exit={{ opacity: 0, y: -30 }}
-            className="relative z-10 flex-1 flex flex-col items-center justify-center gap-8 px-4"
+            exit={{ opacity: 0, y: -40 }}
+            className="relative z-10 flex-1 flex flex-col items-center justify-center gap-8 px-4 py-8"
           >
             {/* Header */}
-            <div className="text-center space-y-3">
+            <div className="text-center space-y-4">
               <motion.div
                 initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20"
+                transition={{ delay: 0.1 }}
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/10 border border-primary/20"
               >
-                <Users className="h-3.5 w-3.5 text-primary" />
-                <span className="text-xs font-medium text-primary tracking-wide">SALA DE ESTRATÉGIA IA</span>
+                <Users className="h-4 w-4 text-primary" />
+                <span className="text-xs font-bold text-primary tracking-widest uppercase">War Room de IA</span>
               </motion.div>
-              <h1 className="font-display text-4xl md:text-5xl font-bold bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-                Mesa de Reunião
-              </h1>
-              <p className="text-muted-foreground text-sm max-w-md mx-auto">
-                Convoque seu time de IA para uma reunião estratégica. Descreva um objetivo e seus agentes irão colaborar.
-              </p>
+              
+              <motion.h1
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
+                className="font-display text-4xl md:text-5xl lg:text-6xl font-bold"
+              >
+                <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
+                  Sala de Reunião
+                </span>
+              </motion.h1>
+              
+              <motion.p
+                initial={{ y: 20, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto"
+              >
+                Convoque seu time de especialistas em IA para uma reunião estratégica. 
+                Descreva um objetivo e veja a magia acontecer.
+              </motion.p>
             </div>
 
-            {/* Preview of agents */}
-            <div className="flex items-center gap-3 flex-wrap justify-center">
-              {agents.slice(0, 6).map((a) => {
+            {/* Agent preview */}
+            <motion.div
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.4 }}
+              className="flex items-center gap-4 flex-wrap justify-center"
+            >
+              {agents.slice(0, 6).map((a, i) => {
                 const Icon = AGENT_ROLES[a.role].icon;
                 return (
                   <motion.div
                     key={a.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ scale: 1.1, y: -4 }}
-                    className="flex flex-col items-center gap-1.5"
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ delay: 0.5 + i * 0.1, type: "spring" }}
+                    whileHover={{ scale: 1.15, y: -8 }}
+                    className="flex flex-col items-center gap-2 cursor-pointer group"
                   >
                     <div
-                      className="w-11 h-11 rounded-full flex items-center justify-center border"
+                      className="w-14 h-14 md:w-16 md:h-16 rounded-full flex items-center justify-center border-2 transition-all group-hover:shadow-lg"
                       style={{
-                        background: `radial-gradient(circle at 35% 35%, ${AGENT_ROLES[a.role].color}60, transparent 70%)`,
-                        borderColor: `${AGENT_ROLES[a.role].color}30`,
-                        boxShadow: `0 0 20px ${AGENT_ROLES[a.role].color}20`,
+                        background: `radial-gradient(circle at 30% 30%, ${AGENT_ROLES[a.role].color}80, ${AGENT_ROLES[a.role].color}30 70%)`,
+                        borderColor: `${AGENT_ROLES[a.role].color}50`,
+                        boxShadow: `0 0 30px ${AGENT_ROLES[a.role].color}20`,
                       }}
                     >
-                      <Icon className="w-5 h-5 text-white/80" strokeWidth={1.5} />
+                      <Icon className="w-6 h-6 md:w-7 md:h-7 text-white/90" strokeWidth={1.5} />
                     </div>
-                    <span className="text-[9px] text-muted-foreground">{AGENT_ROLES[a.role].label}</span>
+                    <span className="text-[10px] md:text-xs text-muted-foreground font-medium">
+                      {AGENT_ROLES[a.role].label}
+                    </span>
                   </motion.div>
                 );
               })}
-            </div>
+            </motion.div>
 
             {/* Input area */}
-            <div className="w-full max-w-xl space-y-4">
+            <motion.div
+              initial={{ y: 30, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="w-full max-w-2xl space-y-5"
+            >
               <div className="relative">
                 <textarea
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
                   placeholder='Descreva seu objetivo… Ex: "Criar campanha para a Copa do Mundo"'
                   rows={3}
-                  className="w-full resize-none rounded-2xl bg-card/40 backdrop-blur-md border border-border/40 px-5 py-4 pr-14 text-sm text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all"
+                  className="w-full resize-none rounded-2xl bg-card/50 backdrop-blur-xl border border-border/40 px-6 py-5 pr-16 text-sm md:text-base text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all shadow-xl"
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); startMeeting(); } }}
                 />
                 <button
                   onClick={toggleVoice}
                   className={cn(
-                    "absolute right-3 top-3 w-10 h-10 rounded-full flex items-center justify-center transition-all",
-                    isListening ? "bg-primary/20 text-primary animate-pulse" : "text-muted-foreground hover:text-foreground hover:bg-card"
+                    "absolute right-4 top-4 w-12 h-12 rounded-xl flex items-center justify-center transition-all border",
+                    isListening
+                      ? "bg-primary/20 text-primary border-primary/30 animate-pulse"
+                      : "text-muted-foreground hover:text-foreground hover:bg-card/80 border-transparent hover:border-border/30"
                   )}
                 >
                   {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
@@ -585,37 +637,38 @@ const HolographicMeetingRoom = () => {
 
               {/* Quick suggestions */}
               <div className="flex flex-wrap gap-2 justify-center">
-                {["Lançar novo produto", "Aumentar conversão de leads", "Campanha Black Friday", "Reduzir churn"].map((s) => (
+                {["Lançar novo produto", "Aumentar conversão", "Campanha Black Friday", "Reduzir churn", "Otimizar funil"].map((s) => (
                   <button
                     key={s}
                     onClick={() => setTopic(s)}
-                    className="text-xs px-4 py-2 rounded-full bg-card/50 border border-border/30 hover:border-primary/40 hover:bg-primary/5 transition-all"
+                    className="text-xs md:text-sm px-4 py-2.5 rounded-full bg-card/60 border border-border/30 hover:border-primary/50 hover:bg-primary/5 transition-all hover:shadow-md"
                   >
                     {s}
                   </button>
                 ))}
               </div>
 
-              <div className="text-center">
+              {/* Start button */}
+              <div className="text-center pt-2">
                 <Button
                   onClick={startMeeting}
                   disabled={!topic || agents.length < 2}
                   size="lg"
-                  className="gap-3 px-10 py-6 text-base rounded-2xl shadow-lg shadow-primary/20 hover:shadow-primary/40 transition-all"
+                  className="gap-3 px-12 py-7 text-base md:text-lg rounded-2xl shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all hover:scale-105"
                 >
                   <Play className="h-5 w-5" />
                   Iniciar Reunião com {agents.length} Agentes
                 </Button>
                 {agents.length < 2 && (
-                  <p className="text-[11px] text-muted-foreground mt-3">Mínimo de 2 agentes ativos necessários</p>
+                  <p className="text-xs text-muted-foreground mt-4">Mínimo de 2 agentes ativos necessários</p>
                 )}
               </div>
-            </div>
+            </motion.div>
           </motion.div>
         ) : (
-          /* ════════════════════════════════════════════
+          /* ═══════════════════════════════════════════
              ACTIVE MEETING
-             ════════════════════════════════════════════ */
+             ═══════════════════════════════════════════ */
           <motion.div
             key="meeting"
             initial={{ opacity: 0 }}
@@ -623,142 +676,136 @@ const HolographicMeetingRoom = () => {
             className="relative z-10 flex-1 flex flex-col overflow-hidden"
           >
             {/* Top bar */}
-            <div className="flex items-center justify-between px-6 py-3 border-b border-border/10 shrink-0">
-              <div className="flex items-center gap-3">
-                <div className={cn("w-2 h-2 rounded-full", phase === "conclusion" ? "bg-accent-emerald" : "bg-primary animate-pulse")} />
-                <span className="text-sm font-display font-semibold text-foreground/80">
-                  {phase === "discussion" ? "Discussão" : phase === "planning" ? "Planejando…" : phase === "conclusion" ? "Plano Pronto" : "Preparando…"}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-border/10 shrink-0 backdrop-blur-xl bg-background/50">
+              <div className="flex items-center gap-4">
+                <div className={cn(
+                  "w-3 h-3 rounded-full",
+                  phase === "conclusion" ? "bg-accent-emerald" : "bg-primary animate-pulse"
+                )} />
+                <span className="text-sm md:text-base font-display font-semibold">
+                  {phase === "discussion" ? "Discussão em Andamento" : 
+                   phase === "planning" ? "Gerando Plano de Ação…" : 
+                   phase === "conclusion" ? "✓ Plano Pronto" : "Preparando…"}
                 </span>
-                <Badge variant="secondary" className="text-[9px]">{selectedAgents.length} agentes</Badge>
+                <Badge variant="secondary" className="text-xs">{selectedAgents.length} agentes ativos</Badge>
               </div>
-              <Button variant="ghost" size="sm" onClick={resetMeeting} className="gap-2 text-xs text-muted-foreground">
-                <RotateCcw className="h-3.5 w-3.5" /> Nova Reunião
+              <Button variant="ghost" size="sm" onClick={resetMeeting} className="gap-2 text-xs text-muted-foreground hover:text-foreground">
+                <RotateCcw className="h-4 w-4" /> Nova Reunião
               </Button>
             </div>
 
-            {/* Main content: table + chat side-by-side */}
-            <div className="flex-1 flex min-h-0">
-              {/* ── Holographic Table Area ──────────── */}
-              <div className="hidden lg:flex flex-1 items-center justify-center relative">
-                {/* Table surface – large ellipse */}
-                <div className="relative" style={{ width: 520, height: 340 }}>
-                  {/* Table base glow */}
+            {/* Main content */}
+            <div className="flex-1 flex flex-col lg:flex-row min-h-0">
+              
+              {/* ═══ HOLOGRAPHIC TABLE AREA ═══ */}
+              <div className="flex-1 relative flex items-end justify-center pb-8 min-h-[300px] lg:min-h-0">
+                
+                {/* Table surface */}
+                <motion.div
+                  className="absolute bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-[700px] h-24 md:h-32"
+                  initial={{ opacity: 0, scaleX: 0 }}
+                  animate={{ opacity: 1, scaleX: 1 }}
+                  transition={{ type: "spring", stiffness: 100 }}
+                >
+                  {/* Table glow */}
                   <motion.div
                     className="absolute inset-0 rounded-[50%] bg-primary/[0.03] border border-primary/10"
-                    animate={{ boxShadow: ["0 0 60px hsl(var(--primary)/0.05)", "0 0 100px hsl(var(--primary)/0.1)", "0 0 60px hsl(var(--primary)/0.05)"] }}
+                    animate={{ 
+                      boxShadow: [
+                        "0 0 60px hsl(var(--primary)/0.05), inset 0 0 30px hsl(var(--primary)/0.02)",
+                        "0 0 100px hsl(var(--primary)/0.12), inset 0 0 50px hsl(var(--primary)/0.04)",
+                        "0 0 60px hsl(var(--primary)/0.05), inset 0 0 30px hsl(var(--primary)/0.02)",
+                      ]
+                    }}
                     transition={{ duration: 4, repeat: Infinity }}
                   />
-                  {/* Inner ring */}
-                  <div className="absolute inset-8 rounded-[50%] border border-primary/[0.06]" />
-                  {/* Glass surface */}
-                  <div className="absolute inset-0 rounded-[50%] bg-gradient-to-b from-primary/[0.02] via-transparent to-primary/[0.01]" />
-
+                  
+                  {/* Table glass surface */}
+                  <div className="absolute inset-4 rounded-[50%] bg-gradient-to-b from-primary/[0.03] via-transparent to-primary/[0.02] border border-primary/[0.06]" />
+                  
                   {/* Center hologram content */}
                   <div className="absolute inset-0 flex items-center justify-center">
                     <motion.div
-                      animate={{ opacity: [0.6, 1, 0.6] }}
+                      animate={{ opacity: [0.7, 1, 0.7] }}
                       transition={{ duration: 3, repeat: Infinity }}
-                      className="text-center px-16 max-w-xs"
+                      className="text-center px-8"
                     >
                       {phase === "conclusion" ? (
                         <div className="space-y-2">
-                          <ListChecks className="h-6 w-6 text-accent-emerald mx-auto" />
-                          <p className="text-xs font-semibold text-accent-emerald">Plano Gerado</p>
-                          <p className="text-[10px] text-muted-foreground">{actionItems.length} tarefas criadas</p>
+                          <ListChecks className="h-8 w-8 text-accent-emerald mx-auto" />
+                          <p className="text-sm font-bold text-accent-emerald">Plano Gerado</p>
+                          <p className="text-xs text-muted-foreground">{actionItems.length} tarefas criadas</p>
                         </div>
                       ) : (
                         <div className="space-y-2">
-                          <Lightbulb className="h-5 w-5 text-primary/60 mx-auto" />
-                          <p className="text-[10px] text-primary/50 uppercase tracking-widest">Objetivo</p>
-                          <p className="text-xs font-medium text-primary/80 leading-relaxed line-clamp-3">{topic}</p>
+                          <Lightbulb className="h-6 w-6 text-primary/70 mx-auto" />
+                          <p className="text-[10px] text-primary/60 uppercase tracking-widest">Objetivo</p>
+                          <p className="text-xs md:text-sm font-medium text-primary/90 leading-relaxed line-clamp-2 max-w-xs">{topic}</p>
                         </div>
                       )}
                     </motion.div>
                   </div>
+                </motion.div>
 
-                  {/* Phase progress */}
-                  <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-2">
-                    {(["setup", "discussion", "planning", "conclusion"] as const).map((p, i) => {
-                      const phaseIdx = ["setup", "discussion", "planning", "conclusion"].indexOf(phase);
-                      return (
-                        <div key={p} className="flex items-center gap-2">
-                          <div className={cn("w-2 h-2 rounded-full transition-all", i <= phaseIdx ? "bg-primary shadow-lg shadow-primary/50" : "bg-muted/40")} />
-                          {i < 3 && <div className={cn("w-6 h-px transition-colors", i < phaseIdx ? "bg-primary/50" : "bg-border/20")} />}
-                        </div>
-                      );
-                    })}
-                  </div>
+                {/* Agents around the table */}
+                {agents.map((agent, idx) => {
+                  const pos = getAgentPosition(idx, agents.length);
+                  const isActive = selectedAgents.includes(agent.id);
+                  const isSpeaking = speakingAgentId === agent.id;
+                  
+                  return (
+                    <AgentHologram
+                      key={agent.id}
+                      agent={agent}
+                      position={pos}
+                      isActive={isActive}
+                      isSpeaking={isSpeaking}
+                    />
+                  );
+                })}
 
-                  {/* Connection lines SVG layer */}
-                  <svg
-                    className="absolute pointer-events-none"
-                    style={{ left: "50%", top: "50%", width: 600, height: 400, marginLeft: -300, marginTop: -200, overflow: "visible" }}
-                  >
-                    {selectedAgents.length > 1 &&
-                      agents
-                        .filter((a) => selectedAgents.includes(a.id))
-                        .map((a, i, arr) => {
-                          if (i >= arr.length - 1) return null;
-                          const next = arr[i + 1];
-                          const aIdx = agents.indexOf(a);
-                          const nIdx = agents.indexOf(next);
-                          const p1 = agentPositions[aIdx];
-                          const p2 = agentPositions[nIdx];
-                          if (!p1 || !p2) return null;
-                          return (
-                            <EnergyLine
-                              key={`${a.id}-${next.id}`}
-                              x1={300 + p1.x}
-                              y1={200 + p1.y}
-                              x2={300 + p2.x}
-                              y2={200 + p2.y}
-                              active={speakingAgentId === a.id || speakingAgentId === next.id}
-                              color={AGENT_ROLES[a.role].color}
-                            />
-                          );
-                        })}
-                  </svg>
-
-                  {/* Agent seats */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    {agents.map((a, idx) => (
-                      <AgentSeat
-                        key={a.id}
-                        agent={{
-                          ...a,
-                          state:
-                            speakingAgentId === a.id ? "speaking" :
-                            selectedAgents.includes(a.id) ? "processing" : "idle",
-                        }}
-                        angle={getAngle(idx, agents.length)}
-                        radius={TABLE_RADIUS}
-                        isSelected={selectedAgents.includes(a.id)}
-                      />
-                    ))}
-                  </div>
+                {/* Phase progress indicator */}
+                <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-3">
+                  {(["setup", "discussion", "planning", "conclusion"] as const).map((p, i) => {
+                    const phaseIdx = ["setup", "discussion", "planning", "conclusion"].indexOf(phase);
+                    return (
+                      <div key={p} className="flex items-center gap-3">
+                        <motion.div
+                          className={cn(
+                            "w-2.5 h-2.5 rounded-full transition-all",
+                            i <= phaseIdx ? "bg-primary" : "bg-muted/30"
+                          )}
+                          animate={i <= phaseIdx ? { scale: [1, 1.3, 1], boxShadow: "0 0 12px hsl(var(--primary)/0.5)" } : {}}
+                          transition={{ duration: 1, repeat: i === phaseIdx ? Infinity : 0 }}
+                        />
+                        {i < 3 && (
+                          <div className={cn("w-8 h-px", i < phaseIdx ? "bg-primary/60" : "bg-border/20")} />
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* ── Chat / Discussion Panel ────────── */}
-              <div className="w-full lg:w-[420px] lg:border-l border-border/10 flex flex-col bg-card/20 backdrop-blur-sm">
-                {/* Chat messages */}
-                <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
+              {/* ═══ CHAT PANEL ═══ */}
+              <div className="w-full lg:w-[420px] lg:border-l border-border/10 flex flex-col bg-card/30 backdrop-blur-sm">
+                
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
                   <AnimatePresence mode="popLayout">
                     {messages.map((msg) => (
                       <motion.div
                         key={msg.id}
-                        initial={{ opacity: 0, y: 10, scale: 0.97 }}
+                        initial={{ opacity: 0, y: 15, scale: 0.95 }}
                         animate={{ opacity: 1, y: 0, scale: 1 }}
                         className={cn(
-                          "p-3 rounded-xl border-l-2",
-                          msg.agentId === "user"
-                            ? "border-l-primary bg-primary/5 ml-8"
-                            : msgStyle(msg.type)
+                          "p-4 rounded-xl border-l-4",
+                          msg.agentId === "user" ? "border-l-primary bg-primary/5 ml-8" : msgTypeStyle(msg.type)
                         )}
                       >
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-xs font-semibold">{msg.agentRole}</span>
-                          <Badge variant="outline" className="text-[8px] px-1.5 py-0 h-4 border-border/30">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-xs font-bold">{msg.agentRole}</span>
+                          <Badge variant="outline" className="text-[9px] px-1.5 py-0 h-4 border-border/30">
                             {msg.type}
                           </Badge>
                         </div>
@@ -767,24 +814,24 @@ const HolographicMeetingRoom = () => {
                     ))}
                   </AnimatePresence>
 
-                  {/* Speaking indicator */}
+                  {/* Typing indicator */}
                   {speakingAgentId && (
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="flex items-center gap-2 px-3 py-2"
+                      className="flex items-center gap-3 px-4 py-3"
                     >
                       <div className="flex gap-1">
                         {[0, 1, 2].map((i) => (
                           <motion.div
                             key={i}
-                            className="w-1.5 h-1.5 rounded-full bg-primary/60"
-                            animate={{ y: [0, -6, 0] }}
-                            transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.12 }}
+                            className="w-2 h-2 rounded-full bg-primary/60"
+                            animate={{ y: [0, -8, 0] }}
+                            transition={{ duration: 0.5, repeat: Infinity, delay: i * 0.15 }}
                           />
                         ))}
                       </div>
-                      <span className="text-[10px] text-muted-foreground">
+                      <span className="text-xs text-muted-foreground">
                         {agents.find((a) => a.id === speakingAgentId)?.name || "Agente"} está analisando…
                       </span>
                     </motion.div>
@@ -799,23 +846,23 @@ const HolographicMeetingRoom = () => {
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
-                      className="border-t border-border/10 bg-accent-emerald/[0.03] p-4 space-y-2 max-h-52 overflow-y-auto"
+                      className="border-t border-border/10 bg-accent-emerald/[0.03] p-4 space-y-3 max-h-56 overflow-y-auto"
                     >
-                      <div className="flex items-center gap-2 mb-2">
-                        <ListChecks className="h-4 w-4 text-accent-emerald" />
-                        <span className="text-xs font-semibold text-accent-emerald">Plano de Ação</span>
+                      <div className="flex items-center gap-2 mb-3">
+                        <ListChecks className="h-5 w-5 text-accent-emerald" />
+                        <span className="text-sm font-bold text-accent-emerald">Plano de Ação</span>
                       </div>
                       {actionItems.map((item, idx) => (
                         <motion.div
                           key={item.id}
-                          initial={{ opacity: 0, x: -10 }}
+                          initial={{ opacity: 0, x: -15 }}
                           animate={{ opacity: 1, x: 0 }}
                           transition={{ delay: idx * 0.1 }}
-                          className="flex items-center gap-3 text-xs"
+                          className="flex items-center gap-3 text-sm"
                         >
-                          <ChevronRight className="h-3 w-3 text-accent-emerald shrink-0" />
+                          <ChevronRight className="h-4 w-4 text-accent-emerald shrink-0" />
                           <span className="flex-1 text-foreground/80">{item.task}</span>
-                          <Badge variant="outline" className={cn("text-[8px] shrink-0", priorityBadge(item.priority))}>
+                          <Badge variant="outline" className={cn("text-[9px] shrink-0", priorityStyle(item.priority))}>
                             {item.priority}
                           </Badge>
                         </motion.div>
@@ -824,34 +871,31 @@ const HolographicMeetingRoom = () => {
                   )}
                 </AnimatePresence>
 
-                {/* ── Chat input ─────────────────────── */}
-                <div className="p-3 border-t border-border/10 shrink-0">
-                  <div className="flex gap-2">
+                {/* Input */}
+                <div className="p-4 border-t border-border/10 shrink-0">
+                  <div className="flex gap-3">
                     <div className="flex-1 relative">
                       <input
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Pergunte algo ao seu time de IA… Use @Marketing, @Sales..."
-                        className="w-full h-11 rounded-xl bg-card/50 border border-border/30 px-4 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30 focus:border-primary/30 transition-all"
+                        placeholder="Pergunte algo ao seu time de IA…"
+                        className="w-full h-12 rounded-xl bg-card/60 border border-border/30 px-4 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all"
                         onKeyDown={(e) => { if (e.key === "Enter") handleSendInput(); }}
                       />
                     </div>
                     <button
                       onClick={toggleVoice}
                       className={cn(
-                        "w-11 h-11 rounded-xl flex items-center justify-center border border-border/30 transition-all",
-                        isListening ? "bg-primary/20 text-primary border-primary/30" : "text-muted-foreground hover:bg-card/60"
+                        "w-12 h-12 rounded-xl flex items-center justify-center border transition-all",
+                        isListening
+                          ? "bg-primary/20 text-primary border-primary/30"
+                          : "border-border/30 text-muted-foreground hover:bg-card/80 hover:text-foreground"
                       )}
                     >
-                      {isListening ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                      {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
                     </button>
-                    <Button
-                      onClick={handleSendInput}
-                      disabled={!inputValue.trim()}
-                      size="icon"
-                      className="w-11 h-11 rounded-xl shrink-0"
-                    >
-                      <Send className="h-4 w-4" />
+                    <Button onClick={handleSendInput} disabled={!inputValue.trim()} size="icon" className="w-12 h-12 rounded-xl">
+                      <Send className="h-5 w-5" />
                     </Button>
                   </div>
                 </div>
