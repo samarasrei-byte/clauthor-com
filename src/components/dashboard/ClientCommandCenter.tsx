@@ -202,14 +202,14 @@ const ClientCommandCenter = ({
               </div>
 
               {/* Quick Actions */}
-              <div className="flex flex-wrap items-center justify-center gap-3 max-w-4xl pt-4">
+              <div className="flex flex-wrap items-center justify-center gap-2 max-w-3xl">
                 {suggestions.map((sug, idx) => (
                   <button 
                     key={idx}
                     onClick={() => handleCommand(sug.text)}
-                    className="flex items-center gap-2.5 px-5 py-3 rounded-xl border border-border/50 bg-card/40 hover:bg-primary/10 hover:border-primary/40 hover:text-primary transition-all duration-300 text-sm font-medium text-muted-foreground hover:shadow-[0_0_15px_hsl(var(--primary)/0.1)]"
+                    className="flex items-center gap-2 px-4 py-2 rounded-lg border border-border/40 bg-card/40 hover:bg-primary/10 hover:border-primary/30 hover:text-primary transition-all text-xs font-medium text-muted-foreground"
                   >
-                    <sug.icon className="h-4 w-4" />
+                    <sug.icon className="h-3.5 w-3.5" />
                     {sug.text}
                   </button>
                 ))}
