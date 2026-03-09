@@ -568,6 +568,47 @@ const ClientDashboard = () => {
                     <Suspense fallback={<SectionLoader />}>
                       <div className="space-y-4">
                         <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                        
+                        {/* Smart task entry — simple or strategic modes */}
+                        <TaskRequestPanel
+                          contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
+                          onSubmitTask={(task, mode) => {
+                            // Strategic mode → send to THOR/Omnix for orchestration
+                            if (mode === "strategic" || mode === "guided") {
+                              setActiveSection("omnix");
+                            } else {
+                              // Simple mode — try to match an agent
+                              const q = task.toLowerCase();
+                              const matchedSlug = agents
+                                .map(a => nameToSlug[a.name])
+                                .filter(Boolean)
+                                .find(slug => q.includes(slug?.replace(/_/g, " ") || ""));
+                              if (matchedSlug) {
+                                const agent = agents.find(a => nameToSlug[a.name] === matchedSlug);
+                                if (agent) {
+                                  setPreviousSection(activeSection);
+                                  setSelectedAgent({ id: agent.id, name: agent.name });
+                                  setActiveSection("chat");
+                                  return;
+                                }
+                              }
+                              // Fallback to THOR
+                              setActiveSection("omnix");
+                            }
+                          }}
+                          onSelectAgent={(slug) => {
+                            const agent = agents.find(a => nameToSlug[a.name] === slug);
+                            if (agent) {
+                              setPreviousSection(activeSection);
+                              setSelectedAgent({ id: agent.id, name: agent.name });
+                              setActiveSection("chat");
+                            } else {
+                              setActiveSection("library");
+                            }
+                          }}
+                        />
+                        
+                        {/* Quick router for direct agent access */}
                         <SmartAgentRouter
                           contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
                           onSelectAgent={(slug) => {
@@ -577,12 +618,12 @@ const ClientDashboard = () => {
                               setSelectedAgent({ id: agent.id, name: agent.name });
                               setActiveSection("chat");
                             } else {
-                              // Agent not contracted — go to library
                               setActiveSection("library");
                             }
                           }}
-                          onAskThor={(msg) => setActiveSection("omnix")}
+                          onAskThor={() => setActiveSection("omnix")}
                         />
+                        
                         <PendingActionsPanel />
                         <ClientCommandCenter
                           activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
