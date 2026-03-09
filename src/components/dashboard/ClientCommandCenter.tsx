@@ -168,7 +168,7 @@ const ClientCommandCenter = ({
             >
               {/* Proactive AI Tip */}
               <div 
-                className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-primary/10 border border-primary/20 text-sm text-primary shadow-[0_0_20px_hsl(var(--primary)/0.15)] cursor-pointer hover:bg-primary/15 transition-colors"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-xs text-primary cursor-pointer hover:bg-primary/15 transition-colors"
                 onClick={() => handleCommand("Reativar 120 leads parados")}
               >
                 <Sparkles className="h-4 w-4 animate-pulse" />
