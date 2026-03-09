@@ -260,6 +260,7 @@ const ClientDashboard = () => {
     ...soloAgentItems,
 
     // More — secondary features grouped together
+    { id: "war-room", label: "War Room", icon: Presentation, group: moreGroup },
     { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
     { id: "ai-quality", label: "Qualidade IA", icon: Star, group: moreGroup },
     { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
