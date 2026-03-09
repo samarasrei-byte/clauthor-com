@@ -494,8 +494,9 @@ Apenas o texto, sem introduções.`,
     setInputValue("");
   };
 
-  const handleSendInput = () => {
+  const handleSendInput = async () => {
     if (!inputValue.trim()) return;
+    const userContent = inputValue.trim();
     setMessages((prev) => [
       ...prev,
       {
@@ -503,12 +504,57 @@ Apenas o texto, sem introduções.`,
         agentId: "user",
         agentName: "Você",
         agentRole: "Líder",
-        content: inputValue,
+        content: userContent,
         type: "question",
         timestamp: new Date(),
       },
     ]);
     setInputValue("");
+
+    // Pick a relevant agent to respond
+    const active = agents.filter((a) => selectedAgents.includes(a.id));
+    const responder = active[Math.floor(Math.random() * active.length)] || agents[0];
+    if (!responder) return;
+
+    setSpeakingAgentId(responder.id);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) return;
+
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({
+            message: userContent,
+            agentId: responder.id,
+            conversationHistory: messages.slice(-5).map(m => ({ role: m.agentId === "user" ? "user" : "assistant", content: m.content })),
+          }),
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        const roleInfo = AGENT_ROLES[responder.role];
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: `resp-${Date.now()}`,
+            agentId: responder.id,
+            agentName: responder.name,
+            agentRole: roleInfo.label,
+            content: data.response || data.content || "Entendi, vou analisar.",
+            type: "analysis",
+            timestamp: new Date(),
+          },
+        ]);
+      }
+    } catch (err) {
+      console.error("Meeting response error:", err);
+    }
+    setSpeakingAgentId(null);
   };
 
   useEffect(() => {
