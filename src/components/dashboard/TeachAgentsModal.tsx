@@ -43,29 +43,46 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
       const token = sessionData?.session?.access_token;
       if (!token) { toast.error("Faça login primeiro."); setScanning(false); return; }
 
-      setScanStep(0); // Fetching
+      setScanStep(0); // Fetching via Firecrawl
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/company-scanner`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/firecrawl-scrape`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({ action: "scan_url", url: url.trim() }),
+          body: JSON.stringify({ url: url.trim(), options: { formats: ["markdown"] } }),
         }
       );
 
-      setScanStep(1); // Analyzing
+      setScanStep(1); // Analyzing with AI
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
         throw new Error(errData.error || "Erro ao analisar o site");
       }
 
-      const data = await response.json();
+      const scrapeData = await response.json();
+      const markdown = scrapeData.data?.markdown || scrapeData.markdown || "";
+      const metadata = scrapeData.data?.metadata || scrapeData.metadata || {};
+
+      if (!markdown) throw new Error("Não foi possível extrair conteúdo da página.");
+
+      // Use AI to extract structured company info from markdown
+      const aiResponse = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/company-scanner`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+          body: JSON.stringify({ action: "analyze_content", content: markdown, url: url.trim(), title: metadata.title }),
+        }
+      );
+
+      const aiData = await aiResponse.json();
       setScanStep(2); // Saving
 
-      if (data.success && data.data) {
-        // Save to company_board
-        const extracted = data.data;
+      const extracted = aiData.success && aiData.data ? aiData.data : {
+        companyName: metadata.title || url.trim(),
+        description: markdown.substring(0, 500),
+      };
         const { data: { user } } = await supabase.auth.getUser();
         if (user) {
           const entries = [
