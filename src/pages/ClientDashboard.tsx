@@ -582,6 +582,15 @@ const ClientDashboard = () => {
                   <ErrorBoundary>
                     <Suspense fallback={<SectionLoader />}>
                       <div className="space-y-4">
+                        <GuidedOnboarding
+                          hasCompanyData={boardCount > 0}
+                          hasAgents={agents.length > 0}
+                          hasSentCommand={recentLogs.length > 0}
+                          onTeach={() => setShowCompanyOnboarding(true)}
+                          onHire={() => setActiveSection("library")}
+                          onCommand={() => setActiveSection("overview")}
+                          onDismiss={() => {}}
+                        />
                         <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
                         
                         {/* Smart task entry — simple or strategic modes */}
