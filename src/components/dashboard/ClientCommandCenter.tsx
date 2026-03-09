@@ -220,7 +220,7 @@ const ClientCommandCenter = ({
               key="execution-view"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="w-full max-w-4xl mx-auto bg-card/90 backdrop-blur-xl border border-primary/40 rounded-3xl p-10 shadow-[0_0_50px_hsl(var(--primary)/0.15)] relative overflow-hidden"
+              className="w-full max-w-4xl mx-auto bg-card/90 backdrop-blur-xl border border-primary/40 rounded-2xl p-6 shadow-xl relative overflow-hidden"
             >
               {/* Scanline effect */}
               <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-3xl">
