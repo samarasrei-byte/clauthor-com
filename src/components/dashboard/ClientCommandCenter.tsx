@@ -65,6 +65,13 @@ const ClientCommandCenter = ({
   
   const hasKnowledge = agents.some(a => a.knowledge_base || (a.integrations && a.integrations.length > 0));
 
+  // Use real agents if available, otherwise show demo agents for preview
+  const displayAgents = agents.length > 0 
+    ? agents.slice(0, 5).map(a => ({ name: a.name, role: a.description || a.objective || "Agente IA", status: a.status }))
+    : DEMO_AGENTS;
+
+  const isDemo = agents.length === 0;
+
   const handleCommand = (cmd: string) => {
     if (!cmd.trim()) return;
     setCommand(cmd);
