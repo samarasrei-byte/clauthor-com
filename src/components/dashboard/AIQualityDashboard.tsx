@@ -114,6 +114,35 @@ const AIQualityDashboard = () => {
     return { total, positive, negative, rate, agentStats, trend, last7Rate };
   }, [feedback, agentMap]);
 
+  // Auto-quality: scores per agent based on execution success rate + avg response time
+  const autoQuality = useMemo(() => {
+    const byAgent: Record<string, { success: number; fail: number; totalTime: number; count: number }> = {};
+    execLogs.forEach(log => {
+      const key = log.agent_id || "general";
+      if (!byAgent[key]) byAgent[key] = { success: 0, fail: 0, totalTime: 0, count: 0 };
+      byAgent[key].count++;
+      if (log.status === "success") byAgent[key].success++;
+      else byAgent[key].fail++;
+      if (log.execution_time_ms) byAgent[key].totalTime += log.execution_time_ms;
+    });
+
+    return Object.entries(byAgent).map(([id, s]) => {
+      const successRate = s.count > 0 ? Math.round((s.success / s.count) * 100) : 0;
+      const avgTime = s.count > 0 ? Math.round(s.totalTime / s.count) : 0;
+      // Score: 60% success rate + 40% speed (under 3s = 100%)
+      const speedScore = Math.min(100, Math.round((3000 / Math.max(avgTime, 500)) * 100));
+      const score = Math.round(successRate * 0.6 + speedScore * 0.4);
+      return {
+        id,
+        name: id === "general" ? "Geral" : (agentMap[id] || "Agente"),
+        successRate,
+        avgTime,
+        score,
+        executions: s.count,
+      };
+    }).sort((a, b) => b.executions - a.executions);
+  }, [execLogs, agentMap]);
+
   const recentNegative = useMemo(() => {
     return feedback
       .filter(f => f.rating === "negative" && f.feedback_text)
