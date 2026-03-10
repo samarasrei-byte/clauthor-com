@@ -103,7 +103,10 @@ const ClientDashboard = () => {
       setOmnixMounted(true);
     }
   }, [activeSection, omnixMounted]);
-  const [boardGateSkipped, setBoardGateSkipped] = useState(false);
+  const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
+    if (!user) return false;
+    return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
+  });
 
   // Check if Company Board has data
   const { data: boardCount = 0 } = useQuery({
