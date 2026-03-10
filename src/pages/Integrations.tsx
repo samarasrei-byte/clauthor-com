@@ -200,6 +200,7 @@ const integrations: Integration[] = [
 ];
 
 const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integration; connectedKeys: Set<string>; onSaved: () => void }) => {
+  const { t } = useTranslation();
   const [values, setValues] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [validating, setValidating] = useState(false);
@@ -253,9 +254,9 @@ const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integrati
 
   if (allConnected) {
     return (
-      <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
-        <CheckCircle className="h-4 w-4 text-emerald-500" />
-        <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Conectado e funcionando</span>
+      <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/5 border border-primary/20">
+        <CheckCircle className="h-4 w-4 text-primary" />
+        <span className="text-xs text-primary font-medium">{t("integrations.connected_working", { defaultValue: "Conectado e funcionando" })}</span>
       </div>
     );
   }
@@ -273,7 +274,7 @@ const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integrati
         <div key={field.key}>
           <label className="text-[11px] text-muted-foreground mb-0.5 block">
             {field.label} {field.required && <span className="text-destructive">*</span>}
-            {connectedKeys.has(field.key) && <span className="text-emerald-500 ml-1">✓ salvo</span>}
+            {connectedKeys.has(field.key) && <span className="text-primary ml-1">✓ {t("integrations.saved", { defaultValue: "salvo" })}</span>}
           </label>
           <Input
             placeholder={field.placeholder}
@@ -368,7 +369,7 @@ const IntegrationsPage = () => {
         <div className="flex items-center gap-3">
           <p className="text-muted-foreground">{t("integrations.subtitle", { defaultValue: "Conecte seus agentes com as ferramentas que você já usa." })}</p>
           {connectedCount > 0 && (
-            <Badge className="bg-emerald-500/15 text-emerald-500 border-emerald-500/20">
+            <Badge className="bg-primary/15 text-primary border-primary/20">
               <CheckCircle className="h-3 w-3 mr-1" />
               {connectedCount} {t("integrations.connected", { defaultValue: "conectada" })}{connectedCount > 1 ? "s" : ""}
             </Badge>
@@ -422,26 +423,26 @@ const IntegrationsPage = () => {
                       transition={{ delay: i * 0.04 }}
                     >
                       <Card className={`glass border-border hover:neon-border transition-all h-full ${
-                        connectionStatus === "connected" ? "border-emerald-500/30 bg-emerald-500/[0.02]" : ""
+                        connectionStatus === "connected" ? "border-primary/30 bg-primary/[0.02]" : ""
                       }`}>
                         <CardContent className="p-5 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-3">
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                              connectionStatus === "connected" ? "bg-emerald-500/10" : "bg-primary/10"
+                              connectionStatus === "connected" ? "bg-primary/10" : "bg-primary/10"
                             }`}>
                               <ig.icon className={`h-5 w-5 ${
-                                connectionStatus === "connected" ? "text-emerald-500" : "text-primary"
+                                connectionStatus === "connected" ? "text-primary" : "text-primary"
                               }`} />
                             </div>
                             <div className="flex items-center gap-1.5">
                               {connectionStatus === "connected" && (
-                                <Badge className="bg-emerald-500/15 text-emerald-500 border-emerald-500/20 text-[10px]">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1" />
+                                <Badge className="bg-primary/15 text-primary border-primary/20 text-[10px]">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse mr-1" />
                                   {t("integrations.status_connected", { defaultValue: "Conectado" })}
                                 </Badge>
                               )}
                               {connectionStatus === "partial" && (
-                                <Badge className="bg-amber-500/15 text-amber-500 border-amber-500/20 text-[10px]">
+                                <Badge className="bg-muted text-muted-foreground border-border text-[10px]">
                                   {t("integrations.status_partial", { defaultValue: "Parcial" })}
                                 </Badge>
                               )}

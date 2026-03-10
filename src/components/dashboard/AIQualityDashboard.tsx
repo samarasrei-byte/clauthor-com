@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 
 interface FeedbackRow {
   id: string;
@@ -23,6 +24,7 @@ interface AgentInfo {
 
 const AIQualityDashboard = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [feedback, setFeedback] = useState<FeedbackRow[]>([]);
   const [agents, setAgents] = useState<AgentInfo[]>([]);
   const [execLogs, setExecLogs] = useState<any[]>([]);
@@ -48,7 +50,6 @@ const AIQualityDashboard = () => {
       fbQuery = fbQuery.gte("created_at", d.toISOString());
     }
 
-    // Also fetch execution_logs for auto-quality scoring
     let logsQuery = supabase.from("execution_logs").select("agent_id, status, execution_time_ms, created_at").eq("user_id", userId);
     if (period === "7d") {
       const d = new Date(); d.setDate(d.getDate() - 7);
@@ -82,7 +83,6 @@ const AIQualityDashboard = () => {
     const negative = feedback.filter(f => f.rating === "negative").length;
     const rate = total > 0 ? Math.round((positive / total) * 100) : 0;
 
-    // Per agent breakdown
     const byAgent: Record<string, { positive: number; negative: number; total: number; texts: string[] }> = {};
     feedback.forEach(f => {
       const key = f.agent_id || "general";
@@ -95,12 +95,11 @@ const AIQualityDashboard = () => {
 
     const agentStats = Object.entries(byAgent).map(([id, s]) => ({
       id,
-      name: id === "general" ? "Concierge / Geral" : (agentMap[id] || "Agente"),
+      name: id === "general" ? t("quality.concierge_general") : (agentMap[id] || t("quality.agent")),
       ...s,
       rate: s.total > 0 ? Math.round((s.positive / s.total) * 100) : 0,
     })).sort((a, b) => b.total - a.total);
 
-    // Trend — compare last 7 days vs previous 7
     const now = Date.now();
     const last7 = feedback.filter(f => now - new Date(f.created_at).getTime() < 7 * 86400000);
     const prev7 = feedback.filter(f => {
@@ -112,9 +111,8 @@ const AIQualityDashboard = () => {
     const trend = last7Rate - prev7Rate;
 
     return { total, positive, negative, rate, agentStats, trend, last7Rate };
-  }, [feedback, agentMap]);
+  }, [feedback, agentMap, t]);
 
-  // Auto-quality: scores per agent based on execution success rate + avg response time
   const autoQuality = useMemo(() => {
     const byAgent: Record<string, { success: number; fail: number; totalTime: number; count: number }> = {};
     execLogs.forEach(log => {
@@ -129,19 +127,18 @@ const AIQualityDashboard = () => {
     return Object.entries(byAgent).map(([id, s]) => {
       const successRate = s.count > 0 ? Math.round((s.success / s.count) * 100) : 0;
       const avgTime = s.count > 0 ? Math.round(s.totalTime / s.count) : 0;
-      // Score: 60% success rate + 40% speed (under 3s = 100%)
       const speedScore = Math.min(100, Math.round((3000 / Math.max(avgTime, 500)) * 100));
       const score = Math.round(successRate * 0.6 + speedScore * 0.4);
       return {
         id,
-        name: id === "general" ? "Geral" : (agentMap[id] || "Agente"),
+        name: id === "general" ? t("quality.general") : (agentMap[id] || t("quality.agent")),
         successRate,
         avgTime,
         score,
         executions: s.count,
       };
     }).sort((a, b) => b.executions - a.executions);
-  }, [execLogs, agentMap]);
+  }, [execLogs, agentMap, t]);
 
   const recentNegative = useMemo(() => {
     return feedback
@@ -157,12 +154,18 @@ const AIQualityDashboard = () => {
     );
   }
 
+  const periodLabels: Record<string, string> = {
+    "7d": t("quality.period_7d"),
+    "30d": t("quality.period_30d"),
+    "all": t("quality.period_all"),
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display text-xl font-bold">Qualidade dos Agentes</h2>
-          <p className="text-sm text-muted-foreground">Métricas de satisfação baseadas no feedback dos usuários</p>
+          <h2 className="font-display text-xl font-bold">{t("quality.title")}</h2>
+          <p className="text-sm text-muted-foreground">{t("quality.subtitle")}</p>
         </div>
         <div className="flex gap-1">
           {(["7d", "30d", "all"] as const).map(p => (
@@ -172,7 +175,7 @@ const AIQualityDashboard = () => {
               className="cursor-pointer"
               onClick={() => setPeriod(p)}
             >
-              {p === "7d" ? "7 dias" : p === "30d" ? "30 dias" : "Tudo"}
+              {periodLabels[p]}
             </Badge>
           ))}
         </div>
@@ -183,28 +186,28 @@ const AIQualityDashboard = () => {
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl p-4 text-center">
           <MessageSquare className="h-5 w-5 text-primary mx-auto mb-2" />
           <p className="text-2xl font-bold">{stats.total}</p>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Total Feedbacks</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("quality.total_feedbacks")}</p>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }} className="glass-card rounded-2xl p-4 text-center">
-          <ThumbsUp className="h-5 w-5 text-accent-emerald mx-auto mb-2" />
-          <p className="text-2xl font-bold text-accent-emerald">{stats.rate}%</p>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Satisfação</p>
+          <ThumbsUp className="h-5 w-5 text-primary mx-auto mb-2" />
+          <p className="text-2xl font-bold text-primary">{stats.rate}%</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("quality.satisfaction")}</p>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="glass-card rounded-2xl p-4 text-center">
           <ThumbsDown className="h-5 w-5 text-destructive mx-auto mb-2" />
           <p className="text-2xl font-bold text-destructive">{stats.negative}</p>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Negativos</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("quality.negatives")}</p>
         </motion.div>
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="glass-card rounded-2xl p-4 text-center">
           {stats.trend >= 0 ? (
-            <TrendingUp className="h-5 w-5 text-accent-emerald mx-auto mb-2" />
+            <TrendingUp className="h-5 w-5 text-primary mx-auto mb-2" />
           ) : (
             <TrendingDown className="h-5 w-5 text-destructive mx-auto mb-2" />
           )}
-          <p className={`text-2xl font-bold ${stats.trend >= 0 ? "text-accent-emerald" : "text-destructive"}`}>
+          <p className={`text-2xl font-bold ${stats.trend >= 0 ? "text-primary" : "text-destructive"}`}>
             {stats.trend >= 0 ? "+" : ""}{stats.trend}%
           </p>
-          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Tendência 7d</p>
+          <p className="text-[10px] text-muted-foreground uppercase tracking-wider">{t("quality.trend_7d")}</p>
         </motion.div>
       </div>
 
@@ -212,7 +215,7 @@ const AIQualityDashboard = () => {
       {stats.agentStats.length > 0 && (
         <div className="glass-card rounded-2xl p-5 space-y-4">
           <h3 className="font-display font-semibold text-sm flex items-center gap-2">
-            <Bot className="h-4 w-4 text-primary" /> Satisfação por Agente
+            <Bot className="h-4 w-4 text-primary" /> {t("quality.satisfaction_by_agent")}
           </h3>
           <div className="space-y-3">
             {stats.agentStats.map((agent, i) => (
@@ -225,13 +228,13 @@ const AIQualityDashboard = () => {
               >
                 <div className="w-32 truncate">
                   <p className="text-xs font-semibold truncate">{agent.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{agent.total} feedbacks</p>
+                  <p className="text-[10px] text-muted-foreground">{agent.total} {t("quality.feedbacks")}</p>
                 </div>
                 <div className="flex-1">
                   <Progress value={agent.rate} className="h-2" />
                 </div>
                 <div className="flex items-center gap-2 w-24 justify-end">
-                  <span className={`text-xs font-bold ${agent.rate >= 70 ? "text-accent-emerald" : agent.rate >= 40 ? "text-yellow-500" : "text-destructive"}`}>
+                  <span className={`text-xs font-bold ${agent.rate >= 70 ? "text-primary" : agent.rate >= 40 ? "text-muted-foreground" : "text-destructive"}`}>
                     {agent.rate}%
                   </span>
                   <div className="flex gap-1">
@@ -253,9 +256,9 @@ const AIQualityDashboard = () => {
       {autoQuality.length > 0 && (
         <div className="glass-card rounded-2xl p-5 space-y-4">
           <h3 className="font-display font-semibold text-sm flex items-center gap-2">
-            <BarChart3 className="h-4 w-4 text-primary" /> Score Automático de Qualidade
+            <BarChart3 className="h-4 w-4 text-primary" /> {t("quality.auto_quality_title")}
           </h3>
-          <p className="text-[10px] text-muted-foreground">Baseado em taxa de sucesso das execuções e tempo médio de resposta</p>
+          <p className="text-[10px] text-muted-foreground">{t("quality.auto_quality_desc")}</p>
           <div className="space-y-3">
             {autoQuality.map((agent, i) => (
               <motion.div
@@ -267,7 +270,7 @@ const AIQualityDashboard = () => {
               >
                 <div className="w-32 truncate">
                   <p className="text-xs font-semibold truncate">{agent.name}</p>
-                  <p className="text-[10px] text-muted-foreground">{agent.executions} execuções</p>
+                  <p className="text-[10px] text-muted-foreground">{agent.executions} {t("quality.executions")}</p>
                 </div>
                 <div className="flex-1">
                   <Progress value={agent.score} className="h-2" />
@@ -279,7 +282,7 @@ const AIQualityDashboard = () => {
                   <Badge variant="secondary" className="text-[9px] gap-0.5 px-1">
                     <Clock className="h-2 w-2" /> {agent.avgTime > 1000 ? `${(agent.avgTime / 1000).toFixed(1)}s` : `${agent.avgTime}ms`}
                   </Badge>
-                  <span className={`text-xs font-bold ${agent.score >= 80 ? "text-accent-emerald" : agent.score >= 50 ? "text-yellow-500" : "text-destructive"}`}>
+                  <span className={`text-xs font-bold ${agent.score >= 80 ? "text-primary" : agent.score >= 50 ? "text-muted-foreground" : "text-destructive"}`}>
                     {agent.score}
                   </span>
                 </div>
@@ -292,7 +295,7 @@ const AIQualityDashboard = () => {
       {recentNegative.length > 0 && (
         <div className="glass-card rounded-2xl p-5 space-y-3">
           <h3 className="font-display font-semibold text-sm flex items-center gap-2">
-            <ThumbsDown className="h-4 w-4 text-destructive" /> Feedbacks Negativos Recentes
+            <ThumbsDown className="h-4 w-4 text-destructive" /> {t("quality.recent_negative_title")}
           </h3>
           <div className="space-y-2">
             {recentNegative.map((f, i) => (
@@ -305,14 +308,14 @@ const AIQualityDashboard = () => {
               >
                 <div className="flex items-center justify-between">
                   <Badge variant="secondary" className="text-[9px]">
-                    {f.agent_id ? (agentMap[f.agent_id] || "Agente") : "Geral"}
+                    {f.agent_id ? (agentMap[f.agent_id] || t("quality.agent")) : t("quality.general")}
                   </Badge>
                   <span className="text-[10px] text-muted-foreground">
-                    {new Date(f.created_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                    {new Date(f.created_at).toLocaleDateString(undefined, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground line-clamp-1">
-                  <span className="text-foreground font-medium">Pergunta:</span> {f.message_content}
+                  <span className="text-foreground font-medium">{t("quality.question_label")}</span> {f.message_content}
                 </p>
                 {f.feedback_text && (
                   <p className="text-xs text-destructive/80 italic">"{f.feedback_text}"</p>
@@ -327,9 +330,9 @@ const AIQualityDashboard = () => {
       {stats.total === 0 && (
         <div className="glass-card rounded-2xl p-12 text-center">
           <Star className="h-12 w-12 text-primary/30 mx-auto mb-4" />
-          <h3 className="font-display font-semibold mb-2">Nenhum feedback ainda</h3>
+          <h3 className="font-display font-semibold mb-2">{t("quality.no_feedback_title")}</h3>
           <p className="text-sm text-muted-foreground">
-            Os usuários podem avaliar as respostas dos agentes com 👍👎 — os dados aparecerão aqui automaticamente.
+            {t("quality.no_feedback_desc")}
           </p>
         </div>
       )}
