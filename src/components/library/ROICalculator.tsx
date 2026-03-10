@@ -4,11 +4,11 @@ import { Calculator, Users, TrendingDown, DollarSign, Minus, Plus } from "lucide
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { useTranslation } from "react-i18next";
-import { getRegionalPricing, formatPrice } from "@/lib/pricing";
+import { regionalPricing, formatPrice } from "@/lib/pricing";
 
 const ROICalculator = () => {
   const { t, i18n } = useTranslation();
-  const region = getRegionalPricing(i18n.language);
+  const region = regionalPricing[i18n.language] || regionalPricing.en;
   const fmt = (v: number) => formatPrice(v, i18n.language);
 
   const [employees, setEmployees] = useState(3);
