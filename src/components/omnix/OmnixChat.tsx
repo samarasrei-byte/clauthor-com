@@ -46,20 +46,25 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     setIsListening(false);
     window.speechSynthesis.cancel();
 
-    const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "");
-    const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 500));
-    utterance.lang = config.language || "en-US";
+    const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "").replace(/\n{2,}/g, ". ").trim();
+    const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 800));
+    const lang = config.language || "en-US";
+    utterance.lang = lang;
 
     const voices = window.speechSynthesis.getVoices();
-    const lang = config.language || "en-US";
-    const langVoices = voices.filter(v => v.lang.startsWith(lang.split("-")[0]));
-    const premium = langVoices.find(v => /google|microsoft|natural|neural|online/i.test(v.name));
-    const fallback = langVoices.find(v => v.localService === false) || langVoices[0];
-    if (premium) utterance.voice = premium;
-    else if (fallback) utterance.voice = fallback;
+    const langPrefix = lang.split("-")[0];
+    const langVoices = voices.filter(v => v.lang.startsWith(langPrefix));
+    
+    // Priority: Neural/Natural > Remote/Cloud > Any matching language
+    const neural = langVoices.find(v => /natural|neural|enhanced|wavenet/i.test(v.name));
+    const googleMs = langVoices.find(v => /google|microsoft|online/i.test(v.name));
+    const remote = langVoices.find(v => v.localService === false);
+    const local = langVoices[0];
+    utterance.voice = neural || googleMs || remote || local || null;
 
-    utterance.rate = 1.25;
-    utterance.pitch = 1.05;
+    // Tuned for conversational naturalness
+    utterance.rate = 1.12;
+    utterance.pitch = 1.0;
     utterance.volume = 1;
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => {
