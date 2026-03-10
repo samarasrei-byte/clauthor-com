@@ -506,13 +506,13 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex gap-2.5 items-start ${msg.role === "user" ? "flex-row-reverse" : ""}`}
                       >
-                        <div className={`h-6 w-6 rounded-lg border border-white/[0.04] flex items-center justify-center shrink-0 mt-0.5 ${
-                          msg.role === "user" ? "bg-primary/[0.12]" : msg.type === "diagnostic" ? "bg-amber-500/10" : "bg-white/[0.03]"
+                        <div className={`h-6 w-6 rounded-lg border border-border/10 flex items-center justify-center shrink-0 mt-0.5 ${
+                          msg.role === "user" ? "bg-primary/[0.12]" : msg.type === "diagnostic" ? "bg-destructive/10" : "bg-card/30"
                         }`}>
                           {msg.role === "user"
                             ? <User className="h-3 w-3 text-primary" />
                             : msg.type === "diagnostic"
-                            ? <Shield className="h-3 w-3 text-amber-400" />
+                            ? <Shield className="h-3 w-3 text-destructive" />
                             : <Bot className="h-3 w-3 text-primary/70" />
                           }
                         </div>
@@ -520,11 +520,11 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                           msg.role === "user"
                             ? "bg-primary/[0.1] border border-primary/[0.15] rounded-tr-sm"
                             : msg.type === "diagnostic"
-                            ? "bg-amber-500/[0.06] border border-amber-500/[0.15] rounded-tl-sm"
-                            : "bg-white/[0.03] border border-white/[0.04] rounded-tl-sm"
+                            ? "bg-destructive/[0.06] border border-destructive/[0.15] rounded-tl-sm"
+                            : "bg-card/30 border border-border/10 rounded-tl-sm"
                         }`}>
                           {msg.role === "assistant" ? (
-                            <div className="text-[12px] text-foreground/70 leading-relaxed prose prose-invert prose-xs max-w-none [&_p]:m-0 [&_ul]:my-1 [&_li]:my-0">
+                            <div className="text-[12px] text-foreground/70 leading-relaxed prose dark:prose-invert prose-xs max-w-none [&_p]:m-0 [&_ul]:my-1 [&_li]:my-0">
                               <ReactMarkdown>{msg.content}</ReactMarkdown>
                             </div>
                           ) : (
