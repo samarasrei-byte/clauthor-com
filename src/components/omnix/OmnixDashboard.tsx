@@ -71,11 +71,11 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
 
   const kpiCards = [
     { label: kpiLabels.agents, value: activeAgents, icon: Bot, color: "text-primary" },
-    { label: kpiLabels.executions, value: totalExecs, icon: Zap, color: "text-cyan-400" },
-    { label: kpiLabels.success, value: `${successRate}%`, icon: CheckCircle, color: "text-emerald-400" },
-    { label: kpiLabels.time, value: `${avgTime}ms`, icon: Clock, color: "text-amber-400" },
-    { label: kpiLabels.credits, value: remainingCredits, icon: Coins, color: "text-violet-400" },
-    { label: kpiLabels.tasks, value: openTasks, icon: Target, color: "text-orange-400" },
+    { label: kpiLabels.executions, value: totalExecs, icon: Zap, color: "text-primary/70" },
+    { label: kpiLabels.success, value: `${successRate}%`, icon: CheckCircle, color: "text-accent-foreground" },
+    { label: kpiLabels.time, value: `${avgTime}ms`, icon: Clock, color: "text-muted-foreground" },
+    { label: kpiLabels.credits, value: remainingCredits, icon: Coins, color: "text-primary/80" },
+    { label: kpiLabels.tasks, value: openTasks, icon: Target, color: "text-destructive/70" },
   ];
 
   // Compact mode: just KPIs in a horizontal bar
