@@ -116,7 +116,13 @@ export function useOmnix() {
       );
 
       if (!response.ok) {
-        const data = await response.json();
+        // Remove the user message that got no response
+        setMessages(prev => {
+          const cleaned = prev.filter((_, i) => i < prev.length - 1 || prev[prev.length - 1]?.role !== "user");
+          messagesRef.current = cleaned;
+          return cleaned;
+        });
+        const data = await response.json().catch(() => ({}));
         if (response.status === 402) toast.error("Créditos esgotados! Faça upgrade.");
         else if (response.status === 429) toast.error("Limite de requisições. Tente novamente.");
         else toast.error(data.error || "Erro ao processar.");
