@@ -14,15 +14,6 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
   const particleCount = 12;
   const particles = Array.from({ length: particleCount }, (_, i) => i);
 
-  // Dynamic color per state
-  const stateColor = state === "speaking"
-    ? "hsl(var(--primary))"
-    : state === "listening"
-    ? "hsl(160 84% 50%)"
-    : state === "processing"
-    ? "hsl(40 96% 56%)"
-    : "hsl(var(--primary))";
-
   return (
     <div className={cn("relative w-32 h-32 flex items-center justify-center mb-2", className)}>
 

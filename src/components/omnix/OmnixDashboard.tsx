@@ -56,7 +56,7 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
   const successLogs = logs.filter(l => l.status === "success").length;
   const successRate = logs.length > 0 ? Math.round((successLogs / logs.length) * 100) : 100;
   const avgTime = logs.length > 0 ? Math.round(logs.reduce((s, l) => s + (l.execution_time_ms || 0), 0) / logs.length) : 0;
-  const openTasks = tasks.filter(t => t.status === "open").length;
+  const openTasks = tasks.filter(task => task.status === "open").length;
 
   const lastKpis = [...messages].reverse().find(m => m.kpis)?.kpis || null;
 
