@@ -4,6 +4,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 // Only load PT (default) synchronously — others loaded on demand
 import pt from "./locales/pt.json";
+import en from "./locales/en.json";
 
 export const languages = [
   { code: "pt", name: "Português (BR)", flag: "br" },
@@ -43,7 +44,7 @@ const localeLoaders: Record<string, () => Promise<{ default: Record<string, any>
 
 // Load a locale dynamically and add it to i18n
 async function loadLocale(lng: string) {
-  if (lng === "pt" || i18n.hasResourceBundle(lng, "translation")) return;
+  if (lng === "pt" || lng === "en" || i18n.hasResourceBundle(lng, "translation")) return;
   const loader = localeLoaders[lng];
   if (!loader) return;
   try {
@@ -66,6 +67,7 @@ i18n
   .init({
     resources: {
       pt: { translation: pt },
+      en: { translation: en },
     },
     fallbackLng: "pt",
     supportedLngs,
