@@ -70,11 +70,11 @@ export function useAgentChat(agentId?: string) {
       if (!response.ok) {
         const data = await response.json();
         if (response.status === 402) {
-          toast.error("Créditos esgotados! Faça upgrade do seu plano.");
+          toast.error("Credits exhausted! Please upgrade your plan.");
         } else if (response.status === 429) {
-          toast.error("Limite de requisições atingido. Tente novamente em alguns segundos.");
+          toast.error("Rate limit reached. Please try again in a few seconds.");
         } else {
-          toast.error(data.error || "Erro ao processar sua mensagem.");
+          toast.error(data.error || "Error processing your message.");
         }
         setIsLoading(false);
         setIsStreaming(false);
@@ -190,7 +190,7 @@ export function useAgentChat(agentId?: string) {
       }
 
       if (gotCreditWarning) {
-        toast.warning("⚠️ Seus créditos estão em 80%+. Considere fazer upgrade.", { duration: 5000 });
+        toast.warning("⚠️ Credits at 80%+. Consider upgrading.", { duration: 5000 });
       }
 
       refetchCredits();

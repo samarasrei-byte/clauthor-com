@@ -22,7 +22,7 @@ interface SubscriptionManagerProps {
 const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
   const { credits, usagePercentage } = useCredits();
   const { i18n, t } = useTranslation();
-  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
+  const locale = i18n.language === "pt" ? "pt-BR" : (i18n.language || "en");
   const currency = locale.startsWith("pt") ? "BRL" : "USD";
   const fmt = (v: number) => new Intl.NumberFormat(locale, { style: "currency", currency, minimumFractionDigits: 0 }).format(v / 100);
 
@@ -44,8 +44,8 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
             <CreditCard className="h-4 w-4 text-primary" />
           </div>
           <div>
-            <h2 className="font-display font-semibold">Assinatura & Créditos</h2>
-            <p className="text-xs text-muted-foreground">Gerencie seu plano</p>
+            <h2 className="font-display font-semibold">{t("subscription.title", { defaultValue: "Subscription & Credits" })}</h2>
+            <p className="text-xs text-muted-foreground">{t("subscription.subtitle", { defaultValue: "Manage your plan" })}</p>
           </div>
         </div>
       </div>
@@ -54,14 +54,14 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
         {/* Credit Usage */}
         <div className="bg-white/[0.02] rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium">Uso de Créditos</span>
+            <span className="text-sm font-medium">{t("subscription.credit_usage", { defaultValue: "Credit Usage" })}</span>
             <span className="text-xs text-muted-foreground">
-              {credits?.used_credits?.toLocaleString("pt-BR") || 0} / {credits?.total_credits?.toLocaleString("pt-BR") || 0}
+              {credits?.used_credits?.toLocaleString(locale) || 0} / {credits?.total_credits?.toLocaleString(locale) || 0}
             </span>
           </div>
           <Progress value={usagePercentage} className="h-2" />
           <p className="text-xs text-muted-foreground mt-2">
-            {100 - usagePercentage}% restante este mês
+            {100 - usagePercentage}% {t("subscription.remaining", { defaultValue: "remaining this month" })}
           </p>
         </div>
 
@@ -70,7 +70,7 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
           <div className="bg-white/[0.02] rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Receipt className="h-4 w-4 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Total Mensal</span>
+              <span className="text-xs text-muted-foreground">{t("subscription.monthly_total", { defaultValue: "Monthly Total" })}</span>
             </div>
             <p className="font-display text-xl font-bold">
               {fmt(totalMonthly)}
@@ -79,11 +79,11 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
           <div className="bg-white/[0.02] rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Próxima Cobrança</span>
+              <span className="text-xs text-muted-foreground">{t("subscription.next_billing", { defaultValue: "Next Billing" })}</span>
             </div>
             <p className="font-display text-xl font-bold">
               {nextBilling
-                ? nextBilling.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })
+                ? nextBilling.toLocaleDateString(locale, { day: "2-digit", month: "short" })
                 : "—"}
             </p>
           </div>
@@ -91,10 +91,10 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
 
         {/* Active Subscriptions */}
         <div>
-          <h3 className="text-sm font-medium mb-3">Assinaturas Ativas</h3>
+          <h3 className="text-sm font-medium mb-3">{t("subscription.active", { defaultValue: "Active Subscriptions" })}</h3>
           {subscriptions.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Nenhuma assinatura ativa
+              {t("subscription.none", { defaultValue: "No active subscriptions" })}
             </p>
           ) : (
             <div className="space-y-2">
@@ -109,10 +109,10 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-muted-foreground">
-                      {fmt(sub.monthly_price)}/{t("dashboard.month_short", { defaultValue: "mês" })}
+                      {fmt(sub.monthly_price)}/{t("dashboard.month_short", { defaultValue: "mo" })}
                     </span>
                     <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 text-[10px]">
-                      Ativo
+                      {t("subscription.status_active", { defaultValue: "Active" })}
                     </Badge>
                   </div>
                 </div>
@@ -123,15 +123,15 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
 
         {/* Payment Method */}
         <div className="pt-4 border-t border-white/5">
-          <h3 className="text-sm font-medium mb-3">Método de Pagamento</h3>
+          <h3 className="text-sm font-medium mb-3">{t("subscription.payment_method", { defaultValue: "Payment Method" })}</h3>
           <div className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02]">
             <Globe className="h-4 w-4 text-blue-500" />
             <div>
               <p className="text-sm font-medium">PayPal</p>
-              <p className="text-[10px] text-muted-foreground">Cobrança recorrente mensal</p>
+              <p className="text-[10px] text-muted-foreground">{t("subscription.recurring", { defaultValue: "Monthly recurring billing" })}</p>
             </div>
             <Badge variant="secondary" className="ml-auto bg-blue-500/10 text-blue-400 text-[10px]">
-              Ativo
+              {t("subscription.status_active", { defaultValue: "Active" })}
             </Badge>
           </div>
         </div>
@@ -139,7 +139,7 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
         {/* Upgrade Button */}
         <TokenUpgradeDialog trigger={
           <Button className="w-full glow group">
-            Upgrade de Plano
+            {t("subscription.upgrade", { defaultValue: "Upgrade Plan" })}
             <ArrowUpRight className="h-4 w-4 ml-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </Button>
         } />

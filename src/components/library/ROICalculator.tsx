@@ -4,20 +4,24 @@ import { Calculator, Users, TrendingDown, DollarSign, Minus, Plus } from "lucide
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { useTranslation } from "react-i18next";
+import { regionalPricing, formatPrice } from "@/lib/pricing";
 
 const ROICalculator = () => {
+  const { t, i18n } = useTranslation();
+  const region = regionalPricing[i18n.language] || regionalPricing.en;
+  const fmt = (v: number) => formatPrice(v, i18n.language);
+
   const [employees, setEmployees] = useState(3);
-  const [avgSalary, setAvgSalary] = useState(4500);
-  const { t } = useTranslation();
+  const [avgSalary, setAvgSalary] = useState(region.comparison.avgSalary);
 
   const stats = useMemo(() => {
     const humanCost = employees * avgSalary;
-    const agentCost = Math.ceil(employees / 3) * 3997;
+    const agentCost = Math.ceil(employees / 3) * region.departments.marketing;
     const savings = humanCost - agentCost;
     const savingsPercent = humanCost > 0 ? Math.round((savings / humanCost) * 100) : 0;
     const yearSavings = savings * 12;
     return { humanCost, agentCost, savings, savingsPercent, yearSavings };
-  }, [employees, avgSalary]);
+  }, [employees, avgSalary, region]);
 
   return (
     <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="holo-card rounded-2xl p-6 sm:p-8">
@@ -49,20 +53,20 @@ const ROICalculator = () => {
             <DollarSign className="h-4 w-4 text-muted-foreground" />
             {t("roi.salary_label")}
           </label>
-          <div className="flex-1"><Slider value={[avgSalary]} onValueChange={([v]) => setAvgSalary(v)} min={1500} max={15000} step={500} /></div>
-          <p className="text-center text-2xl font-display font-bold mt-2 gradient-text">R$ {avgSalary.toLocaleString("pt-BR")}</p>
+          <div className="flex-1"><Slider value={[avgSalary]} onValueChange={([v]) => setAvgSalary(v)} min={Math.round(region.comparison.avgSalary * 0.3)} max={Math.round(region.comparison.avgSalary * 3)} step={Math.round(region.comparison.avgSalary * 0.05) || 100} /></div>
+          <p className="text-center text-2xl font-display font-bold mt-2 gradient-text">{fmt(avgSalary)}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-4">
         <div className="bg-white/[0.03] rounded-xl p-4 text-center border border-white/5">
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{t("roi.human_cost")}</p>
-          <p className="font-display text-xl font-bold text-destructive/80">R$ {stats.humanCost.toLocaleString("pt-BR")}</p>
+          <p className="font-display text-xl font-bold text-destructive/80">{fmt(stats.humanCost)}</p>
           <p className="text-[10px] text-muted-foreground">{t("roi.per_month")}</p>
         </div>
         <div className="bg-white/[0.03] rounded-xl p-4 text-center border border-primary/10">
           <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{t("roi.apexbot_cost")}</p>
-          <p className="font-display text-xl font-bold gradient-text">R$ {stats.agentCost.toLocaleString("pt-BR")}</p>
+          <p className="font-display text-xl font-bold gradient-text">{fmt(stats.agentCost)}</p>
           <p className="text-[10px] text-muted-foreground">{t("roi.per_month")}</p>
         </div>
         <div className="bg-primary/5 rounded-xl p-4 text-center border border-primary/20 neon-border">
@@ -71,7 +75,7 @@ const ROICalculator = () => {
             {t("roi.savings")}
           </p>
           <p className="font-display text-xl font-bold text-primary">{stats.savingsPercent}%</p>
-          <p className="text-[10px] text-primary/70">R$ {stats.yearSavings.toLocaleString("pt-BR")}{t("roi.per_year")}</p>
+          <p className="text-[10px] text-primary/70">{fmt(stats.yearSavings)}{t("roi.per_year")}</p>
         </div>
       </div>
     </motion.div>

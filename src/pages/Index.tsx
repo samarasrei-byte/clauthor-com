@@ -297,7 +297,7 @@ const HomePage = () => {
     return Object.fromEntries(keys.map(k => [k, {
       icon: finderIcons[k],
       tier: "advanced" as string,
-      socialProof: { companies: 150, rating: 4.9, savings: "R$ 8.500" },
+      socialProof: { companies: 150, rating: 4.9, savings: "$8,500" },
       capabilities: [],
       slug: k.replace(/_/g, "-"),
     }]));
@@ -888,8 +888,8 @@ const HomePage = () => {
             {/* Value comparison */}
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-3 sm:gap-6 mb-6">
               {[
-                { label: t("home.pricing_val_human", { defaultValue: "Funcionário CLT" }), value: "R$ 4.500/mês", sub: t("home.pricing_val_human_sub", { defaultValue: "8h/dia, férias, encargos" }), muted: true },
-                { label: t("home.pricing_val_agent", { defaultValue: "Agente CLAUTHOR" }), value: "R$ 147/mês", sub: t("home.pricing_val_agent_sub", { defaultValue: "24/7, sem encargos, escala infinita" }), muted: false },
+                { label: t("home.pricing_val_human", { defaultValue: "Full-time Employee" }), value: "$5,500/mo", sub: t("home.pricing_val_human_sub", { defaultValue: "8h/day, benefits, overhead" }), muted: true },
+                { label: t("home.pricing_val_agent", { defaultValue: "CLAUTHOR Agent" }), value: "$139/mo", sub: t("home.pricing_val_agent_sub", { defaultValue: "24/7, no overhead, infinite scale" }), muted: false },
               ].map((item) => (
                 <div key={item.label} className={`px-3 sm:px-5 py-3 rounded-xl border text-center min-w-0 ${item.muted ? "border-border/30 bg-card/20 opacity-60" : "border-primary/20 bg-primary/5"}`}>
                   <p className="font-mono text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mb-1 truncate">{item.label}</p>
@@ -1004,7 +1004,7 @@ const HomePage = () => {
                 quote: t("home.testimonial_2", { defaultValue: "O agente financeiro concilia notas fiscais, cobra inadimplentes e gera relatórios. Economizamos um funcionário inteiro." }),
                 author: "CFO",
                 company: t("home.testimonial_2_company", { defaultValue: "Startup SaaS B2B" }),
-                metric: "R$8k",
+                metric: "$8k",
                 metricLabel: t("home.testimonial_2_metric", { defaultValue: "economia mensal" }),
               },
               {

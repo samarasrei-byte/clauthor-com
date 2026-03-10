@@ -294,9 +294,9 @@ const Waitlist = () => {
               </div>
               <div className="text-sm">
                 <motion.span key={displayCount} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="font-bold text-primary text-lg tabular-nums">
-                  {displayCount.toLocaleString('pt-BR')}+
+                  {displayCount.toLocaleString('en-US')}+
                 </motion.span>
-                <span className="text-muted-foreground"> profissionais na fila</span>
+                <span className="text-muted-foreground"> professionals in queue</span>
               </div>
             </motion.div>
 

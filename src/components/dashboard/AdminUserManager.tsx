@@ -65,9 +65,9 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
       .eq("user_id", editingUser.user_id);
 
     if (error) {
-      toast.error("Erro ao resetar créditos.");
+      toast.error("Failed to reset credits.");
     } else {
-      toast.success("Créditos resetados!");
+      toast.success("Credits reset!");
       queryClient.invalidateQueries({ queryKey: ["admin-all-credits"] });
     }
     setSaving(false);
@@ -78,7 +78,7 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
       <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
         <CardHeader>
           <CardTitle className="font-display text-lg flex items-center gap-2">
-            <Users className="h-5 w-5 text-cyan-400" /> Todos os Usuários ({allProfiles.length})
+            <Users className="h-5 w-5 text-cyan-400" /> All Users ({allProfiles.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -86,12 +86,12 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/[0.08]">
-                  <th className="text-left p-3 text-muted-foreground font-medium">Nome</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Empresa</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Plano</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Créditos</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Cadastro</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Ações</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Name</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Company</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Plan</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Credits</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Joined</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -157,7 +157,7 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Total de créditos</Label>
+              <Label>Total credits</Label>
               <Input
                 type="number"
                 value={newCredits}
@@ -167,19 +167,19 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
             </div>
             {editingUser?.credit && (
               <div className="p-3 rounded-lg bg-muted/30 text-xs space-y-1">
-                <p>Usados: <strong>{editingUser.credit.used_credits.toLocaleString()}</strong></p>
-                <p>Reset em: <strong>{new Date(editingUser.credit.credits_reset_at).toLocaleDateString(locale)}</strong></p>
+                <p>Used: <strong>{editingUser.credit.used_credits.toLocaleString()}</strong></p>
+                <p>Reset at: <strong>{new Date(editingUser.credit.credits_reset_at).toLocaleDateString(locale)}</strong></p>
               </div>
             )}
             <Button variant="outline" size="sm" onClick={resetCredits} disabled={saving} className="w-full text-xs">
-              Resetar créditos usados para 0
+              Reset used credits to 0
             </Button>
           </div>
           <DialogFooter>
-            <Button variant="ghost" onClick={() => setEditingUser(null)}>Cancelar</Button>
+            <Button variant="ghost" onClick={() => setEditingUser(null)}>Cancel</Button>
             <Button onClick={handleSave} disabled={saving} className="gap-2">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              Salvar
+              Save
             </Button>
           </DialogFooter>
         </DialogContent>

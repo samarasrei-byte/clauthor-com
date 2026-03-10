@@ -3,9 +3,11 @@ import { Coins, TrendingUp } from "lucide-react";
 import { useCredits } from "@/hooks/useCredits";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
 
 export function CreditsDisplay() {
   const { credits, remainingCredits, usagePercentage, isLoading } = useCredits();
+  const { t } = useTranslation();
 
   if (isLoading || !credits) {
     return (
@@ -48,7 +50,7 @@ export function CreditsDisplay() {
             <Coins className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Créditos</p>
+            <p className="text-sm text-muted-foreground">{t("credits.title", { defaultValue: "Credits" })}</p>
             <p className="font-display font-bold text-xl gradient-text">
               {formatCredits(remainingCredits)}
             </p>
@@ -61,8 +63,8 @@ export function CreditsDisplay() {
 
       <div className="space-y-2">
         <div className="flex justify-between text-xs text-muted-foreground">
-          <span>Usado: {formatCredits(credits.used_credits)}</span>
-          <span>Total: {formatCredits(credits.total_credits)}</span>
+          <span>{t("credits.used", { defaultValue: "Used" })}: {formatCredits(credits.used_credits)}</span>
+          <span>{t("credits.total", { defaultValue: "Total" })}: {formatCredits(credits.total_credits)}</span>
         </div>
         <Progress 
           value={usagePercentage} 
@@ -71,7 +73,7 @@ export function CreditsDisplay() {
         {usagePercentage > 80 && (
           <p className="text-xs text-cyan-400 flex items-center gap-1 mt-2">
             <TrendingUp className="h-3 w-3" />
-            Créditos baixos! Considere fazer upgrade.
+            {t("credits.low_warning", { defaultValue: "Credits running low! Consider upgrading." })}
           </p>
         )}
       </div>
