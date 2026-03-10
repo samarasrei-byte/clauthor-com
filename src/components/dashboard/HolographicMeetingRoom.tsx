@@ -259,7 +259,7 @@ const CollaborationLine = ({
 
 const HolographicMeetingRoom = () => {
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [meetingActive, setMeetingActive] = useState(false);
   const [topic, setTopic] = useState("");
   const [messages, setMessages] = useState<MeetingMessage[]>([]);
@@ -317,7 +317,7 @@ const HolographicMeetingRoom = () => {
       recognitionRef.current = new SR();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = "pt-BR";
+      recognitionRef.current.lang = i18n.language === "pt" ? "pt-BR" : i18n.language;
       recognitionRef.current.onresult = (e: any) => {
         const t = Array.from(e.results).map((r: any) => r[0].transcript).join("");
         if (meetingActive) setInputValue(t);
@@ -591,8 +591,8 @@ Apenas o texto, sem introduções.`,
   const priorityStyle = (p: string) => {
     switch (p) {
       case "high": return "bg-destructive/10 text-destructive border-destructive/20";
-      case "medium": return "bg-accent-amber/10 text-accent-amber border-accent-amber/20";
-      default: return "bg-accent-emerald/10 text-accent-emerald border-accent-emerald/20";
+      case "medium": return "bg-primary/10 text-primary border-primary/20";
+      default: return "bg-muted/10 text-muted-foreground border-border/20";
     }
   };
 
@@ -797,7 +797,7 @@ Apenas o texto, sem introduções.`,
               <div className="flex items-center gap-4">
                 <div className={cn(
                   "w-3 h-3 rounded-full",
-                  phase === "conclusion" ? "bg-accent-emerald" : "bg-primary animate-pulse"
+                  phase === "conclusion" ? "bg-primary" : "bg-primary animate-pulse"
                 )} />
                 <span className="text-sm md:text-base font-display font-semibold">
                   {phase === "discussion" ? t("meeting.discussion") : 

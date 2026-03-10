@@ -1907,5 +1907,11 @@
     "step_command_sub": "Dê a primeira missão",
     "step_command_desc": "Use o Command Center para dar tarefas aos agentes. Eles executam, reportam e aprendem com cada interação.",
     "step_command_cta": "Abrir Command Center"
+  },
+  "omnix": {
+    "standby": "EM ESPERA",
+    "listening": "OUVINDO",
+    "speaking": "FALANDO",
+    "processing": "PROCESSANDO"
   }
 }
