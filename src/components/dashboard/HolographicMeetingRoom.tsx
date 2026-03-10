@@ -259,7 +259,7 @@ const CollaborationLine = ({
 
 const HolographicMeetingRoom = () => {
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [meetingActive, setMeetingActive] = useState(false);
   const [topic, setTopic] = useState("");
   const [messages, setMessages] = useState<MeetingMessage[]>([]);
