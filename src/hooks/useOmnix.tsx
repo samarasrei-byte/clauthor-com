@@ -79,8 +79,11 @@ export function useOmnix() {
     if (!content.trim()) return;
 
     const userMsg: OmnixMessage = { role: "user", content, timestamp: new Date() };
-    const updatedMessages = [...messages, userMsg];
-    setMessages(updatedMessages);
+    let updatedMessages: OmnixMessage[] = [];
+    setMessages(prev => {
+      updatedMessages = [...prev, userMsg];
+      return updatedMessages;
+    });
     setIsLoading(true);
     setIsStreaming(true);
 
@@ -173,7 +176,7 @@ export function useOmnix() {
       setIsStreaming(false);
       abortRef.current = null;
     }
-  }, [messages, config]);
+  }, [config]);
 
   const stopStreaming = useCallback(() => abortRef.current?.abort(), []);
   const clearMessages = useCallback(() => setMessages([]), []);

@@ -65,7 +65,7 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
           onSend={sendMessage}
           onStop={stopStreaming}
           onClear={clearMessages}
-          voiceFirst
+          voiceFirst={!initialMessage}
         />
         
         <Button

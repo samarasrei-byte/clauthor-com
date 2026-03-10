@@ -598,9 +598,9 @@ const ClientDashboard = () => {
                         <TaskRequestPanel
                           contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
                           onSubmitTask={(task, mode) => {
-                            setPendingTaskMessage(task);
                             // Strategic mode → send to THOR/Omnix for orchestration
                             if (mode === "strategic" || mode === "guided") {
+                              setPendingTaskMessage(task);
                               setActiveSection("omnix");
                             } else {
                               // Simple mode — try to match an agent
@@ -619,6 +619,7 @@ const ClientDashboard = () => {
                                 }
                               }
                               // Fallback to THOR
+                              setPendingTaskMessage(task);
                               setActiveSection("omnix");
                             }
                           }}
