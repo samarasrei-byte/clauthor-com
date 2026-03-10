@@ -728,7 +728,7 @@ const ClientDashboard = () => {
                             ) : (
                               <div className="space-y-2">
                                 {subscriptions.map((sub) => (
-                                  <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02]">
+                                  <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/5">
                                     <div className="flex items-center gap-2">
                                       <span className="w-2 h-2 rounded-full bg-accent-emerald" />
                                       <span className="text-sm">{sub.agent_name}</span>
