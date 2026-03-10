@@ -774,10 +774,10 @@ Apenas o texto, sem introduções.`,
                   className="gap-3 px-12 py-7 text-base md:text-lg rounded-2xl shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all hover:scale-105"
                 >
                   <Play className="h-5 w-5" />
-                  Iniciar Reunião com {agents.length} Agentes
+                  {t("meeting.start_meeting", { count: agents.length })}
                 </Button>
                 {agents.length < 2 && (
-                  <p className="text-xs text-muted-foreground mt-4">Mínimo de 2 agentes ativos necessários</p>
+                  <p className="text-xs text-muted-foreground mt-4">{t("meeting.min_agents")}</p>
                 )}
               </div>
             </motion.div>
