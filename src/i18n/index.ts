@@ -67,6 +67,7 @@ i18n
   .init({
     resources: {
       pt: { translation: pt },
+      en: { translation: en },
     },
     fallbackLng: "pt",
     supportedLngs,
