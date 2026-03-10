@@ -2,6 +2,7 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Settings, Maximize2, Minimize2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 import { useMonix } from "@/hooks/useMonix";
 import MonixChat from "@/components/monix/MonixChat";
 import MonixDashboard from "@/components/monix/MonixDashboard";
