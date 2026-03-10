@@ -265,9 +265,9 @@ const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integrati
     <div className="space-y-2.5 p-3 rounded-xl bg-muted/5 border border-border/20">
       <div className="flex items-center gap-1.5 mb-1">
         <Zap className="h-3.5 w-3.5 text-primary" />
-        <span className="text-xs font-medium">Conexão Rápida</span>
+        <span className="text-xs font-medium">{t("integrations.quick_connect_title", { defaultValue: "Conexão Rápida" })}</span>
         <Badge variant="outline" className="text-[9px] ml-auto">
-          <Shield className="h-2.5 w-2.5 mr-0.5" /> Criptografado
+          <Shield className="h-2.5 w-2.5 mr-0.5" /> {t("integrations.encrypted", { defaultValue: "Criptografado" })}
         </Badge>
       </div>
       {fields.map(field => (
