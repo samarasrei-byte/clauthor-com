@@ -380,15 +380,15 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
 
   // Quick actions
   const quickActions = useMemo(() => [
-    { label: "Auto-diagnóstico", icon: "🔍", action: () => setActiveTab("diagnostics") },
-    { label: "Status do sistema", icon: "📡", action: () => sendMessage("Qual o status atual do meu sistema e agentes?") },
-    { label: "Resolver problema", icon: "⚡", action: () => sendMessage("Estou com um problema e preciso de ajuda para resolver rapidamente.") },
-  ], [sendMessage]);
+    { label: t("support.auto_diag"), icon: "🔍", action: () => setActiveTab("diagnostics") },
+    { label: t("support.system_status"), icon: "📡", action: () => sendMessage(t("support.system_status_prompt")) },
+    { label: t("support.solve_problem"), icon: "⚡", action: () => sendMessage(t("support.solve_problem_prompt")) },
+  ], [sendMessage, t]);
 
   const tabs = [
-    { id: "chat" as const, label: "Chat IA", icon: MessageSquare },
-    { id: "diagnostics" as const, label: "Diagnóstico", icon: Shield },
-    { id: "prevention" as const, label: "Prevenção", icon: Brain },
+    { id: "chat" as const, label: t("support.tab_chat"), icon: MessageSquare },
+    { id: "diagnostics" as const, label: t("support.tab_diagnostics"), icon: Shield },
+    { id: "prevention" as const, label: t("support.tab_prevention"), icon: Brain },
   ];
 
   if (embedded) {
