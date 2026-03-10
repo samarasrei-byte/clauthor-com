@@ -488,9 +488,9 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                         <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg mb-4">
                           <Users className="h-6 w-6 text-white" />
                         </div>
-                        <h3 className="font-display font-bold text-base mb-1">Chat em Grupo</h3>
+                        <h3 className="font-display font-bold text-base mb-1">{t("squad.group_empty_title")}</h3>
                         <p className="text-xs text-muted-foreground mb-4 max-w-xs">
-                          Faça perguntas para toda sua equipe. Os agentes colaboram para resolver.
+                          {t("squad.group_empty_desc")}
                         </p>
                       </>
                     ) : (
