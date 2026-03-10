@@ -800,14 +800,14 @@ Apenas o texto, sem introduções.`,
                   phase === "conclusion" ? "bg-accent-emerald" : "bg-primary animate-pulse"
                 )} />
                 <span className="text-sm md:text-base font-display font-semibold">
-                  {phase === "discussion" ? "Discussão em Andamento" : 
-                   phase === "planning" ? "Gerando Plano de Ação…" : 
-                   phase === "conclusion" ? "✓ Plano Pronto" : "Preparando…"}
+                  {phase === "discussion" ? t("meeting.discussion") : 
+                   phase === "planning" ? t("meeting.generating_plan") : 
+                   phase === "conclusion" ? t("meeting.plan_ready") : t("meeting.preparing")}
                 </span>
-                <Badge variant="secondary" className="text-xs">{selectedAgents.length} agentes ativos</Badge>
+                <Badge variant="secondary" className="text-xs">{t("meeting.agents_active", { count: selectedAgents.length })}</Badge>
               </div>
               <Button variant="ghost" size="sm" onClick={resetMeeting} className="gap-2 text-xs text-muted-foreground hover:text-foreground">
-                <RotateCcw className="h-4 w-4" /> Nova Reunião
+                <RotateCcw className="h-4 w-4" /> {t("meeting.new_meeting")}
               </Button>
             </div>
 
