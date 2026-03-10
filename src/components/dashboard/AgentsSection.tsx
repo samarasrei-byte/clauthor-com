@@ -44,10 +44,10 @@ const AUTONOMY_ICONS: Record<AutonomyLevel, any> = {
 };
 
 const AUTONOMY_COLORS: Record<AutonomyLevel, string> = {
-  observer: "text-blue-400",
-  assistant: "text-emerald-400",
-  executor: "text-amber-400",
-  autonomous: "text-purple-400",
+  observer: "text-muted-foreground",
+  assistant: "text-primary",
+  executor: "text-accent-foreground",
+  autonomous: "text-primary",
 };
 
 const AgentsSection = ({
