@@ -749,7 +749,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         onClick={() => { onClose(); navigate("/marketplace"); }}
                         className="flex-1 h-10 rounded-xl text-xs border-border/50"
                       >
-                        Explorar todos os agentes
+                        Explore all agents
                       </Button>
                     </div>
                   </motion.div>
