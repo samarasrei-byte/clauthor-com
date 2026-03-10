@@ -537,7 +537,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                         {msg.role === "assistant" && mode === "grupo" && msg.agent_name && (
                           <div className="text-[10px] font-semibold text-primary mb-1">{msg.agent_name}</div>
                         )}
-                        <div className="text-[14px] leading-relaxed prose prose-sm prose-invert max-w-none [&>p]:mb-1 [&>p:last-child]:mb-0">
+                        <div className="text-[14px] leading-relaxed prose prose-sm dark:prose-invert max-w-none [&>p]:mb-1 [&>p:last-child]:mb-0">
                           <ReactMarkdown>{msg.content}</ReactMarkdown>
                         </div>
                         <div className={cn(
