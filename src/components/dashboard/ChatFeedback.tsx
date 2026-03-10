@@ -79,7 +79,7 @@ const ChatFeedback = ({ userMessage, assistantMessage, agentId }: ChatFeedbackPr
         <Button
           variant="ghost"
           size="icon"
-          className={`h-6 w-6 ${rating === "positive" ? "text-emerald-400" : "text-muted-foreground/40 hover:text-emerald-400"}`}
+          className={`h-6 w-6 ${rating === "positive" ? "text-primary" : "text-muted-foreground/40 hover:text-primary"}`}
           onClick={() => handleRating("positive")}
           title="Resposta útil"
         >
