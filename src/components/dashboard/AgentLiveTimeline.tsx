@@ -122,6 +122,7 @@ const AgentLiveTimeline = () => {
 
   const statusFilters = [
     { key: "all" as const, label: t("timeline.all", { defaultValue: "Todos" }), count: entries.length },
+    { key: "running" as const, label: t("timeline.running", { defaultValue: "Em execução" }), count: entries.filter(e => e.status === "running").length },
     { key: "success" as const, label: t("timeline.success", { defaultValue: "Sucesso" }), count: entries.filter(e => e.status === "success").length },
     { key: "error" as const, label: t("timeline.error", { defaultValue: "Erro" }), count: entries.filter(e => e.status === "error").length },
   ];
