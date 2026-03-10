@@ -297,7 +297,7 @@ const HomePage = () => {
     return Object.fromEntries(keys.map(k => [k, {
       icon: finderIcons[k],
       tier: "advanced" as string,
-      socialProof: { companies: 150, rating: 4.9, savings: "R$ 8.500" },
+      socialProof: { companies: 150, rating: 4.9, savings: "$8,500" },
       capabilities: [],
       slug: k.replace(/_/g, "-"),
     }]));
