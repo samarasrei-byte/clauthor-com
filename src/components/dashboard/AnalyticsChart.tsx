@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { BarChart3, TrendingUp } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
+import { useTranslation } from "react-i18next";
 
 const mockData = [
   { name: "Jan", execucoes: 400, sucesso: 380 },
@@ -12,6 +13,8 @@ const mockData = [
 ];
 
 const AnalyticsChart = () => {
+  const { t } = useTranslation();
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -19,24 +22,24 @@ const AnalyticsChart = () => {
       transition={{ delay: 0.2 }}
       className="glass-card rounded-2xl overflow-hidden"
     >
-      <div className="p-6 border-b border-white/5 flex items-center justify-between">
+      <div className="p-6 border-b border-border/10 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
             <BarChart3 className="h-4 w-4 text-primary" />
           </div>
           <div>
-            <h2 className="font-display font-semibold">Analytics</h2>
-            <p className="text-xs text-muted-foreground">Últimos 6 meses</p>
+            <h2 className="font-display font-semibold">{t("dashboard.analytics", { defaultValue: "Analytics" })}</h2>
+            <p className="text-xs text-muted-foreground">{t("dashboard.last_6_months", { defaultValue: "Últimos 6 meses" })}</p>
           </div>
         </div>
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-2">
             <span className="w-3 h-3 rounded bg-primary" />
-            <span className="text-xs text-muted-foreground">Execuções</span>
+            <span className="text-xs text-muted-foreground">{t("dashboard.executions", { defaultValue: "Execuções" })}</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded bg-emerald-500" />
-            <span className="text-xs text-muted-foreground">Sucesso</span>
+            <span className="w-3 h-3 rounded bg-accent-emerald" />
+            <span className="text-xs text-muted-foreground">{t("dashboard.success_rate_short", { defaultValue: "Sucesso" })}</span>
           </div>
         </div>
       </div>
@@ -51,20 +54,20 @@ const AnalyticsChart = () => {
                   <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                 </linearGradient>
                 <linearGradient id="colorSucesso" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                  <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                  <stop offset="5%" stopColor="hsl(var(--accent-emerald))" stopOpacity={0.3} />
+                  <stop offset="95%" stopColor="hsl(var(--accent-emerald))" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis 
                 dataKey="name" 
-                stroke="rgba(255,255,255,0.3)" 
+                stroke="hsl(var(--muted-foreground))" 
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis 
-                stroke="rgba(255,255,255,0.3)" 
+                stroke="hsl(var(--muted-foreground))" 
                 fontSize={12}
                 tickLine={false}
                 axisLine={false}
@@ -72,7 +75,7 @@ const AnalyticsChart = () => {
               <Tooltip
                 contentStyle={{
                   backgroundColor: "hsl(var(--card))",
-                  border: "1px solid rgba(255,255,255,0.1)",
+                  border: "1px solid hsl(var(--border))",
                   borderRadius: "12px",
                   boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
                 }}
@@ -89,7 +92,7 @@ const AnalyticsChart = () => {
               <Area
                 type="monotone"
                 dataKey="sucesso"
-                stroke="#10b981"
+                stroke="hsl(var(--accent-emerald))"
                 strokeWidth={2}
                 fillOpacity={1}
                 fill="url(#colorSucesso)"
@@ -100,27 +103,27 @@ const AnalyticsChart = () => {
 
         {/* Summary Cards */}
         <div className="grid grid-cols-3 gap-4 mt-6">
-          <div className="bg-white/[0.02] rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
-              <TrendingUp className="h-4 w-4 text-emerald-500" />
-              <span className="text-xs text-muted-foreground">Este mês</span>
+              <TrendingUp className="h-4 w-4 text-primary" />
+              <span className="text-xs text-muted-foreground">{t("dashboard.this_month", { defaultValue: "Este mês" })}</span>
             </div>
             <p className="font-display text-xl font-bold">1,800</p>
-            <p className="text-xs text-emerald-500">+20% vs mês anterior</p>
+            <p className="text-xs text-primary">+20% {t("dashboard.vs_last_month", { defaultValue: "vs mês anterior" })}</p>
           </div>
-          <div className="bg-white/[0.02] rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs text-muted-foreground">Taxa Média</span>
+              <span className="text-xs text-muted-foreground">{t("dashboard.avg_rate", { defaultValue: "Taxa Média" })}</span>
             </div>
             <p className="font-display text-xl font-bold">97.2%</p>
-            <p className="text-xs text-muted-foreground">de sucesso</p>
+            <p className="text-xs text-muted-foreground">{t("dashboard.of_success", { defaultValue: "de sucesso" })}</p>
           </div>
-          <div className="bg-white/[0.02] rounded-xl p-4">
+          <div className="bg-card/50 rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
-              <span className="text-xs text-muted-foreground">Tempo Médio</span>
+              <span className="text-xs text-muted-foreground">{t("dashboard.avg_time", { defaultValue: "Tempo Médio" })}</span>
             </div>
             <p className="font-display text-xl font-bold">1.2s</p>
-            <p className="text-xs text-muted-foreground">por execução</p>
+            <p className="text-xs text-muted-foreground">{t("dashboard.per_execution", { defaultValue: "por execução" })}</p>
           </div>
         </div>
       </div>

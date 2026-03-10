@@ -26,7 +26,7 @@ const AnalyticsSection = ({ chartData, totalExecutions, recentLogs, locale, onGo
           </div>
           <div className="flex gap-4">
             <div className="flex items-center gap-2"><span className="w-3 h-1 rounded bg-primary" /><span className="text-xs text-muted-foreground">{t("dashboard.executions")}</span></div>
-            <div className="flex items-center gap-2"><span className="w-3 h-1 rounded bg-emerald-500" /><span className="text-xs text-muted-foreground">{t("dashboard.success_rate_short")}</span></div>
+            <div className="flex items-center gap-2"><span className="w-3 h-1 rounded bg-accent-emerald" /><span className="text-xs text-muted-foreground">{t("dashboard.success_rate_short")}</span></div>
           </div>
         </div>
 
@@ -52,31 +52,31 @@ const AnalyticsSection = ({ chartData, totalExecutions, recentLogs, locale, onGo
                       <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
                     </linearGradient>
                     <linearGradient id="cSucc" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#10b981" stopOpacity={0.3} />
-                      <stop offset="95%" stopColor="#10b981" stopOpacity={0} />
+                      <stop offset="5%" stopColor="hsl(var(--accent-emerald))" stopOpacity={0.3} />
+                      <stop offset="95%" stopColor="hsl(var(--accent-emerald))" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" />
-                  <XAxis dataKey="name" stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke="rgba(255,255,255,0.3)" fontSize={11} tickLine={false} axisLine={false} />
-                  <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid rgba(255,255,255,0.1)", borderRadius: "12px" }} />
+                  <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                  <XAxis dataKey="name" stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} />
+                  <YAxis stroke="hsl(var(--muted-foreground))" fontSize={11} tickLine={false} axisLine={false} />
+                  <Tooltip contentStyle={{ backgroundColor: "hsl(var(--card))", border: "1px solid hsl(var(--border))", borderRadius: "12px" }} />
                   <Area type="monotone" dataKey="execucoes" stroke="hsl(var(--primary))" strokeWidth={2} fillOpacity={1} fill="url(#cExec)" />
-                  <Area type="monotone" dataKey="sucesso" stroke="#10b981" strokeWidth={2} fillOpacity={1} fill="url(#cSucc)" />
+                  <Area type="monotone" dataKey="sucesso" stroke="hsl(var(--accent-emerald))" strokeWidth={2} fillOpacity={1} fill="url(#cSucc)" />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
             <div className="grid grid-cols-3 gap-4 mt-6">
-              <div className="bg-white/[0.02] rounded-xl p-4">
+              <div className="bg-card/50 rounded-xl p-4">
                 <p className="text-xs text-muted-foreground mb-1">{t("dashboard.this_month")}</p>
                 <p className="font-display text-xl font-bold">{totalExecutions.toLocaleString(locale)}</p>
-                <p className="text-xs text-emerald-500">{t("dashboard.executions")}</p>
+                <p className="text-xs text-primary">{t("dashboard.executions")}</p>
               </div>
-              <div className="bg-white/[0.02] rounded-xl p-4">
+              <div className="bg-card/50 rounded-xl p-4">
                 <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_rate")}</p>
                 <p className="font-display text-xl font-bold">{recentLogs.length > 0 ? Math.round((recentLogs.filter((l: any) => l.status === "success").length / recentLogs.length) * 100) : 100}%</p>
                 <p className="text-xs text-muted-foreground">{t("dashboard.of_success")}</p>
               </div>
-              <div className="bg-white/[0.02] rounded-xl p-4">
+              <div className="bg-card/50 rounded-xl p-4">
                 <p className="text-xs text-muted-foreground mb-1">{t("dashboard.avg_time")}</p>
                 <p className="font-display text-xl font-bold">{recentLogs.length > 0 ? (recentLogs.reduce((a: number, l: any) => a + (l.execution_time_ms || 0), 0) / recentLogs.length / 1000).toFixed(1) : "0"}s</p>
                 <p className="text-xs text-muted-foreground">{t("dashboard.per_execution")}</p>
