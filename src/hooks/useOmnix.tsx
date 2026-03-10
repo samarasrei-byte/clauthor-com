@@ -182,7 +182,7 @@ export function useOmnix() {
   }, [config]);
 
   const stopStreaming = useCallback(() => abortRef.current?.abort(), []);
-  const clearMessages = useCallback(() => setMessages([]), []);
+  const clearMessages = useCallback(() => { messagesRef.current = []; setMessages([]); }, []);
 
   return { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages };
 }
