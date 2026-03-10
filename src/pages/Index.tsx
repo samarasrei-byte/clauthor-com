@@ -389,7 +389,7 @@ const HomePage = () => {
                             <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_40px_hsl(var(--primary)/0.3),0_0_80px_hsl(var(--primary)/0.1)]" />
                             <span className="relative z-10 flex items-center justify-center gap-3">
                               <Rocket className="h-4 w-4" strokeWidth={1.5} />
-                              {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                              {t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
                               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                             </span>
                           </motion.button>
