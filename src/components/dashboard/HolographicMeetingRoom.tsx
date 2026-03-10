@@ -856,7 +856,7 @@ Apenas o texto, sem introduções.`,
                       ) : (
                         <div className="space-y-2">
                           <Lightbulb className="h-6 w-6 text-primary/70 mx-auto" />
-                          <p className="text-[10px] text-primary/60 uppercase tracking-widest">Objetivo</p>
+                          <p className="text-[10px] text-primary/60 uppercase tracking-widest">{t("meeting.objective")}</p>
                           <p className="text-xs md:text-sm font-medium text-primary/90 leading-relaxed line-clamp-2 max-w-xs">{topic}</p>
                         </div>
                       )}
