@@ -53,6 +53,7 @@ function extractKPIs(content: string) {
 
 export function useOmnix() {
   const [messages, setMessages] = useState<OmnixMessage[]>([]);
+  const messagesRef = useRef<OmnixMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [config, setConfig] = useState<OmnixConfig>(() => {
