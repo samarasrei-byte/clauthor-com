@@ -131,9 +131,9 @@ function useVoiceInput() {
 /* ─── Diagnostic Card ─── */
 const DiagnosticCard = ({ health, onRunScan }: { health: SystemHealth; onRunScan: () => void }) => {
   const statusConfig = {
-    optimal: { color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20", label: "ÓTIMO" },
-    warning: { color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20", label: "ALERTA" },
-    critical: { color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/20", label: "CRÍTICO" },
+    optimal: { color: "text-primary", bg: "bg-primary/10", border: "border-primary/20", label: "OPTIMAL" },
+    warning: { color: "text-muted-foreground", bg: "bg-muted/20", border: "border-border", label: "WARNING" },
+    critical: { color: "text-destructive", bg: "bg-destructive/10", border: "border-destructive/20", label: "CRITICAL" },
   };
   const cfg = statusConfig[health.status];
 
