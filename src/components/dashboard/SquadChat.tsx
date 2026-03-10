@@ -279,7 +279,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
       queryClient.invalidateQueries({ queryKey: ["squad-chat-last-messages"] });
     } catch (err) {
       console.error("Chat error:", err);
-      toast.error("Erro de conexão.");
+      toast.error(t("squad.connection_error"));
     } finally {
       setIsLoading(false);
     }
