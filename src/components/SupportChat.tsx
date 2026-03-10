@@ -469,16 +469,16 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                           animate={{ opacity: 1, y: 0 }}
                           className="flex gap-2.5 items-start"
                         >
-                          <div className="h-6 w-6 rounded-lg bg-primary/[0.08] border border-white/[0.04] flex items-center justify-center shrink-0 mt-0.5">
+                          <div className="h-6 w-6 rounded-lg bg-primary/[0.08] border border-border/10 flex items-center justify-center shrink-0 mt-0.5">
                             <Bot className="h-3 w-3 text-primary" />
                           </div>
-                          <div className="bg-white/[0.03] border border-white/[0.04] rounded-xl rounded-tl-sm px-3 py-2 max-w-[85%]">
+                          <div className="bg-card/30 border border-border/10 rounded-xl rounded-tl-sm px-3 py-2 max-w-[85%]">
                             <p className="text-[12px] text-foreground/70 leading-relaxed">
                               {area === "admin"
-                                ? "Sistema ativo. Monitorando todos os tenants em tempo real. Como posso ajudar?"
+                                ? t("support.welcome_admin")
                                 : area === "client"
-                                ? "Olá! Seus sistemas estão sendo monitorados. 0 anomalias detectadas. Como posso ajudar?"
-                                : "Bem-vindo ao CLAUTHOR. Suporte com auto-diagnóstico e prevenção inteligente ativo."}
+                                ? t("support.welcome_client")
+                                : t("support.welcome_public")}
                             </p>
                           </div>
                         </motion.div>
