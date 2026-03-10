@@ -736,7 +736,7 @@ const ClientDashboard = () => {
                                     <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{t("dashboard.per_month_short", { defaultValue: "mo" })}</span>
                                   </div>
                                 ))}
-                                <div className="pt-3 border-t border-white/5 flex justify-between">
+                                <div className="pt-3 border-t border-border/10 flex justify-between">
                                   <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
                                   <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
                                 </div>
