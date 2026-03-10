@@ -126,15 +126,18 @@ const AnimatedStat = ({ value, suffix = "", prefix = "", label, icon: Icon }: {
         const steps = 40;
         const increment = value / steps;
         let current = 0;
+        let cleared = false;
         const interval = setInterval(() => {
           current += increment;
-          if (current >= value) {
+          if (current >= value || cleared) {
             setCount(value);
             clearInterval(interval);
           } else {
             setCount(Math.floor(current));
           }
         }, duration / steps);
+        // Safety: clear interval if component unmounts mid-animation
+        return () => { cleared = true; clearInterval(interval); };
       }}
       className="text-center p-4 sm:p-5"
     >
