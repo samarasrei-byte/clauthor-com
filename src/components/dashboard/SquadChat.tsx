@@ -418,10 +418,10 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
   // ═══════════ CHAT AREA ═══════════
   const ChatArea = () => {
     const showChat = mode === "grupo" || selectedAgent;
-    const chatTitle = mode === "grupo" ? "Grupo da Equipe" : selectedAgent?.name || "";
+    const chatTitle = mode === "grupo" ? t("squad.group_team") : selectedAgent?.name || "";
     const chatSubtitle = mode === "grupo" 
-      ? `${activeAgents.length} agentes colaborando`
-      : (selectedAgent?.description || selectedAgent?.objective || "Agente IA");
+      ? t("squad.agents_collaborating", { count: activeAgents.length })
+      : (selectedAgent?.description || selectedAgent?.objective || t("squad.ai_agent"));
 
     return (
       <div className={cn(
