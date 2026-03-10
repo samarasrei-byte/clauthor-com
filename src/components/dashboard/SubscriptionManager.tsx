@@ -91,10 +91,10 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
 
         {/* Active Subscriptions */}
         <div>
-          <h3 className="text-sm font-medium mb-3">Assinaturas Ativas</h3>
+          <h3 className="text-sm font-medium mb-3">{t("subscription.active", { defaultValue: "Active Subscriptions" })}</h3>
           {subscriptions.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
-              Nenhuma assinatura ativa
+              {t("subscription.none", { defaultValue: "No active subscriptions" })}
             </p>
           ) : (
             <div className="space-y-2">
