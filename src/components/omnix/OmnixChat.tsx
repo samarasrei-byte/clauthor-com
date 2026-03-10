@@ -145,7 +145,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   };
 
   // TTS output — enhanced voice selection
-  const speak = (text: string) => {
+  const speak = useCallback((text: string) => {
     if (!("speechSynthesis" in window)) return;
 
     // Never keep mic open while the assistant is speaking (avoids echo loops)
@@ -175,7 +175,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
     window.speechSynthesis.speak(utterance);
-  };
+  }, [config.language]);
 
   const stopSpeaking = () => {
     window.speechSynthesis?.cancel();
