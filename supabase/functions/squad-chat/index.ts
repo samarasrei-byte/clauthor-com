@@ -212,7 +212,7 @@ Respond ONLY with a JSON array of the EXACT names of the chosen agents. Example:
         role: m.role === "user" ? "user" as const : "assistant" as const,
         content: m.role === "user" 
           ? m.content 
-          : `[${m.agentName || 'Agente'}]: ${m.content}`,
+          : `[${m.agentName || 'Agent'}]: ${m.content}`,
       }));
 
       const otherAgentNames = allAgents
