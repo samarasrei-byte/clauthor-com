@@ -86,7 +86,7 @@ serve(async (req) => {
 
     if (!membership) {
       tenantStep.done("error");
-      return new Response(JSON.stringify({ error: "Usuário não pertence a nenhuma organização." }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "User does not belong to any organization." }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const tenantId = membership.tenant_id;
     tenantStep.done();
