@@ -43,7 +43,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       lastSpokenRef.current = lastIdx;
       speak(last.content);
     }
-  }, [messages, isStreaming, autoSpeak]);
+  }, [messages, isStreaming, autoSpeak, speak]);
 
   // Auto-start listening in voice-first mode ONLY on first load (no messages yet)
   useEffect(() => {
