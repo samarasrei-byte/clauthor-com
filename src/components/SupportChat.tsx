@@ -536,13 +536,13 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
 
                     {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2.5 items-start">
-                        <div className="h-6 w-6 rounded-lg bg-white/[0.03] border border-white/[0.04] flex items-center justify-center shrink-0">
+                        <div className="h-6 w-6 rounded-lg bg-card/30 border border-border/10 flex items-center justify-center shrink-0">
                           <Bot className="h-3 w-3 text-primary/70" />
                         </div>
-                        <div className="bg-white/[0.03] border border-white/[0.04] rounded-xl rounded-tl-sm px-3 py-2.5">
+                        <div className="bg-card/30 border border-border/10 rounded-xl rounded-tl-sm px-3 py-2.5">
                           <div className="flex gap-1 items-center">
                             <Sparkles className="h-3 w-3 text-primary/40 animate-pulse" />
-                            <span className="text-[10px] text-muted-foreground/40">Processando...</span>
+                            <span className="text-[10px] text-muted-foreground/40">{t("cmd.processing")}</span>
                           </div>
                         </div>
                       </motion.div>
