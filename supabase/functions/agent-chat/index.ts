@@ -1082,7 +1082,7 @@ serve(async (req) => {
           tier: agentTier,
           planType: credits.plan_type,
           area: agentArea,
-          objective: agent.objective || "Ajudar o usuário",
+          objective: agent.objective || "Help the user",
           limits,
           sla,
         };
