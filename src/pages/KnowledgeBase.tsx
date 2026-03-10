@@ -90,7 +90,6 @@ const KnowledgeBase = () => {
         .from("agents")
         .select("id, name")
         .eq("user_id", user!.id)
-        .eq("status", "active")
         .order("name");
       return data || [];
     },
