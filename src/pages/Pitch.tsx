@@ -216,17 +216,17 @@ const Pitch = () => {
 
         <motion.div className="relative z-10 max-w-5xl mx-auto px-6 text-center" style={{ y: textY }}>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-xs uppercase tracking-[0.3em] text-primary/70 mb-6 font-mono">
-            Pré-Seed · Documento Confidencial
+            Pre-Seed · Confidential Document
           </motion.p>
 
           <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.08] tracking-tight mb-6">
-            Estamos construindo a infraestrutura que{" "}
-            <span className="bg-gradient-to-r from-primary via-accent-violet to-accent-cyan bg-clip-text text-transparent">substitui departamentos</span>{" "}
-            por IA.
+            We're building the infrastructure that{" "}
+            <span className="bg-gradient-to-r from-primary via-accent-violet to-accent-cyan bg-clip-text text-transparent">replaces departments</span>{" "}
+            with AI.
           </motion.h1>
 
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-            A CLAUTHOR é uma plataforma de agentes inteligentes que executa operações completas para empresas — 24/7.
+            CLAUTHOR is an intelligent agent platform that executes complete operations for companies — 24/7.
           </motion.p>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
