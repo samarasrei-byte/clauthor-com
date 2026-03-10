@@ -66,7 +66,7 @@ const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     const recognition = new SpeechRecognition();
-    recognition.lang = config.language || "pt-BR";
+    recognition.lang = config.language || "en-US";
     recognition.interimResults = true;
     recognition.continuous = false;
 
