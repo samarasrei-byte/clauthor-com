@@ -984,7 +984,22 @@
     "this_period": "this period",
     "hire_agents": "hire agents",
     "no_data": "no data",
-    "return_month": "return/mo"
+    "return_month": "return/mo",
+    "team_label": "Team",
+    "war_room": "Meeting Room",
+    "knowledge_base": "Knowledge Base",
+    "ai_quality": "AI Quality",
+    "results": "Results",
+    "live_timeline": "Timeline",
+    "integrations": "Integrations",
+    "coming_soon": "Coming soon",
+    "nav_upcoming": "🚀 Upcoming",
+    "per_month_short": "mo",
+    "back": "Back",
+    "navigation": "Navigation",
+    "departments": "Departments",
+    "solo_agents": "Solo Agents",
+    "help_intro": "This is your control panel. Use the sidebar on the left to navigate between sections."
   },
   "credits": {
     "title": "Credits",

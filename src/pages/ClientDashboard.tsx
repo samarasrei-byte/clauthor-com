@@ -203,7 +203,7 @@ const ClientDashboard = () => {
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
-  const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);
+  const totalTokensUsed = tokenUsage.reduce((acc, tu) => acc + tu.tokens_used, 0);
   const estimatedSavings = activeAgents * 7560;
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
 
@@ -274,29 +274,29 @@ const ClientDashboard = () => {
     ...soloAgentItems,
 
     // More — secondary features grouped together
-    { id: "equipe", label: "Equipe", icon: Users, group: moreGroup },
-    { id: "war-room", label: "Sala de Reunião", icon: Presentation, group: moreGroup },
-    { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
-    { id: "ai-quality", label: "Qualidade IA", icon: Star, group: moreGroup },
-    { id: "results", label: "Resultados", icon: FileText, group: moreGroup },
-    { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
-    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: moreGroup },
+    { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Team" }), icon: Users, group: moreGroup },
+    { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Meeting Room" }), icon: Presentation, group: moreGroup },
+    { id: "knowledge-base", label: t("dashboard.knowledge_base", { defaultValue: "Knowledge Base" }), icon: Database, group: moreGroup },
+    { id: "ai-quality", label: t("dashboard.ai_quality", { defaultValue: "AI Quality" }), icon: Star, group: moreGroup },
+    { id: "results", label: t("dashboard.results", { defaultValue: "Results" }), icon: FileText, group: moreGroup },
+    { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Eye, group: moreGroup },
+    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrations" }), icon: Plug, group: moreGroup },
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, group: moreGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
 
     // Coming soon features
-    { id: "mission-control", label: "Mission Control", icon: Rocket, badge: "Em breve", group: "🚀 Próximas Features" },
-    { id: "agent-memory", label: "Agent Memory", icon: Network, badge: "Em breve", group: "🚀 Próximas Features" },
-    { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: "Em breve", group: "🚀 Próximas Features" },
-    { id: "voice-first", label: "Voice-First", icon: Mic, badge: "Em breve", group: "🚀 Próximas Features" },
-    { id: "marketplace-p2p", label: "Marketplace P2P", icon: Store, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "mission-control", label: "Mission Control", icon: Rocket, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "agent-memory", label: "Agent Memory", icon: Network, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "voice-first", label: "Voice-First", icon: Mic, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "marketplace-p2p", label: "Marketplace P2P", icon: Store, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
   ];
 
   const tierColors: Record<string, string> = {
     basic: "bg-muted text-muted-foreground",
-    intermediate: "bg-cyan-500/15 text-cyan-400",
-    advanced: "bg-emerald-500/15 text-emerald-400",
+    intermediate: "bg-accent/15 text-accent-foreground",
+    advanced: "bg-accent-emerald/15 text-accent-emerald",
     enterprise: "bg-primary/15 text-primary",
   };
 
@@ -320,19 +320,19 @@ const ClientDashboard = () => {
   };
 
   const breadcrumbMap: Record<string, string> = useMemo(() => ({
-    "results": "Resultados",
+    results: t("dashboard.results", { defaultValue: "Results" }),
     overview: t("dashboard.command_center"),
-    omnix: t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" }),
+    omnix: t("dashboard.ai_assistant_label", { defaultValue: "AI Assistant" }),
     agents: t("dashboard.agents_tab"),
     analytics: t("dashboard.analytics"),
     logs: t("dashboard.logs"),
     settings: t("dashboard.settings"),
-    library: t("dashboard.library", { defaultValue: "Biblioteca" }),
-    integrations: t("dashboard.integrations", { defaultValue: "Integrações" }),
-    "knowledge-base": "Base de Conhecimento",
-    "ai-quality": "Qualidade IA",
-    "war-room": "Sala de Reunião",
-    "live-timeline": "Timeline",
+    library: t("dashboard.library", { defaultValue: "Library" }),
+    integrations: t("dashboard.integrations", { defaultValue: "Integrations" }),
+    "knowledge-base": t("dashboard.knowledge_base", { defaultValue: "Knowledge Base" }),
+    "ai-quality": t("dashboard.ai_quality", { defaultValue: "AI Quality" }),
+    "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
+    "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
@@ -728,15 +728,15 @@ const ClientDashboard = () => {
                             ) : (
                               <div className="space-y-2">
                                 {subscriptions.map((sub) => (
-                                  <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.02]">
+                                  <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/5">
                                     <div className="flex items-center gap-2">
                                       <span className="w-2 h-2 rounded-full bg-accent-emerald" />
                                       <span className="text-sm">{sub.agent_name}</span>
                                     </div>
-                                    <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{locale.startsWith("pt") ? "mês" : "mo"}</span>
+                                    <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{t("dashboard.per_month_short", { defaultValue: "mo" })}</span>
                                   </div>
                                 ))}
-                                <div className="pt-3 border-t border-white/5 flex justify-between">
+                                <div className="pt-3 border-t border-border/10 flex justify-between">
                                   <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
                                   <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
                                 </div>
