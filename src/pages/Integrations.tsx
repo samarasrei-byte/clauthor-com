@@ -253,9 +253,9 @@ const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integrati
 
   if (allConnected) {
     return (
-      <div className="flex items-center gap-2 p-3 rounded-lg bg-emerald-500/5 border border-emerald-500/20">
-        <CheckCircle className="h-4 w-4 text-emerald-500" />
-        <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">Conectado e funcionando</span>
+      <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/5 border border-primary/20">
+        <CheckCircle className="h-4 w-4 text-primary" />
+        <span className="text-xs text-primary font-medium">{t("integrations.connected_working", { defaultValue: "Conectado e funcionando" })}</span>
       </div>
     );
   }
