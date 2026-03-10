@@ -142,20 +142,20 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `Você é o moderador de uma reunião corporativa. Dado uma mensagem e a lista de agentes disponíveis, escolha APENAS 1 ou 2 agentes que DEVEM responder. Os outros devem ficar em silêncio.
+              content: `You are the moderator of a corporate meeting. Given a message and the list of available agents, choose ONLY 1 or 2 agents that SHOULD respond. The others must stay silent.
 
-Regras:
-- Se a pergunta é específica de uma área, escolha APENAS 1 agente
-- Se é uma pergunta que cruza áreas (ex: "qual o impacto financeiro da nova campanha?"), escolha no máximo 2
-- Se é uma saudação ou pergunta genérica, escolha apenas 1 (o mais sênior ou CEO se existir)
-- NUNCA escolha mais de 2 agentes
+Rules:
+- If the question is specific to one area, choose ONLY 1 agent
+- If it crosses areas (e.g., "what's the financial impact of the new campaign?"), choose at most 2
+- If it's a greeting or generic question, choose only 1 (the most senior or CEO if available)
+- NEVER choose more than 2 agents
 
-Agentes disponíveis:
+Available agents:
 ${agentList}
 
-${recentContext ? `Contexto recente da conversa:\n${recentContext}` : ''}
+${recentContext ? `Recent conversation context:\n${recentContext}` : ''}
 
-Responda APENAS com um JSON array dos nomes EXATOS dos agentes escolhidos. Exemplo: ["Nome Agente 1"]`
+Respond ONLY with a JSON array of the EXACT names of the chosen agents. Example: ["Agent Name 1"]`
             },
             { role: "user", content: message },
           ],
