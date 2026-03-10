@@ -1888,5 +1888,11 @@
     "step_command_sub": "Give the first mission",
     "step_command_desc": "Use the Command Center to assign tasks to agents. They execute, report, and learn from each interaction.",
     "step_command_cta": "Open Command Center"
+  },
+  "omnix": {
+    "standby": "STANDBY",
+    "listening": "LISTENING",
+    "speaking": "SPEAKING",
+    "processing": "PROCESSING"
   }
 }
