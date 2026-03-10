@@ -949,7 +949,7 @@ Apenas o texto, sem introduções.`,
                         ))}
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        {agents.find((a) => a.id === speakingAgentId)?.name || "Agente"} está analisando…
+                        {agents.find((a) => a.id === speakingAgentId)?.name || "Agent"} {t("meeting.analyzing")}
                       </span>
                     </motion.div>
                   )}
