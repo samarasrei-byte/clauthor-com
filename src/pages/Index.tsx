@@ -1064,8 +1064,8 @@ const HomePage = () => {
                   {t("home.final_cta_desc_v2", { defaultValue: "Os primeiros a entrar ganham acesso antecipado, desconto exclusivo de lançamento e onboarding personalizado." })}
                 </p>
                 <div className="flex items-center justify-center gap-4 mb-8 font-mono text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1.5"><Star className="h-3.5 w-3.5 text-primary" /> 50% OFF lançamento</div>
-                  <div className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-primary" /> Acesso prioritário</div>
+                  <div className="flex items-center gap-1.5"><Star className="h-3.5 w-3.5 text-primary" /> {t("home.final_cta_discount", { defaultValue: "50% OFF launch" })}</div>
+                  <div className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-primary" /> {t("home.final_cta_priority", { defaultValue: "Priority access" })}</div>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link to="/waitlist">
