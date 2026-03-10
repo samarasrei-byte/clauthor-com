@@ -103,7 +103,7 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
               <Activity className="h-3 w-3 text-primary" />
               <span className="text-[10px] text-muted-foreground/60">{kpi.label}</span>
               <span className="font-display font-bold text-xs">{kpi.value}</span>
-              {kpi.trend === "up" && <TrendingUp className="h-2.5 w-2.5 text-emerald-400" />}
+              {kpi.trend === "up" && <TrendingUp className="h-2.5 w-2.5 text-primary" />}
             </div>
           ))}
 
