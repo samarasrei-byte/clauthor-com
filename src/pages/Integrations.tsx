@@ -463,8 +463,7 @@ const IntegrationsPage = () => {
                           <div className="space-y-2 mb-3">
                             <div className="flex items-center gap-3 text-xs text-muted-foreground">
                               <span className="flex items-center gap-1">
-                                <Star className="h-3 w-3" />
-                                {ig.difficulty === "Fácil" ? "⭐" : ig.difficulty === "Médio" ? "⭐⭐" : "⭐⭐⭐"} {ig.difficulty}
+                                {"⭐".repeat(ig.difficultyStars)} {ig.difficulty}
                               </span>
                               <span className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
