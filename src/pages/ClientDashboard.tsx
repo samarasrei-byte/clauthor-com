@@ -320,19 +320,19 @@ const ClientDashboard = () => {
   };
 
   const breadcrumbMap: Record<string, string> = useMemo(() => ({
-    "results": "Resultados",
+    results: t("dashboard.results", { defaultValue: "Results" }),
     overview: t("dashboard.command_center"),
-    omnix: t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" }),
+    omnix: t("dashboard.ai_assistant_label", { defaultValue: "AI Assistant" }),
     agents: t("dashboard.agents_tab"),
     analytics: t("dashboard.analytics"),
     logs: t("dashboard.logs"),
     settings: t("dashboard.settings"),
-    library: t("dashboard.library", { defaultValue: "Biblioteca" }),
-    integrations: t("dashboard.integrations", { defaultValue: "Integrações" }),
-    "knowledge-base": "Base de Conhecimento",
-    "ai-quality": "Qualidade IA",
-    "war-room": "Sala de Reunião",
-    "live-timeline": "Timeline",
+    library: t("dashboard.library", { defaultValue: "Library" }),
+    integrations: t("dashboard.integrations", { defaultValue: "Integrations" }),
+    "knowledge-base": t("dashboard.knowledge_base", { defaultValue: "Knowledge Base" }),
+    "ai-quality": t("dashboard.ai_quality", { defaultValue: "AI Quality" }),
+    "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
+    "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
