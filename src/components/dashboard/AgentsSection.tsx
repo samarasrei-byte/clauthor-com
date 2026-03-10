@@ -210,21 +210,23 @@ const AgentsSection = ({
 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
+                  <div className="bg-muted/[0.04] rounded-lg p-2.5 text-center">
                     <p className="text-xs text-muted-foreground">{t("dashboard.price")}</p>
                     <p className="font-display font-bold text-sm">{formatCurrency(agent.monthly_price)}</p>
                   </div>
-                  <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
+                  <div className="bg-muted/[0.04] rounded-lg p-2.5 text-center">
                     <p className="text-xs text-muted-foreground">{t("dashboard.executions")}</p>
                     <p className="font-display font-bold text-sm">{agent.total_executions}</p>
                   </div>
-                  <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
+                  <div className="bg-muted/[0.04] rounded-lg p-2.5 text-center">
                     <p className="text-xs text-muted-foreground">Status</p>
                     <p className={cn(
                       "font-bold text-sm",
-                      agent.status === "active" ? "text-emerald-500" : "text-muted-foreground"
+                      agent.status === "active" ? "text-primary" : "text-muted-foreground"
                     )}>
-                      {agent.status === "active" ? "● Ativo" : "○ Pausado"}
+                      {agent.status === "active"
+                        ? `● ${t("dashboard.active_status", { defaultValue: "Active" })}`
+                        : `○ ${t("dashboard.paused_status", { defaultValue: "Paused" })}`}
                     </p>
                   </div>
                 </div>
