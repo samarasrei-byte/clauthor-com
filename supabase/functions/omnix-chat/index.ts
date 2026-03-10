@@ -1,7 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
-import { checkRateLimit, rateLimitResponse } from "../_shared/security.ts";
+import { checkRateLimit, rateLimitResponse, detectPromptInjection, scanToolArguments, securityHeaders } from "../_shared/security.ts";
 import { validateAndEnforcePolicy } from "../_shared/policy-engine.ts";
 
 const corsHeaders = {
@@ -156,6 +156,17 @@ serve(async (req) => {
     const rl = checkRateLimit(`omnix:${user.id}`, 15, 60_000);
     if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
 
+    // ── PromptInjectionGuard: scan last user message ──
+    const lastUserContent = (messages || []).filter((m: any) => m.role === "user").pop()?.content || "";
+    const injectionCheck = detectPromptInjection(lastUserContent);
+    if (injectionCheck.blocked) {
+      console.warn(`[PromptInjectionGuard] Blocked injection from user ${user.id}: ${injectionCheck.pattern}`);
+      return new Response(
+        JSON.stringify({ error: injectionCheck.message }),
+        { status: 403, headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const policyResult = await validateAndEnforcePolicy(supabase, user.id, "omnix-orchestrator", "chat");
     if (!policyResult.allowed) {
       return new Response(JSON.stringify({ error: policyResult.reason }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -283,6 +294,15 @@ REGRAS:
               toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos inválidos da IA" }) });
               continue;
             }
+
+            // ── FeatherShield: scan tool arguments ──
+            const toolScan = scanToolArguments(tc.function.name, args);
+            if (!toolScan.safe) {
+              console.warn(`[FeatherShield] Blocked tool "${tc.function.name}" for user ${user.id}: ${toolScan.threats.join("; ")}`);
+              toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos bloqueados pela política de segurança.", threats: toolScan.threats }) });
+              continue;
+            }
+
             const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader);
             toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
           }
