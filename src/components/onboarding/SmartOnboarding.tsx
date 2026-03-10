@@ -414,7 +414,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </Button>
                     {selectedChallenges.length > 0 && (
                       <Button onClick={() => setPhase(2)} className="flex-1 h-12 glow rounded-xl gap-2">
-                        Continuar ({selectedChallenges.length} selecionados)
+                        Continue ({selectedChallenges.length} selected)
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                     )}
