@@ -992,6 +992,7 @@ const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
             {[
               {
+                id: "testimonial-ceo",
                 quote: t("home.testimonial_1", { defaultValue: "Automatizamos 80% do atendimento ao cliente no primeiro mês. O agente resolve tickets sozinho e escala só quando precisa." }),
                 author: "CEO",
                 company: t("home.testimonial_1_company", { defaultValue: "E-commerce de Moda" }),
@@ -999,6 +1000,7 @@ const HomePage = () => {
                 metricLabel: t("home.testimonial_1_metric", { defaultValue: "tickets automatizados" }),
               },
               {
+                id: "testimonial-cfo",
                 quote: t("home.testimonial_2", { defaultValue: "O agente financeiro concilia notas fiscais, cobra inadimplentes e gera relatórios. Economizamos um funcionário inteiro." }),
                 author: "CFO",
                 company: t("home.testimonial_2_company", { defaultValue: "Startup SaaS B2B" }),
@@ -1006,6 +1008,7 @@ const HomePage = () => {
                 metricLabel: t("home.testimonial_2_metric", { defaultValue: "economia mensal" }),
               },
               {
+                id: "testimonial-growth",
                 quote: t("home.testimonial_3", { defaultValue: "Configurei o SDR em 10 minutos. Ele já prospecta via LinkedIn e WhatsApp, qualifica leads e agenda reuniões automaticamente." }),
                 author: "Head of Growth",
                 company: t("home.testimonial_3_company", { defaultValue: "Agência Digital" }),
@@ -1014,7 +1017,7 @@ const HomePage = () => {
               },
             ].map((item, i) => (
               <motion.div
-                key={i}
+                key={item.id}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
