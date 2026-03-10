@@ -11,7 +11,7 @@ import {
   FileSpreadsheet, BookOpen, Trello, BarChart3,
   TrendingUp, Code, ArrowRight, Linkedin, Megaphone,
   Instagram, ShoppingCart, CreditCard, Database,
-  Clock, Star, Key, ChevronDown, ChevronUp,
+  Clock, Key, ChevronDown, ChevronUp,
   CheckCircle, Loader2, Shield, AlertTriangle, Sparkles, Zap
 } from "lucide-react";
 import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
@@ -265,9 +265,9 @@ const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integrati
     <div className="space-y-2.5 p-3 rounded-xl bg-muted/5 border border-border/20">
       <div className="flex items-center gap-1.5 mb-1">
         <Zap className="h-3.5 w-3.5 text-primary" />
-        <span className="text-xs font-medium">Conexão Rápida</span>
+        <span className="text-xs font-medium">{t("integrations.quick_connect_title", { defaultValue: "Conexão Rápida" })}</span>
         <Badge variant="outline" className="text-[9px] ml-auto">
-          <Shield className="h-2.5 w-2.5 mr-0.5" /> Criptografado
+          <Shield className="h-2.5 w-2.5 mr-0.5" /> {t("integrations.encrypted", { defaultValue: "Criptografado" })}
         </Badge>
       </div>
       {fields.map(field => (
@@ -295,11 +295,11 @@ const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integrati
         {saving ? (
           <Loader2 className="h-3.5 w-3.5 animate-spin" />
         ) : validating ? (
-          <>Validando...</>
+          <>{t("integrations.validating", { defaultValue: "Validando..." })}</>
         ) : (
           <>
             <CheckCircle className="h-3.5 w-3.5" />
-            Conectar {ig.name}
+            {t("integrations.connect_name", { defaultValue: "Conectar {{name}}", name: ig.name })}
           </>
         )}
       </Button>
@@ -428,10 +428,10 @@ const IntegrationsPage = () => {
                         <CardContent className="p-5 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-3">
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                              connectionStatus === "connected" ? "bg-primary/10" : "bg-primary/10"
+                              connectionStatus === "connected" ? "bg-primary/20 ring-1 ring-primary/30" : "bg-primary/10"
                             }`}>
                               <ig.icon className={`h-5 w-5 ${
-                                connectionStatus === "connected" ? "text-primary" : "text-primary"
+                                connectionStatus === "connected" ? "text-primary" : "text-muted-foreground"
                               }`} />
                             </div>
                             <div className="flex items-center gap-1.5">
@@ -463,8 +463,7 @@ const IntegrationsPage = () => {
                           <div className="space-y-2 mb-3">
                             <div className="flex items-center gap-3 text-xs text-muted-foreground">
                               <span className="flex items-center gap-1">
-                                <Star className="h-3 w-3" />
-                                {ig.difficulty === "Fácil" ? "⭐" : ig.difficulty === "Médio" ? "⭐⭐" : "⭐⭐⭐"} {ig.difficulty}
+                                {"⭐".repeat(ig.difficultyStars)} {ig.difficulty}
                               </span>
                               <span className="flex items-center gap-1">
                                 <Clock className="h-3 w-3" />
