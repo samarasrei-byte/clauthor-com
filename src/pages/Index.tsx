@@ -386,7 +386,7 @@ const HomePage = () => {
                           >
                             <div className="absolute inset-0 bg-primary rounded-xl" />
                             <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
+                            <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_40px_hsl(var(--primary)/0.3),0_0_80px_hsl(var(--primary)/0.1)]" />
                             <span className="relative z-10 flex items-center justify-center gap-3">
                               <Rocket className="h-4 w-4" strokeWidth={1.5} />
                               {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
