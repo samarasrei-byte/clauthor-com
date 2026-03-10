@@ -100,7 +100,7 @@ const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     window.speechSynthesis.cancel();
     const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "");
     const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 500));
-    utterance.lang = config.language || "pt-BR";
+    utterance.lang = config.language || "en-US";
     utterance.rate = 1.05;
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
