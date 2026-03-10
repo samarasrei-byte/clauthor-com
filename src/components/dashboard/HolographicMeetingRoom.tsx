@@ -683,8 +683,7 @@ Apenas o texto, sem introduções.`,
                 transition={{ delay: 0.3 }}
                 className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto"
               >
-                Convoque seu time de especialistas em IA para uma reunião estratégica. 
-                Descreva um objetivo e veja a magia acontecer.
+                {t("meeting.room_desc")}
               </motion.p>
             </div>
 
