@@ -733,7 +733,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       className="w-full h-13 glow rounded-xl gap-2 text-sm font-semibold"
                     >
                       <Rocket className="h-4 w-4" />
-                      Criar conta e contratar meu Squad
+                      Create account and hire my Squad
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                     <div className="flex gap-2">
