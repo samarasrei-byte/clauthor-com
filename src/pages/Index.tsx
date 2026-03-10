@@ -153,7 +153,6 @@ const AnimatedStat = ({ value, suffix = "", prefix = "", label, icon: Icon }: {
    LIVE AGENT CARD
    ═══════════════════════════════════════════════════════ */
 interface LiveAgentProps {
-  key?: string;
   slug?: string;
   name: string;
   role: string;
