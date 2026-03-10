@@ -109,10 +109,10 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-sm text-muted-foreground">
-                      {fmt(sub.monthly_price)}/{t("dashboard.month_short", { defaultValue: "mês" })}
+                      {fmt(sub.monthly_price)}/{t("dashboard.month_short", { defaultValue: "mo" })}
                     </span>
                     <Badge variant="secondary" className="bg-emerald-500/10 text-emerald-500 text-[10px]">
-                      Ativo
+                      {t("subscription.status_active", { defaultValue: "Active" })}
                     </Badge>
                   </div>
                 </div>
