@@ -754,7 +754,7 @@ Apenas o texto, sem introduções.`,
 
               {/* Quick suggestions */}
               <div className="flex flex-wrap gap-2 justify-center">
-                {["Lançar novo produto", "Aumentar conversão", "Campanha Black Friday", "Reduzir churn", "Otimizar funil"].map((s) => (
+                {[t("meeting.suggestion_launch"), t("meeting.suggestion_conversion"), t("meeting.suggestion_black_friday"), t("meeting.suggestion_churn"), t("meeting.suggestion_funnel")].map((s) => (
                   <button
                     key={s}
                     onClick={() => setTopic(s)}
