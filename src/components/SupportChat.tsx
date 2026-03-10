@@ -10,6 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
 /* ─── Types ─── */
 interface Message {
@@ -80,10 +81,24 @@ function useVoiceInput() {
   const [transcript, setTranscript] = useState("");
   const recognitionRef = useRef<any>(null);
 
-  const startListening = useCallback(() => {
+  const startListening = useCallback(async () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      toast.error("Reconhecimento de voz não suportado neste navegador");
+      toast.error("Voice recognition not supported");
+      return;
+    }
+
+    // Request microphone permission explicitly
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (err: any) {
+      if (err.name === "NotAllowedError") {
+        toast.error("Microphone permission denied");
+      } else if (err.name === "NotFoundError") {
+        toast.error("No microphone detected");
+      } else {
+        toast.error("Microphone error: " + (err.message || "Unknown"));
+      }
       return;
     }
     const recognition = new SpeechRecognition();
@@ -116,9 +131,9 @@ function useVoiceInput() {
 /* ─── Diagnostic Card ─── */
 const DiagnosticCard = ({ health, onRunScan }: { health: SystemHealth; onRunScan: () => void }) => {
   const statusConfig = {
-    optimal: { color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-500/20", label: "ÓTIMO" },
-    warning: { color: "text-amber-400", bg: "bg-amber-500/10", border: "border-amber-500/20", label: "ALERTA" },
-    critical: { color: "text-red-400", bg: "bg-red-500/10", border: "border-red-500/20", label: "CRÍTICO" },
+    optimal: { color: "text-primary", bg: "bg-primary/10", border: "border-primary/20", label: "OPTIMAL" },
+    warning: { color: "text-muted-foreground", bg: "bg-muted/20", border: "border-border", label: "WARNING" },
+    critical: { color: "text-destructive", bg: "bg-destructive/10", border: "border-destructive/20", label: "CRITICAL" },
   };
   const cfg = statusConfig[health.status];
 
@@ -132,7 +147,7 @@ const DiagnosticCard = ({ health, onRunScan }: { health: SystemHealth; onRunScan
         <div className="flex items-center gap-2">
           <div className="relative">
             <Activity className={`h-3.5 w-3.5 ${cfg.color}`} />
-            <span className={`absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full ${health.status === "optimal" ? "bg-emerald-400" : health.status === "warning" ? "bg-amber-400" : "bg-red-400"} animate-pulse`} />
+            <span className={`absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full ${health.status === "optimal" ? "bg-primary" : health.status === "warning" ? "bg-muted-foreground" : "bg-destructive"} animate-pulse`} />
           </div>
           <span className={`text-[10px] font-bold tracking-[0.2em] uppercase ${cfg.color}`}>
             {cfg.label}
@@ -206,6 +221,7 @@ const VoiceWaveform = () => (
 
 /* ─── Main Component ─── */
 const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(embedded);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -353,7 +369,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
     } catch {
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "Falha na conexão. Auto-recuperação ativada. Tente novamente em instantes ou contate suporte@clauthor.ai",
+        content: t("support.connection_error"),
         type: "diagnostic",
       }]);
     } finally {
@@ -364,15 +380,15 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
 
   // Quick actions
   const quickActions = useMemo(() => [
-    { label: "Auto-diagnóstico", icon: "🔍", action: () => setActiveTab("diagnostics") },
-    { label: "Status do sistema", icon: "📡", action: () => sendMessage("Qual o status atual do meu sistema e agentes?") },
-    { label: "Resolver problema", icon: "⚡", action: () => sendMessage("Estou com um problema e preciso de ajuda para resolver rapidamente.") },
-  ], [sendMessage]);
+    { label: t("support.auto_diag"), icon: "🔍", action: () => setActiveTab("diagnostics") },
+    { label: t("support.system_status"), icon: "📡", action: () => sendMessage(t("support.system_status_prompt")) },
+    { label: t("support.solve_problem"), icon: "⚡", action: () => sendMessage(t("support.solve_problem_prompt")) },
+  ], [sendMessage, t]);
 
   const tabs = [
-    { id: "chat" as const, label: "Chat IA", icon: MessageSquare },
-    { id: "diagnostics" as const, label: "Diagnóstico", icon: Shield },
-    { id: "prevention" as const, label: "Prevenção", icon: Brain },
+    { id: "chat" as const, label: t("support.tab_chat"), icon: MessageSquare },
+    { id: "diagnostics" as const, label: t("support.tab_diagnostics"), icon: Shield },
+    { id: "prevention" as const, label: t("support.tab_prevention"), icon: Brain },
   ];
 
   if (embedded) {
@@ -388,18 +404,18 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                     <Bot className="h-4 w-4 text-primary" />
                   </div>
                   <span className={`absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full ${
-                    health.status === "optimal" ? "bg-emerald-400" : health.status === "warning" ? "bg-amber-400" : "bg-red-400 animate-pulse"
+                    health.status === "optimal" ? "bg-primary" : health.status === "warning" ? "bg-muted-foreground" : "bg-destructive animate-pulse"
                   } shadow-[0_0_6px_hsl(var(--primary)/0.5)]`} />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-1.5">
                     <p className="text-[12px] font-semibold tracking-[0.15em] uppercase text-foreground/80">
-                      Suporte CLAUTHOR
+                      {t("support.title")}
                     </p>
-                    <Radio className="h-2.5 w-2.5 text-emerald-400 animate-pulse" />
+                    <Radio className="h-2.5 w-2.5 text-primary animate-pulse" />
                   </div>
                   <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40">
-                    IA Preditiva • Auto-diagnóstico • Voz
+                    {t("support.subtitle")}
                   </p>
                 </div>
                 {!embedded && (
@@ -453,16 +469,16 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                           animate={{ opacity: 1, y: 0 }}
                           className="flex gap-2.5 items-start"
                         >
-                          <div className="h-6 w-6 rounded-lg bg-primary/[0.08] border border-white/[0.04] flex items-center justify-center shrink-0 mt-0.5">
+                          <div className="h-6 w-6 rounded-lg bg-primary/[0.08] border border-border/10 flex items-center justify-center shrink-0 mt-0.5">
                             <Bot className="h-3 w-3 text-primary" />
                           </div>
-                          <div className="bg-white/[0.03] border border-white/[0.04] rounded-xl rounded-tl-sm px-3 py-2 max-w-[85%]">
+                          <div className="bg-card/30 border border-border/10 rounded-xl rounded-tl-sm px-3 py-2 max-w-[85%]">
                             <p className="text-[12px] text-foreground/70 leading-relaxed">
                               {area === "admin"
-                                ? "Sistema ativo. Monitorando todos os tenants em tempo real. Como posso ajudar?"
+                                ? t("support.welcome_admin")
                                 : area === "client"
-                                ? "Olá! Seus sistemas estão sendo monitorados. 0 anomalias detectadas. Como posso ajudar?"
-                                : "Bem-vindo ao CLAUTHOR. Suporte com auto-diagnóstico e prevenção inteligente ativo."}
+                                ? t("support.welcome_client")
+                                : t("support.welcome_public")}
                             </p>
                           </div>
                         </motion.div>
@@ -473,7 +489,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                             <button
                               key={qa.label}
                               onClick={qa.action}
-                              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[10px] text-foreground/50 hover:bg-white/[0.06] hover:text-foreground/70 hover:border-primary/20 transition-all"
+                              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-card/30 border border-border/10 text-[10px] text-foreground/50 hover:bg-card/50 hover:text-foreground/70 hover:border-primary/20 transition-all"
                             >
                               <span>{qa.icon}</span>
                               {qa.label}
@@ -490,13 +506,13 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         animate={{ opacity: 1, y: 0 }}
                         className={`flex gap-2.5 items-start ${msg.role === "user" ? "flex-row-reverse" : ""}`}
                       >
-                        <div className={`h-6 w-6 rounded-lg border border-white/[0.04] flex items-center justify-center shrink-0 mt-0.5 ${
-                          msg.role === "user" ? "bg-primary/[0.12]" : msg.type === "diagnostic" ? "bg-amber-500/10" : "bg-white/[0.03]"
+                        <div className={`h-6 w-6 rounded-lg border border-border/10 flex items-center justify-center shrink-0 mt-0.5 ${
+                          msg.role === "user" ? "bg-primary/[0.12]" : msg.type === "diagnostic" ? "bg-destructive/10" : "bg-card/30"
                         }`}>
                           {msg.role === "user"
                             ? <User className="h-3 w-3 text-primary" />
                             : msg.type === "diagnostic"
-                            ? <Shield className="h-3 w-3 text-amber-400" />
+                            ? <Shield className="h-3 w-3 text-destructive" />
                             : <Bot className="h-3 w-3 text-primary/70" />
                           }
                         </div>
@@ -504,11 +520,11 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                           msg.role === "user"
                             ? "bg-primary/[0.1] border border-primary/[0.15] rounded-tr-sm"
                             : msg.type === "diagnostic"
-                            ? "bg-amber-500/[0.06] border border-amber-500/[0.15] rounded-tl-sm"
-                            : "bg-white/[0.03] border border-white/[0.04] rounded-tl-sm"
+                            ? "bg-destructive/[0.06] border border-destructive/[0.15] rounded-tl-sm"
+                            : "bg-card/30 border border-border/10 rounded-tl-sm"
                         }`}>
                           {msg.role === "assistant" ? (
-                            <div className="text-[12px] text-foreground/70 leading-relaxed prose prose-invert prose-xs max-w-none [&_p]:m-0 [&_ul]:my-1 [&_li]:my-0">
+                            <div className="text-[12px] text-foreground/70 leading-relaxed prose dark:prose-invert prose-xs max-w-none [&_p]:m-0 [&_ul]:my-1 [&_li]:my-0">
                               <ReactMarkdown>{msg.content}</ReactMarkdown>
                             </div>
                           ) : (
@@ -520,13 +536,13 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
 
                     {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2.5 items-start">
-                        <div className="h-6 w-6 rounded-lg bg-white/[0.03] border border-white/[0.04] flex items-center justify-center shrink-0">
+                        <div className="h-6 w-6 rounded-lg bg-card/30 border border-border/10 flex items-center justify-center shrink-0">
                           <Bot className="h-3 w-3 text-primary/70" />
                         </div>
-                        <div className="bg-white/[0.03] border border-white/[0.04] rounded-xl rounded-tl-sm px-3 py-2.5">
+                        <div className="bg-card/30 border border-border/10 rounded-xl rounded-tl-sm px-3 py-2.5">
                           <div className="flex gap-1 items-center">
                             <Sparkles className="h-3 w-3 text-primary/40 animate-pulse" />
-                            <span className="text-[10px] text-muted-foreground/40">Processando...</span>
+                            <span className="text-[10px] text-muted-foreground/40">{t("cmd.processing")}</span>
                           </div>
                         </div>
                       </motion.div>
@@ -544,7 +560,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         status: diag.issues.length === 0 ? "optimal" : diag.issues.length <= 2 ? "warning" : "critical",
                         lastScan: Date.now(),
                       }));
-                      toast.success("Scan completo!");
+                      toast.success(t("support.scan_complete"));
                     }} />
 
                     {/* Diagnostic details */}
@@ -553,20 +569,20 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                       return (
                         <div className="space-y-2">
                           <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-muted-foreground/50 px-1">
-                            Resultados do Scan
+                            {t("support.scan_results")}
                           </p>
                           {diag.issues.length === 0 ? (
-                            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.05] p-3 flex items-center gap-2">
-                              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                            <div className="rounded-xl border border-primary/20 bg-primary/[0.05] p-3 flex items-center gap-2">
+                              <CheckCircle2 className="h-4 w-4 text-primary" />
                               <div>
-                                <p className="text-[11px] font-semibold text-emerald-400">Nenhum problema detectado</p>
-                                <p className="text-[9px] text-muted-foreground/40">Todos os sistemas operando normalmente</p>
+                                <p className="text-[11px] font-semibold text-primary">{t("support.no_issues")}</p>
+                                <p className="text-[9px] text-muted-foreground/40">{t("support.all_systems_ok")}</p>
                               </div>
                             </div>
                           ) : (
                             diag.issues.map((issue, i) => (
-                              <div key={i} className="rounded-xl border border-amber-500/20 bg-amber-500/[0.05] p-2.5 flex items-start gap-2">
-                                <AlertTriangle className="h-3.5 w-3.5 text-amber-400 shrink-0 mt-0.5" />
+                              <div key={i} className="rounded-xl border border-destructive/20 bg-destructive/[0.05] p-2.5 flex items-start gap-2">
+                                <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0 mt-0.5" />
                                 <div>
                                   <p className="text-[11px] text-foreground/70">{issue}</p>
                                   {diag.suggestions[i] && (
@@ -581,16 +597,16 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
 
                           {/* Performance metrics */}
                           <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-muted-foreground/50 px-1 mt-3">
-                            Métricas em Tempo Real
+                            {t("support.realtime_metrics")}
                           </p>
                           <div className="grid grid-cols-2 gap-2">
                             {[
-                              { label: "Uptime", value: "99.97%", color: "text-emerald-400" },
-                              { label: "Resp. Média", value: `${health.latency}ms`, color: "text-primary" },
-                              { label: "Sistema", value: "Online", color: "text-emerald-400" },
-                              { label: "Último Scan", value: new Date(health.lastScan).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), color: "text-muted-foreground" },
+                              { label: t("support.uptime"), value: "99.97%", color: "text-primary" },
+                              { label: t("support.avg_response"), value: `${health.latency}ms`, color: "text-primary" },
+                              { label: t("support.system_label"), value: t("support.online"), color: "text-primary" },
+                              { label: t("support.last_scan"), value: new Date(health.lastScan).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), color: "text-muted-foreground" },
                             ].map(m => (
-                              <div key={m.label} className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-2 text-center">
+                              <div key={m.label} className="rounded-lg border border-border/10 bg-card/30 p-2 text-center">
                                 <p className={`text-[12px] font-bold ${m.color}`}>{m.value}</p>
                                 <p className="text-[8px] text-muted-foreground/30 uppercase tracking-wider">{m.label}</p>
                               </div>
@@ -607,36 +623,36 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                     <div className="rounded-xl border border-primary/10 bg-primary/[0.03] p-3">
                       <div className="flex items-center gap-2 mb-2">
                         <Brain className="h-4 w-4 text-primary" />
-                        <p className="text-[10px] font-bold tracking-[0.15em] uppercase text-primary">Motor de Prevenção</p>
+                        <p className="text-[10px] font-bold tracking-[0.15em] uppercase text-primary">{t("support.prevention_engine")}</p>
                       </div>
                       <p className="text-[11px] text-foreground/50 leading-relaxed">
-                        O sistema monitora continuamente padrões de uso, performance e anomalias para prevenir problemas antes que aconteçam.
+                        {t("support.prevention_desc")}
                       </p>
                     </div>
 
                     {/* Prevention rules */}
                     <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-muted-foreground/50 px-1">
-                      Regras Ativas
+                      {t("support.active_rules")}
                     </p>
                     {[
-                      { rule: "Detecção de sessão expirada", status: "ativo", icon: Shield },
-                      { rule: "Monitor de latência > 2s", status: "ativo", icon: Zap },
-                      { rule: "Alerta de créditos baixos", status: "ativo", icon: AlertTriangle },
-                      { rule: "Análise de padrões de erro", status: "ativo", icon: Activity },
-                      { rule: "Prevenção de sobrecarga de agentes", status: "ativo", icon: Cpu },
+                      { rule: t("support.rule_session"), status: t("support.rule_status_active"), icon: Shield },
+                      { rule: t("support.rule_latency"), status: t("support.rule_status_active"), icon: Zap },
+                      { rule: t("support.rule_credits"), status: t("support.rule_status_active"), icon: AlertTriangle },
+                      { rule: t("support.rule_errors"), status: t("support.rule_status_active"), icon: Activity },
+                      { rule: t("support.rule_overload"), status: t("support.rule_status_active"), icon: Cpu },
                     ].map((r, i) => (
                       <motion.div
                         key={i}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className="flex items-center gap-2.5 rounded-lg border border-white/[0.04] bg-white/[0.02] p-2.5"
+                        className="flex items-center gap-2.5 rounded-lg border border-border/10 bg-card/30 p-2.5"
                       >
                         <r.icon className="h-3.5 w-3.5 text-muted-foreground/40" />
                         <div className="flex-1">
                           <p className="text-[11px] text-foreground/60">{r.rule}</p>
                         </div>
-                        <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold uppercase tracking-wider">
+                        <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold uppercase tracking-wider">
                           {r.status}
                         </span>
                       </motion.div>
@@ -660,7 +676,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         className="flex items-center justify-center gap-2 pb-2"
                       >
                         <VoiceWaveform />
-                        <span className="text-[10px] text-primary animate-pulse">Ouvindo...</span>
+                        <span className="text-[10px] text-primary animate-pulse">{t("support.listening")}</span>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -673,7 +689,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                       className={`h-9 w-9 rounded-xl border flex items-center justify-center transition-all duration-300 shrink-0 ${
                         voice.isListening
                           ? "border-primary/40 bg-primary/[0.1] text-primary"
-                          : "border-white/[0.06] bg-white/[0.02] text-muted-foreground hover:border-primary/20 hover:text-primary"
+                          : "border-border/10 bg-card/30 text-muted-foreground hover:border-primary/20 hover:text-primary"
                       }`}
                     >
                       {voice.isListening ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
@@ -684,8 +700,8 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
-                        placeholder={voice.isListening ? "Fale agora..." : "Descreva seu problema..."}
-                        className="w-full h-9 px-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-[12px] text-foreground placeholder:text-muted-foreground/30 outline-none focus:border-primary/20 focus:bg-white/[0.04] transition-all tracking-wide"
+                        placeholder={voice.isListening ? t("support.speak_now") : t("support.describe_problem")}
+                        className="w-full h-9 px-3 rounded-xl bg-card/30 border border-border/10 text-[12px] text-foreground placeholder:text-muted-foreground/30 outline-none focus:border-primary/20 focus:bg-card/40 transition-all tracking-wide"
                         disabled={isLoading || voice.isListening}
                       />
                     </div>
@@ -693,7 +709,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                       onClick={() => sendMessage()}
                       disabled={isLoading || !input.trim()}
                       aria-label="Send message"
-                      className="h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center hover:border-primary/20 hover:bg-primary/[0.06] disabled:opacity-30 transition-all duration-300 group shrink-0"
+                      className="h-9 w-9 rounded-xl border border-border/10 bg-card/30 flex items-center justify-center hover:border-primary/20 hover:bg-primary/[0.06] disabled:opacity-30 transition-all duration-300 group shrink-0"
                     >
                       {isLoading ? (
                         <Loader2 className="h-3.5 w-3.5 text-muted-foreground animate-spin" />
@@ -703,7 +719,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                     </button>
                   </div>
                   <p className="text-center text-[8px] tracking-[0.15em] uppercase text-muted-foreground/20 mt-2">
-                    Suporte • CLAUTHOR
+                    {t("support.footer")}
                   </p>
                 </div>
               )}
@@ -731,9 +747,9 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                 </span>
                 <span className="absolute inset-[1px] rounded-[15px] bg-background/90 backdrop-blur-2xl" />
                 <span className={`absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full z-20 ${
-                  health.status === "optimal" ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
-                  : health.status === "warning" ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"
-                  : "bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.5)] animate-pulse"
+                  health.status === "optimal" ? "bg-primary shadow-[0_0_8px_hsl(var(--primary)/0.5)]"
+                  : health.status === "warning" ? "bg-muted-foreground shadow-[0_0_8px_hsl(var(--muted-foreground)/0.5)]"
+                  : "bg-destructive shadow-[0_0_8px_hsl(var(--destructive)/0.5)] animate-pulse"
                 }`} />
                 <MessageSquare className="h-4.5 w-4.5 text-muted-foreground group-hover:text-primary transition-colors duration-300 relative z-10" />
               </motion.button>
