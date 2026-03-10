@@ -439,7 +439,7 @@ const HomePage = () => {
                   </div>
                   <div className="h-[280px] sm:h-[320px] px-4 py-4 space-y-3">
                     <div className="flex items-center justify-center">
-                      <span className="font-mono text-[10px] text-muted-foreground/50 px-3 py-1.5 rounded-full bg-muted/20 border border-border/30">Conectando agente...</span>
+                      <span className="font-mono text-[10px] text-muted-foreground/50 px-3 py-1.5 rounded-full bg-muted/20 border border-border/30">{t("home.connecting_agent", { defaultValue: "Connecting agent..." })}</span>
                     </div>
                     <div className="flex items-start gap-2.5 max-w-[85%]">
                       <div className="w-6 h-6 rounded-md bg-primary/10 animate-pulse shrink-0" />
