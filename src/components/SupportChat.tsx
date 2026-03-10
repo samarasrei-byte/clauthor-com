@@ -560,7 +560,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         status: diag.issues.length === 0 ? "optimal" : diag.issues.length <= 2 ? "warning" : "critical",
                         lastScan: Date.now(),
                       }));
-                      toast.success("Scan completo!");
+                      toast.success(t("support.scan_complete"));
                     }} />
 
                     {/* Diagnostic details */}
