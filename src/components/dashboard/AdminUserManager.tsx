@@ -78,7 +78,7 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
       <Card className="bg-background/40 backdrop-blur-xl border border-white/[0.08]">
         <CardHeader>
           <CardTitle className="font-display text-lg flex items-center gap-2">
-            <Users className="h-5 w-5 text-cyan-400" /> Todos os Usuários ({allProfiles.length})
+            <Users className="h-5 w-5 text-cyan-400" /> All Users ({allProfiles.length})
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -86,12 +86,12 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/[0.08]">
-                  <th className="text-left p-3 text-muted-foreground font-medium">Nome</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Empresa</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Plano</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Créditos</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Cadastro</th>
-                  <th className="text-left p-3 text-muted-foreground font-medium">Ações</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Name</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Company</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Plan</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Credits</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Joined</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
