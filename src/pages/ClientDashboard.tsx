@@ -91,6 +91,7 @@ const ClientDashboard = () => {
     }
   }, [user]);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
+  const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
   const [showBoardGate, setShowBoardGate] = useState(false);
   const [boardGateSkipped, setBoardGateSkipped] = useState(false);
@@ -431,7 +432,7 @@ const ClientDashboard = () => {
           {activeSection === "omnix" && (
             <Suspense fallback={<SectionLoader />}>
               <div className="h-full">
-                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} />
+                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} initialMessage={pendingTaskMessage} onInitialMessageHandled={() => setPendingTaskMessage(null)} />
               </div>
             </Suspense>
           )}
@@ -597,6 +598,7 @@ const ClientDashboard = () => {
                         <TaskRequestPanel
                           contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
                           onSubmitTask={(task, mode) => {
+                            setPendingTaskMessage(task);
                             // Strategic mode → send to THOR/Omnix for orchestration
                             if (mode === "strategic" || mode === "guided") {
                               setActiveSection("omnix");
