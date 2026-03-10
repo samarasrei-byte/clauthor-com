@@ -623,36 +623,36 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                     <div className="rounded-xl border border-primary/10 bg-primary/[0.03] p-3">
                       <div className="flex items-center gap-2 mb-2">
                         <Brain className="h-4 w-4 text-primary" />
-                        <p className="text-[10px] font-bold tracking-[0.15em] uppercase text-primary">Motor de Prevenção</p>
+                        <p className="text-[10px] font-bold tracking-[0.15em] uppercase text-primary">{t("support.prevention_engine")}</p>
                       </div>
                       <p className="text-[11px] text-foreground/50 leading-relaxed">
-                        O sistema monitora continuamente padrões de uso, performance e anomalias para prevenir problemas antes que aconteçam.
+                        {t("support.prevention_desc")}
                       </p>
                     </div>
 
                     {/* Prevention rules */}
                     <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-muted-foreground/50 px-1">
-                      Regras Ativas
+                      {t("support.active_rules")}
                     </p>
                     {[
-                      { rule: "Detecção de sessão expirada", status: "ativo", icon: Shield },
-                      { rule: "Monitor de latência > 2s", status: "ativo", icon: Zap },
-                      { rule: "Alerta de créditos baixos", status: "ativo", icon: AlertTriangle },
-                      { rule: "Análise de padrões de erro", status: "ativo", icon: Activity },
-                      { rule: "Prevenção de sobrecarga de agentes", status: "ativo", icon: Cpu },
+                      { rule: t("support.rule_session"), status: t("support.rule_status_active"), icon: Shield },
+                      { rule: t("support.rule_latency"), status: t("support.rule_status_active"), icon: Zap },
+                      { rule: t("support.rule_credits"), status: t("support.rule_status_active"), icon: AlertTriangle },
+                      { rule: t("support.rule_errors"), status: t("support.rule_status_active"), icon: Activity },
+                      { rule: t("support.rule_overload"), status: t("support.rule_status_active"), icon: Cpu },
                     ].map((r, i) => (
                       <motion.div
                         key={i}
                         initial={{ opacity: 0, x: -10 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: i * 0.05 }}
-                        className="flex items-center gap-2.5 rounded-lg border border-white/[0.04] bg-white/[0.02] p-2.5"
+                        className="flex items-center gap-2.5 rounded-lg border border-border/10 bg-card/30 p-2.5"
                       >
                         <r.icon className="h-3.5 w-3.5 text-muted-foreground/40" />
                         <div className="flex-1">
                           <p className="text-[11px] text-foreground/60">{r.rule}</p>
                         </div>
-                        <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold uppercase tracking-wider">
+                        <span className="text-[8px] px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20 font-semibold uppercase tracking-wider">
                           {r.status}
                         </span>
                       </motion.div>
