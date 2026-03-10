@@ -1913,5 +1913,15 @@
     "listening": "OUVINDO",
     "speaking": "FALANDO",
     "processing": "PROCESSANDO"
+  },
+  "setup_checklist": {
+    "title": "Setup dos Agentes",
+    "all_done": "✅ Todos os agentes configurados!",
+    "progress": "{{pct}}% completo — {{count}} agente(s) pendente(s)",
+    "agent_activated": "Agente ativado",
+    "board_filled": "Board da Empresa preenchido",
+    "pure_ai": "Puro IA",
+    "configure_thor": "Configurar com THOR",
+    "more_pending": "agentes pendentes"
   }
 }
