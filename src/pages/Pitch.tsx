@@ -374,7 +374,7 @@ const Pitch = () => {
       {/* ═══ 7. VANTAGEM COMPETITIVA ═══ */}
       <Section className="bg-white/[0.01]">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Vantagem competitiva real.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Real competitive advantage.</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {advantages.map((a) => (
               <GlassCard key={a.text} className="flex flex-col items-center gap-3 text-center">
@@ -386,30 +386,30 @@ const Pitch = () => {
         </div>
       </Section>
 
-      {/* ═══ 8. VISÃO ═══ */}
+      {/* ═══ 8. VISION ═══ */}
       <Section>
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold leading-tight tracking-tight mb-8">
-            A CLAUTHOR não é uma ferramenta.<br />
-            <span className="bg-gradient-to-r from-primary to-accent-violet bg-clip-text text-transparent">É a camada operacional da nova economia.</span>
+            CLAUTHOR is not a tool.<br />
+            <span className="bg-gradient-to-r from-primary to-accent-violet bg-clip-text text-transparent">It's the operational layer of the new economy.</span>
           </h2>
           <div className="flex flex-wrap justify-center gap-3">
-            {["Primeiro 1.000 clientes", "Rodada Seed", "Expansão internacional", "Infraestrutura global de agentes"].map((step) => (
+            {["First 1,000 clients", "Seed Round", "International expansion", "Global agent infrastructure"].map((step) => (
               <span key={step} className="px-4 py-2 rounded-full border border-white/[0.06] bg-white/[0.02] text-xs text-muted-foreground">{step}</span>
             ))}
           </div>
         </div>
       </Section>
 
-      {/* ═══ 9. CTA FINAL ═══ */}
+      {/* ═══ 9. FINAL CTA ═══ */}
       <section className="relative py-32 px-6">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_100%,hsl(var(--primary)/0.1),transparent_70%)]" />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-8 tracking-tight">Estamos abrindo 10% da empresa para acelerar exponencialmente.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-8 tracking-tight">We're opening 10% of the company to accelerate exponentially.</h2>
           <Button size="lg" onClick={handleTalk} className="text-lg px-10 py-6 h-auto">
-            Falar com o Founder <ArrowRight className="ml-2 w-5 h-5" />
+            Talk to the Founder <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
-          <p className="mt-8 text-xs text-muted-foreground/50">Documento confidencial. Distribuição restrita a potenciais investidores.</p>
+          <p className="mt-8 text-xs text-muted-foreground/50">Confidential document. Distribution restricted to potential investors.</p>
         </div>
       </section>
     </div>
