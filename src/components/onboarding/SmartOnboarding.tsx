@@ -126,7 +126,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
     if (count >= 7) return { pct: 30, label: "30% off — Power Squad" };
     if (count >= 5) return { pct: 20, label: "20% off — Growth Squad" };
     if (count >= 3) return { pct: 10, label: "10% off — Starter Squad" };
-    return { pct: 0, label: "Agente individual" };
+    return { pct: 0, label: "Individual agent" };
   };
 
   const getDepts = () => {
