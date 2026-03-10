@@ -40,7 +40,8 @@ function normalizeOmnixConfig(saved: Partial<OmnixConfig> | null): OmnixConfig {
 }
 
 function extractKPIs(content: string) {
-  const kpiRegex = /```kpi\n([\s\S]*?)```/g;
+  // Don't use /g flag — we only need the first match and /g causes lastIndex issues on repeated calls
+  const kpiRegex = /```kpi\n([\s\S]*?)```/;
   const match = kpiRegex.exec(content);
   if (!match) return null;
   try {
@@ -115,7 +116,13 @@ export function useOmnix() {
       );
 
       if (!response.ok) {
-        const data = await response.json();
+        // Remove the user message that got no response
+        setMessages(prev => {
+          const cleaned = prev.filter((_, i) => i < prev.length - 1 || prev[prev.length - 1]?.role !== "user");
+          messagesRef.current = cleaned;
+          return cleaned;
+        });
+        const data = await response.json().catch(() => ({}));
         if (response.status === 402) toast.error("Créditos esgotados! Faça upgrade.");
         else if (response.status === 429) toast.error("Limite de requisições. Tente novamente.");
         else toast.error(data.error || "Erro ao processar.");
@@ -171,7 +178,19 @@ export function useOmnix() {
         }
       }
     } catch (err: any) {
-      if (err.name === "AbortError") return;
+      if (err.name === "AbortError") {
+        // Mark truncated assistant message
+        setMessages(prev => {
+          const last = prev[prev.length - 1];
+          if (last?.role === "assistant" && last.content) {
+            const next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: m.content + "\n\n⏹ *Resposta interrompida.*" } : m);
+            messagesRef.current = next;
+            return next;
+          }
+          return prev;
+        });
+        return;
+      }
       console.error("Omnix error:", err);
       toast.error("Erro de conexão.");
     } finally {
