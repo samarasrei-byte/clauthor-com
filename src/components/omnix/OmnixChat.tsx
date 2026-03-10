@@ -335,7 +335,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             variant="ghost"
             size="icon"
             className="shrink-0 h-8 w-8 text-muted-foreground/40 hover:text-destructive"
-            onClick={onClear}
+            onClick={() => {
+              if (messages.length === 0) return;
+              if (messages.length > 2) {
+                const confirmed = window.confirm("Limpar todo o histórico do chat?");
+                if (!confirmed) return;
+              }
+              onClear();
+            }}
           >
             <Trash2 className="h-3.5 w-3.5" />
           </Button>
