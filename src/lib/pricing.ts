@@ -160,7 +160,7 @@ export const regionalPricing: Record<string, RegionalPricing> = {
 };
 
 export function getRegion(lang: string): RegionalPricing {
-  return regionalPricing[lang] || regionalPricing.pt;
+  return regionalPricing[lang] || regionalPricing.en;
 }
 
 export function formatPrice(amount: number, lang: string): string {
