@@ -384,7 +384,7 @@ async function delegateToAgent(
   }
 
   if (targetAgent.id === sourceAgentId) {
-    return { success: false, result: { error: "Um agente não pode delegar para si mesmo." } };
+    return { success: false, result: { error: "An agent cannot delegate to itself." } };
   }
 
   console.log(`[A2A] Delegating to ${targetAgent.name} (depth ${depth})`);
