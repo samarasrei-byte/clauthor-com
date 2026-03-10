@@ -68,7 +68,7 @@ const VoiceInput = ({ onTranscript, disabled }: VoiceInputProps) => {
     }
 
     const recognition = new SpeechRecognition();
-    recognition.lang = "pt-BR";
+    recognition.lang = "en-US";
     recognition.interimResults = true;
     recognition.continuous = true;
     recognition.maxAlternatives = 1;

@@ -550,7 +550,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                             "text-[9px]",
                             msg.role === "user" ? "text-primary-foreground/60" : "text-muted-foreground"
                           )}>
-                            {msg.timestamp.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
+                            {msg.timestamp.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}
                           </span>
                           {msg.role === "user" && (
                             <CheckCheck className="h-3 w-3 text-primary-foreground/60" />

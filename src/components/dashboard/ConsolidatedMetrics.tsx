@@ -36,8 +36,8 @@ const ConsolidatedMetrics = ({
   successRate,
 }: ConsolidatedMetricsProps) => {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
-  const currencyPrefix = locale.startsWith("pt") ? "R$ " : "$ ";
+  const locale = i18n.language === "pt" ? "pt-BR" : (i18n.language || "en");
+  const currencyPrefix = "$ ";
 
   // Build chart data
   const executionChartData = (() => {
