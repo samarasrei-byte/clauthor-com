@@ -266,8 +266,8 @@ const Pitch = () => {
       {/* ═══ 3. A SOLUÇÃO ═══ */}
       <Section>
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Infraestrutura multiagente coordenada.</h2>
-          <p className="text-muted-foreground text-lg mb-14 max-w-2xl mx-auto">A CLAUTHOR substitui departamentos por squads de IA especializados.</p>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Coordinated multi-agent infrastructure.</h2>
+          <p className="text-muted-foreground text-lg mb-14 max-w-2xl mx-auto">CLAUTHOR replaces departments with specialized AI squads.</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {solutions.map((s) => (
               <GlassCard key={s.title} className="flex flex-col items-center gap-3 text-center">
