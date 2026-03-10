@@ -81,7 +81,7 @@ const DashboardLayout = () => {
               </Button>
             </Link>
           )}
-          {/* <LanguageSelector /> */}
+          <LanguageSelector />
           <Button
             variant="ghost"
             size="sm"
