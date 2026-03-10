@@ -441,7 +441,7 @@ const IntegrationsPage = () => {
                                 </Badge>
                               )}
                               {connectionStatus === "partial" && (
-                                <Badge className="bg-amber-500/15 text-amber-500 border-amber-500/20 text-[10px]">
+                                <Badge className="bg-muted text-muted-foreground border-border text-[10px]">
                                   {t("integrations.status_partial", { defaultValue: "Parcial" })}
                                 </Badge>
                               )}
