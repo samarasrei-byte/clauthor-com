@@ -742,7 +742,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         onClick={() => setPhase(0)}
                         className="h-10 rounded-xl gap-1.5 px-4 text-xs"
                       >
-                        <ChevronLeft className="h-3.5 w-3.5" /> Voltar ao início
+                        <ChevronLeft className="h-3.5 w-3.5" /> Back to start
                       </Button>
                       <Button
                         variant="outline"
