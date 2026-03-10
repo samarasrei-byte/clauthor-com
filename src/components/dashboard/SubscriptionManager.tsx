@@ -22,7 +22,7 @@ interface SubscriptionManagerProps {
 const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
   const { credits, usagePercentage } = useCredits();
   const { i18n, t } = useTranslation();
-  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
+  const locale = i18n.language === "pt" ? "pt-BR" : (i18n.language || "en");
   const currency = locale.startsWith("pt") ? "BRL" : "USD";
   const fmt = (v: number) => new Intl.NumberFormat(locale, { style: "currency", currency, minimumFractionDigits: 0 }).format(v / 100);
 
