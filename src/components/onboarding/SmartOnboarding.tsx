@@ -38,16 +38,16 @@ const useTyping = (text: string, speed = 30, delay = 0) => {
 const industries = [
   { id: "saas", label: "SaaS / Tech", icon: Code, gradient: "from-cyan-500 to-blue-600" },
   { id: "ecommerce", label: "E-commerce", icon: ShoppingCart, gradient: "from-emerald-500 to-teal-600" },
-  { id: "services", label: "Serviços", icon: Briefcase, gradient: "from-amber-500 to-orange-600" },
-  { id: "health", label: "Saúde", icon: HeartHandshake, gradient: "from-rose-500 to-pink-600" },
-  { id: "education", label: "Educação", icon: GraduationCap, gradient: "from-violet-500 to-purple-600" },
-  { id: "industry", label: "Indústria", icon: Factory, gradient: "from-slate-400 to-zinc-600" },
+  { id: "services", label: "Services", icon: Briefcase, gradient: "from-amber-500 to-orange-600" },
+  { id: "health", label: "Healthcare", icon: HeartHandshake, gradient: "from-rose-500 to-pink-600" },
+  { id: "education", label: "Education", icon: GraduationCap, gradient: "from-violet-500 to-purple-600" },
+  { id: "industry", label: "Manufacturing", icon: Factory, gradient: "from-slate-400 to-zinc-600" },
   { id: "startup", label: "Startup", icon: Rocket, gradient: "from-primary to-primary-glow" },
-  { id: "agency", label: "Agência / Marketing", icon: Target, gradient: "from-pink-500 to-fuchsia-600" },
-  { id: "retail", label: "Varejo", icon: Building2, gradient: "from-orange-500 to-red-600" },
-  { id: "finance", label: "Finanças / Contábil", icon: Receipt, gradient: "from-yellow-500 to-amber-600" },
-  { id: "logistics", label: "Logística", icon: Globe, gradient: "from-sky-500 to-indigo-600" },
-  { id: "other", label: "Outro", icon: Sparkles, gradient: "from-muted to-muted-foreground" },
+  { id: "agency", label: "Agency / Marketing", icon: Target, gradient: "from-pink-500 to-fuchsia-600" },
+  { id: "retail", label: "Retail", icon: Building2, gradient: "from-orange-500 to-red-600" },
+  { id: "finance", label: "Finance / Accounting", icon: Receipt, gradient: "from-yellow-500 to-amber-600" },
+  { id: "logistics", label: "Logistics", icon: Globe, gradient: "from-sky-500 to-indigo-600" },
+  { id: "other", label: "Other", icon: Sparkles, gradient: "from-muted to-muted-foreground" },
 ];
 
 const popularChallenges = new Set(["sales", "support", "marketing"]);
