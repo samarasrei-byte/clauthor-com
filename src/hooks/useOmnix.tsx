@@ -53,6 +53,7 @@ function extractKPIs(content: string) {
 
 export function useOmnix() {
   const [messages, setMessages] = useState<OmnixMessage[]>([]);
+  const messagesRef = useRef<OmnixMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [config, setConfig] = useState<OmnixConfig>(() => {
@@ -79,11 +80,9 @@ export function useOmnix() {
     if (!content.trim()) return;
 
     const userMsg: OmnixMessage = { role: "user", content, timestamp: new Date() };
-    let updatedMessages: OmnixMessage[] = [];
-    setMessages(prev => {
-      updatedMessages = [...prev, userMsg];
-      return updatedMessages;
-    });
+    const updatedMessages = [...messagesRef.current, userMsg];
+    messagesRef.current = updatedMessages;
+    setMessages(updatedMessages);
     setIsLoading(true);
     setIsStreaming(true);
 
@@ -155,10 +154,14 @@ export function useOmnix() {
               const kpis = extractKPIs(assistantText);
               setMessages(prev => {
                 const last = prev[prev.length - 1];
+                let next: OmnixMessage[];
                 if (last?.role === "assistant") {
-                  return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantText, kpis: kpis || m.kpis } : m);
+                  next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantText, kpis: kpis || m.kpis } : m);
+                } else {
+                  next = [...prev, { role: "assistant", content: assistantText, timestamp: new Date(), kpis: kpis || undefined }];
                 }
-                return [...prev, { role: "assistant", content: assistantText, timestamp: new Date(), kpis: kpis || undefined }];
+                messagesRef.current = next;
+                return next;
               });
             }
           } catch {
@@ -179,7 +182,7 @@ export function useOmnix() {
   }, [config]);
 
   const stopStreaming = useCallback(() => abortRef.current?.abort(), []);
-  const clearMessages = useCallback(() => setMessages([]), []);
+  const clearMessages = useCallback(() => { messagesRef.current = []; setMessages([]); }, []);
 
   return { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages };
 }
