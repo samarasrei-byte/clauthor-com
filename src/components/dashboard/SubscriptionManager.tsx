@@ -54,14 +54,14 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
         {/* Credit Usage */}
         <div className="bg-white/[0.02] rounded-xl p-4">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-sm font-medium">Uso de Créditos</span>
+            <span className="text-sm font-medium">{t("subscription.credit_usage", { defaultValue: "Credit Usage" })}</span>
             <span className="text-xs text-muted-foreground">
-              {credits?.used_credits?.toLocaleString("pt-BR") || 0} / {credits?.total_credits?.toLocaleString("pt-BR") || 0}
+              {credits?.used_credits?.toLocaleString(locale) || 0} / {credits?.total_credits?.toLocaleString(locale) || 0}
             </span>
           </div>
           <Progress value={usagePercentage} className="h-2" />
           <p className="text-xs text-muted-foreground mt-2">
-            {100 - usagePercentage}% restante este mês
+            {100 - usagePercentage}% {t("subscription.remaining", { defaultValue: "remaining this month" })}
           </p>
         </div>
 
