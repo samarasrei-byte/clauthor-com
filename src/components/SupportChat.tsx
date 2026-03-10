@@ -689,7 +689,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                       className={`h-9 w-9 rounded-xl border flex items-center justify-center transition-all duration-300 shrink-0 ${
                         voice.isListening
                           ? "border-primary/40 bg-primary/[0.1] text-primary"
-                          : "border-white/[0.06] bg-white/[0.02] text-muted-foreground hover:border-primary/20 hover:text-primary"
+                          : "border-border/10 bg-card/30 text-muted-foreground hover:border-primary/20 hover:text-primary"
                       }`}
                     >
                       {voice.isListening ? <MicOff className="h-3.5 w-3.5" /> : <Mic className="h-3.5 w-3.5" />}
