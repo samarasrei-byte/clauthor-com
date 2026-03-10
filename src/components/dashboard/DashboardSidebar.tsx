@@ -181,7 +181,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                               "w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs transition-all",
                               isChildActive
                                 ? "bg-primary/10 text-primary font-medium"
-                                : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/10"
                             )}
                           >
                             <ChildIcon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
