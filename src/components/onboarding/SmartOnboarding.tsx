@@ -185,7 +185,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
               </div>
               <div>
                 <span className="font-display font-bold text-xs tracking-wider uppercase text-foreground">
-                  Monte seu time
+                  Build your team
                 </span>
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
