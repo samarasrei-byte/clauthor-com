@@ -570,9 +570,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         {/* Savings */}
                         <div className="flex items-center gap-2 pt-2 border-t border-primary/10">
                           <Zap className="h-3.5 w-3.5 text-primary" />
-                          <span className="text-xs text-muted-foreground">
-                            Economia estimada: <strong className="text-foreground">{teamSizes.find(t => t.id === teamSize)?.savings}/mês</strong> vs. equipe CLT
-                          </span>
+                           <span className="text-xs text-muted-foreground">
+                             Estimated savings: <strong className="text-foreground">{teamSizes.find(t => t.id === teamSize)?.savings}/mo</strong> vs. traditional team
+                           </span>
                         </div>
 
                         {/* Price */}
