@@ -83,7 +83,7 @@ const AgentLiveTimeline = () => {
     return d.toLocaleDateString(undefined, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
   };
 
-  const { data: entries = [], isLoading } = useQuery({
+  const { data: entries = [], isLoading, refetch } = useQuery({
     queryKey: ["agent-live-timeline", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -104,22 +104,25 @@ const AgentLiveTimeline = () => {
       })) as TimelineEntry[];
     },
     enabled: !!user,
-    refetchInterval: 5000,
+    refetchInterval: 8000,
   });
 
   useEffect(() => {
     if (!user) return;
     const channel = supabase
       .channel("timeline-live")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "execution_logs" }, () => {})
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "execution_logs" }, () => {
+        refetch();
+      })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, [user]);
+  }, [user, refetch]);
 
   const filtered = filter === "all" ? entries : entries.filter(e => e.status === filter);
 
   const statusFilters = [
     { key: "all" as const, label: t("timeline.all", { defaultValue: "Todos" }), count: entries.length },
+    { key: "running" as const, label: t("timeline.running", { defaultValue: "Em execução" }), count: entries.filter(e => e.status === "running").length },
     { key: "success" as const, label: t("timeline.success", { defaultValue: "Sucesso" }), count: entries.filter(e => e.status === "success").length },
     { key: "error" as const, label: t("timeline.error", { defaultValue: "Erro" }), count: entries.filter(e => e.status === "error").length },
   ];
