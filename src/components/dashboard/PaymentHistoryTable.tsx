@@ -76,7 +76,7 @@ export default function PaymentHistoryTable() {
     >
       <div className="flex items-center gap-3 p-5 pb-3">
         <Receipt className="h-5 w-5 text-primary" />
-        <h3 className="font-display font-semibold">Histórico de Transações</h3>
+        <h3 className="font-display font-semibold">Transaction History</h3>
         <Badge variant="secondary" className="text-[10px]">{payments.length}</Badge>
       </div>
 
