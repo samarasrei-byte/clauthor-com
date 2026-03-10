@@ -80,6 +80,11 @@ const ClientDashboard = () => {
   const queryClient = useQueryClient();
   const [activeSection, setActiveSection] = useState("overview");
   const [previousSection, setPreviousSection] = useState<string | null>(null);
+  const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
+  const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
+  const [omnixMounted, setOmnixMounted] = useState(false);
+  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
+  const [showBoardGate, setShowBoardGate] = useState(false);
 
   // Redirect first-time user to THOR (concierge)
   useEffect(() => {
@@ -88,12 +93,16 @@ const ClientDashboard = () => {
     if (!localStorage.getItem(key)) {
       localStorage.setItem(key, "true");
       setActiveSection("omnix");
+      setOmnixMounted(true);
     }
   }, [user]);
-  const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
-  const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
-  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
-  const [showBoardGate, setShowBoardGate] = useState(false);
+
+  // Track when omnix is first visited so we can keep it mounted
+  useEffect(() => {
+    if (activeSection === "omnix" && !omnixMounted) {
+      setOmnixMounted(true);
+    }
+  }, [activeSection, omnixMounted]);
   const [boardGateSkipped, setBoardGateSkipped] = useState(false);
 
   // Check if Company Board has data
@@ -428,13 +437,13 @@ const ClientDashboard = () => {
         </div>
 
         <div className="flex-1 min-w-0 overflow-hidden">
-          {/* ═══ IMMERSIVE MODE — chat/omnix fill the viewport ═══ */}
-          {activeSection === "omnix" && (
-            <Suspense fallback={<SectionLoader />}>
-              <div className="h-full">
+          {/* ═══ IMMERSIVE MODE — THOR stays mounted to preserve chat history ═══ */}
+          {omnixMounted && (
+            <div className={activeSection === "omnix" ? "h-full" : "hidden"}>
+              <Suspense fallback={<SectionLoader />}>
                 <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} initialMessage={pendingTaskMessage} onInitialMessageHandled={() => setPendingTaskMessage(null)} />
-              </div>
-            </Suspense>
+              </Suspense>
+            </div>
           )}
 
           {activeSection === "chat" && selectedAgent && (
