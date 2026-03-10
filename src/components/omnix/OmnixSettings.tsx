@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { OmnixConfig } from "@/hooks/useOmnix";
+import { useTranslation } from "react-i18next";
 
 interface OmnixSettingsProps {
   config: OmnixConfig;
@@ -13,7 +14,8 @@ interface OmnixSettingsProps {
 }
 
 const OmnixSettings = ({ config, onUpdate, onClose }: OmnixSettingsProps) => {
-  // Close on Escape key
+  const { t } = useTranslation();
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
     window.addEventListener("keydown", handler);
@@ -38,7 +40,7 @@ const OmnixSettings = ({ config, onUpdate, onClose }: OmnixSettingsProps) => {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Settings className="h-5 w-5 text-primary" />
-            <h2 className="font-display font-bold text-lg">Personalizar {config.name}</h2>
+            <h2 className="font-display font-bold text-lg">{t("cmd.customize", { name: config.name })}</h2>
           </div>
           <Button variant="ghost" size="icon" className="h-8 w-8" onClick={onClose}>
             <X className="h-4 w-4" />
@@ -47,24 +49,24 @@ const OmnixSettings = ({ config, onUpdate, onClose }: OmnixSettingsProps) => {
 
         <div className="space-y-4">
           <div>
-            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">Nome do Agente</label>
+            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">{t("cmd.agent_name_label")}</label>
             <Input value={config.name} onChange={e => onUpdate({ name: e.target.value })} placeholder="THOR" />
           </div>
 
           <div>
-            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">Tom de Voz</label>
+            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">{t("cmd.tone_label")}</label>
             <Select value={config.tone} onValueChange={v => onUpdate({ tone: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                {["estratégico", "técnico", "direto", "inspirador", "formal", "informal"].map(t => (
-                  <SelectItem key={t} value={t}>{t.charAt(0).toUpperCase() + t.slice(1)}</SelectItem>
+                {["estratégico", "técnico", "direto", "inspirador", "formal", "informal"].map(tone => (
+                  <SelectItem key={tone} value={tone}>{tone.charAt(0).toUpperCase() + tone.slice(1)}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">Personalidade</label>
+            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">{t("cmd.personality_label")}</label>
             <Select value={config.personality} onValueChange={v => onUpdate({ personality: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -76,18 +78,18 @@ const OmnixSettings = ({ config, onUpdate, onClose }: OmnixSettingsProps) => {
           </div>
 
           <div>
-            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">Estilo de Resposta</label>
+            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">{t("cmd.response_style_label")}</label>
             <Select value={config.responseStyle} onValueChange={v => onUpdate({ responseStyle: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="curto">Curto e objetivo</SelectItem>
-                <SelectItem value="detalhado">Detalhado e profundo</SelectItem>
+                <SelectItem value="curto">{t("cmd.style_short")}</SelectItem>
+                <SelectItem value="detalhado">{t("cmd.style_detailed")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div>
-            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">Idioma</label>
+            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">{t("cmd.language_label")}</label>
             <Select value={config.language} onValueChange={v => onUpdate({ language: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
@@ -99,20 +101,20 @@ const OmnixSettings = ({ config, onUpdate, onClose }: OmnixSettingsProps) => {
           </div>
 
           <div>
-            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">Nível de Autonomia</label>
+            <label className="text-[10px] text-muted-foreground/70 mb-1.5 block uppercase tracking-wider">{t("cmd.autonomy_label")}</label>
             <Select value={config.autonomy} onValueChange={v => onUpdate({ autonomy: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="apenas analisar">Apenas analisar</SelectItem>
-                <SelectItem value="analisar e sugerir">Analisar e sugerir ações</SelectItem>
-                <SelectItem value="autônomo">Sugerir ações automáticas</SelectItem>
+                <SelectItem value="apenas analisar">{t("cmd.autonomy_analyze")}</SelectItem>
+                <SelectItem value="analisar e sugerir">{t("cmd.autonomy_suggest")}</SelectItem>
+                <SelectItem value="autônomo">{t("cmd.autonomy_auto")}</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </div>
 
         <Button className="w-full shadow-[0_0_16px_hsl(var(--primary)/0.2)]" onClick={onClose}>
-          Salvar Configurações
+          {t("cmd.save_settings")}
         </Button>
       </motion.div>
     </motion.div>

@@ -7,9 +7,10 @@ import {
   Bot, Zap, TrendingUp, AlertTriangle, CheckCircle, Clock,
   Target, Shield, Activity, Coins
 } from "lucide-react";
-import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, ResponsiveContainer, CartesianGrid, Tooltip } from "recharts";
+import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, CartesianGrid, Tooltip } from "recharts";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import type { MonixMessage } from "@/hooks/useMonix";
+import { useTranslation } from "react-i18next";
 
 interface MonixDashboardProps {
   messages: MonixMessage[];
@@ -17,6 +18,7 @@ interface MonixDashboardProps {
 
 const MonixDashboard = ({ messages }: MonixDashboardProps) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const { credits, remainingCredits, usagePercentage } = useCredits();
   const { data: tokenUsage = [] } = useTokenUsage();
 
@@ -53,12 +55,10 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
   const errorLogs = logs.filter(l => l.status === "error").length;
   const successRate = logs.length > 0 ? Math.round((successLogs / logs.length) * 100) : 100;
   const avgTime = logs.length > 0 ? Math.round(logs.reduce((s, l) => s + (l.execution_time_ms || 0), 0) / logs.length) : 0;
-  const openTasks = tasks.filter(t => t.status === "open").length;
+  const openTasks = tasks.filter(tk => tk.status === "open").length;
 
-  // Extract latest KPIs from assistant messages
   const lastKpis = [...messages].reverse().find(m => m.kpis)?.kpis || null;
 
-  // Chart data from logs (grouped by day)
   const last7days = Array.from({ length: 7 }, (_, i) => {
     const d = new Date(); d.setDate(d.getDate() - (6 - i));
     const key = d.toISOString().split("T")[0];
@@ -72,12 +72,12 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
   });
 
   const kpiCards = [
-    { label: "Agentes Ativos", value: activeAgents, icon: Bot, color: "text-primary" },
-    { label: "Execuções", value: totalExecs, icon: Zap, color: "text-cyan-400" },
-    { label: "Taxa Sucesso", value: `${successRate}%`, icon: CheckCircle, color: "text-emerald-400" },
-    { label: "Tempo Médio", value: `${avgTime}ms`, icon: Clock, color: "text-amber-400" },
-    { label: "Créditos Restantes", value: remainingCredits, icon: Coins, color: "text-violet-400" },
-    { label: "Tarefas Abertas", value: openTasks, icon: Target, color: "text-orange-400" },
+    { label: t("cmd.active_agents"), value: activeAgents, icon: Bot, color: "text-primary" },
+    { label: t("cmd.executions"), value: totalExecs, icon: Zap, color: "text-primary/70" },
+    { label: t("cmd.success_rate"), value: `${successRate}%`, icon: CheckCircle, color: "text-accent-foreground" },
+    { label: t("cmd.avg_time"), value: `${avgTime}ms`, icon: Clock, color: "text-muted-foreground" },
+    { label: t("cmd.remaining_credits"), value: remainingCredits, icon: Coins, color: "text-primary/80" },
+    { label: t("cmd.open_tasks"), value: openTasks, icon: Target, color: "text-destructive/70" },
   ];
 
   return (
@@ -108,7 +108,7 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="bg-primary/5 border border-primary/10 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-3">
             <Activity className="h-4 w-4 text-primary" />
-            <span className="text-xs font-bold text-primary">Insights do {messages[0]?.content ? "MONIX" : "AI"}</span>
+            <span className="text-xs font-bold text-primary">{t("cmd.ai_insights")}</span>
           </div>
           <div className="grid grid-cols-2 gap-2">
             {lastKpis.map((kpi: any, i: number) => (
@@ -116,9 +116,9 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
                 <p className="text-[10px] text-muted-foreground">{kpi.label}</p>
                 <div className="flex items-center gap-1.5">
                   <span className="font-display font-bold text-sm">{kpi.value}</span>
-                  {kpi.trend === "up" && <TrendingUp className="h-3 w-3 text-emerald-400" />}
+                  {kpi.trend === "up" && <TrendingUp className="h-3 w-3 text-primary" />}
                   {kpi.trend === "down" && <TrendingUp className="h-3 w-3 text-destructive rotate-180" />}
-                  {kpi.delta && <span className={`text-[10px] ${kpi.trend === "up" ? "text-emerald-400" : "text-destructive"}`}>{kpi.delta}</span>}
+                  {kpi.delta && <span className={`text-[10px] ${kpi.trend === "up" ? "text-primary" : "text-destructive"}`}>{kpi.delta}</span>}
                 </div>
               </div>
             ))}
@@ -130,7 +130,7 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
       <div className="bg-card/40 border border-border/30 rounded-xl p-4">
         <div className="flex items-center gap-2 mb-3">
           <TrendingUp className="h-4 w-4 text-primary" />
-          <span className="text-xs font-semibold">Execuções — Últimos 7 dias</span>
+          <span className="text-xs font-semibold">{t("cmd.exec_7days")}</span>
         </div>
         <div className="h-[140px]">
           <ResponsiveContainer width="100%" height="100%">
@@ -156,16 +156,16 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
       <div className="bg-card/40 border border-border/30 rounded-xl p-4">
         <div className="flex items-center gap-2 mb-3">
           <Bot className="h-4 w-4 text-primary" />
-          <span className="text-xs font-semibold">Status dos Agentes</span>
+          <span className="text-xs font-semibold">{t("cmd.agent_status_title")}</span>
         </div>
         <div className="space-y-2">
           {agents.slice(0, 6).map(agent => (
             <div key={agent.id} className="flex items-center justify-between py-1.5">
               <div className="flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${agent.status === "active" ? "bg-emerald-400" : "bg-muted-foreground/40"}`} />
+                <span className={`w-2 h-2 rounded-full ${agent.status === "active" ? "bg-primary" : "bg-muted-foreground/40"}`} />
                 <span className="text-xs truncate max-w-[120px]">{agent.name}</span>
               </div>
-              <span className="text-[10px] text-muted-foreground font-mono">{agent.total_executions} exec</span>
+              <span className="text-[10px] text-muted-foreground font-mono">{agent.total_executions} {t("cmd.exec_unit")}</span>
             </div>
           ))}
         </div>
@@ -176,11 +176,11 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
         <div className="bg-destructive/5 border border-destructive/10 rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <AlertTriangle className="h-4 w-4 text-destructive" />
-            <span className="text-xs font-bold text-destructive">Alertas</span>
+            <span className="text-xs font-bold text-destructive">{t("cmd.alerts")}</span>
           </div>
           <div className="space-y-1.5">
-            {errorLogs > 0 && <p className="text-[11px] text-muted-foreground">⚠️ {errorLogs} erros nos últimos logs</p>}
-            {usagePercentage > 80 && <p className="text-[11px] text-muted-foreground">⚠️ Créditos em {usagePercentage}% de uso</p>}
+            {errorLogs > 0 && <p className="text-[11px] text-muted-foreground">⚠️ {t("cmd.error_count", { count: errorLogs })}</p>}
+            {usagePercentage > 80 && <p className="text-[11px] text-muted-foreground">⚠️ {t("cmd.credits_usage", { pct: usagePercentage })}</p>}
           </div>
         </div>
       )}
@@ -189,7 +189,7 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
       <div className="flex items-center justify-between py-2 px-1 text-[10px] text-muted-foreground/60">
         <div className="flex items-center gap-1.5">
           <Shield className="h-3 w-3" />
-          <span>Sistema Operacional</span>
+          <span>{t("cmd.system_operational")}</span>
         </div>
         <span>{new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
       </div>

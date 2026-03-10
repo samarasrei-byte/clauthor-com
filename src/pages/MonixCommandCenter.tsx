@@ -62,7 +62,7 @@ const MonixCommandCenter = () => {
         {/* Dashboard panel */}
         <motion.div layout className={`${dashFlex} min-w-0 flex flex-col transition-all duration-300`}>
           <div className="shrink-0 flex items-center justify-between px-4 py-1">
-            <span className="text-[11px] text-muted-foreground font-medium">Dashboard em Tempo Real</span>
+            <span className="text-[11px] text-muted-foreground font-medium">{t("cmd.realtime_dashboard")}</span>
             <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => setExpandedPanel(p => p === "dashboard" ? "none" : "dashboard")}>
               {expandedPanel === "dashboard" ? <Minimize2 className="h-3 w-3" /> : <Maximize2 className="h-3 w-3" />}
             </Button>
