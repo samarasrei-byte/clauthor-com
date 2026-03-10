@@ -594,13 +594,13 @@ const HomePage = () => {
               { step: "01", icon: Crosshair, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
               { step: "02", icon: Layers3, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
               { step: "03", icon: Bolt, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
-            ].map((item) => (
+            ].map((item, idx) => (
               <motion.div
                 key={item.step}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.4 }}
+                transition={{ delay: idx * 0.15, duration: 0.4 }}
                 className="flex items-start gap-4 sm:gap-6 group p-4 sm:p-5 rounded-xl border border-transparent hover:border-border hover:bg-card/30 transition-all duration-500"
               >
                 <div className="shrink-0 flex flex-col items-center">
