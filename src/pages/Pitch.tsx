@@ -299,12 +299,12 @@ const Pitch = () => {
       {/* ═══ 4. MERCADO ═══ */}
       <Section>
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">O maior shift operacional da história corporativa.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">The biggest operational shift in corporate history.</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { value: 1.8, suffix: "T", prefix: "US$ ", label: "Mercado global de IA até 2030", decimals: 1 },
-              { value: 35, suffix: "%+", prefix: "", label: "Crescimento anual do setor", decimals: 0 },
-              { value: 850, suffix: "+", prefix: "", label: "Empresas buscando automação B2B", decimals: 0 },
+              { value: 1.8, suffix: "T", prefix: "$ ", label: "Global AI market by 2030", decimals: 1 },
+              { value: 35, suffix: "%+", prefix: "", label: "Annual sector growth", decimals: 0 },
+              { value: 850, suffix: "+", prefix: "", label: "Companies seeking B2B automation", decimals: 0 },
             ].map((m) => (
               <GlassCard key={m.label} className="text-center !py-10">
                 <p className="text-4xl md:text-5xl font-display font-bold text-primary mb-2"><CountUp end={m.value} prefix={m.prefix} suffix={m.suffix} decimals={m.decimals} /></p>
