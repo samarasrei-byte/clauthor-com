@@ -489,7 +489,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                             <button
                               key={qa.label}
                               onClick={qa.action}
-                              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/[0.03] border border-white/[0.06] text-[10px] text-foreground/50 hover:bg-white/[0.06] hover:text-foreground/70 hover:border-primary/20 transition-all"
+                              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-card/30 border border-border/10 text-[10px] text-foreground/50 hover:bg-card/50 hover:text-foreground/70 hover:border-primary/20 transition-all"
                             >
                               <span>{qa.icon}</span>
                               {qa.label}
