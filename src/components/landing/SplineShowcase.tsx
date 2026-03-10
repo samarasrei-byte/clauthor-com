@@ -62,7 +62,7 @@ const SplineShowcase = ({ variant = "home" }: SplineShowcaseProps) => {
                   <div className="flex flex-col sm:flex-row gap-3">
                     <Link to="/waitlist">
                       <Button className="glow gap-2 px-6">
-                        {t("spline.cta", { defaultValue: "Garantir meu lugar" })}
+                        {t("spline.cta", { defaultValue: "Join the Waitlist" })}
                         <ArrowRight className="h-4 w-4" />
                       </Button>
                     </Link>

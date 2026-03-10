@@ -381,7 +381,7 @@ const HomePage = () => {
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            aria-label={t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                            aria-label={t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
                             className="group relative h-14 sm:h-14 px-10 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full"
                           >
                             <div className="absolute inset-0 bg-primary rounded-xl" />
@@ -389,7 +389,7 @@ const HomePage = () => {
                             <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_40px_hsl(var(--primary)/0.3),0_0_80px_hsl(var(--primary)/0.1)]" />
                             <span className="relative z-10 flex items-center justify-center gap-3">
                               <Rocket className="h-4 w-4" strokeWidth={1.5} />
-                              {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                              {t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
                               <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
                             </span>
                           </motion.button>
@@ -914,9 +914,9 @@ const HomePage = () => {
             </div>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to="/waitlist">
-                <Button className="glow rounded-xl h-13 px-10 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label="Entrar na waitlist">
+                <Button className="glow rounded-xl h-13 px-10 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label="Join the waitlist">
                   <Rocket className="h-4 w-4" strokeWidth={1.5} />
-                  {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                  {t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
@@ -961,7 +961,7 @@ const HomePage = () => {
             <Link to="/waitlist" className="shrink-0">
               <Button className="glow rounded-xl h-13 px-8 gap-2 font-display font-bold text-sm uppercase tracking-wider">
                 <Rocket className="h-4 w-4" strokeWidth={1.5} />
-                {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                  {t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -1071,7 +1071,7 @@ const HomePage = () => {
                   <Link to="/waitlist">
                     <Button className="glow rounded-xl h-14 px-12 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label={t("home.cta_waitlist")}>
                       <Rocket className="h-4 w-4" strokeWidth={1.5} />
-                      {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                      {t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                   </Link>
