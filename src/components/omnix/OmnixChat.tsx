@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, useId } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -252,7 +252,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         <AnimatePresence>
           {messages.map((msg, i) => (
             <motion.div
-              key={i}
+              key={`${msg.role}-${msg.timestamp.getTime()}-${i}`}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
@@ -335,7 +335,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             variant="ghost"
             size="icon"
             className="shrink-0 h-8 w-8 text-muted-foreground/40 hover:text-destructive"
-            onClick={onClear}
+            onClick={() => {
+              if (messages.length === 0) return;
+              if (messages.length > 2) {
+                const confirmed = window.confirm("Limpar todo o histórico do chat?");
+                if (!confirmed) return;
+              }
+              onClear();
+            }}
           >
             <Trash2 className="h-3.5 w-3.5" />
           </Button>

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Sparkles, MessageSquare, Compass, Target, Send, ChevronRight,
@@ -70,6 +71,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
     } else {
       const task = `[Modo Guiado] O usuário definiu:\n• Objetivo principal: ${newAnswers[0]}\n• Prazo desejado: ${newAnswers[1] || answer}\n• Escala de impacto: ${newAnswers[2] || answer}\n\nCom base nessas informações, elabore um plano de ação detalhado com os agentes mais adequados.`;
       onSubmitTask(task, "guided");
+      toast.success("Enviando para o THOR...", { description: "Seu objetivo foi registrado. Os agentes serão acionados." });
       setGuidedStep(0);
       setGuidedAnswers([]);
     }
@@ -164,7 +166,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
                   {QUICK_TASKS.map(({ icon: Icon, label, color }) => (
                     <button
                       key={label}
-                      onClick={() => { setSimpleInput(label); }}
+                      onClick={() => { onSubmitTask(label, "simple"); }}
                       className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] rounded-lg bg-muted/20 hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-colors border border-border/10"
                     >
                       <Icon className={cn("h-3 w-3", color)} />
