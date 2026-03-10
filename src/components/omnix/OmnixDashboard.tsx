@@ -176,9 +176,9 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
                 <p className="text-[9px] text-muted-foreground/60">{kpi.label}</p>
                 <div className="flex items-center gap-1.5">
                   <span className="font-display font-bold text-sm">{kpi.value}</span>
-                  {kpi.trend === "up" && <TrendingUp className="h-3 w-3 text-emerald-400" />}
+                  {kpi.trend === "up" && <TrendingUp className="h-3 w-3 text-primary" />}
                   {kpi.trend === "down" && <TrendingUp className="h-3 w-3 text-destructive rotate-180" />}
-                  {kpi.delta && <span className={`text-[9px] ${kpi.trend === "up" ? "text-emerald-400" : "text-destructive"}`}>{kpi.delta}</span>}
+                  {kpi.delta && <span className={`text-[9px] ${kpi.trend === "up" ? "text-primary" : "text-destructive"}`}>{kpi.delta}</span>}
                 </div>
               </div>
             ))}
