@@ -348,13 +348,13 @@ const Pitch = () => {
       {/* ═══ 6. RODADA ATUAL ═══ */}
       <Section>
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-mono uppercase tracking-widest mb-6">Rodada aberta</motion.div>
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Pré-Seed Aberto</h2>
+          <motion.div className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-mono uppercase tracking-widest mb-6">Round Open</motion.div>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Pre-Seed Open</h2>
           <div className="grid sm:grid-cols-3 gap-6 mb-14">
             {[
-              { label: "Captação", value: "R$ 200.000" },
-              { label: "Equity ofertado", value: "10%" },
-              { label: "Valuation implícito", value: "R$ 2.000.000" },
+              { label: "Raising", value: "$50,000" },
+              { label: "Equity offered", value: "10%" },
+              { label: "Implied valuation", value: "$500,000" },
             ].map((item) => (
               <GlassCard key={item.label} hover={false} className="text-center !py-8">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
@@ -363,10 +363,10 @@ const Pitch = () => {
             ))}
           </div>
           <div className="max-w-lg mx-auto space-y-5">
-            <h3 className="text-sm uppercase tracking-widest text-muted-foreground mb-6">Uso do Capital</h3>
-            <AnimatedBar label="Growth (tráfego, influência, B2B)" pct={70} color="bg-primary" />
-            <AnimatedBar label="Infraestrutura" pct={20} color="bg-accent-violet" />
-            <AnimatedBar label="Reserva estratégica" pct={10} color="bg-accent-cyan" />
+            <h3 className="text-sm uppercase tracking-widest text-muted-foreground mb-6">Use of Capital</h3>
+            <AnimatedBar label="Growth (traffic, influence, B2B)" pct={70} color="bg-primary" />
+            <AnimatedBar label="Infrastructure" pct={20} color="bg-accent-violet" />
+            <AnimatedBar label="Strategic reserve" pct={10} color="bg-accent-cyan" />
           </div>
         </div>
       </Section>
