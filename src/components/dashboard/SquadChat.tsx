@@ -13,6 +13,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ReactMarkdown from "react-markdown";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface Agent {
   id: string;
@@ -39,8 +40,8 @@ interface SquadChatProps {
 
 const tierDot: Record<string, string> = {
   basic: "bg-muted-foreground",
-  intermediate: "bg-blue-400",
-  advanced: "bg-emerald-400",
+  intermediate: "bg-primary/60",
+  advanced: "bg-primary",
   enterprise: "bg-primary",
 };
 
@@ -66,6 +67,7 @@ function agentInitials(name: string): string {
 
 const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [mode, setMode] = useState<"individual" | "grupo">("individual");
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
@@ -177,7 +179,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
 
   const getLastMessage = (agentId: string): string => {
     const msg = lastMessages[agentId];
-    if (!msg) return "Toque para conversar";
+    if (!msg) return t("squad.tap_to_chat");
     return msg.content.slice(0, 50) + (msg.content.length > 50 ? "…" : "");
   };
 
@@ -227,7 +229,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData?.session?.access_token;
-      if (!token) { toast.error("Faça login."); setIsLoading(false); return; }
+      if (!token) { toast.error(t("squad.login_required")); setIsLoading(false); return; }
 
       // Build conversation history from persisted messages
       const history = messages.slice(-10).map(m => ({
@@ -251,8 +253,8 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
 
       if (!response.ok) {
         const data = await response.json();
-        if (response.status === 402) toast.error("Créditos esgotados!");
-        else toast.error(data.error || "Erro ao enviar.");
+        if (response.status === 402) toast.error(t("squad.credits_exhausted"));
+        else toast.error(data.error || t("squad.send_error"));
         setIsLoading(false);
         return;
       }
@@ -277,7 +279,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
       queryClient.invalidateQueries({ queryKey: ["squad-chat-last-messages"] });
     } catch (err) {
       console.error("Chat error:", err);
-      toast.error("Erro de conexão.");
+      toast.error(t("squad.connection_error"));
     } finally {
       setIsLoading(false);
     }
@@ -293,9 +295,9 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
       {/* Header with Tabs */}
       <div className="px-4 py-4 border-b border-border/20">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-display font-bold text-lg">Equipe</h2>
+          <h2 className="font-display font-bold text-lg">{t("squad.title")}</h2>
           <Badge className="bg-primary/10 text-primary border-0 text-[10px]">
-            {activeAgents.length} agentes
+            {t("squad.agents_count", { count: activeAgents.length })}
           </Badge>
         </div>
         
@@ -303,11 +305,11 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
           <TabsList className="w-full h-9 p-1 bg-muted/30">
             <TabsTrigger value="individual" className="flex-1 text-xs gap-1.5 data-[state=active]:bg-background">
               <User className="h-3.5 w-3.5" />
-              Chat 1:1
+              {t("squad.chat_individual")}
             </TabsTrigger>
             <TabsTrigger value="grupo" className="flex-1 text-xs gap-1.5 data-[state=active]:bg-background">
               <Users className="h-3.5 w-3.5" />
-              Grupo
+              {t("squad.chat_group")}
             </TabsTrigger>
           </TabsList>
         </Tabs>
@@ -319,7 +321,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Buscar agente..."
+              placeholder={t("squad.search_agent")}
               className="w-full bg-background/50 border border-border/30 rounded-xl pl-10 pr-4 py-2.5 text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
             />
           </div>
@@ -333,7 +335,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
             <div className="flex flex-col items-center justify-center h-full text-center px-6">
               <Bot className="h-10 w-10 text-muted-foreground/30 mb-3" />
               <p className="text-sm text-muted-foreground">
-                {activeAgents.length === 0 ? "Nenhum agente ativo" : "Nenhum resultado"}
+                {activeAgents.length === 0 ? t("squad.no_active_agents") : t("squad.no_results")}
               </p>
               {activeAgents.length === 0 && (
                 <Button 
@@ -341,7 +343,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                   className="text-primary text-xs mt-2"
                   onClick={() => onRequestAgent?.("")}
                 >
-                  Contratar agentes →
+                  {t("squad.hire_agents")}
                 </Button>
               )}
             </div>
@@ -370,7 +372,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                     </div>
                     <div className={cn(
                       "absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-background",
-                      agent.status === "active" ? "bg-emerald-400" : "bg-muted-foreground/50"
+                      agent.status === "active" ? "bg-primary" : "bg-muted-foreground/50"
                     )} />
                   </div>
 
@@ -397,16 +399,16 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg mb-4">
             <Users className="h-7 w-7 text-white" />
           </div>
-          <h3 className="font-display font-bold text-base mb-2">Chat em Grupo</h3>
+          <h3 className="font-display font-bold text-base mb-2">{t("squad.group_chat")}</h3>
           <p className="text-xs text-muted-foreground max-w-xs mb-4">
-            Converse com toda sua equipe de agentes simultaneamente. Eles colaboram entre si para resolver sua demanda.
+            {t("squad.group_desc")}
           </p>
           <Button 
             variant="default" 
             size="sm"
             onClick={() => { setShowMobileChat(true); inputRef.current?.focus(); }}
           >
-            Abrir Chat
+            {t("squad.open_chat")}
           </Button>
         </div>
       )}
@@ -416,10 +418,10 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
   // ═══════════ CHAT AREA ═══════════
   const ChatArea = () => {
     const showChat = mode === "grupo" || selectedAgent;
-    const chatTitle = mode === "grupo" ? "Grupo da Equipe" : selectedAgent?.name || "";
+    const chatTitle = mode === "grupo" ? t("squad.group_team") : selectedAgent?.name || "";
     const chatSubtitle = mode === "grupo" 
-      ? `${activeAgents.length} agentes colaborando`
-      : (selectedAgent?.description || selectedAgent?.objective || "Agente IA");
+      ? t("squad.agents_collaborating", { count: activeAgents.length })
+      : (selectedAgent?.description || selectedAgent?.objective || t("squad.ai_agent"));
 
     return (
       <div className={cn(
@@ -431,9 +433,9 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
             <div className="w-20 h-20 rounded-full bg-primary/5 border border-primary/10 flex items-center justify-center mb-4">
               <MessageSquare className="h-8 w-8 text-primary/40" />
             </div>
-            <h3 className="font-display font-bold text-lg text-foreground mb-2">Selecione um agente</h3>
+            <h3 className="font-display font-bold text-lg text-foreground mb-2">{t("squad.select_agent")}</h3>
             <p className="text-sm text-muted-foreground max-w-xs">
-              Escolha um agente da sua equipe para iniciar uma conversa individual.
+              {t("squad.select_agent_desc")}
             </p>
           </div>
         ) : (
@@ -486,9 +488,9 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                         <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg mb-4">
                           <Users className="h-6 w-6 text-white" />
                         </div>
-                        <h3 className="font-display font-bold text-base mb-1">Chat em Grupo</h3>
+                        <h3 className="font-display font-bold text-base mb-1">{t("squad.group_empty_title")}</h3>
                         <p className="text-xs text-muted-foreground mb-4 max-w-xs">
-                          Faça perguntas para toda sua equipe. Os agentes colaboram para resolver.
+                          {t("squad.group_empty_desc")}
                         </p>
                       </>
                     ) : (
@@ -498,12 +500,12 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                         </div>
                         <h3 className="font-display font-bold text-base mb-1">{selectedAgent?.name}</h3>
                         <p className="text-xs text-muted-foreground mb-4 max-w-xs">
-                          {selectedAgent?.description || selectedAgent?.objective || "Agente de IA pronto para ajudar"}
+                          {selectedAgent?.description || selectedAgent?.objective || t("squad.agent_ready")}
                         </p>
                       </>
                     )}
                     <div className="flex flex-wrap gap-2 justify-center">
-                      {["Como você pode me ajudar?", "Qual seu objetivo?", "Me dê um relatório"].map((q) => (
+                      {[t("squad.quick_help"), t("squad.quick_objective"), t("squad.quick_report")].map((q) => (
                         <button
                           key={q}
                           onClick={() => { setInput(q); inputRef.current?.focus(); }}
@@ -535,7 +537,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                         {msg.role === "assistant" && mode === "grupo" && msg.agent_name && (
                           <div className="text-[10px] font-semibold text-primary mb-1">{msg.agent_name}</div>
                         )}
-                        <div className="text-[14px] leading-relaxed prose prose-sm prose-invert max-w-none [&>p]:mb-1 [&>p:last-child]:mb-0">
+                        <div className="text-[14px] leading-relaxed prose prose-sm dark:prose-invert max-w-none [&>p]:mb-1 [&>p:last-child]:mb-0">
                           <ReactMarkdown>{msg.content}</ReactMarkdown>
                         </div>
                         <div className={cn(
@@ -571,7 +573,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                           <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0.2 }} />
                           <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0.4 }} />
                         </div>
-                        <span className="text-[10px] text-muted-foreground">digitando...</span>
+                        <span className="text-[10px] text-muted-foreground">{t("squad.typing")}</span>
                       </div>
                     </div>
                   </motion.div>
@@ -595,7 +597,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                         handleSend();
                       }
                     }}
-                    placeholder={mode === "grupo" ? "Mensagem para a equipe..." : `Mensagem para ${selectedAgent?.name || "agente"}...`}
+                    placeholder={mode === "grupo" ? t("squad.msg_group_placeholder") : t("squad.msg_agent_placeholder", { name: selectedAgent?.name || "" })}
                     rows={1}
                     className="w-full resize-none bg-background/60 border border-border/30 rounded-2xl px-4 py-3 text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all max-h-32"
                     style={{ minHeight: "44px" }}

@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 /* ═══════════════════════════════════════════════════════
    TYPES
@@ -258,6 +259,7 @@ const CollaborationLine = ({
 
 const HolographicMeetingRoom = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [meetingActive, setMeetingActive] = useState(false);
   const [topic, setTopic] = useState("");
   const [messages, setMessages] = useState<MeetingMessage[]>([]);
@@ -468,8 +470,8 @@ Apenas o texto, sem introduções.`,
 
     // Fallback action items if none generated
     setActionItems(prev => prev.length > 0 ? prev : [
-      { id: "1", task: "Executar plano estratégico", assignedTo: active[0]?.name || "Equipe", priority: "high" },
-      { id: "2", task: "Preparar relatório de resultados", assignedTo: active[1]?.name || "Equipe", priority: "medium" },
+      { id: "1", task: t("meeting.fallback_task1"), assignedTo: active[0]?.name || t("team.title"), priority: "high" },
+      { id: "2", task: t("meeting.fallback_task2"), assignedTo: active[1]?.name || t("team.title"), priority: "medium" },
     ]);
 
     setPhase("conclusion");
@@ -502,8 +504,8 @@ Apenas o texto, sem introduções.`,
       {
         id: `user-${Date.now()}`,
         agentId: "user",
-        agentName: "Você",
-        agentRole: "Líder",
+        agentName: t("meeting.you"),
+        agentRole: t("meeting.leader"),
         content: userContent,
         type: "question",
         timestamp: new Date(),
@@ -661,7 +663,7 @@ Apenas o texto, sem introduções.`,
                 className="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-primary/10 border border-primary/20"
               >
                 <Users className="h-4 w-4 text-primary" />
-                <span className="text-xs font-bold text-primary tracking-widest uppercase">Sala de Reunião</span>
+                <span className="text-xs font-bold text-primary tracking-widest uppercase">{t("meeting.room_label")}</span>
               </motion.div>
               
               <motion.h1
@@ -671,7 +673,7 @@ Apenas o texto, sem introduções.`,
                 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold"
               >
                 <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-                  Sala de Reunião
+                  {t("meeting.room_title")}
                 </span>
               </motion.h1>
               
@@ -681,8 +683,7 @@ Apenas o texto, sem introduções.`,
                 transition={{ delay: 0.3 }}
                 className="text-muted-foreground text-sm md:text-base max-w-lg mx-auto"
               >
-                Convoque seu time de especialistas em IA para uma reunião estratégica. 
-                Descreva um objetivo e veja a magia acontecer.
+                {t("meeting.room_desc")}
               </motion.p>
             </div>
 
@@ -733,7 +734,7 @@ Apenas o texto, sem introduções.`,
                 <textarea
                   value={topic}
                   onChange={(e) => setTopic(e.target.value)}
-                  placeholder='Descreva seu objetivo… Ex: "Criar campanha para a Copa do Mundo"'
+                  placeholder={t("meeting.topic_placeholder")}
                   rows={3}
                   className="w-full resize-none rounded-2xl bg-card/50 backdrop-blur-xl border border-border/40 px-6 py-5 pr-16 text-sm md:text-base text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all shadow-xl"
                   onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); startMeeting(); } }}
@@ -753,7 +754,7 @@ Apenas o texto, sem introduções.`,
 
               {/* Quick suggestions */}
               <div className="flex flex-wrap gap-2 justify-center">
-                {["Lançar novo produto", "Aumentar conversão", "Campanha Black Friday", "Reduzir churn", "Otimizar funil"].map((s) => (
+                {[t("meeting.suggestion_launch"), t("meeting.suggestion_conversion"), t("meeting.suggestion_black_friday"), t("meeting.suggestion_churn"), t("meeting.suggestion_funnel")].map((s) => (
                   <button
                     key={s}
                     onClick={() => setTopic(s)}
@@ -773,10 +774,10 @@ Apenas o texto, sem introduções.`,
                   className="gap-3 px-12 py-7 text-base md:text-lg rounded-2xl shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all hover:scale-105"
                 >
                   <Play className="h-5 w-5" />
-                  Iniciar Reunião com {agents.length} Agentes
+                  {t("meeting.start_meeting", { count: agents.length })}
                 </Button>
                 {agents.length < 2 && (
-                  <p className="text-xs text-muted-foreground mt-4">Mínimo de 2 agentes ativos necessários</p>
+                  <p className="text-xs text-muted-foreground mt-4">{t("meeting.min_agents")}</p>
                 )}
               </div>
             </motion.div>
@@ -799,14 +800,14 @@ Apenas o texto, sem introduções.`,
                   phase === "conclusion" ? "bg-accent-emerald" : "bg-primary animate-pulse"
                 )} />
                 <span className="text-sm md:text-base font-display font-semibold">
-                  {phase === "discussion" ? "Discussão em Andamento" : 
-                   phase === "planning" ? "Gerando Plano de Ação…" : 
-                   phase === "conclusion" ? "✓ Plano Pronto" : "Preparando…"}
+                  {phase === "discussion" ? t("meeting.discussion") : 
+                   phase === "planning" ? t("meeting.generating_plan") : 
+                   phase === "conclusion" ? t("meeting.plan_ready") : t("meeting.preparing")}
                 </span>
-                <Badge variant="secondary" className="text-xs">{selectedAgents.length} agentes ativos</Badge>
+                <Badge variant="secondary" className="text-xs">{t("meeting.agents_active", { count: selectedAgents.length })}</Badge>
               </div>
               <Button variant="ghost" size="sm" onClick={resetMeeting} className="gap-2 text-xs text-muted-foreground hover:text-foreground">
-                <RotateCcw className="h-4 w-4" /> Nova Reunião
+                <RotateCcw className="h-4 w-4" /> {t("meeting.new_meeting")}
               </Button>
             </div>
 
@@ -848,14 +849,14 @@ Apenas o texto, sem introduções.`,
                     >
                       {phase === "conclusion" ? (
                         <div className="space-y-2">
-                          <ListChecks className="h-8 w-8 text-accent-emerald mx-auto" />
-                          <p className="text-sm font-bold text-accent-emerald">Plano Gerado</p>
-                          <p className="text-xs text-muted-foreground">{actionItems.length} tarefas criadas</p>
+                          <ListChecks className="h-8 w-8 text-primary mx-auto" />
+                          <p className="text-sm font-bold text-primary">{t("meeting.plan_generated")}</p>
+                          <p className="text-xs text-muted-foreground">{t("meeting.tasks_created", { count: actionItems.length })}</p>
                         </div>
                       ) : (
                         <div className="space-y-2">
                           <Lightbulb className="h-6 w-6 text-primary/70 mx-auto" />
-                          <p className="text-[10px] text-primary/60 uppercase tracking-widest">Objetivo</p>
+                          <p className="text-[10px] text-primary/60 uppercase tracking-widest">{t("meeting.objective")}</p>
                           <p className="text-xs md:text-sm font-medium text-primary/90 leading-relaxed line-clamp-2 max-w-xs">{topic}</p>
                         </div>
                       )}
@@ -948,7 +949,7 @@ Apenas o texto, sem introduções.`,
                         ))}
                       </div>
                       <span className="text-xs text-muted-foreground">
-                        {agents.find((a) => a.id === speakingAgentId)?.name || "Agente"} está analisando…
+                        {agents.find((a) => a.id === speakingAgentId)?.name || "Agent"} {t("meeting.analyzing")}
                       </span>
                     </motion.div>
                   )}
@@ -962,11 +963,11 @@ Apenas o texto, sem introduções.`,
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
-                      className="border-t border-border/10 bg-accent-emerald/[0.03] p-4 space-y-3 max-h-56 overflow-y-auto"
+                      className="border-t border-border/10 bg-primary/[0.03] p-4 space-y-3 max-h-56 overflow-y-auto"
                     >
                       <div className="flex items-center gap-2 mb-3">
-                        <ListChecks className="h-5 w-5 text-accent-emerald" />
-                        <span className="text-sm font-bold text-accent-emerald">Plano de Ação</span>
+                        <ListChecks className="h-5 w-5 text-primary" />
+                        <span className="text-sm font-bold text-primary">{t("meeting.action_plan")}</span>
                       </div>
                       {actionItems.map((item, idx) => (
                         <motion.div
@@ -976,7 +977,7 @@ Apenas o texto, sem introduções.`,
                           transition={{ delay: idx * 0.1 }}
                           className="flex items-center gap-3 text-sm"
                         >
-                          <ChevronRight className="h-4 w-4 text-accent-emerald shrink-0" />
+                          <ChevronRight className="h-4 w-4 text-primary shrink-0" />
                           <span className="flex-1 text-foreground/80">{item.task}</span>
                           <Badge variant="outline" className={cn("text-[9px] shrink-0", priorityStyle(item.priority))}>
                             {item.priority}
@@ -994,7 +995,7 @@ Apenas o texto, sem introduções.`,
                       <input
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Pergunte algo ao seu time de IA…"
+                        placeholder={t("meeting.ask_team")}
                         className="w-full h-12 rounded-xl bg-card/60 border border-border/30 px-4 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all"
                         onKeyDown={(e) => { if (e.key === "Enter") handleSendInput(); }}
                       />
