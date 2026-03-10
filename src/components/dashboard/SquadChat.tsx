@@ -505,7 +505,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                       </>
                     )}
                     <div className="flex flex-wrap gap-2 justify-center">
-                      {["Como você pode me ajudar?", "Qual seu objetivo?", "Me dê um relatório"].map((q) => (
+                      {[t("squad.quick_help"), t("squad.quick_objective"), t("squad.quick_report")].map((q) => (
                         <button
                           key={q}
                           onClick={() => { setInput(q); inputRef.current?.focus(); }}
