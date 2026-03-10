@@ -295,9 +295,9 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
       {/* Header with Tabs */}
       <div className="px-4 py-4 border-b border-border/20">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="font-display font-bold text-lg">Equipe</h2>
+          <h2 className="font-display font-bold text-lg">{t("squad.title")}</h2>
           <Badge className="bg-primary/10 text-primary border-0 text-[10px]">
-            {activeAgents.length} agentes
+            {t("squad.agents_count", { count: activeAgents.length })}
           </Badge>
         </div>
         
