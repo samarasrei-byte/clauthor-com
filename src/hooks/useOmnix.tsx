@@ -178,7 +178,19 @@ export function useOmnix() {
         }
       }
     } catch (err: any) {
-      if (err.name === "AbortError") return;
+      if (err.name === "AbortError") {
+        // Mark truncated assistant message
+        setMessages(prev => {
+          const last = prev[prev.length - 1];
+          if (last?.role === "assistant" && last.content) {
+            const next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: m.content + "\n\n⏹ *Resposta interrompida.*" } : m);
+            messagesRef.current = next;
+            return next;
+          }
+          return prev;
+        });
+        return;
+      }
       console.error("Omnix error:", err);
       toast.error("Erro de conexão.");
     } finally {
