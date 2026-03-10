@@ -149,7 +149,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
 
   const selectedItemName = selectedPlan
     ? plans.find((p) => p.id === selectedPlan)?.name
-    : `Pacote ${tokenPacks.find((p) => p.id === selectedPack)?.tokens}`;
+    : `Pack ${tokenPacks.find((p) => p.id === selectedPack)?.tokens}`;
 
   const handlePayment = (method: PaymentMethod) => {
     setPaymentMethod(method);
