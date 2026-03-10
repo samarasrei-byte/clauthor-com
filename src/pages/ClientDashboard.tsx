@@ -92,6 +92,7 @@ const ClientDashboard = () => {
   }, [user]);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
+  const [omnixMounted, setOmnixMounted] = useState(false);
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
   const [showBoardGate, setShowBoardGate] = useState(false);
   const [boardGateSkipped, setBoardGateSkipped] = useState(false);
