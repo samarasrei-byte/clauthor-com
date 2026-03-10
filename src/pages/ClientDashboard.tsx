@@ -455,7 +455,10 @@ const ClientDashboard = () => {
                 <CompanyBoardGate
                   agentName={selectedAgent.name}
                   onSetupCompany={() => setShowCompanyOnboarding(true)}
-                  onSkip={() => setBoardGateSkipped(true)}
+                  onSkip={() => {
+                    setBoardGateSkipped(true);
+                    if (user) localStorage.setItem(`clauthor_board_gate_skipped_${user.id}`, "true");
+                  }}
                 />
               ) : (
                 <div className="h-full flex flex-col">
