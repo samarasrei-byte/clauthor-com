@@ -176,7 +176,7 @@ export function useOmnix() {
       setIsStreaming(false);
       abortRef.current = null;
     }
-  }, [messages, config]);
+  }, [config]);
 
   const stopStreaming = useCallback(() => abortRef.current?.abort(), []);
   const clearMessages = useCallback(() => setMessages([]), []);
