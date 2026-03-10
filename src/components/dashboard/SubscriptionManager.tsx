@@ -79,11 +79,11 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
           <div className="bg-white/[0.02] rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Calendar className="h-4 w-4 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Próxima Cobrança</span>
+              <span className="text-xs text-muted-foreground">{t("subscription.next_billing", { defaultValue: "Next Billing" })}</span>
             </div>
             <p className="font-display text-xl font-bold">
               {nextBilling
-                ? nextBilling.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })
+                ? nextBilling.toLocaleDateString(locale, { day: "2-digit", month: "short" })
                 : "—"}
             </p>
           </div>
