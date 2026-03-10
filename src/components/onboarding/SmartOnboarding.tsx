@@ -53,16 +53,16 @@ const industries = [
 const popularChallenges = new Set(["sales", "support", "marketing"]);
 
 const challenges = [
-  { id: "sales", label: "Vender mais e prospectar clientes", icon: DollarSign, agents: ["sales", "sdr_outbound", "voice_ai", "crm_manager"], dept: "Comercial" },
-  { id: "support", label: "Atender clientes 24/7", icon: Headphones, agents: ["support_channel", "omnichannel", "voice_support", "rag"], dept: "Suporte" },
-  { id: "marketing", label: "Criar conteúdo e atrair leads", icon: Megaphone, agents: ["content", "seo_growth", "marketing_automation", "media_buyer"], dept: "Marketing" },
-  { id: "finance", label: "Controlar financeiro e cobranças", icon: Receipt, agents: ["revenue", "ai_cfo", "data_analytics"], dept: "Financeiro" },
-  { id: "operations", label: "Organizar processos e projetos", icon: BarChart3, agents: ["orchestrator", "project_management", "scheduler"], dept: "Operações" },
-  { id: "hr", label: "Recrutar e treinar equipe", icon: Users, agents: ["hr", "training", "people_analytics"], dept: "RH" },
-  { id: "tech", label: "Desenvolver software ou infra", icon: Cpu, agents: ["coding", "computer", "data_engineer"], dept: "Tecnologia" },
-  { id: "creative", label: "Design, vídeo e branding", icon: PenTool, agents: ["creative_design", "video_production", "branding"], dept: "Criação" },
-  { id: "legal", label: "Jurídico e compliance", icon: Shield, agents: ["legal", "contract_analyst", "compliance_officer"], dept: "Jurídico" },
-  { id: "ecommerce", label: "Escalar e-commerce e tráfego", icon: LineChart, agents: ["ecommerce", "paid_traffic", "affiliate_manager"], dept: "E-commerce" },
+  { id: "sales", label: "Sell more and prospect clients", icon: DollarSign, agents: ["sales", "sdr_outbound", "voice_ai", "crm_manager"], dept: "Sales" },
+  { id: "support", label: "24/7 customer support", icon: Headphones, agents: ["support_channel", "omnichannel", "voice_support", "rag"], dept: "Support" },
+  { id: "marketing", label: "Create content and attract leads", icon: Megaphone, agents: ["content", "seo_growth", "marketing_automation", "media_buyer"], dept: "Marketing" },
+  { id: "finance", label: "Financial control and billing", icon: Receipt, agents: ["revenue", "ai_cfo", "data_analytics"], dept: "Finance" },
+  { id: "operations", label: "Organize processes and projects", icon: BarChart3, agents: ["orchestrator", "project_management", "scheduler"], dept: "Operations" },
+  { id: "hr", label: "Recruit and train your team", icon: Users, agents: ["hr", "training", "people_analytics"], dept: "HR" },
+  { id: "tech", label: "Develop software or infrastructure", icon: Cpu, agents: ["coding", "computer", "data_engineer"], dept: "Technology" },
+  { id: "creative", label: "Design, video and branding", icon: PenTool, agents: ["creative_design", "video_production", "branding"], dept: "Creative" },
+  { id: "legal", label: "Legal and compliance", icon: Shield, agents: ["legal", "contract_analyst", "compliance_officer"], dept: "Legal" },
+  { id: "ecommerce", label: "Scale e-commerce and traffic", icon: LineChart, agents: ["ecommerce", "paid_traffic", "affiliate_manager"], dept: "E-commerce" },
 ];
 
 const teamSizes = [
