@@ -71,6 +71,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
     } else {
       const task = `[Modo Guiado] O usuário definiu:\n• Objetivo principal: ${newAnswers[0]}\n• Prazo desejado: ${newAnswers[1] || answer}\n• Escala de impacto: ${newAnswers[2] || answer}\n\nCom base nessas informações, elabore um plano de ação detalhado com os agentes mais adequados.`;
       onSubmitTask(task, "guided");
+      toast.success("Enviando para o THOR...", { description: "Seu objetivo foi registrado. Os agentes serão acionados." });
       setGuidedStep(0);
       setGuidedAnswers([]);
     }
