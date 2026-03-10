@@ -279,7 +279,6 @@ const HolographicMeetingRoom = () => {
         .from("agents")
         .select("*")
         .eq("user_id", user!.id)
-        .eq("status", "active")
         .limit(6);
       if (error) throw error;
       return data;
