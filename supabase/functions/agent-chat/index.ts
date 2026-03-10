@@ -367,7 +367,7 @@ async function delegateToAgent(
     .eq("status", "active");
 
   if (agentsError || !agents || agents.length === 0) {
-    return { success: false, result: { error: "Nenhum agente ativo encontrado para delegação." } };
+    return { success: false, result: { error: "No active agents found for delegation." } };
   }
 
   const targetName = args.target_agent_name.toLowerCase();
