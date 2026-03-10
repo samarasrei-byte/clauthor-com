@@ -1069,7 +1069,7 @@ const HomePage = () => {
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link to="/waitlist">
-                    <Button className="glow rounded-xl h-14 px-12 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label="Entrar na waitlist">
+                    <Button className="glow rounded-xl h-14 px-12 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label={t("home.cta_waitlist")}>
                       <Rocket className="h-4 w-4" strokeWidth={1.5} />
                       {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
                       <ArrowRight className="h-4 w-4" />
