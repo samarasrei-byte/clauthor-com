@@ -91,7 +91,7 @@ export function useOmnix() {
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData?.session?.access_token;
       if (!token) {
-        toast.error("Você precisa estar logado.");
+        toast.error("You need to be logged in.");
         setIsLoading(false);
         setIsStreaming(false);
         return;
@@ -123,9 +123,9 @@ export function useOmnix() {
           return cleaned;
         });
         const data = await response.json().catch(() => ({}));
-        if (response.status === 402) toast.error("Créditos esgotados! Faça upgrade.");
-        else if (response.status === 429) toast.error("Limite de requisições. Tente novamente.");
-        else toast.error(data.error || "Erro ao processar.");
+        if (response.status === 402) toast.error("Credits exhausted! Please upgrade.");
+        else if (response.status === 429) toast.error("Rate limit reached. Try again shortly.");
+        else toast.error(data.error || "Error processing request.");
         setIsLoading(false);
         setIsStreaming(false);
         return;
@@ -183,7 +183,7 @@ export function useOmnix() {
         setMessages(prev => {
           const last = prev[prev.length - 1];
           if (last?.role === "assistant" && last.content) {
-            const next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: m.content + "\n\n⏹ *Resposta interrompida.*" } : m);
+            const next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: m.content + "\n\n⏹ *Response interrupted.*" } : m);
             messagesRef.current = next;
             return next;
           }
@@ -192,7 +192,7 @@ export function useOmnix() {
         return;
       }
       console.error("Omnix error:", err);
-      toast.error("Erro de conexão.");
+      toast.error("Connection error.");
     } finally {
       setIsLoading(false);
       setIsStreaming(false);

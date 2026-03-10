@@ -8,168 +8,146 @@ interface OmnixOrbProps {
   className?: string;
 }
 
-const RING_COUNT = 48;
+const BAR_COUNT = 64;
 
-const OmnixOrb = ({ state, className }: OmnixOrbProps) => {
+const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
   const isActive = state !== "idle";
 
   const seeds = useMemo(
-    () => Array.from({ length: RING_COUNT }, () => [Math.random(), Math.random()]),
+    () => Array.from({ length: BAR_COUNT }, () => [Math.random(), Math.random(), Math.random()]),
     []
   );
 
-  const stateColor = {
-    idle: "hsl(var(--muted-foreground) / 0.15)",
-    listening: "hsl(var(--primary))",
-    speaking: "hsl(var(--primary))",
-    processing: "hsl(var(--primary))",
+  const stateLabel = {
+    idle: "",
+    listening: "LISTENING",
+    speaking: "SPEAKING",
+    processing: "THINKING",
   }[state];
 
   return (
-    <div className={cn("relative w-36 h-36 flex items-center justify-center", className)}>
-      {/* Ambient glow */}
-      {isActive && (
-        <motion.div
-          className="absolute inset-[-40px] rounded-full pointer-events-none"
-          style={{
-            background: `radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%)`,
-          }}
-          animate={{ scale: [1, 1.15, 1], opacity: [0.4, 0.7, 0.4] }}
-          transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-        />
-      )}
-
-      {/* Rotating scan arc */}
-      {isActive && (
-        <motion.div
-          className="absolute inset-[-8px] rounded-full"
-          style={{
-            border: "1.5px solid transparent",
-            borderTopColor: "hsl(var(--primary) / 0.5)",
-          }}
-          animate={{ rotate: [0, 360] }}
-          transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
-        />
-      )}
-
-      {/* Main orb container — transparent with border */}
-      <div
-        className={cn(
-          "relative w-28 h-28 rounded-full flex items-center justify-center overflow-hidden z-10",
-          "border transition-colors duration-500",
-          state === "idle" ? "border-muted-foreground/10" : "border-primary/30"
-        )}
-        style={{
-          boxShadow: isActive ? `0 0 40px hsl(var(--primary) / 0.15), inset 0 0 30px hsl(var(--primary) / 0.05)` : "none",
-        }}
+    <div className={cn("relative flex flex-col items-center gap-3", className)}>
+      {/* Name */}
+      <motion.span
+        className="text-[11px] font-mono tracking-[0.35em] uppercase text-muted-foreground/50"
+        animate={{ opacity: isActive ? 1 : 0.4 }}
       >
-        {/* Circular waveform — the star of the show */}
-        <svg viewBox="0 0 200 200" className="w-full h-full">
-          {seeds.map(([r1, r2], i) => {
-            const angle = (i / RING_COUNT) * 360;
-            const rad = (angle * Math.PI) / 180;
-            const baseRadius = 60;
+        {name}
+      </motion.span>
 
-            const amplitudes = {
-              idle: 2 + r1 * 3,
-              listening: 8 + r1 * 18,
-              speaking: 12 + r1 * 24,
-              processing: 6 + r1 * 14,
+      {/* Waveform container — wide horizontal strip */}
+      <div className="relative w-[320px] sm:w-[400px] h-[80px] flex items-center justify-center">
+        {/* Ambient glow behind waveform */}
+        {isActive && (
+          <motion.div
+            className="absolute inset-0 rounded-full pointer-events-none"
+            style={{
+              background: `radial-gradient(ellipse 80% 100% at center, hsl(var(--primary) / 0.12) 0%, transparent 70%)`,
+            }}
+            animate={{ opacity: [0.3, 0.7, 0.3] }}
+            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+          />
+        )}
+
+        {/* The waveform bars — horizontal, filling the width */}
+        <svg
+          viewBox={`0 0 ${BAR_COUNT * 6.5} 80`}
+          className="w-full h-full"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <defs>
+            <linearGradient id="bar-gradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
+              <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="1" />
+              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
+            </linearGradient>
+            <linearGradient id="bar-idle" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="hsl(var(--muted-foreground))" stopOpacity="0.08" />
+              <stop offset="50%" stopColor="hsl(var(--muted-foreground))" stopOpacity="0.15" />
+              <stop offset="100%" stopColor="hsl(var(--muted-foreground))" stopOpacity="0.08" />
+            </linearGradient>
+          </defs>
+
+          {seeds.map(([r1, r2, r3], i) => {
+            const x = i * 6.5 + 3;
+            const center = 40;
+
+            // Distance from center (0..1) — bars taller near center, shorter at edges
+            const centerFactor = 1 - Math.abs((i - BAR_COUNT / 2) / (BAR_COUNT / 2));
+            const envelope = 0.3 + centerFactor * 0.7;
+
+            const heights = {
+              idle: (3 + r1 * 4) * envelope,
+              listening: (10 + r1 * 28) * envelope,
+              speaking: (14 + r1 * 32) * envelope,
+              processing: (8 + r1 * 20) * envelope,
             };
-            const amp = amplitudes[state];
+            const h = heights[state];
+            const halfH = h / 2;
 
-            const innerR = baseRadius - amp * 0.3;
-            const outerR = baseRadius + amp * 0.7;
+            const speeds = {
+              idle: 2 + r1 * 1.5,
+              listening: 0.4 + r1 * 0.35,
+              speaking: 0.2 + r1 * 0.25,
+              processing: 0.8 + r1 * 0.5,
+            };
 
-            const x1 = 100 + Math.cos(rad) * innerR;
-            const y1 = 100 + Math.sin(rad) * innerR;
-            const x2 = 100 + Math.cos(rad) * outerR;
-            const y2 = 100 + Math.sin(rad) * outerR;
-
-            const duration = state === "speaking" ? 0.3 + r1 * 0.3 : state === "listening" ? 0.6 + r1 * 0.4 : 1.5 + r1;
-            const delay = i * 0.015;
+            const barWidth = 3;
 
             return (
-              <motion.line
+              <motion.rect
                 key={i}
-                x1={x1}
-                y1={y1}
-                x2={x2}
-                y2={y2}
-                stroke={isActive ? "hsl(var(--primary))" : "hsl(var(--muted-foreground) / 0.2)"}
-                strokeWidth={1.5}
-                strokeLinecap="round"
-                style={{ opacity: isActive ? 0.7 + r1 * 0.3 : 0.15 }}
+                x={x - barWidth / 2}
+                rx={1.5}
+                ry={1.5}
+                width={barWidth}
+                fill={isActive ? "url(#bar-gradient)" : "url(#bar-idle)"}
                 animate={
                   isActive
                     ? {
-                        x1: [
-                          100 + Math.cos(rad) * (baseRadius - amp * 0.2),
-                          100 + Math.cos(rad) * (baseRadius - amp * (0.4 + r2 * 0.3)),
-                          100 + Math.cos(rad) * (baseRadius - amp * 0.1),
-                          100 + Math.cos(rad) * (baseRadius - amp * (0.3 + r1 * 0.2)),
-                          100 + Math.cos(rad) * (baseRadius - amp * 0.2),
+                        y: [
+                          center - halfH * 0.5,
+                          center - halfH * (0.9 + r2 * 0.1),
+                          center - halfH * 0.3,
+                          center - halfH * (0.7 + r3 * 0.3),
+                          center - halfH * 0.5,
                         ],
-                        y1: [
-                          100 + Math.sin(rad) * (baseRadius - amp * 0.2),
-                          100 + Math.sin(rad) * (baseRadius - amp * (0.4 + r2 * 0.3)),
-                          100 + Math.sin(rad) * (baseRadius - amp * 0.1),
-                          100 + Math.sin(rad) * (baseRadius - amp * (0.3 + r1 * 0.2)),
-                          100 + Math.sin(rad) * (baseRadius - amp * 0.2),
+                        height: [
+                          halfH * 1,
+                          halfH * (1.8 + r2 * 0.2),
+                          halfH * 0.6,
+                          halfH * (1.4 + r3 * 0.6),
+                          halfH * 1,
                         ],
-                        x2: [
-                          100 + Math.cos(rad) * (baseRadius + amp * 0.6),
-                          100 + Math.cos(rad) * (baseRadius + amp * (0.8 + r1 * 0.2)),
-                          100 + Math.cos(rad) * (baseRadius + amp * 0.4),
-                          100 + Math.cos(rad) * (baseRadius + amp * (0.7 + r2 * 0.3)),
-                          100 + Math.cos(rad) * (baseRadius + amp * 0.6),
-                        ],
-                        y2: [
-                          100 + Math.sin(rad) * (baseRadius + amp * 0.6),
-                          100 + Math.sin(rad) * (baseRadius + amp * (0.8 + r1 * 0.2)),
-                          100 + Math.sin(rad) * (baseRadius + amp * 0.4),
-                          100 + Math.sin(rad) * (baseRadius + amp * (0.7 + r2 * 0.3)),
-                          100 + Math.sin(rad) * (baseRadius + amp * 0.6),
-                        ],
-                        opacity: [0.5, 0.9, 0.4, 0.8, 0.5],
+                        opacity: [0.6, 1, 0.5, 0.9, 0.6],
                       }
-                    : {}
+                    : {
+                        y: center - halfH,
+                        height: halfH * 2,
+                        opacity: 1,
+                      }
                 }
                 transition={{
-                  duration,
+                  duration: speeds[state],
                   repeat: Infinity,
-                  delay,
+                  delay: i * 0.02,
                   ease: "easeInOut",
                 }}
               />
             );
           })}
-
-          {/* Center dot */}
-          <motion.circle
-            cx={100}
-            cy={100}
-            r={isActive ? 3 : 2}
-            fill={stateColor}
-            animate={isActive ? { opacity: [0.6, 1, 0.6], r: [2, 3.5, 2] } : {}}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          />
         </svg>
       </div>
 
-      {/* State indicator dot — minimal, below orb */}
-      <motion.div
-        className="absolute -bottom-3 left-1/2 -translate-x-1/2 z-10"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+      {/* State label */}
+      <motion.span
+        className="text-[9px] font-mono tracking-[0.5em] uppercase h-3"
+        style={{ color: isActive ? "hsl(var(--primary))" : "transparent" }}
+        animate={{ opacity: isActive ? [0.4, 1, 0.4] : 0 }}
+        transition={{ duration: 1.8, repeat: Infinity }}
       >
-        <motion.span
-          className="block w-2 h-2 rounded-full"
-          style={{ backgroundColor: stateColor }}
-          animate={isActive ? { scale: [1, 1.5, 1], opacity: [1, 0.4, 1] } : { opacity: 0.3 }}
-          transition={{ duration: 1.2, repeat: Infinity }}
-        />
-      </motion.div>
+        {stateLabel}
+      </motion.span>
     </div>
   );
 };

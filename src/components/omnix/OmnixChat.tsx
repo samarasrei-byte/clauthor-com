@@ -26,19 +26,30 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  const [autoSpeak, setAutoSpeak] = useState(false);
+  const [autoSpeak, setAutoSpeak] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
+  const autoListenAfterSpeakRef = useRef(true);
 
+  // ─── Stop TTS immediately ───
+  const stopSpeaking = useCallback(() => {
+    window.speechSynthesis?.cancel();
+    setIsSpeaking(false);
+  }, []);
+
+  // ─── TTS: speak text, auto-listen after done ───
   const speak = useCallback((text: string) => {
     if (!("speechSynthesis" in window)) return;
+    // Stop any listening first
     recognitionRef.current?.stop?.();
     setIsListening(false);
     window.speechSynthesis.cancel();
+
     const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "");
     const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 500));
     utterance.lang = config.language || "en-US";
+
     const voices = window.speechSynthesis.getVoices();
     const lang = config.language || "en-US";
     const langVoices = voices.filter(v => v.lang.startsWith(lang.split("-")[0]));
@@ -46,19 +57,28 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     const fallback = langVoices.find(v => v.localService === false) || langVoices[0];
     if (premium) utterance.voice = premium;
     else if (fallback) utterance.voice = fallback;
+
     utterance.rate = 1.0;
     utterance.pitch = 0.95;
     utterance.volume = 1;
     utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      // Auto-listen after THOR finishes speaking (if voice mode)
+      if (autoListenAfterSpeakRef.current) {
+        setTimeout(() => startListening(), 400);
+      }
+    };
     utterance.onerror = () => setIsSpeaking(false);
     window.speechSynthesis.speak(utterance);
   }, [config.language]);
 
+  // ─── Scroll on new messages ───
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
+  // ─── Auto-speak when assistant finishes ───
   useEffect(() => {
     if (!autoSpeak || isStreaming) return;
     const lastIdx = messages.length - 1;
@@ -69,6 +89,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   }, [messages, isStreaming, autoSpeak, speak]);
 
+  // ─── Voice-first: auto-start listening ───
   useEffect(() => {
     if (!voiceFirst) return;
     if (messages.length === 0 && !isListening && !isLoading && !isStreaming && !isSpeaking) {
@@ -91,23 +112,29 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     return "idle";
   };
 
+  // ─── Start listening — BARGE-IN: stops TTS first ───
   const startListening = useCallback(async () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
-      toast.error(t("cmd.mic_unsupported"));
+      toast.error(t("cmd.mic_unsupported", { defaultValue: "Your browser doesn't support voice recognition." }));
       return;
     }
-    if (isListening || isSpeaking || isStreaming || isLoading) return;
+    if (isListening || isStreaming || isLoading) return;
+
+    // BARGE-IN: if THOR is speaking, stop it immediately so user can talk
+    if (isSpeaking) {
+      stopSpeaking();
+    }
 
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (err: any) {
       console.error("Microphone permission error:", err);
       if (err.name === "NotAllowedError") {
-        toast.error(t("cmd.mic_denied"));
+        toast.error(t("cmd.mic_denied", { defaultValue: "Microphone permission denied." }));
       } else if (err.name === "NotFoundError") {
-        toast.error(t("cmd.mic_not_found"));
+        toast.error(t("cmd.mic_not_found", { defaultValue: "No microphone detected." }));
       } else {
-        toast.error(t("cmd.mic_error", { error: err.message || "Unknown" }));
+        toast.error(t("cmd.mic_error", { defaultValue: "Error accessing microphone: {{error}}", error: err.message || "Unknown" }));
       }
       return;
     }
@@ -122,7 +149,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join("");
       setInput(transcript);
       if (e.results[0]?.isFinal) {
-        if (isSpeaking || isStreaming || isLoading) return;
+        if (isStreaming || isLoading) return;
         setTimeout(() => {
           onSend(transcript);
           setInput("");
@@ -134,26 +161,29 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       setIsListening(false);
       console.error("SpeechRecognition error:", e.error, e.message);
       if (e.error === "not-allowed") {
-        toast.error(t("cmd.mic_denied_short"));
+        toast.error(t("cmd.mic_denied_short", { defaultValue: "Microphone permission denied." }));
       } else if (e.error === "no-speech") {
-        toast.info(t("cmd.no_speech"));
+        // Silently restart listening instead of showing toast
+        setTimeout(() => startListening(), 500);
+        return;
       } else if (e.error === "network") {
-        toast.error(t("cmd.network_error"));
+        toast.error(t("cmd.network_error", { defaultValue: "Voice recognition network error." }));
       } else if (e.error !== "aborted") {
-        toast.error(t("cmd.voice_error", { error: e.error }));
+        toast.error(t("cmd.voice_error", { defaultValue: "Voice error: {{error}}", error: e.error }));
       }
     };
 
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend, t]);
+  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend, stopSpeaking, t]);
 
   const toggleVoice = () => {
     if (isStreaming || isLoading) return;
+    // If THOR is speaking, barge-in: stop speaking and start listening
     if (isSpeaking) {
       stopSpeaking();
-      setTimeout(() => startListening(), 300);
+      setTimeout(() => startListening(), 200);
       return;
     }
     if (isListening) {
@@ -164,11 +194,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     startListening();
   };
 
-  const stopSpeaking = () => {
-    window.speechSynthesis?.cancel();
-    setIsSpeaking(false);
-  };
-
   const hasMessages = messages.length > 0;
 
   return (
@@ -177,25 +202,30 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       <motion.div
         className="shrink-0 flex flex-col items-center justify-center gap-1 bg-gradient-to-b from-primary/[0.02] to-transparent"
         animate={{
-          paddingTop: hasMessages ? 16 : 40,
-          paddingBottom: hasMessages ? 8 : 24,
+          paddingTop: hasMessages ? 12 : 32,
+          paddingBottom: hasMessages ? 4 : 16,
         }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
         <motion.div
-          animate={{ scale: hasMessages ? 0.6 : 1 }}
+          animate={{ scale: hasMessages ? 0.65 : 1 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
+          className="origin-center"
         >
           <OmnixOrb state={getOrbState()} name={config.name} />
         </motion.div>
 
-        {/* Auto-voice toggle — compact */}
+        {/* Auto-voice toggle */}
         <button
-          onClick={() => { setAutoSpeak(!autoSpeak); if (isSpeaking) stopSpeaking(); }}
+          onClick={() => {
+            setAutoSpeak(!autoSpeak);
+            autoListenAfterSpeakRef.current = !autoSpeak;
+            if (isSpeaking) stopSpeaking();
+          }}
           className="flex items-center gap-1 text-[9px] text-muted-foreground/40 hover:text-muted-foreground transition-colors"
         >
           {autoSpeak ? <Volume2 className="h-2.5 w-2.5" /> : <VolumeX className="h-2.5 w-2.5" />}
-          {t("cmd.auto_voice")} {autoSpeak ? t("cmd.on") : t("cmd.off")}
+          {t("cmd.auto_voice", { defaultValue: "Auto-voice" })} {autoSpeak ? t("cmd.on", { defaultValue: "ON" }) : t("cmd.off", { defaultValue: "OFF" })}
         </button>
       </motion.div>
 
@@ -208,18 +238,18 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           <div className="flex flex-col items-center justify-center h-full text-center px-4">
             <p className="text-sm text-muted-foreground/60 max-w-xs leading-relaxed">
               {voiceFirst ? (
-                <>{t("cmd.hello_voice", { name: config.name })}</>
+                <>{t("cmd.hello_voice", { defaultValue: "Hi, I'm {{name}}. I'm listening. Just speak.", name: config.name })}</>
               ) : (
-                <>{t("cmd.hello_text", { name: config.name })}</>
+                <>{t("cmd.hello_text", { defaultValue: "Hi, I'm {{name}}. Your central AI agent. Speak or type to begin.", name: config.name })}</>
               )}
             </p>
             {!voiceFirst && (
               <div className="flex flex-wrap gap-2 mt-4 justify-center max-w-md">
                 {[
-                  t("cmd.audit_system", { name: config.name }),
-                  t("cmd.briefing_day"),
-                  t("cmd.status_agents"),
-                  t("cmd.risk_analysis"),
+                  t("cmd.audit_system", { defaultValue: "{{name}}, run a system audit", name: config.name }),
+                  t("cmd.briefing_day", { defaultValue: "Executive briefing of the day" }),
+                  t("cmd.status_agents", { defaultValue: "Status of all agents" }),
+                  t("cmd.risk_analysis", { defaultValue: "Risk analysis" }),
                 ].map(s => (
                   <button
                     key={s}
@@ -294,7 +324,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             className={`shrink-0 h-11 w-11 rounded-full transition-all ${
               isListening
                 ? "text-primary bg-primary/10 shadow-[0_0_20px_hsl(var(--primary)/0.25)] animate-pulse"
-                : "text-muted-foreground/50 hover:text-foreground"
+                : isSpeaking
+                  ? "text-destructive bg-destructive/10"
+                  : "text-muted-foreground/50 hover:text-foreground"
             }`}
             onClick={toggleVoice}
           >
@@ -304,7 +336,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
-            placeholder={t("cmd.talk_to", { name: config.name })}
+            placeholder={t("cmd.talk_to", { defaultValue: "Talk to {{name}}...", name: config.name })}
             className="flex-1 bg-card/20 border-border/15 h-11 text-sm"
             disabled={isLoading}
           />
@@ -329,7 +361,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             onClick={() => {
               if (messages.length === 0) return;
               if (messages.length > 2) {
-                const confirmed = window.confirm(t("cmd.clear_confirm"));
+                const confirmed = window.confirm(t("cmd.clear_confirm", { defaultValue: "Clear all chat history?" }));
                 if (!confirmed) return;
               }
               onClear();
