@@ -80,6 +80,11 @@ const ClientDashboard = () => {
   const queryClient = useQueryClient();
   const [activeSection, setActiveSection] = useState("overview");
   const [previousSection, setPreviousSection] = useState<string | null>(null);
+  const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
+  const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
+  const [omnixMounted, setOmnixMounted] = useState(false);
+  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
+  const [showBoardGate, setShowBoardGate] = useState(false);
 
   // Redirect first-time user to THOR (concierge)
   useEffect(() => {
@@ -98,11 +103,6 @@ const ClientDashboard = () => {
       setOmnixMounted(true);
     }
   }, [activeSection, omnixMounted]);
-  const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
-  const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
-  const [omnixMounted, setOmnixMounted] = useState(false);
-  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
-  const [showBoardGate, setShowBoardGate] = useState(false);
   const [boardGateSkipped, setBoardGateSkipped] = useState(false);
 
   // Check if Company Board has data
