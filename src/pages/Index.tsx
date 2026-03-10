@@ -381,7 +381,7 @@ const HomePage = () => {
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            aria-label={t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                            aria-label={t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
                             className="group relative h-14 sm:h-14 px-10 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full"
                           >
                             <div className="absolute inset-0 bg-primary rounded-xl" />
