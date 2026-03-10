@@ -198,7 +198,7 @@ const AgentsSection = ({
                         toast.error(t("dashboard.status_error", { defaultValue: "Erro ao atualizar status." }));
                         return;
                       }
-                      toast.success(`${agent.name} ${newStatus === "active" ? "ativado" : "pausado"}!`);
+                      toast.success(`${agent.name} ${newStatus === "active" ? t("dashboard.activated", { defaultValue: "activated" }) : t("dashboard.paused", { defaultValue: "paused" })}!`);
                       queryClient.invalidateQueries({ queryKey: ["my-agents"] });
                     }}
                   >
