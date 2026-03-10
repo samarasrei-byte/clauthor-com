@@ -204,7 +204,7 @@ const ConsolidatedMetrics = ({
               <Progress value={usagePercentage} className="h-2 mb-2" />
 
               <div className="flex justify-between text-[9px] text-muted-foreground">
-                <span>{credits.used_credits.toLocaleString(locale)} {locale.startsWith("pt") ? "usados" : "used"}</span>
+                <span>{credits.used_credits.toLocaleString(locale)} {"used"}</span>
                 <span>{credits.total_credits.toLocaleString(locale)} total</span>
               </div>
 

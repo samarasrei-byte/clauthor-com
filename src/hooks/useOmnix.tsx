@@ -20,11 +20,11 @@ export interface OmnixMessage {
 
 const DEFAULT_CONFIG: OmnixConfig = {
   name: "THOR",
-  tone: "estratégico",
-  personality: "futurista",
-  responseStyle: "detalhado",
-  language: "pt-BR",
-  autonomy: "analisar e sugerir",
+  tone: "strategic",
+  personality: "futuristic",
+  responseStyle: "detailed",
+  language: "en-US",
+  autonomy: "analyze and suggest",
 };
 
 function normalizeOmnixConfig(saved: Partial<OmnixConfig> | null): OmnixConfig {

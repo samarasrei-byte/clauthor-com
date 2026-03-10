@@ -111,7 +111,7 @@ export default function PaymentHistoryTable() {
                 return (
                   <TableRow key={p.id} className="border-white/5">
                     <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
-                      {new Date(p.created_at).toLocaleDateString("pt-BR", {
+                      {new Date(p.created_at).toLocaleDateString("en-US", {
                         day: "2-digit", month: "2-digit", year: "2-digit",
                         hour: "2-digit", minute: "2-digit",
                       })}
