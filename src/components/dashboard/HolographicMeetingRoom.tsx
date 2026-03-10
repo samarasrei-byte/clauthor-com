@@ -977,7 +977,7 @@ Apenas o texto, sem introduções.`,
                           transition={{ delay: idx * 0.1 }}
                           className="flex items-center gap-3 text-sm"
                         >
-                          <ChevronRight className="h-4 w-4 text-accent-emerald shrink-0" />
+                          <ChevronRight className="h-4 w-4 text-primary shrink-0" />
                           <span className="flex-1 text-foreground/80">{item.task}</span>
                           <Badge variant="outline" className={cn("text-[9px] shrink-0", priorityStyle(item.priority))}>
                             {item.priority}
