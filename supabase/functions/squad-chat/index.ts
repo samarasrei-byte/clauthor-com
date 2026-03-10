@@ -201,7 +201,7 @@ Respond ONLY with a JSON array of the EXACT names of the chosen agents. Example:
         tier: agent.tier || "basic",
         planType: credits?.plan_type || "free",
         area: agentArea,
-        objective: agent.objective || "Ajudar o usuário",
+        objective: agent.objective || "Help the user",
         limits,
         sla,
       };
