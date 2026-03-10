@@ -569,20 +569,20 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                       return (
                         <div className="space-y-2">
                           <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-muted-foreground/50 px-1">
-                            Resultados do Scan
+                            {t("support.scan_results")}
                           </p>
                           {diag.issues.length === 0 ? (
-                            <div className="rounded-xl border border-emerald-500/20 bg-emerald-500/[0.05] p-3 flex items-center gap-2">
-                              <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                            <div className="rounded-xl border border-primary/20 bg-primary/[0.05] p-3 flex items-center gap-2">
+                              <CheckCircle2 className="h-4 w-4 text-primary" />
                               <div>
-                                <p className="text-[11px] font-semibold text-emerald-400">Nenhum problema detectado</p>
-                                <p className="text-[9px] text-muted-foreground/40">Todos os sistemas operando normalmente</p>
+                                <p className="text-[11px] font-semibold text-primary">{t("support.no_issues")}</p>
+                                <p className="text-[9px] text-muted-foreground/40">{t("support.all_systems_ok")}</p>
                               </div>
                             </div>
                           ) : (
                             diag.issues.map((issue, i) => (
-                              <div key={i} className="rounded-xl border border-amber-500/20 bg-amber-500/[0.05] p-2.5 flex items-start gap-2">
-                                <AlertTriangle className="h-3.5 w-3.5 text-amber-400 shrink-0 mt-0.5" />
+                              <div key={i} className="rounded-xl border border-destructive/20 bg-destructive/[0.05] p-2.5 flex items-start gap-2">
+                                <AlertTriangle className="h-3.5 w-3.5 text-destructive shrink-0 mt-0.5" />
                                 <div>
                                   <p className="text-[11px] text-foreground/70">{issue}</p>
                                   {diag.suggestions[i] && (
@@ -597,16 +597,16 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
 
                           {/* Performance metrics */}
                           <p className="text-[9px] font-bold tracking-[0.2em] uppercase text-muted-foreground/50 px-1 mt-3">
-                            Métricas em Tempo Real
+                            {t("support.realtime_metrics")}
                           </p>
                           <div className="grid grid-cols-2 gap-2">
                             {[
-                              { label: "Uptime", value: "99.97%", color: "text-emerald-400" },
-                              { label: "Resp. Média", value: `${health.latency}ms`, color: "text-primary" },
-                              { label: "Sistema", value: "Online", color: "text-emerald-400" },
-                              { label: "Último Scan", value: new Date(health.lastScan).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), color: "text-muted-foreground" },
+                              { label: t("support.uptime"), value: "99.97%", color: "text-primary" },
+                              { label: t("support.avg_response"), value: `${health.latency}ms`, color: "text-primary" },
+                              { label: t("support.system_label"), value: t("support.online"), color: "text-primary" },
+                              { label: t("support.last_scan"), value: new Date(health.lastScan).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), color: "text-muted-foreground" },
                             ].map(m => (
-                              <div key={m.label} className="rounded-lg border border-white/[0.04] bg-white/[0.02] p-2 text-center">
+                              <div key={m.label} className="rounded-lg border border-border/10 bg-card/30 p-2 text-center">
                                 <p className={`text-[12px] font-bold ${m.color}`}>{m.value}</p>
                                 <p className="text-[8px] text-muted-foreground/30 uppercase tracking-wider">{m.label}</p>
                               </div>
