@@ -10,6 +10,7 @@ import MonixSettings from "@/components/monix/MonixSettings";
 
 const MonixCommandCenter = () => {
   const { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages } = useMonix();
+  const { t } = useTranslation();
   const [showSettings, setShowSettings] = useState(false);
   const [expandedPanel, setExpandedPanel] = useState<"none" | "chat" | "dashboard">("none");
 
