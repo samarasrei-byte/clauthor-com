@@ -78,7 +78,8 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
-  const activeAgents = agents.filter((a) => a.status === "active");
+  // Show all agents (active + paused) so users can always chat with their contracted agents
+  const activeAgents = agents;
 
   // Fetch tenant_id
   const { data: tenantId } = useQuery({
