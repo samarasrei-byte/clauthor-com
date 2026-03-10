@@ -170,13 +170,7 @@ const AgentsSection = ({
                         </Badge>
                         <div className={cn(
                           "flex items-center gap-1 text-[9px] font-semibold px-1.5 py-0.5 rounded-md border",
-                          autonomyLevel === "autonomous"
-                            ? "text-purple-400 bg-purple-500/10 border-purple-500/20"
-                            : autonomyLevel === "executor"
-                              ? "text-amber-400 bg-amber-500/10 border-amber-500/20"
-                              : autonomyLevel === "observer"
-                                ? "text-blue-400 bg-blue-500/10 border-blue-500/20"
-                                : "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+                          "text-primary bg-primary/10 border-primary/20"
                         )}>
                           <AutonomyIcon className={cn("h-3 w-3", autonomyColor)} />
                           {autonomyLevel}
