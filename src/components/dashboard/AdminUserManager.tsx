@@ -157,7 +157,7 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Total de créditos</Label>
+              <Label>Total credits</Label>
               <Input
                 type="number"
                 value={newCredits}
@@ -167,19 +167,19 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
             </div>
             {editingUser?.credit && (
               <div className="p-3 rounded-lg bg-muted/30 text-xs space-y-1">
-                <p>Usados: <strong>{editingUser.credit.used_credits.toLocaleString()}</strong></p>
-                <p>Reset em: <strong>{new Date(editingUser.credit.credits_reset_at).toLocaleDateString(locale)}</strong></p>
+                <p>Used: <strong>{editingUser.credit.used_credits.toLocaleString()}</strong></p>
+                <p>Reset at: <strong>{new Date(editingUser.credit.credits_reset_at).toLocaleDateString(locale)}</strong></p>
               </div>
             )}
             <Button variant="outline" size="sm" onClick={resetCredits} disabled={saving} className="w-full text-xs">
-              Resetar créditos usados para 0
+              Reset used credits to 0
             </Button>
           </div>
           <DialogFooter>
-            <Button variant="ghost" onClick={() => setEditingUser(null)}>Cancelar</Button>
+            <Button variant="ghost" onClick={() => setEditingUser(null)}>Cancel</Button>
             <Button onClick={handleSave} disabled={saving} className="gap-2">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              Salvar
+              Save
             </Button>
           </DialogFooter>
         </DialogContent>
