@@ -44,8 +44,8 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
             <CreditCard className="h-4 w-4 text-primary" />
           </div>
           <div>
-            <h2 className="font-display font-semibold">Assinatura & Créditos</h2>
-            <p className="text-xs text-muted-foreground">Gerencie seu plano</p>
+            <h2 className="font-display font-semibold">{t("subscription.title", { defaultValue: "Subscription & Credits" })}</h2>
+            <p className="text-xs text-muted-foreground">{t("subscription.subtitle", { defaultValue: "Manage your plan" })}</p>
           </div>
         </div>
       </div>
