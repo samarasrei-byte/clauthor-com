@@ -87,8 +87,8 @@ i18n
     },
   });
 
-// Load detected language if not PT
-if (i18n.language && i18n.language !== "pt") {
+// Load detected language if not EN (already bundled)
+if (i18n.language && i18n.language !== "en") {
   loadLocale(i18n.language);
 }
 
