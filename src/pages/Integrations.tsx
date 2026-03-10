@@ -435,8 +435,8 @@ const IntegrationsPage = () => {
                             </div>
                             <div className="flex items-center gap-1.5">
                               {connectionStatus === "connected" && (
-                                <Badge className="bg-emerald-500/15 text-emerald-500 border-emerald-500/20 text-[10px]">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-1" />
+                                <Badge className="bg-primary/15 text-primary border-primary/20 text-[10px]">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse mr-1" />
                                   {t("integrations.status_connected", { defaultValue: "Conectado" })}
                                 </Badge>
                               )}
