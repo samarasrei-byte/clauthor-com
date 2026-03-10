@@ -9,12 +9,15 @@ import OmnixSettings from "@/components/omnix/OmnixSettings";
 interface OmnixCommandCenterProps {
   postPaymentContext?: { agentName: string; isDepartment: boolean; agentCount: number } | null;
   onPostPaymentHandled?: () => void;
+  initialMessage?: string | null;
+  onInitialMessageHandled?: () => void;
 }
 
-const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled }: OmnixCommandCenterProps) => {
+const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialMessage, onInitialMessageHandled }: OmnixCommandCenterProps) => {
   const { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages } = useOmnix();
   const [showSettings, setShowSettings] = useState(false);
   const postPaymentSent = useRef(false);
+  const initialMessageSent = useRef(false);
 
   // Auto-send contextual welcome message after payment
   useEffect(() => {
@@ -33,6 +36,23 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled }: OmnixC
     }, 1200);
     return () => clearTimeout(timer);
   }, [postPaymentContext, messages.length, isLoading, isStreaming, sendMessage, onPostPaymentHandled]);
+
+  // Auto-send task message from TaskRequestPanel
+  useEffect(() => {
+    if (!initialMessage || initialMessageSent.current || isLoading || isStreaming) return;
+    initialMessageSent.current = true;
+
+    const timer = setTimeout(() => {
+      sendMessage(initialMessage);
+      onInitialMessageHandled?.();
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [initialMessage, isLoading, isStreaming, sendMessage, onInitialMessageHandled]);
+
+  // Reset ref when initialMessage changes
+  useEffect(() => {
+    if (!initialMessage) initialMessageSent.current = false;
+  }, [initialMessage]);
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">
