@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -60,6 +61,7 @@ const INDUSTRY_OPTIONS = [
 
 export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyOnboardingWizardProps) {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [currentStep, setCurrentStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [scanning, setScanning] = useState(false);
@@ -173,6 +175,9 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
         );
       }
       toast.success("Informações da empresa salvas! Seus agentes agora conhecem seu negócio. 🎯");
+      // Invalidate the board count cache so the gate doesn't reappear
+      await queryClient.invalidateQueries({ queryKey: ["company-board-count-gate"] });
+      await queryClient.invalidateQueries({ queryKey: ["company-board"] });
       onComplete();
     } catch {
       toast.error("Erro ao salvar. Tente novamente.");
