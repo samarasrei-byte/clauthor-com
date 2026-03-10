@@ -305,11 +305,11 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
           <TabsList className="w-full h-9 p-1 bg-muted/30">
             <TabsTrigger value="individual" className="flex-1 text-xs gap-1.5 data-[state=active]:bg-background">
               <User className="h-3.5 w-3.5" />
-              Chat 1:1
+              {t("squad.chat_individual")}
             </TabsTrigger>
             <TabsTrigger value="grupo" className="flex-1 text-xs gap-1.5 data-[state=active]:bg-background">
               <Users className="h-3.5 w-3.5" />
-              Grupo
+              {t("squad.chat_group")}
             </TabsTrigger>
           </TabsList>
         </Tabs>
