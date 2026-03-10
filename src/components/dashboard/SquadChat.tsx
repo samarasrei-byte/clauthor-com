@@ -500,7 +500,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                         </div>
                         <h3 className="font-display font-bold text-base mb-1">{selectedAgent?.name}</h3>
                         <p className="text-xs text-muted-foreground mb-4 max-w-xs">
-                          {selectedAgent?.description || selectedAgent?.objective || "Agente de IA pronto para ajudar"}
+                          {selectedAgent?.description || selectedAgent?.objective || t("squad.agent_ready")}
                         </p>
                       </>
                     )}
