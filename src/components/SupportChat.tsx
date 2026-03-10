@@ -676,7 +676,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         className="flex items-center justify-center gap-2 pb-2"
                       >
                         <VoiceWaveform />
-                        <span className="text-[10px] text-primary animate-pulse">Ouvindo...</span>
+                        <span className="text-[10px] text-primary animate-pulse">{t("support.listening")}</span>
                       </motion.div>
                     )}
                   </AnimatePresence>
