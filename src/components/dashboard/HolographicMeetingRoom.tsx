@@ -963,7 +963,7 @@ Apenas o texto, sem introduções.`,
                     <motion.div
                       initial={{ opacity: 0, height: 0 }}
                       animate={{ opacity: 1, height: "auto" }}
-                      className="border-t border-border/10 bg-accent-emerald/[0.03] p-4 space-y-3 max-h-56 overflow-y-auto"
+                      className="border-t border-border/10 bg-primary/[0.03] p-4 space-y-3 max-h-56 overflow-y-auto"
                     >
                       <div className="flex items-center gap-2 mb-3">
                         <ListChecks className="h-5 w-5 text-primary" />
