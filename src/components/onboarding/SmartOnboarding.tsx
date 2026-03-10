@@ -349,7 +349,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   {/* User reply bubble */}
                   <div className="flex gap-3 justify-end">
                     <div className="bg-primary text-primary-foreground rounded-2xl rounded-br-sm px-4 py-3 max-w-[70%]">
-                      <p className="text-sm">Minha empresa é do segmento <strong>{industries.find(i => i.id === industry)?.label}</strong></p>
+                      <p className="text-sm">My company is in the <strong>{industries.find(i => i.id === industry)?.label}</strong> industry</p>
                     </div>
                   </div>
 
