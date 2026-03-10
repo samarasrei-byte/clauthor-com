@@ -284,13 +284,13 @@ const Pitch = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
             <MessageCircle className="w-5 h-5 text-primary" />
-            <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight">Por que investir na CLAUTHOR?</h2>
+            <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight">Why invest in CLAUTHOR?</h2>
           </div>
-          <p className="text-muted-foreground text-sm mb-10">Veja como nosso agente responde às perguntas mais comuns de investidores.</p>
+          <p className="text-muted-foreground text-sm mb-10">See how our agent answers the most common investor questions.</p>
           <InvestorChat />
           <div className="mt-8">
             <Button onClick={handleTalk} className="text-sm">
-              Tirar suas dúvidas no WhatsApp <ArrowRight className="ml-1 w-4 h-4" />
+              Ask your questions on WhatsApp <ArrowRight className="ml-1 w-4 h-4" />
             </Button>
           </div>
         </div>
