@@ -229,7 +229,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
     try {
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData?.session?.access_token;
-      if (!token) { toast.error("Faça login."); setIsLoading(false); return; }
+      if (!token) { toast.error(t("squad.login_required")); setIsLoading(false); return; }
 
       // Build conversation history from persisted messages
       const history = messages.slice(-10).map(m => ({
