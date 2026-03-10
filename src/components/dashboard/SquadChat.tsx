@@ -372,7 +372,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                     </div>
                     <div className={cn(
                       "absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-background",
-                      agent.status === "active" ? "bg-emerald-400" : "bg-muted-foreground/50"
+                      agent.status === "active" ? "bg-primary" : "bg-muted-foreground/50"
                     )} />
                   </div>
 
