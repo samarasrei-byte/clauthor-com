@@ -65,9 +65,9 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
       .eq("user_id", editingUser.user_id);
 
     if (error) {
-      toast.error("Erro ao resetar créditos.");
+      toast.error("Failed to reset credits.");
     } else {
-      toast.success("Créditos resetados!");
+      toast.success("Credits reset!");
       queryClient.invalidateQueries({ queryKey: ["admin-all-credits"] });
     }
     setSaving(false);
