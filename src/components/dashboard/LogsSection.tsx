@@ -17,9 +17,9 @@ const LogsSection = ({ recentLogs, locale, onGoToAgents }: LogsSectionProps) => 
   const filteredLogs = recentLogs.filter(l => filter === "all" || l.status === filter);
 
   const getStatusIcon = (status: string) => {
-    if (status === "success") return <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />;
+    if (status === "success") return <CheckCircle className="h-3.5 w-3.5 text-primary" />;
     if (status === "error") return <Activity className="h-3.5 w-3.5 text-destructive" />;
-    return <Clock className="h-3.5 w-3.5 text-yellow-500" />;
+    return <Clock className="h-3.5 w-3.5 text-muted-foreground" />;
   };
 
   return (
@@ -58,9 +58,9 @@ const LogsSection = ({ recentLogs, locale, onGoToAgents }: LogsSectionProps) => 
             )}
           </div>
         ) : (
-          <div className="divide-y divide-white/5 max-h-[600px] overflow-y-auto">
+          <div className="divide-y divide-border/10 max-h-[600px] overflow-y-auto">
             {filteredLogs.map((log: any) => (
-              <div key={log.id} className="p-4 hover:bg-white/[0.02] transition-colors flex items-center justify-between">
+              <div key={log.id} className="p-4 hover:bg-card/50 transition-colors flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   {getStatusIcon(log.status)}
                   <div>
@@ -69,7 +69,7 @@ const LogsSection = ({ recentLogs, locale, onGoToAgents }: LogsSectionProps) => 
                   </div>
                 </div>
                 <div className="text-right">
-                  <Badge variant="secondary" className={`text-[10px] ${log.status === "success" ? "bg-emerald-500/10 text-emerald-500" : log.status === "error" ? "bg-destructive/10 text-destructive" : "bg-yellow-500/10 text-yellow-500"}`}>
+                  <Badge variant="secondary" className={`text-[10px] ${log.status === "success" ? "bg-primary/10 text-primary" : log.status === "error" ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground"}`}>
                     {log.status}
                   </Badge>
                   <p className="text-[10px] text-muted-foreground mt-1">
