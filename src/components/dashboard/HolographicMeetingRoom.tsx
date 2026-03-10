@@ -591,8 +591,8 @@ Apenas o texto, sem introduções.`,
   const priorityStyle = (p: string) => {
     switch (p) {
       case "high": return "bg-destructive/10 text-destructive border-destructive/20";
-      case "medium": return "bg-accent-amber/10 text-accent-amber border-accent-amber/20";
-      default: return "bg-accent-emerald/10 text-accent-emerald border-accent-emerald/20";
+      case "medium": return "bg-primary/10 text-primary border-primary/20";
+      default: return "bg-muted/10 text-muted-foreground border-border/20";
     }
   };
 
