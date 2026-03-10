@@ -445,9 +445,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                       <p className="text-sm">
-                        Excelente seleção. Já temos um time forte para montar.
+                        Excellent selection. We've got a strong team to build.
                         <br /><br />
-                        Última pergunta: <strong>quantas pessoas tem na sua empresa?</strong> Isso define o tamanho do time.
+                        Last question: <strong>how many people are in your company?</strong> This defines the team size.
                       </p>
                     </div>
                   </div>
