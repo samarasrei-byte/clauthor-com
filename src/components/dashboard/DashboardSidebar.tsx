@@ -169,7 +169,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="ml-4 pl-3 border-l border-white/[0.06] space-y-0.5 py-1">
+                    <div className="ml-4 pl-3 border-l border-border/10 space-y-0.5 py-1">
                       {item.children!.map(child => {
                         const ChildIcon = child.icon || Bot;
                         const isChildActive = activeItem === child.id;
