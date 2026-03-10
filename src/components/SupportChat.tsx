@@ -404,18 +404,18 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                     <Bot className="h-4 w-4 text-primary" />
                   </div>
                   <span className={`absolute -bottom-0.5 -right-0.5 h-2 w-2 rounded-full ${
-                    health.status === "optimal" ? "bg-emerald-400" : health.status === "warning" ? "bg-amber-400" : "bg-red-400 animate-pulse"
+                    health.status === "optimal" ? "bg-primary" : health.status === "warning" ? "bg-muted-foreground" : "bg-destructive animate-pulse"
                   } shadow-[0_0_6px_hsl(var(--primary)/0.5)]`} />
                 </div>
                 <div className="flex-1">
                   <div className="flex items-center gap-1.5">
                     <p className="text-[12px] font-semibold tracking-[0.15em] uppercase text-foreground/80">
-                      Suporte CLAUTHOR
+                      {t("support.title")}
                     </p>
-                    <Radio className="h-2.5 w-2.5 text-emerald-400 animate-pulse" />
+                    <Radio className="h-2.5 w-2.5 text-primary animate-pulse" />
                   </div>
                   <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40">
-                    IA Preditiva • Auto-diagnóstico • Voz
+                    {t("support.subtitle")}
                   </p>
                 </div>
                 {!embedded && (
