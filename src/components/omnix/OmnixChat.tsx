@@ -9,6 +9,7 @@ import AudioWaveform from "./AudioWaveform";
 import AudioSpectrum from "./AudioSpectrum";
 import OmnixOrb from "./OmnixOrb";
 import type { OmnixMessage, OmnixConfig } from "@/hooks/useOmnix";
+import { useTranslation } from "react-i18next";
 
 interface OmnixChatProps {
   messages: OmnixMessage[];
@@ -22,6 +23,7 @@ interface OmnixChatProps {
 }
 
 const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, onClear, voiceFirst }: OmnixChatProps) => {
+  const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -30,29 +32,21 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
 
-  // TTS output — enhanced voice selection (declared early for use in effects)
   const speak = useCallback((text: string) => {
     if (!("speechSynthesis" in window)) return;
-
-    // Never keep mic open while the assistant is speaking (avoids echo loops)
     recognitionRef.current?.stop?.();
     setIsListening(false);
-
     window.speechSynthesis.cancel();
     const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "");
     const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 500));
     utterance.lang = config.language || "pt-BR";
-
     const voices = window.speechSynthesis.getVoices();
     const lang = config.language || "pt-BR";
     const langVoices = voices.filter(v => v.lang.startsWith(lang.split("-")[0]));
-    const premium = langVoices.find(v =>
-      /google|microsoft|natural|neural|online/i.test(v.name)
-    );
+    const premium = langVoices.find(v => /google|microsoft|natural|neural|online/i.test(v.name));
     const fallback = langVoices.find(v => v.localService === false) || langVoices[0];
     if (premium) utterance.voice = premium;
     else if (fallback) utterance.voice = fallback;
-
     utterance.rate = 1.0;
     utterance.pitch = 0.95;
     utterance.volume = 1;
@@ -66,7 +60,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  // Auto-speak new assistant messages
   useEffect(() => {
     if (!autoSpeak || isStreaming) return;
     const lastIdx = messages.length - 1;
@@ -77,7 +70,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   }, [messages, isStreaming, autoSpeak, speak]);
 
-  // Auto-start listening in voice-first mode ONLY on first load (no messages yet)
   useEffect(() => {
     if (!voiceFirst) return;
     if (messages.length === 0 && !isListening && !isLoading && !isStreaming && !isSpeaking) {
@@ -102,22 +94,21 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   const startListening = useCallback(async () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
-      toast.error("Seu navegador não suporta reconhecimento de voz. Tente o Google Chrome.");
+      toast.error(t("cmd.mic_unsupported"));
       return;
     }
     if (isListening || isSpeaking || isStreaming || isLoading) return;
 
-    // Request microphone permission explicitly
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (err: any) {
       console.error("Microphone permission error:", err);
       if (err.name === "NotAllowedError") {
-        toast.error("Permissão do microfone negada. Habilite o microfone nas configurações do navegador.");
+        toast.error(t("cmd.mic_denied"));
       } else if (err.name === "NotFoundError") {
-        toast.error("Nenhum microfone detectado. Conecte um microfone e tente novamente.");
+        toast.error(t("cmd.mic_not_found"));
       } else {
-        toast.error("Erro ao acessar o microfone: " + (err.message || "Desconhecido"));
+        toast.error(t("cmd.mic_error", { error: err.message || "Unknown" }));
       }
       return;
     }
@@ -144,27 +135,25 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       setIsListening(false);
       console.error("SpeechRecognition error:", e.error, e.message);
       if (e.error === "not-allowed") {
-        toast.error("Permissão do microfone negada.");
+        toast.error(t("cmd.mic_denied_short"));
       } else if (e.error === "no-speech") {
-        toast.info("Nenhuma fala detectada. Tente novamente.");
+        toast.info(t("cmd.no_speech"));
       } else if (e.error === "network") {
-        toast.error("Erro de rede no reconhecimento de voz.");
+        toast.error(t("cmd.network_error"));
       } else if (e.error !== "aborted") {
-        toast.error(`Erro de voz: ${e.error}`);
+        toast.error(t("cmd.voice_error", { error: e.error }));
       }
     };
 
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend]);
+  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend, t]);
 
   const toggleVoice = () => {
     if (isStreaming || isLoading) return;
-    // If THOR is speaking, stop him first so the user can talk
     if (isSpeaking) {
       stopSpeaking();
-      // Small delay to let TTS fully stop before opening mic
       setTimeout(() => startListening(), 300);
       return;
     }
@@ -183,30 +172,25 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   return (
     <div className="flex flex-col h-full">
-      {/* Orb area - centered and prominent */}
       <div className="shrink-0 flex flex-col items-center pt-8 pb-6 gap-3 bg-gradient-to-b from-primary/[0.03] to-transparent">
         <OmnixOrb state={getOrbState()} name={config.name} className={voiceFirst ? "scale-125" : ""} />
-        
         <div className="flex flex-col items-center gap-1 mt-2">
           <h3 className="font-display font-black text-sm tracking-widest uppercase text-foreground/80">
             {config.name}
           </h3>
           <p className="text-[10px] text-muted-foreground/60 font-mono tracking-wider">
-            CENTRAL AI AGENT • v2.0
+            {t("cmd.central_agent")}
           </p>
         </div>
-
-        {/* Auto-speak toggle */}
         <button
           onClick={() => { setAutoSpeak(!autoSpeak); if (isSpeaking) stopSpeaking(); }}
           className="mt-3 flex items-center gap-1.5 text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors"
         >
           {autoSpeak ? <Volume2 className="h-3 w-3" /> : <VolumeX className="h-3 w-3" />}
-          Auto-voice {autoSpeak ? "ON" : "OFF"}
+          {t("cmd.auto_voice")} {autoSpeak ? t("cmd.on") : t("cmd.off")}
         </button>
       </div>
 
-      {/* Waveform / Spectrum area */}
       <AnimatePresence>
         {(isListening || isSpeaking) && (
           <div className="shrink-0 py-2 border-b border-border/10 bg-background/50">
@@ -216,24 +200,23 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         )}
       </AnimatePresence>
 
-      {/* Messages */}
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
         {messages.length === 0 && (
           <div className="flex flex-col items-center justify-center h-full text-center">
             <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
               {voiceFirst ? (
-                <>Olá, eu sou o <span className="text-primary font-bold">{config.name}</span>. Estou ouvindo você. Basta falar.</>
+                <>{t("cmd.hello_voice", { name: config.name })}</>
               ) : (
-                <>Olá, eu sou o <span className="text-primary font-bold">{config.name}</span>. Seu agente central de IA. Fale ou digite para começar.</>
+                <>{t("cmd.hello_text", { name: config.name })}</>
               )}
             </p>
             {!voiceFirst && (
               <div className="flex flex-wrap gap-2 mt-5 justify-center">
                 {[
-                  `${config.name}, faça uma auditoria do sistema`,
-                  "Briefing executivo do dia",
-                  "Status de todos os agentes",
-                  "Análise de riscos",
+                  t("cmd.audit_system", { name: config.name }),
+                  t("cmd.briefing_day"),
+                  t("cmd.status_agents"),
+                  t("cmd.risk_analysis"),
                 ].map(s => (
                   <button
                     key={s}
@@ -262,7 +245,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                   : "bg-card border border-border/20 backdrop-blur-sm"
               }`}>
                 {msg.role === "assistant" ? (
-                  <div className="prose prose-sm prose-invert max-w-none text-[15px] leading-relaxed [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                  <div className="prose prose-sm dark:prose-invert max-w-none text-[15px] leading-relaxed [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
                     <ReactMarkdown>{msg.content.replace(/```kpi[\s\S]*?```/g, "")}</ReactMarkdown>
                   </div>
                 ) : (
@@ -293,7 +276,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         )}
       </div>
 
-      {/* Input area */}
       <div className="shrink-0 p-4 border-t border-border/10 bg-background/50 backdrop-blur-sm">
         <div className="flex gap-2 items-center">
           <Button
@@ -312,7 +294,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
-            placeholder={`Fale com ${config.name}...`}
+            placeholder={t("cmd.talk_to", { name: config.name })}
             className="flex-1 bg-card/30 border-border/20"
             disabled={isLoading}
           />
@@ -337,7 +319,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             onClick={() => {
               if (messages.length === 0) return;
               if (messages.length > 2) {
-                const confirmed = window.confirm("Limpar todo o histórico do chat?");
+                const confirmed = window.confirm(t("cmd.clear_confirm"));
                 if (!confirmed) return;
               }
               onClear();

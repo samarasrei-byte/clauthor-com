@@ -1,10 +1,12 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Square, Mic, MicOff, Volume2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
 import type { MonixMessage, MonixConfig } from "@/hooks/useMonix";
+import { useTranslation } from "react-i18next";
 
 interface MonixChatProps {
   messages: MonixMessage[];
@@ -17,6 +19,7 @@ interface MonixChatProps {
 }
 
 const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, onClear }: MonixChatProps) => {
+  const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -33,13 +36,31 @@ const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     setInput("");
   };
 
-  // Voice input
-  const toggleVoice = () => {
-    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) return;
+  // Voice input with proper permission handling (parity with OmnixChat)
+  const toggleVoice = useCallback(async () => {
+    if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
+      toast.error(t("cmd.mic_unsupported"));
+      return;
+    }
 
     if (isListening) {
       recognitionRef.current?.stop();
       setIsListening(false);
+      return;
+    }
+
+    // Request microphone permission explicitly
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (err: any) {
+      console.error("Microphone permission error:", err);
+      if (err.name === "NotAllowedError") {
+        toast.error(t("cmd.mic_denied"));
+      } else if (err.name === "NotFoundError") {
+        toast.error(t("cmd.mic_not_found"));
+      } else {
+        toast.error(t("cmd.mic_error", { error: err.message || "Unknown" }));
+      }
       return;
     }
 
@@ -54,12 +75,24 @@ const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       setInput(transcript);
     };
     recognition.onend = () => setIsListening(false);
-    recognition.onerror = () => setIsListening(false);
+    recognition.onerror = (e: any) => {
+      setIsListening(false);
+      console.error("SpeechRecognition error:", e.error, e.message);
+      if (e.error === "not-allowed") {
+        toast.error(t("cmd.mic_denied_short"));
+      } else if (e.error === "no-speech") {
+        toast.info(t("cmd.no_speech"));
+      } else if (e.error === "network") {
+        toast.error(t("cmd.network_error"));
+      } else if (e.error !== "aborted") {
+        toast.error(t("cmd.voice_error", { error: e.error }));
+      }
+    };
 
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  };
+  }, [config.language, isListening, t]);
 
   // TTS output
   const speak = (text: string) => {
@@ -79,7 +112,6 @@ const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       {/* Chat header */}
       <div className="shrink-0 px-4 py-3 border-b border-border/30 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          {/* Animated orb */}
           <div className="relative w-10 h-10">
             <div className={`absolute inset-0 rounded-full bg-primary/20 ${isStreaming ? "animate-ping" : ""}`} />
             <div className="absolute inset-1 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center">
@@ -91,7 +123,7 @@ const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           <div>
             <h3 className="font-display font-bold text-sm">{config.name}</h3>
             <p className="text-[11px] text-muted-foreground">
-              {isStreaming ? "Processando..." : "Chief AI Officer"}
+              {isStreaming ? t("cmd.processing") : t("cmd.chief_ai")}
             </p>
           </div>
         </div>
@@ -107,12 +139,12 @@ const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             <div className="w-20 h-20 rounded-full bg-gradient-to-br from-primary/20 to-primary/5 flex items-center justify-center mb-4">
               <span className="text-2xl font-display font-bold text-primary">{config.name.slice(0, 2)}</span>
             </div>
-            <h3 className="font-display font-bold text-lg mb-1">Olá, eu sou o {config.name}</h3>
+            <h3 className="font-display font-bold text-lg mb-1">{t("cmd.hello_monix", { name: config.name })}</h3>
             <p className="text-sm text-muted-foreground max-w-sm">
-              Seu Chief AI Officer pessoal. Peça um briefing, análise de KPIs, panorama de agentes ou qualquer visão estratégica.
+              {t("cmd.monix_desc")}
             </p>
             <div className="flex flex-wrap gap-2 mt-4 justify-center">
-              {["Briefing do dia", "Status dos agentes", "Análise de KPIs", "Riscos e oportunidades"].map(s => (
+              {[t("cmd.briefing_short"), t("cmd.agent_status_short"), t("cmd.kpi_analysis"), t("cmd.risk_opportunities")].map(s => (
                 <button key={s} onClick={() => onSend(s)} className="px-3 py-1.5 rounded-full border border-border/50 text-xs text-muted-foreground hover:text-foreground hover:border-primary/30 transition-colors">
                   {s}
                 </button>
@@ -135,7 +167,7 @@ const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                   : "bg-card/60 border border-border/30"
               }`}>
                 {msg.role === "assistant" ? (
-                  <div className="prose prose-sm prose-invert max-w-none">
+                  <div className="prose prose-sm dark:prose-invert max-w-none">
                     <ReactMarkdown>{msg.content.replace(/```kpi[\s\S]*?```/g, "")}</ReactMarkdown>
                   </div>
                 ) : (
@@ -195,7 +227,7 @@ const MonixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
-            placeholder={`Fale com ${config.name}...`}
+            placeholder={t("cmd.talk_to", { name: config.name })}
             className="flex-1"
             disabled={isLoading}
           />

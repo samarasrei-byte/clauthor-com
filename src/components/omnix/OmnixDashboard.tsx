@@ -71,11 +71,11 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
 
   const kpiCards = [
     { label: kpiLabels.agents, value: activeAgents, icon: Bot, color: "text-primary" },
-    { label: kpiLabels.executions, value: totalExecs, icon: Zap, color: "text-cyan-400" },
-    { label: kpiLabels.success, value: `${successRate}%`, icon: CheckCircle, color: "text-emerald-400" },
-    { label: kpiLabels.time, value: `${avgTime}ms`, icon: Clock, color: "text-amber-400" },
-    { label: kpiLabels.credits, value: remainingCredits, icon: Coins, color: "text-violet-400" },
-    { label: kpiLabels.tasks, value: openTasks, icon: Target, color: "text-orange-400" },
+    { label: kpiLabels.executions, value: totalExecs, icon: Zap, color: "text-primary/70" },
+    { label: kpiLabels.success, value: `${successRate}%`, icon: CheckCircle, color: "text-accent-foreground" },
+    { label: kpiLabels.time, value: `${avgTime}ms`, icon: Clock, color: "text-muted-foreground" },
+    { label: kpiLabels.credits, value: remainingCredits, icon: Coins, color: "text-primary/80" },
+    { label: kpiLabels.tasks, value: openTasks, icon: Target, color: "text-destructive/70" },
   ];
 
   // Compact mode: just KPIs in a horizontal bar
@@ -83,8 +83,8 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
     return (
       <div className="px-4 py-2.5">
         <div className="flex items-center gap-1 mb-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[9px] font-mono text-emerald-400/70 uppercase tracking-widest">THOR ONLINE</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          <span className="text-[9px] font-mono text-primary/70 uppercase tracking-widest">THOR ONLINE</span>
         </div>
         <div className="flex items-center gap-3 overflow-x-auto pb-1">
           {kpiCards.map((kpi, i) => (
@@ -103,7 +103,7 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
               <Activity className="h-3 w-3 text-primary" />
               <span className="text-[10px] text-muted-foreground/60">{kpi.label}</span>
               <span className="font-display font-bold text-xs">{kpi.value}</span>
-              {kpi.trend === "up" && <TrendingUp className="h-2.5 w-2.5 text-emerald-400" />}
+              {kpi.trend === "up" && <TrendingUp className="h-2.5 w-2.5 text-primary" />}
             </div>
           ))}
 
@@ -137,8 +137,8 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest">System Dashboard</span>
         <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[10px] font-mono text-emerald-400/70">ALL SYSTEMS ONLINE</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          <span className="text-[10px] font-mono text-primary/70">ALL SYSTEMS ONLINE</span>
         </div>
       </div>
 
@@ -176,9 +176,9 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
                 <p className="text-[9px] text-muted-foreground/60">{kpi.label}</p>
                 <div className="flex items-center gap-1.5">
                   <span className="font-display font-bold text-sm">{kpi.value}</span>
-                  {kpi.trend === "up" && <TrendingUp className="h-3 w-3 text-emerald-400" />}
+                  {kpi.trend === "up" && <TrendingUp className="h-3 w-3 text-primary" />}
                   {kpi.trend === "down" && <TrendingUp className="h-3 w-3 text-destructive rotate-180" />}
-                  {kpi.delta && <span className={`text-[9px] ${kpi.trend === "up" ? "text-emerald-400" : "text-destructive"}`}>{kpi.delta}</span>}
+                  {kpi.delta && <span className={`text-[9px] ${kpi.trend === "up" ? "text-primary" : "text-destructive"}`}>{kpi.delta}</span>}
                 </div>
               </div>
             ))}
