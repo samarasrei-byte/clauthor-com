@@ -252,7 +252,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         <AnimatePresence>
           {messages.map((msg, i) => (
             <motion.div
-              key={i}
+              key={`${msg.role}-${msg.timestamp.getTime()}-${i}`}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
