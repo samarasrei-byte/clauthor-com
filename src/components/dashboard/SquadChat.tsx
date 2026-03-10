@@ -40,8 +40,8 @@ interface SquadChatProps {
 
 const tierDot: Record<string, string> = {
   basic: "bg-muted-foreground",
-  intermediate: "bg-blue-400",
-  advanced: "bg-emerald-400",
+  intermediate: "bg-primary/60",
+  advanced: "bg-primary",
   enterprise: "bg-primary",
 };
 
