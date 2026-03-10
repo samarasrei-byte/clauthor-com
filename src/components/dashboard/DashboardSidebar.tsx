@@ -150,7 +150,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
                 {/* Tooltip when collapsed */}
                 {collapsed && (
-                  <div className="absolute left-full ml-2 px-2.5 py-1.5 rounded-lg bg-background border border-white/10 text-xs font-medium opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-xl">
+                  <div className="absolute left-full ml-2 px-2.5 py-1.5 rounded-lg bg-background border border-border/20 text-xs font-medium opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-xl">
                     {item.label}
                     {item.badge && (
                       <span className="ml-1.5 text-[10px] text-primary">({item.badge})</span>
