@@ -433,9 +433,9 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
             <div className="w-20 h-20 rounded-full bg-primary/5 border border-primary/10 flex items-center justify-center mb-4">
               <MessageSquare className="h-8 w-8 text-primary/40" />
             </div>
-            <h3 className="font-display font-bold text-lg text-foreground mb-2">Selecione um agente</h3>
+            <h3 className="font-display font-bold text-lg text-foreground mb-2">{t("squad.select_agent")}</h3>
             <p className="text-sm text-muted-foreground max-w-xs">
-              Escolha um agente da sua equipe para iniciar uma conversa individual.
+              {t("squad.select_agent_desc")}
             </p>
           </div>
         ) : (
