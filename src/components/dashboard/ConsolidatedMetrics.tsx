@@ -197,7 +197,7 @@ const ConsolidatedMetrics = ({
                   {remainingCredits.toLocaleString(locale)}
                 </p>
                 <p className="text-[10px] text-muted-foreground">
-                  {locale.startsWith("pt") ? "créditos restantes" : "credits remaining"}
+                  {"credits remaining"}
                 </p>
               </div>
 
