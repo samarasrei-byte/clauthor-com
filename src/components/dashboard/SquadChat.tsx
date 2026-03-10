@@ -343,7 +343,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                   className="text-primary text-xs mt-2"
                   onClick={() => onRequestAgent?.("")}
                 >
-                  Contratar agentes →
+                  {t("squad.hire_agents")}
                 </Button>
               )}
             </div>
