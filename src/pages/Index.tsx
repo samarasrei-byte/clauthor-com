@@ -590,13 +590,13 @@ const HomePage = () => {
           </motion.div>
 
           <div className="space-y-4 sm:space-y-6">
-            {[
+              {[
               { step: "01", icon: Crosshair, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
               { step: "02", icon: Layers3, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
               { step: "03", icon: Bolt, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
-            ].map((item, i) => (
+            ].map((item) => (
               <motion.div
-                key={i}
+                key={item.step}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
