@@ -188,7 +188,7 @@ const Navbar = () => {
 
           <div className="hidden md:flex items-center gap-2">
             <ThemeToggle />
-            <LanguageSelector />
+            {/* <LanguageSelector /> */}
             {user ? (
               <>
                 <Button 
