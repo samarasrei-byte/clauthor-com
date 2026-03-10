@@ -200,6 +200,7 @@ const integrations: Integration[] = [
 ];
 
 const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integration; connectedKeys: Set<string>; onSaved: () => void }) => {
+  const { t } = useTranslation();
   const [values, setValues] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
   const [validating, setValidating] = useState(false);
