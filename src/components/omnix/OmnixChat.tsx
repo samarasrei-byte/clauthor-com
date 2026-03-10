@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
+import ChatFeedback from "@/components/dashboard/ChatFeedback";
 import AudioWaveform from "./AudioWaveform";
 import AudioSpectrum from "./AudioSpectrum";
 import OmnixOrb from "./OmnixOrb";

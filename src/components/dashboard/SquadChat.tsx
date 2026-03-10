@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useMemo, useCallback } from "react";
+import ChatFeedback from "./ChatFeedback";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, Bot, Loader2, Users, Search,
