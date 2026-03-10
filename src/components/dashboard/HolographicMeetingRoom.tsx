@@ -673,7 +673,7 @@ Apenas o texto, sem introduções.`,
                 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold"
               >
                 <span className="bg-gradient-to-r from-foreground via-primary to-foreground bg-clip-text text-transparent">
-                  Sala de Reunião
+                  {t("meeting.room_title")}
                 </span>
               </motion.h1>
               
