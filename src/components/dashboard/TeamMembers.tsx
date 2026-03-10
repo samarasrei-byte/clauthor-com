@@ -9,23 +9,24 @@ import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useTranslation } from "react-i18next";
 
-const roleConfig: Record<string, { label: string; icon: React.ElementType; color: string }> = {
-  owner: { label: "Proprietário", icon: Crown, color: "bg-primary/15 text-primary" },
-  admin: { label: "Admin", icon: Shield, color: "bg-accent-amber/15 text-accent-amber" },
-  member: { label: "Membro", icon: Users, color: "bg-accent-blue/15 text-accent-blue" },
-  viewer: { label: "Visualizador", icon: Eye, color: "bg-muted text-muted-foreground" },
+const roleKeys: Record<string, { labelKey: string; icon: React.ElementType; color: string }> = {
+  owner: { labelKey: "team.role_owner", icon: Crown, color: "bg-primary/15 text-primary" },
+  admin: { labelKey: "team.role_admin", icon: Shield, color: "bg-primary/10 text-primary" },
+  member: { labelKey: "team.role_member", icon: Users, color: "bg-muted text-muted-foreground" },
+  viewer: { labelKey: "team.role_viewer", icon: Eye, color: "bg-muted text-muted-foreground" },
 };
 
-const areaOptions = [
-  { id: "geral", label: "Geral" },
-  { id: "financeiro", label: "Financeiro" },
-  { id: "comercial", label: "Comercial" },
-  { id: "marketing", label: "Marketing" },
-  { id: "tecnologia", label: "Tecnologia" },
-  { id: "rh", label: "RH" },
-  { id: "suporte", label: "Suporte" },
-  { id: "criacao", label: "Criação" },
+const areaKeys = [
+  { id: "geral", key: "team.area_geral" },
+  { id: "financeiro", key: "team.area_financeiro" },
+  { id: "comercial", key: "team.area_comercial" },
+  { id: "marketing", key: "team.area_marketing" },
+  { id: "tecnologia", key: "team.area_tecnologia" },
+  { id: "rh", key: "team.area_rh" },
+  { id: "suporte", key: "team.area_suporte" },
+  { id: "criacao", key: "team.area_criacao" },
 ];
 
 const planLimits: Record<string, { members: number; label: string }> = {
@@ -37,8 +38,16 @@ const planLimits: Record<string, { members: number; label: string }> = {
   enterprise: { members: 100, label: "Enterprise" },
 };
 
+const descKeys: Record<string, string> = {
+  owner: "team.desc_owner",
+  admin: "team.desc_admin",
+  member: "team.desc_member",
+  viewer: "team.desc_viewer",
+};
+
 const TeamMembers = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState("member");
@@ -102,28 +111,31 @@ const TeamMembers = () => {
   const canInvite = memberCount < limits.members;
   const usagePct = Math.min((memberCount / limits.members) * 100, 100);
 
+  const getRoleLabel = (role: string) => t(roleKeys[role]?.labelKey || "team.role_member");
+  const getAreaLabel = (areaId: string) => {
+    const area = areaKeys.find(a => a.id === areaId);
+    return area ? t(area.key) : areaId;
+  };
+
   const handleInvite = async () => {
     if (!inviteEmail.trim() || !tenantId || !user) return;
     if (!canInvite) {
-      toast.error(`Limite de ${limits.members} membros atingido no plano ${limits.label}. Faça upgrade.`);
+      toast.error(t("team.limit_toast", { max: limits.members, plan: limits.label }));
       return;
     }
 
-    // Validate email format
     const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
     if (!emailRegex.test(inviteEmail.trim())) {
-      toast.error("Email inválido.");
+      toast.error(t("team.invalid_email"));
       return;
     }
 
     setIsInviting(true);
     try {
-      // Check if the user exists by looking up profiles (by email we can't directly, so we create a notification)
-      // For now, store the invite as a notification that can be picked up
       const { error } = await supabase.from("notifications").insert({
         user_id: user.id,
-        title: "Convite de equipe enviado",
-        message: `Convite enviado para ${inviteEmail} como ${roleConfig[inviteRole]?.label || inviteRole} na área ${areaOptions.find(a => a.id === inviteArea)?.label || inviteArea}`,
+        title: t("team.invite_notification"),
+        message: t("team.invite_notification_msg", { email: inviteEmail, role: getRoleLabel(inviteRole), area: getAreaLabel(inviteArea) }),
         type: "team_invite",
         metadata: {
           invite_email: inviteEmail,
@@ -135,14 +147,14 @@ const TeamMembers = () => {
 
       if (error) throw error;
 
-      toast.success(`Convite enviado para ${inviteEmail}`, {
-        description: `Área: ${areaOptions.find(a => a.id === inviteArea)?.label || inviteArea} • Função: ${roleConfig[inviteRole]?.label}`,
+      toast.success(t("team.invite_sent", { email: inviteEmail }), {
+        description: t("team.invite_sent_desc", { area: getAreaLabel(inviteArea), role: getRoleLabel(inviteRole) }),
       });
       setInviteEmail("");
       queryClient.invalidateQueries({ queryKey: ["tenant-members"] });
     } catch (err) {
       console.error("Invite error:", err);
-      toast.error("Erro ao enviar convite.");
+      toast.error(t("team.invite_error"));
     } finally {
       setIsInviting(false);
     }
@@ -150,7 +162,7 @@ const TeamMembers = () => {
 
   const handleRemoveMember = async (memberId: string, memberUserId: string) => {
     if (memberUserId === user?.id) {
-      toast.error("Você não pode remover a si mesmo.");
+      toast.error(t("team.remove_self_error"));
       return;
     }
     try {
@@ -159,10 +171,10 @@ const TeamMembers = () => {
         .delete()
         .eq("id", memberId);
       if (error) throw error;
-      toast.success("Membro removido.");
+      toast.success(t("team.member_removed"));
       queryClient.invalidateQueries({ queryKey: ["tenant-members"] });
     } catch {
-      toast.error("Erro ao remover membro.");
+      toast.error(t("team.remove_error"));
     }
   };
 
@@ -173,10 +185,10 @@ const TeamMembers = () => {
         .update({ role: newRole })
         .eq("id", memberId);
       if (error) throw error;
-      toast.success("Permissão atualizada.");
+      toast.success(t("team.permission_updated"));
       queryClient.invalidateQueries({ queryKey: ["tenant-members"] });
     } catch {
-      toast.error("Erro ao atualizar permissão.");
+      toast.error(t("team.permission_error"));
     }
   };
 
@@ -185,28 +197,28 @@ const TeamMembers = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h2 className="font-display text-xl font-bold">Equipe</h2>
+          <h2 className="font-display text-xl font-bold">{t("team.title")}</h2>
           <p className="text-sm text-muted-foreground">
-            {tenant?.name || "Meu Workspace"} • {memberCount} de {limits.members} membro{limits.members !== 1 ? "s" : ""}
+            {tenant?.name || t("team.workspace_default")} • {memberCount} {t("team.members_used").toLowerCase()} ({limits.members} max)
           </p>
         </div>
         <Badge variant="secondary" className="self-start gap-1.5 text-xs">
           <Zap className="h-3 w-3" />
-          Plano {limits.label}
+          {t("team.plan_label", { plan: limits.label })}
         </Badge>
       </div>
 
       {/* Member Usage Bar */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-2xl p-4 border border-border">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-xs text-muted-foreground">Membros utilizados</span>
+          <span className="text-xs text-muted-foreground">{t("team.members_used")}</span>
           <span className="text-xs font-semibold">{memberCount}/{limits.members}</span>
         </div>
         <Progress value={usagePct} className="h-2" />
         {!canInvite && (
           <div className="flex items-center gap-2 mt-2 p-2 rounded-lg bg-destructive/10">
             <Lock className="h-3 w-3 text-destructive" />
-            <span className="text-[10px] text-destructive">Limite atingido. Faça upgrade para adicionar mais membros.</span>
+            <span className="text-[10px] text-destructive">{t("team.limit_reached")}</span>
           </div>
         )}
       </motion.div>
@@ -219,16 +231,16 @@ const TeamMembers = () => {
           className="glass-card rounded-2xl p-5 border border-border"
         >
           <div className="flex items-center gap-2 mb-4">
-            <UserPlus className="h-4 w-4 text-accent-violet" />
-            <span className="text-sm font-medium">Convidar Membro</span>
+            <UserPlus className="h-4 w-4 text-primary" />
+            <span className="text-sm font-medium">{t("team.invite_member")}</span>
             <Badge variant="secondary" className="text-[9px] ml-auto">
-              {memberCount}/{limits.members} vagas
+              {memberCount}/{limits.members} {t("team.slots")}
             </Badge>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
             <Input
               type="email"
-              placeholder="email@empresa.com"
+              placeholder={t("team.email_placeholder")}
               value={inviteEmail}
               onChange={(e) => setInviteEmail(e.target.value)}
               disabled={!canInvite}
@@ -240,8 +252,8 @@ const TeamMembers = () => {
               disabled={!canInvite}
               className="h-9 px-3 rounded-md border border-border bg-card text-sm text-foreground"
             >
-              {areaOptions.map(a => (
-                <option key={a.id} value={a.id}>{a.label}</option>
+              {areaKeys.map(a => (
+                <option key={a.id} value={a.id}>{t(a.key)}</option>
               ))}
             </select>
             <select
@@ -250,9 +262,9 @@ const TeamMembers = () => {
               disabled={!canInvite}
               className="h-9 px-3 rounded-md border border-border bg-card text-sm text-foreground"
             >
-              <option value="admin">Admin</option>
-              <option value="member">Membro</option>
-              <option value="viewer">Visualizador</option>
+              <option value="admin">{t("team.role_admin")}</option>
+              <option value="member">{t("team.role_member")}</option>
+              <option value="viewer">{t("team.role_viewer")}</option>
             </select>
             <Button
               onClick={handleInvite}
@@ -264,13 +276,13 @@ const TeamMembers = () => {
               ) : (
                 <>
                   <Mail className="h-4 w-4" />
-                  Convidar
+                  {t("team.invite")}
                 </>
               )}
             </Button>
           </div>
           <p className="text-[10px] text-muted-foreground mt-2">
-            Membros participam da reunião com agentes e acessam o dashboard de acordo com sua função.
+            {t("team.invite_desc")}
           </p>
         </motion.div>
       )}
@@ -284,7 +296,7 @@ const TeamMembers = () => {
       >
         <div className="p-4 border-b border-border flex items-center gap-2">
           <Users className="h-4 w-4 text-primary" />
-          <span className="text-sm font-medium">Membros ({memberCount})</span>
+          <span className="text-sm font-medium">{t("team.members_count", { count: memberCount })}</span>
         </div>
 
         {isLoading ? (
@@ -293,13 +305,13 @@ const TeamMembers = () => {
           </div>
         ) : members.length === 0 ? (
           <div className="p-8 text-center text-muted-foreground text-sm">
-            Nenhum membro encontrado.
+            {t("team.no_members")}
           </div>
         ) : (
           <div className="divide-y divide-border">
             {members.map((member: any) => {
-              const role = roleConfig[member.role] || roleConfig.member;
-              const RoleIcon = role.icon;
+              const roleInfo = roleKeys[member.role] || roleKeys.member;
+              const RoleIcon = roleInfo.icon;
               const profile = member.profile;
               const isMe = member.user_id === user?.id;
               const isOwner = member.role === "owner";
@@ -318,36 +330,35 @@ const TeamMembers = () => {
                     <div>
                       <div className="flex items-center gap-2">
                         <span className="text-sm font-medium">
-                          {profile?.full_name || `Usuário ${member.user_id.slice(0, 8)}`}
+                          {profile?.full_name || `User ${member.user_id.slice(0, 8)}`}
                         </span>
                         {isMe && (
-                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0">Você</Badge>
+                          <Badge variant="secondary" className="text-[9px] px-1.5 py-0">{t("team.you")}</Badge>
                         )}
                       </div>
                       {profile?.company_name && (
                         <span className="text-[10px] text-muted-foreground">{profile.company_name}</span>
                       )}
                       <span className="text-[10px] text-muted-foreground block">
-                        Desde {new Date(member.created_at).toLocaleDateString("pt-BR", { month: "short", year: "numeric" })}
+                        {t("team.since", { date: new Date(member.created_at).toLocaleDateString(undefined, { month: "short", year: "numeric" }) })}
                       </span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    {/* Role change dropdown for admins */}
                     {isAdmin && !isMe && !isOwner && (
                       <select
                         value={member.role}
                         onChange={(e) => handleChangeRole(member.id, e.target.value)}
                         className="h-7 px-2 rounded border border-border bg-card text-[10px] text-foreground"
                       >
-                        <option value="admin">Admin</option>
-                        <option value="member">Membro</option>
-                        <option value="viewer">Visualizador</option>
+                        <option value="admin">{t("team.role_admin")}</option>
+                        <option value="member">{t("team.role_member")}</option>
+                        <option value="viewer">{t("team.role_viewer")}</option>
                       </select>
                     )}
-                    <Badge variant="secondary" className={`text-[10px] gap-1 ${role.color}`}>
+                    <Badge variant="secondary" className={`text-[10px] gap-1 ${roleInfo.color}`}>
                       <RoleIcon className="h-2.5 w-2.5" />
-                      {role.label}
+                      {t(roleInfo.labelKey)}
                     </Badge>
                     {isAdmin && !isMe && !isOwner && (
                       <Button
@@ -374,9 +385,9 @@ const TeamMembers = () => {
         transition={{ delay: 0.2 }}
         className="glass-card rounded-2xl p-5 border border-border"
       >
-        <h3 className="font-display font-semibold text-sm mb-3">Níveis de Acesso</h3>
+        <h3 className="font-display font-semibold text-sm mb-3">{t("team.access_levels")}</h3>
         <div className="grid sm:grid-cols-2 gap-3">
-          {Object.entries(roleConfig).map(([key, config]) => {
+          {Object.entries(roleKeys).map(([key, config]) => {
             const Icon = config.icon;
             return (
               <div key={key} className="flex items-start gap-3 p-3 rounded-xl bg-card/50">
@@ -384,12 +395,9 @@ const TeamMembers = () => {
                   <Icon className="h-4 w-4" />
                 </div>
                 <div>
-                  <p className="text-xs font-semibold">{config.label}</p>
+                  <p className="text-xs font-semibold">{t(config.labelKey)}</p>
                   <p className="text-[10px] text-muted-foreground">
-                    {key === "owner" && "Controle total do workspace, agentes e membros."}
-                    {key === "admin" && "Gerencia agentes, configurações e convida membros."}
-                    {key === "member" && "Usa agentes, vê analytics e participa de reuniões."}
-                    {key === "viewer" && "Visualiza dashboards e relatórios. Sem enviar mensagens."}
+                    {t(descKeys[key])}
                   </p>
                 </div>
               </div>
@@ -405,7 +413,7 @@ const TeamMembers = () => {
         transition={{ delay: 0.3 }}
         className="glass-card rounded-2xl p-5 border border-border"
       >
-        <h3 className="font-display font-semibold text-sm mb-3">Limites por Plano</h3>
+        <h3 className="font-display font-semibold text-sm mb-3">{t("team.plan_limits")}</h3>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {Object.entries(planLimits).filter(([k]) => k !== "free").map(([key, plan]) => (
             <div
@@ -414,9 +422,9 @@ const TeamMembers = () => {
             >
               <p className="text-[10px] text-muted-foreground">{plan.label}</p>
               <p className="font-display font-bold text-lg">{plan.members}</p>
-              <p className="text-[10px] text-muted-foreground">membros</p>
+              <p className="text-[10px] text-muted-foreground">{t("team.members")}</p>
               {planType === key && (
-                <Badge variant="default" className="text-[8px] mt-1">Atual</Badge>
+                <Badge variant="default" className="text-[8px] mt-1">{t("team.current")}</Badge>
               )}
             </div>
           ))}

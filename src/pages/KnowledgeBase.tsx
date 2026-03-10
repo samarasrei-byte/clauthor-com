@@ -19,21 +19,22 @@ import {
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
+import { useTranslation } from "react-i18next";
 
 const CATEGORIES = [
-  { value: "general", label: "Geral", icon: "📁" },
-  { value: "produto", label: "Produto", icon: "📦" },
-  { value: "vendas", label: "Vendas", icon: "💰" },
-  { value: "suporte", label: "Suporte", icon: "🎧" },
-  { value: "marketing", label: "Marketing", icon: "📢" },
-  { value: "financeiro", label: "Financeiro", icon: "📊" },
-  { value: "rh", label: "RH", icon: "👥" },
-  { value: "juridico", label: "Jurídico", icon: "⚖️" },
-  { value: "tecnologia", label: "Tecnologia", icon: "💻" },
-  { value: "operacoes", label: "Operações", icon: "⚙️" },
-  { value: "faq", label: "FAQ", icon: "❓" },
-  { value: "processos", label: "Processos", icon: "📋" },
-  { value: "politicas", label: "Políticas", icon: "📜" },
+  { value: "general", key: "knowledge.cat_general", icon: "📁" },
+  { value: "produto", key: "knowledge.cat_produto", icon: "📦" },
+  { value: "vendas", key: "knowledge.cat_vendas", icon: "💰" },
+  { value: "suporte", key: "knowledge.cat_suporte", icon: "🎧" },
+  { value: "marketing", key: "knowledge.cat_marketing", icon: "📢" },
+  { value: "financeiro", key: "knowledge.cat_financeiro", icon: "📊" },
+  { value: "rh", key: "knowledge.cat_rh", icon: "👥" },
+  { value: "juridico", key: "knowledge.cat_juridico", icon: "⚖️" },
+  { value: "tecnologia", key: "knowledge.cat_tecnologia", icon: "💻" },
+  { value: "operacoes", key: "knowledge.cat_operacoes", icon: "⚙️" },
+  { value: "faq", key: "knowledge.cat_faq", icon: "❓" },
+  { value: "processos", key: "knowledge.cat_processos", icon: "📋" },
+  { value: "politicas", key: "knowledge.cat_politicas", icon: "📜" },
 ];
 
 interface KnowledgeDoc {
@@ -48,6 +49,7 @@ interface KnowledgeDoc {
 
 const KnowledgeBase = () => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -57,7 +59,6 @@ const KnowledgeBase = () => {
   const [showCreate, setShowCreate] = useState(false);
   const [newDoc, setNewDoc] = useState({ title: "", content: "", category: "general", agent_id: "" });
 
-  // Fetch tenant_id
   const { data: tenantId } = useQuery({
     queryKey: ["tenant-id", user?.id],
     queryFn: async () => {
@@ -68,7 +69,6 @@ const KnowledgeBase = () => {
     enabled: !!user?.id,
   });
 
-  // Fetch documents
   const { data: documents = [], isLoading } = useQuery({
     queryKey: ["knowledge-documents", user?.id],
     queryFn: async () => {
@@ -83,7 +83,6 @@ const KnowledgeBase = () => {
     enabled: !!user?.id,
   });
 
-  // Fetch user's agents for assignment
   const { data: agents = [] } = useQuery({
     queryKey: ["user-agents-list", user?.id],
     queryFn: async () => {
@@ -98,7 +97,6 @@ const KnowledgeBase = () => {
     enabled: !!user?.id,
   });
 
-  // Create document
   const createMutation = useMutation({
     mutationFn: async (doc: typeof newDoc) => {
       if (!user?.id || !tenantId) throw new Error("Not authenticated");
@@ -116,12 +114,11 @@ const KnowledgeBase = () => {
       queryClient.invalidateQueries({ queryKey: ["knowledge-documents"] });
       setShowCreate(false);
       setNewDoc({ title: "", content: "", category: "general", agent_id: "" });
-      toast.success("Documento adicionado à base de conhecimento! 📚");
+      toast.success(t("knowledge.doc_created"));
     },
-    onError: (err: any) => toast.error(err.message || "Erro ao criar documento"),
+    onError: (err: any) => toast.error(err.message || t("knowledge.create_error")),
   });
 
-  // Update document
   const updateMutation = useMutation({
     mutationFn: async ({ id, ...data }: { id: string; title: string; content: string; category: string; agent_id: string }) => {
       const { error } = await supabase
@@ -133,12 +130,11 @@ const KnowledgeBase = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["knowledge-documents"] });
       setEditingId(null);
-      toast.success("Documento atualizado! ✅");
+      toast.success(t("knowledge.doc_updated"));
     },
-    onError: (err: any) => toast.error(err.message || "Erro ao atualizar"),
+    onError: (err: any) => toast.error(err.message || t("knowledge.update_error")),
   });
 
-  // Delete document
   const deleteMutation = useMutation({
     mutationFn: async (id: string) => {
       const { error } = await supabase.from("knowledge_documents").delete().eq("id", id);
@@ -146,11 +142,10 @@ const KnowledgeBase = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["knowledge-documents"] });
-      toast.success("Documento removido da base! 🗑️");
+      toast.success(t("knowledge.doc_deleted"));
     },
   });
 
-  // Filter documents
   const filtered = documents.filter((doc) => {
     if (categoryFilter !== "all" && doc.category !== categoryFilter) return false;
     if (agentFilter !== "all" && (doc.agent_id || "global") !== agentFilter) return false;
@@ -166,7 +161,10 @@ const KnowledgeBase = () => {
     setEditData({ title: doc.title, content: doc.content, category: doc.category, agent_id: doc.agent_id || "" });
   };
 
-  const catLabel = (val: string) => CATEGORIES.find((c) => c.value === val);
+  const catLabel = (val: string) => {
+    const cat = CATEGORIES.find((c) => c.value === val);
+    return cat ? { icon: cat.icon, label: t(cat.key) } : null;
+  };
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -178,9 +176,9 @@ const KnowledgeBase = () => {
               <Database className="h-5 w-5 text-primary" />
             </div>
             <div>
-              <h1 className="font-display text-lg font-bold">Base de Conhecimento</h1>
+              <h1 className="font-display text-lg font-bold">{t("knowledge.title")}</h1>
               <p className="text-xs text-muted-foreground">
-                RAG • {documents.length} documentos • Full-Text Search
+                {t("knowledge.subtitle", { count: documents.length })}
               </p>
             </div>
           </div>
@@ -188,35 +186,35 @@ const KnowledgeBase = () => {
           <Dialog open={showCreate} onOpenChange={setShowCreate}>
             <DialogTrigger asChild>
               <Button size="sm" className="gap-1.5 rounded-xl">
-                <Plus className="h-4 w-4" /> Novo Documento
+                <Plus className="h-4 w-4" /> {t("knowledge.new_document")}
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-lg">
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2">
                   <Sparkles className="h-5 w-5 text-primary" />
-                  Adicionar Documento
+                  {t("knowledge.add_document")}
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-4 pt-2">
                 <Input
-                  placeholder="Título do documento"
+                  placeholder={t("knowledge.doc_title_placeholder")}
                   value={newDoc.title}
                   onChange={(e) => setNewDoc((p) => ({ ...p, title: e.target.value }))}
                 />
                 <div className="grid grid-cols-2 gap-3">
                   <Select value={newDoc.category} onValueChange={(v) => setNewDoc((p) => ({ ...p, category: v }))}>
-                    <SelectTrigger><SelectValue placeholder="Categoria" /></SelectTrigger>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
                       {CATEGORIES.map((c) => (
-                        <SelectItem key={c.value} value={c.value}>{c.icon} {c.label}</SelectItem>
+                        <SelectItem key={c.value} value={c.value}>{c.icon} {t(c.key)}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                   <Select value={newDoc.agent_id || "global"} onValueChange={(v) => setNewDoc((p) => ({ ...p, agent_id: v === "global" ? "" : v }))}>
-                    <SelectTrigger><SelectValue placeholder="Agente" /></SelectTrigger>
+                    <SelectTrigger><SelectValue /></SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="global">🌐 Todos os agentes</SelectItem>
+                      <SelectItem value="global">🌐 {t("knowledge.global")}</SelectItem>
                       {agents.map((a) => (
                         <SelectItem key={a.id} value={a.id}>🤖 {a.name}</SelectItem>
                       ))}
@@ -224,21 +222,21 @@ const KnowledgeBase = () => {
                   </Select>
                 </div>
                 <Textarea
-                  placeholder="Conteúdo do documento... (informações, processos, FAQ, políticas)"
+                  placeholder={t("knowledge.content_placeholder")}
                   value={newDoc.content}
                   onChange={(e) => setNewDoc((p) => ({ ...p, content: e.target.value }))}
                   className="min-h-[200px] resize-y"
                 />
                 <div className="flex items-center gap-2 p-3 rounded-xl bg-primary/5 border border-primary/10 text-xs text-muted-foreground">
                   <AlertCircle className="h-4 w-4 text-primary shrink-0" />
-                  Este conteúdo será indexado automaticamente e usado pelos agentes via RAG.
+                  {t("knowledge.rag_info")}
                 </div>
                 <Button
                   className="w-full rounded-xl"
                   disabled={!newDoc.title.trim() || !newDoc.content.trim() || createMutation.isPending}
                   onClick={() => createMutation.mutate(newDoc)}
                 >
-                  {createMutation.isPending ? "Salvando..." : "Salvar na Base"}
+                  {createMutation.isPending ? t("knowledge.saving") : t("knowledge.save_to_base")}
                 </Button>
               </div>
             </DialogContent>
@@ -250,7 +248,7 @@ const KnowledgeBase = () => {
           <div className="relative flex-1 min-w-[200px]">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Buscar documentos..."
+              placeholder={t("knowledge.search_docs")}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-9 h-9 rounded-xl"
@@ -259,23 +257,23 @@ const KnowledgeBase = () => {
           <Select value={categoryFilter} onValueChange={setCategoryFilter}>
             <SelectTrigger className="w-[160px] h-9 rounded-xl">
               <Filter className="h-3.5 w-3.5 mr-1.5" />
-              <SelectValue placeholder="Categoria" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Todas categorias</SelectItem>
+              <SelectItem value="all">{t("knowledge.all_categories")}</SelectItem>
               {CATEGORIES.map((c) => (
-                <SelectItem key={c.value} value={c.value}>{c.icon} {c.label}</SelectItem>
+                <SelectItem key={c.value} value={c.value}>{c.icon} {t(c.key)}</SelectItem>
               ))}
             </SelectContent>
           </Select>
           <Select value={agentFilter} onValueChange={setAgentFilter}>
             <SelectTrigger className="w-[160px] h-9 rounded-xl">
               <Bot className="h-3.5 w-3.5 mr-1.5" />
-              <SelectValue placeholder="Agente" />
+              <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">Todos agentes</SelectItem>
-              <SelectItem value="global">🌐 Global</SelectItem>
+              <SelectItem value="all">{t("knowledge.all_agents")}</SelectItem>
+              <SelectItem value="global">🌐 {t("knowledge.global")}</SelectItem>
               {agents.map((a) => (
                 <SelectItem key={a.id} value={a.id}>🤖 {a.name}</SelectItem>
               ))}
@@ -296,12 +294,10 @@ const KnowledgeBase = () => {
               <BookOpen className="h-8 w-8 text-primary" />
             </div>
             <p className="text-sm font-medium mb-1">
-              {documents.length === 0 ? "Base de conhecimento vazia" : "Nenhum resultado encontrado"}
+              {documents.length === 0 ? t("knowledge.empty_title") : t("knowledge.no_results_title")}
             </p>
             <p className="text-xs text-muted-foreground max-w-sm">
-              {documents.length === 0
-                ? "Adicione documentos para que seus agentes possam buscar informações relevantes via RAG."
-                : "Tente ajustar os filtros ou a busca."}
+              {documents.length === 0 ? t("knowledge.empty_desc") : t("knowledge.no_results_desc")}
             </p>
           </div>
         ) : (
@@ -333,14 +329,14 @@ const KnowledgeBase = () => {
                               <SelectTrigger><SelectValue /></SelectTrigger>
                               <SelectContent>
                                 {CATEGORIES.map((c) => (
-                                  <SelectItem key={c.value} value={c.value}>{c.icon} {c.label}</SelectItem>
+                                  <SelectItem key={c.value} value={c.value}>{c.icon} {t(c.key)}</SelectItem>
                                 ))}
                               </SelectContent>
                             </Select>
                             <Select value={editData.agent_id || "global"} onValueChange={(v) => setEditData((p) => ({ ...p, agent_id: v === "global" ? "" : v }))}>
                               <SelectTrigger><SelectValue /></SelectTrigger>
                               <SelectContent>
-                                <SelectItem value="global">🌐 Global</SelectItem>
+                                <SelectItem value="global">🌐 {t("knowledge.global")}</SelectItem>
                                 {agents.map((a) => (
                                   <SelectItem key={a.id} value={a.id}>🤖 {a.name}</SelectItem>
                                 ))}
@@ -354,14 +350,14 @@ const KnowledgeBase = () => {
                           />
                           <div className="flex gap-2 justify-end">
                             <Button variant="ghost" size="sm" onClick={() => setEditingId(null)}>
-                              <X className="h-4 w-4 mr-1" /> Cancelar
+                              <X className="h-4 w-4 mr-1" /> {t("knowledge.cancel")}
                             </Button>
                             <Button
                               size="sm"
                               disabled={updateMutation.isPending}
                               onClick={() => updateMutation.mutate({ id: doc.id, ...editData })}
                             >
-                              <Save className="h-4 w-4 mr-1" /> Salvar
+                              <Save className="h-4 w-4 mr-1" /> {t("knowledge.save")}
                             </Button>
                           </div>
                         </div>
@@ -381,7 +377,7 @@ const KnowledgeBase = () => {
                                 )}
                                 {!doc.agent_id && (
                                   <Badge variant="outline" className="text-[10px] px-1.5 py-0 shrink-0 text-muted-foreground">
-                                    🌐 Global
+                                    🌐 {t("knowledge.global")}
                                   </Badge>
                                 )}
                               </div>
@@ -389,8 +385,8 @@ const KnowledgeBase = () => {
                                 {doc.content}
                               </p>
                               <p className="text-[10px] text-muted-foreground/50 mt-2">
-                                Atualizado: {new Date(doc.updated_at).toLocaleDateString("pt-BR")}
-                                {" • "}{doc.content.length} caracteres
+                                {t("knowledge.updated", { date: new Date(doc.updated_at).toLocaleDateString() })}
+                                {" • "}{t("knowledge.characters", { count: doc.content.length })}
                               </p>
                             </div>
                             <div className="flex gap-1 shrink-0">
@@ -420,10 +416,10 @@ const KnowledgeBase = () => {
 
       {/* Footer stats */}
       <div className="shrink-0 px-6 py-3 border-t border-border/10 flex items-center justify-between text-[10px] text-muted-foreground">
-        <span>{filtered.length} de {documents.length} documentos</span>
+        <span>{t("knowledge.footer_count", { filtered: filtered.length, total: documents.length })}</span>
         <span className="flex items-center gap-1">
           <Sparkles className="h-3 w-3 text-primary" />
-          RAG ativo • Full-Text Search em português
+          {t("knowledge.rag_active")}
         </span>
       </div>
     </div>
