@@ -61,9 +61,9 @@ export default function PaymentHistoryTable() {
 
   const formatCurrency = (cents: number, currency: string) => {
     if (cents === 0) return "—";
-    return new Intl.NumberFormat("pt-BR", {
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: currency || "BRL",
+      currency: currency || "USD",
       minimumFractionDigits: 0,
     }).format(cents);
   };
