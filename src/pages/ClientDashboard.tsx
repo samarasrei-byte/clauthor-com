@@ -274,23 +274,23 @@ const ClientDashboard = () => {
     ...soloAgentItems,
 
     // More — secondary features grouped together
-    { id: "equipe", label: "Equipe", icon: Users, group: moreGroup },
-    { id: "war-room", label: "Sala de Reunião", icon: Presentation, group: moreGroup },
-    { id: "knowledge-base", label: "Base de Conhecimento", icon: Database, group: moreGroup },
-    { id: "ai-quality", label: "Qualidade IA", icon: Star, group: moreGroup },
-    { id: "results", label: "Resultados", icon: FileText, group: moreGroup },
-    { id: "live-timeline", label: "Timeline", icon: Eye, group: moreGroup },
-    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: moreGroup },
+    { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Team" }), icon: Users, group: moreGroup },
+    { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Meeting Room" }), icon: Presentation, group: moreGroup },
+    { id: "knowledge-base", label: t("dashboard.knowledge_base", { defaultValue: "Knowledge Base" }), icon: Database, group: moreGroup },
+    { id: "ai-quality", label: t("dashboard.ai_quality", { defaultValue: "AI Quality" }), icon: Star, group: moreGroup },
+    { id: "results", label: t("dashboard.results", { defaultValue: "Results" }), icon: FileText, group: moreGroup },
+    { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Eye, group: moreGroup },
+    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrations" }), icon: Plug, group: moreGroup },
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, group: moreGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
 
     // Coming soon features
-    { id: "mission-control", label: "Mission Control", icon: Rocket, badge: "Em breve", group: "🚀 Próximas Features" },
-    { id: "agent-memory", label: "Agent Memory", icon: Network, badge: "Em breve", group: "🚀 Próximas Features" },
-    { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: "Em breve", group: "🚀 Próximas Features" },
-    { id: "voice-first", label: "Voice-First", icon: Mic, badge: "Em breve", group: "🚀 Próximas Features" },
-    { id: "marketplace-p2p", label: "Marketplace P2P", icon: Store, badge: "Em breve", group: "🚀 Próximas Features" },
+    { id: "mission-control", label: "Mission Control", icon: Rocket, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "agent-memory", label: "Agent Memory", icon: Network, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "voice-first", label: "Voice-First", icon: Mic, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "marketplace-p2p", label: "Marketplace P2P", icon: Store, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
   ];
 
   const tierColors: Record<string, string> = {
