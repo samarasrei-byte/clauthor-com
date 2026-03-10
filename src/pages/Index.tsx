@@ -1004,7 +1004,7 @@ const HomePage = () => {
                 quote: t("home.testimonial_2", { defaultValue: "O agente financeiro concilia notas fiscais, cobra inadimplentes e gera relatórios. Economizamos um funcionário inteiro." }),
                 author: "CFO",
                 company: t("home.testimonial_2_company", { defaultValue: "Startup SaaS B2B" }),
-                metric: "R$8k",
+                metric: "$8k",
                 metricLabel: t("home.testimonial_2_metric", { defaultValue: "economia mensal" }),
               },
               {
