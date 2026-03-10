@@ -123,9 +123,9 @@ export function useOmnix() {
           return cleaned;
         });
         const data = await response.json().catch(() => ({}));
-        if (response.status === 402) toast.error("Créditos esgotados! Faça upgrade.");
-        else if (response.status === 429) toast.error("Limite de requisições. Tente novamente.");
-        else toast.error(data.error || "Erro ao processar.");
+        if (response.status === 402) toast.error("Credits exhausted! Please upgrade.");
+        else if (response.status === 429) toast.error("Rate limit reached. Try again shortly.");
+        else toast.error(data.error || "Error processing request.");
         setIsLoading(false);
         setIsStreaming(false);
         return;
