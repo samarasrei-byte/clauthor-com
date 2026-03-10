@@ -1003,7 +1003,22 @@
     "this_period": "este período",
     "hire_agents": "contrate agentes",
     "no_data": "sem dados",
-    "return_month": "retorno/mês"
+    "return_month": "retorno/mês",
+    "team_label": "Equipe",
+    "war_room": "Sala de Reunião",
+    "knowledge_base": "Base de Conhecimento",
+    "ai_quality": "Qualidade IA",
+    "results": "Resultados",
+    "live_timeline": "Timeline",
+    "integrations": "Integrações",
+    "coming_soon": "Em breve",
+    "nav_upcoming": "🚀 Próximas Features",
+    "per_month_short": "mês",
+    "back": "Voltar",
+    "navigation": "Navegação",
+    "departments": "Departamentos",
+    "solo_agents": "Agentes Avulsos",
+    "help_intro": "Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções."
   },
   "credits": {
     "title": "Créditos",
