@@ -294,6 +294,15 @@ REGRAS:
               toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos inválidos da IA" }) });
               continue;
             }
+
+            // ── FeatherShield: scan tool arguments ──
+            const toolScan = scanToolArguments(tc.function.name, args);
+            if (!toolScan.safe) {
+              console.warn(`[FeatherShield] Blocked tool "${tc.function.name}" for user ${user.id}: ${toolScan.threats.join("; ")}`);
+              toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos bloqueados pela política de segurança.", threats: toolScan.threats }) });
+              continue;
+            }
+
             const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader);
             toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
           }
