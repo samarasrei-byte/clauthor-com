@@ -221,6 +221,7 @@ const VoiceWaveform = () => (
 
 /* ─── Main Component ─── */
 const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) => {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(embedded);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
