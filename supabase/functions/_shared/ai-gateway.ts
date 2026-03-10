@@ -142,8 +142,11 @@ async function callOpenClaw(body: Record<string, any>): Promise<Response> {
 
   const OPENCLAW_API_KEY = Deno.env.get("OPENCLAW_API_KEY");
 
-  const cb = circuitBreaker("ai-openclaw", 5, 60_000);
-  if (cb.isOpen) throw new Error("OpenClaw circuit breaker OPEN");
+  const cb = circuitBreaker("ai-openclaw", 3, 300_000); // 5min cooldown
+  if (cb.isOpen) {
+    // Don't throw — return a signal so the router silently skips to fallback
+    throw new Error("OpenClaw circuit breaker OPEN — skipping");
+  }
 
   try {
     const headers: Record<string, string> = { "Content-Type": "application/json" };
