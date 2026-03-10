@@ -428,10 +428,10 @@ const IntegrationsPage = () => {
                         <CardContent className="p-5 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-3">
                             <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                              connectionStatus === "connected" ? "bg-primary/10" : "bg-primary/10"
+                              connectionStatus === "connected" ? "bg-primary/20 ring-1 ring-primary/30" : "bg-primary/10"
                             }`}>
                               <ig.icon className={`h-5 w-5 ${
-                                connectionStatus === "connected" ? "text-primary" : "text-primary"
+                                connectionStatus === "connected" ? "text-primary" : "text-muted-foreground"
                               }`} />
                             </div>
                             <div className="flex items-center gap-1.5">
