@@ -966,8 +966,8 @@ Apenas o texto, sem introduções.`,
                       className="border-t border-border/10 bg-accent-emerald/[0.03] p-4 space-y-3 max-h-56 overflow-y-auto"
                     >
                       <div className="flex items-center gap-2 mb-3">
-                        <ListChecks className="h-5 w-5 text-accent-emerald" />
-                        <span className="text-sm font-bold text-accent-emerald">Plano de Ação</span>
+                        <ListChecks className="h-5 w-5 text-primary" />
+                        <span className="text-sm font-bold text-primary">{t("meeting.action_plan")}</span>
                       </div>
                       {actionItems.map((item, idx) => (
                         <motion.div
