@@ -253,10 +253,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                   <p className="text-[15px] leading-relaxed">{msg.content}</p>
                 )}
                 {msg.role === "assistant" && !isStreaming && (
-                  <div className="flex gap-2 mt-2">
+                  <div className="flex items-center gap-2 mt-2">
                     <button onClick={() => speak(msg.content)} className="text-muted-foreground/50 hover:text-primary transition-colors">
                       <Volume2 className="h-3 w-3" />
                     </button>
+                    <ChatFeedback
+                      userMessage={messages[i - 1]?.content || ""}
+                      assistantMessage={msg.content}
+                    />
                   </div>
                 )}
               </div>

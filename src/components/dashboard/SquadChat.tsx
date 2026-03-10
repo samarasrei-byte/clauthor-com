@@ -556,6 +556,13 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                             <CheckCheck className="h-3 w-3 text-primary-foreground/60" />
                           )}
                         </div>
+                        {msg.role === "assistant" && !isLoading && (
+                          <ChatFeedback
+                            userMessage={messages[messages.indexOf(msg) - 1]?.content || ""}
+                            assistantMessage={msg.content}
+                            agentId={selectedAgent?.id}
+                          />
+                        )}
                       </div>
                     </motion.div>
                   ))}
