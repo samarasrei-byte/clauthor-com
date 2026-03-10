@@ -733,7 +733,7 @@ const ClientDashboard = () => {
                                       <span className="w-2 h-2 rounded-full bg-accent-emerald" />
                                       <span className="text-sm">{sub.agent_name}</span>
                                     </div>
-                                    <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{locale.startsWith("pt") ? "mês" : "mo"}</span>
+                                    <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{t("dashboard.per_month_short", { defaultValue: "mo" })}</span>
                                   </div>
                                 ))}
                                 <div className="pt-3 border-t border-white/5 flex justify-between">
