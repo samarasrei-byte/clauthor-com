@@ -125,7 +125,7 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
     const key = d.toISOString().split("T")[0];
     const dayLogs = logs.filter(l => l.created_at?.startsWith(key));
     return {
-      day: d.toLocaleDateString("pt-BR", { weekday: "short" }),
+      day: d.toLocaleDateString("en-US", { weekday: "short" }),
       total: dayLogs.length,
       success: dayLogs.filter(l => l.status === "success").length,
       error: dayLogs.filter(l => l.status === "error").length,

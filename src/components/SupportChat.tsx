@@ -604,7 +604,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                               { label: t("support.uptime"), value: "99.97%", color: "text-primary" },
                               { label: t("support.avg_response"), value: `${health.latency}ms`, color: "text-primary" },
                               { label: t("support.system_label"), value: t("support.online"), color: "text-primary" },
-                              { label: t("support.last_scan"), value: new Date(health.lastScan).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }), color: "text-muted-foreground" },
+                              { label: t("support.last_scan"), value: new Date(health.lastScan).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" }), color: "text-muted-foreground" },
                             ].map(m => (
                               <div key={m.label} className="rounded-lg border border-border/10 bg-card/30 p-2 text-center">
                                 <p className={`text-[12px] font-bold ${m.color}`}>{m.value}</p>
