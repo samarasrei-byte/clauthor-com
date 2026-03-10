@@ -245,7 +245,7 @@ const HomePage = () => {
     "AI CFO Assistant",
     "AI Content Creator",
     "AI DevOps Engineer",
-  ], [t]);
+  ], []);
   const { displayed: typedText, firstCycleDone: typingDone } = useCyclingTypewriter(cyclingRoles, 45, 2200, 600);
 
   // SEO meta tags
