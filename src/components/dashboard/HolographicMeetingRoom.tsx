@@ -995,7 +995,7 @@ Apenas o texto, sem introduções.`,
                       <input
                         value={inputValue}
                         onChange={(e) => setInputValue(e.target.value)}
-                        placeholder="Pergunte algo ao seu time de IA…"
+                        placeholder={t("meeting.ask_team")}
                         className="w-full h-12 rounded-xl bg-card/60 border border-border/30 px-4 text-sm text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary/40 transition-all"
                         onKeyDown={(e) => { if (e.key === "Enter") handleSendInput(); }}
                       />
