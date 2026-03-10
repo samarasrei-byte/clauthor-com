@@ -849,9 +849,9 @@ Apenas o texto, sem introduções.`,
                     >
                       {phase === "conclusion" ? (
                         <div className="space-y-2">
-                          <ListChecks className="h-8 w-8 text-accent-emerald mx-auto" />
-                          <p className="text-sm font-bold text-accent-emerald">Plano Gerado</p>
-                          <p className="text-xs text-muted-foreground">{actionItems.length} tarefas criadas</p>
+                          <ListChecks className="h-8 w-8 text-primary mx-auto" />
+                          <p className="text-sm font-bold text-primary">{t("meeting.plan_generated")}</p>
+                          <p className="text-xs text-muted-foreground">{t("meeting.tasks_created", { count: actionItems.length })}</p>
                         </div>
                       ) : (
                         <div className="space-y-2">
