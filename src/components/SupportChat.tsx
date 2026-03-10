@@ -102,7 +102,7 @@ function useVoiceInput() {
       return;
     }
     const recognition = new SpeechRecognition();
-    recognition.lang = "pt-BR";
+    recognition.lang = "en-US";
     recognition.continuous = false;
     recognition.interimResults = true;
 
