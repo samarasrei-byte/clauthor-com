@@ -483,7 +483,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     ))}
                   </div>
                   <Button variant="outline" onClick={() => setPhase(1)} className="h-10 rounded-xl gap-1.5 px-4 mt-2">
-                    <ChevronLeft className="h-4 w-4" /> Voltar
+                    <ChevronLeft className="h-4 w-4" /> Back
                   </Button>
                 </motion.div>
               )}
