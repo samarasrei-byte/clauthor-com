@@ -142,8 +142,11 @@ async function callOpenClaw(body: Record<string, any>): Promise<Response> {
 
   const OPENCLAW_API_KEY = Deno.env.get("OPENCLAW_API_KEY");
 
-  const cb = circuitBreaker("ai-openclaw", 5, 60_000);
-  if (cb.isOpen) throw new Error("OpenClaw circuit breaker OPEN");
+  const cb = circuitBreaker("ai-openclaw", 3, 300_000); // 5min cooldown
+  if (cb.isOpen) {
+    // Don't throw — return a signal so the router silently skips to fallback
+    throw new Error("OpenClaw circuit breaker OPEN — skipping");
+  }
 
   try {
     const headers: Record<string, string> = { "Content-Type": "application/json" };
@@ -209,17 +212,13 @@ export async function fetchAI(
       }
       console.warn(`[AI Router] OpenClaw returned ${response.status}, falling back to Lovable`);
     } catch (e) {
-      console.warn("[AI Router] OpenClaw failed, falling back to Lovable:", e);
+      // Silent fallback — OpenClaw is down, just use Lovable
+      console.warn("[AI Router] OpenClaw unavailable, using Lovable");
     }
 
     // Fallback to Lovable
     if (hasLovable) {
-      try {
-        return await callLovable(body, extraHeaders);
-      } catch (e) {
-        console.error("[AI Router] Both OpenClaw and Lovable failed:", e);
-        throw new Error("All AI endpoints failed");
-      }
+      return await callLovable(body, extraHeaders);
     }
     throw new Error("OpenClaw failed and Lovable not configured");
   }
