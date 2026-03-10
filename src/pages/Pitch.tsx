@@ -176,28 +176,28 @@ const Pitch = () => {
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   const indicators = [
-    { icon: Bot, label: "83 agentes operacionais" },
-    { icon: Clock, label: "Setup em 5 minutos" },
+    { icon: Bot, label: "83 operational agents" },
+    { icon: Clock, label: "Setup in 5 minutes" },
     { icon: Shield, label: "SOC 2 compliant" },
-    { icon: Globe, label: "Multi-idioma nativo" },
+    { icon: Globe, label: "Native multi-language" },
   ];
 
   const solutions = [
-    { icon: Headphones, title: "Atendimento Omnichannel" },
-    { icon: Receipt, title: "Financeiro & Cobrança" },
-    { icon: Code, title: "Desenvolvedor Autônomo" },
+    { icon: Headphones, title: "Omnichannel Support" },
+    { icon: Receipt, title: "Finance & Billing" },
+    { icon: Code, title: "Autonomous Developer" },
     { icon: Scale, title: "Compliance" },
-    { icon: Brain, title: "Orquestração Inteligente" },
-    { icon: UserCheck, title: "Concierge Estratégico" },
+    { icon: Brain, title: "Intelligent Orchestration" },
+    { icon: UserCheck, title: "Strategic Concierge" },
   ];
 
   const advantages = [
-    { icon: Bot, text: "83 agentes já operacionais" },
-    { icon: Users, text: "Banco de 200 mil leads" },
-    { icon: TrendingUp, text: "Estrutura própria de aquisição" },
-    { icon: Globe, text: "Multi-idioma" },
-    { icon: Zap, text: "Escala infinita" },
-    { icon: Lock, text: "Infraestrutura segura" },
+    { icon: Bot, text: "83 agents already operational" },
+    { icon: Users, text: "200K lead database" },
+    { icon: TrendingUp, text: "Own acquisition structure" },
+    { icon: Globe, text: "Multi-language" },
+    { icon: Zap, text: "Infinite scale" },
+    { icon: Lock, text: "Secure infrastructure" },
   ];
 
   const handleTalk = useCallback(() => {
