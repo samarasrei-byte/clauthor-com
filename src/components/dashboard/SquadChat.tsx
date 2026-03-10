@@ -335,7 +335,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
             <div className="flex flex-col items-center justify-center h-full text-center px-6">
               <Bot className="h-10 w-10 text-muted-foreground/30 mb-3" />
               <p className="text-sm text-muted-foreground">
-                {activeAgents.length === 0 ? "Nenhum agente ativo" : "Nenhum resultado"}
+                {activeAgents.length === 0 ? t("squad.no_active_agents") : t("squad.no_results")}
               </p>
               {activeAgents.length === 0 && (
                 <Button 
