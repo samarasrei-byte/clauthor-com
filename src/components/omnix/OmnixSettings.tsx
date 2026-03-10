@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Settings, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
