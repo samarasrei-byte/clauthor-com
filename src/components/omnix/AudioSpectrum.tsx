@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -6,10 +7,16 @@ interface AudioSpectrumProps {
   className?: string;
 }
 
-const AudioSpectrum = ({ active, className }: AudioSpectrumProps) => {
-  if (!active) return null;
+const BAR_COUNT = 16;
 
-  const bars = 16;
+const AudioSpectrum = ({ active, className }: AudioSpectrumProps) => {
+  // Memoize random seeds so bars stay stable across re-renders
+  const seeds = useMemo(
+    () => Array.from({ length: BAR_COUNT }, () => [Math.random(), Math.random(), Math.random()]),
+    []
+  );
+
+  if (!active) return null;
 
   return (
     <motion.div
@@ -21,8 +28,8 @@ const AudioSpectrum = ({ active, className }: AudioSpectrumProps) => {
         className
       )}
     >
-      {Array.from({ length: bars }).map((_, i) => {
-        const centerDist = Math.abs(i - bars / 2) / (bars / 2);
+      {seeds.map(([r1, r2, r3], i) => {
+        const centerDist = Math.abs(i - BAR_COUNT / 2) / (BAR_COUNT / 2);
         const maxH = 40 * (1 - centerDist * 0.5);
 
         return (
@@ -33,14 +40,14 @@ const AudioSpectrum = ({ active, className }: AudioSpectrumProps) => {
             animate={{
               height: [
                 4,
-                maxH * (0.3 + Math.random() * 0.7),
-                maxH * (0.1 + Math.random() * 0.5),
-                maxH * (0.4 + Math.random() * 0.6),
+                maxH * (0.3 + r1 * 0.7),
+                maxH * (0.1 + r2 * 0.5),
+                maxH * (0.4 + r3 * 0.6),
                 4,
               ],
             }}
             transition={{
-              duration: 1.2 + Math.random() * 0.8,
+              duration: 1.2 + r1 * 0.8,
               repeat: Infinity,
               delay: i * 0.05,
               ease: "easeInOut",
