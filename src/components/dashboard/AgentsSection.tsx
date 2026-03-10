@@ -44,10 +44,10 @@ const AUTONOMY_ICONS: Record<AutonomyLevel, any> = {
 };
 
 const AUTONOMY_COLORS: Record<AutonomyLevel, string> = {
-  observer: "text-blue-400",
-  assistant: "text-emerald-400",
-  executor: "text-amber-400",
-  autonomous: "text-purple-400",
+  observer: "text-muted-foreground",
+  assistant: "text-primary",
+  executor: "text-accent-foreground",
+  autonomous: "text-primary",
 };
 
 const AgentsSection = ({
@@ -157,8 +157,8 @@ const AgentsSection = ({
                         <Bot className="h-5 w-5 text-primary" />
                       </div>
                       {agent.status === "active" && (
-                        <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-background flex items-center justify-center">
-                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse" />
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-primary border-2 border-background flex items-center justify-center">
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground animate-pulse" />
                         </div>
                       )}
                     </div>
@@ -170,13 +170,7 @@ const AgentsSection = ({
                         </Badge>
                         <div className={cn(
                           "flex items-center gap-1 text-[9px] font-semibold px-1.5 py-0.5 rounded-md border",
-                          autonomyLevel === "autonomous"
-                            ? "text-purple-400 bg-purple-500/10 border-purple-500/20"
-                            : autonomyLevel === "executor"
-                              ? "text-amber-400 bg-amber-500/10 border-amber-500/20"
-                              : autonomyLevel === "observer"
-                                ? "text-blue-400 bg-blue-500/10 border-blue-500/20"
-                                : "text-emerald-400 bg-emerald-500/10 border-emerald-500/20"
+                          "text-primary bg-primary/10 border-primary/20"
                         )}>
                           <AutonomyIcon className={cn("h-3 w-3", autonomyColor)} />
                           {autonomyLevel}
@@ -191,7 +185,7 @@ const AgentsSection = ({
                     className={cn(
                       "h-7 text-[10px] gap-1 shrink-0",
                       agent.status === "active"
-                        ? "border-emerald-500/30 text-emerald-500"
+                        ? "border-primary/30 text-primary"
                         : "border-muted"
                     )}
                     onClick={async () => {
@@ -204,7 +198,7 @@ const AgentsSection = ({
                         toast.error(t("dashboard.status_error", { defaultValue: "Erro ao atualizar status." }));
                         return;
                       }
-                      toast.success(`${agent.name} ${newStatus === "active" ? "ativado" : "pausado"}!`);
+                      toast.success(`${agent.name} ${newStatus === "active" ? t("dashboard.activated", { defaultValue: "activated" }) : t("dashboard.paused", { defaultValue: "paused" })}!`);
                       queryClient.invalidateQueries({ queryKey: ["my-agents"] });
                     }}
                   >
@@ -216,21 +210,23 @@ const AgentsSection = ({
 
                 {/* Stats */}
                 <div className="grid grid-cols-3 gap-2">
-                  <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
+                  <div className="bg-muted/[0.04] rounded-lg p-2.5 text-center">
                     <p className="text-xs text-muted-foreground">{t("dashboard.price")}</p>
                     <p className="font-display font-bold text-sm">{formatCurrency(agent.monthly_price)}</p>
                   </div>
-                  <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
+                  <div className="bg-muted/[0.04] rounded-lg p-2.5 text-center">
                     <p className="text-xs text-muted-foreground">{t("dashboard.executions")}</p>
                     <p className="font-display font-bold text-sm">{agent.total_executions}</p>
                   </div>
-                  <div className="bg-white/[0.02] rounded-lg p-2.5 text-center">
+                  <div className="bg-muted/[0.04] rounded-lg p-2.5 text-center">
                     <p className="text-xs text-muted-foreground">Status</p>
                     <p className={cn(
                       "font-bold text-sm",
-                      agent.status === "active" ? "text-emerald-500" : "text-muted-foreground"
+                      agent.status === "active" ? "text-primary" : "text-muted-foreground"
                     )}>
-                      {agent.status === "active" ? "● Ativo" : "○ Pausado"}
+                      {agent.status === "active"
+                        ? `● ${t("dashboard.active_status", { defaultValue: "Active" })}`
+                        : `○ ${t("dashboard.paused_status", { defaultValue: "Paused" })}`}
                     </p>
                   </div>
                 </div>

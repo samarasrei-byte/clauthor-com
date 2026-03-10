@@ -8,6 +8,7 @@ import { SLUG_TO_DEPT } from "@/data/departmentMap";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "react-i18next";
 
 // Department → required integrations mapping
 const DEPT_INTEGRATIONS: Record<string, string[]> = {
@@ -48,6 +49,7 @@ interface AgentSetupChecklistProps {
 
 const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupChecklistProps) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
 
   // Fetch all credentials for the user's agents
   const { data: credentials = [] } = useQuery({
@@ -91,13 +93,13 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
       const checks = [
         {
           id: "active",
-          label: "Agente ativado",
+          label: t("setup_checklist.agent_activated", { defaultValue: "Agent activated" }),
           done: agent.status === "active",
           icon: Bot,
         },
         {
           id: "board",
-          label: "Board da Empresa preenchido",
+          label: t("setup_checklist.board_filled", { defaultValue: "Company Board filled" }),
           done: boardCount >= 3,
           icon: Database,
         },
@@ -117,7 +119,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
 
       return { agent, slug, deptId, checks, doneCount, totalCount, pct, isComplete, isPureAI };
     });
-  }, [agents, nameToSlug, credentials, boardCount]);
+  }, [agents, nameToSlug, credentials, boardCount, t]);
 
   // Filter to only show agents with incomplete setup (or all if <= 4 agents)
   const visibleChecklists = agents.length <= 4
@@ -129,6 +131,8 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
   const overallPct = agentChecklists.length > 0
     ? Math.round(agentChecklists.reduce((s, c) => s + c.pct, 0) / agentChecklists.length)
     : 0;
+
+  const pendingCount = agentChecklists.filter(c => !c.isComplete).length;
 
   return (
     <motion.div
@@ -143,11 +147,17 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
             <Shield className="h-4.5 w-4.5 text-primary" />
           </div>
           <div>
-            <h3 className="font-display font-semibold text-sm">Setup dos Agentes</h3>
+            <h3 className="font-display font-semibold text-sm">
+              {t("setup_checklist.title", { defaultValue: "Agent Setup" })}
+            </h3>
             <p className="text-[11px] text-muted-foreground">
               {overallPct === 100
-                ? "✅ Todos os agentes configurados!"
-                : `${overallPct}% completo — ${agentChecklists.filter(c => !c.isComplete).length} agente(s) pendente(s)`}
+                ? t("setup_checklist.all_done", { defaultValue: "✅ All agents configured!" })
+                : t("setup_checklist.progress", {
+                    defaultValue: "{{pct}}% complete — {{count}} agent(s) pending",
+                    pct: overallPct,
+                    count: pendingCount,
+                  })}
             </p>
           </div>
         </div>
@@ -167,23 +177,23 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
             transition={{ delay: i * 0.05 }}
             className={`rounded-xl border p-3.5 space-y-2.5 transition-colors ${
               isComplete
-                ? "border-emerald-500/20 bg-emerald-500/[0.03]"
-                : "border-border/20 bg-white/[0.02]"
+                ? "border-primary/20 bg-primary/[0.03]"
+                : "border-border/20 bg-muted/[0.02]"
             }`}
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <span className={`w-2 h-2 rounded-full ${isComplete ? "bg-emerald-500" : "bg-amber-500 animate-pulse"}`} />
+                <span className={`w-2 h-2 rounded-full ${isComplete ? "bg-primary" : "bg-accent-foreground/50 animate-pulse"}`} />
                 <span className="font-display font-semibold text-xs truncate max-w-[140px]">{agent.name}</span>
               </div>
               <div className="flex items-center gap-1.5">
                 {isPureAI && (
                   <Badge variant="secondary" className="text-[8px] px-1.5 py-0 bg-primary/10 text-primary border-0">
                     <Sparkles className="h-2.5 w-2.5 mr-0.5" />
-                    Puro IA
+                    {t("setup_checklist.pure_ai", { defaultValue: "Pure AI" })}
                   </Badge>
                 )}
-                <span className={`text-[10px] font-mono font-bold ${isComplete ? "text-emerald-500" : "text-muted-foreground"}`}>
+                <span className={`text-[10px] font-mono font-bold ${isComplete ? "text-primary" : "text-muted-foreground"}`}>
                   {pct}%
                 </span>
               </div>
@@ -195,7 +205,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
               {checks.map(check => (
                 <div key={check.id} className="flex items-center gap-2 text-[11px]">
                   {check.done ? (
-                    <CheckCircle className="h-3 w-3 text-emerald-500 shrink-0" />
+                    <CheckCircle className="h-3 w-3 text-primary shrink-0" />
                   ) : (
                     <Circle className="h-3 w-3 text-muted-foreground/40 shrink-0" />
                   )}
@@ -213,7 +223,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
                 className="w-full h-7 text-[10px] text-primary hover:text-primary hover:bg-primary/5 gap-1"
                 onClick={onOpenThor}
               >
-                Configurar com THOR <ChevronRight className="h-3 w-3" />
+                {t("setup_checklist.configure_thor", { defaultValue: "Configure with THOR" })} <ChevronRight className="h-3 w-3" />
               </Button>
             )}
           </motion.div>
@@ -221,9 +231,9 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
       </div>
 
       {/* Show more if some are hidden */}
-      {agentChecklists.filter(c => !c.isComplete).length > visibleChecklists.length && (
+      {pendingCount > visibleChecklists.length && (
         <p className="text-[10px] text-muted-foreground text-center">
-          +{agentChecklists.filter(c => !c.isComplete).length - visibleChecklists.length} agentes pendentes
+          +{pendingCount - visibleChecklists.length} {t("setup_checklist.more_pending", { defaultValue: "agents pending" })}
         </p>
       )}
     </motion.div>

@@ -1894,5 +1894,15 @@
     "listening": "LISTENING",
     "speaking": "SPEAKING",
     "processing": "PROCESSING"
+  },
+  "setup_checklist": {
+    "title": "Agent Setup",
+    "all_done": "✅ All agents configured!",
+    "progress": "{{pct}}% complete — {{count}} agent(s) pending",
+    "agent_activated": "Agent activated",
+    "board_filled": "Company Board filled",
+    "pure_ai": "Pure AI",
+    "configure_thor": "Configure with THOR",
+    "more_pending": "agents pending"
   }
 }

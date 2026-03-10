@@ -78,6 +78,23 @@ export function usePaypalCapture() {
               continue;
             }
 
+            // Check if agent with same name already exists for this user
+            const { data: existing } = await supabase
+              .from("agents")
+              .select("id")
+              .eq("user_id", user.id)
+              .eq("name", template.name)
+              .limit(1)
+              .maybeSingle();
+
+            if (existing) {
+              // Agent already exists — reuse it instead of creating a duplicate
+              provisionedAgents.push(existing.id);
+              // Ensure it's active
+              await supabase.from("agents").update({ status: "active" }).eq("id", existing.id);
+              continue;
+            }
+
             const tier = (template.tier || "basic") as "basic" | "intermediate" | "advanced" | "enterprise";
             const priceInCents = subIntent.is_department ? 0 : (subIntent.price || 0) * 100;
 
