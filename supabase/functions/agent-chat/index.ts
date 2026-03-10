@@ -380,7 +380,7 @@ async function delegateToAgent(
 
   if (!targetAgent) {
     const availableNames = agents.map((a: any) => a.name).join(", ");
-    return { success: false, result: { error: `Agente "${args.target_agent_name}" não encontrado. Disponíveis: ${availableNames}` } };
+    return { success: false, result: { error: `Agent "${args.target_agent_name}" not found. Available: ${availableNames}` } };
   }
 
   if (targetAgent.id === sourceAgentId) {
