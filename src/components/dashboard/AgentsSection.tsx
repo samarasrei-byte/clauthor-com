@@ -185,7 +185,7 @@ const AgentsSection = ({
                     className={cn(
                       "h-7 text-[10px] gap-1 shrink-0",
                       agent.status === "active"
-                        ? "border-emerald-500/30 text-emerald-500"
+                        ? "border-primary/30 text-primary"
                         : "border-muted"
                     )}
                     onClick={async () => {
