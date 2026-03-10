@@ -4,6 +4,7 @@ import LanguageDetector from "i18next-browser-languagedetector";
 
 // Only load PT (default) synchronously — others loaded on demand
 import pt from "./locales/pt.json";
+import en from "./locales/en.json";
 
 export const languages = [
   { code: "pt", name: "Português (BR)", flag: "br" },
