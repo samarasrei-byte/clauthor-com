@@ -30,7 +30,7 @@ const AgentsPage = () => {
   const statusColor: Record<string, string> = {
     active: "bg-primary/20 text-primary",
     draft: "bg-muted text-muted-foreground",
-    paused: "bg-yellow-500/20 text-yellow-400",
+    paused: "bg-muted text-muted-foreground/80",
     archived: "bg-destructive/20 text-destructive",
   };
 
@@ -134,7 +134,7 @@ const AgentsPage = () => {
                     <Button
                       size="sm"
                       variant="outline"
-                      className={`text-xs ${a.status === "active" ? "border-emerald-500/30 text-emerald-500" : ""}`}
+                      className={`text-xs ${a.status === "active" ? "border-primary/30 text-primary" : ""}`}
                       onClick={() => toggleStatus(a)}
                     >
                       {a.status === "active" ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
