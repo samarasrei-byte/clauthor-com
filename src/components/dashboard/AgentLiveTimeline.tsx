@@ -83,7 +83,7 @@ const AgentLiveTimeline = () => {
     return d.toLocaleDateString(undefined, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
   };
 
-  const { data: entries = [], isLoading } = useQuery({
+  const { data: entries = [], isLoading, refetch } = useQuery({
     queryKey: ["agent-live-timeline", user?.id],
     queryFn: async () => {
       const { data, error } = await supabase
@@ -104,7 +104,7 @@ const AgentLiveTimeline = () => {
       })) as TimelineEntry[];
     },
     enabled: !!user,
-    refetchInterval: 5000,
+    refetchInterval: 8000,
   });
 
   useEffect(() => {
