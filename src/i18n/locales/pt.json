@@ -625,7 +625,17 @@
     "testimonial_3_metric": "mais leads qualificados",
     "early_adopters_disclaimer": "* Resultados de early adopters em fase beta. Nomes omitidos por acordo de confidencialidade.",
     "final_cta_title": "Pronto para automatizar?",
-    "final_cta_desc": "Monte seu time de agentes em 5 minutos. Sem código, sem cartão de crédito. Comece agora e veja resultados no primeiro dia."
+    "final_cta_desc": "Monte seu time de agentes em 5 minutos. Sem código, sem cartão de crédito. Comece agora e veja resultados no primeiro dia.",
+    "final_cta_title_v2": "Vagas limitadas. Garanta a sua.",
+    "final_cta_desc_v2": "Os primeiros a entrar ganham acesso antecipado, desconto exclusivo de lançamento e onboarding personalizado.",
+    "final_cta_discount": "50% OFF lançamento",
+    "final_cta_priority": "Acesso prioritário",
+    "waitlist_banner_live": "LANÇAMENTO EM BREVE",
+    "waitlist_banner_title": "Não fique de fora do futuro.",
+    "waitlist_banner_desc": "Entre na fila agora e seja dos primeiros a ter acesso exclusivo à plataforma com desconto de lançamento.",
+    "connecting_agent": "Conectando agente...",
+    "footer_ssl": "SSL 256-BIT",
+    "footer_enterprise_badge": "ENTERPRISE-GRADE"
   },
   "pricing_page": {
     "badge": "Planos e Preços",

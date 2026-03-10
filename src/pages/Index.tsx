@@ -381,12 +381,12 @@ const HomePage = () => {
                         <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            aria-label="Garantir meu lugar"
+                            aria-label={t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
                             className="group relative h-14 sm:h-14 px-10 rounded-xl font-display font-bold text-sm uppercase tracking-wider text-primary-foreground overflow-hidden cursor-pointer w-full"
                           >
                             <div className="absolute inset-0 bg-primary rounded-xl" />
                             <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                            <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ boxShadow: "0 0 40px hsl(0 85% 55% / 0.3), 0 0 80px hsl(0 85% 55% / 0.1)" }} />
+                            <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 shadow-[0_0_40px_hsl(var(--primary)/0.3),0_0_80px_hsl(var(--primary)/0.1)]" />
                             <span className="relative z-10 flex items-center justify-center gap-3">
                               <Rocket className="h-4 w-4" strokeWidth={1.5} />
                               {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
@@ -439,7 +439,7 @@ const HomePage = () => {
                   </div>
                   <div className="h-[280px] sm:h-[320px] px-4 py-4 space-y-3">
                     <div className="flex items-center justify-center">
-                      <span className="font-mono text-[10px] text-muted-foreground/50 px-3 py-1.5 rounded-full bg-muted/20 border border-border/30">Conectando agente...</span>
+                      <span className="font-mono text-[10px] text-muted-foreground/50 px-3 py-1.5 rounded-full bg-muted/20 border border-border/30">{t("home.connecting_agent", { defaultValue: "Connecting agent..." })}</span>
                     </div>
                     <div className="flex items-start gap-2.5 max-w-[85%]">
                       <div className="w-6 h-6 rounded-md bg-primary/10 animate-pulse shrink-0" />
@@ -1064,12 +1064,12 @@ const HomePage = () => {
                   {t("home.final_cta_desc_v2", { defaultValue: "Os primeiros a entrar ganham acesso antecipado, desconto exclusivo de lançamento e onboarding personalizado." })}
                 </p>
                 <div className="flex items-center justify-center gap-4 mb-8 font-mono text-xs text-muted-foreground">
-                  <div className="flex items-center gap-1.5"><Star className="h-3.5 w-3.5 text-primary" /> 50% OFF lançamento</div>
-                  <div className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-primary" /> Acesso prioritário</div>
+                  <div className="flex items-center gap-1.5"><Star className="h-3.5 w-3.5 text-primary" /> {t("home.final_cta_discount", { defaultValue: "50% OFF launch" })}</div>
+                  <div className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5 text-primary" /> {t("home.final_cta_priority", { defaultValue: "Priority access" })}</div>
                 </div>
                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
                   <Link to="/waitlist">
-                    <Button className="glow rounded-xl h-14 px-12 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label="Entrar na waitlist">
+                    <Button className="glow rounded-xl h-14 px-12 gap-2 font-display font-bold text-sm uppercase tracking-wider" aria-label={t("home.cta_waitlist")}>
                       <Rocket className="h-4 w-4" strokeWidth={1.5} />
                       {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
                       <ArrowRight className="h-4 w-4" />
@@ -1133,8 +1133,8 @@ const HomePage = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border">
             <div className="flex flex-wrap items-center gap-4">
               {[
-                { icon: LockKeyhole, label: "SSL 256-bit" },
-                { icon: ShieldCheck, label: "ENTERPRISE-GRADE" },
+                { icon: LockKeyhole, label: t("home.footer_ssl", { defaultValue: "SSL 256-BIT" }) },
+                { icon: ShieldCheck, label: t("home.footer_enterprise_badge", { defaultValue: "ENTERPRISE-GRADE" }) },
               ].map((badge) => (
                 <div key={badge.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/50 border border-border">
                   <badge.icon className="h-3 w-3 text-primary/50" strokeWidth={1.5} />

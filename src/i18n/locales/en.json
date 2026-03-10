@@ -606,7 +606,17 @@
     "testimonial_3_metric": "more qualified leads",
     "early_adopters_disclaimer": "* Results from early adopters in beta phase. Names omitted by confidentiality agreement.",
     "final_cta_title": "Ready to automate?",
-    "final_cta_desc": "Build your agent team in 5 minutes. No code, no credit card. Start now and see results on day one."
+    "final_cta_desc": "Build your agent team in 5 minutes. No code, no credit card. Start now and see results on day one.",
+    "final_cta_title_v2": "Limited spots. Claim yours.",
+    "final_cta_desc_v2": "Early access members get a launch discount, priority onboarding and personalized setup.",
+    "final_cta_discount": "50% OFF launch",
+    "final_cta_priority": "Priority access",
+    "waitlist_banner_live": "LAUNCHING SOON",
+    "waitlist_banner_title": "Don't miss the future.",
+    "waitlist_banner_desc": "Join the waitlist now and be among the first to get exclusive access with a launch discount.",
+    "connecting_agent": "Connecting agent...",
+    "footer_ssl": "SSL 256-BIT",
+    "footer_enterprise_badge": "ENTERPRISE-GRADE"
   },
   "pricing_page": {
     "badge": "Plans & Pricing",
