@@ -709,7 +709,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                       onClick={() => sendMessage()}
                       disabled={isLoading || !input.trim()}
                       aria-label="Send message"
-                      className="h-9 w-9 rounded-xl border border-white/[0.06] bg-white/[0.02] flex items-center justify-center hover:border-primary/20 hover:bg-primary/[0.06] disabled:opacity-30 transition-all duration-300 group shrink-0"
+                      className="h-9 w-9 rounded-xl border border-border/10 bg-card/30 flex items-center justify-center hover:border-primary/20 hover:bg-primary/[0.06] disabled:opacity-30 transition-all duration-300 group shrink-0"
                     >
                       {isLoading ? (
                         <Loader2 className="h-3.5 w-3.5 text-muted-foreground animate-spin" />
