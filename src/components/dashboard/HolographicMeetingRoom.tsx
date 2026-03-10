@@ -317,7 +317,7 @@ const HolographicMeetingRoom = () => {
       recognitionRef.current = new SR();
       recognitionRef.current.continuous = false;
       recognitionRef.current.interimResults = true;
-      recognitionRef.current.lang = "pt-BR";
+      recognitionRef.current.lang = i18n.language === "pt" ? "pt-BR" : i18n.language;
       recognitionRef.current.onresult = (e: any) => {
         const t = Array.from(e.results).map((r: any) => r[0].transcript).join("");
         if (meetingActive) setInputValue(t);
