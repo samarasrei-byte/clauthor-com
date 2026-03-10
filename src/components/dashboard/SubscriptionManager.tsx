@@ -139,7 +139,7 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
         {/* Upgrade Button */}
         <TokenUpgradeDialog trigger={
           <Button className="w-full glow group">
-            Upgrade de Plano
+            {t("subscription.upgrade", { defaultValue: "Upgrade Plan" })}
             <ArrowUpRight className="h-4 w-4 ml-2 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
           </Button>
         } />
