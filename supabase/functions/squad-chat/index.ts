@@ -86,7 +86,7 @@ serve(async (req) => {
 
     if (!membership) {
       tenantStep.done("error");
-      return new Response(JSON.stringify({ error: "Usuário não pertence a nenhuma organização." }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+      return new Response(JSON.stringify({ error: "User does not belong to any organization." }), { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
     const tenantId = membership.tenant_id;
     tenantStep.done();
@@ -142,20 +142,20 @@ serve(async (req) => {
           messages: [
             {
               role: "system",
-              content: `Você é o moderador de uma reunião corporativa. Dado uma mensagem e a lista de agentes disponíveis, escolha APENAS 1 ou 2 agentes que DEVEM responder. Os outros devem ficar em silêncio.
+              content: `You are the moderator of a corporate meeting. Given a message and the list of available agents, choose ONLY 1 or 2 agents that SHOULD respond. The others must stay silent.
 
-Regras:
-- Se a pergunta é específica de uma área, escolha APENAS 1 agente
-- Se é uma pergunta que cruza áreas (ex: "qual o impacto financeiro da nova campanha?"), escolha no máximo 2
-- Se é uma saudação ou pergunta genérica, escolha apenas 1 (o mais sênior ou CEO se existir)
-- NUNCA escolha mais de 2 agentes
+Rules:
+- If the question is specific to one area, choose ONLY 1 agent
+- If it crosses areas (e.g., "what's the financial impact of the new campaign?"), choose at most 2
+- If it's a greeting or generic question, choose only 1 (the most senior or CEO if available)
+- NEVER choose more than 2 agents
 
-Agentes disponíveis:
+Available agents:
 ${agentList}
 
-${recentContext ? `Contexto recente da conversa:\n${recentContext}` : ''}
+${recentContext ? `Recent conversation context:\n${recentContext}` : ''}
 
-Responda APENAS com um JSON array dos nomes EXATOS dos agentes escolhidos. Exemplo: ["Nome Agente 1"]`
+Respond ONLY with a JSON array of the EXACT names of the chosen agents. Example: ["Agent Name 1"]`
             },
             { role: "user", content: message },
           ],
@@ -201,7 +201,7 @@ Responda APENAS com um JSON array dos nomes EXATOS dos agentes escolhidos. Exemp
         tier: agent.tier || "basic",
         planType: credits?.plan_type || "free",
         area: agentArea,
-        objective: agent.objective || "Ajudar o usuário",
+        objective: agent.objective || "Help the user",
         limits,
         sla,
       };
@@ -212,7 +212,7 @@ Responda APENAS com um JSON array dos nomes EXATOS dos agentes escolhidos. Exemp
         role: m.role === "user" ? "user" as const : "assistant" as const,
         content: m.role === "user" 
           ? m.content 
-          : `[${m.agentName || 'Agente'}]: ${m.content}`,
+          : `[${m.agentName || 'Agent'}]: ${m.content}`,
       }));
 
       const otherAgentNames = allAgents
@@ -220,21 +220,21 @@ Responda APENAS com um JSON array dos nomes EXATOS dos agentes escolhidos. Exemp
         .map(a => a.name)
         .join(", ");
 
-      const systemPrompt = `${SAFETY_LAYER}\n${contractPrompt}\n${agent.instructions || "Você é um assistente profissional especializado."}
+      const systemPrompt = `${SAFETY_LAYER}\n${contractPrompt}\n${agent.instructions || "You are a specialized professional assistant."}
 
-## PROTOCOLO DE REUNIÃO (TURN-BASED):
-Você é **${agent.name}**, especialista em "${agentArea}". 
-Você está em uma reunião com outros colegas: ${otherAgentNames || 'nenhum'}.
+## MEETING PROTOCOL (TURN-BASED):
+You are **${agent.name}**, a specialist in "${agentArea}". 
+You are in a meeting with other colleagues: ${otherAgentNames || 'none'}.
 
-REGRAS DA REUNIÃO:
-- Responda APENAS quando o assunto for relevante para sua área
-- Seja CONCISO: máximo 2-3 parágrafos curtos
-- NÃO repita o que outros agentes já disseram na conversa
-- Se outro agente já cobriu o tema, apenas complemente com algo NOVO da sua perspectiva
-- Se o assunto NÃO é da sua área, responda brevemente: "Isso está mais na área do [colega]. Posso ajudar com [sua área]."
-- Fale de forma natural, como um profissional em reunião — sem formalidade excessiva
-- NÃO comece com "Olá" ou "Boa tarde" a cada mensagem, vá direto ao ponto
-- Use português do Brasil
+MEETING RULES:
+- Respond ONLY when the subject is relevant to your area
+- Be CONCISE: maximum 2-3 short paragraphs
+- DO NOT repeat what other agents already said in the conversation
+- If another agent already covered the topic, only add something NEW from your perspective
+- If the subject is NOT your area, briefly respond: "That's more in [colleague]'s area. I can help with [your area]."
+- Speak naturally, like a professional in a meeting — without excessive formality
+- DO NOT start with "Hello" or "Good afternoon" in every message, get straight to the point
+- Respond in English
 ${companyContext}`;
 
       try {

@@ -9,30 +9,29 @@ import { Badge } from "@/components/ui/badge";
 
 /** Glossary of technical terms with friendly explanations */
 const GLOSSARY: Record<string, string> = {
-  "API Key": "Uma 'senha especial' que identifica seu app. Funciona como uma chave de acesso — quem tem, pode usar o serviço.",
-  "API": "Interface de Programação — é como dois sistemas 'conversam' entre si automaticamente, sem precisar de uma pessoa.",
-  "Access Token": "Um código temporário que prova que você tem permissão para acessar algo. Pense como um crachá digital.",
-  "Token": "Um código temporário que prova que você tem permissão para acessar algo. Pense como um crachá digital.",
-  "Client ID": "O 'nome de usuário' do seu aplicativo. Identifica qual app está fazendo a conexão.",
-  "Client Secret": "A 'senha' do seu aplicativo. Nunca compartilhe — é como a senha do seu banco.",
-  "OAuth": "Um método seguro de login que permite conectar apps sem compartilhar sua senha real. Ex: 'Entrar com Google'.",
-  "OAuth 2.0": "Um método seguro de login que permite conectar apps sem compartilhar sua senha real. Ex: 'Entrar com Google'.",
-  "Webhook": "Um 'aviso automático' que um sistema envia para outro quando algo acontece. Ex: receber uma notificação quando chega uma mensagem.",
-  "Phone Number ID": "O identificador único do seu número de WhatsApp dentro da plataforma Meta. Não é o número em si.",
-  "Ad Account ID": "O código que identifica sua conta de anúncios no Facebook/Instagram. Começa com 'act_'.",
-  "AES-256-GCM": "Um padrão de criptografia militar — seus dados ficam protegidos como informações de segurança nacional.",
-  "Criptografia": "Processo de embaralhar dados para que só quem tem a 'chave' consiga ler. Protege suas informações.",
-  "CNPJ": "Cadastro Nacional da Pessoa Jurídica — o 'CPF' da sua empresa.",
-  "DNS": "Sistema de Nomes de Domínio — traduz endereços como 'google.com' para números que os computadores entendem.",
-  "Redirect URL": "O endereço para onde o usuário é enviado após fazer login. É como dizer 'depois de entrar, volte para cá'.",
-  "Escopos": "Permissões específicas que você dá ao app. Ex: 'pode ler meu perfil' ou 'pode postar em meu nome'.",
-  "SMTP": "Protocolo para envio de e-mails — é o 'carteiro digital' que entrega suas mensagens.",
-  "SendGrid": "Um serviço popular para enviar e-mails em massa de forma confiável e sem cair no spam.",
-  "Graph API Explorer": "Ferramenta do Facebook para testar conexões com a API. É como um 'playground' para desenvolvedores.",
-  "Business Manager": "Painel central do Facebook/Meta para gerenciar páginas, anúncios e apps da sua empresa.",
-  "Marketing API": "A interface que permite criar e gerenciar anúncios no Facebook/Instagram de forma automática.",
-  "Company Page": "A página oficial da sua empresa no LinkedIn.",
-  "ROAS": "Retorno Sobre Investimento em Anúncios — quanto você ganha para cada R$1 investido em ads.",
+  "API Key": "A special 'password' that identifies your app. Works like an access key — whoever has it can use the service.",
+  "API": "Application Programming Interface — how two systems 'talk' to each other automatically, without a person.",
+  "Access Token": "A temporary code that proves you have permission to access something. Think of it as a digital badge.",
+  "Token": "A temporary code that proves you have permission to access something. Think of it as a digital badge.",
+  "Client ID": "The 'username' of your application. Identifies which app is making the connection.",
+  "Client Secret": "The 'password' of your application. Never share it — it's like your bank password.",
+  "OAuth": "A secure login method that lets you connect apps without sharing your real password. E.g., 'Sign in with Google'.",
+  "OAuth 2.0": "A secure login method that lets you connect apps without sharing your real password. E.g., 'Sign in with Google'.",
+  "Webhook": "An automatic notification that one system sends to another when something happens. E.g., receiving a notification when a message arrives.",
+  "Phone Number ID": "The unique identifier of your WhatsApp number within the Meta platform. It's not the number itself.",
+  "Ad Account ID": "The code that identifies your Facebook/Instagram ad account. Starts with 'act_'.",
+  "AES-256-GCM": "A military-grade encryption standard — your data is protected like national security information.",
+  "Encryption": "The process of scrambling data so only those with the 'key' can read it. Protects your information.",
+  "DNS": "Domain Name System — translates addresses like 'google.com' into numbers that computers understand.",
+  "Redirect URL": "The address where the user is sent after logging in. It's like saying 'after entering, come back here'.",
+  "Scopes": "Specific permissions you give the app. E.g., 'can read my profile' or 'can post on my behalf'.",
+  "SMTP": "Protocol for sending emails — the digital 'mailman' that delivers your messages.",
+  "SendGrid": "A popular service for sending bulk emails reliably without landing in spam.",
+  "Graph API Explorer": "Facebook's tool for testing API connections. It's like a 'playground' for developers.",
+  "Business Manager": "Facebook/Meta's central panel for managing pages, ads, and apps for your company.",
+  "Marketing API": "The interface that allows you to create and manage Facebook/Instagram ads automatically.",
+  "Company Page": "Your company's official LinkedIn page.",
+  "ROAS": "Return On Ad Spend — how much you earn for every $1 invested in ads.",
 };
 
 /** Inline tooltip that explains a technical term */
@@ -71,18 +70,18 @@ export const TutorialBanner = ({
   return (
     <div className="flex flex-wrap items-center gap-2 p-3 rounded-lg bg-muted/10 border border-border/20">
       <Badge variant="outline" className="text-[10px] bg-primary/5 border-primary/20 text-primary gap-1">
-        <BookOpen className="h-3 w-3" /> Ajuda
+        <BookOpen className="h-3 w-3" /> Help
       </Badge>
       <span className="text-xs text-muted-foreground">{label}</span>
       <div className="flex gap-2 ml-auto">
         {videoUrl && (
           <a href={videoUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
-            <PlayCircle className="h-3.5 w-3.5" /> Vídeo tutorial
+            <PlayCircle className="h-3.5 w-3.5" /> Video tutorial
           </a>
         )}
         {docsUrl && (
           <a href={docsUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-primary hover:underline">
-            <BookOpen className="h-3.5 w-3.5" /> Documentação
+            <BookOpen className="h-3.5 w-3.5" /> Documentation
           </a>
         )}
       </div>

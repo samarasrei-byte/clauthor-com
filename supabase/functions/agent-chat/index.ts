@@ -367,7 +367,7 @@ async function delegateToAgent(
     .eq("status", "active");
 
   if (agentsError || !agents || agents.length === 0) {
-    return { success: false, result: { error: "Nenhum agente ativo encontrado para delegação." } };
+    return { success: false, result: { error: "No active agents found for delegation." } };
   }
 
   const targetName = args.target_agent_name.toLowerCase();
@@ -380,11 +380,11 @@ async function delegateToAgent(
 
   if (!targetAgent) {
     const availableNames = agents.map((a: any) => a.name).join(", ");
-    return { success: false, result: { error: `Agente "${args.target_agent_name}" não encontrado. Disponíveis: ${availableNames}` } };
+    return { success: false, result: { error: `Agent "${args.target_agent_name}" not found. Available: ${availableNames}` } };
   }
 
   if (targetAgent.id === sourceAgentId) {
-    return { success: false, result: { error: "Um agente não pode delegar para si mesmo." } };
+    return { success: false, result: { error: "An agent cannot delegate to itself." } };
   }
 
   console.log(`[A2A] Delegating to ${targetAgent.name} (depth ${depth})`);
@@ -401,14 +401,14 @@ async function delegateToAgent(
   // Load company board for delegated agent too
   const companyContext = await loadCompanyBoard(adminClient, userId);
 
-  const delegatedPrompt = `${targetAgent.instructions || "Você é um assistente profissional."}
+  const delegatedPrompt = `${targetAgent.instructions || "You are a professional assistant."}
 ${companyContext}
-## CONTEXTO DE DELEGAÇÃO:
-Tarefa: ${args.task_description}
-Contexto adicional: ${args.context || "Nenhum"}
-Prioridade: ${args.priority || "normal"}
+## DELEGATION CONTEXT:
+Task: ${args.task_description}
+Additional context: ${args.context || "None"}
+Priority: ${args.priority || "normal"}
 
-Execute a tarefa e retorne o resultado de forma clara. Responda em português do Brasil.`;
+Execute the task and return the result clearly. Respond in English.`;
 
   const delegatedResponse = await fetchAI({
     model: "google/gemini-3-flash-preview",
@@ -1057,10 +1057,10 @@ serve(async (req) => {
     optimizedMessages = truncateOlderMessages(optimizedMessages, 500);
 
     // Build system prompt with Company Board data
-    let agentPrompt = "Você é um assistente de IA útil e profissional. Responda em português do Brasil.";
+    let agentPrompt = "You are a helpful and professional AI assistant. Respond in English.";
     let agentTier = "basic";
-    let agentArea = "geral";
-    let agentName = "Agente AI";
+    let agentArea = "general";
+    let agentName = "AI Agent";
     let contractPrompt = "";
 
     if (agentId) {
@@ -1069,7 +1069,7 @@ serve(async (req) => {
 
       if (agent) {
         agentTier = agent.tier || "basic";
-        agentName = agent.name || "Agente AI";
+        agentName = agent.name || "AI Agent";
         agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
         const sla = getTierSLA(agentTier);
         const limits = getAreaLimits(agentArea);
@@ -1082,7 +1082,7 @@ serve(async (req) => {
           tier: agentTier,
           planType: credits.plan_type,
           area: agentArea,
-          objective: agent.objective || "Ajudar o usuário",
+          objective: agent.objective || "Help the user",
           limits,
           sla,
         };
@@ -1090,9 +1090,9 @@ serve(async (req) => {
         contractPrompt = buildAgentContract(contract);
 
         if (agent.instructions) {
-          agentPrompt = `Você é o agente "${agent.name}". 
-Objetivo: ${agent.objective || "Ajudar o usuário"}
-Instruções: ${agent.instructions}`;
+          agentPrompt = `You are the agent "${agent.name}". 
+Objective: ${agent.objective || "Help the user"}
+Instructions: ${agent.instructions}`;
         }
       }
     }

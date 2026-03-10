@@ -226,7 +226,7 @@ export default function AgentCollaborationPanel({
                         </>
                       )}
                       <span className="text-muted-foreground/50 ml-auto text-[9px]">
-                        {new Date(event.timestamp).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+                        {new Date(event.timestamp).toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
                       </span>
                     </div>
                     {event.task && (

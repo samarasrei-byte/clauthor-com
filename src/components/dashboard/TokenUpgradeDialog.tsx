@@ -44,35 +44,35 @@ const plans: Plan[] = [
     name: "Starter",
     tokens: "5M",
     tokensNum: 5000000,
-    price: "R$ 3.997",
-    priceNum: 3997,
-    replaces: "Substitui 3 CLT",
+    price: "$799",
+    priceNum: 799,
+    replaces: "Replaces 3 employees",
     icon: Zap,
     color: "text-cyan-400",
     features: [
-      "5 milhões de tokens/mês",
-      "Até 5 agentes ativos",
-      "Suporte prioritário",
-      "Analytics avançado",
+      "5 million tokens/month",
+      "Up to 5 active agents",
+      "Priority support",
+      "Advanced analytics",
     ],
   },
   {
     id: "pro",
-    name: "Profissional",
+    name: "Professional",
     tokens: "25M",
     tokensNum: 25000000,
-    price: "R$ 9.997",
-    priceNum: 9997,
-    replaces: "Substitui 10 CLT",
+    price: "$1,999",
+    priceNum: 1999,
+    replaces: "Replaces 10 employees",
     popular: true,
     icon: Crown,
     color: "text-primary",
     features: [
-      "25 milhões de tokens/mês",
-      "Agentes ilimitados",
-      "Suporte dedicado 24/7",
-      "API de integração",
-      "Relatórios customizados",
+      "25 million tokens/month",
+      "Unlimited agents",
+      "Dedicated 24/7 support",
+      "Integration API",
+      "Custom reports",
     ],
   },
   {
@@ -80,28 +80,28 @@ const plans: Plan[] = [
     name: "Enterprise",
     tokens: "100M+",
     tokensNum: 100000000,
-    price: "Sob consulta",
+    price: "Custom",
     priceNum: 0,
-    replaces: "Substitui 30+ CLT",
+    replaces: "Replaces 30+ employees",
     icon: Rocket,
     color: "text-emerald-400",
     features: [
-      "100M+ tokens/mês",
-      "Infraestrutura dedicada",
-      "SLA garantido 99.99%",
-      "Onboarding personalizado",
-      "Treinamento da equipe",
-      "Consultoria de processos",
+      "100M+ tokens/month",
+      "Dedicated infrastructure",
+      "99.99% SLA guaranteed",
+      "Personalized onboarding",
+      "Team training",
+      "Process consulting",
     ],
   },
 ];
 
 const tokenPacks: TokenPack[] = [
-  { id: "pack-5m", tokens: "5M", tokensNum: 5000000, price: "R$ 1.497", priceNum: 1497 },
-  { id: "pack-10m", tokens: "10M", tokensNum: 10000000, price: "R$ 2.497", priceNum: 2497, savings: "17% off" },
-  { id: "pack-25m", tokens: "25M", tokensNum: 25000000, price: "R$ 4.997", priceNum: 4997, savings: "33% off" },
-  { id: "pack-50m", tokens: "50M", tokensNum: 50000000, price: "R$ 8.997", priceNum: 8997, savings: "40% off" },
-  { id: "pack-100m", tokens: "100M", tokensNum: 100000000, price: "R$ 14.997", priceNum: 14997, savings: "50% off" },
+  { id: "pack-5m", tokens: "5M", tokensNum: 5000000, price: "$299", priceNum: 299 },
+  { id: "pack-10m", tokens: "10M", tokensNum: 10000000, price: "$499", priceNum: 499, savings: "17% off" },
+  { id: "pack-25m", tokens: "25M", tokensNum: 25000000, price: "$999", priceNum: 999, savings: "33% off" },
+  { id: "pack-50m", tokens: "50M", tokensNum: 50000000, price: "$1,799", priceNum: 1799, savings: "40% off" },
+  { id: "pack-100m", tokens: "100M", tokensNum: 100000000, price: "$2,999", priceNum: 2999, savings: "50% off" },
 ];
 
 type PaymentMethod = "paypal";
@@ -149,7 +149,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
 
   const selectedItemName = selectedPlan
     ? plans.find((p) => p.id === selectedPlan)?.name
-    : `Pacote ${tokenPacks.find((p) => p.id === selectedPack)?.tokens}`;
+    : `Pack ${tokenPacks.find((p) => p.id === selectedPack)?.tokens}`;
 
   const handlePayment = (method: PaymentMethod) => {
     setPaymentMethod(method);
@@ -171,7 +171,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
         body: {
           action: "create_order",
           amount: priceNum,
-          currency: "BRL",
+          currency: "USD",
           description: selectedItemName || "Clauthor Upgrade",
           metadata: {
             type: selectedPlan ? "plan" : "token_pack",
@@ -182,7 +182,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
 
       if (error) throw error;
       if (!data?.success || !data?.approve_url) {
-        throw new Error(data?.error || "Falha ao criar ordem PayPal");
+        throw new Error(data?.error || "Failed to create PayPal order");
       }
 
       sessionStorage.setItem("paypal_order", JSON.stringify({
@@ -243,7 +243,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
         item_name: selectedItemName || itemId,
         tokens_amount: tokensToAdd,
         amount_cents: 0,
-        currency: "BRL",
+        currency: "USD",
         status: "completed",
       });
 

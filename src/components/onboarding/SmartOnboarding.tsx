@@ -38,38 +38,38 @@ const useTyping = (text: string, speed = 30, delay = 0) => {
 const industries = [
   { id: "saas", label: "SaaS / Tech", icon: Code, gradient: "from-cyan-500 to-blue-600" },
   { id: "ecommerce", label: "E-commerce", icon: ShoppingCart, gradient: "from-emerald-500 to-teal-600" },
-  { id: "services", label: "Serviços", icon: Briefcase, gradient: "from-amber-500 to-orange-600" },
-  { id: "health", label: "Saúde", icon: HeartHandshake, gradient: "from-rose-500 to-pink-600" },
-  { id: "education", label: "Educação", icon: GraduationCap, gradient: "from-violet-500 to-purple-600" },
-  { id: "industry", label: "Indústria", icon: Factory, gradient: "from-slate-400 to-zinc-600" },
+  { id: "services", label: "Services", icon: Briefcase, gradient: "from-amber-500 to-orange-600" },
+  { id: "health", label: "Healthcare", icon: HeartHandshake, gradient: "from-rose-500 to-pink-600" },
+  { id: "education", label: "Education", icon: GraduationCap, gradient: "from-violet-500 to-purple-600" },
+  { id: "industry", label: "Manufacturing", icon: Factory, gradient: "from-slate-400 to-zinc-600" },
   { id: "startup", label: "Startup", icon: Rocket, gradient: "from-primary to-primary-glow" },
-  { id: "agency", label: "Agência / Marketing", icon: Target, gradient: "from-pink-500 to-fuchsia-600" },
-  { id: "retail", label: "Varejo", icon: Building2, gradient: "from-orange-500 to-red-600" },
-  { id: "finance", label: "Finanças / Contábil", icon: Receipt, gradient: "from-yellow-500 to-amber-600" },
-  { id: "logistics", label: "Logística", icon: Globe, gradient: "from-sky-500 to-indigo-600" },
-  { id: "other", label: "Outro", icon: Sparkles, gradient: "from-muted to-muted-foreground" },
+  { id: "agency", label: "Agency / Marketing", icon: Target, gradient: "from-pink-500 to-fuchsia-600" },
+  { id: "retail", label: "Retail", icon: Building2, gradient: "from-orange-500 to-red-600" },
+  { id: "finance", label: "Finance / Accounting", icon: Receipt, gradient: "from-yellow-500 to-amber-600" },
+  { id: "logistics", label: "Logistics", icon: Globe, gradient: "from-sky-500 to-indigo-600" },
+  { id: "other", label: "Other", icon: Sparkles, gradient: "from-muted to-muted-foreground" },
 ];
 
 const popularChallenges = new Set(["sales", "support", "marketing"]);
 
 const challenges = [
-  { id: "sales", label: "Vender mais e prospectar clientes", icon: DollarSign, agents: ["sales", "sdr_outbound", "voice_ai", "crm_manager"], dept: "Comercial" },
-  { id: "support", label: "Atender clientes 24/7", icon: Headphones, agents: ["support_channel", "omnichannel", "voice_support", "rag"], dept: "Suporte" },
-  { id: "marketing", label: "Criar conteúdo e atrair leads", icon: Megaphone, agents: ["content", "seo_growth", "marketing_automation", "media_buyer"], dept: "Marketing" },
-  { id: "finance", label: "Controlar financeiro e cobranças", icon: Receipt, agents: ["revenue", "ai_cfo", "data_analytics"], dept: "Financeiro" },
-  { id: "operations", label: "Organizar processos e projetos", icon: BarChart3, agents: ["orchestrator", "project_management", "scheduler"], dept: "Operações" },
-  { id: "hr", label: "Recrutar e treinar equipe", icon: Users, agents: ["hr", "training", "people_analytics"], dept: "RH" },
-  { id: "tech", label: "Desenvolver software ou infra", icon: Cpu, agents: ["coding", "computer", "data_engineer"], dept: "Tecnologia" },
-  { id: "creative", label: "Design, vídeo e branding", icon: PenTool, agents: ["creative_design", "video_production", "branding"], dept: "Criação" },
-  { id: "legal", label: "Jurídico e compliance", icon: Shield, agents: ["legal", "contract_analyst", "compliance_officer"], dept: "Jurídico" },
-  { id: "ecommerce", label: "Escalar e-commerce e tráfego", icon: LineChart, agents: ["ecommerce", "paid_traffic", "affiliate_manager"], dept: "E-commerce" },
+  { id: "sales", label: "Sell more and prospect clients", icon: DollarSign, agents: ["sales", "sdr_outbound", "voice_ai", "crm_manager"], dept: "Sales" },
+  { id: "support", label: "24/7 customer support", icon: Headphones, agents: ["support_channel", "omnichannel", "voice_support", "rag"], dept: "Support" },
+  { id: "marketing", label: "Create content and attract leads", icon: Megaphone, agents: ["content", "seo_growth", "marketing_automation", "media_buyer"], dept: "Marketing" },
+  { id: "finance", label: "Financial control and billing", icon: Receipt, agents: ["revenue", "ai_cfo", "data_analytics"], dept: "Finance" },
+  { id: "operations", label: "Organize processes and projects", icon: BarChart3, agents: ["orchestrator", "project_management", "scheduler"], dept: "Operations" },
+  { id: "hr", label: "Recruit and train your team", icon: Users, agents: ["hr", "training", "people_analytics"], dept: "HR" },
+  { id: "tech", label: "Develop software or infrastructure", icon: Cpu, agents: ["coding", "computer", "data_engineer"], dept: "Technology" },
+  { id: "creative", label: "Design, video and branding", icon: PenTool, agents: ["creative_design", "video_production", "branding"], dept: "Creative" },
+  { id: "legal", label: "Legal and compliance", icon: Shield, agents: ["legal", "contract_analyst", "compliance_officer"], dept: "Legal" },
+  { id: "ecommerce", label: "Scale e-commerce and traffic", icon: LineChart, agents: ["ecommerce", "paid_traffic", "affiliate_manager"], dept: "E-commerce" },
 ];
 
 const teamSizes = [
-  { id: "micro", label: "Só eu (MEI/Freelancer)", maxAgents: 2, savings: "R$ 3k" },
-  { id: "small", label: "2-10 pessoas", maxAgents: 4, savings: "R$ 12k" },
-  { id: "medium", label: "11-50 pessoas", maxAgents: 7, savings: "R$ 35k" },
-  { id: "large", label: "50+ pessoas", maxAgents: 12, savings: "R$ 80k+" },
+  { id: "micro", label: "Just me (Freelancer)", maxAgents: 2, savings: "$600" },
+  { id: "small", label: "2-10 people", maxAgents: 4, savings: "$2.4k" },
+  { id: "medium", label: "11-50 people", maxAgents: 7, savings: "$7k" },
+  { id: "large", label: "50+ people", maxAgents: 12, savings: "$16k+" },
 ];
 
 interface SmartOnboardingProps {
@@ -89,9 +89,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
   // Chat-like messages
   const messages = [
-    "Olá! Bem-vindo à CLAUTHOR.",
-    "Vamos montar o time ideal para sua empresa em menos de 1 minuto.",
-    "Para começar, qual é o segmento da sua empresa?",
+    "Hello! Welcome to CLAUTHOR.",
+    "Let's build the ideal team for your company in under 1 minute.",
+    "To get started, what's your company's industry?",
   ];
 
   const msg0 = useTyping(messages[0], 25, 400);
@@ -126,7 +126,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
     if (count >= 7) return { pct: 30, label: "30% off — Power Squad" };
     if (count >= 5) return { pct: 20, label: "20% off — Growth Squad" };
     if (count >= 3) return { pct: 10, label: "10% off — Starter Squad" };
-    return { pct: 0, label: "Agente individual" };
+    return { pct: 0, label: "Individual agent" };
   };
 
   const getDepts = () => {
@@ -147,7 +147,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
         signup: true,
         hireIntent: allSlugs.length > 0 ? {
           type: "agent" as const,
-          label: `Squad ${industries.find(i => i.id === industry)?.label || "IA"} (${allSlugs.length} agentes)`,
+          label: `Squad ${industries.find(i => i.id === industry)?.label || "AI"} (${allSlugs.length} agents)`,
           slugs: allSlugs,
         } : undefined,
       },
@@ -185,7 +185,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
               </div>
               <div>
                 <span className="font-display font-bold text-xs tracking-wider uppercase text-foreground">
-                  Monte seu time
+                  Build your team
                 </span>
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
@@ -298,7 +298,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                             className="gap-2 rounded-xl border-primary/30 bg-primary/10 hover:bg-primary/20 text-sm h-12 px-6 font-semibold shadow-[0_0_20px_hsl(var(--primary)/0.1)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)] transition-all hover:scale-[1.03] active:scale-[0.98]"
                           >
                             <HelpCircle className="h-4 w-4 text-primary" />
-                            Não sei o que preciso — falar com IA
+                            Not sure what I need — talk to AI
                           </Button>
                         </motion.div>
                         <div className="flex gap-2">
@@ -312,7 +312,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                               onClick={() => { onClose(); navigate("/marketplace"); }}
                               className="text-sm gap-1.5 rounded-xl h-12 px-5 border-border/60 hover:border-primary/30 hover:bg-primary/5 hover:scale-[1.03] active:scale-[0.98] transition-all"
                             >
-                              Já sei — ver Agentes
+                              I know — view Agents
                               <ArrowRight className="h-3.5 w-3.5" />
                             </Button>
                           </motion.div>
@@ -326,7 +326,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                               onClick={() => { onClose(); navigate("/departamentos"); }}
                               className="text-sm gap-1.5 rounded-xl h-12 px-5 border-border/60 hover:border-primary/30 hover:bg-primary/5 hover:scale-[1.03] active:scale-[0.98] transition-all"
                             >
-                              Já sei — ver Departamentos
+                              I know — view Departments
                               <ArrowRight className="h-3.5 w-3.5" />
                             </Button>
                           </motion.div>
@@ -349,7 +349,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   {/* User reply bubble */}
                   <div className="flex gap-3 justify-end">
                     <div className="bg-primary text-primary-foreground rounded-2xl rounded-br-sm px-4 py-3 max-w-[70%]">
-                      <p className="text-sm">Minha empresa é do segmento <strong>{industries.find(i => i.id === industry)?.label}</strong></p>
+                      <p className="text-sm">My company is in the <strong>{industries.find(i => i.id === industry)?.label}</strong> industry</p>
                     </div>
                   </div>
 
@@ -360,9 +360,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                       <p className="text-sm">
-                        Boa escolha! {industries.find(i => i.id === industry)?.label} é um setor com grande potencial de automação.
+                        Great choice! {industries.find(i => i.id === industry)?.label} is a sector with huge automation potential.
                         <br /><br />
-                        Agora selecione: <strong>quais são seus maiores desafios?</strong>
+                        Now select: <strong>what are your biggest challenges?</strong>
                       </p>
                     </div>
                   </div>
@@ -410,11 +410,11 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2 pt-2">
                     <Button variant="outline" onClick={() => setPhase(0)} className="h-12 rounded-xl gap-1.5 px-4">
-                      <ChevronLeft className="h-4 w-4" /> Voltar
+                      <ChevronLeft className="h-4 w-4" /> Back
                     </Button>
                     {selectedChallenges.length > 0 && (
                       <Button onClick={() => setPhase(2)} className="flex-1 h-12 glow rounded-xl gap-2">
-                        Continuar ({selectedChallenges.length} selecionados)
+                        Continue ({selectedChallenges.length} selected)
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                     )}
@@ -434,7 +434,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   {/* User reply */}
                   <div className="flex gap-3 justify-end">
                     <div className="bg-primary text-primary-foreground rounded-2xl rounded-br-sm px-4 py-3 max-w-[70%]">
-                      <p className="text-sm">Preciso de ajuda com: <strong>{selectedChallenges.map(c => challenges.find(ch => ch.id === c)?.label).join(", ")}</strong></p>
+                      <p className="text-sm">I need help with: <strong>{selectedChallenges.map(c => challenges.find(ch => ch.id === c)?.label).join(", ")}</strong></p>
                     </div>
                   </div>
 
@@ -445,9 +445,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                       <p className="text-sm">
-                        Excelente seleção. Já temos um time forte para montar.
+                        Excellent selection. We've got a strong team to build.
                         <br /><br />
-                        Última pergunta: <strong>quantas pessoas tem na sua empresa?</strong> Isso define o tamanho do time.
+                        Last question: <strong>how many people are in your company?</strong> This defines the team size.
                       </p>
                     </div>
                   </div>
@@ -473,17 +473,17 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                           </div>
                           <div>
                             <p className="text-sm font-medium">{size.label}</p>
-                            <p className="text-[11px] text-muted-foreground">Até {size.maxAgents} agentes recomendados</p>
+                            <p className="text-[11px] text-muted-foreground">Up to {size.maxAgents} recommended agents</p>
                           </div>
                         </div>
                         <Badge variant="outline" className="border-primary/20 text-primary text-[10px] shrink-0">
-                          Economia ~{size.savings}/mês
+                          Savings ~{size.savings}/mo
                         </Badge>
                       </motion.button>
                     ))}
                   </div>
                   <Button variant="outline" onClick={() => setPhase(1)} className="h-10 rounded-xl gap-1.5 px-4 mt-2">
-                    <ChevronLeft className="h-4 w-4" /> Voltar
+                    <ChevronLeft className="h-4 w-4" /> Back
                   </Button>
                 </motion.div>
               )}
@@ -510,9 +510,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       <Bot className="h-4 w-4 text-primary" />
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[90%] space-y-4">
-                      <p className="text-sm">
-                        <strong>Pronto! Aqui está o seu time personalizado:</strong>
-                      </p>
+                       <p className="text-sm">
+                         <strong>Done! Here's your personalized team:</strong>
+                       </p>
 
                       {/* Squad card */}
                       <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-3">
@@ -560,7 +560,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                               </TooltipTrigger>
                               <TooltipContent side="top" className="max-w-[250px] text-xs">
                                 <p className="font-semibold mb-0.5">{t(`library_page.agents.${agent}_title`, { defaultValue: agent.replace(/_/g, " ") })}</p>
-                                <p className="text-muted-foreground">{t(`library_page.agents.${agent}_desc`, { defaultValue: "Agente de IA especializado" })}</p>
+                                 <p className="text-muted-foreground">{t(`library_page.agents.${agent}_desc`, { defaultValue: "Specialized AI agent" })}</p>
                               </TooltipContent>
                             </Tooltip>
                           ))}
@@ -569,9 +569,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         {/* Savings */}
                         <div className="flex items-center gap-2 pt-2 border-t border-primary/10">
                           <Zap className="h-3.5 w-3.5 text-primary" />
-                          <span className="text-xs text-muted-foreground">
-                            Economia estimada: <strong className="text-foreground">{teamSizes.find(t => t.id === teamSize)?.savings}/mês</strong> vs. equipe CLT
-                          </span>
+                           <span className="text-xs text-muted-foreground">
+                             Estimated savings: <strong className="text-foreground">{teamSizes.find(t => t.id === teamSize)?.savings}/mo</strong> vs. traditional team
+                           </span>
                         </div>
 
                         {/* Price */}
@@ -600,7 +600,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   <div className="space-y-2">
                     <p className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5 px-1">
                       <Plus className="h-3 w-3" />
-                      Adicionar agentes individuais
+                      Add individual agents
                     </p>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 max-h-48 overflow-y-auto pr-1">
                       {[
@@ -639,7 +639,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                               </TooltipTrigger>
                               <TooltipContent side="top" className="max-w-[250px] text-xs">
                                 <p className="font-semibold mb-0.5">{t(`library_page.agents.${agent}_title`, { defaultValue: agent.replace(/_/g, " ") })}</p>
-                                <p className="text-muted-foreground">{t(`library_page.agents.${agent}_desc`, { defaultValue: "Agente de IA especializado" })}</p>
+                                <p className="text-muted-foreground">{t(`library_page.agents.${agent}_desc`, { defaultValue: "Specialized AI agent" })}</p>
                               </TooltipContent>
                             </Tooltip>
                           );
@@ -647,7 +647,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     {extraAgents.length > 0 && (
                       <p className="text-[10px] text-primary px-1">
-                        +{extraAgents.length} agente{extraAgents.length > 1 ? "s" : ""} individual{extraAgents.length > 1 ? "is" : ""} adicionado{extraAgents.length > 1 ? "s" : ""}
+                        +{extraAgents.length} individual agent{extraAgents.length > 1 ? "s" : ""} added
                       </p>
                     )}
                   </div>
@@ -661,22 +661,22 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   >
                     <Button onClick={handleFinish} className="w-full h-13 glow rounded-xl gap-2 text-sm font-semibold">
                       <Rocket className="h-4 w-4" />
-                      Criar conta e ativar meu Squad
+                      Create account and activate my Squad
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                     <div className="flex gap-2">
                       <Button variant="outline" onClick={() => setPhase(2)} className="h-10 rounded-xl gap-1.5 px-4 text-xs">
-                        <ChevronLeft className="h-3.5 w-3.5" /> Voltar
+                         <ChevronLeft className="h-3.5 w-3.5" /> Back
                       </Button>
                       <Button variant="outline" onClick={handleViewLibrary} className="flex-1 h-10 rounded-xl text-xs border-border/50">
-                        Explorar 80+ agentes
+                        Explore 80+ agents
                       </Button>
                       <Button variant="outline" onClick={() => { onClose(); navigate("/pricing"); }} className="flex-1 h-10 rounded-xl text-xs border-border/50">
-                        Ver preços
+                        View pricing
                       </Button>
                     </div>
                     <Button variant="ghost" onClick={() => { setPhase(0); setIndustry(""); setSelectedChallenges([]); setTeamSize(""); setExtraAgents([]); }} className="w-full text-xs text-muted-foreground">
-                      ← Recomeçar
+                      ← Start over
                     </Button>
                   </motion.div>
                 </motion.div>
@@ -697,10 +697,10 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       <Bot className="h-4 w-4 text-primary" />
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
-                      <p className="text-sm">
-                        Sem problema! Nosso <strong>consultor especializado</strong> vai te orientar.
-                        Conte sobre sua empresa e montamos o time ideal para você.
-                      </p>
+                       <p className="text-sm">
+                         No problem! Our <strong>specialized consultant</strong> will guide you.
+                         Tell us about your company and we'll build the ideal team for you.
+                       </p>
                     </div>
                   </div>
 
@@ -724,7 +724,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                             signup: true,
                             hireIntent: {
                               type: "agent" as const,
-                              label: "Squad recomendado pelo consultor IA",
+                              label: "AI consultant recommended squad",
                               slugs: ["sales", "omnichannel", "customer_success"],
                             },
                           },
@@ -733,7 +733,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       className="w-full h-13 glow rounded-xl gap-2 text-sm font-semibold"
                     >
                       <Rocket className="h-4 w-4" />
-                      Criar conta e contratar meu Squad
+                      Create account and hire my Squad
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                     <div className="flex gap-2">
@@ -742,14 +742,14 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         onClick={() => setPhase(0)}
                         className="h-10 rounded-xl gap-1.5 px-4 text-xs"
                       >
-                        <ChevronLeft className="h-3.5 w-3.5" /> Voltar ao início
+                        <ChevronLeft className="h-3.5 w-3.5" /> Back to start
                       </Button>
                       <Button
                         variant="outline"
                         onClick={() => { onClose(); navigate("/marketplace"); }}
                         className="flex-1 h-10 rounded-xl text-xs border-border/50"
                       >
-                        Explorar todos os agentes
+                        Explore all agents
                       </Button>
                     </div>
                   </motion.div>
