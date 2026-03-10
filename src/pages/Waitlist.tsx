@@ -296,7 +296,7 @@ const Waitlist = () => {
                 <motion.span key={displayCount} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="font-bold text-primary text-lg tabular-nums">
                   {displayCount.toLocaleString('en-US')}+
                 </motion.span>
-                <span className="text-muted-foreground"> {t("waitlist.professionals_in_queue", { defaultValue: "professionals in queue" })}</span>
+                <span className="text-muted-foreground"> professionals in queue</span>
               </div>
             </motion.div>
 
