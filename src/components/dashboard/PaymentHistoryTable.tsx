@@ -93,11 +93,11 @@ export default function PaymentHistoryTable() {
           <Table>
             <TableHeader>
               <TableRow className="border-white/5 hover:bg-transparent">
-                <TableHead className="text-[10px] uppercase tracking-wider">Data</TableHead>
-                <TableHead className="text-[10px] uppercase tracking-wider">Tipo</TableHead>
+                <TableHead className="text-[10px] uppercase tracking-wider">Date</TableHead>
+                <TableHead className="text-[10px] uppercase tracking-wider">Type</TableHead>
                 <TableHead className="text-[10px] uppercase tracking-wider">Item</TableHead>
                 <TableHead className="text-[10px] uppercase tracking-wider text-right">Tokens</TableHead>
-                <TableHead className="text-[10px] uppercase tracking-wider text-right">Valor</TableHead>
+                <TableHead className="text-[10px] uppercase tracking-wider text-right">Amount</TableHead>
                 <TableHead className="text-[10px] uppercase tracking-wider text-center">Status</TableHead>
               </TableRow>
             </TableHeader>
