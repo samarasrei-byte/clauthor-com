@@ -506,14 +506,14 @@ const ClientDashboard = () => {
                         </h1>
                         <HelpTooltip id="dashboard-intro" text={t("dashboard.help_intro", { defaultValue: "Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções." })} position="bottom" />
                       </div>
-                      <p className="text-sm text-muted-foreground">
-                        {new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
+                      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                        <span>{new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</span>
                         {credits && (
-                          <span className="ml-2 text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium">
+                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium whitespace-nowrap">
                             {remainingCredits.toLocaleString(locale)} {t("dashboard.credits_short", { defaultValue: "créditos" })}
                           </span>
                         )}
-                      </p>
+                      </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <NotificationPanel />
