@@ -154,10 +154,14 @@ export function useOmnix() {
               const kpis = extractKPIs(assistantText);
               setMessages(prev => {
                 const last = prev[prev.length - 1];
+                let next: OmnixMessage[];
                 if (last?.role === "assistant") {
-                  return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantText, kpis: kpis || m.kpis } : m);
+                  next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantText, kpis: kpis || m.kpis } : m);
+                } else {
+                  next = [...prev, { role: "assistant", content: assistantText, timestamp: new Date(), kpis: kpis || undefined }];
                 }
-                return [...prev, { role: "assistant", content: assistantText, timestamp: new Date(), kpis: kpis || undefined }];
+                messagesRef.current = next;
+                return next;
               });
             }
           } catch {
