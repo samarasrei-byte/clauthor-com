@@ -597,7 +597,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                         handleSend();
                       }
                     }}
-                    placeholder={mode === "grupo" ? "Mensagem para a equipe..." : `Mensagem para ${selectedAgent?.name || "agente"}...`}
+                    placeholder={mode === "grupo" ? t("squad.msg_group_placeholder") : t("squad.msg_agent_placeholder", { name: selectedAgent?.name || "" })}
                     rows={1}
                     className="w-full resize-none bg-background/60 border border-border/30 rounded-2xl px-4 py-3 text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all max-h-32"
                     style={{ minHeight: "44px" }}
