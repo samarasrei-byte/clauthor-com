@@ -93,9 +93,9 @@ const OmnixSettings = ({ config, onUpdate, onClose }: OmnixSettingsProps) => {
             <Select value={config.language} onValueChange={v => onUpdate({ language: v })}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="pt-BR">Português</SelectItem>
                 <SelectItem value="en-US">English</SelectItem>
                 <SelectItem value="es-ES">Español</SelectItem>
+                <SelectItem value="fr-FR">Français</SelectItem>
               </SelectContent>
             </Select>
           </div>

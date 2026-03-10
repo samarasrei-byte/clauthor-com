@@ -24,7 +24,7 @@ const CountUp = ({ end, prefix = "", suffix = "", decimals = 0, duration = 2 }: 
     requestAnimationFrame(tick);
   }, [inView, end, duration]);
 
-  const formatted = decimals > 0 ? val.toFixed(decimals) : Math.round(val).toLocaleString("pt-BR");
+  const formatted = decimals > 0 ? val.toFixed(decimals) : Math.round(val).toLocaleString("en-US");
   return <span ref={ref}>{prefix}{formatted}{suffix}</span>;
 };
 
