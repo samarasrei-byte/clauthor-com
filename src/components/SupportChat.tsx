@@ -81,10 +81,24 @@ function useVoiceInput() {
   const [transcript, setTranscript] = useState("");
   const recognitionRef = useRef<any>(null);
 
-  const startListening = useCallback(() => {
+  const startListening = useCallback(async () => {
     const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
     if (!SpeechRecognition) {
-      toast.error("Reconhecimento de voz não suportado neste navegador");
+      toast.error("Voice recognition not supported");
+      return;
+    }
+
+    // Request microphone permission explicitly
+    try {
+      await navigator.mediaDevices.getUserMedia({ audio: true });
+    } catch (err: any) {
+      if (err.name === "NotAllowedError") {
+        toast.error("Microphone permission denied");
+      } else if (err.name === "NotFoundError") {
+        toast.error("No microphone detected");
+      } else {
+        toast.error("Microphone error: " + (err.message || "Unknown"));
+      }
       return;
     }
     const recognition = new SpeechRecognition();
