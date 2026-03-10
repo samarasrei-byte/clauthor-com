@@ -470,8 +470,8 @@ Apenas o texto, sem introduções.`,
 
     // Fallback action items if none generated
     setActionItems(prev => prev.length > 0 ? prev : [
-      { id: "1", task: "Executar plano estratégico", assignedTo: active[0]?.name || "Equipe", priority: "high" },
-      { id: "2", task: "Preparar relatório de resultados", assignedTo: active[1]?.name || "Equipe", priority: "medium" },
+      { id: "1", task: t("meeting.fallback_task1"), assignedTo: active[0]?.name || t("team.title"), priority: "high" },
+      { id: "2", task: t("meeting.fallback_task2"), assignedTo: active[1]?.name || t("team.title"), priority: "medium" },
     ]);
 
     setPhase("conclusion");
