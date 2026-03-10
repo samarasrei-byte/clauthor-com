@@ -97,7 +97,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                     ? "text-muted-foreground/50 hover:text-muted-foreground/70 hover:bg-muted/5"
                     : isActive
                       ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/10"
                 )}
               >
                 {/* Active indicator */}
