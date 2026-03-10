@@ -88,8 +88,16 @@ const ClientDashboard = () => {
     if (!localStorage.getItem(key)) {
       localStorage.setItem(key, "true");
       setActiveSection("omnix");
+      setOmnixMounted(true);
     }
   }, [user]);
+
+  // Track when omnix is first visited so we can keep it mounted
+  useEffect(() => {
+    if (activeSection === "omnix" && !omnixMounted) {
+      setOmnixMounted(true);
+    }
+  }, [activeSection, omnixMounted]);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
   const [omnixMounted, setOmnixMounted] = useState(false);
