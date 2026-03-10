@@ -147,7 +147,7 @@ const DiagnosticCard = ({ health, onRunScan }: { health: SystemHealth; onRunScan
         <div className="flex items-center gap-2">
           <div className="relative">
             <Activity className={`h-3.5 w-3.5 ${cfg.color}`} />
-            <span className={`absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full ${health.status === "optimal" ? "bg-emerald-400" : health.status === "warning" ? "bg-amber-400" : "bg-red-400"} animate-pulse`} />
+            <span className={`absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full ${health.status === "optimal" ? "bg-primary" : health.status === "warning" ? "bg-muted-foreground" : "bg-destructive"} animate-pulse`} />
           </div>
           <span className={`text-[10px] font-bold tracking-[0.2em] uppercase ${cfg.color}`}>
             {cfg.label}
