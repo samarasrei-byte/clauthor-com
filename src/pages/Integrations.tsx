@@ -11,7 +11,7 @@ import {
   FileSpreadsheet, BookOpen, Trello, BarChart3,
   TrendingUp, Code, ArrowRight, Linkedin, Megaphone,
   Instagram, ShoppingCart, CreditCard, Database,
-  Clock, Star, Key, ChevronDown, ChevronUp,
+  Clock, Key, ChevronDown, ChevronUp,
   CheckCircle, Loader2, Shield, AlertTriangle, Sparkles, Zap
 } from "lucide-react";
 import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
