@@ -243,7 +243,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
         item_name: selectedItemName || itemId,
         tokens_amount: tokensToAdd,
         amount_cents: 0,
-        currency: "BRL",
+        currency: "USD",
         status: "completed",
       });
 

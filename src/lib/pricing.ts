@@ -214,7 +214,7 @@ const priceTierValues: Record<string, Record<PriceTier, number>> = {
 };
 
 export function getPrice(lang: string, priceTier: PriceTier): number {
-  const tiers = priceTierValues[lang] || priceTierValues.pt;
+  const tiers = priceTierValues[lang] || priceTierValues.en;
   return tiers[priceTier];
 }
 

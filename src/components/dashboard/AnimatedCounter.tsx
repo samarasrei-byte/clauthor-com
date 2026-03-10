@@ -47,7 +47,7 @@ const AnimatedCounter = ({
 
   const formatted = decimals > 0
     ? displayValue.toFixed(decimals)
-    : Math.round(displayValue).toLocaleString("pt-BR");
+    : Math.round(displayValue).toLocaleString("en-US");
 
   return (
     <motion.span

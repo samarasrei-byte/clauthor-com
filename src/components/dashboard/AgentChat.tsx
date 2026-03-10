@@ -348,17 +348,17 @@ function useTTS() {
     if (!cleanText) return;
 
     const utterance = new SpeechSynthesisUtterance(cleanText);
-    utterance.lang = "pt-BR";
+    utterance.lang = "en-US";
     utterance.rate = 1.05;
     utterance.pitch = 1;
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
     utterance.onerror = () => setIsSpeaking(false);
     
-    // Try to pick a Portuguese voice
+    // Try to pick an English voice
     const voices = window.speechSynthesis.getVoices();
-    const ptVoice = voices.find(v => v.lang.startsWith("pt")) || voices[0];
-    if (ptVoice) utterance.voice = ptVoice;
+    const enVoice = voices.find(v => v.lang.startsWith("en")) || voices[0];
+    if (enVoice) utterance.voice = enVoice;
 
     utteranceRef.current = utterance;
     window.speechSynthesis.speak(utterance);

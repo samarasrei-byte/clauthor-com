@@ -66,10 +66,10 @@ const challenges = [
 ];
 
 const teamSizes = [
-  { id: "micro", label: "Só eu (MEI/Freelancer)", maxAgents: 2, savings: "R$ 3k" },
-  { id: "small", label: "2-10 pessoas", maxAgents: 4, savings: "R$ 12k" },
-  { id: "medium", label: "11-50 pessoas", maxAgents: 7, savings: "R$ 35k" },
-  { id: "large", label: "50+ pessoas", maxAgents: 12, savings: "R$ 80k+" },
+  { id: "micro", label: "Just me (Freelancer)", maxAgents: 2, savings: "$600" },
+  { id: "small", label: "2-10 people", maxAgents: 4, savings: "$2.4k" },
+  { id: "medium", label: "11-50 people", maxAgents: 7, savings: "$7k" },
+  { id: "large", label: "50+ people", maxAgents: 12, savings: "$16k+" },
 ];
 
 interface SmartOnboardingProps {
