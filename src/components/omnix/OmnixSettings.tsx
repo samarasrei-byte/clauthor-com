@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Settings, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,13 @@ interface OmnixSettingsProps {
 }
 
 const OmnixSettings = ({ config, onUpdate, onClose }: OmnixSettingsProps) => {
+  // Close on Escape key
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
+
   return (
     <motion.div
       initial={{ opacity: 0 }}

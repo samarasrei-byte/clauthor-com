@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -7,10 +8,17 @@ interface AudioWaveformProps {
   className?: string;
 }
 
+const BAR_COUNT = 32;
+
 const AudioWaveform = ({ active, mode, className }: AudioWaveformProps) => {
+  // Memoize random seeds so bars don't re-randomize on every render
+  const seeds = useMemo(
+    () => Array.from({ length: BAR_COUNT }, () => [Math.random(), Math.random()]),
+    []
+  );
+
   if (!active) return null;
 
-  const barCount = 32;
   const isListening = mode === "listening";
 
   return (
@@ -23,8 +31,8 @@ const AudioWaveform = ({ active, mode, className }: AudioWaveformProps) => {
         className
       )}
     >
-      {Array.from({ length: barCount }).map((_, i) => {
-        const center = barCount / 2;
+      {seeds.map(([r1, r2], i) => {
+        const center = BAR_COUNT / 2;
         const dist = Math.abs(i - center) / center;
         const maxH = isListening ? 32 : 40;
         const minH = 3;
@@ -42,14 +50,14 @@ const AudioWaveform = ({ active, mode, className }: AudioWaveformProps) => {
             animate={{
               height: [
                 minH,
-                amplitude * (0.4 + Math.random() * 0.6),
+                amplitude * (0.4 + r1 * 0.6),
                 minH,
-                amplitude * (0.3 + Math.random() * 0.7),
+                amplitude * (0.3 + r2 * 0.7),
                 minH,
               ],
             }}
             transition={{
-              duration: isListening ? 0.8 + Math.random() * 0.4 : 0.5 + Math.random() * 0.3,
+              duration: isListening ? 0.8 + r1 * 0.4 : 0.5 + r1 * 0.3,
               repeat: Infinity,
               delay: i * 0.02,
               ease: "easeInOut",

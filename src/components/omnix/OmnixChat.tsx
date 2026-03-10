@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback, useId } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2 } from "lucide-react";
 import { toast } from "sonner";
@@ -30,6 +30,38 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
 
+  // TTS output — enhanced voice selection (declared early for use in effects)
+  const speak = useCallback((text: string) => {
+    if (!("speechSynthesis" in window)) return;
+
+    // Never keep mic open while the assistant is speaking (avoids echo loops)
+    recognitionRef.current?.stop?.();
+    setIsListening(false);
+
+    window.speechSynthesis.cancel();
+    const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "");
+    const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 500));
+    utterance.lang = config.language || "pt-BR";
+
+    const voices = window.speechSynthesis.getVoices();
+    const lang = config.language || "pt-BR";
+    const langVoices = voices.filter(v => v.lang.startsWith(lang.split("-")[0]));
+    const premium = langVoices.find(v =>
+      /google|microsoft|natural|neural|online/i.test(v.name)
+    );
+    const fallback = langVoices.find(v => v.localService === false) || langVoices[0];
+    if (premium) utterance.voice = premium;
+    else if (fallback) utterance.voice = fallback;
+
+    utterance.rate = 1.0;
+    utterance.pitch = 0.95;
+    utterance.volume = 1;
+    utterance.onstart = () => setIsSpeaking(true);
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+    window.speechSynthesis.speak(utterance);
+  }, [config.language]);
+
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
@@ -43,7 +75,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       lastSpokenRef.current = lastIdx;
       speak(last.content);
     }
-  }, [messages, isStreaming, autoSpeak]);
+  }, [messages, isStreaming, autoSpeak, speak]);
 
   // Auto-start listening in voice-first mode ONLY on first load (no messages yet)
   useEffect(() => {
@@ -142,39 +174,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       return;
     }
     startListening();
-  };
-
-  // TTS output — enhanced voice selection
-  const speak = (text: string) => {
-    if (!("speechSynthesis" in window)) return;
-
-    // Never keep mic open while the assistant is speaking (avoids echo loops)
-    recognitionRef.current?.stop?.();
-    setIsListening(false);
-
-    window.speechSynthesis.cancel();
-    const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "");
-    const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 500));
-    utterance.lang = config.language || "pt-BR";
-
-    // Pick the best available voice: prefer Google/Microsoft premium voices
-    const voices = window.speechSynthesis.getVoices();
-    const lang = config.language || "pt-BR";
-    const langVoices = voices.filter(v => v.lang.startsWith(lang.split("-")[0]));
-    const premium = langVoices.find(v =>
-      /google|microsoft|natural|neural|online/i.test(v.name)
-    );
-    const fallback = langVoices.find(v => v.localService === false) || langVoices[0];
-    if (premium) utterance.voice = premium;
-    else if (fallback) utterance.voice = fallback;
-
-    utterance.rate = 1.0;
-    utterance.pitch = 0.95;
-    utterance.volume = 1;
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-    window.speechSynthesis.speak(utterance);
   };
 
   const stopSpeaking = () => {
