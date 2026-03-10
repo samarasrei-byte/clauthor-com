@@ -295,11 +295,11 @@ const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integrati
         {saving ? (
           <Loader2 className="h-3.5 w-3.5 animate-spin" />
         ) : validating ? (
-          <>Validando...</>
+          <>{t("integrations.validating", { defaultValue: "Validando..." })}</>
         ) : (
           <>
             <CheckCircle className="h-3.5 w-3.5" />
-            Conectar {ig.name}
+            {t("integrations.connect_name", { defaultValue: "Conectar {{name}}", name: ig.name })}
           </>
         )}
       </Button>
