@@ -1057,10 +1057,10 @@ serve(async (req) => {
     optimizedMessages = truncateOlderMessages(optimizedMessages, 500);
 
     // Build system prompt with Company Board data
-    let agentPrompt = "Você é um assistente de IA útil e profissional. Responda em português do Brasil.";
+    let agentPrompt = "You are a helpful and professional AI assistant. Respond in English.";
     let agentTier = "basic";
-    let agentArea = "geral";
-    let agentName = "Agente AI";
+    let agentArea = "general";
+    let agentName = "AI Agent";
     let contractPrompt = "";
 
     if (agentId) {
