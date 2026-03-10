@@ -428,14 +428,12 @@ const ClientDashboard = () => {
         </div>
 
         <div className="flex-1 min-w-0 overflow-hidden">
-          {/* ═══ IMMERSIVE MODE — chat/omnix fill the viewport ═══ */}
-          {activeSection === "omnix" && (
+          {/* ═══ IMMERSIVE MODE — THOR stays mounted to preserve chat history ═══ */}
+          <div className={activeSection === "omnix" ? "h-full" : "hidden"}>
             <Suspense fallback={<SectionLoader />}>
-              <div className="h-full">
-                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} initialMessage={pendingTaskMessage} onInitialMessageHandled={() => setPendingTaskMessage(null)} />
-              </div>
+              <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} initialMessage={pendingTaskMessage} onInitialMessageHandled={() => setPendingTaskMessage(null)} />
             </Suspense>
-          )}
+          </div>
 
           {activeSection === "chat" && selectedAgent && (
             <Suspense fallback={<SectionLoader />}>
