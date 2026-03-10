@@ -747,9 +747,9 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                 </span>
                 <span className="absolute inset-[1px] rounded-[15px] bg-background/90 backdrop-blur-2xl" />
                 <span className={`absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full z-20 ${
-                  health.status === "optimal" ? "bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.5)]"
-                  : health.status === "warning" ? "bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.5)]"
-                  : "bg-red-400 shadow-[0_0_8px_rgba(248,113,113,0.5)] animate-pulse"
+                  health.status === "optimal" ? "bg-primary shadow-[0_0_8px_hsl(var(--primary)/0.5)]"
+                  : health.status === "warning" ? "bg-muted-foreground shadow-[0_0_8px_hsl(var(--muted-foreground)/0.5)]"
+                  : "bg-destructive shadow-[0_0_8px_hsl(var(--destructive)/0.5)] animate-pulse"
                 }`} />
                 <MessageSquare className="h-4.5 w-4.5 text-muted-foreground group-hover:text-primary transition-colors duration-300 relative z-10" />
               </motion.button>
