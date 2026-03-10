@@ -123,15 +123,15 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
 
         {/* Payment Method */}
         <div className="pt-4 border-t border-white/5">
-          <h3 className="text-sm font-medium mb-3">Método de Pagamento</h3>
+          <h3 className="text-sm font-medium mb-3">{t("subscription.payment_method", { defaultValue: "Payment Method" })}</h3>
           <div className="flex items-center gap-3 p-3 rounded-lg bg-white/[0.02]">
             <Globe className="h-4 w-4 text-blue-500" />
             <div>
               <p className="text-sm font-medium">PayPal</p>
-              <p className="text-[10px] text-muted-foreground">Cobrança recorrente mensal</p>
+              <p className="text-[10px] text-muted-foreground">{t("subscription.recurring", { defaultValue: "Monthly recurring billing" })}</p>
             </div>
             <Badge variant="secondary" className="ml-auto bg-blue-500/10 text-blue-400 text-[10px]">
-              Ativo
+              {t("subscription.status_active", { defaultValue: "Active" })}
             </Badge>
           </div>
         </div>
