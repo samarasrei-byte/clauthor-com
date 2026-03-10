@@ -473,7 +473,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                           </div>
                           <div>
                             <p className="text-sm font-medium">{size.label}</p>
-                            <p className="text-[11px] text-muted-foreground">Até {size.maxAgents} agentes recomendados</p>
+                            <p className="text-[11px] text-muted-foreground">Up to {size.maxAgents} recommended agents</p>
                           </div>
                         </div>
                         <Badge variant="outline" className="border-primary/20 text-primary text-[10px] shrink-0">
