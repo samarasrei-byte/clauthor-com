@@ -85,7 +85,7 @@ const MouseReactiveField = () => {
         style={{
           left: useTransform(smoothX, [0, 1], ["-10%", "70%"]),
           top: useTransform(smoothY, [0, 1], ["-10%", "60%"]),
-          background: "radial-gradient(circle, hsl(0 85% 55% / 0.08) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%)",
         }}
       />
       <motion.div
@@ -93,11 +93,11 @@ const MouseReactiveField = () => {
         style={{
           left: useTransform(smoothX, [0, 1], ["60%", "20%"]),
           top: useTransform(smoothY, [0, 1], ["50%", "10%"]),
-          background: "radial-gradient(circle, hsl(0 85% 55% / 0.04) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(var(--primary) / 0.04) 0%, transparent 70%)",
         }}
       />
       <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `linear-gradient(hsl(0 85% 55% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(0 85% 55% / 0.3) 1px, transparent 1px)`,
+        backgroundImage: `linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)`,
         backgroundSize: "60px 60px",
       }} />
     </div>
@@ -126,15 +126,18 @@ const AnimatedStat = ({ value, suffix = "", prefix = "", label, icon: Icon }: {
         const steps = 40;
         const increment = value / steps;
         let current = 0;
+        let cleared = false;
         const interval = setInterval(() => {
           current += increment;
-          if (current >= value) {
+          if (current >= value || cleared) {
             setCount(value);
             clearInterval(interval);
           } else {
             setCount(Math.floor(current));
           }
         }, duration / steps);
+        // Safety: clear interval if component unmounts mid-animation
+        return () => { cleared = true; clearInterval(interval); };
       }}
       className="text-center p-4 sm:p-5"
     >
@@ -153,7 +156,6 @@ const AnimatedStat = ({ value, suffix = "", prefix = "", label, icon: Icon }: {
    LIVE AGENT CARD
    ═══════════════════════════════════════════════════════ */
 interface LiveAgentProps {
-  key?: string;
   slug?: string;
   name: string;
   role: string;
@@ -245,7 +247,7 @@ const HomePage = () => {
     "AI CFO Assistant",
     "AI Content Creator",
     "AI DevOps Engineer",
-  ], [t]);
+  ], []);
   const { displayed: typedText, firstCycleDone: typingDone } = useCyclingTypewriter(cyclingRoles, 45, 2200, 600);
 
   // SEO meta tags
@@ -588,17 +590,17 @@ const HomePage = () => {
           </motion.div>
 
           <div className="space-y-4 sm:space-y-6">
-            {[
+              {[
               { step: "01", icon: Crosshair, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
               { step: "02", icon: Layers3, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
               { step: "03", icon: Bolt, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
-            ].map((item, i) => (
+            ].map((item, idx) => (
               <motion.div
-                key={i}
+                key={item.step}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.4 }}
+                transition={{ delay: idx * 0.15, duration: 0.4 }}
                 className="flex items-start gap-4 sm:gap-6 group p-4 sm:p-5 rounded-xl border border-transparent hover:border-border hover:bg-card/30 transition-all duration-500"
               >
                 <div className="shrink-0 flex flex-col items-center">
@@ -990,6 +992,7 @@ const HomePage = () => {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
             {[
               {
+                id: "testimonial-ceo",
                 quote: t("home.testimonial_1", { defaultValue: "Automatizamos 80% do atendimento ao cliente no primeiro mês. O agente resolve tickets sozinho e escala só quando precisa." }),
                 author: "CEO",
                 company: t("home.testimonial_1_company", { defaultValue: "E-commerce de Moda" }),
@@ -997,6 +1000,7 @@ const HomePage = () => {
                 metricLabel: t("home.testimonial_1_metric", { defaultValue: "tickets automatizados" }),
               },
               {
+                id: "testimonial-cfo",
                 quote: t("home.testimonial_2", { defaultValue: "O agente financeiro concilia notas fiscais, cobra inadimplentes e gera relatórios. Economizamos um funcionário inteiro." }),
                 author: "CFO",
                 company: t("home.testimonial_2_company", { defaultValue: "Startup SaaS B2B" }),
@@ -1004,6 +1008,7 @@ const HomePage = () => {
                 metricLabel: t("home.testimonial_2_metric", { defaultValue: "economia mensal" }),
               },
               {
+                id: "testimonial-growth",
                 quote: t("home.testimonial_3", { defaultValue: "Configurei o SDR em 10 minutos. Ele já prospecta via LinkedIn e WhatsApp, qualifica leads e agenda reuniões automaticamente." }),
                 author: "Head of Growth",
                 company: t("home.testimonial_3_company", { defaultValue: "Agência Digital" }),
@@ -1012,7 +1017,7 @@ const HomePage = () => {
               },
             ].map((item, i) => (
               <motion.div
-                key={i}
+                key={item.id}
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
