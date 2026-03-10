@@ -295,8 +295,8 @@ const ClientDashboard = () => {
 
   const tierColors: Record<string, string> = {
     basic: "bg-muted text-muted-foreground",
-    intermediate: "bg-cyan-500/15 text-cyan-400",
-    advanced: "bg-emerald-500/15 text-emerald-400",
+    intermediate: "bg-accent/15 text-accent-foreground",
+    advanced: "bg-accent-emerald/15 text-accent-emerald",
     enterprise: "bg-primary/15 text-primary",
   };
 
