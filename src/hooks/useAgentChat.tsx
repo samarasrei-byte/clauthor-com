@@ -190,7 +190,7 @@ export function useAgentChat(agentId?: string) {
       }
 
       if (gotCreditWarning) {
-        toast.warning("⚠️ Seus créditos estão em 80%+. Considere fazer upgrade.", { duration: 5000 });
+        toast.warning("⚠️ Credits at 80%+. Consider upgrading.", { duration: 5000 });
       }
 
       refetchCredits();
