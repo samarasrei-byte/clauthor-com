@@ -240,7 +240,7 @@ const Pitch = () => {
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" onClick={handleTalk} className="text-base px-8">
-              Falar com o Founder <ArrowRight className="ml-1 w-4 h-4" />
+              Talk to the Founder <ArrowRight className="ml-1 w-4 h-4" />
             </Button>
           </motion.div>
         </motion.div>
