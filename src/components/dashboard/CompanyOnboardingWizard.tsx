@@ -61,6 +61,7 @@ const INDUSTRY_OPTIONS = [
 
 export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyOnboardingWizardProps) {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [currentStep, setCurrentStep] = useState(0);
   const [saving, setSaving] = useState(false);
   const [scanning, setScanning] = useState(false);
