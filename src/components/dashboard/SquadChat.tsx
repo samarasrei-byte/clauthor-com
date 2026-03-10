@@ -573,7 +573,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
                           <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0.2 }} />
                           <motion.span className="w-2 h-2 rounded-full bg-primary/60" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ repeat: Infinity, duration: 1.2, delay: 0.4 }} />
                         </div>
-                        <span className="text-[10px] text-muted-foreground">digitando...</span>
+                        <span className="text-[10px] text-muted-foreground">{t("squad.typing")}</span>
                       </div>
                     </div>
                   </motion.div>
