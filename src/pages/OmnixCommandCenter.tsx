@@ -17,9 +17,9 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
   const { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages } = useOmnix();
   const [showSettings, setShowSettings] = useState(false);
   const postPaymentSent = useRef(false);
-  const initialMessageSent = useRef(false);
+  const lastSentMessage = useRef<string | null>(null);
 
-  // Auto-send contextual welcome message after payment
+  // Auto-send contextual welcome message after payment (priority 1)
   useEffect(() => {
     if (!postPaymentContext || postPaymentSent.current || isLoading || isStreaming) return;
     if (messages.length > 0) return;
@@ -37,22 +37,22 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
     return () => clearTimeout(timer);
   }, [postPaymentContext, messages.length, isLoading, isStreaming, sendMessage, onPostPaymentHandled]);
 
-  // Auto-send task message from TaskRequestPanel
+  // Auto-send task message from TaskRequestPanel (priority 2 — skips if postPayment is active)
   useEffect(() => {
-    if (!initialMessage || initialMessageSent.current || isLoading || isStreaming) return;
-    initialMessageSent.current = true;
+    if (!initialMessage || isLoading || isStreaming) return;
+    // Don't conflict with postPayment flow
+    if (postPaymentContext && !postPaymentSent.current) return;
+    // Don't send the same message twice
+    if (lastSentMessage.current === initialMessage) return;
+
+    lastSentMessage.current = initialMessage;
 
     const timer = setTimeout(() => {
       sendMessage(initialMessage);
       onInitialMessageHandled?.();
-    }, 600);
+    }, 400);
     return () => clearTimeout(timer);
-  }, [initialMessage, isLoading, isStreaming, sendMessage, onInitialMessageHandled]);
-
-  // Reset ref when initialMessage changes
-  useEffect(() => {
-    if (!initialMessage) initialMessageSent.current = false;
-  }, [initialMessage]);
+  }, [initialMessage, isLoading, isStreaming, sendMessage, onInitialMessageHandled, postPaymentContext]);
 
   return (
     <div className="flex flex-col h-full overflow-hidden bg-background">

@@ -68,7 +68,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
     if (guidedStep < Object.keys(GUIDED_QUESTIONS).length - 1) {
       setGuidedStep(guidedStep + 1);
     } else {
-      const task = `Objetivo: ${newAnswers[0]}. Prazo: ${newAnswers[1] || answer}. Impacto: ${newAnswers[2] || answer}.`;
+      const task = `[Modo Guiado] O usuário definiu:\n• Objetivo principal: ${newAnswers[0]}\n• Prazo desejado: ${newAnswers[1] || answer}\n• Escala de impacto: ${newAnswers[2] || answer}\n\nCom base nessas informações, elabore um plano de ação detalhado com os agentes mais adequados.`;
       onSubmitTask(task, "guided");
       setGuidedStep(0);
       setGuidedAnswers([]);
