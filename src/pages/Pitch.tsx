@@ -81,16 +81,16 @@ const AnimatedBar = ({ label, pct, color }: { label: string; pct: number; color:
 
 /* ── Investor Agent Chat (auto-plays conversation) ── */
 const investorConversation = [
-  { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-  { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 83 agentes já operacionais, infraestrutura pronta e um mercado de US$ 1.8T até 2030. Você entra antes da escala explodir." },
-  { role: "investor" as const, text: "Mas o mercado de IA está saturado. Qual o diferencial?" },
-  { role: "agent" as const, text: "Ninguém faz o que fazemos: substituir departamentos inteiros com squads de IA coordenados. Não vendemos chatbot — vendemos operação completa. Atendimento, financeiro, compliance, tudo rodando 24/7." },
-  { role: "investor" as const, text: "Como vocês monetizam?" },
-  { role: "agent" as const, text: "SaaS B2B com ticket médio de R$ 997/mês por squad. Com 1.000 clientes, são quase R$ 12M/ano de receita recorrente. LTV alto, churn baixo." },
-  { role: "investor" as const, text: "E o risco?" },
-  { role: "agent" as const, text: "O risco de não investir é maior. A automação B2B não é tendência — é inevitável. Quem entra agora no pré-seed a R$ 2M de valuation, captura o maior upside possível." },
-  { role: "investor" as const, text: "Como entro?" },
-  { role: "agent" as const, text: "Fale diretamente com o Founder pelo WhatsApp. A rodada é limitada — 10% de equity para R$ 200K. Cada dia conta." },
+  { role: "investor" as const, text: "Why should I invest in CLAUTHOR now?" },
+  { role: "agent" as const, text: "Because we're at the inflection point. 83 agents fully operational, infrastructure ready, and a $1.8T market by 2030. You get in before the scale explodes." },
+  { role: "investor" as const, text: "But the AI market is saturated. What's the differentiator?" },
+  { role: "agent" as const, text: "No one does what we do: replace entire departments with coordinated AI squads. We don't sell chatbots — we sell full operations. Support, finance, compliance, all running 24/7." },
+  { role: "investor" as const, text: "How do you monetize?" },
+  { role: "agent" as const, text: "B2B SaaS with an average ticket of $199/mo per squad. With 1,000 clients, that's nearly $2.4M/year in recurring revenue. High LTV, low churn." },
+  { role: "investor" as const, text: "What about risk?" },
+  { role: "agent" as const, text: "The risk of not investing is greater. B2B automation isn't a trend — it's inevitable. Getting in now at the pre-seed at a $500K valuation captures the highest upside." },
+  { role: "investor" as const, text: "How do I get in?" },
+  { role: "agent" as const, text: "Talk directly to the Founder via WhatsApp. The round is limited — 10% equity for $50K. Every day counts." },
 ];
 
 const InvestorChat = () => {
