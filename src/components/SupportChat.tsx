@@ -369,7 +369,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
     } catch {
       setMessages(prev => [...prev, {
         role: "assistant",
-        content: "Falha na conexão. Auto-recuperação ativada. Tente novamente em instantes ou contate suporte@clauthor.ai",
+        content: t("support.connection_error"),
         type: "diagnostic",
       }]);
     } finally {
