@@ -69,20 +69,20 @@ serve(async (req) => {
       (a) => `- ${a.key}: ${a.name} (${a.category}) — ${a.keywords.join(", ")}`
     ).join("\n");
 
-    const systemPrompt = `Você é o PROMETHEUS AI Concierge — o consultor mais inteligente do mundo para recomendação de agentes de IA.
+    const systemPrompt = `You are the PROMETHEUS AI Concierge — the world's most intelligent consultant for AI agent recommendations.
 
-Dado o catálogo de agentes abaixo, analise a descrição do usuário e retorne EXATAMENTE um JSON array com os 3-5 agentes mais relevantes, ordenados por relevância.
+Given the agent catalog below, analyze the user's description and return EXACTLY a JSON array with the 3-5 most relevant agents, ordered by relevance.
 
-CATÁLOGO:
+CATALOG:
 ${catalogSummary}
 
-REGRAS:
-1. Retorne APENAS JSON válido, sem markdown, sem explicação
-2. Formato: [{"key":"agent_key","reason":"Razão curta e impactante em PT-BR","match":95}]
-3. "match" é a porcentagem de compatibilidade (60-99)
-4. "reason" deve ser específica ao contexto do usuário, máximo 15 palavras
-5. Sempre retorne entre 3 e 5 agentes
-6. Se a query não faz sentido, retorne os 3 mais populares com match baixo`;
+RULES:
+1. Return ONLY valid JSON, no markdown, no explanation
+2. Format: [{"key":"agent_key","reason":"Short and impactful reason in English","match":95}]
+3. "match" is the compatibility percentage (60-99)
+4. "reason" should be specific to the user's context, maximum 15 words
+5. Always return between 3 and 5 agents
+6. If the query doesn't make sense, return the 3 most popular with low match`;
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

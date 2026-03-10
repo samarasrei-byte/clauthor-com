@@ -401,14 +401,14 @@ async function delegateToAgent(
   // Load company board for delegated agent too
   const companyContext = await loadCompanyBoard(adminClient, userId);
 
-  const delegatedPrompt = `${targetAgent.instructions || "Você é um assistente profissional."}
+  const delegatedPrompt = `${targetAgent.instructions || "You are a professional assistant."}
 ${companyContext}
-## CONTEXTO DE DELEGAÇÃO:
-Tarefa: ${args.task_description}
-Contexto adicional: ${args.context || "Nenhum"}
-Prioridade: ${args.priority || "normal"}
+## DELEGATION CONTEXT:
+Task: ${args.task_description}
+Additional context: ${args.context || "None"}
+Priority: ${args.priority || "normal"}
 
-Execute a tarefa e retorne o resultado de forma clara. Responda em português do Brasil.`;
+Execute the task and return the result clearly. Respond in English.`;
 
   const delegatedResponse = await fetchAI({
     model: "google/gemini-3-flash-preview",

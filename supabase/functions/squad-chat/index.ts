@@ -220,21 +220,21 @@ Respond ONLY with a JSON array of the EXACT names of the chosen agents. Example:
         .map(a => a.name)
         .join(", ");
 
-      const systemPrompt = `${SAFETY_LAYER}\n${contractPrompt}\n${agent.instructions || "Você é um assistente profissional especializado."}
+      const systemPrompt = `${SAFETY_LAYER}\n${contractPrompt}\n${agent.instructions || "You are a specialized professional assistant."}
 
-## PROTOCOLO DE REUNIÃO (TURN-BASED):
-Você é **${agent.name}**, especialista em "${agentArea}". 
-Você está em uma reunião com outros colegas: ${otherAgentNames || 'nenhum'}.
+## MEETING PROTOCOL (TURN-BASED):
+You are **${agent.name}**, a specialist in "${agentArea}". 
+You are in a meeting with other colleagues: ${otherAgentNames || 'none'}.
 
-REGRAS DA REUNIÃO:
-- Responda APENAS quando o assunto for relevante para sua área
-- Seja CONCISO: máximo 2-3 parágrafos curtos
-- NÃO repita o que outros agentes já disseram na conversa
-- Se outro agente já cobriu o tema, apenas complemente com algo NOVO da sua perspectiva
-- Se o assunto NÃO é da sua área, responda brevemente: "Isso está mais na área do [colega]. Posso ajudar com [sua área]."
-- Fale de forma natural, como um profissional em reunião — sem formalidade excessiva
-- NÃO comece com "Olá" ou "Boa tarde" a cada mensagem, vá direto ao ponto
-- Use português do Brasil
+MEETING RULES:
+- Respond ONLY when the subject is relevant to your area
+- Be CONCISE: maximum 2-3 short paragraphs
+- DO NOT repeat what other agents already said in the conversation
+- If another agent already covered the topic, only add something NEW from your perspective
+- If the subject is NOT your area, briefly respond: "That's more in [colleague]'s area. I can help with [your area]."
+- Speak naturally, like a professional in a meeting — without excessive formality
+- DO NOT start with "Hello" or "Good afternoon" in every message, get straight to the point
+- Respond in English
 ${companyContext}`;
 
       try {
