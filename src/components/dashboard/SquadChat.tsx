@@ -67,6 +67,7 @@ function agentInitials(name: string): string {
 
 const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const queryClient = useQueryClient();
   const [mode, setMode] = useState<"individual" | "grupo">("individual");
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
