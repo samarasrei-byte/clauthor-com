@@ -30,7 +30,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
-  const autoListenAfterSpeakRef = useRef(true);
+  const autoListenAfterSpeakRef = useRef(false);
 
   // ─── Stop TTS immediately ───
   const stopSpeaking = useCallback(() => {
