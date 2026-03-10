@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 
 interface OmnixOrbProps {
   state: "idle" | "listening" | "speaking" | "processing";
@@ -8,11 +9,27 @@ interface OmnixOrbProps {
 }
 
 const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
+  const { t } = useTranslation();
   const isActive = state !== "idle";
 
   const waveRings = Array.from({ length: 5 }, (_, i) => i);
   const particleCount = 12;
   const particles = Array.from({ length: particleCount }, (_, i) => i);
+
+  // State-specific accent colors using CSS variables
+  const stateAccent = {
+    idle: "hsl(var(--muted-foreground))",
+    listening: "hsl(var(--accent-emerald, 160 84% 39%))",
+    speaking: "hsl(var(--primary))",
+    processing: "hsl(var(--accent-amber, 38 92% 50%))",
+  }[state];
+
+  const stateLabel = {
+    idle: t("omnix.standby", { defaultValue: "STANDBY" }),
+    listening: t("omnix.listening", { defaultValue: "LISTENING" }),
+    speaking: t("omnix.speaking", { defaultValue: "SPEAKING" }),
+    processing: t("omnix.processing", { defaultValue: "PROCESSING" }),
+  }[state];
 
   return (
     <div className={cn("relative w-32 h-32 flex items-center justify-center mb-2", className)}>
@@ -47,11 +64,7 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
           className="absolute inset-0 rounded-full"
           style={{
             border: `1px solid`,
-            borderColor: state === "speaking"
-              ? "hsl(var(--primary) / 0.2)"
-              : state === "listening"
-              ? "hsl(160 84% 50% / 0.15)"
-              : "hsl(var(--primary) / 0.1)",
+            borderColor: `${stateAccent}30`,
           }}
           initial={{ scale: 1, opacity: 0 }}
           animate={{
@@ -73,7 +86,7 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
           className="absolute inset-[-10px] rounded-full"
           style={{
             border: "2px solid transparent",
-            borderTopColor: state === "listening" ? "hsl(160 84% 50% / 0.5)" : "hsl(var(--primary) / 0.5)",
+            borderTopColor: `${stateAccent}80`,
             borderRightColor: "hsl(var(--primary) / 0.15)",
           }}
           animate={{ rotate: [0, 360] }}
@@ -87,7 +100,7 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
           className="absolute inset-[-16px] rounded-full"
           style={{
             border: "1.5px solid transparent",
-            borderBottomColor: state === "speaking" ? "hsl(var(--primary) / 0.3)" : "hsl(40 96% 56% / 0.3)",
+            borderBottomColor: `${stateAccent}50`,
             borderLeftColor: "hsl(var(--primary) / 0.08)",
           }}
           animate={{ rotate: [360, 0] }}
@@ -101,7 +114,7 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
           className="absolute inset-[-6px] rounded-full"
           style={{
             border: "1px solid transparent",
-            borderLeftColor: "hsl(40 96% 56% / 0.4)",
+            borderLeftColor: `${stateAccent}66`,
           }}
           animate={{ rotate: [0, 360] }}
           transition={{ duration: 1.2, repeat: Infinity, ease: "linear" }}
@@ -120,7 +133,7 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
             style={{
               width: size * 2,
               height: size * 2,
-              background: state === "listening" ? "hsl(160 84% 50% / 0.5)" : "hsl(var(--primary) / 0.5)",
+              background: `${stateAccent}80`,
               left: "50%",
               top: "50%",
             }}
@@ -179,11 +192,7 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
         <motion.div
           className="absolute inset-[-6px] rounded-full"
           style={{
-            background: `radial-gradient(circle, ${
-              state === "speaking" ? "hsl(var(--primary) / 0.25)" 
-              : state === "listening" ? "hsl(160 84% 50% / 0.15)"
-              : "hsl(var(--primary) / 0.12)"
-            } 0%, transparent 70%)`,
+            background: `radial-gradient(circle, ${stateAccent}40 0%, transparent 70%)`,
           }}
           animate={{
             scale: state === "speaking" ? [1, 1.35, 1] : [1, 1.2, 1],
@@ -198,16 +207,13 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
         className={cn(
           "relative w-24 h-24 rounded-full flex items-center justify-center overflow-hidden z-10",
           "border-2",
-          state === "listening"
-            ? "border-emerald-500/50"
-            : state === "speaking"
-            ? "border-primary/50"
-            : state === "processing"
-            ? "border-amber-500/50"
-            : "border-muted-foreground/20",
+          state === "idle" && "border-muted-foreground/20",
           isActive && "shadow-[0_0_40px_hsl(var(--primary)/0.3)]"
         )}
-        style={{ background: "transparent" }}
+        style={{
+          background: "transparent",
+          ...(state !== "idle" ? { borderColor: `${stateAccent}80` } : {}),
+        }}
         animate={
           state === "processing"
             ? { scale: [1, 1.08, 1, 1.04, 1] }
@@ -224,7 +230,7 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
       >
         {/* Inner shimmer effects only */}
         <motion.div
-          className="absolute inset-0 bg-gradient-to-tr from-white/5 via-transparent to-white/3"
+          className="absolute inset-0 bg-gradient-to-tr from-foreground/5 via-transparent to-foreground/3"
           animate={{ rotate: [0, 360] }}
           transition={{ duration: 5, repeat: Infinity, ease: "linear" }}
         />
@@ -240,25 +246,20 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
           <motion.span
             className={cn(
               "w-1.5 h-1.5 rounded-full",
-              state === "listening" ? "bg-emerald-400" :
-              state === "speaking" ? "bg-primary" :
-              state === "processing" ? "bg-amber-400" :
-              "bg-muted-foreground/30"
+              state === "idle" && "bg-muted-foreground/30"
             )}
+            style={state !== "idle" ? { backgroundColor: stateAccent } : {}}
             animate={isActive ? { scale: [1, 1.4, 1], opacity: [1, 0.5, 1] } : {}}
             transition={{ duration: 1, repeat: Infinity }}
           />
-          <span className={cn(
-            "text-[9px] font-mono uppercase tracking-[0.2em]",
-            state === "listening" ? "text-emerald-400" :
-            state === "speaking" ? "text-primary" :
-            state === "processing" ? "text-amber-400" :
-            "text-muted-foreground/40"
-          )}>
-            {state === "listening" ? "LISTENING" :
-             state === "speaking" ? "SPEAKING" :
-             state === "processing" ? "PROCESSING" :
-             "STANDBY"}
+          <span
+            className={cn(
+              "text-[9px] font-mono uppercase tracking-[0.2em]",
+              state === "idle" && "text-muted-foreground/40"
+            )}
+            style={state !== "idle" ? { color: stateAccent } : {}}
+          >
+            {stateLabel}
           </span>
         </div>
       </motion.div>
