@@ -182,7 +182,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
 
       if (error) throw error;
       if (!data?.success || !data?.approve_url) {
-        throw new Error(data?.error || "Falha ao criar ordem PayPal");
+        throw new Error(data?.error || "Failed to create PayPal order");
       }
 
       sessionStorage.setItem("paypal_order", JSON.stringify({
