@@ -7,8 +7,6 @@ import pt from "./locales/pt.json";
 import en from "./locales/en.json";
 
 export const languages = [
-  { code: "pt", name: "Português (BR)", flag: "br" },
-  { code: "pt-pt", name: "Português (PT)", flag: "pt" },
   { code: "en", name: "English", flag: "us" },
   { code: "es", name: "Español", flag: "es" },
   { code: "fr", name: "Français", flag: "fr" },
