@@ -274,7 +274,7 @@ const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integrati
         <div key={field.key}>
           <label className="text-[11px] text-muted-foreground mb-0.5 block">
             {field.label} {field.required && <span className="text-destructive">*</span>}
-            {connectedKeys.has(field.key) && <span className="text-emerald-500 ml-1">✓ salvo</span>}
+            {connectedKeys.has(field.key) && <span className="text-primary ml-1">✓ {t("integrations.saved", { defaultValue: "salvo" })}</span>}
           </label>
           <Input
             placeholder={field.placeholder}
