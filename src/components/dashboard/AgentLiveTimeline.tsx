@@ -111,10 +111,12 @@ const AgentLiveTimeline = () => {
     if (!user) return;
     const channel = supabase
       .channel("timeline-live")
-      .on("postgres_changes", { event: "INSERT", schema: "public", table: "execution_logs" }, () => {})
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "execution_logs" }, () => {
+        refetch();
+      })
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, [user]);
+  }, [user, refetch]);
 
   const filtered = filter === "all" ? entries : entries.filter(e => e.status === filter);
 
