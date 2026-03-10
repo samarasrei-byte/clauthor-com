@@ -40,7 +40,8 @@ function normalizeOmnixConfig(saved: Partial<OmnixConfig> | null): OmnixConfig {
 }
 
 function extractKPIs(content: string) {
-  const kpiRegex = /```kpi\n([\s\S]*?)```/g;
+  // Don't use /g flag — we only need the first match and /g causes lastIndex issues on repeated calls
+  const kpiRegex = /```kpi\n([\s\S]*?)```/;
   const match = kpiRegex.exec(content);
   if (!match) return null;
   try {
