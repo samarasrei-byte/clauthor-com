@@ -126,15 +126,21 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    const clientIP = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
-    const rl = checkRateLimit(`omnix:${clientIP}`, 15, 60_000);
-    if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
-
     const startTime = Date.now();
     const authHeader = req.headers.get("Authorization") || "";
     const token = authHeader.replace("Bearer ", "");
     if (!token) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+    }
+
+    // Parse body early before any async work
+    let messages: any[], config: any;
+    try {
+      const body = await req.json();
+      messages = body.messages;
+      config = body.config;
+    } catch {
+      return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
@@ -146,7 +152,9 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const { messages, config } = await req.json();
+    // Rate limit by user ID, not IP
+    const rl = checkRateLimit(`omnix:${user.id}`, 15, 60_000);
+    if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
 
     const policyResult = await validateAndEnforcePolicy(supabase, user.id, "omnix-orchestrator", "chat");
     if (!policyResult.allowed) {
@@ -268,7 +276,13 @@ REGRAS:
         if (toolCalls && toolCalls.length > 0) {
           const toolResults: any[] = [];
           for (const tc of toolCalls) {
-            const args = JSON.parse(tc.function.arguments);
+            let args: any;
+            try {
+              args = JSON.parse(tc.function.arguments);
+            } catch {
+              toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos inválidos da IA" }) });
+              continue;
+            }
             const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader);
             toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
           }
@@ -280,18 +294,17 @@ REGRAS:
           });
 
           if (finalResponse.ok) {
-          const credMgmtTokens = (toolData.usage?.total_tokens || 400) + 400; // estimate for second call
-          await Promise.all([
-              supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_mgmt", tokens_used: credMgmtTokens, model: "google/gemini-2.5-flash" }),
-              supabase.from("execution_logs").insert({
-                user_id: user.id,
-                agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-                action: "chat",
-                status: "success",
-                execution_time_ms: Date.now() - startTime,
-                details: { type: "omnix_credential_mgmt", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
-              }),
-            ]);
+            const credMgmtTokens = (toolData.usage?.total_tokens || 400) + 400;
+            // Log after initiating stream (best effort — stream may fail but log is still useful)
+            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_mgmt", tokens_used: credMgmtTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+            supabase.from("execution_logs").insert({
+              user_id: user.id,
+              agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+              action: "chat",
+              status: "success",
+              execution_time_ms: Date.now() - startTime,
+              details: { type: "omnix_credential_mgmt", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
+            }).then(() => {});
             return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
           }
         }
@@ -299,17 +312,15 @@ REGRAS:
         if (choice?.message?.content) {
           const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
           const toolRespTokens = toolData.usage?.total_tokens || 300;
-          await Promise.all([
-            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: toolRespTokens, model: "google/gemini-2.5-flash" }),
-            supabase.from("execution_logs").insert({
-              user_id: user.id,
-              agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-              action: "chat",
-              status: "success",
-              execution_time_ms: Date.now() - startTime,
-              details: { type: "omnix_tool_response" },
-            }),
-          ]);
+          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: toolRespTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+          supabase.from("execution_logs").insert({
+            user_id: user.id,
+            agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+            action: "chat",
+            status: "success",
+            execution_time_ms: Date.now() - startTime,
+            details: { type: "omnix_tool_response" },
+          }).then(() => {});
           return new Response(sseData, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
         }
       }
@@ -332,20 +343,22 @@ REGRAS:
       return new Response(JSON.stringify({ error: "AI gateway error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Estimate tokens from message sizes (input chars/4 + estimated output)
-    const omnixInputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
-    const omnixEstimatedTokens = omnixInputTokens + Math.ceil(systemPrompt.length / 4) + 500; // 500 for output estimate
-    await Promise.all([
-      supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash" }),
-      supabase.from("execution_logs").insert({
-        user_id: user.id,
-        agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-        action: "chat",
-        status: "success",
-        execution_time_ms: Date.now() - startTime,
-        details: { type: "omnix_chat", model: "google/gemini-2.5-flash" },
-      }),
-    ]);
+    // Estimate tokens — more accurate: system + messages input + reasonable output estimate
+    const systemTokens = Math.ceil(systemPrompt.length / 4);
+    const inputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
+    const estimatedOutputTokens = 800; // conservative average for streaming responses
+    const omnixEstimatedTokens = systemTokens + inputTokens + estimatedOutputTokens;
+
+    // Fire-and-forget logging (don't block the stream response)
+    supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+    supabase.from("execution_logs").insert({
+      user_id: user.id,
+      agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+      action: "chat",
+      status: "success",
+      execution_time_ms: Date.now() - startTime,
+      details: { type: "omnix_chat", model: "google/gemini-2.5-flash" },
+    }).then(() => {});
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
   } catch (e) {
