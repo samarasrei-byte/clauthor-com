@@ -164,7 +164,7 @@ export default function TaskRequestPanel({ contractedAgentSlugs, onSubmitTask, o
                   {QUICK_TASKS.map(({ icon: Icon, label, color }) => (
                     <button
                       key={label}
-                      onClick={() => { setSimpleInput(label); }}
+                      onClick={() => { onSubmitTask(label, "simple"); }}
                       className="flex items-center gap-1.5 px-2.5 py-1.5 text-[11px] rounded-lg bg-muted/20 hover:bg-muted/40 text-muted-foreground hover:text-foreground transition-colors border border-border/10"
                     >
                       <Icon className={cn("h-3 w-3", color)} />
