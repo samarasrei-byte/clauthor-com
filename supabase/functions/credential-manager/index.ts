@@ -282,6 +282,30 @@ serve(async (req) => {
         }), { headers });
       }
 
+      // ── LIST ALL (user's credentials across all agents) ──
+      case "list_all": {
+        const { data: allCreds } = await adminClient
+          .from("agent_credentials")
+          .select("id, agent_id, integration_name, credential_key, is_secret, created_at, updated_at, expires_at, last_accessed_at, access_count")
+          .eq("user_id", userId)
+          .order("integration_name");
+
+        return new Response(JSON.stringify({
+          credentials: (allCreds || []).map(c => ({
+            id: c.id,
+            agent_id: c.agent_id,
+            integration_name: c.integration_name,
+            key: c.credential_key,
+            is_secret: c.is_secret,
+            expires_at: c.expires_at,
+            last_accessed_at: c.last_accessed_at,
+            access_count: c.access_count,
+            created_at: c.created_at,
+            value: "••••••••",
+          })),
+        }), { headers });
+      }
+
       // ── LIST (masked, never returns values) ──
       case "list": {
         if (!agent_id) {
