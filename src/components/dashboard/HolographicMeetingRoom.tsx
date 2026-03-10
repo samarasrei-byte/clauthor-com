@@ -797,7 +797,7 @@ Apenas o texto, sem introduções.`,
               <div className="flex items-center gap-4">
                 <div className={cn(
                   "w-3 h-3 rounded-full",
-                  phase === "conclusion" ? "bg-accent-emerald" : "bg-primary animate-pulse"
+                  phase === "conclusion" ? "bg-primary" : "bg-primary animate-pulse"
                 )} />
                 <span className="text-sm md:text-base font-display font-semibold">
                   {phase === "discussion" ? t("meeting.discussion") : 
