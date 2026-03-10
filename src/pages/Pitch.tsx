@@ -318,27 +318,27 @@ const Pitch = () => {
       {/* ═══ 5. MODELO DE NEGÓCIO ═══ */}
       <Section className="bg-white/[0.01]">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight text-center">Modelo de receita recorrente.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight text-center">Recurring revenue model.</h2>
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
               <GlassCard hover={false}>
-                <p className="text-sm text-muted-foreground mb-1">Ticket médio</p>
-                <p className="text-2xl font-display font-bold">R$ 997<span className="text-base font-normal text-muted-foreground">/mês</span></p>
+                <p className="text-sm text-muted-foreground mb-1">Average ticket</p>
+                <p className="text-2xl font-display font-bold">$199<span className="text-base font-normal text-muted-foreground">/mo</span></p>
               </GlassCard>
-              <p className="text-muted-foreground text-sm leading-relaxed">SaaS B2B com assinatura mensal por squad. Receita previsível, LTV alto e expansão natural via upsell de agentes adicionais.</p>
+              <p className="text-muted-foreground text-sm leading-relaxed">B2B SaaS with monthly subscription per squad. Predictable revenue, high LTV and natural expansion via additional agent upsell.</p>
             </div>
             <div className="space-y-4">
               <GlassCard hover={false} className="text-center !py-8">
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Cenário · 1.000 clientes</p>
-                <p className="text-3xl md:text-4xl font-display font-bold text-primary">R$ <CountUp end={997} suffix="K" /><span className="text-base font-normal text-muted-foreground">/mês</span></p>
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Scenario · 1,000 clients</p>
+                <p className="text-3xl md:text-4xl font-display font-bold text-primary">$ <CountUp end={199} suffix="K" /><span className="text-base font-normal text-muted-foreground">/mo</span></p>
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-8">
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Receita anual projetada</p>
-                <p className="text-3xl md:text-4xl font-display font-bold">R$ <CountUp end={11.96} suffix="M" decimals={2} /></p>
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Projected annual revenue</p>
+                <p className="text-3xl md:text-4xl font-display font-bold">$ <CountUp end={2.39} suffix="M" decimals={2} /></p>
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-6">
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Valuation potencial (5x)</p>
-                <p className="text-2xl font-display font-bold text-accent-emerald">≈ R$ <CountUp end={60} suffix="M" /></p>
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Potential valuation (5x)</p>
+                <p className="text-2xl font-display font-bold text-accent-emerald">≈ $ <CountUp end={12} suffix="M" /></p>
               </GlassCard>
             </div>
           </div>
