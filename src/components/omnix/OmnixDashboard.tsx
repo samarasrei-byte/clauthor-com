@@ -137,8 +137,8 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-muted-foreground/50 uppercase tracking-widest">System Dashboard</span>
         <div className="flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[10px] font-mono text-emerald-400/70">ALL SYSTEMS ONLINE</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          <span className="text-[10px] font-mono text-primary/70">ALL SYSTEMS ONLINE</span>
         </div>
       </div>
 
