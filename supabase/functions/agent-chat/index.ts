@@ -1090,9 +1090,9 @@ serve(async (req) => {
         contractPrompt = buildAgentContract(contract);
 
         if (agent.instructions) {
-          agentPrompt = `Você é o agente "${agent.name}". 
-Objetivo: ${agent.objective || "Ajudar o usuário"}
-Instruções: ${agent.instructions}`;
+          agentPrompt = `You are the agent "${agent.name}". 
+Objective: ${agent.objective || "Help the user"}
+Instructions: ${agent.instructions}`;
         }
       }
     }
