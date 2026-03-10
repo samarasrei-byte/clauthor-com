@@ -156,6 +156,17 @@ serve(async (req) => {
     const rl = checkRateLimit(`omnix:${user.id}`, 15, 60_000);
     if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
 
+    // ── PromptInjectionGuard: scan last user message ──
+    const lastUserContent = (messages || []).filter((m: any) => m.role === "user").pop()?.content || "";
+    const injectionCheck = detectPromptInjection(lastUserContent);
+    if (injectionCheck.blocked) {
+      console.warn(`[PromptInjectionGuard] Blocked injection from user ${user.id}: ${injectionCheck.pattern}`);
+      return new Response(
+        JSON.stringify({ error: injectionCheck.message }),
+        { status: 403, headers: { ...corsHeaders, ...securityHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const policyResult = await validateAndEnforcePolicy(supabase, user.id, "omnix-orchestrator", "chat");
     if (!policyResult.allowed) {
       return new Response(JSON.stringify({ error: policyResult.reason }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
