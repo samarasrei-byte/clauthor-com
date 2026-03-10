@@ -672,7 +672,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         Explore 80+ agents
                       </Button>
                       <Button variant="outline" onClick={() => { onClose(); navigate("/pricing"); }} className="flex-1 h-10 rounded-xl text-xs border-border/50">
-                        Ver preços
+                        View pricing
                       </Button>
                     </div>
                     <Button variant="ghost" onClick={() => { setPhase(0); setIndustry(""); setSelectedChallenges([]); setTeamSize(""); setExtraAgents([]); }} className="w-full text-xs text-muted-foreground">
