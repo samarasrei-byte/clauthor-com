@@ -513,7 +513,6 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                        <p className="text-sm">
                          <strong>Done! Here's your personalized team:</strong>
                        </p>
-                      </p>
 
                       {/* Squad card */}
                       <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 space-y-3">
