@@ -58,8 +58,8 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     if (premium) utterance.voice = premium;
     else if (fallback) utterance.voice = fallback;
 
-    utterance.rate = 1.15;
-    utterance.pitch = 1.0;
+    utterance.rate = 1.25;
+    utterance.pitch = 1.05;
     utterance.volume = 1;
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => {

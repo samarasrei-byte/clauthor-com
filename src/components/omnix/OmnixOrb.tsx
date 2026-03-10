@@ -36,7 +36,7 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
       </motion.span>
 
       {/* Waveform container — wide horizontal strip */}
-      <div className="relative w-[320px] sm:w-[400px] h-[80px] flex items-center justify-center">
+      <div className="relative w-[420px] sm:w-[520px] h-[80px] flex items-center justify-center">
         {/* Ambient glow behind waveform */}
         {isActive && (
           <motion.div
