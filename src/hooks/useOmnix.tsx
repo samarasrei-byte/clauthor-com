@@ -80,11 +80,9 @@ export function useOmnix() {
     if (!content.trim()) return;
 
     const userMsg: OmnixMessage = { role: "user", content, timestamp: new Date() };
-    let updatedMessages: OmnixMessage[] = [];
-    setMessages(prev => {
-      updatedMessages = [...prev, userMsg];
-      return updatedMessages;
-    });
+    const updatedMessages = [...messagesRef.current, userMsg];
+    messagesRef.current = updatedMessages;
+    setMessages(updatedMessages);
     setIsLoading(true);
     setIsStreaming(true);
 
