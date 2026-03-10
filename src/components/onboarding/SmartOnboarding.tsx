@@ -147,7 +147,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
         signup: true,
         hireIntent: allSlugs.length > 0 ? {
           type: "agent" as const,
-          label: `Squad ${industries.find(i => i.id === industry)?.label || "IA"} (${allSlugs.length} agentes)`,
+          label: `Squad ${industries.find(i => i.id === industry)?.label || "AI"} (${allSlugs.length} agents)`,
           slugs: allSlugs,
         } : undefined,
       },
