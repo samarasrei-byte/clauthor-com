@@ -23,19 +23,20 @@ interface TimelineEntry {
   details?: Record<string, any> | null;
 }
 
+// All colors now use semantic tokens or CSS variables
 const ACTION_CONFIG: Record<string, { icon: React.ElementType; color: string; labelKey: string; illustration: string }> = {
-  send_email:       { icon: Mail,         color: "text-blue-400",    labelKey: "timeline.sending_email",       illustration: "📧" },
-  create_task:      { icon: CalendarPlus, color: "text-amber-400",   labelKey: "timeline.creating_task",       illustration: "📋" },
-  generate_report:  { icon: FileText,     color: "text-emerald-400", labelKey: "timeline.generating_report",   illustration: "📊" },
-  search_leads:     { icon: Search,       color: "text-cyan-400",    labelKey: "timeline.searching_leads",     illustration: "🔍" },
-  schedule_meeting: { icon: CalendarPlus, color: "text-violet-400",  labelKey: "timeline.scheduling_meeting",  illustration: "📅" },
-  analyze_data:     { icon: BarChart3,    color: "text-orange-400",  labelKey: "timeline.analyzing_data",      illustration: "📈" },
-  delegate_to_agent:{ icon: Users,        color: "text-pink-400",    labelKey: "timeline.delegating",          illustration: "🤝" },
-  chat:             { icon: MessageSquare,color: "text-primary",     labelKey: "timeline.chatting",            illustration: "💬" },
-  whatsapp:         { icon: Phone,        color: "text-green-400",   labelKey: "timeline.sending_whatsapp",    illustration: "📱" },
-  web_search:       { icon: Globe,        color: "text-sky-400",     labelKey: "timeline.web_searching",       illustration: "🌐" },
-  security_scan:    { icon: Shield,       color: "text-red-400",     labelKey: "timeline.security_scanning",   illustration: "🛡️" },
-  monitoring:       { icon: Eye,          color: "text-yellow-400",  labelKey: "timeline.monitoring",          illustration: "👁️" },
+  send_email:       { icon: Mail,         color: "text-primary",               labelKey: "timeline.sending_email",       illustration: "📧" },
+  create_task:      { icon: CalendarPlus, color: "text-accent-foreground",     labelKey: "timeline.creating_task",       illustration: "📋" },
+  generate_report:  { icon: FileText,     color: "text-primary",               labelKey: "timeline.generating_report",   illustration: "📊" },
+  search_leads:     { icon: Search,       color: "text-primary/80",            labelKey: "timeline.searching_leads",     illustration: "🔍" },
+  schedule_meeting: { icon: CalendarPlus, color: "text-accent-foreground",     labelKey: "timeline.scheduling_meeting",  illustration: "📅" },
+  analyze_data:     { icon: BarChart3,    color: "text-accent-foreground",     labelKey: "timeline.analyzing_data",      illustration: "📈" },
+  delegate_to_agent:{ icon: Users,        color: "text-primary",               labelKey: "timeline.delegating",          illustration: "🤝" },
+  chat:             { icon: MessageSquare,color: "text-primary",               labelKey: "timeline.chatting",            illustration: "💬" },
+  whatsapp:         { icon: Phone,        color: "text-primary",               labelKey: "timeline.sending_whatsapp",    illustration: "📱" },
+  web_search:       { icon: Globe,        color: "text-primary/80",            labelKey: "timeline.web_searching",       illustration: "🌐" },
+  security_scan:    { icon: Shield,       color: "text-destructive",           labelKey: "timeline.security_scanning",   illustration: "🛡️" },
+  monitoring:       { icon: Eye,          color: "text-accent-foreground",     labelKey: "timeline.monitoring",          illustration: "👁️" },
 };
 
 const FALLBACK_LABELS: Record<string, string> = {
@@ -54,16 +55,15 @@ const FALLBACK_LABELS: Record<string, string> = {
 };
 
 const StatusDot = ({ status }: { status: string }) => {
-  if (status === "success") return <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />;
+  if (status === "success") return <CheckCircle className="h-3.5 w-3.5 text-primary" />;
   if (status === "error") return <XCircle className="h-3.5 w-3.5 text-destructive" />;
   if (status === "running") return <Loader2 className="h-3.5 w-3.5 text-primary animate-spin" />;
-  return <Clock className="h-3.5 w-3.5 text-amber-400" />;
+  return <Clock className="h-3.5 w-3.5 text-muted-foreground" />;
 };
 
 const AgentLiveTimeline = () => {
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
-  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
   const [filter, setFilter] = useState<"all" | "running" | "success" | "error">("all");
 
   const getActionConfig = (action: string) => {
@@ -80,7 +80,7 @@ const AgentLiveTimeline = () => {
     if (diff < 60000) return t("timeline.now", { defaultValue: "agora" });
     if (diff < 3600000) return `${Math.floor(diff / 60000)}min ${t("timeline.ago", { defaultValue: "atrás" })}`;
     if (diff < 86400000) return `${Math.floor(diff / 3600000)}h ${t("timeline.ago", { defaultValue: "atrás" })}`;
-    return d.toLocaleDateString(locale, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+    return d.toLocaleDateString(undefined, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
   };
 
   const { data: entries = [], isLoading } = useQuery({
@@ -155,8 +155,8 @@ const AgentLiveTimeline = () => {
       {/* Live indicator */}
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <span className="relative flex h-2 w-2">
-          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
         </span>
         {t("timeline.updating_realtime", { defaultValue: "Atualizando em tempo real" })}
       </div>

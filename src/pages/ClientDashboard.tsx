@@ -730,7 +730,7 @@ const ClientDashboard = () => {
                                 {subscriptions.map((sub) => (
                                   <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/5">
                                     <div className="flex items-center gap-2">
-                                      <span className="w-2 h-2 rounded-full bg-accent-emerald" />
+                                      <span className="w-2 h-2 rounded-full bg-primary" />
                                       <span className="text-sm">{sub.agent_name}</span>
                                     </div>
                                     <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{t("dashboard.per_month_short", { defaultValue: "mo" })}</span>

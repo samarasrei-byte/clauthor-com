@@ -44,12 +44,12 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       initial={false}
       animate={{ width: collapsed ? 64 : 220 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="h-full flex flex-col glass-card border-r border-white/[0.06] overflow-hidden shrink-0 relative"
+      className="h-full flex flex-col glass-card border-r border-border/10 overflow-hidden shrink-0 relative"
     >
       {/* Toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute right-1 top-6 z-10 w-6 h-6 rounded-full bg-background border border-white/10 flex items-center justify-center hover:border-primary/30 transition-colors"
+        className="absolute right-1 top-6 z-10 w-6 h-6 rounded-full bg-background border border-border/20 flex items-center justify-center hover:border-primary/30 transition-colors"
       >
         {collapsed ? (
           <ChevronRight className="h-3 w-3 text-muted-foreground" />
@@ -93,11 +93,11 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 className={cn(
                   "w-full flex items-center gap-3 rounded-xl transition-all duration-200 group relative",
                   collapsed ? "px-3 py-3 justify-center" : "px-3 py-2.5",
-                  item.badge === "Em breve"
-                    ? "text-muted-foreground/50 hover:text-muted-foreground/70 hover:bg-white/[0.02]"
+                  (typeof item.badge === "string" && item.badge.length > 3)
+                    ? "text-muted-foreground/50 hover:text-muted-foreground/70 hover:bg-muted/5"
                     : isActive
                       ? "bg-primary/10 text-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted/10"
                 )}
               >
                 {/* Active indicator */}
@@ -133,7 +133,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 {item.badge && !collapsed && !hasChildren && (
                   <span className={cn(
                     "ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md",
-                    item.badge === "Em breve" 
+                  (typeof item.badge === "string" && item.badge.length > 3) 
                       ? "bg-muted/30 text-muted-foreground/60 italic font-medium"
                       : "bg-primary/15 text-primary"
                   )}>
@@ -150,7 +150,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
                 {/* Tooltip when collapsed */}
                 {collapsed && (
-                  <div className="absolute left-full ml-2 px-2.5 py-1.5 rounded-lg bg-background border border-white/10 text-xs font-medium opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-xl">
+                  <div className="absolute left-full ml-2 px-2.5 py-1.5 rounded-lg bg-background border border-border/20 text-xs font-medium opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50 shadow-xl">
                     {item.label}
                     {item.badge && (
                       <span className="ml-1.5 text-[10px] text-primary">({item.badge})</span>
@@ -169,7 +169,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                     transition={{ duration: 0.2 }}
                     className="overflow-hidden"
                   >
-                    <div className="ml-4 pl-3 border-l border-white/[0.06] space-y-0.5 py-1">
+                    <div className="ml-4 pl-3 border-l border-border/10 space-y-0.5 py-1">
                       {item.children!.map(child => {
                         const ChildIcon = child.icon || Bot;
                         const isChildActive = activeItem === child.id;
@@ -181,7 +181,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                               "w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs transition-all",
                               isChildActive
                                 ? "bg-primary/10 text-primary font-medium"
-                                : "text-muted-foreground hover:text-foreground hover:bg-white/[0.04]"
+                                : "text-muted-foreground hover:text-foreground hover:bg-muted/10"
                             )}
                           >
                             <ChildIcon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
