@@ -321,7 +321,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Buscar agente..."
+              placeholder={t("squad.search_agent")}
               className="w-full bg-background/50 border border-border/30 rounded-xl pl-10 pr-4 py-2.5 text-sm placeholder:text-muted-foreground/40 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
             />
           </div>
