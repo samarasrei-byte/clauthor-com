@@ -697,10 +697,10 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       <Bot className="h-4 w-4 text-primary" />
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
-                      <p className="text-sm">
-                        Sem problema! Nosso <strong>consultor especializado</strong> vai te orientar.
-                        Conte sobre sua empresa e montamos o time ideal para você.
-                      </p>
+                       <p className="text-sm">
+                         No problem! Our <strong>specialized consultant</strong> will guide you.
+                         Tell us about your company and we'll build the ideal team for you.
+                       </p>
                     </div>
                   </div>
 
