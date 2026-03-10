@@ -157,8 +157,8 @@ const AgentsSection = ({
                         <Bot className="h-5 w-5 text-primary" />
                       </div>
                       {agent.status === "active" && (
-                        <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-background flex items-center justify-center">
-                          <div className="w-1.5 h-1.5 rounded-full bg-emerald-200 animate-pulse" />
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-primary border-2 border-background flex items-center justify-center">
+                          <div className="w-1.5 h-1.5 rounded-full bg-primary-foreground animate-pulse" />
                         </div>
                       )}
                     </div>
