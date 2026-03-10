@@ -666,7 +666,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </Button>
                     <div className="flex gap-2">
                       <Button variant="outline" onClick={() => setPhase(2)} className="h-10 rounded-xl gap-1.5 px-4 text-xs">
-                        <ChevronLeft className="h-3.5 w-3.5" /> Voltar
+                         <ChevronLeft className="h-3.5 w-3.5" /> Back
                       </Button>
                       <Button variant="outline" onClick={handleViewLibrary} className="flex-1 h-10 rounded-xl text-xs border-border/50">
                         Explorar 80+ agentes
