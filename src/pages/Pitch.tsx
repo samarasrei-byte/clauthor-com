@@ -251,14 +251,14 @@ const Pitch = () => {
       {/* ═══ 2. O PROBLEMA ═══ */}
       <Section className="bg-white/[0.01]">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">Empresas são ineficientes por natureza.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">Companies are inherently inefficient.</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
-            Departamentos são caros, lentos e difíceis de escalar.<br />
-            Turnover, erro humano, falta de integração e alto custo fixo.
+            Departments are expensive, slow and hard to scale.<br />
+            Turnover, human error, lack of integration and high fixed costs.
           </p>
           <GlassCard hover={false} className="max-w-md mx-auto text-center !py-10">
             <p className="text-5xl md:text-6xl font-display font-bold text-primary mb-2"><CountUp end={70} suffix="%" /></p>
-            <p className="text-sm text-muted-foreground">das tarefas operacionais podem ser automatizadas com IA.</p>
+            <p className="text-sm text-muted-foreground">of operational tasks can be automated with AI.</p>
           </GlassCard>
         </div>
       </Section>
