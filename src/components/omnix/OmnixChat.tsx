@@ -6,8 +6,6 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
 import ChatFeedback from "@/components/dashboard/ChatFeedback";
-import AudioWaveform from "./AudioWaveform";
-import AudioSpectrum from "./AudioSpectrum";
 import OmnixOrb from "./OmnixOrb";
 import type { OmnixMessage, OmnixConfig } from "@/hooks/useOmnix";
 import { useTranslation } from "react-i18next";
@@ -171,40 +169,44 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     setIsSpeaking(false);
   };
 
+  const hasMessages = messages.length > 0;
+
   return (
     <div className="flex flex-col h-full">
-      <div className="shrink-0 flex flex-col items-center pt-8 pb-6 gap-3 bg-gradient-to-b from-primary/[0.03] to-transparent">
-        <OmnixOrb state={getOrbState()} name={config.name} className={voiceFirst ? "scale-125" : ""} />
-        <div className="flex flex-col items-center gap-1 mt-2">
-          <h3 className="font-display font-black text-sm tracking-widest uppercase text-foreground/80">
-            {config.name}
-          </h3>
-          <p className="text-[10px] text-muted-foreground/60 font-mono tracking-wider">
-            {t("cmd.central_agent")}
-          </p>
-        </div>
+      {/* Orb hero — shrinks when messages exist */}
+      <motion.div
+        className="shrink-0 flex flex-col items-center justify-center gap-1 bg-gradient-to-b from-primary/[0.02] to-transparent"
+        animate={{
+          paddingTop: hasMessages ? 16 : 40,
+          paddingBottom: hasMessages ? 8 : 24,
+        }}
+        transition={{ duration: 0.4, ease: "easeOut" }}
+      >
+        <motion.div
+          animate={{ scale: hasMessages ? 0.6 : 1 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <OmnixOrb state={getOrbState()} name={config.name} />
+        </motion.div>
+
+        {/* Auto-voice toggle — compact */}
         <button
           onClick={() => { setAutoSpeak(!autoSpeak); if (isSpeaking) stopSpeaking(); }}
-          className="mt-3 flex items-center gap-1.5 text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors"
+          className="flex items-center gap-1 text-[9px] text-muted-foreground/40 hover:text-muted-foreground transition-colors"
         >
-          {autoSpeak ? <Volume2 className="h-3 w-3" /> : <VolumeX className="h-3 w-3" />}
+          {autoSpeak ? <Volume2 className="h-2.5 w-2.5" /> : <VolumeX className="h-2.5 w-2.5" />}
           {t("cmd.auto_voice")} {autoSpeak ? t("cmd.on") : t("cmd.off")}
         </button>
-      </div>
+      </motion.div>
 
-      <AnimatePresence>
-        {(isListening || isSpeaking) && (
-          <div className="shrink-0 py-2 border-b border-border/10 bg-background/50">
-            {isListening && <AudioWaveform active={true} mode="listening" />}
-            {isSpeaking && <AudioSpectrum active={true} />}
-          </div>
-        )}
-      </AnimatePresence>
-
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-        {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-center">
-            <p className="text-sm text-muted-foreground max-w-xs leading-relaxed">
+      {/* Messages area */}
+      <div
+        ref={scrollRef}
+        className="flex-1 overflow-y-auto px-3 sm:px-6 py-3 space-y-3 scroll-smooth"
+      >
+        {!hasMessages && (
+          <div className="flex flex-col items-center justify-center h-full text-center px-4">
+            <p className="text-sm text-muted-foreground/60 max-w-xs leading-relaxed">
               {voiceFirst ? (
                 <>{t("cmd.hello_voice", { name: config.name })}</>
               ) : (
@@ -212,7 +214,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               )}
             </p>
             {!voiceFirst && (
-              <div className="flex flex-wrap gap-2 mt-5 justify-center">
+              <div className="flex flex-wrap gap-2 mt-4 justify-center max-w-md">
                 {[
                   t("cmd.audit_system", { name: config.name }),
                   t("cmd.briefing_day"),
@@ -222,7 +224,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                   <button
                     key={s}
                     onClick={() => onSend(s)}
-                    className="px-3 py-1.5 rounded-full border border-border/30 text-[11px] text-muted-foreground/70 hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all"
+                    className="px-3 py-1.5 rounded-full border border-border/20 text-[11px] text-muted-foreground/60 hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all"
                   >
                     {s}
                   </button>
@@ -240,21 +242,23 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               animate={{ opacity: 1, y: 0 }}
               className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
             >
-              <div className={`max-w-[85%] rounded-2xl px-5 py-3.5 ${
-                msg.role === "user"
-                  ? "bg-primary/90 text-primary-foreground shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
-                  : "bg-card border border-border/20 backdrop-blur-sm"
-              }`}>
+              <div
+                className={`rounded-2xl px-4 py-3 break-words overflow-hidden ${
+                  msg.role === "user"
+                    ? "max-w-[88%] sm:max-w-[75%] bg-primary/90 text-primary-foreground shadow-[0_0_16px_hsl(var(--primary)/0.12)]"
+                    : "max-w-[95%] sm:max-w-[85%] bg-card/80 border border-border/15 backdrop-blur-sm"
+                }`}
+              >
                 {msg.role === "assistant" ? (
-                  <div className="prose prose-sm dark:prose-invert max-w-none text-[15px] leading-relaxed [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                  <div className="prose prose-sm dark:prose-invert max-w-none text-[14px] sm:text-[15px] leading-relaxed [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_code]:break-all [&_p]:break-words [&_table]:block [&_table]:overflow-x-auto">
                     <ReactMarkdown>{msg.content.replace(/```kpi[\s\S]*?```/g, "")}</ReactMarkdown>
                   </div>
                 ) : (
-                  <p className="text-[15px] leading-relaxed">{msg.content}</p>
+                  <p className="text-[14px] sm:text-[15px] leading-relaxed break-words">{msg.content}</p>
                 )}
                 {msg.role === "assistant" && !isStreaming && (
-                  <div className="flex items-center gap-2 mt-2">
-                    <button onClick={() => speak(msg.content)} className="text-muted-foreground/50 hover:text-primary transition-colors">
+                  <div className="flex items-center gap-2 mt-2 pt-1.5 border-t border-border/10">
+                    <button onClick={() => speak(msg.content)} className="text-muted-foreground/40 hover:text-primary transition-colors">
                       <Volume2 className="h-3 w-3" />
                     </button>
                     <ChatFeedback
@@ -270,37 +274,38 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
         {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
           <div className="flex justify-start">
-            <div className="bg-card/50 border border-border/20 rounded-2xl px-4 py-3 backdrop-blur-sm">
+            <div className="bg-card/40 border border-border/15 rounded-2xl px-4 py-3 backdrop-blur-sm">
               <div className="flex gap-1.5">
-                <span className="w-1.5 h-1.5 bg-primary/50 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-1.5 h-1.5 bg-primary/50 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-1.5 h-1.5 bg-primary/50 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
               </div>
             </div>
           </div>
         )}
       </div>
 
-      <div className="shrink-0 p-4 border-t border-border/10 bg-background/50 backdrop-blur-sm">
-        <div className="flex gap-2 items-center">
+      {/* Input bar */}
+      <div className="shrink-0 px-3 sm:px-4 py-3 border-t border-border/8 bg-background/60 backdrop-blur-sm">
+        <div className="flex gap-2 items-center max-w-3xl mx-auto">
           <Button
             variant="ghost"
             size="icon"
-            className={`shrink-0 h-12 w-12 rounded-full ${
+            className={`shrink-0 h-11 w-11 rounded-full transition-all ${
               isListening
-                ? "text-primary bg-primary/10 shadow-[0_0_20px_hsl(var(--primary)/0.3)] animate-pulse"
-                : "text-muted-foreground/60 hover:text-foreground"
+                ? "text-primary bg-primary/10 shadow-[0_0_20px_hsl(var(--primary)/0.25)] animate-pulse"
+                : "text-muted-foreground/50 hover:text-foreground"
             }`}
             onClick={toggleVoice}
           >
-            {isListening ? <MicOff className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+            {isListening ? <MicOff className="h-4.5 w-4.5" /> : <Mic className="h-4.5 w-4.5" />}
           </Button>
           <Input
             value={input}
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
             placeholder={t("cmd.talk_to", { name: config.name })}
-            className="flex-1 bg-card/30 border-border/20"
+            className="flex-1 bg-card/20 border-border/15 h-11 text-sm"
             disabled={isLoading}
           />
           {isStreaming ? (
@@ -310,7 +315,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           ) : (
             <Button
               size="icon"
-              className="shrink-0 h-10 w-10 rounded-full shadow-[0_0_16px_hsl(var(--primary)/0.2)]"
+              className="shrink-0 h-10 w-10 rounded-full shadow-[0_0_12px_hsl(var(--primary)/0.15)]"
               onClick={handleSend}
               disabled={!input.trim() || isLoading}
             >
@@ -320,7 +325,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           <Button
             variant="ghost"
             size="icon"
-            className="shrink-0 h-8 w-8 text-muted-foreground/40 hover:text-destructive"
+            className="shrink-0 h-8 w-8 text-muted-foreground/30 hover:text-destructive"
             onClick={() => {
               if (messages.length === 0) return;
               if (messages.length > 2) {
