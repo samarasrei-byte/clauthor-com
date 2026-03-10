@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "react-i18next";
 import TeachAgentsModal from "./TeachAgentsModal";
 
 interface ClientCommandCenterProps {
@@ -27,37 +28,12 @@ interface ClientCommandCenterProps {
   onNavigate?: (section: string) => void;
 }
 
-const suggestions = [
-  { icon: Users, text: "Prospectar leads" },
-  { icon: Zap, text: "Criar campanha" },
-  { icon: LineChart, text: "Analisar dados" },
-  { icon: MessageSquare, text: "Melhorar suporte" },
-  { icon: Database, text: "Relatório financeiro" },
-  { icon: Workflow, text: "Automatizar processos" },
-];
-
-const executionSteps = [
-  "Analisando objetivo e contexto",
-  "Selecionando especialistas e criando estratégia",
-  "Processando dados e gerando conteúdo",
-  "Orquestrando execução entre agentes",
-  "Finalizando e preparando relatório"
-];
-
-// Simulated agents when user has none yet — gives a preview of the experience
-const DEMO_AGENTS = [
-  { name: "SDR Outbound", role: "Prospecção & Vendas", status: "active" },
-  { name: "Copywriter IA", role: "Criação de Conteúdo", status: "active" },
-  { name: "Analista Financeiro", role: "Relatórios & Dados", status: "active" },
-  { name: "Suporte Premium", role: "Atendimento ao Cliente", status: "active" },
-  { name: "Growth Hacker", role: "Marketing & Growth", status: "standby" },
-];
-
 const ClientCommandCenter = ({
   activeAgents,
   agents = [],
   onNavigate,
 }: ClientCommandCenterProps) => {
+  const { t } = useTranslation();
   const [command, setCommand] = useState("");
   const [isExecuting, setIsExecuting] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -66,9 +42,34 @@ const ClientCommandCenter = ({
   
   const hasKnowledge = agents.some(a => a.knowledge_base || (a.integrations && a.integrations.length > 0));
 
+  const suggestions = [
+    { icon: Users, text: t("cmd.sug_prospect", { defaultValue: "Prospectar leads" }) },
+    { icon: Zap, text: t("cmd.sug_campaign", { defaultValue: "Criar campanha" }) },
+    { icon: LineChart, text: t("cmd.sug_analyze", { defaultValue: "Analisar dados" }) },
+    { icon: MessageSquare, text: t("cmd.sug_support", { defaultValue: "Melhorar suporte" }) },
+    { icon: Database, text: t("cmd.sug_finance", { defaultValue: "Relatório financeiro" }) },
+    { icon: Workflow, text: t("cmd.sug_automate", { defaultValue: "Automatizar processos" }) },
+  ];
+
+  const executionSteps = [
+    t("cmd.step_1", { defaultValue: "Analisando objetivo e contexto" }),
+    t("cmd.step_2", { defaultValue: "Selecionando especialistas e criando estratégia" }),
+    t("cmd.step_3", { defaultValue: "Processando dados e gerando conteúdo" }),
+    t("cmd.step_4", { defaultValue: "Orquestrando execução entre agentes" }),
+    t("cmd.step_5", { defaultValue: "Finalizando e preparando relatório" }),
+  ];
+
+  const DEMO_AGENTS = [
+    { name: "SDR Outbound", role: t("cmd.role_sales", { defaultValue: "Prospecção & Vendas" }), status: "active" },
+    { name: "Copywriter IA", role: t("cmd.role_content", { defaultValue: "Criação de Conteúdo" }), status: "active" },
+    { name: t("cmd.agent_analyst", { defaultValue: "Analista Financeiro" }), role: t("cmd.role_reports", { defaultValue: "Relatórios & Dados" }), status: "active" },
+    { name: t("cmd.agent_support", { defaultValue: "Suporte Premium" }), role: t("cmd.role_support", { defaultValue: "Atendimento ao Cliente" }), status: "active" },
+    { name: "Growth Hacker", role: "Marketing & Growth", status: "standby" },
+  ];
+
   // Use real agents if available, otherwise show demo agents for preview
   const displayAgents = agents.length > 0 
-    ? agents.slice(0, 5).map(a => ({ name: a.name, role: a.description || a.objective || "Agente IA", status: a.status }))
+    ? agents.slice(0, 5).map(a => ({ name: a.name, role: a.description || a.objective || t("cmd.default_role", { defaultValue: "Agente IA" }), status: a.status }))
     : DEMO_AGENTS;
 
   const isDemo = agents.length === 0;
@@ -80,7 +81,6 @@ const ClientCommandCenter = ({
     setCurrentStep(0);
     setProgress(0);
 
-    // Run real AI processing in background while showing steps
     const stepDuration = 1800;
     let step = 0;
     const stepInterval = setInterval(() => {
@@ -97,7 +97,6 @@ const ClientCommandCenter = ({
       const token = sessionData?.session?.access_token;
       
       if (token && agents.length > 0) {
-        // Send mission to real AI via squad-chat
         await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/squad-chat`,
           {
@@ -114,7 +113,6 @@ const ClientCommandCenter = ({
       console.error("Command center error:", err);
     }
 
-    // Wait for animation to finish, then redirect to results
     setTimeout(() => {
       clearInterval(stepInterval);
       setProgress(100);
@@ -124,7 +122,6 @@ const ClientCommandCenter = ({
         setCommand("");
         setProgress(0);
         setCurrentStep(0);
-        // Navigate to results panel to see execution output
         onNavigate?.("results");
       }, 2000);
     }, stepDuration * executionSteps.length);
@@ -142,10 +139,10 @@ const ClientCommandCenter = ({
       {/* Status Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {[
-          { label: "Agentes Ativos", value: isDemo ? "5 (demo)" : String(activeAgents), icon: Bot, sub: isDemo ? "Modo demonstração" : "Operando", color: "primary" },
-          { label: "Conhecimento", value: hasKnowledge ? "Ativa" : "Vazia", icon: Brain, sub: hasKnowledge ? "Sincronizada" : "Requer atenção", color: "muted" },
-          { label: "Integrações", value: "0", icon: LinkIcon, sub: "Prontas", color: "muted" },
-          { label: "Rede", value: "100%", icon: Cpu, sub: "Otimizada", color: "primary" },
+          { label: t("cmd.active_agents", { defaultValue: "Agentes Ativos" }), value: isDemo ? `5 (${t("cmd.demo", { defaultValue: "demo" })})` : String(activeAgents), icon: Bot, sub: isDemo ? t("cmd.demo_mode", { defaultValue: "Modo demonstração" }) : t("cmd.operating", { defaultValue: "Operando" }), color: "primary" },
+          { label: t("cmd.knowledge", { defaultValue: "Conhecimento" }), value: hasKnowledge ? t("cmd.active_fem", { defaultValue: "Ativa" }) : t("cmd.empty_fem", { defaultValue: "Vazia" }), icon: Brain, sub: hasKnowledge ? t("cmd.synced", { defaultValue: "Sincronizada" }) : t("cmd.needs_attention", { defaultValue: "Requer atenção" }), color: "muted" },
+          { label: t("cmd.integrations", { defaultValue: "Integrações" }), value: "0", icon: LinkIcon, sub: t("cmd.ready_plur", { defaultValue: "Prontas" }), color: "muted" },
+          { label: t("cmd.network", { defaultValue: "Rede" }), value: "100%", icon: Cpu, sub: t("cmd.optimized", { defaultValue: "Otimizada" }), color: "primary" },
         ].map((card, i) => (
           <motion.div 
             key={card.label}
@@ -170,7 +167,7 @@ const ClientCommandCenter = ({
         >
           <Sparkles className="h-4 w-4 text-primary animate-pulse" />
           <p className="text-xs text-muted-foreground">
-            <strong className="text-primary">Modo demonstração</strong> — Você está vendo agentes simulados. Contrate agentes reais na <button onClick={() => onNavigate?.("library")} className="underline text-primary hover:text-primary/80 transition-colors">Biblioteca</button>.
+            <strong className="text-primary">{t("cmd.demo_mode", { defaultValue: "Modo demonstração" })}</strong> — {t("cmd.demo_desc", { defaultValue: "Você está vendo agentes simulados. Contrate agentes reais na" })} <button onClick={() => onNavigate?.("library")} className="underline text-primary hover:text-primary/80 transition-colors">{t("cmd.library", { defaultValue: "Biblioteca" })}</button>.
           </p>
         </motion.div>
       )}
@@ -184,17 +181,17 @@ const ClientCommandCenter = ({
           <div>
             <h3 className="text-lg font-display font-bold text-destructive flex items-center gap-2">
               <Brain className="h-5 w-5" />
-              Seus agentes ainda não conhecem sua empresa
+              {t("cmd.no_knowledge_title", { defaultValue: "Seus agentes ainda não conhecem sua empresa" })}
             </h3>
             <p className="text-sm text-muted-foreground mt-1.5">
-              Conecte seu site, documentos ou CRM para que a inteligência artificial tome decisões precisas pelo seu negócio.
+              {t("cmd.no_knowledge_desc", { defaultValue: "Conecte seu site, documentos ou CRM para que a inteligência artificial tome decisões precisas pelo seu negócio." })}
             </p>
           </div>
           <Button 
             onClick={() => setShowTeachModal(true)} 
             className="shrink-0 shadow-lg"
           >
-            Ensinar meus agentes <ArrowRight className="ml-2 h-4 w-4" />
+            {t("cmd.teach_agents", { defaultValue: "Ensinar meus agentes" })} <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </motion.div>
       )}
@@ -214,10 +211,10 @@ const ClientCommandCenter = ({
               {/* Proactive AI Tip */}
               <div 
                 className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-xs text-primary cursor-pointer hover:bg-primary/15 transition-colors"
-                onClick={() => handleCommand("Reativar 120 leads parados")}
+                onClick={() => handleCommand(t("cmd.suggestion_reactivate", { defaultValue: "Reativar 120 leads parados" }))}
               >
                 <Sparkles className="h-4 w-4 animate-pulse" />
-                <span><strong className="font-semibold mr-1">Sugestão:</strong> Você tem 120 leads parados. Quer reativar?</span>
+                <span><strong className="font-semibold mr-1">{t("cmd.suggestion_label", { defaultValue: "Sugestão:" })}</strong> {t("cmd.suggestion_text", { defaultValue: "Você tem 120 leads parados. Quer reativar?" })}</span>
                 <ChevronRight className="h-4 w-4 opacity-50" />
               </div>
 
@@ -233,7 +230,7 @@ const ClientCommandCenter = ({
                     value={command}
                     onChange={(e) => setCommand(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleCommand(command)}
-                    placeholder="O que você quer que sua empresa faça agora?"
+                    placeholder={t("cmd.input_placeholder", { defaultValue: "O que você quer que sua empresa faça agora?" })}
                     className="flex-1 bg-transparent border-none outline-none text-base md:text-lg font-display font-medium text-foreground placeholder:text-muted-foreground/40 px-2 h-14"
                   />
                   <Button 
@@ -285,7 +282,7 @@ const ClientCommandCenter = ({
                       <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center border border-primary/30">
                         <Sparkles className="h-5 w-5 text-primary animate-pulse" />
                       </div>
-                      <h2 className="text-3xl font-display font-bold">Missão Iniciada</h2>
+                      <h2 className="text-3xl font-display font-bold">{t("cmd.mission_started", { defaultValue: "Missão Iniciada" })}</h2>
                     </div>
                     <p className="text-muted-foreground text-xl font-mono mt-2 flex items-center gap-2">
                       <Terminal className="h-4 w-4 opacity-50" />
@@ -293,7 +290,7 @@ const ClientCommandCenter = ({
                     </p>
                   </div>
                   <div className="text-right">
-                    <div className="text-xs font-mono text-primary uppercase tracking-widest mb-1 font-semibold">Progresso Global</div>
+                    <div className="text-xs font-mono text-primary uppercase tracking-widest mb-1 font-semibold">{t("cmd.global_progress", { defaultValue: "Progresso Global" })}</div>
                     <div className="text-4xl font-display font-bold text-foreground">
                       {Math.round(progress)}%
                     </div>
@@ -305,7 +302,7 @@ const ClientCommandCenter = ({
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-10 pt-2">
                   {/* Steps */}
                   <div className="space-y-5">
-                    <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-widest font-semibold">Protocolo de Execução</h3>
+                    <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-widest font-semibold">{t("cmd.execution_protocol", { defaultValue: "Protocolo de Execução" })}</h3>
                     <div className="space-y-3">
                       {executionSteps.map((step, idx) => {
                         const isActive = idx === currentStep;
@@ -329,7 +326,7 @@ const ClientCommandCenter = ({
                             )}
                             
                             {isDone ? (
-                              <CheckCircle2 className="h-5 w-5 text-accent-foreground shrink-0" />
+                              <CheckCircle2 className="h-5 w-5 text-primary shrink-0" />
                             ) : isActive ? (
                               <Activity className="h-5 w-5 animate-pulse shrink-0" />
                             ) : (
@@ -348,7 +345,7 @@ const ClientCommandCenter = ({
                   {/* Agents Involved */}
                   <div className="space-y-5">
                     <h3 className="text-xs font-mono text-muted-foreground uppercase tracking-widest font-semibold">
-                      Esquadrão Alocado {isDemo && <span className="text-primary/60 ml-1">(demo)</span>}
+                      {t("cmd.squad_allocated", { defaultValue: "Esquadrão Alocado" })} {isDemo && <span className="text-primary/60 ml-1">({t("cmd.demo", { defaultValue: "demo" })})</span>}
                     </h3>
                     <div className="flex flex-col gap-3">
                       {displayAgents.slice(0, 4).map((agent, i) => (
@@ -369,7 +366,7 @@ const ClientCommandCenter = ({
                             <div>
                               <div className="font-semibold text-sm">{agent.name}</div>
                               <div className="text-[10px] text-muted-foreground font-mono mt-0.5">
-                                {i <= currentStep % 4 ? "Processando..." : "Aguardando"}
+                                {i <= currentStep % 4 ? t("cmd.processing", { defaultValue: "Processando..." }) : t("cmd.waiting", { defaultValue: "Aguardando" })}
                               </div>
                             </div>
                           </div>
