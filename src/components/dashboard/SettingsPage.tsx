@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings, User, Users, CreditCard, MessageSquare, Bot, Link2, Presentation } from "lucide-react";
+import { Settings, User, Users, CreditCard, MessageSquare, Bot, Link2 } from "lucide-react";
 import HelpTooltip from "@/components/HelpTooltip";
 import AgentSettings from "./AgentSettings";
 import UserProfileEditor from "./UserProfileEditor";
@@ -8,7 +8,6 @@ import TeamMembers from "./TeamMembers";
 import SupportChat from "@/components/SupportChat";
 import { CouponRedeemer } from "./CouponRedeemer";
 import CredentialsHub from "./CredentialsHub";
-import HolographicMeetingRoom from "./HolographicMeetingRoom";
 import { useTranslation } from "react-i18next";
 
 interface SettingsPageProps {
@@ -16,12 +15,11 @@ interface SettingsPageProps {
   defaultTab?: string;
 }
 
-const SettingsPage = ({ billingContent, defaultTab = "meeting" }: SettingsPageProps) => {
+const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPageProps) => {
   const [activeTab, setActiveTab] = useState(defaultTab);
   const { t } = useTranslation();
 
   const tabs = [
-    { id: "meeting", label: t("settings.tab_meeting", { defaultValue: "Sala de Reunião" }), icon: Presentation },
     { id: "agents", label: t("settings.tab_agents", { defaultValue: "Configurações" }), icon: Bot },
     { id: "credentials", label: t("settings.tab_credentials", { defaultValue: "Conexões" }), icon: Link2 },
     { id: "profile", label: t("settings.tab_profile", { defaultValue: "Meu Perfil" }), icon: User },
@@ -36,7 +34,7 @@ const SettingsPage = ({ billingContent, defaultTab = "meeting" }: SettingsPagePr
         <h2 className="font-display text-xl font-bold flex items-center gap-2">
           <Settings className="h-5 w-5 text-primary" />
           {t("settings.title", { defaultValue: "Central de Comando" })}
-          <HelpTooltip id="settings-intro" text={t("settings.help", { defaultValue: "Gerencie seus agentes, conexões, reuniões, perfil, equipe e assinatura." })} size={14} />
+          <HelpTooltip id="settings-intro" text={t("settings.help", { defaultValue: "Gerencie seus agentes, conexões, perfil, equipe e assinatura." })} size={14} />
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
           {t("settings.subtitle", { defaultValue: "O sistema operacional da sua equipe de IA." })}
@@ -52,10 +50,6 @@ const SettingsPage = ({ billingContent, defaultTab = "meeting" }: SettingsPagePr
             </TabsTrigger>
           ))}
         </TabsList>
-
-        <TabsContent value="meeting">
-          <HolographicMeetingRoom />
-        </TabsContent>
 
         <TabsContent value="agents">
           <AgentSettings />
