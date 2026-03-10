@@ -700,8 +700,8 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && sendMessage()}
-                        placeholder={voice.isListening ? "Fale agora..." : "Descreva seu problema..."}
-                        className="w-full h-9 px-3 rounded-xl bg-white/[0.03] border border-white/[0.06] text-[12px] text-foreground placeholder:text-muted-foreground/30 outline-none focus:border-primary/20 focus:bg-white/[0.04] transition-all tracking-wide"
+                        placeholder={voice.isListening ? t("support.speak_now") : t("support.describe_problem")}
+                        className="w-full h-9 px-3 rounded-xl bg-card/30 border border-border/10 text-[12px] text-foreground placeholder:text-muted-foreground/30 outline-none focus:border-primary/20 focus:bg-card/40 transition-all tracking-wide"
                         disabled={isLoading || voice.isListening}
                       />
                     </div>
