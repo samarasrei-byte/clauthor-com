@@ -64,7 +64,7 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
     const key = d.toISOString().split("T")[0];
     const dayLogs = logs.filter(l => l.created_at?.startsWith(key));
     return {
-      day: d.toLocaleDateString("pt-BR", { weekday: "short" }),
+      day: d.toLocaleDateString("en-US", { weekday: "short" }),
       total: dayLogs.length,
       success: dayLogs.filter(l => l.status === "success").length,
       error: dayLogs.filter(l => l.status === "error").length,
@@ -191,7 +191,7 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
           <Shield className="h-3 w-3" />
           <span>{t("cmd.system_operational")}</span>
         </div>
-        <span>{new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}</span>
+        <span>{new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" })}</span>
       </div>
     </div>
   );

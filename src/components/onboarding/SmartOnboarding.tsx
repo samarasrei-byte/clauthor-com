@@ -576,22 +576,22 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
                         {/* Price */}
                         <div className="flex items-center justify-between pt-2 border-t border-primary/10">
-                          <span className="text-xs text-muted-foreground">Investimento mensal:</span>
+                          <span className="text-xs text-muted-foreground">Monthly investment:</span>
                           <div className="text-right">
                             {getDiscount().pct > 0 && (
                               <span className="text-[10px] text-muted-foreground line-through mr-2">
-                                R$ {(getRecommendedAgents().length * 697).toLocaleString("pt-BR")}
+                                ${(getRecommendedAgents().length * 139).toLocaleString("en-US")}
                               </span>
                             )}
                             <span className="font-display font-bold text-sm text-primary">
-                              R$ {Math.round(getRecommendedAgents().length * 697 * (1 - getDiscount().pct / 100)).toLocaleString("pt-BR")}/mês
+                              ${Math.round(getRecommendedAgents().length * 139 * (1 - getDiscount().pct / 100)).toLocaleString("en-US")}/mo
                             </span>
                           </div>
                         </div>
                       </div>
 
                       <p className="text-sm text-muted-foreground">
-                        Você também pode adicionar agentes individuais abaixo, ou criar sua conta para explorar todos.
+                        You can also add individual agents below, or create your account to explore all of them.
                       </p>
                     </div>
                   </div>

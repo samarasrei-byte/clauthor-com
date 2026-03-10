@@ -61,9 +61,9 @@ export default function PaymentHistoryTable() {
 
   const formatCurrency = (cents: number, currency: string) => {
     if (cents === 0) return "—";
-    return new Intl.NumberFormat("pt-BR", {
+    return new Intl.NumberFormat("en-US", {
       style: "currency",
-      currency: currency || "BRL",
+      currency: currency || "USD",
       minimumFractionDigits: 0,
     }).format(cents);
   };
@@ -76,28 +76,28 @@ export default function PaymentHistoryTable() {
     >
       <div className="flex items-center gap-3 p-5 pb-3">
         <Receipt className="h-5 w-5 text-primary" />
-        <h3 className="font-display font-semibold">Histórico de Transações</h3>
+        <h3 className="font-display font-semibold">Transaction History</h3>
         <Badge variant="secondary" className="text-[10px]">{payments.length}</Badge>
       </div>
 
       {isLoading ? (
-        <div className="p-8 text-center text-muted-foreground text-sm">Carregando...</div>
+        <div className="p-8 text-center text-muted-foreground text-sm">Loading...</div>
       ) : payments.length === 0 ? (
         <div className="p-8 text-center">
           <Coins className="h-10 w-10 text-muted-foreground/30 mx-auto mb-3" />
-          <p className="text-sm text-muted-foreground">Nenhuma transação registrada ainda.</p>
-          <p className="text-xs text-muted-foreground/60 mt-1">Suas compras de tokens e upgrades aparecerão aqui.</p>
+          <p className="text-sm text-muted-foreground">No transactions recorded yet.</p>
+          <p className="text-xs text-muted-foreground/60 mt-1">Your token purchases and upgrades will appear here.</p>
         </div>
       ) : (
         <div className="overflow-x-auto">
           <Table>
             <TableHeader>
               <TableRow className="border-white/5 hover:bg-transparent">
-                <TableHead className="text-[10px] uppercase tracking-wider">Data</TableHead>
-                <TableHead className="text-[10px] uppercase tracking-wider">Tipo</TableHead>
+                <TableHead className="text-[10px] uppercase tracking-wider">Date</TableHead>
+                <TableHead className="text-[10px] uppercase tracking-wider">Type</TableHead>
                 <TableHead className="text-[10px] uppercase tracking-wider">Item</TableHead>
                 <TableHead className="text-[10px] uppercase tracking-wider text-right">Tokens</TableHead>
-                <TableHead className="text-[10px] uppercase tracking-wider text-right">Valor</TableHead>
+                <TableHead className="text-[10px] uppercase tracking-wider text-right">Amount</TableHead>
                 <TableHead className="text-[10px] uppercase tracking-wider text-center">Status</TableHead>
               </TableRow>
             </TableHeader>
@@ -111,7 +111,7 @@ export default function PaymentHistoryTable() {
                 return (
                   <TableRow key={p.id} className="border-white/5">
                     <TableCell className="text-xs text-muted-foreground whitespace-nowrap">
-                      {new Date(p.created_at).toLocaleDateString("pt-BR", {
+                      {new Date(p.created_at).toLocaleDateString("en-US", {
                         day: "2-digit", month: "2-digit", year: "2-digit",
                         hour: "2-digit", minute: "2-digit",
                       })}

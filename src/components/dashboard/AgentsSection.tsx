@@ -236,7 +236,7 @@ const AgentsSection = ({
                   <div className="flex items-center gap-2 text-[10px] text-muted-foreground bg-muted/20 rounded-lg px-3 py-2">
                     <Clock className="h-3 w-3 shrink-0" />
                     <span className="truncate">
-                      Última atividade: {lastActivity[agent.id].action} — {new Date(lastActivity[agent.id].date).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                      Last activity: {lastActivity[agent.id].action} — {new Date(lastActivity[agent.id].date).toLocaleDateString("en-US", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
                 )}

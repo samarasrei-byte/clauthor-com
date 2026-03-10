@@ -74,7 +74,7 @@ const Terms = () => {
               Termos e Condições de Uso
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Última atualização: {new Date().toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric" })}
+              Last updated: {new Date().toLocaleDateString("en-US", { day: "numeric", month: "long", year: "numeric" })}
             </p>
           </motion.div>
         </div>

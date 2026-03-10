@@ -20,11 +20,11 @@ export interface MonixMessage {
 
 const DEFAULT_CONFIG: MonixConfig = {
   name: "MONIX",
-  tone: "estratégico",
-  personality: "visionário",
-  responseStyle: "detalhado",
-  language: "pt-BR",
-  autonomy: "analisar e sugerir",
+  tone: "strategic",
+  personality: "visionary",
+  responseStyle: "detailed",
+  language: "en-US",
+  autonomy: "analyze and suggest",
 };
 
 function extractKPIs(content: string) {

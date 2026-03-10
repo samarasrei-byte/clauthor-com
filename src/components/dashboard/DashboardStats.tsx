@@ -16,8 +16,8 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
   const { credits, remainingCredits, usagePercentage } = useCredits();
   const { data: tokenUsage = [] } = useTokenUsage();
   const { t, i18n } = useTranslation();
-  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
-  const currencyCode = locale.startsWith("pt") ? "BRL" : "USD";
+  const locale = i18n.language === "pt" ? "pt-BR" : (i18n.language || "en");
+  const currencyCode = "USD";
   const formatNum = (n: number) => n.toLocaleString(locale);
 
   const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);

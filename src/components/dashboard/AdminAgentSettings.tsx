@@ -339,9 +339,9 @@ const AdminAgentCard = ({ agent, ownerName, isExpanded, onToggle }: AdminAgentCa
               {/* Meta info */}
               <div className="flex items-center gap-4 text-[10px] text-muted-foreground pt-2 border-t border-white/[0.04]">
                 <span>ID: {agent.id.slice(0, 8)}...</span>
-                <span>Criado: {new Date(agent.created_at).toLocaleDateString("pt-BR")}</span>
-                <span>Preço: R$ {(agent.monthly_price / 100).toFixed(2)}</span>
-                <span>Dono: {ownerName}</span>
+                <span>Created: {new Date(agent.created_at).toLocaleDateString("en-US")}</span>
+                <span>Price: ${(agent.monthly_price / 100).toFixed(2)}</span>
+                <span>Owner: {ownerName}</span>
               </div>
 
               {/* Save */}

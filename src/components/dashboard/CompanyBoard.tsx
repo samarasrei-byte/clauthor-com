@@ -236,7 +236,7 @@ const CompanyBoard = () => {
                   </>
                 )}
                 <p className="text-[10px] text-muted-foreground/60">
-                  Atualizado: {new Date(item.updated_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                  Updated: {new Date(item.updated_at).toLocaleDateString("en-US", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
                 </p>
               </motion.div>
             );

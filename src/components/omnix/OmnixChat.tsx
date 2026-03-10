@@ -40,9 +40,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     window.speechSynthesis.cancel();
     const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "");
     const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 500));
-    utterance.lang = config.language || "pt-BR";
+    utterance.lang = config.language || "en-US";
     const voices = window.speechSynthesis.getVoices();
-    const lang = config.language || "pt-BR";
+    const lang = config.language || "en-US";
     const langVoices = voices.filter(v => v.lang.startsWith(lang.split("-")[0]));
     const premium = langVoices.find(v => /google|microsoft|natural|neural|online/i.test(v.name));
     const fallback = langVoices.find(v => v.localService === false) || langVoices[0];
@@ -116,7 +116,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     const recognition = new SpeechRecognition();
-    recognition.lang = config.language || "pt-BR";
+    recognition.lang = config.language || "en-US";
     recognition.interimResults = true;
     recognition.continuous = false;
 

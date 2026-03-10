@@ -36,8 +36,8 @@ const ConsolidatedMetrics = ({
   successRate,
 }: ConsolidatedMetricsProps) => {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
-  const currencyPrefix = locale.startsWith("pt") ? "R$ " : "$ ";
+  const locale = i18n.language === "pt" ? "pt-BR" : (i18n.language || "en");
+  const currencyPrefix = "$ ";
 
   // Build chart data
   const executionChartData = (() => {
@@ -197,14 +197,14 @@ const ConsolidatedMetrics = ({
                   {remainingCredits.toLocaleString(locale)}
                 </p>
                 <p className="text-[10px] text-muted-foreground">
-                  {locale.startsWith("pt") ? "créditos restantes" : "credits remaining"}
+                  {"credits remaining"}
                 </p>
               </div>
 
               <Progress value={usagePercentage} className="h-2 mb-2" />
 
               <div className="flex justify-between text-[9px] text-muted-foreground">
-                <span>{credits.used_credits.toLocaleString(locale)} {locale.startsWith("pt") ? "usados" : "used"}</span>
+                <span>{credits.used_credits.toLocaleString(locale)} {"used"}</span>
                 <span>{credits.total_credits.toLocaleString(locale)} total</span>
               </div>
 

@@ -212,11 +212,11 @@ const OpenClawStatusPanel = () => {
                           </span>
                         </td>
                         <td className="p-3 font-mono text-xs">
-                          {reg.agents?.total_executions?.toLocaleString("pt-BR") || "0"}
+                          {reg.agents?.total_executions?.toLocaleString("en-US") || "0"}
                         </td>
                         <td className="p-3 text-muted-foreground text-xs">
                           {reg.last_webhook_at
-                            ? new Date(reg.last_webhook_at).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })
+                            ? new Date(reg.last_webhook_at).toLocaleString("en-US", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })
                             : "—"}
                         </td>
                         <td className="p-3">

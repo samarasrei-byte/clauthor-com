@@ -24,7 +24,7 @@ const CountUp = ({ end, prefix = "", suffix = "", decimals = 0, duration = 2 }: 
     requestAnimationFrame(tick);
   }, [inView, end, duration]);
 
-  const formatted = decimals > 0 ? val.toFixed(decimals) : Math.round(val).toLocaleString("pt-BR");
+  const formatted = decimals > 0 ? val.toFixed(decimals) : Math.round(val).toLocaleString("en-US");
   return <span ref={ref}>{prefix}{formatted}{suffix}</span>;
 };
 
@@ -81,16 +81,16 @@ const AnimatedBar = ({ label, pct, color }: { label: string; pct: number; color:
 
 /* ── Investor Agent Chat (auto-plays conversation) ── */
 const investorConversation = [
-  { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-  { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 83 agentes já operacionais, infraestrutura pronta e um mercado de US$ 1.8T até 2030. Você entra antes da escala explodir." },
-  { role: "investor" as const, text: "Mas o mercado de IA está saturado. Qual o diferencial?" },
-  { role: "agent" as const, text: "Ninguém faz o que fazemos: substituir departamentos inteiros com squads de IA coordenados. Não vendemos chatbot — vendemos operação completa. Atendimento, financeiro, compliance, tudo rodando 24/7." },
-  { role: "investor" as const, text: "Como vocês monetizam?" },
-  { role: "agent" as const, text: "SaaS B2B com ticket médio de R$ 997/mês por squad. Com 1.000 clientes, são quase R$ 12M/ano de receita recorrente. LTV alto, churn baixo." },
-  { role: "investor" as const, text: "E o risco?" },
-  { role: "agent" as const, text: "O risco de não investir é maior. A automação B2B não é tendência — é inevitável. Quem entra agora no pré-seed a R$ 2M de valuation, captura o maior upside possível." },
-  { role: "investor" as const, text: "Como entro?" },
-  { role: "agent" as const, text: "Fale diretamente com o Founder pelo WhatsApp. A rodada é limitada — 10% de equity para R$ 200K. Cada dia conta." },
+  { role: "investor" as const, text: "Why should I invest in CLAUTHOR now?" },
+  { role: "agent" as const, text: "Because we're at the inflection point. 83 agents fully operational, infrastructure ready, and a $1.8T market by 2030. You get in before the scale explodes." },
+  { role: "investor" as const, text: "But the AI market is saturated. What's the differentiator?" },
+  { role: "agent" as const, text: "No one does what we do: replace entire departments with coordinated AI squads. We don't sell chatbots — we sell full operations. Support, finance, compliance, all running 24/7." },
+  { role: "investor" as const, text: "How do you monetize?" },
+  { role: "agent" as const, text: "B2B SaaS with an average ticket of $199/mo per squad. With 1,000 clients, that's nearly $2.4M/year in recurring revenue. High LTV, low churn." },
+  { role: "investor" as const, text: "What about risk?" },
+  { role: "agent" as const, text: "The risk of not investing is greater. B2B automation isn't a trend — it's inevitable. Getting in now at the pre-seed at a $500K valuation captures the highest upside." },
+  { role: "investor" as const, text: "How do I get in?" },
+  { role: "agent" as const, text: "Talk directly to the Founder via WhatsApp. The round is limited — 10% equity for $50K. Every day counts." },
 ];
 
 const InvestorChat = () => {
@@ -176,28 +176,28 @@ const Pitch = () => {
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "15%"]);
 
   const indicators = [
-    { icon: Bot, label: "83 agentes operacionais" },
-    { icon: Clock, label: "Setup em 5 minutos" },
+    { icon: Bot, label: "83 operational agents" },
+    { icon: Clock, label: "Setup in 5 minutes" },
     { icon: Shield, label: "SOC 2 compliant" },
-    { icon: Globe, label: "Multi-idioma nativo" },
+    { icon: Globe, label: "Native multi-language" },
   ];
 
   const solutions = [
-    { icon: Headphones, title: "Atendimento Omnichannel" },
-    { icon: Receipt, title: "Financeiro & Cobrança" },
-    { icon: Code, title: "Desenvolvedor Autônomo" },
+    { icon: Headphones, title: "Omnichannel Support" },
+    { icon: Receipt, title: "Finance & Billing" },
+    { icon: Code, title: "Autonomous Developer" },
     { icon: Scale, title: "Compliance" },
-    { icon: Brain, title: "Orquestração Inteligente" },
-    { icon: UserCheck, title: "Concierge Estratégico" },
+    { icon: Brain, title: "Intelligent Orchestration" },
+    { icon: UserCheck, title: "Strategic Concierge" },
   ];
 
   const advantages = [
-    { icon: Bot, text: "83 agentes já operacionais" },
-    { icon: Users, text: "Banco de 200 mil leads" },
-    { icon: TrendingUp, text: "Estrutura própria de aquisição" },
-    { icon: Globe, text: "Multi-idioma" },
-    { icon: Zap, text: "Escala infinita" },
-    { icon: Lock, text: "Infraestrutura segura" },
+    { icon: Bot, text: "83 agents already operational" },
+    { icon: Users, text: "200K lead database" },
+    { icon: TrendingUp, text: "Own acquisition structure" },
+    { icon: Globe, text: "Multi-language" },
+    { icon: Zap, text: "Infinite scale" },
+    { icon: Lock, text: "Secure infrastructure" },
   ];
 
   const handleTalk = useCallback(() => {
@@ -216,17 +216,17 @@ const Pitch = () => {
 
         <motion.div className="relative z-10 max-w-5xl mx-auto px-6 text-center" style={{ y: textY }}>
           <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }} className="text-xs uppercase tracking-[0.3em] text-primary/70 mb-6 font-mono">
-            Pré-Seed · Documento Confidencial
+            Pre-Seed · Confidential Document
           </motion.p>
 
           <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.08] tracking-tight mb-6">
-            Estamos construindo a infraestrutura que{" "}
-            <span className="bg-gradient-to-r from-primary via-accent-violet to-accent-cyan bg-clip-text text-transparent">substitui departamentos</span>{" "}
-            por IA.
+            We're building the infrastructure that{" "}
+            <span className="bg-gradient-to-r from-primary via-accent-violet to-accent-cyan bg-clip-text text-transparent">replaces departments</span>{" "}
+            with AI.
           </motion.h1>
 
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-            A CLAUTHOR é uma plataforma de agentes inteligentes que executa operações completas para empresas — 24/7.
+            CLAUTHOR is an intelligent agent platform that executes complete operations for companies — 24/7.
           </motion.p>
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
@@ -240,7 +240,7 @@ const Pitch = () => {
 
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1 }} className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="lg" onClick={handleTalk} className="text-base px-8">
-              Falar com o Founder <ArrowRight className="ml-1 w-4 h-4" />
+              Talk to the Founder <ArrowRight className="ml-1 w-4 h-4" />
             </Button>
           </motion.div>
         </motion.div>
@@ -251,14 +251,14 @@ const Pitch = () => {
       {/* ═══ 2. O PROBLEMA ═══ */}
       <Section className="bg-white/[0.01]">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">Empresas são ineficientes por natureza.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">Companies are inherently inefficient.</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
-            Departamentos são caros, lentos e difíceis de escalar.<br />
-            Turnover, erro humano, falta de integração e alto custo fixo.
+            Departments are expensive, slow and hard to scale.<br />
+            Turnover, human error, lack of integration and high fixed costs.
           </p>
           <GlassCard hover={false} className="max-w-md mx-auto text-center !py-10">
             <p className="text-5xl md:text-6xl font-display font-bold text-primary mb-2"><CountUp end={70} suffix="%" /></p>
-            <p className="text-sm text-muted-foreground">das tarefas operacionais podem ser automatizadas com IA.</p>
+            <p className="text-sm text-muted-foreground">of operational tasks can be automated with AI.</p>
           </GlassCard>
         </div>
       </Section>
@@ -266,8 +266,8 @@ const Pitch = () => {
       {/* ═══ 3. A SOLUÇÃO ═══ */}
       <Section>
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Infraestrutura multiagente coordenada.</h2>
-          <p className="text-muted-foreground text-lg mb-14 max-w-2xl mx-auto">A CLAUTHOR substitui departamentos por squads de IA especializados.</p>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Coordinated multi-agent infrastructure.</h2>
+          <p className="text-muted-foreground text-lg mb-14 max-w-2xl mx-auto">CLAUTHOR replaces departments with specialized AI squads.</p>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {solutions.map((s) => (
               <GlassCard key={s.title} className="flex flex-col items-center gap-3 text-center">
@@ -284,13 +284,13 @@ const Pitch = () => {
         <div className="max-w-4xl mx-auto text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
             <MessageCircle className="w-5 h-5 text-primary" />
-            <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight">Por que investir na CLAUTHOR?</h2>
+            <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight">Why invest in CLAUTHOR?</h2>
           </div>
-          <p className="text-muted-foreground text-sm mb-10">Veja como nosso agente responde às perguntas mais comuns de investidores.</p>
+          <p className="text-muted-foreground text-sm mb-10">See how our agent answers the most common investor questions.</p>
           <InvestorChat />
           <div className="mt-8">
             <Button onClick={handleTalk} className="text-sm">
-              Tirar suas dúvidas no WhatsApp <ArrowRight className="ml-1 w-4 h-4" />
+              Ask your questions on WhatsApp <ArrowRight className="ml-1 w-4 h-4" />
             </Button>
           </div>
         </div>
@@ -299,12 +299,12 @@ const Pitch = () => {
       {/* ═══ 4. MERCADO ═══ */}
       <Section>
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">O maior shift operacional da história corporativa.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">The biggest operational shift in corporate history.</h2>
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { value: 1.8, suffix: "T", prefix: "US$ ", label: "Mercado global de IA até 2030", decimals: 1 },
-              { value: 35, suffix: "%+", prefix: "", label: "Crescimento anual do setor", decimals: 0 },
-              { value: 850, suffix: "+", prefix: "", label: "Empresas buscando automação B2B", decimals: 0 },
+              { value: 1.8, suffix: "T", prefix: "$ ", label: "Global AI market by 2030", decimals: 1 },
+              { value: 35, suffix: "%+", prefix: "", label: "Annual sector growth", decimals: 0 },
+              { value: 850, suffix: "+", prefix: "", label: "Companies seeking B2B automation", decimals: 0 },
             ].map((m) => (
               <GlassCard key={m.label} className="text-center !py-10">
                 <p className="text-4xl md:text-5xl font-display font-bold text-primary mb-2"><CountUp end={m.value} prefix={m.prefix} suffix={m.suffix} decimals={m.decimals} /></p>
@@ -318,27 +318,27 @@ const Pitch = () => {
       {/* ═══ 5. MODELO DE NEGÓCIO ═══ */}
       <Section className="bg-white/[0.01]">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight text-center">Modelo de receita recorrente.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight text-center">Recurring revenue model.</h2>
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div className="space-y-6">
               <GlassCard hover={false}>
-                <p className="text-sm text-muted-foreground mb-1">Ticket médio</p>
-                <p className="text-2xl font-display font-bold">R$ 997<span className="text-base font-normal text-muted-foreground">/mês</span></p>
+                <p className="text-sm text-muted-foreground mb-1">Average ticket</p>
+                <p className="text-2xl font-display font-bold">$199<span className="text-base font-normal text-muted-foreground">/mo</span></p>
               </GlassCard>
-              <p className="text-muted-foreground text-sm leading-relaxed">SaaS B2B com assinatura mensal por squad. Receita previsível, LTV alto e expansão natural via upsell de agentes adicionais.</p>
+              <p className="text-muted-foreground text-sm leading-relaxed">B2B SaaS with monthly subscription per squad. Predictable revenue, high LTV and natural expansion via additional agent upsell.</p>
             </div>
             <div className="space-y-4">
               <GlassCard hover={false} className="text-center !py-8">
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Cenário · 1.000 clientes</p>
-                <p className="text-3xl md:text-4xl font-display font-bold text-primary">R$ <CountUp end={997} suffix="K" /><span className="text-base font-normal text-muted-foreground">/mês</span></p>
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Scenario · 1,000 clients</p>
+                <p className="text-3xl md:text-4xl font-display font-bold text-primary">$ <CountUp end={199} suffix="K" /><span className="text-base font-normal text-muted-foreground">/mo</span></p>
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-8">
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Receita anual projetada</p>
-                <p className="text-3xl md:text-4xl font-display font-bold">R$ <CountUp end={11.96} suffix="M" decimals={2} /></p>
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Projected annual revenue</p>
+                <p className="text-3xl md:text-4xl font-display font-bold">$ <CountUp end={2.39} suffix="M" decimals={2} /></p>
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-6">
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Valuation potencial (5x)</p>
-                <p className="text-2xl font-display font-bold text-accent-emerald">≈ R$ <CountUp end={60} suffix="M" /></p>
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Potential valuation (5x)</p>
+                <p className="text-2xl font-display font-bold text-accent-emerald">≈ $ <CountUp end={12} suffix="M" /></p>
               </GlassCard>
             </div>
           </div>
@@ -348,13 +348,13 @@ const Pitch = () => {
       {/* ═══ 6. RODADA ATUAL ═══ */}
       <Section>
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-mono uppercase tracking-widest mb-6">Rodada aberta</motion.div>
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Pré-Seed Aberto</h2>
+          <motion.div className="inline-block px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 text-primary text-xs font-mono uppercase tracking-widest mb-6">Round Open</motion.div>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Pre-Seed Open</h2>
           <div className="grid sm:grid-cols-3 gap-6 mb-14">
             {[
-              { label: "Captação", value: "R$ 200.000" },
-              { label: "Equity ofertado", value: "10%" },
-              { label: "Valuation implícito", value: "R$ 2.000.000" },
+              { label: "Raising", value: "$50,000" },
+              { label: "Equity offered", value: "10%" },
+              { label: "Implied valuation", value: "$500,000" },
             ].map((item) => (
               <GlassCard key={item.label} hover={false} className="text-center !py-8">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
@@ -363,10 +363,10 @@ const Pitch = () => {
             ))}
           </div>
           <div className="max-w-lg mx-auto space-y-5">
-            <h3 className="text-sm uppercase tracking-widest text-muted-foreground mb-6">Uso do Capital</h3>
-            <AnimatedBar label="Growth (tráfego, influência, B2B)" pct={70} color="bg-primary" />
-            <AnimatedBar label="Infraestrutura" pct={20} color="bg-accent-violet" />
-            <AnimatedBar label="Reserva estratégica" pct={10} color="bg-accent-cyan" />
+            <h3 className="text-sm uppercase tracking-widest text-muted-foreground mb-6">Use of Capital</h3>
+            <AnimatedBar label="Growth (traffic, influence, B2B)" pct={70} color="bg-primary" />
+            <AnimatedBar label="Infrastructure" pct={20} color="bg-accent-violet" />
+            <AnimatedBar label="Strategic reserve" pct={10} color="bg-accent-cyan" />
           </div>
         </div>
       </Section>
@@ -374,7 +374,7 @@ const Pitch = () => {
       {/* ═══ 7. VANTAGEM COMPETITIVA ═══ */}
       <Section className="bg-white/[0.01]">
         <div className="max-w-5xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Vantagem competitiva real.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Real competitive advantage.</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {advantages.map((a) => (
               <GlassCard key={a.text} className="flex flex-col items-center gap-3 text-center">
@@ -386,30 +386,30 @@ const Pitch = () => {
         </div>
       </Section>
 
-      {/* ═══ 8. VISÃO ═══ */}
+      {/* ═══ 8. VISION ═══ */}
       <Section>
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold leading-tight tracking-tight mb-8">
-            A CLAUTHOR não é uma ferramenta.<br />
-            <span className="bg-gradient-to-r from-primary to-accent-violet bg-clip-text text-transparent">É a camada operacional da nova economia.</span>
+            CLAUTHOR is not a tool.<br />
+            <span className="bg-gradient-to-r from-primary to-accent-violet bg-clip-text text-transparent">It's the operational layer of the new economy.</span>
           </h2>
           <div className="flex flex-wrap justify-center gap-3">
-            {["Primeiro 1.000 clientes", "Rodada Seed", "Expansão internacional", "Infraestrutura global de agentes"].map((step) => (
+            {["First 1,000 clients", "Seed Round", "International expansion", "Global agent infrastructure"].map((step) => (
               <span key={step} className="px-4 py-2 rounded-full border border-white/[0.06] bg-white/[0.02] text-xs text-muted-foreground">{step}</span>
             ))}
           </div>
         </div>
       </Section>
 
-      {/* ═══ 9. CTA FINAL ═══ */}
+      {/* ═══ 9. FINAL CTA ═══ */}
       <section className="relative py-32 px-6">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_100%,hsl(var(--primary)/0.1),transparent_70%)]" />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-8 tracking-tight">Estamos abrindo 10% da empresa para acelerar exponencialmente.</h2>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-8 tracking-tight">We're opening 10% of the company to accelerate exponentially.</h2>
           <Button size="lg" onClick={handleTalk} className="text-lg px-10 py-6 h-auto">
-            Falar com o Founder <ArrowRight className="ml-2 w-5 h-5" />
+            Talk to the Founder <ArrowRight className="ml-2 w-5 h-5" />
           </Button>
-          <p className="mt-8 text-xs text-muted-foreground/50">Documento confidencial. Distribuição restrita a potenciais investidores.</p>
+          <p className="mt-8 text-xs text-muted-foreground/50">Confidential document. Distribution restricted to potential investors.</p>
         </div>
       </section>
     </div>
