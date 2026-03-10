@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useTranslation } from "react-i18next";
 import { 
   FileText, Users, Mail, BarChart3, CheckCircle2, 
-  Clock, Bot, ChevronRight, Download, Eye 
+  Clock, Bot, ChevronRight, Eye 
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -15,19 +16,19 @@ interface ExecutionResultsPanelProps {
   onNavigate?: (section: string) => void;
 }
 
-const resultTypeConfig: Record<string, { icon: typeof FileText; label: string; color: string }> = {
-  report: { icon: FileText, label: "Relatório", color: "text-blue-400" },
-  leads: { icon: Users, label: "Leads Gerados", color: "text-emerald-400" },
-  content: { icon: Mail, label: "Conteúdo Criado", color: "text-purple-400" },
-  analysis: { icon: BarChart3, label: "Análise", color: "text-amber-400" },
-  custom: { icon: FileText, label: "Resultado", color: "text-muted-foreground" },
+const resultTypeConfig: Record<string, { icon: typeof FileText; labelKey: string }> = {
+  report: { icon: FileText, labelKey: "results.report_type" },
+  leads: { icon: Users, labelKey: "results.leads_type" },
+  content: { icon: Mail, labelKey: "results.content_type" },
+  analysis: { icon: BarChart3, labelKey: "results.analysis_type" },
+  custom: { icon: FileText, labelKey: "results.result_type" },
 };
 
 const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
   const { user } = useAuth();
+  const { t } = useTranslation();
   const [expandedId, setExpandedId] = useState<string | null>(null);
 
-  // Fetch real reports
   const { data: reports = [] } = useQuery({
     queryKey: ["agent-reports", user?.id],
     queryFn: async () => {
@@ -43,7 +44,6 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
     enabled: !!user,
   });
 
-  // Fetch recent successful executions with details
   const { data: executions = [] } = useQuery({
     queryKey: ["recent-executions-results", user?.id],
     queryFn: async () => {
@@ -61,7 +61,6 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
     enabled: !!user,
   });
 
-  // Fetch tasks created by agents
   const { data: tasks = [] } = useQuery({
     queryKey: ["agent-created-tasks", user?.id],
     queryFn: async () => {
@@ -81,43 +80,43 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
 
   const hasResults = reports.length > 0 || executions.length > 0 || tasks.length > 0;
 
+  const formatTime = (dateStr: string) => {
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - d.getTime();
+    const diffMin = Math.floor(diffMs / 60000);
+    if (diffMin < 60) return t("results.ago_min", { count: diffMin });
+    const diffHrs = Math.floor(diffMin / 60);
+    if (diffHrs < 24) return t("results.ago_hours", { count: diffHrs });
+    return d.toLocaleDateString(undefined, { day: "2-digit", month: "short" });
+  };
+
   if (!hasResults) {
     return (
       <div className="text-center py-12 space-y-3">
         <div className="w-16 h-16 rounded-2xl bg-muted/30 border border-border/20 flex items-center justify-center mx-auto">
           <FileText className="h-7 w-7 text-muted-foreground/50" />
         </div>
-        <h3 className="font-display text-lg font-semibold">Nenhum resultado ainda</h3>
+        <h3 className="font-display text-lg font-semibold">{t("results.empty_title")}</h3>
         <p className="text-sm text-muted-foreground max-w-md mx-auto">
-          Quando seus agentes executarem tarefas, os resultados aparecerão aqui — relatórios, leads, conteúdo gerado e mais.
+          {t("results.empty_desc")}
         </p>
         <Button variant="outline" size="sm" onClick={() => onNavigate?.("overview")}>
-          Ir ao Command Center
+          {t("results.go_command_center")}
         </Button>
       </div>
     );
   }
 
-  const formatTime = (dateStr: string) => {
-    const d = new Date(dateStr);
-    const now = new Date();
-    const diffMs = now.getTime() - d.getTime();
-    const diffMin = Math.floor(diffMs / 60000);
-    if (diffMin < 60) return `${diffMin}min atrás`;
-    const diffHrs = Math.floor(diffMin / 60);
-    if (diffHrs < 24) return `${diffHrs}h atrás`;
-    return d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="font-display text-xl font-bold">Resultados das Execuções</h2>
-          <p className="text-sm text-muted-foreground">Relatórios, leads e conteúdo gerado pelos seus agentes</p>
+          <h2 className="font-display text-xl font-bold">{t("results.title")}</h2>
+          <p className="text-sm text-muted-foreground">{t("results.subtitle")}</p>
         </div>
         <Badge variant="secondary" className="text-xs">
-          {reports.length + executions.length} resultados
+          {reports.length + executions.length} {t("results.results_count")}
         </Badge>
       </div>
 
@@ -125,7 +124,7 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
       {reports.length > 0 && (
         <div className="space-y-3">
           <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground font-semibold">
-            📄 Relatórios Gerados
+            📄 {t("results.reports_section")}
           </h3>
           <div className="grid gap-3">
             {reports.map((report: any) => {
@@ -141,14 +140,14 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
                     onClick={() => setExpandedId(isExpanded ? null : report.id)}
                     className="w-full flex items-center gap-4 p-4 text-left hover:bg-muted/20 transition-colors"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center shrink-0">
-                      <FileText className="h-5 w-5 text-blue-400" />
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+                      <FileText className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-semibold text-sm truncate">{report.title}</div>
                       <div className="text-[10px] text-muted-foreground flex items-center gap-2">
                         <Bot className="h-3 w-3" />
-                        <span>{report.agent?.name || "Agente"}</span>
+                        <span>{report.agent?.name || t("quality.agent")}</span>
                         <span>•</span>
                         <Clock className="h-3 w-3" />
                         <span>{formatTime(report.created_at)}</span>
@@ -167,7 +166,7 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
                         <div className="p-4 space-y-3">
                           {sections.map((section: any, i: number) => (
                             <div key={i} className="bg-muted/20 rounded-lg p-3">
-                              <div className="text-xs font-semibold text-foreground mb-1">{section.title || `Seção ${i + 1}`}</div>
+                              <div className="text-xs font-semibold text-foreground mb-1">{section.title || t("results.section_label", { num: i + 1 })}</div>
                               <p className="text-xs text-muted-foreground whitespace-pre-wrap">{section.content || JSON.stringify(section)}</p>
                             </div>
                           ))}
@@ -186,14 +185,11 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
       {executions.length > 0 && (
         <div className="space-y-3">
           <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground font-semibold">
-            ⚡ Execuções Recentes
+            ⚡ {t("results.executions_section")}
           </h3>
           <div className="grid gap-2">
             {executions.slice(0, 8).map((exec: any) => {
               const details = exec.details || {};
-              const resultType = details.result_type || "custom";
-              const config = resultTypeConfig[resultType] || resultTypeConfig.custom;
-              const Icon = config.icon;
               
               return (
                 <div
@@ -201,13 +197,13 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
                   className="flex items-center gap-3 p-3 rounded-xl bg-card/30 border border-border/20 hover:bg-muted/20 transition-colors"
                 >
                   <div className="w-8 h-8 rounded-lg bg-muted/30 flex items-center justify-center shrink-0">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                    <CheckCircle2 className="h-4 w-4 text-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-sm font-medium truncate">{exec.action}</div>
                     <div className="text-[10px] text-muted-foreground flex items-center gap-1.5">
                       <Bot className="h-3 w-3" />
-                      <span>{exec.agent?.name || "Agente"}</span>
+                      <span>{exec.agent?.name || t("quality.agent")}</span>
                       {exec.execution_time_ms && (
                         <>
                           <span>•</span>
@@ -221,7 +217,7 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
                   {details.output_preview && (
                     <Badge variant="outline" className="text-[9px] shrink-0">
                       <Eye className="h-3 w-3 mr-1" />
-                      Ver
+                      {t("results.view")}
                     </Badge>
                   )}
                 </div>
@@ -235,7 +231,7 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
       {tasks.length > 0 && (
         <div className="space-y-3">
           <h3 className="text-xs font-mono uppercase tracking-widest text-muted-foreground font-semibold">
-            📋 Tarefas Criadas por Agentes
+            📋 {t("results.tasks_section")}
           </h3>
           <div className="grid gap-2">
             {tasks.slice(0, 5).map((task: any) => (
@@ -246,16 +242,16 @@ const ExecutionResultsPanel = ({ onNavigate }: ExecutionResultsPanelProps) => {
                 <div className={cn(
                   "w-2 h-8 rounded-full shrink-0",
                   task.priority === "high" ? "bg-destructive" :
-                  task.priority === "medium" ? "bg-amber-400" : "bg-muted-foreground/30"
+                  task.priority === "medium" ? "bg-muted-foreground/50" : "bg-muted-foreground/30"
                 )} />
                 <div className="flex-1 min-w-0">
                   <div className="text-sm font-medium truncate">{task.title}</div>
                   <div className="text-[10px] text-muted-foreground">
-                    {task.status === "completed" ? "✅ Concluída" : task.status === "in_progress" ? "🔄 Em andamento" : "📌 Pendente"}
-                    {task.due_date && ` • Prazo: ${new Date(task.due_date).toLocaleDateString("pt-BR")}`}
+                    {task.status === "completed" ? `✅ ${t("results.completed")}` : task.status === "in_progress" ? `🔄 ${t("results.in_progress")}` : `📌 ${t("results.pending")}`}
+                    {task.due_date && ` • ${t("results.due_label", { date: new Date(task.due_date).toLocaleDateString() })}`}
                   </div>
                 </div>
-                <Badge variant="outline" className="text-[9px] capitalize">{task.category || "geral"}</Badge>
+                <Badge variant="outline" className="text-[9px] capitalize">{task.category || t("quality.general")}</Badge>
               </div>
             ))}
           </div>

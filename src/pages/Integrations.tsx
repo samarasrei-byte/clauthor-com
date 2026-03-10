@@ -368,7 +368,7 @@ const IntegrationsPage = () => {
         <div className="flex items-center gap-3">
           <p className="text-muted-foreground">{t("integrations.subtitle", { defaultValue: "Conecte seus agentes com as ferramentas que você já usa." })}</p>
           {connectedCount > 0 && (
-            <Badge className="bg-emerald-500/15 text-emerald-500 border-emerald-500/20">
+            <Badge className="bg-primary/15 text-primary border-primary/20">
               <CheckCircle className="h-3 w-3 mr-1" />
               {connectedCount} {t("integrations.connected", { defaultValue: "conectada" })}{connectedCount > 1 ? "s" : ""}
             </Badge>
