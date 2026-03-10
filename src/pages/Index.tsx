@@ -888,8 +888,8 @@ const HomePage = () => {
             {/* Value comparison */}
             <div className="grid grid-cols-2 sm:flex sm:flex-wrap sm:justify-center gap-3 sm:gap-6 mb-6">
               {[
-                { label: t("home.pricing_val_human", { defaultValue: "Funcionário CLT" }), value: "R$ 4.500/mês", sub: t("home.pricing_val_human_sub", { defaultValue: "8h/dia, férias, encargos" }), muted: true },
-                { label: t("home.pricing_val_agent", { defaultValue: "Agente CLAUTHOR" }), value: "R$ 147/mês", sub: t("home.pricing_val_agent_sub", { defaultValue: "24/7, sem encargos, escala infinita" }), muted: false },
+                { label: t("home.pricing_val_human", { defaultValue: "Full-time Employee" }), value: "$5,500/mo", sub: t("home.pricing_val_human_sub", { defaultValue: "8h/day, benefits, overhead" }), muted: true },
+                { label: t("home.pricing_val_agent", { defaultValue: "CLAUTHOR Agent" }), value: "$139/mo", sub: t("home.pricing_val_agent_sub", { defaultValue: "24/7, no overhead, infinite scale" }), muted: false },
               ].map((item) => (
                 <div key={item.label} className={`px-3 sm:px-5 py-3 rounded-xl border text-center min-w-0 ${item.muted ? "border-border/30 bg-card/20 opacity-60" : "border-primary/20 bg-primary/5"}`}>
                   <p className="font-mono text-[9px] sm:text-[10px] uppercase tracking-wider text-muted-foreground mb-1 truncate">{item.label}</p>
