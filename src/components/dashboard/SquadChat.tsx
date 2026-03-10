@@ -179,7 +179,7 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
 
   const getLastMessage = (agentId: string): string => {
     const msg = lastMessages[agentId];
-    if (!msg) return "Toque para conversar";
+    if (!msg) return t("squad.tap_to_chat");
     return msg.content.slice(0, 50) + (msg.content.length > 50 ? "…" : "");
   };
 
