@@ -647,7 +647,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     {extraAgents.length > 0 && (
                       <p className="text-[10px] text-primary px-1">
-                        +{extraAgents.length} agente{extraAgents.length > 1 ? "s" : ""} individual{extraAgents.length > 1 ? "is" : ""} adicionado{extraAgents.length > 1 ? "s" : ""}
+                        +{extraAgents.length} individual agent{extraAgents.length > 1 ? "s" : ""} added
                       </p>
                     )}
                   </div>
