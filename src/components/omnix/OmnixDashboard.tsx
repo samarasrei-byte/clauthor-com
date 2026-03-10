@@ -83,8 +83,8 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
     return (
       <div className="px-4 py-2.5">
         <div className="flex items-center gap-1 mb-2">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-          <span className="text-[9px] font-mono text-emerald-400/70 uppercase tracking-widest">THOR ONLINE</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+          <span className="text-[9px] font-mono text-primary/70 uppercase tracking-widest">THOR ONLINE</span>
         </div>
         <div className="flex items-center gap-3 overflow-x-auto pb-1">
           {kpiCards.map((kpi, i) => (
