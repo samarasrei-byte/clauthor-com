@@ -719,7 +719,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
                     </button>
                   </div>
                   <p className="text-center text-[8px] tracking-[0.15em] uppercase text-muted-foreground/20 mt-2">
-                    Suporte • CLAUTHOR
+                    {t("support.footer")}
                   </p>
                 </div>
               )}
