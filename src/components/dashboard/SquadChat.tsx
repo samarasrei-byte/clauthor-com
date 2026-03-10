@@ -253,8 +253,8 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
 
       if (!response.ok) {
         const data = await response.json();
-        if (response.status === 402) toast.error("Créditos esgotados!");
-        else toast.error(data.error || "Erro ao enviar.");
+        if (response.status === 402) toast.error(t("squad.credits_exhausted"));
+        else toast.error(data.error || t("squad.send_error"));
         setIsLoading(false);
         return;
       }
