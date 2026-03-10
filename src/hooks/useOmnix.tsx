@@ -183,7 +183,7 @@ export function useOmnix() {
         setMessages(prev => {
           const last = prev[prev.length - 1];
           if (last?.role === "assistant" && last.content) {
-            const next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: m.content + "\n\n⏹ *Resposta interrompida.*" } : m);
+            const next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: m.content + "\n\n⏹ *Response interrupted.*" } : m);
             messagesRef.current = next;
             return next;
           }
