@@ -91,7 +91,7 @@ export function useOmnix() {
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData?.session?.access_token;
       if (!token) {
-        toast.error("Você precisa estar logado.");
+        toast.error("You need to be logged in.");
         setIsLoading(false);
         setIsStreaming(false);
         return;
