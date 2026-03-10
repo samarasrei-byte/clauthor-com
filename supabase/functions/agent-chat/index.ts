@@ -1069,7 +1069,7 @@ serve(async (req) => {
 
       if (agent) {
         agentTier = agent.tier || "basic";
-        agentName = agent.name || "Agente AI";
+        agentName = agent.name || "AI Agent";
         agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
         const sla = getTierSLA(agentTier);
         const limits = getAreaLimits(agentArea);
