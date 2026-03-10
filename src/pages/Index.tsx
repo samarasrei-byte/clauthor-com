@@ -85,7 +85,7 @@ const MouseReactiveField = () => {
         style={{
           left: useTransform(smoothX, [0, 1], ["-10%", "70%"]),
           top: useTransform(smoothY, [0, 1], ["-10%", "60%"]),
-          background: "radial-gradient(circle, hsl(0 85% 55% / 0.08) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%)",
         }}
       />
       <motion.div
@@ -93,11 +93,11 @@ const MouseReactiveField = () => {
         style={{
           left: useTransform(smoothX, [0, 1], ["60%", "20%"]),
           top: useTransform(smoothY, [0, 1], ["50%", "10%"]),
-          background: "radial-gradient(circle, hsl(0 85% 55% / 0.04) 0%, transparent 70%)",
+          background: "radial-gradient(circle, hsl(var(--primary) / 0.04) 0%, transparent 70%)",
         }}
       />
       <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `linear-gradient(hsl(0 85% 55% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(0 85% 55% / 0.3) 1px, transparent 1px)`,
+        backgroundImage: `linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)`,
         backgroundSize: "60px 60px",
       }} />
     </div>
