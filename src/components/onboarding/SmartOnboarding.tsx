@@ -510,8 +510,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       <Bot className="h-4 w-4 text-primary" />
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[90%] space-y-4">
-                      <p className="text-sm">
-                        <strong>Pronto! Aqui está o seu time personalizado:</strong>
+                       <p className="text-sm">
+                         <strong>Done! Here's your personalized team:</strong>
+                       </p>
                       </p>
 
                       {/* Squad card */}
