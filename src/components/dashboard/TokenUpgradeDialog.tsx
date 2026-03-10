@@ -171,7 +171,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
         body: {
           action: "create_order",
           amount: priceNum,
-          currency: "BRL",
+          currency: "USD",
           description: selectedItemName || "Clauthor Upgrade",
           metadata: {
             type: selectedPlan ? "plan" : "token_pack",
