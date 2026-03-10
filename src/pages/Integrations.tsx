@@ -422,7 +422,7 @@ const IntegrationsPage = () => {
                       transition={{ delay: i * 0.04 }}
                     >
                       <Card className={`glass border-border hover:neon-border transition-all h-full ${
-                        connectionStatus === "connected" ? "border-emerald-500/30 bg-emerald-500/[0.02]" : ""
+                        connectionStatus === "connected" ? "border-primary/30 bg-primary/[0.02]" : ""
                       }`}>
                         <CardContent className="p-5 flex flex-col h-full">
                           <div className="flex items-start justify-between mb-3">
