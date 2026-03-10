@@ -70,7 +70,7 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
           <div className="bg-white/[0.02] rounded-xl p-4">
             <div className="flex items-center gap-2 mb-2">
               <Receipt className="h-4 w-4 text-muted-foreground" />
-              <span className="text-xs text-muted-foreground">Total Mensal</span>
+              <span className="text-xs text-muted-foreground">{t("subscription.monthly_total", { defaultValue: "Monthly Total" })}</span>
             </div>
             <p className="font-display text-xl font-bold">
               {fmt(totalMonthly)}
