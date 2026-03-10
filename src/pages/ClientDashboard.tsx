@@ -203,7 +203,7 @@ const ClientDashboard = () => {
 
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
-  const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);
+  const totalTokensUsed = tokenUsage.reduce((acc, tu) => acc + tu.tokens_used, 0);
   const estimatedSavings = activeAgents * 7560;
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
 
