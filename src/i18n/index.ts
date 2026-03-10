@@ -44,7 +44,7 @@ const localeLoaders: Record<string, () => Promise<{ default: Record<string, any>
 
 // Load a locale dynamically and add it to i18n
 async function loadLocale(lng: string) {
-  if (lng === "pt" || lng === "en" || i18n.hasResourceBundle(lng, "translation")) return;
+  if (lng === "en" || lng === "pt" || i18n.hasResourceBundle(lng, "translation")) return;
   const loader = localeLoaders[lng];
   if (!loader) return;
   try {
@@ -69,7 +69,7 @@ i18n
       pt: { translation: pt },
       en: { translation: en },
     },
-    fallbackLng: "pt",
+    fallbackLng: "en",
     supportedLngs,
     load: "languageOnly",
     interpolation: {
@@ -87,8 +87,8 @@ i18n
     },
   });
 
-// Load detected language if not PT
-if (i18n.language && i18n.language !== "pt") {
+// Load detected language if not EN (already bundled)
+if (i18n.language && i18n.language !== "en") {
   loadLocale(i18n.language);
 }
 
