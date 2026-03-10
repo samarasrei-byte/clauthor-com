@@ -961,7 +961,7 @@ const HomePage = () => {
             <Link to="/waitlist" className="shrink-0">
               <Button className="glow rounded-xl h-13 px-8 gap-2 font-display font-bold text-sm uppercase tracking-wider">
                 <Rocket className="h-4 w-4" strokeWidth={1.5} />
-                {t("home.cta_waitlist", { defaultValue: "GARANTIR MEU LUGAR" })}
+                  {t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
