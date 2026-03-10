@@ -175,6 +175,9 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
         );
       }
       toast.success("Informações da empresa salvas! Seus agentes agora conhecem seu negócio. 🎯");
+      // Invalidate the board count cache so the gate doesn't reappear
+      await queryClient.invalidateQueries({ queryKey: ["company-board-count-gate"] });
+      await queryClient.invalidateQueries({ queryKey: ["company-board"] });
       onComplete();
     } catch {
       toast.error("Erro ao salvar. Tente novamente.");
