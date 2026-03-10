@@ -399,16 +399,16 @@ const SquadChat = ({ agents, onRequestAgent }: SquadChatProps) => {
           <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary to-primary/60 flex items-center justify-center shadow-lg mb-4">
             <Users className="h-7 w-7 text-white" />
           </div>
-          <h3 className="font-display font-bold text-base mb-2">Chat em Grupo</h3>
+          <h3 className="font-display font-bold text-base mb-2">{t("squad.group_chat")}</h3>
           <p className="text-xs text-muted-foreground max-w-xs mb-4">
-            Converse com toda sua equipe de agentes simultaneamente. Eles colaboram entre si para resolver sua demanda.
+            {t("squad.group_desc")}
           </p>
           <Button 
             variant="default" 
             size="sm"
             onClick={() => { setShowMobileChat(true); inputRef.current?.focus(); }}
           >
-            Abrir Chat
+            {t("squad.open_chat")}
           </Button>
         </div>
       )}
