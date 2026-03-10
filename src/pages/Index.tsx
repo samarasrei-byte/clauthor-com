@@ -1133,8 +1133,8 @@ const HomePage = () => {
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-border">
             <div className="flex flex-wrap items-center gap-4">
               {[
-                { icon: LockKeyhole, label: "SSL 256-bit" },
-                { icon: ShieldCheck, label: "ENTERPRISE-GRADE" },
+                { icon: LockKeyhole, label: t("home.footer_ssl", { defaultValue: "SSL 256-BIT" }) },
+                { icon: ShieldCheck, label: t("home.footer_enterprise_badge", { defaultValue: "ENTERPRISE-GRADE" }) },
               ].map((badge) => (
                 <div key={badge.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/50 border border-border">
                   <badge.icon className="h-3 w-3 text-primary/50" strokeWidth={1.5} />
