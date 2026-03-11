@@ -254,7 +254,7 @@ const Waitlist = () => {
               <span className="font-display text-primary font-bold text-sm">C</span>
             </div>
             <span className="font-display font-bold text-foreground text-sm tracking-tight">Clauthor</span>
-          </motion.a>
+          </motion.div>
 
           {/* Countdown + spots — the only "nav" */}
           <motion.div
