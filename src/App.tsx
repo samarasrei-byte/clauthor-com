@@ -81,6 +81,10 @@ const App = () => (
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Public pages with full navbar */}
+                {/* Waitlist — standalone immersive page, no navbar */}
+                <Route path="/waitlist" element={<Waitlist />} />
+
+                {/* Public pages with full navbar */}
                 <Route element={<AppLayout />}>
                   <Route path="/" element={<Index />} />
                   <Route path="/auth" element={<Auth />} />
@@ -88,7 +92,6 @@ const App = () => (
                   <Route path="/library" element={<Library />} />
                   <Route path="/pricing" element={<Pricing />} />
                   <Route path="/how-it-works" element={<HowItWorks />} />
-                  <Route path="/waitlist" element={<Waitlist />} />
                   <Route path="/community" element={<Community />} />
                   <Route path="/departamentos" element={<Departamentos />} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />

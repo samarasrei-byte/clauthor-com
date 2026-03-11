@@ -238,8 +238,52 @@ const Waitlist = () => {
   if (success) return <SuccessView position={position} />;
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden bg-background">
       <WaitlistBackground />
+
+      {/* ─── FLOATING BRANDED HEADER (no navigation links) ─── */}
+      <header className="fixed top-0 left-0 right-0 z-50">
+        <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
+          {/* Logo */}
+          <motion.a
+            href="/"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="flex items-center gap-2 group"
+          >
+            <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/15 transition-all">
+              <span className="font-display text-primary font-bold text-sm">C</span>
+            </div>
+            <span className="font-display font-bold text-foreground text-sm tracking-tight">Clauthor</span>
+          </motion.a>
+
+          {/* Countdown + spots — the only "nav" */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-3"
+          >
+            <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
+              <div className="relative">
+                <div className="w-2 h-2 bg-accent-emerald rounded-full" />
+                <div className="absolute inset-0 w-2 h-2 bg-accent-emerald rounded-full animate-ping" />
+              </div>
+              <span className="tabular-nums font-medium text-foreground">{displayCount.toLocaleString('pt-BR')}+</span> na fila
+            </div>
+            <div className="h-4 w-px bg-border/50 hidden sm:block" />
+            <Badge variant="outline" className="border-destructive/40 bg-destructive/10 text-destructive px-3 py-1.5 gap-1.5 font-mono text-xs">
+              <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
+                <Timer className="h-3 w-3" />
+              </motion.div>
+              <span className="tabular-nums">
+                {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
+              </span>
+            </Badge>
+          </motion.div>
+        </div>
+        {/* Glass divider */}
+        <div className="h-px bg-gradient-to-r from-transparent via-border/40 to-transparent" />
+      </header>
 
       {/* ─── HERO SECTION ─── */}
       <section className="relative z-10 px-4 pt-24 pb-16 md:pt-32 md:pb-24">
@@ -247,19 +291,6 @@ const Waitlist = () => {
 
           {/* Left — Copy */}
           <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
-            {/* Urgency timer */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-5">
-              <Badge variant="outline" className="border-destructive/40 bg-destructive/10 text-destructive px-4 py-2.5 gap-2 font-mono">
-                <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                  <Timer className="h-4 w-4" />
-                </motion.div>
-                <span className="tabular-nums">
-                  {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
-                </span>
-                <span className="text-muted-foreground text-xs">para garantir bônus de lançamento</span>
-              </Badge>
-            </motion.div>
-
             {/* Spots counter */}
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
               <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2 backdrop-blur-sm">
