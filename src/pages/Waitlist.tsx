@@ -291,19 +291,6 @@ const Waitlist = () => {
 
           {/* Left — Copy */}
           <motion.div initial={{ opacity: 0, x: -40 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
-            {/* Urgency timer */}
-            <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="mb-5">
-              <Badge variant="outline" className="border-destructive/40 bg-destructive/10 text-destructive px-4 py-2.5 gap-2 font-mono">
-                <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
-                  <Timer className="h-4 w-4" />
-                </motion.div>
-                <span className="tabular-nums">
-                  {String(timeLeft.hours).padStart(2, '0')}:{String(timeLeft.minutes).padStart(2, '0')}:{String(timeLeft.seconds).padStart(2, '0')}
-                </span>
-                <span className="text-muted-foreground text-xs">para garantir bônus de lançamento</span>
-              </Badge>
-            </motion.div>
-
             {/* Spots counter */}
             <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
               <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2 backdrop-blur-sm">
