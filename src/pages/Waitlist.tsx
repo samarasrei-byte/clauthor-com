@@ -8,7 +8,9 @@ import {
   Zap, CheckCircle2, Clock,
   ArrowRight, Sparkles, Shield, Bot, Star, Timer, TrendingUp, Users,
   Cpu, Lock, Play, BarChart3, Calendar, MessageSquare, Target,
-  Rocket, Gift, Crown, ChevronDown
+  Rocket, Gift, Crown, ChevronDown, Building2, Brain, Headphones,
+  DollarSign, Megaphone, ShoppingCart, Scale, Truck, Gem,
+  Cog, Briefcase, MonitorSmartphone, UserCheck, Layers
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -112,19 +114,46 @@ const SuccessView = ({ position }: { position: number | null }) => (
 
 // ── Benefit Cards ──
 const benefits = [
-  { icon: Bot, title: "Agentes de IA que Prospectam", desc: "IA autônoma que encontra, qualifica e engaja leads 24/7 sem intervenção humana." },
-  { icon: Target, title: "Automação de Campanhas", desc: "Campanhas multicanal automatizadas com personalização por IA em escala." },
-  { icon: BarChart3, title: "CRM Visual Inteligente", desc: "Pipeline visual com insights preditivos e scoring automático de leads." },
-  { icon: Calendar, title: "Agendamento Automático", desc: "Reuniões agendadas automaticamente sem troca de emails." },
-  { icon: MessageSquare, title: "Atendimento Omnichannel", desc: "WhatsApp, email e chat unificados com IA respondendo em segundos." },
-  { icon: TrendingUp, title: "Analytics Avançado", desc: "Dashboards em tempo real com métricas de ROI e previsão de receita." },
+  { icon: Bot, title: "83 Agentes Autônomos", desc: "Uma frota completa de IA que trabalha 24/7 — vendendo, atendendo, prospectando e executando sem intervenção humana." },
+  { icon: Target, title: "Prospecção Inteligente", desc: "IA que encontra, qualifica e engaja leads automaticamente em múltiplos canais." },
+  { icon: BarChart3, title: "Analytics em Tempo Real", desc: "Dashboards com métricas de ROI, performance de agentes e previsão de receita." },
+  { icon: Calendar, title: "Agendamento Automático", desc: "Reuniões agendadas pela IA sem troca de e-mails. Tudo no piloto automático." },
+  { icon: MessageSquare, title: "Atendimento Omnichannel", desc: "WhatsApp, e-mail e chat unificados com IA respondendo em segundos." },
+  { icon: TrendingUp, title: "Escalabilidade Infinita", desc: "De 1 a 10.000 conversas simultâneas sem contratar mais ninguém." },
+];
+
+// ── 15 Departments ──
+const departments = [
+  { icon: MonitorSmartphone, name: "Tecnologia", agents: 12 },
+  { icon: Target, name: "Vendas", agents: 8 },
+  { icon: Megaphone, name: "Marketing", agents: 7 },
+  { icon: DollarSign, name: "Financeiro", agents: 6 },
+  { icon: Gem, name: "Criação", agents: 5 },
+  { icon: Headphones, name: "Suporte", agents: 6 },
+  { icon: Users, name: "RH", agents: 5 },
+  { icon: UserCheck, name: "Prospecção", agents: 5 },
+  { icon: MessageSquare, name: "Comunicação", agents: 4 },
+  { icon: Cog, name: "Operações", agents: 5 },
+  { icon: ShoppingCart, name: "E-commerce & Growth", agents: 4 },
+  { icon: Scale, name: "Jurídico", agents: 3 },
+  { icon: Briefcase, name: "Compras", agents: 3 },
+  { icon: Truck, name: "Logística", agents: 3 },
+  { icon: CheckCircle2, name: "Qualidade", agents: 3 },
 ];
 
 // ── Testimonials ──
 const testimonials = [
   { name: "Ricardo M.", role: "CEO, TechScale", quote: "Reduzimos 70% do tempo de prospecção no primeiro mês de teste.", rating: 5 },
-  { name: "Ana L.", role: "Head of Growth, StartupX", quote: "Os agentes de IA geraram 3x mais reuniões qualificadas do que nosso SDR.", rating: 5 },
+  { name: "Ana L.", role: "Head de Growth, StartupX", quote: "Os agentes de IA geraram 3x mais reuniões qualificadas do que nosso SDR.", rating: 5 },
   { name: "Carlos S.", role: "Diretor Comercial, InnovaCorp", quote: "Plataforma impressionante. Estamos ansiosos pelo acesso completo.", rating: 5 },
+];
+
+// ── How It Works Steps ──
+const howItWorks = [
+  { step: "01", title: "Cadastre-se na Whitelist", desc: "Preencha o formulário com seu e-mail e WhatsApp. Os dados vão direto para nossa base." },
+  { step: "02", title: "Receba seu Convite", desc: "Liberamos acesso em lotes limitados. Quanto antes você entrar, mais rápido recebe." },
+  { step: "03", title: "Ative seus Agentes", desc: "Escolha entre 83 agentes e 15 departamentos. Configure em minutos, sem código." },
+  { step: "04", title: "Opere no Piloto Automático", desc: "Agentes trabalham 24/7 — prospectam, atendem, vendem e escalam seu negócio." },
 ];
 
 const Waitlist = () => {
@@ -192,7 +221,7 @@ const Waitlist = () => {
         company: formData.company.trim() || null,
       });
       if (error) {
-        if (error.code === "23505") toast.error("Este email já está na lista de espera!");
+        if (error.code === "23505") toast.error("Este e-mail já está na lista de espera!");
         else throw error;
         return;
       }
@@ -240,14 +269,15 @@ const Waitlist = () => {
             </motion.div>
 
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-[0.95] tracking-tight">
-              <span className="block text-foreground">A próxima geração</span>
-              <span className="block text-foreground">de automação com IA</span>
-              <span className="block gradient-text glow-text">está chegando.</span>
+              <span className="block text-foreground">83 agentes de IA</span>
+              <span className="block text-foreground">autônomos para</span>
+              <span className="block gradient-text glow-text">sua empresa.</span>
             </h1>
 
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed max-w-lg">
-              Entre na whitelist e tenha <span className="text-foreground font-semibold">acesso antecipado</span> à plataforma que automatiza prospecção, respostas e reuniões com{" "}
-              <span className="text-primary font-semibold">inteligência artificial autônoma.</span>
+              Entre na whitelist e tenha <span className="text-foreground font-semibold">acesso antecipado</span> à plataforma com{" "}
+              <span className="text-primary font-semibold">15 departamentos completos</span> — vendas, marketing, suporte, financeiro e muito mais.
+              Tudo operado por IA autônoma 24/7.
             </p>
 
             {/* Benefit pills */}
@@ -294,9 +324,9 @@ const Waitlist = () => {
               </div>
               <div className="text-sm">
                 <motion.span key={displayCount} initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="font-bold text-primary text-lg tabular-nums">
-                  {displayCount.toLocaleString('en-US')}+
+                  {displayCount.toLocaleString('pt-BR')}+
                 </motion.span>
-                <span className="text-muted-foreground"> professionals in queue</span>
+                <span className="text-muted-foreground"> profissionais na fila</span>
               </div>
             </motion.div>
 
@@ -360,7 +390,7 @@ const Waitlist = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-xs uppercase tracking-wider text-muted-foreground">Email *</Label>
+                    <Label htmlFor="email" className="text-xs uppercase tracking-wider text-muted-foreground">E-mail *</Label>
                     <Input
                       id="email"
                       type="email"
@@ -432,6 +462,14 @@ const Waitlist = () => {
                     </div>
                   ))}
                 </div>
+
+                {/* Data destination info */}
+                <div className="mt-4 p-3 rounded-xl bg-primary/5 border border-primary/10">
+                  <p className="text-[11px] text-muted-foreground text-center">
+                    📧 Seus dados ficam salvos com segurança na nossa base.
+                    Entraremos em contato pelo <span className="text-primary font-medium">WhatsApp</span> e <span className="text-primary font-medium">e-mail</span> cadastrados.
+                  </p>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -448,6 +486,127 @@ const Waitlist = () => {
             <ChevronDown className="h-6 w-6" />
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* ─── HOW IT WORKS ─── */}
+      <section className="relative z-10 px-4 py-20 md:py-28">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-16"
+          >
+            <Badge variant="outline" className="mb-4 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Layers className="h-4 w-4" />
+              Como funciona
+            </Badge>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              Da whitelist ao piloto automático
+              <br />
+              <span className="gradient-text">em 4 passos.</span>
+            </h2>
+          </motion.div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {howItWorks.map((item, i) => (
+              <motion.div
+                key={item.step}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ delay: i * 0.12 }}
+                className="relative p-6 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm text-center"
+              >
+                <div className="font-display text-5xl font-bold text-primary/10 mb-3">{item.step}</div>
+                <h3 className="font-display font-semibold text-lg mb-2 text-foreground">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                {i < howItWorks.length - 1 && (
+                  <div className="hidden lg:block absolute top-1/2 -right-3 text-primary/20">
+                    <ArrowRight className="h-5 w-5" />
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─── 15 DEPARTMENTS ─── */}
+      <section className="relative z-10 px-4 py-20 md:py-28">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-16"
+          >
+            <Badge variant="outline" className="mb-4 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Building2 className="h-4 w-4" />
+              15 Departamentos Completos
+            </Badge>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              Uma empresa inteira
+              <br />
+              <span className="gradient-text">movida por IA.</span>
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              83 agentes autônomos distribuídos em 15 departamentos corporativos.
+              Cada departamento opera de forma independente, 24 horas por dia.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
+            {departments.map((dept, i) => (
+              <motion.div
+                key={dept.name}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true, margin: "-30px" }}
+                transition={{ delay: i * 0.05 }}
+                className="group p-4 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm hover:border-primary/30 hover:bg-card/80 transition-all duration-500 text-center"
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary/5 border border-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/10 group-hover:border-primary/20 transition-all duration-500">
+                  <dept.icon className="h-5 w-5 text-primary/80" strokeWidth={1.5} />
+                </div>
+                <h3 className="font-semibold text-sm text-foreground mb-1">{dept.name}</h3>
+                <p className="text-xs text-muted-foreground">{dept.agents} agentes</p>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Total agents highlight */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-10 p-6 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8"
+          >
+            <div className="flex items-center gap-3">
+              <Brain className="h-8 w-8 text-primary" />
+              <div>
+                <p className="font-display text-3xl font-bold gradient-text">83</p>
+                <p className="text-sm text-muted-foreground">Agentes Autônomos</p>
+              </div>
+            </div>
+            <div className="hidden sm:block w-px h-12 bg-border/50" />
+            <div className="flex items-center gap-3">
+              <Building2 className="h-8 w-8 text-primary" />
+              <div>
+                <p className="font-display text-3xl font-bold gradient-text">15</p>
+                <p className="text-sm text-muted-foreground">Departamentos</p>
+              </div>
+            </div>
+            <div className="hidden sm:block w-px h-12 bg-border/50" />
+            <div className="flex items-center gap-3">
+              <Zap className="h-8 w-8 text-primary" />
+              <div>
+                <p className="font-display text-3xl font-bold gradient-text">24/7</p>
+                <p className="text-sm text-muted-foreground">Operação Contínua</p>
+              </div>
+            </div>
+          </motion.div>
+        </div>
       </section>
 
       {/* ─── VALUE PROOF SECTION ─── */}
@@ -494,6 +653,98 @@ const Waitlist = () => {
         </div>
       </section>
 
+      {/* ─── HOW AUTONOMOUS AGENTS WORK ─── */}
+      <section className="relative z-10 px-4 py-20 md:py-28">
+        <div className="max-w-5xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-16"
+          >
+            <Badge variant="outline" className="mb-4 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Brain className="h-4 w-4" />
+              Inteligência Autônoma
+            </Badge>
+            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
+              Não é chatbot.
+              <br />
+              <span className="gradient-text">É funcionário digital.</span>
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+              Nossos agentes não esperam comandos. Eles detectam oportunidades, tomam decisões e executam ações — com segurança e auditoria completa.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {[
+              {
+                icon: Zap,
+                title: "Execução Autônoma",
+                items: ["Respondem WhatsApp e e-mail sozinhos", "Criam tarefas e relatórios", "Agendam reuniões automaticamente"],
+                color: "text-accent-emerald",
+                label: "Baixo Risco — Execução Direta",
+              },
+              {
+                icon: Shield,
+                title: "Notificação + Ação",
+                items: ["Enviam e-mails individuais", "Delegam entre agentes", "Agendamentos inteligentes"],
+                color: "text-accent-amber",
+                label: "Médio Risco — Executa e Notifica",
+              },
+              {
+                icon: Lock,
+                title: "Aprovação Humana",
+                items: ["E-mails em massa", "Exclusão de dados sensíveis", "Chamadas a APIs externas"],
+                color: "text-destructive",
+                label: "Alto Risco — Só com Aprovação",
+              },
+            ].map((level, i) => (
+              <motion.div
+                key={level.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15 }}
+                className="p-6 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm"
+              >
+                <div className="flex items-center gap-3 mb-4">
+                  <level.icon className={`h-6 w-6 ${level.color}`} />
+                  <h3 className="font-display font-semibold text-lg text-foreground">{level.title}</h3>
+                </div>
+                <Badge variant="outline" className="mb-4 text-[10px] border-border/40 text-muted-foreground">
+                  {level.label}
+                </Badge>
+                <ul className="space-y-2">
+                  {level.items.map((item) => (
+                    <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
+                      <CheckCircle2 className="h-4 w-4 text-primary/60 mt-0.5 shrink-0" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Security highlight */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-8 p-5 rounded-2xl border border-border/40 bg-card/30 backdrop-blur-sm flex items-center gap-4"
+          >
+            <Shield className="h-8 w-8 text-primary shrink-0" />
+            <div>
+              <p className="font-semibold text-sm text-foreground">Segurança Enterprise</p>
+              <p className="text-xs text-muted-foreground">
+                Criptografia AES-256-GCM · Auditoria completa de ações · Conformidade LGPD · Limites automáticos (500 ações/dia de baixo risco, 3/dia de alto risco)
+              </p>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* ─── SOCIAL PROOF / TESTIMONIALS ─── */}
       <section className="relative z-10 px-4 py-20 md:py-28">
         <div className="max-w-5xl mx-auto">
@@ -505,7 +756,7 @@ const Waitlist = () => {
           >
             <Badge variant="outline" className="mb-4 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
               <Star className="h-4 w-4" />
-              Early adopters
+              Primeiros testadores
             </Badge>
             <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">
               O que os primeiros testadores dizem
@@ -554,6 +805,42 @@ const Waitlist = () => {
               </div>
             ))}
           </motion.div>
+        </div>
+      </section>
+
+      {/* ─── FAQ RÁPIDO ─── */}
+      <section className="relative z-10 px-4 py-20 md:py-28">
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-12"
+          >
+            <h2 className="font-display text-3xl sm:text-4xl font-bold mb-4">Perguntas frequentes</h2>
+          </motion.div>
+
+          <div className="space-y-4">
+            {[
+              { q: "Preciso pagar para entrar na whitelist?", a: "Não. A inscrição é 100% gratuita. Quem entrar agora terá 50% de desconto no lançamento." },
+              { q: "Meus dados ficam seguros?", a: "Sim. Utilizamos criptografia AES-256-GCM e conformidade total com LGPD. Seus dados vão direto para nossa base segura." },
+              { q: "Quando vou receber o acesso?", a: "Convites são liberados em lotes limitados via WhatsApp e e-mail. Quanto antes você se cadastrar, mais cedo recebe." },
+              { q: "A plataforma aguenta muitas pessoas?", a: "Sim. Nossa infraestrutura escala automaticamente com Lovable Cloud. De 1 a 100.000+ usuários sem degradação de performance." },
+              { q: "Os agentes substituem minha equipe?", a: "Não substituem. Eles trabalham ao lado da sua equipe, automatizando tarefas repetitivas para que seu time foque em decisões estratégicas." },
+            ].map((faq, i) => (
+              <motion.div
+                key={faq.q}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+                className="p-5 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-sm"
+              >
+                <h3 className="font-semibold text-foreground mb-2">{faq.q}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{faq.a}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 
