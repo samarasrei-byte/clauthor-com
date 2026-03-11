@@ -150,10 +150,10 @@ const testimonials = [
 
 // ── How It Works Steps ──
 const howItWorks = [
-  { step: "01", title: "Cadastre-se na Whitelist", desc: "Preencha o formulário com seu e-mail e WhatsApp. Os dados vão direto para nossa base." },
-  { step: "02", title: "Receba seu Convite", desc: "Liberamos acesso em lotes limitados. Quanto antes você entrar, mais rápido recebe." },
-  { step: "03", title: "Ative seus Agentes", desc: "Escolha entre 83 agentes e 15 departamentos. Configure em minutos, sem código." },
-  { step: "04", title: "Opere no Piloto Automático", desc: "Agentes trabalham 24/7 — prospectam, atendem, vendem e escalam seu negócio." },
+  { step: "01", title: "Entre na Whitelist", desc: "Preencha o formulário com seu e-mail e WhatsApp para garantir sua vaga na fila." },
+  { step: "02", title: "Liberação Gradual pelo Brasil", desc: "A plataforma está sendo liberada aos poucos no Brasil. Você receberá seu convite por WhatsApp quando for a sua vez." },
+  { step: "03", title: "Ative seus Agentes", desc: "Ao receber acesso, escolha entre 83 agentes e 15 departamentos. Configure em minutos, sem código." },
+  { step: "04", title: "Opere no Piloto Automático", desc: "Agentes trabalham 24/7 — prospectam, atendem, vendem e escalam seu negócio automaticamente." },
 ];
 
 const Waitlist = () => {
@@ -245,17 +245,16 @@ const Waitlist = () => {
       <header className="fixed top-0 left-0 right-0 z-50">
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
           {/* Logo */}
-          <motion.a
-            href="/"
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 group"
+            className="flex items-center gap-2"
           >
             <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/15 transition-all">
               <span className="font-display text-primary font-bold text-sm">C</span>
             </div>
             <span className="font-display font-bold text-foreground text-sm tracking-tight">Clauthor</span>
-          </motion.a>
+          </motion.div>
 
           {/* Countdown + spots — the only "nav" */}
           <motion.div
