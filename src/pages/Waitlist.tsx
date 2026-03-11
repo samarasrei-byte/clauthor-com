@@ -150,10 +150,10 @@ const testimonials = [
 
 // ── How It Works Steps ──
 const howItWorks = [
-  { step: "01", title: "Cadastre-se na Whitelist", desc: "Preencha o formulário com seu e-mail e WhatsApp. Os dados vão direto para nossa base." },
-  { step: "02", title: "Receba seu Convite", desc: "Liberamos acesso em lotes limitados. Quanto antes você entrar, mais rápido recebe." },
-  { step: "03", title: "Ative seus Agentes", desc: "Escolha entre 83 agentes e 15 departamentos. Configure em minutos, sem código." },
-  { step: "04", title: "Opere no Piloto Automático", desc: "Agentes trabalham 24/7 — prospectam, atendem, vendem e escalam seu negócio." },
+  { step: "01", title: "Entre na Whitelist", desc: "Preencha o formulário com seu e-mail e WhatsApp para garantir sua vaga na fila." },
+  { step: "02", title: "Liberação Gradual pelo Brasil", desc: "A plataforma está sendo liberada aos poucos no Brasil. Você receberá seu convite por WhatsApp quando for a sua vez." },
+  { step: "03", title: "Ative seus Agentes", desc: "Ao receber acesso, escolha entre 83 agentes e 15 departamentos. Configure em minutos, sem código." },
+  { step: "04", title: "Opere no Piloto Automático", desc: "Agentes trabalham 24/7 — prospectam, atendem, vendem e escalam seu negócio automaticamente." },
 ];
 
 const Waitlist = () => {
