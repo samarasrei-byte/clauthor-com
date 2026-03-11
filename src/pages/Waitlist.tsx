@@ -245,11 +245,10 @@ const Waitlist = () => {
       <header className="fixed top-0 left-0 right-0 z-50">
         <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
           {/* Logo */}
-          <motion.a
-            href="/"
+          <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 group"
+            className="flex items-center gap-2"
           >
             <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center group-hover:bg-primary/15 transition-all">
               <span className="font-display text-primary font-bold text-sm">C</span>
