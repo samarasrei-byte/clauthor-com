@@ -176,8 +176,8 @@ const ValuationDefense = () => {
     },
     {
       icon: Users,
-      title: "Tração Validada",
-      desc: "4.100+ profissionais na whitelist antes do lançamento público. Prova social real de demanda de mercado sem gasto significativo em mídia paga.",
+      title: "Tração Massiva",
+      desc: "2.000.000+ leads qualificados no banco de dados, com 4.100+ profissionais na whitelist ativa antes do lançamento público. Prova social real de demanda explosiva de mercado.",
     },
     {
       icon: Layers,
