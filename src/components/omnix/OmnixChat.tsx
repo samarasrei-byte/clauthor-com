@@ -9,6 +9,7 @@ import ChatFeedback from "@/components/dashboard/ChatFeedback";
 import OmnixOrb from "./OmnixOrb";
 import type { OmnixMessage, OmnixConfig } from "@/hooks/useOmnix";
 import { useTranslation } from "react-i18next";
+import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 
 interface OmnixChatProps {
   messages: OmnixMessage[];
@@ -25,58 +26,29 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
   const autoListenAfterSpeakRef = useRef(false);
 
-  // ─── Stop TTS immediately ───
-  const stopSpeaking = useCallback(() => {
-    window.speechSynthesis?.cancel();
-    setIsSpeaking(false);
-  }, []);
-
-  // ─── TTS: speak text, auto-listen after done ───
-  const speak = useCallback((text: string) => {
-    if (!("speechSynthesis" in window)) return;
-    // Stop any listening first
-    recognitionRef.current?.stop?.();
-    setIsListening(false);
-    window.speechSynthesis.cancel();
-
-    const cleaned = text.replace(/```[\s\S]*?```/g, "").replace(/[#*_`]/g, "").replace(/\n{2,}/g, ". ").trim();
-    const utterance = new SpeechSynthesisUtterance(cleaned.slice(0, 800));
-    const lang = config.language || "en-US";
-    utterance.lang = lang;
-
-    const voices = window.speechSynthesis.getVoices();
-    const langPrefix = lang.split("-")[0];
-    const langVoices = voices.filter(v => v.lang.startsWith(langPrefix));
-    
-    // Priority: Neural/Natural > Remote/Cloud > Any matching language
-    const neural = langVoices.find(v => /natural|neural|enhanced|wavenet/i.test(v.name));
-    const googleMs = langVoices.find(v => /google|microsoft|online/i.test(v.name));
-    const remote = langVoices.find(v => v.localService === false);
-    const local = langVoices[0];
-    utterance.voice = neural || googleMs || remote || local || null;
-
-    // Tuned for conversational naturalness
-    utterance.rate = 1.12;
-    utterance.pitch = 1.0;
-    utterance.volume = 1;
-    utterance.onstart = () => setIsSpeaking(true);
-    utterance.onend = () => {
-      setIsSpeaking(false);
+  // ─── ElevenLabs TTS ───
+  const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
+    onEnd: () => {
       // Auto-listen after THOR finishes speaking (if voice mode)
       if (autoListenAfterSpeakRef.current) {
         setTimeout(() => startListening(), 400);
       }
-    };
-    utterance.onerror = () => setIsSpeaking(false);
-    window.speechSynthesis.speak(utterance);
-  }, [config.language]);
+    },
+  });
+
+  // ─── TTS: speak text ───
+  const speak = useCallback((text: string) => {
+    // Stop any listening first
+    recognitionRef.current?.stop?.();
+    setIsListening(false);
+    elevenLabsSpeak(text);
+  }, [elevenLabsSpeak]);
 
   // ─── Scroll on new messages ───
   useEffect(() => {
@@ -168,7 +140,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       if (e.error === "not-allowed") {
         toast.error(t("cmd.mic_denied_short", { defaultValue: "Microphone permission denied." }));
       } else if (e.error === "no-speech") {
-        // Silently restart listening instead of showing toast
         setTimeout(() => startListening(), 500);
         return;
       } else if (e.error === "network") {
@@ -185,7 +156,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   const toggleVoice = () => {
     if (isStreaming || isLoading) return;
-    // If THOR is speaking, barge-in: stop speaking and start listening
     if (isSpeaking) {
       stopSpeaking();
       setTimeout(() => startListening(), 200);
@@ -223,14 +193,16 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         {/* Auto-voice toggle */}
         <button
           onClick={() => {
-            setAutoSpeak(!autoSpeak);
-            autoListenAfterSpeakRef.current = !autoSpeak;
+            const next = !autoSpeak;
+            setAutoSpeak(next);
+            autoListenAfterSpeakRef.current = next;
             if (isSpeaking) stopSpeaking();
           }}
           className="flex items-center gap-1 text-[9px] text-muted-foreground/40 hover:text-muted-foreground transition-colors"
         >
           {autoSpeak ? <Volume2 className="h-2.5 w-2.5" /> : <VolumeX className="h-2.5 w-2.5" />}
           {t("cmd.auto_voice", { defaultValue: "Auto-voice" })} {autoSpeak ? t("cmd.on", { defaultValue: "ON" }) : t("cmd.off", { defaultValue: "OFF" })}
+          <span className="ml-1 px-1 py-0.5 rounded bg-primary/10 text-primary text-[8px] font-medium">ElevenLabs</span>
         </button>
       </motion.div>
 
