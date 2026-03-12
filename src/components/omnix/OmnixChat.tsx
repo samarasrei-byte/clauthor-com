@@ -10,6 +10,7 @@ import OmnixOrb from "./OmnixOrb";
 import type { OmnixMessage, OmnixConfig } from "@/hooks/useOmnix";
 import { useTranslation } from "react-i18next";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
+import { useVoiceActivityDetection } from "@/hooks/useVoiceActivityDetection";
 
 interface OmnixChatProps {
   messages: OmnixMessage[];
@@ -32,12 +33,19 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
-  // Don't auto-listen after speak by default — prevents loops
   const autoListenAfterSpeakRef = useRef(false);
+  // Ref to track if we should auto-barge-in (VAD triggered)
+  const vadBargeInRef = useRef(false);
 
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
     onEnd: () => {
+      // If VAD triggered the stop, start listening immediately
+      if (vadBargeInRef.current) {
+        vadBargeInRef.current = false;
+        setTimeout(() => startListening(), 80);
+        return;
+      }
       // Only auto-listen if user explicitly enabled it and not in text mode
       if (autoListenAfterSpeakRef.current && autoSpeak && !showTextInput) {
         setTimeout(() => startListening(), 600);
