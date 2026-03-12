@@ -391,23 +391,54 @@ Estamos em uma reunião estratégica sobre: "${topic}".
 ${conversationHistory.length > 0 ? "Contexto da discussão até agora:\n" + conversationHistory.map(m => m.content).join("\n") : ""}
 Dê sua contribuição profissional em 2-3 frases, focando na sua especialidade. Seja direto e estratégico.`;
 
-        const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-            body: JSON.stringify({
-              message: contextPrompt,
-              agentId: agent.id,
-              conversationHistory: [],
-            }),
-          }
-        );
-
         let content = `Analisando "${topic}" pela perspectiva de ${roleInfo.specialty}...`;
-        if (response.ok) {
-          const data = await response.json();
-          content = data.response || data.content || content;
+
+        if (useDemo || agent.id.startsWith("demo-")) {
+          // Use omnix-chat (THOR) for demo agents
+          const response = await fetch(
+            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/omnix-chat`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                messages: [{ role: "user", content: contextPrompt }],
+              }),
+            }
+          );
+          if (response.ok) {
+            // omnix-chat returns SSE stream — parse it
+            const text = await response.text();
+            const chunks = text.split("\n").filter(l => l.startsWith("data: ") && !l.includes("[DONE]"));
+            let parsed = "";
+            for (const chunk of chunks) {
+              try {
+                const json = JSON.parse(chunk.slice(6));
+                parsed += json.choices?.[0]?.delta?.content || "";
+              } catch {}
+            }
+            if (parsed.trim()) content = parsed.trim();
+          }
+        } else {
+          // Use agent-chat for real agents (correct format: messages array)
+          const response = await fetch(
+            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                messages: [
+                  ...conversationHistory.map(m => ({ role: m.role, content: m.content })),
+                  { role: "user", content: contextPrompt },
+                ],
+                agentId: agent.id,
+              }),
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            const parsed = data.message || data.response || data.content;
+            if (parsed) content = parsed;
+          }
         }
 
         const msgType: MeetingMessage["type"] = 
