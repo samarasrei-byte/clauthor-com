@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings, User, Users, CreditCard, MessageSquare, Bot, Link2 } from "lucide-react";
+import { Settings, User, Users, CreditCard, MessageSquare, Bot, Link2, Database } from "lucide-react";
 import HelpTooltip from "@/components/HelpTooltip";
 import AgentSettings from "./AgentSettings";
 import UserProfileEditor from "./UserProfileEditor";
@@ -9,6 +9,14 @@ import SupportChat from "@/components/SupportChat";
 import { CouponRedeemer } from "./CouponRedeemer";
 import CredentialsHub from "./CredentialsHub";
 import { useTranslation } from "react-i18next";
+
+const KnowledgeBase = lazy(() => import("@/pages/KnowledgeBase"));
+
+const SectionLoader = () => (
+  <div className="flex items-center justify-center py-16">
+    <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+  </div>
+);
 
 interface SettingsPageProps {
   billingContent: React.ReactNode;
@@ -22,6 +30,7 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
   const tabs = [
     { id: "agents", label: t("settings.tab_agents", { defaultValue: "Configurações" }), icon: Bot },
     { id: "credentials", label: t("settings.tab_credentials", { defaultValue: "Conexões" }), icon: Link2 },
+    { id: "knowledge", label: t("dashboard.knowledge_base", { defaultValue: "Knowledge Base" }), icon: Database },
     { id: "profile", label: t("settings.tab_profile", { defaultValue: "Meu Perfil" }), icon: User },
     { id: "team", label: t("settings.tab_team", { defaultValue: "Equipe" }), icon: Users },
     { id: "billing", label: t("settings.tab_billing", { defaultValue: "Assinatura" }), icon: CreditCard },
@@ -57,6 +66,12 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
 
         <TabsContent value="credentials">
           <CredentialsHub />
+        </TabsContent>
+
+        <TabsContent value="knowledge">
+          <Suspense fallback={<SectionLoader />}>
+            <KnowledgeBase />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="profile">

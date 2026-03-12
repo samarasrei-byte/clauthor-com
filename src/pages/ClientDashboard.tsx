@@ -7,8 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database, Star, Presentation,
-  Rocket, Network, Target, Mic, Store, FileText, Cpu
+  Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Presentation,
+  Rocket, Network, Target, Mic, Store, Cpu
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -51,20 +51,16 @@ const ClientCommandCenter = lazy(() => import("@/components/dashboard/ClientComm
 const SquadChat = lazy(() => import("@/components/dashboard/SquadChat"));
 const SettingsPage = lazy(() => import("@/components/dashboard/SettingsPage"));
 const AgentsSection = lazy(() => import("@/components/dashboard/AgentsSection"));
-const AnalyticsSection = lazy(() => import("@/components/dashboard/AnalyticsSection"));
-const LogsSection = lazy(() => import("@/components/dashboard/LogsSection"));
 const PaymentHistoryTable = lazy(() => import("@/components/dashboard/PaymentHistoryTable"));
 const OmnixCommandCenter = lazy(() => import("@/pages/OmnixCommandCenter"));
 const AgentLiveTimeline = lazy(() => import("@/components/dashboard/AgentLiveTimeline"));
 const HolographicMeetingRoom = lazy(() => import("@/components/dashboard/HolographicMeetingRoom"));
 const Library = lazy(() => import("./Library"));
 const Integrations = lazy(() => import("./Integrations"));
-const KnowledgeBase = lazy(() => import("./KnowledgeBase"));
-const AIQualityDashboard = lazy(() => import("@/components/dashboard/AIQualityDashboard"));
 const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
-const ExecutionResultsPanel = lazy(() => import("@/components/dashboard/ExecutionResultsPanel"));
 const ControlTowerSection = lazy(() => import("@/pages/ControlTower"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
+const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -304,13 +300,9 @@ const ClientDashboard = () => {
     // More — secondary features grouped together
     { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Team" }), icon: Users, group: moreGroup },
     { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Meeting Room" }), icon: Presentation, group: moreGroup },
-    { id: "knowledge-base", label: t("dashboard.knowledge_base", { defaultValue: "Knowledge Base" }), icon: Database, group: moreGroup },
-    { id: "ai-quality", label: t("dashboard.ai_quality", { defaultValue: "AI Quality" }), icon: Star, group: moreGroup },
-    { id: "results", label: t("dashboard.results", { defaultValue: "Results" }), icon: FileText, group: moreGroup },
     { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Eye, group: moreGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrations" }), icon: Plug, group: moreGroup },
-    { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
-    { id: "logs", label: t("dashboard.logs"), icon: Activity, group: moreGroup },
+    { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: moreGroup },
     { id: "control-tower", label: "Control Tower", icon: Cpu, group: moreGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
 
@@ -353,13 +345,10 @@ const ClientDashboard = () => {
     overview: t("dashboard.command_center"),
     omnix: t("dashboard.ai_assistant_label", { defaultValue: "AI Assistant" }),
     agents: t("dashboard.agents_tab"),
-    analytics: t("dashboard.analytics"),
-    logs: t("dashboard.logs"),
+    insights: t("dashboard.insights", { defaultValue: "Insights" }),
     settings: t("dashboard.settings"),
     library: t("dashboard.library", { defaultValue: "Library" }),
     integrations: t("dashboard.integrations", { defaultValue: "Integrations" }),
-    "knowledge-base": t("dashboard.knowledge_base", { defaultValue: "Knowledge Base" }),
-    "ai-quality": t("dashboard.ai_quality", { defaultValue: "AI Quality" }),
     "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
     "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
     "control-tower": "Control Tower",
@@ -715,16 +704,17 @@ const ClientDashboard = () => {
                 {/* ═══ INTEGRATIONS ═══ */}
                 {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
 
-                {/* ═══ KNOWLEDGE BASE ═══ */}
-                {activeSection === "knowledge-base" && <Suspense fallback={<SectionLoader />}><KnowledgeBase /></Suspense>}
-
-                {/* ═══ AI QUALITY ═══ */}
-                {activeSection === "ai-quality" && <Suspense fallback={<SectionLoader />}><AIQualityDashboard /></Suspense>}
-
-                {/* ═══ EXECUTION RESULTS ═══ */}
-                {activeSection === "results" && (
+                {/* ═══ INSIGHTS HUB (Analytics + Results + AI Quality + Logs) ═══ */}
+                {activeSection === "insights" && (
                   <Suspense fallback={<SectionLoader />}>
-                    <ExecutionResultsPanel onNavigate={handleSidebarNav} />
+                    <InsightsHub
+                      chartData={realChartData}
+                      totalExecutions={totalExecutions}
+                      recentLogs={recentLogs}
+                      locale={locale}
+                      onGoToAgents={() => setActiveSection("agents")}
+                      onNavigate={handleSidebarNav}
+                    />
                   </Suspense>
                 )}
 
@@ -808,29 +798,6 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
-                {/* ═══ ANALYTICS ═══ */}
-                {activeSection === "analytics" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <AnalyticsSection
-                      chartData={realChartData}
-                      totalExecutions={totalExecutions}
-                      recentLogs={recentLogs}
-                      locale={locale}
-                      onGoToAgents={() => setActiveSection("agents")}
-                    />
-                  </Suspense>
-                )}
-
-                {/* ═══ LOGS ═══ */}
-                {activeSection === "logs" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <LogsSection
-                      recentLogs={recentLogs}
-                      locale={locale}
-                      onGoToAgents={() => setActiveSection("agents")}
-                    />
-                  </Suspense>
-                )}
 
                 {/* ═══ CONTROL TOWER ═══ */}
                 {activeSection === "control-tower" && (
