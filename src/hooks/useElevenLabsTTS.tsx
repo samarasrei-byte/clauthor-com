@@ -6,6 +6,8 @@ interface UseElevenLabsTTSOptions {
   onEnd?: () => void;
 }
 
+const ELEVENLABS_NATIVE_ONLY_KEY = "thor_tts_native_only";
+
 /** Fallback to browser's native speech synthesis */
 function speakNative(text: string, lang: string, onStart?: () => void, onEnd?: () => void): SpeechSynthesisUtterance | null {
   if (!("speechSynthesis" in window)) return null;
@@ -54,7 +56,9 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const objectUrlRef = useRef<string | null>(null);
   const nativeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const elevenLabsFailedRef = useRef(false);
+  const elevenLabsFailedRef = useRef(
+    typeof window !== "undefined" && localStorage.getItem(ELEVENLABS_NATIVE_ONLY_KEY) === "1"
+  );
 
   const stop = useCallback(() => {
     // Stop ElevenLabs audio
@@ -132,6 +136,9 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       if (!response.ok) {
         console.warn("ElevenLabs TTS failed, using native voice:", response.status);
         elevenLabsFailedRef.current = true;
+        if (response.status === 401) {
+          localStorage.setItem(ELEVENLABS_NATIVE_ONLY_KEY, "1");
+        }
         doNativeFallback();
         return true;
       }
@@ -172,6 +179,7 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
 
   const resetProvider = useCallback(() => {
     elevenLabsFailedRef.current = false;
+    localStorage.removeItem(ELEVENLABS_NATIVE_ONLY_KEY);
   }, []);
 
   return { speak, stop, isSpeaking, resetProvider };
