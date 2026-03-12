@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2 } from "lucide-react";
+import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2, MessageSquare, X } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,16 +27,16 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const [input, setInput] = useState("");
   const [isListening, setIsListening] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(true);
+  const [showChat, setShowChat] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
-  const autoListenAfterSpeakRef = useRef(false);
+  const autoListenAfterSpeakRef = useRef(true);
 
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
     onEnd: () => {
-      // Auto-listen after THOR finishes speaking (if voice mode)
-      if (autoListenAfterSpeakRef.current) {
+      if (autoListenAfterSpeakRef.current && autoSpeak) {
         setTimeout(() => startListening(), 400);
       }
     },
@@ -44,7 +44,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   // ─── TTS: speak text ───
   const speak = useCallback((text: string) => {
-    // Stop any listening first
     recognitionRef.current?.stop?.();
     setIsListening(false);
     elevenLabsSpeak(text);
@@ -89,7 +88,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     return "idle";
   };
 
-  // ─── Start listening — BARGE-IN: stops TTS first ───
+  // ─── Start listening — BARGE-IN ───
   const startListening = useCallback(async () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
       toast.error(t("cmd.mic_unsupported", { defaultValue: "Your browser doesn't support voice recognition." }));
@@ -97,7 +96,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
     if (isListening || isStreaming || isLoading) return;
 
-    // BARGE-IN: if THOR is speaking, stop it immediately so user can talk
     if (isSpeaking) {
       stopSpeaking();
     }
@@ -118,7 +116,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
     const SpeechRecognition = (window as any).webkitSpeechRecognition || (window as any).SpeechRecognition;
     const recognition = new SpeechRecognition();
-    recognition.lang = config.language || "en-US";
+    recognition.lang = config.language || "pt-BR";
     recognition.interimResults = true;
     recognition.continuous = false;
 
@@ -171,25 +169,68 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   const hasMessages = messages.length > 0;
 
+  // ─── Immersive voice-only view (default) ───
+  // Shows full-screen orb with floating controls; chat panel slides in on demand
   return (
-    <div className="flex flex-col h-full">
-      {/* Orb hero — shrinks when messages exist */}
-      <motion.div
-        className="shrink-0 flex flex-col items-center justify-center gap-1 bg-gradient-to-b from-primary/[0.02] to-transparent"
-        animate={{
-          paddingTop: hasMessages ? 12 : 32,
-          paddingBottom: hasMessages ? 4 : 16,
-        }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-      >
-        <motion.div
-          animate={{ scale: hasMessages ? 0.65 : 1 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          className="origin-center"
-        >
-          <OmnixOrb state={getOrbState()} name={config.name} />
-        </motion.div>
+    <div className="relative flex flex-col h-full overflow-hidden">
+      {/* ── IMMERSIVE ORB VIEW ── */}
+      <div className="flex-1 flex flex-col items-center justify-center relative">
+        {/* Background ambient effect */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <motion.div
+            className="absolute w-[600px] h-[600px] rounded-full"
+            style={{
+              left: "50%",
+              top: "50%",
+              x: "-50%",
+              y: "-50%",
+              background: `radial-gradient(circle, hsl(var(--primary) / 0.04) 0%, transparent 70%)`,
+            }}
+            animate={{
+              scale: isListening ? [1, 1.3, 1] : isSpeaking ? [1, 1.2, 1] : [1, 1.05, 1],
+            }}
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </div>
 
+        {/* The Orb — immersive size */}
+        <OmnixOrb state={getOrbState()} name={config.name} immersive />
+
+        {/* Live transcript while listening */}
+        <AnimatePresence>
+          {(isListening || input) && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 10 }}
+              className="absolute bottom-32 left-1/2 -translate-x-1/2 max-w-md px-6"
+            >
+              <p className="text-center text-sm text-muted-foreground/70 italic">
+                {input || "..."}
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Last assistant response preview (when chat is hidden) */}
+        <AnimatePresence>
+          {!showChat && hasMessages && messages[messages.length - 1]?.role === "assistant" && !isSpeaking && !isListening && (
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="absolute bottom-28 left-1/2 -translate-x-1/2 max-w-lg px-6"
+            >
+              <p className="text-center text-xs text-muted-foreground/40 line-clamp-2">
+                {messages[messages.length - 1].content.slice(0, 120)}…
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* ── BOTTOM CONTROLS ── */}
+      <div className="shrink-0 flex items-center justify-center gap-4 pb-6 pt-3 relative z-10">
         {/* Auto-voice toggle */}
         <button
           onClick={() => {
@@ -198,156 +239,173 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             autoListenAfterSpeakRef.current = next;
             if (isSpeaking) stopSpeaking();
           }}
-          className="flex items-center gap-1 text-[9px] text-muted-foreground/40 hover:text-muted-foreground transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] text-muted-foreground/40 hover:text-muted-foreground border border-border/10 hover:border-border/30 transition-all"
         >
-          {autoSpeak ? <Volume2 className="h-2.5 w-2.5" /> : <VolumeX className="h-2.5 w-2.5" />}
-          {t("cmd.auto_voice", { defaultValue: "Auto-voice" })} {autoSpeak ? t("cmd.on", { defaultValue: "ON" }) : t("cmd.off", { defaultValue: "OFF" })}
-          <span className="ml-1 px-1 py-0.5 rounded bg-primary/10 text-primary text-[8px] font-medium">ElevenLabs</span>
+          {autoSpeak ? <Volume2 className="h-3 w-3" /> : <VolumeX className="h-3 w-3" />}
+          {autoSpeak ? "ON" : "OFF"}
         </button>
-      </motion.div>
 
-      {/* Messages area */}
-      <div
-        ref={scrollRef}
-        className="flex-1 overflow-y-auto px-3 sm:px-6 py-3 space-y-3 scroll-smooth"
-      >
-        {!hasMessages && (
-          <div className="flex flex-col items-center justify-center h-full text-center px-4">
-            <p className="text-sm text-muted-foreground/60 max-w-xs leading-relaxed">
-              {voiceFirst ? (
-                <>{t("cmd.hello_voice", { defaultValue: "Hi, I'm {{name}}. I'm listening. Just speak.", name: config.name })}</>
-              ) : (
-                <>{t("cmd.hello_text", { defaultValue: "Hi, I'm {{name}}. Your central AI agent. Speak or type to begin.", name: config.name })}</>
-              )}
-            </p>
-            {!voiceFirst && (
-              <div className="flex flex-wrap gap-2 mt-4 justify-center max-w-md">
-                {[
-                  t("cmd.audit_system", { defaultValue: "{{name}}, run a system audit", name: config.name }),
-                  t("cmd.briefing_day", { defaultValue: "Executive briefing of the day" }),
-                  t("cmd.status_agents", { defaultValue: "Status of all agents" }),
-                  t("cmd.risk_analysis", { defaultValue: "Risk analysis" }),
-                ].map(s => (
-                  <button
-                    key={s}
-                    onClick={() => onSend(s)}
-                    className="px-3 py-1.5 rounded-full border border-border/20 text-[11px] text-muted-foreground/60 hover:text-foreground hover:border-primary/30 hover:bg-primary/5 transition-all"
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        <AnimatePresence>
-          {messages.map((msg, i) => (
-            <motion.div
-              key={`${msg.role}-${msg.timestamp.getTime()}-${i}`}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-            >
-              <div
-                className={`rounded-2xl px-4 py-3 break-words overflow-hidden ${
-                  msg.role === "user"
-                    ? "max-w-[88%] sm:max-w-[75%] bg-primary/90 text-primary-foreground shadow-[0_0_16px_hsl(var(--primary)/0.12)]"
-                    : "max-w-[95%] sm:max-w-[85%] bg-card/80 border border-border/15 backdrop-blur-sm"
-                }`}
-              >
-                {msg.role === "assistant" ? (
-                  <div className="prose prose-sm dark:prose-invert max-w-none text-[14px] sm:text-[15px] leading-relaxed [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_code]:break-all [&_p]:break-words [&_table]:block [&_table]:overflow-x-auto">
-                    <ReactMarkdown>{msg.content.replace(/```kpi[\s\S]*?```/g, "")}</ReactMarkdown>
-                  </div>
-                ) : (
-                  <p className="text-[14px] sm:text-[15px] leading-relaxed break-words">{msg.content}</p>
-                )}
-                {msg.role === "assistant" && !isStreaming && (
-                  <div className="flex items-center gap-2 mt-2 pt-1.5 border-t border-border/10">
-                    <button onClick={() => speak(msg.content)} className="text-muted-foreground/40 hover:text-primary transition-colors">
-                      <Volume2 className="h-3 w-3" />
-                    </button>
-                    <ChatFeedback
-                      userMessage={messages[i - 1]?.content || ""}
-                      assistantMessage={msg.content}
-                    />
-                  </div>
-                )}
-              </div>
-            </motion.div>
-          ))}
-        </AnimatePresence>
-
-        {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
-          <div className="flex justify-start">
-            <div className="bg-card/40 border border-border/15 rounded-2xl px-4 py-3 backdrop-blur-sm">
-              <div className="flex gap-1.5">
-                <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
-                <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
-                <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Input bar */}
-      <div className="shrink-0 px-3 sm:px-4 py-3 border-t border-border/8 bg-background/60 backdrop-blur-sm">
-        <div className="flex gap-2 items-center max-w-3xl mx-auto">
-          <Button
-            variant="ghost"
-            size="icon"
-            className={`shrink-0 h-11 w-11 rounded-full transition-all ${
-              isListening
-                ? "text-primary bg-primary/10 shadow-[0_0_20px_hsl(var(--primary)/0.25)] animate-pulse"
-                : isSpeaking
-                  ? "text-destructive bg-destructive/10"
-                  : "text-muted-foreground/50 hover:text-foreground"
-            }`}
-            onClick={toggleVoice}
-          >
-            {isListening ? <MicOff className="h-4.5 w-4.5" /> : <Mic className="h-4.5 w-4.5" />}
-          </Button>
-          <Input
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
-            placeholder={t("cmd.talk_to", { defaultValue: "Talk to {{name}}...", name: config.name })}
-            className="flex-1 bg-card/20 border-border/15 h-11 text-sm"
-            disabled={isLoading}
-          />
-          {isStreaming ? (
-            <Button variant="destructive" size="icon" className="shrink-0 h-10 w-10 rounded-full" onClick={onStop}>
-              <Square className="h-4 w-4" />
-            </Button>
+        {/* Main mic button — large, prominent */}
+        <Button
+          size="icon"
+          className={`h-16 w-16 rounded-full transition-all duration-300 ${
+            isListening
+              ? "bg-primary text-primary-foreground shadow-[0_0_40px_hsl(var(--primary)/0.4)] scale-110"
+              : isSpeaking
+              ? "bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)]"
+              : "bg-primary/10 text-primary hover:bg-primary/20 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
+          }`}
+          onClick={toggleVoice}
+          disabled={isStreaming || isLoading}
+        >
+          {isListening ? (
+            <MicOff className="h-6 w-6" />
+          ) : isStreaming || isLoading ? (
+            <Square className="h-5 w-5" />
           ) : (
-            <Button
-              size="icon"
-              className="shrink-0 h-10 w-10 rounded-full shadow-[0_0_12px_hsl(var(--primary)/0.15)]"
-              onClick={handleSend}
-              disabled={!input.trim() || isLoading}
-            >
-              <Send className="h-4 w-4" />
-            </Button>
+            <Mic className="h-6 w-6" />
           )}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="shrink-0 h-8 w-8 text-muted-foreground/30 hover:text-destructive"
+        </Button>
+
+        {/* Show chat panel */}
+        <button
+          onClick={() => setShowChat(!showChat)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
+            showChat
+              ? "text-primary border-primary/30 bg-primary/5"
+              : "text-muted-foreground/40 border-border/10 hover:text-muted-foreground hover:border-border/30"
+          }`}
+        >
+          <MessageSquare className="h-3 w-3" />
+          Chat
+        </button>
+
+        {/* Clear */}
+        {hasMessages && (
+          <button
             onClick={() => {
-              if (messages.length === 0) return;
               if (messages.length > 2) {
                 const confirmed = window.confirm(t("cmd.clear_confirm", { defaultValue: "Clear all chat history?" }));
                 if (!confirmed) return;
               }
               onClear();
             }}
+            className="flex items-center gap-1 px-2 py-1.5 rounded-full text-[10px] text-muted-foreground/30 hover:text-destructive border border-border/10 hover:border-destructive/30 transition-all"
           >
-            <Trash2 className="h-3.5 w-3.5" />
-          </Button>
-        </div>
+            <Trash2 className="h-3 w-3" />
+          </button>
+        )}
       </div>
+
+      {/* ── SLIDE-IN CHAT PANEL ── */}
+      <AnimatePresence>
+        {showChat && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="absolute right-0 top-0 bottom-0 w-full sm:w-[420px] bg-background/95 backdrop-blur-xl border-l border-border/15 z-20 flex flex-col shadow-[-20px_0_60px_hsl(var(--background)/0.8)]"
+          >
+            {/* Chat header */}
+            <div className="shrink-0 flex items-center justify-between px-4 py-3 border-b border-border/10">
+              <span className="text-xs font-mono tracking-wider text-muted-foreground/60 uppercase">
+                {config.name} · Chat
+              </span>
+              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => setShowChat(false)}>
+                <X className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+
+            {/* Messages */}
+            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-3 scroll-smooth">
+              {!hasMessages && (
+                <div className="flex items-center justify-center h-full">
+                  <p className="text-sm text-muted-foreground/40 text-center px-4">
+                    {t("cmd.hello_text", { defaultValue: "Hi, I'm {{name}}. Your central AI agent. Speak or type to begin.", name: config.name })}
+                  </p>
+                </div>
+              )}
+
+              {messages.map((msg, i) => (
+                <motion.div
+                  key={`${msg.role}-${msg.timestamp.getTime()}-${i}`}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                >
+                  <div
+                    className={`rounded-2xl px-4 py-3 break-words overflow-hidden ${
+                      msg.role === "user"
+                        ? "max-w-[85%] bg-primary/90 text-primary-foreground shadow-[0_0_16px_hsl(var(--primary)/0.12)]"
+                        : "max-w-[95%] bg-card/80 border border-border/15 backdrop-blur-sm"
+                    }`}
+                  >
+                    {msg.role === "assistant" ? (
+                      <div className="prose prose-sm dark:prose-invert max-w-none text-[13px] leading-relaxed [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_code]:break-all [&_p]:break-words">
+                        <ReactMarkdown>{msg.content.replace(/```kpi[\s\S]*?```/g, "")}</ReactMarkdown>
+                      </div>
+                    ) : (
+                      <p className="text-[13px] leading-relaxed break-words">{msg.content}</p>
+                    )}
+                    {msg.role === "assistant" && !isStreaming && (
+                      <div className="flex items-center gap-2 mt-2 pt-1.5 border-t border-border/10">
+                        <button onClick={() => speak(msg.content)} className="text-muted-foreground/40 hover:text-primary transition-colors">
+                          <Volume2 className="h-3 w-3" />
+                        </button>
+                        <ChatFeedback
+                          userMessage={messages[i - 1]?.content || ""}
+                          assistantMessage={msg.content}
+                        />
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+
+              {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
+                <div className="flex justify-start">
+                  <div className="bg-card/40 border border-border/15 rounded-2xl px-4 py-3 backdrop-blur-sm">
+                    <div className="flex gap-1.5">
+                      <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+                      <span className="w-1.5 h-1.5 bg-primary/40 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Text input inside chat panel */}
+            <div className="shrink-0 px-3 py-3 border-t border-border/8">
+              <div className="flex gap-2 items-center">
+                <Input
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
+                  placeholder={t("cmd.talk_to", { defaultValue: "Talk to {{name}}...", name: config.name })}
+                  className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
+                  disabled={isLoading}
+                />
+                {isStreaming ? (
+                  <Button variant="destructive" size="icon" className="shrink-0 h-9 w-9 rounded-full" onClick={onStop}>
+                    <Square className="h-3.5 w-3.5" />
+                  </Button>
+                ) : (
+                  <Button
+                    size="icon"
+                    className="shrink-0 h-9 w-9 rounded-full"
+                    onClick={handleSend}
+                    disabled={!input.trim() || isLoading}
+                  >
+                    <Send className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
