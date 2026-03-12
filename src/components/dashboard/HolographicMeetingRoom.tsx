@@ -286,11 +286,21 @@ const HolographicMeetingRoom = () => {
     enabled: !!user,
   });
 
+  // Demo squad for users with no/few agents
+  const DEMO_SQUAD: { id: string; name: string; role: HolographicAgent["role"] }[] = [
+    { id: "demo-ceo", name: "THOR CEO", role: "ceo" },
+    { id: "demo-sales", name: "SDR Outbound", role: "sales" },
+    { id: "demo-mkt", name: "Growth Hacker", role: "marketing" },
+    { id: "demo-data", name: "Data Analyst", role: "analytics" },
+    { id: "demo-design", name: "Creative Director", role: "design" },
+    { id: "demo-auto", name: "Automation Lead", role: "automation" },
+  ];
+
   const assignRole = (name: string, idx: number): HolographicAgent["role"] => {
     const n = name.toLowerCase();
-    if (n.includes("ceo") || n.includes("chief")) return "ceo";
-    if (n.includes("sales") || n.includes("vend")) return "sales";
-    if (n.includes("market")) return "marketing";
+    if (n.includes("ceo") || n.includes("chief") || n.includes("thor")) return "ceo";
+    if (n.includes("sales") || n.includes("vend") || n.includes("sdr")) return "sales";
+    if (n.includes("market") || n.includes("growth")) return "marketing";
     if (n.includes("data") || n.includes("analy")) return "analytics";
     if (n.includes("design") || n.includes("creat")) return "design";
     if (n.includes("auto") || n.includes("process")) return "automation";
@@ -298,16 +308,17 @@ const HolographicMeetingRoom = () => {
     return roles[idx % roles.length];
   };
 
-  const agents: HolographicAgent[] = dbAgents.map((a, i) => {
-    const role = assignRole(a.name, i);
-    return {
-      id: a.id,
-      name: a.name,
-      specialty: AGENT_ROLES[role].specialty,
-      role,
-      state: speakingAgentId === a.id ? "speaking" : selectedAgents.includes(a.id) ? "processing" : "idle",
-    };
-  });
+  // Use real agents if available (2+), otherwise fill with demo squad
+  const useDemo = dbAgents.length < 2;
+  const agentSource = useDemo ? DEMO_SQUAD : dbAgents.map((a, i) => ({ id: a.id, name: a.name, role: assignRole(a.name, i) }));
+
+  const agents: HolographicAgent[] = agentSource.map((a) => ({
+    id: a.id,
+    name: a.name,
+    specialty: AGENT_ROLES[a.role].specialty,
+    role: a.role,
+    state: speakingAgentId === a.id ? "speaking" : selectedAgents.includes(a.id) ? "processing" : "idle",
+  }));
 
   // Voice recognition setup
   useEffect(() => {
