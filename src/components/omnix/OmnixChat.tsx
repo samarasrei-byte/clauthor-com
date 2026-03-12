@@ -120,6 +120,21 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   }, [messages, isStreaming, autoSpeak, speak]);
 
+  // Auto-start hands-free listening once (after first load)
+  useEffect(() => {
+    if (autoStartAttemptedRef.current) return;
+    if (showTextInput) return;
+
+    autoStartAttemptedRef.current = true;
+    const timer = setTimeout(() => {
+      if (!isListening && !isSpeaking && !isStreaming && !isLoading) {
+        startListening();
+      }
+    }, 700);
+
+    return () => clearTimeout(timer);
+  }, [showTextInput, isListening, isSpeaking, isStreaming, isLoading, startListening]);
+
   const handleSend = () => {
     if (!input.trim() || isLoading) return;
     autoListenAfterSpeakRef.current = false; // Text mode: don't auto-listen
