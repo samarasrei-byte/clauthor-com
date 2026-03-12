@@ -13,8 +13,8 @@ function speakNative(text: string, lang: string, onStart?: () => void, onEnd?: (
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 1.0;
-  utterance.pitch = 0.85;
+  utterance.rate = 1.08;
+  utterance.pitch = 0.98;
   utterance.volume = 1;
   utterance.lang = lang;
 
