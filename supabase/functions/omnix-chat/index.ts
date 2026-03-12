@@ -534,7 +534,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
           }
 
           const finalResponse = await fetchAI({
-            model: "google/gemini-2.5-flash-lite",
+            model: chatModel,
             messages: [...aiMessages, choice.message, ...toolResults],
             stream: true,
             max_tokens: 520,
