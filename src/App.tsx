@@ -52,6 +52,7 @@ const KnowledgeBase = lazyRetry(() => import("./pages/KnowledgeBase"));
 const ResetPassword = lazyRetry(() => import("./pages/ResetPassword"));
 const ApiDocs = lazyRetry(() => import("./pages/ApiDocs"));
 const TeamBuilder = lazyRetry(() => import("./pages/TeamBuilder"));
+const ControlTower = lazyRetry(() => import("./pages/ControlTower"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -112,6 +113,7 @@ const App = () => (
                   <Route path="/knowledge-base" element={<KnowledgeBase />} />
                   <Route path="/monix" element={<MonixCommandCenter />} />
                   <Route path="/omnix" element={<OmnixCommandCenter />} />
+                  <Route path="/control-tower" element={<ControlTower />} />
                 </Route>
 
                 {/* Admin */}

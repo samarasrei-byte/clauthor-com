@@ -8,7 +8,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, Plus, ArrowRight, Coins, Settings, Users, Building2, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Loader2, Database, Star, Presentation,
-  Rocket, Network, Target, Mic, Store, FileText
+  Rocket, Network, Target, Mic, Store, FileText, Cpu
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -63,6 +63,7 @@ const KnowledgeBase = lazy(() => import("./KnowledgeBase"));
 const AIQualityDashboard = lazy(() => import("@/components/dashboard/AIQualityDashboard"));
 const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
 const ExecutionResultsPanel = lazy(() => import("@/components/dashboard/ExecutionResultsPanel"));
+const ControlTowerSection = lazy(() => import("@/pages/ControlTower"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
@@ -286,6 +287,7 @@ const ClientDashboard = () => {
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrations" }), icon: Plug, group: moreGroup },
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, group: moreGroup },
+    { id: "control-tower", label: "Control Tower", icon: Cpu, group: moreGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
 
     // Coming soon features
@@ -336,6 +338,7 @@ const ClientDashboard = () => {
     "ai-quality": t("dashboard.ai_quality", { defaultValue: "AI Quality" }),
     "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
     "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
+    "control-tower": "Control Tower",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
@@ -802,6 +805,13 @@ const ClientDashboard = () => {
                       locale={locale}
                       onGoToAgents={() => setActiveSection("agents")}
                     />
+                  </Suspense>
+                )}
+
+                {/* ═══ CONTROL TOWER ═══ */}
+                {activeSection === "control-tower" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ControlTowerSection />
                   </Suspense>
                 )}
 
