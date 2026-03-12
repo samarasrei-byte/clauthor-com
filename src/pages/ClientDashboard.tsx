@@ -63,6 +63,7 @@ const KnowledgeBase = lazy(() => import("./KnowledgeBase"));
 const AIQualityDashboard = lazy(() => import("@/components/dashboard/AIQualityDashboard"));
 const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
 const ExecutionResultsPanel = lazy(() => import("@/components/dashboard/ExecutionResultsPanel"));
+const ControlTowerSection = lazy(() => import("@/pages/ControlTower"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
