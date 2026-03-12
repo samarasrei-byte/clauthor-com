@@ -518,14 +518,14 @@ REGRAS GERAIS:
         }
 
         const finalResponse = await fetchAI({
-          model: "google/gemini-2.5-flash",
+          model: "google/gemini-2.5-flash-lite",
           messages: [...aiMessages, choice.message, ...toolResults],
-          stream: true, max_tokens: 1500, temperature: 0.7,
+          stream: true, max_tokens: 800, temperature: 0.5,
         });
 
         if (finalResponse.ok) {
           const toolMgmtTokens = (toolData.usage?.total_tokens || 500) + 600;
-          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
           supabase.from("execution_logs").insert({
             user_id: user.id,
             agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
@@ -542,7 +542,7 @@ REGRAS GERAIS:
       if (choice?.message?.content) {
         const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
         const directTokens = toolData.usage?.total_tokens || 300;
-        supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+        supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
         supabase.from("execution_logs").insert({
           user_id: user.id,
           agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
@@ -557,11 +557,11 @@ REGRAS GERAIS:
 
     // Fallback: normal streaming (if tool call attempt failed)
     const response = await fetchAI({
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-2.5-flash-lite",
       messages: aiMessages,
       stream: true,
-      temperature: 0.7,
-      max_tokens: 2048,
+      temperature: 0.5,
+      max_tokens: 1024,
     });
 
     if (!response.ok) {
