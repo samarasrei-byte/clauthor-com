@@ -274,6 +274,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       return;
     }
     if (isListening) {
+      manualStopRef.current = true;
       recognitionRef.current?.stop();
       setIsListening(false);
       return;
