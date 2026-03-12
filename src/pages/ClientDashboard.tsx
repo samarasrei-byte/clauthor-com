@@ -708,16 +708,17 @@ const ClientDashboard = () => {
                 {/* ═══ INTEGRATIONS ═══ */}
                 {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
 
-                {/* ═══ KNOWLEDGE BASE ═══ */}
-                {activeSection === "knowledge-base" && <Suspense fallback={<SectionLoader />}><KnowledgeBase /></Suspense>}
-
-                {/* ═══ AI QUALITY ═══ */}
-                {activeSection === "ai-quality" && <Suspense fallback={<SectionLoader />}><AIQualityDashboard /></Suspense>}
-
-                {/* ═══ EXECUTION RESULTS ═══ */}
-                {activeSection === "results" && (
+                {/* ═══ INSIGHTS HUB (Analytics + Results + AI Quality + Logs) ═══ */}
+                {activeSection === "insights" && (
                   <Suspense fallback={<SectionLoader />}>
-                    <ExecutionResultsPanel onNavigate={handleSidebarNav} />
+                    <InsightsHub
+                      chartData={realChartData}
+                      totalExecutions={totalExecutions}
+                      recentLogs={recentLogs}
+                      locale={locale}
+                      onGoToAgents={() => setActiveSection("agents")}
+                      onNavigate={handleSidebarNav}
+                    />
                   </Suspense>
                 )}
 
