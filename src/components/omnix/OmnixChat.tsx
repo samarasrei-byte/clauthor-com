@@ -142,10 +142,17 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   // Auto-start VAD when Thor starts speaking, stop when he stops
   useEffect(() => {
     if (isSpeaking && !isListening) {
-      startVAD();
-    } else {
-      stopVAD();
+      const timer = window.setTimeout(() => {
+        startVAD();
+      }, 420);
+
+      return () => {
+        window.clearTimeout(timer);
+        stopVAD();
+      };
     }
+
+    stopVAD();
   }, [isSpeaking, isListening, startVAD, stopVAD]);
 
   // ─── Scroll on new messages ───

@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOmnix } from "@/hooks/useOmnix";
@@ -102,7 +101,7 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
           onStop={stopStreaming}
           onClear={clearMessages}
         />
-        
+
         <Button
           variant="ghost"
           size="icon"
@@ -113,11 +112,9 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
         </Button>
       </div>
 
-      <AnimatePresence>
-        {showSettings && (
-          <OmnixSettings config={config} onUpdate={updateConfig} onClose={() => setShowSettings(false)} />
-        )}
-      </AnimatePresence>
+      {showSettings && (
+        <OmnixSettings config={config} onUpdate={updateConfig} onClose={() => setShowSettings(false)} />
+      )}
     </div>
   );
 };

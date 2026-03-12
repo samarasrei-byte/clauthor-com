@@ -176,9 +176,10 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
         setIsSpeaking(true);
         onStart?.();
       };
-      audio.onended = () => stop();
+      audio.onended = () => stop(true);
       audio.onerror = () => {
         console.error("Audio playback error, using native");
+        stop(false);
         doNativeFallback();
       };
 
