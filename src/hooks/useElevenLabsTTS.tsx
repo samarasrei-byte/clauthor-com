@@ -143,6 +143,15 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
         return true;
       }
 
+      const contentType = response.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        console.warn("ElevenLabs TTS returned fallback payload, using native voice");
+        elevenLabsFailedRef.current = true;
+        localStorage.setItem(ELEVENLABS_NATIVE_ONLY_KEY, "1");
+        doNativeFallback();
+        return true;
+      }
+
       const audioBlob = await response.blob();
       if (audioBlob.size < 100) {
         // Too small = probably error response

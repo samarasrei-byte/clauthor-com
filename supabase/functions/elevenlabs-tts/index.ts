@@ -11,7 +11,12 @@ serve(async (req) => {
   try {
     const { text, voiceId } = await req.json();
     const ELEVENLABS_API_KEY = Deno.env.get("ELEVENLABS_API_KEY");
-    if (!ELEVENLABS_API_KEY) throw new Error("ELEVENLABS_API_KEY not configured");
+    if (!ELEVENLABS_API_KEY) {
+      return new Response(JSON.stringify({ fallback: true, reason: "tts_provider_not_configured" }), {
+        status: 200,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     if (!text || text.trim().length === 0) {
       return new Response(JSON.stringify({ error: "No text provided" }), {
@@ -48,21 +53,26 @@ serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error("ElevenLabs TTS error:", response.status, errorText);
-      
-      if (response.status === 401) {
-        return new Response(JSON.stringify({ error: "Invalid ElevenLabs API key" }), {
-          status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+
+      let parsed: any = null;
+      try {
+        parsed = JSON.parse(errorText);
+      } catch {
+        // ignore
       }
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "ElevenLabs rate limit exceeded" }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      
-      return new Response(JSON.stringify({ error: "TTS generation failed" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+
+      const providerStatus = parsed?.detail?.status || null;
+      return new Response(
+        JSON.stringify({
+          fallback: true,
+          reason: providerStatus || "tts_provider_unavailable",
+          provider_status_code: response.status,
+        }),
+        {
+          status: 200,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
     }
 
     return new Response(response.body, {
@@ -74,8 +84,8 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("TTS error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
+    return new Response(JSON.stringify({ fallback: true, reason: "tts_runtime_error" }), {
+      status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
