@@ -360,10 +360,10 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         <div className="flex items-center justify-center gap-3">
           {/* Auto-voice toggle */}
           <button
-            onClick={() => {
+          onClick={() => {
               const next = !autoSpeak;
               setAutoSpeak(next);
-              autoListenAfterSpeakRef.current = false; // Never auto-listen to prevent loops
+              if (!next) autoListenAfterSpeakRef.current = false;
               if (isSpeaking) stopSpeaking();
             }}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] text-muted-foreground/40 hover:text-muted-foreground border border-border/10 hover:border-border/30 transition-all"
