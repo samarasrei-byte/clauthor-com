@@ -411,7 +411,19 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             </Button>
           )}
 
-          {/* Text input toggle */}
+          {/* Webcam toggle */}
+          <button
+            onClick={toggleWebcam}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
+              webcamActive
+                ? "text-primary border-primary/30 bg-primary/5"
+                : "text-muted-foreground/40 border-border/10 hover:text-muted-foreground hover:border-border/30"
+            }`}
+          >
+            {webcamActive ? <Video className="h-3 w-3" /> : <VideoOff className="h-3 w-3" />}
+            Cam
+          </button>
+
           <button
             onClick={() => setShowTextInput(!showTextInput)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
