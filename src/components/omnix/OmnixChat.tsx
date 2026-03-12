@@ -349,21 +349,26 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     if (isStreaming || isLoading) return;
     if (isSpeaking) {
       // BARGE-IN: stop Thor and immediately start listening
+      clearPendingRestart();
       stopSpeaking();
-      setTimeout(() => startListening(), 120);
+      setTimeout(() => startListeningRef.current?.(), 120);
       return;
     }
     if (isListening) {
+      clearPendingRestart();
       manualStopRef.current = true;
+      restartAttemptsRef.current = 0;
       recognitionRef.current?.stop();
       setIsListening(false);
       return;
     }
-    startListening();
+    startListeningRef.current?.();
   };
 
   // Stop everything (streaming + speaking)
   const handleStop = () => {
+    clearPendingRestart();
+    restartAttemptsRef.current = 0;
     if (isSpeaking) stopSpeaking();
     if (isStreaming) onStop();
     if (isListening) {
@@ -377,9 +382,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const handleBargeIn = useCallback(() => {
     handleStop();
     // dupla tentativa para cobrir janela de abort/cleanup do streaming
-    setTimeout(() => startListening(), 180);
-    setTimeout(() => startListening(), 650);
-  }, [handleStop, startListening]);
+    setTimeout(() => startListeningRef.current?.(), 180);
+    setTimeout(() => startListeningRef.current?.(), 650);
+  }, [handleStop]);
 
   const hasMessages = messages.length > 0;
   const isActive = isListening || isSpeaking || isStreaming || isLoading;
