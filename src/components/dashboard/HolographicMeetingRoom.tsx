@@ -624,7 +624,6 @@ Apenas o texto, sem introduções.`;
           timestamp: new Date(),
         },
       ]);
-      }
     } catch (err) {
       console.error("Meeting response error:", err);
     }
