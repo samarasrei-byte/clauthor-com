@@ -90,8 +90,8 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   }, [isSpeaking, stopSpeaking]);
 
   const { startMonitoring: startVAD, stopMonitoring: stopVAD } = useVoiceActivityDetection({
-    threshold: 30, // Sensitive enough to catch speech
-    consecutiveFrames: 4, // ~4 frames (~66ms) to avoid false positives
+    threshold: 18, // More sensitive for natural barge-in
+    consecutiveFrames: 2, // Faster reaction (~30-40ms)
     onVoiceDetected: handleVoiceDetected,
   });
 
