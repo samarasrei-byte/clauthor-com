@@ -75,6 +75,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   // ─── TTS: speak text ───
   const speak = useCallback((text: string) => {
+    manualStopRef.current = true;
     recognitionRef.current?.stop?.();
     setIsListening(false);
     elevenLabsSpeak(text);
