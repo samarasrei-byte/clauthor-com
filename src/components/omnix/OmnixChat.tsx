@@ -60,6 +60,29 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     elevenLabsSpeak(text);
   }, [elevenLabsSpeak]);
 
+  // ─── VAD: Auto barge-in when user speaks while Thor is talking ───
+  const handleVoiceDetected = useCallback(() => {
+    if (isSpeaking) {
+      vadBargeInRef.current = true;
+      stopSpeaking(); // This triggers onEnd which starts listening
+    }
+  }, [isSpeaking, stopSpeaking]);
+
+  const { startMonitoring: startVAD, stopMonitoring: stopVAD } = useVoiceActivityDetection({
+    threshold: 30, // Sensitive enough to catch speech
+    consecutiveFrames: 4, // ~4 frames (~66ms) to avoid false positives
+    onVoiceDetected: handleVoiceDetected,
+  });
+
+  // Auto-start VAD when Thor starts speaking, stop when he stops
+  useEffect(() => {
+    if (isSpeaking && !isListening) {
+      startVAD();
+    } else {
+      stopVAD();
+    }
+  }, [isSpeaking, isListening, startVAD, stopVAD]);
+
   // ─── Scroll on new messages ───
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
