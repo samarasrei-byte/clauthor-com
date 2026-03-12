@@ -84,8 +84,8 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("TTS error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), {
-      status: 500,
+    return new Response(JSON.stringify({ fallback: true, reason: "tts_runtime_error" }), {
+      status: 200,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   }
