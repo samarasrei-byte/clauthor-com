@@ -102,6 +102,16 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     },
   });
 
+  useEffect(() => {
+    liveStateRef.current = {
+      autoSpeak,
+      showTextInput,
+      isSpeaking,
+      isStreaming,
+      isLoading,
+    };
+  }, [autoSpeak, showTextInput, isSpeaking, isStreaming, isLoading]);
+
   // ─── TTS: speak text ───
   const speak = useCallback((text: string) => {
     manualStopRef.current = true;
