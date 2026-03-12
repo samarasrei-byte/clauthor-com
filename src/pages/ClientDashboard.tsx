@@ -286,6 +286,7 @@ const ClientDashboard = () => {
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrations" }), icon: Plug, group: moreGroup },
     { id: "analytics", label: t("dashboard.analytics"), icon: BarChart3, group: moreGroup },
     { id: "logs", label: t("dashboard.logs"), icon: Activity, group: moreGroup },
+    { id: "control-tower", label: "Control Tower", icon: Cpu, group: moreGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
 
     // Coming soon features
