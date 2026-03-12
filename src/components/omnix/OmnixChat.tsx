@@ -237,6 +237,31 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   return (
     <div className="relative flex flex-col h-full overflow-hidden">
+      {/* ── WEBCAM PREVIEW (floating top-right) ── */}
+      <AnimatePresence>
+        {webcamActive && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="absolute top-3 right-3 z-30 rounded-xl overflow-hidden border-2 border-primary/30 shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
+          >
+            <video
+              ref={videoRef as any}
+              autoPlay
+              muted
+              playsInline
+              className="w-28 h-20 object-cover rounded-xl"
+            />
+            <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
+              <span className="text-[8px] bg-primary/80 text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">
+                📷 AO VIVO
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── IMMERSIVE ORB VIEW ── */}
       <div className="flex-1 flex flex-col items-center justify-center relative">
         {/* Background ambient */}
