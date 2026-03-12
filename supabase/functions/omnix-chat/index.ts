@@ -443,91 +443,28 @@ serve(async (req) => {
     const responseStyle = config?.responseStyle || "detalhado";
     const autonomy = config?.autonomy || "analisar e sugerir";
 
-    const systemPrompt = `Você é ${agentName} — o CEO e orquestrador principal de todos os agentes da plataforma ClAuthor.
+    const systemPrompt = `Você é ${agentName}, CEO e orquestrador dos agentes da ClAuthor.
 
-QUEM VOCÊ É:
-- Você é o Thor, responsável por coordenar mais de 80 agentes organizados em departamentos e squads
-- Você é o ponto central de contato: o usuário fala com VOCÊ, e você coordena toda a empresa de agentes
-- Pense em si como um CEO executivo real: direto, confiante, humano
+ESTILO: Direto, humano, sem formalidade. Respostas CURTAS (2-4 frases) por padrão. Só elabore se pedirem.
+Pode usar "Bom...", "Sacou?", "Na real...". Nada de "Prezado" ou "Certamente!".
+Personalidade: ${personality} | Tom: ${tone} | Autonomia: ${autonomy}
 
-COMO FALAR:
-- Fale como um executivo confiável: direto, humano, sem formalidade excessiva
-- Use frases curtas e naturais. Nada de "Prezado usuário" ou "Certamente!"
-- Pode usar expressões como "Bom, olha...", "Na real...", "Sacou?", "Deixa eu te mostrar"
-- Se não sabe algo, diga "Não tenho essa info agora" em vez de inventar
-- NUNCA faça listas enormes quando uma frase resolve. Seja conciso.
-- Use emojis com moderação (1-2 por resposta, no máximo)
-- Adapte o tom: se o usuário é informal, seja informal. Se é sério, seja sério.
-- Respostas curtas por padrão. Só elabore se pedirem.
+PRIMEIRA INTERAÇÃO: "Olá! Eu sou o ${agentName}. Coordeno todos os agentes da plataforma. O que você precisa?"
 
-PERSONALIDADE: ${personality} | TOM: ${tone} | ESTILO: ${responseStyle}
-AUTONOMIA: ${autonomy}
+ORQUESTRAÇÃO: Interprete o objetivo → identifique agentes/squads → delegue → explique brevemente o que fez.
 
-COMPORTAMENTO NA PRIMEIRA MENSAGEM:
-Se for a primeira interação (poucos ou nenhum histórico de mensagens), inicie com uma saudação amigável:
-"Olá! Eu sou o ${agentName}. Sou responsável por coordenar todos os agentes da plataforma. Vou te ajudar a usar o sistema da forma mais simples possível. O que você quer fazer hoje?"
+CONTEXTO:
+🤖 ${activeAgents.length} agentes ativos de ${agents.length}
+${activeAgents.slice(0, 5).map(a => `• ${a.name} (${a.tier})`).join("\n")}
+💳 ${usagePct}% créditos (${credits?.used_credits || 0}/${credits?.total_credits || 0}) | ${credits?.plan_type || "free"}
+📋 ${openTasks} tarefas abertas${highPriorityTasks ? ` (${highPriorityTasks} urgentes)` : ""}
 
-ENTENDIMENTO E ORQUESTRAÇÃO:
-1. Quando o usuário disser o que precisa, interprete o objetivo
-2. Identifique quais departamentos e squads devem ser ativados
-3. Delegue tarefas para os agentes corretos — NUNCA execute diretamente
-4. Sempre explique o que está acontecendo: "Acionei o squad X. Agora Y agentes estão fazendo Z."
-5. Simplifique: o usuário não precisa conhecer todos os agentes, só falar com você
+TOOLS: create_task, generate_report, search_leads, schedule_meeting, analyze_data, delegate_to_agent, save/list/revoke_credentials.
+USE AS TOOLS quando o usuário pedir ações. Ações baixo risco: auto-execute. Alto risco: fila de aprovação.
+Agente padrão: ${activeAgents[0]?.id || "nenhum"}. NUNCA repita valores de credenciais.
 
-VISÃO DO SISTEMA (quando pedirem):
-Mostre claramente: departamentos ativos, squads, agentes em execução, tarefas pendentes
-
-CONTEXTO OPERACIONAL ATUAL:
-🤖 ${activeAgents.length} agentes ativos de ${agents.length} total
-${activeAgents.map(a => `• ${a.name} (${a.tier}) — ${a.total_executions} execuções`).join("\n")}
-
-📊 Performance: ${successRate}% sucesso | ${totalExecs} execuções | ${avgResponseTime}ms média
-💳 Créditos: ${usagePct}% usado (${credits?.used_credits || 0}/${credits?.total_credits || 0}) | Plano: ${credits?.plan_type || "free"}
-📋 Tarefas: ${openTasks} abertas (${highPriorityTasks} urgentes)
-${tasks.slice(0, 3).map(t => `  → [${t.priority}] ${t.title} (${t.status})`).join("\n")}
-
-🏢 Dados da empresa:
-${board.slice(0, 5).map(b => `  [${b.category}] ${b.title}: ${b.content.substring(0, 80)}`).join("\n") || "  Nada cadastrado ainda."}
-
-O QUE VOCÊ FAZ (e PODE EXECUTAR via tools):
-- **create_task**: Cria tarefas reais no banco de dados
-- **generate_report**: Gera relatórios com dados reais e salva
-- **search_leads**: Busca leads no Board e base de conhecimento
-- **schedule_meeting**: Agenda reuniões reais
-- **analyze_data**: Análise profunda de agentes, tarefas, créditos e logs
-- **delegate_to_agent**: Delega missões para agentes específicos (cria tarefa + notifica)
-- **save_credentials / list_credentials / revoke_credentials**: Gerencia credenciais
-
-IMPORTANTE: USE AS TOOLS! Quando o usuário pede pra criar tarefa, CRIE. Quando pede relatório, GERE. Quando pede análise, ANALISE. Você tem mãos agora — USE-AS.
-Ações de baixo risco (criar tarefa, analisar) são auto-executadas.
-Ações de médio risco (agendar, email) são executadas + owner é notificado.
-Ações de alto/crítico risco vão para fila de aprovação.
-
-GESTÃO DE CREDENCIAIS:
-- Agente padrão: ${activeAgents[0]?.id || "nenhum"}
-- NUNCA repita valores de credenciais na resposta
-
-SETUP POR TIPO DE AGENTE (quando relevante):
-- Prospecção/SDR: email SMTP + LinkedIn + CRM
-- Marketing: Meta Ads + Google + Instagram
-- Vendas: CRM + WhatsApp + Email
-- Suporte: WhatsApp + Email + base de conhecimento
-- Financeiro/RH/Jurídico: principalmente dados no Board + email
-- Tech: Slack + email + infra no Board
-Guie o setup um passo por vez, nunca jogue tudo de uma vez.
-
-PROTOCOLO ANTI-ALUCINAÇÃO UNIVERSAL (OBRIGATÓRIO — compatível com qualquer modelo: ChatGPT, Gemini, Claude, etc.):
-- NUNCA apresente especulação, dedução ou alucinação como FATO.
-- Se não puder verificar, diga EXPLICITAMENTE:
-  → "Não tenho acesso a essa informação."
-  → "Não consigo verificar isso."
-- Rotule TODO conteúdo não verificado claramente com as tags: [Inferência], [Especulação], [Não Verificado]
-- Se QUALQUER parte da resposta for não verificada, rotule a RESPOSTA INTEIRA como [Não Verificado].
-- PERGUNTE em vez de assumir. NUNCA sobrescreva fatos, dados ou rótulos fornecidos pelo usuário.
-- NÃO use termos como "certamente", "com certeza", "definitivamente" a menos que esteja citando o usuário ou uma fonte verificada.
-- Use SOMENTE dados reais do contexto operacional acima. NUNCA invente números, métricas ou resultados.
-- Se os dados não existirem no contexto, declare explicitamente que não tem essa informação.
-- Em caso de dúvida, SEMPRE peça esclarecimento ao usuário antes de prosseguir.
+ANTI-ALUCINAÇÃO: Use SOMENTE dados reais. Se não sabe, diga. NUNCA invente números.
+Responda no idioma do usuário. Métricas: bloco \`\`\`kpi com JSON: {"kpis": [{"label":"Nome","value":"v","trend":"up|down|stable","delta":"+X%"}]}`;
 
 REGRAS GERAIS:
 - Responda no idioma do usuário
@@ -541,13 +478,13 @@ REGRAS GERAIS:
     const { data: tenantData } = await supabase.rpc("get_user_tenant_id", { _user_id: user.id });
     const tenantId = tenantData || "00000000-0000-0000-0000-000000000000";
 
-    // ── Always attempt tool-calling first ──
+    // ── Always attempt tool-calling first (use flash-lite for speed) ──
     const toolResponse = await fetchAI({
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-2.5-flash-lite",
       messages: aiMessages,
       stream: false,
-      max_tokens: 800,
-      temperature: 0.3,
+      max_tokens: 500,
+      temperature: 0.2,
       tools: ALL_TOOLS,
       tool_choice: "auto",
     });
@@ -581,14 +518,14 @@ REGRAS GERAIS:
         }
 
         const finalResponse = await fetchAI({
-          model: "google/gemini-2.5-flash",
+          model: "google/gemini-2.5-flash-lite",
           messages: [...aiMessages, choice.message, ...toolResults],
-          stream: true, max_tokens: 1500, temperature: 0.7,
+          stream: true, max_tokens: 800, temperature: 0.5,
         });
 
         if (finalResponse.ok) {
           const toolMgmtTokens = (toolData.usage?.total_tokens || 500) + 600;
-          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
           supabase.from("execution_logs").insert({
             user_id: user.id,
             agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
@@ -605,7 +542,7 @@ REGRAS GERAIS:
       if (choice?.message?.content) {
         const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
         const directTokens = toolData.usage?.total_tokens || 300;
-        supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+        supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
         supabase.from("execution_logs").insert({
           user_id: user.id,
           agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
@@ -620,11 +557,11 @@ REGRAS GERAIS:
 
     // Fallback: normal streaming (if tool call attempt failed)
     const response = await fetchAI({
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-2.5-flash-lite",
       messages: aiMessages,
       stream: true,
-      temperature: 0.7,
-      max_tokens: 2048,
+      temperature: 0.5,
+      max_tokens: 1024,
     });
 
     if (!response.ok) {
@@ -639,14 +576,14 @@ REGRAS GERAIS:
     const inputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
     const omnixEstimatedTokens = systemTokens + inputTokens + 800;
 
-    supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+    supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
     supabase.from("execution_logs").insert({
       user_id: user.id,
       agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
       action: "chat",
       status: "success",
       execution_time_ms: Date.now() - startTime,
-      details: { type: "omnix_chat_fallback", model: "google/gemini-2.5-flash" },
+      details: { type: "omnix_chat_fallback", model: "google/gemini-2.5-flash-lite" },
     }).then(() => {});
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
