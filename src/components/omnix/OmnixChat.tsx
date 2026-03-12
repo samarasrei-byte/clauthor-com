@@ -162,19 +162,33 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       setShowTextInput(true);
       return;
     }
-    if (isListening) return;
+
+    if (isListening || isStartingListeningRef.current) return;
     if (isStreaming || isLoading) return;
+
+    const now = Date.now();
+    if (now - lastListenStartRef.current < 280) return;
 
     // BARGE-IN: stop Thor if speaking
     if (isSpeaking) {
       stopSpeaking();
     }
 
+    clearPendingRestart();
     manualStopRef.current = false;
+    isStartingListeningRef.current = true;
 
     try {
-      await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Ask microphone permission once. Future restarts reuse browser permission state.
+      if (!micPermissionGrantedRef.current) {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: true, noiseSuppression: true, autoGainControl: true },
+        });
+        stream.getTracks().forEach((track) => track.stop());
+        micPermissionGrantedRef.current = true;
+      }
     } catch (err: any) {
+      isStartingListeningRef.current = false;
       console.error("Microphone permission error:", err);
       setShowTextInput(true);
       if (err.name === "NotAllowedError") {
@@ -191,17 +205,18 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     const recognition = new SpeechRecognition();
     recognition.lang = config.language || "pt-BR";
     recognition.interimResults = true;
-    recognition.continuous = true;
+    recognition.continuous = false;
 
     let hasFinalResult = false;
-    let restartAttempts = 0;
-    const MAX_RESTART_ATTEMPTS = 3;
 
     recognition.onresult = (e: any) => {
-      const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join("").trim();
+      const transcript = Array.from(e.results)
+        .map((r: any) => r[0].transcript)
+        .join("")
+        .trim();
       if (!transcript) return;
-      restartAttempts = 0; // Reset on successful result
 
+      restartAttemptsRef.current = 0;
       setInput(transcript);
 
       const currentResult = e.results[e.resultIndex];
@@ -218,21 +233,29 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
     recognition.onend = () => {
       setIsListening(false);
+      isStartingListeningRef.current = false;
       recognitionRef.current = null;
 
       if (manualStopRef.current) {
         manualStopRef.current = false;
+        restartAttemptsRef.current = 0;
         return;
       }
 
-      // Keep always-on listening — create fresh instance via startListening
-      if (autoSpeak && !showTextInput && !isSpeaking && !isStreaming && !isLoading && restartAttempts < MAX_RESTART_ATTEMPTS) {
-        restartAttempts++;
-        setTimeout(() => {
-          if (manualStopRef.current) return;
-          startListening();
-        }, 300 + restartAttempts * 200);
+      if (!autoSpeak || showTextInput || isSpeaking || isStreaming || isLoading) {
+        return;
       }
+
+      restartAttemptsRef.current += 1;
+      if (restartAttemptsRef.current > 6) {
+        return;
+      }
+
+      const delay = Math.min(1400, 220 + restartAttemptsRef.current * 220);
+      restartTimeoutRef.current = window.setTimeout(() => {
+        if (manualStopRef.current) return;
+        startListeningRef.current?.();
+      }, delay);
     };
 
     recognition.onerror = (e: any) => {
@@ -240,6 +263,8 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
       if (e.error === "not-allowed") {
         setIsListening(false);
+        isStartingListeningRef.current = false;
+        clearPendingRestart();
         toast.error("Microfone bloqueado. Use o campo de texto.");
         setShowTextInput(true);
         manualStopRef.current = true;
@@ -248,18 +273,47 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
       if (e.error === "network") {
         setIsListening(false);
+        isStartingListeningRef.current = false;
+        clearPendingRestart();
         toast.error("Erro de rede no reconhecimento de voz.");
         return;
       }
 
-      // For aborted/no-speech: let onend handle the restart (don't double-restart)
-      // Just mark not listening; onend fires right after onerror
+      // no-speech/aborted are expected while switching states; onend handles restart.
     };
 
     recognitionRef.current = recognition;
-    recognition.start();
-    setIsListening(true);
-  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend, stopSpeaking, autoSpeak, showTextInput, getImageForSend]);
+
+    try {
+      recognition.start();
+      lastListenStartRef.current = Date.now();
+      setIsListening(true);
+      isStartingListeningRef.current = false;
+    } catch (err) {
+      console.error("SpeechRecognition start error:", err);
+      setIsListening(false);
+      isStartingListeningRef.current = false;
+      recognitionRef.current = null;
+
+      restartAttemptsRef.current += 1;
+      if (restartAttemptsRef.current <= 4) {
+        const delay = 300 + restartAttemptsRef.current * 220;
+        restartTimeoutRef.current = window.setTimeout(() => startListeningRef.current?.(), delay);
+      }
+    }
+  }, [
+    autoSpeak,
+    clearPendingRestart,
+    config.language,
+    getImageForSend,
+    isListening,
+    isLoading,
+    isSpeaking,
+    isStreaming,
+    onSend,
+    showTextInput,
+    stopSpeaking,
+  ]);
 
   // Auto-start hands-free listening once (after first load)
   useEffect(() => {
