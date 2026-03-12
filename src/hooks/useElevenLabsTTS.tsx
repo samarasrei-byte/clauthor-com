@@ -89,7 +89,7 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
     const cleaned = cleanTextForSpeech(text);
     if (!cleaned) return;
 
-    stop();
+    stop(false);
 
     const doNativeFallback = () => {
       const utterance = speakNative(
