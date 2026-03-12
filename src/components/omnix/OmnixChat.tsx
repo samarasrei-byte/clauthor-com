@@ -463,7 +463,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             <Button
               size="icon"
               className="h-16 w-16 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
-              onClick={() => { recognitionRef.current?.stop(); setIsListening(false); }}
+              onClick={() => { manualStopRef.current = true; recognitionRef.current?.stop(); setIsListening(false); }}
             >
               <MicOff className="h-6 w-6" />
             </Button>

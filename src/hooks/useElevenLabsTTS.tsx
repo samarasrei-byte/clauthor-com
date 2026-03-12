@@ -83,12 +83,28 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
     stop();
 
     const doNativeFallback = () => {
-      setIsSpeaking(true);
-      onStart?.();
-      nativeUtteranceRef.current = speakNative(cleaned, "pt-BR", undefined, () => {
+      const utterance = speakNative(
+        cleaned,
+        "pt-BR",
+        () => {
+          setIsSpeaking(true);
+          onStart?.();
+        },
+        () => {
+          setIsSpeaking(false);
+          onEnd?.();
+        }
+      );
+
+      nativeUtteranceRef.current = utterance;
+
+      if (!utterance) {
         setIsSpeaking(false);
         onEnd?.();
-      });
+        return false;
+      }
+
+      return true;
     };
 
     // If ElevenLabs already failed this session, go straight to native

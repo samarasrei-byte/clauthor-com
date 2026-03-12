@@ -580,8 +580,8 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
       model: chatModel,
       messages: aiMessages,
       stream: true,
-      temperature: 0.35,
-      max_tokens: 640,
+      temperature: 0.25,
+      max_tokens: 220,
     }, {
       complexity: "complex",
     });
