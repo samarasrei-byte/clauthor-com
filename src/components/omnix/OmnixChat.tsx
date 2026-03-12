@@ -380,7 +380,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       // BARGE-IN: stop Thor and immediately start listening
       clearPendingRestart();
       stopSpeaking();
-      setTimeout(() => startListeningRef.current?.(), 120);
+      queueRestartListening(120);
       return;
     }
     if (isListening) {
@@ -411,9 +411,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const handleBargeIn = useCallback(() => {
     handleStop();
     // dupla tentativa para cobrir janela de abort/cleanup do streaming
-    setTimeout(() => startListeningRef.current?.(), 180);
-    setTimeout(() => startListeningRef.current?.(), 650);
-  }, [handleStop]);
+    queueRestartListening(180);
+    setTimeout(() => startListeningRef.current?.(), 620);
+  }, [handleStop, queueRestartListening]);
 
   const hasMessages = messages.length > 0;
   const isActive = isListening || isSpeaking || isStreaming || isLoading;
