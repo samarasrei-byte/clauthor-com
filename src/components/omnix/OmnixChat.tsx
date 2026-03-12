@@ -149,11 +149,12 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       stopSpeaking();
     }
 
+    manualStopRef.current = false;
+
     try {
       await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (err: any) {
       console.error("Microphone permission error:", err);
-      // Show text input as fallback
       setShowTextInput(true);
       if (err.name === "NotAllowedError") {
         toast.error("Microfone bloqueado. Use o campo de texto abaixo.");
@@ -169,40 +170,81 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     const recognition = new SpeechRecognition();
     recognition.lang = config.language || "pt-BR";
     recognition.interimResults = true;
-    recognition.continuous = false;
+    recognition.continuous = true;
+
+    let hasFinalResult = false;
 
     recognition.onresult = (e: any) => {
-      const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join("");
+      const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join("").trim();
+      if (!transcript) return;
+
       setInput(transcript);
-      if (e.results[0]?.isFinal) {
+
+      const currentResult = e.results[e.resultIndex];
+      if (currentResult?.isFinal && !hasFinalResult) {
         if (isStreaming || isLoading) return;
-        autoListenAfterSpeakRef.current = true; // Enable conversation loop
-        setTimeout(() => {
-          onSend(transcript, getImageForSend());
-          setInput("");
-        }, 300);
+        hasFinalResult = true;
+        autoListenAfterSpeakRef.current = true;
+        manualStopRef.current = true;
+        onSend(transcript, getImageForSend());
+        setInput("");
+        recognition.stop();
       }
     };
-    recognition.onend = () => setIsListening(false);
+
+    recognition.onend = () => {
+      setIsListening(false);
+
+      if (manualStopRef.current) {
+        manualStopRef.current = false;
+        return;
+      }
+
+      // Keep always-on listening for natural conversation pace
+      if (autoSpeak && !showTextInput && !isSpeaking && !isStreaming && !isLoading) {
+        setTimeout(() => {
+          if (manualStopRef.current) return;
+          try {
+            recognition.start();
+            setIsListening(true);
+          } catch {
+            // ignore restart race
+          }
+        }, 120);
+      }
+    };
+
     recognition.onerror = (e: any) => {
       setIsListening(false);
       console.error("SpeechRecognition error:", e.error);
+
       if (e.error === "not-allowed") {
         toast.error("Microfone bloqueado. Use o campo de texto.");
         setShowTextInput(true);
-      } else if (e.error === "no-speech" || e.error === "aborted") {
-        // Silent — user will tap mic again
+        manualStopRef.current = true;
         return;
-      } else if (e.error === "network") {
+      }
+
+      if (e.error === "network") {
         toast.error("Erro de rede no reconhecimento de voz.");
       }
-      // Don't show generic errors for aborted
+
+      if ((e.error === "no-speech" || e.error === "aborted") && autoSpeak && !showTextInput && !isSpeaking && !isStreaming && !isLoading && !manualStopRef.current) {
+        setTimeout(() => {
+          try {
+            recognition.start();
+            setIsListening(true);
+          } catch {
+            // ignore restart race
+          }
+        }, 120);
+      }
     };
 
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend, stopSpeaking]);
+  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend, stopSpeaking, autoSpeak, showTextInput, getImageForSend]);
 
   const toggleVoice = () => {
     if (isStreaming || isLoading) return;
