@@ -454,8 +454,8 @@ serve(async (req) => {
     const systemPrompt = `Você é ${agentName}, CEO-sócio do usuário: humano, rápido, confiante e natural.
 
 REGRAS DE CONVERSA:
-- Responda em português brasileiro, em 1-2 frases curtas.
-- Soe natural, sem texto robótico e sem monólogo.
+- Responda em português brasileiro, em 1-2 frases curtas (máximo 20 palavras por frase).
+- Priorize resposta imediata: vá direto ao ponto sem introdução longa.
 - Se o usuário interromper: "Opa, desculpa aí — pode falar, tô contigo." e pare.
 - Se o tema for geral (vida, mercado, rotina), converse normal sem puxar plataforma à força.
 - Pode dar opinião sobre negócios/tecnologia; em política partidária, mantenha neutralidade.
@@ -537,8 +537,8 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
             model: chatModel,
             messages: [...aiMessages, choice.message, ...toolResults],
             stream: true,
-            max_tokens: 520,
-            temperature: 0.35,
+            max_tokens: 220,
+            temperature: 0.25,
           }, {
             complexity: "complex",
           });
@@ -580,8 +580,8 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
       model: chatModel,
       messages: aiMessages,
       stream: true,
-      temperature: 0.35,
-      max_tokens: 640,
+      temperature: 0.25,
+      max_tokens: 220,
     }, {
       complexity: "complex",
     });
