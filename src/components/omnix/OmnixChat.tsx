@@ -38,6 +38,23 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   // Ref to track if we should auto-barge-in (VAD triggered)
   const vadBargeInRef = useRef(false);
 
+  // ─── Webcam ───
+  const { isActive: webcamActive, videoRef, start: startWebcam, stop: stopWebcam, captureFrame } = useWebcam();
+
+  const getImageForSend = useCallback((): string | null => {
+    if (!webcamActive) return null;
+    return captureFrame();
+  }, [webcamActive, captureFrame]);
+
+  const toggleWebcam = useCallback(async () => {
+    if (webcamActive) {
+      stopWebcam();
+    } else {
+      const ok = await startWebcam();
+      if (!ok) toast.error("Não foi possível acessar a câmera.");
+    }
+  }, [webcamActive, startWebcam, stopWebcam]);
+
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
     onEnd: () => {
