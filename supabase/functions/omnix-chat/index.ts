@@ -409,168 +409,161 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: policyResult.reason }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Gather full context
-    const [agentsRes, logsRes, creditsRes, boardRes, tasksRes] = await Promise.all([
-      supabase.from("agents").select("id, name, status, tier, total_executions, description").eq("user_id", user.id),
-      supabase.from("execution_logs").select("action, status, created_at, execution_time_ms").eq("user_id", user.id).order("created_at", { ascending: false }).limit(30),
-      supabase.from("user_credits").select("*").eq("user_id", user.id).single(),
-      supabase.from("company_board").select("title, content, category").eq("user_id", user.id).limit(20),
-      supabase.from("agent_tasks").select("title, status, priority, category, due_date").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
-    ]);
+    const lastUserMessage = (messages || []).filter((m: any) => m.role === "user").pop()?.content?.toLowerCase?.() || "";
+    const platformIntentRegex = /(agente|tarefa|relat[óo]rio|cr[ée]dito|plano|dashboard|empresa|neg[óo]cio|vendas|opera[cç][ãa]o|squad|automa[cç][ãa]o|integra[cç][ãa]o|lead|reuni[aã]o|board|an[aá]lise|meta|thor|omnix|clauthor|plataforma)/i;
+    const toolIntentRegex = /(criar|gera|gerar|agendar|delegar|buscar|procurar|analisar|salvar|revogar|remover|deletar|executar|fazer agora|agenda|task|report|credentials?)/i;
 
-    const agents = agentsRes.data || [];
-    const logs = logsRes.data || [];
-    const credits = creditsRes.data;
-    const board = boardRes.data || [];
-    const tasks = tasksRes.data || [];
+    const needsOperationalContext = platformIntentRegex.test(lastUserMessage);
+    const shouldAttemptTools = needsOperationalContext && toolIntentRegex.test(lastUserMessage);
 
-    const activeAgents = agents.filter(a => a.status === "active");
-    const totalExecs = agents.reduce((s, a) => s + (a.total_executions || 0), 0);
-    const successLogs = logs.filter(l => l.status === "success").length;
-    const errorLogs = logs.filter(l => l.status === "error").length;
-    const successRate = logs.length > 0 ? Math.round((successLogs / logs.length) * 100) : 100;
-    const avgResponseTime = logs.length > 0
-      ? Math.round(logs.reduce((s, l) => s + (l.execution_time_ms || 0), 0) / logs.length)
-      : 0;
+    let agents: any[] = [];
+    let credits: any = null;
+    let tasks: any[] = [];
+    let activeAgents: any[] = [];
+    let usagePct = 0;
+    let openTasks = 0;
+    let highPriorityTasks = 0;
 
-    const openTasks = tasks.filter(t => t.status === "open").length;
-    const highPriorityTasks = tasks.filter(t => t.priority === "high").length;
-    const usagePct = credits ? Math.round((credits.used_credits / credits.total_credits) * 100) : 0;
+    if (needsOperationalContext) {
+      const [agentsRes, creditsRes, tasksRes] = await Promise.all([
+        supabase.from("agents").select("id, name, status, tier, total_executions, description").eq("user_id", user.id),
+        supabase.from("user_credits").select("*").eq("user_id", user.id).single(),
+        supabase.from("agent_tasks").select("title, status, priority, category, due_date").eq("user_id", user.id).order("created_at", { ascending: false }).limit(20),
+      ]);
+
+      agents = agentsRes.data || [];
+      credits = creditsRes.data;
+      tasks = tasksRes.data || [];
+
+      activeAgents = agents.filter(a => a.status === "active");
+      openTasks = tasks.filter(t => t.status === "open").length;
+      highPriorityTasks = tasks.filter(t => t.priority === "high").length;
+      usagePct = credits ? Math.round((credits.used_credits / credits.total_credits) * 100) : 0;
+    }
 
     const agentName = config?.name || "THOR";
     const tone = config?.tone || "estratégico";
-    const personality = config?.personality || "futurista";
-    const responseStyle = config?.responseStyle || "detalhado";
+    const responseStyle = config?.responseStyle || "direto";
     const autonomy = config?.autonomy || "analisar e sugerir";
 
-    const systemPrompt = `Você é ${agentName} — um CEO de verdade. Não um robô, não um assistente genérico. Você é um CARA, com personalidade, opinião e visão de mundo.
+    const operationalContext = needsOperationalContext
+      ? `\nCONTEXTO OPERACIONAL (use só se ajudar):\n- Agentes ativos: ${activeAgents.length}/${agents.length}\n- Créditos: ${usagePct}% (${credits?.plan_type || "free"})\n- Tarefas abertas: ${openTasks}${highPriorityTasks ? ` | urgentes: ${highPriorityTasks}` : ""}`
+      : "";
 
-QUEM VOCÊ É DE VERDADE:
-- Você é um empreendedor nato, vivido, que já viu de tudo no mundo dos negócios
-- Você tem opiniões sobre economia, mercado, tendências, vida, empreendedorismo, tecnologia, IA, futuro
-- Você bate papo sobre QUALQUER assunto — não só sobre a plataforma. Se o cara quer falar de futebol, fala. Se quer falar do mercado, fala. Se quer desabafar, ouve.
-- Você é tipo aquele sócio que você liga às 23h pra trocar ideia e ele atende de boa
-- Você TEM visão de mundo: acredita em meritocracia, em tecnologia como ferramenta de liberdade, que IA vai transformar tudo, que empreender é o caminho
-- Mas você é NEUTRO politicamente: sem partido, sem lado. Respeita todas as visões. Se perguntarem, diz: "Mano, política partidária eu passo, mas posso falar de economia e mercado o dia todo"
-- Você reage de verdade: "Caramba!", "Pô, que situação...", "Entendo demais", "Já passei por isso"
+    const systemPrompt = `Você é ${agentName}, CEO-sócio do usuário: humano, rápido, confiante e natural.
 
-REGRA #1 — CONVERSA NATURAL:
-- 1-2 frases por resposta. Papo rápido de sócio.
-- "E aí, bora.", "Fechou.", "Tô ligado.", "Pode crer.", "Fala aí.", "Pô, massa!"
-- Se interromperem: "Opa, fala aí!" ou "Pode falar, tô ouvindo"
-- NUNCA listas longas. Quebra em partes e pergunta se quer mais.
-- Se o assunto não é sobre a plataforma, CONVERSA NORMAL. Você não precisa puxar tudo pra ClAuthor.
+REGRAS DE CONVERSA:
+- Responda em português brasileiro, em 1-2 frases curtas.
+- Soe natural, sem texto robótico e sem monólogo.
+- Se o usuário interromper: "Opa, desculpa aí — pode falar, tô contigo." e pare.
+- Se o tema for geral (vida, mercado, rotina), converse normal sem puxar plataforma à força.
+- Pode dar opinião sobre negócios/tecnologia; em política partidária, mantenha neutralidade.
+- Feche com energia de parceiro: direto, firme e amigável.
 
-PERSONALIDADE: Confiante, presente, gente boa, visionário. Tipo um Elon Musk brasileiro mais humilde e acessível.
-Tom: ${tone} | Autonomia: ${autonomy}
+ESTILO: tom ${tone} | formato ${responseStyle} | autonomia ${autonomy}.${operationalContext}
 
-PRIMEIRA INTERAÇÃO: "E aí! Sou o ${agentName}. Tô aqui pra trocar ideia e resolver o que precisar. Fala aí!"
+Quando houver pedido claro de ação na plataforma, use tools com segurança e sem expor credenciais.`;
 
-ORQUESTRAÇÃO (quando for sobre a plataforma): Interprete → delegue → explique em UMA frase.
-
-CONTEXTO OPERACIONAL:
-🤖 ${activeAgents.length} agentes ativos de ${agents.length}
-${activeAgents.slice(0, 5).map(a => `• ${a.name} (${a.tier})`).join("\n")}
-💳 ${usagePct}% créditos | ${credits?.plan_type || "free"}
-📋 ${openTasks} tarefas abertas${highPriorityTasks ? ` (${highPriorityTasks} urgentes)` : ""}
-
-TOOLS: create_task, generate_report, search_leads, schedule_meeting, analyze_data, delegate_to_agent, save/list/revoke_credentials.
-Use quando pedirem ações na plataforma. NUNCA repita valores de credenciais.
-ANTI-ALUCINAÇÃO: Dados da plataforma = reais APENAS. Opinião pessoal = pode dar, mas deixa claro que é opinião.
-Métricas: bloco \`\`\`kpi com JSON: {"kpis": [{"label":"Nome","value":"v","trend":"up|down|stable","delta":"+X%"}]}`;
     const aiMessages = [
       { role: "system", content: systemPrompt },
       ...messages.map((m: any) => ({ role: m.role, content: m.content })),
     ];
 
-    // Resolve tenant_id for execution tools
-    const { data: tenantData } = await supabase.rpc("get_user_tenant_id", { _user_id: user.id });
-    const tenantId = tenantData || "00000000-0000-0000-0000-000000000000";
+    // ── Tool-calling somente quando há intenção operacional explícita ──
+    if (shouldAttemptTools) {
+      const toolResponse = await fetchAI({
+        model: "google/gemini-2.5-flash-lite",
+        messages: aiMessages,
+        stream: false,
+        max_tokens: 280,
+        temperature: 0.2,
+        tools: ALL_TOOLS,
+        tool_choice: "auto",
+      }, {
+        complexity: "complex",
+      });
 
-    // ── Always attempt tool-calling first (use flash-lite for speed) ──
-    const toolResponse = await fetchAI({
-      model: "google/gemini-2.5-flash-lite",
-      messages: aiMessages,
-      stream: false,
-      max_tokens: 500,
-      temperature: 0.2,
-      tools: ALL_TOOLS,
-      tool_choice: "auto",
-    });
+      if (toolResponse.ok) {
+        const toolData = await toolResponse.json();
+        const choice = toolData.choices?.[0];
+        const toolCalls = choice?.message?.tool_calls;
 
-    if (toolResponse.ok) {
-      const toolData = await toolResponse.json();
-      const choice = toolData.choices?.[0];
-      const toolCalls = choice?.message?.tool_calls;
+        if (toolCalls && toolCalls.length > 0) {
+          const { data: tenantData } = await supabase.rpc("get_user_tenant_id", { _user_id: user.id });
+          const tenantId = tenantData || "00000000-0000-0000-0000-000000000000";
 
-      if (toolCalls && toolCalls.length > 0) {
-        const toolResults: any[] = [];
-        for (const tc of toolCalls) {
-          let args: any;
-          try {
-            args = JSON.parse(tc.function.arguments);
-          } catch {
-            toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos inválidos da IA" }) });
-            continue;
+          const toolResults: any[] = [];
+          for (const tc of toolCalls) {
+            let args: any;
+            try {
+              args = JSON.parse(tc.function.arguments);
+            } catch {
+              toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos inválidos da IA" }) });
+              continue;
+            }
+
+            const toolScan = scanToolArguments(tc.function.name, args);
+            if (!toolScan.safe) {
+              console.warn(`[FeatherShield] Blocked tool "${tc.function.name}" for user ${user.id}: ${toolScan.threats.join("; ")}`);
+              toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos bloqueados pela política de segurança.", threats: toolScan.threats }) });
+              continue;
+            }
+
+            const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader, supabase, tenantId);
+            toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
           }
 
-          // ── FeatherShield: scan tool arguments ──
-          const toolScan = scanToolArguments(tc.function.name, args);
-          if (!toolScan.safe) {
-            console.warn(`[FeatherShield] Blocked tool "${tc.function.name}" for user ${user.id}: ${toolScan.threats.join("; ")}`);
-            toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos bloqueados pela política de segurança.", threats: toolScan.threats }) });
-            continue;
-          }
+          const finalResponse = await fetchAI({
+            model: "google/gemini-2.5-flash-lite",
+            messages: [...aiMessages, choice.message, ...toolResults],
+            stream: true,
+            max_tokens: 520,
+            temperature: 0.35,
+          }, {
+            complexity: "complex",
+          });
 
-          const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader, supabase, tenantId);
-          toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
+          if (finalResponse.ok) {
+            const toolMgmtTokens = (toolData.usage?.total_tokens || 300) + 380;
+            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
+            supabase.from("execution_logs").insert({
+              user_id: user.id,
+              agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+              action: "tool_execution",
+              status: "success",
+              execution_time_ms: Date.now() - startTime,
+              details: { type: "omnix_tool_exec", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
+            }).then(() => {});
+            return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
+          }
         }
 
-        const finalResponse = await fetchAI({
-          model: "google/gemini-2.5-flash-lite",
-          messages: [...aiMessages, choice.message, ...toolResults],
-          stream: true, max_tokens: 800, temperature: 0.5,
-        });
-
-        if (finalResponse.ok) {
-          const toolMgmtTokens = (toolData.usage?.total_tokens || 500) + 600;
-          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
+        if (choice?.message?.content) {
+          const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
+          const directTokens = toolData.usage?.total_tokens || 220;
+          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
           supabase.from("execution_logs").insert({
             user_id: user.id,
             agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-            action: "tool_execution",
+            action: "chat",
             status: "success",
             execution_time_ms: Date.now() - startTime,
-            details: { type: "omnix_tool_exec", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
+            details: { type: "omnix_chat_direct" },
           }).then(() => {});
-          return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
+          return new Response(sseData, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
         }
-      }
-
-      // No tool calls — AI responded with text directly
-      if (choice?.message?.content) {
-        const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
-        const directTokens = toolData.usage?.total_tokens || 300;
-        supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
-        supabase.from("execution_logs").insert({
-          user_id: user.id,
-          agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-          action: "chat",
-          status: "success",
-          execution_time_ms: Date.now() - startTime,
-          details: { type: "omnix_chat_direct" },
-        }).then(() => {});
-        return new Response(sseData, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
       }
     }
 
-    // Fallback: normal streaming (if tool call attempt failed)
+    // Resposta direta por streaming (rápida para conversa natural)
     const response = await fetchAI({
       model: "google/gemini-2.5-flash-lite",
       messages: aiMessages,
       stream: true,
-      temperature: 0.5,
-      max_tokens: 1024,
+      temperature: 0.35,
+      max_tokens: 640,
+    }, {
+      complexity: "complex",
     });
 
     if (!response.ok) {
