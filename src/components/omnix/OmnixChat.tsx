@@ -171,6 +171,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       setInput(transcript);
       if (e.results[0]?.isFinal) {
         if (isStreaming || isLoading) return;
+        autoListenAfterSpeakRef.current = true; // Enable conversation loop
         setTimeout(() => {
           onSend(transcript, getImageForSend());
           setInput("");
