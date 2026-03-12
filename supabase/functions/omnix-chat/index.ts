@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, rateLimitResponse, detectPromptInjection, scanToolArguments, securityHeaders } from "../_shared/security.ts";
 import { validateAndEnforcePolicy } from "../_shared/policy-engine.ts";
+import { autonomousExecute } from "../_shared/tool-executor.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -68,6 +69,111 @@ const CREDENTIAL_TOOLS = [
   },
 ];
 
+// ── Execution tools for THOR ──
+const EXECUTION_TOOLS = [
+  {
+    type: "function" as const,
+    function: {
+      name: "create_task",
+      description: "Create a new task assigned to an agent or the user. Use when the user asks to create, add, or register a task, to-do, or action item.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: { type: "string", description: "Task title" },
+          description: { type: "string", description: "Task details" },
+          priority: { type: "string", enum: ["low", "medium", "high"], description: "Task priority" },
+          category: { type: "string", description: "Category: sales, marketing, support, finance, hr, tech, other" },
+          agent_id: { type: "string", description: "Agent to assign. Optional." },
+          due_date: { type: "string", description: "Due date in YYYY-MM-DD format. Optional." },
+        },
+        required: ["title"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "generate_report",
+      description: "Generate a report based on current data. Use when the user asks for reports, summaries, or analysis documents.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: { type: "string", description: "Report title" },
+          report_type: { type: "string", enum: ["performance", "financial", "sales", "marketing", "custom"], description: "Type of report" },
+          period: { type: "string", description: "Period: today, week, month, quarter" },
+        },
+        required: ["title", "report_type"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "search_leads",
+      description: "Search for leads or prospects based on criteria. Use when the user asks to find, search, or look up leads or potential clients.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "Search query or criteria" },
+          category: { type: "string", description: "Industry or segment filter" },
+        },
+        required: ["query"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "schedule_meeting",
+      description: "Schedule a meeting or appointment. Use when the user wants to book, schedule, or arrange a meeting.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: { type: "string", description: "Meeting title" },
+          meeting_date: { type: "string", description: "Date in YYYY-MM-DD" },
+          meeting_time: { type: "string", description: "Time in HH:MM" },
+          duration_minutes: { type: "number", description: "Duration in minutes. Default 30." },
+          participants: { type: "array", items: { type: "string" }, description: "List of participant names/emails" },
+          notes: { type: "string", description: "Meeting notes or agenda" },
+        },
+        required: ["title", "meeting_date", "meeting_time"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "analyze_data",
+      description: "Analyze internal data (tasks, logs, credits, agents) and return insights. Use when the user asks for analysis, insights, or diagnostics.",
+      parameters: {
+        type: "object",
+        properties: {
+          scope: { type: "string", enum: ["agents", "tasks", "credits", "logs", "full"], description: "What to analyze" },
+        },
+        required: ["scope"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "delegate_to_agent",
+      description: "Delegate a task or mission to a specific agent. Use when orchestrating work between agents.",
+      parameters: {
+        type: "object",
+        properties: {
+          agent_id: { type: "string", description: "Target agent ID" },
+          mission: { type: "string", description: "What the agent should do" },
+          priority: { type: "string", enum: ["low", "medium", "high"], description: "Mission priority" },
+        },
+        required: ["agent_id", "mission"],
+      },
+    },
+  },
+];
+
+const ALL_TOOLS = [...CREDENTIAL_TOOLS, ...EXECUTION_TOOLS];
+
 async function callCredentialManager(
   action: string, body: Record<string, any>,
   supabaseUrl: string, authHeader: string,
@@ -84,10 +190,14 @@ async function handleToolCall(
   toolName: string, args: any,
   userId: string, activeAgents: any[],
   supabaseUrl: string, authHeader: string,
+  adminClient: any, tenantId: string,
 ): Promise<string> {
   const agentId = args.agent_id || activeAgents[0]?.id;
-  if (!agentId) return JSON.stringify({ error: "Nenhum agente ativo encontrado." });
-  const agentName = activeAgents.find(a => a.id === agentId)?.name || "Agente";
+  if (!agentId && ["save_credentials", "list_credentials", "revoke_credentials"].includes(toolName)) {
+    return JSON.stringify({ error: "Nenhum agente ativo encontrado." });
+  }
+  const agentName = activeAgents.find(a => a.id === agentId)?.name || "THOR";
+  const effectiveAgentId = agentId || "00000000-0000-0000-0000-000000000000";
 
   switch (toolName) {
     case "save_credentials": {
@@ -117,6 +227,133 @@ async function handleToolCall(
       }, supabaseUrl, authHeader);
       return JSON.stringify({ success: result.success, revoked_count: result.revoked_count || 0, integration: args.integration_name, agent_name: agentName });
     }
+
+    // ── Execution Tools (via Autonomy Engine) ──
+    case "create_task": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        const { data, error } = await adminClient.from("agent_tasks").insert({
+          user_id: userId, tenant_id: tenantId, agent_id: agentId || null,
+          title: args.title, description: args.description || "",
+          priority: args.priority || "medium", category: args.category || "other",
+          due_date: args.due_date || null,
+        }).select("id, title").single();
+        if (error) return { success: false, result: { error: error.message } };
+        return { success: true, result: { task_id: data.id, title: data.title, message: `Tarefa "${data.title}" criada com sucesso.` } };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "generate_report": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        // Gather data for report
+        const [logsRes, tasksRes, creditsRes] = await Promise.all([
+          adminClient.from("execution_logs").select("action, status, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(50),
+          adminClient.from("agent_tasks").select("title, status, priority, category").eq("user_id", userId).limit(50),
+          adminClient.from("user_credits").select("*").eq("user_id", userId).single(),
+        ]);
+        const sections = [
+          { title: "Resumo de Execuções", content: `${logsRes.data?.length || 0} logs recentes. Sucesso: ${logsRes.data?.filter((l: any) => l.status === "success").length || 0}` },
+          { title: "Tarefas", content: `${tasksRes.data?.length || 0} tarefas. Abertas: ${tasksRes.data?.filter((t: any) => t.status === "open").length || 0}` },
+          { title: "Créditos", content: `${creditsRes.data?.used_credits || 0}/${creditsRes.data?.total_credits || 0} usados (${creditsRes.data?.plan_type || "free"})` },
+        ];
+        const { data, error } = await adminClient.from("agent_reports").insert({
+          user_id: userId, tenant_id: tenantId, agent_id: agentId || null,
+          title: args.title, report_type: args.report_type, period: args.period || "custom",
+          sections,
+        }).select("id, title").single();
+        if (error) return { success: false, result: { error: error.message } };
+        return { success: true, result: { report_id: data.id, title: data.title, sections, message: `Relatório "${data.title}" gerado.` } };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "search_leads": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        // Search company board and knowledge base for lead-like data
+        const { data: boardResults } = await adminClient.from("company_board")
+          .select("title, content, category").eq("user_id", userId)
+          .or(`title.ilike.%${args.query}%,content.ilike.%${args.query}%`).limit(10);
+        const { data: kbResults } = await adminClient.rpc("search_knowledge", {
+          _user_id: userId, _query: args.query, _limit: 5,
+        });
+        return {
+          success: true,
+          result: {
+            board_matches: boardResults?.length || 0,
+            knowledge_matches: kbResults?.length || 0,
+            results: [...(boardResults || []).map((b: any) => ({ source: "board", title: b.title, preview: b.content.substring(0, 120) })),
+                      ...(kbResults || []).map((k: any) => ({ source: "knowledge", title: k.title, preview: k.content.substring(0, 120) }))],
+            message: `Encontrados ${(boardResults?.length || 0) + (kbResults?.length || 0)} resultados para "${args.query}".`,
+          },
+        };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "schedule_meeting": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        const { data, error } = await adminClient.from("agent_meetings").insert({
+          user_id: userId, tenant_id: tenantId, agent_id: agentId || null,
+          title: args.title, meeting_date: args.meeting_date, meeting_time: args.meeting_time,
+          duration_minutes: args.duration_minutes || 30,
+          participants: args.participants || [],
+          notes: args.notes || "",
+        }).select("id, title, meeting_date, meeting_time").single();
+        if (error) return { success: false, result: { error: error.message } };
+        return { success: true, result: { meeting_id: data.id, title: data.title, date: data.meeting_date, time: data.meeting_time, calendar_link: "https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe", message: `Reunião "${data.title}" agendada para ${data.meeting_date} às ${data.meeting_time}.` } };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "analyze_data": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        const scope = args.scope || "full";
+        const analysis: any = {};
+        if (scope === "agents" || scope === "full") {
+          const { data } = await adminClient.from("agents").select("name, status, tier, total_executions").eq("user_id", userId);
+          analysis.agents = { total: data?.length || 0, active: data?.filter((a: any) => a.status === "active").length || 0, total_executions: data?.reduce((s: number, a: any) => s + (a.total_executions || 0), 0) || 0 };
+        }
+        if (scope === "tasks" || scope === "full") {
+          const { data } = await adminClient.from("agent_tasks").select("status, priority").eq("user_id", userId);
+          analysis.tasks = { total: data?.length || 0, open: data?.filter((t: any) => t.status === "open").length || 0, high_priority: data?.filter((t: any) => t.priority === "high").length || 0 };
+        }
+        if (scope === "credits" || scope === "full") {
+          const { data } = await adminClient.from("user_credits").select("*").eq("user_id", userId).single();
+          analysis.credits = data ? { used: data.used_credits, total: data.total_credits, pct: Math.round((data.used_credits / data.total_credits) * 100), plan: data.plan_type } : null;
+        }
+        if (scope === "logs" || scope === "full") {
+          const { data } = await adminClient.from("execution_logs").select("status").eq("user_id", userId).limit(100);
+          const success = data?.filter((l: any) => l.status === "success").length || 0;
+          analysis.logs = { total: data?.length || 0, success, errors: (data?.length || 0) - success, success_rate: data?.length ? Math.round((success / data.length) * 100) : 100 };
+        }
+        return { success: true, result: { scope, analysis, message: `Análise de ${scope} completa.` } };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "delegate_to_agent": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        const targetAgent = activeAgents.find(a => a.id === args.agent_id);
+        if (!targetAgent) return { success: false, result: { error: `Agente ${args.agent_id} não encontrado ou inativo.` } };
+        // Create a task for the target agent
+        const { data, error } = await adminClient.from("agent_tasks").insert({
+          user_id: userId, tenant_id: tenantId, agent_id: args.agent_id,
+          title: `[Delegado] ${args.mission}`, description: `Missão delegada pelo THOR: ${args.mission}`,
+          priority: args.priority || "medium", category: "delegation",
+        }).select("id, title").single();
+        if (error) return { success: false, result: { error: error.message } };
+        // Notify
+        await adminClient.from("notifications").insert({
+          user_id: userId, type: "agent_delegation",
+          title: `🔀 Missão delegada: ${targetAgent.name}`,
+          message: `THOR delegou para ${targetAgent.name}: ${args.mission}`,
+          metadata: { agent_id: args.agent_id, task_id: data.id },
+        });
+        return { success: true, result: { task_id: data.id, agent_name: targetAgent.name, mission: args.mission, message: `Missão delegada para ${targetAgent.name}.` } };
+      });
+      return JSON.stringify(result);
+    }
+
     default:
       return JSON.stringify({ error: `Unknown tool: ${toolName}` });
   }
@@ -252,18 +489,21 @@ ${tasks.slice(0, 3).map(t => `  → [${t.priority}] ${t.title} (${t.status})`).j
 🏢 Dados da empresa:
 ${board.slice(0, 5).map(b => `  [${b.category}] ${b.title}: ${b.content.substring(0, 80)}`).join("\n") || "  Nada cadastrado ainda."}
 
-O QUE VOCÊ FAZ:
-- Coordena departamentos e squads de agentes para executar missões complexas
-- Dá visão estratégica com base nos dados reais acima
-- Identifica problemas e sugere soluções práticas
-- Gerencia credenciais de integrações (save_credentials, list_credentials, revoke_credentials)
-- Guia setup pós-contratação de agentes
-- Quando o usuário pede algo, explica QUAIS agentes/squads serão acionados e O QUE farão
+O QUE VOCÊ FAZ (e PODE EXECUTAR via tools):
+- **create_task**: Cria tarefas reais no banco de dados
+- **generate_report**: Gera relatórios com dados reais e salva
+- **search_leads**: Busca leads no Board e base de conhecimento
+- **schedule_meeting**: Agenda reuniões reais
+- **analyze_data**: Análise profunda de agentes, tarefas, créditos e logs
+- **delegate_to_agent**: Delega missões para agentes específicos (cria tarefa + notifica)
+- **save_credentials / list_credentials / revoke_credentials**: Gerencia credenciais
 
-GESTÃO DE CREDENCIAIS (use as tools quando necessário):
-- save_credentials: quando o usuário der dados de acesso
-- list_credentials: quando pedir pra ver credenciais salvas
-- revoke_credentials: quando quiser remover acesso
+IMPORTANTE: USE AS TOOLS! Quando o usuário pede pra criar tarefa, CRIE. Quando pede relatório, GERE. Quando pede análise, ANALISE. Você tem mãos agora — USE-AS.
+Ações de baixo risco (criar tarefa, analisar) são auto-executadas.
+Ações de médio risco (agendar, email) são executadas + owner é notificado.
+Ações de alto/crítico risco vão para fila de aprovação.
+
+GESTÃO DE CREDENCIAIS:
 - Agente padrão: ${activeAgents[0]?.id || "nenhum"}
 - NUNCA repita valores de credenciais na resposta
 
@@ -285,89 +525,88 @@ REGRAS:
       ...messages.map((m: any) => ({ role: m.role, content: m.content })),
     ];
 
-    // Detect credential intent (save, list, revoke)
-    const lastUserMsg = (messages || []).filter((m: any) => m.role === "user").pop()?.content || "";
-    const credentialIntent = /senha|password|api.?key|token|acesso|login|credencial|chave|phone|telefone|whatsapp|smtp|e-?mail.*senha|linkedin.*senha|listar|mostrar|ver.*credencia|revogar|remover|deletar.*credencia|quais.*credencia/i.test(lastUserMsg);
+    // Resolve tenant_id for execution tools
+    const { data: tenantData } = await supabase.rpc("get_user_tenant_id", { _user_id: user.id });
+    const tenantId = tenantData || "00000000-0000-0000-0000-000000000000";
 
-    if (credentialIntent && activeAgents.length > 0) {
-      const toolResponse = await fetchAI({
-        model: "google/gemini-2.5-flash",
-        messages: aiMessages,
-        stream: false,
-        max_tokens: 500,
-        temperature: 0.3,
-        tools: CREDENTIAL_TOOLS,
-        tool_choice: "auto",
-      });
+    // ── Always attempt tool-calling first ──
+    const toolResponse = await fetchAI({
+      model: "google/gemini-2.5-flash",
+      messages: aiMessages,
+      stream: false,
+      max_tokens: 800,
+      temperature: 0.3,
+      tools: ALL_TOOLS,
+      tool_choice: "auto",
+    });
 
-      if (toolResponse.ok) {
-        const toolData = await toolResponse.json();
-        const choice = toolData.choices?.[0];
-        const toolCalls = choice?.message?.tool_calls;
+    if (toolResponse.ok) {
+      const toolData = await toolResponse.json();
+      const choice = toolData.choices?.[0];
+      const toolCalls = choice?.message?.tool_calls;
 
-        if (toolCalls && toolCalls.length > 0) {
-          const toolResults: any[] = [];
-          for (const tc of toolCalls) {
-            let args: any;
-            try {
-              args = JSON.parse(tc.function.arguments);
-            } catch {
-              toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos inválidos da IA" }) });
-              continue;
-            }
-
-            // ── FeatherShield: scan tool arguments ──
-            const toolScan = scanToolArguments(tc.function.name, args);
-            if (!toolScan.safe) {
-              console.warn(`[FeatherShield] Blocked tool "${tc.function.name}" for user ${user.id}: ${toolScan.threats.join("; ")}`);
-              toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos bloqueados pela política de segurança.", threats: toolScan.threats }) });
-              continue;
-            }
-
-            const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader);
-            toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
+      if (toolCalls && toolCalls.length > 0) {
+        const toolResults: any[] = [];
+        for (const tc of toolCalls) {
+          let args: any;
+          try {
+            args = JSON.parse(tc.function.arguments);
+          } catch {
+            toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos inválidos da IA" }) });
+            continue;
           }
 
-          const finalResponse = await fetchAI({
-            model: "google/gemini-2.5-flash",
-            messages: [...aiMessages, choice.message, ...toolResults],
-            stream: true, max_tokens: 500, temperature: 0.7,
-          });
-
-          if (finalResponse.ok) {
-            const credMgmtTokens = (toolData.usage?.total_tokens || 400) + 400;
-            // Log after initiating stream (best effort — stream may fail but log is still useful)
-            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_mgmt", tokens_used: credMgmtTokens, model: "google/gemini-2.5-flash" }).then(() => {});
-            supabase.from("execution_logs").insert({
-              user_id: user.id,
-              agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-              action: "chat",
-              status: "success",
-              execution_time_ms: Date.now() - startTime,
-              details: { type: "omnix_credential_mgmt", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
-            }).then(() => {});
-            return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
+          // ── FeatherShield: scan tool arguments ──
+          const toolScan = scanToolArguments(tc.function.name, args);
+          if (!toolScan.safe) {
+            console.warn(`[FeatherShield] Blocked tool "${tc.function.name}" for user ${user.id}: ${toolScan.threats.join("; ")}`);
+            toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos bloqueados pela política de segurança.", threats: toolScan.threats }) });
+            continue;
           }
+
+          const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader, supabase, tenantId);
+          toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
         }
 
-        if (choice?.message?.content) {
-          const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
-          const toolRespTokens = toolData.usage?.total_tokens || 300;
-          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: toolRespTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+        const finalResponse = await fetchAI({
+          model: "google/gemini-2.5-flash",
+          messages: [...aiMessages, choice.message, ...toolResults],
+          stream: true, max_tokens: 1500, temperature: 0.7,
+        });
+
+        if (finalResponse.ok) {
+          const toolMgmtTokens = (toolData.usage?.total_tokens || 500) + 600;
+          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: "google/gemini-2.5-flash" }).then(() => {});
           supabase.from("execution_logs").insert({
             user_id: user.id,
             agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-            action: "chat",
+            action: "tool_execution",
             status: "success",
             execution_time_ms: Date.now() - startTime,
-            details: { type: "omnix_tool_response" },
+            details: { type: "omnix_tool_exec", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
           }).then(() => {});
-          return new Response(sseData, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
+          return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
         }
+      }
+
+      // No tool calls — AI responded with text directly
+      if (choice?.message?.content) {
+        const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
+        const directTokens = toolData.usage?.total_tokens || 300;
+        supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+        supabase.from("execution_logs").insert({
+          user_id: user.id,
+          agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+          action: "chat",
+          status: "success",
+          execution_time_ms: Date.now() - startTime,
+          details: { type: "omnix_chat_direct" },
+        }).then(() => {});
+        return new Response(sseData, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
       }
     }
 
-    // Normal streaming
+    // Fallback: normal streaming (if tool call attempt failed)
     const response = await fetchAI({
       model: "google/gemini-2.5-flash",
       messages: aiMessages,
@@ -384,13 +623,10 @@ REGRAS:
       return new Response(JSON.stringify({ error: "AI gateway error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Estimate tokens — more accurate: system + messages input + reasonable output estimate
     const systemTokens = Math.ceil(systemPrompt.length / 4);
     const inputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
-    const estimatedOutputTokens = 800; // conservative average for streaming responses
-    const omnixEstimatedTokens = systemTokens + inputTokens + estimatedOutputTokens;
+    const omnixEstimatedTokens = systemTokens + inputTokens + 800;
 
-    // Fire-and-forget logging (don't block the stream response)
     supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash" }).then(() => {});
     supabase.from("execution_logs").insert({
       user_id: user.id,
@@ -398,7 +634,7 @@ REGRAS:
       action: "chat",
       status: "success",
       execution_time_ms: Date.now() - startTime,
-      details: { type: "omnix_chat", model: "google/gemini-2.5-flash" },
+      details: { type: "omnix_chat_fallback", model: "google/gemini-2.5-flash" },
     }).then(() => {});
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
