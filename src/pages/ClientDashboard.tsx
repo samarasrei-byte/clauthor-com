@@ -471,7 +471,7 @@ const ClientDashboard = () => {
           {omnixMounted && (
             <div className={activeSection === "omnix" ? "h-full" : "hidden"}>
               <Suspense fallback={<SectionLoader />}>
-                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} initialMessage={pendingTaskMessage} onInitialMessageHandled={() => setPendingTaskMessage(null)} />
+                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} initialMessage={pendingTaskMessage || welcomeMessage} onInitialMessageHandled={() => { setPendingTaskMessage(null); setWelcomeMessage(null); }} />
               </Suspense>
             </div>
           )}
