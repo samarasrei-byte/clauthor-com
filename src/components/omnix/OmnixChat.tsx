@@ -119,7 +119,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   const handleSend = () => {
     if (!input.trim() || isLoading) return;
-    onSend(input);
+    onSend(input, getImageForSend());
     setInput("");
   };
 
