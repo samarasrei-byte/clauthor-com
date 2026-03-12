@@ -576,14 +576,14 @@ REGRAS GERAIS:
     const inputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
     const omnixEstimatedTokens = systemTokens + inputTokens + 800;
 
-    supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+    supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
     supabase.from("execution_logs").insert({
       user_id: user.id,
       agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
       action: "chat",
       status: "success",
       execution_time_ms: Date.now() - startTime,
-      details: { type: "omnix_chat_fallback", model: "google/gemini-2.5-flash" },
+      details: { type: "omnix_chat_fallback", model: "google/gemini-2.5-flash-lite" },
     }).then(() => {});
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
