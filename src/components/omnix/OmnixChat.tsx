@@ -138,7 +138,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       if (e.error === "not-allowed") {
         toast.error(t("cmd.mic_denied_short", { defaultValue: "Microphone permission denied." }));
       } else if (e.error === "no-speech") {
-        setTimeout(() => startListening(), 500);
+        // Don't auto-retry — user will tap mic again
         return;
       } else if (e.error === "network") {
         toast.error(t("cmd.network_error", { defaultValue: "Voice recognition network error." }));
