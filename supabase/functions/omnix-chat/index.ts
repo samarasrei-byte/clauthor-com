@@ -561,7 +561,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
         if (choice?.message?.content) {
           const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
           const directTokens = toolData.usage?.total_tokens || 220;
-          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
+          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: chatModel }).then(() => {});
           supabase.from("execution_logs").insert({
             user_id: user.id,
             agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
