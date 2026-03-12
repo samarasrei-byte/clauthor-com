@@ -1,6 +1,5 @@
 import { useCallback, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
 
 interface UseElevenLabsTTSOptions {
   onStart?: () => void;
@@ -8,21 +7,25 @@ interface UseElevenLabsTTSOptions {
 }
 
 /** Fallback to browser's native speech synthesis */
-function speakNative(text: string, onStart?: () => void, onEnd?: () => void): SpeechSynthesisUtterance | null {
+function speakNative(text: string, lang: string, onStart?: () => void, onEnd?: () => void): SpeechSynthesisUtterance | null {
   if (!("speechSynthesis" in window)) return null;
 
   window.speechSynthesis.cancel();
 
   const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 1.05;
-  utterance.pitch = 0.9;
+  utterance.rate = 1.0;
+  utterance.pitch = 0.85;
   utterance.volume = 1;
+  utterance.lang = lang;
 
-  // Try to pick a good voice
+  // Pick best voice for language
   const voices = window.speechSynthesis.getVoices();
-  const preferred = voices.find(
-    (v) => v.lang.startsWith("pt") && v.name.toLowerCase().includes("male")
-  ) || voices.find((v) => v.lang.startsWith("pt")) || voices.find((v) => v.lang.startsWith("en")) || voices[0];
+  const langPrefix = lang.split("-")[0]; // "pt" from "pt-BR"
+  const preferred =
+    voices.find((v) => v.lang.startsWith(langPrefix) && v.name.toLowerCase().includes("male")) ||
+    voices.find((v) => v.lang.startsWith(langPrefix)) ||
+    voices.find((v) => v.lang.startsWith("en")) ||
+    voices[0];
   if (preferred) utterance.voice = preferred;
 
   utterance.onstart = () => onStart?.();
@@ -37,11 +40,11 @@ function speakNative(text: string, onStart?: () => void, onEnd?: () => void): Sp
 function cleanTextForSpeech(text: string): string {
   return text
     .replace(/```[\s\S]*?```/g, "")
-    .replace(/```kpi[\s\S]*?```/g, "")
-    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1") // links -> text
-    .replace(/[#*_`~]/g, "")
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+    .replace(/[#*_`~>]/g, "")
     .replace(/\n{2,}/g, ". ")
     .replace(/\n/g, " ")
+    .replace(/\s{2,}/g, " ")
     .trim()
     .slice(0, 3500);
 }
@@ -79,14 +82,18 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
 
     stop();
 
-    // If ElevenLabs already failed this session, go straight to native
-    if (elevenLabsFailedRef.current) {
+    const doNativeFallback = () => {
       setIsSpeaking(true);
       onStart?.();
-      nativeUtteranceRef.current = speakNative(cleaned, undefined, () => {
+      nativeUtteranceRef.current = speakNative(cleaned, "pt-BR", undefined, () => {
         setIsSpeaking(false);
         onEnd?.();
       });
+    };
+
+    // If ElevenLabs already failed this session, go straight to native
+    if (elevenLabsFailedRef.current) {
+      doNativeFallback();
       return true;
     }
 
@@ -107,24 +114,21 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       );
 
       if (!response.ok) {
-        console.warn("ElevenLabs TTS failed, falling back to native speech:", response.status);
+        console.warn("ElevenLabs TTS failed, using native voice:", response.status);
         elevenLabsFailedRef.current = true;
-
-        if (response.status === 401) {
-          toast.info("Usando voz nativa — configure sua API ElevenLabs para voz premium.", { duration: 5000 });
-        }
-
-        // Fallback to native
-        setIsSpeaking(true);
-        onStart?.();
-        nativeUtteranceRef.current = speakNative(cleaned, undefined, () => {
-          setIsSpeaking(false);
-          onEnd?.();
-        });
+        doNativeFallback();
         return true;
       }
 
       const audioBlob = await response.blob();
+      if (audioBlob.size < 100) {
+        // Too small = probably error response
+        console.warn("ElevenLabs returned tiny response, using native");
+        elevenLabsFailedRef.current = true;
+        doNativeFallback();
+        return true;
+      }
+
       const audioUrl = URL.createObjectURL(audioBlob);
       objectUrlRef.current = audioUrl;
 
@@ -137,31 +141,19 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       };
       audio.onended = () => stop();
       audio.onerror = () => {
-        console.error("Audio playback error, falling back to native");
-        // Fallback on playback error too
-        setIsSpeaking(true);
-        nativeUtteranceRef.current = speakNative(cleaned, undefined, () => {
-          setIsSpeaking(false);
-          onEnd?.();
-        });
+        console.error("Audio playback error, using native");
+        doNativeFallback();
       };
 
       await audio.play();
       return true;
     } catch (err) {
       console.error("TTS error, using fallback:", err);
-      // Fallback to native on any error
-      setIsSpeaking(true);
-      onStart?.();
-      nativeUtteranceRef.current = speakNative(cleaned, undefined, () => {
-        setIsSpeaking(false);
-        onEnd?.();
-      });
+      doNativeFallback();
       return true;
     }
   }, [stop, onStart, onEnd]);
 
-  /** Reset ElevenLabs failure flag (e.g., after user updates API key) */
   const resetProvider = useCallback(() => {
     elevenLabsFailedRef.current = false;
   }, []);

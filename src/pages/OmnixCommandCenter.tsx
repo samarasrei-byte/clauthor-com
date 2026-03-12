@@ -13,11 +13,49 @@ interface OmnixCommandCenterProps {
   onInitialMessageHandled?: () => void;
 }
 
+const GREETING_KEY = "thor_greeted";
+
 const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialMessage, onInitialMessageHandled }: OmnixCommandCenterProps) => {
   const { messages, isLoading, isStreaming, config, updateConfig, sendMessage, stopStreaming, clearMessages } = useOmnix();
   const [showSettings, setShowSettings] = useState(false);
   const postPaymentSent = useRef(false);
   const lastSentMessage = useRef<string | null>(null);
+  const greetingSent = useRef(false);
+
+  // ─── Proactive greeting on first ever visit ───
+  useEffect(() => {
+    if (greetingSent.current || isLoading || isStreaming) return;
+    if (messages.length > 0) return;
+    // Don't greet if post-payment or initial message will be sent
+    if (postPaymentContext || initialMessage) return;
+
+    // Check if already greeted this session
+    const greeted = sessionStorage.getItem(GREETING_KEY);
+    if (greeted) return;
+
+    greetingSent.current = true;
+    sessionStorage.setItem(GREETING_KEY, "1");
+
+    // Check for hire intent from onboarding
+    const hireIntent = localStorage.getItem("hireIntent");
+    let greeting: string;
+
+    if (hireIntent) {
+      try {
+        const intent = JSON.parse(hireIntent);
+        greeting = `Acabei de chegar na plataforma. Me ajude a começar com ${intent.agentName || intent.departmentName || "os agentes"}. O que eu faço primeiro?`;
+      } catch {
+        greeting = "Acabei de entrar na plataforma. Me apresente o que você pode fazer e como me ajudar.";
+      }
+    } else {
+      greeting = "Acabei de entrar na plataforma. Me apresente o que você pode fazer e como me ajudar.";
+    }
+
+    const timer = setTimeout(() => {
+      sendMessage(greeting);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [messages.length, isLoading, isStreaming, sendMessage, postPaymentContext, initialMessage]);
 
   // Auto-send contextual welcome message after payment (priority 1)
   useEffect(() => {
@@ -37,12 +75,10 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
     return () => clearTimeout(timer);
   }, [postPaymentContext, messages.length, isLoading, isStreaming, sendMessage, onPostPaymentHandled]);
 
-  // Auto-send task message from TaskRequestPanel (priority 2 — skips if postPayment is active)
+  // Auto-send task message from TaskRequestPanel (priority 2)
   useEffect(() => {
     if (!initialMessage || isLoading || isStreaming) return;
-    // Don't conflict with postPayment flow
     if (postPaymentContext && !postPaymentSent.current) return;
-    // Don't send the same message twice
     if (lastSentMessage.current === initialMessage) return;
 
     lastSentMessage.current = initialMessage;
@@ -65,7 +101,6 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
           onSend={sendMessage}
           onStop={stopStreaming}
           onClear={clearMessages}
-          voiceFirst={!initialMessage}
         />
         
         <Button
