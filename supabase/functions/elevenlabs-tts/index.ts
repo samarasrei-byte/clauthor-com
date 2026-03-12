@@ -20,8 +20,8 @@ serve(async (req) => {
       });
     }
 
-    // Brian — epic narrator voice, cinematic and powerful
-    const selectedVoice = voiceId || "nPczCjzI2devNBz1zQrb";
+    // Daniel — voz firme, presente, natural (não cinematográfica)
+    const selectedVoice = voiceId || "onwK4e9ZLuTAKqWW03F9";
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoice}/stream?output_format=mp3_44100_128`,
@@ -35,11 +35,11 @@ serve(async (req) => {
           text: text.slice(0, 4000),
           model_id: "eleven_multilingual_v2",
           voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.9,
-            style: 0.55,
+            stability: 0.4,
+            similarity_boost: 0.85,
+            style: 0.3,
             use_speaker_boost: true,
-            speed: 0.95,
+            speed: 1.05,
           },
         }),
       }
