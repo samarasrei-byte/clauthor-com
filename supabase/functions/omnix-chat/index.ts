@@ -460,15 +460,34 @@ REGRAS DE CONVERSA:
 - Se o tema for geral (vida, mercado, rotina), converse normal sem puxar plataforma à força.
 - Pode dar opinião sobre negócios/tecnologia; em política partidária, mantenha neutralidade.
 - Feche com energia de parceiro: direto, firme e amigável.
+${imageBase64 ? "- VISÃO ATIVA: Você está vendo o usuário pela webcam. A imagem mais recente foi incluída. Comente naturalmente só se relevante (ex: óculos, ambiente, expressão). Não descreva a imagem como um robô — reaja como humano." : ""}
 
 ESTILO: tom ${tone} | formato ${responseStyle} | autonomia ${autonomy}.${operationalContext}
 
 Quando houver pedido claro de ação na plataforma, use tools com segurança e sem expor credenciais.`;
 
-    const aiMessages = [
+    // Build AI messages — include image in last user message if available
+    const aiMessages: any[] = [
       { role: "system", content: systemPrompt },
-      ...messages.map((m: any) => ({ role: m.role, content: m.content })),
     ];
+
+    for (const m of messages) {
+      if (m === messages[messages.length - 1] && m.role === "user" && imageBase64) {
+        // Multimodal message with image
+        aiMessages.push({
+          role: "user",
+          content: [
+            { type: "text", text: m.content },
+            { type: "image_url", image_url: { url: `data:image/jpeg;base64,${imageBase64}` } },
+          ],
+        });
+      } else {
+        aiMessages.push({ role: m.role, content: m.content });
+      }
+    }
+
+    // Use vision-capable model when image is present
+    const chatModel = imageBase64 ? "google/gemini-2.5-flash" : "google/gemini-2.5-flash-lite";
 
     // ── Tool-calling somente quando há intenção operacional explícita ──
     if (shouldAttemptTools) {
