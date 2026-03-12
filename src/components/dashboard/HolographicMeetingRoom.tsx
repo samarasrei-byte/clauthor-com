@@ -286,11 +286,21 @@ const HolographicMeetingRoom = () => {
     enabled: !!user,
   });
 
+  // Demo squad for users with no/few agents
+  const DEMO_SQUAD: { id: string; name: string; role: HolographicAgent["role"] }[] = [
+    { id: "demo-ceo", name: "THOR CEO", role: "ceo" },
+    { id: "demo-sales", name: "SDR Outbound", role: "sales" },
+    { id: "demo-mkt", name: "Growth Hacker", role: "marketing" },
+    { id: "demo-data", name: "Data Analyst", role: "analytics" },
+    { id: "demo-design", name: "Creative Director", role: "design" },
+    { id: "demo-auto", name: "Automation Lead", role: "automation" },
+  ];
+
   const assignRole = (name: string, idx: number): HolographicAgent["role"] => {
     const n = name.toLowerCase();
-    if (n.includes("ceo") || n.includes("chief")) return "ceo";
-    if (n.includes("sales") || n.includes("vend")) return "sales";
-    if (n.includes("market")) return "marketing";
+    if (n.includes("ceo") || n.includes("chief") || n.includes("thor")) return "ceo";
+    if (n.includes("sales") || n.includes("vend") || n.includes("sdr")) return "sales";
+    if (n.includes("market") || n.includes("growth")) return "marketing";
     if (n.includes("data") || n.includes("analy")) return "analytics";
     if (n.includes("design") || n.includes("creat")) return "design";
     if (n.includes("auto") || n.includes("process")) return "automation";
@@ -298,16 +308,17 @@ const HolographicMeetingRoom = () => {
     return roles[idx % roles.length];
   };
 
-  const agents: HolographicAgent[] = dbAgents.map((a, i) => {
-    const role = assignRole(a.name, i);
-    return {
-      id: a.id,
-      name: a.name,
-      specialty: AGENT_ROLES[role].specialty,
-      role,
-      state: speakingAgentId === a.id ? "speaking" : selectedAgents.includes(a.id) ? "processing" : "idle",
-    };
-  });
+  // Use real agents if available (2+), otherwise fill with demo squad
+  const useDemo = dbAgents.length < 2;
+  const agentSource = useDemo ? DEMO_SQUAD : dbAgents.map((a, i) => ({ id: a.id, name: a.name, role: assignRole(a.name, i) }));
+
+  const agents: HolographicAgent[] = agentSource.map((a) => ({
+    id: a.id,
+    name: a.name,
+    specialty: AGENT_ROLES[a.role].specialty,
+    role: a.role,
+    state: speakingAgentId === a.id ? "speaking" : selectedAgents.includes(a.id) ? "processing" : "idle",
+  }));
 
   // Voice recognition setup
   useEffect(() => {
@@ -380,23 +391,54 @@ Estamos em uma reunião estratégica sobre: "${topic}".
 ${conversationHistory.length > 0 ? "Contexto da discussão até agora:\n" + conversationHistory.map(m => m.content).join("\n") : ""}
 Dê sua contribuição profissional em 2-3 frases, focando na sua especialidade. Seja direto e estratégico.`;
 
-        const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-            body: JSON.stringify({
-              message: contextPrompt,
-              agentId: agent.id,
-              conversationHistory: [],
-            }),
-          }
-        );
-
         let content = `Analisando "${topic}" pela perspectiva de ${roleInfo.specialty}...`;
-        if (response.ok) {
-          const data = await response.json();
-          content = data.response || data.content || content;
+
+        if (useDemo || agent.id.startsWith("demo-")) {
+          // Use omnix-chat (THOR) for demo agents
+          const response = await fetch(
+            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/omnix-chat`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                messages: [{ role: "user", content: contextPrompt }],
+              }),
+            }
+          );
+          if (response.ok) {
+            // omnix-chat returns SSE stream — parse it
+            const text = await response.text();
+            const chunks = text.split("\n").filter(l => l.startsWith("data: ") && !l.includes("[DONE]"));
+            let parsed = "";
+            for (const chunk of chunks) {
+              try {
+                const json = JSON.parse(chunk.slice(6));
+                parsed += json.choices?.[0]?.delta?.content || "";
+              } catch {}
+            }
+            if (parsed.trim()) content = parsed.trim();
+          }
+        } else {
+          // Use agent-chat for real agents (correct format: messages array)
+          const response = await fetch(
+            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+              body: JSON.stringify({
+                messages: [
+                  ...conversationHistory.map(m => ({ role: m.role, content: m.content })),
+                  { role: "user", content: contextPrompt },
+                ],
+                agentId: agent.id,
+              }),
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            const parsed = data.message || data.response || data.content;
+            if (parsed) content = parsed;
+          }
         }
 
         const msgType: MeetingMessage["type"] = 
@@ -432,24 +474,37 @@ Dê sua contribuição profissional em 2-3 frases, focando na sua especialidade.
     const ceoAgent = active.find(a => a.role === "ceo") || active[0];
     if (ceoAgent) {
       try {
+        const planPrompt = `Com base na reunião sobre "${topic}", liste exatamente 5 ações prioritárias no formato:
+1. [ALTA] Ação - Responsável
+2. [MÉDIA] Ação - Responsável
+Apenas o texto, sem introduções.`;
+
+        let text = "";
+        const isDemo = useDemo || ceoAgent.id.startsWith("demo-");
+        const endpoint = isDemo ? "omnix-chat" : "agent-chat";
+        const body = isDemo
+          ? { messages: [...conversationHistory.slice(-3).map(m => ({ role: m.role, content: m.content })), { role: "user", content: planPrompt }] }
+          : { messages: [...conversationHistory.slice(-3).map(m => ({ role: m.role, content: m.content })), { role: "user", content: planPrompt }], agentId: ceoAgent.id };
+
         const planResponse = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/${endpoint}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-            body: JSON.stringify({
-              message: `Com base na reunião sobre "${topic}", liste exatamente 5 ações prioritárias no formato:
-1. [ALTA] Ação - Responsável
-2. [MÉDIA] Ação - Responsável
-Apenas o texto, sem introduções.`,
-              agentId: ceoAgent.id,
-              conversationHistory: conversationHistory.slice(-3),
-            }),
+            body: JSON.stringify(body),
           }
         );
         if (planResponse.ok) {
-          const planData = await planResponse.json();
-          const text = planData.response || planData.content || "";
+          if (isDemo) {
+            const raw = await planResponse.text();
+            const chunks = raw.split("\n").filter(l => l.startsWith("data: ") && !l.includes("[DONE]"));
+            for (const chunk of chunks) {
+              try { const j = JSON.parse(chunk.slice(6)); text += j.choices?.[0]?.delta?.content || ""; } catch {}
+            }
+          } else {
+            const planData = await planResponse.json();
+            text = planData.message || planData.response || planData.content || "";
+          }
           const lines = text.split("\n").filter((l: string) => l.trim());
           const parsed: ActionItem[] = lines.slice(0, 5).map((line: string, i: number) => {
             const priority = line.includes("[ALTA]") ? "high" : line.includes("[MÉDIA]") ? "medium" : "low";
@@ -523,35 +578,52 @@ Apenas o texto, sem introduções.`,
       const token = sessionData?.session?.access_token;
       if (!token) return;
 
+      const isDemo = useDemo || responder.id.startsWith("demo-");
+      const roleInfo = AGENT_ROLES[responder.role];
+      const chatHistory = messages.slice(-5).map(m => ({ role: m.agentId === "user" ? "user" as const : "assistant" as const, content: m.content }));
+      
+      const endpoint = isDemo ? "omnix-chat" : "agent-chat";
+      const body = isDemo
+        ? { messages: [...chatHistory, { role: "user", content: `[Contexto: reunião sobre "${topic}". Você é ${responder.name} (${roleInfo.label}).] ${userContent}` }] }
+        : { messages: [...chatHistory, { role: "user", content: userContent }], agentId: responder.id };
+
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/${endpoint}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({
-            message: userContent,
-            agentId: responder.id,
-            conversationHistory: messages.slice(-5).map(m => ({ role: m.agentId === "user" ? "user" : "assistant", content: m.content })),
-          }),
+          body: JSON.stringify(body),
         }
       );
 
+      let content = "Entendi, vou analisar.";
       if (response.ok) {
-        const data = await response.json();
-        const roleInfo = AGENT_ROLES[responder.role];
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `resp-${Date.now()}`,
-            agentId: responder.id,
-            agentName: responder.name,
-            agentRole: roleInfo.label,
-            content: data.response || data.content || "Entendi, vou analisar.",
-            type: "analysis",
-            timestamp: new Date(),
-          },
-        ]);
+        if (isDemo) {
+          const raw = await response.text();
+          const chunks = raw.split("\n").filter(l => l.startsWith("data: ") && !l.includes("[DONE]"));
+          let parsed = "";
+          for (const chunk of chunks) {
+            try { const j = JSON.parse(chunk.slice(6)); parsed += j.choices?.[0]?.delta?.content || ""; } catch {}
+          }
+          if (parsed.trim()) content = parsed.trim();
+        } else {
+          const data = await response.json();
+          content = data.message || data.response || data.content || content;
+        }
       }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `resp-${Date.now()}`,
+          agentId: responder.id,
+          agentName: responder.name,
+          agentRole: roleInfo.label,
+          content,
+          type: "analysis",
+          timestamp: new Date(),
+        },
+      ]);
     } catch (err) {
       console.error("Meeting response error:", err);
     }
@@ -768,15 +840,17 @@ Apenas o texto, sem introduções.`,
               <div className="text-center pt-2">
                 <Button
                   onClick={startMeeting}
-                  disabled={!topic || agents.length < 2}
+                  disabled={!topic}
                   size="lg"
                   className="gap-3 px-12 py-7 text-base md:text-lg rounded-2xl shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all hover:scale-105"
                 >
                   <Play className="h-5 w-5" />
                   {t("meeting.start_meeting", { count: agents.length })}
                 </Button>
-                {agents.length < 2 && (
-                  <p className="text-xs text-muted-foreground mt-4">{t("meeting.min_agents")}</p>
+                {useDemo && (
+                  <p className="text-xs text-muted-foreground mt-4">
+                    {t("meeting.demo_mode", { defaultValue: "Modo demonstração — contrate agentes para reuniões personalizadas" })}
+                  </p>
                 )}
               </div>
             </motion.div>
