@@ -52,6 +52,7 @@ const KnowledgeBase = lazyRetry(() => import("./pages/KnowledgeBase"));
 const ResetPassword = lazyRetry(() => import("./pages/ResetPassword"));
 const ApiDocs = lazyRetry(() => import("./pages/ApiDocs"));
 const TeamBuilder = lazyRetry(() => import("./pages/TeamBuilder"));
+const ControlTower = lazyRetry(() => import("./pages/ControlTower"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
