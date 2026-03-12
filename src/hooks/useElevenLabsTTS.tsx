@@ -56,9 +56,8 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const objectUrlRef = useRef<string | null>(null);
   const nativeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const elevenLabsFailedRef = useRef(
-    typeof window !== "undefined" && localStorage.getItem(ELEVENLABS_NATIVE_ONLY_KEY) === "1"
-  );
+  // Always start fresh — allow ElevenLabs to be tried on each new session
+  const elevenLabsFailedRef = useRef(false);
 
   const stop = useCallback((notify = true) => {
     const wasPlaying =
