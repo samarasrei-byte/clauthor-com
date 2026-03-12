@@ -172,7 +172,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       if (e.results[0]?.isFinal) {
         if (isStreaming || isLoading) return;
         setTimeout(() => {
-          onSend(transcript);
+          onSend(transcript, getImageForSend());
           setInput("");
         }, 300);
       }
