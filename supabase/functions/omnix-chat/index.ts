@@ -605,7 +605,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
       action: "chat",
       status: "success",
       execution_time_ms: Date.now() - startTime,
-      details: { type: "omnix_chat_fallback", model: "google/gemini-2.5-flash-lite" },
+      details: { type: "omnix_chat_fallback", model: chatModel },
     }).then(() => {});
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
