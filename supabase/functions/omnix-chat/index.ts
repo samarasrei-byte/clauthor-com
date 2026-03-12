@@ -478,13 +478,13 @@ REGRAS GERAIS:
     const { data: tenantData } = await supabase.rpc("get_user_tenant_id", { _user_id: user.id });
     const tenantId = tenantData || "00000000-0000-0000-0000-000000000000";
 
-    // ── Always attempt tool-calling first ──
+    // ── Always attempt tool-calling first (use flash-lite for speed) ──
     const toolResponse = await fetchAI({
-      model: "google/gemini-2.5-flash",
+      model: "google/gemini-2.5-flash-lite",
       messages: aiMessages,
       stream: false,
-      max_tokens: 800,
-      temperature: 0.3,
+      max_tokens: 500,
+      temperature: 0.2,
       tools: ALL_TOOLS,
       tool_choice: "auto",
     });
