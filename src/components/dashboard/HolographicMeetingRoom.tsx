@@ -474,24 +474,37 @@ Dê sua contribuição profissional em 2-3 frases, focando na sua especialidade.
     const ceoAgent = active.find(a => a.role === "ceo") || active[0];
     if (ceoAgent) {
       try {
+        const planPrompt = `Com base na reunião sobre "${topic}", liste exatamente 5 ações prioritárias no formato:
+1. [ALTA] Ação - Responsável
+2. [MÉDIA] Ação - Responsável
+Apenas o texto, sem introduções.`;
+
+        let text = "";
+        const isDemo = useDemo || ceoAgent.id.startsWith("demo-");
+        const endpoint = isDemo ? "omnix-chat" : "agent-chat";
+        const body = isDemo
+          ? { messages: [...conversationHistory.slice(-3).map(m => ({ role: m.role, content: m.content })), { role: "user", content: planPrompt }] }
+          : { messages: [...conversationHistory.slice(-3).map(m => ({ role: m.role, content: m.content })), { role: "user", content: planPrompt }], agentId: ceoAgent.id };
+
         const planResponse = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/${endpoint}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-            body: JSON.stringify({
-              message: `Com base na reunião sobre "${topic}", liste exatamente 5 ações prioritárias no formato:
-1. [ALTA] Ação - Responsável
-2. [MÉDIA] Ação - Responsável
-Apenas o texto, sem introduções.`,
-              agentId: ceoAgent.id,
-              conversationHistory: conversationHistory.slice(-3),
-            }),
+            body: JSON.stringify(body),
           }
         );
         if (planResponse.ok) {
-          const planData = await planResponse.json();
-          const text = planData.response || planData.content || "";
+          if (isDemo) {
+            const raw = await planResponse.text();
+            const chunks = raw.split("\n").filter(l => l.startsWith("data: ") && !l.includes("[DONE]"));
+            for (const chunk of chunks) {
+              try { const j = JSON.parse(chunk.slice(6)); text += j.choices?.[0]?.delta?.content || ""; } catch {}
+            }
+          } else {
+            const planData = await planResponse.json();
+            text = planData.message || planData.response || planData.content || "";
+          }
           const lines = text.split("\n").filter((l: string) => l.trim());
           const parsed: ActionItem[] = lines.slice(0, 5).map((line: string, i: number) => {
             const priority = line.includes("[ALTA]") ? "high" : line.includes("[MÉDIA]") ? "medium" : "low";
