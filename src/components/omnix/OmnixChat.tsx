@@ -177,10 +177,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     recognition.continuous = true;
 
     let hasFinalResult = false;
+    let restartAttempts = 0;
+    const MAX_RESTART_ATTEMPTS = 3;
 
     recognition.onresult = (e: any) => {
       const transcript = Array.from(e.results).map((r: any) => r[0].transcript).join("").trim();
       if (!transcript) return;
+      restartAttempts = 0; // Reset on successful result
 
       setInput(transcript);
 
@@ -198,31 +201,28 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
     recognition.onend = () => {
       setIsListening(false);
+      recognitionRef.current = null;
 
       if (manualStopRef.current) {
         manualStopRef.current = false;
         return;
       }
 
-      // Keep always-on listening for natural conversation pace
-      if (autoSpeak && !showTextInput && !isSpeaking && !isStreaming && !isLoading) {
+      // Keep always-on listening — create fresh instance via startListening
+      if (autoSpeak && !showTextInput && !isSpeaking && !isStreaming && !isLoading && restartAttempts < MAX_RESTART_ATTEMPTS) {
+        restartAttempts++;
         setTimeout(() => {
           if (manualStopRef.current) return;
-          try {
-            recognition.start();
-            setIsListening(true);
-          } catch {
-            // ignore restart race
-          }
-        }, 120);
+          startListening();
+        }, 300 + restartAttempts * 200);
       }
     };
 
     recognition.onerror = (e: any) => {
-      setIsListening(false);
       console.error("SpeechRecognition error:", e.error);
 
       if (e.error === "not-allowed") {
+        setIsListening(false);
         toast.error("Microfone bloqueado. Use o campo de texto.");
         setShowTextInput(true);
         manualStopRef.current = true;
@@ -230,19 +230,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       }
 
       if (e.error === "network") {
+        setIsListening(false);
         toast.error("Erro de rede no reconhecimento de voz.");
+        return;
       }
 
-      if ((e.error === "no-speech" || e.error === "aborted") && autoSpeak && !showTextInput && !isSpeaking && !isStreaming && !isLoading && !manualStopRef.current) {
-        setTimeout(() => {
-          try {
-            recognition.start();
-            setIsListening(true);
-          } catch {
-            // ignore restart race
-          }
-        }, 120);
-      }
+      // For aborted/no-speech: let onend handle the restart (don't double-restart)
+      // Just mark not listening; onend fires right after onerror
     };
 
     recognitionRef.current = recognition;
