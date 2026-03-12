@@ -21,8 +21,8 @@ function speakNative(text: string, onStart?: () => void, onEnd?: () => void): Sp
   // Try to pick a good voice
   const voices = window.speechSynthesis.getVoices();
   const preferred = voices.find(
-    (v) => v.lang.startsWith("en") && v.name.toLowerCase().includes("male")
-  ) || voices.find((v) => v.lang.startsWith("en")) || voices[0];
+    (v) => v.lang.startsWith("pt") && v.name.toLowerCase().includes("male")
+  ) || voices.find((v) => v.lang.startsWith("pt")) || voices.find((v) => v.lang.startsWith("en")) || voices[0];
   if (preferred) utterance.voice = preferred;
 
   utterance.onstart = () => onStart?.();

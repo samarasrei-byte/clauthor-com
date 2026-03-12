@@ -23,7 +23,7 @@ const DEFAULT_CONFIG: OmnixConfig = {
   tone: "strategic",
   personality: "futuristic",
   responseStyle: "detailed",
-  language: "en-US",
+  language: "pt-BR",
   autonomy: "analyze and suggest",
 };
 
