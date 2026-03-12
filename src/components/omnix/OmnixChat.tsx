@@ -142,6 +142,8 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     if (!input.trim() || isLoading) return;
     autoListenAfterSpeakRef.current = false; // Text mode: don't auto-listen
     manualStopRef.current = true;
+    restartAttemptsRef.current = 0;
+    clearPendingRestart();
     recognitionRef.current?.stop?.();
     setIsListening(false);
     onSend(input, getImageForSend());
