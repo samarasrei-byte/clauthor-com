@@ -338,6 +338,7 @@ const ClientDashboard = () => {
     "ai-quality": t("dashboard.ai_quality", { defaultValue: "AI Quality" }),
     "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
     "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
+    "control-tower": "Control Tower",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
