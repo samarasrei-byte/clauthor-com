@@ -885,10 +885,10 @@ Apenas o texto, sem introduções.`;
             </div>
 
             {/* Main content */}
-            <div className="flex-1 flex flex-col lg:flex-row min-h-0">
+            <div className="flex-1 flex flex-col-reverse lg:flex-row min-h-0">
               
-              {/* ═══ HOLOGRAPHIC TABLE AREA ═══ */}
-              <div className="flex-1 relative flex items-end justify-center pb-8 min-h-[300px] lg:min-h-0">
+              {/* ═══ HOLOGRAPHIC TABLE AREA — hidden on mobile during active meeting ═══ */}
+              <div className="hidden lg:flex flex-1 relative items-end justify-center pb-8 min-h-0">
                 
                 {/* Table surface */}
                 <motion.div
@@ -978,7 +978,7 @@ Apenas o texto, sem introduções.`;
               </div>
 
               {/* ═══ CHAT PANEL ═══ */}
-              <div className="w-full lg:w-[420px] lg:border-l border-border/10 flex flex-col bg-card/30 backdrop-blur-sm">
+              <div className="w-full lg:w-[420px] lg:border-l border-border/10 flex flex-col flex-1 bg-card/30 backdrop-blur-sm">
                 
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
