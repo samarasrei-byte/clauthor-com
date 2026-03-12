@@ -96,7 +96,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   }, [autoSpeak, showTextInput, isSpeaking, isStreaming, isLoading]);
 
   // ─── ElevenLabs TTS ───
-  const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking: ttsSpeaking } = useElevenLabsTTS({
+  const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
     onEnd: () => {
       // If VAD triggered the stop, start listening immediately
       if (vadBargeInRef.current) {
