@@ -3,6 +3,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, rateLimitResponse, detectPromptInjection, scanToolArguments, securityHeaders } from "../_shared/security.ts";
 import { validateAndEnforcePolicy } from "../_shared/policy-engine.ts";
+import { autonomousExecute } from "../_shared/tool-executor.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
