@@ -69,6 +69,111 @@ const CREDENTIAL_TOOLS = [
   },
 ];
 
+// ── Execution tools for THOR ──
+const EXECUTION_TOOLS = [
+  {
+    type: "function" as const,
+    function: {
+      name: "create_task",
+      description: "Create a new task assigned to an agent or the user. Use when the user asks to create, add, or register a task, to-do, or action item.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: { type: "string", description: "Task title" },
+          description: { type: "string", description: "Task details" },
+          priority: { type: "string", enum: ["low", "medium", "high"], description: "Task priority" },
+          category: { type: "string", description: "Category: sales, marketing, support, finance, hr, tech, other" },
+          agent_id: { type: "string", description: "Agent to assign. Optional." },
+          due_date: { type: "string", description: "Due date in YYYY-MM-DD format. Optional." },
+        },
+        required: ["title"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "generate_report",
+      description: "Generate a report based on current data. Use when the user asks for reports, summaries, or analysis documents.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: { type: "string", description: "Report title" },
+          report_type: { type: "string", enum: ["performance", "financial", "sales", "marketing", "custom"], description: "Type of report" },
+          period: { type: "string", description: "Period: today, week, month, quarter" },
+        },
+        required: ["title", "report_type"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "search_leads",
+      description: "Search for leads or prospects based on criteria. Use when the user asks to find, search, or look up leads or potential clients.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "Search query or criteria" },
+          category: { type: "string", description: "Industry or segment filter" },
+        },
+        required: ["query"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "schedule_meeting",
+      description: "Schedule a meeting or appointment. Use when the user wants to book, schedule, or arrange a meeting.",
+      parameters: {
+        type: "object",
+        properties: {
+          title: { type: "string", description: "Meeting title" },
+          meeting_date: { type: "string", description: "Date in YYYY-MM-DD" },
+          meeting_time: { type: "string", description: "Time in HH:MM" },
+          duration_minutes: { type: "number", description: "Duration in minutes. Default 30." },
+          participants: { type: "array", items: { type: "string" }, description: "List of participant names/emails" },
+          notes: { type: "string", description: "Meeting notes or agenda" },
+        },
+        required: ["title", "meeting_date", "meeting_time"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "analyze_data",
+      description: "Analyze internal data (tasks, logs, credits, agents) and return insights. Use when the user asks for analysis, insights, or diagnostics.",
+      parameters: {
+        type: "object",
+        properties: {
+          scope: { type: "string", enum: ["agents", "tasks", "credits", "logs", "full"], description: "What to analyze" },
+        },
+        required: ["scope"],
+      },
+    },
+  },
+  {
+    type: "function" as const,
+    function: {
+      name: "delegate_to_agent",
+      description: "Delegate a task or mission to a specific agent. Use when orchestrating work between agents.",
+      parameters: {
+        type: "object",
+        properties: {
+          agent_id: { type: "string", description: "Target agent ID" },
+          mission: { type: "string", description: "What the agent should do" },
+          priority: { type: "string", enum: ["low", "medium", "high"], description: "Mission priority" },
+        },
+        required: ["agent_id", "mission"],
+      },
+    },
+  },
+];
+
+const ALL_TOOLS = [...CREDENTIAL_TOOLS, ...EXECUTION_TOOLS];
+
 async function callCredentialManager(
   action: string, body: Record<string, any>,
   supabaseUrl: string, authHeader: string,
