@@ -152,8 +152,10 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const toggleVoice = () => {
     if (isStreaming || isLoading) return;
     if (isSpeaking) {
+      // BARGE-IN: stop Thor and immediately start listening
       stopSpeaking();
-      return; // Just stop — don't auto-listen
+      setTimeout(() => startListening(), 120);
+      return;
     }
     if (isListening) {
       recognitionRef.current?.stop();
