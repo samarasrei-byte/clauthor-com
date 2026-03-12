@@ -76,12 +76,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       // If VAD triggered the stop, start listening immediately
       if (vadBargeInRef.current) {
         vadBargeInRef.current = false;
-        setTimeout(() => startListening(), 80);
+        clearPendingRestart();
+        setTimeout(() => startListeningRef.current?.(), 80);
         return;
       }
       // Auto-listen for hands-free conversation when voice mode is on
       if (autoListenAfterSpeakRef.current && autoSpeak && !showTextInput) {
-        setTimeout(() => startListening(), 120);
+        clearPendingRestart();
+        setTimeout(() => startListeningRef.current?.(), 180);
       }
     },
   });
