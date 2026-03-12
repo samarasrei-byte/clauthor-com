@@ -371,11 +371,12 @@ serve(async (req) => {
     }
 
     // Parse body early before any async work
-    let messages: any[], config: any;
+    let messages: any[], config: any, imageBase64: string | null = null;
     try {
       const body = await req.json();
       messages = body.messages;
       config = body.config;
+      imageBase64 = body.image || null; // base64 JPEG frame from webcam
     } catch {
       return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
@@ -459,20 +460,39 @@ REGRAS DE CONVERSA:
 - Se o tema for geral (vida, mercado, rotina), converse normal sem puxar plataforma à força.
 - Pode dar opinião sobre negócios/tecnologia; em política partidária, mantenha neutralidade.
 - Feche com energia de parceiro: direto, firme e amigável.
+${imageBase64 ? "- VISÃO ATIVA: Você está vendo o usuário pela webcam. A imagem mais recente foi incluída. Comente naturalmente só se relevante (ex: óculos, ambiente, expressão). Não descreva a imagem como um robô — reaja como humano." : ""}
 
 ESTILO: tom ${tone} | formato ${responseStyle} | autonomia ${autonomy}.${operationalContext}
 
 Quando houver pedido claro de ação na plataforma, use tools com segurança e sem expor credenciais.`;
 
-    const aiMessages = [
+    // Build AI messages — include image in last user message if available
+    const aiMessages: any[] = [
       { role: "system", content: systemPrompt },
-      ...messages.map((m: any) => ({ role: m.role, content: m.content })),
     ];
+
+    for (const m of messages) {
+      if (m === messages[messages.length - 1] && m.role === "user" && imageBase64) {
+        // Multimodal message with image
+        aiMessages.push({
+          role: "user",
+          content: [
+            { type: "text", text: m.content },
+            { type: "image_url", image_url: { url: `data:image/jpeg;base64,${imageBase64}` } },
+          ],
+        });
+      } else {
+        aiMessages.push({ role: m.role, content: m.content });
+      }
+    }
+
+    // Use vision-capable model when image is present
+    const chatModel = imageBase64 ? "google/gemini-2.5-flash" : "google/gemini-2.5-flash-lite";
 
     // ── Tool-calling somente quando há intenção operacional explícita ──
     if (shouldAttemptTools) {
       const toolResponse = await fetchAI({
-        model: "google/gemini-2.5-flash-lite",
+        model: chatModel,
         messages: aiMessages,
         stream: false,
         max_tokens: 280,
@@ -514,7 +534,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
           }
 
           const finalResponse = await fetchAI({
-            model: "google/gemini-2.5-flash-lite",
+            model: chatModel,
             messages: [...aiMessages, choice.message, ...toolResults],
             stream: true,
             max_tokens: 520,
@@ -525,7 +545,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
 
           if (finalResponse.ok) {
             const toolMgmtTokens = (toolData.usage?.total_tokens || 300) + 380;
-            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
+            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: chatModel }).then(() => {});
             supabase.from("execution_logs").insert({
               user_id: user.id,
               agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
@@ -541,7 +561,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
         if (choice?.message?.content) {
           const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
           const directTokens = toolData.usage?.total_tokens || 220;
-          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
+          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: chatModel }).then(() => {});
           supabase.from("execution_logs").insert({
             user_id: user.id,
             agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
@@ -557,7 +577,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
 
     // Resposta direta por streaming (rápida para conversa natural)
     const response = await fetchAI({
-      model: "google/gemini-2.5-flash-lite",
+      model: chatModel,
       messages: aiMessages,
       stream: true,
       temperature: 0.35,
@@ -578,14 +598,14 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
     const inputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
     const omnixEstimatedTokens = systemTokens + inputTokens + 800;
 
-    supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash-lite" }).then(() => {});
+    supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: chatModel }).then(() => {});
     supabase.from("execution_logs").insert({
       user_id: user.id,
       agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
       action: "chat",
       status: "success",
       execution_time_ms: Date.now() - startTime,
-      details: { type: "omnix_chat_fallback", model: "google/gemini-2.5-flash-lite" },
+      details: { type: "omnix_chat_fallback", model: chatModel },
     }).then(() => {});
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });

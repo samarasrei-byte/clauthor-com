@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2, MessageSquare, X, Keyboard } from "lucide-react";
+import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2, MessageSquare, X, Keyboard, Video, VideoOff } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,13 +11,14 @@ import type { OmnixMessage, OmnixConfig } from "@/hooks/useOmnix";
 import { useTranslation } from "react-i18next";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import { useVoiceActivityDetection } from "@/hooks/useVoiceActivityDetection";
+import { useWebcam } from "@/hooks/useWebcam";
 
 interface OmnixChatProps {
   messages: OmnixMessage[];
   isLoading: boolean;
   isStreaming: boolean;
   config: OmnixConfig;
-  onSend: (msg: string) => void;
+  onSend: (msg: string, image?: string | null) => void;
   onStop: () => void;
   onClear: () => void;
   voiceFirst?: boolean;
@@ -36,6 +37,23 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const autoListenAfterSpeakRef = useRef(false);
   // Ref to track if we should auto-barge-in (VAD triggered)
   const vadBargeInRef = useRef(false);
+
+  // ─── Webcam ───
+  const { isActive: webcamActive, videoRef, start: startWebcam, stop: stopWebcam, captureFrame } = useWebcam();
+
+  const getImageForSend = useCallback((): string | null => {
+    if (!webcamActive) return null;
+    return captureFrame();
+  }, [webcamActive, captureFrame]);
+
+  const toggleWebcam = useCallback(async () => {
+    if (webcamActive) {
+      stopWebcam();
+    } else {
+      const ok = await startWebcam();
+      if (!ok) toast.error("Não foi possível acessar a câmera.");
+    }
+  }, [webcamActive, startWebcam, stopWebcam]);
 
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
@@ -101,7 +119,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   const handleSend = () => {
     if (!input.trim() || isLoading) return;
-    onSend(input);
+    onSend(input, getImageForSend());
     setInput("");
   };
 
@@ -154,7 +172,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       if (e.results[0]?.isFinal) {
         if (isStreaming || isLoading) return;
         setTimeout(() => {
-          onSend(transcript);
+          onSend(transcript, getImageForSend());
           setInput("");
         }, 300);
       }
@@ -219,6 +237,31 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   return (
     <div className="relative flex flex-col h-full overflow-hidden">
+      {/* ── WEBCAM PREVIEW (floating top-right) ── */}
+      <AnimatePresence>
+        {webcamActive && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            className="absolute top-3 right-3 z-30 rounded-xl overflow-hidden border-2 border-primary/30 shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
+          >
+            <video
+              ref={videoRef as any}
+              autoPlay
+              muted
+              playsInline
+              className="w-28 h-20 object-cover rounded-xl"
+            />
+            <div className="absolute bottom-1 left-1/2 -translate-x-1/2">
+              <span className="text-[8px] bg-primary/80 text-primary-foreground px-1.5 py-0.5 rounded-full font-medium">
+                📷 AO VIVO
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* ── IMMERSIVE ORB VIEW ── */}
       <div className="flex-1 flex flex-col items-center justify-center relative">
         {/* Background ambient */}
@@ -368,7 +411,19 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             </Button>
           )}
 
-          {/* Text input toggle */}
+          {/* Webcam toggle */}
+          <button
+            onClick={toggleWebcam}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
+              webcamActive
+                ? "text-primary border-primary/30 bg-primary/5"
+                : "text-muted-foreground/40 border-border/10 hover:text-muted-foreground hover:border-border/30"
+            }`}
+          >
+            {webcamActive ? <Video className="h-3 w-3" /> : <VideoOff className="h-3 w-3" />}
+            Cam
+          </button>
+
           <button
             onClick={() => setShowTextInput(!showTextInput)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${

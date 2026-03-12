@@ -77,7 +77,7 @@ export function useOmnix() {
     setConfig(prev => ({ ...prev, ...partial }));
   }, []);
 
-  const sendMessage = useCallback(async (content: string) => {
+  const sendMessage = useCallback(async (content: string, imageBase64?: string | null) => {
     if (!content.trim()) return;
 
     const userMsg: OmnixMessage = { role: "user", content, timestamp: new Date() };
@@ -102,6 +102,9 @@ export function useOmnix() {
 
       const apiMessages = updatedMessages.map(m => ({ role: m.role, content: m.content }));
 
+      const body: any = { messages: apiMessages, config };
+      if (imageBase64) body.image = imageBase64;
+
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/omnix-chat`,
         {
@@ -110,7 +113,7 @@ export function useOmnix() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ messages: apiMessages, config }),
+          body: JSON.stringify(body),
           signal: controller.signal,
         }
       );
