@@ -173,6 +173,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   };
 
+  // One-tap barge-in: interrompe e tenta abrir microfone rapidamente
+  const handleBargeIn = useCallback(() => {
+    handleStop();
+    // dupla tentativa para cobrir janela de abort/cleanup do streaming
+    setTimeout(() => startListening(), 180);
+    setTimeout(() => startListening(), 650);
+  }, [handleStop, startListening]);
+
   const hasMessages = messages.length > 0;
   const isActive = isListening || isSpeaking || isStreaming || isLoading;
 
