@@ -21,7 +21,8 @@ serve(async (req) => {
     }
 
     // Default to Roger voice - deep, authoritative tone perfect for Thor
-    const selectedVoice = voiceId || "CwhRBWXzGAHq8TQ4Fs17";
+    // Daniel — deep, authoritative, executive tone
+    const selectedVoice = voiceId || "onwK4e9ZLuTAKqWW03F9";
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoice}/stream?output_format=mp3_44100_128`,
