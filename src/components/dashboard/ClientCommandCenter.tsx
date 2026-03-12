@@ -133,7 +133,7 @@ const ClientCommandCenter = ({
       <TeachAgentsModal
         open={showTeachModal}
         onClose={() => setShowTeachModal(false)}
-        onNavigateKnowledge={() => onNavigate?.("knowledge-base")}
+        onNavigateKnowledge={() => onNavigate?.("settings")}
       />
 
       {/* Status Cards */}
