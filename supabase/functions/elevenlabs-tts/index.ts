@@ -20,8 +20,8 @@ serve(async (req) => {
       });
     }
 
-    // Brian — epic narrator voice, cinematic and powerful
-    const selectedVoice = voiceId || "nPczCjzI2devNBz1zQrb";
+    // Daniel — voz firme, presente, natural (não cinematográfica)
+    const selectedVoice = voiceId || "onwK4e9ZLuTAKqWW03F9";
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoice}/stream?output_format=mp3_44100_128`,
