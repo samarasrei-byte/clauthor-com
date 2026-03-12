@@ -802,29 +802,6 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
-                {/* ═══ ANALYTICS ═══ */}
-                {activeSection === "analytics" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <AnalyticsSection
-                      chartData={realChartData}
-                      totalExecutions={totalExecutions}
-                      recentLogs={recentLogs}
-                      locale={locale}
-                      onGoToAgents={() => setActiveSection("agents")}
-                    />
-                  </Suspense>
-                )}
-
-                {/* ═══ LOGS ═══ */}
-                {activeSection === "logs" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <LogsSection
-                      recentLogs={recentLogs}
-                      locale={locale}
-                      onGoToAgents={() => setActiveSection("agents")}
-                    />
-                  </Suspense>
-                )}
 
                 {/* ═══ CONTROL TOWER ═══ */}
                 {activeSection === "control-tower" && (
