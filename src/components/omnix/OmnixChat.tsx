@@ -33,6 +33,12 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const [showTextInput, setShowTextInput] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
+  const restartTimeoutRef = useRef<number | null>(null);
+  const restartAttemptsRef = useRef(0);
+  const isStartingListeningRef = useRef(false);
+  const micPermissionGrantedRef = useRef(false);
+  const lastListenStartRef = useRef(0);
+  const startListeningRef = useRef<(() => void) | null>(null);
   const lastSpokenRef = useRef<number>(-1);
   const autoListenAfterSpeakRef = useRef(true);
   const autoStartAttemptedRef = useRef(false);
