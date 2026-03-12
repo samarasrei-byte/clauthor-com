@@ -66,9 +66,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         setTimeout(() => startListening(), 80);
         return;
       }
-      // Only auto-listen if user explicitly enabled it and not in text mode
+      // Auto-listen for hands-free conversation when voice mode is on
       if (autoListenAfterSpeakRef.current && autoSpeak && !showTextInput) {
-        setTimeout(() => startListening(), 600);
+        setTimeout(() => startListening(), 120);
       }
     },
   });
