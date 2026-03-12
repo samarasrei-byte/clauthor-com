@@ -578,34 +578,52 @@ Apenas o texto, sem introduções.`;
       const token = sessionData?.session?.access_token;
       if (!token) return;
 
+      const isDemo = useDemo || responder.id.startsWith("demo-");
+      const roleInfo = AGENT_ROLES[responder.role];
+      const chatHistory = messages.slice(-5).map(m => ({ role: m.agentId === "user" ? "user" as const : "assistant" as const, content: m.content }));
+      
+      const endpoint = isDemo ? "omnix-chat" : "agent-chat";
+      const body = isDemo
+        ? { messages: [...chatHistory, { role: "user", content: `[Contexto: reunião sobre "${topic}". Você é ${responder.name} (${roleInfo.label}).] ${userContent}` }] }
+        : { messages: [...chatHistory, { role: "user", content: userContent }], agentId: responder.id };
+
       const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/agent-chat`,
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/${endpoint}`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-          body: JSON.stringify({
-            message: userContent,
-            agentId: responder.id,
-            conversationHistory: messages.slice(-5).map(m => ({ role: m.agentId === "user" ? "user" : "assistant", content: m.content })),
-          }),
+          body: JSON.stringify(body),
         }
       );
 
+      let content = "Entendi, vou analisar.";
       if (response.ok) {
-        const data = await response.json();
-        const roleInfo = AGENT_ROLES[responder.role];
-        setMessages((prev) => [
-          ...prev,
-          {
-            id: `resp-${Date.now()}`,
-            agentId: responder.id,
-            agentName: responder.name,
-            agentRole: roleInfo.label,
-            content: data.response || data.content || "Entendi, vou analisar.",
-            type: "analysis",
-            timestamp: new Date(),
-          },
-        ]);
+        if (isDemo) {
+          const raw = await response.text();
+          const chunks = raw.split("\n").filter(l => l.startsWith("data: ") && !l.includes("[DONE]"));
+          let parsed = "";
+          for (const chunk of chunks) {
+            try { const j = JSON.parse(chunk.slice(6)); parsed += j.choices?.[0]?.delta?.content || ""; } catch {}
+          }
+          if (parsed.trim()) content = parsed.trim();
+        } else {
+          const data = await response.json();
+          content = data.message || data.response || data.content || content;
+        }
+      }
+
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: `resp-${Date.now()}`,
+          agentId: responder.id,
+          agentName: responder.name,
+          agentRole: roleInfo.label,
+          content,
+          type: "analysis",
+          timestamp: new Date(),
+        },
+      ]);
       }
     } catch (err) {
       console.error("Meeting response error:", err);
