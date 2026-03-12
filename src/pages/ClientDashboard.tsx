@@ -65,6 +65,7 @@ const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSe
 const ExecutionResultsPanel = lazy(() => import("@/components/dashboard/ExecutionResultsPanel"));
 const ControlTowerSection = lazy(() => import("@/pages/ControlTower"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
+const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
