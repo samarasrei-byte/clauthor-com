@@ -21,8 +21,8 @@ serve(async (req) => {
     }
 
     // Default to Roger voice - deep, authoritative tone perfect for Thor
-    // Daniel — deep, authoritative, executive tone
-    const selectedVoice = voiceId || "onwK4e9ZLuTAKqWW03F9";
+    // George — deep, powerful, CEO-like presence
+    const selectedVoice = voiceId || "JBFqnCBsd6RMkjVDRZzb";
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoice}/stream?output_format=mp3_44100_128`,
@@ -36,11 +36,11 @@ serve(async (req) => {
           text: text.slice(0, 4000),
           model_id: "eleven_multilingual_v2",
           voice_settings: {
-            stability: 0.55,
-            similarity_boost: 0.85,
-            style: 0.5,
+            stability: 0.5,
+            similarity_boost: 0.9,
+            style: 0.55,
             use_speaker_boost: true,
-            speed: 1.0,
+            speed: 0.95,
           },
         }),
       }
