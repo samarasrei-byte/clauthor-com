@@ -978,7 +978,7 @@ Apenas o texto, sem introduções.`;
               </div>
 
               {/* ═══ CHAT PANEL ═══ */}
-              <div className="w-full lg:w-[420px] lg:border-l border-border/10 flex flex-col bg-card/30 backdrop-blur-sm">
+              <div className="w-full lg:w-[420px] lg:border-l border-border/10 flex flex-col flex-1 bg-card/30 backdrop-blur-sm">
                 
                 {/* Messages */}
                 <div className="flex-1 overflow-y-auto p-4 space-y-3 min-h-0">
