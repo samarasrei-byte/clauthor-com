@@ -445,8 +445,10 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               <div className="flex gap-2 items-center">
                 <Input
                   value={input}
-                  onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
+                  onChange={e => {
+                    if (isSpeaking) stopSpeaking();
+                    setInput(e.target.value);
+                  }}
                   placeholder={`Fale com ${config.name}...`}
                   className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
                   disabled={isLoading}
