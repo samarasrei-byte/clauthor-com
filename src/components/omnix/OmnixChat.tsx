@@ -34,7 +34,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
-  const autoListenAfterSpeakRef = useRef(false);
+  const autoListenAfterSpeakRef = useRef(true);
+  const autoStartAttemptedRef = useRef(false);
+  const manualStopRef = useRef(false);
   // Ref to track if we should auto-barge-in (VAD triggered)
   const vadBargeInRef = useRef(false);
 
