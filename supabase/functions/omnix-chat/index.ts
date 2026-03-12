@@ -371,11 +371,12 @@ serve(async (req) => {
     }
 
     // Parse body early before any async work
-    let messages: any[], config: any;
+    let messages: any[], config: any, imageBase64: string | null = null;
     try {
       const body = await req.json();
       messages = body.messages;
       config = body.config;
+      imageBase64 = body.image || null; // base64 JPEG frame from webcam
     } catch {
       return new Response(JSON.stringify({ error: "Invalid request body" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
