@@ -190,10 +190,14 @@ async function handleToolCall(
   toolName: string, args: any,
   userId: string, activeAgents: any[],
   supabaseUrl: string, authHeader: string,
+  adminClient: any, tenantId: string,
 ): Promise<string> {
   const agentId = args.agent_id || activeAgents[0]?.id;
-  if (!agentId) return JSON.stringify({ error: "Nenhum agente ativo encontrado." });
-  const agentName = activeAgents.find(a => a.id === agentId)?.name || "Agente";
+  if (!agentId && ["save_credentials", "list_credentials", "revoke_credentials"].includes(toolName)) {
+    return JSON.stringify({ error: "Nenhum agente ativo encontrado." });
+  }
+  const agentName = activeAgents.find(a => a.id === agentId)?.name || "THOR";
+  const effectiveAgentId = agentId || "00000000-0000-0000-0000-000000000000";
 
   switch (toolName) {
     case "save_credentials": {
@@ -223,6 +227,133 @@ async function handleToolCall(
       }, supabaseUrl, authHeader);
       return JSON.stringify({ success: result.success, revoked_count: result.revoked_count || 0, integration: args.integration_name, agent_name: agentName });
     }
+
+    // ── Execution Tools (via Autonomy Engine) ──
+    case "create_task": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        const { data, error } = await adminClient.from("agent_tasks").insert({
+          user_id: userId, tenant_id: tenantId, agent_id: agentId || null,
+          title: args.title, description: args.description || "",
+          priority: args.priority || "medium", category: args.category || "other",
+          due_date: args.due_date || null,
+        }).select("id, title").single();
+        if (error) return { success: false, result: { error: error.message } };
+        return { success: true, result: { task_id: data.id, title: data.title, message: `Tarefa "${data.title}" criada com sucesso.` } };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "generate_report": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        // Gather data for report
+        const [logsRes, tasksRes, creditsRes] = await Promise.all([
+          adminClient.from("execution_logs").select("action, status, created_at").eq("user_id", userId).order("created_at", { ascending: false }).limit(50),
+          adminClient.from("agent_tasks").select("title, status, priority, category").eq("user_id", userId).limit(50),
+          adminClient.from("user_credits").select("*").eq("user_id", userId).single(),
+        ]);
+        const sections = [
+          { title: "Resumo de Execuções", content: `${logsRes.data?.length || 0} logs recentes. Sucesso: ${logsRes.data?.filter((l: any) => l.status === "success").length || 0}` },
+          { title: "Tarefas", content: `${tasksRes.data?.length || 0} tarefas. Abertas: ${tasksRes.data?.filter((t: any) => t.status === "open").length || 0}` },
+          { title: "Créditos", content: `${creditsRes.data?.used_credits || 0}/${creditsRes.data?.total_credits || 0} usados (${creditsRes.data?.plan_type || "free"})` },
+        ];
+        const { data, error } = await adminClient.from("agent_reports").insert({
+          user_id: userId, tenant_id: tenantId, agent_id: agentId || null,
+          title: args.title, report_type: args.report_type, period: args.period || "custom",
+          sections,
+        }).select("id, title").single();
+        if (error) return { success: false, result: { error: error.message } };
+        return { success: true, result: { report_id: data.id, title: data.title, sections, message: `Relatório "${data.title}" gerado.` } };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "search_leads": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        // Search company board and knowledge base for lead-like data
+        const { data: boardResults } = await adminClient.from("company_board")
+          .select("title, content, category").eq("user_id", userId)
+          .or(`title.ilike.%${args.query}%,content.ilike.%${args.query}%`).limit(10);
+        const { data: kbResults } = await adminClient.rpc("search_knowledge", {
+          _user_id: userId, _query: args.query, _limit: 5,
+        });
+        return {
+          success: true,
+          result: {
+            board_matches: boardResults?.length || 0,
+            knowledge_matches: kbResults?.length || 0,
+            results: [...(boardResults || []).map((b: any) => ({ source: "board", title: b.title, preview: b.content.substring(0, 120) })),
+                      ...(kbResults || []).map((k: any) => ({ source: "knowledge", title: k.title, preview: k.content.substring(0, 120) }))],
+            message: `Encontrados ${(boardResults?.length || 0) + (kbResults?.length || 0)} resultados para "${args.query}".`,
+          },
+        };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "schedule_meeting": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        const { data, error } = await adminClient.from("agent_meetings").insert({
+          user_id: userId, tenant_id: tenantId, agent_id: agentId || null,
+          title: args.title, meeting_date: args.meeting_date, meeting_time: args.meeting_time,
+          duration_minutes: args.duration_minutes || 30,
+          participants: args.participants || [],
+          notes: args.notes || "",
+        }).select("id, title, meeting_date, meeting_time").single();
+        if (error) return { success: false, result: { error: error.message } };
+        return { success: true, result: { meeting_id: data.id, title: data.title, date: data.meeting_date, time: data.meeting_time, calendar_link: "https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe", message: `Reunião "${data.title}" agendada para ${data.meeting_date} às ${data.meeting_time}.` } };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "analyze_data": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        const scope = args.scope || "full";
+        const analysis: any = {};
+        if (scope === "agents" || scope === "full") {
+          const { data } = await adminClient.from("agents").select("name, status, tier, total_executions").eq("user_id", userId);
+          analysis.agents = { total: data?.length || 0, active: data?.filter((a: any) => a.status === "active").length || 0, total_executions: data?.reduce((s: number, a: any) => s + (a.total_executions || 0), 0) || 0 };
+        }
+        if (scope === "tasks" || scope === "full") {
+          const { data } = await adminClient.from("agent_tasks").select("status, priority").eq("user_id", userId);
+          analysis.tasks = { total: data?.length || 0, open: data?.filter((t: any) => t.status === "open").length || 0, high_priority: data?.filter((t: any) => t.priority === "high").length || 0 };
+        }
+        if (scope === "credits" || scope === "full") {
+          const { data } = await adminClient.from("user_credits").select("*").eq("user_id", userId).single();
+          analysis.credits = data ? { used: data.used_credits, total: data.total_credits, pct: Math.round((data.used_credits / data.total_credits) * 100), plan: data.plan_type } : null;
+        }
+        if (scope === "logs" || scope === "full") {
+          const { data } = await adminClient.from("execution_logs").select("status").eq("user_id", userId).limit(100);
+          const success = data?.filter((l: any) => l.status === "success").length || 0;
+          analysis.logs = { total: data?.length || 0, success, errors: (data?.length || 0) - success, success_rate: data?.length ? Math.round((success / data.length) * 100) : 100 };
+        }
+        return { success: true, result: { scope, analysis, message: `Análise de ${scope} completa.` } };
+      });
+      return JSON.stringify(result);
+    }
+
+    case "delegate_to_agent": {
+      const result = await autonomousExecute(toolName, args, adminClient, userId, tenantId, effectiveAgentId, agentName, async () => {
+        const targetAgent = activeAgents.find(a => a.id === args.agent_id);
+        if (!targetAgent) return { success: false, result: { error: `Agente ${args.agent_id} não encontrado ou inativo.` } };
+        // Create a task for the target agent
+        const { data, error } = await adminClient.from("agent_tasks").insert({
+          user_id: userId, tenant_id: tenantId, agent_id: args.agent_id,
+          title: `[Delegado] ${args.mission}`, description: `Missão delegada pelo THOR: ${args.mission}`,
+          priority: args.priority || "medium", category: "delegation",
+        }).select("id, title").single();
+        if (error) return { success: false, result: { error: error.message } };
+        // Notify
+        await adminClient.from("notifications").insert({
+          user_id: userId, type: "agent_delegation",
+          title: `🔀 Missão delegada: ${targetAgent.name}`,
+          message: `THOR delegou para ${targetAgent.name}: ${args.mission}`,
+          metadata: { agent_id: args.agent_id, task_id: data.id },
+        });
+        return { success: true, result: { task_id: data.id, agent_name: targetAgent.name, mission: args.mission, message: `Missão delegada para ${targetAgent.name}.` } };
+      });
+      return JSON.stringify(result);
+    }
+
     default:
       return JSON.stringify({ error: `Unknown tool: ${toolName}` });
   }
