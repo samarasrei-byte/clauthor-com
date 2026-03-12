@@ -840,15 +840,17 @@ Apenas o texto, sem introduções.`;
               <div className="text-center pt-2">
                 <Button
                   onClick={startMeeting}
-                  disabled={!topic || agents.length < 2}
+                  disabled={!topic}
                   size="lg"
                   className="gap-3 px-12 py-7 text-base md:text-lg rounded-2xl shadow-2xl shadow-primary/30 hover:shadow-primary/50 transition-all hover:scale-105"
                 >
                   <Play className="h-5 w-5" />
                   {t("meeting.start_meeting", { count: agents.length })}
                 </Button>
-                {agents.length < 2 && (
-                  <p className="text-xs text-muted-foreground mt-4">{t("meeting.min_agents")}</p>
+                {useDemo && (
+                  <p className="text-xs text-muted-foreground mt-4">
+                    {t("meeting.demo_mode", { defaultValue: "Modo demonstração — contrate agentes para reuniões personalizadas" })}
+                  </p>
                 )}
               </div>
             </motion.div>
