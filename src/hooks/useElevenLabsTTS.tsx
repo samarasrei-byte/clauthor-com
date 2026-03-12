@@ -60,7 +60,12 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
     typeof window !== "undefined" && localStorage.getItem(ELEVENLABS_NATIVE_ONLY_KEY) === "1"
   );
 
-  const stop = useCallback(() => {
+  const stop = useCallback((notify = true) => {
+    const wasPlaying =
+      !!audioRef.current ||
+      !!nativeUtteranceRef.current ||
+      (typeof window !== "undefined" && !!window.speechSynthesis?.speaking);
+
     // Stop ElevenLabs audio
     if (audioRef.current) {
       audioRef.current.pause();
@@ -77,14 +82,14 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       nativeUtteranceRef.current = null;
     }
     setIsSpeaking(false);
-    onEnd?.();
+    if (notify && wasPlaying) onEnd?.();
   }, [onEnd]);
 
   const speak = useCallback(async (text: string, voiceId?: string) => {
     const cleaned = cleanTextForSpeech(text);
     if (!cleaned) return;
 
-    stop();
+    stop(false);
 
     const doNativeFallback = () => {
       const utterance = speakNative(
@@ -171,9 +176,10 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
         setIsSpeaking(true);
         onStart?.();
       };
-      audio.onended = () => stop();
+      audio.onended = () => stop(true);
       audio.onerror = () => {
         console.error("Audio playback error, using native");
+        stop(false);
         doNativeFallback();
       };
 

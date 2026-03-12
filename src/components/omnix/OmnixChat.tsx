@@ -87,6 +87,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
+    onStart: () => {
+      clearPendingRestart();
+    },
     onEnd: () => {
       // If VAD triggered the stop, start listening immediately
       if (vadBargeInRef.current) {
@@ -97,7 +100,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       // Auto-listen for hands-free conversation when voice mode is on
       const live = liveStateRef.current;
       if (autoListenAfterSpeakRef.current && live.autoSpeak && !live.showTextInput) {
-        queueRestartListening(140);
+        queueRestartListening(360);
       }
     },
   });
@@ -131,18 +134,25 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   }, [isSpeaking, stopSpeaking]);
 
   const { startMonitoring: startVAD, stopMonitoring: stopVAD } = useVoiceActivityDetection({
-    threshold: 18, // More sensitive for natural barge-in
-    consecutiveFrames: 2, // Faster reaction (~30-40ms)
+    threshold: 34, // Less false positives from Thor's own speaker output
+    consecutiveFrames: 4, // Require sustained voice before interrupting
     onVoiceDetected: handleVoiceDetected,
   });
 
   // Auto-start VAD when Thor starts speaking, stop when he stops
   useEffect(() => {
     if (isSpeaking && !isListening) {
-      startVAD();
-    } else {
-      stopVAD();
+      const timer = window.setTimeout(() => {
+        startVAD();
+      }, 420);
+
+      return () => {
+        window.clearTimeout(timer);
+        stopVAD();
+      };
     }
+
+    stopVAD();
   }, [isSpeaking, isListening, startVAD, stopVAD]);
 
   // ─── Scroll on new messages ───
