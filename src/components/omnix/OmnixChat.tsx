@@ -87,6 +87,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
+    onStart: () => {
+      clearPendingRestart();
+    },
     onEnd: () => {
       // If VAD triggered the stop, start listening immediately
       if (vadBargeInRef.current) {
@@ -97,7 +100,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       // Auto-listen for hands-free conversation when voice mode is on
       const live = liveStateRef.current;
       if (autoListenAfterSpeakRef.current && live.autoSpeak && !live.showTextInput) {
-        queueRestartListening(140);
+        queueRestartListening(360);
       }
     },
   });
