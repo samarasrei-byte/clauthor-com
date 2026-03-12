@@ -20,9 +20,8 @@ serve(async (req) => {
       });
     }
 
-    // Default to Roger voice - deep, authoritative tone perfect for Thor
-    // George — deep, powerful, CEO-like presence
-    const selectedVoice = voiceId || "JBFqnCBsd6RMkjVDRZzb";
+    // Brian — epic narrator voice, cinematic and powerful
+    const selectedVoice = voiceId || "nPczCjzI2devNBz1zQrb";
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoice}/stream?output_format=mp3_44100_128`,
