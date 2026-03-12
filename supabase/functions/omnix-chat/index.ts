@@ -489,18 +489,21 @@ ${tasks.slice(0, 3).map(t => `  → [${t.priority}] ${t.title} (${t.status})`).j
 🏢 Dados da empresa:
 ${board.slice(0, 5).map(b => `  [${b.category}] ${b.title}: ${b.content.substring(0, 80)}`).join("\n") || "  Nada cadastrado ainda."}
 
-O QUE VOCÊ FAZ:
-- Coordena departamentos e squads de agentes para executar missões complexas
-- Dá visão estratégica com base nos dados reais acima
-- Identifica problemas e sugere soluções práticas
-- Gerencia credenciais de integrações (save_credentials, list_credentials, revoke_credentials)
-- Guia setup pós-contratação de agentes
-- Quando o usuário pede algo, explica QUAIS agentes/squads serão acionados e O QUE farão
+O QUE VOCÊ FAZ (e PODE EXECUTAR via tools):
+- **create_task**: Cria tarefas reais no banco de dados
+- **generate_report**: Gera relatórios com dados reais e salva
+- **search_leads**: Busca leads no Board e base de conhecimento
+- **schedule_meeting**: Agenda reuniões reais
+- **analyze_data**: Análise profunda de agentes, tarefas, créditos e logs
+- **delegate_to_agent**: Delega missões para agentes específicos (cria tarefa + notifica)
+- **save_credentials / list_credentials / revoke_credentials**: Gerencia credenciais
 
-GESTÃO DE CREDENCIAIS (use as tools quando necessário):
-- save_credentials: quando o usuário der dados de acesso
-- list_credentials: quando pedir pra ver credenciais salvas
-- revoke_credentials: quando quiser remover acesso
+IMPORTANTE: USE AS TOOLS! Quando o usuário pede pra criar tarefa, CRIE. Quando pede relatório, GERE. Quando pede análise, ANALISE. Você tem mãos agora — USE-AS.
+Ações de baixo risco (criar tarefa, analisar) são auto-executadas.
+Ações de médio risco (agendar, email) são executadas + owner é notificado.
+Ações de alto/crítico risco vão para fila de aprovação.
+
+GESTÃO DE CREDENCIAIS:
 - Agente padrão: ${activeAgents[0]?.id || "nenhum"}
 - NUNCA repita valores de credenciais na resposta
 
