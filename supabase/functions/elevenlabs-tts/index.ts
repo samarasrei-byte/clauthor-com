@@ -20,11 +20,11 @@ serve(async (req) => {
       });
     }
 
-    // Daniel — voz firme, presente, natural (não cinematográfica)
-    const selectedVoice = voiceId || "onwK4e9ZLuTAKqWW03F9";
+    // Voz mais jovem, inovadora e firme
+    const selectedVoice = voiceId || "TX3LPaxmHKxFdv7VOQHJ"; // Liam
 
     const response = await fetch(
-      `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoice}/stream?output_format=mp3_44100_128`,
+      `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoice}/stream?output_format=mp3_22050_32`,
       {
         method: "POST",
         headers: {
@@ -32,14 +32,14 @@ serve(async (req) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          text: text.slice(0, 4000),
-          model_id: "eleven_multilingual_v2",
+          text: text.slice(0, 2500),
+          model_id: "eleven_turbo_v2_5",
           voice_settings: {
-            stability: 0.4,
-            similarity_boost: 0.85,
-            style: 0.3,
+            stability: 0.38,
+            similarity_boost: 0.8,
+            style: 0.12,
             use_speaker_boost: true,
-            speed: 1.05,
+            speed: 1.12,
           },
         }),
       }
