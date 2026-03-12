@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2, MessageSquare, X, Keyboard } from "lucide-react";
+import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2, MessageSquare, X, Keyboard, Video, VideoOff } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,13 +11,14 @@ import type { OmnixMessage, OmnixConfig } from "@/hooks/useOmnix";
 import { useTranslation } from "react-i18next";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import { useVoiceActivityDetection } from "@/hooks/useVoiceActivityDetection";
+import { useWebcam } from "@/hooks/useWebcam";
 
 interface OmnixChatProps {
   messages: OmnixMessage[];
   isLoading: boolean;
   isStreaming: boolean;
   config: OmnixConfig;
-  onSend: (msg: string) => void;
+  onSend: (msg: string, image?: string | null) => void;
   onStop: () => void;
   onClear: () => void;
   voiceFirst?: boolean;
