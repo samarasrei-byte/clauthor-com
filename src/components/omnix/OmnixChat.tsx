@@ -550,7 +550,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             <Button
               size="icon"
               className="h-16 w-16 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
-              onClick={() => { manualStopRef.current = true; recognitionRef.current?.stop(); setIsListening(false); }}
+              onClick={() => {
+                clearPendingRestart();
+                manualStopRef.current = true;
+                restartAttemptsRef.current = 0;
+                recognitionRef.current?.stop();
+                setIsListening(false);
+              }}
             >
               <MicOff className="h-6 w-6" />
             </Button>
@@ -559,7 +565,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             <Button
               size="icon"
               className="h-16 w-16 rounded-full bg-primary/10 text-primary hover:bg-primary/20 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300"
-              onClick={startListening}
+              onClick={() => startListeningRef.current?.()}
             >
               <Mic className="h-6 w-6" />
             </Button>
