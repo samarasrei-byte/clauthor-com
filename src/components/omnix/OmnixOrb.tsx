@@ -1,20 +1,30 @@
 import { useMemo } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface OmnixOrbProps {
   state: "idle" | "listening" | "speaking" | "processing";
   name: string;
   className?: string;
+  /** Full immersive mode — larger orb */
+  immersive?: boolean;
 }
 
-const BAR_COUNT = 64;
+const RING_COUNT = 5;
+const PARTICLE_COUNT = 24;
 
-const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
+const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
   const isActive = state !== "idle";
 
-  const seeds = useMemo(
-    () => Array.from({ length: BAR_COUNT }, () => [Math.random(), Math.random(), Math.random()]),
+  const particles = useMemo(
+    () =>
+      Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
+        angle: (360 / PARTICLE_COUNT) * i + Math.random() * 15,
+        distance: 80 + Math.random() * 60,
+        size: 1.5 + Math.random() * 2.5,
+        speed: 2 + Math.random() * 3,
+        delay: Math.random() * 2,
+      })),
     []
   );
 
@@ -25,129 +35,210 @@ const OmnixOrb = ({ state, name, className }: OmnixOrbProps) => {
     processing: "THINKING",
   }[state];
 
+  const orbSize = immersive ? 180 : 120;
+  const containerSize = immersive ? 420 : 300;
+
   return (
-    <div className={cn("relative flex flex-col items-center gap-3", className)}>
-      {/* Name */}
+    <div
+      className={cn(
+        "relative flex flex-col items-center justify-center gap-4 select-none",
+        className
+      )}
+      style={{ width: containerSize, height: containerSize }}
+    >
+      {/* Ambient radial glow */}
+      <motion.div
+        className="absolute inset-0 rounded-full pointer-events-none"
+        style={{
+          background: `radial-gradient(circle at center, hsl(var(--primary) / ${isActive ? 0.15 : 0.03}) 0%, transparent 70%)`,
+        }}
+        animate={{
+          scale: isActive ? [1, 1.15, 1] : 1,
+          opacity: isActive ? [0.6, 1, 0.6] : 0.2,
+        }}
+        transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Concentric pulse rings */}
+      {Array.from({ length: RING_COUNT }).map((_, i) => {
+        const ringScale = 1 + i * 0.35;
+        const baseOpacity = isActive ? 0.25 - i * 0.04 : 0.04;
+
+        return (
+          <motion.div
+            key={`ring-${i}`}
+            className="absolute rounded-full border pointer-events-none"
+            style={{
+              width: orbSize,
+              height: orbSize,
+              borderColor: `hsl(var(--primary) / ${baseOpacity})`,
+              left: "50%",
+              top: "50%",
+              x: "-50%",
+              y: "-50%",
+            }}
+            animate={
+              isActive
+                ? {
+                    scale: [ringScale, ringScale + 0.2, ringScale],
+                    opacity: [baseOpacity, baseOpacity * 2, baseOpacity],
+                    borderWidth: state === "speaking" ? [1, 2, 1] : 1,
+                  }
+                : { scale: ringScale, opacity: baseOpacity }
+            }
+            transition={{
+              duration: 2 + i * 0.5,
+              repeat: Infinity,
+              delay: i * 0.3,
+              ease: "easeInOut",
+            }}
+          />
+        );
+      })}
+
+      {/* Orbiting particles */}
+      <AnimatePresence>
+        {isActive &&
+          particles.map((p, i) => (
+            <motion.div
+              key={`particle-${i}`}
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                width: p.size,
+                height: p.size,
+                background: `hsl(var(--primary))`,
+                boxShadow: `0 0 ${p.size * 3}px hsl(var(--primary) / 0.6)`,
+                left: "50%",
+                top: "50%",
+              }}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{
+                opacity: [0, 0.8, 0.3, 0.9, 0],
+                scale: [0.5, 1.2, 0.8, 1.4, 0.5],
+                x: [
+                  Math.cos((p.angle * Math.PI) / 180) * p.distance * 0.5,
+                  Math.cos(((p.angle + 60) * Math.PI) / 180) * p.distance,
+                  Math.cos(((p.angle + 120) * Math.PI) / 180) * p.distance * 0.7,
+                  Math.cos(((p.angle + 180) * Math.PI) / 180) * p.distance,
+                  Math.cos(((p.angle + 240) * Math.PI) / 180) * p.distance * 0.5,
+                ],
+                y: [
+                  Math.sin((p.angle * Math.PI) / 180) * p.distance * 0.5,
+                  Math.sin(((p.angle + 60) * Math.PI) / 180) * p.distance,
+                  Math.sin(((p.angle + 120) * Math.PI) / 180) * p.distance * 0.7,
+                  Math.sin(((p.angle + 180) * Math.PI) / 180) * p.distance,
+                  Math.sin(((p.angle + 240) * Math.PI) / 180) * p.distance * 0.5,
+                ],
+              }}
+              exit={{ opacity: 0, scale: 0 }}
+              transition={{
+                duration: p.speed,
+                repeat: Infinity,
+                delay: p.delay,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+      </AnimatePresence>
+
+      {/* Core orb — fluid plasma effect */}
+      <motion.div
+        className="absolute rounded-full"
+        style={{
+          width: orbSize,
+          height: orbSize,
+          left: "50%",
+          top: "50%",
+          x: "-50%",
+          y: "-50%",
+          background: isActive
+            ? `radial-gradient(circle at 40% 35%, hsl(var(--primary) / 0.9) 0%, hsl(var(--primary) / 0.4) 40%, hsl(var(--primary) / 0.1) 70%, transparent 100%)`
+            : `radial-gradient(circle at 50% 50%, hsl(var(--primary) / 0.15) 0%, hsl(var(--primary) / 0.05) 50%, transparent 100%)`,
+          boxShadow: isActive
+            ? `0 0 ${orbSize * 0.4}px hsl(var(--primary) / 0.3), inset 0 0 ${orbSize * 0.3}px hsl(var(--primary) / 0.15)`
+            : `0 0 20px hsl(var(--primary) / 0.05)`,
+        }}
+        animate={
+          isActive
+            ? {
+                scale:
+                  state === "speaking"
+                    ? [1, 1.12, 0.95, 1.08, 1]
+                    : state === "listening"
+                    ? [1, 1.06, 0.97, 1.04, 1]
+                    : [1, 1.03, 0.98, 1.02, 1],
+                borderRadius: [
+                  "50%",
+                  "47% 53% 51% 49%",
+                  "52% 48% 49% 51%",
+                  "49% 51% 52% 48%",
+                  "50%",
+                ],
+              }
+            : { scale: [1, 1.02, 1], borderRadius: "50%" }
+        }
+        transition={{
+          duration: state === "speaking" ? 0.6 : state === "listening" ? 1.2 : 2.5,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+      />
+
+      {/* Inner bright core */}
+      <motion.div
+        className="absolute rounded-full pointer-events-none"
+        style={{
+          width: orbSize * 0.35,
+          height: orbSize * 0.35,
+          left: "50%",
+          top: "50%",
+          x: "-50%",
+          y: "-50%",
+          background: `radial-gradient(circle, hsl(var(--primary)) 0%, hsl(var(--primary) / 0.3) 60%, transparent 100%)`,
+          filter: "blur(4px)",
+        }}
+        animate={{
+          opacity: isActive ? [0.5, 1, 0.5] : [0.1, 0.2, 0.1],
+          scale: isActive ? [0.8, 1.1, 0.8] : 1,
+        }}
+        transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+      />
+
+      {/* Name label */}
       <motion.span
-        className="text-[11px] font-mono tracking-[0.35em] uppercase text-muted-foreground/50"
-        animate={{ opacity: isActive ? 1 : 0.4 }}
+        className="absolute font-mono tracking-[0.35em] uppercase text-muted-foreground/50"
+        style={{
+          bottom: immersive ? 30 : 16,
+          fontSize: immersive ? 13 : 10,
+          left: "50%",
+          x: "-50%",
+        }}
+        animate={{ opacity: isActive ? 1 : 0.35 }}
       >
         {name}
       </motion.span>
 
-      {/* Waveform container — wide horizontal strip */}
-      <div className="relative w-[420px] sm:w-[520px] h-[80px] flex items-center justify-center">
-        {/* Ambient glow behind waveform */}
-        {isActive && (
-          <motion.div
-            className="absolute inset-0 rounded-full pointer-events-none"
-            style={{
-              background: `radial-gradient(ellipse 80% 100% at center, hsl(var(--primary) / 0.12) 0%, transparent 70%)`,
-            }}
-            animate={{ opacity: [0.3, 0.7, 0.3] }}
-            transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-          />
-        )}
-
-        {/* The waveform bars — horizontal, filling the width */}
-        <svg
-          viewBox={`0 0 ${BAR_COUNT * 6.5} 80`}
-          className="w-full h-full"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <defs>
-            <linearGradient id="bar-gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
-              <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="1" />
-              <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
-            </linearGradient>
-            <linearGradient id="bar-idle" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="hsl(var(--muted-foreground))" stopOpacity="0.08" />
-              <stop offset="50%" stopColor="hsl(var(--muted-foreground))" stopOpacity="0.15" />
-              <stop offset="100%" stopColor="hsl(var(--muted-foreground))" stopOpacity="0.08" />
-            </linearGradient>
-          </defs>
-
-          {seeds.map(([r1, r2, r3], i) => {
-            const x = i * 6.5 + 3;
-            const center = 40;
-
-            // Distance from center (0..1) — bars taller near center, shorter at edges
-            const centerFactor = 1 - Math.abs((i - BAR_COUNT / 2) / (BAR_COUNT / 2));
-            const envelope = 0.3 + centerFactor * 0.7;
-
-            const heights = {
-              idle: (3 + r1 * 4) * envelope,
-              listening: (10 + r1 * 28) * envelope,
-              speaking: (14 + r1 * 32) * envelope,
-              processing: (8 + r1 * 20) * envelope,
-            };
-            const h = heights[state];
-            const halfH = h / 2;
-
-            const speeds = {
-              idle: 2 + r1 * 1.5,
-              listening: 0.4 + r1 * 0.35,
-              speaking: 0.2 + r1 * 0.25,
-              processing: 0.8 + r1 * 0.5,
-            };
-
-            const barWidth = 3;
-
-            return (
-              <motion.rect
-                key={i}
-                x={x - barWidth / 2}
-                rx={1.5}
-                ry={1.5}
-                width={barWidth}
-                fill={isActive ? "url(#bar-gradient)" : "url(#bar-idle)"}
-                animate={
-                  isActive
-                    ? {
-                        y: [
-                          center - halfH * 0.5,
-                          center - halfH * (0.9 + r2 * 0.1),
-                          center - halfH * 0.3,
-                          center - halfH * (0.7 + r3 * 0.3),
-                          center - halfH * 0.5,
-                        ],
-                        height: [
-                          halfH * 1,
-                          halfH * (1.8 + r2 * 0.2),
-                          halfH * 0.6,
-                          halfH * (1.4 + r3 * 0.6),
-                          halfH * 1,
-                        ],
-                        opacity: [0.6, 1, 0.5, 0.9, 0.6],
-                      }
-                    : {
-                        y: center - halfH,
-                        height: halfH * 2,
-                        opacity: 1,
-                      }
-                }
-                transition={{
-                  duration: speeds[state],
-                  repeat: Infinity,
-                  delay: i * 0.02,
-                  ease: "easeInOut",
-                }}
-              />
-            );
-          })}
-        </svg>
-      </div>
-
       {/* State label */}
-      <motion.span
-        className="text-[9px] font-mono tracking-[0.5em] uppercase h-3"
-        style={{ color: isActive ? "hsl(var(--primary))" : "transparent" }}
-        animate={{ opacity: isActive ? [0.4, 1, 0.4] : 0 }}
-        transition={{ duration: 1.8, repeat: Infinity }}
-      >
-        {stateLabel}
-      </motion.span>
+      <AnimatePresence>
+        {isActive && stateLabel && (
+          <motion.span
+            className="absolute font-mono tracking-[0.5em] uppercase"
+            style={{
+              bottom: immersive ? 10 : 2,
+              fontSize: immersive ? 10 : 8,
+              left: "50%",
+              x: "-50%",
+              color: "hsl(var(--primary))",
+            }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1.8, repeat: Infinity }}
+          >
+            {stateLabel}
+          </motion.span>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
