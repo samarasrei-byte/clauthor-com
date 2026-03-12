@@ -525,89 +525,88 @@ REGRAS:
       ...messages.map((m: any) => ({ role: m.role, content: m.content })),
     ];
 
-    // Detect credential intent (save, list, revoke)
-    const lastUserMsg = (messages || []).filter((m: any) => m.role === "user").pop()?.content || "";
-    const credentialIntent = /senha|password|api.?key|token|acesso|login|credencial|chave|phone|telefone|whatsapp|smtp|e-?mail.*senha|linkedin.*senha|listar|mostrar|ver.*credencia|revogar|remover|deletar.*credencia|quais.*credencia/i.test(lastUserMsg);
+    // Resolve tenant_id for execution tools
+    const { data: tenantData } = await supabase.rpc("get_user_tenant_id", { _user_id: user.id });
+    const tenantId = tenantData || "00000000-0000-0000-0000-000000000000";
 
-    if (credentialIntent && activeAgents.length > 0) {
-      const toolResponse = await fetchAI({
-        model: "google/gemini-2.5-flash",
-        messages: aiMessages,
-        stream: false,
-        max_tokens: 500,
-        temperature: 0.3,
-        tools: CREDENTIAL_TOOLS,
-        tool_choice: "auto",
-      });
+    // ── Always attempt tool-calling first ──
+    const toolResponse = await fetchAI({
+      model: "google/gemini-2.5-flash",
+      messages: aiMessages,
+      stream: false,
+      max_tokens: 800,
+      temperature: 0.3,
+      tools: ALL_TOOLS,
+      tool_choice: "auto",
+    });
 
-      if (toolResponse.ok) {
-        const toolData = await toolResponse.json();
-        const choice = toolData.choices?.[0];
-        const toolCalls = choice?.message?.tool_calls;
+    if (toolResponse.ok) {
+      const toolData = await toolResponse.json();
+      const choice = toolData.choices?.[0];
+      const toolCalls = choice?.message?.tool_calls;
 
-        if (toolCalls && toolCalls.length > 0) {
-          const toolResults: any[] = [];
-          for (const tc of toolCalls) {
-            let args: any;
-            try {
-              args = JSON.parse(tc.function.arguments);
-            } catch {
-              toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos inválidos da IA" }) });
-              continue;
-            }
-
-            // ── FeatherShield: scan tool arguments ──
-            const toolScan = scanToolArguments(tc.function.name, args);
-            if (!toolScan.safe) {
-              console.warn(`[FeatherShield] Blocked tool "${tc.function.name}" for user ${user.id}: ${toolScan.threats.join("; ")}`);
-              toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos bloqueados pela política de segurança.", threats: toolScan.threats }) });
-              continue;
-            }
-
-            const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader);
-            toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
+      if (toolCalls && toolCalls.length > 0) {
+        const toolResults: any[] = [];
+        for (const tc of toolCalls) {
+          let args: any;
+          try {
+            args = JSON.parse(tc.function.arguments);
+          } catch {
+            toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos inválidos da IA" }) });
+            continue;
           }
 
-          const finalResponse = await fetchAI({
-            model: "google/gemini-2.5-flash",
-            messages: [...aiMessages, choice.message, ...toolResults],
-            stream: true, max_tokens: 500, temperature: 0.7,
-          });
-
-          if (finalResponse.ok) {
-            const credMgmtTokens = (toolData.usage?.total_tokens || 400) + 400;
-            // Log after initiating stream (best effort — stream may fail but log is still useful)
-            supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_credential_mgmt", tokens_used: credMgmtTokens, model: "google/gemini-2.5-flash" }).then(() => {});
-            supabase.from("execution_logs").insert({
-              user_id: user.id,
-              agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-              action: "chat",
-              status: "success",
-              execution_time_ms: Date.now() - startTime,
-              details: { type: "omnix_credential_mgmt", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
-            }).then(() => {});
-            return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
+          // ── FeatherShield: scan tool arguments ──
+          const toolScan = scanToolArguments(tc.function.name, args);
+          if (!toolScan.safe) {
+            console.warn(`[FeatherShield] Blocked tool "${tc.function.name}" for user ${user.id}: ${toolScan.threats.join("; ")}`);
+            toolResults.push({ role: "tool", tool_call_id: tc.id, content: JSON.stringify({ error: "Argumentos bloqueados pela política de segurança.", threats: toolScan.threats }) });
+            continue;
           }
+
+          const result = await handleToolCall(tc.function.name, args, user.id, activeAgents, supabaseUrl, authHeader, supabase, tenantId);
+          toolResults.push({ role: "tool", tool_call_id: tc.id, content: result });
         }
 
-        if (choice?.message?.content) {
-          const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
-          const toolRespTokens = toolData.usage?.total_tokens || 300;
-          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: toolRespTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+        const finalResponse = await fetchAI({
+          model: "google/gemini-2.5-flash",
+          messages: [...aiMessages, choice.message, ...toolResults],
+          stream: true, max_tokens: 1500, temperature: 0.7,
+        });
+
+        if (finalResponse.ok) {
+          const toolMgmtTokens = (toolData.usage?.total_tokens || 500) + 600;
+          supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: "google/gemini-2.5-flash" }).then(() => {});
           supabase.from("execution_logs").insert({
             user_id: user.id,
             agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-            action: "chat",
+            action: "tool_execution",
             status: "success",
             execution_time_ms: Date.now() - startTime,
-            details: { type: "omnix_tool_response" },
+            details: { type: "omnix_tool_exec", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
           }).then(() => {});
-          return new Response(sseData, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
+          return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
         }
+      }
+
+      // No tool calls — AI responded with text directly
+      if (choice?.message?.content) {
+        const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
+        const directTokens = toolData.usage?.total_tokens || 300;
+        supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: "google/gemini-2.5-flash" }).then(() => {});
+        supabase.from("execution_logs").insert({
+          user_id: user.id,
+          agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
+          action: "chat",
+          status: "success",
+          execution_time_ms: Date.now() - startTime,
+          details: { type: "omnix_chat_direct" },
+        }).then(() => {});
+        return new Response(sseData, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
       }
     }
 
-    // Normal streaming
+    // Fallback: normal streaming (if tool call attempt failed)
     const response = await fetchAI({
       model: "google/gemini-2.5-flash",
       messages: aiMessages,
@@ -624,13 +623,10 @@ REGRAS:
       return new Response(JSON.stringify({ error: "AI gateway error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    // Estimate tokens — more accurate: system + messages input + reasonable output estimate
     const systemTokens = Math.ceil(systemPrompt.length / 4);
     const inputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
-    const estimatedOutputTokens = 800; // conservative average for streaming responses
-    const omnixEstimatedTokens = systemTokens + inputTokens + estimatedOutputTokens;
+    const omnixEstimatedTokens = systemTokens + inputTokens + 800;
 
-    // Fire-and-forget logging (don't block the stream response)
     supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: "google/gemini-2.5-flash" }).then(() => {});
     supabase.from("execution_logs").insert({
       user_id: user.id,
@@ -638,7 +634,7 @@ REGRAS:
       action: "chat",
       status: "success",
       execution_time_ms: Date.now() - startTime,
-      details: { type: "omnix_chat", model: "google/gemini-2.5-flash" },
+      details: { type: "omnix_chat_fallback", model: "google/gemini-2.5-flash" },
     }).then(() => {});
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
