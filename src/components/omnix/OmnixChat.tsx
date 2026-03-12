@@ -39,6 +39,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const micPermissionGrantedRef = useRef(false);
   const lastListenStartRef = useRef(0);
   const startListeningRef = useRef<(() => void) | null>(null);
+  const liveStateRef = useRef({
+    autoSpeak: true,
+    showTextInput: false,
+    isSpeaking: false,
+    isStreaming: false,
+    isLoading: false,
+  });
   const lastSpokenRef = useRef<number>(-1);
   const autoListenAfterSpeakRef = useRef(true);
   const autoStartAttemptedRef = useRef(false);
@@ -70,23 +77,40 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   }, []);
 
+  const queueRestartListening = useCallback((delayMs: number) => {
+    clearPendingRestart();
+    restartTimeoutRef.current = window.setTimeout(() => {
+      if (manualStopRef.current) return;
+      startListeningRef.current?.();
+    }, delayMs);
+  }, [clearPendingRestart]);
+
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
     onEnd: () => {
       // If VAD triggered the stop, start listening immediately
       if (vadBargeInRef.current) {
         vadBargeInRef.current = false;
-        clearPendingRestart();
-        setTimeout(() => startListeningRef.current?.(), 80);
+        queueRestartListening(80);
         return;
       }
       // Auto-listen for hands-free conversation when voice mode is on
-      if (autoListenAfterSpeakRef.current && autoSpeak && !showTextInput) {
-        clearPendingRestart();
-        setTimeout(() => startListeningRef.current?.(), 180);
+      const live = liveStateRef.current;
+      if (autoListenAfterSpeakRef.current && live.autoSpeak && !live.showTextInput) {
+        queueRestartListening(140);
       }
     },
   });
+
+  useEffect(() => {
+    liveStateRef.current = {
+      autoSpeak,
+      showTextInput,
+      isSpeaking,
+      isStreaming,
+      isLoading,
+    };
+  }, [autoSpeak, showTextInput, isSpeaking, isStreaming, isLoading]);
 
   // ─── TTS: speak text ───
   const speak = useCallback((text: string) => {
@@ -165,17 +189,19 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       return;
     }
 
+    const live = liveStateRef.current;
     if (isListening || isStartingListeningRef.current) return;
-    if (isStreaming || isLoading) return;
+    if (live.isStreaming || live.isLoading) return;
 
     const now = Date.now();
     if (now - lastListenStartRef.current < 280) return;
 
     // BARGE-IN: stop Thor if speaking
-    if (isSpeaking) {
+    if (live.isSpeaking) {
       stopSpeaking();
     }
 
+    stopVAD();
     clearPendingRestart();
     manualStopRef.current = false;
     isStartingListeningRef.current = true;
@@ -207,7 +233,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     const recognition = new SpeechRecognition();
     recognition.lang = config.language || "pt-BR";
     recognition.interimResults = true;
-    recognition.continuous = false;
+    recognition.continuous = true;
 
     let hasFinalResult = false;
 
@@ -223,7 +249,24 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
       const currentResult = e.results[e.resultIndex];
       if (currentResult?.isFinal && !hasFinalResult) {
-        if (isStreaming || isLoading) return;
+        const currentLive = liveStateRef.current;
+        const normalized = transcript.toLowerCase().trim();
+        const isPauseCommand = /\b(pausa|parar|pare|stop|sil[eê]ncio|silencio|fica quieto)\b/.test(normalized);
+
+        if (isPauseCommand) {
+          hasFinalResult = true;
+          manualStopRef.current = true;
+          restartAttemptsRef.current = 0;
+          clearPendingRestart();
+          setInput("");
+          if (currentLive.isSpeaking) stopSpeaking();
+          if (currentLive.isStreaming) onStop();
+          recognition.stop();
+          queueRestartListening(180);
+          return;
+        }
+
+        if (currentLive.isStreaming || currentLive.isLoading) return;
         hasFinalResult = true;
         autoListenAfterSpeakRef.current = true;
         manualStopRef.current = true;
@@ -244,7 +287,8 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         return;
       }
 
-      if (!autoSpeak || showTextInput || isSpeaking || isStreaming || isLoading) {
+      const currentLive = liveStateRef.current;
+      if (!currentLive.autoSpeak || currentLive.showTextInput || currentLive.isSpeaking || currentLive.isStreaming || currentLive.isLoading) {
         return;
       }
 
@@ -253,11 +297,8 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         return;
       }
 
-      const delay = Math.min(1400, 220 + restartAttemptsRef.current * 220);
-      restartTimeoutRef.current = window.setTimeout(() => {
-        if (manualStopRef.current) return;
-        startListeningRef.current?.();
-      }, delay);
+      const delay = Math.min(1200, 180 + restartAttemptsRef.current * 200);
+      queueRestartListening(delay);
     };
 
     recognition.onerror = (e: any) => {
@@ -299,23 +340,11 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
       restartAttemptsRef.current += 1;
       if (restartAttemptsRef.current <= 4) {
-        const delay = 300 + restartAttemptsRef.current * 220;
-        restartTimeoutRef.current = window.setTimeout(() => startListeningRef.current?.(), delay);
+        const delay = 300 + restartAttemptsRef.current * 180;
+        queueRestartListening(delay);
       }
     }
-  }, [
-    autoSpeak,
-    clearPendingRestart,
-    config.language,
-    getImageForSend,
-    isListening,
-    isLoading,
-    isSpeaking,
-    isStreaming,
-    onSend,
-    showTextInput,
-    stopSpeaking,
-  ]);
+  }, [clearPendingRestart, config.language, getImageForSend, isListening, onSend, onStop, queueRestartListening, stopSpeaking, stopVAD]);
 
   useEffect(() => {
     startListeningRef.current = startListening;
@@ -351,7 +380,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       // BARGE-IN: stop Thor and immediately start listening
       clearPendingRestart();
       stopSpeaking();
-      setTimeout(() => startListeningRef.current?.(), 120);
+      queueRestartListening(120);
       return;
     }
     if (isListening) {
@@ -382,9 +411,9 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const handleBargeIn = useCallback(() => {
     handleStop();
     // dupla tentativa para cobrir janela de abort/cleanup do streaming
-    setTimeout(() => startListeningRef.current?.(), 180);
-    setTimeout(() => startListeningRef.current?.(), 650);
-  }, [handleStop]);
+    queueRestartListening(180);
+    setTimeout(() => startListeningRef.current?.(), 620);
+  }, [handleStop, queueRestartListening]);
 
   const hasMessages = messages.length > 0;
   const isActive = isListening || isSpeaking || isStreaming || isLoading;
