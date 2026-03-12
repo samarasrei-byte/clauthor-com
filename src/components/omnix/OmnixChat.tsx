@@ -315,6 +315,19 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     stopSpeaking,
   ]);
 
+  useEffect(() => {
+    startListeningRef.current = startListening;
+  }, [startListening]);
+
+  useEffect(() => {
+    return () => {
+      clearPendingRestart();
+      manualStopRef.current = true;
+      recognitionRef.current?.stop?.();
+      isStartingListeningRef.current = false;
+    };
+  }, [clearPendingRestart]);
+
   // Auto-start hands-free listening once (after first load)
   useEffect(() => {
     if (autoStartAttemptedRef.current) return;
@@ -323,7 +336,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     autoStartAttemptedRef.current = true;
     const timer = setTimeout(() => {
       if (!isListening && !isSpeaking && !isStreaming && !isLoading) {
-        startListening();
+        startListeningRef.current?.();
       }
     }, 700);
 
