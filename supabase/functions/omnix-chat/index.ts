@@ -492,7 +492,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
     // ── Tool-calling somente quando há intenção operacional explícita ──
     if (shouldAttemptTools) {
       const toolResponse = await fetchAI({
-        model: "google/gemini-2.5-flash-lite",
+        model: chatModel,
         messages: aiMessages,
         stream: false,
         max_tokens: 280,
