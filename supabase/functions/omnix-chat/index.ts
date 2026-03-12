@@ -577,7 +577,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
 
     // Resposta direta por streaming (rápida para conversa natural)
     const response = await fetchAI({
-      model: "google/gemini-2.5-flash-lite",
+      model: chatModel,
       messages: aiMessages,
       stream: true,
       temperature: 0.35,
