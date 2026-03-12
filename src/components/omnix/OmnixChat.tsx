@@ -77,20 +77,37 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   }, []);
 
+  const queueRestartListening = useCallback((delayMs: number) => {
+    clearPendingRestart();
+    restartTimeoutRef.current = window.setTimeout(() => {
+      if (manualStopRef.current) return;
+      startListeningRef.current?.();
+    }, delayMs);
+  }, [clearPendingRestart]);
+
+  useEffect(() => {
+    liveStateRef.current = {
+      autoSpeak,
+      showTextInput,
+      isSpeaking,
+      isStreaming,
+      isLoading,
+    };
+  }, [autoSpeak, showTextInput, isSpeaking, isStreaming, isLoading]);
+
   // ─── ElevenLabs TTS ───
-  const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
+  const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking: ttsSpeaking } = useElevenLabsTTS({
     onEnd: () => {
       // If VAD triggered the stop, start listening immediately
       if (vadBargeInRef.current) {
         vadBargeInRef.current = false;
-        clearPendingRestart();
-        setTimeout(() => startListeningRef.current?.(), 80);
+        queueRestartListening(80);
         return;
       }
       // Auto-listen for hands-free conversation when voice mode is on
-      if (autoListenAfterSpeakRef.current && autoSpeak && !showTextInput) {
-        clearPendingRestart();
-        setTimeout(() => startListeningRef.current?.(), 180);
+      const live = liveStateRef.current;
+      if (autoListenAfterSpeakRef.current && live.autoSpeak && !live.showTextInput) {
+        queueRestartListening(140);
       }
     },
   });
