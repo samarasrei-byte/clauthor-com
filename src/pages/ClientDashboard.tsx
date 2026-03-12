@@ -806,6 +806,13 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {/* ═══ CONTROL TOWER ═══ */}
+                {activeSection === "control-tower" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ControlTowerSection />
+                  </Suspense>
+                )}
+
                 {/* ═══ COMING SOON FEATURES ═══ */}
                 {["mission-control", "agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
                   <ComingSoonSection feature={activeSection} />
