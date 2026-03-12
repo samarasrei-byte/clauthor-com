@@ -885,10 +885,10 @@ Apenas o texto, sem introduções.`;
             </div>
 
             {/* Main content */}
-            <div className="flex-1 flex flex-col lg:flex-row min-h-0">
+            <div className="flex-1 flex flex-col-reverse lg:flex-row min-h-0">
               
-              {/* ═══ HOLOGRAPHIC TABLE AREA ═══ */}
-              <div className="flex-1 relative flex items-end justify-center pb-8 min-h-[300px] lg:min-h-0">
+              {/* ═══ HOLOGRAPHIC TABLE AREA — hidden on mobile during active meeting ═══ */}
+              <div className="hidden lg:flex flex-1 relative items-end justify-center pb-8 min-h-0">
                 
                 {/* Table surface */}
                 <motion.div
