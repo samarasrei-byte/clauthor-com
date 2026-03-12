@@ -85,16 +85,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }, delayMs);
   }, [clearPendingRestart]);
 
-  useEffect(() => {
-    liveStateRef.current = {
-      autoSpeak,
-      showTextInput,
-      isSpeaking,
-      isStreaming,
-      isLoading,
-    };
-  }, [autoSpeak, showTextInput, isSpeaking, isStreaming, isLoading]);
-
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
     onEnd: () => {
