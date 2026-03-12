@@ -134,8 +134,8 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   }, [isSpeaking, stopSpeaking]);
 
   const { startMonitoring: startVAD, stopMonitoring: stopVAD } = useVoiceActivityDetection({
-    threshold: 18, // More sensitive for natural barge-in
-    consecutiveFrames: 2, // Faster reaction (~30-40ms)
+    threshold: 34, // Less false positives from Thor's own speaker output
+    consecutiveFrames: 4, // Require sustained voice before interrupting
     onVoiceDetected: handleVoiceDetected,
   });
 
