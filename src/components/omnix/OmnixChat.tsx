@@ -173,6 +173,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   };
 
+  // One-tap barge-in: interrompe e tenta abrir microfone rapidamente
+  const handleBargeIn = useCallback(() => {
+    handleStop();
+    // dupla tentativa para cobrir janela de abort/cleanup do streaming
+    setTimeout(() => startListening(), 180);
+    setTimeout(() => startListening(), 650);
+  }, [handleStop, startListening]);
+
   const hasMessages = messages.length > 0;
   const isActive = isListening || isSpeaking || isStreaming || isLoading;
 
@@ -250,8 +258,10 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               <div className="flex gap-2 items-center">
                 <Input
                   value={input}
-                  onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
+                  onChange={e => {
+                    if (isSpeaking) stopSpeaking();
+                    setInput(e.target.value);
+                  }}
                   placeholder={`Fale com ${config.name}...`}
                   className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
                   disabled={isLoading}
@@ -291,7 +301,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             <Button
               size="icon"
               className="h-16 w-16 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
-              onClick={handleStop}
+              onClick={isSpeaking ? handleBargeIn : handleStop}
             >
               <Square className="h-6 w-6" />
             </Button>
@@ -435,8 +445,10 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               <div className="flex gap-2 items-center">
                 <Input
                   value={input}
-                  onChange={e => setInput(e.target.value)}
-                  onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
+                  onChange={e => {
+                    if (isSpeaking) stopSpeaking();
+                    setInput(e.target.value);
+                  }}
                   placeholder={`Fale com ${config.name}...`}
                   className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
                   disabled={isLoading}
