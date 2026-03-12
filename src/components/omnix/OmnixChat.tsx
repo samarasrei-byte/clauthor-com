@@ -298,21 +298,40 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           </button>
 
           {/* Main action button */}
-          {isActive ? (
-            // STOP button — visible whenever Thor is active (speaking, processing, listening)
+          {isSpeaking ? (
+            // Thor is speaking — tap to BARGE-IN (stop + listen)
+            <Button
+              size="icon"
+              className="h-16 w-16 rounded-full bg-accent/20 text-primary border-2 border-primary/30 shadow-[0_0_30px_hsl(var(--primary)/0.15)] hover:bg-primary/20 transition-all duration-300 animate-pulse"
+              onClick={handleBargeIn}
+              title="Toque para interromper e falar"
+            >
+              <Mic className="h-6 w-6" />
+            </Button>
+          ) : isStreaming || isLoading ? (
+            // Processing — show stop
             <Button
               size="icon"
               className="h-16 w-16 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
-              onClick={isSpeaking ? handleBargeIn : handleStop}
+              onClick={handleStop}
             >
               <Square className="h-6 w-6" />
             </Button>
+          ) : isListening ? (
+            // Listening — show active mic, tap to stop
+            <Button
+              size="icon"
+              className="h-16 w-16 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
+              onClick={() => { recognitionRef.current?.stop(); setIsListening(false); }}
+            >
+              <MicOff className="h-6 w-6" />
+            </Button>
           ) : (
-            // MIC button — only when idle
+            // Idle — tap to start listening
             <Button
               size="icon"
               className="h-16 w-16 rounded-full bg-primary/10 text-primary hover:bg-primary/20 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300"
-              onClick={toggleVoice}
+              onClick={startListening}
             >
               <Mic className="h-6 w-6" />
             </Button>
