@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2, MessageSquare, X } from "lucide-react";
+import { Send, Square, Mic, MicOff, Volume2, VolumeX, Trash2, MessageSquare, X, Keyboard } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -28,16 +28,19 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const [isListening, setIsListening] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(true);
   const [showChat, setShowChat] = useState(false);
+  const [showTextInput, setShowTextInput] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const lastSpokenRef = useRef<number>(-1);
-  const autoListenAfterSpeakRef = useRef(true);
+  // Don't auto-listen after speak by default — prevents loops
+  const autoListenAfterSpeakRef = useRef(false);
 
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
     onEnd: () => {
-      if (autoListenAfterSpeakRef.current && autoSpeak) {
-        setTimeout(() => startListening(), 400);
+      // Only auto-listen if user explicitly enabled it and not in text mode
+      if (autoListenAfterSpeakRef.current && autoSpeak && !showTextInput) {
+        setTimeout(() => startListening(), 600);
       }
     },
   });
@@ -54,7 +57,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
   }, [messages]);
 
-  // ─── Auto-speak when assistant finishes ───
+  // ─── Auto-speak when assistant finishes (NOT during streaming) ───
   useEffect(() => {
     if (!autoSpeak || isStreaming) return;
     const lastIdx = messages.length - 1;
@@ -64,16 +67,6 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       speak(last.content);
     }
   }, [messages, isStreaming, autoSpeak, speak]);
-
-  // ─── Voice-first: auto-start listening ───
-  useEffect(() => {
-    if (!voiceFirst) return;
-    if (messages.length === 0 && !isListening && !isLoading && !isStreaming && !isSpeaking) {
-      const timer = setTimeout(() => startListening(), 800);
-      return () => clearTimeout(timer);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [voiceFirst]);
 
   const handleSend = () => {
     if (!input.trim() || isLoading) return;
@@ -91,11 +84,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   // ─── Start listening — BARGE-IN ───
   const startListening = useCallback(async () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
-      toast.error(t("cmd.mic_unsupported", { defaultValue: "Your browser doesn't support voice recognition." }));
+      toast.error("Seu navegador não suporta reconhecimento de voz. Use o campo de texto.");
+      setShowTextInput(true);
       return;
     }
     if (isListening || isStreaming || isLoading) return;
 
+    // BARGE-IN: stop Thor if speaking
     if (isSpeaking) {
       stopSpeaking();
     }
@@ -104,12 +99,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       await navigator.mediaDevices.getUserMedia({ audio: true });
     } catch (err: any) {
       console.error("Microphone permission error:", err);
+      // Show text input as fallback
+      setShowTextInput(true);
       if (err.name === "NotAllowedError") {
-        toast.error(t("cmd.mic_denied", { defaultValue: "Microphone permission denied." }));
+        toast.error("Microfone bloqueado. Use o campo de texto abaixo.");
       } else if (err.name === "NotFoundError") {
-        toast.error(t("cmd.mic_not_found", { defaultValue: "No microphone detected." }));
+        toast.error("Nenhum microfone detectado. Use o campo de texto.");
       } else {
-        toast.error(t("cmd.mic_error", { defaultValue: "Error accessing microphone: {{error}}", error: err.message || "Unknown" }));
+        toast.error("Erro no microfone. Use o campo de texto.");
       }
       return;
     }
@@ -134,30 +131,29 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     recognition.onend = () => setIsListening(false);
     recognition.onerror = (e: any) => {
       setIsListening(false);
-      console.error("SpeechRecognition error:", e.error, e.message);
+      console.error("SpeechRecognition error:", e.error);
       if (e.error === "not-allowed") {
-        toast.error(t("cmd.mic_denied_short", { defaultValue: "Microphone permission denied." }));
-      } else if (e.error === "no-speech") {
-        // Don't auto-retry — user will tap mic again
+        toast.error("Microfone bloqueado. Use o campo de texto.");
+        setShowTextInput(true);
+      } else if (e.error === "no-speech" || e.error === "aborted") {
+        // Silent — user will tap mic again
         return;
       } else if (e.error === "network") {
-        toast.error(t("cmd.network_error", { defaultValue: "Voice recognition network error." }));
-      } else if (e.error !== "aborted") {
-        toast.error(t("cmd.voice_error", { defaultValue: "Voice error: {{error}}", error: e.error }));
+        toast.error("Erro de rede no reconhecimento de voz.");
       }
+      // Don't show generic errors for aborted
     };
 
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend, stopSpeaking, t]);
+  }, [config.language, isListening, isSpeaking, isStreaming, isLoading, onSend, stopSpeaking]);
 
   const toggleVoice = () => {
     if (isStreaming || isLoading) return;
     if (isSpeaking) {
       stopSpeaking();
-      setTimeout(() => startListening(), 200);
-      return;
+      return; // Just stop — don't auto-listen
     }
     if (isListening) {
       recognitionRef.current?.stop();
@@ -167,15 +163,24 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     startListening();
   };
 
-  const hasMessages = messages.length > 0;
+  // Stop everything (streaming + speaking)
+  const handleStop = () => {
+    if (isSpeaking) stopSpeaking();
+    if (isStreaming) onStop();
+    if (isListening) {
+      recognitionRef.current?.stop();
+      setIsListening(false);
+    }
+  };
 
-  // ─── Immersive voice-only view (default) ───
-  // Shows full-screen orb with floating controls; chat panel slides in on demand
+  const hasMessages = messages.length > 0;
+  const isActive = isListening || isSpeaking || isStreaming || isLoading;
+
   return (
     <div className="relative flex flex-col h-full overflow-hidden">
       {/* ── IMMERSIVE ORB VIEW ── */}
       <div className="flex-1 flex flex-col items-center justify-center relative">
-        {/* Background ambient effect */}
+        {/* Background ambient */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div
             className="absolute w-[600px] h-[600px] rounded-full"
@@ -193,17 +198,17 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           />
         </div>
 
-        {/* The Orb — immersive size */}
+        {/* Orb */}
         <OmnixOrb state={getOrbState()} name={config.name} immersive />
 
         {/* Live transcript while listening */}
         <AnimatePresence>
-          {(isListening || input) && (
+          {(isListening || (input && !showTextInput)) && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="absolute bottom-32 left-1/2 -translate-x-1/2 max-w-md px-6"
+              className="absolute bottom-36 left-1/2 -translate-x-1/2 max-w-md px-6"
             >
               <p className="text-center text-sm text-muted-foreground/70 italic">
                 {input || "..."}
@@ -212,17 +217,19 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           )}
         </AnimatePresence>
 
-        {/* Last assistant response preview (when chat is hidden) */}
+        {/* Last assistant response preview */}
         <AnimatePresence>
-          {!showChat && hasMessages && messages[messages.length - 1]?.role === "assistant" && !isSpeaking && !isListening && (
+          {!showChat && hasMessages && messages[messages.length - 1]?.role === "assistant" && !isSpeaking && !isListening && !isLoading && (
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="absolute bottom-28 left-1/2 -translate-x-1/2 max-w-lg px-6"
+              className="absolute bottom-36 left-1/2 -translate-x-1/2 max-w-lg px-6 cursor-pointer"
+              onClick={() => setShowChat(true)}
             >
-              <p className="text-center text-xs text-muted-foreground/40 line-clamp-2">
-                {messages[messages.length - 1].content.slice(0, 120)}…
+              <p className="text-center text-xs text-muted-foreground/40 line-clamp-2 hover:text-muted-foreground/60 transition-colors">
+                {messages[messages.length - 1].content.slice(0, 150)}…
+                <span className="ml-2 text-primary/40">ver mais</span>
               </p>
             </motion.div>
           )}
@@ -230,71 +237,118 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       </div>
 
       {/* ── BOTTOM CONTROLS ── */}
-      <div className="shrink-0 flex items-center justify-center gap-4 pb-6 pt-3 relative z-10">
-        {/* Auto-voice toggle */}
-        <button
-          onClick={() => {
-            const next = !autoSpeak;
-            setAutoSpeak(next);
-            autoListenAfterSpeakRef.current = next;
-            if (isSpeaking) stopSpeaking();
-          }}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] text-muted-foreground/40 hover:text-muted-foreground border border-border/10 hover:border-border/30 transition-all"
-        >
-          {autoSpeak ? <Volume2 className="h-3 w-3" /> : <VolumeX className="h-3 w-3" />}
-          {autoSpeak ? "ON" : "OFF"}
-        </button>
-
-        {/* Main mic button — large, prominent */}
-        <Button
-          size="icon"
-          className={`h-16 w-16 rounded-full transition-all duration-300 ${
-            isListening
-              ? "bg-primary text-primary-foreground shadow-[0_0_40px_hsl(var(--primary)/0.4)] scale-110"
-              : isSpeaking
-              ? "bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)]"
-              : "bg-primary/10 text-primary hover:bg-primary/20 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)]"
-          }`}
-          onClick={toggleVoice}
-          disabled={isStreaming || isLoading}
-        >
-          {isListening ? (
-            <MicOff className="h-6 w-6" />
-          ) : isStreaming || isLoading ? (
-            <Square className="h-5 w-5" />
-          ) : (
-            <Mic className="h-6 w-6" />
+      <div className="shrink-0 pb-5 pt-2 relative z-10">
+        {/* Text input (shown when mic fails or user requests) */}
+        <AnimatePresence>
+          {showTextInput && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              className="px-6 pb-3 max-w-lg mx-auto"
+            >
+              <div className="flex gap-2 items-center">
+                <Input
+                  value={input}
+                  onChange={e => setInput(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
+                  placeholder={`Fale com ${config.name}...`}
+                  className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
+                  disabled={isLoading}
+                  autoFocus
+                />
+                <Button
+                  size="icon"
+                  className="shrink-0 h-9 w-9 rounded-full"
+                  onClick={handleSend}
+                  disabled={!input.trim() || isLoading}
+                >
+                  <Send className="h-3.5 w-3.5" />
+                </Button>
+              </div>
+            </motion.div>
           )}
-        </Button>
+        </AnimatePresence>
 
-        {/* Show chat panel */}
-        <button
-          onClick={() => setShowChat(!showChat)}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
-            showChat
-              ? "text-primary border-primary/30 bg-primary/5"
-              : "text-muted-foreground/40 border-border/10 hover:text-muted-foreground hover:border-border/30"
-          }`}
-        >
-          <MessageSquare className="h-3 w-3" />
-          Chat
-        </button>
-
-        {/* Clear */}
-        {hasMessages && (
+        <div className="flex items-center justify-center gap-3">
+          {/* Auto-voice toggle */}
           <button
             onClick={() => {
-              if (messages.length > 2) {
-                const confirmed = window.confirm(t("cmd.clear_confirm", { defaultValue: "Clear all chat history?" }));
-                if (!confirmed) return;
-              }
-              onClear();
+              const next = !autoSpeak;
+              setAutoSpeak(next);
+              autoListenAfterSpeakRef.current = false; // Never auto-listen to prevent loops
+              if (isSpeaking) stopSpeaking();
             }}
-            className="flex items-center gap-1 px-2 py-1.5 rounded-full text-[10px] text-muted-foreground/30 hover:text-destructive border border-border/10 hover:border-destructive/30 transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] text-muted-foreground/40 hover:text-muted-foreground border border-border/10 hover:border-border/30 transition-all"
           >
-            <Trash2 className="h-3 w-3" />
+            {autoSpeak ? <Volume2 className="h-3 w-3" /> : <VolumeX className="h-3 w-3" />}
+            {autoSpeak ? "ON" : "OFF"}
           </button>
-        )}
+
+          {/* Main action button */}
+          {isActive ? (
+            // STOP button — visible whenever Thor is active (speaking, processing, listening)
+            <Button
+              size="icon"
+              className="h-16 w-16 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
+              onClick={handleStop}
+            >
+              <Square className="h-6 w-6" />
+            </Button>
+          ) : (
+            // MIC button — only when idle
+            <Button
+              size="icon"
+              className="h-16 w-16 rounded-full bg-primary/10 text-primary hover:bg-primary/20 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300"
+              onClick={toggleVoice}
+            >
+              <Mic className="h-6 w-6" />
+            </Button>
+          )}
+
+          {/* Text input toggle */}
+          <button
+            onClick={() => setShowTextInput(!showTextInput)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
+              showTextInput
+                ? "text-primary border-primary/30 bg-primary/5"
+                : "text-muted-foreground/40 border-border/10 hover:text-muted-foreground hover:border-border/30"
+            }`}
+          >
+            <Keyboard className="h-3 w-3" />
+            Texto
+          </button>
+
+          {/* Chat panel toggle */}
+          <button
+            onClick={() => setShowChat(!showChat)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
+              showChat
+                ? "text-primary border-primary/30 bg-primary/5"
+                : "text-muted-foreground/40 border-border/10 hover:text-muted-foreground hover:border-border/30"
+            }`}
+          >
+            <MessageSquare className="h-3 w-3" />
+            Chat
+          </button>
+
+          {/* Clear */}
+          {hasMessages && (
+            <button
+              onClick={() => {
+                if (messages.length > 2) {
+                  const confirmed = window.confirm("Limpar todo o histórico?");
+                  if (!confirmed) return;
+                }
+                handleStop();
+                onClear();
+              }}
+              className="flex items-center gap-1 px-2 py-1.5 rounded-full text-[10px] text-muted-foreground/30 hover:text-destructive border border-border/10 hover:border-destructive/30 transition-all"
+            >
+              <Trash2 className="h-3 w-3" />
+            </button>
+          )}
+        </div>
       </div>
 
       {/* ── SLIDE-IN CHAT PANEL ── */}
@@ -322,7 +376,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               {!hasMessages && (
                 <div className="flex items-center justify-center h-full">
                   <p className="text-sm text-muted-foreground/40 text-center px-4">
-                    {t("cmd.hello_text", { defaultValue: "Hi, I'm {{name}}. Your central AI agent. Speak or type to begin.", name: config.name })}
+                    Fale ou digite para começar uma conversa com {config.name}.
                   </p>
                 </div>
               )}
@@ -383,7 +437,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                   value={input}
                   onChange={e => setInput(e.target.value)}
                   onKeyDown={e => e.key === "Enter" && !e.shiftKey && handleSend()}
-                  placeholder={t("cmd.talk_to", { defaultValue: "Talk to {{name}}...", name: config.name })}
+                  placeholder={`Fale com ${config.name}...`}
                   className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
                   disabled={isLoading}
                 />
