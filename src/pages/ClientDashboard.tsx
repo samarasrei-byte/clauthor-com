@@ -87,7 +87,9 @@ const ClientDashboard = () => {
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
   const [showBoardGate, setShowBoardGate] = useState(false);
 
-  // Redirect first-time user to THOR (concierge)
+  const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
+
+  // Redirect first-time user to THOR (concierge) with contextual welcome
   useEffect(() => {
     if (!user) return;
     const key = `clauthor_concierge_seen_${user.id}`;
@@ -95,6 +97,28 @@ const ClientDashboard = () => {
       localStorage.setItem(key, "true");
       setActiveSection("omnix");
       setOmnixMounted(true);
+
+      // Build contextual welcome based on onboarding state
+      const hireIntent = localStorage.getItem("hireIntent");
+      let parsed: { agentName?: string; isDepartment?: boolean; agentCount?: number; slug?: string } | null = null;
+      try { parsed = hireIntent ? JSON.parse(hireIntent) : null; } catch {}
+
+      if (parsed?.isDepartment && parsed.agentName) {
+        setWelcomeMessage(
+          `Acabei de entrar na plataforma e escolhi o departamento ${parsed.agentName} com ${parsed.agentCount || 'vários'} agentes. ` +
+          `Me dê boas-vindas, explique o que esse departamento pode fazer por mim e me guie nos próximos passos.`
+        );
+      } else if (parsed?.agentName) {
+        setWelcomeMessage(
+          `Acabei de entrar na plataforma e escolhi o agente ${parsed.agentName}. ` +
+          `Me dê boas-vindas, explique o que esse agente faz e me ajude a configurá-lo.`
+        );
+      } else {
+        setWelcomeMessage(
+          `Sou um novo usuário na plataforma. Me dê boas-vindas, se apresente como Thor (o CEO e orquestrador de todos os agentes) e me guie: ` +
+          `explique os 3 passos (Ensinar, Contratar e Comandar) de forma simples e pergunte como posso te ajudar.`
+        );
+      }
     }
   }, [user]);
 
