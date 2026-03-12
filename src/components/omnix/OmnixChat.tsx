@@ -137,7 +137,8 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       setShowTextInput(true);
       return;
     }
-    if (isListening || isStreaming || isLoading) return;
+    if (isListening) return;
+    if (isStreaming || isLoading) return;
 
     // BARGE-IN: stop Thor if speaking
     if (isSpeaking) {
