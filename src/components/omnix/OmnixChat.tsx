@@ -63,6 +63,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     }
   }, [webcamActive, startWebcam, stopWebcam]);
 
+  const clearPendingRestart = useCallback(() => {
+    if (restartTimeoutRef.current) {
+      window.clearTimeout(restartTimeoutRef.current);
+      restartTimeoutRef.current = null;
+    }
+  }, []);
+
   // ─── ElevenLabs TTS ───
   const { speak: elevenLabsSpeak, stop: stopSpeaking, isSpeaking } = useElevenLabsTTS({
     onEnd: () => {
