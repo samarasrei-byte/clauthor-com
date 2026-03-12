@@ -91,10 +91,12 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   // ─── TTS: speak text ───
   const speak = useCallback((text: string) => {
     manualStopRef.current = true;
+    restartAttemptsRef.current = 0;
+    clearPendingRestart();
     recognitionRef.current?.stop?.();
     setIsListening(false);
     elevenLabsSpeak(text);
-  }, [elevenLabsSpeak]);
+  }, [clearPendingRestart, elevenLabsSpeak]);
 
   // ─── VAD: Auto barge-in when user speaks while Thor is talking ───
   const handleVoiceDetected = useCallback(() => {
