@@ -488,8 +488,8 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
       }
     }
 
-    // Use vision-capable model when image is present
-    const chatModel = imageBase64 ? "google/gemini-2.5-flash" : "google/gemini-2.5-flash-lite";
+    // Use vision-capable model when image is present, otherwise use flash for quality
+    const chatModel = imageBase64 ? "google/gemini-2.5-flash" : "google/gemini-2.5-flash";
 
     // ── Tool-calling somente quando há intenção operacional explícita ──
     if (shouldAttemptTools) {
