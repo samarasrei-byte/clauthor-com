@@ -183,7 +183,10 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
         setIsSpeaking(true);
         onStart?.();
       };
-      audio.onended = () => stop(true);
+      audio.onended = () => {
+        stop(true);
+        resolveFinished?.();
+      };
       audio.onerror = () => {
         console.error("Audio playback error, using native");
         stop(false);
@@ -191,10 +194,12 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       };
 
       await audio.play();
+      if (finishedPromise) await finishedPromise;
       return true;
     } catch (err) {
       console.error("TTS error, using fallback:", err);
       doNativeFallback();
+      if (finishedPromise) await finishedPromise;
       return true;
     }
   }, [stop, onStart, onEnd]);
