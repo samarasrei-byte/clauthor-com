@@ -497,7 +497,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
         model: chatModel,
         messages: aiMessages,
         stream: false,
-        max_tokens: 280,
+        max_tokens: 600,
         temperature: 0.2,
         tools: ALL_TOOLS,
         tool_choice: "auto",
