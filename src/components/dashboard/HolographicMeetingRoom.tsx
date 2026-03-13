@@ -470,7 +470,8 @@ Dê sua contribuição profissional em 2-3 frases, focando na sua especialidade.
 
         conversationHistory.push({ role: "assistant", content: `[${agent.name}]: ${content}` });
         setMessages((prev) => [...prev, msg]);
-        await delay(1500);
+        await speakAgentMessage(content);
+        await delay(500);
       } catch (err) {
         console.error("Meeting agent error:", err);
       }
