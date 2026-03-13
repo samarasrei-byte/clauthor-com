@@ -637,6 +637,7 @@ Apenas o texto, sem introduções.`;
           timestamp: new Date(),
         },
       ]);
+      await speakAgentMessage(content);
     } catch (err) {
       console.error("Meeting response error:", err);
     }
