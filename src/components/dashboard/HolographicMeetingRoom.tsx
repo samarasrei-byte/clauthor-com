@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import {
   Bot, Sparkles, Play, RotateCcw, Mic, MicOff,
   Send, Lightbulb, Target, ListChecks,
@@ -272,6 +273,17 @@ const HolographicMeetingRoom = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
 
+  // TTS — agents speak aloud
+  const { speak: ttsSpeak, stop: ttsStop, isSpeaking: ttsSpeaking } = useElevenLabsTTS();
+
+  const speakAgentMessage = useCallback(async (text: string) => {
+    try {
+      await ttsSpeak(text);
+    } catch (e) {
+      console.warn("Meeting TTS error:", e);
+    }
+  }, [ttsSpeak]);
+
   const { data: dbAgents = [], isLoading } = useQuery({
     queryKey: ["holographic-meeting-agents", user?.id],
     queryFn: async () => {
@@ -458,7 +470,8 @@ Dê sua contribuição profissional em 2-3 frases, focando na sua especialidade.
 
         conversationHistory.push({ role: "assistant", content: `[${agent.name}]: ${content}` });
         setMessages((prev) => [...prev, msg]);
-        await delay(1500);
+        await speakAgentMessage(content);
+        await delay(500);
       } catch (err) {
         console.error("Meeting agent error:", err);
       }
@@ -540,6 +553,7 @@ Apenas o texto, sem introduções.`;
   };
 
   const resetMeeting = () => {
+    ttsStop();
     setMeetingActive(false);
     setPhase("setup");
     setMessages([]);
@@ -624,6 +638,7 @@ Apenas o texto, sem introduções.`;
           timestamp: new Date(),
         },
       ]);
+      await speakAgentMessage(content);
     } catch (err) {
       console.error("Meeting response error:", err);
     }
