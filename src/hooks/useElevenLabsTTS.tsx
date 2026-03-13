@@ -84,11 +84,21 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
     if (notify && wasPlaying) onEnd?.();
   }, [onEnd]);
 
-  const speak = useCallback(async (text: string, voiceId?: string) => {
+  const speak = useCallback(async (text: string, voiceId?: string, waitForEnd = false) => {
     const cleaned = cleanTextForSpeech(text);
     if (!cleaned) return;
 
     stop(false);
+
+    // Resolves when speech finishes (used by waitForEnd)
+    let resolveFinished: (() => void) | null = null;
+    const finishedPromise = waitForEnd ? new Promise<void>(r => { resolveFinished = r; }) : null;
+
+    const wrappedOnEnd = () => {
+      setIsSpeaking(false);
+      onEnd?.();
+      resolveFinished?.();
+    };
 
     const doNativeFallback = () => {
       const utterance = speakNative(
@@ -98,10 +108,7 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
           setIsSpeaking(true);
           onStart?.();
         },
-        () => {
-          setIsSpeaking(false);
-          onEnd?.();
-        }
+        wrappedOnEnd
       );
 
       nativeUtteranceRef.current = utterance;
@@ -109,6 +116,7 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       if (!utterance) {
         setIsSpeaking(false);
         onEnd?.();
+        resolveFinished?.();
         return false;
       }
 
@@ -175,7 +183,10 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
         setIsSpeaking(true);
         onStart?.();
       };
-      audio.onended = () => stop(true);
+      audio.onended = () => {
+        stop(true);
+        resolveFinished?.();
+      };
       audio.onerror = () => {
         console.error("Audio playback error, using native");
         stop(false);
@@ -183,10 +194,12 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       };
 
       await audio.play();
+      if (finishedPromise) await finishedPromise;
       return true;
     } catch (err) {
       console.error("TTS error, using fallback:", err);
       doNativeFallback();
+      if (finishedPromise) await finishedPromise;
       return true;
     }
   }, [stop, onStart, onEnd]);
