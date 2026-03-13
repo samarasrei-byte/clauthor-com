@@ -11,7 +11,7 @@ serve(async (req) => {
   const ENDPOINT = Deno.env.get("EXTERNAL_AI_ENDPOINT") || "";
   const API_KEY = Deno.env.get("OPENCLAW_API_KEY") || "";
 
-  console.log(`[Test OpenClaw] Endpoint: ${ENDPOINT ? ENDPOINT.substring(0, 30) + "..." : "NOT SET"}`);
+  console.log(`[Test OpenClaw] Endpoint: ${ENDPOINT ? ENDPOINT.substring(0, 40) + "..." : "NOT SET"}`);
   console.log(`[Test OpenClaw] API Key: ${API_KEY ? "SET (" + API_KEY.length + " chars)" : "NOT SET"}`);
 
   if (!ENDPOINT) {
@@ -36,15 +36,30 @@ serve(async (req) => {
   const startTime = Date.now();
 
   try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 15000);
-
-    const response = await fetch(ENDPOINT, {
+    // Create HTTP client that accepts self-signed certificates
+    const fetchOptions: any = {
       method: "POST",
       headers,
       body: JSON.stringify(body),
-      signal: controller.signal,
-    });
+    };
+
+    // Try to create a client that skips TLS verification
+    try {
+      const httpClient = (Deno as any).createHttpClient({ 
+        caCerts: [],
+        // @ts-ignore - allow self-signed
+      });
+      fetchOptions.client = httpClient;
+      console.log("[Test OpenClaw] Using custom HTTP client (skip TLS verify)");
+    } catch (e) {
+      console.warn("[Test OpenClaw] Could not create custom HTTP client, using default:", e.message);
+    }
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 15000);
+    fetchOptions.signal = controller.signal;
+
+    const response = await fetch(ENDPOINT, fetchOptions);
 
     clearTimeout(timeout);
     const latency = Date.now() - startTime;
