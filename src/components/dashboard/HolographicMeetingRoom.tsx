@@ -553,6 +553,7 @@ Apenas o texto, sem introduções.`;
   };
 
   const resetMeeting = () => {
+    ttsStop();
     setMeetingActive(false);
     setPhase("setup");
     setMessages([]);
