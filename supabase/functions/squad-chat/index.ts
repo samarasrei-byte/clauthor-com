@@ -297,15 +297,9 @@ ${companyContext}`;
       }
     }
 
-    // Update credits using real token counts from AI responses
-    const totalTokens = results.reduce((sum: number, r: any) => sum + (r.tokensUsed || 150), 0);
-    if (credits) {
-      adminClient.from("user_credits")
-        .update({ used_credits: (credits.used_credits || 0) + totalTokens })
-        .eq("user_id", user.id)
-        .then(() => {})
-        .catch(() => {});
-    }
+    // Token usage is tracked via token_usage inserts below, 
+    // which trigger increment_used_credits automatically.
+    // DO NOT manually update user_credits here to avoid double-counting.
 
     // Log token usage per agent
     Promise.all(

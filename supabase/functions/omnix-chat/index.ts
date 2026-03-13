@@ -596,9 +596,9 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
       return new Response(JSON.stringify({ error: "AI gateway error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const systemTokens = Math.ceil(systemPrompt.length / 4);
+    // Estimate tokens conservatively (avoid over-charging)
     const inputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
-    const omnixEstimatedTokens = systemTokens + inputTokens + 800;
+    const omnixEstimatedTokens = inputTokens + 400;
 
     supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: chatModel }).then(() => {});
     supabase.from("execution_logs").insert({
