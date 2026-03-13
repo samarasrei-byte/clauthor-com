@@ -1,8 +1,9 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import {
   Bot, Sparkles, Play, RotateCcw, Mic, MicOff,
   Send, Lightbulb, Target, ListChecks,
