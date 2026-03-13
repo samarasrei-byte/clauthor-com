@@ -273,6 +273,17 @@ const HolographicMeetingRoom = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
 
+  // TTS — agents speak aloud
+  const { speak: ttsSpeak, stop: ttsStop, isSpeaking: ttsSpeaking } = useElevenLabsTTS();
+
+  const speakAgentMessage = useCallback(async (text: string) => {
+    try {
+      await ttsSpeak(text);
+    } catch (e) {
+      console.warn("Meeting TTS error:", e);
+    }
+  }, [ttsSpeak]);
+
   const { data: dbAgents = [], isLoading } = useQuery({
     queryKey: ["holographic-meeting-agents", user?.id],
     queryFn: async () => {
