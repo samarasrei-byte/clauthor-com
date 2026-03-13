@@ -234,7 +234,7 @@ MEETING RULES:
 - If the subject is NOT your area, briefly respond: "That's more in [colleague]'s area. I can help with [your area]."
 - Speak naturally, like a professional in a meeting — without excessive formality
 - DO NOT start with "Hello" or "Good afternoon" in every message, get straight to the point
-- Respond in English
+- ALWAYS respond in Brazilian Portuguese (pt-BR)
 ${companyContext}`;
 
       try {
