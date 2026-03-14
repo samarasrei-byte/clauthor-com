@@ -103,6 +103,7 @@ const App = () => (
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/api-docs" element={<ApiDocs />} />
                   <Route path="/team-builder" element={<TeamBuilder />} />
+                  <Route path="/architecture" element={<Architecture />} />
                 </Route>
 
                 {/* Dashboard pages with minimal header + sidebar only */}
