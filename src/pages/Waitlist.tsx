@@ -250,19 +250,18 @@ const LiveChatSimulation = () => {
       </div>
 
       {/* Squad agents bar */}
-      <div className="px-3 py-2 border-b border-primary/5 bg-card/10 overflow-x-auto scrollbar-none">
-        <div className="flex gap-1.5 min-w-max">
+      <div className="px-3 py-1.5 border-b border-primary/5 bg-card/5 overflow-x-auto scrollbar-none">
+        <div className="flex gap-1 min-w-max">
           {SQUAD_AGENTS.map((a, i) => (
             <motion.div
               key={a.name}
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.05 }}
-              className="flex items-center gap-1 px-2 py-1 rounded-full bg-card/40 border border-primary/5 shrink-0"
+              transition={{ delay: i * 0.04 }}
+              className="flex items-center gap-1 px-1.5 py-0.5 rounded-md shrink-0"
             >
-              <span className="text-[10px]">{a.emoji}</span>
-              <span className="text-[9px] text-foreground/70 font-medium">{a.name}</span>
               <div className="w-1 h-1 bg-accent-emerald rounded-full" />
+              <span className="text-[8px] text-foreground/50 font-medium">{a.name}</span>
             </motion.div>
           ))}
         </div>
