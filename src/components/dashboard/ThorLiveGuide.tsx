@@ -303,12 +303,9 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
                 <span className="text-sm font-semibold">Thor</span>
                 <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium">GUIDE</span>
               </div>
-              <div className="flex items-center gap-2 mt-0.5">
-                <WaveformVisualizer active={isTyping && !isPaused} compact />
-                <span className="text-[10px] text-muted-foreground">
-                  {isPaused ? "Paused" : isTyping ? "Speaking..." : "Listening"}
-                </span>
-              </div>
+              <span className="text-[10px] text-muted-foreground mt-0.5 block">
+                {isPaused ? "Paused" : isTyping ? "Speaking..." : "Listening"}
+              </span>
             </div>
 
             {/* Controls */}
