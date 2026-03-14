@@ -68,7 +68,7 @@ i18n
       pt: { translation: pt },
       en: { translation: en },
     },
-    fallbackLng: "en",
+    fallbackLng: "pt",
     supportedLngs,
     load: "languageOnly",
     interpolation: {
