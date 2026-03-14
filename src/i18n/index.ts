@@ -22,7 +22,7 @@ export const languages = [
   { code: "tr", name: "Türkçe", flag: "tr" },
 ];
 
-const supportedLngs = languages.map((l) => l.code);
+const supportedLngs = ["pt", ...languages.map((l) => l.code).filter(c => c !== "pt")];
 
 // Dynamic locale loaders — only fetched when needed
 const localeLoaders: Record<string, () => Promise<{ default: Record<string, any> }>> = {
