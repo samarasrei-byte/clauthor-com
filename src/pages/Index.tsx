@@ -458,12 +458,6 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ═══════════════════════════════════════════════════════
-          3D SHOWCASE — Spline immersive section
-          ═══════════════════════════════════════════════════════ */}
-      <Suspense fallback={null}>
-        <SplineShowcase variant="home" />
-      </Suspense>
 
       {/* ═══════════════════════════════════════════════════════
           SOCIAL PROOF — Authority numbers
