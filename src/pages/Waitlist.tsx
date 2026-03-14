@@ -739,31 +739,6 @@ const Waitlist = () => {
                 </div>
               </motion.div>
 
-              {/* Transparent checkout */}
-              <GlassCard hover={false} className="p-5 mt-4 border-accent-emerald/15">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-accent-emerald/10 border border-accent-emerald/20 flex items-center justify-center shrink-0">
-                    <Shield className="h-5 w-5 text-accent-emerald" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-foreground mb-1">Checkout Transparente</p>
-                    <p className="text-xs text-muted-foreground leading-relaxed">
-                      Após o acesso antecipado, pague com PayPal — tudo em um único card. Sem taxas ocultas, sem redirecionamentos. Segurança enterprise.
-                    </p>
-                    <div className="flex items-center gap-3 mt-3">
-                      <Badge variant="outline" className="text-[10px] border-accent-emerald/20 text-accent-emerald/80 gap-1">
-                        <Lock className="h-2.5 w-2.5" /> PayPal
-                      </Badge>
-                      <Badge variant="outline" className="text-[10px] border-accent-emerald/20 text-accent-emerald/80 gap-1">
-                        <Shield className="h-2.5 w-2.5" /> Criptografado
-                      </Badge>
-                      <Badge variant="outline" className="text-[10px] border-accent-emerald/20 text-accent-emerald/80 gap-1">
-                        <CheckCircle2 className="h-2.5 w-2.5" /> In-app
-                      </Badge>
-                    </div>
-                  </div>
-                </div>
-              </GlassCard>
             </motion.div>
 
             {/* Right — Form */}
