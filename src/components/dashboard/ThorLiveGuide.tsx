@@ -78,21 +78,49 @@ const GUIDE_STEPS: GuideStep[] = [
   },
 ];
 
-// ─── Voice waveform animation ───
-const VoiceWaveform = ({ active }: { active: boolean }) => (
-  <div className="flex items-center gap-[2px] h-4">
-    {[...Array(5)].map((_, i) => (
-      <motion.div
-        key={i}
-        className="w-[3px] rounded-full bg-primary"
-        animate={active ? {
-          height: [4, 12 + Math.random() * 8, 4],
-          transition: { repeat: Infinity, duration: 0.4 + i * 0.1, ease: "easeInOut" }
-        } : { height: 4 }}
-      />
-    ))}
-  </div>
-);
+// ─── Immersive Voice Waveform ───
+const WAVE_BARS = 24;
+
+const WaveformVisualizer = ({ active, compact = false }: { active: boolean; compact?: boolean }) => {
+  const heights = useRef(
+    Array.from({ length: WAVE_BARS }, () => 0.15 + Math.random() * 0.15)
+  ).current;
+
+  return (
+    <div className={cn(
+      "flex items-end justify-center gap-[2px] w-full",
+      compact ? "h-5" : "h-10"
+    )}>
+      {heights.map((base, i) => {
+        const center = Math.abs(i - WAVE_BARS / 2) / (WAVE_BARS / 2);
+        const maxH = compact ? 18 : 38;
+        const minH = compact ? 3 : 4;
+        const peakH = maxH * (1 - center * 0.6);
+
+        return (
+          <motion.div
+            key={i}
+            className="rounded-full bg-primary/80"
+            style={{ width: compact ? 2 : 3 }}
+            animate={active ? {
+              height: [minH, peakH * (0.5 + base), minH, peakH * (0.3 + base * 0.5), minH],
+              opacity: [0.5, 1, 0.6, 0.9, 0.5],
+            } : {
+              height: minH,
+              opacity: 0.25,
+            }}
+            transition={active ? {
+              duration: 1.2 + base * 0.8,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.04,
+            } : { duration: 0.4 }}
+          />
+        );
+      })}
+    </div>
+  );
+};
 
 interface ThorLiveGuideProps {
   activeSection: string;
@@ -236,7 +264,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
                 <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium">GUIDE</span>
               </div>
               <div className="flex items-center gap-2 mt-0.5">
-                <VoiceWaveform active={isTyping && !isPaused} />
+                <WaveformVisualizer active={isTyping && !isPaused} compact />
                 <span className="text-[10px] text-muted-foreground">
                   {isPaused ? "Paused" : isTyping ? "Speaking..." : "Listening"}
                 </span>
@@ -275,9 +303,16 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
           </div>
         </div>
 
+        {/* Waveform visualizer */}
+        <div className="px-4 pb-2">
+          <div className="p-2 rounded-xl bg-background/30 border border-border/5">
+            <WaveformVisualizer active={isTyping && !isPaused} />
+          </div>
+        </div>
+
         {/* Message area */}
         <div className="px-4 pb-3">
-          <div className="p-3 rounded-xl bg-background/40 border border-border/10 min-h-[60px]">
+          <div className="p-3 rounded-xl bg-background/40 border border-border/10 min-h-[50px]">
             <p className="text-[13px] leading-relaxed text-foreground/90">
               {displayedText}
               {isTyping && <span className="inline-block w-[2px] h-[14px] bg-primary ml-0.5 animate-pulse align-text-bottom" />}
