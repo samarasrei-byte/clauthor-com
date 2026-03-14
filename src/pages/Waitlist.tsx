@@ -639,7 +639,7 @@ const Waitlist = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {[
                 { value: "+30", label: "Agentes Autônomos", icon: Bot },
-                { value: "15", label: "Departamentos", icon: Users },
+                { value: "∞", label: "Squads sob Demanda", icon: Users },
                 { value: "88%", label: "Economia", icon: TrendingUp },
                 { value: "24/7", label: "Operação Contínua", icon: Zap },
               ].map((stat) => (
