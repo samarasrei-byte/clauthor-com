@@ -59,6 +59,7 @@ const Library = lazy(() => import("./Library"));
 const Integrations = lazy(() => import("./Integrations"));
 const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
 const ControlTowerSection = lazy(() => import("@/pages/ControlTower"));
+const MissionControl = lazy(() => import("@/components/dashboard/MissionControl"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
 
@@ -307,7 +308,7 @@ const ClientDashboard = () => {
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
 
     // Coming soon features
-    { id: "mission-control", label: "Mission Control", icon: Rocket, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "mission-control", label: "Mission Control", icon: Rocket, group: moreGroup },
     { id: "agent-memory", label: "Agent Memory", icon: Network, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
     { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
     { id: "voice-first", label: "Voice-First", icon: Mic, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
@@ -806,8 +807,15 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {/* ═══ MISSION CONTROL ═══ */}
+                {activeSection === "mission-control" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <MissionControl />
+                  </Suspense>
+                )}
+
                 {/* ═══ COMING SOON FEATURES ═══ */}
-                {["mission-control", "agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
+                {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
                   <ComingSoonSection feature={activeSection} />
                 )}
               </div>
