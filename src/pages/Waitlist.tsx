@@ -44,22 +44,22 @@ const trendingCountries = [
 ];
 
 // ── Simulated Chat Messages ──
-const SQUAD_AGENTS = [
-  { name: "SDR Outbound", emoji: "🎯", dept: "Prospecção" },
-  { name: "Copywriter IA", emoji: "✍️", dept: "Criação" },
-  { name: "Growth Hacker", emoji: "📈", dept: "Marketing" },
-  { name: "CFO Agent", emoji: "💰", dept: "Financeiro" },
-  { name: "Social Media", emoji: "📱", dept: "Comunicação" },
-  { name: "SEO Specialist", emoji: "🔍", dept: "Marketing" },
-  { name: "CS Agent", emoji: "🎧", dept: "Suporte" },
-  { name: "Data Analyst", emoji: "📊", dept: "Tecnologia" },
-  { name: "Closer Pro", emoji: "🤝", dept: "Comercial" },
-  { name: "Email Marketer", emoji: "📧", dept: "Marketing" },
-  { name: "Jurídico IA", emoji: "⚖️", dept: "Jurídico" },
-  { name: "RH Recruiter", emoji: "👥", dept: "RH" },
-  { name: "DevOps Agent", emoji: "⚙️", dept: "Tecnologia" },
-  { name: "Designer IA", emoji: "🎨", dept: "Criação" },
-  { name: "Logistics Pro", emoji: "🚚", dept: "Logística" },
+const SQUAD_AGENTS: { name: string; icon: LucideIcon; dept: string }[] = [
+  { name: "SDR Outbound", icon: Crosshair, dept: "Prospecção" },
+  { name: "Copywriter IA", icon: PenTool, dept: "Criação" },
+  { name: "Growth Hacker", icon: TrendingUp, dept: "Marketing" },
+  { name: "CFO Agent", icon: DollarSign, dept: "Financeiro" },
+  { name: "Social Media", icon: Smartphone, dept: "Comunicação" },
+  { name: "SEO Specialist", icon: Search, dept: "Marketing" },
+  { name: "CS Agent", icon: Headphones, dept: "Suporte" },
+  { name: "Data Analyst", icon: BarChart3, dept: "Tecnologia" },
+  { name: "Closer Pro", icon: Target, dept: "Comercial" },
+  { name: "Email Marketer", icon: Mail, dept: "Marketing" },
+  { name: "Jurídico IA", icon: Scale, dept: "Jurídico" },
+  { name: "RH Recruiter", icon: Users, dept: "RH" },
+  { name: "DevOps Agent", icon: Settings, dept: "Tecnologia" },
+  { name: "Designer IA", icon: Palette, dept: "Criação" },
+  { name: "Logistics Pro", icon: Truck, dept: "Logística" },
 ];
 
 interface SimMessage {
