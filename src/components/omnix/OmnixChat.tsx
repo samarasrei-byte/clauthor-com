@@ -268,11 +268,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           manualStopRef.current = true;
           restartAttemptsRef.current = 0;
           clearPendingRestart();
+          autoListenAfterSpeakRef.current = false;
           setInput("");
           if (currentLive.isSpeaking) stopSpeaking();
           if (currentLive.isStreaming) onStop();
           recognition.stop();
-          queueRestartListening(180);
+          setIsListening(false);
+          // Do NOT restart listening — user explicitly asked to stop
           return;
         }
 
@@ -369,20 +371,21 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     };
   }, [clearPendingRestart]);
 
-  // Auto-start hands-free listening once (after first load)
+  // Auto-start hands-free listening when idle (after greeting/TTS cycle completes)
   useEffect(() => {
-    if (autoStartAttemptedRef.current) return;
     if (showTextInput) return;
+    if (isListening || isSpeaking || isStreaming || isLoading) return;
+    if (messages.length === 0) return; // Wait for at least the greeting exchange
 
-    autoStartAttemptedRef.current = true;
+    // Only auto-start if no recognition is active and we're truly idle
     const timer = setTimeout(() => {
-      if (!isListening && !isSpeaking && !isStreaming && !isLoading) {
+      if (!recognitionRef.current && !manualStopRef.current && autoListenAfterSpeakRef.current !== false) {
         startListeningRef.current?.();
       }
-    }, 700);
+    }, 800);
 
     return () => clearTimeout(timer);
-  }, [showTextInput, isListening, isSpeaking, isStreaming, isLoading, startListening]);
+  }, [showTextInput, isListening, isSpeaking, isStreaming, isLoading, messages.length]);
 
   const toggleVoice = () => {
     if (isStreaming || isLoading) return;
@@ -566,15 +569,37 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
           {/* Main action button */}
           {isSpeaking ? (
-            // Thor is speaking — tap to BARGE-IN (stop + listen)
-            <Button
-              size="icon"
-              className="h-16 w-16 rounded-full bg-accent/20 text-primary border-2 border-primary/30 shadow-[0_0_30px_hsl(var(--primary)/0.15)] hover:bg-primary/20 transition-all duration-300 animate-pulse"
-              onClick={handleBargeIn}
-              title="Toque para interromper e falar"
-            >
-              <Mic className="h-6 w-6" />
-            </Button>
+            // Thor is speaking — show TWO buttons: stop and barge-in
+            <div className="flex items-center gap-2">
+              {/* STOP button — fully stop speaking without restarting */}
+              <Button
+                size="icon"
+                className="h-12 w-12 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_20px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
+                onClick={() => {
+                  clearPendingRestart();
+                  autoListenAfterSpeakRef.current = false;
+                  manualStopRef.current = true;
+                  restartAttemptsRef.current = 0;
+                  stopSpeaking();
+                  if (isListening) {
+                    recognitionRef.current?.stop();
+                    setIsListening(false);
+                  }
+                }}
+                title="Parar Thor"
+              >
+                <Square className="h-5 w-5" />
+              </Button>
+              {/* BARGE-IN button — stop Thor and start listening */}
+              <Button
+                size="icon"
+                className="h-16 w-16 rounded-full bg-accent/20 text-primary border-2 border-primary/30 shadow-[0_0_30px_hsl(var(--primary)/0.15)] hover:bg-primary/20 transition-all duration-300 animate-pulse"
+                onClick={handleBargeIn}
+                title="Interromper e falar"
+              >
+                <Mic className="h-6 w-6" />
+              </Button>
+            </div>
           ) : isStreaming || isLoading ? (
             // Processing — show stop
             <Button
