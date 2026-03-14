@@ -6,12 +6,12 @@ import { Badge } from "@/components/ui/badge";
 import {
   Zap, CheckCircle2, Clock, ArrowRight, Sparkles, Shield, Star, Timer,
   Rocket, Gift, Crown, Lock, Play, Cpu, Users, Headphones, Target,
-  Globe, Instagram, Twitter, Linkedin, Mail, TrendingUp, Bot, BrainCircuit
+  Globe, Instagram, Twitter, Linkedin, Mail, TrendingUp, Bot, BrainCircuit,
+  Send, MessageSquare
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
-import thorOrchestrating from "@/assets/thor-orchestrating.png";
 import thorOrb from "@/assets/thor-orb.png";
 
 const waitlistSchema = z.object({
@@ -32,13 +32,57 @@ const trendingCountries = [
   { flag: "🇧🇷", name: "Brasil", users: "2.1K+" },
   { flag: "🇺🇸", name: "USA", users: "1.8K+" },
   { flag: "🇬🇧", name: "UK", users: "890+" },
-  { flag: "🇩🇪", name: "Germany", users: "720+" },
-  { flag: "🇯🇵", name: "Japan", users: "650+" },
-  { flag: "🇫🇷", name: "France", users: "580+" },
-  { flag: "🇮🇳", name: "India", users: "1.2K+" },
-  { flag: "🇦🇪", name: "UAE", users: "430+" },
-  { flag: "🇰🇷", name: "Korea", users: "390+" },
+  { flag: "🇩🇪", name: "Alemanha", users: "720+" },
+  { flag: "🇯🇵", name: "Japão", users: "650+" },
+  { flag: "🇫🇷", name: "França", users: "580+" },
+  { flag: "🇮🇳", name: "Índia", users: "1.2K+" },
+  { flag: "🇦🇪", name: "Emirados", users: "430+" },
+  { flag: "🇰🇷", name: "Coreia", users: "390+" },
   { flag: "🇵🇹", name: "Portugal", users: "340+" },
+];
+
+// ── Simulated Chat Messages ──
+const SQUAD_AGENTS = [
+  { name: "SDR Outbound", emoji: "🎯", dept: "Prospecção" },
+  { name: "Copywriter IA", emoji: "✍️", dept: "Criação" },
+  { name: "Growth Hacker", emoji: "📈", dept: "Marketing" },
+  { name: "CFO Agent", emoji: "💰", dept: "Financeiro" },
+  { name: "Social Media", emoji: "📱", dept: "Comunicação" },
+  { name: "SEO Specialist", emoji: "🔍", dept: "Marketing" },
+  { name: "CS Agent", emoji: "🎧", dept: "Suporte" },
+  { name: "Data Analyst", emoji: "📊", dept: "Tecnologia" },
+  { name: "Closer Pro", emoji: "🤝", dept: "Comercial" },
+  { name: "Email Marketer", emoji: "📧", dept: "Marketing" },
+  { name: "Jurídico IA", emoji: "⚖️", dept: "Jurídico" },
+  { name: "RH Recruiter", emoji: "👥", dept: "RH" },
+  { name: "DevOps Agent", emoji: "⚙️", dept: "Tecnologia" },
+  { name: "Designer IA", emoji: "🎨", dept: "Criação" },
+  { name: "Logistics Pro", emoji: "🚚", dept: "Logística" },
+];
+
+interface SimMessage {
+  id: number;
+  sender: string;
+  emoji: string;
+  content: string;
+  isOrchestrator?: boolean;
+  isSystem?: boolean;
+  agentsAdded?: string[];
+}
+
+const CHAT_SCRIPT: SimMessage[] = [
+  { id: 1, sender: "Thor", emoji: "⚡", content: "Equipe, temos uma nova missão: lançar campanha de Q2 para o cliente TechNova. Vou montar o squad agora.", isOrchestrator: true },
+  { id: 2, sender: "Sistema", emoji: "🔄", content: "Squad \"Campanha TechNova\" criado · 8 agentes convocados", isSystem: true, agentsAdded: ["SDR Outbound", "Copywriter IA", "Growth Hacker", "Social Media", "SEO Specialist", "Email Marketer", "Designer IA", "Data Analyst"] },
+  { id: 3, sender: "Growth Hacker", emoji: "📈", content: "Recebi a missão. Analisando 3.2K leads no funil... Identificados 847 leads quentes com score > 75. Recomendo segmentação por vertical." },
+  { id: 4, sender: "Thor", emoji: "⚡", content: "Perfeito. Copywriter, crie variações A/B para cada vertical. SDR, prepare a sequência de outreach. Designer, precisamos dos criativos em 2h.", isOrchestrator: true },
+  { id: 5, sender: "Copywriter IA", emoji: "✍️", content: "Gerando 12 variações de copy para 4 verticais... Versão A focada em ROI, versão B em eficiência operacional. CTR estimado: 4.2%." },
+  { id: 6, sender: "SDR Outbound", emoji: "🎯", content: "Sequência de 5 toques configurada. LinkedIn + Email + WhatsApp. Disparando para os 847 leads em ondas de 100/dia." },
+  { id: 7, sender: "Designer IA", emoji: "🎨", content: "Criativos prontos: 8 banners responsivos + 4 stories + 2 vídeos curtos. Tudo no brand guide do cliente." },
+  { id: 8, sender: "CFO Agent", emoji: "💰", content: "Estimativa de custo da campanha: R$ 12.400. ROI projetado: 340%. Budget aprovado automaticamente (baixo risco)." },
+  { id: 9, sender: "Thor", emoji: "⚡", content: "Squad TechNova: campanha no ar em 47 minutos. Isso é o poder de 83 agentes autônomos trabalhando juntos. 🚀", isOrchestrator: true },
+  { id: 10, sender: "Sistema", emoji: "✅", content: "Missão concluída · 847 leads engajados · 12 criativos publicados · ROI projetado: 340%", isSystem: true },
+  { id: 11, sender: "CS Agent", emoji: "🎧", content: "Monitorando feedback dos leads em tempo real. 23 respostas positivas nos primeiros 15 minutos. Encaminhando para Closer Pro." },
+  { id: 12, sender: "Closer Pro", emoji: "🤝", content: "Recebi 23 leads quentes. Iniciando cadência de fechamento personalizada. Meta: 8 conversões hoje." },
 ];
 
 // ── Particle System ──
@@ -102,19 +146,19 @@ const SuccessView = ({ position }: { position: number | null }) => (
         <CheckCircle2 className="h-14 w-14 text-primary relative z-10" />
       </motion.div>
       <h1 className="font-display text-5xl sm:text-6xl font-bold mb-4">
-        You're <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.3)' }}>in!</span>
+        Você está <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.3)' }}>dentro!</span>
       </h1>
       <GlassCard hover={false} className="p-10 mb-8">
-        <p className="text-muted-foreground mb-4 text-sm uppercase tracking-[0.2em]">Your position</p>
+        <p className="text-muted-foreground mb-4 text-sm uppercase tracking-[0.2em]">Sua posição</p>
         <motion.div initial={{ scale: 0.5, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.5, type: "spring" }}
           className="font-display text-7xl font-bold gradient-text mb-3" style={{ textShadow: '0 0 40px hsl(var(--primary) / 0.4)' }}>
           #{position}
         </motion.div>
-        <p className="text-sm text-muted-foreground">We'll reach out via WhatsApp when it's your turn</p>
+        <p className="text-sm text-muted-foreground">Entraremos em contato via WhatsApp quando for sua vez</p>
       </GlassCard>
       <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
-        <div className="flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /><span>Launching this week</span></div>
-        <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-primary" /><span>Priority access</span></div>
+        <div className="flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /><span>Lançamento esta semana</span></div>
+        <div className="flex items-center gap-2"><Shield className="h-4 w-4 text-primary" /><span>Acesso prioritário</span></div>
       </div>
     </motion.div>
   </div>
@@ -142,6 +186,165 @@ const CountryMarquee = () => (
   </div>
 );
 
+// ── Live Chat Simulation ──
+const LiveChatSimulation = () => {
+  const [visibleMessages, setVisibleMessages] = useState<SimMessage[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const chatRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (currentIndex >= CHAT_SCRIPT.length) {
+      // Loop back
+      const timeout = setTimeout(() => {
+        setVisibleMessages([]);
+        setCurrentIndex(0);
+      }, 5000);
+      return () => clearTimeout(timeout);
+    }
+
+    const delay = currentIndex === 0 ? 1000 : (CHAT_SCRIPT[currentIndex].isSystem ? 1200 : 2200 + Math.random() * 1500);
+    const timeout = setTimeout(() => {
+      setVisibleMessages(prev => [...prev, CHAT_SCRIPT[currentIndex]]);
+      setCurrentIndex(prev => prev + 1);
+    }, delay);
+
+    return () => clearTimeout(timeout);
+  }, [currentIndex]);
+
+  useEffect(() => {
+    if (chatRef.current) {
+      chatRef.current.scrollTop = chatRef.current.scrollHeight;
+    }
+  }, [visibleMessages]);
+
+  return (
+    <GlassCard hover={false} className="overflow-hidden w-full max-w-2xl mx-auto">
+      {/* Chat header */}
+      <div className="px-4 py-3 border-b border-primary/10 flex items-center justify-between bg-card/30">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+            <span className="text-sm">⚡</span>
+          </div>
+          <div>
+            <p className="text-sm font-display font-bold text-foreground">Thor · Orquestrador</p>
+            <p className="text-[10px] text-muted-foreground">Squad Campanha TechNova · 8 agentes online</p>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex -space-x-1.5">
+            {SQUAD_AGENTS.slice(0, 6).map((a, i) => (
+              <div key={i} className="w-5 h-5 rounded-full bg-primary/10 border border-background flex items-center justify-center text-[8px]">
+                {a.emoji}
+              </div>
+            ))}
+            <div className="w-5 h-5 rounded-full bg-primary/20 border border-background flex items-center justify-center text-[7px] text-primary font-bold">
+              +9
+            </div>
+          </div>
+          <Badge variant="outline" className="text-[8px] border-accent-emerald/30 text-accent-emerald gap-1 px-1.5 py-0.5">
+            <div className="w-1.5 h-1.5 bg-accent-emerald rounded-full" />
+            AO VIVO
+          </Badge>
+        </div>
+      </div>
+
+      {/* Squad agents bar */}
+      <div className="px-3 py-2 border-b border-primary/5 bg-card/10 overflow-x-auto scrollbar-none">
+        <div className="flex gap-1.5 min-w-max">
+          {SQUAD_AGENTS.map((a, i) => (
+            <motion.div
+              key={a.name}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: i * 0.05 }}
+              className="flex items-center gap-1 px-2 py-1 rounded-full bg-card/40 border border-primary/5 shrink-0"
+            >
+              <span className="text-[10px]">{a.emoji}</span>
+              <span className="text-[9px] text-foreground/70 font-medium">{a.name}</span>
+              <div className="w-1 h-1 bg-accent-emerald rounded-full" />
+            </motion.div>
+          ))}
+        </div>
+      </div>
+
+      {/* Messages */}
+      <div ref={chatRef} className="h-[320px] sm:h-[380px] overflow-y-auto p-3 space-y-2.5 scrollbar-thin">
+        <AnimatePresence>
+          {visibleMessages.map((msg) => (
+            <motion.div
+              key={msg.id}
+              initial={{ opacity: 0, y: 12, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              {msg.isSystem ? (
+                <div className="flex justify-center my-2">
+                  <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-emerald/5 border border-accent-emerald/15 text-[11px] text-accent-emerald">
+                    <span>{msg.emoji}</span>
+                    <span>{msg.content}</span>
+                  </div>
+                  {msg.agentsAdded && (
+                    <div className="hidden" /> // agents shown in bar above
+                  )}
+                </div>
+              ) : (
+                <div className={`flex gap-2 ${msg.isOrchestrator ? '' : ''}`}>
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 mt-0.5 text-sm ${
+                    msg.isOrchestrator
+                      ? 'bg-primary/15 border border-primary/25 shadow-[0_0_10px_hsl(var(--primary)/0.15)]'
+                      : 'bg-card/60 border border-primary/10'
+                  }`}>
+                    {msg.emoji}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className={`text-[11px] font-bold ${msg.isOrchestrator ? 'text-primary' : 'text-foreground/80'}`}>
+                        {msg.sender}
+                      </span>
+                      {msg.isOrchestrator && (
+                        <Badge variant="outline" className="text-[7px] px-1 py-0 border-primary/25 text-primary/70 h-3.5">
+                          CEO
+                        </Badge>
+                      )}
+                    </div>
+                    <div className={`text-[12px] leading-relaxed rounded-xl px-3 py-2 max-w-[95%] ${
+                      msg.isOrchestrator
+                        ? 'bg-primary/5 border border-primary/10 text-foreground/90'
+                        : 'bg-card/40 border border-border/50 text-foreground/80'
+                    }`}>
+                      {msg.content}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {currentIndex < CHAT_SCRIPT.length && visibleMessages.length > 0 && (
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2 items-center pl-9">
+            <div className="flex gap-1">
+              <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: 0 }} className="w-1.5 h-1.5 rounded-full bg-primary/50" />
+              <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: 0.2 }} className="w-1.5 h-1.5 rounded-full bg-primary/50" />
+              <motion.div animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1, repeat: Infinity, delay: 0.4 }} className="w-1.5 h-1.5 rounded-full bg-primary/50" />
+            </div>
+            <span className="text-[10px] text-muted-foreground">{CHAT_SCRIPT[currentIndex]?.sender} digitando...</span>
+          </motion.div>
+        )}
+      </div>
+
+      {/* Fake input */}
+      <div className="px-3 py-2.5 border-t border-primary/10 bg-card/20">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-background/30 border border-primary/5">
+          <MessageSquare className="h-3.5 w-3.5 text-muted-foreground/50" />
+          <span className="text-[11px] text-muted-foreground/40 flex-1">Delegue uma missão ao Thor...</span>
+          <Send className="h-3.5 w-3.5 text-primary/30" />
+        </div>
+      </div>
+    </GlassCard>
+  );
+};
+
 const Waitlist = () => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -154,9 +357,7 @@ const Waitlist = () => {
 
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
-  const bannerScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
   useEffect(() => {
     const getNextThursday = () => {
@@ -220,15 +421,15 @@ const Waitlist = () => {
         company: formData.company.trim() || null,
       });
       if (error) {
-        if (error.code === "23505") toast.error("This email is already on the waitlist!");
+        if (error.code === "23505") toast.error("Este email já está na lista!");
         else throw error;
         return;
       }
       setPosition(Math.floor(Math.random() * 50) + 1);
       setSuccess(true);
-      toast.success("You're on the list! 🎉");
+      toast.success("Você está na lista! 🎉");
     } catch {
-      toast.error("Error signing up. Please try again.");
+      toast.error("Erro ao cadastrar. Tente novamente.");
     } finally {
       setLoading(false);
     }
@@ -255,18 +456,22 @@ const Waitlist = () => {
               <span className="font-display font-bold text-foreground text-sm tracking-tight">Clauthor</span>
             </motion.div>
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
-              <div className="hidden sm:flex items-center gap-2 text-xs text-muted-foreground">
+              {/* Big live counter */}
+              <div className="flex items-center gap-2">
                 <div className="relative">
-                  <div className="w-2 h-2 bg-accent-emerald rounded-full" />
-                  <div className="absolute inset-0 w-2 h-2 bg-accent-emerald rounded-full animate-ping" />
+                  <div className="w-2.5 h-2.5 bg-accent-emerald rounded-full" />
+                  <div className="absolute inset-0 w-2.5 h-2.5 bg-accent-emerald rounded-full animate-ping" />
                 </div>
-                <span className="tabular-nums font-medium text-foreground">{displayCount.toLocaleString()}+</span> in queue
+                <span className="font-display font-bold text-lg sm:text-xl tabular-nums text-primary" style={{ textShadow: '0 0 15px hsl(var(--primary) / 0.3)' }}>
+                  {displayCount.toLocaleString('pt-BR')}+
+                </span>
+                <span className="text-xs text-muted-foreground hidden sm:inline">na fila</span>
               </div>
               <Badge variant="outline" className="border-primary/20 bg-primary/5 text-primary px-3 py-1.5 gap-1.5 font-mono text-xs backdrop-blur-sm">
                 <motion.div animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
                   <Timer className="h-3 w-3" />
                 </motion.div>
-                <span className="tabular-nums">EARLY ACCESS</span>
+                <span className="tabular-nums">ACESSO ANTECIPADO</span>
               </Badge>
             </motion.div>
           </div>
@@ -274,101 +479,123 @@ const Waitlist = () => {
       </header>
 
       {/* ═══════════════════════════════════════════════════════ */}
-      {/* ─── 1. THOR ORCHESTRATOR BANNER — PARALLAX HERO ─── */}
+      {/* ─── 1. HERO — LIVE CHAT SIMULATION TOP BANNER ─── */}
       {/* ═══════════════════════════════════════════════════════ */}
       <section ref={heroRef} className="relative z-10 min-h-screen flex flex-col">
-        {/* Parallax background image - Thor orchestrating */}
-        <motion.div style={{ y: heroY, scale: bannerScale }} className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/60 to-background z-10" />
-          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/80 z-10" />
-          <img src={thorOrchestrating} alt="Thor AI Orchestrator coordinating agent team" className="w-full h-full object-cover object-center opacity-40" />
-        </motion.div>
+        {/* Ambient glow background */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-primary/10 rounded-full blur-[120px]" />
+          <div className="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] bg-primary/5 rounded-full blur-[100px]" />
+        </div>
 
-        {/* Thor Orb floating element */}
+        {/* Thor Orb floating */}
         <motion.div
           style={{ opacity: heroOpacity }}
           animate={{ y: [-10, 10, -10] }}
           transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-24 right-[5%] w-[200px] h-[200px] sm:w-[280px] sm:h-[280px] lg:w-[360px] lg:h-[360px] z-[5] hidden md:block"
+          className="absolute top-20 right-[3%] w-[120px] h-[120px] sm:w-[160px] sm:h-[160px] z-[5] hidden lg:block"
         >
-          <div className="absolute inset-0 rounded-full bg-primary/10 blur-[60px]" />
-          <img src={thorOrb} alt="Thor AI Orb" className="w-full h-full object-contain opacity-60 drop-shadow-[0_0_40px_hsl(var(--primary)/0.3)]" />
+          <div className="absolute inset-0 rounded-full bg-primary/10 blur-[40px]" />
+          <img src={thorOrb} alt="Thor AI Orb" className="w-full h-full object-contain opacity-50 drop-shadow-[0_0_30px_hsl(var(--primary)/0.3)]" />
         </motion.div>
 
         {/* Hero content */}
-        <motion.div style={{ opacity: heroOpacity }} className="relative z-20 flex-1 flex flex-col justify-center px-4 pt-24 pb-16">
-          <div className="max-w-5xl mx-auto w-full">
+        <motion.div style={{ opacity: heroOpacity }} className="relative z-20 flex-1 flex flex-col justify-center px-4 pt-24 pb-8">
+          <div className="max-w-6xl mx-auto w-full">
             <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}>
 
               {/* Trending badge */}
-              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }} className="mb-6">
+              <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.3 }} className="mb-4 text-center">
                 <Badge variant="outline" className="border-accent-emerald/30 bg-accent-emerald/5 text-accent-emerald px-4 py-2 gap-2 backdrop-blur-sm text-sm">
                   <TrendingUp className="h-4 w-4" />
-                  Trending in 10+ countries
+                  🔥 Febre em 10+ países
                   <Globe className="h-3.5 w-3.5 ml-1" />
                 </Badge>
               </motion.div>
 
-              <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6 leading-[0.95] tracking-tight max-w-3xl">
-                <span className="block text-foreground">Imagine an AI</span>
-                <span className="block mt-2">
+              {/* Title + counter highlight */}
+              <div className="text-center mb-6">
+                <h1 className="font-display text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-bold mb-4 leading-[0.95] tracking-tight">
+                  <span className="text-foreground">Imagine um</span>{" "}
                   <span className="gradient-text" style={{ textShadow: '0 0 50px hsl(var(--primary) / 0.35)' }}>
-                    Orchestrator
+                    Orquestrador IA
                   </span>
-                </span>
-                <span className="block text-foreground/90 mt-2 text-3xl sm:text-4xl lg:text-5xl">
-                  that coordinates your <span className="text-primary">entire team</span>
-                </span>
-              </h1>
-
-              <p className="text-lg sm:text-xl text-muted-foreground mb-8 leading-relaxed max-w-2xl">
-                <span className="text-foreground font-medium">83 AI agents</span> across{" "}
-                <span className="text-foreground font-medium">15 departments</span>.
-                One orchestrator. Zero complexity.
-                <span className="text-primary font-semibold"> Save 88%</span> vs traditional hiring.
-              </p>
-
-              {/* Dual CTA */}
-              <div className="flex flex-col sm:flex-row gap-4 mb-10">
-                <button
-                  onClick={scrollToForm}
-                  className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-display font-semibold text-lg overflow-hidden transition-all duration-500 hover:scale-[1.03] active:scale-[0.98]"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary to-primary-glow rounded-2xl" />
-                  <div className="absolute -inset-1 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-                  <span className="relative z-10 flex items-center gap-3 text-primary-foreground">
-                    <Rocket className="h-5 w-5" />
-                    Get Early Access
-                    <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                  <br />
+                  <span className="text-foreground/90 text-2xl sm:text-3xl lg:text-4xl">
+                    que coordena seu <span className="text-primary">time inteiro</span>
                   </span>
-                </button>
-                <button
-                  onClick={() => window.open('https://clauthor.com', '_blank')}
-                  className="group relative inline-flex items-center justify-center gap-3 px-8 py-5 rounded-2xl font-display font-medium text-base overflow-hidden glass-btn"
+                </h1>
+
+                {/* Big counter highlight */}
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.6 }}
+                  className="inline-flex items-center gap-3 px-6 py-3 rounded-2xl border border-primary/15 bg-primary/5 backdrop-blur-sm mb-4"
                 >
-                  <Play className="h-4 w-4 text-primary fill-primary" />
-                  <span className="text-foreground/90">Watch Demo</span>
-                </button>
+                  <div className="relative">
+                    <div className="w-3 h-3 bg-accent-emerald rounded-full" />
+                    <div className="absolute inset-0 w-3 h-3 bg-accent-emerald rounded-full animate-ping" />
+                  </div>
+                  <span className="font-display font-bold text-3xl sm:text-4xl tabular-nums text-primary" style={{ textShadow: '0 0 25px hsl(var(--primary) / 0.4)' }}>
+                    {displayCount.toLocaleString('pt-BR')}+
+                  </span>
+                  <span className="text-sm text-muted-foreground">profissionais já entraram</span>
+                </motion.div>
+
+                <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+                  <span className="text-foreground font-medium">+30 agentes autônomos</span> em{" "}
+                  <span className="text-foreground font-medium">15 departamentos</span>.
+                  Um orquestrador. Zero complexidade.
+                  <span className="text-primary font-semibold"> Economize 88%</span> vs contratação tradicional.
+                </p>
               </div>
 
-              {/* Live activity toast */}
-              <AnimatePresence mode="wait">
-                <motion.div key={recentSignup} initial={{ opacity: 0, x: -20, y: 10 }} animate={{ opacity: 1, x: 0, y: 0 }} exit={{ opacity: 0, x: 20 }}
-                  className="inline-flex items-center gap-3 px-4 py-2.5 rounded-full border border-primary/10 bg-card/30 backdrop-blur-xl">
-                  <div className="relative">
-                    <div className="w-2 h-2 bg-accent-emerald rounded-full" />
-                    <div className="absolute inset-0 w-2 h-2 bg-accent-emerald rounded-full animate-ping" />
-                  </div>
-                  <span className="text-sm text-muted-foreground">
-                    <span className="font-medium text-foreground">{recentSignup}</span> just joined the waitlist
-                  </span>
-                </motion.div>
-              </AnimatePresence>
+              {/* ─── LIVE CHAT SIMULATION ─── */}
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.8 }}
+                className="mb-6"
+              >
+                <LiveChatSimulation />
+              </motion.div>
+
+              {/* CTA + live activity */}
+              <div className="text-center space-y-4">
+                <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                  <button
+                    onClick={scrollToForm}
+                    className="group relative inline-flex items-center justify-center gap-3 px-10 py-5 rounded-2xl font-display font-semibold text-lg overflow-hidden transition-all duration-500 hover:scale-[1.03] active:scale-[0.98]"
+                  >
+                    <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary to-primary-glow rounded-2xl" />
+                    <div className="absolute -inset-1 bg-primary/20 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                    <span className="relative z-10 flex items-center gap-3 text-primary-foreground">
+                      <Rocket className="h-5 w-5" />
+                      Garantir Acesso Antecipado
+                      <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                    </span>
+                  </button>
+                </div>
+
+                <AnimatePresence mode="wait">
+                  <motion.div key={recentSignup} initial={{ opacity: 0, x: -20, y: 10 }} animate={{ opacity: 1, x: 0, y: 0 }} exit={{ opacity: 0, x: 20 }}
+                    className="inline-flex items-center gap-3 px-4 py-2.5 rounded-full border border-primary/10 bg-card/30 backdrop-blur-xl">
+                    <div className="relative">
+                      <div className="w-2 h-2 bg-accent-emerald rounded-full" />
+                      <div className="absolute inset-0 w-2 h-2 bg-accent-emerald rounded-full animate-ping" />
+                    </div>
+                    <span className="text-sm text-muted-foreground">
+                      <span className="font-medium text-foreground">{recentSignup}</span> acabou de entrar na lista
+                    </span>
+                  </motion.div>
+                </AnimatePresence>
+              </div>
             </motion.div>
           </div>
         </motion.div>
 
-        {/* Countdown at bottom of hero */}
+        {/* Countdown */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -376,15 +603,15 @@ const Waitlist = () => {
           className="relative z-20 pb-12 px-4"
         >
           <div className="max-w-5xl mx-auto text-center">
-            <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Early access opens in</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">Acesso antecipado abre em</p>
             <div className="flex items-center justify-center gap-2 sm:gap-4">
-              <CountdownDigit value={String(timeLeft.days).padStart(2, '0')} label="Days" />
+              <CountdownDigit value={String(timeLeft.days).padStart(2, '0')} label="Dias" />
               <span className="font-display text-xl sm:text-3xl text-primary/40 mt-[-16px]">:</span>
-              <CountdownDigit value={String(timeLeft.hours).padStart(2, '0')} label="Hours" />
+              <CountdownDigit value={String(timeLeft.hours).padStart(2, '0')} label="Horas" />
               <span className="font-display text-xl sm:text-3xl text-primary/40 mt-[-16px]">:</span>
               <CountdownDigit value={String(timeLeft.minutes).padStart(2, '0')} label="Min" />
               <span className="font-display text-xl sm:text-3xl text-primary/40 mt-[-16px]">:</span>
-              <CountdownDigit value={String(timeLeft.seconds).padStart(2, '0')} label="Sec" />
+              <CountdownDigit value={String(timeLeft.seconds).padStart(2, '0')} label="Seg" />
             </div>
           </div>
         </motion.div>
@@ -397,107 +624,55 @@ const Waitlist = () => {
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
           <p className="text-center text-xs uppercase tracking-[0.3em] text-muted-foreground mb-4">
             <TrendingUp className="h-3 w-3 inline mr-2 text-accent-emerald" />
-            Trending worldwide
+            🔥 Febre no mundo todo
           </p>
           <CountryMarquee />
         </motion.div>
       </section>
 
       {/* ═══════════════════════════════════════════════ */}
-      {/* ─── 3. ORCHESTRATOR SHOWCASE ─── */}
+      {/* ─── 3. STATS BAR ─── */}
       {/* ═══════════════════════════════════════════════ */}
-      <section className="relative z-10 px-4 py-20 md:py-28">
-        <div className="max-w-6xl mx-auto">
-          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} className="text-center mb-16">
-            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2 text-sm">
-              <BrainCircuit className="h-4 w-4" />
-              AI Orchestration
-            </Badge>
-            <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-              One Command. <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.25)' }}>Entire Team Moves.</span>
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Thor delegates, coordinates, and orchestrates 83 AI agents across your business — from marketing to cybersecurity.
-            </p>
-          </motion.div>
-
-          {/* Orchestrator visual card */}
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="relative"
-          >
-            <GlassCard hover={false} className="overflow-hidden">
-              <div className="relative h-[300px] sm:h-[400px] lg:h-[500px]">
-                <div className="absolute inset-0 bg-gradient-to-t from-card via-transparent to-transparent z-10" />
-                <div className="absolute inset-0 bg-gradient-to-r from-card/60 via-transparent to-card/60 z-10" />
-                <img src={thorOrchestrating} alt="AI orchestrator coordinating agents" className="w-full h-full object-cover" />
-
-                {/* Floating agent indicators */}
-                {[
-                  { label: "Marketing AI", x: "10%", y: "20%", delay: 0 },
-                  { label: "Sales AI", x: "75%", y: "15%", delay: 0.2 },
-                  { label: "CFO Agent", x: "85%", y: "55%", delay: 0.4 },
-                  { label: "Growth Hacker", x: "15%", y: "65%", delay: 0.6 },
-                ].map((agent, i) => (
-                  <motion.div
-                    key={agent.label}
-                    initial={{ opacity: 0, scale: 0 }}
-                    whileInView={{ opacity: 1, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.5 + agent.delay, type: "spring" }}
-                    className="absolute z-20"
-                    style={{ left: agent.x, top: agent.y }}
-                  >
-                    <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-card/80 backdrop-blur-xl border border-primary/20 shadow-[0_0_20px_hsl(var(--primary)/0.1)]">
-                      <Bot className="h-3 w-3 text-primary" />
-                      <span className="text-xs font-medium text-foreground/90">{agent.label}</span>
-                      <div className="w-1.5 h-1.5 bg-accent-emerald rounded-full" />
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-
-              {/* Bottom bar with stats */}
-              <div className="relative z-20 p-6 border-t border-primary/5 grid grid-cols-2 sm:grid-cols-4 gap-4">
-                {[
-                  { value: "83", label: "AI Agents", icon: Bot },
-                  { value: "15", label: "Departments", icon: Users },
-                  { value: "88%", label: "Cost Savings", icon: TrendingUp },
-                  { value: "24/7", label: "Autonomous", icon: Zap },
-                ].map((stat) => (
-                  <div key={stat.label} className="text-center">
-                    <stat.icon className="h-4 w-4 text-primary mx-auto mb-1" />
-                    <p className="font-display text-2xl font-bold text-foreground">{stat.value}</p>
-                    <p className="text-xs text-muted-foreground">{stat.label}</p>
-                  </div>
-                ))}
-              </div>
-            </GlassCard>
-          </motion.div>
+      <section className="relative z-10 px-4 py-16">
+        <div className="max-w-5xl mx-auto">
+          <GlassCard hover={false} className="p-6">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+              {[
+                { value: "+30", label: "Agentes Autônomos", icon: Bot },
+                { value: "15", label: "Departamentos", icon: Users },
+                { value: "88%", label: "Economia", icon: TrendingUp },
+                { value: "24/7", label: "Operação Contínua", icon: Zap },
+              ].map((stat) => (
+                <div key={stat.label} className="text-center">
+                  <stat.icon className="h-5 w-5 text-primary mx-auto mb-2" strokeWidth={1.5} />
+                  <p className="font-display text-3xl font-bold text-foreground">{stat.value}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
+                </div>
+              ))}
+            </div>
+          </GlassCard>
         </div>
       </section>
 
       {/* ═══════════════════════════════════════════════ */}
-      {/* ─── 4. BENEFITS ─── */}
+      {/* ─── 4. BENEFÍCIOS ─── */}
       {/* ═══════════════════════════════════════════════ */}
       <section className="relative z-10 px-4 py-20 md:py-28">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} className="text-center mb-16">
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-              Why Join the <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.25)' }}>White List?</span>
+              Por que entrar na <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.25)' }}>White List?</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Exclusive perks for those who secure their spot before the official launch.
+              Benefícios exclusivos para quem garantir sua vaga antes do lançamento oficial.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: Zap, title: "Early Access", desc: "Be the first to experience the full platform. Set up your AI agents and departments before anyone else." },
-              { icon: Headphones, title: "Premium Support", desc: "Dedicated onboarding team. Personalized 1:1 setup to ensure your AI workforce hits the ground running." },
-              { icon: Crown, title: "Exclusive Pricing", desc: "50% off launch pricing for white list members. Lock in your rate before public launch." },
+              { icon: Zap, title: "Acesso Antecipado", desc: "Seja o primeiro a usar a plataforma completa. Configure seus agentes e departamentos antes de todos." },
+              { icon: Headphones, title: "Suporte Premium", desc: "Equipe dedicada de onboarding. Setup personalizado 1:1 para garantir que sua força de trabalho IA comece voando." },
+              { icon: Crown, title: "Preço Exclusivo", desc: "50% de desconto no lançamento para membros da white list. Garanta sua taxa antes da abertura pública." },
             ].map((benefit, i) => (
               <motion.div key={benefit.title} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.15, duration: 0.6 }}>
                 <GlassCard className="p-8 h-full group">
@@ -514,16 +689,16 @@ const Waitlist = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════ */}
-      {/* ─── 5. FORM + CHECKOUT CARD ─── */}
+      {/* ─── 5. FORMULÁRIO + CHECKOUT ─── */}
       {/* ═══════════════════════════════════════════════ */}
       <section id="waitlist-form" className="relative z-10 px-4 py-20 md:py-28">
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} className="text-center mb-16">
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-              Secure Your Spot <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.25)' }}>Now</span>
+              Garanta Sua Vaga <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.25)' }}>Agora</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Only white list members get priority access. Join now and claim your VIP position.
+              Somente membros da white list têm acesso prioritário. Entre agora e garanta sua posição VIP.
             </p>
           </motion.div>
 
@@ -531,10 +706,10 @@ const Waitlist = () => {
             {/* Left — Value props */}
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-5">
               {[
-                { icon: Crown, text: "Exclusive early access", tag: "VIP" },
-                { icon: Gift, text: "50% off at launch", tag: "BONUS" },
-                { icon: Zap, text: "Personalized 1:1 onboarding", tag: "FREE" },
-                { icon: Shield, text: "Lifetime priority support", tag: "PRO" },
+                { icon: Crown, text: "Acesso antecipado exclusivo", tag: "VIP" },
+                { icon: Gift, text: "50% de desconto no lançamento", tag: "BÔNUS" },
+                { icon: Zap, text: "Onboarding personalizado 1:1", tag: "GRÁTIS" },
+                { icon: Shield, text: "Suporte prioritário vitalício", tag: "PRO" },
               ].map((item, i) => (
                 <motion.div key={item.text} initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.1 }}>
                   <GlassCard className="p-4 flex items-center gap-4 group">
@@ -560,28 +735,28 @@ const Waitlist = () => {
                   ))}
                 </div>
                 <div className="text-sm">
-                  <span className="font-bold text-primary text-lg tabular-nums">{displayCount.toLocaleString()}+</span>
-                  <span className="text-muted-foreground"> professionals waiting</span>
+                  <span className="font-bold text-primary text-2xl tabular-nums" style={{ textShadow: '0 0 15px hsl(var(--primary) / 0.3)' }}>{displayCount.toLocaleString('pt-BR')}+</span>
+                  <span className="text-muted-foreground"> profissionais na fila</span>
                 </div>
               </motion.div>
 
-              {/* Transparent checkout info card */}
+              {/* Transparent checkout */}
               <GlassCard hover={false} className="p-5 mt-4 border-accent-emerald/15">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 rounded-xl bg-accent-emerald/10 border border-accent-emerald/20 flex items-center justify-center shrink-0">
                     <Shield className="h-5 w-5 text-accent-emerald" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-foreground mb-1">Transparent Checkout</p>
+                    <p className="text-sm font-medium text-foreground mb-1">Checkout Transparente</p>
                     <p className="text-xs text-muted-foreground leading-relaxed">
-                      After early access, pay seamlessly with PayPal — all in one card. No hidden fees, no redirects. Enterprise-grade security.
+                      Após o acesso antecipado, pague com PayPal — tudo em um único card. Sem taxas ocultas, sem redirecionamentos. Segurança enterprise.
                     </p>
                     <div className="flex items-center gap-3 mt-3">
                       <Badge variant="outline" className="text-[10px] border-accent-emerald/20 text-accent-emerald/80 gap-1">
                         <Lock className="h-2.5 w-2.5" /> PayPal
                       </Badge>
                       <Badge variant="outline" className="text-[10px] border-accent-emerald/20 text-accent-emerald/80 gap-1">
-                        <Shield className="h-2.5 w-2.5" /> Encrypted
+                        <Shield className="h-2.5 w-2.5" /> Criptografado
                       </Badge>
                       <Badge variant="outline" className="text-[10px] border-accent-emerald/20 text-accent-emerald/80 gap-1">
                         <CheckCircle2 className="h-2.5 w-2.5" /> In-app
@@ -604,27 +779,27 @@ const Waitlist = () => {
                       className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4 backdrop-blur-sm shadow-[0_0_25px_hsl(var(--primary)/0.15)]">
                       <Sparkles className="h-8 w-8 text-primary" />
                     </motion.div>
-                    <h3 className="font-display text-2xl font-bold mb-2">Join the White List</h3>
-                    <p className="text-muted-foreground text-sm">Fill in your details and secure priority access</p>
+                    <h3 className="font-display text-2xl font-bold mb-2">Entrar na White List</h3>
+                    <p className="text-muted-foreground text-sm">Preencha seus dados e garanta acesso prioritário</p>
                   </div>
 
                   <form onSubmit={handleSubmit} className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <Label htmlFor="name" className="text-xs uppercase tracking-wider text-muted-foreground">Name</Label>
-                        <Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Your name" className="h-12 bg-background/30 border-primary/10 rounded-xl backdrop-blur-sm focus:border-primary/30 transition-colors" />
+                        <Label htmlFor="name" className="text-xs uppercase tracking-wider text-muted-foreground">Nome</Label>
+                        <Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Seu nome" className="h-12 bg-background/30 border-primary/10 rounded-xl backdrop-blur-sm focus:border-primary/30 transition-colors" />
                         {errors.name && <p className="text-destructive text-xs">{errors.name}</p>}
                       </div>
                       <div className="space-y-2">
-                        <Label htmlFor="company" className="text-xs uppercase tracking-wider text-muted-foreground">Company</Label>
-                        <Input id="company" value={formData.company} onChange={(e) => setFormData({ ...formData, company: e.target.value })} placeholder="Your company" className="h-12 bg-background/30 border-primary/10 rounded-xl backdrop-blur-sm focus:border-primary/30 transition-colors" />
+                        <Label htmlFor="company" className="text-xs uppercase tracking-wider text-muted-foreground">Empresa</Label>
+                        <Input id="company" value={formData.company} onChange={(e) => setFormData({ ...formData, company: e.target.value })} placeholder="Sua empresa" className="h-12 bg-background/30 border-primary/10 rounded-xl backdrop-blur-sm focus:border-primary/30 transition-colors" />
                         {errors.company && <p className="text-destructive text-xs">{errors.company}</p>}
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label htmlFor="email" className="text-xs uppercase tracking-wider text-muted-foreground">E-mail *</Label>
-                      <Input id="email" type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="you@email.com" className="h-12 bg-background/30 border-primary/10 rounded-xl backdrop-blur-sm focus:border-primary/30 transition-colors" required />
+                      <Input id="email" type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="voce@email.com" className="h-12 bg-background/30 border-primary/10 rounded-xl backdrop-blur-sm focus:border-primary/30 transition-colors" required />
                       {errors.email && <p className="text-destructive text-xs">{errors.email}</p>}
                     </div>
 
@@ -638,26 +813,25 @@ const Waitlist = () => {
                       className="group relative w-full h-14 rounded-xl font-display font-semibold text-lg overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:pointer-events-none mt-2">
                       <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
                       <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-md opacity-50 group-hover:opacity-80 transition-opacity" />
-                      <div className="absolute inset-0 bg-gradient-to-b from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-xl" />
                       <span className="relative z-10 flex items-center justify-center gap-2 text-primary-foreground">
                         {loading ? (
-                          <><div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />Joining...</>
+                          <><div className="w-5 h-5 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />Entrando...</>
                         ) : (
-                          <><Rocket className="h-5 w-5" />Get Early Access<ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 transition-transform duration-300" /></>
+                          <><Rocket className="h-5 w-5" />Garantir Acesso Antecipado<ArrowRight className="h-5 w-5 group-hover:translate-x-1.5 transition-transform duration-300" /></>
                         )}
                       </span>
                     </button>
 
                     <p className="text-[11px] text-center text-muted-foreground/70 pt-1">
-                      Invites sent in limited batches · <a href="/privacy" className="text-primary/60 hover:text-primary transition-colors underline-offset-2 hover:underline">Privacy Policy</a>
+                      Convites enviados em lotes limitados · <a href="/privacy" className="text-primary/60 hover:text-primary transition-colors underline-offset-2 hover:underline">Política de Privacidade</a>
                     </p>
                   </form>
 
                   <div className="flex items-center justify-center gap-5 mt-6 text-muted-foreground/50">
                     {[
-                      { icon: Lock, label: "Encrypted" },
-                      { icon: Shield, label: "GDPR" },
-                      { icon: Cpu, label: "Cutting-edge AI" },
+                      { icon: Lock, label: "Criptografado" },
+                      { icon: Shield, label: "LGPD" },
+                      { icon: Cpu, label: "IA de ponta" },
                     ].map((item) => (
                       <div key={item.label} className="flex items-center gap-1.5">
                         <item.icon className="h-3 w-3 text-primary/40" />
@@ -678,17 +852,17 @@ const Waitlist = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <GlassCard hover={false} className="inline-flex items-center gap-3 px-6 py-3">
               <Globe className="h-5 w-5 text-primary" />
-              <span className="text-sm font-medium text-foreground/80">Trending in 10+ countries — Exclusive white list</span>
+              <span className="text-sm font-medium text-foreground/80">🔥 Febre em 10+ países — White list exclusiva</span>
               <CheckCircle2 className="h-4 w-4 text-accent-emerald" />
             </GlassCard>
           </motion.div>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
             <div className="flex items-center gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-primary transition-colors duration-300">About</a>
+              <a href="#" className="hover:text-primary transition-colors duration-300">Sobre</a>
               <span className="text-border">·</span>
-              <a href="#" className="hover:text-primary transition-colors duration-300">Contact</a>
+              <a href="#" className="hover:text-primary transition-colors duration-300">Contato</a>
               <span className="text-border">·</span>
-              <a href="#" className="hover:text-primary transition-colors duration-300">Partners</a>
+              <a href="#" className="hover:text-primary transition-colors duration-300">Parceiros</a>
             </div>
             <div className="flex items-center gap-4">
               {[
@@ -704,7 +878,7 @@ const Waitlist = () => {
             </div>
           </div>
           <div className="text-center mt-8">
-            <p className="text-xs text-muted-foreground/40">© 2026 Clauthor · All rights reserved</p>
+            <p className="text-xs text-muted-foreground/40">© 2026 Clauthor · Todos os direitos reservados</p>
           </div>
         </div>
       </footer>
