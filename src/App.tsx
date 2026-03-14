@@ -53,6 +53,7 @@ const ResetPassword = lazyRetry(() => import("./pages/ResetPassword"));
 const ApiDocs = lazyRetry(() => import("./pages/ApiDocs"));
 const TeamBuilder = lazyRetry(() => import("./pages/TeamBuilder"));
 const ControlTower = lazyRetry(() => import("./pages/ControlTower"));
+const Architecture = lazyRetry(() => import("./pages/Architecture"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -102,6 +103,7 @@ const App = () => (
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/api-docs" element={<ApiDocs />} />
                   <Route path="/team-builder" element={<TeamBuilder />} />
+                  <Route path="/architecture" element={<Architecture />} />
                 </Route>
 
                 {/* Dashboard pages with minimal header + sidebar only */}
