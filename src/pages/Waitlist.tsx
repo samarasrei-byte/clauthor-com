@@ -235,8 +235,8 @@ const LiveChatSimulation = () => {
         <div className="flex items-center gap-2">
           <div className="flex -space-x-1.5">
             {SQUAD_AGENTS.slice(0, 6).map((a, i) => (
-              <div key={i} className="w-5 h-5 rounded-full bg-primary/10 border border-background flex items-center justify-center text-[8px]">
-                {a.emoji}
+              <div key={i} className="w-5 h-5 rounded-full bg-primary/10 border border-background flex items-center justify-center">
+                <a.icon className="w-2.5 h-2.5 text-primary/70" strokeWidth={1.5} />
               </div>
             ))}
             <div className="w-5 h-5 rounded-full bg-primary/20 border border-background flex items-center justify-center text-[7px] text-primary font-bold">
