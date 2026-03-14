@@ -7,6 +7,7 @@ import pt from "./locales/pt.json";
 import en from "./locales/en.json";
 
 export const languages = [
+  { code: "pt", name: "Português", flag: "br" },
   { code: "en", name: "English", flag: "us" },
   { code: "es", name: "Español", flag: "es" },
   { code: "fr", name: "Français", flag: "fr" },
@@ -21,7 +22,7 @@ export const languages = [
   { code: "tr", name: "Türkçe", flag: "tr" },
 ];
 
-const supportedLngs = languages.map((l) => l.code);
+const supportedLngs = ["pt", ...languages.map((l) => l.code).filter(c => c !== "pt")];
 
 // Dynamic locale loaders — only fetched when needed
 const localeLoaders: Record<string, () => Promise<{ default: Record<string, any> }>> = {
@@ -67,7 +68,7 @@ i18n
       pt: { translation: pt },
       en: { translation: en },
     },
-    fallbackLng: "en",
+    fallbackLng: "pt",
     supportedLngs,
     load: "languageOnly",
     interpolation: {
