@@ -517,8 +517,20 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         </AnimatePresence>
       </div>
 
+      {/* ── WAVEFORM VISUALIZATION ── */}
+      <AnimatePresence>
+        {(isListening || isSpeaking) && (
+          <div className="shrink-0 px-8">
+            <AudioWaveform
+              active
+              mode={isSpeaking ? "speaking" : "listening"}
+            />
+          </div>
+        )}
+      </AnimatePresence>
+
       {/* ── BOTTOM CONTROLS ── */}
-      <div className="shrink-0 pb-5 pt-2 relative z-10">
+      <div className="shrink-0 pb-6 pt-3 relative z-10">
         {/* Text input (shown when mic fails or user requests) */}
         <AnimatePresence>
           {showTextInput && (
