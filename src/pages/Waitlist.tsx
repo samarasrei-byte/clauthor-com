@@ -544,8 +544,8 @@ const Waitlist = () => {
                 </motion.div>
 
                 <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                  <span className="text-foreground font-medium">+30 agentes autônomos</span> em{" "}
-                  <span className="text-foreground font-medium">15 departamentos</span>.
+                  <span className="text-foreground font-medium">+30 agentes autônomos</span> organizados em{" "}
+                  <span className="text-foreground font-medium">squads inteligentes</span>.
                   Um orquestrador. Zero complexidade.
                   <span className="text-primary font-semibold"> Economize 88%</span> vs contratação tradicional.
                 </p>
@@ -639,7 +639,7 @@ const Waitlist = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {[
                 { value: "+30", label: "Agentes Autônomos", icon: Bot },
-                { value: "15", label: "Departamentos", icon: Users },
+                { value: "∞", label: "Squads sob Demanda", icon: Users },
                 { value: "88%", label: "Economia", icon: TrendingUp },
                 { value: "24/7", label: "Operação Contínua", icon: Zap },
               ].map((stat) => (
@@ -670,9 +670,9 @@ const Waitlist = () => {
 
           <div className="grid md:grid-cols-3 gap-6">
             {[
-              { icon: Zap, title: "Acesso Antecipado", desc: "Seja o primeiro a usar a plataforma completa. Configure seus agentes e departamentos antes de todos." },
-              { icon: Headphones, title: "Suporte Premium", desc: "Equipe dedicada de onboarding. Setup personalizado 1:1 para garantir que sua força de trabalho IA comece voando." },
-              { icon: Crown, title: "Preço Exclusivo", desc: "50% de desconto no lançamento para membros da white list. Garanta sua taxa antes da abertura pública." },
+              { icon: Zap, title: "Acesso Antecipado", desc: "Seja o primeiro a montar seus squads de IA. Configure agentes especializados e coloque-os para trabalhar antes de todos." },
+              { icon: Headphones, title: "Suporte Premium", desc: "Equipe dedicada de onboarding. Setup personalizado 1:1 para garantir que seus squads comecem voando desde o dia 1." },
+              { icon: Crown, title: "Preço Exclusivo", desc: "50% de desconto no lançamento para membros da white list. Monte squads ilimitados com a melhor taxa do mercado." },
             ].map((benefit, i) => (
               <motion.div key={benefit.title} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.15, duration: 0.6 }}>
                 <GlassCard className="p-8 h-full group">
