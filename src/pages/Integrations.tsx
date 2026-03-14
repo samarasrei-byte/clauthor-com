@@ -1,320 +1,35 @@
-import { motion, AnimatePresence } from "framer-motion";
-import HelpTooltip from "@/components/HelpTooltip";
-import { useTranslation } from "react-i18next";
-import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
+import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Mail, MessageSquare, Globe, Facebook,
-  FileSpreadsheet, BookOpen, Trello, BarChart3,
-  TrendingUp, Code, ArrowRight, Linkedin, Megaphone,
-  Instagram, ShoppingCart, CreditCard, Database,
-  Clock, Key, ChevronDown, ChevronUp,
-  CheckCircle, Loader2, Shield, AlertTriangle, Sparkles, Zap
-} from "lucide-react";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Search, Plus, CheckCircle, X, Settings2 } from "lucide-react";
+import { connectors, categories, type ConnectorData } from "@/components/integrations/connectorData";
+import ConnectorDetailDialog from "@/components/integrations/ConnectorDetailDialog";
 import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
 import SendGridSetupGuide from "@/components/dashboard/SendGridSetupGuide";
 import LinkedInSetupGuide from "@/components/dashboard/LinkedInSetupGuide";
 import MetaAdsSetupGuide from "@/components/dashboard/MetaAdsSetupGuide";
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
-import { useAuth } from "@/hooks/useAuth";
 
-interface CredentialField {
-  key: string;
-  label: string;
-  placeholder: string;
-  type?: string;
-  required?: boolean;
-}
-
-interface Integration {
-  icon: any;
-  name: string;
-  desc: string;
-  status: string;
-  category: string;
-  hasSetup: boolean;
-  setupKey?: string;
-  difficulty: string;
-  difficultyStars: number;
-  totalTime: string;
-  needsApi: boolean;
-  apiInfo: string;
-  integrationKey: string;
-  quickFields?: CredentialField[];
-}
-
-const integrations: Integration[] = [
-  {
-    icon: MessageSquare, name: "WhatsApp", desc: "Atenda clientes e envie notificações via WhatsApp.",
-    status: "Disponível", category: "Comunicação", hasSetup: true, setupKey: "whatsapp",
-    difficulty: "Médio", difficultyStars: 2, totalTime: "~30 min", needsApi: true,
-    apiInfo: "Phone ID + Access Token (Meta Business)",
-    integrationKey: "whatsapp",
-    quickFields: [
-      { key: "phone_id", label: "Phone Number ID", placeholder: "Ex: 1234567890", required: true },
-      { key: "access_token", label: "Access Token", placeholder: "Token do Meta Business", type: "password", required: true },
-      { key: "business_account_id", label: "Business Account ID", placeholder: "Opcional" },
-    ],
-  },
-  {
-    icon: Mail, name: "E-mail (SendGrid)", desc: "Envie e receba e-mails automaticamente.",
-    status: "Disponível", category: "Comunicação", hasSetup: true, setupKey: "email",
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "~10 min", needsApi: true,
-    apiInfo: "API Key (conta gratuita)",
-    integrationKey: "sendgrid",
-    quickFields: [
-      { key: "api_key", label: "API Key", placeholder: "SG.xxxxxxx...", type: "password", required: true },
-      { key: "from_email", label: "E-mail remetente", placeholder: "noreply@suaempresa.com" },
-    ],
-  },
-  {
-    icon: Linkedin, name: "LinkedIn", desc: "Automatize prospecção e networking no LinkedIn.",
-    status: "Disponível", category: "Social", hasSetup: true, setupKey: "linkedin",
-    difficulty: "Médio", difficultyStars: 2, totalTime: "~20 min", needsApi: true,
-    apiInfo: "Client ID + Secret + Access Token",
-    integrationKey: "linkedin",
-    quickFields: [
-      { key: "client_id", label: "Client ID", placeholder: "Do painel do app", required: true },
-      { key: "client_secret", label: "Client Secret", placeholder: "Gerado na aba Auth", type: "password" },
-      { key: "access_token", label: "Access Token", placeholder: "Token de acesso", type: "password", required: true },
-    ],
-  },
-  {
-    icon: Megaphone, name: "Meta Ads", desc: "Gerencie campanhas no Facebook e Instagram Ads.",
-    status: "Disponível", category: "Ads", hasSetup: true, setupKey: "meta-ads",
-    difficulty: "Médio", difficultyStars: 2, totalTime: "~25 min", needsApi: true,
-    apiInfo: "Access Token + Ad Account ID",
-    integrationKey: "meta_ads",
-    quickFields: [
-      { key: "access_token", label: "Access Token", placeholder: "Do Graph API Explorer", type: "password", required: true },
-      { key: "ad_account_id", label: "Ad Account ID", placeholder: "act_XXXXXXXXX", required: true },
-    ],
-  },
-  {
-    icon: Instagram, name: "Instagram", desc: "Responda DMs e comentários automaticamente.",
-    status: "Disponível", category: "Social", hasSetup: false,
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "~5 min", needsApi: true,
-    apiInfo: "Via Meta Business (mesmo token)",
-    integrationKey: "instagram",
-    quickFields: [
-      { key: "access_token", label: "Access Token", placeholder: "Mesmo do Meta Business", type: "password", required: true },
-      { key: "instagram_account_id", label: "Instagram Account ID", placeholder: "ID da conta IG" },
-    ],
-  },
-  {
-    icon: Facebook, name: "Facebook", desc: "Gerencie mensagens e posts no Facebook.",
-    status: "Em Breve", category: "Social", hasSetup: false,
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "-", needsApi: true,
-    apiInfo: "Via Meta Business",
-    integrationKey: "facebook",
-  },
-  {
-    icon: FileSpreadsheet, name: "Google Sheets", desc: "Leia e escreva dados em planilhas.",
-    status: "Disponível", category: "Produtividade", hasSetup: false,
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "~5 min", needsApi: true,
-    apiInfo: "OAuth Google",
-    integrationKey: "google_sheets",
-    quickFields: [
-      { key: "api_key", label: "API Key / Service Account", placeholder: "Chave de serviço JSON ou API Key", type: "password", required: true },
-    ],
-  },
-  {
-    icon: BookOpen, name: "Notion", desc: "Sincronize dados com seu workspace Notion.",
-    status: "Disponível", category: "Produtividade", hasSetup: false,
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "~5 min", needsApi: true,
-    apiInfo: "Integration Token",
-    integrationKey: "notion",
-    quickFields: [
-      { key: "api_key", label: "Integration Token", placeholder: "secret_xxxxxxx...", type: "password", required: true },
-    ],
-  },
-  {
-    icon: Trello, name: "Trello", desc: "Crie cards e gerencie boards automaticamente.",
-    status: "Disponível", category: "Produtividade", hasSetup: false,
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "~5 min", needsApi: true,
-    apiInfo: "API Key + Token",
-    integrationKey: "trello",
-    quickFields: [
-      { key: "api_key", label: "API Key", placeholder: "Chave da API", type: "password", required: true },
-      { key: "token", label: "Token", placeholder: "Token de autorização", type: "password", required: true },
-    ],
-  },
-  {
-    icon: BarChart3, name: "HubSpot", desc: "Sincronize leads, deals e contatos.",
-    status: "Disponível", category: "CRM", hasSetup: false,
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "~3 min", needsApi: true,
-    apiInfo: "API Key (gratuito)",
-    integrationKey: "hubspot",
-    quickFields: [
-      { key: "api_key", label: "API Key", placeholder: "pat-xxx...", type: "password", required: true },
-    ],
-  },
-  {
-    icon: TrendingUp, name: "Pipedrive", desc: "Gerencie pipeline de vendas automaticamente.",
-    status: "Disponível", category: "CRM", hasSetup: false,
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "~3 min", needsApi: true,
-    apiInfo: "API Token",
-    integrationKey: "pipedrive",
-    quickFields: [
-      { key: "api_key", label: "API Token", placeholder: "Token do Pipedrive", type: "password", required: true },
-    ],
-  },
-  {
-    icon: ShoppingCart, name: "Shopify", desc: "Integre catálogo, pedidos e atendimento.",
-    status: "Em Breve", category: "E-commerce", hasSetup: false,
-    difficulty: "Médio", difficultyStars: 2, totalTime: "-", needsApi: true,
-    apiInfo: "Admin API Key",
-    integrationKey: "shopify",
-  },
-  {
-    icon: CreditCard, name: "Stripe", desc: "Gerencie pagamentos e assinaturas.",
-    status: "Em Breve", category: "Pagamentos", hasSetup: false,
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "-", needsApi: true,
-    apiInfo: "Secret Key",
-    integrationKey: "stripe",
-  },
-  {
-    icon: Database, name: "Zapier", desc: "Conecte com +5000 apps via automações.",
-    status: "Em Breve", category: "Automação", hasSetup: false,
-    difficulty: "Fácil", difficultyStars: 1, totalTime: "-", needsApi: true,
-    apiInfo: "Webhook URL",
-    integrationKey: "zapier",
-  },
-  {
-    icon: Code, name: "APIs Customizadas", desc: "Conecte qualquer API REST ou GraphQL.",
-    status: "Disponível", category: "Desenvolvimento", hasSetup: false,
-    difficulty: "Avançado", difficultyStars: 3, totalTime: "Variável", needsApi: true,
-    apiInfo: "Depende da API",
-    integrationKey: "custom_api",
-    quickFields: [
-      { key: "api_key", label: "API Key", placeholder: "Chave da API", type: "password", required: true },
-      { key: "base_url", label: "Base URL", placeholder: "https://api.exemplo.com" },
-    ],
-  },
+const SORT_OPTIONS = [
+  { value: "popular", label: "Mais populares" },
+  { value: "name", label: "A-Z" },
+  { value: "recent", label: "Recentes" },
 ];
 
-const IntegrationQuickConnect = ({ ig, connectedKeys, onSaved }: { ig: Integration; connectedKeys: Set<string>; onSaved: () => void }) => {
-  const { t } = useTranslation();
-  const [values, setValues] = useState<Record<string, string>>({});
-  const [saving, setSaving] = useState(false);
-  const [validating, setValidating] = useState(false);
-
-  const fields = ig.quickFields || [];
-  const allRequiredFilled = fields.filter(f => f.required).every(f => values[f.key]?.trim());
-  const allConnected = fields.filter(f => f.required).every(f => connectedKeys.has(f.key));
-
-  const handleSave = async () => {
-    setSaving(true);
-    try {
-      // Validate first if has setup
-      if (ig.setupKey) {
-        setValidating(true);
-        const channelMap: Record<string, string> = { whatsapp: "whatsapp", email: "email", linkedin: "linkedin", "meta-ads": "meta_ads" };
-        const channel = channelMap[ig.setupKey] || ig.integrationKey;
-        const { data } = await supabase.functions.invoke("validate-credentials", {
-          body: { channel, credentials: values },
-        });
-        setValidating(false);
-        if (data && !data.valid) {
-          toast.error(data.error || "Credencial inválida. Verifique e tente novamente.");
-          setSaving(false);
-          return;
-        }
-      }
-
-      // Save all credentials
-      for (const field of fields) {
-        if (!values[field.key]?.trim()) continue;
-        await supabase.functions.invoke("credential-manager", {
-          body: {
-            action: "save_platform",
-            integration_name: ig.integrationKey,
-            credential_key: field.key,
-            credential_value: values[field.key],
-            description: `${ig.name} - ${field.key}`,
-          },
-        });
-      }
-      toast.success(`${ig.name} conectado com sucesso! 🎉`);
-      setValues({});
-      onSaved();
-    } catch {
-      toast.error("Erro ao salvar. Tente novamente.");
-    } finally {
-      setSaving(false);
-      setValidating(false);
-    }
-  };
-
-  if (allConnected) {
-    return (
-      <div className="flex items-center gap-2 p-3 rounded-lg bg-primary/5 border border-primary/20">
-        <CheckCircle className="h-4 w-4 text-primary" />
-        <span className="text-xs text-primary font-medium">{t("integrations.connected_working", { defaultValue: "Conectado e funcionando" })}</span>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-2.5 p-3 rounded-xl bg-muted/5 border border-border/20">
-      <div className="flex items-center gap-1.5 mb-1">
-        <Zap className="h-3.5 w-3.5 text-primary" />
-        <span className="text-xs font-medium">{t("integrations.quick_connect_title", { defaultValue: "Conexão Rápida" })}</span>
-        <Badge variant="outline" className="text-[9px] ml-auto">
-          <Shield className="h-2.5 w-2.5 mr-0.5" /> {t("integrations.encrypted", { defaultValue: "Criptografado" })}
-        </Badge>
-      </div>
-      {fields.map(field => (
-        <div key={field.key}>
-          <label className="text-[11px] text-muted-foreground mb-0.5 block">
-            {field.label} {field.required && <span className="text-destructive">*</span>}
-            {connectedKeys.has(field.key) && <span className="text-primary ml-1">✓ {t("integrations.saved", { defaultValue: "salvo" })}</span>}
-          </label>
-          <Input
-            placeholder={field.placeholder}
-            type={field.type || "text"}
-            value={values[field.key] || ""}
-            onChange={(e) => setValues(v => ({ ...v, [field.key]: e.target.value }))}
-            className="text-xs h-8"
-            disabled={connectedKeys.has(field.key)}
-          />
-        </div>
-      ))}
-      <Button
-        size="sm"
-        className="w-full gap-1.5 h-8 text-xs"
-        disabled={!allRequiredFilled || saving}
-        onClick={handleSave}
-      >
-        {saving ? (
-          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-        ) : validating ? (
-          <>{t("integrations.validating", { defaultValue: "Validando..." })}</>
-        ) : (
-          <>
-            <CheckCircle className="h-3.5 w-3.5" />
-            {t("integrations.connect_name", { defaultValue: "Conectar {{name}}", name: ig.name })}
-          </>
-        )}
-      </Button>
-    </div>
-  );
-};
-
 const IntegrationsPage = () => {
-  const [activeSetup, setActiveSetup] = useState<string | null>(null);
-  const [expandedCard, setExpandedCard] = useState<string | null>(null);
-  const queryClient = useQueryClient();
   const { user } = useAuth();
-  const { t } = useTranslation();
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("Todas");
+  const [sortBy, setSortBy] = useState("popular");
+  const [selectedConnector, setSelectedConnector] = useState<ConnectorData | null>(null);
+  const [detailOpen, setDetailOpen] = useState(false);
+  const [activeSetup, setActiveSetup] = useState<string | null>(null);
 
-  // Fetch connected integrations from platform_credentials
   const { data: connectedCreds = [], refetch: refetchCreds } = useQuery({
     queryKey: ["integration-status"],
     queryFn: async () => {
@@ -327,26 +42,47 @@ const IntegrationsPage = () => {
     enabled: !!user,
   });
 
-  // Build a map: integrationKey -> Set of connected keys
   const connectedMap = connectedCreds.reduce((acc: Record<string, Set<string>>, c: any) => {
     if (!acc[c.integration_name]) acc[c.integration_name] = new Set();
     acc[c.integration_name].add(c.credential_key);
     return acc;
   }, {} as Record<string, Set<string>>);
 
-  const getConnectionStatus = (ig: Integration) => {
-    const keys = connectedMap[ig.integrationKey];
-    if (!keys || keys.size === 0) return "none";
-    const required = ig.quickFields?.filter(f => f.required) || [];
-    if (required.length === 0) return keys.size > 0 ? "connected" : "none";
-    return required.every(f => keys.has(f.key)) ? "connected" : "partial";
+  const isConnected = (c: ConnectorData) => {
+    const keys = connectedMap[c.integrationKey];
+    if (!keys || keys.size === 0) return false;
+    const required = c.fields.filter(f => f.required);
+    if (required.length === 0) return keys.size > 0;
+    return required.every(f => keys.has(f.key));
   };
 
+  const filtered = useMemo(() => {
+    let list = connectors;
+    if (category !== "Todas") list = list.filter(c => c.category === category);
+    if (search.trim()) {
+      const q = search.toLowerCase();
+      list = list.filter(c =>
+        c.name.toLowerCase().includes(q) ||
+        c.shortDesc.toLowerCase().includes(q) ||
+        c.tools.some(t => t.toLowerCase().includes(q))
+      );
+    }
+    if (sortBy === "popular") list = [...list].sort((a, b) => (a.popularity || 99) - (b.popularity || 99));
+    else if (sortBy === "name") list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+    return list;
+  }, [category, search, sortBy]);
+
+  const openDetail = (c: ConnectorData) => {
+    setSelectedConnector(c);
+    setDetailOpen(true);
+  };
+
+  // Setup guides
   if (activeSetup) {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
         <Button variant="ghost" size="sm" onClick={() => setActiveSetup(null)} className="gap-1 mb-2">
-          ← {t("integrations.back", { defaultValue: "Voltar para Integrações" })}
+          ← Voltar para Conectores
         </Button>
         {activeSetup === "whatsapp" && <WhatsAppSetupGuide />}
         {activeSetup === "email" && <SendGridSetupGuide />}
@@ -356,205 +92,160 @@ const IntegrationsPage = () => {
     );
   }
 
-  // Count connected
-  const connectedCount = integrations.filter(ig => getConnectionStatus(ig) === "connected").length;
+  const connectedCount = connectors.filter(c => isConnected(c)).length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-6">
+      {/* Header */}
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="font-display text-3xl font-bold mb-1 flex items-center gap-2">
-          {t("nav.integrations", { defaultValue: "Integrações" })}
-          <HelpTooltip id="integrations-intro" text={t("integrations.help", { defaultValue: "Conecte seus agentes com WhatsApp, E-mail, LinkedIn, Meta Ads e mais. Cole suas chaves direto no card ou clique 'Passo a passo' para o tutorial completo." })} position="bottom" size={16} />
-        </h1>
-        <div className="flex items-center gap-3">
-          <p className="text-muted-foreground">{t("integrations.subtitle", { defaultValue: "Conecte seus agentes com as ferramentas que você já usa." })}</p>
-          {connectedCount > 0 && (
-            <Badge className="bg-primary/15 text-primary border-primary/20">
-              <CheckCircle className="h-3 w-3 mr-1" />
-              {connectedCount} {t("integrations.connected", { defaultValue: "conectada" })}{connectedCount > 1 ? "s" : ""}
-            </Badge>
-          )}
-        </div>
-      </motion.div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="flex items-center gap-3 p-3 rounded-xl bg-primary/5 border border-primary/10"
-      >
-        <Sparkles className="h-5 w-5 text-primary shrink-0" />
-        <p className="text-xs text-muted-foreground">
-          <strong className="text-foreground">{t("integrations.tip_label", { defaultValue: "Dica:" })}</strong> {t("integrations.tip_text", { defaultValue: "Já tem as credenciais? Clique no card e cole direto — sem precisar seguir o tutorial inteiro. Para integrações complexas, use o botão \"Passo a passo\"." })}
+        <h1 className="font-display text-3xl font-bold">Conectores</h1>
+        <p className="text-muted-foreground text-sm mt-1 max-w-2xl">
+          Conecte os agentes Clauthor aos seus aplicativos, arquivos e serviços. Os conectores permitem que seus agentes acessem dados e executem ações em ferramentas externas.
         </p>
       </motion.div>
 
-      <Tabs defaultValue="all" className="space-y-6">
-        <TabsList className="flex-wrap h-auto gap-1">
-          <TabsTrigger value="all">{t("integrations.tab_all", { defaultValue: "Todas" })}</TabsTrigger>
-          <TabsTrigger value="Comunicação">{t("integrations.tab_comm", { defaultValue: "Comunicação" })}</TabsTrigger>
-          <TabsTrigger value="Social">Social</TabsTrigger>
-          <TabsTrigger value="Ads">Ads</TabsTrigger>
-          <TabsTrigger value="CRM">CRM</TabsTrigger>
-          <TabsTrigger value="Produtividade">{t("integrations.tab_prod", { defaultValue: "Produtividade" })}</TabsTrigger>
-          <TabsTrigger value="outros">{t("integrations.tab_others", { defaultValue: "Outros" })}</TabsTrigger>
-        </TabsList>
+      {/* Search & Filters */}
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1 }}
+        className="flex flex-col sm:flex-row gap-3"
+      >
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Procurar conectores..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="pl-9 h-10 bg-muted/10 border-border/30"
+          />
+          {search && (
+            <button onClick={() => setSearch("")} className="absolute right-3 top-1/2 -translate-y-1/2">
+              <X className="h-3.5 w-3.5 text-muted-foreground hover:text-foreground" />
+            </button>
+          )}
+        </div>
+        <Select value={sortBy} onValueChange={setSortBy}>
+          <SelectTrigger className="w-[140px] h-10 bg-muted/10 border-border/30">
+            <SelectValue placeholder="Ordenar" />
+          </SelectTrigger>
+          <SelectContent>
+            {SORT_OPTIONS.map(o => (
+              <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={category} onValueChange={setCategory}>
+          <SelectTrigger className="w-[160px] h-10 bg-muted/10 border-border/30">
+            <SelectValue placeholder="Categorias" />
+          </SelectTrigger>
+          <SelectContent>
+            {categories.map(c => (
+              <SelectItem key={c} value={c}>{c}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </motion.div>
 
-        {["all", "Comunicação", "Social", "Ads", "CRM", "Produtividade", "outros"].map((tab) => {
-          const filtered = tab === "all"
-            ? integrations
-            : tab === "outros"
-            ? integrations.filter((ig) => !["Comunicação", "Social", "Ads", "CRM", "Produtividade"].includes(ig.category))
-            : integrations.filter((ig) => ig.category === tab);
+      {/* Connected count + manage button */}
+      <div className="flex items-center gap-3">
+        {connectedCount > 0 && (
+          <Badge className="bg-primary/15 text-primary border-primary/20 text-xs">
+            <CheckCircle className="h-3 w-3 mr-1" />
+            {connectedCount} conectado{connectedCount > 1 ? "s" : ""}
+          </Badge>
+        )}
+        <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8" onClick={() => setActiveSetup("whatsapp")}>
+          <Settings2 className="h-3.5 w-3.5" />
+          Gerenciar conectores
+        </Button>
+      </div>
+
+      {/* Connector Grid */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.15 }}
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+      >
+        {filtered.map((connector, i) => {
+          const connected = isConnected(connector);
+          const popularityLabel = connector.popularity === 1
+            ? "Mais popular"
+            : connector.popularity
+              ? `#${connector.popularity} popular`
+              : null;
 
           return (
-            <TabsContent key={tab} value={tab}>
-              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                {filtered.map((ig, i) => {
-                  const connectionStatus = getConnectionStatus(ig);
-                  const isExpanded = expandedCard === ig.integrationKey;
-                  const hasQuickFields = ig.quickFields && ig.quickFields.length > 0;
-
-                  return (
-                    <motion.div
-                      key={ig.name}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.04 }}
-                    >
-                      <Card className={`glass border-border hover:neon-border transition-all h-full ${
-                        connectionStatus === "connected" ? "border-primary/30 bg-primary/[0.02]" : ""
-                      }`}>
-                        <CardContent className="p-5 flex flex-col h-full">
-                          <div className="flex items-start justify-between mb-3">
-                            <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                              connectionStatus === "connected" ? "bg-primary/20 ring-1 ring-primary/30" : "bg-primary/10"
-                            }`}>
-                              <ig.icon className={`h-5 w-5 ${
-                                connectionStatus === "connected" ? "text-primary" : "text-muted-foreground"
-                              }`} />
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                              {connectionStatus === "connected" && (
-                                <Badge className="bg-primary/15 text-primary border-primary/20 text-[10px]">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse mr-1" />
-                                  {t("integrations.status_connected", { defaultValue: "Conectado" })}
-                                </Badge>
-                              )}
-                              {connectionStatus === "partial" && (
-                                <Badge className="bg-muted text-muted-foreground border-border text-[10px]">
-                                  {t("integrations.status_partial", { defaultValue: "Parcial" })}
-                                </Badge>
-                              )}
-                              {connectionStatus === "none" && (
-                                <Badge
-                                  variant="secondary"
-                                  className={ig.status === "Disponível" ? "bg-primary/15 text-primary" : ""}
-                                >
-                                  {ig.status === "Disponível" ? t("integrations.status_available", { defaultValue: "Disponível" }) : t("integrations.status_soon", { defaultValue: "Em Breve" })}
-                                </Badge>
-                              )}
-                            </div>
-                          </div>
-                          <h3 className="font-display font-semibold text-base mb-1">{ig.name}</h3>
-                          <p className="text-sm text-muted-foreground mb-3 flex-1">{ig.desc}</p>
-                          
-                          {/* Difficulty + Time + API info */}
-                          <div className="space-y-2 mb-3">
-                            <div className="flex items-center gap-3 text-xs text-muted-foreground">
-                              <span className="flex items-center gap-1">
-                                {"⭐".repeat(ig.difficultyStars)} {ig.difficulty}
-                              </span>
-                              <span className="flex items-center gap-1">
-                                <Clock className="h-3 w-3" />
-                                {ig.totalTime}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-1 text-[11px] text-muted-foreground/70">
-                              <Key className="h-3 w-3 shrink-0" />
-                              <span className="truncate">{ig.apiInfo}</span>
-                            </div>
-                          </div>
-
-                          {/* Quick connect expandable area */}
-                          {hasQuickFields && ig.status === "Disponível" && (
-                            <AnimatePresence>
-                              {isExpanded && (
-                                <motion.div
-                                  initial={{ height: 0, opacity: 0 }}
-                                  animate={{ height: "auto", opacity: 1 }}
-                                  exit={{ height: 0, opacity: 0 }}
-                                  transition={{ duration: 0.2 }}
-                                  className="overflow-hidden mb-3"
-                                >
-                                  <IntegrationQuickConnect
-                                    ig={ig}
-                                    connectedKeys={connectedMap[ig.integrationKey] || new Set()}
-                                    onSaved={() => refetchCreds()}
-                                  />
-                                </motion.div>
-                              )}
-                            </AnimatePresence>
-                          )}
-
-                          <div className="flex items-center gap-2">
-                            <Badge variant="outline" className="text-xs">{ig.category}</Badge>
-                          </div>
-
-                          {/* Action buttons */}
-                          <div className="flex gap-2 mt-3">
-                            {/* Quick connect toggle */}
-                            {hasQuickFields && ig.status === "Disponível" && connectionStatus !== "connected" && (
-                              <Button
-                                size="sm"
-                                variant={isExpanded ? "secondary" : "default"}
-                                className={`flex-1 gap-1.5 ${!isExpanded ? "neon-glow" : ""}`}
-                                onClick={() => setExpandedCard(isExpanded ? null : ig.integrationKey)}
-                              >
-                                {isExpanded ? (
-                                  <>{t("integrations.close", { defaultValue: "Fechar" })} <ChevronUp className="h-3.5 w-3.5" /></>
-                                ) : (
-                                  <>
-                                    <Zap className="h-3.5 w-3.5" />
-                                    {t("integrations.quick_connect", { defaultValue: "Conectar Rápido" })}
-                                  </>
-                                )}
-                              </Button>
-                            )}
-                            {/* Full wizard button */}
-                            {ig.hasSetup && ig.status === "Disponível" && (
-                              <Button
-                                size="sm"
-                                variant={hasQuickFields && connectionStatus !== "connected" ? "outline" : "default"}
-                                className={`gap-1.5 ${!hasQuickFields || connectionStatus === "connected" ? "flex-1 neon-glow" : ""}`}
-                                onClick={() => setActiveSetup(ig.setupKey!)}
-                              >
-                                {t("integrations.step_by_step", { defaultValue: "Passo a passo" })} <ArrowRight className="h-3.5 w-3.5" />
-                              </Button>
-                            )}
-                            {/* Non-setup available */}
-                            {!ig.hasSetup && ig.status === "Disponível" && !hasQuickFields && (
-                              <Button size="sm" variant="default" className="flex-1 neon-glow" disabled>
-                                {t("integrations.connect", { defaultValue: "Conectar" })}
-                              </Button>
-                            )}
-                            {/* Coming soon */}
-                            {ig.status !== "Disponível" && (
-                              <Button size="sm" variant="secondary" className="flex-1" disabled>
-                                {t("integrations.status_soon", { defaultValue: "Em Breve" })}
-                              </Button>
-                            )}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    </motion.div>
-                  );
-                })}
+            <motion.button
+              key={connector.integrationKey}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.03 }}
+              onClick={() => openDetail(connector)}
+              className={`group relative flex items-center gap-4 p-4 rounded-xl border text-left transition-all duration-200 hover:bg-muted/10 ${
+                connected
+                  ? "border-primary/25 bg-primary/[0.02]"
+                  : "border-border/30 bg-card/50"
+              } ${connector.status === "soon" ? "opacity-60" : ""}`}
+            >
+              {/* Icon */}
+              <div className={`w-11 h-11 rounded-xl flex items-center justify-center shrink-0 ${
+                connected ? "bg-primary/15" : "bg-muted/20"
+              }`}>
+                {connector.iconUrl ? (
+                  <img src={connector.iconUrl} alt={connector.name} className="w-6 h-6 rounded" />
+                ) : (
+                  <connector.icon className={`h-5 w-5 ${connected ? "text-primary" : "text-muted-foreground"}`} />
+                )}
               </div>
-            </TabsContent>
+
+              {/* Content */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <h3 className="font-display font-semibold text-sm">{connector.name}</h3>
+                  {popularityLabel && (
+                    <span className="text-[10px] text-muted-foreground/60">{popularityLabel}</span>
+                  )}
+                  {connected && (
+                    <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium ml-auto">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                      Vinculado
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{connector.shortDesc}</p>
+              </div>
+
+              {/* Action */}
+              <div className="shrink-0">
+                {connector.status === "soon" ? (
+                  <Badge variant="secondary" className="text-[10px]">Em breve</Badge>
+                ) : connected ? (
+                  <CheckCircle className="h-4 w-4 text-emerald-500" />
+                ) : (
+                  <Plus className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                )}
+              </div>
+            </motion.button>
           );
         })}
-      </Tabs>
+      </motion.div>
+
+      {filtered.length === 0 && (
+        <div className="text-center py-12 text-muted-foreground">
+          <p className="text-sm">Nenhum conector encontrado para "{search}"</p>
+        </div>
+      )}
+
+      {/* Detail Dialog */}
+      <ConnectorDetailDialog
+        connector={selectedConnector}
+        open={detailOpen}
+        onOpenChange={setDetailOpen}
+        connectedKeys={selectedConnector ? (connectedMap[selectedConnector.integrationKey] || new Set()) : new Set()}
+        onSaved={refetchCreds}
+      />
     </div>
   );
 };
