@@ -303,9 +303,16 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
           </div>
         </div>
 
+        {/* Waveform visualizer */}
+        <div className="px-4 pb-2">
+          <div className="p-2 rounded-xl bg-background/30 border border-border/5">
+            <WaveformVisualizer active={isTyping && !isPaused} />
+          </div>
+        </div>
+
         {/* Message area */}
         <div className="px-4 pb-3">
-          <div className="p-3 rounded-xl bg-background/40 border border-border/10 min-h-[60px]">
+          <div className="p-3 rounded-xl bg-background/40 border border-border/10 min-h-[50px]">
             <p className="text-[13px] leading-relaxed text-foreground/90">
               {displayedText}
               {isTyping && <span className="inline-block w-[2px] h-[14px] bg-primary ml-0.5 animate-pulse align-text-bottom" />}
