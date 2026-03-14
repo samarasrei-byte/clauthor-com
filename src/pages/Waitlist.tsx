@@ -7,7 +7,8 @@ import {
   Zap, CheckCircle2, Clock, ArrowRight, Sparkles, Shield, Star, Timer,
   Rocket, Gift, Crown, Lock, Play, Cpu, Users, Headphones, Target,
   Globe, Instagram, Twitter, Linkedin, Mail, TrendingUp, Bot, BrainCircuit,
-  Send, MessageSquare
+  Send, MessageSquare, Crosshair, PenTool, BarChart3, DollarSign, Smartphone,
+  Search, Settings, Palette, Truck, Scale, type LucideIcon
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -43,22 +44,22 @@ const trendingCountries = [
 ];
 
 // ── Simulated Chat Messages ──
-const SQUAD_AGENTS = [
-  { name: "SDR Outbound", emoji: "🎯", dept: "Prospecção" },
-  { name: "Copywriter IA", emoji: "✍️", dept: "Criação" },
-  { name: "Growth Hacker", emoji: "📈", dept: "Marketing" },
-  { name: "CFO Agent", emoji: "💰", dept: "Financeiro" },
-  { name: "Social Media", emoji: "📱", dept: "Comunicação" },
-  { name: "SEO Specialist", emoji: "🔍", dept: "Marketing" },
-  { name: "CS Agent", emoji: "🎧", dept: "Suporte" },
-  { name: "Data Analyst", emoji: "📊", dept: "Tecnologia" },
-  { name: "Closer Pro", emoji: "🤝", dept: "Comercial" },
-  { name: "Email Marketer", emoji: "📧", dept: "Marketing" },
-  { name: "Jurídico IA", emoji: "⚖️", dept: "Jurídico" },
-  { name: "RH Recruiter", emoji: "👥", dept: "RH" },
-  { name: "DevOps Agent", emoji: "⚙️", dept: "Tecnologia" },
-  { name: "Designer IA", emoji: "🎨", dept: "Criação" },
-  { name: "Logistics Pro", emoji: "🚚", dept: "Logística" },
+const SQUAD_AGENTS: { name: string; icon: LucideIcon; dept: string }[] = [
+  { name: "SDR Outbound", icon: Crosshair, dept: "Prospecção" },
+  { name: "Copywriter IA", icon: PenTool, dept: "Criação" },
+  { name: "Growth Hacker", icon: TrendingUp, dept: "Marketing" },
+  { name: "CFO Agent", icon: DollarSign, dept: "Financeiro" },
+  { name: "Social Media", icon: Smartphone, dept: "Comunicação" },
+  { name: "SEO Specialist", icon: Search, dept: "Marketing" },
+  { name: "CS Agent", icon: Headphones, dept: "Suporte" },
+  { name: "Data Analyst", icon: BarChart3, dept: "Tecnologia" },
+  { name: "Closer Pro", icon: Target, dept: "Comercial" },
+  { name: "Email Marketer", icon: Mail, dept: "Marketing" },
+  { name: "Jurídico IA", icon: Scale, dept: "Jurídico" },
+  { name: "RH Recruiter", icon: Users, dept: "RH" },
+  { name: "DevOps Agent", icon: Settings, dept: "Tecnologia" },
+  { name: "Designer IA", icon: Palette, dept: "Criação" },
+  { name: "Logistics Pro", icon: Truck, dept: "Logística" },
 ];
 
 interface SimMessage {
@@ -234,8 +235,8 @@ const LiveChatSimulation = () => {
         <div className="flex items-center gap-2">
           <div className="flex -space-x-1.5">
             {SQUAD_AGENTS.slice(0, 6).map((a, i) => (
-              <div key={i} className="w-5 h-5 rounded-full bg-primary/10 border border-background flex items-center justify-center text-[8px]">
-                {a.emoji}
+              <div key={i} className="w-5 h-5 rounded-full bg-primary/10 border border-background flex items-center justify-center">
+                <a.icon className="w-2.5 h-2.5 text-primary/70" strokeWidth={1.5} />
               </div>
             ))}
             <div className="w-5 h-5 rounded-full bg-primary/20 border border-background flex items-center justify-center text-[7px] text-primary font-bold">
@@ -258,10 +259,10 @@ const LiveChatSimulation = () => {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: i * 0.04 }}
-              className="flex items-center gap-1 px-1.5 py-0.5 rounded-md shrink-0"
+              className="flex items-center gap-1.5 px-2 py-1 rounded-md shrink-0 bg-card/30 border border-border/30 hover:border-primary/20 transition-colors group"
             >
-              <div className="w-1 h-1 bg-accent-emerald rounded-full" />
-              <span className="text-[8px] text-foreground/50 font-medium">{a.name}</span>
+              <a.icon className="w-3 h-3 text-primary/60 group-hover:text-primary transition-colors icon-modern" strokeWidth={1.5} />
+              <span className="text-[9px] text-foreground/60 font-medium tracking-wide">{a.name}</span>
             </motion.div>
           ))}
         </div>
