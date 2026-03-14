@@ -829,6 +829,20 @@ const ClientDashboard = () => {
         </div>
       </div>
 
+      {/* Thor Live Guide — floating onboarding assistant */}
+      {showLiveGuide && (
+        <Suspense fallback={null}>
+          <ThorLiveGuide
+            activeSection={activeSection}
+            onNavigate={handleSidebarNav}
+            onDismiss={() => {
+              setShowLiveGuide(false);
+              localStorage.setItem("clauthor_live_guide_dismissed", "true");
+            }}
+          />
+        </Suspense>
+      )}
+
       {/* Persistent mobile bottom navigation */}
       <MobileBottomNav
         activeSection={activeSection}
