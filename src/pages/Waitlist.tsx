@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
 import thorOrb from "@/assets/thor-orb.png";
+import clauthorLogo from "@/assets/clauthor-logo.png";
 
 const waitlistSchema = z.object({
   email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
