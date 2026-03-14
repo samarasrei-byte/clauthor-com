@@ -565,29 +565,45 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           )}
         </AnimatePresence>
 
-        <div className="flex items-center justify-center gap-3">
-          {/* Auto-voice toggle */}
+        <div className="flex items-center justify-center gap-2.5">
+          {/* Auto-voice toggle — glass pill */}
           <button
-          onClick={() => {
+            onClick={() => {
               const next = !autoSpeak;
               setAutoSpeak(next);
               if (!next) autoListenAfterSpeakRef.current = false;
               if (isSpeaking) stopSpeaking();
             }}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] text-muted-foreground/40 hover:text-muted-foreground border border-border/10 hover:border-border/30 transition-all"
+            className={`h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 ${
+              autoSpeak
+                ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)]"
+                : "bg-card/30 text-muted-foreground/40 border border-border/10 hover:text-muted-foreground hover:border-border/20"
+            }`}
+            title={autoSpeak ? "Voz ativa" : "Voz desativada"}
           >
-            {autoSpeak ? <Volume2 className="h-3 w-3" /> : <VolumeX className="h-3 w-3" />}
-            {autoSpeak ? "ON" : "OFF"}
+            {autoSpeak ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
           </button>
 
-          {/* Main action button */}
+          {/* Webcam toggle */}
+          <button
+            onClick={toggleWebcam}
+            className={`h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 ${
+              webcamActive
+                ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)]"
+                : "bg-card/30 text-muted-foreground/40 border border-border/10 hover:text-muted-foreground hover:border-border/20"
+            }`}
+            title="Câmera"
+          >
+            {webcamActive ? <Video className="h-3.5 w-3.5" /> : <VideoOff className="h-3.5 w-3.5" />}
+          </button>
+
+          {/* ─── MAIN ACTION BUTTON ─── */}
           {isSpeaking ? (
-            // Thor is speaking — show TWO buttons: stop and barge-in
             <div className="flex items-center gap-2">
-              {/* STOP button — fully stop speaking without restarting */}
-              <Button
-                size="icon"
-                className="h-12 w-12 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_20px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="h-12 w-12 rounded-2xl bg-card/40 backdrop-blur-xl border border-border/15 text-muted-foreground hover:text-destructive hover:border-destructive/30 flex items-center justify-center transition-all duration-300 shadow-[0_4px_20px_hsl(var(--background)/0.5)]"
                 onClick={() => {
                   clearPendingRestart();
                   autoListenAfterSpeakRef.current = false;
@@ -599,34 +615,47 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                     setIsListening(false);
                   }
                 }}
-                title="Parar Thor"
+                title="Parar"
               >
-                <Square className="h-5 w-5" />
-              </Button>
-              {/* BARGE-IN button — stop Thor and start listening */}
-              <Button
-                size="icon"
-                className="h-16 w-16 rounded-full bg-accent/20 text-primary border-2 border-primary/30 shadow-[0_0_30px_hsl(var(--primary)/0.15)] hover:bg-primary/20 transition-all duration-300 animate-pulse"
+                <Square className="h-4 w-4" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.92 }}
+                className="h-16 w-16 rounded-full relative flex items-center justify-center"
                 onClick={handleBargeIn}
                 title="Interromper e falar"
               >
-                <Mic className="h-6 w-6" />
-              </Button>
+                <span className="absolute inset-0 rounded-full bg-primary/10 backdrop-blur-xl border border-primary/20 shadow-[0_0_30px_hsl(var(--primary)/0.15)]" />
+                <motion.span
+                  className="absolute inset-[-2px] rounded-full border border-primary/30"
+                  animate={{ scale: [1, 1.08, 1], opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <Mic className="h-6 w-6 text-primary relative z-10" />
+              </motion.button>
             </div>
           ) : isStreaming || isLoading ? (
-            // Processing — show stop
-            <Button
-              size="icon"
-              className="h-16 w-16 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.92 }}
+              className="h-16 w-16 rounded-full relative flex items-center justify-center"
               onClick={handleStop}
             >
-              <Square className="h-6 w-6" />
-            </Button>
+              <span className="absolute inset-0 rounded-full bg-destructive/10 backdrop-blur-xl border border-destructive/20 shadow-[0_0_30px_hsl(var(--destructive)/0.15)]" />
+              <motion.span
+                className="absolute inset-[-2px] rounded-full border border-destructive/30"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                style={{ borderTopColor: "transparent", borderRightColor: "transparent" }}
+              />
+              <Square className="h-6 w-6 text-destructive relative z-10" />
+            </motion.button>
           ) : isListening ? (
-            // Listening — show active mic, tap to stop
-            <Button
-              size="icon"
-              className="h-16 w-16 rounded-full bg-destructive/80 text-destructive-foreground shadow-[0_0_30px_hsl(var(--destructive)/0.3)] hover:bg-destructive transition-all duration-300"
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.92 }}
+              className="h-16 w-16 rounded-full relative flex items-center justify-center"
               onClick={() => {
                 clearPendingRestart();
                 manualStopRef.current = true;
@@ -635,55 +664,50 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                 setIsListening(false);
               }}
             >
-              <MicOff className="h-6 w-6" />
-            </Button>
+              <span className="absolute inset-0 rounded-full bg-primary/10 backdrop-blur-xl border border-primary/25 shadow-[0_0_30px_hsl(var(--primary)/0.2)]" />
+              <motion.span
+                className="absolute inset-[-3px] rounded-full border-2 border-primary/20"
+                animate={{ scale: [1, 1.12, 1], opacity: [0.3, 0.8, 0.3] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <MicOff className="h-6 w-6 text-primary relative z-10" />
+            </motion.button>
           ) : (
-            // Idle — tap to start listening
-            <Button
-              size="icon"
-              className="h-16 w-16 rounded-full bg-primary/10 text-primary hover:bg-primary/20 hover:shadow-[0_0_20px_hsl(var(--primary)/0.15)] transition-all duration-300"
+            <motion.button
+              whileHover={{ scale: 1.08 }}
+              whileTap={{ scale: 0.92 }}
+              className="h-16 w-16 rounded-full relative flex items-center justify-center group"
               onClick={() => startListeningRef.current?.()}
             >
-              <Mic className="h-6 w-6" />
-            </Button>
+              <span className="absolute inset-0 rounded-full bg-card/30 backdrop-blur-xl border border-border/15 group-hover:border-primary/20 group-hover:bg-primary/5 shadow-[0_4px_20px_hsl(var(--background)/0.5)] transition-all duration-300" />
+              <Mic className="h-6 w-6 text-muted-foreground/60 group-hover:text-primary transition-colors duration-300 relative z-10" />
+            </motion.button>
           )}
 
-          {/* Webcam toggle */}
-          <button
-            onClick={toggleWebcam}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
-              webcamActive
-                ? "text-primary border-primary/30 bg-primary/5"
-                : "text-muted-foreground/40 border-border/10 hover:text-muted-foreground hover:border-border/30"
-            }`}
-          >
-            {webcamActive ? <Video className="h-3 w-3" /> : <VideoOff className="h-3 w-3" />}
-            Cam
-          </button>
-
+          {/* Text toggle */}
           <button
             onClick={() => setShowTextInput(!showTextInput)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
+            className={`h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 ${
               showTextInput
-                ? "text-primary border-primary/30 bg-primary/5"
-                : "text-muted-foreground/40 border-border/10 hover:text-muted-foreground hover:border-border/30"
+                ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)]"
+                : "bg-card/30 text-muted-foreground/40 border border-border/10 hover:text-muted-foreground hover:border-border/20"
             }`}
+            title="Texto"
           >
-            <Keyboard className="h-3 w-3" />
-            Texto
+            <Keyboard className="h-3.5 w-3.5" />
           </button>
 
           {/* Chat panel toggle */}
           <button
             onClick={() => setShowChat(!showChat)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] border transition-all ${
+            className={`h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 ${
               showChat
-                ? "text-primary border-primary/30 bg-primary/5"
-                : "text-muted-foreground/40 border-border/10 hover:text-muted-foreground hover:border-border/30"
+                ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)]"
+                : "bg-card/30 text-muted-foreground/40 border border-border/10 hover:text-muted-foreground hover:border-border/20"
             }`}
+            title="Chat"
           >
-            <MessageSquare className="h-3 w-3" />
-            Chat
+            <MessageSquare className="h-3.5 w-3.5" />
           </button>
 
           {/* Clear */}
@@ -697,9 +721,10 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                 handleStop();
                 onClear();
               }}
-              className="flex items-center gap-1 px-2 py-1.5 rounded-full text-[10px] text-muted-foreground/30 hover:text-destructive border border-border/10 hover:border-destructive/30 transition-all"
+              className="h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl bg-card/30 text-muted-foreground/30 border border-border/10 hover:text-destructive hover:border-destructive/20 transition-all duration-300"
+              title="Limpar"
             >
-              <Trash2 className="h-3 w-3" />
+              <Trash2 className="h-3.5 w-3.5" />
             </button>
           )}
         </div>
