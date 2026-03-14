@@ -7,7 +7,8 @@ import {
   Zap, CheckCircle2, Clock, ArrowRight, Sparkles, Shield, Star, Timer,
   Rocket, Gift, Crown, Lock, Play, Cpu, Users, Headphones, Target,
   Globe, Instagram, Twitter, Linkedin, Mail, TrendingUp, Bot, BrainCircuit,
-  Send, MessageSquare
+  Send, MessageSquare, Crosshair, PenTool, BarChart3, DollarSign, Smartphone,
+  Search, Settings, Palette, Truck, Scale, type LucideIcon
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
