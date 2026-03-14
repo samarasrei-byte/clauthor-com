@@ -308,7 +308,7 @@ const ClientDashboard = () => {
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
 
     // Coming soon features
-    { id: "mission-control", label: "Mission Control", icon: Rocket, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    { id: "mission-control", label: "Mission Control", icon: Rocket, group: moreGroup },
     { id: "agent-memory", label: "Agent Memory", icon: Network, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
     { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
     { id: "voice-first", label: "Voice-First", icon: Mic, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
