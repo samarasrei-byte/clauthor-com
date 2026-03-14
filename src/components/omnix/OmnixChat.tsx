@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import ReactMarkdown from "react-markdown";
 import ChatFeedback from "@/components/dashboard/ChatFeedback";
 import OmnixOrb from "./OmnixOrb";
-import type { OmnixMessage, OmnixConfig } from "@/hooks/useOmnix";
+import type { OmnixConfig, OmnixMessage } from "@/hooks/useOmnix";
 import { useTranslation } from "react-i18next";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import { useVoiceActivityDetection } from "@/hooks/useVoiceActivityDetection";
