@@ -371,20 +371,21 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     };
   }, [clearPendingRestart]);
 
-  // Auto-start hands-free listening once (after first load)
+  // Auto-start hands-free listening when idle (after greeting/TTS cycle completes)
   useEffect(() => {
-    if (autoStartAttemptedRef.current) return;
     if (showTextInput) return;
+    if (isListening || isSpeaking || isStreaming || isLoading) return;
+    if (messages.length === 0) return; // Wait for at least the greeting exchange
 
-    autoStartAttemptedRef.current = true;
+    // Only auto-start if no recognition is active and we're truly idle
     const timer = setTimeout(() => {
-      if (!isListening && !isSpeaking && !isStreaming && !isLoading) {
+      if (!recognitionRef.current && !manualStopRef.current && autoListenAfterSpeakRef.current !== false) {
         startListeningRef.current?.();
       }
-    }, 700);
+    }, 800);
 
     return () => clearTimeout(timer);
-  }, [showTextInput, isListening, isSpeaking, isStreaming, isLoading, startListening]);
+  }, [showTextInput, isListening, isSpeaking, isStreaming, isLoading, messages.length]);
 
   const toggleVoice = () => {
     if (isStreaming || isLoading) return;
