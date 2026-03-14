@@ -84,6 +84,10 @@ const ClientDashboard = () => {
   const [omnixMounted, setOmnixMounted] = useState(false);
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
   const [showBoardGate, setShowBoardGate] = useState(false);
+  const [showLiveGuide, setShowLiveGuide] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !localStorage.getItem("clauthor_live_guide_dismissed");
+  });
 
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
 
