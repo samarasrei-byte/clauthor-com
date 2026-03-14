@@ -268,11 +268,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           manualStopRef.current = true;
           restartAttemptsRef.current = 0;
           clearPendingRestart();
+          autoListenAfterSpeakRef.current = false;
           setInput("");
           if (currentLive.isSpeaking) stopSpeaking();
           if (currentLive.isStreaming) onStop();
           recognition.stop();
-          queueRestartListening(180);
+          setIsListening(false);
+          // Do NOT restart listening — user explicitly asked to stop
           return;
         }
 
