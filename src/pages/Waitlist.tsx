@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
 import thorOrb from "@/assets/thor-orb.png";
+import clauthorLogo from "@/assets/clauthor-logo.png";
 
 const waitlistSchema = z.object({
   email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
@@ -450,9 +451,7 @@ const Waitlist = () => {
         <div className="backdrop-blur-xl bg-background/40 border-b border-primary/5">
           <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center backdrop-blur-sm">
-                <span className="font-display text-primary font-bold text-sm">C</span>
-              </div>
+              <img src={clauthorLogo} alt="Clauthor" className="h-8 w-auto" />
               <span className="font-display font-bold text-foreground text-sm tracking-tight">Clauthor</span>
             </motion.div>
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
