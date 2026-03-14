@@ -60,6 +60,7 @@ const Integrations = lazy(() => import("./Integrations"));
 const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
 const ControlTowerSection = lazy(() => import("@/pages/ControlTower"));
 const MissionControl = lazy(() => import("@/components/dashboard/MissionControl"));
+const ThorLiveGuide = lazy(() => import("@/components/dashboard/ThorLiveGuide"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
 
@@ -83,6 +84,10 @@ const ClientDashboard = () => {
   const [omnixMounted, setOmnixMounted] = useState(false);
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
   const [showBoardGate, setShowBoardGate] = useState(false);
+  const [showLiveGuide, setShowLiveGuide] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !localStorage.getItem("clauthor_live_guide_dismissed");
+  });
 
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
 
@@ -823,6 +828,20 @@ const ClientDashboard = () => {
           )}
         </div>
       </div>
+
+      {/* Thor Live Guide — floating onboarding assistant */}
+      {showLiveGuide && (
+        <Suspense fallback={null}>
+          <ThorLiveGuide
+            activeSection={activeSection}
+            onNavigate={handleSidebarNav}
+            onDismiss={() => {
+              setShowLiveGuide(false);
+              localStorage.setItem("clauthor_live_guide_dismissed", "true");
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Persistent mobile bottom navigation */}
       <MobileBottomNav
