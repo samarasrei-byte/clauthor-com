@@ -446,19 +446,8 @@ serve(async (req) => {
         }), { headers });
       }
 
-      // ── LIST PLATFORM CREDENTIALS (admin only) ──
+      // ── LIST PLATFORM CREDENTIALS (all authenticated users — masked values only) ──
       case "list_platform": {
-        const { data: roleCheck } = await adminClient
-          .from("user_roles")
-          .select("role")
-          .eq("user_id", userId)
-          .eq("role", "admin")
-          .single();
-
-        if (!roleCheck) {
-          return new Response(JSON.stringify({ error: "Admin access required" }), { status: 403, headers });
-        }
-
         const { data: platCreds } = await adminClient
           .from("platform_credentials")
           .select("id, integration_name, credential_key, is_active, description, created_at, updated_at")
