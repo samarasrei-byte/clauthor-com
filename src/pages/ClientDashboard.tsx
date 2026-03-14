@@ -807,8 +807,15 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {/* ═══ MISSION CONTROL ═══ */}
+                {activeSection === "mission-control" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <MissionControl />
+                  </Suspense>
+                )}
+
                 {/* ═══ COMING SOON FEATURES ═══ */}
-                {["mission-control", "agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
+                {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
                   <ComingSoonSection feature={activeSection} />
                 )}
               </div>
