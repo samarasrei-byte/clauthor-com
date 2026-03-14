@@ -28,12 +28,12 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
     // Don't greet if post-payment or initial message will be sent
     if (postPaymentContext || initialMessage) return;
 
-    // Check if already greeted this session
-    const greeted = sessionStorage.getItem(GREETING_KEY);
+    // Check if already greeted (persist across sessions with localStorage)
+    const greeted = localStorage.getItem(GREETING_KEY);
     if (greeted) return;
 
     greetingSent.current = true;
-    sessionStorage.setItem(GREETING_KEY, "1");
+    localStorage.setItem(GREETING_KEY, "1");
 
     // Check for hire intent from onboarding
     const hireIntent = localStorage.getItem("hireIntent");
