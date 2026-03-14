@@ -78,46 +78,86 @@ const GUIDE_STEPS: GuideStep[] = [
   },
 ];
 
-// ─── Immersive Voice Waveform ───
-const WAVE_BARS = 24;
+// ─── Premium Waveform Visualizer (Siri-level) ───
+const WAVE_BARS = 32;
 
-const WaveformVisualizer = ({ active, compact = false }: { active: boolean; compact?: boolean }) => {
-  const heights = useRef(
-    Array.from({ length: WAVE_BARS }, () => 0.15 + Math.random() * 0.15)
+type WaveMode = "speaking" | "listening" | "idle";
+
+const WaveformVisualizer = ({ mode }: { mode: WaveMode }) => {
+  const seeds = useRef(
+    Array.from({ length: WAVE_BARS }, () => Math.random())
   ).current;
 
   return (
-    <div className={cn(
-      "flex items-end justify-center gap-[2px] w-full",
-      compact ? "h-5" : "h-10"
-    )}>
-      {heights.map((base, i) => {
-        const center = Math.abs(i - WAVE_BARS / 2) / (WAVE_BARS / 2);
-        const maxH = compact ? 18 : 38;
-        const minH = compact ? 3 : 4;
-        const peakH = maxH * (1 - center * 0.6);
+    <div className="relative w-full h-12 flex items-center justify-center">
+      {/* Glow backdrop */}
+      <motion.div
+        className="absolute inset-0 rounded-xl"
+        animate={{
+          background: mode === "speaking"
+            ? "radial-gradient(ellipse at center, hsl(var(--primary) / 0.12) 0%, transparent 70%)"
+            : mode === "listening"
+            ? "radial-gradient(ellipse at center, hsl(var(--primary) / 0.06) 0%, transparent 70%)"
+            : "radial-gradient(ellipse at center, hsl(var(--primary) / 0.03) 0%, transparent 70%)",
+        }}
+        transition={{ duration: 0.6 }}
+      />
 
-        return (
-          <motion.div
-            key={i}
-            className="rounded-full bg-primary/80"
-            style={{ width: compact ? 2 : 3 }}
-            animate={active ? {
-              height: [minH, peakH * (0.5 + base), minH, peakH * (0.3 + base * 0.5), minH],
-              opacity: [0.5, 1, 0.6, 0.9, 0.5],
-            } : {
-              height: minH,
-              opacity: 0.25,
-            }}
-            transition={active ? {
-              duration: 1.2 + base * 0.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: i * 0.04,
-            } : { duration: 0.4 }}
-          />
-        );
-      })}
+      {/* Bars */}
+      <div className="flex items-center gap-[1.5px] h-full z-10">
+        {seeds.map((seed, i) => {
+          const center = Math.abs(i - WAVE_BARS / 2) / (WAVE_BARS / 2);
+          const envelope = 1 - center * center; // parabolic envelope
+          const peakH = 40 * envelope;
+          const idleH = 3 + envelope * 5; // breathing idle height
+
+          const speakingAnim = {
+            height: [idleH, peakH * (0.4 + seed * 0.6), idleH * 1.5, peakH * (0.2 + seed * 0.4), idleH],
+            opacity: [0.4, 0.95, 0.5, 0.85, 0.4],
+          };
+
+          const listeningAnim = {
+            height: [idleH, idleH + envelope * 8, idleH, idleH + envelope * 5, idleH],
+            opacity: [0.3, 0.6, 0.35, 0.55, 0.3],
+          };
+
+          const idleAnim = {
+            height: [idleH * 0.8, idleH * 1.2, idleH * 0.8],
+            opacity: [0.15, 0.25, 0.15],
+          };
+
+          const anim = mode === "speaking" ? speakingAnim
+            : mode === "listening" ? listeningAnim
+            : idleAnim;
+
+          const dur = mode === "speaking" ? 0.6 + seed * 0.6
+            : mode === "listening" ? 2 + seed * 1.5
+            : 3 + seed * 2;
+
+          return (
+            <motion.div
+              key={i}
+              className="rounded-full"
+              style={{
+                width: 2.5,
+                background: mode === "speaking"
+                  ? `linear-gradient(to top, hsl(var(--primary) / 0.6), hsl(var(--primary)))`
+                  : `hsl(var(--primary) / ${mode === "listening" ? 0.5 : 0.2})`,
+                boxShadow: mode === "speaking" && envelope > 0.5
+                  ? "0 0 6px hsl(var(--primary) / 0.3)"
+                  : "none",
+              }}
+              animate={anim}
+              transition={{
+                duration: dur,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: i * 0.025,
+              }}
+            />
+          );
+        })}
+      </div>
     </div>
   );
 };
@@ -263,12 +303,9 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
                 <span className="text-sm font-semibold">Thor</span>
                 <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium">GUIDE</span>
               </div>
-              <div className="flex items-center gap-2 mt-0.5">
-                <WaveformVisualizer active={isTyping && !isPaused} compact />
-                <span className="text-[10px] text-muted-foreground">
-                  {isPaused ? "Paused" : isTyping ? "Speaking..." : "Listening"}
-                </span>
-              </div>
+              <span className="text-[10px] text-muted-foreground mt-0.5 block">
+                {isPaused ? "Paused" : isTyping ? "Speaking..." : "Listening"}
+              </span>
             </div>
 
             {/* Controls */}
@@ -306,7 +343,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         {/* Waveform visualizer */}
         <div className="px-4 pb-2">
           <div className="p-2 rounded-xl bg-background/30 border border-border/5">
-            <WaveformVisualizer active={isTyping && !isPaused} />
+            <WaveformVisualizer mode={isPaused ? "idle" : isTyping ? "speaking" : "listening"} />
           </div>
         </div>
 
