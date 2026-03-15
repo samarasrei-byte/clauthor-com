@@ -574,6 +574,17 @@ export const agentCapabilities: Record<string, string[]> = {
   credit_recovery: ["Serasa", "Negociação", "Score"],
 };
 
+// ─── Auto-fill missing agents from workforce architecture ───
+for (const slug of agentKeys) {
+  if (!(slug in agentIcons)) agentIcons[slug] = getDefaultIcon(slug);
+  if (!(slug in agentTiers)) agentTiers[slug] = getDefaultTier(slug);
+  if (!(slug in agentPriceTiers)) agentPriceTiers[slug] = getDefaultPriceTier(slug);
+  if (!(slug in agentTags)) agentTags[slug] = getDefaultTags(slug);
+  if (!(slug in agentIntegrations)) agentIntegrations[slug] = getDefaultIntegrations(slug);
+  if (!(slug in agentSocialProof)) agentSocialProof[slug] = getDefaultSocialProof(slug);
+  if (!(slug in agentCapabilities)) agentCapabilities[slug] = getDefaultCapabilities(slug);
+}
+
 export const tierColors: Record<string, string> = {
   basic: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
   intermediate: "bg-cyan-500/10 text-cyan-400 border-cyan-500/20",
