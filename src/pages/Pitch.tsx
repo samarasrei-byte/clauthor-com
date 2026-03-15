@@ -84,13 +84,13 @@ const AnimatedBar = ({ label, pct, color }: { label: string; pct: number; color:
 /* ── Investor Agent Chat (auto-plays conversation) ── */
 const investorConversation = [
   { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora? Vi que vocês têm 200 agentes." },
-  { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 200 agentes distribuídos em 7 departamentos e 37 squads — totalmente operacionais, infraestrutura pronta, e um mercado de US$ 1,8 trilhão até 2030. Você entra antes da escala explodir." },
+  { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 200 agentes distribuídos em 15 departamentos e 37 squads — totalmente operacionais, infraestrutura pronta, e um mercado de US$ 1,8 trilhão até 2030. Você entra antes da escala explodir." },
   { role: "investor" as const, text: "Mas o mercado de IA está saturado. Qual o diferencial?" },
   { role: "agent" as const, text: "Ninguém faz o que nós fazemos: substituir departamentos inteiros com squads coordenados de IA. 200 agentes especializados organizados como uma empresa real — Marketing, Growth, Product, Sales, CS, Finance e Operations. Não vendemos chatbots — vendemos operações completas 24/7." },
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B com ticket médio de US$ 199/mês por squad. Com 1.000 clientes, são quase US$ 2,4M/ano em receita recorrente. LTV alto, churn baixo." },
   { role: "investor" as const, text: "Mas US$ 250K de valuation? Não é arriscado?" },
-  { role: "agent" as const, text: "É exatamente o contrário — é a melhor janela para o investidor. US$ 250K reflete o valor da ideia e de toda a arquitetura já construída: 200 agentes, 7 departamentos, 37 squads, 4.100+ leads. Startups com apenas um deck captam a US$ 2-5M. Com US$ 50K você garante 20% de equity antes da escala." },
+  { role: "agent" as const, text: "É exatamente o contrário — é a melhor janela para o investidor. US$ 250K reflete o valor da ideia e de toda a arquitetura já construída: 200 agentes, 15 departamentos, 37 squads, 4.100+ leads. Startups com apenas um deck captam a US$ 2-5M. Com US$ 50K você garante 20% de equity antes da escala." },
   { role: "investor" as const, text: "Quais são os riscos?" },
   { role: "agent" as const, text: "O risco de NÃO investir é maior. Automação B2B não é tendência — é inevitável. 20% de equity a US$ 250K de valuation é uma oportunidade que não vai se repetir após o lançamento." },
   { role: "investor" as const, text: "Como eu entro?" },
@@ -173,7 +173,7 @@ const ValuationDefense = () => {
     {
       icon: Cpu,
       title: "Produto Funcional (não é MVP)",
-      desc: "200 agentes autônomos operacionais em 7 departamentos e 37 squads. Plataforma completa com orquestração multi-agente, memória persistente e motor de autonomia Nível 3.",
+      desc: "200 agentes autônomos operacionais em 15 departamentos e 37 squads. Plataforma completa com orquestração multi-agente, memória persistente e motor de autonomia Nível 3.",
     },
     {
       icon: Users,
@@ -583,7 +583,7 @@ const Pitch = () => {
               </div>
               <ul className="space-y-3">
                 {[
-                  "200 agentes autônomos em 7 departamentos",
+                  "200 agentes autônomos em 15 departamentos",
                   "37 squads especializados operacionais",
                   "4.100+ leads na whitelist",
                   "Valuation: US$ 250K (20% por US$ 50K)",
