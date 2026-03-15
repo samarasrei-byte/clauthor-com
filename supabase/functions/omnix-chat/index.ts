@@ -412,10 +412,11 @@ serve(async (req) => {
 
     const lastUserMessage = (messages || []).filter((m: any) => m.role === "user").pop()?.content?.toLowerCase?.() || "";
     const platformIntentRegex = /(agente|tarefa|relat[óo]rio|cr[ée]dito|plano|dashboard|empresa|neg[óo]cio|vendas|opera[cç][ãa]o|squad|automa[cç][ãa]o|integra[cç][ãa]o|lead|reuni[aã]o|board|an[aá]lise|meta|thor|omnix|clauthor|plataforma)/i;
-    const toolIntentRegex = /(criar|gera|gerar|agendar|delegar|buscar|procurar|analisar|salvar|revogar|remover|deletar|executar|fazer agora|agenda|task|report|credentials?)/i;
+    const toolIntentRegex = /(criar|crie|cria|gera|gerar|agendar|delegar|buscar|procurar|analisar|salvar|revogar|remover|deletar|executar|fazer agora|agenda|task|report|credentials?|configur|ativ|lista|mostr|ver credenciais|exclu|cancel)/i;
 
     const needsOperationalContext = platformIntentRegex.test(lastUserMessage);
-    const shouldAttemptTools = needsOperationalContext && toolIntentRegex.test(lastUserMessage);
+    // Tools trigger on EITHER explicit tool verbs OR platform context + action verbs
+    const shouldAttemptTools = toolIntentRegex.test(lastUserMessage) || (needsOperationalContext && lastUserMessage.length > 15);
 
     let agents: any[] = [];
     let credits: any = null;
@@ -468,13 +469,16 @@ ESTILO: tom ${tone} | formato ${responseStyle} | autonomia ${autonomy}.${operati
 
 Quando houver pedido claro de ação na plataforma, use tools com segurança e sem expor credenciais.`;
 
+    // Trim conversation history to last 30 messages to avoid context overflow
+    const trimmedMessages = messages.length > 30 ? messages.slice(-30) : messages;
+
     // Build AI messages — include image in last user message if available
     const aiMessages: any[] = [
       { role: "system", content: systemPrompt },
     ];
 
-    for (const m of messages) {
-      if (m === messages[messages.length - 1] && m.role === "user" && imageBase64) {
+    for (const m of trimmedMessages) {
+      if (m === trimmedMessages[trimmedMessages.length - 1] && m.role === "user" && imageBase64) {
         // Multimodal message with image
         aiMessages.push({
           role: "user",
@@ -497,12 +501,12 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
         model: chatModel,
         messages: aiMessages,
         stream: false,
-        max_tokens: 600,
+        max_tokens: 1200,
         temperature: 0.2,
         tools: ALL_TOOLS,
         tool_choice: "auto",
       }, {
-        complexity: "complex",
+        complexity: "auto",
       });
 
       if (toolResponse.ok) {
@@ -539,23 +543,25 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
             model: chatModel,
             messages: [...aiMessages, choice.message, ...toolResults],
             stream: true,
-            max_tokens: 600,
+            max_tokens: 1200,
             temperature: 0.25,
           }, {
-            complexity: "complex",
+            complexity: "auto",
           });
 
           if (finalResponse.ok) {
             const toolMgmtTokens = (toolData.usage?.total_tokens || 300) + 380;
             supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_tool_exec", tokens_used: toolMgmtTokens, model: chatModel }).then(() => {});
-            supabase.from("execution_logs").insert({
-              user_id: user.id,
-              agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-              action: "tool_execution",
-              status: "success",
-              execution_time_ms: Date.now() - startTime,
-              details: { type: "omnix_tool_exec", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
-            }).then(() => {});
+            if (activeAgents[0]?.id) {
+              supabase.from("execution_logs").insert({
+                user_id: user.id,
+                agent_id: activeAgents[0].id,
+                action: "tool_execution",
+                status: "success",
+                execution_time_ms: Date.now() - startTime,
+                details: { type: "omnix_tool_exec", tool_calls: toolCalls.map((tc: any) => tc.function.name) },
+              }).then(() => {});
+            }
             return new Response(finalResponse.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
           }
         }
@@ -564,14 +570,16 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
           const sseData = `data: ${JSON.stringify({ choices: [{ delta: { content: choice.message.content } }] })}\n\ndata: [DONE]\n\n`;
           const directTokens = toolData.usage?.total_tokens || 220;
           supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: directTokens, model: chatModel }).then(() => {});
-          supabase.from("execution_logs").insert({
-            user_id: user.id,
-            agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-            action: "chat",
-            status: "success",
-            execution_time_ms: Date.now() - startTime,
-            details: { type: "omnix_chat_direct" },
-          }).then(() => {});
+          if (activeAgents[0]?.id) {
+            supabase.from("execution_logs").insert({
+              user_id: user.id,
+              agent_id: activeAgents[0].id,
+              action: "chat",
+              status: "success",
+              execution_time_ms: Date.now() - startTime,
+              details: { type: "omnix_chat_direct" },
+            }).then(() => {});
+          }
           return new Response(sseData, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
         }
       }
@@ -583,9 +591,9 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
       messages: aiMessages,
       stream: true,
       temperature: 0.25,
-      max_tokens: 600,
+      max_tokens: 1200,
     }, {
-      complexity: "complex",
+      complexity: "auto",
     });
 
     if (!response.ok) {
@@ -601,14 +609,16 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
     const omnixEstimatedTokens = inputTokens + 400;
 
     supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: chatModel }).then(() => {});
-    supabase.from("execution_logs").insert({
-      user_id: user.id,
-      agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-      action: "chat",
-      status: "success",
-      execution_time_ms: Date.now() - startTime,
-      details: { type: "omnix_chat_fallback", model: chatModel },
-    }).then(() => {});
+    if (activeAgents[0]?.id) {
+      supabase.from("execution_logs").insert({
+        user_id: user.id,
+        agent_id: activeAgents[0].id,
+        action: "chat",
+        status: "success",
+        execution_time_ms: Date.now() - startTime,
+        details: { type: "omnix_chat_stream", model: chatModel },
+      }).then(() => {});
+    }
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
   } catch (e) {
