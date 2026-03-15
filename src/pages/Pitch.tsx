@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
-import { Bot, Clock, Shield, Globe, Headphones, Receipt, Code, Scale, Brain, UserCheck, TrendingUp, Zap, Lock, Users, ArrowRight, MessageCircle, CheckCircle2, Target, Building2, Megaphone, DollarSign, Cpu, BarChart3, Layers, Rocket, Star, Award, Gem } from "lucide-react";
+import { Bot, Clock, Shield, Globe, Headphones, Receipt, Code, Scale, Brain, UserCheck, TrendingUp, Zap, Lock, Users, ArrowRight, MessageCircle, CheckCircle2, Target, Building2, Megaphone, DollarSign, Cpu, BarChart3, Layers, Rocket, Star, Award, Gem, ChevronRight, Network, Briefcase } from "lucide-react";
+import { WORKFORCE, TOTAL_WORKFORCE_AGENTS, TOTAL_SQUADS, TOTAL_DEPARTMENTS } from "@/data/workforceArchitecture";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -82,14 +83,14 @@ const AnimatedBar = ({ label, pct, color }: { label: string; pct: number; color:
 
 /* ── Investor Agent Chat (auto-plays conversation) ── */
 const investorConversation = [
-  { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-  { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 83 agentes totalmente operacionais, infraestrutura pronta, e um mercado de US$ 1,8 trilhão até 2030. Você entra antes da escala explodir." },
+  { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora? Vi que vocês têm 200 agentes." },
+  { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 200 agentes distribuídos em 7 departamentos e 37 squads — totalmente operacionais, infraestrutura pronta, e um mercado de US$ 1,8 trilhão até 2030. Você entra antes da escala explodir." },
   { role: "investor" as const, text: "Mas o mercado de IA está saturado. Qual o diferencial?" },
-  { role: "agent" as const, text: "Ninguém faz o que nós fazemos: substituir departamentos inteiros com squads coordenados de IA. Não vendemos chatbots — vendemos operações completas. Suporte, financeiro, compliance, tudo rodando 24/7." },
+  { role: "agent" as const, text: "Ninguém faz o que nós fazemos: substituir departamentos inteiros com squads coordenados de IA. 200 agentes especializados organizados como uma empresa real — Marketing, Growth, Product, Sales, CS, Finance e Operations. Não vendemos chatbots — vendemos operações completas 24/7." },
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B com ticket médio de US$ 199/mês por squad. Com 1.000 clientes, são quase US$ 2,4M/ano em receita recorrente. LTV alto, churn baixo." },
   { role: "investor" as const, text: "Mas US$ 500K de valuation não é baixo demais?" },
-  { role: "agent" as const, text: "Na verdade, é o ponto ideal para o investidor. Estamos em estágio pre-seed com produto funcional — 83 agentes, 15 departamentos, 4.100+ leads na whitelist. Plataformas similares com apenas um MVP captaram a US$ 2-5M. Entrar a US$ 500K significa capturar o maior upside possível." },
+  { role: "agent" as const, text: "Na verdade, é o ponto ideal para o investidor. Estamos em estágio pre-seed com produto funcional — 200 agentes, 7 departamentos, 37 squads, 4.100+ leads na whitelist. Plataformas similares com apenas um MVP captaram a US$ 2-5M. Entrar a US$ 500K significa capturar o maior upside possível." },
   { role: "investor" as const, text: "Quais são os riscos?" },
   { role: "agent" as const, text: "O risco de NÃO investir é maior. Automação B2B não é tendência — é inevitável. Entrar agora no pre-seed a US$ 500K captura o maior potencial de retorno." },
   { role: "investor" as const, text: "Como eu entro?" },
@@ -172,7 +173,7 @@ const ValuationDefense = () => {
     {
       icon: Cpu,
       title: "Produto Funcional (não é MVP)",
-      desc: "83 agentes autônomos operacionais em 15 departamentos. Plataforma completa com orquestração multi-agente, memória persistente e motor de autonomia Nível 3.",
+      desc: "200 agentes autônomos operacionais em 7 departamentos e 37 squads. Plataforma completa com orquestração multi-agente, memória persistente e motor de autonomia Nível 3.",
     },
     {
       icon: Users,
@@ -221,6 +222,86 @@ const ValuationDefense = () => {
         </motion.div>
       ))}
     </div>
+  );
+};
+
+/* ── Workforce Department Card ── */
+const deptIcons: Record<string, React.ElementType> = {
+  marketing: Megaphone, growth: TrendingUp, product: Cpu, sales: Briefcase,
+  customer_success: Headphones, finance: DollarSign, operations: Layers,
+};
+
+const WorkforceDeptCard = ({ dept, index }: { dept: typeof WORKFORCE[0]; index: number }) => {
+  const [expanded, setExpanded] = useState(false);
+  const totalAgents = dept.squads.reduce((s, sq) => s + sq.agents.length, 0);
+  const Icon = deptIcons[dept.id] || Building2;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.05 }}
+      className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl overflow-hidden"
+    >
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between p-5 hover:bg-muted/5 transition-colors"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center">
+            <Icon className="w-5 h-5 text-primary" />
+          </div>
+          <div className="text-left">
+            <h3 className="font-display font-bold text-foreground">{dept.name}</h3>
+            <p className="text-xs text-muted-foreground">
+              {dept.squads.length} squads · {totalAgents} agentes
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <Badge variant="outline" className="text-[10px] border-primary/20 text-primary hidden sm:flex">
+            {totalAgents} agents
+          </Badge>
+          <ChevronRight className={`h-4 w-4 text-muted-foreground transition-transform ${expanded ? "rotate-90" : ""}`} />
+        </div>
+      </button>
+
+      {expanded && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          className="border-t border-border/30 px-5 pb-5"
+        >
+          <div className="grid gap-3 pt-4">
+            {dept.squads.map((squad) => (
+              <div key={squad.id} className="p-4 rounded-xl bg-muted/20 border border-border/20">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-semibold text-foreground">{squad.name}</h4>
+                  <span className="text-[10px] text-muted-foreground font-mono">{squad.agents.length} agents</span>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{squad.mission}</p>
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {squad.agents.map((agent) => (
+                    <span key={agent.slug} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/5 border border-primary/10 text-primary/80">
+                      {agent.name}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {squad.outcomes.map((outcome) => (
+                    <span key={outcome} className="text-[10px] flex items-center gap-1 text-muted-foreground">
+                      <CheckCircle2 className="w-3 h-3 text-primary/60" />
+                      {outcome}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </motion.div>
   );
 };
 
@@ -274,8 +355,8 @@ const Pitch = () => {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
             {[
-              { icon: Bot, label: "83 agentes operacionais" },
-              { icon: Clock, label: "Setup em 5 minutos" },
+              { icon: Bot, label: `${TOTAL_WORKFORCE_AGENTS} agentes operacionais` },
+              { icon: Network, label: `${TOTAL_SQUADS} squads inteligentes` },
               { icon: Shield, label: "Segurança Enterprise" },
               { icon: Globe, label: "13 idiomas nativos" },
             ].map((ind) => (
@@ -502,9 +583,9 @@ const Pitch = () => {
               </div>
               <ul className="space-y-3">
                 {[
-                  "83 agentes autônomos funcionais",
+                  "200 agentes autônomos em 7 departamentos",
+                  "37 squads especializados operacionais",
                   "4.100+ leads na whitelist",
-                  "15 departamentos completos",
                   "Valuation: US$ 500K (barganha)",
                   "Infraestrutura enterprise-grade",
                 ].map((item) => (
@@ -713,7 +794,7 @@ const Pitch = () => {
               </div>
               <ul className="space-y-2.5 text-sm">
                 {[
-                  "83 agentes que EXECUTAM, não só falam",
+                  "200 agentes que EXECUTAM, não só falam",
                   "Orquestração A2A — agentes delegam entre si",
                   "Policy Engine: 5 portões de segurança",
                   "CRM + Kanban + Analytics integrado",
@@ -849,7 +930,80 @@ const Pitch = () => {
         </div>
       </Section>
 
-      {/* ═══ 10. VANTAGEM COMPETITIVA ═══ */}
+      {/* ═══ 10. WORKFORCE ARCHITECTURE — 200 AGENTS ═══ */}
+      <Section className="bg-muted/20" id="workforce">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Network className="h-4 w-4" />
+              Arquitetura Organizacional
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">
+              <CountUp end={TOTAL_WORKFORCE_AGENTS} /> agentes. <CountUp end={TOTAL_SQUADS} /> squads. <CountUp end={TOTAL_DEPARTMENTS} /> departamentos.
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
+              Uma empresa inteira de IA organizada hierarquicamente — como uma corporação real, mas que opera 24/7, 
+              executa sob demanda (event-driven) e custa menos que 1 estagiário CLT.
+            </p>
+          </div>
+
+          {/* Summary Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            {[
+              { value: TOTAL_WORKFORCE_AGENTS, label: "Agentes Especializados", suffix: "" },
+              { value: TOTAL_SQUADS, label: "Squads com Missão", suffix: "" },
+              { value: TOTAL_DEPARTMENTS, label: "Departamentos", suffix: "" },
+              { value: 0, label: "Execução Contínua", suffix: "", display: "Event-Driven" },
+            ].map((s) => (
+              <GlassCard key={s.label} hover={false} className="text-center !py-6">
+                <p className="text-3xl font-display font-bold text-primary mb-1">
+                  {s.display || <CountUp end={s.value} suffix={s.suffix} />}
+                </p>
+                <p className="text-xs text-muted-foreground">{s.label}</p>
+              </GlassCard>
+            ))}
+          </div>
+
+          {/* Department Org Chart */}
+          <div className="space-y-4">
+            {WORKFORCE.map((dept, di) => (
+              <WorkforceDeptCard key={dept.id} dept={dept} index={di} />
+            ))}
+          </div>
+
+          {/* Event-Driven Execution Explainer */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12 p-8 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <Zap className="w-5 h-5 text-primary" />
+              <h3 className="font-display text-lg font-bold text-foreground">Execução Event-Driven — Zero Desperdício</h3>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+              Nossos 200 agentes <strong className="text-foreground">NÃO rodam continuamente</strong>. 
+              Eles operam sob demanda — ativados apenas quando um evento acontece: task assigned, metric change, 
+              campaign launch, report requested. Isso reduz custo computacional em até <strong className="text-primary">95%</strong> vs execução contínua.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {[
+                { trigger: "Task Assigned", example: "Blog post solicitado → Blog Writer ativa → entrega → dorme" },
+                { trigger: "Metric Change", example: "ROAS cai 20% → Campaign Optimizer ativa → ajusta → dorme" },
+                { trigger: "Report Requested", example: "CFO pede DRE → Financial Forecaster gera → entrega → dorme" },
+              ].map((t) => (
+                <div key={t.trigger} className="p-3 rounded-lg bg-background/50 border border-border/30">
+                  <p className="text-xs font-mono text-primary font-bold mb-1">{t.trigger}</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{t.example}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </Section>
+
+      {/* ═══ 11. VANTAGEM COMPETITIVA ═══ */}
       <Section>
         <div className="max-w-5xl mx-auto text-center">
           <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
@@ -859,12 +1013,12 @@ const Pitch = () => {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Vantagem competitiva real.</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              { icon: Bot, text: "83 agentes operacionais" },
+              { icon: Bot, text: "200 agentes operacionais" },
+              { icon: Network, text: "37 squads especializados" },
               { icon: Users, text: "4.100+ leads na whitelist" },
-              { icon: TrendingUp, text: "Estrutura própria de aquisição" },
               { icon: Globe, text: "13 idiomas nativos" },
-              { icon: Zap, text: "Escala infinita" },
-              { icon: Lock, text: "Infraestrutura segura" },
+              { icon: Zap, text: "Event-driven, zero desperdício" },
+              { icon: Lock, text: "Infraestrutura enterprise" },
             ].map((a) => (
               <GlassCard key={a.text} className="flex flex-col items-center gap-3 text-center">
                 <a.icon className="w-5 h-5 text-primary" />
