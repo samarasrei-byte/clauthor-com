@@ -105,6 +105,7 @@ const App = () => (
                   <Route path="/api-docs" element={<ApiDocs />} />
                   <Route path="/team-builder" element={<TeamBuilder />} />
                   <Route path="/architecture" element={<Architecture />} />
+                  <Route path="/timeline" element={<ProjectTimeline />} />
                 </Route>
 
                 {/* Dashboard pages with minimal header + sidebar only */}
