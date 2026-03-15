@@ -241,6 +241,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
 
   const selectedAgentData = agentNodes.find(a => a.id === selectedAgent);
   const pendingValidations = validationItems.filter(v => v.status === "pending");
+  const overallConfidence = Math.round(mockPreferences.reduce((a, p) => a + p.confidence, 0) / mockPreferences.length);
 
   const handleSimulate = () => {
     setShowSimulation(true);
