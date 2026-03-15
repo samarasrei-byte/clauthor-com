@@ -583,7 +583,7 @@ const Pitch = () => {
               </div>
               <ul className="space-y-3">
                 {[
-                  "200 agentes autônomos em 7 departamentos",
+                  "200 agentes autônomos em 15 departamentos",
                   "37 squads especializados operacionais",
                   "4.100+ leads na whitelist",
                   "Valuation: US$ 250K (20% por US$ 50K)",
