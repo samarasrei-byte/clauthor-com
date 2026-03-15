@@ -8,6 +8,8 @@ const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinde
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 const InnovationRoadmap = lazy(() => import("@/components/landing/InnovationRoadmap"));
 const SplineShowcase = lazy(() => import("@/components/landing/SplineShowcase"));
+const ROIBenchmark = lazy(() => import("@/components/landing/ROIBenchmark"));
+const CompetitiveMoat = lazy(() => import("@/components/landing/CompetitiveMoat"));
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, ShieldCheck, Bolt,
