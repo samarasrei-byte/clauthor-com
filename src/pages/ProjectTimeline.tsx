@@ -509,6 +509,37 @@ const ProjectTimeline = () => {
             </div>
           </div>
         </motion.div>
+
+        {/* Team callout */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.0 }}
+          className="mt-4 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/5 to-transparent p-6"
+          style={{ backdropFilter: "blur(20px)" }}
+        >
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+              <Users className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold mb-2">Equipe — Responsabilidades</h3>
+              <div className="space-y-2">
+                <div className="text-[12px] text-muted-foreground leading-relaxed">
+                  <span className="text-foreground font-semibold">Guilherme</span> — Desenvolvimento completo, lançamento, software, design UX/UI, prospecção de leads. Responsável por toda a construção técnica e visual da plataforma.
+                </div>
+                <div className="text-[12px] text-muted-foreground leading-relaxed">
+                  <span className="text-foreground font-semibold">Gabriel</span> — Auditoria e análise da plataforma, gestão do painel admin, integração com Claude Platform.
+                </div>
+              </div>
+              <div className="mt-3">
+                <span className="text-[10px] px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono">
+                  🚀 Lançamento: Terça-feira, 17 de Março de 2026
+                </span>
+              </div>
+            </div>
+          </div>
+        </motion.div>
       </div>
     </div>
   );
