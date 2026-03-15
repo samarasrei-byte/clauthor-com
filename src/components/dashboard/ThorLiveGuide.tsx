@@ -523,7 +523,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         {/* Waveform visualizer */}
         <div className="px-4 pb-2">
           <div className="p-2 rounded-xl bg-background/30 border border-border/5">
-            <WaveformVisualizer mode={isPaused ? "idle" : isTyping ? "speaking" : "listening"} />
+            <NeuralWaveform mode={isPaused ? "idle" : isTyping ? "speaking" : "listening"} />
           </div>
         </div>
 
