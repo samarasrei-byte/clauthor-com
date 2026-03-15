@@ -96,10 +96,6 @@ export function useOmnix() {
         setIsStreaming(false);
         return;
       }
-        setIsLoading(false);
-        setIsStreaming(false);
-        return;
-      }
 
       const controller = new AbortController();
       abortRef.current = controller;
