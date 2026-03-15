@@ -469,12 +469,15 @@ ESTILO: tom ${tone} | formato ${responseStyle} | autonomia ${autonomy}.${operati
 
 Quando houver pedido claro de ação na plataforma, use tools com segurança e sem expor credenciais.`;
 
+    // Trim conversation history to last 30 messages to avoid context overflow
+    const trimmedMessages = messages.length > 30 ? messages.slice(-30) : messages;
+
     // Build AI messages — include image in last user message if available
     const aiMessages: any[] = [
       { role: "system", content: systemPrompt },
     ];
 
-    for (const m of messages) {
+    for (const m of trimmedMessages) {
       if (m === messages[messages.length - 1] && m.role === "user" && imageBase64) {
         // Multimodal message with image
         aiMessages.push({
