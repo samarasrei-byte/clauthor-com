@@ -19,62 +19,62 @@ const GUIDE_STEPS: GuideStep[] = [
   {
     section: "overview",
     title: "Command Center",
-    message: "Welcome! This is your Command Center — the central hub where you monitor everything. You can see your agents' performance, pending tasks, and quick actions all in one place.",
+    message: "Bem-vindo! Este é o seu Command Center — o hub central onde você monitora tudo. Desempenho dos agentes, tarefas pendentes e ações rápidas, tudo em um só lugar.",
   },
   {
     section: "omnix",
-    title: "Thor AI Assistant",
-    message: "This is where I live! You can talk to me anytime — delegate tasks, ask strategic questions, or let me orchestrate your entire AI team. I'm your co-pilot.",
+    title: "Thor IA",
+    message: "Aqui é onde eu moro! Pode falar comigo a qualquer momento — delegue tarefas, faça perguntas estratégicas ou me deixe orquestrar toda a sua equipe de IA. Sou seu co-piloto.",
   },
   {
     section: "agents",
-    title: "Your Agents",
-    message: "Here you'll find all the AI agents working for you. Each one is specialized in a different area — from sales prospecting to content creation. Think of them as your digital employees.",
+    title: "Seus Agentes",
+    message: "Aqui você encontra todos os agentes de IA trabalhando para você. Cada um é especializado em uma área diferente — de prospecção de vendas a criação de conteúdo. Pense neles como seus funcionários digitais.",
   },
   {
     section: "library",
-    title: "Agent Library",
-    message: "This is the Library — your marketplace of 83+ AI agents across 15 departments. Browse, compare, and hire the ones that match your business needs.",
+    title: "Biblioteca de Agentes",
+    message: "Esta é a Biblioteca — seu marketplace com 200+ agentes de IA em 37 squads e 7 departamentos. Navegue, compare e contrate os que combinam com suas necessidades.",
   },
   {
     section: "war-room",
-    title: "Meeting Room",
-    message: "This is the Meeting Room. Here you can talk directly with your AI agents and delegate tasks in a collaborative environment. It's like a virtual boardroom for your AI team.",
+    title: "Sala de Reunião",
+    message: "Esta é a Sala de Reunião. Aqui você conversa diretamente com seus agentes de IA e delega tarefas em um ambiente colaborativo. Como uma sala de diretoria virtual.",
   },
   {
     section: "live-timeline",
     title: "Timeline",
-    message: "This is the Timeline. It shows everything your agents are doing in real time — every task, every execution, every result. Full transparency into your AI operations.",
+    message: "Esta é a Timeline. Mostra tudo que seus agentes estão fazendo em tempo real — cada tarefa, cada execução, cada resultado. Transparência total nas suas operações de IA.",
   },
   {
     section: "mission-control",
-    title: "Mission Control",
-    message: "This is Mission Control. Here you can observe all your agents working, validate outputs, and train Thor to understand your preferences. It's your AI operations command center.",
+    title: "Controle de Missão",
+    message: "Este é o Controle de Missão. Observe todos os agentes trabalhando, valide outputs e treine o Thor para entender suas preferências. Seu centro de comando de operações de IA.",
   },
   {
     section: "integrations",
-    title: "Integrations",
-    message: "This is the Integrations section. Here you connect external tools like WhatsApp, email, CRM systems, and more to expand the power of your AI agents.",
+    title: "Integrações",
+    message: "Seção de Integrações. Conecte ferramentas externas como WhatsApp, e-mail, CRM e mais para expandir o poder dos seus agentes de IA.",
   },
   {
     section: "insights",
     title: "Insights",
-    message: "Insights gives you deep analytics on your AI team's performance — success rates, execution trends, token usage, and AI quality metrics.",
+    message: "Insights traz análises profundas do desempenho da sua equipe de IA — taxas de sucesso, tendências de execução, uso de tokens e métricas de qualidade.",
   },
   {
     section: "control-tower",
-    title: "Control Tower",
-    message: "The Control Tower centralizes command over your entire agent fleet — credentials, execution feedback, and global metrics in one powerful dashboard.",
+    title: "Torre de Controle",
+    message: "A Torre de Controle centraliza o comando de toda sua frota de agentes — credenciais, feedback de execução e métricas globais em um dashboard poderoso.",
   },
   {
     section: "settings",
-    title: "Settings",
-    message: "Here you can manage your profile, billing, team members, and platform connections. Everything to keep your workspace configured perfectly.",
+    title: "Configurações",
+    message: "Aqui você gerencia perfil, faturamento, membros da equipe e conexões da plataforma. Tudo para manter seu workspace configurado perfeitamente.",
   },
   {
     section: "equipe",
-    title: "Team",
-    message: "The Team section lets you manage squad conversations and coordinate between multiple agents working together on complex tasks.",
+    title: "Equipe",
+    message: "A seção Equipe permite gerenciar conversas dos squads e coordenar múltiplos agentes trabalhando juntos em tarefas complexas.",
   },
 ];
 
@@ -336,7 +336,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
         animate={{ opacity: [0.3, 0.7, 0.3] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        {isSpeaking ? "speaking" : isListening ? "listening" : "standby"}
+        {isSpeaking ? "falando" : isListening ? "ouvindo" : "standby"}
       </motion.span>
     </div>
   );
@@ -361,7 +361,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
   const [hasGreeted, setHasGreeted] = useState(false);
   const typingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const WELCOME_MESSAGE = "Welcome! I'm Thor, your AI co-pilot inside CoAutor. I'll guide you through the platform so you can understand everything in just a few minutes. Navigate through the sidebar — I'll explain each section as you explore.";
+  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro da CoAutor. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral — eu explico cada seção enquanto você explora.";
 
   // Typewriter effect
   const typeText = useCallback((text: string) => {
@@ -408,7 +408,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
     const isFirstVisit = !visitedSections.has(activeSection);
     const message = isFirstVisit
       ? step.message
-      : `You're back at ${step.title}. ${step.message.split(".")[0]}.`;
+      : `Você voltou para ${step.title}. ${step.message.split(".")[0]}.`;
 
     setCurrentMessage(message);
     typeText(message);
@@ -448,7 +448,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         <span className="absolute inset-0 rounded-2xl border-2 border-primary/40 animate-ping opacity-30" />
         {/* Tooltip */}
         <div className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-background border border-border/20 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">
-          Thor is guiding you
+          Thor está te guiando
         </div>
       </motion.button>
     );
@@ -484,7 +484,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
                 <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium">GUIDE</span>
               </div>
               <span className="text-[10px] text-muted-foreground mt-0.5 block">
-                {isPaused ? "Paused" : isTyping ? "Speaking..." : "Listening"}
+                {isPaused ? "Pausado" : isTyping ? "Falando..." : "Ouvindo"}
               </span>
             </div>
 
@@ -546,7 +546,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             onClick={() => setIsPaused(!isPaused)}
           >
             {isPaused ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
-            {isPaused ? "Resume" : "Pause"}
+            {isPaused ? "Retomar" : "Pausar"}
           </Button>
 
           {nextStep && (
@@ -556,7 +556,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
               className="h-8 text-[11px] gap-1.5 flex-1"
               onClick={() => onNavigate(nextStep.section)}
             >
-              Next: {nextStep.title}
+              Próximo: {nextStep.title}
               <ChevronRight className="h-3 w-3" />
             </Button>
           )}
@@ -571,7 +571,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             }}
           >
             <MessageSquare className="h-3 w-3" />
-            Ask
+            Perguntar
           </Button>
         </div>
 
@@ -581,7 +581,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             onClick={onDismiss}
             className="w-full text-center text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors py-1"
           >
-            End tour · I'll explore on my own
+            Encerrar tour · Vou explorar sozinho
           </button>
         </div>
       </motion.div>
