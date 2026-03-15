@@ -57,6 +57,7 @@ const NAV_SECTIONS = [
   { id: "command-center", label: "Command Center" },
   { id: "platform", label: "Plataforma" },
   { id: "integrations", label: "Integrações" },
+  { id: "infrastructure", label: "Infraestrutura" },
 ];
 
 // ═══════════════════════════════════════
@@ -896,6 +897,202 @@ const Architecture = () => {
                 </Card>
               </motion.div>
             ))}
+          </div>
+        </motion.div>
+      </Section>
+
+      <Divider />
+
+      {/* ═══ INFRASTRUCTURE SETUP ═══ */}
+      <Section id="infrastructure">
+        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={{ visible: { transition: { staggerChildren: 0.06 } } }}>
+          <motion.div variants={fadeUp}><SectionTag>Infraestrutura · Setup Guide</SectionTag></motion.div>
+          <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-4xl font-bold mb-3">Configuração da Infraestrutura</motion.h2>
+          <motion.p variants={fadeUp} className="text-muted-foreground max-w-2xl text-sm leading-relaxed mb-10">
+            Guia passo a passo para configurar o pipeline completo: DNS, SSL, OpenClaw VPS e templates dos agentes.
+          </motion.p>
+
+          <div className="grid lg:grid-cols-2 gap-6">
+            {/* DNS + SSL Setup */}
+            <motion.div variants={fadeUp} className="space-y-4">
+              <h3 className="font-display text-xl font-bold flex items-center gap-2">
+                <Globe className="h-5 w-5 text-primary" strokeWidth={1.5} />
+                Conexão OpenClaw VPS
+              </h3>
+
+              {/* Step 1 */}
+              <Card className="border-primary/20 bg-card/30 overflow-hidden">
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Badge className="bg-primary/10 text-primary border-0 text-[10px]">Passo 1</Badge>
+                    <h4 className="text-sm font-semibold">Configure o DNS no Cloudflare</h4>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mb-3">No painel do Cloudflare, crie o registro A apontando para o VPS:</p>
+                  <Card className="bg-muted/10 border-border/20 p-3 font-mono text-[11px] space-y-1.5">
+                    <div className="flex items-center gap-2"><span className="text-muted-foreground w-14">Type:</span><span className="text-foreground font-semibold">A</span></div>
+                    <div className="flex items-center gap-2"><span className="text-muted-foreground w-14">Name:</span><span className="text-foreground font-semibold">api</span></div>
+                    <div className="flex items-center gap-2"><span className="text-muted-foreground w-14">IP:</span><span className="text-primary font-semibold">IP_DO_VPS</span></div>
+                    <div className="flex items-center gap-2"><span className="text-muted-foreground w-14">Proxy:</span><span className="text-accent-amber font-semibold">ON ☁️</span></div>
+                  </Card>
+                  <div className="mt-3 flex items-center gap-2 text-[10px] text-accent-emerald">
+                    <CheckCircle2 className="h-3 w-3" strokeWidth={1.5} />
+                    <span>Resultado: <code className="bg-muted/20 px-1.5 py-0.5 rounded text-foreground">api.clauthor.com</code></span>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Step 2 */}
+              <Card className="border-accent-emerald/20 bg-card/30 overflow-hidden">
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Badge className="bg-accent-emerald/10 text-accent-emerald border-0 text-[10px]">Passo 2</Badge>
+                    <h4 className="text-sm font-semibold">Instale SSL no VPS</h4>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mb-3">No Ubuntu, instale o Certbot e gere o certificado Let's Encrypt:</p>
+                  <Card className="bg-muted/10 border-border/20 overflow-hidden">
+                    <div className="flex items-center gap-2 px-3 py-1.5 border-b border-border/20 bg-muted/10">
+                      <div className="flex gap-1"><div className="w-2 h-2 rounded-full bg-destructive/60" /><div className="w-2 h-2 rounded-full bg-accent-amber/60" /><div className="w-2 h-2 rounded-full bg-accent-emerald/60" /></div>
+                      <span className="font-mono text-[9px] text-muted-foreground">terminal</span>
+                    </div>
+                    <div className="p-3 font-mono text-[10px] space-y-1 text-muted-foreground">
+                      <p><span className="text-accent-emerald">$</span> sudo apt update</p>
+                      <p><span className="text-accent-emerald">$</span> sudo apt install certbot python3-certbot-nginx</p>
+                      <p><span className="text-accent-emerald">$</span> sudo certbot --nginx -d api.clauthor.com</p>
+                    </div>
+                  </Card>
+                  <p className="text-[10px] text-muted-foreground mt-2">Gera certificado válido com Let's Encrypt automaticamente.</p>
+                </div>
+              </Card>
+
+              {/* Step 3 */}
+              <Card className="border-accent-amber/20 bg-card/30 overflow-hidden">
+                <div className="p-5">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Badge className="bg-accent-amber/10 text-accent-amber border-0 text-[10px]">Passo 3</Badge>
+                    <h4 className="text-sm font-semibold">Ajuste SSL no Cloudflare</h4>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mb-3">No painel SSL/TLS do Cloudflare, configure o modo:</p>
+                  <div className="flex items-center gap-3 px-4 py-3 rounded-lg bg-accent-amber/5 border border-accent-amber/20">
+                    <Shield className="h-5 w-5 text-accent-amber" strokeWidth={1.5} />
+                    <div>
+                      <p className="text-sm font-bold">Full (strict)</p>
+                      <p className="text-[10px] text-muted-foreground">Cloudflare ↔ VPS: criptografia ponta a ponta</p>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+
+              {/* Architecture Diagram */}
+              <Card className="border-border/30 bg-card/20 p-5">
+                <p className="font-mono text-[9px] text-muted-foreground uppercase tracking-widest mb-4">Arquitetura de Rede</p>
+                <div className="flex flex-col items-center gap-1">
+                  <FlowNode icon={Eye} label="User" sublabel="Requisição HTTPS" />
+                  <FlowArrow />
+                  <FlowNode icon={Shield} label="Cloudflare" sublabel="SSL Termination + CDN" accent />
+                  <FlowArrow />
+                  <FlowNode icon={Globe} label="api.clauthor.com" sublabel="DNS A Record" />
+                  <FlowArrow />
+                  <FlowNode icon={Server} label="VPS" sublabel="Let's Encrypt SSL" />
+                  <FlowArrow />
+                  <FlowNode icon={Cpu} label="OpenClaw API" sublabel="Motor de Execução" glow />
+                </div>
+              </Card>
+            </motion.div>
+
+            {/* Agent Templates Status */}
+            <motion.div variants={fadeUp} className="space-y-4">
+              <h3 className="font-display text-xl font-bold flex items-center gap-2">
+                <Bot className="h-5 w-5 text-primary" strokeWidth={1.5} />
+                Templates dos 200 Agentes
+              </h3>
+
+              <Card className="border-primary/20 bg-card/30 p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-sm font-semibold">Status dos Templates</h4>
+                  <Badge className="bg-accent-emerald/10 text-accent-emerald border-0 text-[10px]">
+                    <CheckCircle2 className="h-3 w-3 mr-1" strokeWidth={1.5} />
+                    253 Populados
+                  </Badge>
+                </div>
+                <p className="text-[11px] text-muted-foreground mb-4">
+                  Todos os templates foram inseridos na tabela <code className="bg-muted/20 px-1 py-0.5 rounded text-[10px]">agent_templates</code> com system prompts e instruções.
+                </p>
+                <div className="w-full bg-muted/20 rounded-full h-2 mb-4">
+                  <div className="h-full rounded-full bg-gradient-to-r from-accent-emerald/60 to-accent-emerald w-full" />
+                </div>
+              </Card>
+
+              {/* Table Schema */}
+              <Card className="border-border/20 bg-card/30 overflow-hidden">
+                <div className="p-5">
+                  <h4 className="text-sm font-semibold mb-3 flex items-center gap-2">
+                    <Database className="h-4 w-4 text-primary" strokeWidth={1.5} />
+                    Estrutura: agent_templates
+                  </h4>
+                  <div className="space-y-1.5">
+                    {[
+                      { field: "id", type: "uuid", desc: "Identificador único" },
+                      { field: "name", type: "text", desc: "Nome do agente" },
+                      { field: "slug", type: "text", desc: "Identificador único (URL-safe)" },
+                      { field: "system_prompt", type: "text", desc: "Prompt de sistema com disciplina de área" },
+                      { field: "instructions", type: "text", desc: "Instruções específicas do papel" },
+                      { field: "tier", type: "enum", desc: "basic | intermediate | advanced | enterprise" },
+                      { field: "tags", type: "text[]", desc: "Categorias e departamento" },
+                      { field: "default_integrations", type: "jsonb", desc: "Ferramentas e APIs disponíveis" },
+                      { field: "default_actions", type: "jsonb", desc: "Ações padrão do agente" },
+                      { field: "is_active", type: "boolean", desc: "Status de ativação" },
+                    ].map(row => (
+                      <div key={row.field} className="flex items-center gap-2 text-[10px] px-2 py-1.5 rounded-md hover:bg-muted/10 transition-colors">
+                        <code className="font-mono text-primary/80 w-36 shrink-0">{row.field}</code>
+                        <Badge variant="secondary" className="text-[8px] h-4 w-14 justify-center shrink-0">{row.type}</Badge>
+                        <span className="text-muted-foreground">{row.desc}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+
+              {/* Example Agent */}
+              <Card className="border-border/20 bg-card/30 overflow-hidden">
+                <div className="flex items-center gap-2 px-4 py-2 border-b border-border/20 bg-muted/10">
+                  <div className="flex gap-1"><div className="w-2 h-2 rounded-full bg-destructive/60" /><div className="w-2 h-2 rounded-full bg-accent-amber/60" /><div className="w-2 h-2 rounded-full bg-accent-emerald/60" /></div>
+                  <span className="font-mono text-[9px] text-muted-foreground">exemplo de registro</span>
+                </div>
+                <div className="p-4 font-mono text-[10px] space-y-1.5">
+                  <div><span className="text-muted-foreground">name:</span> <span className="text-primary">"SEO Analyst"</span></div>
+                  <div><span className="text-muted-foreground">slug:</span> <span className="text-foreground">"seo_analyst"</span></div>
+                  <div><span className="text-muted-foreground">department:</span> <span className="text-foreground">"Marketing"</span></div>
+                  <div><span className="text-muted-foreground">squad:</span> <span className="text-foreground">"SEO Squad"</span></div>
+                  <div><span className="text-muted-foreground">role:</span> <span className="text-foreground">"keyword analysis"</span></div>
+                  <div><span className="text-muted-foreground">tools:</span> <span className="text-accent-emerald">["google_search_api", "analytics_api"]</span></div>
+                  <div><span className="text-muted-foreground">triggers:</span> <span className="text-accent-amber">["ranking_drop", "new_content"]</span></div>
+                  <div><span className="text-muted-foreground">status:</span> <span className="text-accent-emerald">active ✓</span></div>
+                </div>
+              </Card>
+
+              {/* Checklist */}
+              <Card className="border-border/20 bg-card/30 p-5">
+                <h4 className="text-sm font-semibold mb-3">Checklist de Deploy</h4>
+                <div className="space-y-2">
+                  {[
+                    { label: "DNS Cloudflare configurado (api.clauthor.com)", done: false },
+                    { label: "SSL Let's Encrypt instalado no VPS", done: false },
+                    { label: "Cloudflare SSL → Full (strict)", done: false },
+                    { label: "Templates dos 200 agentes populados", done: true },
+                    { label: "AI Gateway configurado (LOVABLE_API_KEY)", done: true },
+                    { label: "Edge Functions deployadas", done: true },
+                    { label: "RLS policies ativas", done: true },
+                    { label: "Sistema multi-tenant operacional", done: true },
+                  ].map(item => (
+                    <div key={item.label} className="flex items-center gap-2 text-[11px]">
+                      <CheckCircle2 className={cn("h-3.5 w-3.5 shrink-0", item.done ? "text-accent-emerald" : "text-muted-foreground/30")} strokeWidth={1.5} />
+                      <span className={item.done ? "text-foreground/80" : "text-muted-foreground"}>{item.label}</span>
+                      {!item.done && <Badge variant="secondary" className="text-[8px] h-4 ml-auto">Pendente</Badge>}
+                    </div>
+                  ))}
+                </div>
+              </Card>
+            </motion.div>
           </div>
         </motion.div>
       </Section>
