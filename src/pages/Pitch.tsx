@@ -545,12 +545,12 @@ const Pitch = () => {
               Valuation Atual
             </Badge>
             <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-4">
-              Por que US$ 500K é o valor justo
+              Valuation de US$ 250K
               <br />
-              <span className="gradient-text">neste momento.</span>
+              <span className="gradient-text">baseado em arquitetura real.</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
-              A maioria das startups capta no pre-seed com apenas um deck e uma ideia. A CLAUTHOR já tem produto funcional com 200 agentes em 37 squads, tração real de 4.100+ leads, e infraestrutura enterprise-grade. Veja por que US$ 500K é, na verdade, uma oportunidade única para o investidor.
+              A maioria das startups capta no pre-seed com apenas um deck e uma ideia. A CLAUTHOR já tem produto funcional com 200 agentes em 37 squads, tração real de 4.100+ leads, e infraestrutura enterprise-grade. US$ 250K reflete o valor da ideia e toda a arquitetura já construída — e 20% de equity é a porta de entrada.
             </p>
           </div>
 
