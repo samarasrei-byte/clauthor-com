@@ -819,32 +819,61 @@ const Pitch = () => {
             </GlassCard>
           </div>
 
-          {/* Token Cost Analysis - CFO Section */}
+          {/* Token Economics — CFO + Data Scientist Analysis */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="mb-12 p-8 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl"
           >
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-2">
               <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                 <BarChart3 className="w-5 h-5 text-primary" />
               </div>
               <div>
-                <h3 className="font-display text-lg font-bold text-foreground">Análise de Custo Real — Visão de CFO</h3>
-                <p className="text-xs text-muted-foreground">"Se meus agentes trabalharem o mês inteiro, quanto gasto?"</p>
+                <h3 className="font-display text-lg font-bold text-foreground">Economia de Tokens — Análise de CFO + Cientista de Dados</h3>
+                <p className="text-xs text-muted-foreground">"Por que os agentes NÃO trabalham 24h consumindo tokens?"</p>
+              </div>
+            </div>
+
+            {/* The Core Insight */}
+            <div className="my-6 p-5 rounded-xl bg-primary/5 border border-primary/15">
+              <h4 className="text-sm font-bold text-primary mb-3 flex items-center gap-2">
+                <Zap className="w-4 h-4" /> A ESTRATÉGIA: Execução Event-Driven
+              </h4>
+              <p className="text-sm text-foreground leading-relaxed mb-4">
+                <strong>Agentes da Clauthor NÃO ficam rodando 24h.</strong> Eles são <strong className="text-primary">event-driven</strong> — 
+                dormem até que um gatilho os acorde: task assigned, metric changed, lead received, report requested. 
+                Isso é o oposto de um funcionário CLT que gasta 8h sentado mesmo sem demanda.
+              </p>
+              <div className="grid sm:grid-cols-3 gap-3">
+                <div className="p-3 rounded-lg bg-background/50 border border-border/20">
+                  <p className="text-[10px] font-mono text-primary font-bold mb-1">CLT HUMANO</p>
+                  <p className="text-xs text-muted-foreground">8h/dia sentado, produtivo ~3h. Custo fixo R$ 7.900/mês mesmo parado.</p>
+                </div>
+                <div className="p-3 rounded-lg bg-background/50 border border-border/20">
+                  <p className="text-[10px] font-mono text-primary font-bold mb-1">CHATBOT 24/7 (Concorrentes)</p>
+                  <p className="text-xs text-muted-foreground">Roda o tempo todo, queima tokens sem parar. Custo cresce linearmente com uso.</p>
+                </div>
+                <div className="p-3 rounded-lg bg-background/50 border border-border/20">
+                  <p className="text-[10px] font-mono text-primary font-bold mb-1">CLAUTHOR (Event-Driven)</p>
+                  <p className="text-xs text-muted-foreground">Dorme. Acorda no evento. Executa. Entrega. Volta a dormir. Custo = uso real.</p>
+                </div>
               </div>
             </div>
             
             <div className="grid md:grid-cols-2 gap-6">
+              {/* Left: Real Token Math */}
               <div className="space-y-4">
-                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Custo de Tokens (Realidade)</h4>
+                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Custo Real por Agente (Modelo Científico)</h4>
                 <div className="space-y-3 text-sm">
                   {[
-                    { label: "Agente trabalhando 24/7 (200 interações/dia)", value: "≈ 12M tokens/mês" },
-                    { label: "Custo real desses tokens (Gemini Flash)", value: "≈ R$ 22/mês" },
-                    { label: "Mesmo com modelo premium (GPT-5)", value: "≈ R$ 95/mês" },
-                    { label: "Custo médio real por agente", value: "R$ 30-60/mês" },
+                    { label: "Tokens médios por interação", value: "~2.000 tokens" },
+                    { label: "Interações reais/dia (event-driven)", value: "20-80 (não 200)" },
+                    { label: "Tokens/mês por agente real", value: "~1.2M-4.8M" },
+                    { label: "Custo Gemini Flash (mais usado)", value: "R$ 3-12/mês" },
+                    { label: "Custo GPT-5 (casos premium)", value: "R$ 15-50/mês" },
+                    { label: "Custo MÁXIMO cenário extremo", value: "R$ 60/mês" },
                   ].map((item) => (
                     <div key={item.label} className="flex justify-between items-center p-2.5 rounded-lg bg-muted/30">
                       <span className="text-muted-foreground">{item.label}</span>
@@ -852,32 +881,71 @@ const Pitch = () => {
                     </div>
                   ))}
                 </div>
+                <div className="p-3 rounded-lg bg-muted/20 border border-border/20">
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">
+                    <strong className="text-foreground">Cálculo:</strong> 80 interações/dia × 2K tokens × 30 dias = 4.8M tokens/mês.
+                    Gemini Flash: $0.075/1M input + $0.30/1M output ≈ <strong className="text-primary">R$ 8-12/mês</strong>. 
+                    Mesmo GPT-5 a $5/1M output fica em ~R$ 50/mês. Agentes event-driven gastam uma fração do cenário "24/7".
+                  </p>
+                </div>
               </div>
               
+              {/* Right: Revenue Math */}
               <div className="space-y-4">
-                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Sua Margem como Dono</h4>
+                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Margem por Tier (Visão de CFO)</h4>
                 <div className="space-y-3 text-sm">
                   {[
-                    { label: "Agente Starter cobra", value: "R$ 497/mês", color: "text-primary" },
-                    { label: "Custo real de operação", value: "- R$ 60/mês", color: "text-muted-foreground" },
-                    { label: "Margem bruta por agente", value: "R$ 437 (87.9%)", color: "text-green-500" },
-                    { label: "Agente Premium cobra", value: "R$ 4.997/mês", color: "text-primary" },
-                    { label: "Margem Premium", value: "R$ 4.900+ (98%)", color: "text-green-500" },
+                    { label: "Starter (R$ 497) - custo real", value: "R$ 8-15", margin: "96-97%", color: "text-green-500" },
+                    { label: "Entry (R$ 997) - custo real", value: "R$ 12-25", margin: "97%", color: "text-green-500" },
+                    { label: "Mid (R$ 1.697) - custo real", value: "R$ 20-40", margin: "97-98%", color: "text-green-500" },
+                    { label: "High (R$ 2.497) - custo real", value: "R$ 30-50", margin: "98%", color: "text-green-500" },
+                    { label: "Premium (R$ 4.997) - custo real", value: "R$ 40-60", margin: "98-99%", color: "text-green-500" },
                   ].map((item) => (
                     <div key={item.label} className="flex justify-between items-center p-2.5 rounded-lg bg-muted/30">
-                      <span className="text-muted-foreground">{item.label}</span>
-                      <span className={`font-mono font-semibold ${item.color}`}>{item.value}</span>
+                      <div className="flex flex-col">
+                        <span className="text-muted-foreground">{item.label}</span>
+                        <span className="text-[10px] text-muted-foreground/60">Token cost: {item.value}/mês</span>
+                      </div>
+                      <span className={`font-mono font-bold ${item.color}`}>{item.margin}</span>
                     </div>
                   ))}
+                </div>
+                <div className="p-3 rounded-lg bg-muted/20 border border-border/20">
+                  <p className="text-[10px] text-muted-foreground leading-relaxed">
+                    <strong className="text-foreground">Por que a margem é tão alta?</strong> Porque o agente <strong>não roda 24h</strong>. 
+                    Event-driven = custo proporcional ao uso real. Um SDR que prospecta 50 leads/dia consome ~R$ 8 em tokens. 
+                    Cobra-se R$ 497. A margem não é acidente — é <strong className="text-primary">engenharia de custos</strong>.
+                  </p>
                 </div>
               </div>
             </div>
 
+            {/* Scenario Comparison */}
+            <div className="mt-6 grid sm:grid-cols-3 gap-4">
+              <div className="p-4 rounded-xl bg-destructive/5 border border-destructive/15 text-center">
+                <p className="text-xs font-mono text-destructive/80 font-bold mb-1">CENÁRIO RUIM</p>
+                <p className="text-lg font-display font-bold text-foreground">R$ 60/mês</p>
+                <p className="text-[10px] text-muted-foreground">Agente premium 24/7 com GPT-5 no cenário mais caro possível</p>
+              </div>
+              <div className="p-4 rounded-xl bg-primary/5 border border-primary/15 text-center">
+                <p className="text-xs font-mono text-primary font-bold mb-1">CENÁRIO REAL</p>
+                <p className="text-lg font-display font-bold text-primary">R$ 8-15/mês</p>
+                <p className="text-[10px] text-muted-foreground">Event-driven com Gemini Flash — como 90% dos agentes opera</p>
+              </div>
+              <div className="p-4 rounded-xl bg-green-500/5 border border-green-500/15 text-center">
+                <p className="text-xs font-mono text-green-500 font-bold mb-1">RECEITA MÍNIMA</p>
+                <p className="text-lg font-display font-bold text-foreground">R$ 497/mês</p>
+                <p className="text-[10px] text-muted-foreground">Tier mais barato → margem de 96% no cenário real</p>
+              </div>
+            </div>
+
+            {/* Bottom line */}
             <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/15 text-center">
-              <p className="text-sm text-foreground font-medium">
-                💡 <strong>Resposta sincera:</strong> Mesmo seu agente mais barato (R$497) trabalhando 24/7 o mês inteiro 
-                consome ~R$60 em tokens. Sua margem é de <strong className="text-primary">87%+</strong>. 
-                Tokens são baratos — o valor está na <strong>orquestração, segurança e automação</strong> que a Clauthor entrega.
+              <p className="text-sm text-foreground font-medium leading-relaxed">
+                🧠 <strong>Resposta definitiva:</strong> Agentes NÃO queimam tokens 24h porque são <strong className="text-primary">event-driven</strong>. 
+                Um SDR real interage 50x/dia, não 200x. Custo real: <strong className="text-primary">R$ 8-15/mês</strong>. 
+                Cobramos R$ 497+. A margem de <strong className="text-primary">96%+</strong> não é acidente — é arquitetura. 
+                Tokens são commodity; o valor está na <strong>orquestração, memória, segurança e automação</strong> que a Clauthor entrega.
               </p>
             </div>
           </motion.div>
