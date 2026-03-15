@@ -258,8 +258,8 @@ const AgentsSection = ({
                     variant="ghost"
                     className="text-xs h-8 px-2 text-muted-foreground hover:text-foreground"
                     onClick={() => setExpandedAgent(isExpanded ? null : agent.id)}
-                  >
-                    Autonomia
+                   >
+                    {t("dashboard.autonomy", { defaultValue: "Autonomia" })}
                   </Button>
                 </div>
 
