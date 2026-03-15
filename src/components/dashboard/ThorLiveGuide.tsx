@@ -448,7 +448,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         <span className="absolute inset-0 rounded-2xl border-2 border-primary/40 animate-ping opacity-30" />
         {/* Tooltip */}
         <div className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-background border border-border/20 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">
-          Thor is guiding you
+          Thor está te guiando
         </div>
       </motion.button>
     );
