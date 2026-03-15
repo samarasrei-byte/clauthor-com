@@ -556,7 +556,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
               className="h-8 text-[11px] gap-1.5 flex-1"
               onClick={() => onNavigate(nextStep.section)}
             >
-              Next: {nextStep.title}
+              Próximo: {nextStep.title}
               <ChevronRight className="h-3 w-3" />
             </Button>
           )}
