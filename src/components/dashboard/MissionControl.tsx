@@ -320,7 +320,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
           <div className="flex items-center gap-2">
             <Eye className="h-4 w-4 text-primary" />
             <CardTitle className="text-sm">Agent Network Map</CardTitle>
-            <Badge variant="secondary" className="text-[9px] ml-auto">{mockAgents.length} agents</Badge>
+            <Badge variant="secondary" className="text-[9px] ml-auto">{agentNodes.length} agents</Badge>
           </div>
         </CardHeader>
         <CardContent>
