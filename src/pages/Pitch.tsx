@@ -86,7 +86,7 @@ const investorConversation = [
   { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora? Vi que vocês têm 200 agentes." },
   { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 200 agentes distribuídos em 7 departamentos e 37 squads — totalmente operacionais, infraestrutura pronta, e um mercado de US$ 1,8 trilhão até 2030. Você entra antes da escala explodir." },
   { role: "investor" as const, text: "Mas o mercado de IA está saturado. Qual o diferencial?" },
-  { role: "agent" as const, text: "Ninguém faz o que nós fazemos: substituir departamentos inteiros com squads coordenados de IA. Não vendemos chatbots — vendemos operações completas. Suporte, financeiro, compliance, tudo rodando 24/7." },
+  { role: "agent" as const, text: "Ninguém faz o que nós fazemos: substituir departamentos inteiros com squads coordenados de IA. 200 agentes especializados organizados como uma empresa real — Marketing, Growth, Product, Sales, CS, Finance e Operations. Não vendemos chatbots — vendemos operações completas 24/7." },
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B com ticket médio de US$ 199/mês por squad. Com 1.000 clientes, são quase US$ 2,4M/ano em receita recorrente. LTV alto, churn baixo." },
   { role: "investor" as const, text: "Mas US$ 500K de valuation não é baixo demais?" },
