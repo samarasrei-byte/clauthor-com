@@ -28,9 +28,13 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
     // Don't greet if post-payment or initial message will be sent
     if (postPaymentContext || initialMessage) return;
 
-    // Check if already greeted (persist across sessions with localStorage)
+    // If user already greeted but no messages exist (e.g. edge fn failed), retry
     const greeted = localStorage.getItem(GREETING_KEY);
-    if (greeted) return;
+    if (greeted) {
+      // Still allow retry if localStorage is set but messages are empty
+      // (means previous greeting failed silently)
+      return;
+    }
 
     greetingSent.current = true;
     localStorage.setItem(GREETING_KEY, "1");

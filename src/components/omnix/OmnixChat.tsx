@@ -31,7 +31,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
   const [isListening, setIsListening] = useState(false);
   const [autoSpeak, setAutoSpeak] = useState(true);
   const [showChat, setShowChat] = useState(false);
-  const [showTextInput, setShowTextInput] = useState(false);
+  const [showTextInput, setShowTextInput] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
   const restartTimeoutRef = useRef<number | null>(null);
@@ -494,7 +494,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               : isSpeaking ? t("omnix.status_speaking", { defaultValue: "Falando..." })
               : isStreaming ? t("omnix.status_thinking", { defaultValue: "Pensando..." })
               : isLoading ? t("omnix.status_processing", { defaultValue: "Processando..." })
-              : t("omnix.status_ready", { defaultValue: "Pronto para conversar" })}
+              : t("omnix.status_ready", { defaultValue: "Digite abaixo ou clique no microfone 🎙️" })}
           </span>
         </motion.div>
 
@@ -569,7 +569,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                       handleSend();
                     }
                   }}
-                  placeholder={`Fale com ${config.name}...`}
+                  placeholder={`💬 Digite sua mensagem para ${config.name}...`}
                   className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
                   disabled={isLoading}
                   autoFocus
