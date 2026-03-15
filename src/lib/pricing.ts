@@ -63,10 +63,10 @@ export const regionalPricing: Record<string, RegionalPricing> = {
   },
   en: {
     currency: "USD", symbol: "$", locale: "en-US",
-    plans: { starter: 199, growth: 399 },
-    tokenPacks: { pack5m: 59, pack15m: 149, pack50m: 369, pack100m: 699 },
-    comparison: { avgSalary: 5500, avgSalaryYear3: 330000, agentStarting: 59, agentYear3: 2124 },
-    departments: { tecnologia: 1499, comercial: 1199, marketing: 1099, financeiro: 1199, criacao: 799, suporte: 799, rh: 399 },
+    plans: { starter: 239, growth: 479 },
+    tokenPacks: { pack5m: 69, pack15m: 169, pack50m: 429, pack100m: 829 },
+    comparison: { avgSalary: 5500, avgSalaryYear3: 330000, agentStarting: 69, agentYear3: 2484 },
+    departments: { tecnologia: 1799, comercial: 1449, marketing: 1299, financeiro: 1449, criacao: 959, suporte: 959, rh: 479 },
     departmentClt: cltCosts,
   },
   es: {
