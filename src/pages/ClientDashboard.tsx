@@ -63,6 +63,8 @@ const MissionControl = lazy(() => import("@/components/dashboard/MissionControl"
 const ThorLiveGuide = lazy(() => import("@/components/dashboard/ThorLiveGuide"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
+const KanbanBoard = lazy(() => import("@/components/dashboard/KanbanBoard"));
+const CompanyHub = lazy(() => import("@/components/dashboard/CompanyHub"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
