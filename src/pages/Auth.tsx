@@ -126,7 +126,7 @@ const AuthPage = () => {
           <p className="text-sm text-muted-foreground max-w-xs mx-auto">
             {isLogin
               ? t("auth.login_subtitle")
-              : t("auth.register_subtitle_enhanced", { defaultValue: "Crie sua conta gratuita e tenha acesso imediato a 83 agentes de IA." })}
+              : t("auth.register_subtitle_enhanced", { defaultValue: "Crie sua conta gratuita e tenha acesso imediato a 200 agentes de IA." })}
           </p>
         </div>
 
