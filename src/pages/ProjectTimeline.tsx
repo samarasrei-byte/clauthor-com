@@ -144,14 +144,16 @@ const TIMELINE_STEPS: TimelineStep[] = [
   {
     id: 8,
     phase: "FASE 08",
-    title: "Claude Code — Cérebro de Planejamento",
+    title: "Claude Platform — Cérebro de Planejamento",
     date: "Março 2026",
     status: "pending",
-    description: "Integrar Anthropic Claude como cérebro estratégico para orquestração de alto nível, separando inteligência (Claude) de execução (Gemini/GPT).",
+    description: "Integrar a Claude Platform (platform.claude.com) como cérebro estratégico para orquestração de alto nível, separando inteligência (Claude) de execução (Gemini/GPT). Responsável: Gabriel.",
     details: [
       "🔮 Dual-model: Claude para planejamento, Gemini para execução",
       "🔮 Raciocínio estratégico em cadeia para tarefas complexas",
       "🔮 Auto-avaliação e feedback loop",
+      "🔮 Integração com platform.claude.com/dashboard",
+      "👤 Responsável: Gabriel — Auditoria, análise e gestão admin",
     ],
     icon: <Brain className="h-5 w-5" />,
     metric: "Próximo",
@@ -159,18 +161,20 @@ const TIMELINE_STEPS: TimelineStep[] = [
   {
     id: 9,
     phase: "FASE 09",
-    title: "MVP Live 🚀",
-    date: "Abril 2026",
+    title: "Lançamento MVP 🚀",
+    date: "17 de Março de 2026 — Terça-feira",
     status: "pending",
-    description: "Deploy do MVP completo com agentes autônomos reais processando tarefas, gerando relatórios e orquestrando squads inteligentes.",
+    description: "Deploy oficial do MVP completo com agentes autônomos reais. Lançamento marcado para terça-feira, 17 de março.",
     details: [
       "🚀 200 agentes operacionais com IA real",
       "🚀 Orquestração autônoma 24/7",
       "🚀 Custo estimado: ~R$290/mês para infraestrutura",
       "🚀 Margem bruta projetada: 96-99%",
+      "👤 Guilherme — Desenvolvimento, lançamento, software, UX/UI, prospecção de leads",
+      "👤 Gabriel — Auditoria, análise da plataforma, gestão do admin",
     ],
     icon: <Rocket className="h-5 w-5" />,
-    metric: "MVP",
+    metric: "17/03",
   },
 ];
 
@@ -502,6 +506,37 @@ const ProjectTimeline = () => {
               <p className="text-[12px] text-muted-foreground leading-relaxed">
                 Este projeto foi construído com dedicação integral — 12 horas por dia, 7 dias por semana, durante mais de 2 meses e meio. Totalizando mais de 900 horas de desenvolvimento puro, incluindo arquitetura, backend, frontend, UX, integrações e testes.
               </p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Team callout */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.0 }}
+          className="mt-4 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/5 to-transparent p-6"
+          style={{ backdropFilter: "blur(20px)" }}
+        >
+          <div className="flex items-start gap-4">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+              <Users className="h-6 w-6 text-primary" />
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold mb-2">Equipe — Responsabilidades</h3>
+              <div className="space-y-2">
+                <div className="text-[12px] text-muted-foreground leading-relaxed">
+                  <span className="text-foreground font-semibold">Guilherme</span> — Desenvolvimento completo, lançamento, software, design UX/UI, prospecção de leads. Responsável por toda a construção técnica e visual da plataforma.
+                </div>
+                <div className="text-[12px] text-muted-foreground leading-relaxed">
+                  <span className="text-foreground font-semibold">Gabriel</span> — Auditoria e análise da plataforma, gestão do painel admin, integração com Claude Platform.
+                </div>
+              </div>
+              <div className="mt-3">
+                <span className="text-[10px] px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono">
+                  🚀 Lançamento: Terça-feira, 17 de Março de 2026
+                </span>
+              </div>
             </div>
           </div>
         </motion.div>
