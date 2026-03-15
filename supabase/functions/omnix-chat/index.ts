@@ -418,6 +418,9 @@ serve(async (req) => {
     // Tools trigger on EITHER explicit tool verbs OR platform context + action verbs
     const shouldAttemptTools = toolIntentRegex.test(lastUserMessage) || (needsOperationalContext && lastUserMessage.length > 15);
 
+    // If tools are needed, we always need operational context
+    const loadContext = needsOperationalContext || shouldAttemptTools;
+
     let agents: any[] = [];
     let credits: any = null;
     let tasks: any[] = [];
@@ -426,7 +429,7 @@ serve(async (req) => {
     let openTasks = 0;
     let highPriorityTasks = 0;
 
-    if (needsOperationalContext) {
+    if (loadContext) {
       const [agentsRes, creditsRes, tasksRes] = await Promise.all([
         supabase.from("agents").select("id, name, status, tier, total_executions, description").eq("user_id", user.id),
         supabase.from("user_credits").select("*").eq("user_id", user.id).single(),
@@ -448,7 +451,7 @@ serve(async (req) => {
     const responseStyle = config?.responseStyle || "direto";
     const autonomy = config?.autonomy || "analisar e sugerir";
 
-    const operationalContext = needsOperationalContext
+    const operationalContext = loadContext
       ? `\nCONTEXTO OPERACIONAL (use só se ajudar):\n- Agentes ativos: ${activeAgents.length}/${agents.length}\n- Créditos: ${usagePct}% (${credits?.plan_type || "free"})\n- Tarefas abertas: ${openTasks}${highPriorityTasks ? ` | urgentes: ${highPriorityTasks}` : ""}`
       : "";
 

@@ -91,7 +91,7 @@ export function useOmnix() {
       const { data: sessionData } = await supabase.auth.getSession();
       const token = sessionData?.session?.access_token;
       if (!token) {
-        toast.error("You need to be logged in.");
+        toast.error("Você precisa estar logado.");
         setIsLoading(false);
         setIsStreaming(false);
         return;
@@ -126,16 +126,16 @@ export function useOmnix() {
           return cleaned;
         });
         const data = await response.json().catch(() => ({}));
-        if (response.status === 402) toast.error("Credits exhausted! Please upgrade.");
-        else if (response.status === 429) toast.error("Rate limit reached. Try again shortly.");
-        else toast.error(data.error || "Error processing request.");
+        if (response.status === 402) toast.error("Créditos esgotados! Faça upgrade para continuar.");
+        else if (response.status === 429) toast.error("Limite de requisições atingido. Tente em instantes.");
+        else toast.error(data.error || "Erro ao processar sua mensagem.");
         setIsLoading(false);
         setIsStreaming(false);
         return;
       }
 
       const reader = response.body?.getReader();
-      if (!reader) throw new Error("No stream");
+      if (!reader) throw new Error("Sem stream disponível");
 
       const decoder = new TextDecoder();
       let buf = "";
@@ -175,8 +175,13 @@ export function useOmnix() {
               });
             }
           } catch {
-            buf = line + "\n" + buf;
-            break;
+            // Only retry if this looks like a partial chunk (no closing brace)
+            if (!jsonStr.includes("}")) {
+              buf = line + "\n" + buf;
+              break;
+            }
+            // Otherwise skip this malformed line
+            console.warn("[OmnixStream] Skipping malformed SSE line");
           }
         }
       }
@@ -186,7 +191,7 @@ export function useOmnix() {
         setMessages(prev => {
           const last = prev[prev.length - 1];
           if (last?.role === "assistant" && last.content) {
-            const next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: m.content + "\n\n⏹ *Response interrupted.*" } : m);
+            const next = prev.map((m, i) => i === prev.length - 1 ? { ...m, content: m.content + "\n\n⏹ *Resposta interrompida.*" } : m);
             messagesRef.current = next;
             return next;
           }
@@ -195,7 +200,7 @@ export function useOmnix() {
         return;
       }
       console.error("Omnix error:", err);
-      toast.error("Connection error.");
+      toast.error("Erro de conexão com o servidor.");
     } finally {
       setIsLoading(false);
       setIsStreaming(false);

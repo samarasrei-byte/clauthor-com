@@ -56,8 +56,10 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const objectUrlRef = useRef<string | null>(null);
   const nativeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  // Always start fresh — allow ElevenLabs to be tried on each new session
-  const elevenLabsFailedRef = useRef(false);
+  // Check localStorage for persistent ElevenLabs failure flag
+  const elevenLabsFailedRef = useRef(
+    typeof window !== "undefined" && localStorage.getItem(ELEVENLABS_NATIVE_ONLY_KEY) === "1"
+  );
 
   const stop = useCallback((notify = true) => {
     const wasPlaying =
@@ -184,8 +186,13 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
         onStart?.();
       };
       audio.onended = () => {
-        stop(true);
-        resolveFinished?.();
+        audioRef.current = null;
+        if (objectUrlRef.current) {
+          URL.revokeObjectURL(objectUrlRef.current);
+          objectUrlRef.current = null;
+        }
+        setIsSpeaking(false);
+        wrappedOnEnd();
       };
       audio.onerror = () => {
         console.error("Audio playback error, using native");
