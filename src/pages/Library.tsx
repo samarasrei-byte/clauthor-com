@@ -71,8 +71,8 @@ const LibraryPage = () => {
     if (filter !== "all" && agentTiers[k] !== filter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      const title = t(`library_page.agents.${k}_title`).toLowerCase();
-      const desc = t(`library_page.agents.${k}_desc`).toLowerCase();
+      const title = t(`library_page.agents.${k}_title`, { defaultValue: getAgentName(k) }).toLowerCase();
+      const desc = t(`library_page.agents.${k}_desc`, { defaultValue: getAgentName(k) }).toLowerCase();
       const tags = agentTags[k].join(" ").toLowerCase();
       if (!title.includes(q) && !desc.includes(q) && !tags.includes(q)) return false;
     }
