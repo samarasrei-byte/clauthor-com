@@ -250,8 +250,8 @@ const AgentsSection = ({
                     onClick={() => agent.status === "active" && onOpenChat({ id: agent.id, name: agent.name })}
                     disabled={agent.status !== "active"}
                   >
-                    <MessageSquare className="h-3.5 w-3.5" />
-                    Conversar
+                     <MessageSquare className="h-3.5 w-3.5" />
+                    {t("dashboard.chat_action", { defaultValue: "Conversar" })}
                   </Button>
                   <Button
                     size="sm"
