@@ -275,8 +275,8 @@ const Pitch = () => {
 
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
             {[
-              { icon: Bot, label: "83 agentes operacionais" },
-              { icon: Clock, label: "Setup em 5 minutos" },
+              { icon: Bot, label: `${TOTAL_WORKFORCE_AGENTS} agentes operacionais` },
+              { icon: Network, label: `${TOTAL_SQUADS} squads inteligentes` },
               { icon: Shield, label: "Segurança Enterprise" },
               { icon: Globe, label: "13 idiomas nativos" },
             ].map((ind) => (
