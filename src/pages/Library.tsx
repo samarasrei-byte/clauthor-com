@@ -99,7 +99,7 @@ const LibraryPage = () => {
     }
 
     // Logged in → show checkout summary dialog instead of going directly to PayPal
-    const agentName = t(`library_page.agents.${key}_title`);
+    const agentName = t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) });
     const priceTier = agentPriceTiers[key];
     const region = getRegion(lang);
     const price = getPrice(lang, priceTier);
