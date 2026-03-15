@@ -266,9 +266,9 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="gap-1.5 text-[10px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            {mockAgents.filter(a => a.status === "working").length} active
+            <Badge variant="secondary" className="gap-1.5 text-[10px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              {agentNodes.filter(a => a.status === "working").length} active
           </Badge>
           <Badge variant="secondary" className="gap-1.5 text-[10px]">
             <AlertTriangle className="h-3 w-3 text-amber-400" />
