@@ -65,6 +65,8 @@ import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
 const KanbanBoard = lazy(() => import("@/components/dashboard/KanbanBoard"));
 const CompanyHub = lazy(() => import("@/components/dashboard/CompanyHub"));
+const ThorDailyBriefing = lazy(() => import("@/components/dashboard/ThorDailyBriefing"));
+const QuickWins = lazy(() => import("@/components/dashboard/QuickWins"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -643,6 +645,29 @@ const ClientDashboard = () => {
                           onDismiss={() => {}}
                         />
                         <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                        
+                        {/* Thor Daily Briefing — shows once per day */}
+                        <ThorDailyBriefing
+                          data={{
+                            activeAgents,
+                            totalExecutions,
+                            recentLogs,
+                            remainingCredits,
+                            usagePercentage,
+                          }}
+                          onGoToThor={() => setActiveSection("omnix")}
+                          onDismiss={() => {}}
+                        />
+
+                        {/* Quick Wins — smart suggestions */}
+                        <QuickWins
+                          activeAgents={activeAgents}
+                          totalExecutions={totalExecutions}
+                          recentLogs={recentLogs}
+                          hasCompanyData={boardCount > 0}
+                          remainingCredits={remainingCredits}
+                          onNavigate={handleSidebarNav}
+                        />
                         
                         {/* Smart task entry — simple or strategic modes */}
                         <TaskRequestPanel
