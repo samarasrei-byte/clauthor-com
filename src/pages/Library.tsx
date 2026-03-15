@@ -90,7 +90,7 @@ const LibraryPage = () => {
           signup: true,
           hireIntent: {
             type: "agent" as const,
-            label: t(`library_page.agents.${key}_title`),
+            label: t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) }),
             slugs: [slug],
           },
         },
