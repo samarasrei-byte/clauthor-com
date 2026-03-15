@@ -850,7 +850,80 @@ const Pitch = () => {
         </div>
       </Section>
 
-      {/* ═══ 10. VANTAGEM COMPETITIVA ═══ */}
+      {/* ═══ 10. WORKFORCE ARCHITECTURE — 200 AGENTS ═══ */}
+      <Section className="bg-muted/20" id="workforce">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Network className="h-4 w-4" />
+              Arquitetura Organizacional
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">
+              <CountUp end={TOTAL_WORKFORCE_AGENTS} /> agentes. <CountUp end={TOTAL_SQUADS} /> squads. <CountUp end={TOTAL_DEPARTMENTS} /> departamentos.
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
+              Uma empresa inteira de IA organizada hierarquicamente — como uma corporação real, mas que opera 24/7, 
+              executa sob demanda (event-driven) e custa menos que 1 estagiário CLT.
+            </p>
+          </div>
+
+          {/* Summary Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            {[
+              { value: TOTAL_WORKFORCE_AGENTS, label: "Agentes Especializados", suffix: "" },
+              { value: TOTAL_SQUADS, label: "Squads com Missão", suffix: "" },
+              { value: TOTAL_DEPARTMENTS, label: "Departamentos", suffix: "" },
+              { value: 0, label: "Execução Contínua", suffix: "", display: "Event-Driven" },
+            ].map((s) => (
+              <GlassCard key={s.label} hover={false} className="text-center !py-6">
+                <p className="text-3xl font-display font-bold text-primary mb-1">
+                  {s.display || <CountUp end={s.value} suffix={s.suffix} />}
+                </p>
+                <p className="text-xs text-muted-foreground">{s.label}</p>
+              </GlassCard>
+            ))}
+          </div>
+
+          {/* Department Org Chart */}
+          <div className="space-y-4">
+            {WORKFORCE.map((dept, di) => (
+              <WorkforceDeptCard key={dept.id} dept={dept} index={di} />
+            ))}
+          </div>
+
+          {/* Event-Driven Execution Explainer */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12 p-8 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm"
+          >
+            <div className="flex items-center gap-3 mb-4">
+              <Zap className="w-5 h-5 text-primary" />
+              <h3 className="font-display text-lg font-bold text-foreground">Execução Event-Driven — Zero Desperdício</h3>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+              Nossos 200 agentes <strong className="text-foreground">NÃO rodam continuamente</strong>. 
+              Eles operam sob demanda — ativados apenas quando um evento acontece: task assigned, metric change, 
+              campaign launch, report requested. Isso reduz custo computacional em até <strong className="text-primary">95%</strong> vs execução contínua.
+            </p>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {[
+                { trigger: "Task Assigned", example: "Blog post solicitado → Blog Writer ativa → entrega → dorme" },
+                { trigger: "Metric Change", example: "ROAS cai 20% → Campaign Optimizer ativa → ajusta → dorme" },
+                { trigger: "Report Requested", example: "CFO pede DRE → Financial Forecaster gera → entrega → dorme" },
+              ].map((t) => (
+                <div key={t.trigger} className="p-3 rounded-lg bg-background/50 border border-border/30">
+                  <p className="text-xs font-mono text-primary font-bold mb-1">{t.trigger}</p>
+                  <p className="text-xs text-muted-foreground leading-relaxed">{t.example}</p>
+                </div>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </Section>
+
+      {/* ═══ 11. VANTAGEM COMPETITIVA ═══ */}
       <Section>
         <div className="max-w-5xl mx-auto text-center">
           <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
@@ -861,11 +934,11 @@ const Pitch = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
               { icon: Bot, text: "200 agentes operacionais" },
+              { icon: Network, text: "37 squads especializados" },
               { icon: Users, text: "4.100+ leads na whitelist" },
-              { icon: TrendingUp, text: "Estrutura própria de aquisição" },
               { icon: Globe, text: "13 idiomas nativos" },
-              { icon: Zap, text: "Escala infinita" },
-              { icon: Lock, text: "Infraestrutura segura" },
+              { icon: Zap, text: "Event-driven, zero desperdício" },
+              { icon: Lock, text: "Infraestrutura enterprise" },
             ].map((a) => (
               <GlassCard key={a.text} className="flex flex-col items-center gap-3 text-center">
                 <a.icon className="w-5 h-5 text-primary" />
