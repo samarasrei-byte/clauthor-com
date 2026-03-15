@@ -484,7 +484,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
                 <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium">GUIDE</span>
               </div>
               <span className="text-[10px] text-muted-foreground mt-0.5 block">
-                {isPaused ? "Paused" : isTyping ? "Speaking..." : "Listening"}
+                {isPaused ? "Pausado" : isTyping ? "Falando..." : "Ouvindo"}
               </span>
             </div>
 
