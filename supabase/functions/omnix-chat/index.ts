@@ -501,12 +501,12 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
         model: chatModel,
         messages: aiMessages,
         stream: false,
-        max_tokens: 600,
+        max_tokens: 1200,
         temperature: 0.2,
         tools: ALL_TOOLS,
         tool_choice: "auto",
       }, {
-        complexity: "complex",
+        complexity: "auto",
       });
 
       if (toolResponse.ok) {
