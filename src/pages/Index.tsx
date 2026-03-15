@@ -682,6 +682,19 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════════════════════════════════════════════════
+          ROI BENCHMARK CALCULATOR
+          ═══════════════════════════════════════════════════════ */}
+      <Suspense fallback={<div className="py-20" />}>
+        <ROIBenchmark />
+      </Suspense>
+
+      {/* ═══════════════════════════════════════════════════════
+          COMPETITIVE MOAT — Side-by-side comparison
+          ═══════════════════════════════════════════════════════ */}
+      <Suspense fallback={<div className="py-20" />}>
+        <CompetitiveMoat />
+      </Suspense>
+      {/* ═══════════════════════════════════════════════════════
           TESTIMONIALS — Multiple cases
           ═══════════════════════════════════════════════════════ */}
       <section className="py-16 sm:py-24 px-4 relative" aria-label="Testimonials">
