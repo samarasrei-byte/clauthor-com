@@ -225,6 +225,86 @@ const ValuationDefense = () => {
   );
 };
 
+/* ── Workforce Department Card ── */
+const deptIcons: Record<string, React.ElementType> = {
+  marketing: Megaphone, growth: TrendingUp, product: Cpu, sales: Briefcase,
+  customer_success: Headphones, finance: DollarSign, operations: Layers,
+};
+
+const WorkforceDeptCard = ({ dept, index }: { dept: typeof WORKFORCE[0]; index: number }) => {
+  const [expanded, setExpanded] = useState(false);
+  const totalAgents = dept.squads.reduce((s, sq) => s + sq.agents.length, 0);
+  const Icon = deptIcons[dept.id] || Building2;
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ delay: index * 0.05 }}
+      className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl overflow-hidden"
+    >
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full flex items-center justify-between p-5 hover:bg-muted/5 transition-colors"
+      >
+        <div className="flex items-center gap-4">
+          <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center">
+            <Icon className="w-5 h-5 text-primary" />
+          </div>
+          <div className="text-left">
+            <h3 className="font-display font-bold text-foreground">{dept.name}</h3>
+            <p className="text-xs text-muted-foreground">
+              {dept.squads.length} squads · {totalAgents} agentes
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-3">
+          <Badge variant="outline" className="text-[10px] border-primary/20 text-primary hidden sm:flex">
+            {totalAgents} agents
+          </Badge>
+          <ChevronRight className={`h-4 w-4 text-muted-foreground transition-transform ${expanded ? "rotate-90" : ""}`} />
+        </div>
+      </button>
+
+      {expanded && (
+        <motion.div
+          initial={{ height: 0, opacity: 0 }}
+          animate={{ height: "auto", opacity: 1 }}
+          className="border-t border-border/30 px-5 pb-5"
+        >
+          <div className="grid gap-3 pt-4">
+            {dept.squads.map((squad) => (
+              <div key={squad.id} className="p-4 rounded-xl bg-muted/20 border border-border/20">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-sm font-semibold text-foreground">{squad.name}</h4>
+                  <span className="text-[10px] text-muted-foreground font-mono">{squad.agents.length} agents</span>
+                </div>
+                <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{squad.mission}</p>
+                <div className="flex flex-wrap gap-1.5 mb-3">
+                  {squad.agents.map((agent) => (
+                    <span key={agent.slug} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/5 border border-primary/10 text-primary/80">
+                      {agent.name}
+                    </span>
+                  ))}
+                </div>
+                <div className="flex flex-wrap gap-2">
+                  {squad.outcomes.map((outcome) => (
+                    <span key={outcome} className="text-[10px] flex items-center gap-1 text-muted-foreground">
+                      <CheckCircle2 className="w-3 h-3 text-primary/60" />
+                      {outcome}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </motion.div>
+      )}
+    </motion.div>
+  );
+};
+
 const Pitch = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
