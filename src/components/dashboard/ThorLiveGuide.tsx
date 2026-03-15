@@ -571,7 +571,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             }}
           >
             <MessageSquare className="h-3 w-3" />
-            Ask
+            Perguntar
           </Button>
         </div>
 
