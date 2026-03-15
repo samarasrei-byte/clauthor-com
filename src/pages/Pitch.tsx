@@ -503,9 +503,9 @@ const Pitch = () => {
               </div>
               <ul className="space-y-3">
                 {[
-                  "83 agentes autônomos funcionais",
+                  "200 agentes autônomos em 7 departamentos",
+                  "37 squads especializados operacionais",
                   "4.100+ leads na whitelist",
-                  "15 departamentos completos",
                   "Valuation: US$ 500K (barganha)",
                   "Infraestrutura enterprise-grade",
                 ].map((item) => (
