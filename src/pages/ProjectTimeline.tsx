@@ -146,13 +146,11 @@ const TIMELINE_STEPS: TimelineStep[] = [
     title: "Claude Platform — Cérebro de Planejamento",
     date: "Março 2026",
     status: "pending",
-    description: "Integrar a Claude Platform (platform.claude.com) como cérebro estratégico para orquestração de alto nível, separando inteligência (Claude) de execução (Gemini/GPT). Responsável: Gabriel.",
+    description: "Integrar Claude Code como cérebro estratégico para orquestração de alto nível, separando inteligência (Claude) de execução (Gemini/GPT).",
     details: [
       "🔮 Dual-model: Claude para planejamento, Gemini para execução",
       "🔮 Raciocínio estratégico em cadeia para tarefas complexas",
       "🔮 Auto-avaliação e feedback loop",
-      "🔮 Integração com platform.claude.com/dashboard",
-      "👤 Responsável: Gabriel — Auditoria, análise e gestão admin",
     ],
     icon: <Brain className="h-5 w-5" />,
     metric: "Próximo",
@@ -356,7 +354,7 @@ const ProjectTimeline = () => {
             </div>
 
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight">
-              Projeto ClauThor
+              Projeto Clauthor
               <span className="block text-primary">— Timeline de Desenvolvimento</span>
             </h1>
             <p className="text-sm text-muted-foreground mt-3 max-w-xl leading-relaxed">
@@ -526,7 +524,7 @@ const ProjectTimeline = () => {
                   Auditoria & Gestão
                 </p>
                 <div className="space-y-1">
-                  {["Auditoria da plataforma", "Análise de qualidade", "Gestão do painel admin", "Claude Platform"].map((item) => (
+                  {["Auditoria da plataforma", "Análise de qualidade", "Gestão do painel admin"].map((item) => (
                     <p key={item} className="text-[11px] text-muted-foreground flex items-center gap-1.5">
                       <span className="w-1 h-1 rounded-full bg-muted-foreground/40 shrink-0" />
                       {item}
