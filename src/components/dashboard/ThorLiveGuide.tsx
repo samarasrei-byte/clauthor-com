@@ -78,86 +78,266 @@ const GUIDE_STEPS: GuideStep[] = [
   },
 ];
 
-// ─── Premium Waveform Visualizer (Siri-level) ───
-const WAVE_BARS = 32;
-
+// ─── Neural Radial Waveform Visualizer ───
 type WaveMode = "speaking" | "listening" | "idle";
 
-const WaveformVisualizer = ({ mode }: { mode: WaveMode }) => {
+const RING_SEGMENTS = 64;
+const PARTICLE_COUNT = 12;
+const SVG_SIZE = 200;
+const CENTER = SVG_SIZE / 2;
+const BASE_RADIUS = 38;
+
+const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
   const seeds = useRef(
-    Array.from({ length: WAVE_BARS }, () => Math.random())
+    Array.from({ length: RING_SEGMENTS }, () => [Math.random(), Math.random(), Math.random()])
   ).current;
 
+  const particles = useRef(
+    Array.from({ length: PARTICLE_COUNT }, () => ({
+      angle: Math.random() * 360,
+      speed: 2 + Math.random() * 4,
+      dist: 8 + Math.random() * 18,
+      size: 1 + Math.random() * 1.5,
+      delay: Math.random() * 3,
+    }))
+  ).current;
+
+  const isSpeaking = mode === "speaking";
+  const isListening = mode === "listening";
+  const isIdle = mode === "idle";
+  const intensity = isSpeaking ? 1.4 : isListening ? 0.9 : 0.2;
+
+  // Generate the animated radial path segments
+  const getPathForSegment = (index: number, amplitude: number) => {
+    const angleStep = (2 * Math.PI) / RING_SEGMENTS;
+    const angle = angleStep * index;
+    const nextAngle = angleStep * (index + 1);
+    const r = BASE_RADIUS + amplitude;
+    const x1 = CENTER + Math.cos(angle) * r;
+    const y1 = CENTER + Math.sin(angle) * r;
+    const x2 = CENTER + Math.cos(nextAngle) * r;
+    const y2 = CENTER + Math.sin(nextAngle) * r;
+    return { x1, y1, x2, y2, angle };
+  };
+
   return (
-    <div className="relative w-full h-12 flex items-center justify-center">
-      {/* Glow backdrop */}
-      <motion.div
-        className="absolute inset-0 rounded-xl"
-        animate={{
-          background: mode === "speaking"
-            ? "radial-gradient(ellipse at center, hsl(var(--primary) / 0.12) 0%, transparent 70%)"
-            : mode === "listening"
-            ? "radial-gradient(ellipse at center, hsl(var(--primary) / 0.06) 0%, transparent 70%)"
-            : "radial-gradient(ellipse at center, hsl(var(--primary) / 0.03) 0%, transparent 70%)",
-        }}
-        transition={{ duration: 0.6 }}
-      />
+    <div className="relative w-full flex items-center justify-center" style={{ height: 90 }}>
+      <svg viewBox={`0 0 ${SVG_SIZE} ${SVG_SIZE}`} width={90} height={90} className="overflow-visible">
+        <defs>
+          <radialGradient id="neural-glow" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.15 * intensity} />
+            <stop offset="60%" stopColor="hsl(var(--primary))" stopOpacity={0.04 * intensity} />
+            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+          </radialGradient>
+          <filter id="neural-bloom" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation={isSpeaking ? 3 : 1.5} />
+          </filter>
+          <filter id="neural-bloom-lg" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation={6} />
+          </filter>
+        </defs>
 
-      {/* Bars */}
-      <div className="flex items-center gap-[1.5px] h-full z-10">
-        {seeds.map((seed, i) => {
-          const center = Math.abs(i - WAVE_BARS / 2) / (WAVE_BARS / 2);
-          const envelope = 1 - center * center; // parabolic envelope
-          const peakH = 40 * envelope;
-          const idleH = 3 + envelope * 5; // breathing idle height
+        {/* Ambient glow */}
+        <motion.circle
+          cx={CENTER} cy={CENTER} r={65}
+          fill="url(#neural-glow)"
+          animate={{
+            r: isSpeaking ? [60, 72, 60] : isListening ? [58, 64, 58] : [55, 58, 55],
+            opacity: isSpeaking ? [0.6, 1, 0.6] : [0.3, 0.5, 0.3],
+          }}
+          transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+        />
 
-          const speakingAnim = {
-            height: [idleH, peakH * (0.4 + seed * 0.6), idleH * 1.5, peakH * (0.2 + seed * 0.4), idleH],
-            opacity: [0.4, 0.95, 0.5, 0.85, 0.4],
-          };
+        {/* Core bloom halo */}
+        <motion.circle
+          cx={CENTER} cy={CENTER}
+          fill="hsl(var(--primary))"
+          filter="url(#neural-bloom-lg)"
+          animate={{
+            r: isSpeaking ? [12, 22, 14, 20, 12] : isListening ? [10, 15, 10] : [8, 10, 8],
+            opacity: [0.06, 0.15 * intensity, 0.06],
+          }}
+          transition={{ duration: isSpeaking ? 0.5 : 2, repeat: Infinity, ease: "easeInOut" }}
+        />
 
-          const listeningAnim = {
-            height: [idleH, idleH + envelope * 8, idleH, idleH + envelope * 5, idleH],
-            opacity: [0.3, 0.6, 0.35, 0.55, 0.3],
-          };
+        {/* Neural ring segments — each bar radiates outward from center */}
+        {seeds.map(([r1, r2, r3], i) => {
+          const angleStep = (2 * Math.PI) / RING_SEGMENTS;
+          const angle = angleStep * i;
+          const dist = Math.abs(i - RING_SEGMENTS / 2) / (RING_SEGMENTS / 2);
+          const envelope = 1 - dist * 0.3; // slight variation
 
-          const idleAnim = {
-            height: [idleH * 0.8, idleH * 1.2, idleH * 0.8],
-            opacity: [0.15, 0.25, 0.15],
-          };
+          const innerR = BASE_RADIUS;
+          const maxOuterExtent = isSpeaking ? 24 : isListening ? 12 : 4;
 
-          const anim = mode === "speaking" ? speakingAnim
-            : mode === "listening" ? listeningAnim
-            : idleAnim;
-
-          const dur = mode === "speaking" ? 0.6 + seed * 0.6
-            : mode === "listening" ? 2 + seed * 1.5
-            : 3 + seed * 2;
+          const x1 = CENTER + Math.cos(angle) * innerR;
+          const y1 = CENTER + Math.sin(angle) * innerR;
 
           return (
-            <motion.div
+            <motion.line
               key={i}
-              className="rounded-full"
-              style={{
-                width: 2.5,
-                background: mode === "speaking"
-                  ? `linear-gradient(to top, hsl(var(--primary) / 0.6), hsl(var(--primary)))`
-                  : `hsl(var(--primary) / ${mode === "listening" ? 0.5 : 0.2})`,
-                boxShadow: mode === "speaking" && envelope > 0.5
-                  ? "0 0 6px hsl(var(--primary) / 0.3)"
-                  : "none",
+              x1={x1} y1={y1}
+              stroke="hsl(var(--primary))"
+              strokeWidth={isSpeaking ? 1.8 : 1.2}
+              strokeLinecap="round"
+              animate={{
+                x2: isSpeaking
+                  ? [
+                      CENTER + Math.cos(angle) * (innerR + 2),
+                      CENTER + Math.cos(angle) * (innerR + maxOuterExtent * (0.4 + r1 * 0.6) * envelope),
+                      CENTER + Math.cos(angle) * (innerR + maxOuterExtent * 0.15 * envelope),
+                      CENTER + Math.cos(angle) * (innerR + maxOuterExtent * (0.3 + r2 * 0.7) * envelope),
+                      CENTER + Math.cos(angle) * (innerR + 2),
+                    ]
+                  : isListening
+                  ? [
+                      CENTER + Math.cos(angle) * (innerR + 1),
+                      CENTER + Math.cos(angle) * (innerR + maxOuterExtent * (0.3 + r1 * 0.5) * envelope),
+                      CENTER + Math.cos(angle) * (innerR + 1),
+                    ]
+                  : [
+                      CENTER + Math.cos(angle) * (innerR + 1),
+                      CENTER + Math.cos(angle) * (innerR + maxOuterExtent * envelope),
+                      CENTER + Math.cos(angle) * (innerR + 1),
+                    ],
+                y2: isSpeaking
+                  ? [
+                      CENTER + Math.sin(angle) * (innerR + 2),
+                      CENTER + Math.sin(angle) * (innerR + maxOuterExtent * (0.4 + r1 * 0.6) * envelope),
+                      CENTER + Math.sin(angle) * (innerR + maxOuterExtent * 0.15 * envelope),
+                      CENTER + Math.sin(angle) * (innerR + maxOuterExtent * (0.3 + r2 * 0.7) * envelope),
+                      CENTER + Math.sin(angle) * (innerR + 2),
+                    ]
+                  : isListening
+                  ? [
+                      CENTER + Math.sin(angle) * (innerR + 1),
+                      CENTER + Math.sin(angle) * (innerR + maxOuterExtent * (0.3 + r1 * 0.5) * envelope),
+                      CENTER + Math.sin(angle) * (innerR + 1),
+                    ]
+                  : [
+                      CENTER + Math.sin(angle) * (innerR + 1),
+                      CENTER + Math.sin(angle) * (innerR + maxOuterExtent * envelope),
+                      CENTER + Math.sin(angle) * (innerR + 1),
+                    ],
+                opacity: isSpeaking
+                  ? [0.3, 0.9 * envelope, 0.4, 0.85 * envelope, 0.3]
+                  : isListening
+                  ? [0.2, 0.5 * envelope, 0.2]
+                  : [0.08, 0.15, 0.08],
               }}
-              animate={anim}
               transition={{
-                duration: dur,
+                duration: isSpeaking ? 0.5 + r1 * 0.5 : isListening ? 1.8 + r1 * 1.2 : 3 + r1 * 2,
                 repeat: Infinity,
+                delay: i * 0.012,
                 ease: "easeInOut",
-                delay: i * 0.025,
+              }}
+              style={{
+                filter: isSpeaking && envelope > 0.7 ? "url(#neural-bloom)" : "none",
               }}
             />
           );
         })}
-      </div>
+
+        {/* Orbital arc */}
+        <motion.circle
+          cx={CENTER} cy={CENTER}
+          r={BASE_RADIUS - 4}
+          fill="none"
+          stroke="hsl(var(--primary))"
+          strokeWidth={0.8}
+          strokeDasharray="6 8"
+          strokeLinecap="round"
+          style={{ transformOrigin: `${CENTER}px ${CENTER}px` }}
+          animate={{
+            rotate: [0, 360],
+            strokeOpacity: isSpeaking ? [0.2, 0.5, 0.2] : [0.08, 0.15, 0.08],
+          }}
+          transition={{
+            rotate: { duration: 12, repeat: Infinity, ease: "linear" },
+            strokeOpacity: { duration: 2, repeat: Infinity, ease: "easeInOut" },
+          }}
+        />
+
+        {/* Second orbital arc — counter-rotating */}
+        <motion.circle
+          cx={CENTER} cy={CENTER}
+          r={BASE_RADIUS + (isSpeaking ? 28 : isListening ? 16 : 8)}
+          fill="none"
+          stroke="hsl(var(--primary))"
+          strokeWidth={0.5}
+          strokeDasharray="4 14"
+          strokeLinecap="round"
+          style={{ transformOrigin: `${CENTER}px ${CENTER}px` }}
+          animate={{
+            rotate: [360, 0],
+            strokeOpacity: [0.06, 0.2 * intensity, 0.06],
+          }}
+          transition={{
+            rotate: { duration: 18, repeat: Infinity, ease: "linear" },
+            strokeOpacity: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+          }}
+        />
+
+        {/* Floating particles */}
+        {!isIdle && particles.map((p, i) => {
+          const rad = (p.angle * Math.PI) / 180;
+          const cx = CENTER + Math.cos(rad) * (BASE_RADIUS + p.dist);
+          const cy = CENTER + Math.sin(rad) * (BASE_RADIUS + p.dist);
+          return (
+            <motion.circle
+              key={`np-${i}`}
+              r={p.size}
+              fill="hsl(var(--primary))"
+              filter="url(#neural-bloom)"
+              animate={{
+                cx: [cx, cx + Math.cos(rad) * 8, cx - Math.cos(rad) * 4, cx],
+                cy: [cy, cy + Math.sin(rad) * 8, cy - Math.sin(rad) * 4, cy],
+                opacity: [0, 0.7 * intensity, 0.2, 0],
+                r: isSpeaking ? [p.size, p.size * 2, p.size] : [p.size, p.size * 1.3, p.size],
+              }}
+              transition={{
+                duration: p.speed,
+                repeat: Infinity,
+                delay: p.delay,
+                ease: "easeInOut",
+              }}
+            />
+          );
+        })}
+
+        {/* Core nucleus */}
+        <motion.circle
+          cx={CENTER} cy={CENTER}
+          fill="hsl(var(--primary))"
+          animate={{
+            r: isSpeaking ? [4, 8, 3, 7, 4] : isListening ? [3, 5, 3] : [2, 3, 2],
+            opacity: [0.3, 0.8 * intensity, 0.3],
+          }}
+          transition={{
+            duration: isSpeaking ? 0.35 : 2,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        />
+
+        {/* Specular highlight */}
+        <ellipse
+          cx={CENTER - 6} cy={CENTER - 8}
+          rx={4} ry={2.5}
+          fill="white"
+          opacity={isSpeaking ? 0.12 : 0.04}
+          style={{ filter: "blur(2px)" }}
+        />
+      </svg>
+
+      {/* Mode label underneath */}
+      <motion.span
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 font-mono text-[8px] uppercase tracking-[0.25em] text-muted-foreground/40"
+        animate={{ opacity: [0.3, 0.7, 0.3] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        {isSpeaking ? "speaking" : isListening ? "listening" : "standby"}
+      </motion.span>
     </div>
   );
 };
@@ -340,10 +520,10 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
           </div>
         </div>
 
-        {/* Waveform visualizer */}
-        <div className="px-4 pb-2">
-          <div className="p-2 rounded-xl bg-background/30 border border-border/5">
-            <WaveformVisualizer mode={isPaused ? "idle" : isTyping ? "speaking" : "listening"} />
+        {/* Neural waveform visualizer */}
+        <div className="px-4 pb-1">
+          <div className="rounded-xl bg-background/20 border border-border/5 flex items-center justify-center">
+            <NeuralWaveform mode={isPaused ? "idle" : isTyping ? "speaking" : "listening"} />
           </div>
         </div>
 
