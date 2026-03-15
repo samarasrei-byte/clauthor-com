@@ -545,238 +545,163 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         )}
       </AnimatePresence>
 
-      {/* ── BOTTOM CONTROLS ── */}
-      <div className="shrink-0 pb-6 pt-3 relative z-10">
-        {/* Premium text input — always visible pill */}
-        <AnimatePresence>
-          {showTextInput && (
-            <motion.div
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 12 }}
-              transition={{ type: "spring", damping: 20, stiffness: 300 }}
-              className="px-4 sm:px-6 pb-4 max-w-xl mx-auto"
-            >
-              <div className="relative flex items-center rounded-2xl bg-card/60 backdrop-blur-2xl border border-border/20 shadow-[0_8px_32px_hsl(var(--background)/0.6),0_0_0_1px_hsl(var(--border)/0.08)] hover:border-primary/20 focus-within:border-primary/30 focus-within:shadow-[0_8px_32px_hsl(var(--primary)/0.08),0_0_0_1px_hsl(var(--primary)/0.15)] transition-all duration-300">
-                {/* Subtle glow accent */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/[0.02] via-transparent to-primary/[0.02] pointer-events-none" />
-                
-                <input
-                  value={input}
-                  onChange={e => {
-                    if (isSpeaking) stopSpeaking();
-                    setInput(e.target.value);
-                  }}
-                  onKeyDown={e => {
-                    if (e.key === "Enter" && !e.shiftKey) {
-                      e.preventDefault();
-                      handleSend();
-                    }
-                  }}
-                  placeholder={`Mensagem para ${config.name}...`}
-                  className="flex-1 bg-transparent border-none outline-none h-12 px-5 text-sm text-foreground placeholder:text-muted-foreground/40 relative z-10"
-                  disabled={isLoading}
-                  autoFocus
-                />
-
-                <div className="flex items-center gap-1 pr-2 relative z-10">
-                  {/* Mic inside input */}
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={() => startListeningRef.current?.()}
-                    className={`h-8 w-8 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                      isListening
-                        ? "bg-primary/15 text-primary"
-                        : "text-muted-foreground/40 hover:text-muted-foreground hover:bg-muted/30"
-                    }`}
-                    title="Microfone"
-                  >
-                    <Mic className="h-4 w-4" />
-                  </motion.button>
-
-                  {/* Send button */}
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.9 }}
-                    onClick={handleSend}
-                    disabled={!input.trim() || isLoading}
-                    className={`h-8 w-8 rounded-xl flex items-center justify-center transition-all duration-200 ${
-                      input.trim() && !isLoading
-                        ? "bg-primary text-primary-foreground shadow-[0_0_12px_hsl(var(--primary)/0.3)]"
-                        : "bg-muted/20 text-muted-foreground/25 cursor-not-allowed"
-                    }`}
-                  >
-                    <Send className="h-3.5 w-3.5" />
-                  </motion.button>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        <div className="flex items-center justify-center gap-2.5">
-          {/* Auto-voice toggle — glass pill */}
-          <button
-            onClick={() => {
-              const next = !autoSpeak;
-              setAutoSpeak(next);
-              if (!next) autoListenAfterSpeakRef.current = false;
-              if (isSpeaking) stopSpeaking();
-            }}
-            className={`h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 ${
-              autoSpeak
-                ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)]"
-                : "bg-card/30 text-muted-foreground/40 border border-border/10 hover:text-muted-foreground hover:border-border/20"
-            }`}
-            title={autoSpeak ? t("omnix.voice_on", { defaultValue: "Voz ativa" }) : t("omnix.voice_off", { defaultValue: "Voz desativada" })}
-          >
-            {autoSpeak ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
-          </button>
-
-          {/* Webcam toggle */}
-          <button
-            onClick={toggleWebcam}
-            className={`h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 ${
-              webcamActive
-                ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)]"
-                : "bg-card/30 text-muted-foreground/40 border border-border/10 hover:text-muted-foreground hover:border-border/20"
-            }`}
-            title="Câmera"
-          >
-            {webcamActive ? <Video className="h-3.5 w-3.5" /> : <VideoOff className="h-3.5 w-3.5" />}
-          </button>
-
-          {/* ─── MAIN ACTION BUTTON ─── */}
-          {isSpeaking ? (
-            <div className="flex items-center gap-2">
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="h-12 w-12 rounded-2xl bg-card/40 backdrop-blur-xl border border-border/15 text-muted-foreground hover:text-destructive hover:border-destructive/30 flex items-center justify-center transition-all duration-300 shadow-[0_4px_20px_hsl(var(--background)/0.5)]"
+      {/* ── UNIFIED BOTTOM BAR ── */}
+      <div className="shrink-0 pb-5 pt-2 px-4 sm:px-6 relative z-10">
+        <div className="max-w-2xl mx-auto space-y-3">
+          {/* Main input bar */}
+          <div className="relative flex items-center gap-2 rounded-2xl bg-card/50 backdrop-blur-2xl border border-border/15 shadow-[0_4px_24px_hsl(var(--background)/0.4)] hover:border-border/25 focus-within:border-primary/25 focus-within:shadow-[0_4px_24px_hsl(var(--primary)/0.06)] transition-all duration-300 px-2">
+            {/* Left actions */}
+            <div className="flex items-center gap-0.5 pl-1">
+              {/* Voice toggle */}
+              <button
                 onClick={() => {
-                  clearPendingRestart();
-                  autoListenAfterSpeakRef.current = false;
-                  manualStopRef.current = true;
-                  restartAttemptsRef.current = 0;
-                  stopSpeaking();
-                  if (isListening) {
+                  const next = !autoSpeak;
+                  setAutoSpeak(next);
+                  if (!next) autoListenAfterSpeakRef.current = false;
+                  if (isSpeaking) stopSpeaking();
+                }}
+                className={`h-8 w-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                  autoSpeak
+                    ? "text-primary bg-primary/8"
+                    : "text-muted-foreground/30 hover:text-muted-foreground/60"
+                }`}
+                title={autoSpeak ? "Voz ativa" : "Voz desativada"}
+              >
+                {autoSpeak ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
+              </button>
+
+              {/* Webcam */}
+              <button
+                onClick={toggleWebcam}
+                className={`h-8 w-8 rounded-lg flex items-center justify-center transition-all duration-200 ${
+                  webcamActive
+                    ? "text-primary bg-primary/8"
+                    : "text-muted-foreground/30 hover:text-muted-foreground/60"
+                }`}
+                title="Câmera"
+              >
+                {webcamActive ? <Video className="h-3.5 w-3.5" /> : <VideoOff className="h-3.5 w-3.5" />}
+              </button>
+            </div>
+
+            {/* Separator */}
+            <div className="w-px h-5 bg-border/15" />
+
+            {/* Text input */}
+            <input
+              value={input}
+              onChange={e => {
+                if (isSpeaking) stopSpeaking();
+                setInput(e.target.value);
+              }}
+              onKeyDown={e => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSend();
+                }
+              }}
+              placeholder={`Mensagem para ${config.name}...`}
+              className="flex-1 bg-transparent border-none outline-none h-12 text-sm text-foreground placeholder:text-muted-foreground/30"
+              disabled={isLoading}
+            />
+
+            {/* Right actions */}
+            <div className="flex items-center gap-1 pr-1">
+              {/* Mic / Stop / Listening button */}
+              {isSpeaking || isStreaming || isLoading ? (
+                <motion.button
+                  whileTap={{ scale: 0.9 }}
+                  onClick={isSpeaking ? handleBargeIn : handleStop}
+                  className={`h-9 w-9 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                    isSpeaking
+                      ? "bg-primary/10 text-primary"
+                      : "bg-destructive/10 text-destructive"
+                  }`}
+                  title={isSpeaking ? "Interromper" : "Parar"}
+                >
+                  {isSpeaking ? <Mic className="h-4 w-4" /> : <Square className="h-4 w-4" />}
+                </motion.button>
+              ) : isListening ? (
+                <motion.button
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => {
+                    clearPendingRestart();
+                    manualStopRef.current = true;
+                    restartAttemptsRef.current = 0;
                     recognitionRef.current?.stop();
                     setIsListening(false);
-                  }
-                }}
-                title="Parar"
-              >
-                <Square className="h-4 w-4" />
-              </motion.button>
+                  }}
+                  className="h-9 w-9 rounded-xl flex items-center justify-center bg-primary/15 text-primary relative"
+                >
+                  <motion.span
+                    className="absolute inset-0 rounded-xl border border-primary/30"
+                    animate={{ opacity: [0.3, 1, 0.3] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  />
+                  <MicOff className="h-4 w-4 relative z-10" />
+                </motion.button>
+              ) : (
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.9 }}
+                  onClick={() => startListeningRef.current?.()}
+                  className="h-9 w-9 rounded-xl flex items-center justify-center text-muted-foreground/40 hover:text-primary hover:bg-primary/5 transition-all duration-200"
+                  title="Microfone"
+                >
+                  <Mic className="h-4 w-4" />
+                </motion.button>
+              )}
+
+              {/* Send */}
               <motion.button
                 whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.92 }}
-                className="h-16 w-16 rounded-full relative flex items-center justify-center"
-                onClick={handleBargeIn}
-                title="Interromper e falar"
+                whileTap={{ scale: 0.9 }}
+                onClick={handleSend}
+                disabled={!input.trim() || isLoading}
+                className={`h-9 w-9 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                  input.trim() && !isLoading
+                    ? "bg-primary text-primary-foreground shadow-[0_0_16px_hsl(var(--primary)/0.25)]"
+                    : "bg-muted/15 text-muted-foreground/20 cursor-not-allowed"
+                }`}
               >
-                <span className="absolute inset-0 rounded-full bg-primary/10 backdrop-blur-xl border border-primary/20 shadow-[0_0_30px_hsl(var(--primary)/0.15)]" />
-                <motion.span
-                  className="absolute inset-[-2px] rounded-full border border-primary/30"
-                  animate={{ scale: [1, 1.08, 1], opacity: [0.5, 1, 0.5] }}
-                  transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-                />
-                <Mic className="h-6 w-6 text-primary relative z-10" />
+                <Send className="h-4 w-4" />
               </motion.button>
             </div>
-          ) : isStreaming || isLoading ? (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.92 }}
-              className="h-16 w-16 rounded-full relative flex items-center justify-center"
-              onClick={handleStop}
-            >
-              <span className="absolute inset-0 rounded-full bg-destructive/10 backdrop-blur-xl border border-destructive/20 shadow-[0_0_30px_hsl(var(--destructive)/0.15)]" />
-              <motion.span
-                className="absolute inset-[-2px] rounded-full border border-destructive/30"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                style={{ borderTopColor: "transparent", borderRightColor: "transparent" }}
-              />
-              <Square className="h-6 w-6 text-destructive relative z-10" />
-            </motion.button>
-          ) : isListening ? (
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.92 }}
-              className="h-16 w-16 rounded-full relative flex items-center justify-center"
-              onClick={() => {
-                clearPendingRestart();
-                manualStopRef.current = true;
-                restartAttemptsRef.current = 0;
-                recognitionRef.current?.stop();
-                setIsListening(false);
-              }}
-            >
-              <span className="absolute inset-0 rounded-full bg-primary/10 backdrop-blur-xl border border-primary/25 shadow-[0_0_30px_hsl(var(--primary)/0.2)]" />
-              <motion.span
-                className="absolute inset-[-3px] rounded-full border-2 border-primary/20"
-                animate={{ scale: [1, 1.12, 1], opacity: [0.3, 0.8, 0.3] }}
-                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
-              />
-              <MicOff className="h-6 w-6 text-primary relative z-10" />
-            </motion.button>
-          ) : (
-            <motion.button
-              whileHover={{ scale: 1.08 }}
-              whileTap={{ scale: 0.92 }}
-              className="h-16 w-16 rounded-full relative flex items-center justify-center group"
-              onClick={() => startListeningRef.current?.()}
-            >
-              <span className="absolute inset-0 rounded-full bg-card/30 backdrop-blur-xl border border-border/15 group-hover:border-primary/20 group-hover:bg-primary/5 shadow-[0_4px_20px_hsl(var(--background)/0.5)] transition-all duration-300" />
-              <Mic className="h-6 w-6 text-muted-foreground/60 group-hover:text-primary transition-colors duration-300 relative z-10" />
-            </motion.button>
-          )}
+          </div>
 
-          {/* Text toggle */}
-          <button
-            onClick={() => setShowTextInput(!showTextInput)}
-            className={`h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 ${
-              showTextInput
-                ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)]"
-                : "bg-card/30 text-muted-foreground/40 border border-border/10 hover:text-muted-foreground hover:border-border/20"
-            }`}
-            title="Texto"
-          >
-            <Keyboard className="h-3.5 w-3.5" />
-          </button>
-
-          {/* Chat panel toggle */}
-          <button
-            onClick={() => setShowChat(!showChat)}
-            className={`h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl transition-all duration-300 ${
-              showChat
-                ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)]"
-                : "bg-card/30 text-muted-foreground/40 border border-border/10 hover:text-muted-foreground hover:border-border/20"
-            }`}
-            title="Chat"
-          >
-            <MessageSquare className="h-3.5 w-3.5" />
-          </button>
-
-          {/* Clear */}
-          {hasMessages && (
+          {/* Secondary actions row */}
+          <div className="flex items-center justify-center gap-2">
+            {/* Chat panel toggle */}
             <button
-              onClick={() => {
-                if (messages.length > 2) {
-                  const confirmed = window.confirm("Limpar todo o histórico?");
-                  if (!confirmed) return;
-                }
-                handleStop();
-                onClear();
-              }}
-              className="h-9 w-9 rounded-xl flex items-center justify-center backdrop-blur-xl bg-card/30 text-muted-foreground/30 border border-border/10 hover:text-destructive hover:border-destructive/20 transition-all duration-300"
-              title="Limpar"
+              onClick={() => setShowChat(!showChat)}
+              className={`h-7 px-3 rounded-lg flex items-center gap-1.5 text-[11px] font-medium transition-all duration-200 ${
+                showChat
+                  ? "bg-primary/10 text-primary"
+                  : "text-muted-foreground/30 hover:text-muted-foreground/60 hover:bg-muted/10"
+              }`}
             >
-              <Trash2 className="h-3.5 w-3.5" />
+              <MessageSquare className="h-3 w-3" />
+              <span>Chat</span>
             </button>
-          )}
+
+            {/* Clear */}
+            {hasMessages && (
+              <button
+                onClick={() => {
+                  if (messages.length > 2) {
+                    const confirmed = window.confirm("Limpar todo o histórico?");
+                    if (!confirmed) return;
+                  }
+                  handleStop();
+                  onClear();
+                }}
+                className="h-7 px-3 rounded-lg flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground/30 hover:text-destructive/60 hover:bg-destructive/5 transition-all duration-200"
+              >
+                <Trash2 className="h-3 w-3" />
+                <span>Limpar</span>
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
