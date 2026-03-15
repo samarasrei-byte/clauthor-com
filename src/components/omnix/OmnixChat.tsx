@@ -489,13 +489,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           animate={{ opacity: 1 }}
           className="mt-4"
         >
-          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
-            {isListening ? t("omnix.status_listening", { defaultValue: "Ouvindo..." })
-              : isSpeaking ? t("omnix.status_speaking", { defaultValue: "Falando..." })
-              : isStreaming ? t("omnix.status_thinking", { defaultValue: "Pensando..." })
-              : isLoading ? t("omnix.status_processing", { defaultValue: "Processando..." })
-              : t("omnix.status_ready", { defaultValue: "Digite abaixo ou clique no microfone 🎙️" })}
-          </span>
+           <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/30">
+             {isListening ? t("omnix.status_listening", { defaultValue: "Ouvindo..." })
+               : isSpeaking ? t("omnix.status_speaking", { defaultValue: "Falando..." })
+               : isStreaming ? t("omnix.status_thinking", { defaultValue: "Pensando..." })
+               : isLoading ? t("omnix.status_processing", { defaultValue: "Processando..." })
+               : t("omnix.status_ready", { defaultValue: "Pronto" })}
+           </span>
         </motion.div>
 
         {/* Live transcript while listening */}
