@@ -90,7 +90,7 @@ const investorConversation = [
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B com ticket médio de US$ 199/mês por squad. Com 1.000 clientes, são quase US$ 2,4M/ano em receita recorrente. LTV alto, churn baixo." },
   { role: "investor" as const, text: "Mas US$ 500K de valuation não é baixo demais?" },
-  { role: "agent" as const, text: "Na verdade, é o ponto ideal para o investidor. Estamos em estágio pre-seed com produto funcional — 83 agentes, 15 departamentos, 4.100+ leads na whitelist. Plataformas similares com apenas um MVP captaram a US$ 2-5M. Entrar a US$ 500K significa capturar o maior upside possível." },
+  { role: "agent" as const, text: "Na verdade, é o ponto ideal para o investidor. Estamos em estágio pre-seed com produto funcional — 200 agentes, 7 departamentos, 37 squads, 4.100+ leads na whitelist. Plataformas similares com apenas um MVP captaram a US$ 2-5M. Entrar a US$ 500K significa capturar o maior upside possível." },
   { role: "investor" as const, text: "Quais são os riscos?" },
   { role: "agent" as const, text: "O risco de NÃO investir é maior. Automação B2B não é tendência — é inevitável. Entrar agora no pre-seed a US$ 500K captura o maior potencial de retorno." },
   { role: "investor" as const, text: "Como eu entro?" },
