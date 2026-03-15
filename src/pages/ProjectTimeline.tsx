@@ -526,7 +526,7 @@ const ProjectTimeline = () => {
                   Auditoria & Gestão
                 </p>
                 <div className="space-y-1">
-                  {["Auditoria da plataforma", "Análise de qualidade", "Gestão do painel admin", "Claude Platform"].map((item) => (
+                  {["Auditoria da plataforma", "Análise de qualidade", "Gestão do painel admin"].map((item) => (
                     <p key={item} className="text-[11px] text-muted-foreground flex items-center gap-1.5">
                       <span className="w-1 h-1 rounded-full bg-muted-foreground/40 shrink-0" />
                       {item}
