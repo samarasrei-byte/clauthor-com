@@ -28,6 +28,7 @@ import {
   agentCapabilities, tierColors, tiers
 } from "@/data/libraryAgentData";
 import { getSimplifiedAgentKeys } from "@/data/agentConsolidation";
+import { getAgentName } from "@/data/agentLibraryBridge";
 import { deptDetails } from "@/data/departmentData";
 import { Skeleton } from "@/components/ui/skeleton";
 
