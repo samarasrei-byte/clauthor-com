@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
+import APICredentialEditor from "@/components/timeline/APICredentialEditor";
 
 // ─── Timeline Data ───
 interface TimelineStep {
@@ -284,17 +285,21 @@ const TimelineCard = ({ step, index }: { step: TimelineStep; index: number }) =>
               className="overflow-hidden"
             >
               <div className="mt-3 pt-3 border-t border-border/10 space-y-1.5">
-                {step.details.map((detail, i) => (
-                  <motion.p
-                    key={i}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="text-[11px] text-foreground/70 leading-relaxed"
-                  >
-                    {detail}
-                  </motion.p>
-                ))}
+                {step.id === 7 ? (
+                  <APICredentialEditor />
+                ) : (
+                  step.details.map((detail, i) => (
+                    <motion.p
+                      key={i}
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: i * 0.05 }}
+                      className="text-[11px] text-foreground/70 leading-relaxed"
+                    >
+                      {detail}
+                    </motion.p>
+                  ))
+                )}
               </div>
             </motion.div>
           )}
