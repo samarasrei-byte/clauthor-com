@@ -333,7 +333,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
               <span className="text-[10px] font-semibold text-primary">You</span>
             </div>
             <ConnectionLine />
-            {mockAgents.map((agent, i) => (
+            {agentNodes.map((agent, i) => (
               <div key={agent.id} className="flex items-center gap-2">
                 <AgentNodeCard
                   agent={agent}
