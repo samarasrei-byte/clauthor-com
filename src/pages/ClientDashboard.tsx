@@ -8,7 +8,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Presentation,
-  Rocket, Network, Target, Mic, Store, Cpu
+  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -63,6 +63,8 @@ const MissionControl = lazy(() => import("@/components/dashboard/MissionControl"
 const ThorLiveGuide = lazy(() => import("@/components/dashboard/ThorLiveGuide"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
+const KanbanBoard = lazy(() => import("@/components/dashboard/KanbanBoard"));
+const CompanyHub = lazy(() => import("@/components/dashboard/CompanyHub"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -304,6 +306,8 @@ const ClientDashboard = () => {
     ...soloAgentItems,
 
     // More — secondary features grouped together
+    { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: moreGroup },
+    { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: moreGroup },
     { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Team" }), icon: Users, group: moreGroup },
     { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Meeting Room" }), icon: Presentation, group: moreGroup },
     { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Eye, group: moreGroup },
@@ -358,6 +362,8 @@ const ClientDashboard = () => {
     "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
     "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
     "control-tower": "Control Tower",
+    empresa: t("dashboard.company", { defaultValue: "Empresa" }),
+    kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
@@ -801,6 +807,26 @@ const ClientDashboard = () => {
                       onOpenThor={() => setActiveSection("omnix")}
                       onOpenChat={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
                     />
+                  </Suspense>
+                )}
+
+                {/* ═══ EMPRESA (Company Hub) ═══ */}
+                {activeSection === "empresa" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <CompanyHub
+                      agents={agents}
+                      nameToSlug={nameToSlug}
+                      onNavigate={handleSidebarNav}
+                      onOpenAgent={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
+                      onSetupCompany={() => setShowCompanyOnboarding(true)}
+                    />
+                  </Suspense>
+                )}
+
+                {/* ═══ KANBAN BOARD ═══ */}
+                {activeSection === "kanban" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <KanbanBoard />
                   </Suspense>
                 )}
 
