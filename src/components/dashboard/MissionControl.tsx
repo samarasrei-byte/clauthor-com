@@ -393,7 +393,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
-            {mockValidation.map((item) => (
+            {validationItems.map((item) => (
               <motion.div
                 key={item.id}
                 layout
