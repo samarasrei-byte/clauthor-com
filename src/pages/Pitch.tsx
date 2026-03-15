@@ -83,7 +83,7 @@ const AnimatedBar = ({ label, pct, color }: { label: string; pct: number; color:
 
 /* ── Investor Agent Chat (auto-plays conversation) ── */
 const investorConversation = [
-  { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
+  { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora? Vi que vocês têm 200 agentes." },
   { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 83 agentes totalmente operacionais, infraestrutura pronta, e um mercado de US$ 1,8 trilhão até 2030. Você entra antes da escala explodir." },
   { role: "investor" as const, text: "Mas o mercado de IA está saturado. Qual o diferencial?" },
   { role: "agent" as const, text: "Ninguém faz o que nós fazemos: substituir departamentos inteiros com squads coordenados de IA. Não vendemos chatbots — vendemos operações completas. Suporte, financeiro, compliance, tudo rodando 24/7." },
