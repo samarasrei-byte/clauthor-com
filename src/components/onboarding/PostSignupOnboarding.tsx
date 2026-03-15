@@ -50,7 +50,7 @@ const PostSignupOnboarding = ({ onComplete }: PostSignupOnboardingProps) => {
   };
 
   const benefits = [
-    t("onboarding.benefit_1", { defaultValue: "83 agentes prontos para trabalhar" }),
+    t("onboarding.benefit_1", { defaultValue: "200 agentes prontos para trabalhar" }),
     t("onboarding.benefit_2", { defaultValue: "Respostas personalizadas para seu negócio" }),
     t("onboarding.benefit_3", { defaultValue: "Configuração em menos de 2 minutos" }),
   ];

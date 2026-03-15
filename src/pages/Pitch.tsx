@@ -550,7 +550,7 @@ const Pitch = () => {
               <span className="gradient-text">neste momento.</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
-              A maioria das startups capta no pre-seed com apenas um deck e uma ideia. A CLAUTHOR já tem produto funcional com 83 agentes, tração real de 4.100+ leads, e infraestrutura enterprise-grade. Veja por que US$ 500K é, na verdade, uma oportunidade única para o investidor.
+              A maioria das startups capta no pre-seed com apenas um deck e uma ideia. A CLAUTHOR já tem produto funcional com 200 agentes em 37 squads, tração real de 4.100+ leads, e infraestrutura enterprise-grade. Veja por que US$ 500K é, na verdade, uma oportunidade única para o investidor.
             </p>
           </div>
 

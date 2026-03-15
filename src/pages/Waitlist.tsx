@@ -81,7 +81,7 @@ const CHAT_SCRIPT: SimMessage[] = [
   { id: 6, sender: "SDR Outbound", emoji: "🎯", content: "Sequência de 5 toques configurada. LinkedIn + Email + WhatsApp. Disparando para os 847 leads em ondas de 100/dia." },
   { id: 7, sender: "Designer IA", emoji: "🎨", content: "Criativos prontos: 8 banners responsivos + 4 stories + 2 vídeos curtos. Tudo no brand guide do cliente." },
   { id: 8, sender: "CFO Agent", emoji: "💰", content: "Estimativa de custo da campanha: R$ 12.400. ROI projetado: 340%. Budget aprovado automaticamente (baixo risco)." },
-  { id: 9, sender: "Thor", emoji: "⚡", content: "Squad TechNova: campanha no ar em 47 minutos. Isso é o poder de 83 agentes autônomos trabalhando juntos. 🚀", isOrchestrator: true },
+  { id: 9, sender: "Thor", emoji: "⚡", content: "Squad TechNova: campanha no ar em 47 minutos. Isso é o poder de 200 agentes autônomos trabalhando juntos. 🚀", isOrchestrator: true },
   { id: 10, sender: "Sistema", emoji: "✅", content: "Missão concluída · 847 leads engajados · 12 criativos publicados · ROI projetado: 340%", isSystem: true },
   { id: 11, sender: "CS Agent", emoji: "🎧", content: "Monitorando feedback dos leads em tempo real. 23 respostas positivas nos primeiros 15 minutos. Encaminhando para Closer Pro." },
   { id: 12, sender: "Closer Pro", emoji: "🤝", content: "Recebi 23 leads quentes. Iniciando cadência de fechamento personalizada. Meta: 8 conversões hoje." },
