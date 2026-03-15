@@ -610,10 +610,10 @@ const Pitch = () => {
             <h3 className="font-display text-xl font-bold mb-6 text-foreground">Cenário de retorno para o investidor</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                { label: "Investimento", value: "US$ 50K", sub: "10% equity" },
-                { label: "Valuation Seed (6-12 meses)", value: "US$ 3-5M", sub: "6-10x" },
-                { label: "Valuation Série A", value: "US$ 15-30M", sub: "30-60x" },
-                { label: "Potencial saída (5 anos)", value: "US$ 50M+", sub: "100x+" },
+                { label: "Investimento", value: "US$ 50K", sub: "20% equity" },
+                { label: "Valuation Seed (6-12 meses)", value: "US$ 3-5M", sub: "12-20x" },
+                { label: "Valuation Série A", value: "US$ 15-30M", sub: "60-120x" },
+                { label: "Potencial saída (5 anos)", value: "US$ 50M+", sub: "200x+" },
               ].map((item) => (
                 <div key={item.label}>
                   <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
