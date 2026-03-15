@@ -1131,7 +1131,7 @@ const Pitch = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Estamos abrindo 10% da empresa para acelerar exponencialmente.</h2>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Estamos abrindo 20% da empresa por US$ 50K para acelerar exponencialmente.</h2>
             <p className="text-muted-foreground text-lg mb-8 max-w-lg mx-auto">
               A rodada é limitada. Quem entra agora, captura o maior retorno.
             </p>

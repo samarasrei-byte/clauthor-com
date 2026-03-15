@@ -169,7 +169,7 @@ const TIMELINE_STEPS: TimelineStep[] = [
       "🚀 Custo estimado: ~R$290/mês para infraestrutura",
       "🚀 Margem bruta projetada: 96-99%",
       "👤 Guilherme — Desenvolvimento, lançamento, software, UX/UI, prospecção de leads",
-      "👤 Gabriel — Auditoria, análise da plataforma, gestão do admin",
+      "👤 Gabriel — Auditoria, APIs, análise da plataforma, gestão do admin",
     ],
     icon: <Rocket className="h-5 w-5" />,
     metric: "17/03",
