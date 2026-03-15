@@ -186,8 +186,8 @@ const LibraryPage = () => {
         )}
         onHire={(key) => handleHire(key)}
         onPreview={(key) => setPreviewAgent({
-          name: t(`library_page.agents.${key}_title`),
-          desc: t(`library_page.agents.${key}_desc`),
+          name: t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) }),
+          desc: t(`library_page.agents.${key}_desc`, { defaultValue: getAgentName(key) }),
         })}
         hiringSlug={hiringSlug}
       />
