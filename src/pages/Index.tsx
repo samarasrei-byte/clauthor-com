@@ -8,6 +8,8 @@ const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinde
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 const InnovationRoadmap = lazy(() => import("@/components/landing/InnovationRoadmap"));
 const SplineShowcase = lazy(() => import("@/components/landing/SplineShowcase"));
+const ROIBenchmark = lazy(() => import("@/components/landing/ROIBenchmark"));
+const CompetitiveMoat = lazy(() => import("@/components/landing/CompetitiveMoat"));
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, ShieldCheck, Bolt,
@@ -349,7 +351,7 @@ const HomePage = () => {
                     <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-accent-emerald animate-ping opacity-75" />
                   </div>
                   <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                    {t("home.system_status")}
+                    {t("home.system_status_full", { defaultValue: "SYSTEM ACTIVE · 200 AGENTS OPERATIONAL" })}
                   </span>
                   <HelpTooltip id="home-intro" text={t("home.help_tooltip", { defaultValue: "Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo." })} position="bottom" size={12} autoShow={false} />
                 </div>
@@ -460,15 +462,15 @@ const HomePage = () => {
 
 
       {/* ═══════════════════════════════════════════════════════
-          SOCIAL PROOF — Authority numbers
+          SOCIAL PROOF — Platform-level authority numbers
           ═══════════════════════════════════════════════════════ */}
       <section className="py-12 sm:py-16 px-4 relative border-y border-border/50" aria-label="Platform capabilities">
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
-            <AnimatedStat icon={BotMessageSquare} value={83} suffix="" label={t("home.stats_active_agents", { defaultValue: "AI AGENTS READY" })} />
-            <AnimatedStat icon={Layers3} value={15} suffix="" label={t("home.stats_departments", { defaultValue: "DEPARTMENTS" })} />
-            <AnimatedStat icon={Fingerprint} value={7} suffix="" label={t("home.stats_tools", { defaultValue: "BUILT-IN TOOLS" })} />
-            <AnimatedStat icon={Signal} value={100} suffix="%" label={t("home.stats_uptime", { defaultValue: "PLATFORM UPTIME" })} />
+            <AnimatedStat icon={BotMessageSquare} value={200} suffix="+" label={t("home.stats_active_agents", { defaultValue: "AI AGENTS" })} />
+            <AnimatedStat icon={Layers3} value={37} suffix="" label={t("home.stats_squads", { defaultValue: "SMART SQUADS" })} />
+            <AnimatedStat icon={Building2} value={7} suffix="" label={t("home.stats_departments", { defaultValue: "DEPARTMENTS" })} />
+            <AnimatedStat icon={Signal} value={99.9} suffix="%" label={t("home.stats_uptime", { defaultValue: "UPTIME SLA" })} />
           </div>
         </div>
       </section>
@@ -679,6 +681,19 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ═══════════════════════════════════════════════════════
+          ROI BENCHMARK CALCULATOR
+          ═══════════════════════════════════════════════════════ */}
+      <Suspense fallback={<div className="py-20" />}>
+        <ROIBenchmark />
+      </Suspense>
+
+      {/* ═══════════════════════════════════════════════════════
+          COMPETITIVE MOAT — Side-by-side comparison
+          ═══════════════════════════════════════════════════════ */}
+      <Suspense fallback={<div className="py-20" />}>
+        <CompetitiveMoat />
+      </Suspense>
       {/* ═══════════════════════════════════════════════════════
           TESTIMONIALS — Multiple cases
           ═══════════════════════════════════════════════════════ */}

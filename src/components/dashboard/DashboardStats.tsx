@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
-import { Bot, Zap, CheckCircle, TrendingUp, Coins, Clock, Target, DollarSign } from "lucide-react";
+import { Bot, Zap, CheckCircle, TrendingUp, Coins, Clock, Target, DollarSign, Sparkles } from "lucide-react";
 import { useCredits } from "@/hooks/useCredits";
 import { useTokenUsage } from "@/hooks/useCredits";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";
+import { useMemo } from "react";
 
 interface DashboardStatsProps {
   activeAgents: number;
@@ -11,6 +12,16 @@ interface DashboardStatsProps {
   successRate: number;
   monthlyGrowth: number;
 }
+
+// Demo data for new users with 0 agents
+const DEMO_STATS = {
+  activeAgents: 12,
+  totalExecutions: 3847,
+  successRate: 97,
+  monthlyGrowth: 4,
+  totalTokensUsed: 284500,
+  estimatedSavings: 90720,
+};
 
 const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGrowth }: DashboardStatsProps) => {
   const { credits, remainingCredits, usagePercentage } = useCredits();
@@ -20,39 +31,47 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
   const currencyCode = "USD";
   const formatNum = (n: number) => n.toLocaleString(locale);
 
-  const totalTokensUsed = tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);
-  const estimatedSavings = activeAgents * 7560;
+  // Demo mode: show simulated data when user has no agents
+  const isDemo = activeAgents === 0 && totalExecutions === 0;
+  const d = isDemo ? DEMO_STATS : null;
 
-  const successLogs = totalExecutions > 0 ? Math.round(successRate) : 0;
-  const execTrend = totalExecutions > 100 ? `+${Math.min(99, Math.round(totalExecutions * 0.12))}` : totalExecutions > 0 ? `+${totalExecutions}` : "0";
+  const effectiveAgents = d ? d.activeAgents : activeAgents;
+  const effectiveExecutions = d ? d.totalExecutions : totalExecutions;
+  const effectiveSuccessRate = d ? d.successRate : successRate;
+  const effectiveGrowth = d ? d.monthlyGrowth : monthlyGrowth;
 
-  const stats = [
+  const totalTokensUsed = d ? d.totalTokensUsed : tokenUsage.reduce((acc, t) => acc + t.tokens_used, 0);
+  const estimatedSavings = d ? d.estimatedSavings : effectiveAgents * 7560;
+
+  const execTrend = effectiveExecutions > 100 ? `+${Math.min(99, Math.round(effectiveExecutions * 0.12))}` : effectiveExecutions > 0 ? `+${effectiveExecutions}` : "0";
+
+  const stats = useMemo(() => [
     { 
       icon: Bot, 
       label: t("dashboard.active_agents_label"), 
-      value: activeAgents.toString(), 
-      trend: monthlyGrowth > 0 ? `+${monthlyGrowth} ${t("dashboard.this_period")}` : activeAgents > 0 ? t("dashboard.stable") : t("dashboard.none"),
+      value: effectiveAgents.toString(), 
+      trend: effectiveGrowth > 0 ? `+${effectiveGrowth} ${t("dashboard.this_period")}` : effectiveAgents > 0 ? t("dashboard.stable") : t("dashboard.none"),
       color: "text-primary"
     },
     { 
       icon: Zap, 
       label: t("dashboard.total_executions_label"), 
-      value: formatNum(totalExecutions), 
+      value: formatNum(effectiveExecutions), 
       trend: execTrend,
       color: "text-cyan-400"
     },
     { 
       icon: CheckCircle, 
       label: t("dashboard.success_rate_label"), 
-      value: totalExecutions > 0 ? `${successRate}%` : "—", 
-      trend: totalExecutions > 0 ? `${totalExecutions} ${t("dashboard.executions_label")}` : t("dashboard.no_data"),
+      value: effectiveExecutions > 0 ? `${effectiveSuccessRate}%` : "—", 
+      trend: effectiveExecutions > 0 ? `${effectiveExecutions} ${t("dashboard.executions_label")}` : t("dashboard.no_data"),
       color: "text-primary/80"
     },
     { 
       icon: DollarSign, 
       label: t("dashboard.estimated_savings_label"), 
-      value: activeAgents > 0 ? new Intl.NumberFormat(locale, { style: "currency", currency: currencyCode, minimumFractionDigits: 0 }).format(estimatedSavings) : "—", 
-      trend: activeAgents > 0 ? t("dashboard.vs_clt_month") : t("dashboard.hire_agents"),
+      value: effectiveAgents > 0 ? new Intl.NumberFormat(locale, { style: "currency", currency: currencyCode, minimumFractionDigits: 0 }).format(estimatedSavings) : "—", 
+      trend: effectiveAgents > 0 ? t("dashboard.vs_clt_month") : t("dashboard.hire_agents"),
       color: "text-cyan-400"
     },
     { 
@@ -76,21 +95,35 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
     { 
       icon: Clock, 
       label: t("dashboard.hours_saved_label"), 
-      value: activeAgents > 0 ? `${Math.round(totalExecutions * 0.03)}h` : "—",
-      trend: activeAgents > 0 ? t("dashboard.this_period") : t("dashboard.no_data"),
+      value: effectiveAgents > 0 ? `${Math.round(effectiveExecutions * 0.03)}h` : "—",
+      trend: effectiveAgents > 0 ? t("dashboard.this_period") : t("dashboard.no_data"),
       color: "text-primary/80"
     },
     { 
       icon: TrendingUp, 
       label: t("dashboard.roi_label"), 
-      value: activeAgents > 0 ? `${Math.round(((estimatedSavings - (activeAgents * 3997)) / Math.max(activeAgents * 3997, 1)) * 100)}%` : "—",
-      trend: activeAgents > 0 ? t("dashboard.return_month") : t("dashboard.hire_agents"),
+      value: effectiveAgents > 0 ? `${Math.round(((estimatedSavings - (effectiveAgents * 3997)) / Math.max(effectiveAgents * 3997, 1)) * 100)}%` : "—",
+      trend: effectiveAgents > 0 ? t("dashboard.return_month") : t("dashboard.hire_agents"),
       color: "text-cyan-400"
     },
-  ];
+  ], [effectiveAgents, effectiveExecutions, effectiveSuccessRate, effectiveGrowth, totalTokensUsed, estimatedSavings, remainingCredits, usagePercentage, credits, execTrend, locale, currencyCode, formatNum, t]);
 
   return (
     <div className="space-y-4">
+      {/* Demo Mode Banner */}
+      {isDemo && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-primary/20 bg-primary/[0.04]"
+        >
+          <Sparkles className="h-4 w-4 text-primary shrink-0" />
+          <span className="text-xs text-muted-foreground">
+            {t("dashboard.demo_mode_banner", { defaultValue: "📊 Demo mode — these are simulated metrics. Hire your first agent to see real data!" })}
+          </span>
+        </motion.div>
+      )}
+
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((s, i) => (
           <motion.div
@@ -99,7 +132,7 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.05 }}
           >
-            <div className="glass-card rounded-2xl p-5 glass-hover">
+            <div className={`glass-card rounded-2xl p-5 glass-hover ${isDemo ? "opacity-80" : ""}`}>
               <div className="flex items-center justify-between mb-4">
                 <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center">
                   <s.icon className={`h-5 w-5 ${s.color}`} />
