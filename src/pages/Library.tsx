@@ -265,7 +265,7 @@ const LibraryPage = () => {
                     </div>
 
                     <h2 className="font-display text-2xl md:text-3xl font-bold mb-2">
-                      {t(`library_page.agents.${featuredAgent}_title`)}
+                      {t(`library_page.agents.${featuredAgent}_title`, { defaultValue: getAgentName(featuredAgent) })}
                     </h2>
                     <p className="text-muted-foreground mb-5 leading-relaxed max-w-lg">
                       {t(`library_page.agents.${featuredAgent}_desc`)}
