@@ -546,7 +546,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             onClick={() => setIsPaused(!isPaused)}
           >
             {isPaused ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
-            {isPaused ? "Resume" : "Pause"}
+            {isPaused ? "Retomar" : "Pausar"}
           </Button>
 
           {nextStep && (
