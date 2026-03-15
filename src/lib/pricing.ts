@@ -49,8 +49,8 @@ export const regionalPricing: Record<string, RegionalPricing> = {
     currency: "BRL", symbol: "R$", locale: "pt-BR",
     plans: { starter: 1197, growth: 2397 },
     tokenPacks: { pack5m: 347, pack15m: 797, pack50m: 1997, pack100m: 3997 },
-    comparison: { avgSalary: 4500, avgSalaryYear3: 272160, agentStarting: 297, agentYear3: 10692 },
-    departments: { tecnologia: 7497, comercial: 5997, marketing: 4997, financeiro: 5997, criacao: 3997, suporte: 3997, rh: 1997 },
+    comparison: { avgSalary: 4500, avgSalaryYear3: 272160, agentStarting: 347, agentYear3: 12492 },
+    departments: { tecnologia: 8997, comercial: 6997, marketing: 5997, financeiro: 6997, criacao: 4797, suporte: 4797, rh: 2397 },
     departmentClt: cltCosts,
   },
   "pt-pt": {
