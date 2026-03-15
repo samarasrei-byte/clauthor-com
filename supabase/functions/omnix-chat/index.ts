@@ -478,7 +478,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
     ];
 
     for (const m of trimmedMessages) {
-      if (m === messages[messages.length - 1] && m.role === "user" && imageBase64) {
+      if (m === trimmedMessages[trimmedMessages.length - 1] && m.role === "user" && imageBase64) {
         // Multimodal message with image
         aiMessages.push({
           role: "user",
