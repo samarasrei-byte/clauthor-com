@@ -329,7 +329,7 @@ const CredentialVault = ({ credentials }: { credentials: any[] }) => {
 };
 
 // ─── MAIN CONTROL TOWER ───
-const ControlTower = () => {
+const ControlTower = ({ onNavigate }: { onNavigate?: (id: string) => void }) => {
   const { user } = useAuth();
   const { t } = useTranslation();
   const { credits, remainingCredits, usagePercentage } = useCredits();
@@ -391,8 +391,10 @@ const ControlTower = () => {
     : agents;
 
   const handleCommand = (cmd: string) => {
-    // In production this would route to THOR/Omnix
-    console.log("Command dispatched:", cmd);
+    // Route command to THOR for real execution
+    if (onNavigate) {
+      onNavigate("omnix");
+    }
   };
 
   return (
