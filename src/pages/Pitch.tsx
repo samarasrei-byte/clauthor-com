@@ -643,8 +643,8 @@ const Pitch = () => {
           <div className="grid sm:grid-cols-3 gap-6 mb-14">
             {[
               { label: "Captando", value: "US$ 50.000" },
-              { label: "Equity oferecido", value: "10%" },
-              { label: "Valuation implícito", value: "US$ 500.000" },
+              { label: "Equity oferecido", value: "20%" },
+              { label: "Valuation implícito", value: "US$ 250.000" },
             ].map((item) => (
               <GlassCard key={item.label} hover={false} className="text-center !py-8">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
