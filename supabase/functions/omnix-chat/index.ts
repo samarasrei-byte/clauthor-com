@@ -543,10 +543,10 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
             model: chatModel,
             messages: [...aiMessages, choice.message, ...toolResults],
             stream: true,
-            max_tokens: 600,
+            max_tokens: 1200,
             temperature: 0.25,
           }, {
-            complexity: "complex",
+            complexity: "auto",
           });
 
           if (finalResponse.ok) {
