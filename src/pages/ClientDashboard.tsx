@@ -810,6 +810,26 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {/* ═══ EMPRESA (Company Hub) ═══ */}
+                {activeSection === "empresa" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <CompanyHub
+                      agents={agents}
+                      nameToSlug={nameToSlug}
+                      onNavigate={handleSidebarNav}
+                      onOpenAgent={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
+                      onSetupCompany={() => setShowCompanyOnboarding(true)}
+                    />
+                  </Suspense>
+                )}
+
+                {/* ═══ KANBAN BOARD ═══ */}
+                {activeSection === "kanban" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <KanbanBoard />
+                  </Suspense>
+                )}
+
 
                 {/* ═══ CONTROL TOWER ═══ */}
                 {activeSection === "control-tower" && (
