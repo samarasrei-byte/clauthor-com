@@ -586,7 +586,7 @@ const Pitch = () => {
                   "200 agentes autônomos em 7 departamentos",
                   "37 squads especializados operacionais",
                   "4.100+ leads na whitelist",
-                  "Valuation: US$ 500K (barganha)",
+                  "Valuation: US$ 250K (20% por US$ 50K)",
                   "Infraestrutura enterprise-grade",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-foreground/90">
