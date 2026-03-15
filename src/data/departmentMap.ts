@@ -1,7 +1,9 @@
 /**
  * Maps agent template slugs to their department.
- * Used to group contracted agents by department in the sidebar.
+ * Auto-generated from workforceArchitecture for ALL 200 agents.
  */
+
+import { WORKFORCE, SLUG_TO_WORKFORCE_DEPT } from "./workforceArchitecture";
 
 export interface DepartmentInfo {
   id: string;
@@ -25,10 +27,17 @@ const DEPARTMENTS: Record<string, DepartmentInfo> = {
   compras:          { id: "compras",           label: "Compras & Procurement",    color: "text-lime-400" },
   logistica:        { id: "logistica",         label: "Logística & Supply Chain", color: "text-sky-400" },
   qualidade:        { id: "qualidade",         label: "Qualidade & Processos",    color: "text-yellow-400" },
+  // Workforce architecture departments (mapped to display depts)
+  growth:           { id: "growth",            label: "Growth",                   color: "text-emerald-400" },
+  product:          { id: "product",           label: "Product",                  color: "text-violet-400" },
+  sales:            { id: "sales",             label: "Sales",                    color: "text-cyan-400" },
+  customer_success: { id: "customer_success",  label: "Customer Success",         color: "text-emerald-400" },
+  finance:          { id: "finance",           label: "Finance",                  color: "text-amber-400" },
+  operations:       { id: "operations",        label: "Operations",               color: "text-indigo-400" },
 };
 
-/** slug → department id */
-const SLUG_TO_DEPT: Record<string, string> = {
+// ─── Manual overrides for legacy slugs ───
+const MANUAL_SLUG_TO_DEPT: Record<string, string> = {
   // Tecnologia
   coding: "tecnologia", computer: "tecnologia", project_management: "tecnologia", security: "tecnologia", data_engineer: "tecnologia",
   // Comercial
@@ -41,7 +50,7 @@ const SLUG_TO_DEPT: Record<string, string> = {
   // Criação
   creative_design: "criacao", video_production: "criacao", creative_writer: "criacao", content_producer: "criacao", ux_researcher: "criacao",
   // Suporte
-  support_channel: "suporte", support_lead: "suporte", voice_support: "suporte", rag: "suporte", onboarding_specialist: "suporte",
+  support_channel: "suporte", support_lead: "suporte", voice_support: "suporte", rag: "suporte", onboarding_specialist: "suporte", omnichannel: "suporte",
   // RH
   hr: "rh", training: "rh", people_analytics: "rh",
   // Prospecção & SDR
@@ -63,11 +72,21 @@ const SLUG_TO_DEPT: Record<string, string> = {
   procurement: "compras", supplier_mgr: "compras", cost_analyst: "compras", contract_negotiator: "compras",
   // Logística & Supply Chain
   logistics: "logistica", inventory: "logistica", supply_chain: "logistica",
-  // Suporte (+ omnichannel movido de logística)
-  omnichannel: "suporte",
   // Qualidade & Processos
   quality: "qualidade", process_analyst: "qualidade",
 };
+
+/** Combined slug → department id (manual overrides + workforce auto-mapping) */
+export const SLUG_TO_DEPT: Record<string, string> = { ...MANUAL_SLUG_TO_DEPT };
+
+// Auto-fill from workforce architecture for any slug not manually overridden
+for (const [slug, deptId] of Object.entries(SLUG_TO_WORKFORCE_DEPT)) {
+  if (!(slug in SLUG_TO_DEPT)) {
+    SLUG_TO_DEPT[slug] = deptId;
+  }
+}
+
+export { DEPARTMENTS };
 
 export function getDepartmentForSlug(slug: string): DepartmentInfo | null {
   const deptId = SLUG_TO_DEPT[slug];
