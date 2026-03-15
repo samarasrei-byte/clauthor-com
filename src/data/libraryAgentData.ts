@@ -24,9 +24,10 @@ export const agentKeys = ALL_AGENT_SLUGS as readonly string[];
 
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo"] as const;
 
-export const agentSlugs: Record<string, string> = {
-  voice_ai: "voice_ai", orchestrator: "orchestrator", research: "research", coding: "coding",
-  omnichannel: "omnichannel", revenue: "revenue", sales: "sales",
+// Auto-generate slugs for all 200 agents
+export const agentSlugs: Record<string, string> = Object.fromEntries(
+  agentKeys.map(k => [k, k])
+);
   rag: "rag", computer: "computer", content: "content", security: "security", hr: "hr",
   customer_success: "customer_success", data_analytics: "data_analytics", legal: "legal", ecommerce: "ecommerce",
   influencer: "influencer", marketing_automation: "marketing_automation", creative_design: "creative_design",
