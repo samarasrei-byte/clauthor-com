@@ -418,6 +418,9 @@ serve(async (req) => {
     // Tools trigger on EITHER explicit tool verbs OR platform context + action verbs
     const shouldAttemptTools = toolIntentRegex.test(lastUserMessage) || (needsOperationalContext && lastUserMessage.length > 15);
 
+    // If tools are needed, we always need operational context
+    const loadContext = needsOperationalContext || shouldAttemptTools;
+
     let agents: any[] = [];
     let credits: any = null;
     let tasks: any[] = [];
