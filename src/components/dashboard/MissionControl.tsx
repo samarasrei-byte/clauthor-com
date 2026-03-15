@@ -442,11 +442,11 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
             <div className="flex items-center gap-2">
               <Zap className="h-4 w-4 text-primary" />
               <CardTitle className="text-sm">Task Execution</CardTitle>
-              <Badge variant="secondary" className="text-[9px] ml-auto">{mockTasks.length} running</Badge>
+              <Badge variant="secondary" className="text-[9px] ml-auto">{runningTasks.length} running</Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
-            {mockTasks.map((task) => (
+            {runningTasks.map((task) => (
               <motion.div
                 key={task.id}
                 layout
