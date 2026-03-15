@@ -586,20 +586,21 @@ const Pitch = () => {
           <div className="text-center mb-16">
             <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
               <Target className="h-4 w-4" />
-              Por que a Clauthor?
+              Análise Brutal de Mercado
             </Badge>
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">
-              Não somos um chatbot.
+              Vamos ser honestos.
               <br />
-              <span className="gradient-text glow-text">Somos o departamento inteiro.</span>
+              <span className="gradient-text glow-text">Você não precisa de mais um chatbot.</span>
             </h2>
-            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Existe uma diferença brutal entre usar uma IA para conversar e ter uma infraestrutura completa que executa, decide e escala autonomamente.
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
+              Claude, ChatGPT, OpenClaw — são ferramentas incríveis. Mas nenhuma delas substitui um departamento. 
+              A pergunta não é "qual IA é melhor?" — é <strong className="text-foreground">"quem executa o trabalho?"</strong>
             </p>
           </div>
 
           {/* Comparison Table */}
-          <div className="grid md:grid-cols-3 gap-6 mb-16">
+          <div className="grid md:grid-cols-3 gap-6 mb-12">
             {/* Claude */}
             <GlassCard className="relative overflow-hidden border-destructive/20">
               <div className="absolute top-0 right-0 w-24 h-24 bg-destructive/5 rounded-full blur-2xl" />
@@ -609,31 +610,36 @@ const Pitch = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">Claude / ChatGPT</h3>
-                  <span className="text-xs text-muted-foreground">$25/mês por usuário</span>
+                  <span className="text-xs text-destructive/80 font-mono">Ferramenta Passiva</span>
                 </div>
               </div>
-              <ul className="space-y-3 text-sm">
+              <div className="mb-4 p-3 rounded-lg bg-destructive/5 border border-destructive/10">
+                <p className="text-xs font-mono text-destructive/80">$25/mês · Só responde quando perguntam</p>
+              </div>
+              <ul className="space-y-2.5 text-sm">
                 {[
-                  { ok: false, text: "Apenas chat — zero automação" },
-                  { ok: false, text: "Sem pipeline de vendas" },
+                  { ok: false, text: "Não faz nada sozinho — é passivo" },
+                  { ok: false, text: "Zero automação ou workflows" },
+                  { ok: false, text: "Não envia emails, não prospecta" },
+                  { ok: false, text: "Sem CRM, Kanban ou pipeline" },
                   { ok: false, text: "Sem multi-agente ou delegação" },
-                  { ok: false, text: "Sem integração com CRM/ERP" },
                   { ok: false, text: "Sem memória entre sessões" },
-                  { ok: false, text: "Sem controle de acesso por área" },
-                  { ok: false, text: "Sem relatórios ou analytics" },
-                  { ok: true, text: "Boa qualidade de resposta" },
+                  { ok: false, text: "Sem relatórios de performance" },
+                  { ok: false, text: "Cada conversa começa do zero" },
+                  { ok: true, text: "Qualidade de resposta excelente" },
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className={`mt-0.5 text-xs ${item.ok ? "text-green-500" : "text-destructive"}`}>
+                    <span className={`mt-0.5 text-xs font-bold ${item.ok ? "text-green-500" : "text-destructive"}`}>
                       {item.ok ? "✓" : "✗"}
                     </span>
                     <span className={item.ok ? "text-foreground" : "text-muted-foreground"}>{item.text}</span>
                   </li>
                 ))}
               </ul>
-              <div className="mt-6 pt-4 border-t border-border/30">
-                <p className="text-xs text-muted-foreground italic">
-                  "É como ter um estagiário genial que só responde quando você pergunta — mas nunca faz nada sozinho."
+              <div className="mt-6 pt-4 border-t border-destructive/15">
+                <p className="text-xs text-muted-foreground italic leading-relaxed">
+                  "Você paga $25/mês pra ter um gênio que <strong>só fala</strong>. 
+                  Não executa, não monitora, não escala. É como contratar um consultor que nunca implementa nada."
                 </p>
               </div>
             </GlassCard>
@@ -647,40 +653,45 @@ const Pitch = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg">OpenClaw / DIY</h3>
-                  <span className="text-xs text-muted-foreground">$50+/mês + dev ($5k-15k setup)</span>
+                  <span className="text-xs text-yellow-500/80 font-mono">Motor Bruto</span>
                 </div>
               </div>
-              <ul className="space-y-3 text-sm">
+              <div className="mb-4 p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/10">
+                <p className="text-xs font-mono text-yellow-500/80">$50+/mês + dev ($5K-15K setup) + 3-6 meses</p>
+              </div>
+              <ul className="space-y-2.5 text-sm">
                 {[
-                  { ok: false, text: "Precisa de desenvolvedor" },
-                  { ok: false, text: "Sem interface visual (UI)" },
-                  { ok: false, text: "Sem CRM ou gestão de leads" },
-                  { ok: false, text: "Sem segurança enterprise" },
-                  { ok: false, text: "Sem suporte ou SLA" },
-                  { ok: false, text: "Meses para implementar" },
-                  { ok: true, text: "Custo de tokens baixo" },
+                  { ok: false, text: "Precisa de dev senior ($8K+/mês)" },
+                  { ok: false, text: "Sem interface — é linha de comando" },
+                  { ok: false, text: "Sem CRM, leads ou funil" },
+                  { ok: false, text: "Zero segurança enterprise" },
+                  { ok: false, text: "Sem suporte, sem SLA" },
+                  { ok: false, text: "3-6 meses pra funcionar" },
+                  { ok: false, text: "Manutenção constante necessária" },
+                  { ok: true, text: "Tokens baratos se self-hosted" },
                   { ok: true, text: "Controle total do código" },
                 ].map((item, i) => (
                   <li key={i} className="flex items-start gap-2">
-                    <span className={`mt-0.5 text-xs ${item.ok ? "text-green-500" : "text-yellow-500"}`}>
+                    <span className={`mt-0.5 text-xs font-bold ${item.ok ? "text-green-500" : "text-yellow-500"}`}>
                       {item.ok ? "✓" : "✗"}
                     </span>
                     <span className={item.ok ? "text-foreground" : "text-muted-foreground"}>{item.text}</span>
                   </li>
                 ))}
               </ul>
-              <div className="mt-6 pt-4 border-t border-border/30">
-                <p className="text-xs text-muted-foreground italic">
-                  "É como comprar peças de carro e montar sozinho — funciona, mas leva meses e você precisa ser mecânico."
+              <div className="mt-6 pt-4 border-t border-yellow-500/15">
+                <p className="text-xs text-muted-foreground italic leading-relaxed">
+                  "Você economiza R$200/mês em tokens mas gasta R$15K+ em dev, 6 meses de tempo e reza pra não dar bug em produção. 
+                  O barato sai caro."
                 </p>
               </div>
             </GlassCard>
 
             {/* Clauthor */}
-            <GlassCard className="relative overflow-hidden border-primary/30 ring-1 ring-primary/20 shadow-[0_0_40px_hsl(var(--primary)/0.1)]">
+            <GlassCard className="relative overflow-hidden border-primary/30 ring-1 ring-primary/20 shadow-[0_0_40px_hsl(var(--primary)/0.12)]">
               <div className="absolute -top-3 right-4">
                 <Badge className="bg-primary text-primary-foreground text-xs px-3 py-1 gap-1">
-                  <Star className="w-3 h-3" /> Recomendado
+                  <Star className="w-3 h-3" /> Departamento Completo
                 </Badge>
               </div>
               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl" />
@@ -690,19 +701,23 @@ const Pitch = () => {
                 </div>
                 <div>
                   <h3 className="font-bold text-lg gradient-text">CLAUTHOR</h3>
-                  <span className="text-xs text-muted-foreground">A partir de R$347/mês por agente</span>
+                  <span className="text-xs text-primary/80 font-mono">Autonomia Enterprise</span>
                 </div>
               </div>
-              <ul className="space-y-3 text-sm">
+              <div className="mb-4 p-3 rounded-lg bg-primary/5 border border-primary/15">
+                <p className="text-xs font-mono text-primary/80">A partir de R$497/mês · Ativo em 5 minutos</p>
+              </div>
+              <ul className="space-y-2.5 text-sm">
                 {[
-                  "83 agentes especializados prontos",
-                  "Orquestração Agent-to-Agent (A2A)",
-                  "Policy Engine com 5 portões",
-                  "CRM + Kanban + Analytics nativo",
-                  "Segurança AES-256 + RLS + Anti-injection",
+                  "83 agentes que EXECUTAM, não só falam",
+                  "Orquestração A2A — agentes delegam entre si",
+                  "Policy Engine: 5 portões de segurança",
+                  "CRM + Kanban + Analytics integrado",
+                  "Segurança AES-256 + LGPD + RLS",
                   "Multi-tenant com isolamento total",
-                  "13 idiomas nativos",
-                  "Ativo em minutos, não meses",
+                  "13 idiomas com detecção automática",
+                  "Memória persistente entre sessões",
+                  "Setup completo em minutos, não meses",
                 ].map((text, i) => (
                   <li key={i} className="flex items-start gap-2">
                     <CheckCircle2 className="w-4 h-4 mt-0.5 text-primary shrink-0" />
@@ -711,20 +726,84 @@ const Pitch = () => {
                 ))}
               </ul>
               <div className="mt-6 pt-4 border-t border-primary/20">
-                <p className="text-xs text-primary/80 font-medium italic">
-                  "É como contratar um departamento inteiro de elite que trabalha 24/7, nunca tira férias e custa menos que um estagiário."
+                <p className="text-xs text-primary/80 font-medium italic leading-relaxed">
+                  "É um departamento inteiro de elite que trabalha 24/7, nunca falta, nunca pede aumento, 
+                  e custa menos que 1 estagiário CLT. Não é hype — é matemática."
                 </p>
               </div>
             </GlassCard>
           </div>
 
+          {/* Token Cost Analysis - CFO Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12 p-8 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl"
+          >
+            <div className="flex items-center gap-3 mb-6">
+              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                <BarChart3 className="w-5 h-5 text-primary" />
+              </div>
+              <div>
+                <h3 className="font-display text-lg font-bold text-foreground">Análise de Custo Real — Visão de CFO</h3>
+                <p className="text-xs text-muted-foreground">"Se meus agentes trabalharem o mês inteiro, quanto gasto?"</p>
+              </div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="space-y-4">
+                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Custo de Tokens (Realidade)</h4>
+                <div className="space-y-3 text-sm">
+                  {[
+                    { label: "Agente trabalhando 24/7 (200 interações/dia)", value: "≈ 12M tokens/mês" },
+                    { label: "Custo real desses tokens (Gemini Flash)", value: "≈ R$ 22/mês" },
+                    { label: "Mesmo com modelo premium (GPT-5)", value: "≈ R$ 95/mês" },
+                    { label: "Custo médio real por agente", value: "R$ 30-60/mês" },
+                  ].map((item) => (
+                    <div key={item.label} className="flex justify-between items-center p-2.5 rounded-lg bg-muted/30">
+                      <span className="text-muted-foreground">{item.label}</span>
+                      <span className="font-mono font-semibold text-foreground">{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Sua Margem como Dono</h4>
+                <div className="space-y-3 text-sm">
+                  {[
+                    { label: "Agente Starter cobra", value: "R$ 497/mês", color: "text-primary" },
+                    { label: "Custo real de operação", value: "- R$ 60/mês", color: "text-muted-foreground" },
+                    { label: "Margem bruta por agente", value: "R$ 437 (87.9%)", color: "text-green-500" },
+                    { label: "Agente Premium cobra", value: "R$ 4.997/mês", color: "text-primary" },
+                    { label: "Margem Premium", value: "R$ 4.900+ (98%)", color: "text-green-500" },
+                  ].map((item) => (
+                    <div key={item.label} className="flex justify-between items-center p-2.5 rounded-lg bg-muted/30">
+                      <span className="text-muted-foreground">{item.label}</span>
+                      <span className={`font-mono font-semibold ${item.color}`}>{item.value}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/15 text-center">
+              <p className="text-sm text-foreground font-medium">
+                💡 <strong>Resposta sincera:</strong> Mesmo seu agente mais barato (R$497) trabalhando 24/7 o mês inteiro 
+                consome ~R$60 em tokens. Sua margem é de <strong className="text-primary">87%+</strong>. 
+                Tokens são baratos — o valor está na <strong>orquestração, segurança e automação</strong> que a Clauthor entrega.
+              </p>
+            </div>
+          </motion.div>
+
           {/* ROI Killer Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { value: "95.6%", label: "Economia vs CLT", sublabel: "SDR: R$6.750 → R$347" },
-              { value: "24/7", label: "Disponibilidade", sublabel: "Zero folgas, zero férias" },
-              { value: "83", label: "Agentes prontos", sublabel: "15 departamentos cobertos" },
-              { value: "<5min", label: "Time to value", sublabel: "Ativo no mesmo dia" },
+              { value: "93.7%", label: "Economia vs CLT", sublabel: "SDR CLT: R$7.900 → Agente: R$497" },
+              { value: "24/7", label: "Disponibilidade", sublabel: "Zero férias, zero licença" },
+              { value: "87%+", label: "Margem bruta", sublabel: "Custo de token irrisório" },
+              { value: "<5min", label: "Time to value", sublabel: "Do zero ao operacional" },
             ].map((stat) => (
               <GlassCard key={stat.label} className="text-center">
                 <p className="text-2xl md:text-3xl font-display font-bold gradient-text mb-1">{stat.value}</p>
@@ -733,6 +812,36 @@ const Pitch = () => {
               </GlassCard>
             ))}
           </div>
+
+          {/* Price Table */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12"
+          >
+            <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">Tabela de Preços por Tier</h3>
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+              {[
+                { tier: "Starter", price: "R$ 497", example: "WhatsApp Bot, FAQ", tag: "Mais barato" },
+                { tier: "Entry", price: "R$ 997", example: "Content, RAG Agent" },
+                { tier: "Mid", price: "R$ 1.697", example: "Sales, SEO, CS" },
+                { tier: "High", price: "R$ 2.497", example: "Omnichannel, RevOps" },
+                { tier: "Premium", price: "R$ 4.997", example: "Voice AI, Enterprise", tag: "Mais avançado" },
+              ].map((t) => (
+                <GlassCard key={t.tier} className="text-center relative">
+                  {t.tag && (
+                    <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[10px] font-mono bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">
+                      {t.tag}
+                    </span>
+                  )}
+                  <p className="text-xs text-muted-foreground uppercase tracking-wider">{t.tier}</p>
+                  <p className="text-lg font-display font-bold text-foreground mt-1">{t.price}<span className="text-xs font-normal text-muted-foreground">/mês</span></p>
+                  <p className="text-[10px] text-muted-foreground mt-1">{t.example}</p>
+                </GlassCard>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </Section>
 
