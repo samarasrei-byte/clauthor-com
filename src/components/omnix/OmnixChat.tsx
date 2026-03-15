@@ -595,7 +595,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                 ? "bg-primary/10 text-primary border border-primary/20 shadow-[0_0_12px_hsl(var(--primary)/0.1)]"
                 : "bg-card/30 text-muted-foreground/40 border border-border/10 hover:text-muted-foreground hover:border-border/20"
             }`}
-            title={autoSpeak ? "Voz ativa" : "Voz desativada"}
+            title={autoSpeak ? t("omnix.voice_on", { defaultValue: "Voz ativa" }) : t("omnix.voice_off", { defaultValue: "Voz desativada" })}
           >
             {autoSpeak ? <Volume2 className="h-3.5 w-3.5" /> : <VolumeX className="h-3.5 w-3.5" />}
           </button>
