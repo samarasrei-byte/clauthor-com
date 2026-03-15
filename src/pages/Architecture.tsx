@@ -57,6 +57,7 @@ const NAV_SECTIONS = [
   { id: "command-center", label: "Command Center" },
   { id: "platform", label: "Plataforma" },
   { id: "integrations", label: "Integrações" },
+  { id: "infrastructure", label: "Infraestrutura" },
 ];
 
 // ═══════════════════════════════════════
