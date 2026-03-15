@@ -173,7 +173,7 @@ const ValuationDefense = () => {
     {
       icon: Cpu,
       title: "Produto Funcional (não é MVP)",
-      desc: "200 agentes autônomos operacionais em 7 departamentos e 37 squads. Plataforma completa com orquestração multi-agente, memória persistente e motor de autonomia Nível 3.",
+      desc: "200 agentes autônomos operacionais em 15 departamentos e 37 squads. Plataforma completa com orquestração multi-agente, memória persistente e motor de autonomia Nível 3.",
     },
     {
       icon: Users,
