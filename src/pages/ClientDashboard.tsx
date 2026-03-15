@@ -646,6 +646,29 @@ const ClientDashboard = () => {
                         />
                         <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
                         
+                        {/* Thor Daily Briefing — shows once per day */}
+                        <ThorDailyBriefing
+                          data={{
+                            activeAgents,
+                            totalExecutions,
+                            recentLogs,
+                            remainingCredits,
+                            usagePercentage,
+                          }}
+                          onGoToThor={() => setActiveSection("omnix")}
+                          onDismiss={() => {}}
+                        />
+
+                        {/* Quick Wins — smart suggestions */}
+                        <QuickWins
+                          activeAgents={activeAgents}
+                          totalExecutions={totalExecutions}
+                          recentLogs={recentLogs}
+                          hasCompanyData={boardCount > 0}
+                          remainingCredits={remainingCredits}
+                          onNavigate={handleSidebarNav}
+                        />
+                        
                         {/* Smart task entry — simple or strategic modes */}
                         <TaskRequestPanel
                           contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
