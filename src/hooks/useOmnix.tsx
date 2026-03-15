@@ -139,7 +139,7 @@ export function useOmnix() {
       }
 
       const reader = response.body?.getReader();
-      if (!reader) throw new Error("No stream");
+      if (!reader) throw new Error("Sem stream disponível");
 
       const decoder = new TextDecoder();
       let buf = "";
