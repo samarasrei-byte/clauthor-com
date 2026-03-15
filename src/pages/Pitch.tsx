@@ -580,8 +580,164 @@ const Pitch = () => {
         </div>
       </Section>
 
-      {/* ═══ 9. VANTAGEM COMPETITIVA ═══ */}
-      <Section className="bg-muted/20">
+      {/* ═══ 9. POR QUE CLAUTHOR? — COMPARATIVO MATADOR ═══ */}
+      <Section className="bg-muted/20" id="why-clauthor">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Target className="h-4 w-4" />
+              Por que a Clauthor?
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">
+              Não somos um chatbot.
+              <br />
+              <span className="gradient-text glow-text">Somos o departamento inteiro.</span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+              Existe uma diferença brutal entre usar uma IA para conversar e ter uma infraestrutura completa que executa, decide e escala autonomamente.
+            </p>
+          </div>
+
+          {/* Comparison Table */}
+          <div className="grid md:grid-cols-3 gap-6 mb-16">
+            {/* Claude */}
+            <GlassCard className="relative overflow-hidden border-destructive/20">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-destructive/5 rounded-full blur-2xl" />
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center">
+                  <MessageCircle className="w-5 h-5 text-destructive" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg">Claude / ChatGPT</h3>
+                  <span className="text-xs text-muted-foreground">$25/mês por usuário</span>
+                </div>
+              </div>
+              <ul className="space-y-3 text-sm">
+                {[
+                  { ok: false, text: "Apenas chat — zero automação" },
+                  { ok: false, text: "Sem pipeline de vendas" },
+                  { ok: false, text: "Sem multi-agente ou delegação" },
+                  { ok: false, text: "Sem integração com CRM/ERP" },
+                  { ok: false, text: "Sem memória entre sessões" },
+                  { ok: false, text: "Sem controle de acesso por área" },
+                  { ok: false, text: "Sem relatórios ou analytics" },
+                  { ok: true, text: "Boa qualidade de resposta" },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className={`mt-0.5 text-xs ${item.ok ? "text-green-500" : "text-destructive"}`}>
+                      {item.ok ? "✓" : "✗"}
+                    </span>
+                    <span className={item.ok ? "text-foreground" : "text-muted-foreground"}>{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 pt-4 border-t border-border/30">
+                <p className="text-xs text-muted-foreground italic">
+                  "É como ter um estagiário genial que só responde quando você pergunta — mas nunca faz nada sozinho."
+                </p>
+              </div>
+            </GlassCard>
+
+            {/* OpenClaw */}
+            <GlassCard className="relative overflow-hidden border-yellow-500/20">
+              <div className="absolute top-0 right-0 w-24 h-24 bg-yellow-500/5 rounded-full blur-2xl" />
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
+                  <Code className="w-5 h-5 text-yellow-500" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg">OpenClaw / DIY</h3>
+                  <span className="text-xs text-muted-foreground">$50+/mês + dev ($5k-15k setup)</span>
+                </div>
+              </div>
+              <ul className="space-y-3 text-sm">
+                {[
+                  { ok: false, text: "Precisa de desenvolvedor" },
+                  { ok: false, text: "Sem interface visual (UI)" },
+                  { ok: false, text: "Sem CRM ou gestão de leads" },
+                  { ok: false, text: "Sem segurança enterprise" },
+                  { ok: false, text: "Sem suporte ou SLA" },
+                  { ok: false, text: "Meses para implementar" },
+                  { ok: true, text: "Custo de tokens baixo" },
+                  { ok: true, text: "Controle total do código" },
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <span className={`mt-0.5 text-xs ${item.ok ? "text-green-500" : "text-yellow-500"}`}>
+                      {item.ok ? "✓" : "✗"}
+                    </span>
+                    <span className={item.ok ? "text-foreground" : "text-muted-foreground"}>{item.text}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 pt-4 border-t border-border/30">
+                <p className="text-xs text-muted-foreground italic">
+                  "É como comprar peças de carro e montar sozinho — funciona, mas leva meses e você precisa ser mecânico."
+                </p>
+              </div>
+            </GlassCard>
+
+            {/* Clauthor */}
+            <GlassCard className="relative overflow-hidden border-primary/30 ring-1 ring-primary/20 shadow-[0_0_40px_hsl(var(--primary)/0.1)]">
+              <div className="absolute -top-3 right-4">
+                <Badge className="bg-primary text-primary-foreground text-xs px-3 py-1 gap-1">
+                  <Star className="w-3 h-3" /> Recomendado
+                </Badge>
+              </div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl" />
+              <div className="flex items-center gap-3 mb-6 mt-2">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Layers className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-lg gradient-text">CLAUTHOR</h3>
+                  <span className="text-xs text-muted-foreground">A partir de R$347/mês por agente</span>
+                </div>
+              </div>
+              <ul className="space-y-3 text-sm">
+                {[
+                  "83 agentes especializados prontos",
+                  "Orquestração Agent-to-Agent (A2A)",
+                  "Policy Engine com 5 portões",
+                  "CRM + Kanban + Analytics nativo",
+                  "Segurança AES-256 + RLS + Anti-injection",
+                  "Multi-tenant com isolamento total",
+                  "13 idiomas nativos",
+                  "Ativo em minutos, não meses",
+                ].map((text, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 mt-0.5 text-primary shrink-0" />
+                    <span className="text-foreground font-medium">{text}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-6 pt-4 border-t border-primary/20">
+                <p className="text-xs text-primary/80 font-medium italic">
+                  "É como contratar um departamento inteiro de elite que trabalha 24/7, nunca tira férias e custa menos que um estagiário."
+                </p>
+              </div>
+            </GlassCard>
+          </div>
+
+          {/* ROI Killer Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { value: "95.6%", label: "Economia vs CLT", sublabel: "SDR: R$6.750 → R$347" },
+              { value: "24/7", label: "Disponibilidade", sublabel: "Zero folgas, zero férias" },
+              { value: "83", label: "Agentes prontos", sublabel: "15 departamentos cobertos" },
+              { value: "<5min", label: "Time to value", sublabel: "Ativo no mesmo dia" },
+            ].map((stat) => (
+              <GlassCard key={stat.label} className="text-center">
+                <p className="text-2xl md:text-3xl font-display font-bold gradient-text mb-1">{stat.value}</p>
+                <p className="text-sm font-medium text-foreground">{stat.label}</p>
+                <p className="text-xs text-muted-foreground mt-1">{stat.sublabel}</p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ═══ 10. VANTAGEM COMPETITIVA ═══ */}
+      <Section>
         <div className="max-w-5xl mx-auto text-center">
           <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
             <Gem className="h-4 w-4" />
