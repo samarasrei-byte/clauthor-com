@@ -348,7 +348,7 @@ const LibraryPage = () => {
                   >
                     <Icon className={`h-4 w-4 ${isActive ? "text-primary" : ""}`} />
                     <span className="text-xs font-medium hidden sm:inline">
-                      {t(`library_page.agents.${key}_title`).split("—")[0].trim()}
+                      {t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) }).split("—")[0].trim()}
                     </span>
                     {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
                   </button>
