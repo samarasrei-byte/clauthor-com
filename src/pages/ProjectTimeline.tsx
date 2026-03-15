@@ -356,7 +356,7 @@ const ProjectTimeline = () => {
             </div>
 
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight">
-              Projeto ClAuthor
+              Projeto ClauThor
               <span className="block text-primary">— Timeline de Desenvolvimento</span>
             </h1>
             <p className="text-sm text-muted-foreground mt-3 max-w-xl leading-relaxed">

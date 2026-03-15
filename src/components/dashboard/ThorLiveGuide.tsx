@@ -361,7 +361,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
   const [hasGreeted, setHasGreeted] = useState(false);
   const typingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro da ClAuthor. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral — eu explico cada seção enquanto você explora.";
+  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro da ClauThor. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral — eu explico cada seção enquanto você explora.";
 
   // Typewriter effect
   const typeText = useCallback((text: string) => {
