@@ -336,7 +336,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
         animate={{ opacity: [0.3, 0.7, 0.3] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        {isSpeaking ? "speaking" : isListening ? "listening" : "standby"}
+        {isSpeaking ? "falando" : isListening ? "ouvindo" : "standby"}
       </motion.span>
     </div>
   );
