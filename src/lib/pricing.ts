@@ -185,16 +185,16 @@ export function formatPriceShort(amount: number, lang: string): string {
 export type PriceTier = "starter" | "entry" | "mid" | "high" | "premium";
 
 // Real tier prices per region (monthly, per agent)
-const brlTiers: Record<PriceTier, number> = { starter: 297, entry: 597, mid: 997, high: 1797, premium: 2997 };
-const usdTiers: Record<PriceTier, number> = { starter: 59, entry: 119, mid: 199, high: 359, premium: 599 };
-const eurTiers: Record<PriceTier, number> = { starter: 54, entry: 109, mid: 179, high: 329, premium: 549 };
-const jpyTiers: Record<PriceTier, number> = { starter: 8800, entry: 17800, mid: 29800, high: 53800, premium: 89800 };
-const cnyTiers: Record<PriceTier, number> = { starter: 419, entry: 839, mid: 1399, high: 2499, premium: 4199 };
-const sarTiers: Record<PriceTier, number> = { starter: 219, entry: 449, mid: 749, high: 1349, premium: 2249 };
-const inrTiers: Record<PriceTier, number> = { starter: 4999, entry: 9999, mid: 16499, high: 29999, premium: 49999 };
-const rubTiers: Record<PriceTier, number> = { starter: 5400, entry: 10800, mid: 17900, high: 32900, premium: 54900 };
-const krwTiers: Record<PriceTier, number> = { starter: 79900, entry: 159900, mid: 269000, high: 479900, premium: 799900 };
-const tryTiers: Record<PriceTier, number> = { starter: 1899, entry: 3799, mid: 6499, high: 11699, premium: 19499 };
+const brlTiers: Record<PriceTier, number> = { starter: 347, entry: 697, mid: 1197, high: 1997, premium: 3497 };
+const usdTiers: Record<PriceTier, number> = { starter: 69, entry: 139, mid: 239, high: 399, premium: 699 };
+const eurTiers: Record<PriceTier, number> = { starter: 64, entry: 129, mid: 219, high: 369, premium: 649 };
+const jpyTiers: Record<PriceTier, number> = { starter: 9800, entry: 19800, mid: 34800, high: 59800, premium: 99800 };
+const cnyTiers: Record<PriceTier, number> = { starter: 489, entry: 979, mid: 1699, high: 2799, premium: 4899 };
+const sarTiers: Record<PriceTier, number> = { starter: 259, entry: 519, mid: 899, high: 1499, premium: 2599 };
+const inrTiers: Record<PriceTier, number> = { starter: 5799, entry: 11599, mid: 19999, high: 33499, premium: 58499 };
+const rubTiers: Record<PriceTier, number> = { starter: 6299, entry: 12599, mid: 21900, high: 36900, premium: 63900 };
+const krwTiers: Record<PriceTier, number> = { starter: 92900, entry: 185900, mid: 319000, high: 529900, premium: 929900 };
+const tryTiers: Record<PriceTier, number> = { starter: 2199, entry: 4399, mid: 7499, high: 12999, premium: 22499 };
 
 const priceTierValues: Record<string, Record<PriceTier, number>> = {
   pt: brlTiers,
