@@ -714,7 +714,7 @@ const Pitch = () => {
               </div>
               <ul className="space-y-2.5 text-sm">
                 {[
-                  "83 agentes que EXECUTAM, não só falam",
+                  "200 agentes que EXECUTAM, não só falam",
                   "Orquestração A2A — agentes delegam entre si",
                   "Policy Engine: 5 portões de segurança",
                   "CRM + Kanban + Analytics integrado",
