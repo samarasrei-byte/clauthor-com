@@ -569,7 +569,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                       handleSend();
                     }
                   }}
-                  placeholder={`Fale com ${config.name}...`}
+                  placeholder={`💬 Digite sua mensagem para ${config.name}...`}
                   className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
                   disabled={isLoading}
                   autoFocus
