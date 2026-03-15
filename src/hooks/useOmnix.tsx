@@ -204,7 +204,7 @@ export function useOmnix() {
         return;
       }
       console.error("Omnix error:", err);
-      toast.error("Connection error.");
+      toast.error("Erro de conexão com o servidor.");
     } finally {
       setIsLoading(false);
       setIsStreaming(false);

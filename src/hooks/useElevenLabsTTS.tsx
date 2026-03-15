@@ -186,8 +186,13 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
         onStart?.();
       };
       audio.onended = () => {
-        stop(true);
-        resolveFinished?.();
+        audioRef.current = null;
+        if (objectUrlRef.current) {
+          URL.revokeObjectURL(objectUrlRef.current);
+          objectUrlRef.current = null;
+        }
+        setIsSpeaking(false);
+        wrappedOnEnd();
       };
       audio.onerror = () => {
         console.error("Audio playback error, using native");

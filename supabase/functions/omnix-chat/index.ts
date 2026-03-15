@@ -451,7 +451,7 @@ serve(async (req) => {
     const responseStyle = config?.responseStyle || "direto";
     const autonomy = config?.autonomy || "analisar e sugerir";
 
-    const operationalContext = needsOperationalContext
+    const operationalContext = loadContext
       ? `\nCONTEXTO OPERACIONAL (use só se ajudar):\n- Agentes ativos: ${activeAgents.length}/${agents.length}\n- Créditos: ${usagePct}% (${credits?.plan_type || "free"})\n- Tarefas abertas: ${openTasks}${highPriorityTasks ? ` | urgentes: ${highPriorityTasks}` : ""}`
       : "";
 

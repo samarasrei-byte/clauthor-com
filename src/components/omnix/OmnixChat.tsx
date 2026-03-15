@@ -840,6 +840,12 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                     if (isSpeaking) stopSpeaking();
                     setInput(e.target.value);
                   }}
+                  onKeyDown={e => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
                   placeholder={`Fale com ${config.name}...`}
                   className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
                   disabled={isLoading}
