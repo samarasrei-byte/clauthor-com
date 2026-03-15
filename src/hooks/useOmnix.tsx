@@ -179,8 +179,13 @@ export function useOmnix() {
               });
             }
           } catch {
-            buf = line + "\n" + buf;
-            break;
+            // Only retry if this looks like a partial chunk (no closing brace)
+            if (!jsonStr.includes("}")) {
+              buf = line + "\n" + buf;
+              break;
+            }
+            // Otherwise skip this malformed line
+            console.warn("[OmnixStream] Skipping malformed SSE line");
           }
         }
       }
