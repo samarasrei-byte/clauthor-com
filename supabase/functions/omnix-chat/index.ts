@@ -587,9 +587,9 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
       messages: aiMessages,
       stream: true,
       temperature: 0.25,
-      max_tokens: 600,
+      max_tokens: 1200,
     }, {
-      complexity: "complex",
+      complexity: "auto",
     });
 
     if (!response.ok) {
