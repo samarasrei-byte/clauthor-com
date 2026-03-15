@@ -142,18 +142,18 @@ const ConnectionLine = () => (
 );
 
 // ─── Main Component ───
-const MissionControl = () => {
+const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [selectedAgent, setSelectedAgent] = useState<string | null>("thor");
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [showSimulation, setShowSimulation] = useState(false);
   const [simulationResponse, setSimulationResponse] = useState<string | null>(null);
 
-  // Real agents for enrichment
+  // Real agents
   const { data: realAgents = [] } = useQuery({
     queryKey: ["mission-agents", user?.id],
     queryFn: async () => {
-      const { data } = await supabase.from("agents").select("id, name, status, total_executions").eq("user_id", user!.id);
+      const { data } = await supabase.from("agents").select("id, name, status, total_executions, description").eq("user_id", user!.id);
       return data || [];
     },
     enabled: !!user,
@@ -169,9 +169,78 @@ const MissionControl = () => {
     enabled: !!user,
   });
 
-  const selectedAgentData = mockAgents.find(a => a.id === selectedAgent);
-  const pendingValidations = mockValidation.filter(v => v.status === "pending");
-  const overallConfidence = Math.round(mockPreferences.reduce((a, p) => a + p.confidence, 0) / mockPreferences.length);
+  // Real tasks
+  const { data: realTasks = [] } = useQuery({
+    queryKey: ["mission-tasks", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("agent_tasks").select("*, agent:agents(name)").eq("user_id", user!.id).in("status", ["open", "in_progress"]).order("created_at", { ascending: false }).limit(20);
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  // Real execution logs for timeline
+  const { data: recentLogs = [] } = useQuery({
+    queryKey: ["mission-timeline", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("execution_logs").select("*, agent:agents(name)").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(10);
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  // Build agent nodes from real data (with fallback to demo if no agents)
+  const agentNodes: AgentNode[] = useMemo(() => {
+    if (realAgents.length === 0) return mockAgents;
+    return realAgents.map(a => ({
+      id: a.id,
+      name: a.name,
+      status: a.status === "active" ? ("working" as const) : ("idle" as const),
+      currentTask: realTasks.find(t => t.agent_id === a.id)?.title,
+      progress: a.status === "active" ? 100 : 0,
+      delegatedBy: "Thor",
+    }));
+  }, [realAgents, realTasks]);
+
+  // Build validation items from pending_actions
+  const validationItems: ValidationItem[] = useMemo(() => {
+    if (pendingActions.length === 0) return mockValidation;
+    return pendingActions.map((pa: any) => ({
+      id: pa.id,
+      agentName: pa.title?.split(":")[0] || "Agent",
+      taskTitle: pa.title,
+      outputType: "text" as const,
+      preview: pa.description || "Pending validation",
+      createdAt: pa.created_at,
+      status: "pending" as const,
+    }));
+  }, [pendingActions]);
+
+  // Build running tasks from real tasks
+  const runningTasks: RunningTask[] = useMemo(() => {
+    if (realTasks.length === 0) return mockTasks;
+    return realTasks.map((t: any) => ({
+      id: t.id,
+      agentName: t.agent?.name || "Unassigned",
+      description: t.title,
+      progress: t.status === "in_progress" ? 50 : 10,
+      dependencies: [],
+      delegatedBy: "Thor",
+    }));
+  }, [realTasks]);
+
+  // Build timeline from real logs
+  const timelineEntries = useMemo(() => {
+    if (recentLogs.length === 0) return mockTimeline;
+    return recentLogs.slice(0, 6).map((log: any) => ({
+      time: new Date(log.created_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }),
+      event: `${log.agent?.name || "Agent"}: ${log.action}`,
+      type: log.status === "success" ? ("success" as const) : log.status === "error" ? ("warning" as const) : ("info" as const),
+    }));
+  }, [recentLogs]);
+
+  const selectedAgentData = agentNodes.find(a => a.id === selectedAgent);
+  const pendingValidations = validationItems.filter(v => v.status === "pending");
 
   const handleSimulate = () => {
     setShowSimulation(true);
