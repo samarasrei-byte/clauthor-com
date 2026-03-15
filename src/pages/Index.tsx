@@ -349,7 +349,7 @@ const HomePage = () => {
                     <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-accent-emerald animate-ping opacity-75" />
                   </div>
                   <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                    {t("home.system_status")}
+                    {t("home.system_status_full", { defaultValue: "SYSTEM ACTIVE · 200 AGENTS OPERATIONAL" })}
                   </span>
                   <HelpTooltip id="home-intro" text={t("home.help_tooltip", { defaultValue: "Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo." })} position="bottom" size={12} autoShow={false} />
                 </div>
