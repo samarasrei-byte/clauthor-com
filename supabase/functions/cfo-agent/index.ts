@@ -88,7 +88,7 @@ serve(async (req) => {
     ]);
 
     const subs = subsRes.data || [];
-    const credits = creditsRes.data || [];
+    const creditsAll = creditsRes.data || [];
     const tokenUsage = tokenRes.data || [];
     const users = usersRes.data || [];
     const waitlist = waitlistRes.data || [];
