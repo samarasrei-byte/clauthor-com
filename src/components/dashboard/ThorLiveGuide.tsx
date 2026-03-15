@@ -581,7 +581,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             onClick={onDismiss}
             className="w-full text-center text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors py-1"
           >
-            End tour · I'll explore on my own
+            Encerrar tour · Vou explorar sozinho
           </button>
         </div>
       </motion.div>
