@@ -86,7 +86,6 @@ for (const [slug, deptId] of Object.entries(SLUG_TO_WORKFORCE_DEPT)) {
   }
 }
 
-export { DEPARTMENTS };
 
 export function getDepartmentForSlug(slug: string): DepartmentInfo | null {
   const deptId = SLUG_TO_DEPT[slug];
@@ -97,4 +96,4 @@ export function getDepartmentById(id: string): DepartmentInfo | null {
   return DEPARTMENTS[id] || null;
 }
 
-export { DEPARTMENTS, SLUG_TO_DEPT };
+export { DEPARTMENTS };
