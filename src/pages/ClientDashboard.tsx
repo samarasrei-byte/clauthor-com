@@ -306,6 +306,8 @@ const ClientDashboard = () => {
     ...soloAgentItems,
 
     // More — secondary features grouped together
+    { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: moreGroup },
+    { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: moreGroup },
     { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Team" }), icon: Users, group: moreGroup },
     { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Meeting Room" }), icon: Presentation, group: moreGroup },
     { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Eye, group: moreGroup },
