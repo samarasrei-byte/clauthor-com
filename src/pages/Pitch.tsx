@@ -198,7 +198,7 @@ const ValuationDefense = () => {
     {
       icon: TrendingUp,
       title: "Comparativos de Mercado",
-      desc: "Startups com apenas um MVP (sem produto funcional) captam a US$ 2-5M de valuation. A CLAUTHOR tem produto completo, tração e infraestrutura — a US$ 500K é uma barganha.",
+      desc: "Startups com apenas um MVP (sem produto funcional) captam a US$ 2-5M de valuation. A CLAUTHOR tem produto completo, tração e infraestrutura — a US$ 250K é uma oportunidade irrepetível.",
     },
   ];
 
