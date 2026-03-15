@@ -433,8 +433,8 @@ const LibraryPage = () => {
               const tier = agentTiers[key];
               const Icon = agentIcons[key];
               const priceDisplay = getPriceDisplay(lang, agentPriceTiers[key]);
-              const agentTitle = t(`library_page.agents.${key}_title`);
-              const agentDesc = t(`library_page.agents.${key}_desc`);
+              const agentTitle = t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) });
+              const agentDesc = t(`library_page.agents.${key}_desc`, { defaultValue: `Agente especializado em ${getAgentName(key)}` });
               const social = agentSocialProof[key];
               const capabilities = agentCapabilities[key];
               const tags = agentTags[key] || [];
