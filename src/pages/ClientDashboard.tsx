@@ -288,40 +288,47 @@ const ClientDashboard = () => {
     id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.nav_main", { defaultValue: "Principal" }),
   } : null;
 
-  // Human-readable group names — no developer jargon
-  const mainGroup = t("dashboard.nav_main", { defaultValue: "Principal" });
-  const agentsGroup = t("dashboard.nav_my_agents", { defaultValue: "Meus Agentes" });
-  const moreGroup = t("dashboard.nav_more", { defaultValue: "Mais" });
+  // UX-optimized group names — clear hierarchy
+  const commandGroup = t("dashboard.nav_command", { defaultValue: "Comando" });
+  const agentsGroup = t("dashboard.nav_my_agents", { defaultValue: "Agentes" });
+  const opsGroup = t("dashboard.nav_operations", { defaultValue: "Operações" });
+  const intelGroup = t("dashboard.nav_intelligence", { defaultValue: "Inteligência" });
+  const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
+  const upcomingGroup = t("dashboard.nav_upcoming", { defaultValue: "Em breve" });
 
   const sidebarItems: SidebarItem[] = [
-    // Main — the 4 most important items
-    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
-    { id: "omnix", label: t("dashboard.ai_assistant_label", { defaultValue: "Assistente IA" }), icon: Brain, group: mainGroup },
-    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
+    // ── Comando: core actions the user does every day ──
+    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: commandGroup },
+    { id: "omnix", label: "THOR", icon: Brain, group: commandGroup },
     ...(chatSidebarItem ? [chatSidebarItem] : []),
 
-    // My Agents — departments + solo
+    // ── Agentes: fleet management ──
+    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: agentsGroup },
     { id: "library", label: t("dashboard.library", { defaultValue: "Biblioteca" }), icon: BookOpen, group: agentsGroup },
     ...departmentSidebarItems,
     ...soloAgentItems,
 
-    // More — secondary features grouped together
-    { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: moreGroup },
-    { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: moreGroup },
-    { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Team" }), icon: Users, group: moreGroup },
-    { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Meeting Room" }), icon: Presentation, group: moreGroup },
-    { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Eye, group: moreGroup },
-    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrations" }), icon: Plug, group: moreGroup },
-    { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: moreGroup },
-    { id: "control-tower", label: "Control Tower", icon: Cpu, group: moreGroup },
-    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: moreGroup },
+    // ── Operações: day-to-day business tools ──
+    { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: opsGroup },
+    { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: opsGroup },
+    { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Equipe" }), icon: Users, group: opsGroup },
+    { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Presentation, group: opsGroup },
 
-    // Coming soon features
-    { id: "mission-control", label: "Mission Control", icon: Rocket, group: moreGroup },
-    { id: "agent-memory", label: "Agent Memory", icon: Network, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
-    { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
-    { id: "voice-first", label: "Voice-First", icon: Mic, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
-    { id: "marketplace-p2p", label: "Marketplace P2P", icon: Store, badge: t("dashboard.coming_soon", { defaultValue: "Coming soon" }), group: t("dashboard.nav_upcoming", { defaultValue: "🚀 Upcoming" }) },
+    // ── Inteligência: monitoring & analytics ──
+    { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: intelGroup },
+    { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Eye, group: intelGroup },
+    { id: "control-tower", label: "Control Tower", icon: Cpu, group: intelGroup },
+    { id: "mission-control", label: "Mission Control", icon: Rocket, group: intelGroup },
+
+    // ── Sistema: configuration & integrations ──
+    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
+    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
+
+    // ── Em breve ──
+    { id: "agent-memory", label: "Agent Memory", icon: Network, badge: t("dashboard.coming_soon", { defaultValue: "Em breve" }), group: upcomingGroup },
+    { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: t("dashboard.coming_soon", { defaultValue: "Em breve" }), group: upcomingGroup },
+    { id: "voice-first", label: "Voice-First", icon: Mic, badge: t("dashboard.coming_soon", { defaultValue: "Em breve" }), group: upcomingGroup },
+    { id: "marketplace-p2p", label: "Marketplace P2P", icon: Store, badge: t("dashboard.coming_soon", { defaultValue: "Em breve" }), group: upcomingGroup },
   ];
 
   const tierColors: Record<string, string> = {
