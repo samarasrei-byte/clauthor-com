@@ -89,12 +89,12 @@ const investorConversation = [
   { role: "agent" as const, text: "Ninguém faz o que nós fazemos: substituir departamentos inteiros com squads coordenados de IA. 200 agentes especializados organizados como uma empresa real — Marketing, Growth, Product, Sales, CS, Finance e Operations. Não vendemos chatbots — vendemos operações completas 24/7." },
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B com ticket médio de US$ 199/mês por squad. Com 1.000 clientes, são quase US$ 2,4M/ano em receita recorrente. LTV alto, churn baixo." },
-  { role: "investor" as const, text: "Mas US$ 500K de valuation não é baixo demais?" },
-  { role: "agent" as const, text: "Na verdade, é o ponto ideal para o investidor. Estamos em estágio pre-seed com produto funcional — 200 agentes, 7 departamentos, 37 squads, 4.100+ leads na whitelist. Plataformas similares com apenas um MVP captaram a US$ 2-5M. Entrar a US$ 500K significa capturar o maior upside possível." },
+  { role: "investor" as const, text: "Mas US$ 250K de valuation? Não é arriscado?" },
+  { role: "agent" as const, text: "É exatamente o contrário — é a melhor janela para o investidor. US$ 250K reflete o valor da ideia e de toda a arquitetura já construída: 200 agentes, 7 departamentos, 37 squads, 4.100+ leads. Startups com apenas um deck captam a US$ 2-5M. Com US$ 50K você garante 20% de equity antes da escala." },
   { role: "investor" as const, text: "Quais são os riscos?" },
-  { role: "agent" as const, text: "O risco de NÃO investir é maior. Automação B2B não é tendência — é inevitável. Entrar agora no pre-seed a US$ 500K captura o maior potencial de retorno." },
+  { role: "agent" as const, text: "O risco de NÃO investir é maior. Automação B2B não é tendência — é inevitável. 20% de equity a US$ 250K de valuation é uma oportunidade que não vai se repetir após o lançamento." },
   { role: "investor" as const, text: "Como eu entro?" },
-  { role: "agent" as const, text: "Fale diretamente com o Fundador pelo WhatsApp. A rodada é limitada — 10% de equity por US$ 50K. Cada dia conta." },
+  { role: "agent" as const, text: "Fale diretamente com o Fundador pelo WhatsApp. A rodada é limitada — 20% de equity por US$ 50K. Valuation de US$ 250K. Cada dia conta." },
 ];
 
 const InvestorChat = () => {
@@ -198,7 +198,7 @@ const ValuationDefense = () => {
     {
       icon: TrendingUp,
       title: "Comparativos de Mercado",
-      desc: "Startups com apenas um MVP (sem produto funcional) captam a US$ 2-5M de valuation. A CLAUTHOR tem produto completo, tração e infraestrutura — a US$ 500K é uma barganha.",
+      desc: "Startups com apenas um MVP (sem produto funcional) captam a US$ 2-5M de valuation. A CLAUTHOR tem produto completo, tração e infraestrutura — a US$ 250K é uma oportunidade irrepetível.",
     },
   ];
 
@@ -545,12 +545,12 @@ const Pitch = () => {
               Valuation Atual
             </Badge>
             <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-4">
-              Por que US$ 500K é o valor justo
+              Valuation de US$ 250K
               <br />
-              <span className="gradient-text">neste momento.</span>
+              <span className="gradient-text">baseado em arquitetura real.</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
-              A maioria das startups capta no pre-seed com apenas um deck e uma ideia. A CLAUTHOR já tem produto funcional com 200 agentes em 37 squads, tração real de 4.100+ leads, e infraestrutura enterprise-grade. Veja por que US$ 500K é, na verdade, uma oportunidade única para o investidor.
+              A maioria das startups capta no pre-seed com apenas um deck e uma ideia. A CLAUTHOR já tem produto funcional com 200 agentes em 37 squads, tração real de 4.100+ leads, e infraestrutura enterprise-grade. US$ 250K reflete o valor da ideia e toda a arquitetura já construída — e 20% de equity é a porta de entrada.
             </p>
           </div>
 
@@ -586,7 +586,7 @@ const Pitch = () => {
                   "200 agentes autônomos em 7 departamentos",
                   "37 squads especializados operacionais",
                   "4.100+ leads na whitelist",
-                  "Valuation: US$ 500K (barganha)",
+                  "Valuation: US$ 250K (20% por US$ 50K)",
                   "Infraestrutura enterprise-grade",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-foreground/90">
@@ -610,10 +610,10 @@ const Pitch = () => {
             <h3 className="font-display text-xl font-bold mb-6 text-foreground">Cenário de retorno para o investidor</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                { label: "Investimento", value: "US$ 50K", sub: "10% equity" },
-                { label: "Valuation Seed (6-12 meses)", value: "US$ 3-5M", sub: "6-10x" },
-                { label: "Valuation Série A", value: "US$ 15-30M", sub: "30-60x" },
-                { label: "Potencial saída (5 anos)", value: "US$ 50M+", sub: "100x+" },
+                { label: "Investimento", value: "US$ 50K", sub: "20% equity" },
+                { label: "Valuation Seed (6-12 meses)", value: "US$ 3-5M", sub: "12-20x" },
+                { label: "Valuation Série A", value: "US$ 15-30M", sub: "60-120x" },
+                { label: "Potencial saída (5 anos)", value: "US$ 50M+", sub: "200x+" },
               ].map((item) => (
                 <div key={item.label}>
                   <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
@@ -643,8 +643,8 @@ const Pitch = () => {
           <div className="grid sm:grid-cols-3 gap-6 mb-14">
             {[
               { label: "Captando", value: "US$ 50.000" },
-              { label: "Equity oferecido", value: "10%" },
-              { label: "Valuation implícito", value: "US$ 500.000" },
+              { label: "Equity oferecido", value: "20%" },
+              { label: "Valuation implícito", value: "US$ 250.000" },
             ].map((item) => (
               <GlassCard key={item.label} hover={false} className="text-center !py-8">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
@@ -1131,7 +1131,7 @@ const Pitch = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Estamos abrindo 10% da empresa para acelerar exponencialmente.</h2>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Estamos abrindo 20% da empresa por US$ 50K para acelerar exponencialmente.</h2>
             <p className="text-muted-foreground text-lg mb-8 max-w-lg mx-auto">
               A rodada é limitada. Quem entra agora, captura o maior retorno.
             </p>
