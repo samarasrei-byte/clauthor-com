@@ -494,7 +494,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               : isSpeaking ? t("omnix.status_speaking", { defaultValue: "Falando..." })
               : isStreaming ? t("omnix.status_thinking", { defaultValue: "Pensando..." })
               : isLoading ? t("omnix.status_processing", { defaultValue: "Processando..." })
-              : t("omnix.status_ready", { defaultValue: "Pronto para conversar" })}
+              : t("omnix.status_ready", { defaultValue: "Digite abaixo ou clique no microfone 🎙️" })}
           </span>
         </motion.div>
 
