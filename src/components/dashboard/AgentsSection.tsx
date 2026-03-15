@@ -202,9 +202,9 @@ const AgentsSection = ({
                       queryClient.invalidateQueries({ queryKey: ["my-agents"] });
                     }}
                   >
-                    {agent.status === "active"
-                      ? <><Pause className="h-3 w-3" /> Pausar</>
-                      : <><Play className="h-3 w-3" /> Ativar</>}
+                     {agent.status === "active"
+                      ? <><Pause className="h-3 w-3" /> {t("dashboard.pause_action", { defaultValue: "Pausar" })}</>
+                      : <><Play className="h-3 w-3" /> {t("dashboard.activate_action", { defaultValue: "Ativar" })}</>}
                   </Button>
                 </div>
 

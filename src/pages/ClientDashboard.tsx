@@ -639,7 +639,7 @@ const ClientDashboard = () => {
                           hasSentCommand={recentLogs.length > 0}
                           onTeach={() => setShowCompanyOnboarding(true)}
                           onHire={() => setActiveSection("library")}
-                          onCommand={() => setActiveSection("overview")}
+                         onCommand={() => setActiveSection("omnix")}
                           onDismiss={() => {}}
                         />
                         <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
