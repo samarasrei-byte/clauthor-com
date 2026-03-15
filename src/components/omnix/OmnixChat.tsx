@@ -460,7 +460,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       </AnimatePresence>
 
       {/* ── IMMERSIVE ORB VIEW ── */}
-      <div className="flex-1 flex flex-col items-center justify-center relative">
+      <div className="flex-1 min-h-0 flex flex-col items-center justify-center relative">
         {/* Background ambient */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div
