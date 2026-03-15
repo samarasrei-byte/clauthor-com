@@ -99,13 +99,13 @@ serve(async (req) => {
     const estimatedTokenCostBRL = (totalTokens / 1000) * 0.002;
 
     const planDist: Record<string, { count: number; revenue: number }> = {};
-    credits.forEach((c: any) => {
+    creditsAll.forEach((c: any) => {
       if (!planDist[c.plan_type]) planDist[c.plan_type] = { count: 0, revenue: 0 };
       planDist[c.plan_type].count++;
     });
 
-    const highUsage = credits.filter((c: any) => c.total_credits > 0 && (c.used_credits / c.total_credits) > 0.8);
-    const exhausted = credits.filter((c: any) => c.total_credits > 0 && c.used_credits >= c.total_credits);
+    const highUsage = creditsAll.filter((c: any) => c.total_credits > 0 && (c.used_credits / c.total_credits) > 0.8);
+    const exhausted = creditsAll.filter((c: any) => c.total_credits > 0 && c.used_credits >= c.total_credits);
 
     const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
     const monthAgo = new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString();
