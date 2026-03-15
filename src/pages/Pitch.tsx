@@ -90,7 +90,7 @@ const investorConversation = [
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B com ticket médio de US$ 199/mês por squad. Com 1.000 clientes, são quase US$ 2,4M/ano em receita recorrente. LTV alto, churn baixo." },
   { role: "investor" as const, text: "Mas US$ 250K de valuation? Não é arriscado?" },
-  { role: "agent" as const, text: "É exatamente o contrário — é a melhor janela para o investidor. US$ 250K reflete o valor da ideia e de toda a arquitetura já construída: 200 agentes, 7 departamentos, 37 squads, 4.100+ leads. Startups com apenas um deck captam a US$ 2-5M. Com US$ 50K você garante 20% de equity antes da escala." },
+  { role: "agent" as const, text: "É exatamente o contrário — é a melhor janela para o investidor. US$ 250K reflete o valor da ideia e de toda a arquitetura já construída: 200 agentes, 15 departamentos, 37 squads, 4.100+ leads. Startups com apenas um deck captam a US$ 2-5M. Com US$ 50K você garante 20% de equity antes da escala." },
   { role: "investor" as const, text: "Quais são os riscos?" },
   { role: "agent" as const, text: "O risco de NÃO investir é maior. Automação B2B não é tendência — é inevitável. 20% de equity a US$ 250K de valuation é uma oportunidade que não vai se repetir após o lançamento." },
   { role: "investor" as const, text: "Como eu entro?" },
