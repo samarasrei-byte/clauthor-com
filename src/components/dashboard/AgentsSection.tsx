@@ -202,9 +202,9 @@ const AgentsSection = ({
                       queryClient.invalidateQueries({ queryKey: ["my-agents"] });
                     }}
                   >
-                    {agent.status === "active"
-                      ? <><Pause className="h-3 w-3" /> Pausar</>
-                      : <><Play className="h-3 w-3" /> Ativar</>}
+                     {agent.status === "active"
+                      ? <><Pause className="h-3 w-3" /> {t("dashboard.pause_action", { defaultValue: "Pausar" })}</>
+                      : <><Play className="h-3 w-3" /> {t("dashboard.activate_action", { defaultValue: "Ativar" })}</>}
                   </Button>
                 </div>
 
@@ -234,9 +234,9 @@ const AgentsSection = ({
                 {/* Last Activity */}
                 {lastActivity[agent.id] && (
                   <div className="flex items-center gap-2 text-[10px] text-muted-foreground bg-muted/20 rounded-lg px-3 py-2">
-                    <Clock className="h-3 w-3 shrink-0" />
+                     <Clock className="h-3 w-3 shrink-0" />
                     <span className="truncate">
-                      Last activity: {lastActivity[agent.id].action} — {new Date(lastActivity[agent.id].date).toLocaleDateString("en-US", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                      {t("dashboard.last_activity", { defaultValue: "Última atividade" })}: {lastActivity[agent.id].action} — {new Date(lastActivity[agent.id].date).toLocaleDateString(undefined, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
                     </span>
                   </div>
                 )}
@@ -250,16 +250,16 @@ const AgentsSection = ({
                     onClick={() => agent.status === "active" && onOpenChat({ id: agent.id, name: agent.name })}
                     disabled={agent.status !== "active"}
                   >
-                    <MessageSquare className="h-3.5 w-3.5" />
-                    Conversar
+                     <MessageSquare className="h-3.5 w-3.5" />
+                    {t("dashboard.chat_action", { defaultValue: "Conversar" })}
                   </Button>
                   <Button
                     size="sm"
                     variant="ghost"
                     className="text-xs h-8 px-2 text-muted-foreground hover:text-foreground"
                     onClick={() => setExpandedAgent(isExpanded ? null : agent.id)}
-                  >
-                    Autonomia
+                   >
+                    {t("dashboard.autonomy", { defaultValue: "Autonomia" })}
                   </Button>
                 </div>
 
