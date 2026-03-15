@@ -482,6 +482,22 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
         {/* Orb */}
         <OmnixOrb state={getOrbState()} name={config.name} immersive />
 
+        {/* Status indicator text below orb */}
+        <motion.div
+          key={getOrbState()}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-4"
+        >
+          <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/40">
+            {isListening ? t("omnix.status_listening", { defaultValue: "Ouvindo..." })
+              : isSpeaking ? t("omnix.status_speaking", { defaultValue: "Falando..." })
+              : isStreaming ? t("omnix.status_thinking", { defaultValue: "Pensando..." })
+              : isLoading ? t("omnix.status_processing", { defaultValue: "Processando..." })
+              : t("omnix.status_ready", { defaultValue: "Pronto para conversar" })}
+          </span>
+        </motion.div>
+
         {/* Live transcript while listening */}
         <AnimatePresence>
           {(isListening || (input && !showTextInput)) && (
@@ -510,7 +526,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
             >
               <p className="text-center text-xs text-muted-foreground/40 line-clamp-2 hover:text-muted-foreground/60 transition-colors">
                 {messages[messages.length - 1].content.slice(0, 150)}…
-                <span className="ml-2 text-primary/40">ver mais</span>
+                <span className="ml-2 text-primary/40">{t("omnix.see_more", { defaultValue: "ver mais" })}</span>
               </p>
             </motion.div>
           )}
