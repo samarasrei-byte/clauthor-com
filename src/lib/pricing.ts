@@ -47,10 +47,10 @@ const cltCosts = { tecnologia: 72000, comercial: 52000, marketing: 44000, financ
 export const regionalPricing: Record<string, RegionalPricing> = {
   pt: {
     currency: "BRL", symbol: "R$", locale: "pt-BR",
-    plans: { starter: 1197, growth: 2397 },
-    tokenPacks: { pack5m: 347, pack15m: 797, pack50m: 1997, pack100m: 3997 },
-    comparison: { avgSalary: 4500, avgSalaryYear3: 272160, agentStarting: 347, agentYear3: 12492 },
-    departments: { tecnologia: 8997, comercial: 6997, marketing: 5997, financeiro: 6997, criacao: 4797, suporte: 4797, rh: 2397 },
+    plans: { starter: 1697, growth: 2997 },
+    tokenPacks: { pack5m: 497, pack15m: 997, pack50m: 2497, pack100m: 4997 },
+    comparison: { avgSalary: 4500, avgSalaryYear3: 272160, agentStarting: 497, agentYear3: 17892 },
+    departments: { tecnologia: 12997, comercial: 9997, marketing: 7997, financeiro: 9997, criacao: 5997, suporte: 5997, rh: 2997 },
     departmentClt: cltCosts,
   },
   "pt-pt": {
