@@ -89,12 +89,12 @@ const investorConversation = [
   { role: "agent" as const, text: "Ninguém faz o que nós fazemos: substituir departamentos inteiros com squads coordenados de IA. 200 agentes especializados organizados como uma empresa real — Marketing, Growth, Product, Sales, CS, Finance e Operations. Não vendemos chatbots — vendemos operações completas 24/7." },
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B com ticket médio de US$ 199/mês por squad. Com 1.000 clientes, são quase US$ 2,4M/ano em receita recorrente. LTV alto, churn baixo." },
-  { role: "investor" as const, text: "Mas US$ 500K de valuation não é baixo demais?" },
-  { role: "agent" as const, text: "Na verdade, é o ponto ideal para o investidor. Estamos em estágio pre-seed com produto funcional — 200 agentes, 7 departamentos, 37 squads, 4.100+ leads na whitelist. Plataformas similares com apenas um MVP captaram a US$ 2-5M. Entrar a US$ 500K significa capturar o maior upside possível." },
+  { role: "investor" as const, text: "Mas US$ 250K de valuation? Não é arriscado?" },
+  { role: "agent" as const, text: "É exatamente o contrário — é a melhor janela para o investidor. US$ 250K reflete o valor da ideia e de toda a arquitetura já construída: 200 agentes, 7 departamentos, 37 squads, 4.100+ leads. Startups com apenas um deck captam a US$ 2-5M. Com US$ 50K você garante 20% de equity antes da escala." },
   { role: "investor" as const, text: "Quais são os riscos?" },
-  { role: "agent" as const, text: "O risco de NÃO investir é maior. Automação B2B não é tendência — é inevitável. Entrar agora no pre-seed a US$ 500K captura o maior potencial de retorno." },
+  { role: "agent" as const, text: "O risco de NÃO investir é maior. Automação B2B não é tendência — é inevitável. 20% de equity a US$ 250K de valuation é uma oportunidade que não vai se repetir após o lançamento." },
   { role: "investor" as const, text: "Como eu entro?" },
-  { role: "agent" as const, text: "Fale diretamente com o Fundador pelo WhatsApp. A rodada é limitada — 10% de equity por US$ 50K. Cada dia conta." },
+  { role: "agent" as const, text: "Fale diretamente com o Fundador pelo WhatsApp. A rodada é limitada — 20% de equity por US$ 50K. Valuation de US$ 250K. Cada dia conta." },
 ];
 
 const InvestorChat = () => {
