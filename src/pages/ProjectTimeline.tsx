@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Brain, Users, Clock, Zap, CheckCircle2, AlertTriangle,
+  Users, Clock, Zap, CheckCircle2, AlertTriangle,
   Rocket, Code2, Shield, ChevronDown, ChevronUp, ArrowLeft,
-  Sparkles, Target, Cpu, Bot, DollarSign, Calendar
+  Sparkles, Target, Bot, DollarSign, Calendar
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
