@@ -12,30 +12,15 @@ import {
   HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck
 } from "lucide-react";
 import type { PriceTier } from "@/lib/pricing";
+import { ALL_AGENT_SLUGS } from "./workforceArchitecture";
+import {
+  getDefaultIcon, getDefaultTier, getDefaultPriceTier,
+  getDefaultTags, getDefaultCapabilities, getDefaultIntegrations,
+  getDefaultSocialProof
+} from "./agentLibraryBridge";
 
-// Agent keys map to i18n keys under library_page.agents.*
-export const agentKeys = [
-  "voice_ai", "orchestrator", "research", "coding", "omnichannel",
-  "revenue", "sales", "rag", "computer", "content", "security", "hr",
-  "customer_success", "data_analytics", "legal", "ecommerce",
-  "influencer", "marketing_automation", "creative_design", "video_production",
-  "seo_growth", "project_management", "supply_chain", "training",
-  "concierge", "ceo", "startup_creator", "paid_traffic",
-  "influencer_liveshop", "podcast_manager", "affiliate_manager", "community_mgr",
-  "whatsapp_commerce", "ai_cfo", "scheduler", "reputation", "proposal_gen",
-  "creative_writer", "content_producer", "sales_channel", "support_channel",
-  "support_lead", "voice_support", "people_analytics",
-  "tax_content", "copywriting", "positioning", "branding", "public_relations",
-  "social_proof", "events_speaker",
-  "sdr_social", "sdr_linkedin", "sdr_instagram", "sdr_whatsapp",
-  "sdr_outbound", "sdr_inbound", "sdr_database", "sdr_events",
-  "sdr_partnerships", "pre_qualifier", "hunter", "farmer",
-  "contract_analyst", "compliance_officer", "labor_law", "litigation",
-  "procurement", "supplier_mgr", "cost_analyst", "contract_negotiator",
-  "logistics", "inventory", "quality", "process_analyst",
-  "data_engineer", "crm_manager", "ux_researcher", "media_buyer", "onboarding_specialist",
-  "digital_accountant", "tax_compliance", "credit_recovery"
-] as const;
+// Agent keys — ALL 200 agents from workforce architecture
+export const agentKeys = ALL_AGENT_SLUGS as readonly string[];
 
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo"] as const;
 
