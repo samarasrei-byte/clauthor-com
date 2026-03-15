@@ -15,8 +15,7 @@ const API_LIST: APIEntry[] = [
   { integration: "paypal", label: "PayPal", keys: ["PAYPAL_CLIENT_ID", "PAYPAL_SECRET"] },
   { integration: "whatsapp", label: "WhatsApp Business", keys: ["WHATSAPP_TOKEN", "WHATSAPP_PHONE_ID"] },
   { integration: "elevenlabs", label: "ElevenLabs", keys: ["ELEVENLABS_API_KEY"] },
-  { integration: "firecrawl", label: "Firecrawl", keys: ["FIRECRAWL_API_KEY"] },
-  { integration: "sendgrid", label: "SendGrid", keys: ["SENDGRID_API_KEY"] },
+  { integration: "anthropic", label: "Claude Code", keys: ["ANTHROPIC_API_KEY"] },
 ];
 
 interface CredentialStatus {
