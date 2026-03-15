@@ -412,10 +412,11 @@ serve(async (req) => {
 
     const lastUserMessage = (messages || []).filter((m: any) => m.role === "user").pop()?.content?.toLowerCase?.() || "";
     const platformIntentRegex = /(agente|tarefa|relat[óo]rio|cr[ée]dito|plano|dashboard|empresa|neg[óo]cio|vendas|opera[cç][ãa]o|squad|automa[cç][ãa]o|integra[cç][ãa]o|lead|reuni[aã]o|board|an[aá]lise|meta|thor|omnix|clauthor|plataforma)/i;
-    const toolIntentRegex = /(criar|gera|gerar|agendar|delegar|buscar|procurar|analisar|salvar|revogar|remover|deletar|executar|fazer agora|agenda|task|report|credentials?)/i;
+    const toolIntentRegex = /(criar|crie|cria|gera|gerar|agendar|delegar|buscar|procurar|analisar|salvar|revogar|remover|deletar|executar|fazer agora|agenda|task|report|credentials?|configur|ativ|lista|mostr|ver credenciais|exclu|cancel)/i;
 
     const needsOperationalContext = platformIntentRegex.test(lastUserMessage);
-    const shouldAttemptTools = needsOperationalContext && toolIntentRegex.test(lastUserMessage);
+    // Tools trigger on EITHER explicit tool verbs OR platform context + action verbs
+    const shouldAttemptTools = toolIntentRegex.test(lastUserMessage) || (needsOperationalContext && lastUserMessage.length > 15);
 
     let agents: any[] = [];
     let credits: any = null;
