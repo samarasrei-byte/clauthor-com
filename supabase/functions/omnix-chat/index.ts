@@ -605,14 +605,16 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
     const omnixEstimatedTokens = inputTokens + 400;
 
     supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: chatModel }).then(() => {});
-    supabase.from("execution_logs").insert({
-      user_id: user.id,
-      agent_id: activeAgents[0]?.id || "00000000-0000-0000-0000-000000000000",
-      action: "chat",
-      status: "success",
-      execution_time_ms: Date.now() - startTime,
-      details: { type: "omnix_chat_fallback", model: chatModel },
-    }).then(() => {});
+    if (activeAgents[0]?.id) {
+      supabase.from("execution_logs").insert({
+        user_id: user.id,
+        agent_id: activeAgents[0].id,
+        action: "chat",
+        status: "success",
+        execution_time_ms: Date.now() - startTime,
+        details: { type: "omnix_chat_stream", model: chatModel },
+      }).then(() => {});
+    }
 
     return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
   } catch (e) {
