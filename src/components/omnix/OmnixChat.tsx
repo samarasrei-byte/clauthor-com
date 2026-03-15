@@ -861,8 +861,8 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
 
             {/* Text input inside chat panel */}
             <div className="shrink-0 px-3 py-3 border-t border-border/8">
-              <div className="flex gap-2 items-center">
-                <Input
+              <div className="relative flex items-center rounded-2xl bg-card/60 backdrop-blur-2xl border border-border/20 hover:border-primary/20 focus-within:border-primary/30 focus-within:shadow-[0_4px_20px_hsl(var(--primary)/0.06)] transition-all duration-300">
+                <input
                   value={input}
                   onChange={e => {
                     if (isSpeaking) stopSpeaking();
@@ -874,24 +874,35 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
                       handleSend();
                     }
                   }}
-                  placeholder={`Fale com ${config.name}...`}
-                  className="flex-1 bg-card/20 border-border/15 h-10 text-sm"
+                  placeholder={`Mensagem para ${config.name}...`}
+                  className="flex-1 bg-transparent border-none outline-none h-11 px-4 text-sm text-foreground placeholder:text-muted-foreground/40"
                   disabled={isLoading}
                 />
-                {isStreaming ? (
-                  <Button variant="destructive" size="icon" className="shrink-0 h-9 w-9 rounded-full" onClick={onStop}>
-                    <Square className="h-3.5 w-3.5" />
-                  </Button>
-                ) : (
-                  <Button
-                    size="icon"
-                    className="shrink-0 h-9 w-9 rounded-full"
-                    onClick={handleSend}
-                    disabled={!input.trim() || isLoading}
-                  >
-                    <Send className="h-3.5 w-3.5" />
-                  </Button>
-                )}
+                <div className="flex items-center gap-1 pr-2">
+                  {isStreaming ? (
+                    <motion.button
+                      whileTap={{ scale: 0.9 }}
+                      onClick={onStop}
+                      className="h-8 w-8 rounded-xl flex items-center justify-center bg-destructive/15 text-destructive"
+                    >
+                      <Square className="h-3.5 w-3.5" />
+                    </motion.button>
+                  ) : (
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.9 }}
+                      onClick={handleSend}
+                      disabled={!input.trim() || isLoading}
+                      className={`h-8 w-8 rounded-xl flex items-center justify-center transition-all duration-200 ${
+                        input.trim() && !isLoading
+                          ? "bg-primary text-primary-foreground shadow-[0_0_12px_hsl(var(--primary)/0.3)]"
+                          : "bg-muted/20 text-muted-foreground/25 cursor-not-allowed"
+                      }`}
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                    </motion.button>
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>
