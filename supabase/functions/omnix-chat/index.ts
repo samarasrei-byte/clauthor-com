@@ -429,7 +429,7 @@ serve(async (req) => {
     let openTasks = 0;
     let highPriorityTasks = 0;
 
-    if (needsOperationalContext) {
+    if (loadContext) {
       const [agentsRes, creditsRes, tasksRes] = await Promise.all([
         supabase.from("agents").select("id, name, status, tier, total_executions, description").eq("user_id", user.id),
         supabase.from("user_credits").select("*").eq("user_id", user.id).single(),
