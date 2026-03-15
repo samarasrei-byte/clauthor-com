@@ -860,7 +860,7 @@ const Pitch = () => {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Vantagem competitiva real.</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             {[
-              { icon: Bot, text: "83 agentes operacionais" },
+              { icon: Bot, text: "200 agentes operacionais" },
               { icon: Users, text: "4.100+ leads na whitelist" },
               { icon: TrendingUp, text: "Estrutura própria de aquisição" },
               { icon: Globe, text: "13 idiomas nativos" },
