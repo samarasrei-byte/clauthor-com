@@ -12,99 +12,22 @@ import {
   HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck
 } from "lucide-react";
 import type { PriceTier } from "@/lib/pricing";
+import { ALL_AGENT_SLUGS } from "./workforceArchitecture";
+import {
+  getDefaultIcon, getDefaultTier, getDefaultPriceTier,
+  getDefaultTags, getDefaultCapabilities, getDefaultIntegrations,
+  getDefaultSocialProof
+} from "./agentLibraryBridge";
 
-// Agent keys map to i18n keys under library_page.agents.*
-export const agentKeys = [
-  "voice_ai", "orchestrator", "research", "coding", "omnichannel",
-  "revenue", "sales", "rag", "computer", "content", "security", "hr",
-  "customer_success", "data_analytics", "legal", "ecommerce",
-  "influencer", "marketing_automation", "creative_design", "video_production",
-  "seo_growth", "project_management", "supply_chain", "training",
-  "concierge", "ceo", "startup_creator", "paid_traffic",
-  "influencer_liveshop", "podcast_manager", "affiliate_manager", "community_mgr",
-  "whatsapp_commerce", "ai_cfo", "scheduler", "reputation", "proposal_gen",
-  "creative_writer", "content_producer", "sales_channel", "support_channel",
-  "support_lead", "voice_support", "people_analytics",
-  "tax_content", "copywriting", "positioning", "branding", "public_relations",
-  "social_proof", "events_speaker",
-  "sdr_social", "sdr_linkedin", "sdr_instagram", "sdr_whatsapp",
-  "sdr_outbound", "sdr_inbound", "sdr_database", "sdr_events",
-  "sdr_partnerships", "pre_qualifier", "hunter", "farmer",
-  "contract_analyst", "compliance_officer", "labor_law", "litigation",
-  "procurement", "supplier_mgr", "cost_analyst", "contract_negotiator",
-  "logistics", "inventory", "quality", "process_analyst",
-  "data_engineer", "crm_manager", "ux_researcher", "media_buyer", "onboarding_specialist",
-  "digital_accountant", "tax_compliance", "credit_recovery"
-] as const;
+// Agent keys — ALL 200 agents from workforce architecture
+export const agentKeys = ALL_AGENT_SLUGS as readonly string[];
 
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo"] as const;
 
-export const agentSlugs: Record<string, string> = {
-  voice_ai: "voice_ai", orchestrator: "orchestrator", research: "research", coding: "coding",
-  omnichannel: "omnichannel", revenue: "revenue", sales: "sales",
-  rag: "rag", computer: "computer", content: "content", security: "security", hr: "hr",
-  customer_success: "customer_success", data_analytics: "data_analytics", legal: "legal", ecommerce: "ecommerce",
-  influencer: "influencer", marketing_automation: "marketing_automation", creative_design: "creative_design",
-  video_production: "video_production", seo_growth: "seo_growth", project_management: "project_management",
-  supply_chain: "supply_chain", training: "training",
-  concierge: "concierge", ceo: "ceo", startup_creator: "startup_creator",
-  paid_traffic: "paid_traffic",
-  influencer_liveshop: "influencer_liveshop",
-  podcast_manager: "podcast_manager",
-  affiliate_manager: "affiliate_manager",
-  community_mgr: "community_mgr",
-  whatsapp_commerce: "whatsapp_commerce",
-  ai_cfo: "ai_cfo",
-  scheduler: "scheduler",
-  reputation: "reputation",
-  proposal_gen: "proposal_gen",
-  creative_writer: "creative_writer",
-  content_producer: "content_producer",
-  sales_channel: "sales_channel",
-  support_channel: "support_channel",
-  support_lead: "support_lead",
-  voice_support: "voice_support",
-  people_analytics: "people_analytics",
-  tax_content: "tax_content",
-  copywriting: "copywriting",
-  positioning: "positioning",
-  branding: "branding",
-  public_relations: "public_relations",
-  social_proof: "social_proof",
-  events_speaker: "events_speaker",
-  sdr_social: "sdr_social",
-  sdr_linkedin: "sdr_linkedin",
-  sdr_instagram: "sdr_instagram",
-  sdr_whatsapp: "sdr_whatsapp",
-  sdr_outbound: "sdr_outbound",
-  sdr_inbound: "sdr_inbound",
-  sdr_database: "sdr_database",
-  sdr_events: "sdr_events",
-  sdr_partnerships: "sdr_partnerships",
-  pre_qualifier: "pre_qualifier",
-  hunter: "hunter",
-  farmer: "farmer",
-  contract_analyst: "contract_analyst",
-  compliance_officer: "compliance_officer",
-  labor_law: "labor_law",
-  litigation: "litigation",
-  procurement: "procurement",
-  supplier_mgr: "supplier_mgr",
-  cost_analyst: "cost_analyst",
-  contract_negotiator: "contract_negotiator",
-  logistics: "logistics",
-  inventory: "inventory",
-  quality: "quality",
-  process_analyst: "process_analyst",
-  data_engineer: "data_engineer",
-  crm_manager: "crm_manager",
-  ux_researcher: "ux_researcher",
-  media_buyer: "media_buyer",
-  onboarding_specialist: "onboarding_specialist",
-  digital_accountant: "digital_accountant",
-  tax_compliance: "tax_compliance",
-  credit_recovery: "credit_recovery",
-};
+// Auto-generate slugs for all 200 agents
+export const agentSlugs: Record<string, string> = Object.fromEntries(
+  agentKeys.map(k => [k, k])
+);
 
 export const agentIcons: Record<string, React.ElementType> = {
   voice_ai: Phone, orchestrator: Workflow, research: Search, coding: Code,
@@ -650,6 +573,17 @@ export const agentCapabilities: Record<string, string[]> = {
   tax_compliance: ["SPED", "EFD", "Apuração"],
   credit_recovery: ["Serasa", "Negociação", "Score"],
 };
+
+// ─── Auto-fill missing agents from workforce architecture ───
+for (const slug of agentKeys) {
+  if (!(slug in agentIcons)) agentIcons[slug] = getDefaultIcon(slug);
+  if (!(slug in agentTiers)) agentTiers[slug] = getDefaultTier(slug);
+  if (!(slug in agentPriceTiers)) agentPriceTiers[slug] = getDefaultPriceTier(slug);
+  if (!(slug in agentTags)) agentTags[slug] = getDefaultTags(slug);
+  if (!(slug in agentIntegrations)) agentIntegrations[slug] = getDefaultIntegrations(slug);
+  if (!(slug in agentSocialProof)) agentSocialProof[slug] = getDefaultSocialProof(slug);
+  if (!(slug in agentCapabilities)) agentCapabilities[slug] = getDefaultCapabilities(slug);
+}
 
 export const tierColors: Record<string, string> = {
   basic: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",

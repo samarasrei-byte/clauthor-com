@@ -28,6 +28,7 @@ import {
   agentCapabilities, tierColors, tiers
 } from "@/data/libraryAgentData";
 import { getSimplifiedAgentKeys } from "@/data/agentConsolidation";
+import { getAgentName } from "@/data/agentLibraryBridge";
 import { deptDetails } from "@/data/departmentData";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -70,8 +71,8 @@ const LibraryPage = () => {
     if (filter !== "all" && agentTiers[k] !== filter) return false;
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      const title = t(`library_page.agents.${k}_title`).toLowerCase();
-      const desc = t(`library_page.agents.${k}_desc`).toLowerCase();
+      const title = t(`library_page.agents.${k}_title`, { defaultValue: getAgentName(k) }).toLowerCase();
+      const desc = t(`library_page.agents.${k}_desc`, { defaultValue: getAgentName(k) }).toLowerCase();
       const tags = agentTags[k].join(" ").toLowerCase();
       if (!title.includes(q) && !desc.includes(q) && !tags.includes(q)) return false;
     }
@@ -89,7 +90,7 @@ const LibraryPage = () => {
           signup: true,
           hireIntent: {
             type: "agent" as const,
-            label: t(`library_page.agents.${key}_title`),
+            label: t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) }),
             slugs: [slug],
           },
         },
@@ -98,7 +99,7 @@ const LibraryPage = () => {
     }
 
     // Logged in → show checkout summary dialog instead of going directly to PayPal
-    const agentName = t(`library_page.agents.${key}_title`);
+    const agentName = t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) });
     const priceTier = agentPriceTiers[key];
     const region = getRegion(lang);
     const price = getPrice(lang, priceTier);
@@ -185,8 +186,8 @@ const LibraryPage = () => {
         )}
         onHire={(key) => handleHire(key)}
         onPreview={(key) => setPreviewAgent({
-          name: t(`library_page.agents.${key}_title`),
-          desc: t(`library_page.agents.${key}_desc`),
+          name: t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) }),
+          desc: t(`library_page.agents.${key}_desc`, { defaultValue: getAgentName(key) }),
         })}
         hiringSlug={hiringSlug}
       />
@@ -264,7 +265,7 @@ const LibraryPage = () => {
                     </div>
 
                     <h2 className="font-display text-2xl md:text-3xl font-bold mb-2">
-                      {t(`library_page.agents.${featuredAgent}_title`)}
+                      {t(`library_page.agents.${featuredAgent}_title`, { defaultValue: getAgentName(featuredAgent) })}
                     </h2>
                     <p className="text-muted-foreground mb-5 leading-relaxed max-w-lg">
                       {t(`library_page.agents.${featuredAgent}_desc`)}
@@ -347,7 +348,7 @@ const LibraryPage = () => {
                   >
                     <Icon className={`h-4 w-4 ${isActive ? "text-primary" : ""}`} />
                     <span className="text-xs font-medium hidden sm:inline">
-                      {t(`library_page.agents.${key}_title`).split("—")[0].trim()}
+                      {t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) }).split("—")[0].trim()}
                     </span>
                     {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />}
                   </button>
@@ -432,8 +433,8 @@ const LibraryPage = () => {
               const tier = agentTiers[key];
               const Icon = agentIcons[key];
               const priceDisplay = getPriceDisplay(lang, agentPriceTiers[key]);
-              const agentTitle = t(`library_page.agents.${key}_title`);
-              const agentDesc = t(`library_page.agents.${key}_desc`);
+              const agentTitle = t(`library_page.agents.${key}_title`, { defaultValue: getAgentName(key) });
+              const agentDesc = t(`library_page.agents.${key}_desc`, { defaultValue: `Agente especializado em ${getAgentName(key)}` });
               const social = agentSocialProof[key];
               const capabilities = agentCapabilities[key];
               const tags = agentTags[key] || [];
