@@ -336,7 +336,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
         animate={{ opacity: [0.3, 0.7, 0.3] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        {isSpeaking ? "falando" : isListening ? "ouvindo" : "standby"}
+        {isSpeaking ? "falando" : isListening ? "ouvindo" : "em espera"}
       </motion.span>
     </div>
   );
@@ -481,7 +481,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
                 <span className="text-sm font-semibold">Thor</span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium">GUIDE</span>
+                <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium">GUIA</span>
               </div>
               <span className="text-[10px] text-muted-foreground mt-0.5 block">
                 {isPaused ? "Pausado" : isTyping ? "Falando..." : "Ouvindo"}
