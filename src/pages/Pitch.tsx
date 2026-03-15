@@ -953,10 +953,10 @@ const Pitch = () => {
           {/* ROI Killer Stats */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
+              { value: "96%+", label: "Margem Event-Driven", sublabel: "Custo real: R$8-15/agente/mês" },
+              { value: "24/7", label: "Disponibilidade", sublabel: "Executa sob demanda, não 24h" },
               { value: "93.7%", label: "Economia vs CLT", sublabel: "SDR CLT: R$7.900 → Agente: R$497" },
-              { value: "24/7", label: "Disponibilidade", sublabel: "Zero férias, zero licença" },
-              { value: "87%+", label: "Margem bruta", sublabel: "Custo de token irrisório" },
-              { value: "<5min", label: "Time to value", sublabel: "Do zero ao operacional" },
+              { value: "<5min", label: "Time to Value", sublabel: "200 agentes em minutos" },
             ].map((stat) => (
               <GlassCard key={stat.label} className="text-center">
                 <p className="text-2xl md:text-3xl font-display font-bold gradient-text mb-1">{stat.value}</p>
