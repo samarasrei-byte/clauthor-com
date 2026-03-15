@@ -408,7 +408,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
     const isFirstVisit = !visitedSections.has(activeSection);
     const message = isFirstVisit
       ? step.message
-      : `You're back at ${step.title}. ${step.message.split(".")[0]}.`;
+      : `Você voltou para ${step.title}. ${step.message.split(".")[0]}.`;
 
     setCurrentMessage(message);
     typeText(message);
