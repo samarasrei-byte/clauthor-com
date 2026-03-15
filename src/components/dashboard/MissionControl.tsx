@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
@@ -142,18 +142,18 @@ const ConnectionLine = () => (
 );
 
 // ─── Main Component ───
-const MissionControl = () => {
+const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) => {
   const { t } = useTranslation();
   const { user } = useAuth();
-  const [selectedAgent, setSelectedAgent] = useState<string | null>("thor");
+  const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [showSimulation, setShowSimulation] = useState(false);
   const [simulationResponse, setSimulationResponse] = useState<string | null>(null);
 
-  // Real agents for enrichment
+  // Real agents
   const { data: realAgents = [] } = useQuery({
     queryKey: ["mission-agents", user?.id],
     queryFn: async () => {
-      const { data } = await supabase.from("agents").select("id, name, status, total_executions").eq("user_id", user!.id);
+      const { data } = await supabase.from("agents").select("id, name, status, total_executions, description").eq("user_id", user!.id);
       return data || [];
     },
     enabled: !!user,
@@ -169,8 +169,78 @@ const MissionControl = () => {
     enabled: !!user,
   });
 
-  const selectedAgentData = mockAgents.find(a => a.id === selectedAgent);
-  const pendingValidations = mockValidation.filter(v => v.status === "pending");
+  // Real tasks
+  const { data: realTasks = [] } = useQuery({
+    queryKey: ["mission-tasks", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("agent_tasks").select("*, agent:agents(name)").eq("user_id", user!.id).in("status", ["open", "in_progress"]).order("created_at", { ascending: false }).limit(20);
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  // Real execution logs for timeline
+  const { data: recentLogs = [] } = useQuery({
+    queryKey: ["mission-timeline", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("execution_logs").select("*, agent:agents(name)").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(10);
+      return data || [];
+    },
+    enabled: !!user,
+  });
+
+  // Build agent nodes from real data (with fallback to demo if no agents)
+  const agentNodes: AgentNode[] = useMemo(() => {
+    if (realAgents.length === 0) return mockAgents;
+    return realAgents.map(a => ({
+      id: a.id,
+      name: a.name,
+      status: a.status === "active" ? ("working" as const) : ("idle" as const),
+      currentTask: realTasks.find(t => t.agent_id === a.id)?.title,
+      progress: a.status === "active" ? 100 : 0,
+      delegatedBy: "Thor",
+    }));
+  }, [realAgents, realTasks]);
+
+  // Build validation items from pending_actions
+  const validationItems: ValidationItem[] = useMemo(() => {
+    if (pendingActions.length === 0) return mockValidation;
+    return pendingActions.map((pa: any) => ({
+      id: pa.id,
+      agentName: pa.title?.split(":")[0] || "Agent",
+      taskTitle: pa.title,
+      outputType: "text" as const,
+      preview: pa.description || "Pending validation",
+      createdAt: pa.created_at,
+      status: "pending" as const,
+    }));
+  }, [pendingActions]);
+
+  // Build running tasks from real tasks
+  const runningTasks: RunningTask[] = useMemo(() => {
+    if (realTasks.length === 0) return mockTasks;
+    return realTasks.map((t: any) => ({
+      id: t.id,
+      agentName: t.agent?.name || "Unassigned",
+      description: t.title,
+      progress: t.status === "in_progress" ? 50 : 10,
+      dependencies: [],
+      delegatedBy: "Thor",
+    }));
+  }, [realTasks]);
+
+  // Build timeline from real logs
+  const timelineEntries = useMemo(() => {
+    if (recentLogs.length === 0) return mockTimeline;
+    return recentLogs.slice(0, 6).map((log: any) => ({
+      time: new Date(log.created_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }),
+      event: `${log.agent?.name || "Agent"}: ${log.action}`,
+      type: log.status === "success" ? ("success" as const) : log.status === "error" ? ("warning" as const) : ("info" as const),
+    }));
+  }, [recentLogs]);
+
+  const selectedAgentData = agentNodes.find(a => a.id === selectedAgent);
+  const pendingValidations = validationItems.filter(v => v.status === "pending");
   const overallConfidence = Math.round(mockPreferences.reduce((a, p) => a + p.confidence, 0) / mockPreferences.length);
 
   const handleSimulate = () => {
@@ -196,9 +266,9 @@ const MissionControl = () => {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          <Badge variant="secondary" className="gap-1.5 text-[10px]">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-            {mockAgents.filter(a => a.status === "working").length} active
+            <Badge variant="secondary" className="gap-1.5 text-[10px]">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              {agentNodes.filter(a => a.status === "working").length} active
           </Badge>
           <Badge variant="secondary" className="gap-1.5 text-[10px]">
             <AlertTriangle className="h-3 w-3 text-amber-400" />
@@ -250,7 +320,7 @@ const MissionControl = () => {
           <div className="flex items-center gap-2">
             <Eye className="h-4 w-4 text-primary" />
             <CardTitle className="text-sm">Agent Network Map</CardTitle>
-            <Badge variant="secondary" className="text-[9px] ml-auto">{mockAgents.length} agents</Badge>
+            <Badge variant="secondary" className="text-[9px] ml-auto">{agentNodes.length} agents</Badge>
           </div>
         </CardHeader>
         <CardContent>
@@ -263,7 +333,7 @@ const MissionControl = () => {
               <span className="text-[10px] font-semibold text-primary">You</span>
             </div>
             <ConnectionLine />
-            {mockAgents.map((agent, i) => (
+            {agentNodes.map((agent, i) => (
               <div key={agent.id} className="flex items-center gap-2">
                 <AgentNodeCard
                   agent={agent}
@@ -323,7 +393,7 @@ const MissionControl = () => {
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
-            {mockValidation.map((item) => (
+            {validationItems.map((item) => (
               <motion.div
                 key={item.id}
                 layout
@@ -372,11 +442,11 @@ const MissionControl = () => {
             <div className="flex items-center gap-2">
               <Zap className="h-4 w-4 text-primary" />
               <CardTitle className="text-sm">Task Execution</CardTitle>
-              <Badge variant="secondary" className="text-[9px] ml-auto">{mockTasks.length} running</Badge>
+              <Badge variant="secondary" className="text-[9px] ml-auto">{runningTasks.length} running</Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
-            {mockTasks.map((task) => (
+            {runningTasks.map((task) => (
               <motion.div
                 key={task.id}
                 layout
@@ -469,10 +539,10 @@ const MissionControl = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-0">
-              {mockTimeline.map((entry, i) => (
+              {timelineEntries.map((entry, i) => (
                 <div key={i} className="flex items-start gap-3 py-2.5 relative">
                   {/* Vertical line */}
-                  {i < mockTimeline.length - 1 && (
+                  {i < timelineEntries.length - 1 && (
                     <div className="absolute left-[7px] top-[22px] w-px h-[calc(100%-10px)] bg-border/20" />
                   )}
                   <div className={cn(

@@ -841,14 +841,14 @@ const ClientDashboard = () => {
                 {/* ═══ CONTROL TOWER ═══ */}
                 {activeSection === "control-tower" && (
                   <Suspense fallback={<SectionLoader />}>
-                    <ControlTowerSection />
+                    <ControlTowerSection onNavigate={handleSidebarNav} />
                   </Suspense>
                 )}
 
                 {/* ═══ MISSION CONTROL ═══ */}
                 {activeSection === "mission-control" && (
                   <Suspense fallback={<SectionLoader />}>
-                    <MissionControl />
+                    <MissionControl onNavigate={handleSidebarNav} />
                   </Suspense>
                 )}
 
