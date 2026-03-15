@@ -601,7 +601,7 @@ const Pitch = () => {
 
           {/* Comparison Table */}
           <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {/* Claude */}
+            {/* ChatGPT / Assistentes Genéricos */}
             <GlassCard className="relative overflow-hidden border-destructive/20">
               <div className="absolute top-0 right-0 w-24 h-24 bg-destructive/5 rounded-full blur-2xl" />
               <div className="flex items-center gap-3 mb-6">
@@ -609,7 +609,7 @@ const Pitch = () => {
                   <MessageCircle className="w-5 h-5 text-destructive" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg">Claude / ChatGPT</h3>
+                  <h3 className="font-bold text-lg">ChatGPT / Assistentes IA</h3>
                   <span className="text-xs text-destructive/80 font-mono">Ferramenta Passiva</span>
                 </div>
               </div>
@@ -640,6 +640,10 @@ const Pitch = () => {
                 <p className="text-xs text-muted-foreground italic leading-relaxed">
                   "Você paga $25/mês pra ter um gênio que <strong>só fala</strong>. 
                   Não executa, não monitora, não escala. É como contratar um consultor que nunca implementa nada."
+                </p>
+                <p className="text-[10px] text-muted-foreground/60 mt-2">
+                  ⚡ Na Clauthor, usamos Claude Code como <strong>Planning Brain</strong> interno — ele pensa e planeja, 
+                  nossos agentes executam. É assim que a mágica acontece.
                 </p>
               </div>
             </GlassCard>
