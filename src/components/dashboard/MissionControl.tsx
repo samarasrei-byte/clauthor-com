@@ -539,10 +539,10 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
           </CardHeader>
           <CardContent>
             <div className="space-y-0">
-              {mockTimeline.map((entry, i) => (
+              {timelineEntries.map((entry, i) => (
                 <div key={i} className="flex items-start gap-3 py-2.5 relative">
                   {/* Vertical line */}
-                  {i < mockTimeline.length - 1 && (
+                  {i < timelineEntries.length - 1 && (
                     <div className="absolute left-[7px] top-[22px] w-px h-[calc(100%-10px)] bg-border/20" />
                   )}
                   <div className={cn(
