@@ -456,87 +456,95 @@ const ProjectTimeline = () => {
           <TimelineCard key={step.id} step={step} index={i} />
         ))}
 
-        {/* Cost callout */}
+        {/* Hero dedication card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="mt-10 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/5 to-transparent p-6"
-          style={{ backdropFilter: "blur(20px)" }}
+          className="mt-10 rounded-2xl border border-primary/20 p-8 relative overflow-hidden"
+          style={{
+            background: "linear-gradient(135deg, hsl(var(--primary) / 0.08), hsl(var(--card) / 0.9), hsl(var(--primary) / 0.04))",
+            backdropFilter: "blur(30px) saturate(1.3)",
+          }}
         >
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
-              <DollarSign className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold mb-1">Custo do MVP — Surpreendentemente Baixo</h3>
-              <p className="text-[12px] text-muted-foreground leading-relaxed mb-3">
-                Toda a infraestrutura para rodar 200 agentes de IA com orquestração autônoma 24/7 custa em torno de <span className="text-primary font-bold">R$ 290/mês</span>. Isso inclui banco de dados, edge functions, AI gateway, storage e autenticação.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <span className="text-[9px] px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                  Margem bruta: 96-99%
-                </span>
-                <span className="text-[9px] px-2 py-1 rounded-full bg-primary/10 text-primary border border-primary/20">
-                  Modelo event-driven
-                </span>
-                <span className="text-[9px] px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">
-                  Zero servidor dedicado
-                </span>
-              </div>
-            </div>
-          </div>
-        </motion.div>
+          {/* Ambient glow */}
+          <div className="absolute top-0 right-0 w-48 h-48 bg-primary/10 rounded-full blur-[80px]" />
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-primary/5 rounded-full blur-[60px]" />
 
-        {/* Work dedication callout */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="mt-4 rounded-2xl border border-border/10 bg-card/40 p-6"
-          style={{ backdropFilter: "blur(20px)" }}
-        >
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-muted/20 border border-border/10 flex items-center justify-center shrink-0">
-              <Clock className="h-6 w-6 text-muted-foreground" />
+          <div className="relative space-y-6">
+            {/* Main stat */}
+            <div className="text-center">
+              <motion.p
+                className="text-5xl md:text-6xl font-black text-primary tracking-tight"
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 1, type: "spring" }}
+              >
+                900+
+              </motion.p>
+              <p className="text-sm text-muted-foreground mt-1 font-medium">horas de desenvolvimento puro</p>
+              <p className="text-[11px] text-muted-foreground/60 mt-1">12h/dia · 7 dias/semana · 2 meses e meio</p>
             </div>
-            <div>
-              <h3 className="text-sm font-semibold mb-1">Dedicação — 12h/dia por 2 meses e meio</h3>
-              <p className="text-[12px] text-muted-foreground leading-relaxed">
-                Este projeto foi construído com dedicação integral — 12 horas por dia, 7 dias por semana, durante mais de 2 meses e meio. Totalizando mais de 900 horas de desenvolvimento puro, incluindo arquitetura, backend, frontend, UX, integrações e testes.
-              </p>
-            </div>
-          </div>
-        </motion.div>
 
-        {/* Team callout */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0 }}
-          className="mt-4 rounded-2xl border border-primary/15 bg-gradient-to-br from-primary/5 to-transparent p-6"
-          style={{ backdropFilter: "blur(20px)" }}
-        >
-          <div className="flex items-start gap-4">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
-              <Users className="h-6 w-6 text-primary" />
-            </div>
-            <div>
-              <h3 className="text-sm font-semibold mb-2">Equipe — Responsabilidades</h3>
-              <div className="space-y-2">
-                <div className="text-[12px] text-muted-foreground leading-relaxed">
-                  <span className="text-foreground font-semibold">Guilherme</span> — Desenvolvimento completo, lançamento, software, design UX/UI, prospecção de leads. Responsável por toda a construção técnica e visual da plataforma.
+            <div className="h-px bg-gradient-to-r from-transparent via-border/30 to-transparent" />
+
+            {/* Team section */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Guilherme */}
+              <div className="rounded-xl border border-primary/15 bg-primary/5 p-4 relative">
+                <div className="absolute top-3 right-3">
+                  <span className="text-[8px] px-2 py-0.5 rounded-full bg-primary/20 text-primary font-mono uppercase tracking-wider">
+                    Builder
+                  </span>
                 </div>
-                <div className="text-[12px] text-muted-foreground leading-relaxed">
-                  <span className="text-foreground font-semibold">Gabriel</span> — Auditoria e análise da plataforma, gestão do painel admin, integração com Claude Platform.
+                <h4 className="text-base font-bold text-foreground">Guilherme</h4>
+                <p className="text-[10px] text-primary font-semibold uppercase tracking-wider mt-1 mb-2">
+                  Criador & Desenvolvedor
+                </p>
+                <div className="space-y-1">
+                  {["Arquitetura completa", "Frontend & Backend", "Design UX/UI", "Software & Lançamento", "Prospecção de leads"].map((item) => (
+                    <p key={item} className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                      <span className="w-1 h-1 rounded-full bg-primary shrink-0" />
+                      {item}
+                    </p>
+                  ))}
+                </div>
+                <p className="text-[10px] text-muted-foreground/50 mt-3 italic">
+                  Responsável por 100% da construção técnica e visual
+                </p>
+              </div>
+
+              {/* Gabriel */}
+              <div className="rounded-xl border border-border/15 bg-card/40 p-4 relative">
+                <div className="absolute top-3 right-3">
+                  <span className="text-[8px] px-2 py-0.5 rounded-full bg-muted/30 text-muted-foreground font-mono uppercase tracking-wider">
+                    Admin
+                  </span>
+                </div>
+                <h4 className="text-base font-bold text-foreground">Gabriel</h4>
+                <p className="text-[10px] text-muted-foreground font-semibold uppercase tracking-wider mt-1 mb-2">
+                  Auditoria & Gestão
+                </p>
+                <div className="space-y-1">
+                  {["Auditoria da plataforma", "Análise de qualidade", "Gestão do painel admin", "Claude Platform"].map((item) => (
+                    <p key={item} className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                      <span className="w-1 h-1 rounded-full bg-muted-foreground/40 shrink-0" />
+                      {item}
+                    </p>
+                  ))}
                 </div>
               </div>
-              <div className="mt-3">
-                <span className="text-[10px] px-2 py-1 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-mono">
-                  🚀 Lançamento: Terça-feira, 17 de Março de 2026
-                </span>
-              </div>
             </div>
+
+            {/* Launch banner */}
+            <motion.div
+              className="text-center rounded-xl border border-primary/20 bg-primary/5 py-3 px-4"
+              animate={{ boxShadow: ["0 0 0px hsl(var(--primary) / 0)", "0 0 20px hsl(var(--primary) / 0.15)", "0 0 0px hsl(var(--primary) / 0)"] }}
+              transition={{ duration: 3, repeat: Infinity }}
+            >
+              <p className="text-[10px] text-muted-foreground uppercase tracking-[0.2em] font-mono">Lançamento oficial</p>
+              <p className="text-lg font-bold text-primary mt-0.5">Terça-feira, 17 de Março de 2026</p>
+            </motion.div>
           </div>
         </motion.div>
       </div>
