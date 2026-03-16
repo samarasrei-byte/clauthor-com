@@ -296,7 +296,7 @@ const MessageBubble = ({ msg, onOptionSelect, onModelSelect }: {
 const ThorOnboarding = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [step, setStep] = useState<"welcome" | "analyzing" | "analysis_done" | "pain" | "agents" | "model" | "specialists" | "knowledge" | "whatsapp" | "done">("welcome");
+  const [step, setStep] = useState<"welcome" | "analyzing" | "analysis_done" | "pain" | "agents" | "model" | "specialists" | "knowledge" | "integrations" | "whatsapp" | "done">("welcome");
   const [url, setUrl] = useState("");
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [analysisStep, setAnalysisStep] = useState(0);
