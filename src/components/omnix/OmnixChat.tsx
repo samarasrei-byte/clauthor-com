@@ -507,11 +507,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="absolute bottom-36 left-1/2 -translate-x-1/2 max-w-md px-6"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-md w-full px-6"
             >
-              <p className="text-center text-sm text-muted-foreground/70 italic">
-                {input || "..."}
-              </p>
+              <div className="bg-card/60 backdrop-blur-xl border border-border/15 rounded-xl px-4 py-2.5 shadow-lg">
+                <p className="text-center text-sm text-foreground/70 italic truncate">
+                  {input || "..."}
+                </p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -523,13 +525,15 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="absolute bottom-36 left-1/2 -translate-x-1/2 max-w-lg px-6 cursor-pointer"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-lg w-full px-6 cursor-pointer"
               onClick={() => setShowChat(true)}
             >
-              <p className="text-center text-xs text-muted-foreground/40 line-clamp-2 hover:text-muted-foreground/60 transition-colors">
-                {messages[messages.length - 1].content.slice(0, 150)}…
-                <span className="ml-2 text-primary/40">{t("omnix.see_more", { defaultValue: "ver mais" })}</span>
-              </p>
+              <div className="bg-card/40 backdrop-blur-xl border border-border/10 rounded-xl px-4 py-2.5">
+                <p className="text-center text-xs text-muted-foreground/50 line-clamp-2 hover:text-muted-foreground/70 transition-colors">
+                  {messages[messages.length - 1].content.slice(0, 150)}…
+                  <span className="ml-2 text-primary/50 font-medium">{t("omnix.see_more", { defaultValue: "ver mais" })}</span>
+                </p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
