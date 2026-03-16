@@ -55,6 +55,7 @@ const TeamBuilder = lazyRetry(() => import("./pages/TeamBuilder"));
 const ControlTower = lazyRetry(() => import("./pages/ControlTower"));
 const Architecture = lazyRetry(() => import("./pages/Architecture"));
 const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
+const ThorOnboarding = lazyRetry(() => import("./pages/ThorOnboarding"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -86,6 +87,7 @@ const App = () => (
                 {/* Public pages with full navbar */}
                 {/* Waitlist — standalone immersive page, no navbar */}
                 <Route path="/waitlist" element={<Waitlist />} />
+                <Route path="/onboarding" element={<ThorOnboarding />} />
 
                 {/* Public pages with full navbar */}
                 <Route element={<AppLayout />}>
