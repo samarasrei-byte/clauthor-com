@@ -452,14 +452,51 @@ const ThorOnboarding = () => {
     // Squad flow
     await thorSays("Excelente escolha! O squad é a opção mais eficiente.\n\nVou criar automaticamente sua base de conhecimento usando:\n\n• Site da empresa\n• Serviços detectados\n• Perguntas frequentes\n• Especialistas cadastrados");
 
+    setStep("integrations");
+    await thorSays(
+      "Agora vamos conectar as ferramentas que seu time de IA vai usar. Quais dessas integrações fazem sentido para o seu negócio?",
+      {
+        type: "integrations",
+        options: [
+          { id: "whatsapp", label: "WhatsApp Business", icon: "📱", desc: "Atendimento automático via WhatsApp" },
+          { id: "gmail", label: "Gmail / E-mail", icon: "📧", desc: "Envio e leitura de e-mails" },
+          { id: "notion", label: "Notion", icon: "📝", desc: "Base de conhecimento e docs" },
+          { id: "hubspot", label: "HubSpot CRM", icon: "📊", desc: "Gestão de leads e pipeline" },
+          { id: "google_sheets", label: "Google Sheets", icon: "📋", desc: "Relatórios e dados" },
+          { id: "slack", label: "Slack", icon: "💬", desc: "Notificações internas" },
+          { id: "skip", label: "Fazer depois no Dashboard", icon: "⏭️", desc: "Conectar integrações depois" },
+        ],
+      }
+    );
+  };
+
+  // ── Handle integration selection ─────────────────
+  const handleIntegrationSelect = async (integrationId: string) => {
+    if (integrationId === "skip") {
+      addMessage({ role: "user", content: "⏭️ Vou conectar depois" });
+      await thorSays("Sem problemas! Você pode conectar todas as integrações a qualquer momento no menu **Conectores** do dashboard.");
+    } else {
+      const selected = [
+        { id: "whatsapp", name: "WhatsApp Business" },
+        { id: "gmail", name: "Gmail" },
+        { id: "notion", name: "Notion" },
+        { id: "hubspot", name: "HubSpot" },
+        { id: "google_sheets", name: "Google Sheets" },
+        { id: "slack", name: "Slack" },
+      ].find(i => i.id === integrationId);
+      
+      addMessage({ role: "user", content: `Quero conectar ${selected?.name || integrationId}` });
+      await thorSays(`Ótimo! Para conectar o **${selected?.name}**, vou te levar direto para a tela de configuração no dashboard. É bem simples: você só precisa colar sua chave de API e pronto! 🔑`);
+    }
+
     setStep("whatsapp");
     await thorSays(
-      "Seu time de agentes está quase pronto! 🎉\n\nAgora só falta conectar seu WhatsApp para ativar os agentes.\n\nDeseja conectar agora ou fazer isso depois?",
+      "Seu time de agentes está quase pronto! 🎉\n\nVamos finalizar a configuração?",
       {
         type: "options",
         options: [
-          { id: "connect_now", label: "Conectar WhatsApp agora", icon: "📱" },
-          { id: "connect_later", label: "Fazer depois, quero ver o dashboard", icon: "⏭️" },
+          { id: "connect_now", label: "Ir para o Dashboard agora", icon: "🚀" },
+          { id: "connect_later", label: "Ver mais opções primeiro", icon: "👀" },
         ],
       }
     );
@@ -467,7 +504,19 @@ const ThorOnboarding = () => {
 
   // ── Handle WhatsApp connection choice ────────────
   const handleWhatsAppChoice = async (choice: string) => {
-    addMessage({ role: "user", content: choice === "connect_now" ? "📱 Conectar agora" : "⏭️ Fazer depois" });
+    addMessage({ role: "user", content: choice === "connect_now" ? "🚀 Ir para o Dashboard" : "👀 Ver mais opções" });
+
+    if (choice === "connect_later") {
+      await thorSays("Você pode explorar a **Biblioteca de 200+ Agentes**, configurar **Departamentos** ou ir direto pro **Dashboard**. Pra onde quer ir?", {
+        type: "options",
+        options: [
+          { id: "go_dashboard", label: "Dashboard", icon: "📊" },
+          { id: "go_library", label: "Biblioteca de Agentes", icon: "📚" },
+          { id: "go_integrations", label: "Conectores", icon: "🔌" },
+        ],
+      });
+      return;
+    }
 
     setStep("done");
     await thorSays(
