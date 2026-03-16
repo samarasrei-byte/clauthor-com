@@ -542,12 +542,17 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       {/* ── WAVEFORM VISUALIZATION ── */}
       <AnimatePresence>
         {(isListening || isSpeaking) && (
-          <div className="shrink-0 px-8">
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="shrink-0 px-8 max-h-16 overflow-hidden"
+          >
             <AudioWaveform
               active
               mode={isSpeaking ? "speaking" : "listening"}
             />
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
