@@ -87,6 +87,7 @@ const App = () => (
                 {/* Public pages with full navbar */}
                 {/* Waitlist — standalone immersive page, no navbar */}
                 <Route path="/waitlist" element={<Waitlist />} />
+                <Route path="/onboarding" element={<ThorOnboarding />} />
 
                 {/* Public pages with full navbar */}
                 <Route element={<AppLayout />}>
