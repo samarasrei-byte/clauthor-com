@@ -55,6 +55,7 @@ const TeamBuilder = lazyRetry(() => import("./pages/TeamBuilder"));
 const ControlTower = lazyRetry(() => import("./pages/ControlTower"));
 const Architecture = lazyRetry(() => import("./pages/Architecture"));
 const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
+const ThorOnboarding = lazyRetry(() => import("./pages/ThorOnboarding"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
