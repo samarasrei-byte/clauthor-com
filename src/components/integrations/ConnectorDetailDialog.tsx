@@ -38,7 +38,7 @@ const ConnectorDetailDialog = ({ connector, open, onOpenChange, connectedKeys, o
         if (!values[field.key]?.trim()) continue;
         await supabase.functions.invoke("credential-manager", {
           body: {
-            action: "save_platform",
+            action: "save_user_integration",
             integration_name: connector.integrationKey,
             credential_key: field.key,
             credential_value: values[field.key],
