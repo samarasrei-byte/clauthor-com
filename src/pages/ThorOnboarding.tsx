@@ -267,6 +267,40 @@ const MessageBubble = ({ msg, onOptionSelect, onModelSelect }: {
           </div>
         )}
 
+        {/* Integration selection */}
+        {msg.type === "integrations" && msg.options && (
+          <div className="px-4 pb-4 space-y-2">
+            <div className="flex items-center gap-2 mb-2">
+              <Zap className="h-4 w-4 text-primary" />
+              <span className="text-xs font-bold text-primary uppercase tracking-wider">Integrações</span>
+            </div>
+            {msg.options.map((opt, i) => (
+              <motion.button
+                key={opt.id}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.06 }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => onOptionSelect?.(opt.id)}
+                className={cn(
+                  "w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left group",
+                  opt.id === "skip"
+                    ? "border-border/20 bg-muted/10 hover:bg-muted/20"
+                    : "border-border/30 bg-background/40 hover:bg-primary/5 hover:border-primary/20"
+                )}
+              >
+                <span className="text-lg">{opt.icon}</span>
+                <div className="flex-1">
+                  <span className="text-sm font-medium group-hover:text-primary transition-colors">{opt.label}</span>
+                  {opt.desc && <p className="text-[10px] text-muted-foreground">{opt.desc}</p>}
+                </div>
+                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+              </motion.button>
+            ))}
+          </div>
+        )}
+
         {/* Final screen */}
         {msg.type === "final" && (
           <div className="px-4 pb-4 space-y-3">
