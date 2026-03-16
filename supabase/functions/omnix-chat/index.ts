@@ -609,7 +609,11 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
     }
 
     // Estimate tokens conservatively (avoid over-charging)
-    const inputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
+    const inputTokens = (messages || []).reduce((sum: number, m: any) => {
+      const c = m.content;
+      const len = typeof c === "string" ? c.length : Array.isArray(c) ? c.reduce((s: number, p: any) => s + (p.text?.length || 0), 0) : 0;
+      return sum + Math.ceil(len / 4);
+    }, 0);
     const omnixEstimatedTokens = inputTokens + 400;
 
     supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: chatModel }).then(() => {});
