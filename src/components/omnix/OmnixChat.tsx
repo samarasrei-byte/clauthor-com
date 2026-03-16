@@ -560,7 +560,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       <div className="sticky bottom-0 shrink-0 pt-3 px-4 sm:px-6 relative z-20 pb-[calc(env(safe-area-inset-bottom,0px)+4.5rem)] lg:pb-4 bg-gradient-to-t from-background via-background/90 to-transparent">
         <div className="max-w-2xl mx-auto space-y-3">
           {/* Main input bar */}
-          <div className="relative flex items-center gap-2 rounded-2xl bg-card/50 backdrop-blur-2xl border border-border/15 shadow-[0_4px_24px_hsl(var(--background)/0.4)] hover:border-border/25 focus-within:border-primary/25 focus-within:shadow-[0_4px_24px_hsl(var(--primary)/0.06)] transition-all duration-300 px-2">
+          <div className="relative flex items-center gap-2 rounded-2xl bg-card/50 backdrop-blur-2xl border border-border/20 shadow-[0_2px_20px_hsl(var(--background)/0.5)] hover:border-border/30 focus-within:border-primary/30 focus-within:shadow-[0_2px_20px_hsl(var(--primary)/0.08)] transition-all duration-300 px-2">
             {/* Left actions */}
             <div className="flex items-center gap-0.5 pl-1">
               {/* Voice toggle */}
