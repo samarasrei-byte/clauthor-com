@@ -353,15 +353,16 @@ const ThorOnboarding = () => {
     let analysis: SiteAnalysis;
     try {
       const { data } = await supabase.functions.invoke("company-scanner", {
-        body: { url: url.trim() },
+        body: { action: "scan_url", url: url.trim() },
       });
-      if (data?.company) {
+      const d = data?.data;
+      if (d?.companyName) {
         analysis = {
-          company: data.company || url.replace(/https?:\/\//, "").split(".")[0],
-          industry: data.industry || "serviços",
-          services: data.services || ["serviços gerais"],
-          faqs: data.faqs || ["preços", "horários", "localização"],
-          city: data.city,
+          company: d.companyName,
+          industry: d.industry || "serviços",
+          services: d.products ? d.products.split(/[,;\n]/).map((s: string) => s.trim()).filter(Boolean).slice(0, 5) : ["serviços gerais"],
+          faqs: d.commonQuestions ? d.commonQuestions.split(/[,;\n]/).map((s: string) => s.trim()).filter(Boolean).slice(0, 5) : ["preços", "horários", "localização"],
+          city: d.contactInfo || undefined,
         };
       } else {
         throw new Error("no data");
