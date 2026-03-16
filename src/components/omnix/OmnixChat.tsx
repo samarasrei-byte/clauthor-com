@@ -460,14 +460,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       </AnimatePresence>
 
       {/* ── IMMERSIVE ORB VIEW ── */}
-      <div className="flex-1 min-h-0 flex flex-col items-center justify-center relative">
+      <div className="flex-1 min-h-0 flex flex-col items-center justify-center relative overflow-hidden">
         {/* Background ambient */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div
-            className="absolute w-[600px] h-[600px] rounded-full"
+            className="absolute w-[min(600px,90vw)] h-[min(600px,90vw)] rounded-full"
             style={{
               left: "50%",
-              top: "50%",
+              top: "45%",
               x: "-50%",
               y: "-50%",
               background: `radial-gradient(circle, hsl(var(--primary) / 0.04) 0%, transparent 70%)`,
@@ -479,15 +479,17 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           />
         </div>
 
-        {/* Orb */}
-        <OmnixOrb state={getOrbState()} name={config.name} immersive />
+        {/* Orb — responsive sizing */}
+        <div className="scale-[0.55] sm:scale-[0.7] lg:scale-100 transition-transform duration-300">
+          <OmnixOrb state={getOrbState()} name={config.name} immersive />
+        </div>
 
         {/* Status indicator text below orb */}
         <motion.div
           key={getOrbState()}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-4"
+          className="-mt-6 sm:-mt-2 lg:mt-4"
         >
            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/30">
              {isListening ? t("omnix.status_listening", { defaultValue: "Ouvindo..." })
