@@ -21,7 +21,7 @@ interface ChatMessage {
   id: string;
   role: "thor" | "user" | "system";
   content: string;
-  type?: "text" | "options" | "agents" | "models" | "specialists" | "final";
+  type?: "text" | "options" | "agents" | "models" | "specialists" | "integrations" | "final";
   options?: OptionItem[];
   agents?: AgentRec[];
   typing?: boolean;
