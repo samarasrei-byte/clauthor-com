@@ -21,7 +21,7 @@ interface ChatMessage {
   id: string;
   role: "thor" | "user" | "system";
   content: string;
-  type?: "text" | "options" | "agents" | "models" | "specialists" | "final";
+  type?: "text" | "options" | "agents" | "models" | "specialists" | "integrations" | "final";
   options?: OptionItem[];
   agents?: AgentRec[];
   typing?: boolean;
@@ -267,6 +267,40 @@ const MessageBubble = ({ msg, onOptionSelect, onModelSelect }: {
           </div>
         )}
 
+        {/* Integration selection */}
+        {msg.type === "integrations" && msg.options && (
+          <div className="px-4 pb-4 space-y-2">
+            <div className="flex items-center gap-2 mb-2">
+              <Zap className="h-4 w-4 text-primary" />
+              <span className="text-xs font-bold text-primary uppercase tracking-wider">Integrações</span>
+            </div>
+            {msg.options.map((opt, i) => (
+              <motion.button
+                key={opt.id}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.06 }}
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={() => onOptionSelect?.(opt.id)}
+                className={cn(
+                  "w-full flex items-center gap-3 p-3 rounded-xl border transition-all text-left group",
+                  opt.id === "skip"
+                    ? "border-border/20 bg-muted/10 hover:bg-muted/20"
+                    : "border-border/30 bg-background/40 hover:bg-primary/5 hover:border-primary/20"
+                )}
+              >
+                <span className="text-lg">{opt.icon}</span>
+                <div className="flex-1">
+                  <span className="text-sm font-medium group-hover:text-primary transition-colors">{opt.label}</span>
+                  {opt.desc && <p className="text-[10px] text-muted-foreground">{opt.desc}</p>}
+                </div>
+                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-primary transition-colors" />
+              </motion.button>
+            ))}
+          </div>
+        )}
+
         {/* Final screen */}
         {msg.type === "final" && (
           <div className="px-4 pb-4 space-y-3">
@@ -296,7 +330,7 @@ const MessageBubble = ({ msg, onOptionSelect, onModelSelect }: {
 const ThorOnboarding = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [step, setStep] = useState<"welcome" | "analyzing" | "analysis_done" | "pain" | "agents" | "model" | "specialists" | "knowledge" | "whatsapp" | "done">("welcome");
+  const [step, setStep] = useState<"welcome" | "analyzing" | "analysis_done" | "pain" | "agents" | "model" | "specialists" | "knowledge" | "integrations" | "whatsapp" | "done">("welcome");
   const [url, setUrl] = useState("");
   const [analysisProgress, setAnalysisProgress] = useState(0);
   const [analysisStep, setAnalysisStep] = useState(0);
@@ -452,14 +486,51 @@ const ThorOnboarding = () => {
     // Squad flow
     await thorSays("Excelente escolha! O squad é a opção mais eficiente.\n\nVou criar automaticamente sua base de conhecimento usando:\n\n• Site da empresa\n• Serviços detectados\n• Perguntas frequentes\n• Especialistas cadastrados");
 
+    setStep("integrations");
+    await thorSays(
+      "Agora vamos conectar as ferramentas que seu time de IA vai usar. Quais dessas integrações fazem sentido para o seu negócio?",
+      {
+        type: "integrations",
+        options: [
+          { id: "whatsapp", label: "WhatsApp Business", icon: "📱", desc: "Atendimento automático via WhatsApp" },
+          { id: "gmail", label: "Gmail / E-mail", icon: "📧", desc: "Envio e leitura de e-mails" },
+          { id: "notion", label: "Notion", icon: "📝", desc: "Base de conhecimento e docs" },
+          { id: "hubspot", label: "HubSpot CRM", icon: "📊", desc: "Gestão de leads e pipeline" },
+          { id: "google_sheets", label: "Google Sheets", icon: "📋", desc: "Relatórios e dados" },
+          { id: "slack", label: "Slack", icon: "💬", desc: "Notificações internas" },
+          { id: "skip", label: "Fazer depois no Dashboard", icon: "⏭️", desc: "Conectar integrações depois" },
+        ],
+      }
+    );
+  };
+
+  // ── Handle integration selection ─────────────────
+  const handleIntegrationSelect = async (integrationId: string) => {
+    if (integrationId === "skip") {
+      addMessage({ role: "user", content: "⏭️ Vou conectar depois" });
+      await thorSays("Sem problemas! Você pode conectar todas as integrações a qualquer momento no menu **Conectores** do dashboard.");
+    } else {
+      const selected = [
+        { id: "whatsapp", name: "WhatsApp Business" },
+        { id: "gmail", name: "Gmail" },
+        { id: "notion", name: "Notion" },
+        { id: "hubspot", name: "HubSpot" },
+        { id: "google_sheets", name: "Google Sheets" },
+        { id: "slack", name: "Slack" },
+      ].find(i => i.id === integrationId);
+      
+      addMessage({ role: "user", content: `Quero conectar ${selected?.name || integrationId}` });
+      await thorSays(`Ótimo! Para conectar o **${selected?.name}**, vou te levar direto para a tela de configuração no dashboard. É bem simples: você só precisa colar sua chave de API e pronto! 🔑`);
+    }
+
     setStep("whatsapp");
     await thorSays(
-      "Seu time de agentes está quase pronto! 🎉\n\nAgora só falta conectar seu WhatsApp para ativar os agentes.\n\nDeseja conectar agora ou fazer isso depois?",
+      "Seu time de agentes está quase pronto! 🎉\n\nVamos finalizar a configuração?",
       {
         type: "options",
         options: [
-          { id: "connect_now", label: "Conectar WhatsApp agora", icon: "📱" },
-          { id: "connect_later", label: "Fazer depois, quero ver o dashboard", icon: "⏭️" },
+          { id: "connect_now", label: "Ir para o Dashboard agora", icon: "🚀" },
+          { id: "connect_later", label: "Ver mais opções primeiro", icon: "👀" },
         ],
       }
     );
@@ -467,7 +538,19 @@ const ThorOnboarding = () => {
 
   // ── Handle WhatsApp connection choice ────────────
   const handleWhatsAppChoice = async (choice: string) => {
-    addMessage({ role: "user", content: choice === "connect_now" ? "📱 Conectar agora" : "⏭️ Fazer depois" });
+    addMessage({ role: "user", content: choice === "connect_now" ? "🚀 Ir para o Dashboard" : "👀 Ver mais opções" });
+
+    if (choice === "connect_later") {
+      await thorSays("Você pode explorar a **Biblioteca de 200+ Agentes**, configurar **Departamentos** ou ir direto pro **Dashboard**. Pra onde quer ir?", {
+        type: "options",
+        options: [
+          { id: "go_dashboard", label: "Dashboard", icon: "📊" },
+          { id: "go_library", label: "Biblioteca de Agentes", icon: "📚" },
+          { id: "go_integrations", label: "Conectores", icon: "🔌" },
+        ],
+      });
+      return;
+    }
 
     setStep("done");
     await thorSays(
@@ -481,13 +564,20 @@ const ThorOnboarding = () => {
   // ── Generic option handler ───────────────────────
   const handleOptionSelect = (id: string) => {
     if (step === "pain") handlePainSelect(id);
+    else if (step === "integrations") handleIntegrationSelect(id);
     else if (step === "whatsapp") handleWhatsAppChoice(id);
+    else if (step === "done") {
+      // Handle extra navigation options
+      if (id === "go_dashboard") navigate("/dashboard");
+      else if (id === "go_library") navigate("/library");
+      else if (id === "go_integrations") navigate("/integrations");
+    }
   };
 
   const progressPercent = {
     welcome: 0, analyzing: 15, analysis_done: 30, pain: 45,
     agents: 60, model: 70, specialists: 80, knowledge: 85,
-    whatsapp: 90, done: 100,
+    integrations: 88, whatsapp: 92, done: 100,
   }[step];
 
   return (

@@ -485,6 +485,97 @@ serve(async (req) => {
         return new Response(JSON.stringify({ success: true, message: "Credencial removida." }), { headers });
       }
 
+      // ── SAVE USER INTEGRATION (any authenticated user can store their own integration creds) ──
+      case "save_user_integration": {
+        if (!integration_name || !credential_key || !credential_value) {
+          return new Response(JSON.stringify({ error: "integration_name, credential_key, and credential_value required" }), { status: 400, headers });
+        }
+
+        const encryptedUserValue = await encryptValue(credential_value);
+
+        // Use a deterministic "virtual agent" ID per user+integration to avoid needing a real agent
+        // Store in platform_credentials-like structure but scoped to user via agent_credentials
+        // First, check if user has any agent — if not, create a system placeholder
+        let targetAgentId = body.agent_id;
+        
+        if (!targetAgentId) {
+          // Find or create a system "integrations" agent for this user
+          const { data: existingAgent } = await adminClient
+            .from("agents")
+            .select("id")
+            .eq("user_id", userId)
+            .eq("name", "__integrations__")
+            .maybeSingle();
+          
+          if (existingAgent) {
+            targetAgentId = existingAgent.id;
+          } else {
+            const { data: newAgent } = await adminClient
+              .from("agents")
+              .insert({
+                user_id: userId,
+                name: "__integrations__",
+                description: "Sistema interno para armazenar credenciais de integrações",
+                status: "active",
+                tier: "basic",
+              })
+              .select("id")
+              .single();
+            targetAgentId = newAgent?.id;
+          }
+        }
+
+        if (!targetAgentId) {
+          return new Response(JSON.stringify({ error: "Failed to resolve agent for credentials" }), { status: 500, headers });
+        }
+
+        const { error: saveErr } = await adminClient
+          .from("agent_credentials")
+          .upsert({
+            agent_id: targetAgentId,
+            user_id: userId,
+            integration_name,
+            credential_key,
+            credential_value: encryptedUserValue,
+            is_secret: true,
+            updated_at: new Date().toISOString(),
+          }, { onConflict: "agent_id,credential_key" });
+
+        if (saveErr) throw saveErr;
+
+        await adminClient.from("credential_audit_logs").insert({
+          user_id: userId,
+          agent_id: targetAgentId,
+          integration_name,
+          credential_key,
+          action: "save_user_integration",
+          ip_address: clientIp,
+          user_agent: ua.slice(0, 200),
+          metadata: { encrypted: true, version: "senc:v1" },
+        });
+
+        return new Response(JSON.stringify({
+          success: true,
+          message: `Credencial ${credential_key} de ${integration_name} salva com sucesso.`,
+        }), { headers });
+      }
+
+      // ── LIST USER INTEGRATIONS (user's own integration credentials, masked) ──
+      case "list_user_integrations": {
+        const { data: userCreds } = await adminClient
+          .from("agent_credentials")
+          .select("id, integration_name, credential_key, created_at, updated_at")
+          .eq("user_id", userId)
+          .order("integration_name");
+
+        return new Response(JSON.stringify({
+          credentials: (userCreds || []).map(c => ({
+            ...c,
+            value: "••••••••",
+          })),
+        }), { headers });
+      }
+
       default:
         return new Response(JSON.stringify({ error: `Unknown action: ${action}` }), { status: 400, headers });
     }

@@ -33,11 +33,18 @@ const IntegrationsPage = () => {
   const { data: connectedCreds = [], refetch: refetchCreds } = useQuery({
     queryKey: ["integration-status"],
     queryFn: async () => {
-      const { data, error } = await supabase.functions.invoke("credential-manager", {
-        body: { action: "list_platform" },
-      });
-      if (error) return [];
-      return data?.credentials || [];
+      // Fetch both user integrations and platform credentials
+      const [userRes, platformRes] = await Promise.all([
+        supabase.functions.invoke("credential-manager", {
+          body: { action: "list_user_integrations" },
+        }),
+        supabase.functions.invoke("credential-manager", {
+          body: { action: "list_platform" },
+        }),
+      ]);
+      const userCreds = userRes.data?.credentials || [];
+      const platformCreds = platformRes.data?.credentials || [];
+      return [...userCreds, ...platformCreds];
     },
     enabled: !!user,
   });
