@@ -62,7 +62,17 @@ function detectComplexity(body: Record<string, any>): TaskComplexity {
   const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
   if (!lastUserMsg) return "simple";
 
-  const content = (lastUserMsg.content || "").toLowerCase();
+  // Handle multimodal content (array of text/image parts)
+  let rawContent = lastUserMsg.content || "";
+  if (Array.isArray(rawContent)) {
+    rawContent = rawContent
+      .filter((p: any) => p.type === "text")
+      .map((p: any) => p.text || "")
+      .join(" ");
+  }
+  if (typeof rawContent !== "string") rawContent = String(rawContent);
+
+  const content = rawContent.toLowerCase();
   const wordCount = content.split(/\s+/).length;
 
   // Long prompts are likely complex
