@@ -530,13 +530,20 @@ const ThorOnboarding = () => {
   // ── Generic option handler ───────────────────────
   const handleOptionSelect = (id: string) => {
     if (step === "pain") handlePainSelect(id);
+    else if (step === "integrations") handleIntegrationSelect(id);
     else if (step === "whatsapp") handleWhatsAppChoice(id);
+    else if (step === "done") {
+      // Handle extra navigation options
+      if (id === "go_dashboard") navigate("/dashboard");
+      else if (id === "go_library") navigate("/library");
+      else if (id === "go_integrations") navigate("/integrations");
+    }
   };
 
   const progressPercent = {
     welcome: 0, analyzing: 15, analysis_done: 30, pain: 45,
     agents: 60, model: 70, specialists: 80, knowledge: 85,
-    whatsapp: 90, done: 100,
+    integrations: 88, whatsapp: 92, done: 100,
   }[step];
 
   return (
