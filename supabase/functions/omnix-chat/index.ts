@@ -410,7 +410,8 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: policyResult.reason }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const lastUserMessage = (messages || []).filter((m: any) => m.role === "user").pop()?.content?.toLowerCase?.() || "";
+    const lastUserMsgRaw = (messages || []).filter((m: any) => m.role === "user").pop()?.content;
+    const lastUserMessage = (typeof lastUserMsgRaw === "string" ? lastUserMsgRaw : Array.isArray(lastUserMsgRaw) ? lastUserMsgRaw.filter((p: any) => p.type === "text").map((p: any) => p.text || "").join(" ") : String(lastUserMsgRaw || "")).toLowerCase();
     const platformIntentRegex = /(agente|tarefa|relat[óo]rio|cr[ée]dito|plano|dashboard|empresa|neg[óo]cio|vendas|opera[cç][ãa]o|squad|automa[cç][ãa]o|integra[cç][ãa]o|lead|reuni[aã]o|board|an[aá]lise|meta|thor|omnix|clauthor|plataforma)/i;
     const toolIntentRegex = /(criar|crie|cria|gera|gerar|agendar|delegar|buscar|procurar|analisar|salvar|revogar|remover|deletar|executar|fazer agora|agenda|task|report|credentials?|configur|ativ|lista|mostr|ver credenciais|exclu|cancel)/i;
 
