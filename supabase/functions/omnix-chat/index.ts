@@ -410,7 +410,8 @@ serve(async (req) => {
       return new Response(JSON.stringify({ error: policyResult.reason }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    const lastUserMessage = (messages || []).filter((m: any) => m.role === "user").pop()?.content?.toLowerCase?.() || "";
+    const lastUserMsgRaw = (messages || []).filter((m: any) => m.role === "user").pop()?.content;
+    const lastUserMessage = (typeof lastUserMsgRaw === "string" ? lastUserMsgRaw : Array.isArray(lastUserMsgRaw) ? lastUserMsgRaw.filter((p: any) => p.type === "text").map((p: any) => p.text || "").join(" ") : String(lastUserMsgRaw || "")).toLowerCase();
     const platformIntentRegex = /(agente|tarefa|relat[óo]rio|cr[ée]dito|plano|dashboard|empresa|neg[óo]cio|vendas|opera[cç][ãa]o|squad|automa[cç][ãa]o|integra[cç][ãa]o|lead|reuni[aã]o|board|an[aá]lise|meta|thor|omnix|clauthor|plataforma)/i;
     const toolIntentRegex = /(criar|crie|cria|gera|gerar|agendar|delegar|buscar|procurar|analisar|salvar|revogar|remover|deletar|executar|fazer agora|agenda|task|report|credentials?|configur|ativ|lista|mostr|ver credenciais|exclu|cancel)/i;
 
@@ -608,7 +609,11 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
     }
 
     // Estimate tokens conservatively (avoid over-charging)
-    const inputTokens = (messages || []).reduce((sum: number, m: any) => sum + Math.ceil((m.content?.length || 0) / 4), 0);
+    const inputTokens = (messages || []).reduce((sum: number, m: any) => {
+      const c = m.content;
+      const len = typeof c === "string" ? c.length : Array.isArray(c) ? c.reduce((s: number, p: any) => s + (p.text?.length || 0), 0) : 0;
+      return sum + Math.ceil(len / 4);
+    }, 0);
     const omnixEstimatedTokens = inputTokens + 400;
 
     supabase.from("token_usage").insert({ user_id: user.id, action_type: "omnix_chat", tokens_used: omnixEstimatedTokens, model: chatModel }).then(() => {});
