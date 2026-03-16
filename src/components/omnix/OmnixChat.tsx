@@ -460,14 +460,14 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       </AnimatePresence>
 
       {/* ── IMMERSIVE ORB VIEW ── */}
-      <div className="flex-1 min-h-0 flex flex-col items-center justify-center relative">
+      <div className="flex-1 min-h-0 flex flex-col items-center justify-center relative overflow-hidden">
         {/* Background ambient */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div
-            className="absolute w-[600px] h-[600px] rounded-full"
+            className="absolute w-[min(600px,90vw)] h-[min(600px,90vw)] rounded-full"
             style={{
               left: "50%",
-              top: "50%",
+              top: "45%",
               x: "-50%",
               y: "-50%",
               background: `radial-gradient(circle, hsl(var(--primary) / 0.04) 0%, transparent 70%)`,
@@ -479,15 +479,17 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           />
         </div>
 
-        {/* Orb */}
-        <OmnixOrb state={getOrbState()} name={config.name} immersive />
+        {/* Orb — responsive sizing */}
+        <div className="scale-[0.55] sm:scale-[0.7] lg:scale-100 transition-transform duration-300">
+          <OmnixOrb state={getOrbState()} name={config.name} immersive />
+        </div>
 
         {/* Status indicator text below orb */}
         <motion.div
           key={getOrbState()}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="mt-4"
+          className="-mt-6 sm:-mt-2 lg:mt-4"
         >
            <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/30">
              {isListening ? t("omnix.status_listening", { defaultValue: "Ouvindo..." })
@@ -505,11 +507,13 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="absolute bottom-36 left-1/2 -translate-x-1/2 max-w-md px-6"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-md w-full px-6"
             >
-              <p className="text-center text-sm text-muted-foreground/70 italic">
-                {input || "..."}
-              </p>
+              <div className="bg-card/60 backdrop-blur-xl border border-border/15 rounded-xl px-4 py-2.5 shadow-lg">
+                <p className="text-center text-sm text-foreground/70 italic truncate">
+                  {input || "..."}
+                </p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -521,13 +525,15 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="absolute bottom-36 left-1/2 -translate-x-1/2 max-w-lg px-6 cursor-pointer"
+              className="absolute bottom-4 left-1/2 -translate-x-1/2 max-w-lg w-full px-6 cursor-pointer"
               onClick={() => setShowChat(true)}
             >
-              <p className="text-center text-xs text-muted-foreground/40 line-clamp-2 hover:text-muted-foreground/60 transition-colors">
-                {messages[messages.length - 1].content.slice(0, 150)}…
-                <span className="ml-2 text-primary/40">{t("omnix.see_more", { defaultValue: "ver mais" })}</span>
-              </p>
+              <div className="bg-card/40 backdrop-blur-xl border border-border/10 rounded-xl px-4 py-2.5">
+                <p className="text-center text-xs text-muted-foreground/50 line-clamp-2 hover:text-muted-foreground/70 transition-colors">
+                  {messages[messages.length - 1].content.slice(0, 150)}…
+                  <span className="ml-2 text-primary/50 font-medium">{t("omnix.see_more", { defaultValue: "ver mais" })}</span>
+                </p>
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -536,20 +542,25 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
       {/* ── WAVEFORM VISUALIZATION ── */}
       <AnimatePresence>
         {(isListening || isSpeaking) && (
-          <div className="shrink-0 px-8">
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="shrink-0 px-8 max-h-16 overflow-hidden"
+          >
             <AudioWaveform
               active
               mode={isSpeaking ? "speaking" : "listening"}
             />
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
 
       {/* ── UNIFIED BOTTOM BAR ── */}
-      <div className="sticky bottom-0 shrink-0 pt-2 px-4 sm:px-6 relative z-20 pb-[calc(env(safe-area-inset-bottom)+5.25rem)] lg:pb-5 bg-gradient-to-t from-background/95 via-background/80 to-transparent">
+      <div className="sticky bottom-0 shrink-0 pt-3 px-4 sm:px-6 relative z-20 pb-[calc(env(safe-area-inset-bottom,0px)+4.5rem)] lg:pb-4 bg-gradient-to-t from-background via-background/90 to-transparent">
         <div className="max-w-2xl mx-auto space-y-3">
           {/* Main input bar */}
-          <div className="relative flex items-center gap-2 rounded-2xl bg-card/50 backdrop-blur-2xl border border-border/15 shadow-[0_4px_24px_hsl(var(--background)/0.4)] hover:border-border/25 focus-within:border-primary/25 focus-within:shadow-[0_4px_24px_hsl(var(--primary)/0.06)] transition-all duration-300 px-2">
+          <div className="relative flex items-center gap-2 rounded-2xl bg-card/50 backdrop-blur-2xl border border-border/20 shadow-[0_2px_20px_hsl(var(--background)/0.5)] hover:border-border/30 focus-within:border-primary/30 focus-within:shadow-[0_2px_20px_hsl(var(--primary)/0.08)] transition-all duration-300 px-2">
             {/* Left actions */}
             <div className="flex items-center gap-0.5 pl-1">
               {/* Voice toggle */}
