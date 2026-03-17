@@ -345,7 +345,7 @@ const HomePage = () => {
                 transition={{ delay: 0.2, duration: 0.8 }}
                 className="flex items-center gap-3 mb-6 sm:mb-8"
               >
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/30 backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/30 backdrop-blur-sm">
                   <div className="relative">
                     <div className="w-1.5 h-1.5 rounded-full bg-accent-emerald" />
                     <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-accent-emerald animate-ping opacity-75" />
