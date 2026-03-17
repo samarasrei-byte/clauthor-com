@@ -132,7 +132,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 {/* Badge */}
                 {item.badge && !collapsed && !hasChildren && (
                   <span className={cn(
-                    "ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md",
+                    "ml-auto text-[9px] font-medium px-1.5 py-0.5 rounded",
                   (typeof item.badge === "string" && item.badge.length > 3) 
                       ? "bg-muted/30 text-muted-foreground/60 italic font-medium"
                       : "bg-primary/15 text-primary"
