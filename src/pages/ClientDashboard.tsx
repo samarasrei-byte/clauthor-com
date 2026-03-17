@@ -67,6 +67,9 @@ const KanbanBoard = lazy(() => import("@/components/dashboard/KanbanBoard"));
 const CompanyHub = lazy(() => import("@/components/dashboard/CompanyHub"));
 const ThorDailyBriefing = lazy(() => import("@/components/dashboard/ThorDailyBriefing"));
 const QuickWins = lazy(() => import("@/components/dashboard/QuickWins"));
+const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHub"));
+const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPipelinePanel"));
+const SalesCallTranscriber = lazy(() => import("@/components/dashboard/SalesCallTranscriber"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
