@@ -494,6 +494,20 @@ const ClientDashboard = () => {
             </div>
           )}
 
+          {activeSection === "chat" && !selectedAgent && (
+            <div className="flex flex-col items-center justify-center py-20 px-6 text-center space-y-4">
+              <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                <MessageSquare className="h-7 w-7 text-primary" strokeWidth={1.5} />
+              </div>
+              <h2 className="font-display text-xl font-semibold">{t("dashboard.select_agent_chat", { defaultValue: "Selecione um agente para conversar" })}</h2>
+              <p className="text-sm text-muted-foreground max-w-sm">{t("dashboard.select_agent_chat_desc", { defaultValue: "Escolha um dos seus agentes na aba Agentes para iniciar uma conversa." })}</p>
+              <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setActiveSection("agents")}>
+                <Bot className="h-3.5 w-3.5" />
+                {t("dashboard.agents_tab")}
+              </Button>
+            </div>
+          )}
+
           {activeSection === "chat" && selectedAgent && (
             <Suspense fallback={<SectionLoader />}>
               {needsBoardSetup ? (
@@ -507,7 +521,6 @@ const ClientDashboard = () => {
                 />
               ) : (
                 <div className="h-full flex flex-col">
-                  {/* Slim back bar */}
                   <div className="shrink-0 flex items-center gap-2 px-4 py-2 border-b border-border/10 bg-background/50 backdrop-blur-sm">
                     <button
                       onClick={handleBack}
