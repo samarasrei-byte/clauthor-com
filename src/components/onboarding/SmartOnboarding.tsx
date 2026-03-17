@@ -584,7 +584,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                               </span>
                             )}
                             <span className="font-display font-bold text-sm text-primary">
-                              ${Math.round(getRecommendedAgents().length * 139 * (1 - getDiscount().pct / 100)).toLocaleString("en-US")}/mo
+                              R$ {Math.round(getRecommendedAgents().length * 697 * (1 - getDiscount().pct / 100)).toLocaleString("pt-BR")}/mês
                             </span>
                           </div>
                         </div>
