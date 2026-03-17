@@ -134,7 +134,7 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
         </span>
 
         {/* Icon */}
-        <Search className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-500 relative z-10" />
+        <Terminal className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-500 relative z-10" strokeWidth={1.5} />
 
         {/* ⌘K label on hover */}
         <span className="absolute -top-8 left-1/2 -translate-x-1/2 text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40 opacity-0 group-hover:opacity-100 transition-all duration-300 group-hover:-top-9 whitespace-nowrap bg-background/80 backdrop-blur-sm px-2 py-0.5 rounded-md border border-white/[0.04]">
