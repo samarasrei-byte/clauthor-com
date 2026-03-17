@@ -1162,11 +1162,6 @@ const HomePage = () => {
         <SmartOnboarding isOpen={showSmartOnboarding} onClose={() => setShowSmartOnboarding(false)} />
       </Suspense>
 
-      {/* Thor Guided Tour */}
-      <ThorGuidedTour
-        steps={LANDING_TOUR_STEPS}
-        storageKey="clauthor_landing_tour_done"
-      />
     </div>
   );
 };
