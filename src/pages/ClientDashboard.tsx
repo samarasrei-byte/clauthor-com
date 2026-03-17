@@ -316,6 +316,9 @@ const ClientDashboard = () => {
     // ── Operações: day-to-day business tools ──
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: opsGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: opsGroup },
+    { id: "content-pipeline", label: t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }), icon: Instagram, group: opsGroup },
+    { id: "deliverables", label: t("dashboard.deliverables", { defaultValue: "Entregas" }), icon: FileText, group: opsGroup },
+    { id: "call-transcriber", label: t("dashboard.call_transcriber", { defaultValue: "Chamadas" }), icon: Phone, group: opsGroup },
     { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Equipe" }), icon: Users, group: opsGroup },
     { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Presentation, group: opsGroup },
 
