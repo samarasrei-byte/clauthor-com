@@ -9,7 +9,7 @@ import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft,
   Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, Layers3,
-  FileText, Package, Video, Clock, Radar, Orbit
+  Video, Clock, Radar
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -61,6 +61,7 @@ const Integrations = lazy(() => import("./Integrations"));
 const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
 const ControlTowerSection = lazy(() => import("@/pages/ControlTower"));
 const MissionControl = lazy(() => import("@/components/dashboard/MissionControl"));
+const OperationsCenter = lazy(() => import("@/components/dashboard/OperationsCenter"));
 const ThorLiveGuide = lazy(() => import("@/components/dashboard/ThorLiveGuide"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
@@ -296,13 +297,20 @@ const ClientDashboard = () => {
     id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.nav_main", { defaultValue: "Principal" }),
   } : null;
 
-  // Lean sidebar — 3 groups, ~9 core items
+  // Lean sidebar — 3 groups
   const mainGroup = t("dashboard.nav_main", { defaultValue: "Principal" });
   const workGroup = t("dashboard.nav_work", { defaultValue: "Trabalho" });
+  const monitorGroup = t("dashboard.nav_monitor", { defaultValue: "Monitoramento" });
   const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
 
+  // Count pending tasks for badge
+  const pendingTaskCount = useMemo(() => {
+    // Use recentLogs running status as proxy
+    return recentLogs.filter(l => l.status === "running" || l.status === "pending").length;
+  }, [recentLogs]);
+
   const sidebarItems: SidebarItem[] = [
-    // ── Principal: daily essentials ──
+    // ── Principal ──
     { id: "omnix", label: "THOR", icon: Brain, group: mainGroup },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
@@ -310,19 +318,18 @@ const ClientDashboard = () => {
     ...departmentSidebarItems,
     ...soloAgentItems,
 
-    // ── Trabalho: operations & analytics ──
+    // ── Trabalho ──
     { id: "squads", label: "Squads", icon: Layers3, group: workGroup },
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: workGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: workGroup },
-    { id: "content-pipeline", label: t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }), icon: FileText, group: workGroup },
-    { id: "deliverables", label: t("dashboard.deliverables", { defaultValue: "Entregas" }), icon: Package, group: workGroup },
     { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Video, group: workGroup },
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
 
-    // ── Operações ──
-    { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Clock, group: systemGroup },
-    { id: "control-tower", label: "Control Tower", icon: Radar, group: systemGroup },
-    { id: "mission-control", label: "Mission Control", icon: Orbit, group: systemGroup },
+    // ── Monitoramento ──
+    { id: "live-timeline", label: "Timeline", icon: Clock, badge: pendingTaskCount || undefined, group: monitorGroup },
+    { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Centro de Operações" }), icon: Radar, group: monitorGroup },
+
+    // ── Sistema ──
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
@@ -365,6 +372,8 @@ const ClientDashboard = () => {
     "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
     "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
     "control-tower": "Control Tower",
+    "mission-control": "Mission Control",
+    "operations-center": t("dashboard.operations_center", { defaultValue: "Centro de Operações" }),
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     "content-pipeline": t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }),
@@ -889,17 +898,24 @@ const ClientDashboard = () => {
                 )}
 
 
-                {/* ═══ CONTROL TOWER ═══ */}
-                {activeSection === "control-tower" && (
+                {/* ═══ OPERATIONS CENTER (Control Tower + Mission Control) ═══ */}
+                {activeSection === "operations-center" && (
                   <Suspense fallback={<SectionLoader />}>
-                    <ControlTowerSection onNavigate={handleSidebarNav} />
+                    <OperationsCenter onNavigate={handleSidebarNav} />
                   </Suspense>
                 )}
 
-                {/* ═══ MISSION CONTROL ═══ */}
+                {/* ═══ CONTROL TOWER (legacy route) ═══ */}
+                {activeSection === "control-tower" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <OperationsCenter onNavigate={handleSidebarNav} defaultTab="tower" />
+                  </Suspense>
+                )}
+
+                {/* ═══ MISSION CONTROL (legacy route) ═══ */}
                 {activeSection === "mission-control" && (
                   <Suspense fallback={<SectionLoader />}>
-                    <MissionControl onNavigate={handleSidebarNav} />
+                    <OperationsCenter onNavigate={handleSidebarNav} defaultTab="mission" />
                   </Suspense>
                 )}
 

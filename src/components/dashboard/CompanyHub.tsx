@@ -1,13 +1,14 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import {
   Building2, Users, Bot, Shield, Plug, BookOpen,
   ChevronRight, Sparkles, Crown, Plus, Loader2,
-  BarChart3, Briefcase, Globe
+  BarChart3, Briefcase, Globe, FileText, Package
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +16,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits } from "@/hooks/useCredits";
 import { useTranslation } from "react-i18next";
 import { DEPARTMENTS, SLUG_TO_DEPT } from "@/data/departmentMap";
+
+const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPipelinePanel"));
+const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHub"));
+
+const SectionLoader = () => (
+  <div className="flex items-center justify-center py-16">
+    <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+  </div>
+);
 
 interface CompanyHubProps {
   agents: any[];
@@ -36,6 +46,7 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
   const { t } = useTranslation();
   const { credits, remainingCredits, usagePercentage } = useCredits();
   const [expandedDept, setExpandedDept] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("overview");
 
   // Tenant info
   const { data: tenant } = useQuery({
@@ -157,6 +168,25 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
           </div>
         </div>
       </motion.div>
+
+      {/* Tabs: Visão Geral / Conteúdo / Entregas */}
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="bg-muted/10 border border-border/10 h-9">
+          <TabsTrigger value="overview" className="text-xs gap-1.5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary">
+            <Building2 className="h-3.5 w-3.5" />
+            Visão Geral
+          </TabsTrigger>
+          <TabsTrigger value="content" className="text-xs gap-1.5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary">
+            <FileText className="h-3.5 w-3.5" />
+            Conteúdo
+          </TabsTrigger>
+          <TabsTrigger value="deliverables" className="text-xs gap-1.5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary">
+            <Package className="h-3.5 w-3.5" />
+            Entregas
+          </TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="mt-4 space-y-6">
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
@@ -324,6 +354,20 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
           </button>
         ))}
       </div>
+        </TabsContent>
+
+        <TabsContent value="content" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <ContentPipelinePanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="deliverables" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <DeliverablesHub onNavigate={onNavigate} />
+          </Suspense>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
