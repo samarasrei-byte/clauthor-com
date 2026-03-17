@@ -939,12 +939,6 @@ const ClientDashboard = () => {
         agentCount={agents.length || undefined}
       />
 
-      {/* Thor Guided Tour */}
-      <ThorGuidedTour
-        steps={DASHBOARD_TOUR_STEPS}
-        storageKey="clauthor_dashboard_tour_done"
-        onComplete={() => setShowTour(false)}
-      />
     </>
   );
 };
