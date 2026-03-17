@@ -44,7 +44,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       initial={false}
       animate={{ width: collapsed ? 64 : 220 }}
       transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="h-full flex flex-col glass-card border-r border-border/10 overflow-hidden shrink-0 relative"
+      className="h-full flex flex-col bg-background/50 backdrop-blur-sm border-r border-border/5 overflow-hidden shrink-0 relative"
     >
       {/* Toggle */}
       <button
@@ -59,7 +59,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       </button>
 
       {/* Nav Items */}
-      <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto scrollbar-thin">
+      <nav className="flex-1 py-2 px-1.5 space-y-px overflow-y-auto scrollbar-thin">
         {items.map((item, idx) => {
           const showGroupHeader = item.group && (idx === 0 || items[idx - 1].group !== item.group);
           const isActive = activeItem === item.id;
@@ -70,7 +70,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             <div key={item.id}>
               {showGroupHeader && !collapsed && (
                 <div className="px-3 pt-5 pb-1.5 first:pt-1">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">
+                  <span className="text-[8px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/30">
                     {item.group}
                   </span>
                 </div>
@@ -91,8 +91,8 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   }
                 }}
                 className={cn(
-                  "w-full flex items-center gap-3 rounded-xl transition-all duration-200 group relative",
-                  collapsed ? "px-3 py-3 justify-center" : "px-3 py-2.5",
+                  "w-full flex items-center gap-2.5 rounded-lg transition-all duration-150 group relative",
+                  collapsed ? "px-2.5 py-2.5 justify-center" : "px-2.5 py-[7px]",
                   (typeof item.badge === "string" && item.badge.length > 3)
                     ? "text-muted-foreground/50 hover:text-muted-foreground/70 hover:bg-muted/5"
                     : isActive
@@ -109,7 +109,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   />
                 )}
 
-                <item.icon className={cn("h-4.5 w-4.5 shrink-0 icon-lift", item.colorClass || (isActive ? "text-primary" : ""))} strokeWidth={1.5} />
+                <item.icon className={cn("h-[15px] w-[15px] shrink-0", item.colorClass || (isActive ? "text-primary" : ""))} strokeWidth={1.5} />
 
                 <AnimatePresence>
                   {!collapsed && (
@@ -117,7 +117,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                       initial={{ opacity: 0, width: 0 }}
                       animate={{ opacity: 1, width: "auto" }}
                       exit={{ opacity: 0, width: 0 }}
-                      className="text-sm font-medium truncate flex-1 text-left"
+                      className="text-[12.5px] font-normal truncate flex-1 text-left tracking-[-0.01em]"
                     >
                       {item.label}
                     </motion.span>
@@ -132,7 +132,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 {/* Badge */}
                 {item.badge && !collapsed && !hasChildren && (
                   <span className={cn(
-                    "ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-md",
+                    "ml-auto text-[9px] font-medium px-1.5 py-0.5 rounded",
                   (typeof item.badge === "string" && item.badge.length > 3) 
                       ? "bg-muted/30 text-muted-foreground/60 italic font-medium"
                       : "bg-primary/15 text-primary"
@@ -143,7 +143,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
                 {/* Badge for items with children */}
                 {item.badge && !collapsed && hasChildren && (
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">
+                  <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-primary/10 text-primary">
                     {item.badge}
                   </span>
                 )}
@@ -178,13 +178,13 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                             key={child.id}
                             onClick={() => onItemChange(child.id)}
                             className={cn(
-                              "w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg text-xs transition-all",
+                              "w-full flex items-center gap-2 px-2 py-[5px] rounded-md text-[11.5px] transition-all",
                               isChildActive
                                 ? "bg-primary/10 text-primary font-medium"
                                 : "text-muted-foreground hover:text-foreground hover:bg-muted/10"
                             )}
                           >
-                            <ChildIcon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                            <ChildIcon className="h-3 w-3 shrink-0" strokeWidth={1.5} />
                             <span className="truncate">{child.label}</span>
                           </button>
                         );
