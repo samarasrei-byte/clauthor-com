@@ -600,7 +600,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   <div className="space-y-2">
                     <p className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5 px-1">
                       <Plus className="h-3 w-3" />
-                      Add individual agents
+                      Adicionar agentes individuais
                     </p>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 max-h-48 overflow-y-auto pr-1">
                       {[
