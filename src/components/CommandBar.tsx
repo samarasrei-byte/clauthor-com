@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/command";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import {
-  Search, Bot, LayoutDashboard, Library, CreditCard, Users,
+  Terminal, Bot, LayoutDashboard, Library, CreditCard, Users,
   Sparkles, ArrowRight, Rocket, Plus, Settings, MessageSquare,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
