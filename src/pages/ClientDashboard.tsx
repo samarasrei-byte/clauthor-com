@@ -314,7 +314,8 @@ const ClientDashboard = () => {
     { id: "omnix", label: "THOR", icon: Brain, group: mainGroup },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
-    ...(chatSidebarItem ? [chatSidebarItem] : []),
+    { id: "chat", label: "Chat", icon: MessageSquare, group: mainGroup },
+    ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}` }] : []),
     ...departmentSidebarItems,
     ...soloAgentItems,
 
