@@ -669,7 +669,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                          <ChevronLeft className="h-3.5 w-3.5" /> Voltar
                       </Button>
                       <Button variant="outline" onClick={handleViewLibrary} className="flex-1 h-10 rounded-xl text-xs border-border/50">
-                        Explore 80+ agents
+                        Explorar 80+ agentes
                       </Button>
                       <Button variant="outline" onClick={() => { onClose(); navigate("/pricing"); }} className="flex-1 h-10 rounded-xl text-xs border-border/50">
                         View pricing
