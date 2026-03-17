@@ -379,6 +379,9 @@ const ClientDashboard = () => {
     "control-tower": "Control Tower",
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
+    "content-pipeline": t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }),
+    deliverables: t("dashboard.deliverables", { defaultValue: "Entregas" }),
+    "call-transcriber": t("dashboard.call_transcriber", { defaultValue: "Chamadas" }),
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
