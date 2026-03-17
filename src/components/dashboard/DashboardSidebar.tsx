@@ -109,7 +109,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   />
                 )}
 
-                <item.icon className={cn("h-4.5 w-4.5 shrink-0 icon-lift", item.colorClass || (isActive ? "text-primary" : ""))} strokeWidth={1.5} />
+                <item.icon className={cn("h-[15px] w-[15px] shrink-0", item.colorClass || (isActive ? "text-primary" : ""))} strokeWidth={1.5} />
 
                 <AnimatePresence>
                   {!collapsed && (
