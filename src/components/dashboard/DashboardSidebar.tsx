@@ -70,7 +70,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
             <div key={item.id}>
               {showGroupHeader && !collapsed && (
                 <div className="px-3 pt-5 pb-1.5 first:pt-1">
-                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">
+                  <span className="text-[8px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/30">
                     {item.group}
                   </span>
                 </div>
