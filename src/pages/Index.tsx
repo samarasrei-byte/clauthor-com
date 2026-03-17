@@ -413,7 +413,7 @@ const HomePage = () => {
                     </div>
 
                     {/* Trust badges — honest claims only */}
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-5 mt-8">
+                    <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-5 mt-8">
                       {[
                         { icon: LockKeyhole, label: t("home.trust_e2e", { defaultValue: "END-TO-END ENCRYPTED" }) },
                         { icon: ShieldCheck, label: t("home.trust_enterprise", { defaultValue: "ENTERPRISE-GRADE" }) },
