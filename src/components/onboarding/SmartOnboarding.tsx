@@ -698,8 +698,8 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                        <p className="text-sm">
-                         No problem! Our <strong>specialized consultant</strong> will guide you.
-                         Tell us about your company and we'll build the ideal team for you.
+                         Sem problema! Nosso <strong>consultor especializado</strong> vai te guiar.
+                         Conta sobre sua empresa e vamos montar o time ideal pra você.
                        </p>
                     </div>
                   </div>
