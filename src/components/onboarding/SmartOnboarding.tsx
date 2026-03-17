@@ -591,7 +591,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       </div>
 
                       <p className="text-sm text-muted-foreground">
-                        You can also add individual agents below, or create your account to explore all of them.
+                        Você também pode adicionar agentes individuais abaixo, ou criar sua conta pra explorar todos.
                       </p>
                     </div>
                   </div>
