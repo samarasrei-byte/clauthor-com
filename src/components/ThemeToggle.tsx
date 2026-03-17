@@ -1,4 +1,4 @@
-import { Sun, Moon } from "lucide-react";
+import { SunMedium, Moon } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { motion } from "framer-motion";
 
