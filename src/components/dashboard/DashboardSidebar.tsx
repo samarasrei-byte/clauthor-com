@@ -59,7 +59,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       </button>
 
       {/* Nav Items */}
-      <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto scrollbar-thin">
+      <nav className="flex-1 py-2 px-1.5 space-y-px overflow-y-auto scrollbar-thin">
         {items.map((item, idx) => {
           const showGroupHeader = item.group && (idx === 0 || items[idx - 1].group !== item.group);
           const isActive = activeItem === item.id;
