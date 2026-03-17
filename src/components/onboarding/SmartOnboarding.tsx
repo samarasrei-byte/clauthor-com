@@ -724,8 +724,8 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                             signup: true,
                             hireIntent: {
                               type: "agent" as const,
-                              label: "AI consultant recommended squad",
-                              slugs: ["sales", "omnichannel", "customer_success"],
+                               label: "Squad recomendado pelo consultor IA",
+                               slugs: ["sales", "omnichannel", "customer_success"],
                             },
                           },
                         });
