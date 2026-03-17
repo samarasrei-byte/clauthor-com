@@ -61,6 +61,7 @@ const Integrations = lazy(() => import("./Integrations"));
 const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
 const ControlTowerSection = lazy(() => import("@/pages/ControlTower"));
 const MissionControl = lazy(() => import("@/components/dashboard/MissionControl"));
+const OperationsCenter = lazy(() => import("@/components/dashboard/OperationsCenter"));
 const ThorLiveGuide = lazy(() => import("@/components/dashboard/ThorLiveGuide"));
 import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
 const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
