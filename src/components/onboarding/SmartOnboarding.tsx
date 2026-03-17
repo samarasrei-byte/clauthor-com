@@ -580,7 +580,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                           <div className="text-right">
                             {getDiscount().pct > 0 && (
                               <span className="text-[10px] text-muted-foreground line-through mr-2">
-                                ${(getRecommendedAgents().length * 139).toLocaleString("en-US")}
+                                R$ {(getRecommendedAgents().length * 697).toLocaleString("pt-BR")}
                               </span>
                             )}
                             <span className="font-display font-bold text-sm text-primary">
