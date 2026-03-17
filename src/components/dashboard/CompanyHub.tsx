@@ -381,6 +381,20 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
           </button>
         ))}
       </div>
+        </TabsContent>
+
+        <TabsContent value="content" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <ContentPipelinePanel />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="deliverables" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <DeliverablesHub onNavigate={onNavigate} />
+          </Suspense>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
