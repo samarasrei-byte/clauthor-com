@@ -8,7 +8,8 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft,
-  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, Layers3
+  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, Layers3,
+  FileText, Package, Video, Clock, Radar, Orbit
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -313,9 +314,15 @@ const ClientDashboard = () => {
     { id: "squads", label: "Squads", icon: Layers3, group: workGroup },
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: workGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: workGroup },
+    { id: "content-pipeline", label: t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }), icon: FileText, group: workGroup },
+    { id: "deliverables", label: t("dashboard.deliverables", { defaultValue: "Entregas" }), icon: Package, group: workGroup },
+    { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Video, group: workGroup },
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
 
-    // ── Sistema ──
+    // ── Operações ──
+    { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Clock, group: systemGroup },
+    { id: "control-tower", label: "Control Tower", icon: Radar, group: systemGroup },
+    { id: "mission-control", label: "Mission Control", icon: Orbit, group: systemGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
