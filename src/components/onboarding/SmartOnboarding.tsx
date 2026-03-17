@@ -576,7 +576,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
                         {/* Price */}
                         <div className="flex items-center justify-between pt-2 border-t border-primary/10">
-                          <span className="text-xs text-muted-foreground">Monthly investment:</span>
+                          <span className="text-xs text-muted-foreground">Investimento mensal:</span>
                           <div className="text-right">
                             {getDiscount().pct > 0 && (
                               <span className="text-[10px] text-muted-foreground line-through mr-2">
