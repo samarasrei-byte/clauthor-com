@@ -297,13 +297,20 @@ const ClientDashboard = () => {
     id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.nav_main", { defaultValue: "Principal" }),
   } : null;
 
-  // Lean sidebar — 3 groups, ~9 core items
+  // Lean sidebar — 3 groups
   const mainGroup = t("dashboard.nav_main", { defaultValue: "Principal" });
   const workGroup = t("dashboard.nav_work", { defaultValue: "Trabalho" });
+  const monitorGroup = t("dashboard.nav_monitor", { defaultValue: "Monitoramento" });
   const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
 
+  // Count pending tasks for badge
+  const pendingTaskCount = useMemo(() => {
+    // Use recentLogs running status as proxy
+    return recentLogs.filter(l => l.status === "running" || l.status === "pending").length;
+  }, [recentLogs]);
+
   const sidebarItems: SidebarItem[] = [
-    // ── Principal: daily essentials ──
+    // ── Principal ──
     { id: "omnix", label: "THOR", icon: Brain, group: mainGroup },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
@@ -311,19 +318,18 @@ const ClientDashboard = () => {
     ...departmentSidebarItems,
     ...soloAgentItems,
 
-    // ── Trabalho: operations & analytics ──
+    // ── Trabalho ──
     { id: "squads", label: "Squads", icon: Layers3, group: workGroup },
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: workGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: workGroup },
-    { id: "content-pipeline", label: t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }), icon: FileText, group: workGroup },
-    { id: "deliverables", label: t("dashboard.deliverables", { defaultValue: "Entregas" }), icon: Package, group: workGroup },
     { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Video, group: workGroup },
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
 
-    // ── Operações ──
-    { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Clock, group: systemGroup },
-    { id: "control-tower", label: "Control Tower", icon: Radar, group: systemGroup },
-    { id: "mission-control", label: "Mission Control", icon: Orbit, group: systemGroup },
+    // ── Monitoramento ──
+    { id: "live-timeline", label: "Timeline", icon: Clock, badge: pendingTaskCount || undefined, group: monitorGroup },
+    { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Centro de Operações" }), icon: Radar, group: monitorGroup },
+
+    // ── Sistema ──
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
