@@ -385,6 +385,7 @@ const ClientDashboard = () => {
     "content-pipeline": t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }),
     deliverables: t("dashboard.deliverables", { defaultValue: "Entregas" }),
     "call-transcriber": t("dashboard.call_transcriber", { defaultValue: "Chamadas" }),
+    squads: "Squads",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
