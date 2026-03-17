@@ -70,7 +70,17 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
           return (
             <div key={item.id}>
               {showGroupHeader && !collapsed && (
-                <div className="px-3 pt-5 pb-1.5 first:pt-1">
+                <div
+                  className="px-3 pt-5 pb-1.5 first:pt-1"
+                  data-tour={
+                    item.group?.includes("Comando") || item.group?.includes("Command") ? "overview" :
+                    item.group?.includes("Agent") ? "agents" :
+                    item.group?.includes("Oper") ? "operations" :
+                    item.group?.includes("Intel") || item.group?.includes("Intelig") ? "intelligence" :
+                    item.group?.includes("Sistem") || item.group?.includes("System") ? "settings" :
+                    undefined
+                  }
+                >
                   <span className="text-[8px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/30">
                     {item.group}
                   </span>

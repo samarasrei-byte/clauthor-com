@@ -86,6 +86,7 @@ const ClientDashboard = () => {
   const queryClient = useQueryClient();
   const [activeSection, setActiveSection] = useState("overview");
   const [previousSection, setPreviousSection] = useState<string | null>(null);
+  const [showTour, setShowTour] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
   const [omnixMounted, setOmnixMounted] = useState(false);
