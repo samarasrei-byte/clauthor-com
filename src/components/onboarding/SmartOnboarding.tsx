@@ -38,38 +38,38 @@ const useTyping = (text: string, speed = 30, delay = 0) => {
 const industries = [
   { id: "saas", label: "SaaS / Tech", icon: Code, gradient: "from-cyan-500 to-blue-600" },
   { id: "ecommerce", label: "E-commerce", icon: ShoppingCart, gradient: "from-emerald-500 to-teal-600" },
-  { id: "services", label: "Services", icon: Briefcase, gradient: "from-amber-500 to-orange-600" },
-  { id: "health", label: "Healthcare", icon: HeartHandshake, gradient: "from-rose-500 to-pink-600" },
-  { id: "education", label: "Education", icon: GraduationCap, gradient: "from-violet-500 to-purple-600" },
-  { id: "industry", label: "Manufacturing", icon: Factory, gradient: "from-slate-400 to-zinc-600" },
+  { id: "services", label: "Serviços", icon: Briefcase, gradient: "from-amber-500 to-orange-600" },
+  { id: "health", label: "Saúde", icon: HeartHandshake, gradient: "from-rose-500 to-pink-600" },
+  { id: "education", label: "Educação", icon: GraduationCap, gradient: "from-violet-500 to-purple-600" },
+  { id: "industry", label: "Indústria", icon: Factory, gradient: "from-slate-400 to-zinc-600" },
   { id: "startup", label: "Startup", icon: Rocket, gradient: "from-primary to-primary-glow" },
-  { id: "agency", label: "Agency / Marketing", icon: Target, gradient: "from-pink-500 to-fuchsia-600" },
-  { id: "retail", label: "Retail", icon: Building2, gradient: "from-orange-500 to-red-600" },
-  { id: "finance", label: "Finance / Accounting", icon: Receipt, gradient: "from-yellow-500 to-amber-600" },
-  { id: "logistics", label: "Logistics", icon: Globe, gradient: "from-sky-500 to-indigo-600" },
-  { id: "other", label: "Other", icon: Sparkles, gradient: "from-muted to-muted-foreground" },
+  { id: "agency", label: "Agência / Marketing", icon: Target, gradient: "from-pink-500 to-fuchsia-600" },
+  { id: "retail", label: "Varejo", icon: Building2, gradient: "from-orange-500 to-red-600" },
+  { id: "finance", label: "Finanças / Contabilidade", icon: Receipt, gradient: "from-yellow-500 to-amber-600" },
+  { id: "logistics", label: "Logística", icon: Globe, gradient: "from-sky-500 to-indigo-600" },
+  { id: "other", label: "Outro", icon: Sparkles, gradient: "from-muted to-muted-foreground" },
 ];
 
 const popularChallenges = new Set(["sales", "support", "marketing"]);
 
 const challenges = [
-  { id: "sales", label: "Sell more and prospect clients", icon: DollarSign, agents: ["sales", "sdr_outbound", "voice_ai", "crm_manager"], dept: "Sales" },
-  { id: "support", label: "24/7 customer support", icon: Headphones, agents: ["support_channel", "omnichannel", "voice_support", "rag"], dept: "Support" },
-  { id: "marketing", label: "Create content and attract leads", icon: Megaphone, agents: ["content", "seo_growth", "marketing_automation", "media_buyer"], dept: "Marketing" },
-  { id: "finance", label: "Financial control and billing", icon: Receipt, agents: ["revenue", "ai_cfo", "data_analytics"], dept: "Finance" },
-  { id: "operations", label: "Organize processes and projects", icon: BarChart3, agents: ["orchestrator", "project_management", "scheduler"], dept: "Operations" },
-  { id: "hr", label: "Recruit and train your team", icon: Users, agents: ["hr", "training", "people_analytics"], dept: "HR" },
-  { id: "tech", label: "Develop software or infrastructure", icon: Cpu, agents: ["coding", "computer", "data_engineer"], dept: "Technology" },
-  { id: "creative", label: "Design, video and branding", icon: PenTool, agents: ["creative_design", "video_production", "branding"], dept: "Creative" },
-  { id: "legal", label: "Legal and compliance", icon: Shield, agents: ["legal", "contract_analyst", "compliance_officer"], dept: "Legal" },
-  { id: "ecommerce", label: "Scale e-commerce and traffic", icon: LineChart, agents: ["ecommerce", "paid_traffic", "affiliate_manager"], dept: "E-commerce" },
+  { id: "sales", label: "Vender mais e prospectar clientes", icon: DollarSign, agents: ["sales", "sdr_outbound", "voice_ai", "crm_manager"], dept: "Vendas" },
+  { id: "support", label: "Suporte ao cliente 24/7", icon: Headphones, agents: ["support_channel", "omnichannel", "voice_support", "rag"], dept: "Suporte" },
+  { id: "marketing", label: "Criar conteúdo e atrair leads", icon: Megaphone, agents: ["content", "seo_growth", "marketing_automation", "media_buyer"], dept: "Marketing" },
+  { id: "finance", label: "Controle financeiro e cobrança", icon: Receipt, agents: ["revenue", "ai_cfo", "data_analytics"], dept: "Financeiro" },
+  { id: "operations", label: "Organizar processos e projetos", icon: BarChart3, agents: ["orchestrator", "project_management", "scheduler"], dept: "Operações" },
+  { id: "hr", label: "Recrutar e treinar sua equipe", icon: Users, agents: ["hr", "training", "people_analytics"], dept: "RH" },
+  { id: "tech", label: "Desenvolver software ou infra", icon: Cpu, agents: ["coding", "computer", "data_engineer"], dept: "Tecnologia" },
+  { id: "creative", label: "Design, vídeo e branding", icon: PenTool, agents: ["creative_design", "video_production", "branding"], dept: "Criativo" },
+  { id: "legal", label: "Jurídico e compliance", icon: Shield, agents: ["legal", "contract_analyst", "compliance_officer"], dept: "Jurídico" },
+  { id: "ecommerce", label: "Escalar e-commerce e tráfego", icon: LineChart, agents: ["ecommerce", "paid_traffic", "affiliate_manager"], dept: "E-commerce" },
 ];
 
 const teamSizes = [
-  { id: "micro", label: "Just me (Freelancer)", maxAgents: 2, savings: "$600" },
-  { id: "small", label: "2-10 people", maxAgents: 4, savings: "$2.4k" },
-  { id: "medium", label: "11-50 people", maxAgents: 7, savings: "$7k" },
-  { id: "large", label: "50+ people", maxAgents: 12, savings: "$16k+" },
+  { id: "micro", label: "Só eu (Freelancer)", maxAgents: 2, savings: "R$ 3.000" },
+  { id: "small", label: "2-10 pessoas", maxAgents: 4, savings: "R$ 12.000" },
+  { id: "medium", label: "11-50 pessoas", maxAgents: 7, savings: "R$ 35.000" },
+  { id: "large", label: "50+ pessoas", maxAgents: 12, savings: "R$ 80.000+" },
 ];
 
 interface SmartOnboardingProps {
