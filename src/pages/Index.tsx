@@ -429,7 +429,7 @@ const HomePage = () => {
             </div>
 
             {/* RIGHT — Live Demo Agent */}
-            <div className="w-full max-w-[420px] lg:w-[420px] shrink-0">
+            <div className="w-full max-w-[420px] lg:w-[420px] shrink-0 mx-auto lg:mx-0">
               <Suspense fallback={
                 <div className="rounded-2xl border border-border bg-card/40 backdrop-blur-xl overflow-hidden">
                   <div className="px-4 py-3 border-b border-border flex items-center gap-3">
