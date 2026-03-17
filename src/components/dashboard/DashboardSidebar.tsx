@@ -143,7 +143,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
                 {/* Badge for items with children */}
                 {item.badge && !collapsed && hasChildren && (
-                  <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">
+                  <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-primary/10 text-primary">
                     {item.badge}
                   </span>
                 )}
