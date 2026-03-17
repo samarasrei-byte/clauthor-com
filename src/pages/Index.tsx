@@ -5,7 +5,6 @@ import { Link, useNavigate } from "react-router-dom";
 
 const SmartOnboarding = lazy(() => import("@/components/onboarding/SmartOnboarding"));
 const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
-const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 const InnovationRoadmap = lazy(() => import("@/components/landing/InnovationRoadmap"));
 const SplineShowcase = lazy(() => import("@/components/landing/SplineShowcase"));
