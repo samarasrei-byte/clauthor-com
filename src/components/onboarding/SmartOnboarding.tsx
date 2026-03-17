@@ -434,7 +434,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   {/* User reply */}
                   <div className="flex gap-3 justify-end">
                     <div className="bg-primary text-primary-foreground rounded-2xl rounded-br-sm px-4 py-3 max-w-[70%]">
-                      <p className="text-sm">I need help with: <strong>{selectedChallenges.map(c => challenges.find(ch => ch.id === c)?.label).join(", ")}</strong></p>
+                      <p className="text-sm">Preciso de ajuda com: <strong>{selectedChallenges.map(c => challenges.find(ch => ch.id === c)?.label).join(", ")}</strong></p>
                     </div>
                   </div>
 
