@@ -243,6 +243,70 @@ serve(async (req) => {
       console.error("[EventLoop] Trigger 5 (credits) error:", e);
     }
 
+    // ─── TRIGGER 6: Daily content pipeline (once per day per user) ───
+    try {
+      const today = new Date().toISOString().split("T")[0];
+      const hour = new Date().getUTCHours();
+      
+      // Only run between 10-12 UTC (morning in Brazil)
+      if (hour >= 10 && hour <= 12) {
+        const { data: usersWithAgents } = await supabase
+          .from("agents")
+          .select("user_id")
+          .eq("status", "active");
+
+        if (usersWithAgents) {
+          const uniqueUsers = [...new Set(usersWithAgents.map(a => a.user_id))];
+          for (const userId of uniqueUsers) {
+            // Check if already generated today
+            const { count } = await supabase
+              .from("agent_tasks")
+              .select("*", { count: "exact", head: true })
+              .eq("user_id", userId)
+              .in("category", ["content_instagram", "content_youtube"])
+              .gte("created_at", `${today}T00:00:00Z`);
+
+            if ((count || 0) === 0) {
+              const { data: tenantId } = await supabase.rpc("get_user_tenant_id", { _user_id: userId });
+              if (tenantId) {
+                await supabase.from("agent_tasks").insert([
+                  {
+                    user_id: userId,
+                    tenant_id: tenantId,
+                    title: `Roteiro Instagram — ${today}`,
+                    description: "Roteiro diário automático: gancho, desenvolvimento, CTA, hashtags e sugestão visual.",
+                    priority: "medium",
+                    category: "content_instagram",
+                    status: "open",
+                  },
+                  {
+                    user_id: userId,
+                    tenant_id: tenantId,
+                    title: `Roteiro YouTube — ${today}`,
+                    description: "Roteiro diário automático: título SEO, intro hook, seções, CTA e descrição.",
+                    priority: "medium",
+                    category: "content_youtube",
+                    status: "open",
+                  },
+                ]);
+
+                await supabase.from("notifications").insert({
+                  user_id: userId,
+                  type: "daily_content",
+                  title: "📝 Roteiros do Dia Prontos",
+                  message: `Seus roteiros diários de Instagram e YouTube foram criados. Acesse o Pipeline de Conteúdo.`,
+                  metadata: { date: today, action: "open_content_pipeline" },
+                });
+              }
+            }
+          }
+        }
+        results.push({ trigger: "daily_content", actions: 1, details: "Pipeline de conteúdo diário executado" });
+      }
+    } catch (e) {
+      console.error("[EventLoop] Trigger 6 (daily content) error:", e);
+    }
+
     // Log the event loop execution
     console.log(`[EventLoop] ✅ Completed. Triggers processed: ${results.length}`, results);
 
