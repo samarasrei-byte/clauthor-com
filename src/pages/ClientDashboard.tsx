@@ -868,6 +868,27 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {/* ═══ CONTENT PIPELINE ═══ */}
+                {activeSection === "content-pipeline" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ContentPipelinePanel />
+                  </Suspense>
+                )}
+
+                {/* ═══ DELIVERABLES HUB ═══ */}
+                {activeSection === "deliverables" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <DeliverablesHub onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
+
+                {/* ═══ SALES CALL TRANSCRIBER ═══ */}
+                {activeSection === "call-transcriber" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <SalesCallTranscriber />
+                  </Suspense>
+                )}
+
 
                 {/* ═══ CONTROL TOWER ═══ */}
                 {activeSection === "control-tower" && (
