@@ -89,9 +89,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
   // Chat-like messages
   const messages = [
-    "Hello! Welcome to CLAUTHOR.",
-    "Let's build the ideal team for your company in under 1 minute.",
-    "To get started, what's your company's industry?",
+    "Olá! Bem-vindo à CLAUTHOR.",
+    "Vamos montar o time ideal pra sua empresa em menos de 1 minuto.",
+    "Pra começar, qual é o segmento da sua empresa?",
   ];
 
   const msg0 = useTyping(messages[0], 25, 400);
@@ -122,11 +122,11 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
   const getDiscount = () => {
     const count = getRecommendedAgents().length;
-    if (count >= 10) return { pct: 35, label: "35% off — Enterprise Squad" };
-    if (count >= 7) return { pct: 30, label: "30% off — Power Squad" };
-    if (count >= 5) return { pct: 20, label: "20% off — Growth Squad" };
-    if (count >= 3) return { pct: 10, label: "10% off — Starter Squad" };
-    return { pct: 0, label: "Individual agent" };
+    if (count >= 10) return { pct: 35, label: "35% off — Squad Enterprise" };
+    if (count >= 7) return { pct: 30, label: "30% off — Squad Power" };
+    if (count >= 5) return { pct: 20, label: "20% off — Squad Growth" };
+    if (count >= 3) return { pct: 10, label: "10% off — Squad Starter" };
+    return { pct: 0, label: "Agente individual" };
   };
 
   const getDepts = () => {
@@ -185,7 +185,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
               </div>
               <div>
                 <span className="font-display font-bold text-xs tracking-wider uppercase text-foreground">
-                  Build your team
+                  Monte seu time
                 </span>
                 <div className="flex items-center gap-1.5">
                   <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
