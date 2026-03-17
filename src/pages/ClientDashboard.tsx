@@ -7,8 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Presentation,
-  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, FileText, Phone, Instagram, Layers3
+  Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft,
+  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, Layers3
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -295,51 +295,29 @@ const ClientDashboard = () => {
     id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.nav_main", { defaultValue: "Principal" }),
   } : null;
 
-  // UX-optimized group names — clear hierarchy
-  const commandGroup = t("dashboard.nav_command", { defaultValue: "Comando" });
-  const agentsGroup = t("dashboard.nav_my_agents", { defaultValue: "Agentes" });
-  const opsGroup = t("dashboard.nav_operations", { defaultValue: "Operações" });
-  const intelGroup = t("dashboard.nav_intelligence", { defaultValue: "Inteligência" });
+  // Lean sidebar — 3 groups, ~9 core items
+  const mainGroup = t("dashboard.nav_main", { defaultValue: "Principal" });
+  const workGroup = t("dashboard.nav_work", { defaultValue: "Trabalho" });
   const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
-  const upcomingGroup = t("dashboard.nav_upcoming", { defaultValue: "Em breve" });
 
   const sidebarItems: SidebarItem[] = [
-    // ── Comando: core actions the user does every day ──
-    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: commandGroup },
-    { id: "omnix", label: "THOR", icon: Brain, group: commandGroup },
+    // ── Principal: daily essentials ──
+    { id: "omnix", label: "THOR", icon: Brain, group: mainGroup },
+    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
+    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
     ...(chatSidebarItem ? [chatSidebarItem] : []),
-
-    // ── Agentes: fleet management ──
-    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: agentsGroup },
-    { id: "library", label: t("dashboard.library", { defaultValue: "Biblioteca" }), icon: BookOpen, group: agentsGroup },
-    { id: "squads", label: "Squads", icon: Layers3, group: agentsGroup },
     ...departmentSidebarItems,
     ...soloAgentItems,
 
-    // ── Operações: day-to-day business tools ──
-    { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: opsGroup },
-    { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: opsGroup },
-    { id: "content-pipeline", label: t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }), icon: Instagram, group: opsGroup },
-    { id: "deliverables", label: t("dashboard.deliverables", { defaultValue: "Entregas" }), icon: FileText, group: opsGroup },
-    { id: "call-transcriber", label: t("dashboard.call_transcriber", { defaultValue: "Chamadas" }), icon: Phone, group: opsGroup },
-    { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Equipe" }), icon: Users, group: opsGroup },
-    { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Presentation, group: opsGroup },
+    // ── Trabalho: operations & analytics ──
+    { id: "squads", label: "Squads", icon: Layers3, group: workGroup },
+    { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: workGroup },
+    { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: workGroup },
+    { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
 
-    // ── Inteligência: monitoring & analytics ──
-    { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: intelGroup },
-    { id: "live-timeline", label: t("dashboard.live_timeline", { defaultValue: "Timeline" }), icon: Eye, group: intelGroup },
-    { id: "control-tower", label: "Control Tower", icon: Cpu, group: intelGroup },
-    { id: "mission-control", label: "Mission Control", icon: Rocket, group: intelGroup },
-
-    // ── Sistema: configuration & integrations ──
+    // ── Sistema ──
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
-
-    // ── Em breve ──
-    { id: "agent-memory", label: "Agent Memory", icon: Network, badge: t("dashboard.coming_soon", { defaultValue: "Em breve" }), group: upcomingGroup },
-    { id: "autonomous-goals", label: "Autonomous Goals", icon: Target, badge: t("dashboard.coming_soon", { defaultValue: "Em breve" }), group: upcomingGroup },
-    { id: "voice-first", label: "Voice-First", icon: Mic, badge: t("dashboard.coming_soon", { defaultValue: "Em breve" }), group: upcomingGroup },
-    { id: "marketplace-p2p", label: "Marketplace P2P", icon: Store, badge: t("dashboard.coming_soon", { defaultValue: "Em breve" }), group: upcomingGroup },
   ];
 
   const tierColors: Record<string, string> = {
