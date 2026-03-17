@@ -28,6 +28,8 @@ import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
 
 import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
+import ThorGuidedTour from "@/components/ThorGuidedTour";
+import { DASHBOARD_TOUR_STEPS } from "@/data/tourSteps";
 const CompanyBoardAlert = lazy(() => import("@/components/dashboard/CompanyBoardAlert"));
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
 const SmartAgentRouter = lazy(() => import("@/components/dashboard/SmartAgentRouter"));
@@ -86,6 +88,7 @@ const ClientDashboard = () => {
   const queryClient = useQueryClient();
   const [activeSection, setActiveSection] = useState("overview");
   const [previousSection, setPreviousSection] = useState<string | null>(null);
+  const [showTour, setShowTour] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
   const [omnixMounted, setOmnixMounted] = useState(false);
@@ -936,6 +939,13 @@ const ClientDashboard = () => {
         activeSection={activeSection}
         onNavigate={handleSidebarNav}
         agentCount={agents.length || undefined}
+      />
+
+      {/* Thor Guided Tour */}
+      <ThorGuidedTour
+        steps={DASHBOARD_TOUR_STEPS}
+        storageKey="clauthor_dashboard_tour_done"
+        onComplete={() => setShowTour(false)}
       />
     </>
   );
