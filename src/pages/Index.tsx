@@ -371,7 +371,7 @@ const HomePage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.2 }}
               >
-                    <p className="font-mono text-sm sm:text-base text-muted-foreground max-w-lg leading-relaxed mb-8">
+                    <p className="font-mono text-sm sm:text-base text-muted-foreground max-w-lg mx-auto lg:mx-0 leading-relaxed mb-8">
                       <span className="text-primary/60">$</span>{" "}
                       {t("home.subtitle")}
                       <span className="text-foreground/80 font-medium"> {t("home.subtitle_highlight")}</span>
