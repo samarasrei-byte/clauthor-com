@@ -122,11 +122,11 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
   const getDiscount = () => {
     const count = getRecommendedAgents().length;
-    if (count >= 10) return { pct: 35, label: "35% off — Enterprise Squad" };
-    if (count >= 7) return { pct: 30, label: "30% off — Power Squad" };
-    if (count >= 5) return { pct: 20, label: "20% off — Growth Squad" };
-    if (count >= 3) return { pct: 10, label: "10% off — Starter Squad" };
-    return { pct: 0, label: "Individual agent" };
+    if (count >= 10) return { pct: 35, label: "35% off — Squad Enterprise" };
+    if (count >= 7) return { pct: 30, label: "30% off — Squad Power" };
+    if (count >= 5) return { pct: 20, label: "20% off — Squad Growth" };
+    if (count >= 3) return { pct: 10, label: "10% off — Squad Starter" };
+    return { pct: 0, label: "Agente individual" };
   };
 
   const getDepts = () => {
