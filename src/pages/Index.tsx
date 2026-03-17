@@ -337,7 +337,7 @@ const HomePage = () => {
         <div className="relative z-10 max-w-6xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
             {/* LEFT — Text content */}
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 text-center lg:text-left">
               {/* System status */}
               <motion.div
                 initial={{ opacity: 0 }}
