@@ -1,13 +1,14 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
 import {
   Building2, Users, Bot, Shield, Plug, BookOpen,
   ChevronRight, Sparkles, Crown, Plus, Loader2,
-  BarChart3, Briefcase, Globe
+  BarChart3, Briefcase, Globe, FileText, Package
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
@@ -15,6 +16,15 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits } from "@/hooks/useCredits";
 import { useTranslation } from "react-i18next";
 import { DEPARTMENTS, SLUG_TO_DEPT } from "@/data/departmentMap";
+
+const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPipelinePanel"));
+const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHub"));
+
+const SectionLoader = () => (
+  <div className="flex items-center justify-center py-16">
+    <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
+  </div>
+);
 
 interface CompanyHubProps {
   agents: any[];
