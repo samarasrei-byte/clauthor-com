@@ -8,7 +8,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Presentation,
-  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, FileText, Phone, Instagram
+  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, FileText, Phone, Instagram, Layers3
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -70,6 +70,7 @@ const QuickWins = lazy(() => import("@/components/dashboard/QuickWins"));
 const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHub"));
 const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPipelinePanel"));
 const SalesCallTranscriber = lazy(() => import("@/components/dashboard/SalesCallTranscriber"));
+const SquadManager = lazy(() => import("@/components/dashboard/SquadManager"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -311,6 +312,7 @@ const ClientDashboard = () => {
     // ── Agentes: fleet management ──
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: agentsGroup },
     { id: "library", label: t("dashboard.library", { defaultValue: "Biblioteca" }), icon: BookOpen, group: agentsGroup },
+    { id: "squads", label: "Squads", icon: Layers3, group: agentsGroup },
     ...departmentSidebarItems,
     ...soloAgentItems,
 
@@ -383,6 +385,7 @@ const ClientDashboard = () => {
     "content-pipeline": t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }),
     deliverables: t("dashboard.deliverables", { defaultValue: "Entregas" }),
     "call-transcriber": t("dashboard.call_transcriber", { defaultValue: "Chamadas" }),
+    squads: "Squads",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
@@ -835,6 +838,13 @@ const ClientDashboard = () => {
 
                 {/* ═══ LIBRARY ═══ */}
                 {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
+
+                {/* ═══ SQUADS ═══ */}
+                {activeSection === "squads" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <SquadManager onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
 
                 {/* ═══ AGENTS ═══ */}
                 {activeSection === "agents" && (
