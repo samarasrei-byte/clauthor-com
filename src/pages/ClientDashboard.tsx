@@ -839,6 +839,13 @@ const ClientDashboard = () => {
                 {/* ═══ LIBRARY ═══ */}
                 {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
 
+                {/* ═══ SQUADS ═══ */}
+                {activeSection === "squads" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <SquadManager onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
+
                 {/* ═══ AGENTS ═══ */}
                 {activeSection === "agents" && (
                   <Suspense fallback={<SectionLoader />}>
