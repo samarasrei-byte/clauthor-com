@@ -343,7 +343,7 @@ const HomePage = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
-                className="flex items-center gap-3 mb-6 sm:mb-8"
+                className="flex items-center justify-center lg:justify-start gap-3 mb-6 sm:mb-8"
               >
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/30 backdrop-blur-sm">
                   <div className="relative">
