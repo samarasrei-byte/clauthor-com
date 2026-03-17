@@ -511,7 +511,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[90%] space-y-4">
                        <p className="text-sm">
-                         <strong>Done! Here's your personalized team:</strong>
+                         <strong>Pronto! Aqui está seu time personalizado:</strong>
                        </p>
 
                       {/* Squad card */}
