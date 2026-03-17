@@ -378,7 +378,7 @@ const HomePage = () => {
                     </p>
 
                     {/* CTAs — Waitlist focused for launch */}
-                    <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
                       <Link to="/waitlist" className="block w-full sm:w-auto">
                         <motion.button
                             whileHover={{ scale: 1.02 }}
