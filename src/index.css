@@ -524,3 +524,8 @@
 @keyframes shimmer {
   100% { transform: translateX(100%); }
 }
+
+/* Safe area for mobile bottom nav (iOS notch/home indicator) */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
