@@ -18,7 +18,7 @@ const ThemeToggle = () => {
         exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
         transition={{ duration: 0.3 }}
       >
-        {theme === "dark" ? <SunMedium className="h-4 w-4" strokeWidth={1.5} /> : <Moon className="h-4 w-4" strokeWidth={1.5} />}
+        {theme === "dark" ? <SunDim className="h-4 w-4" strokeWidth={1.5} /> : <Moon className="h-4 w-4" strokeWidth={1.5} />}
       </motion.div>
     </button>
   );
