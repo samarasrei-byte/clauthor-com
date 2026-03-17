@@ -228,13 +228,60 @@ const ThorPageTour = ({ steps, storageKey, onComplete }: ThorPageTourProps) => {
       <motion.button
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.5, type: "spring" }}
+        transition={{ delay: 0.5, type: "spring", damping: 14, stiffness: 120 }}
         onClick={restartTour}
-        className="fixed bottom-24 right-4 z-[60] w-14 h-14 rounded-full bg-primary shadow-lg shadow-primary/30 flex items-center justify-center hover:scale-110 transition-transform group"
+        className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-[60] group cursor-pointer"
         title="Tour com Thor"
       >
-        <img src={thorPhoto} alt="Thor" className="w-10 h-10 rounded-full object-cover border-2 border-primary-foreground/30" />
-        <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-accent-emerald border-2 border-background animate-pulse" />
+        {/* Outer rotating glow ring */}
+        <motion.span
+          className="absolute inset-[-4px] rounded-full overflow-hidden"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+        >
+          <span
+            className="absolute inset-0"
+            style={{
+              background: "conic-gradient(from 0deg, transparent 40%, hsl(var(--primary) / 0.6), hsl(var(--primary) / 0.2), transparent 80%)",
+            }}
+          />
+        </motion.span>
+
+        {/* Glass border ring */}
+        <span className="absolute inset-[-1px] rounded-full bg-gradient-to-b from-primary/30 via-primary/10 to-primary/30" />
+
+        {/* Inner container */}
+        <span className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-background/90 backdrop-blur-2xl overflow-hidden">
+          {/* Photo */}
+          <img
+            src={thorPhoto}
+            alt="Thor"
+            className="w-full h-full object-cover rounded-full"
+          />
+
+          {/* Subtle inner vignette */}
+          <span className="absolute inset-0 rounded-full shadow-[inset_0_0_12px_hsl(var(--primary)/0.15)]" />
+
+          {/* Bottom gradient for depth */}
+          <span className="absolute inset-0 rounded-full bg-gradient-to-t from-background/40 via-transparent to-transparent" />
+        </span>
+
+        {/* Pulse behind on hover */}
+        <motion.span
+          className="absolute inset-[-6px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{ boxShadow: "0 0 40px hsl(var(--primary) / 0.3), 0 0 80px hsl(var(--primary) / 0.1)" }}
+        />
+
+        {/* Online indicator */}
+        <span className="absolute top-0 right-0 w-4 h-4 rounded-full border-2 border-background z-10">
+          <span className="block w-full h-full rounded-full bg-accent-emerald" />
+          <span className="absolute inset-0 rounded-full bg-accent-emerald animate-ping opacity-60" />
+        </span>
+
+        {/* Tooltip on hover */}
+        <span className="absolute -top-10 left-1/2 -translate-x-1/2 text-[10px] font-mono tracking-wider uppercase text-muted-foreground/60 opacity-0 group-hover:opacity-100 transition-all duration-300 whitespace-nowrap bg-background/80 backdrop-blur-sm px-3 py-1 rounded-lg border border-border/30">
+          THOR · Tour
+        </span>
       </motion.button>
     );
   }
