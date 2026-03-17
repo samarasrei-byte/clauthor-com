@@ -676,7 +676,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       </Button>
                     </div>
                     <Button variant="ghost" onClick={() => { setPhase(0); setIndustry(""); setSelectedChallenges([]); setTeamSize(""); setExtraAgents([]); }} className="w-full text-xs text-muted-foreground">
-                      ← Start over
+                      ← Recomeçar
                     </Button>
                   </motion.div>
                 </motion.div>
