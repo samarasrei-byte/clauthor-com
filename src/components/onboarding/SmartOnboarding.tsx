@@ -298,7 +298,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                             className="gap-2 rounded-xl border-primary/30 bg-primary/10 hover:bg-primary/20 text-sm h-12 px-6 font-semibold shadow-[0_0_20px_hsl(var(--primary)/0.1)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)] transition-all hover:scale-[1.03] active:scale-[0.98]"
                           >
                             <HelpCircle className="h-4 w-4 text-primary" />
-                            Not sure what I need — talk to AI
+                            Não sei o que preciso — falar com IA
                           </Button>
                         </motion.div>
                         <div className="flex gap-2">
