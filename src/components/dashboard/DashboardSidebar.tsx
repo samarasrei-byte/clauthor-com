@@ -117,7 +117,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                       initial={{ opacity: 0, width: 0 }}
                       animate={{ opacity: 1, width: "auto" }}
                       exit={{ opacity: 0, width: 0 }}
-                      className="text-sm font-medium truncate flex-1 text-left"
+                      className="text-[12.5px] font-normal truncate flex-1 text-left tracking-[-0.01em]"
                     >
                       {item.label}
                     </motion.span>
