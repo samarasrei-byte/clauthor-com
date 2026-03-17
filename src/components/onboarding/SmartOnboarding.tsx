@@ -360,9 +360,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                       <p className="text-sm">
-                        Great choice! {industries.find(i => i.id === industry)?.label} is a sector with huge automation potential.
+                        Ótima escolha! {industries.find(i => i.id === industry)?.label} é um setor com enorme potencial de automação.
                         <br /><br />
-                        Now select: <strong>what are your biggest challenges?</strong>
+                        Agora selecione: <strong>quais são seus maiores desafios?</strong>
                       </p>
                     </div>
                   </div>
