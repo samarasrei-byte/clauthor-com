@@ -337,15 +337,15 @@ const HomePage = () => {
         <div className="relative z-10 max-w-6xl mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
             {/* LEFT — Text content */}
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 text-center lg:text-left">
               {/* System status */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2, duration: 0.8 }}
-                className="flex items-center gap-3 mb-6 sm:mb-8"
+                className="flex items-center justify-center lg:justify-start gap-3 mb-6 sm:mb-8"
               >
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/30 backdrop-blur-sm">
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/30 backdrop-blur-sm">
                   <div className="relative">
                     <div className="w-1.5 h-1.5 rounded-full bg-accent-emerald" />
                     <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-accent-emerald animate-ping opacity-75" />
@@ -359,7 +359,7 @@ const HomePage = () => {
 
               {/* Self-typing headline */}
               <div className="mb-6 sm:mb-8">
-                <h1 className="font-display text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight min-h-[2.4rem] sm:min-h-[3.6rem] md:min-h-[4.5rem] lg:min-h-[5.25rem]">
+                <h1 className="font-display text-[2rem] sm:text-5xl md:text-6xl lg:text-7xl font-bold leading-[0.95] tracking-tight min-h-[2.4rem] sm:min-h-[3.6rem] md:min-h-[4.5rem] lg:min-h-[5.25rem] text-center lg:text-left">
                   <span className="text-foreground">{typedText}</span>
                   <span className="inline-block w-[3px] h-[0.8em] bg-primary ml-1 align-middle" style={{ animation: "blink-cursor 0.8s step-end infinite" }} />
                 </h1>
@@ -371,14 +371,14 @@ const HomePage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.2 }}
               >
-                    <p className="font-mono text-sm sm:text-base text-muted-foreground max-w-lg leading-relaxed mb-8">
+                    <p className="font-mono text-sm sm:text-base text-muted-foreground max-w-lg mx-auto lg:mx-0 leading-relaxed mb-8">
                       <span className="text-primary/60">$</span>{" "}
                       {t("home.subtitle")}
                       <span className="text-foreground/80 font-medium"> {t("home.subtitle_highlight")}</span>
                     </p>
 
                     {/* CTAs — Waitlist focused for launch */}
-                    <div className="flex flex-col sm:flex-row gap-3">
+                    <div className="flex flex-col sm:flex-row items-center gap-3">
                       <Link to="/waitlist" className="block w-full sm:w-auto">
                         <motion.button
                             whileHover={{ scale: 1.02 }}
@@ -413,7 +413,7 @@ const HomePage = () => {
                     </div>
 
                     {/* Trust badges — honest claims only */}
-                    <div className="flex flex-wrap items-center gap-2 sm:gap-5 mt-8">
+                    <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2 sm:gap-5 mt-8">
                       {[
                         { icon: LockKeyhole, label: t("home.trust_e2e", { defaultValue: "END-TO-END ENCRYPTED" }) },
                         { icon: ShieldCheck, label: t("home.trust_enterprise", { defaultValue: "ENTERPRISE-GRADE" }) },
@@ -429,7 +429,7 @@ const HomePage = () => {
             </div>
 
             {/* RIGHT — Live Demo Agent */}
-            <div className="w-full max-w-[420px] lg:w-[420px] shrink-0">
+            <div className="w-full max-w-[420px] lg:w-[420px] shrink-0 mx-auto lg:mx-0">
               <Suspense fallback={
                 <div className="rounded-2xl border border-border bg-card/40 backdrop-blur-xl overflow-hidden">
                   <div className="px-4 py-3 border-b border-border flex items-center gap-3">
