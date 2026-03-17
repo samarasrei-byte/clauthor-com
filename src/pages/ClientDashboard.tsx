@@ -312,6 +312,7 @@ const ClientDashboard = () => {
     // ── Agentes: fleet management ──
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: agentsGroup },
     { id: "library", label: t("dashboard.library", { defaultValue: "Biblioteca" }), icon: BookOpen, group: agentsGroup },
+    { id: "squads", label: "Squads", icon: Layers3, group: agentsGroup },
     ...departmentSidebarItems,
     ...soloAgentItems,
 
