@@ -280,121 +280,154 @@ const ThorPageTour = ({ steps, storageKey, onComplete }: ThorPageTourProps) => {
         />
       </motion.div>
 
-      {/* Thor Dialog - bottom center */}
+      {/* Thor Dialog - centered */}
       <motion.div
         key={`tour-dialog-${currentStep}`}
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        initial={{ opacity: 0, y: 30, scale: 0.92 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 40 }}
-        transition={{ type: "spring", damping: 25, stiffness: 300 }}
-        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[85] pointer-events-auto"
+        exit={{ opacity: 0, y: 30 }}
+        transition={{ type: "spring", damping: 22, stiffness: 260 }}
+        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[85] pointer-events-auto"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="w-[460px] max-w-[94vw] bg-card/95 backdrop-blur-xl border border-border/40 rounded-2xl shadow-2xl shadow-black/20 overflow-hidden">
-          {/* Route indicator chips */}
-          <div className="flex items-center gap-2 px-4 pt-3 pb-1 overflow-x-auto scrollbar-hide">
-            {steps.map((s, i) => (
-              <button
-                key={i}
-                onClick={() => { stopTTS(); setCurrentStep(i); }}
-                className={`flex-shrink-0 px-2.5 py-1 rounded-full text-[10px] font-medium transition-all ${
-                  i === currentStep
-                    ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                    : i < currentStep
-                    ? "bg-primary/15 text-primary"
-                    : "bg-muted/50 text-muted-foreground"
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
-          </div>
+        <div className="relative w-[480px] max-w-[94vw]">
+          {/* Outer glow ring */}
+          <div className="absolute -inset-[1px] rounded-2xl bg-gradient-to-b from-primary/30 via-primary/10 to-transparent opacity-60" />
+          
+          {/* Subtle scan-line texture */}
+          <div
+            className="absolute inset-0 rounded-2xl opacity-[0.03] pointer-events-none"
+            style={{
+              backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(var(--foreground)) 2px, hsl(var(--foreground)) 3px)",
+            }}
+          />
 
-          {/* Content area */}
-          <div className="flex items-start gap-3 p-4">
-            {/* Thor avatar */}
-            <div className="relative flex-shrink-0">
-              <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-primary/40 shadow-lg shadow-primary/10">
-                <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
-              </div>
-              {isSpeaking && (
-                <motion.div
-                  className="absolute inset-0 rounded-full border-2 border-primary/60"
-                  animate={{ scale: [1, 1.25, 1], opacity: [0.8, 0, 0.8] }}
-                  transition={{ duration: 1.2, repeat: Infinity }}
-                />
-              )}
-              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-accent-emerald rounded-full border-2 border-card" />
+          <div className="relative bg-card/90 backdrop-blur-2xl border border-border/20 rounded-2xl overflow-hidden">
+            {/* Top accent line */}
+            <div className="h-px bg-gradient-to-r from-transparent via-primary/50 to-transparent" />
+
+            {/* Progress track */}
+            <div className="h-[2px] bg-muted/30">
+              <motion.div
+                className="h-full bg-gradient-to-r from-primary to-primary/60"
+                animate={{ width: `${progress}%` }}
+                transition={{ duration: 0.5, ease: "easeOut" }}
+              />
             </div>
 
-            {/* Speech content */}
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-2 mb-1.5">
-                <span className="font-display font-bold text-sm text-foreground">THOR</span>
-                {step?.pageTitle && (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-mono uppercase tracking-wider">
-                    {step.pageTitle}
-                  </span>
-                )}
-              </div>
+            {/* Route chips */}
+            <div className="flex items-center gap-1.5 px-4 pt-3 pb-1 overflow-x-auto scrollbar-hide">
+              {steps.map((s, i) => (
+                <button
+                  key={i}
+                  onClick={() => { stopTTS(); setCurrentStep(i); }}
+                  className={`flex-shrink-0 px-2 py-0.5 rounded-md text-[9px] font-mono uppercase tracking-widest transition-all duration-300 ${
+                    i === currentStep
+                      ? "bg-primary/15 text-primary border border-primary/30"
+                      : i < currentStep
+                      ? "text-primary/50 border border-transparent"
+                      : "text-muted-foreground/40 border border-transparent"
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
 
-              <div className="bg-muted/30 rounded-xl p-3 min-h-[56px] max-h-[120px] overflow-y-auto">
-                <p className="text-[13px] text-foreground/90 leading-relaxed">
-                  {displayedText}
-                  {isTyping && (
-                    <motion.span
-                      animate={{ opacity: [1, 0] }}
-                      transition={{ duration: 0.5, repeat: Infinity }}
-                      className="inline-block w-0.5 h-3.5 bg-primary ml-0.5 align-text-bottom"
+            {/* Content */}
+            <div className="flex items-start gap-4 p-5 pt-3">
+              {/* Thor avatar column */}
+              <div className="relative flex-shrink-0 flex flex-col items-center gap-2">
+                <div className="relative">
+                  <div className="w-12 h-12 rounded-xl overflow-hidden border border-primary/20 shadow-lg shadow-primary/5">
+                    <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                  </div>
+                  {/* Breathing ring */}
+                  {isSpeaking && (
+                    <motion.div
+                      className="absolute -inset-1 rounded-xl border border-primary/40"
+                      animate={{ opacity: [0.4, 0.8, 0.4], scale: [1, 1.06, 1] }}
+                      transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
                     />
                   )}
-                </p>
+                  {/* Status dot */}
+                  <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-accent-emerald border-2 border-card" />
+                </div>
+              </div>
+
+              {/* Text area */}
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="font-display font-bold text-sm text-foreground tracking-wide">THOR</span>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-mono uppercase tracking-widest border border-primary/10">
+                    CEO · Orchestrator
+                  </span>
+                </div>
+
+                {step?.pageTitle && (
+                  <div className="flex items-center gap-1.5 mb-2">
+                    <div className="w-1 h-1 rounded-full bg-primary/60" />
+                    <span className="text-[10px] text-muted-foreground font-mono tracking-wider">
+                      {step.pageTitle}
+                    </span>
+                  </div>
+                )}
+
+                <div className="relative rounded-lg p-3 min-h-[60px] max-h-[130px] overflow-y-auto bg-muted/20 border border-border/10">
+                  <p className="text-[13px] text-foreground/85 leading-[1.7] font-light">
+                    {displayedText}
+                    {isTyping && (
+                      <motion.span
+                        animate={{ opacity: [1, 0] }}
+                        transition={{ duration: 0.5, repeat: Infinity }}
+                        className="inline-block w-[2px] h-3.5 bg-primary ml-0.5 align-text-bottom rounded-full"
+                      />
+                    )}
+                  </p>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Navigation footer */}
-          <div className="flex items-center justify-between px-4 pb-3">
-            <div className="flex items-center gap-2">
-              <span className="text-[11px] text-muted-foreground font-mono">
-                {currentStep + 1}/{steps.length}
-              </span>
-              <button
-                onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
-                className="p-1.5 rounded-lg hover:bg-muted/50 text-muted-foreground hover:text-foreground transition-colors"
-              >
-                {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-              </button>
+            {/* Footer */}
+            <div className="flex items-center justify-between px-5 pb-4 pt-0">
+              <div className="flex items-center gap-3">
+                <span className="text-[10px] text-muted-foreground/50 font-mono tabular-nums">
+                  {String(currentStep + 1).padStart(2, "0")}/{String(steps.length).padStart(2, "0")}
+                </span>
+                <button
+                  onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
+                  className="p-1 rounded-md hover:bg-muted/30 text-muted-foreground/50 hover:text-foreground transition-colors"
+                >
+                  {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+                </button>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={closeTour}
+                  className="h-7 px-2.5 rounded-md text-[10px] text-muted-foreground/40 hover:text-foreground hover:bg-muted/20 transition-all font-mono uppercase tracking-wider"
+                >
+                  Pular
+                </button>
+                <button
+                  onClick={goPrev}
+                  disabled={currentStep === 0}
+                  className="h-7 w-7 rounded-md flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/20 transition-all disabled:opacity-20"
+                >
+                  <ChevronLeft className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  onClick={goNext}
+                  className="h-7 px-4 rounded-md text-[11px] font-medium bg-primary/90 hover:bg-primary text-primary-foreground transition-all flex items-center gap-1"
+                >
+                  {currentStep === steps.length - 1 ? "Concluir" : "Próximo"}
+                  {currentStep < steps.length - 1 && <ChevronRight className="w-3 h-3" />}
+                </button>
+              </div>
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={closeTour}
-                className="h-7 px-2 text-[11px] text-muted-foreground"
-              >
-                <X className="w-3 h-3 mr-1" />
-                Pular
-              </Button>
-              <Button
-                size="sm"
-                variant="ghost"
-                onClick={goPrev}
-                disabled={currentStep === 0}
-                className="h-7 px-2 text-[11px]"
-              >
-                <ChevronLeft className="w-3.5 h-3.5" />
-              </Button>
-              <Button
-                size="sm"
-                onClick={goNext}
-                className="h-7 px-4 text-[11px] bg-primary hover:bg-primary/90 text-primary-foreground"
-              >
-                {currentStep === steps.length - 1 ? "Concluir" : "Próximo"}
-                {currentStep < steps.length - 1 && <ChevronRight className="w-3.5 h-3.5 ml-1" />}
-              </Button>
-            </div>
+            {/* Bottom accent */}
+            <div className="h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
           </div>
         </div>
       </motion.div>
