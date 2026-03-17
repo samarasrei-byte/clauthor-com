@@ -4,8 +4,6 @@ import { lazy, Suspense, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const SmartOnboarding = lazy(() => import("@/components/onboarding/SmartOnboarding"));
-const ThorGuidedTour = lazy(() => import("@/components/ThorGuidedTour"));
-import { LANDING_TOUR_STEPS } from "@/data/tourSteps";
 const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 const InnovationRoadmap = lazy(() => import("@/components/landing/InnovationRoadmap"));
@@ -1162,11 +1160,6 @@ const HomePage = () => {
         <SmartOnboarding isOpen={showSmartOnboarding} onClose={() => setShowSmartOnboarding(false)} />
       </Suspense>
 
-      {/* Thor Guided Tour */}
-      <ThorGuidedTour
-        steps={LANDING_TOUR_STEPS}
-        storageKey="clauthor_landing_tour_done"
-      />
     </div>
   );
 };
