@@ -8,7 +8,7 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft, Presentation,
-  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare
+  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, FileText, Phone, Instagram
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -67,6 +67,9 @@ const KanbanBoard = lazy(() => import("@/components/dashboard/KanbanBoard"));
 const CompanyHub = lazy(() => import("@/components/dashboard/CompanyHub"));
 const ThorDailyBriefing = lazy(() => import("@/components/dashboard/ThorDailyBriefing"));
 const QuickWins = lazy(() => import("@/components/dashboard/QuickWins"));
+const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHub"));
+const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPipelinePanel"));
+const SalesCallTranscriber = lazy(() => import("@/components/dashboard/SalesCallTranscriber"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -313,6 +316,9 @@ const ClientDashboard = () => {
     // ── Operações: day-to-day business tools ──
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: opsGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: opsGroup },
+    { id: "content-pipeline", label: t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }), icon: Instagram, group: opsGroup },
+    { id: "deliverables", label: t("dashboard.deliverables", { defaultValue: "Entregas" }), icon: FileText, group: opsGroup },
+    { id: "call-transcriber", label: t("dashboard.call_transcriber", { defaultValue: "Chamadas" }), icon: Phone, group: opsGroup },
     { id: "equipe", label: t("dashboard.team_label", { defaultValue: "Equipe" }), icon: Users, group: opsGroup },
     { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Presentation, group: opsGroup },
 
@@ -373,6 +379,9 @@ const ClientDashboard = () => {
     "control-tower": "Control Tower",
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
+    "content-pipeline": t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }),
+    deliverables: t("dashboard.deliverables", { defaultValue: "Entregas" }),
+    "call-transcriber": t("dashboard.call_transcriber", { defaultValue: "Chamadas" }),
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
@@ -859,6 +868,27 @@ const ClientDashboard = () => {
                 {activeSection === "kanban" && (
                   <Suspense fallback={<SectionLoader />}>
                     <KanbanBoard />
+                  </Suspense>
+                )}
+
+                {/* ═══ CONTENT PIPELINE ═══ */}
+                {activeSection === "content-pipeline" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ContentPipelinePanel />
+                  </Suspense>
+                )}
+
+                {/* ═══ DELIVERABLES HUB ═══ */}
+                {activeSection === "deliverables" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <DeliverablesHub onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
+
+                {/* ═══ SALES CALL TRANSCRIBER ═══ */}
+                {activeSection === "call-transcriber" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <SalesCallTranscriber />
                   </Suspense>
                 )}
 
