@@ -1,4 +1,4 @@
-import { Sun, Moon } from "lucide-react";
+import { SunMedium, Moon } from "lucide-react";
 import { useTheme } from "@/hooks/useTheme";
 import { motion } from "framer-motion";
 
@@ -18,7 +18,7 @@ const ThemeToggle = () => {
         exit={{ rotate: 90, opacity: 0, scale: 0.5 }}
         transition={{ duration: 0.3 }}
       >
-        {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+        {theme === "dark" ? <SunMedium className="h-4 w-4" strokeWidth={1.5} /> : <Moon className="h-4 w-4" strokeWidth={1.5} />}
       </motion.div>
     </button>
   );
