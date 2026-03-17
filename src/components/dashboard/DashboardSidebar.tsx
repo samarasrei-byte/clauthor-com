@@ -184,7 +184,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                                 : "text-muted-foreground hover:text-foreground hover:bg-muted/10"
                             )}
                           >
-                            <ChildIcon className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                            <ChildIcon className="h-3 w-3 shrink-0" strokeWidth={1.5} />
                             <span className="truncate">{child.label}</span>
                           </button>
                         );
