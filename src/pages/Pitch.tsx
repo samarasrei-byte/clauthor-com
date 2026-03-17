@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from "framer-motion";
-import { Bot, Clock, Shield, Globe, Headphones, Receipt, Code, Scale, Brain, UserCheck, TrendingUp, Zap, Lock, Users, ArrowRight, MessageCircle, CheckCircle2, Target, Building2, Megaphone, DollarSign, Cpu, BarChart3, Layers, Rocket, Star, Award, Gem, ChevronRight, Network, Briefcase } from "lucide-react";
+import { Bot, Clock, Shield, Globe, Headphones, Receipt, Code, Scale, Brain, UserCheck, TrendingUp, Zap, Lock, Users, ArrowRight, MessageCircle, CheckCircle2, Target, Building2, Megaphone, DollarSign, Cpu, BarChart3, Layers, Rocket, Star, Award, Gem, ChevronRight, Network, Briefcase, Activity, ChevronDown, ExternalLink, Fingerprint, Timer, LineChart, Crown, Flame, Eye } from "lucide-react";
 import { WORKFORCE, TOTAL_WORKFORCE_AGENTS, TOTAL_SQUADS, TOTAL_DEPARTMENTS } from "@/data/workforceArchitecture";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 const WA_NUMBER = "5511985214895";
 const WA_LINK = `https://wa.me/${WA_NUMBER}?text=Gostaria%20de%20conversar%20sobre%20investimento%20na%20CLAUTHOR`;
 
-/* ── Animated counter on viewport entry ── */
+/* ── Animated counter ── */
 const CountUp = ({ end, prefix = "", suffix = "", decimals = 0, duration = 2 }: { end: number; prefix?: string; suffix?: string; decimals?: number; duration?: number }) => {
   const ref = useRef<HTMLSpanElement>(null);
   const inView = useInView(ref, { once: true, margin: "-50px" });
@@ -30,18 +30,7 @@ const CountUp = ({ end, prefix = "", suffix = "", decimals = 0, duration = 2 }: 
   return <span ref={ref}>{prefix}{formatted}{suffix}</span>;
 };
 
-/* ── Glass card ── */
-const GlassCard = ({ children, className = "", hover = true }: { children: React.ReactNode; className?: string; hover?: boolean }) => (
-  <motion.div
-    className={`rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl p-6 ${hover ? "hover:border-primary/20 hover:shadow-[0_0_30px_hsl(var(--primary)/0.08)] transition-all duration-500" : ""} ${className}`}
-    whileHover={hover ? { y: -4, rotateX: 2, rotateY: -2 } : undefined}
-    style={{ transformStyle: "preserve-3d" }}
-  >
-    {children}
-  </motion.div>
-);
-
-/* ── Section wrapper with fade-in ── */
+/* ── Section wrapper ── */
 const Section = ({ children, className = "", id }: { children: React.ReactNode; className?: string; id?: string }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -59,7 +48,17 @@ const Section = ({ children, className = "", id }: { children: React.ReactNode; 
   );
 };
 
-/* ── Progress bar ── */
+/* ── Glass card ── */
+const GlassCard = ({ children, className = "", hover = true }: { children: React.ReactNode; className?: string; hover?: boolean }) => (
+  <motion.div
+    className={`rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl p-6 ${hover ? "hover:border-primary/20 hover:shadow-[0_0_30px_hsl(var(--primary)/0.08)] transition-all duration-500" : ""} ${className}`}
+    whileHover={hover ? { y: -4 } : undefined}
+  >
+    {children}
+  </motion.div>
+);
+
+/* ── Animated bar ── */
 const AnimatedBar = ({ label, pct, color }: { label: string; pct: number; color: string }) => {
   const ref = useRef(null);
   const inView = useInView(ref, { once: true });
@@ -81,20 +80,29 @@ const AnimatedBar = ({ label, pct, color }: { label: string; pct: number; color:
   );
 };
 
-/* ── Investor Agent Chat (auto-plays conversation) ── */
+/* ── Table of Contents ── */
+const tocItems = [
+  { id: "overview", label: "Visão Geral" },
+  { id: "problem", label: "O Problema" },
+  { id: "solution", label: "A Solução" },
+  { id: "traction", label: "Tração" },
+  { id: "market", label: "Mercado" },
+  { id: "business-model", label: "Modelo de Negócio" },
+  { id: "unit-economics", label: "Unit Economics" },
+  { id: "architecture", label: "Arquitetura" },
+  { id: "moats", label: "Moats" },
+  { id: "valuation", label: "Valuation" },
+  { id: "round", label: "Rodada" },
+];
+
+/* ── Investor Chat ── */
 const investorConversation = [
-  { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora? Vi que vocês têm 200 agentes." },
-  { role: "agent" as const, text: "Porque estamos no ponto de inflexão. 200 agentes distribuídos em 15 departamentos e 37 squads — totalmente operacionais, infraestrutura pronta, e um mercado de US$ 1,8 trilhão até 2030. Você entra antes da escala explodir." },
-  { role: "investor" as const, text: "Mas o mercado de IA está saturado. Qual o diferencial?" },
-  { role: "agent" as const, text: "Ninguém faz o que nós fazemos: substituir departamentos inteiros com squads coordenados de IA. 200 agentes especializados organizados como uma empresa real — Marketing, Growth, Product, Sales, CS, Finance e Operations. Não vendemos chatbots — vendemos operações completas 24/7." },
+  { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
+  { role: "agent" as const, text: "Porque você entra antes da escala com 20% de equity a US$ 250K de valuation. Produto funcional com 200 agentes, 37 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a US$ 2-5M." },
   { role: "investor" as const, text: "Como monetizam?" },
-  { role: "agent" as const, text: "SaaS B2B com ticket médio de US$ 199/mês por squad. Com 1.000 clientes, são quase US$ 2,4M/ano em receita recorrente. LTV alto, churn baixo." },
-  { role: "investor" as const, text: "Mas US$ 250K de valuation? Não é arriscado?" },
-  { role: "agent" as const, text: "É exatamente o contrário — é a melhor janela para o investidor. US$ 250K reflete o valor da ideia e de toda a arquitetura já construída: 200 agentes, 15 departamentos, 37 squads, 4.100+ leads. Startups com apenas um deck captam a US$ 2-5M. Com US$ 50K você garante 20% de equity antes da escala." },
-  { role: "investor" as const, text: "Quais são os riscos?" },
-  { role: "agent" as const, text: "O risco de NÃO investir é maior. Automação B2B não é tendência — é inevitável. 20% de equity a US$ 250K de valuation é uma oportunidade que não vai se repetir após o lançamento." },
-  { role: "investor" as const, text: "Como eu entro?" },
-  { role: "agent" as const, text: "Fale diretamente com o Fundador pelo WhatsApp. A rodada é limitada — 20% de equity por US$ 50K. Valuation de US$ 250K. Cada dia conta." },
+  { role: "agent" as const, text: "SaaS B2B por assinatura. Ticket médio US$ 199/mês por squad. Event-driven = margem bruta de 96%+. Com 1.000 clientes, são US$ 2,4M/ano em MRR." },
+  { role: "investor" as const, text: "Qual o retorno esperado?" },
+  { role: "agent" as const, text: "Seed (6-12 meses): valuation US$ 3-5M = 12-20x. Series A: US$ 15-30M = 60-120x. Potencial Exit em 5 anos: US$ 50M+ = 200x+. A rodada é limitada — 20% por US$ 50K." },
 ];
 
 const InvestorChat = () => {
@@ -105,16 +113,13 @@ const InvestorChat = () => {
 
   useEffect(() => {
     if (!inView) return;
-    const total = investorConversation.length;
     let i = 0;
     const show = () => {
       i++;
       setVisibleCount(i);
-      if (i < total) {
-        setTimeout(show, 2200 + Math.random() * 800);
-      }
+      if (i < investorConversation.length) setTimeout(show, 2000 + Math.random() * 600);
     };
-    setTimeout(show, 800);
+    setTimeout(show, 600);
   }, [inView]);
 
   useEffect(() => {
@@ -129,10 +134,10 @@ const InvestorChat = () => {
         </div>
         <div>
           <p className="text-sm font-semibold text-foreground">Agente de Relações com Investidores</p>
-          <p className="text-[10px] text-primary font-mono uppercase tracking-wider">ONLINE</p>
+          <p className="text-[10px] text-primary font-mono uppercase tracking-wider">LIVE</p>
         </div>
       </div>
-      <div className="px-4 py-5 space-y-3 max-h-[480px] overflow-y-auto scrollbar-thin">
+      <div className="px-4 py-5 space-y-3 max-h-[380px] overflow-y-auto scrollbar-thin">
         <AnimatePresence>
           {investorConversation.slice(0, visibleCount).map((msg, i) => (
             <motion.div
@@ -156,71 +161,11 @@ const InvestorChat = () => {
         </AnimatePresence>
         {visibleCount < investorConversation.length && visibleCount > 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex items-center gap-1.5 px-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/50 animate-pulse" />
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/50 animate-pulse [animation-delay:0.2s]" />
-            <span className="w-1.5 h-1.5 rounded-full bg-primary/50 animate-pulse [animation-delay:0.4s]" />
+            {[0, 1, 2].map(j => <span key={j} className="w-1.5 h-1.5 rounded-full bg-primary/50 animate-pulse" style={{ animationDelay: `${j * 0.2}s` }} />)}
           </motion.div>
         )}
         <div ref={chatEndRef} />
       </div>
-    </div>
-  );
-};
-
-/* ── Valuation Defense Card ── */
-const ValuationDefense = () => {
-  const defenses = [
-    {
-      icon: Cpu,
-      title: "Produto Funcional (não é MVP)",
-      desc: "200 agentes autônomos operacionais em 15 departamentos e 37 squads. Plataforma completa com orquestração multi-agente, memória persistente e motor de autonomia Nível 3.",
-    },
-    {
-      icon: Users,
-      title: "Tração Massiva",
-      desc: "2.000.000+ leads qualificados no banco de dados, com 4.100+ profissionais na whitelist ativa antes do lançamento público. Prova social real de demanda explosiva de mercado.",
-    },
-    {
-      icon: Layers,
-      title: "Infraestrutura Enterprise-Grade",
-      desc: "Criptografia AES-256-GCM, auditoria completa, LGPD compliance, rate limiting, edge functions serverless. Infraestrutura que escala de 1 a 100K+ usuários.",
-    },
-    {
-      icon: Globe,
-      title: "Internacionalização Nativa",
-      desc: "13 idiomas suportados nativamente com detecção automática. Pronto para expansão global desde o dia 1.",
-    },
-    {
-      icon: Shield,
-      title: "Moats Técnicos",
-      desc: "Motor de autonomia proprietário com 3 níveis de risco, orquestração A2A (Agent-to-Agent), e sistema de memória em 4 camadas. Difícil de replicar.",
-    },
-    {
-      icon: TrendingUp,
-      title: "Comparativos de Mercado",
-      desc: "Startups com apenas um MVP (sem produto funcional) captam a US$ 2-5M de valuation. A CLAUTHOR tem produto completo, tração e infraestrutura — a US$ 250K é uma oportunidade irrepetível.",
-    },
-  ];
-
-  return (
-    <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-      {defenses.map((d, i) => (
-        <motion.div
-          key={d.title}
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-50px" }}
-          transition={{ delay: i * 0.1 }}
-        >
-          <GlassCard className="h-full">
-            <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mb-4">
-              <d.icon className="w-5 h-5 text-primary" />
-            </div>
-            <h3 className="font-display font-semibold text-foreground mb-2">{d.title}</h3>
-            <p className="text-sm text-muted-foreground leading-relaxed">{d.desc}</p>
-          </GlassCard>
-        </motion.div>
-      ))}
     </div>
   );
 };
@@ -235,7 +180,6 @@ const WorkforceDeptCard = ({ dept, index }: { dept: typeof WORKFORCE[0]; index: 
   const [expanded, setExpanded] = useState(false);
   const totalAgents = dept.squads.reduce((s, sq) => s + sq.agents.length, 0);
   const Icon = deptIcons[dept.id] || Building2;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -244,35 +188,23 @@ const WorkforceDeptCard = ({ dept, index }: { dept: typeof WORKFORCE[0]; index: 
       transition={{ delay: index * 0.05 }}
       className="rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl overflow-hidden"
     >
-      <button
-        onClick={() => setExpanded(!expanded)}
-        className="w-full flex items-center justify-between p-5 hover:bg-muted/5 transition-colors"
-      >
+      <button onClick={() => setExpanded(!expanded)} className="w-full flex items-center justify-between p-5 hover:bg-muted/5 transition-colors">
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center">
             <Icon className="w-5 h-5 text-primary" />
           </div>
           <div className="text-left">
             <h3 className="font-display font-bold text-foreground">{dept.name}</h3>
-            <p className="text-xs text-muted-foreground">
-              {dept.squads.length} squads · {totalAgents} agentes
-            </p>
+            <p className="text-xs text-muted-foreground">{dept.squads.length} squads · {totalAgents} agentes</p>
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Badge variant="outline" className="text-[10px] border-primary/20 text-primary hidden sm:flex">
-            {totalAgents} agents
-          </Badge>
+          <Badge variant="outline" className="text-[10px] border-primary/20 text-primary hidden sm:flex">{totalAgents} agents</Badge>
           <ChevronRight className={`h-4 w-4 text-muted-foreground transition-transform ${expanded ? "rotate-90" : ""}`} />
         </div>
       </button>
-
       {expanded && (
-        <motion.div
-          initial={{ height: 0, opacity: 0 }}
-          animate={{ height: "auto", opacity: 1 }}
-          className="border-t border-border/30 px-5 pb-5"
-        >
+        <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} className="border-t border-border/30 px-5 pb-5">
           <div className="grid gap-3 pt-4">
             {dept.squads.map((squad) => (
               <div key={squad.id} className="p-4 rounded-xl bg-muted/20 border border-border/20">
@@ -281,19 +213,9 @@ const WorkforceDeptCard = ({ dept, index }: { dept: typeof WORKFORCE[0]; index: 
                   <span className="text-[10px] text-muted-foreground font-mono">{squad.agents.length} agents</span>
                 </div>
                 <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{squad.mission}</p>
-                <div className="flex flex-wrap gap-1.5 mb-3">
+                <div className="flex flex-wrap gap-1.5">
                   {squad.agents.map((agent) => (
-                    <span key={agent.slug} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/5 border border-primary/10 text-primary/80">
-                      {agent.name}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {squad.outcomes.map((outcome) => (
-                    <span key={outcome} className="text-[10px] flex items-center gap-1 text-muted-foreground">
-                      <CheckCircle2 className="w-3 h-3 text-primary/60" />
-                      {outcome}
-                    </span>
+                    <span key={agent.slug} className="text-[10px] px-2 py-0.5 rounded-full bg-primary/5 border border-primary/10 text-primary/80">{agent.name}</span>
                   ))}
                 </div>
               </div>
@@ -304,6 +226,10 @@ const WorkforceDeptCard = ({ dept, index }: { dept: typeof WORKFORCE[0]; index: 
     </motion.div>
   );
 };
+
+/* ══════════════════════════════════════════════════════════ */
+/* ═══ PITCH PAGE ═══ */
+/* ══════════════════════════════════════════════════════════ */
 
 const Pitch = () => {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -317,53 +243,48 @@ const Pitch = () => {
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/30">
-      {/* ═══ 1. HERO ═══ */}
+
+      {/* ═══ HERO ═══ */}
       <div ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,hsl(var(--primary)/0.15),transparent_70%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_80%,hsl(var(--accent-violet)/0.1),transparent_70%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,hsl(var(--primary)/0.12),transparent_70%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_80%,hsl(var(--accent-violet)/0.08),transparent_70%)]" />
           <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
-          {/* Animated particles */}
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute w-1 h-1 rounded-full bg-primary/30"
-              style={{ left: `${15 + i * 18}%`, top: `${20 + i * 12}%` }}
-              animate={{ y: [-20, 20, -20], opacity: [0.2, 0.6, 0.2] }}
-              transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.5 }}
-            />
-          ))}
+          {/* Subtle grid */}
+          <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
         </motion.div>
 
         <motion.div className="relative z-10 max-w-5xl mx-auto px-6 text-center" style={{ y: textY }}>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}>
-            <Badge variant="outline" className="border-primary/30 bg-primary/5 text-primary text-xs font-mono uppercase tracking-[0.2em] px-4 py-2 mb-6">
+            <Badge variant="outline" className="border-primary/30 bg-primary/5 text-primary text-xs font-mono uppercase tracking-[0.2em] px-4 py-2 mb-8">
               <Lock className="h-3 w-3 mr-2" />
               Pre-Seed · Documento Confidencial
             </Badge>
           </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.08] tracking-tight mb-6">
-            Estamos construindo a infraestrutura que{" "}
-            <span className="bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">substitui departamentos</span>{" "}
-            por IA.
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.05] tracking-tight mb-6">
+            A infraestrutura que{" "}
+            <span className="bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">substitui departamentos inteiros</span>{" "}
+            por IA autônoma.
           </motion.h1>
 
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-12 leading-relaxed">
-            CLAUTHOR é uma plataforma de agentes inteligentes que executa operações completas para empresas, 24 horas por dia, 7 dias por semana.
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
+            200 agentes. 37 squads. 15 departamentos. Margem bruta de 96%+. 
+            Produto operacional — não é MVP.
           </motion.p>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-3 md:gap-4 mb-12">
+          {/* Key metrics strip */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
             {[
-              { icon: Bot, label: `${TOTAL_WORKFORCE_AGENTS} agentes operacionais` },
-              { icon: Network, label: `${TOTAL_SQUADS} squads inteligentes` },
-              { icon: Shield, label: "Segurança Enterprise" },
-              { icon: Globe, label: "13 idiomas nativos" },
-            ].map((ind) => (
-              <GlassCard key={ind.label} className="flex items-center gap-2.5 !p-3 md:!px-5 md:!py-3.5">
-                <ind.icon className="w-4 h-4 text-primary" />
-                <span className="text-xs md:text-sm font-medium text-foreground/80 whitespace-nowrap">{ind.label}</span>
-              </GlassCard>
+              { value: "US$ 250K", label: "Valuation" },
+              { value: "US$ 50K", label: "Captação" },
+              { value: "20%", label: "Equity" },
+              { value: "96%+", label: "Margem Bruta" },
+            ].map((m) => (
+              <div key={m.label} className="text-center">
+                <p className="text-2xl md:text-3xl font-display font-bold text-foreground">{m.value}</p>
+                <p className="text-[10px] text-muted-foreground font-mono uppercase tracking-widest mt-1">{m.label}</p>
+              </div>
             ))}
           </motion.div>
 
@@ -371,72 +292,226 @@ const Pitch = () => {
             <Button size="lg" onClick={handleTalk} className="text-base px-8 gap-2">
               Falar com o Fundador <ArrowRight className="w-4 h-4" />
             </Button>
+            <Button size="lg" variant="outline" className="text-base px-8 gap-2" onClick={() => document.getElementById("overview")?.scrollIntoView({ behavior: "smooth" })}>
+              Ver o Pitch <ChevronDown className="w-4 h-4" />
+            </Button>
           </motion.div>
         </motion.div>
 
         <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent z-20" />
       </div>
 
-      {/* ═══ 2. O PROBLEMA ═══ */}
-      <Section>
+      {/* ═══ TABLE OF CONTENTS ═══ */}
+      <Section id="overview">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <p className="text-xs text-muted-foreground font-mono uppercase tracking-[0.3em] mb-3">Índice do Documento</p>
+            <h2 className="text-2xl md:text-3xl font-display font-bold tracking-tight">Navegue pelo Pitch</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            {tocItems.map((item, i) => (
+              <motion.button
+                key={item.id}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.04 }}
+                onClick={() => document.getElementById(item.id)?.scrollIntoView({ behavior: "smooth" })}
+                className="p-3 rounded-xl border border-border/40 bg-card/30 hover:border-primary/30 hover:bg-primary/5 transition-all text-left group"
+              >
+                <span className="text-[10px] text-primary/60 font-mono">{String(i + 1).padStart(2, "0")}</span>
+                <p className="text-sm font-medium text-foreground/80 group-hover:text-foreground transition-colors">{item.label}</p>
+              </motion.button>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ═══ EXECUTIVE SUMMARY ═══ */}
+      <Section className="bg-muted/20">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Crown className="h-4 w-4" />
+              Executive Summary
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-4">Tudo o que já foi construído.</h2>
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto">Uma visão panorâmica do que torna a CLAUTHOR uma oportunidade irrepetível.</p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[
+              { icon: Bot, title: `${TOTAL_WORKFORCE_AGENTS} Agentes Operacionais`, desc: "Cada agente é um especialista treinado para uma função específica — SDR, Copywriter, CFO, DevOps, Jurídico. Todos funcionam hoje." },
+              { icon: Network, title: `${TOTAL_SQUADS} Squads Inteligentes`, desc: "Agentes organizados em squads com missão definida. Delegam entre si via orquestração A2A (Agent-to-Agent). Não é chatbot — é operação." },
+              { icon: Building2, title: `${TOTAL_DEPARTMENTS} Departamentos`, desc: "Marketing, Growth, Product, Sales, CS, Finance e Operations. Cada departamento é uma unidade autônoma com KPIs próprios." },
+              { icon: Shield, title: "Enterprise-Grade Security", desc: "AES-256-GCM, audit trails, LGPD compliance, Row Level Security, rate limiting. Infraestrutura que escala de 1 a 100K+ usuários." },
+              { icon: Globe, title: "13 Idiomas Nativos", desc: "Detecção automática de idioma. Pronto para expansão global desde o dia 1. Interface e agentes multilíngues." },
+              { icon: Brain, title: "Motor de Autonomia Nível 3", desc: "Policy Engine com 5 portões de segurança. 3 níveis de risco. Memória persistente em 4 camadas. Difícil de replicar." },
+              { icon: Zap, title: "Event-Driven Architecture", desc: "Agentes dormem até que um gatilho os acorde. Zero desperdício computacional. Custo real por agente: R$ 8-15/mês." },
+              { icon: Layers, title: "Plataforma Completa", desc: "CRM, Kanban, Analytics, Meeting Room, Knowledge Base, Chat, Voice AI, Credential Hub — tudo integrado numa única plataforma." },
+              { icon: Fingerprint, title: "Multi-Tenant Isolation", desc: "Cada empresa tem seu ambiente isolado. Dados nunca se cruzam. Compliant com LGPD, GDPR e SOC 2 readiness." },
+            ].map((item, i) => (
+              <motion.div key={item.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.06 }}>
+                <GlassCard className="h-full">
+                  <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center mb-4">
+                    <item.icon className="w-5 h-5 text-primary" />
+                  </div>
+                  <h3 className="font-display font-semibold text-foreground mb-2">{item.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.desc}</p>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ═══ O PROBLEMA ═══ */}
+      <Section id="problem">
         <div className="max-w-4xl mx-auto text-center">
           <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
             <Target className="h-4 w-4" />
             O Problema
           </Badge>
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">Empresas são inerentemente ineficientes.</h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-12 leading-relaxed">
-            Departamentos são caros, lentos e difíceis de escalar. Turnover, erro humano, falta de integração e custos fixos elevados corroem a margem de qualquer negócio.
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">Empresas sangram dinheiro com ineficiência operacional.</h2>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-14 leading-relaxed">
+            Departamentos são caros, lentos e impossíveis de escalar. A maior parte do orçamento vai para tarefas repetitivas que IA já resolve melhor.
           </p>
-          <div className="grid md:grid-cols-3 gap-6">
-            <GlassCard hover={false} className="text-center !py-10">
-              <p className="text-5xl md:text-6xl font-display font-bold text-primary mb-2"><CountUp end={70} suffix="%" /></p>
-              <p className="text-sm text-muted-foreground">das tarefas operacionais podem ser automatizadas com IA</p>
-            </GlassCard>
-            <GlassCard hover={false} className="text-center !py-10">
-              <p className="text-5xl md:text-6xl font-display font-bold text-primary mb-2">R$ <CountUp end={180} suffix="K" /></p>
-              <p className="text-sm text-muted-foreground">custo médio anual por funcionário CLT no Brasil</p>
-            </GlassCard>
-            <GlassCard hover={false} className="text-center !py-10">
-              <p className="text-5xl md:text-6xl font-display font-bold text-primary mb-2"><CountUp end={45} suffix="%" /></p>
-              <p className="text-sm text-muted-foreground">de turnover médio em áreas operacionais</p>
-            </GlassCard>
-          </div>
-        </div>
-      </Section>
-
-      {/* ═══ 3. A SOLUÇÃO ═══ */}
-      <Section className="bg-muted/20">
-        <div className="max-w-5xl mx-auto text-center">
-          <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
-            <Brain className="h-4 w-4" />
-            A Solução
-          </Badge>
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Infraestrutura multi-agente coordenada.</h2>
-          <p className="text-muted-foreground text-lg mb-14 max-w-2xl mx-auto">A CLAUTHOR substitui departamentos inteiros por squads de IA especializados.</p>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-4 gap-5">
             {[
-              { icon: Headphones, title: "Suporte Omnichannel" },
-              { icon: Receipt, title: "Financeiro e Faturamento" },
-              { icon: Code, title: "Desenvolvimento Autônomo" },
-              { icon: Scale, title: "Compliance e Jurídico" },
-              { icon: Brain, title: "Orquestração Inteligente" },
-              { icon: UserCheck, title: "Concierge Estratégico" },
-              { icon: Megaphone, title: "Marketing e Growth" },
-              { icon: DollarSign, title: "Vendas e Prospecção" },
-              { icon: Building2, title: "RH e Operações" },
-            ].map((s) => (
-              <GlassCard key={s.title} className="flex flex-col items-center gap-3 text-center">
-                <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center"><s.icon className="w-5 h-5 text-primary" /></div>
-                <span className="text-sm font-medium text-foreground">{s.title}</span>
+              { value: 70, suffix: "%", label: "das tarefas operacionais são automatizáveis" },
+              { value: 180, prefix: "R$ ", suffix: "K", label: "custo médio anual por funcionário CLT" },
+              { value: 45, suffix: "%", label: "turnover em áreas operacionais" },
+              { value: 3, suffix: "h", label: "produtividade real em 8h de CLT" },
+            ].map((m) => (
+              <GlassCard key={m.label} hover={false} className="text-center !py-8">
+                <p className="text-4xl md:text-5xl font-display font-bold text-primary mb-2">
+                  <CountUp end={m.value} prefix={m.prefix || ""} suffix={m.suffix} />
+                </p>
+                <p className="text-xs text-muted-foreground leading-relaxed">{m.label}</p>
               </GlassCard>
             ))}
           </div>
         </div>
       </Section>
 
-      {/* ═══ 4. MERCADO ═══ */}
-      <Section>
+      {/* ═══ A SOLUÇÃO ═══ */}
+      <Section className="bg-muted/20" id="solution">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Brain className="h-4 w-4" />
+              A Solução
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">
+              Não vendemos chatbots.<br />
+              <span className="gradient-text">Vendemos departamentos inteiros.</span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+              A CLAUTHOR substitui equipes operacionais por squads de IA coordenados que executam, monitoram e entregam resultados — 24/7.
+            </p>
+          </div>
+
+          {/* Before/After */}
+          <div className="grid md:grid-cols-2 gap-8 mb-14">
+            <GlassCard hover={false} className="border-destructive/20">
+              <h3 className="font-display font-bold text-lg text-foreground mb-4 flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-destructive/50" /> Antes (CLT / Ferramentas)
+              </h3>
+              <div className="space-y-3 text-sm text-muted-foreground">
+                {[
+                  "5-15 funcionários por departamento (R$ 500K+/ano)",
+                  "Turnover de 45% — recontratação constante",
+                  "8h/dia, produtivo 3h, indisponível à noite e fds",
+                  "Cada ferramenta é um silo isolado",
+                  "Meses para onboarding de cada funcionário",
+                  "Erros humanos custam receita e reputação",
+                ].map(t => (
+                  <div key={t} className="flex items-start gap-2">
+                    <span className="text-destructive/60 mt-0.5">✗</span>
+                    <span>{t}</span>
+                  </div>
+                ))}
+              </div>
+            </GlassCard>
+            <GlassCard hover={false} className="border-primary/30 bg-primary/[0.03]">
+              <h3 className="font-display font-bold text-lg text-foreground mb-4 flex items-center gap-2">
+                <span className="w-3 h-3 rounded-full bg-primary" /> Depois (CLAUTHOR)
+              </h3>
+              <div className="space-y-3 text-sm text-foreground/80">
+                {[
+                  `${TOTAL_WORKFORCE_AGENTS} agentes = ${TOTAL_DEPARTMENTS} departamentos completos`,
+                  "Zero turnover — agentes aprendem e nunca saem",
+                  "24/7/365 — event-driven, sem hora extra",
+                  "Tudo integrado numa plataforma única",
+                  "Setup completo em minutos, não meses",
+                  "Consistência e compliance automáticos",
+                ].map(t => (
+                  <div key={t} className="flex items-start gap-2">
+                    <CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" />
+                    <span>{t}</span>
+                  </div>
+                ))}
+              </div>
+            </GlassCard>
+          </div>
+
+          {/* Capabilities grid */}
+          <div className="grid grid-cols-3 md:grid-cols-3 gap-3">
+            {[
+              { icon: Headphones, title: "Suporte Omnichannel" },
+              { icon: Receipt, title: "Financeiro" },
+              { icon: Code, title: "Dev Autônomo" },
+              { icon: Scale, title: "Jurídico" },
+              { icon: Megaphone, title: "Marketing" },
+              { icon: DollarSign, title: "Vendas" },
+              { icon: Brain, title: "Orquestração" },
+              { icon: UserCheck, title: "Concierge" },
+              { icon: Building2, title: "RH & Ops" },
+            ].map((s) => (
+              <GlassCard key={s.title} className="flex flex-col items-center gap-2 text-center !p-4">
+                <s.icon className="w-5 h-5 text-primary" />
+                <span className="text-xs font-medium text-foreground">{s.title}</span>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ═══ TRAÇÃO ═══ */}
+      <Section id="traction">
+        <div className="max-w-5xl mx-auto text-center">
+          <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+            <Activity className="h-4 w-4" />
+            Tração Real
+          </Badge>
+          <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Isso não é uma ideia. É um produto.</h2>
+          <p className="text-muted-foreground text-lg mb-14 max-w-2xl mx-auto">
+            Cada número abaixo é real, verificável e operacional — construído antes de qualquer investimento externo.
+          </p>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+            {[
+              { value: TOTAL_WORKFORCE_AGENTS, label: "Agentes Operacionais", suffix: "" },
+              { value: TOTAL_SQUADS, label: "Squads com Missão", suffix: "" },
+              { value: TOTAL_DEPARTMENTS, label: "Departamentos", suffix: "" },
+              { value: 13, label: "Idiomas Suportados", suffix: "" },
+              { value: 4100, label: "Leads Whitelist", suffix: "+" },
+              { value: 96, label: "Margem Bruta", suffix: "%+" },
+              { value: 10, label: "Camadas de Arquitetura", suffix: "" },
+              { value: 5, label: "Portões de Segurança", suffix: "" },
+            ].map((s) => (
+              <GlassCard key={s.label} hover={false} className="text-center !py-8">
+                <p className="text-3xl md:text-4xl font-display font-bold text-primary mb-1">
+                  <CountUp end={s.value} suffix={s.suffix} />
+                </p>
+                <p className="text-xs text-muted-foreground">{s.label}</p>
+              </GlassCard>
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ═══ MERCADO ═══ */}
+      <Section className="bg-muted/20" id="market">
         <div className="max-w-5xl mx-auto text-center">
           <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
             <TrendingUp className="h-4 w-4" />
@@ -444,73 +519,62 @@ const Pitch = () => {
           </Badge>
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">A maior mudança operacional da história corporativa.</h2>
           <p className="text-muted-foreground text-lg mb-14 max-w-2xl mx-auto">
-            O mercado de IA para automação empresarial cresce exponencialmente. Quem entra agora captura o maior retorno.
+            Quem entra agora captura o ciclo exponencial inteiro.
           </p>
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
+          <div className="grid md:grid-cols-3 gap-6 mb-14">
             {[
-              { value: 1.8, suffix: "T", prefix: "US$ ", label: "Mercado global de IA até 2030", decimals: 1 },
-              { value: 35, suffix: "%+", prefix: "", label: "Crescimento anual do setor", decimals: 0 },
-              { value: 850, suffix: "+", prefix: "", label: "Empresas buscando automação B2B", decimals: 0 },
+              { value: 1.8, suffix: "T", prefix: "US$ ", label: "TAM — IA empresarial até 2030", decimals: 1 },
+              { value: 35, suffix: "%+", label: "CAGR do setor de automação B2B" },
+              { value: 127, suffix: "B", prefix: "US$ ", label: "SAM — SaaS de automação operacional" },
             ].map((m) => (
               <GlassCard key={m.label} hover={false} className="text-center !py-10">
-                <p className="text-4xl md:text-5xl font-display font-bold text-primary mb-2"><CountUp end={m.value} prefix={m.prefix} suffix={m.suffix} decimals={m.decimals} /></p>
+                <p className="text-4xl md:text-5xl font-display font-bold text-primary mb-2">
+                  <CountUp end={m.value} prefix={m.prefix || ""} suffix={m.suffix} decimals={m.decimals || 0} />
+                </p>
                 <p className="text-sm text-muted-foreground">{m.label}</p>
               </GlassCard>
             ))}
           </div>
-
-          {/* Market comparison bars */}
           <div className="max-w-lg mx-auto space-y-5">
             <h3 className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">Participação por vertical</h3>
-            <AnimatedBar label="SaaS B2B / Automação" pct={42} color="bg-primary" />
-            <AnimatedBar label="Atendimento ao cliente" pct={28} color="bg-primary/70" />
-            <AnimatedBar label="Vendas e CRM inteligente" pct={18} color="bg-primary/50" />
-            <AnimatedBar label="Compliance e governança" pct={12} color="bg-primary/30" />
+            <AnimatedBar label="SaaS B2B / Automação Operacional" pct={42} color="bg-primary" />
+            <AnimatedBar label="Atendimento e CX Inteligente" pct={28} color="bg-primary/70" />
+            <AnimatedBar label="Vendas e CRM Autônomo" pct={18} color="bg-primary/50" />
+            <AnimatedBar label="Compliance e Governança" pct={12} color="bg-primary/30" />
           </div>
         </div>
       </Section>
 
-      {/* ═══ 5. CHAT DO AGENTE INVESTIDOR ═══ */}
-      <Section className="bg-muted/20">
-        <div className="max-w-4xl mx-auto text-center">
-          <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
-            <MessageCircle className="h-4 w-4" />
-            Demonstração ao Vivo
-          </Badge>
-          <h2 className="text-2xl md:text-4xl font-display font-bold tracking-tight mb-3">Por que investir na CLAUTHOR?</h2>
-          <p className="text-muted-foreground text-sm mb-10">Veja como nosso agente responde as perguntas mais comuns de investidores.</p>
-          <InvestorChat />
-          <div className="mt-8">
-            <Button onClick={handleTalk} className="text-sm gap-2">
-              Tire suas dúvidas no WhatsApp <ArrowRight className="w-4 h-4" />
-            </Button>
-          </div>
-        </div>
-      </Section>
-
-      {/* ═══ 6. MODELO DE NEGÓCIO ═══ */}
-      <Section>
+      {/* ═══ MODELO DE NEGÓCIO ═══ */}
+      <Section id="business-model">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
               <BarChart3 className="h-4 w-4" />
               Modelo de Negócio
             </Badge>
-            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight">Receita recorrente e previsível.</h2>
+            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight">Receita recorrente, previsível e escalável.</h2>
           </div>
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="space-y-6">
-              <GlassCard hover={false}>
-                <p className="text-sm text-muted-foreground mb-1">Ticket médio</p>
-                <p className="text-2xl font-display font-bold text-foreground">US$ 199<span className="text-base font-normal text-muted-foreground">/mês</span></p>
-              </GlassCard>
+          <div className="grid md:grid-cols-2 gap-8 items-start">
+            <div className="space-y-5">
               <GlassCard hover={false}>
                 <p className="text-sm text-muted-foreground mb-1">Modelo</p>
-                <p className="text-lg font-display font-semibold text-foreground">SaaS B2B por assinatura</p>
-                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Receita previsível, LTV alto e expansão natural via upsell de agentes adicionais e departamentos premium.</p>
+                <p className="text-lg font-display font-semibold text-foreground">SaaS B2B por assinatura mensal</p>
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed">Receita previsível (MRR), LTV alto, churn baixo — o produto é a operação da empresa, não uma ferramenta.</p>
+              </GlassCard>
+              <GlassCard hover={false}>
+                <p className="text-sm text-muted-foreground mb-1">Ticket médio</p>
+                <p className="text-2xl font-display font-bold text-foreground">US$ 199<span className="text-base font-normal text-muted-foreground">/mês por squad</span></p>
               </GlassCard>
               <div className="space-y-3">
-                {["Receita recorrente mensal (MRR)", "Baixo churn (produto é a operação)", "Upsell natural por departamento", "Pricing por squad = expansão orgânica"].map((item) => (
+                {[
+                  "Receita recorrente mensal (MRR)",
+                  "Churn ultra baixo — produto = operação",
+                  "Upsell natural: +squads, +departamentos",
+                  "Net Revenue Retention > 130% projetado",
+                  "Pricing por valor, não por token",
+                  "Free-trial → conversão → expansão orgânica",
+                ].map((item) => (
                   <div key={item} className="flex items-center gap-2.5 text-sm text-foreground/80">
                     <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
                     {item}
@@ -520,15 +584,19 @@ const Pitch = () => {
             </div>
             <div className="space-y-4">
               <GlassCard hover={false} className="text-center !py-8">
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Cenário · 500 clientes</p>
+                <p className="text-3xl md:text-4xl font-display font-bold text-primary">US$ <CountUp end={99.5} suffix="K" decimals={1} /><span className="text-base font-normal text-muted-foreground">/mês</span></p>
+              </GlassCard>
+              <GlassCard hover={false} className="text-center !py-8">
                 <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Cenário · 1.000 clientes</p>
                 <p className="text-3xl md:text-4xl font-display font-bold text-primary">US$ <CountUp end={199} suffix="K" /><span className="text-base font-normal text-muted-foreground">/mês</span></p>
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-8">
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Receita anual projetada</p>
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">ARR projetado (1K clientes)</p>
                 <p className="text-3xl md:text-4xl font-display font-bold text-foreground">US$ <CountUp end={2.39} suffix="M" decimals={2} /></p>
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-6 border-primary/20 bg-primary/5">
-                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Valuation potencial (5x receita)</p>
+                <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Valuation potencial (5x ARR)</p>
                 <p className="text-2xl font-display font-bold gradient-text">≈ US$ <CountUp end={12} suffix="M" /></p>
               </GlassCard>
             </div>
@@ -536,25 +604,248 @@ const Pitch = () => {
         </div>
       </Section>
 
-      {/* ═══ 7. VALUATION & DEFESA ═══ */}
-      <Section className="bg-muted/20" id="valuation">
+      {/* ═══ UNIT ECONOMICS ═══ */}
+      <Section className="bg-muted/20" id="unit-economics">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <LineChart className="h-4 w-4" />
+              Unit Economics
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-4">
+              Margem de 96%+ porque agentes{" "}
+              <span className="gradient-text">dormem quando não estão trabalhando.</span>
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto">
+              Event-driven architecture: agentes só consomem tokens quando ativados por um gatilho real. 
+              Diferente de chatbots 24/7 que queimam compute sem parar.
+            </p>
+          </div>
+
+          {/* Execution model comparison */}
+          <div className="grid sm:grid-cols-3 gap-4 mb-10">
+            <GlassCard hover={false} className="border-destructive/20 text-center">
+              <p className="text-[10px] font-mono text-destructive/80 font-bold mb-2">CLT HUMANO</p>
+              <p className="text-xl font-display font-bold text-foreground">R$ 7.900</p>
+              <p className="text-xs text-muted-foreground mt-1">8h/dia, produtivo ~3h. Custo fixo mesmo parado.</p>
+            </GlassCard>
+            <GlassCard hover={false} className="border-yellow-500/20 text-center">
+              <p className="text-[10px] font-mono text-yellow-500/80 font-bold mb-2">CHATBOT 24/7</p>
+              <p className="text-xl font-display font-bold text-foreground">R$ 200-500</p>
+              <p className="text-xs text-muted-foreground mt-1">Roda sem parar. Custo cresce linearmente.</p>
+            </GlassCard>
+            <GlassCard hover={false} className="border-primary/30 bg-primary/[0.03] text-center">
+              <p className="text-[10px] font-mono text-primary font-bold mb-2">CLAUTHOR (EVENT-DRIVEN)</p>
+              <p className="text-xl font-display font-bold text-primary">R$ 8-15</p>
+              <p className="text-xs text-muted-foreground mt-1">Dorme. Acorda no evento. Entrega. Volta a dormir.</p>
+            </GlassCard>
+          </div>
+
+          {/* Margin table */}
+          <div className="grid md:grid-cols-2 gap-6 mb-10">
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Custo Real por Agente</h4>
+              <div className="space-y-2.5 text-sm">
+                {[
+                  { label: "Tokens/interação", value: "~2.000" },
+                  { label: "Interações reais/dia", value: "20-80" },
+                  { label: "Tokens/mês por agente", value: "~1.2-4.8M" },
+                  { label: "Custo Gemini Flash", value: "R$ 3-12/mês" },
+                  { label: "Custo GPT-5 (premium)", value: "R$ 15-50/mês" },
+                  { label: "Custo MÁXIMO extremo", value: "R$ 60/mês" },
+                ].map((item) => (
+                  <div key={item.label} className="flex justify-between items-center p-2.5 rounded-lg bg-muted/30">
+                    <span className="text-muted-foreground">{item.label}</span>
+                    <span className="font-mono font-semibold text-foreground">{item.value}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h4 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">Margem por Tier</h4>
+              <div className="space-y-2.5 text-sm">
+                {[
+                  { tier: "Starter (R$ 497)", cost: "R$ 8-15", margin: "96-97%" },
+                  { tier: "Entry (R$ 997)", cost: "R$ 12-25", margin: "97%" },
+                  { tier: "Mid (R$ 1.697)", cost: "R$ 20-40", margin: "97-98%" },
+                  { tier: "High (R$ 2.497)", cost: "R$ 30-50", margin: "98%" },
+                  { tier: "Premium (R$ 4.997)", cost: "R$ 40-60", margin: "98-99%" },
+                ].map((item) => (
+                  <div key={item.tier} className="flex justify-between items-center p-2.5 rounded-lg bg-muted/30">
+                    <div>
+                      <span className="text-muted-foreground">{item.tier}</span>
+                      <span className="text-[10px] text-muted-foreground/50 ml-2">custo: {item.cost}</span>
+                    </div>
+                    <span className="font-mono font-bold text-green-500">{item.margin}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom insight */}
+          <GlassCard hover={false} className="border-primary/20 bg-primary/5 text-center">
+            <p className="text-sm text-foreground leading-relaxed">
+              <strong>A margem de 96%+ não é acidente — é engenharia.</strong> Event-driven = custo proporcional ao uso real. 
+              Tokens são commodity; o valor está na orquestração, memória, segurança e automação que a CLAUTHOR entrega.
+            </p>
+          </GlassCard>
+        </div>
+      </Section>
+
+      {/* ═══ ARCHITECTURE ═══ */}
+      <Section id="architecture">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Network className="h-4 w-4" />
+              Arquitetura Organizacional
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">
+              <CountUp end={TOTAL_WORKFORCE_AGENTS} /> agentes. <CountUp end={TOTAL_SQUADS} /> squads. <CountUp end={TOTAL_DEPARTMENTS} /> departamentos.
+            </h2>
+            <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
+              Uma empresa inteira de IA organizada hierarquicamente — como uma corporação real, 
+              mas que opera 24/7 e custa menos que 1 estagiário CLT.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+            {[
+              { value: TOTAL_WORKFORCE_AGENTS, label: "Agentes Especializados" },
+              { value: TOTAL_SQUADS, label: "Squads com Missão" },
+              { value: TOTAL_DEPARTMENTS, label: "Departamentos" },
+              { value: 0, label: "Execução Contínua", display: "Event-Driven" },
+            ].map((s) => (
+              <GlassCard key={s.label} hover={false} className="text-center !py-6">
+                <p className="text-3xl font-display font-bold text-primary mb-1">
+                  {s.display || <CountUp end={s.value} />}
+                </p>
+                <p className="text-xs text-muted-foreground">{s.label}</p>
+              </GlassCard>
+            ))}
+          </div>
+
+          <div className="space-y-4">
+            {WORKFORCE.map((dept, di) => (
+              <WorkforceDeptCard key={dept.id} dept={dept} index={di} />
+            ))}
+          </div>
+        </div>
+      </Section>
+
+      {/* ═══ MOATS ═══ */}
+      <Section className="bg-muted/20" id="moats">
+        <div className="max-w-5xl mx-auto">
+          <div className="text-center mb-14">
+            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+              <Gem className="h-4 w-4" />
+              Moats Competitivos
+            </Badge>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">
+              Por que é difícil copiar a CLAUTHOR.
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {[
+              { icon: Brain, title: "Motor de Autonomia Proprietário", desc: "3 níveis de risco, Policy Engine com 5 portões, orquestração A2A. Cada agente tem personalidade, memória e capacidade de delegação." },
+              { icon: Layers, title: "10 Camadas de Arquitetura", desc: "De infraestrutura a interface: cada camada é um moat. Replicar exige 12-18 meses de engenharia senior dedicada." },
+              { icon: Network, title: "Efeito de Rede em Dados", desc: "Cada empresa que usa a plataforma gera dados que melhoram todos os agentes. Mais clientes = agentes mais inteligentes." },
+              { icon: Timer, title: "Time-to-Market", desc: "200 agentes operacionais, 15 departamentos, 37 squads. Qualquer concorrente que comece hoje precisa de 12+ meses para chegar aqui." },
+              { icon: Shield, title: "Enterprise Security Stack", desc: "AES-256-GCM, RLS, audit trails, LGPD, multi-tenant isolation. Padrão enterprise desde o dia 1 — não um retrofit." },
+              { icon: Globe, title: "Globalização Nativa", desc: "13 idiomas com detecção automática. Não é tradução — cada agente opera nativamente no idioma do cliente." },
+            ].map((m, i) => (
+              <motion.div key={m.title} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: i * 0.08 }}>
+                <GlassCard className="h-full">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 border border-primary/15 flex items-center justify-center">
+                      <m.icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <h3 className="font-display font-semibold text-foreground">{m.title}</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{m.desc}</p>
+                </GlassCard>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Competitive comparison */}
+          <div className="grid md:grid-cols-3 gap-6">
+            <GlassCard hover={false} className="border-destructive/20">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center">
+                  <MessageCircle className="w-5 h-5 text-destructive" />
+                </div>
+                <div>
+                  <h3 className="font-bold">ChatGPT / Assistentes</h3>
+                  <span className="text-xs text-destructive/80 font-mono">Ferramenta Passiva</span>
+                </div>
+              </div>
+              <ul className="space-y-2 text-sm">
+                {["Não executa — só responde", "Sem workflows ou automação", "Sem CRM, pipeline ou Kanban", "Sem delegação multi-agente", "Cada conversa começa do zero"].map(t => (
+                  <li key={t} className="flex items-start gap-2"><span className="text-destructive mt-0.5">✗</span><span className="text-muted-foreground">{t}</span></li>
+                ))}
+              </ul>
+            </GlassCard>
+            <GlassCard hover={false} className="border-yellow-500/20">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
+                  <Code className="w-5 h-5 text-yellow-500" />
+                </div>
+                <div>
+                  <h3 className="font-bold">DIY / Open Source</h3>
+                  <span className="text-xs text-yellow-500/80 font-mono">Motor Bruto</span>
+                </div>
+              </div>
+              <ul className="space-y-2 text-sm">
+                {["Precisa de dev senior ($8K+/mês)", "3-6 meses para funcionar", "Zero segurança enterprise", "Manutenção constante", "Sem suporte ou SLA"].map(t => (
+                  <li key={t} className="flex items-start gap-2"><span className="text-yellow-500 mt-0.5">✗</span><span className="text-muted-foreground">{t}</span></li>
+                ))}
+              </ul>
+            </GlassCard>
+            <GlassCard hover={false} className="border-primary/30 ring-1 ring-primary/20 shadow-[0_0_40px_hsl(var(--primary)/0.12)]">
+              <div className="absolute -top-3 right-4">
+                <Badge className="bg-primary text-primary-foreground text-xs px-3 py-1 gap-1"><Star className="w-3 h-3" /> Enterprise</Badge>
+              </div>
+              <div className="flex items-center gap-3 mb-4 mt-2">
+                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                  <Layers className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-bold gradient-text">CLAUTHOR</h3>
+                  <span className="text-xs text-primary/80 font-mono">Autonomia Total</span>
+                </div>
+              </div>
+              <ul className="space-y-2 text-sm">
+                {["200 agentes que EXECUTAM", "Orquestração A2A automática", "Policy Engine + 5 portões", "CRM + Kanban + Analytics", "Setup em 5 minutos"].map(t => (
+                  <li key={t} className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" /><span className="text-foreground">{t}</span></li>
+                ))}
+              </ul>
+            </GlassCard>
+          </div>
+        </div>
+      </Section>
+
+      {/* ═══ VALUATION ═══ */}
+      <Section id="valuation">
         <div className="max-w-5xl mx-auto">
           <div className="text-center mb-14">
             <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
               <Award className="h-4 w-4" />
-              Valuation Atual
+              Valuation
             </Badge>
             <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-4">
-              Valuation de US$ 250K
-              <br />
-              <span className="gradient-text">baseado em arquitetura real.</span>
+              US$ 250K de valuation.{" "}
+              <span className="gradient-text">Baseado em produto real.</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
-              A maioria das startups capta no pre-seed com apenas um deck e uma ideia. A CLAUTHOR já tem produto funcional com 200 agentes em 37 squads, tração real de 4.100+ leads, e infraestrutura enterprise-grade. US$ 250K reflete o valor da ideia e toda a arquitetura já construída — e 20% de equity é a porta de entrada.
+              A maioria das startups capta no pre-seed com apenas um deck. A CLAUTHOR já tem produto funcional, 
+              tração real e infraestrutura enterprise-grade.
             </p>
           </div>
 
-          {/* Comparison table */}
+          {/* Comparison */}
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             <GlassCard hover={false} className="border-border/30">
               <div className="flex items-center gap-3 mb-4">
@@ -583,8 +874,8 @@ const Pitch = () => {
               </div>
               <ul className="space-y-3">
                 {[
-                  "200 agentes autônomos em 15 departamentos",
-                  "37 squads especializados operacionais",
+                  `${TOTAL_WORKFORCE_AGENTS} agentes autônomos em ${TOTAL_DEPARTMENTS} departamentos`,
+                  `${TOTAL_SQUADS} squads especializados operacionais`,
                   "4.100+ leads na whitelist",
                   "Valuation: US$ 250K (20% por US$ 50K)",
                   "Infraestrutura enterprise-grade",
@@ -598,26 +889,24 @@ const Pitch = () => {
             </GlassCard>
           </div>
 
-          <ValuationDefense />
-
           {/* ROI for investor */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mt-12 p-8 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm text-center"
+            className="p-8 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm text-center"
           >
-            <h3 className="font-display text-xl font-bold mb-6 text-foreground">Cenário de retorno para o investidor</h3>
+            <h3 className="font-display text-xl font-bold mb-8 text-foreground">Cenário de retorno para o investidor</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
                 { label: "Investimento", value: "US$ 50K", sub: "20% equity" },
-                { label: "Valuation Seed (6-12 meses)", value: "US$ 3-5M", sub: "12-20x" },
-                { label: "Valuation Série A", value: "US$ 15-30M", sub: "60-120x" },
-                { label: "Potencial saída (5 anos)", value: "US$ 50M+", sub: "200x+" },
+                { label: "Seed (6-12m)", value: "US$ 3-5M", sub: "12-20x retorno" },
+                { label: "Series A", value: "US$ 15-30M", sub: "60-120x retorno" },
+                { label: "Exit (5 anos)", value: "US$ 50M+", sub: "200x+ retorno" },
               ].map((item) => (
                 <div key={item.label}>
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
-                  <p className="font-display text-xl font-bold text-foreground">{item.value}</p>
+                  <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">{item.label}</p>
+                  <p className="font-display text-xl md:text-2xl font-bold text-foreground">{item.value}</p>
                   <p className="text-xs text-primary font-mono mt-1">{item.sub}</p>
                 </div>
               ))}
@@ -626,478 +915,65 @@ const Pitch = () => {
         </div>
       </Section>
 
-      {/* ═══ 8. RODADA ATUAL ═══ */}
-      <Section>
+      {/* ═══ INVESTOR CHAT DEMO ═══ */}
+      <Section className="bg-muted/20">
         <div className="max-w-4xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-          >
-            <Badge variant="outline" className="mb-6 border-primary/30 bg-primary/10 text-primary text-xs font-mono uppercase tracking-[0.2em] px-4 py-2 gap-2">
-              <Rocket className="h-4 w-4" />
-              Rodada Aberta
-            </Badge>
-          </motion.div>
+          <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
+            <MessageCircle className="h-4 w-4" />
+            Live Demo
+          </Badge>
+          <h2 className="text-2xl md:text-4xl font-display font-bold tracking-tight mb-3">Um agente respondendo dúvidas de investidores.</h2>
+          <p className="text-muted-foreground text-sm mb-10">Isso é o que nossos agentes fazem — ao vivo, agora.</p>
+          <InvestorChat />
+        </div>
+      </Section>
+
+      {/* ═══ RODADA ═══ */}
+      <Section id="round">
+        <div className="max-w-4xl mx-auto text-center">
+          <Badge variant="outline" className="mb-6 border-primary/30 bg-primary/10 text-primary text-xs font-mono uppercase tracking-[0.2em] px-4 py-2 gap-2">
+            <Rocket className="h-4 w-4" />
+            Rodada Aberta
+          </Badge>
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Pre-Seed Aberto</h2>
           <div className="grid sm:grid-cols-3 gap-6 mb-14">
             {[
               { label: "Captando", value: "US$ 50.000" },
               { label: "Equity oferecido", value: "20%" },
-              { label: "Valuation implícito", value: "US$ 250.000" },
+              { label: "Valuation", value: "US$ 250.000" },
             ].map((item) => (
-              <GlassCard key={item.label} hover={false} className="text-center !py-8">
+              <GlassCard key={item.label} hover={false} className="text-center !py-10">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
                 <p className="text-2xl md:text-3xl font-display font-bold text-foreground">{item.value}</p>
               </GlassCard>
             ))}
           </div>
-          <div className="max-w-lg mx-auto space-y-5">
+          <div className="max-w-lg mx-auto space-y-5 mb-14">
             <h3 className="text-xs uppercase tracking-[0.2em] text-muted-foreground mb-6">Uso do Capital</h3>
             <AnimatedBar label="Crescimento (tráfego, influência, B2B)" pct={70} color="bg-primary" />
             <AnimatedBar label="Infraestrutura e DevOps" pct={20} color="bg-primary/60" />
             <AnimatedBar label="Reserva estratégica" pct={10} color="bg-primary/30" />
           </div>
-        </div>
-      </Section>
 
-      {/* ═══ 9. POR QUE CLAUTHOR? — COMPARATIVO MATADOR ═══ */}
-      <Section className="bg-muted/20" id="why-clauthor">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
-              <Target className="h-4 w-4" />
-              Análise Brutal de Mercado
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-6 tracking-tight">
-              Vamos ser honestos.
-              <br />
-              <span className="gradient-text glow-text">Você não precisa de mais um chatbot.</span>
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
-              Claude, ChatGPT, OpenClaw — são ferramentas incríveis. Mas nenhuma delas substitui um departamento. 
-              A pergunta não é "qual IA é melhor?" — é <strong className="text-foreground">"quem executa o trabalho?"</strong>
-            </p>
-          </div>
-
-          {/* Comparison Table */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12">
-            {/* ChatGPT / Assistentes Genéricos */}
-            <GlassCard className="relative overflow-hidden border-destructive/20">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-destructive/5 rounded-full blur-2xl" />
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center">
-                  <MessageCircle className="w-5 h-5 text-destructive" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">ChatGPT / Assistentes IA</h3>
-                  <span className="text-xs text-destructive/80 font-mono">Ferramenta Passiva</span>
-                </div>
-              </div>
-              <div className="mb-4 p-3 rounded-lg bg-destructive/5 border border-destructive/10">
-                <p className="text-xs font-mono text-destructive/80">$25/mês · Só responde quando perguntam</p>
-              </div>
-              <ul className="space-y-2.5 text-sm">
-                {[
-                  { ok: false, text: "Não faz nada sozinho — é passivo" },
-                  { ok: false, text: "Zero automação ou workflows" },
-                  { ok: false, text: "Não envia emails, não prospecta" },
-                  { ok: false, text: "Sem CRM, Kanban ou pipeline" },
-                  { ok: false, text: "Sem multi-agente ou delegação" },
-                  { ok: false, text: "Sem memória entre sessões" },
-                  { ok: false, text: "Sem relatórios de performance" },
-                  { ok: false, text: "Cada conversa começa do zero" },
-                  { ok: true, text: "Qualidade de resposta excelente" },
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className={`mt-0.5 text-xs font-bold ${item.ok ? "text-green-500" : "text-destructive"}`}>
-                      {item.ok ? "✓" : "✗"}
-                    </span>
-                    <span className={item.ok ? "text-foreground" : "text-muted-foreground"}>{item.text}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 pt-4 border-t border-destructive/15">
-                <p className="text-xs text-muted-foreground italic leading-relaxed">
-                  "Você paga $25/mês pra ter um gênio que <strong>só fala</strong>. 
-                  Não executa, não monitora, não escala. É como contratar um consultor que nunca implementa nada."
-                </p>
-                <p className="text-[10px] text-muted-foreground/60 mt-2">
-                  ⚡ Na Clauthor, usamos Claude Code como <strong>Planning Brain</strong> interno — ele pensa e planeja, 
-                  nossos agentes executam. É assim que a mágica acontece.
-                </p>
-              </div>
-            </GlassCard>
-
-            {/* OpenClaw */}
-            <GlassCard className="relative overflow-hidden border-yellow-500/20">
-              <div className="absolute top-0 right-0 w-24 h-24 bg-yellow-500/5 rounded-full blur-2xl" />
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
-                  <Code className="w-5 h-5 text-yellow-500" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg">OpenClaw / DIY</h3>
-                  <span className="text-xs text-yellow-500/80 font-mono">Motor Bruto</span>
-                </div>
-              </div>
-              <div className="mb-4 p-3 rounded-lg bg-yellow-500/5 border border-yellow-500/10">
-                <p className="text-xs font-mono text-yellow-500/80">$50+/mês + dev ($5K-15K setup) + 3-6 meses</p>
-              </div>
-              <ul className="space-y-2.5 text-sm">
-                {[
-                  { ok: false, text: "Precisa de dev senior ($8K+/mês)" },
-                  { ok: false, text: "Sem interface — é linha de comando" },
-                  { ok: false, text: "Sem CRM, leads ou funil" },
-                  { ok: false, text: "Zero segurança enterprise" },
-                  { ok: false, text: "Sem suporte, sem SLA" },
-                  { ok: false, text: "3-6 meses pra funcionar" },
-                  { ok: false, text: "Manutenção constante necessária" },
-                  { ok: true, text: "Tokens baratos se self-hosted" },
-                  { ok: true, text: "Controle total do código" },
-                ].map((item, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <span className={`mt-0.5 text-xs font-bold ${item.ok ? "text-green-500" : "text-yellow-500"}`}>
-                      {item.ok ? "✓" : "✗"}
-                    </span>
-                    <span className={item.ok ? "text-foreground" : "text-muted-foreground"}>{item.text}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 pt-4 border-t border-yellow-500/15">
-                <p className="text-xs text-muted-foreground italic leading-relaxed">
-                  "Você economiza R$200/mês em tokens mas gasta R$15K+ em dev, 6 meses de tempo e reza pra não dar bug em produção. 
-                  O barato sai caro."
-                </p>
-              </div>
-            </GlassCard>
-
-            {/* Clauthor */}
-            <GlassCard className="relative overflow-hidden border-primary/30 ring-1 ring-primary/20 shadow-[0_0_40px_hsl(var(--primary)/0.12)]">
-              <div className="absolute -top-3 right-4">
-                <Badge className="bg-primary text-primary-foreground text-xs px-3 py-1 gap-1">
-                  <Star className="w-3 h-3" /> Departamento Completo
-                </Badge>
-              </div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl" />
-              <div className="flex items-center gap-3 mb-6 mt-2">
-                <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                  <Layers className="w-5 h-5 text-primary" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-lg gradient-text">CLAUTHOR</h3>
-                  <span className="text-xs text-primary/80 font-mono">Autonomia Enterprise</span>
-                </div>
-              </div>
-              <div className="mb-4 p-3 rounded-lg bg-primary/5 border border-primary/15">
-                <p className="text-xs font-mono text-primary/80">A partir de R$497/mês · Ativo em 5 minutos</p>
-              </div>
-              <ul className="space-y-2.5 text-sm">
-                {[
-                  "200 agentes que EXECUTAM, não só falam",
-                  "Orquestração A2A — agentes delegam entre si",
-                  "Policy Engine: 5 portões de segurança",
-                  "CRM + Kanban + Analytics integrado",
-                  "Segurança AES-256 + LGPD + RLS",
-                  "Multi-tenant com isolamento total",
-                  "13 idiomas com detecção automática",
-                  "Memória persistente entre sessões",
-                  "Setup completo em minutos, não meses",
-                ].map((text, i) => (
-                  <li key={i} className="flex items-start gap-2">
-                    <CheckCircle2 className="w-4 h-4 mt-0.5 text-primary shrink-0" />
-                    <span className="text-foreground font-medium">{text}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-6 pt-4 border-t border-primary/20">
-                <p className="text-xs text-primary/80 font-medium italic leading-relaxed">
-                  "É um departamento inteiro de elite que trabalha 24/7, nunca falta, nunca pede aumento, 
-                  e custa menos que 1 estagiário CLT. Não é hype — é matemática."
-                </p>
-              </div>
-            </GlassCard>
-          </div>
-
-          {/* Token Economics — CFO + Data Scientist Analysis */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-12 p-8 rounded-2xl border border-border/50 bg-card/50 backdrop-blur-xl"
-          >
-            <div className="flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-                <BarChart3 className="w-5 h-5 text-primary" />
-              </div>
-              <div>
-                <h3 className="font-display text-lg font-bold text-foreground">Economia de Tokens — Análise de CFO + Cientista de Dados</h3>
-                <p className="text-xs text-muted-foreground">"Por que os agentes NÃO trabalham 24h consumindo tokens?"</p>
-              </div>
-            </div>
-
-            {/* The Core Insight */}
-            <div className="my-6 p-5 rounded-xl bg-primary/5 border border-primary/15">
-              <h4 className="text-sm font-bold text-primary mb-3 flex items-center gap-2">
-                <Zap className="w-4 h-4" /> A ESTRATÉGIA: Execução Event-Driven
-              </h4>
-              <p className="text-sm text-foreground leading-relaxed mb-4">
-                <strong>Agentes da Clauthor NÃO ficam rodando 24h.</strong> Eles são <strong className="text-primary">event-driven</strong> — 
-                dormem até que um gatilho os acorde: task assigned, metric changed, lead received, report requested. 
-                Isso é o oposto de um funcionário CLT que gasta 8h sentado mesmo sem demanda.
-              </p>
-              <div className="grid sm:grid-cols-3 gap-3">
-                <div className="p-3 rounded-lg bg-background/50 border border-border/20">
-                  <p className="text-[10px] font-mono text-primary font-bold mb-1">CLT HUMANO</p>
-                  <p className="text-xs text-muted-foreground">8h/dia sentado, produtivo ~3h. Custo fixo R$ 7.900/mês mesmo parado.</p>
-                </div>
-                <div className="p-3 rounded-lg bg-background/50 border border-border/20">
-                  <p className="text-[10px] font-mono text-primary font-bold mb-1">CHATBOT 24/7 (Concorrentes)</p>
-                  <p className="text-xs text-muted-foreground">Roda o tempo todo, queima tokens sem parar. Custo cresce linearmente com uso.</p>
-                </div>
-                <div className="p-3 rounded-lg bg-background/50 border border-border/20">
-                  <p className="text-[10px] font-mono text-primary font-bold mb-1">CLAUTHOR (Event-Driven)</p>
-                  <p className="text-xs text-muted-foreground">Dorme. Acorda no evento. Executa. Entrega. Volta a dormir. Custo = uso real.</p>
-                </div>
-              </div>
-            </div>
-            
-            <div className="grid md:grid-cols-2 gap-6">
-              {/* Left: Real Token Math */}
-              <div className="space-y-4">
-                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Custo Real por Agente (Modelo Científico)</h4>
-                <div className="space-y-3 text-sm">
-                  {[
-                    { label: "Tokens médios por interação", value: "~2.000 tokens" },
-                    { label: "Interações reais/dia (event-driven)", value: "20-80 (não 200)" },
-                    { label: "Tokens/mês por agente real", value: "~1.2M-4.8M" },
-                    { label: "Custo Gemini Flash (mais usado)", value: "R$ 3-12/mês" },
-                    { label: "Custo GPT-5 (casos premium)", value: "R$ 15-50/mês" },
-                    { label: "Custo MÁXIMO cenário extremo", value: "R$ 60/mês" },
-                  ].map((item) => (
-                    <div key={item.label} className="flex justify-between items-center p-2.5 rounded-lg bg-muted/30">
-                      <span className="text-muted-foreground">{item.label}</span>
-                      <span className="font-mono font-semibold text-foreground">{item.value}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="p-3 rounded-lg bg-muted/20 border border-border/20">
-                  <p className="text-[10px] text-muted-foreground leading-relaxed">
-                    <strong className="text-foreground">Cálculo:</strong> 80 interações/dia × 2K tokens × 30 dias = 4.8M tokens/mês.
-                    Gemini Flash: $0.075/1M input + $0.30/1M output ≈ <strong className="text-primary">R$ 8-12/mês</strong>. 
-                    Mesmo GPT-5 a $5/1M output fica em ~R$ 50/mês. Agentes event-driven gastam uma fração do cenário "24/7".
-                  </p>
-                </div>
-              </div>
-              
-              {/* Right: Revenue Math */}
-              <div className="space-y-4">
-                <h4 className="text-sm font-semibold text-foreground/80 uppercase tracking-wider">Margem por Tier (Visão de CFO)</h4>
-                <div className="space-y-3 text-sm">
-                  {[
-                    { label: "Starter (R$ 497) - custo real", value: "R$ 8-15", margin: "96-97%", color: "text-green-500" },
-                    { label: "Entry (R$ 997) - custo real", value: "R$ 12-25", margin: "97%", color: "text-green-500" },
-                    { label: "Mid (R$ 1.697) - custo real", value: "R$ 20-40", margin: "97-98%", color: "text-green-500" },
-                    { label: "High (R$ 2.497) - custo real", value: "R$ 30-50", margin: "98%", color: "text-green-500" },
-                    { label: "Premium (R$ 4.997) - custo real", value: "R$ 40-60", margin: "98-99%", color: "text-green-500" },
-                  ].map((item) => (
-                    <div key={item.label} className="flex justify-between items-center p-2.5 rounded-lg bg-muted/30">
-                      <div className="flex flex-col">
-                        <span className="text-muted-foreground">{item.label}</span>
-                        <span className="text-[10px] text-muted-foreground/60">Token cost: {item.value}/mês</span>
-                      </div>
-                      <span className={`font-mono font-bold ${item.color}`}>{item.margin}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="p-3 rounded-lg bg-muted/20 border border-border/20">
-                  <p className="text-[10px] text-muted-foreground leading-relaxed">
-                    <strong className="text-foreground">Por que a margem é tão alta?</strong> Porque o agente <strong>não roda 24h</strong>. 
-                    Event-driven = custo proporcional ao uso real. Um SDR que prospecta 50 leads/dia consome ~R$ 8 em tokens. 
-                    Cobra-se R$ 497. A margem não é acidente — é <strong className="text-primary">engenharia de custos</strong>.
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Scenario Comparison */}
-            <div className="mt-6 grid sm:grid-cols-3 gap-4">
-              <div className="p-4 rounded-xl bg-destructive/5 border border-destructive/15 text-center">
-                <p className="text-xs font-mono text-destructive/80 font-bold mb-1">CENÁRIO RUIM</p>
-                <p className="text-lg font-display font-bold text-foreground">R$ 60/mês</p>
-                <p className="text-[10px] text-muted-foreground">Agente premium 24/7 com GPT-5 no cenário mais caro possível</p>
-              </div>
-              <div className="p-4 rounded-xl bg-primary/5 border border-primary/15 text-center">
-                <p className="text-xs font-mono text-primary font-bold mb-1">CENÁRIO REAL</p>
-                <p className="text-lg font-display font-bold text-primary">R$ 8-15/mês</p>
-                <p className="text-[10px] text-muted-foreground">Event-driven com Gemini Flash — como 90% dos agentes opera</p>
-              </div>
-              <div className="p-4 rounded-xl bg-green-500/5 border border-green-500/15 text-center">
-                <p className="text-xs font-mono text-green-500 font-bold mb-1">RECEITA MÍNIMA</p>
-                <p className="text-lg font-display font-bold text-foreground">R$ 497/mês</p>
-                <p className="text-[10px] text-muted-foreground">Tier mais barato → margem de 96% no cenário real</p>
-              </div>
-            </div>
-
-            {/* Bottom line */}
-            <div className="mt-6 p-4 rounded-xl bg-primary/5 border border-primary/15 text-center">
-              <p className="text-sm text-foreground font-medium leading-relaxed">
-                🧠 <strong>Resposta definitiva:</strong> Agentes NÃO queimam tokens 24h porque são <strong className="text-primary">event-driven</strong>. 
-                Um SDR real interage 50x/dia, não 200x. Custo real: <strong className="text-primary">R$ 8-15/mês</strong>. 
-                Cobramos R$ 497+. A margem de <strong className="text-primary">96%+</strong> não é acidente — é arquitetura. 
-                Tokens são commodity; o valor está na <strong>orquestração, memória, segurança e automação</strong> que a Clauthor entrega.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* ROI Killer Stats */}
+          {/* Milestones */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              { value: "96%+", label: "Margem Event-Driven", sublabel: "Custo real: R$8-15/agente/mês" },
-              { value: "24/7", label: "Disponibilidade", sublabel: "Executa sob demanda, não 24h" },
-              { value: "93.7%", label: "Economia vs CLT", sublabel: "SDR CLT: R$7.900 → Agente: R$497" },
-              { value: "<5min", label: "Time to Value", sublabel: "200 agentes em minutos" },
-            ].map((stat) => (
-              <GlassCard key={stat.label} className="text-center">
-                <p className="text-2xl md:text-3xl font-display font-bold gradient-text mb-1">{stat.value}</p>
-                <p className="text-sm font-medium text-foreground">{stat.label}</p>
-                <p className="text-xs text-muted-foreground mt-1">{stat.sublabel}</p>
-              </GlassCard>
-            ))}
-          </div>
-
-          {/* Price Table */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mt-12"
-          >
-            <h3 className="text-center text-sm font-semibold text-muted-foreground uppercase tracking-wider mb-6">Tabela de Preços por Tier</h3>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-              {[
-                { tier: "Starter", price: "R$ 497", example: "WhatsApp Bot, FAQ", tag: "Mais barato" },
-                { tier: "Entry", price: "R$ 997", example: "Content, RAG Agent" },
-                { tier: "Mid", price: "R$ 1.697", example: "Sales, SEO, CS" },
-                { tier: "High", price: "R$ 2.497", example: "Omnichannel, RevOps" },
-                { tier: "Premium", price: "R$ 4.997", example: "Voice AI, Enterprise", tag: "Mais avançado" },
-              ].map((t) => (
-                <GlassCard key={t.tier} className="text-center relative">
-                  {t.tag && (
-                    <span className="absolute -top-2 left-1/2 -translate-x-1/2 text-[10px] font-mono bg-primary/10 text-primary px-2 py-0.5 rounded-full border border-primary/20">
-                      {t.tag}
-                    </span>
-                  )}
-                  <p className="text-xs text-muted-foreground uppercase tracking-wider">{t.tier}</p>
-                  <p className="text-lg font-display font-bold text-foreground mt-1">{t.price}<span className="text-xs font-normal text-muted-foreground">/mês</span></p>
-                  <p className="text-[10px] text-muted-foreground mt-1">{t.example}</p>
-                </GlassCard>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </Section>
-
-      {/* ═══ 10. WORKFORCE ARCHITECTURE — 200 AGENTS ═══ */}
-      <Section className="bg-muted/20" id="workforce">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
-              <Network className="h-4 w-4" />
-              Arquitetura Organizacional
-            </Badge>
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">
-              <CountUp end={TOTAL_WORKFORCE_AGENTS} /> agentes. <CountUp end={TOTAL_SQUADS} /> squads. <CountUp end={TOTAL_DEPARTMENTS} /> departamentos.
-            </h2>
-            <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
-              Uma empresa inteira de IA organizada hierarquicamente — como uma corporação real, mas que opera 24/7, 
-              executa sob demanda (event-driven) e custa menos que 1 estagiário CLT.
-            </p>
-          </div>
-
-          {/* Summary Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
-            {[
-              { value: TOTAL_WORKFORCE_AGENTS, label: "Agentes Especializados", suffix: "" },
-              { value: TOTAL_SQUADS, label: "Squads com Missão", suffix: "" },
-              { value: TOTAL_DEPARTMENTS, label: "Departamentos", suffix: "" },
-              { value: 0, label: "Execução Contínua", suffix: "", display: "Event-Driven" },
-            ].map((s) => (
-              <GlassCard key={s.label} hover={false} className="text-center !py-6">
-                <p className="text-3xl font-display font-bold text-primary mb-1">
-                  {s.display || <CountUp end={s.value} suffix={s.suffix} />}
-                </p>
-                <p className="text-xs text-muted-foreground">{s.label}</p>
-              </GlassCard>
-            ))}
-          </div>
-
-          {/* Department Org Chart */}
-          <div className="space-y-4">
-            {WORKFORCE.map((dept, di) => (
-              <WorkforceDeptCard key={dept.id} dept={dept} index={di} />
-            ))}
-          </div>
-
-          {/* Event-Driven Execution Explainer */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mt-12 p-8 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm"
-          >
-            <div className="flex items-center gap-3 mb-4">
-              <Zap className="w-5 h-5 text-primary" />
-              <h3 className="font-display text-lg font-bold text-foreground">Execução Event-Driven — Zero Desperdício</h3>
-            </div>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-              Nossos 200 agentes <strong className="text-foreground">NÃO rodam continuamente</strong>. 
-              Eles operam sob demanda — ativados apenas quando um evento acontece: task assigned, metric change, 
-              campaign launch, report requested. Isso reduz custo computacional em até <strong className="text-primary">95%</strong> vs execução contínua.
-            </p>
-            <div className="grid sm:grid-cols-3 gap-4">
-              {[
-                { trigger: "Task Assigned", example: "Blog post solicitado → Blog Writer ativa → entrega → dorme" },
-                { trigger: "Metric Change", example: "ROAS cai 20% → Campaign Optimizer ativa → ajusta → dorme" },
-                { trigger: "Report Requested", example: "CFO pede DRE → Financial Forecaster gera → entrega → dorme" },
-              ].map((t) => (
-                <div key={t.trigger} className="p-3 rounded-lg bg-background/50 border border-border/30">
-                  <p className="text-xs font-mono text-primary font-bold mb-1">{t.trigger}</p>
-                  <p className="text-xs text-muted-foreground leading-relaxed">{t.example}</p>
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </Section>
-
-      {/* ═══ 11. VANTAGEM COMPETITIVA ═══ */}
-      <Section>
-        <div className="max-w-5xl mx-auto text-center">
-          <Badge variant="outline" className="mb-6 border-primary/20 bg-primary/5 text-primary px-4 py-2 gap-2">
-            <Gem className="h-4 w-4" />
-            Moats Competitivos
-          </Badge>
-          <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Vantagem competitiva real.</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {[
-              { icon: Bot, text: "200 agentes operacionais" },
-              { icon: Network, text: "37 squads especializados" },
-              { icon: Users, text: "4.100+ leads na whitelist" },
-              { icon: Globe, text: "13 idiomas nativos" },
-              { icon: Zap, text: "Event-driven, zero desperdício" },
-              { icon: Lock, text: "Infraestrutura enterprise" },
-            ].map((a) => (
-              <GlassCard key={a.text} className="flex flex-col items-center gap-3 text-center">
-                <a.icon className="w-5 h-5 text-primary" />
-                <span className="text-sm font-medium text-foreground">{a.text}</span>
+              { label: "Q1", milestone: "1.000 usuários ativos", icon: Users },
+              { label: "Q2", milestone: "Revenue positivo", icon: DollarSign },
+              { label: "Q3", milestone: "Rodada Seed US$ 1-3M", icon: Rocket },
+              { label: "Q4", milestone: "Expansão internacional", icon: Globe },
+            ].map(m => (
+              <GlassCard key={m.label} hover={false} className="text-center">
+                <m.icon className="w-5 h-5 text-primary mx-auto mb-2" />
+                <p className="text-xs text-primary font-mono font-bold mb-1">{m.label}</p>
+                <p className="text-sm text-foreground">{m.milestone}</p>
               </GlassCard>
             ))}
           </div>
         </div>
       </Section>
 
-      {/* ═══ 10. VISÃO ═══ */}
+      {/* ═══ VISÃO ═══ */}
       <Section>
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold leading-tight tracking-tight mb-8">
@@ -1122,23 +998,22 @@ const Pitch = () => {
         </div>
       </Section>
 
-      {/* ═══ 11. FINAL CTA ═══ */}
+      {/* ═══ FINAL CTA ═══ */}
       <section className="relative py-32 px-6">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_100%,hsl(var(--primary)/0.1),transparent_70%)]" />
         <div className="relative z-10 max-w-3xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-          >
-            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">Estamos abrindo 20% da empresa por US$ 50K para acelerar exponencialmente.</h2>
+          <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
+            <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">
+              20% de equity por US$ 50K.<br />
+              <span className="gradient-text">A janela fecha com a escala.</span>
+            </h2>
             <p className="text-muted-foreground text-lg mb-8 max-w-lg mx-auto">
               A rodada é limitada. Quem entra agora, captura o maior retorno.
             </p>
             <Button size="lg" onClick={handleTalk} className="text-lg px-10 py-6 h-auto gap-2">
               Falar com o Fundador <ArrowRight className="w-5 h-5" />
             </Button>
-            <p className="mt-8 text-xs text-muted-foreground/50">Documento confidencial. Distribuição restrita a potenciais investidores.</p>
+            <p className="mt-8 text-xs text-muted-foreground/50">Documento confidencial · Distribuição restrita a potenciais investidores</p>
           </motion.div>
         </div>
       </section>
