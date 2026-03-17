@@ -896,17 +896,24 @@ const ClientDashboard = () => {
                 )}
 
 
-                {/* ═══ CONTROL TOWER ═══ */}
-                {activeSection === "control-tower" && (
+                {/* ═══ OPERATIONS CENTER (Control Tower + Mission Control) ═══ */}
+                {activeSection === "operations-center" && (
                   <Suspense fallback={<SectionLoader />}>
-                    <ControlTowerSection onNavigate={handleSidebarNav} />
+                    <OperationsCenter onNavigate={handleSidebarNav} />
                   </Suspense>
                 )}
 
-                {/* ═══ MISSION CONTROL ═══ */}
+                {/* ═══ CONTROL TOWER (legacy route) ═══ */}
+                {activeSection === "control-tower" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <OperationsCenter onNavigate={handleSidebarNav} defaultTab="tower" />
+                  </Suspense>
+                )}
+
+                {/* ═══ MISSION CONTROL (legacy route) ═══ */}
                 {activeSection === "mission-control" && (
                   <Suspense fallback={<SectionLoader />}>
-                    <MissionControl onNavigate={handleSidebarNav} />
+                    <OperationsCenter onNavigate={handleSidebarNav} defaultTab="mission" />
                   </Suspense>
                 )}
 
