@@ -89,9 +89,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
   // Chat-like messages
   const messages = [
-    "Hello! Welcome to CLAUTHOR.",
-    "Let's build the ideal team for your company in under 1 minute.",
-    "To get started, what's your company's industry?",
+    "Olá! Bem-vindo à CLAUTHOR.",
+    "Vamos montar o time ideal pra sua empresa em menos de 1 minuto.",
+    "Pra começar, qual é o segmento da sua empresa?",
   ];
 
   const msg0 = useTyping(messages[0], 25, 400);
