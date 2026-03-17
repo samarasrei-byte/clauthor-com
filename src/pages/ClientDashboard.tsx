@@ -70,6 +70,7 @@ const QuickWins = lazy(() => import("@/components/dashboard/QuickWins"));
 const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHub"));
 const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPipelinePanel"));
 const SalesCallTranscriber = lazy(() => import("@/components/dashboard/SalesCallTranscriber"));
+const SquadManager = lazy(() => import("@/components/dashboard/SquadManager"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
