@@ -187,33 +187,6 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
         </TabsList>
 
         <TabsContent value="overview" className="mt-4 space-y-6">
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/10 flex items-center justify-center">
-              <Building2 className="h-7 w-7 text-primary" />
-            </div>
-            <div>
-              <h2 className="font-display text-xl font-bold">{tenantData?.name || "Minha Empresa"}</h2>
-              <div className="flex items-center gap-2 mt-0.5">
-                <Badge variant="outline" className="text-[10px] bg-primary/5 border-primary/15 text-primary">
-                  {planType.charAt(0).toUpperCase() + planType.slice(1)}
-                </Badge>
-                <span className="text-[10px] text-muted-foreground">
-                  {Object.keys(departmentGroups.groups).length} departamentos • {activeAgents} agentes
-                </span>
-              </div>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" className="text-xs h-8 gap-1.5" onClick={onSetupCompany}>
-              <BookOpen className="h-3.5 w-3.5" /> Ensinar Empresa
-            </Button>
-            <Button size="sm" className="text-xs h-8 gap-1.5" onClick={() => onNavigate("library")}>
-              <Plus className="h-3.5 w-3.5" /> Contratar Agente
-            </Button>
-          </div>
-        </div>
-      </motion.div>
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
