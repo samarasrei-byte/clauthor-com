@@ -8,7 +8,8 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft,
-  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, Layers3
+  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, Layers3,
+  FileText, Package, Video, Clock, Radar, Orbit
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
