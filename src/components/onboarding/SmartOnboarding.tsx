@@ -560,7 +560,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                               </TooltipTrigger>
                               <TooltipContent side="top" className="max-w-[250px] text-xs">
                                 <p className="font-semibold mb-0.5">{t(`library_page.agents.${agent}_title`, { defaultValue: agent.replace(/_/g, " ") })}</p>
-                                 <p className="text-muted-foreground">{t(`library_page.agents.${agent}_desc`, { defaultValue: "Specialized AI agent" })}</p>
+                                 <p className="text-muted-foreground">{t(`library_page.agents.${agent}_desc`, { defaultValue: "Agente de IA especializado" })}</p>
                               </TooltipContent>
                             </Tooltip>
                           ))}
