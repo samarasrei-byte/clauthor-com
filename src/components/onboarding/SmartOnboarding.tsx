@@ -410,7 +410,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2 pt-2">
                     <Button variant="outline" onClick={() => setPhase(0)} className="h-12 rounded-xl gap-1.5 px-4">
-                      <ChevronLeft className="h-4 w-4" /> Back
+                      <ChevronLeft className="h-4 w-4" /> Voltar
                     </Button>
                     {selectedChallenges.length > 0 && (
                       <Button onClick={() => setPhase(2)} className="flex-1 h-12 glow rounded-xl gap-2">
