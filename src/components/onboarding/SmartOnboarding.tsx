@@ -477,7 +477,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                           </div>
                         </div>
                         <Badge variant="outline" className="border-primary/20 text-primary text-[10px] shrink-0">
-                          Savings ~{size.savings}/mo
+                          Economia ~{size.savings}/mês
                         </Badge>
                       </motion.button>
                     ))}
