@@ -312,7 +312,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                               onClick={() => { onClose(); navigate("/marketplace"); }}
                               className="text-sm gap-1.5 rounded-xl h-12 px-5 border-border/60 hover:border-primary/30 hover:bg-primary/5 hover:scale-[1.03] active:scale-[0.98] transition-all"
                             >
-                              I know — view Agents
+                              Já sei — ver Agentes
                               <ArrowRight className="h-3.5 w-3.5" />
                             </Button>
                           </motion.div>
