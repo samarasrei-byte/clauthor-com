@@ -326,7 +326,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           HERO
           ═══════════════════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-[70vh] flex items-center px-4 sm:px-6 overflow-hidden pt-2 pb-10 sm:pt-4 sm:pb-14" aria-label="Hero">
+      <section ref={heroRef} className="relative min-h-[70svh] sm:min-h-[70vh] flex items-center px-4 sm:px-6 overflow-hidden pt-2 pb-10 sm:pt-4 sm:pb-14" aria-label="Hero">
         {!isMobile && <MouseReactiveField />}
 
         <div className="absolute inset-0 pointer-events-none">
