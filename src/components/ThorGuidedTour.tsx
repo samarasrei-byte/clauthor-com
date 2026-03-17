@@ -236,7 +236,7 @@ const ThorGuidedTour = ({ steps, storageKey, onComplete }: ThorGuidedTourProps) 
                   transition={{ duration: 1.2, repeat: Infinity }}
                 />
               )}
-              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-green-500 rounded-full border-2 border-card" />
+              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-accent-emerald rounded-full border-2 border-card" />
             </div>
 
             <div className="flex-1 min-w-0">
