@@ -46,6 +46,7 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
   const { t } = useTranslation();
   const { credits, remainingCredits, usagePercentage } = useCredits();
   const [expandedDept, setExpandedDept] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState("overview");
 
   // Tenant info
   const { data: tenant } = useQuery({
