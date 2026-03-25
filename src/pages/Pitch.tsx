@@ -98,11 +98,11 @@ const tocItems = [
 /* ── Investor Chat ── */
 const investorConversation = [
   { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-  { role: "agent" as const, text: "Porque você entra antes da escala com 20% de equity a R$ 500K de valuation. Produto funcional com 200 agentes, 37 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a R$ 2-5M." },
+  { role: "agent" as const, text: "Porque você entra antes da escala com 20% de equity a R$ 1M de valuation. Produto funcional com 200 agentes de IA autônomos, 37 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a R$ 5-15M." },
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B por assinatura. Ticket médio R$ 997/mês por squad. Event-driven = margem bruta de 96%+. Com 1.000 clientes, são R$ 12M/ano em MRR." },
   { role: "investor" as const, text: "Qual o retorno esperado?" },
-  { role: "agent" as const, text: "Seed (6-12 meses): valuation R$ 15-25M = 30-50x. Series A: R$ 75-150M = 150-300x. Potencial Exit em 5 anos: R$ 250M+ = 500x+. A rodada é limitada — 20% por R$ 100K." },
+  { role: "agent" as const, text: "Seed (6-12 meses): valuation R$ 15-25M = 7-12x. Series A: R$ 75-150M = 37-75x. Potencial Exit em 5 anos: R$ 500M+ = 250x+. A rodada é limitada — 20% por R$ 200K." },
 ];
 
 const InvestorChat = () => {
@@ -265,19 +265,19 @@ const Pitch = () => {
           <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.05] tracking-tight mb-6">
             A infraestrutura que{" "}
             <span className="bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">substitui departamentos inteiros</span>{" "}
-            por IA autônoma.
+            por agentes de IA autônomos.
           </motion.h1>
 
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            200 agentes. 37 squads. 15 departamentos. Margem bruta de 96%+. 
+            200 agentes de inteligência artificial autônomos. 37 squads. 15 departamentos. Margem bruta de 96%+. 
             Produto operacional — não é MVP.
           </motion.p>
 
           {/* Key metrics strip */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
             {[
-              { value: "R$ 500K", label: "Valuation" },
-              { value: "R$ 100K", label: "Captação" },
+              { value: "R$ 1M", label: "Valuation" },
+              { value: "R$ 200K", label: "Captação" },
               { value: "20%", label: "Equity" },
               { value: "96%+", label: "Margem Bruta" },
             ].map((m) => (
@@ -341,7 +341,7 @@ const Pitch = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {[
-              { icon: Bot, title: `${TOTAL_WORKFORCE_AGENTS} Agentes Operacionais`, desc: "Cada agente é um especialista treinado para uma função específica — SDR, Copywriter, CFO, DevOps, Jurídico. Todos funcionam hoje." },
+              { icon: Bot, title: `${TOTAL_WORKFORCE_AGENTS} Agentes de IA Autônomos`, desc: "Cada agente é um especialista treinado para uma função específica — SDR, Copywriter, CFO, DevOps, Jurídico. Todos funcionam hoje." },
               { icon: Network, title: `${TOTAL_SQUADS} Squads Inteligentes`, desc: "Agentes organizados em squads com missão definida. Delegam entre si via orquestração A2A (Agent-to-Agent). Não é chatbot — é operação." },
               { icon: Building2, title: `${TOTAL_DEPARTMENTS} Departamentos`, desc: "Marketing, Growth, Product, Sales, CS, Finance e Operations. Cada departamento é uma unidade autônoma com KPIs próprios." },
               { icon: Shield, title: "Enterprise-Grade Security", desc: "AES-256-GCM, audit trails, LGPD compliance, Row Level Security, rate limiting. Infraestrutura que escala de 1 a 100K+ usuários." },
@@ -523,9 +523,9 @@ const Pitch = () => {
           </p>
           <div className="grid md:grid-cols-3 gap-6 mb-14">
             {[
-              { value: 1.8, suffix: "T", prefix: "US$ ", label: "TAM — IA empresarial até 2030", decimals: 1 },
+              { value: 9.5, suffix: "T", prefix: "R$ ", label: "TAM — IA empresarial até 2030", decimals: 1 },
               { value: 35, suffix: "%+", label: "CAGR do setor de automação B2B" },
-              { value: 127, suffix: "B", prefix: "US$ ", label: "SAM — SaaS de automação operacional" },
+              { value: 670, suffix: "B", prefix: "R$ ", label: "SAM — SaaS de automação operacional" },
             ].map((m) => (
               <GlassCard key={m.label} hover={false} className="text-center !py-10">
                 <p className="text-4xl md:text-5xl font-display font-bold text-primary mb-2">
@@ -564,7 +564,7 @@ const Pitch = () => {
               </GlassCard>
               <GlassCard hover={false}>
                 <p className="text-sm text-muted-foreground mb-1">Ticket médio</p>
-                <p className="text-2xl font-display font-bold text-foreground">US$ 199<span className="text-base font-normal text-muted-foreground">/mês por squad</span></p>
+                <p className="text-2xl font-display font-bold text-foreground">R$ 997<span className="text-base font-normal text-muted-foreground">/mês por squad</span></p>
               </GlassCard>
               <div className="space-y-3">
                 {[
@@ -585,15 +585,15 @@ const Pitch = () => {
             <div className="space-y-4">
               <GlassCard hover={false} className="text-center !py-8">
                 <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Cenário · 500 clientes</p>
-                <p className="text-3xl md:text-4xl font-display font-bold text-primary">US$ <CountUp end={99.5} suffix="K" decimals={1} /><span className="text-base font-normal text-muted-foreground">/mês</span></p>
+                <p className="text-3xl md:text-4xl font-display font-bold text-primary">R$ <CountUp end={498} suffix="K" /><span className="text-base font-normal text-muted-foreground">/mês</span></p>
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-8">
                 <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Cenário · 1.000 clientes</p>
-                <p className="text-3xl md:text-4xl font-display font-bold text-primary">US$ <CountUp end={199} suffix="K" /><span className="text-base font-normal text-muted-foreground">/mês</span></p>
+                <p className="text-3xl md:text-4xl font-display font-bold text-primary">R$ <CountUp end={997} suffix="K" /><span className="text-base font-normal text-muted-foreground">/mês</span></p>
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-8">
                 <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">ARR projetado (1K clientes)</p>
-                <p className="text-3xl md:text-4xl font-display font-bold text-foreground">US$ <CountUp end={2.39} suffix="M" decimals={2} /></p>
+                <p className="text-3xl md:text-4xl font-display font-bold text-foreground">R$ <CountUp end={11.96} suffix="M" decimals={2} /></p>
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-6 border-primary/20 bg-primary/5">
                 <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Valuation potencial (5x ARR)</p>
@@ -892,7 +892,7 @@ const Pitch = () => {
                   {[
                     "Usa Claude como cérebro de planejamento",
                     "Usa OpenClaw como motor de execução",
-                    "Orquestração A2A com 200+ agentes",
+                    "Orquestração A2A com 200+ agentes de IA autônomos",
                     "Policy Engine + 5 portões de governança",
                     "CRM + Kanban + Analytics nativos",
                     "Multi-tenant + AES-256 + LGPD",
@@ -955,7 +955,7 @@ const Pitch = () => {
               Valuation
             </Badge>
             <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-4">
-              R$ 500K de valuation.{" "}
+               R$ 1M de valuation.{" "}
               <span className="gradient-text">Baseado em produto real.</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
@@ -993,11 +993,10 @@ const Pitch = () => {
               </div>
               <ul className="space-y-3">
                 {[
-                  `${TOTAL_WORKFORCE_AGENTS} agentes autônomos em ${TOTAL_DEPARTMENTS} departamentos`,
+                  `${TOTAL_WORKFORCE_AGENTS} agentes de IA autônomos em ${TOTAL_DEPARTMENTS} departamentos`,
                   `${TOTAL_SQUADS} squads especializados operacionais`,
                   "Infraestrutura enterprise-grade desde o dia 1",
-                  "Valuation: R$ 500K (20% por R$ 100K)",
-                  "Infraestrutura enterprise-grade",
+                  "Valuation: R$ 1M (20% por R$ 200K)",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-foreground/90">
                     <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
@@ -1018,10 +1017,10 @@ const Pitch = () => {
             <h3 className="font-display text-xl font-bold mb-8 text-foreground">Cenário de retorno para o investidor</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                { label: "Investimento", value: "R$ 100K", sub: "20% equity" },
-                { label: "Seed (6-12m)", value: "R$ 15-25M", sub: "30-50x retorno" },
-                { label: "Series A", value: "R$ 75-150M", sub: "150-300x retorno" },
-                { label: "Exit (5 anos)", value: "R$ 250M+", sub: "500x+ retorno" },
+                { label: "Investimento", value: "R$ 200K", sub: "20% equity" },
+                { label: "Seed (6-12m)", value: "R$ 15-25M", sub: "7-12x retorno" },
+                { label: "Series A", value: "R$ 75-150M", sub: "37-75x retorno" },
+                { label: "Exit (5 anos)", value: "R$ 500M+", sub: "250x+ retorno" },
               ].map((item) => (
                 <div key={item.label}>
                   <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">{item.label}</p>
@@ -1057,9 +1056,9 @@ const Pitch = () => {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Pre-Seed Aberto</h2>
           <div className="grid sm:grid-cols-3 gap-6 mb-14">
             {[
-              { label: "Captando", value: "R$ 100.000" },
+              { label: "Captando", value: "R$ 200.000" },
               { label: "Equity oferecido", value: "20%" },
-              { label: "Valuation", value: "R$ 500.000" },
+              { label: "Valuation", value: "R$ 1.000.000" },
             ].map((item) => (
               <GlassCard key={item.label} hover={false} className="text-center !py-10">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
