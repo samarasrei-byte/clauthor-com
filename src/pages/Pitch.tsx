@@ -98,7 +98,7 @@ const tocItems = [
 /* ── Investor Chat ── */
 const investorConversation = [
   { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-  { role: "agent" as const, text: "Porque você entra antes da escala. Duas opções: R$ 100K por 10% ou R$ 200K por 20% — valuation de R$ 1M baseado em produto real. 200 agentes de IA autônomos, 37 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a R$ 5-15M." },
+  { role: "agent" as const, text: "Porque você entra antes da escala. Duas opções: R$ 100K por 10% ou R$ 200K por 20% — valuation de R$ 1M baseado em produto real. 244 agentes de IA autônomos, 53 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a R$ 5-15M." },
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B por assinatura. Ticket médio R$ 997/mês por squad. Event-driven = margem bruta de 96%+. Com 1.000 clientes, são R$ 12M/ano em MRR." },
   { role: "investor" as const, text: "Qual o retorno esperado?" },
@@ -271,7 +271,7 @@ const Pitch = () => {
           </motion.h1>
 
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }} className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-            200 agentes de inteligência artificial autônomos. 37 squads. 15 departamentos. Margem bruta de 96%+. 
+            {TOTAL_WORKFORCE_AGENTS} agentes de inteligência artificial autônomos. {TOTAL_SQUADS} squads. {TOTAL_DEPARTMENTS} departamentos. Margem bruta de 96%+. 
             Produto operacional — não é MVP.
           </motion.p>
 
@@ -754,7 +754,7 @@ const Pitch = () => {
               { icon: Brain, title: "Motor de Autonomia Proprietário", desc: "3 níveis de risco, Policy Engine com 5 portões, orquestração A2A. Cada agente tem personalidade, memória e capacidade de delegação." },
               { icon: Layers, title: "10 Camadas de Arquitetura", desc: "De infraestrutura a interface: cada camada é um moat. Replicar exige 12-18 meses de engenharia senior dedicada." },
               { icon: Network, title: "Efeito de Rede em Dados", desc: "Cada empresa que usa a plataforma gera dados que melhoram todos os agentes. Mais clientes = agentes mais inteligentes." },
-              { icon: Timer, title: "Time-to-Market", desc: "200 agentes operacionais, 15 departamentos, 37 squads. Qualquer concorrente que comece hoje precisa de 12+ meses para chegar aqui." },
+              { icon: Timer, title: "Time-to-Market", desc: `${TOTAL_WORKFORCE_AGENTS} agentes operacionais, ${TOTAL_DEPARTMENTS} departamentos, ${TOTAL_SQUADS} squads. Qualquer concorrente que comece hoje precisa de 12+ meses para chegar aqui.` },
               { icon: Shield, title: "Enterprise Security Stack", desc: "AES-256-GCM, RLS, audit trails, LGPD, multi-tenant isolation. Padrão enterprise desde o dia 1 — não um retrofit." },
               { icon: Globe, title: "Globalização Nativa", desc: "13 idiomas com detecção automática. Não é tradução — cada agente opera nativamente no idioma do cliente." },
             ].map((m, i) => (
