@@ -101,7 +101,6 @@ const App = () => (
                   <Route path="/community" element={<Community />} />
                   <Route path="/departamentos" element={<Departamentos />} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />
-                  <Route path="/pitch" element={<Pitch />} />
                   <Route path="/termos" element={<Terms />} />
                   <Route path="/privacidade" element={<Privacy />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
