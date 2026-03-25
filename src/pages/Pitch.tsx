@@ -98,7 +98,7 @@ const tocItems = [
 /* ── Investor Chat ── */
 const investorConversation = [
   { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-  { role: "agent" as const, text: "Porque você entra antes da escala. Duas opções: R$ 100K por 10% ou R$ 200K por 20% — valuation de R$ 1M baseado em produto real. 244 agentes de IA autônomos, 53 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a R$ 5-15M." },
+  { role: "agent" as const, text: "Porque você entra antes da escala. Duas opções: R$ 100K por 10% ou R$ 200K por 20% — valuation de R$ 1M baseado em produto real. 200 agentes de IA autônomos, 53 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a R$ 5-15M." },
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B por assinatura. Ticket médio R$ 997/mês por squad. Event-driven = margem bruta de 96%+. Com 1.000 clientes, são R$ 12M/ano em MRR." },
   { role: "investor" as const, text: "Qual o retorno esperado?" },
