@@ -85,7 +85,7 @@ const AgentRoom = () => {
           </div>
           <h1 className="font-display text-3xl font-bold gradient-text mb-2">Sala Digital de Agentes</h1>
           <p className="text-muted-foreground text-sm max-w-md mx-auto">
-            {agents.length} membros ativos na sua equipe de inteligência artificial
+            {agents.length} membros ativos na sua equipe autônoma
           </p>
         </motion.div>
       </div>
