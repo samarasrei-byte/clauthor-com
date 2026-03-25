@@ -597,7 +597,7 @@ const Pitch = () => {
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-6 border-primary/20 bg-primary/5">
                 <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Valuation potencial (5x ARR)</p>
-                <p className="text-2xl font-display font-bold gradient-text">≈ US$ <CountUp end={12} suffix="M" /></p>
+                <p className="text-2xl font-display font-bold gradient-text">≈ R$ <CountUp end={60} suffix="M" /></p>
               </GlassCard>
             </div>
           </div>
