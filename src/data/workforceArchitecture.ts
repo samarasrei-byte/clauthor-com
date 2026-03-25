@@ -219,7 +219,8 @@ export const WORKFORCE: WorkforceDepartment[] = [
         name: "Product Strategy Squad",
         mission: "Definir e priorizar o roadmap de produto baseado em dados",
         agents: [
-          { slug: "product_strategist", name: "Product Strategist", responsibilities: ["Product vision", "Roadmap planning", "Stakeholder alignment"], triggers: ["quarterly_planning", "market_shift", "user_feedback_surge"] },\n          { slug: "roadmap_manager", name: "Roadmap Manager", responsibilities: ["Roadmap updates", "Timeline tracking", "Dependency mapping"], triggers: ["milestone_reached", "delay_detected", "stakeholder_request"] },
+          { slug: "product_strategist", name: "Product Strategist", responsibilities: ["Product vision", "Roadmap planning", "Stakeholder alignment"], triggers: ["quarterly_planning", "market_shift", "user_feedback_surge"] },
+          { slug: "roadmap_manager", name: "Roadmap Manager", responsibilities: ["Roadmap updates", "Timeline tracking", "Dependency mapping"], triggers: ["milestone_reached", "delay_detected", "stakeholder_request"] },
           { slug: "competitive_analyst", name: "Competitive Analyst", responsibilities: ["Competitor monitoring", "Feature comparison", "Market gaps"], triggers: ["competitor_launch", "market_report", "quarterly_review"] },
           { slug: "market_research_agent", name: "Market Research Agent", responsibilities: ["User interviews analysis", "Market sizing", "Trend analysis"], triggers: ["research_needed", "new_market_entry", "product_launch"] },
         ],
@@ -397,7 +398,8 @@ export const WORKFORCE: WorkforceDepartment[] = [
         agents: [
           { slug: "onboarding_specialist", name: "Onboarding Specialist", responsibilities: ["Onboarding planning", "Kickoff calls", "Milestone tracking"], triggers: ["customer_signed", "onboarding_started", "milestone_missed"] },
           { slug: "implementation_agent", name: "Implementation Agent", responsibilities: ["Technical setup", "Data migration", "Integration config"], triggers: ["setup_started", "integration_needed", "blocker_identified"] },
-          { slug: "training_agent", name: "Training Agent", responsibilities: ["User training", "Workshop facilitation", "Training materials"], triggers: ["training_scheduled", "new_user_added", "feature_released"] },\n          
+          { slug: "training_agent", name: "Training Agent", responsibilities: ["User training", "Workshop facilitation", "Training materials"], triggers: ["training_scheduled", "new_user_added", "feature_released"] },
+          
         ],
         outcomes: ["Time-to-value <48h", "Onboarding completion 95%+", "First value achievement"],
       },
@@ -408,7 +410,9 @@ export const WORKFORCE: WorkforceDepartment[] = [
         agents: [
           { slug: "support_channel", name: "Support Channel Agent", responsibilities: ["Multi-channel support", "Ticket routing", "First response"], triggers: ["ticket_created", "chat_initiated", "email_received"] },
           { slug: "chat_agent", name: "Chat Agent", responsibilities: ["Live chat", "Instant responses", "Quick resolution"], triggers: ["chat_started", "visitor_question", "pre_sale_inquiry"] },
-          { slug: "email_support", name: "Email Support Agent", responsibilities: ["Email support", "Detailed responses", "Follow-up tracking"], triggers: ["email_received", "ticket_escalated", "response_due"] },\n\n          
+          { slug: "email_support", name: "Email Support Agent", responsibilities: ["Email support", "Detailed responses", "Follow-up tracking"], triggers: ["email_received", "ticket_escalated", "response_due"] },
+
+          
         ],
         outcomes: ["First response <2min", "FCR 80%+", "CSAT 4.8+"],
       },
@@ -508,7 +512,8 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "ai_cfo", name: "CFO Agent", responsibilities: ["Financial strategy", "Board reporting", "Capital allocation"], triggers: ["board_meeting", "strategic_decision", "quarterly_review"] },
           { slug: "budget_analyst", name: "Budget Analyst", responsibilities: ["Budget creation", "Variance analysis", "Departmental budgets"], triggers: ["budget_cycle", "variance_threshold", "reforecast_needed"] },
           { slug: "financial_forecaster", name: "Financial Forecaster", responsibilities: ["Revenue forecasting", "Scenario modeling", "Cash flow projection"], triggers: ["forecast_cycle", "market_change", "data_update"] },
-          { slug: "variance_analyst", name: "Variance Analyst", responsibilities: ["Actual vs budget", "Root cause analysis", "Corrective actions"], triggers: ["period_close", "variance_detected", "management_request"] },\n        ],
+          { slug: "variance_analyst", name: "Variance Analyst", responsibilities: ["Actual vs budget", "Root cause analysis", "Corrective actions"], triggers: ["period_close", "variance_detected", "management_request"] },
+        ],
         outcomes: ["Forecast accuracy 90%+", "Cash flow visibility", "Strategic financial clarity"],
       },
       {
@@ -518,7 +523,8 @@ export const WORKFORCE: WorkforceDepartment[] = [
         agents: [
           { slug: "revenue_ops", name: "Revenue Ops Analyst", responsibilities: ["Revenue analytics", "Billing operations", "Subscription metrics"], triggers: ["mrr_change", "billing_error", "monthly_review"] },
           { slug: "billing_agent", name: "Billing Agent", responsibilities: ["Invoice generation", "Payment processing", "Dunning management"], triggers: ["billing_cycle", "payment_failed", "subscription_change"] },
-          { slug: "subscription_mgr", name: "Subscription Manager", responsibilities: ["Subscription lifecycle", "Plan changes", "Renewal processing"], triggers: ["subscription_event", "plan_change", "renewal_due"] },\n          { slug: "pricing_strategy", name: "Pricing Strategy Agent", responsibilities: ["Pricing optimization", "Competitive pricing", "Price elasticity"], triggers: ["market_analysis", "competitor_pricing", "quarterly_review"] },
+          { slug: "subscription_mgr", name: "Subscription Manager", responsibilities: ["Subscription lifecycle", "Plan changes", "Renewal processing"], triggers: ["subscription_event", "plan_change", "renewal_due"] },
+          { slug: "pricing_strategy", name: "Pricing Strategy Agent", responsibilities: ["Pricing optimization", "Competitive pricing", "Price elasticity"], triggers: ["market_analysis", "competitor_pricing", "quarterly_review"] },
         ],
         outcomes: ["Revenue leakage <1%", "Collection rate 98%+", "Pricing optimization"],
       },
@@ -528,7 +534,9 @@ export const WORKFORCE: WorkforceDepartment[] = [
         mission: "Otimizar compras e gestão de fornecedores",
         agents: [
           { slug: "procurement", name: "Procurement Agent", responsibilities: ["Purchase orders", "Vendor selection", "Cost negotiation"], triggers: ["purchase_request", "contract_renewal", "budget_allocated"] },
-          { slug: "supplier_mgr", name: "Supplier Manager", responsibilities: ["Supplier evaluation", "Performance tracking", "Relationship management"], triggers: ["supplier_review", "quality_issue", "contract_expiring"] },\n          { slug: "vendor_evaluator", name: "Vendor Evaluator", responsibilities: ["Vendor scoring", "RFP management", "Comparison analysis"], triggers: ["rfp_issued", "vendor_submitted", "evaluation_due"] },\n        ],
+          { slug: "supplier_mgr", name: "Supplier Manager", responsibilities: ["Supplier evaluation", "Performance tracking", "Relationship management"], triggers: ["supplier_review", "quality_issue", "contract_expiring"] },
+          { slug: "vendor_evaluator", name: "Vendor Evaluator", responsibilities: ["Vendor scoring", "RFP management", "Comparison analysis"], triggers: ["rfp_issued", "vendor_submitted", "evaluation_due"] },
+        ],
         outcomes: ["Procurement savings 15%+", "Vendor compliance 95%+", "Cycle time -30%"],
       },
     ],
@@ -575,7 +583,9 @@ export const WORKFORCE: WorkforceDepartment[] = [
         agents: [
           { slug: "recruiter_agent", name: "Recruiter Agent", responsibilities: ["Talent acquisition", "Job postings", "Candidate screening"], triggers: ["position_opened", "application_received", "interview_scheduled"] },
           { slug: "people_analytics", name: "People Analytics", responsibilities: ["HR metrics", "Turnover analysis", "Engagement surveys"], triggers: ["survey_completed", "turnover_spike", "quarterly_review"] },
-          { slug: "td_agent", name: "T&D Agent", responsibilities: ["Training programs", "Skill gaps", "Learning paths"], triggers: ["training_needed", "new_hire", "skill_assessment"] },\n\n        ],
+          { slug: "td_agent", name: "T&D Agent", responsibilities: ["Training programs", "Skill gaps", "Learning paths"], triggers: ["training_needed", "new_hire", "skill_assessment"] },
+
+        ],
         outcomes: ["Time-to-hire -40%", "Employee engagement +25%", "Turnover reduction -30%"],
       },
       {
@@ -585,7 +595,9 @@ export const WORKFORCE: WorkforceDepartment[] = [
         agents: [
           { slug: "process_analyst", name: "Process Analyst", responsibilities: ["Process mapping", "Bottleneck identification", "Automation opportunities"], triggers: ["process_review", "inefficiency_detected", "improvement_request"] },
           { slug: "quality_auditor", name: "Quality Auditor", responsibilities: ["Quality audits", "Standard compliance", "Corrective actions"], triggers: ["audit_scheduled", "quality_issue", "certification_review"] },
-          { slug: "sop_writer", name: "SOP Writer", responsibilities: ["Standard Operating Procedures", "Process documentation", "Training materials"], triggers: ["new_process", "process_change", "audit_finding"] },\n\n        ],
+          { slug: "sop_writer", name: "SOP Writer", responsibilities: ["Standard Operating Procedures", "Process documentation", "Training materials"], triggers: ["new_process", "process_change", "audit_finding"] },
+
+        ],
         outcomes: ["Process efficiency +35%", "Quality score 98%+", "SOP coverage 100%"],
       },
       {
@@ -594,7 +606,8 @@ export const WORKFORCE: WorkforceDepartment[] = [
         mission: "Gerenciar logística e cadeia de suprimentos com excelência",
         agents: [
           { slug: "logistics_coordinator", name: "Logistics Coordinator", responsibilities: ["Shipping management", "Route optimization", "Delivery tracking"], triggers: ["order_placed", "delivery_issue", "route_optimization"] },
-          { slug: "inventory_manager", name: "Inventory Manager", responsibilities: ["Stock management", "Reorder points", "Demand forecasting"], triggers: ["stock_low", "demand_change", "inventory_audit"] },\n          
+          { slug: "inventory_manager", name: "Inventory Manager", responsibilities: ["Stock management", "Reorder points", "Demand forecasting"], triggers: ["stock_low", "demand_change", "inventory_audit"] },
+          
           
         ],
         outcomes: ["Delivery time -25%", "Logistics cost -20%", "Inventory accuracy 99%+"],
