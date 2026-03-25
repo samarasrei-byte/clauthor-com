@@ -41,7 +41,7 @@ const Section = ({ children, className = "", id }: { children: React.ReactNode; 
       initial={{ opacity: 0, y: 40 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }}
-      className={`relative py-24 md:py-32 px-6 ${className}`}
+      className={`relative py-16 sm:py-24 md:py-32 px-4 sm:px-6 ${className}`}
     >
       {children}
     </motion.section>
@@ -254,7 +254,7 @@ const Pitch = () => {
           <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: "linear-gradient(hsl(var(--foreground)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--foreground)) 1px, transparent 1px)", backgroundSize: "60px 60px" }} />
         </motion.div>
 
-        <motion.div className="relative z-10 max-w-5xl mx-auto px-6 text-center" style={{ y: textY }}>
+        <motion.div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 text-center" style={{ y: textY }}>
           <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}>
             <Badge variant="outline" className="border-primary/30 bg-primary/5 text-primary text-xs font-mono uppercase tracking-[0.2em] px-4 py-2 mb-8">
               <Lock className="h-3 w-3 mr-2" />
@@ -262,7 +262,7 @@ const Pitch = () => {
             </Badge>
           </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }} className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold leading-[1.05] tracking-tight mb-6">
+          <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.8 }} className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-display font-bold leading-[1.08] tracking-tight mb-6">
             A infraestrutura que{" "}
             <span className="bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">substitui departamentos inteiros</span>{" "}
             por agentes de IA autônomos.
@@ -274,7 +274,7 @@ const Pitch = () => {
           </motion.p>
 
           {/* Key metrics strip */}
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 md:gap-10 mb-12 max-w-3xl mx-auto">
             {[
               { value: "R$ 1M", label: "Valuation" },
               { value: "R$ 100K", label: "10% Equity" },
@@ -456,7 +456,7 @@ const Pitch = () => {
           </div>
 
           {/* Capabilities grid */}
-          <div className="grid grid-cols-3 md:grid-cols-3 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {[
               { icon: Headphones, title: "Suporte Omnichannel" },
               { icon: Receipt, title: "Financeiro" },
@@ -775,7 +775,7 @@ const Pitch = () => {
             <h3 className="text-xl md:text-2xl font-display font-bold tracking-tight mb-2">Análise Competitiva — Visão de Cientista de Dados</h3>
             <p className="text-sm text-muted-foreground max-w-2xl mx-auto">Transparência total. Cada player tem forças reais. A questão é: qual resolve o problema do cliente final?</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {/* OpenClaw */}
             <GlassCard hover={false} className="border-yellow-500/20">
               <div className="flex items-center gap-3 mb-4">
@@ -798,7 +798,7 @@ const Pitch = () => {
               <div>
                 <p className="text-[10px] uppercase tracking-wider text-destructive/80 mb-1">Limitações críticas</p>
                 <ul className="space-y-1.5 text-xs">
-                  {["Zero orquestração multi-agente nativa", "Sem UI — precisa de dev senior ($8K+/mês)", "Sem Policy Engine ou governança", "Sem CRM/Kanban/Analytics", "Sem multi-tenant ou isolamento", "Cada deploy é um projeto custom"].map(t => (
+                  {["Zero orquestração multi-agente nativa", "Sem UI — precisa de dev senior (R$ 40K+/mês)", "Sem Policy Engine ou governança", "Sem CRM/Kanban/Analytics", "Sem multi-tenant ou isolamento", "Cada deploy é um projeto custom"].map(t => (
                     <li key={t} className="flex items-start gap-1.5"><span className="text-destructive mt-0.5 text-[10px]">✗</span><span className="text-muted-foreground">{t}</span></li>
                   ))}
                 </ul>
@@ -1055,7 +1055,7 @@ const Pitch = () => {
             Rodada Aberta
           </Badge>
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Pre-Seed Aberto</h2>
-          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mb-14">
+          <div className="grid grid-cols-2 gap-4 sm:gap-6 mb-14">
             {[
               { label: "Opção 1", value: "R$ 100.000", sub: "10% equity" },
               { label: "Opção 2", value: "R$ 200.000", sub: "20% equity" },
@@ -1077,11 +1077,11 @@ const Pitch = () => {
           </div>
 
           {/* Milestones */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 gap-4">
             {[
               { label: "Q1", milestone: "1.000 usuários ativos", icon: Users },
               { label: "Q2", milestone: "Revenue positivo", icon: DollarSign },
-              { label: "Q3", milestone: "Rodada Seed US$ 1-3M", icon: Rocket },
+              { label: "Q3", milestone: "Rodada Seed R$ 5-15M", icon: Rocket },
               { label: "Q4", milestone: "Expansão internacional", icon: Globe },
             ].map(m => (
               <GlassCard key={m.label} hover={false} className="text-center">
