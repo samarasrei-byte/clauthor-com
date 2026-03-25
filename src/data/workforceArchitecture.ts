@@ -535,7 +535,6 @@ export const WORKFORCE: WorkforceDepartment[] = [
         agents: [
           { slug: "procurement", name: "Procurement Agent", responsibilities: ["Purchase orders", "Vendor selection", "Cost negotiation"], triggers: ["purchase_request", "contract_renewal", "budget_allocated"] },
           { slug: "supplier_mgr", name: "Supplier Manager", responsibilities: ["Supplier evaluation", "Performance tracking", "Relationship management"], triggers: ["supplier_review", "quality_issue", "contract_expiring"] },
-          { slug: "vendor_evaluator", name: "Vendor Evaluator", responsibilities: ["Vendor scoring", "RFP management", "Comparison analysis"], triggers: ["rfp_issued", "vendor_submitted", "evaluation_due"] },
         ],
         outcomes: ["Procurement savings 15%+", "Vendor compliance 95%+", "Cycle time -30%"],
       },
@@ -571,7 +570,6 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "contract_analyst", name: "Contract Analyst", responsibilities: ["Contract review", "Risk assessment", "Terms analysis"], triggers: ["contract_received", "review_requested", "deadline_approaching"] },
           { slug: "compliance_officer", name: "Compliance Officer", responsibilities: ["LGPD compliance", "Regulatory adherence", "Policy management"], triggers: ["regulation_change", "audit_scheduled", "compliance_gap"] },
           { slug: "labor_law_agent", name: "Labor Law Agent", responsibilities: ["Labor compliance", "eSocial", "Employee relations"], triggers: ["hr_event", "legislation_change", "dispute_filed"] },
-          { slug: "ip_protection", name: "IP Protection Agent", responsibilities: ["IP monitoring", "Trademark protection", "Patent tracking"], triggers: ["infringement_detected", "filing_deadline", "competitor_ip"] },
           { slug: "legal_researcher", name: "Legal Researcher", responsibilities: ["Legal research", "Jurisprudence analysis", "Case law"], triggers: ["research_needed", "legal_question", "case_preparation"] },
         ],
         outcomes: ["Legal risk score low", "Compliance 100%", "Contract turnaround -60%"],
