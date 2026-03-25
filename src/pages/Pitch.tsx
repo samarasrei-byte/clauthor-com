@@ -778,21 +778,21 @@ const Pitch = () => {
             <p className="text-sm text-muted-foreground max-w-2xl mx-auto">Transparência total. Cada player tem forças reais. A questão é: qual resolve o problema do cliente final?</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {/* OpenClaw */}
+            {/* CrewAI */}
             <GlassCard hover={false} className="border-yellow-500/20">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
                   <Code className="w-5 h-5 text-yellow-500" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-foreground">OpenClaw</h3>
-                  <span className="text-[10px] text-yellow-500/80 font-mono uppercase tracking-wider">Motor de Execução</span>
+                  <h3 className="font-bold text-foreground">CrewAI</h3>
+                  <span className="text-[10px] text-yellow-500/80 font-mono uppercase tracking-wider">Framework Multi-Agente</span>
                 </div>
               </div>
               <div className="mb-3">
                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Forças reais</p>
                 <ul className="space-y-1.5 text-xs">
-                  {["Open-source, auditável", "Execução de ferramentas sólida", "Comunidade ativa", "Customização total do motor"].map(t => (
+                  {["Open-source, comunidade ativa", "Orquestração básica de agentes", "Integração com LangChain", "Boa documentação"].map(t => (
                     <li key={t} className="flex items-start gap-1.5"><CheckCircle2 className="w-3 h-3 text-yellow-500 mt-0.5 shrink-0" /><span className="text-muted-foreground">{t}</span></li>
                   ))}
                 </ul>
@@ -800,31 +800,31 @@ const Pitch = () => {
               <div>
                 <p className="text-[10px] uppercase tracking-wider text-destructive/80 mb-1">Limitações críticas</p>
                 <ul className="space-y-1.5 text-xs">
-                  {["Zero orquestração multi-agente nativa", "Sem UI — precisa de dev senior (R$ 40K+/mês)", "Sem Policy Engine ou governança", "Sem CRM/Kanban/Analytics", "Sem multi-tenant ou isolamento", "Cada deploy é um projeto custom"].map(t => (
+                  {["Sem UI nativa — precisa construir tudo", "Sem Policy Engine ou governança", "Sem CRM/Kanban/Analytics", "Sem multi-tenant ou isolamento", "Orquestração limitada a workflows simples", "Cada deploy é um projeto custom"].map(t => (
                     <li key={t} className="flex items-start gap-1.5"><span className="text-destructive mt-0.5 text-[10px]">✗</span><span className="text-muted-foreground">{t}</span></li>
                   ))}
                 </ul>
               </div>
               <div className="mt-3 pt-3 border-t border-border/30">
-                <p className="text-[10px] text-muted-foreground italic">Veredicto: Excelente motor bruto. Mas é um motor — não um carro. O cliente precisa construir tudo ao redor.</p>
+                <p className="text-[10px] text-muted-foreground italic">Veredicto: Bom framework para devs. Mas o cliente precisa ser técnico e construir toda a stack.</p>
               </div>
             </GlassCard>
 
-            {/* Claude Code */}
+            {/* AutoGen */}
             <GlassCard hover={false} className="border-purple-500/20">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
                   <Brain className="w-5 h-5 text-purple-500" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-foreground">Claude Code</h3>
-                  <span className="text-[10px] text-purple-500/80 font-mono uppercase tracking-wider">Cérebro de Planejamento</span>
+                  <h3 className="font-bold text-foreground">AutoGen</h3>
+                  <span className="text-[10px] text-purple-500/80 font-mono uppercase tracking-wider">Microsoft Framework</span>
                 </div>
               </div>
               <div className="mb-3">
                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Forças reais</p>
                 <ul className="space-y-1.5 text-xs">
-                  {["Raciocínio de nível PhD", "Contexto de 200K tokens", "Melhor code generation do mercado", "Excelente para arquitetura"].map(t => (
+                  {["Backed by Microsoft", "Conversação multi-agente", "Flexibilidade de modelos", "Boa para prototipagem"].map(t => (
                     <li key={t} className="flex items-start gap-1.5"><CheckCircle2 className="w-3 h-3 text-purple-500 mt-0.5 shrink-0" /><span className="text-muted-foreground">{t}</span></li>
                   ))}
                 </ul>
@@ -832,13 +832,13 @@ const Pitch = () => {
               <div>
                 <p className="text-[10px] uppercase tracking-wider text-destructive/80 mb-1">Limitações críticas</p>
                 <ul className="space-y-1.5 text-xs">
-                  {["Não executa — planeja e sugere", "Cada conversa é efêmera (sem memória)", "Sem delegação entre agentes", "Sem workflows ou automações", "Custo por token alto para produção", "Dependência de um único provider"].map(t => (
+                  {["Não executa — planeja e conversa", "Sem memória persistente nativa", "Sem delegação hierárquica real", "Sem workflows de produção", "Curva de aprendizado alta", "Sem UI ou dashboard"].map(t => (
                     <li key={t} className="flex items-start gap-1.5"><span className="text-destructive mt-0.5 text-[10px]">✗</span><span className="text-muted-foreground">{t}</span></li>
                   ))}
                 </ul>
               </div>
               <div className="mt-3 pt-3 border-t border-border/30">
-                <p className="text-[10px] text-muted-foreground italic">Veredicto: O melhor cérebro do mercado. Mas cérebro sem corpo não executa tarefas empresariais.</p>
+                <p className="text-[10px] text-muted-foreground italic">Veredicto: Bom para pesquisa e POCs. Mas precisa de muito trabalho para virar produto.</p>
               </div>
             </GlassCard>
 
@@ -892,8 +892,8 @@ const Pitch = () => {
                 <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">O que combina</p>
                 <ul className="space-y-1.5 text-xs">
                   {[
-                    "Usa Claude como cérebro de planejamento",
-                    "Usa OpenClaw como motor de execução",
+                    "AI Planner proprietário para planejamento",
+                    "Execution Engine proprietário para execução",
                     "Orquestração A2A com 200+ agentes de IA autônomos",
                     "Policy Engine + 5 portões de governança",
                     "CRM + Kanban + Analytics nativos",

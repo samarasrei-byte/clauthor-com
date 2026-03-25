@@ -834,7 +834,7 @@ const Architecture = () => {
           <motion.div variants={fadeUp}><SectionTag>Execução ao Vivo</SectionTag></motion.div>
           <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-4xl font-bold mb-3">Veja a IA trabalhando</motion.h2>
           <motion.p variants={fadeUp} className="text-muted-foreground max-w-2xl text-sm leading-relaxed mb-8">
-            Simulação real: <span className="text-foreground font-medium">"Criar módulo de pagamentos"</span>. Clique Executar para assistir Thor → Claude Code → OpenClaw em ação.
+            Simulação real: <span className="text-foreground font-medium">"Criar módulo de pagamentos"</span>. Clique Executar para assistir Thor → AI Planner → Execution Engine em ação.
           </motion.p>
           <motion.div variants={fadeUp} className="max-w-3xl"><LiveSimulation /></motion.div>
         </motion.div>
@@ -909,7 +909,7 @@ const Architecture = () => {
           <motion.div variants={fadeUp}><SectionTag>Infraestrutura · Setup Guide</SectionTag></motion.div>
           <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-4xl font-bold mb-3">Configuração da Infraestrutura</motion.h2>
           <motion.p variants={fadeUp} className="text-muted-foreground max-w-2xl text-sm leading-relaxed mb-10">
-            Guia passo a passo para configurar o pipeline completo: DNS, SSL, OpenClaw VPS e templates dos agentes.
+            Guia passo a passo para configurar o pipeline completo: DNS, SSL, VPS e templates dos agentes.
           </motion.p>
 
           <div className="grid lg:grid-cols-2 gap-6">
@@ -917,7 +917,7 @@ const Architecture = () => {
             <motion.div variants={fadeUp} className="space-y-4">
               <h3 className="font-display text-xl font-bold flex items-center gap-2">
                 <Globe className="h-5 w-5 text-primary" strokeWidth={1.5} />
-                Conexão OpenClaw VPS
+                Conexão VPS & Execution Engine
               </h3>
 
               {/* Step 1 */}
@@ -994,7 +994,7 @@ const Architecture = () => {
                   <FlowArrow />
                   <FlowNode icon={Server} label="VPS" sublabel="Let's Encrypt SSL" />
                   <FlowArrow />
-                  <FlowNode icon={Cpu} label="OpenClaw API" sublabel="Motor de Execução" glow />
+                  <FlowNode icon={Cpu} label="Execution Engine" sublabel="Motor Proprietário" glow />
                 </div>
               </Card>
             </motion.div>
@@ -1112,12 +1112,12 @@ const Architecture = () => {
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-primary/20 bg-primary/[0.03]">
               <Brain className="h-5 w-5 text-primary" strokeWidth={1.5} />
-              <div className="text-left"><p className="font-semibold text-sm">Claude Code</p><p className="font-mono text-[9px] text-primary/60 uppercase tracking-widest">Inteligência</p></div>
+              <div className="text-left"><p className="font-semibold text-sm">AI Planner</p><p className="font-mono text-[9px] text-primary/60 uppercase tracking-widest">Inteligência</p></div>
             </div>
             <span className="text-muted-foreground font-mono text-lg">+</span>
             <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-accent-emerald/20 bg-accent-emerald/[0.03]">
               <Cpu className="h-5 w-5 text-accent-emerald" strokeWidth={1.5} />
-              <div className="text-left"><p className="font-semibold text-sm">OpenClaw</p><p className="font-mono text-[9px] text-accent-emerald/60 uppercase tracking-widest">Execução</p></div>
+              <div className="text-left"><p className="font-semibold text-sm">Execution Engine</p><p className="font-mono text-[9px] text-accent-emerald/60 uppercase tracking-widest">Execução</p></div>
             </div>
             <span className="text-muted-foreground font-mono text-lg">=</span>
             <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-accent-amber/20 bg-accent-amber/[0.03]">
