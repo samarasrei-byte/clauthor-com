@@ -174,6 +174,8 @@ const InvestorChat = () => {
 const deptIcons: Record<string, React.ElementType> = {
   marketing: Megaphone, growth: TrendingUp, product: Cpu, sales: Briefcase,
   customer_success: Headphones, finance: DollarSign, operations: Layers,
+  security: Shield, engineering: Code, data_analytics: BarChart3, communications: Globe,
+  talent: Users, innovation: Brain, it_infrastructure: Network, strategy: Target,
 };
 
 const WorkforceDeptCard = ({ dept, index }: { dept: typeof WORKFORCE[0]; index: number }) => {
