@@ -1,5 +1,5 @@
 /**
- * CLAUTHOR AI Workforce Architecture — 200 Agents
+ * CLAUTHOR AI Workforce Architecture - 200 Agents
  * 
  * Hierarchical structure: Departments → Squads → Agents → Tasks
  * Event-driven execution to minimize compute costs.
@@ -29,7 +29,7 @@ export interface WorkforceDepartment {
 
 export const WORKFORCE: WorkforceDepartment[] = [
   // ═══════════════════════════════════════════
-  // 1. MARKETING — 30 agents
+  // 1. MARKETING - 30 agents
   // ═══════════════════════════════════════════
   {
     id: "marketing",
@@ -118,7 +118,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
   },
 
   // ═══════════════════════════════════════════
-  // 2. GROWTH — 30 agents
+  // 2. GROWTH - 30 agents
   // ═══════════════════════════════════════════
   {
     id: "growth",
@@ -207,7 +207,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
   },
 
   // ═══════════════════════════════════════════
-  // 3. PRODUCT — 25 agents
+  // 3. PRODUCT - 25 agents
   // ═══════════════════════════════════════════
   {
     id: "product",
@@ -282,7 +282,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
   },
 
   // ═══════════════════════════════════════════
-  // 4. SALES — 35 agents
+  // 4. SALES - 35 agents
   // ═══════════════════════════════════════════
   {
     id: "sales",
@@ -384,7 +384,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
   },
 
   // ═══════════════════════════════════════════
-  // 5. CUSTOMER SUCCESS — 30 agents
+  // 5. CUSTOMER SUCCESS - 30 agents
   // ═══════════════════════════════════════════
   {
     id: "customer_success",
@@ -471,7 +471,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
   },
 
   // ═══════════════════════════════════════════
-  // 6. FINANCE — 25 agents
+  // 6. FINANCE - 25 agents
   // ═══════════════════════════════════════════
   {
     id: "finance",
@@ -542,7 +542,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
   },
 
   // ═══════════════════════════════════════════
-  // 7. OPERATIONS — 25 agents
+  // 7. OPERATIONS - 25 agents
   // ═══════════════════════════════════════════
   {
     id: "operations",
