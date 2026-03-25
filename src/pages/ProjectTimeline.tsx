@@ -79,7 +79,7 @@ const TIMELINE_STEPS: TimelineStep[] = [
     title: "Integrações & Edge Functions",
     date: "Semana 7-8 · Fevereiro 2026",
     status: "done",
-    description: "30+ edge functions serverless, integrações com PayPal, ElevenLabs, WhatsApp, OpenClaw e sistema de credenciais.",
+    description: "30+ edge functions serverless, integrações com PayPal, ElevenLabs, WhatsApp e sistema de credenciais.",
     details: [
       "✅ 30+ Edge Functions (Deno/TypeScript)",
       "✅ PayPal Subscriptions API integrado",
