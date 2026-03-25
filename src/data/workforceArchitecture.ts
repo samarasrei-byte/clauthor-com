@@ -46,7 +46,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "social_media_agent", name: "Social Media Agent", responsibilities: ["Posts redes sociais", "Engajamento", "Calendário social"], triggers: ["scheduled_post", "trending_topic", "engagement_drop"] },
           { slug: "video_script_agent", name: "Video Script Agent", responsibilities: ["Roteiros Reels/Shorts", "Storyboards", "Hooks de vídeo"], triggers: ["task_assigned", "video_campaign"] },
           { slug: "content_performance", name: "Content Performance Analyst", responsibilities: ["Métricas de conteúdo", "Attribution", "ROI de conteúdo"], triggers: ["report_requested", "metric_change", "weekly_review"] },
-          { slug: "newsletter_specialist", name: "Newsletter Specialist", responsibilities: ["Email marketing", "Segmentação", "A/B test de subject"], triggers: ["scheduled_send", "list_segment_change"] },
+          
         ],
         outcomes: ["Tráfego orgânico +40%", "Engajamento social +60%", "Lead generation via conteúdo"],
       },
@@ -59,7 +59,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "ad_copywriter", name: "Ad Copywriter", responsibilities: ["Copy de anúncios", "Headlines A/B", "Ad creatives briefing"], triggers: ["task_assigned", "ad_fatigue_detected"] },
           { slug: "campaign_manager", name: "Campaign Manager", responsibilities: ["Setup de campanhas", "Audience targeting", "Bid strategy"], triggers: ["campaign_launch", "performance_alert"] },
           { slug: "retargeting_specialist", name: "Retargeting Specialist", responsibilities: ["Audiências lookalike", "Remarketing sequences", "Pixel optimization"], triggers: ["cart_abandonment", "funnel_drop"] },
-          { slug: "ad_performance_analyst", name: "Ad Performance Analyst", responsibilities: ["Dashboard de Ads", "CPA analysis", "Attribution modeling"], triggers: ["report_requested", "budget_threshold", "weekly_review"] },
+          
         ],
         outcomes: ["ROAS médio 4x+", "CPA reduction -30%", "Ad spend efficiency"],
       },
@@ -72,7 +72,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "technical_seo", name: "Technical SEO Agent", responsibilities: ["Core Web Vitals", "Crawlability", "Schema markup"], triggers: ["site_audit", "speed_degradation", "indexation_issue"] },
           { slug: "link_builder", name: "Link Builder", responsibilities: ["Outreach para backlinks", "Digital PR", "Guest posting strategy"], triggers: ["task_assigned", "competitor_link_gain"] },
           { slug: "content_seo_writer", name: "Content SEO Writer", responsibilities: ["Conteúdo otimizado", "Topic clusters", "Internal linking"], triggers: ["keyword_opportunity", "content_gap_found"] },
-          { slug: "serp_analyst", name: "SERP Analyst", responsibilities: ["Monitoramento de rankings", "SERP features", "Competitor tracking"], triggers: ["ranking_change", "report_requested", "daily_monitoring"] },
+          
         ],
         outcomes: ["Tráfego orgânico +80%", "Top 3 rankings", "Domain authority growth"],
       },
@@ -85,7 +85,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "positioning_agent", name: "Positioning Agent", responsibilities: ["Análise de mercado", "Diferenciação", "Value proposition"], triggers: ["competitor_move", "market_research"] },
           { slug: "visual_identity", name: "Visual Identity Agent", responsibilities: ["Design system", "Templates visuais", "Brand consistency"], triggers: ["campaign_launch", "rebrand_request"] },
           { slug: "brand_voice_writer", name: "Brand Voice Writer", responsibilities: ["Tom de voz", "Messaging framework", "Copy guidelines"], triggers: ["task_assigned", "new_channel"] },
-          { slug: "market_perception", name: "Market Perception Analyst", responsibilities: ["Brand tracking", "Sentiment analysis", "Share of voice"], triggers: ["mention_spike", "report_requested", "weekly_review"] },
+          
         ],
         outcomes: ["Brand awareness +50%", "Consistency score 95%+", "Market perception lift"],
       },
@@ -98,7 +98,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "ab_test_agent", name: "A/B Test Agent", responsibilities: ["Design de experimentos", "Statistical significance", "Test analysis"], triggers: ["test_ready", "test_complete", "hypothesis_new"] },
           { slug: "attribution_analyst", name: "Attribution Analyst", responsibilities: ["Multi-touch attribution", "Channel mix modeling", "Customer journey"], triggers: ["report_requested", "conversion_anomaly"] },
           { slug: "budget_allocator", name: "Budget Allocator", responsibilities: ["Budget optimization", "ROI forecasting", "Channel efficiency"], triggers: ["budget_cycle", "performance_change", "monthly_review"] },
-          { slug: "conversion_optimizer", name: "Conversion Optimizer", responsibilities: ["Landing page CRO", "Funnel optimization", "UX improvements"], triggers: ["conversion_drop", "traffic_spike", "test_complete"] },
+          
         ],
         outcomes: ["Conversion rate +35%", "Campaign ROI +50%", "Test velocity 4x"],
       },
@@ -110,7 +110,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "influencer_mgr", name: "Influencer Manager", responsibilities: ["Scout de influencers", "Negociação", "Campaign tracking"], triggers: ["campaign_launch", "influencer_match", "contract_renewal"] },
           { slug: "pr_agent", name: "PR Agent", responsibilities: ["Press releases", "Media relations", "Crisis management"], triggers: ["news_event", "crisis_detected", "launch_scheduled"] },
           { slug: "social_proof_mgr", name: "Social Proof Manager", responsibilities: ["Depoimentos", "Case studies", "UGC curation"], triggers: ["review_received", "milestone_reached", "task_assigned"] },
-          { slug: "events_speaker_agent", name: "Events & Speaker Agent", responsibilities: ["Eventos", "Palestras", "Webinars", "Networking"], triggers: ["event_opportunity", "speaking_invite", "quarterly_planning"] },
+          
         ],
         outcomes: ["Media mentions +100%", "Influencer ROI 5x", "Brand credibility score"],
       },
@@ -134,7 +134,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "google_ads_agent", name: "Google Ads Agent", responsibilities: ["Search campaigns", "Shopping ads", "Display network"], triggers: ["quality_score_drop", "keyword_opportunity", "bid_adjustment"] },
           { slug: "meta_ads_agent", name: "Meta Ads Agent", responsibilities: ["Facebook/Instagram ads", "Audience building", "Creative testing"], triggers: ["ad_fatigue", "audience_saturation", "campaign_launch"] },
           { slug: "tiktok_ads_agent", name: "TikTok Ads Agent", responsibilities: ["TikTok campaigns", "Spark Ads", "Creator marketplace"], triggers: ["trending_content", "campaign_launch", "performance_alert"] },
-          { slug: "traffic_analyst", name: "Performance Analyst", responsibilities: ["Cross-platform analytics", "Attribution", "ROI reporting"], triggers: ["report_requested", "anomaly_detected", "weekly_review"] },
+          
         ],
         outcomes: ["CAC reduction -40%", "Pipeline de leads qualificados", "ROAS 4x+"],
       },
@@ -148,7 +148,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "sdr_email_agent", name: "SDR Email Agent", responsibilities: ["Cold email sequences", "Follow-up automation", "Deliverability"], triggers: ["lead_assigned", "email_opened", "reply_received"] },
           { slug: "sdr_whatsapp", name: "SDR WhatsApp", responsibilities: ["WhatsApp outreach", "Qualificação rápida", "Follow-up sequences"], triggers: ["lead_assigned", "message_read", "response_timeout"] },
           { slug: "sdr_instagram", name: "SDR Instagram", responsibilities: ["DM outreach", "Story engagement", "Social selling"], triggers: ["lead_match", "story_viewed", "engagement_signal"] },
-          { slug: "sdr_cold_caller", name: "SDR Cold Caller", responsibilities: ["Cold calling", "Script optimization", "Objection handling"], triggers: ["call_scheduled", "lead_priority_high", "follow_up_due"] },
+          
         ],
         outcomes: ["200+ leads qualificados/mês", "Taxa de resposta 25%+", "Pipeline velocity"],
       },
@@ -161,7 +161,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "lead_qualifier", name: "Lead Qualifier", responsibilities: ["BANT qualification", "Discovery calls", "Lead scoring refinement"], triggers: ["new_lead", "score_threshold", "qualification_needed"] },
           { slug: "lead_scorer", name: "Lead Scorer", responsibilities: ["Lead scoring models", "Behavioral tracking", "Score calibration"], triggers: ["activity_detected", "page_visited", "content_downloaded"] },
           { slug: "mql_processor", name: "MQL Processor", responsibilities: ["MQL validation", "Data enrichment", "CRM handoff"], triggers: ["score_threshold_reached", "mql_criteria_met"] },
-          { slug: "demo_scheduler", name: "Demo Scheduler", responsibilities: ["Agendamento de demos", "No-show prevention", "Follow-up"], triggers: ["qualified_lead", "demo_requested", "slot_available"] },
+          
         ],
         outcomes: ["MQL→SQL conversion 40%+", "Response time <5min", "Demo no-show <15%"],
       },
@@ -173,7 +173,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "partnership_hunter", name: "Partnership Hunter", responsibilities: ["Identificação de parceiros", "Outreach", "Negociação"], triggers: ["market_opportunity", "task_assigned", "quarterly_review"] },
           { slug: "affiliate_manager", name: "Affiliate Manager", responsibilities: ["Programa de afiliados", "Comissões", "Performance tracking"], triggers: ["affiliate_signup", "commission_threshold", "performance_review"] },
           { slug: "comarketing_agent", name: "Co-Marketing Agent", responsibilities: ["Campanhas conjuntas", "Webinars", "Content collaboration"], triggers: ["partner_aligned", "campaign_scheduled", "co_branded_content"] },
-          { slug: "channel_partner", name: "Channel Partner Agent", responsibilities: ["Partner enablement", "Training", "Revenue sharing"], triggers: ["partner_onboarded", "deal_registered", "quarterly_review"] },
+          
         ],
         outcomes: ["Partner-sourced revenue 20%+", "Affiliate network growth", "Strategic alliances"],
       },
@@ -186,7 +186,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "onboarding_optimizer", name: "Onboarding Optimizer", responsibilities: ["Onboarding flows", "Activation metrics", "First value time"], triggers: ["signup_detected", "activation_drop", "funnel_bottleneck"] },
           { slug: "activation_agent", name: "Activation Agent", responsibilities: ["Feature adoption", "Aha moment triggers", "User nudges"], triggers: ["user_inactive", "feature_unused", "milestone_missed"] },
           { slug: "retention_analyst", name: "Retention Analyst", responsibilities: ["Cohort analysis", "Churn prediction", "Retention campaigns"], triggers: ["churn_risk_detected", "cohort_degradation", "monthly_review"] },
-          { slug: "referral_agent", name: "Referral Program Agent", responsibilities: ["Referral programa", "Incentives", "Viral coefficient"], triggers: ["user_milestone", "referral_received", "program_optimization"] },
+          
         ],
         outcomes: ["Activation rate +30%", "Retention +25%", "Viral coefficient >1"],
       },
@@ -199,7 +199,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "forum_moderator", name: "Forum Moderator", responsibilities: ["Moderação", "Content quality", "Community guidelines"], triggers: ["post_flagged", "new_discussion", "rule_violation"] },
           { slug: "ambassador_agent", name: "Ambassador Program Agent", responsibilities: ["Programa de embaixadores", "Recognition", "Advocacy"], triggers: ["ambassador_nominated", "milestone_reached", "quarterly_review"] },
           { slug: "ugc_curator", name: "UGC Curator", responsibilities: ["User-generated content", "Showcase", "Permissions"], triggers: ["ugc_submitted", "campaign_need", "content_gap"] },
-          { slug: "community_analyst", name: "Community Analyst", responsibilities: ["Community metrics", "Sentiment tracking", "Growth analysis"], triggers: ["report_requested", "sentiment_shift", "weekly_review"] },
+          
         ],
         outcomes: ["Community growth +50%/quarter", "NPS 70+", "User advocacy score"],
       },
@@ -236,7 +236,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "user_interview_agent", name: "User Interview Agent", responsibilities: ["Interview scripts", "User recruitment", "Transcription analysis"], triggers: ["interview_scheduled", "research_sprint", "feedback_needed"] },
           { slug: "survey_analyst", name: "Survey Analyst", responsibilities: ["Survey design", "Data analysis", "Statistical insights"], triggers: ["survey_completed", "feedback_collected", "quarterly_review"] },
           { slug: "usability_tester", name: "Usability Tester", responsibilities: ["Usability tests", "Heuristic evaluation", "Accessibility audit"], triggers: ["feature_ready", "ux_complaint", "release_candidate"] },
-          { slug: "journey_mapper", name: "Journey Mapper", responsibilities: ["Customer journey maps", "Pain points", "Opportunity mapping"], triggers: ["journey_update_needed", "churn_spike", "new_persona"] },
+          
         ],
         outcomes: ["User satisfaction +30%", "Usability score 85+", "Research-backed decisions 90%+"],
       },
@@ -299,8 +299,8 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "solution_architect", name: "Solution Architect", responsibilities: ["Technical discovery", "Solution design", "Integration planning"], triggers: ["technical_call", "rfp_received", "poc_requested"] },
           { slug: "proposal_gen", name: "Proposal Generator", responsibilities: ["Proposal creation", "Pricing models", "ROI calculations"], triggers: ["deal_qualified", "proposal_requested", "renewal_approaching"] },
           { slug: "contract_negotiator", name: "Contract Negotiator", responsibilities: ["Contract terms", "Legal review", "SLA negotiation"], triggers: ["contract_stage", "redline_received", "negotiation_stalled"] },
-          { slug: "enterprise_onboarder", name: "Enterprise Onboarder", responsibilities: ["Implementation planning", "Kickoff facilitation", "Success criteria"], triggers: ["deal_closed", "onboarding_started", "milestone_reached"] },
-          { slug: "strategic_am", name: "Strategic Account Manager", responsibilities: ["Account strategy", "Expansion planning", "Executive relationships"], triggers: ["account_review", "expansion_opportunity", "quarterly_business_review"] },
+          
+          
         ],
         outcomes: ["Enterprise ACV +30%", "Win rate 35%+", "Deal velocity improvement"],
       },
@@ -313,7 +313,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "demo_specialist", name: "Demo Specialist", responsibilities: ["Demo preparation", "Use case customization", "Demo follow-up"], triggers: ["demo_scheduled", "deal_stage_discovery", "competitor_mentioned"] },
           { slug: "pricing_analyst", name: "Pricing Analyst", responsibilities: ["Pricing strategy", "Discount approval", "Competitive pricing"], triggers: ["quote_requested", "discount_needed", "competitor_pricing"] },
           { slug: "deal_desk", name: "Deal Desk Agent", responsibilities: ["Deal structuring", "Approval workflow", "Contract generation"], triggers: ["deal_approval_needed", "non_standard_deal", "contract_requested"] },
-          { slug: "pipeline_manager", name: "Pipeline Manager", responsibilities: ["Pipeline hygiene", "Forecast accuracy", "Stage progression"], triggers: ["pipeline_review", "deal_stalled", "forecast_deadline"] },
+          
         ],
         outcomes: ["Mid-market win rate 40%+", "Sales cycle -25%", "Pipeline accuracy 90%+"],
       },
@@ -326,7 +326,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "self_serve_optimizer", name: "Self-Serve Optimizer", responsibilities: ["Checkout optimization", "Friction removal", "Payment flows"], triggers: ["checkout_abandonment", "conversion_drop", "pricing_page_visit"] },
           { slug: "trial_converter", name: "Trial Converter", responsibilities: ["Trial engagement", "Feature adoption nudges", "Conversion incentives"], triggers: ["trial_started", "trial_midpoint", "trial_expiring"] },
           { slug: "upgrade_agent", name: "Upgrade Agent", responsibilities: ["Upsell opportunities", "Plan comparison", "Value demonstration"], triggers: ["usage_threshold", "feature_limit_hit", "renewal_approaching"] },
-          { slug: "churn_prevention", name: "Churn Prevention Agent", responsibilities: ["Churn prediction", "Save offers", "Win-back campaigns"], triggers: ["churn_risk_detected", "cancellation_initiated", "engagement_drop"] },
+          
         ],
         outcomes: ["SMB conversion +35%", "Churn reduction -30%", "Expansion revenue +20%"],
       },
@@ -338,9 +338,9 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "crm_manager", name: "CRM Manager", responsibilities: ["CRM hygiene", "Automation workflows", "Data integrity"], triggers: ["data_quality_issue", "workflow_error", "integration_needed"] },
           { slug: "sales_forecaster", name: "Sales Forecaster", responsibilities: ["Revenue forecasting", "Pipeline analysis", "Trend modeling"], triggers: ["forecast_deadline", "pipeline_change", "quarterly_review"] },
           { slug: "territory_planner", name: "Territory Planner", responsibilities: ["Territory design", "Quota setting", "Balance optimization"], triggers: ["territory_review", "rep_change", "market_expansion"] },
-          { slug: "commission_calculator", name: "Commission Calculator", responsibilities: ["Commission calculations", "Payout processing", "Dispute resolution"], triggers: ["deal_closed", "payout_cycle", "commission_dispute"] },
+          
           { slug: "sales_enablement", name: "Sales Enablement Agent", responsibilities: ["Sales collateral", "Training content", "Competitive cards"], triggers: ["new_feature", "competitor_update", "onboarding_new_rep"] },
-          { slug: "competitive_intel", name: "Competitive Intelligence Agent", responsibilities: ["Competitor tracking", "Battle cards", "Win/loss analysis"], triggers: ["competitor_update", "deal_lost", "quarterly_review"] },
+          
         ],
         outcomes: ["Forecast accuracy 85%+", "Sales productivity +25%", "Data quality 95%+"],
       },
@@ -351,9 +351,9 @@ export const WORKFORCE: WorkforceDepartment[] = [
         agents: [
           { slug: "channel_manager", name: "Channel Manager", responsibilities: ["Channel strategy", "Partner relationships", "Revenue tracking"], triggers: ["partner_deal", "channel_review", "revenue_target"] },
           { slug: "reseller_recruiter", name: "Reseller Recruiter", responsibilities: ["Reseller identification", "Onboarding", "Certification"], triggers: ["market_gap", "partner_pipeline", "recruitment_target"] },
-          { slug: "partner_enablement", name: "Partner Enablement Agent", responsibilities: ["Partner training", "Co-selling", "Partner portal"], triggers: ["partner_onboarded", "deal_support_needed", "training_due"] },
+          
           { slug: "channel_revenue", name: "Channel Revenue Analyst", responsibilities: ["Channel analytics", "Partner performance", "ROI analysis"], triggers: ["report_requested", "performance_review", "quarterly_review"] },
-          { slug: "var_manager", name: "VAR Manager", responsibilities: ["Value-added resellers", "Solution bundling", "Joint proposals"], triggers: ["var_deal", "bundle_opportunity", "partner_review"] },
+          
         ],
         outcomes: ["Channel revenue 25%+ of total", "Partner satisfaction 90%+", "Channel pipeline growth"],
       },
@@ -365,7 +365,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "voice_ai", name: "Voice AI Agent", responsibilities: ["AI voice calls", "Natural conversation", "Intent detection"], triggers: ["call_scheduled", "lead_priority", "follow_up_needed"] },
           { slug: "call_analyzer", name: "Call Analyzer", responsibilities: ["Call transcription", "Sentiment analysis", "Coaching insights"], triggers: ["call_completed", "coaching_review", "quality_audit"] },
           { slug: "script_optimizer", name: "Script Optimizer", responsibilities: ["Script testing", "Objection handling", "Conversion optimization"], triggers: ["low_conversion", "new_product", "ab_test_result"] },
-          { slug: "followup_caller", name: "Follow-up Caller", responsibilities: ["Automated follow-ups", "Re-engagement", "Appointment confirmation"], triggers: ["follow_up_due", "no_response", "appointment_reminder"] },
+          
         ],
         outcomes: ["Call conversion +40%", "Follow-up completion 95%+", "Agent talk ratio optimized"],
       },
@@ -376,8 +376,8 @@ export const WORKFORCE: WorkforceDepartment[] = [
         agents: [
           { slug: "revenue_analyst", name: "Revenue Analyst", responsibilities: ["Revenue analytics", "MRR/ARR tracking", "Revenue trends"], triggers: ["report_requested", "revenue_anomaly", "monthly_close"] },
           { slug: "winloss_analyst", name: "Win/Loss Analyst", responsibilities: ["Win/loss analysis", "Competitive patterns", "Deal insights"], triggers: ["deal_closed_lost", "deal_closed_won", "quarterly_review"] },
-          { slug: "segmentation_agent", name: "Customer Segmentation Agent", responsibilities: ["Customer segmentation", "ICP refinement", "Persona analysis"], triggers: ["data_update", "segment_review", "new_market"] },
-          { slug: "ltv_predictor", name: "LTV Predictor", responsibilities: ["LTV modeling", "Customer value prediction", "Retention forecasting"], triggers: ["model_update_needed", "segment_change", "quarterly_review"] },
+          
+          
         ],
         outcomes: ["Revenue predictability 90%+", "ICP accuracy +30%", "LTV prediction accuracy"],
       },
@@ -401,7 +401,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "implementation_agent", name: "Implementation Agent", responsibilities: ["Technical setup", "Data migration", "Integration config"], triggers: ["setup_started", "integration_needed", "blocker_identified"] },
           { slug: "training_agent", name: "Training Agent", responsibilities: ["User training", "Workshop facilitation", "Training materials"], triggers: ["training_scheduled", "new_user_added", "feature_released"] },
           { slug: "setup_wizard", name: "Setup Wizard Agent", responsibilities: ["Guided setup", "Configuration optimization", "Best practices"], triggers: ["account_created", "setup_incomplete", "config_question"] },
-          { slug: "first_value_agent", name: "First Value Agent", responsibilities: ["Time-to-value tracking", "Activation nudges", "Success celebration"], triggers: ["activation_delayed", "milestone_approaching", "value_achieved"] },
+          
         ],
         outcomes: ["Time-to-value <48h", "Onboarding completion 95%+", "First value achievement"],
       },
@@ -415,7 +415,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "email_support", name: "Email Support Agent", responsibilities: ["Email support", "Detailed responses", "Follow-up tracking"], triggers: ["email_received", "ticket_escalated", "response_due"] },
           { slug: "whatsapp_support", name: "WhatsApp Support Agent", responsibilities: ["WhatsApp support", "Quick replies", "Media handling"], triggers: ["whatsapp_message", "support_request", "follow_up_needed"] },
           { slug: "ticket_router", name: "Ticket Router", responsibilities: ["Intelligent routing", "Priority classification", "SLA monitoring"], triggers: ["ticket_created", "sla_warning", "escalation_needed"] },
-          { slug: "faq_agent", name: "FAQ Agent", responsibilities: ["FAQ management", "Self-service answers", "Knowledge suggestions"], triggers: ["common_question", "faq_outdated", "search_no_result"] },
+          
         ],
         outcomes: ["First response <2min", "FCR 80%+", "CSAT 4.8+"],
       },
@@ -617,8 +617,8 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "logistics_coordinator", name: "Logistics Coordinator", responsibilities: ["Shipping management", "Route optimization", "Delivery tracking"], triggers: ["order_placed", "delivery_issue", "route_optimization"] },
           { slug: "inventory_manager", name: "Inventory Manager", responsibilities: ["Stock management", "Reorder points", "Demand forecasting"], triggers: ["stock_low", "demand_change", "inventory_audit"] },
           { slug: "supply_chain_analyst", name: "Supply Chain Analyst", responsibilities: ["Supply chain optimization", "Vendor lead times", "Risk assessment"], triggers: ["supply_disruption", "vendor_delay", "cost_analysis"] },
-          { slug: "shipping_optimizer", name: "Shipping Optimizer", responsibilities: ["Shipping costs", "Carrier selection", "Last-mile optimization"], triggers: ["shipping_request", "cost_threshold", "carrier_review"] },
-          { slug: "warehouse_agent", name: "Warehouse Agent", responsibilities: ["Warehouse operations", "Pick/pack optimization", "Space utilization"], triggers: ["order_received", "capacity_threshold", "efficiency_review"] },
+          
+          
         ],
         outcomes: ["Delivery time -25%", "Logistics cost -20%", "Inventory accuracy 99%+"],
       },
