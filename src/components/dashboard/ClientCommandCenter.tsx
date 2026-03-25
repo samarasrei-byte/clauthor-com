@@ -184,7 +184,7 @@ const ClientCommandCenter = ({
               {t("cmd.no_knowledge_title", { defaultValue: "Seus agentes ainda não conhecem sua empresa" })}
             </h3>
             <p className="text-sm text-muted-foreground mt-1.5">
-              {t("cmd.no_knowledge_desc", { defaultValue: "Conecte seu site, documentos ou CRM para que a inteligência artificial tome decisões precisas pelo seu negócio." })}
+              {t("cmd.no_knowledge_desc", { defaultValue: "Conecte seu site, documentos ou CRM para que seus agentes tomem decisões precisas pelo seu negócio." })}
             </p>
           </div>
           <Button 

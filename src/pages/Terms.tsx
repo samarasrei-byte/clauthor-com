@@ -10,7 +10,7 @@ const sections = [
   {
     icon: FileText,
     title: "2. Descrição do Serviço",
-    content: `A Clauthor é uma plataforma de agentes de inteligência artificial que oferece automação empresarial através de agentes especializados organizados em departamentos. Os serviços incluem, mas não se limitam a: automação de tarefas, geração de relatórios, gestão de leads, comunicação multicanal (e-mail, WhatsApp, LinkedIn), análise de dados e orquestração de equipes de IA.`,
+    content: `A Clauthor é uma plataforma de agentes autônomos que oferece automação empresarial através de agentes especializados organizados em departamentos. Os serviços incluem, mas não se limitam a: automação de tarefas, geração de relatórios, gestão de leads, comunicação multicanal (e-mail, WhatsApp, LinkedIn), análise de dados e orquestração de equipes de agentes.`,
   },
   {
     icon: Users,

@@ -7,7 +7,7 @@ export const LANDING_TOUR_STEPS: TourStep[] = [
   {
     label: "Bem-vindo à CLAUTHOR",
     speech:
-      "E aí! Eu sou o Thor, CEO e orquestrador de toda a equipe de inteligência artificial da CLAUTHOR. Vou te mostrar como funciona essa plataforma que vai transformar seu negócio. Vem comigo!",
+      "E aí! Eu sou o Thor, CEO e orquestrador de toda a equipe autônoma da CLAUTHOR. Vou te mostrar como funciona essa plataforma que vai transformar seu negócio. Vem comigo!",
   },
   {
     label: "Sua equipe de IA",
