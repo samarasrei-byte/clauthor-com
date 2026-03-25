@@ -97,9 +97,9 @@ const architectureDetails: Record<string, { title: string; desc: string; stats: 
   "Departamentos": { title: "15 Departamentos", desc: "Organização empresarial completa. Cada departamento tem squads especializados com agentes dedicados.", stats: ["15 departamentos", "37 squads", `${totalAgents} agentes`] },
   "Squads": { title: "37 Squads Inteligentes", desc: "Equipes temáticas dentro de cada departamento. Coordenam agentes especializados para resultados específicos.", stats: ["Coordenação automática", "Roteamento inteligente", "Escalabilidade infinita"] },
   [`${totalAgents} Agentes`]: { title: `${totalAgents} Agentes Especializados`, desc: "Cada agente é um especialista em sua área. Trabalha 24/7, acionado por eventos.", stats: ["15 departamentos", "Operação 24/7", "Escala infinita"] },
-  "OpenClaw Runtime": { title: "OpenClaw · Motor de Execução", desc: "Runtime que transforma planos em ações reais: cria arquivos, executa comandos, roda testes.", stats: ["12 agentes em paralelo", "Acesso completo ao filesystem", "~180 exec/hora"] },
-  "AI Gateway": { title: "AI Gateway · Roteador Inteligente", desc: "Roteamento dinâmico entre modelos. Tarefas simples → VPS local, tarefas complexas → Lovable AI.", stats: ["Fallback automático", "Circuit breaker", "Multi-modelo"] },
-  "Claude API": { title: "Claude API · Anthropic", desc: "Modelo principal para planejamento estratégico, code review e raciocínio complexo.", stats: ["Context: 200K tokens", "Precisão: 94.2%", "Claude 3.5 Sonnet"] },
+  "Execution Engine": { title: "Execution Engine · Motor Proprietário", desc: "Runtime proprietário que transforma planos em ações reais: cria arquivos, executa comandos, roda testes.", stats: ["12 agentes em paralelo", "Acesso completo ao filesystem", "~180 exec/hora"] },
+  "AI Gateway": { title: "AI Gateway · Roteador Inteligente", desc: "Roteamento dinâmico entre modelos. Tarefas simples → VPS local, tarefas complexas → modelos premium.", stats: ["Fallback automático", "Circuit breaker", "Multi-modelo"] },
+  "AI Planner": { title: "AI Planner · Planejamento Estratégico", desc: "Módulo de inteligência para planejamento estratégico, code review e raciocínio complexo.", stats: ["Context: 200K tokens", "Precisão: 94.2%", "Multi-modelo"] },
   "Tools / Integrações": { title: "Ferramentas & APIs Externas", desc: "WhatsApp, Meta Ads, Google Ads, PayPal, GitHub, ElevenLabs e mais. Conexão nativa.", stats: ["12+ integrações", "APIs REST/GraphQL", "Webhooks em tempo real"] },
 };
 
@@ -148,8 +148,8 @@ const LAYER_DEFS = [
   { layer: "Camada 1", title: "Interface", subtitle: "Command Center", icon: Eye, desc: "Painel de controle do CEO humano. Visibilidade total da operação." },
   { layer: "Camada 2", title: "Orquestração", subtitle: "Thor", icon: Zap, accent: true, desc: "Recebe, classifica e distribui todas as tarefas para os departamentos." },
   { layer: "Camada 3", title: "Organização", subtitle: "Departamentos → Squads → Agentes", icon: Users, desc: "Estrutura empresarial com departamentos, squads e agentes especializados." },
-  { layer: "Camada 4", title: "Execução", subtitle: "OpenClaw Runtime", icon: Cpu, desc: "Motor que executa ações reais: filesystem, terminal, APIs externas." },
-  { layer: "Camada 5", title: "Inteligência", subtitle: "AI Gateway → Claude API", icon: Brain, accent: true, desc: "Roteamento inteligente entre modelos de IA para raciocínio e planejamento." },
+  { layer: "Camada 4", title: "Execução", subtitle: "Execution Engine", icon: Cpu, desc: "Motor proprietário que executa ações reais: filesystem, terminal, APIs externas." },
+  { layer: "Camada 5", title: "Inteligência", subtitle: "AI Gateway → Multi-Modelo", icon: Brain, accent: true, desc: "Roteamento inteligente entre modelos de IA para raciocínio e planejamento." },
   { layer: "Camada 6", title: "Ferramentas", subtitle: "APIs & Integrações", icon: Link2, desc: "Conexões nativas com WhatsApp, Meta Ads, PayPal, GitHub e mais." },
 ];
 
@@ -297,9 +297,9 @@ const simulationSteps = [
     "📥 Tarefa recebida: \"Criar módulo de pagamentos\"",
     "🔍 Analisando contexto do sistema...",
     "📋 Classificação: alta prioridade, dept: fintech",
-    "🧠 Roteando para Claude Code para planejamento...",
+    "🧠 Roteando para AI Planner...",
   ]},
-  { agent: "Claude Code", icon: Brain, color: "text-primary", bgColor: "bg-primary/10", messages: [
+  { agent: "AI Planner", icon: Brain, color: "text-primary", bgColor: "bg-primary/10", messages: [
     "📖 Lendo repositório... 847 arquivos",
     "🏗️ Plano criado: 5 etapas",
     "   1. Criar src/modules/payments/",
@@ -307,9 +307,9 @@ const simulationSteps = [
     "   3. Criar PaymentController.ts",
     "   4. Testes unitários",
     "   5. Atualizar documentação",
-    "✅ Plano validado → OpenClaw",
+    "✅ Plano validado → Execution Engine",
   ]},
-  { agent: "OpenClaw", icon: Cpu, color: "text-accent-emerald", bgColor: "bg-accent-emerald/10", messages: [
+  { agent: "Execution Engine", icon: Cpu, color: "text-accent-emerald", bgColor: "bg-accent-emerald/10", messages: [
     "⚡ Execução paralela iniciada...",
     "📁 mkdir src/modules/payments/ ✓",
     "📝 PaymentService.ts · 127 linhas ✓",
@@ -317,7 +317,7 @@ const simulationSteps = [
     "🧪 Testes: 12/12 passando ✓",
     "📚 Docs atualizados ✓",
   ]},
-  { agent: "Claude Code", icon: CheckCircle2, color: "text-primary", bgColor: "bg-primary/10", messages: [
+  { agent: "AI Planner", icon: CheckCircle2, color: "text-primary", bgColor: "bg-primary/10", messages: [
     "🔍 Code review...",
     "✅ Lint: 0 erros | Types: OK | Cobertura: 94%",
     "🎉 Módulo criado com sucesso!",
@@ -536,7 +536,7 @@ const INTEGRATIONS = [
   { name: "PayPal", icon: DollarSign, status: "active", desc: "Processamento de pagamentos" },
   { name: "GitHub", icon: Code2, status: "active", desc: "Repos & CI/CD" },
   { name: "ElevenLabs", icon: Mic, status: "active", desc: "Voz IA para agentes" },
-  { name: "Claude Code", icon: Brain, status: "active", desc: "Planejamento & code review" },
+  { name: "AI Planner", icon: Brain, status: "active", desc: "Planejamento & code review" },
   { name: "HubSpot", icon: Briefcase, status: "coming", desc: "CRM & automação de marketing" },
   { name: "Salesforce", icon: Database, status: "coming", desc: "CRM enterprise" },
   { name: "Slack", icon: MessageSquare, status: "coming", desc: "Notificações & chat" },
@@ -628,11 +628,11 @@ const Architecture = () => {
             <FlowArrow />
             <ClickableArchNode icon={Bot} label={`${totalAgents} Agentes`} sublabel="Workers especializados" />
             <FlowArrow />
-            <ClickableArchNode icon={Cpu} label="OpenClaw Runtime" sublabel="Motor de Execução" />
+            <ClickableArchNode icon={Cpu} label="Execution Engine" sublabel="Motor Proprietário" />
             <FlowArrow />
             <ClickableArchNode icon={Workflow} label="AI Gateway" sublabel="Roteador Multi-Modelo" />
             <FlowArrow />
-            <ClickableArchNode icon={Brain} label="Claude API" sublabel="Anthropic · Raciocínio" accent />
+            <ClickableArchNode icon={Brain} label="AI Planner" sublabel="Planejamento Estratégico" accent />
             <FlowArrow />
             <ClickableArchNode icon={Link2} label="Tools / Integrações" sublabel="WhatsApp, Meta, PayPal..." />
           </motion.div>
@@ -696,7 +696,7 @@ const Architecture = () => {
                 <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
                   <Brain className="h-5 w-5 text-primary" strokeWidth={1.5} />
                 </div>
-                <div><h4 className="font-display text-lg font-bold">Claude Code</h4><p className="text-[10px] font-mono text-primary/60 uppercase tracking-wider">Inteligência</p></div>
+                <div><h4 className="font-display text-lg font-bold">AI Planner</h4><p className="text-[10px] font-mono text-primary/60 uppercase tracking-wider">Inteligência</p></div>
               </div>
               <ul className="space-y-2">
                 {["Lê repositórios com 847+ arquivos", "Planeja arquitetura", "Gera código", "Code review", "Detecta vulnerabilidades"].map(t => (
@@ -713,7 +713,7 @@ const Architecture = () => {
                 <div className="w-10 h-10 rounded-xl bg-accent-emerald/10 flex items-center justify-center">
                   <Cpu className="h-5 w-5 text-accent-emerald" strokeWidth={1.5} />
                 </div>
-                <div><h4 className="font-display text-lg font-bold">OpenClaw</h4><p className="text-[10px] font-mono text-accent-emerald/60 uppercase tracking-wider">Execução</p></div>
+                <div><h4 className="font-display text-lg font-bold">Execution Engine</h4><p className="text-[10px] font-mono text-accent-emerald/60 uppercase tracking-wider">Execução</p></div>
               </div>
               <ul className="space-y-2">
                 {["Cria/edita arquivos", "Executa comandos no terminal", "Roda testes", "Workflows em paralelo", "Integra APIs externas"].map(t => (
