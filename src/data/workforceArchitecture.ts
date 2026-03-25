@@ -593,7 +593,6 @@ export const WORKFORCE: WorkforceDepartment[] = [
         agents: [
           { slug: "process_analyst", name: "Process Analyst", responsibilities: ["Process mapping", "Bottleneck identification", "Automation opportunities"], triggers: ["process_review", "inefficiency_detected", "improvement_request"] },
           { slug: "quality_auditor", name: "Quality Auditor", responsibilities: ["Quality audits", "Standard compliance", "Corrective actions"], triggers: ["audit_scheduled", "quality_issue", "certification_review"] },
-          { slug: "sop_writer", name: "SOP Writer", responsibilities: ["Standard Operating Procedures", "Process documentation", "Training materials"], triggers: ["new_process", "process_change", "audit_finding"] },
 
         ],
         outcomes: ["Process efficiency +35%", "Quality score 98%+", "SOP coverage 100%"],
