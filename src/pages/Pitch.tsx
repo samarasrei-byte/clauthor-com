@@ -770,40 +770,109 @@ const Pitch = () => {
             ))}
           </div>
 
-          {/* Competitive comparison */}
-          <div className="grid md:grid-cols-3 gap-6">
-            <GlassCard hover={false} className="border-destructive/20">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center">
-                  <MessageCircle className="w-5 h-5 text-destructive" />
-                </div>
-                <div>
-                  <h3 className="font-bold">ChatGPT / Assistentes</h3>
-                  <span className="text-xs text-destructive/80 font-mono">Ferramenta Passiva</span>
-                </div>
-              </div>
-              <ul className="space-y-2 text-sm">
-                {["Não executa — só responde", "Sem workflows ou automação", "Sem CRM, pipeline ou Kanban", "Sem delegação multi-agente", "Cada conversa começa do zero"].map(t => (
-                  <li key={t} className="flex items-start gap-2"><span className="text-destructive mt-0.5">✗</span><span className="text-muted-foreground">{t}</span></li>
-                ))}
-              </ul>
-            </GlassCard>
+          {/* Competitive comparison — honest data-science view */}
+          <div className="text-center mb-8">
+            <h3 className="text-xl md:text-2xl font-display font-bold tracking-tight mb-2">Análise Competitiva — Visão de Cientista de Dados</h3>
+            <p className="text-sm text-muted-foreground max-w-2xl mx-auto">Transparência total. Cada player tem forças reais. A questão é: qual resolve o problema do cliente final?</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {/* OpenClaw */}
             <GlassCard hover={false} className="border-yellow-500/20">
               <div className="flex items-center gap-3 mb-4">
                 <div className="w-10 h-10 rounded-xl bg-yellow-500/10 flex items-center justify-center">
                   <Code className="w-5 h-5 text-yellow-500" />
                 </div>
                 <div>
-                  <h3 className="font-bold">DIY / Open Source</h3>
-                  <span className="text-xs text-yellow-500/80 font-mono">Motor Bruto</span>
+                  <h3 className="font-bold text-foreground">OpenClaw</h3>
+                  <span className="text-[10px] text-yellow-500/80 font-mono uppercase tracking-wider">Motor de Execução</span>
                 </div>
               </div>
-              <ul className="space-y-2 text-sm">
-                {["Precisa de dev senior ($8K+/mês)", "3-6 meses para funcionar", "Zero segurança enterprise", "Manutenção constante", "Sem suporte ou SLA"].map(t => (
-                  <li key={t} className="flex items-start gap-2"><span className="text-yellow-500 mt-0.5">✗</span><span className="text-muted-foreground">{t}</span></li>
-                ))}
-              </ul>
+              <div className="mb-3">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Forças reais</p>
+                <ul className="space-y-1.5 text-xs">
+                  {["Open-source, auditável", "Execução de ferramentas sólida", "Comunidade ativa", "Customização total do motor"].map(t => (
+                    <li key={t} className="flex items-start gap-1.5"><CheckCircle2 className="w-3 h-3 text-yellow-500 mt-0.5 shrink-0" /><span className="text-muted-foreground">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-destructive/80 mb-1">Limitações críticas</p>
+                <ul className="space-y-1.5 text-xs">
+                  {["Zero orquestração multi-agente nativa", "Sem UI — precisa de dev senior ($8K+/mês)", "Sem Policy Engine ou governança", "Sem CRM/Kanban/Analytics", "Sem multi-tenant ou isolamento", "Cada deploy é um projeto custom"].map(t => (
+                    <li key={t} className="flex items-start gap-1.5"><span className="text-destructive mt-0.5 text-[10px]">✗</span><span className="text-muted-foreground">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mt-3 pt-3 border-t border-border/30">
+                <p className="text-[10px] text-muted-foreground italic">Veredicto: Excelente motor bruto. Mas é um motor — não um carro. O cliente precisa construir tudo ao redor.</p>
+              </div>
             </GlassCard>
+
+            {/* Claude Code */}
+            <GlassCard hover={false} className="border-purple-500/20">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-purple-500/10 flex items-center justify-center">
+                  <Brain className="w-5 h-5 text-purple-500" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">Claude Code</h3>
+                  <span className="text-[10px] text-purple-500/80 font-mono uppercase tracking-wider">Cérebro de Planejamento</span>
+                </div>
+              </div>
+              <div className="mb-3">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Forças reais</p>
+                <ul className="space-y-1.5 text-xs">
+                  {["Raciocínio de nível PhD", "Contexto de 200K tokens", "Melhor code generation do mercado", "Excelente para arquitetura"].map(t => (
+                    <li key={t} className="flex items-start gap-1.5"><CheckCircle2 className="w-3 h-3 text-purple-500 mt-0.5 shrink-0" /><span className="text-muted-foreground">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-destructive/80 mb-1">Limitações críticas</p>
+                <ul className="space-y-1.5 text-xs">
+                  {["Não executa — planeja e sugere", "Cada conversa é efêmera (sem memória)", "Sem delegação entre agentes", "Sem workflows ou automações", "Custo por token alto para produção", "Dependência de um único provider"].map(t => (
+                    <li key={t} className="flex items-start gap-1.5"><span className="text-destructive mt-0.5 text-[10px]">✗</span><span className="text-muted-foreground">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mt-3 pt-3 border-t border-border/30">
+                <p className="text-[10px] text-muted-foreground italic">Veredicto: O melhor cérebro do mercado. Mas cérebro sem corpo não executa tarefas empresariais.</p>
+              </div>
+            </GlassCard>
+
+            {/* ChatGPT / Assistentes */}
+            <GlassCard hover={false} className="border-destructive/20">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-destructive/10 flex items-center justify-center">
+                  <MessageCircle className="w-5 h-5 text-destructive" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-foreground">ChatGPT / Assistentes</h3>
+                  <span className="text-[10px] text-destructive/80 font-mono uppercase tracking-wider">Ferramenta Passiva</span>
+                </div>
+              </div>
+              <div className="mb-3">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Forças reais</p>
+                <ul className="space-y-1.5 text-xs">
+                  {["Brand recognition global", "GPTs Store com milhares de apps", "Multimodal (voz, imagem, vídeo)", "API robusta e bem documentada"].map(t => (
+                    <li key={t} className="flex items-start gap-1.5"><CheckCircle2 className="w-3 h-3 text-destructive/70 mt-0.5 shrink-0" /><span className="text-muted-foreground">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <p className="text-[10px] uppercase tracking-wider text-destructive/80 mb-1">Limitações críticas</p>
+                <ul className="space-y-1.5 text-xs">
+                  {["Não executa tarefas — só responde", "Sem orquestração A2A", "Sem CRM, pipeline ou Kanban", "Sem multi-agente real (GPTs são isolados)", "Sem segurança enterprise nativa", "Cada conversa é uma ilha"].map(t => (
+                    <li key={t} className="flex items-start gap-1.5"><span className="text-destructive mt-0.5 text-[10px]">✗</span><span className="text-muted-foreground">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mt-3 pt-3 border-t border-border/30">
+                <p className="text-[10px] text-muted-foreground italic">Veredicto: Ótimo assistente pessoal. Mas não substitui um departamento operacional.</p>
+              </div>
+            </GlassCard>
+
+            {/* CLAUTHOR */}
             <GlassCard hover={false} className="border-primary/30 ring-1 ring-primary/20 shadow-[0_0_40px_hsl(var(--primary)/0.12)]">
               <div className="absolute -top-3 right-4">
                 <Badge className="bg-primary text-primary-foreground text-xs px-3 py-1 gap-1"><Star className="w-3 h-3" /> Enterprise</Badge>
@@ -814,16 +883,66 @@ const Pitch = () => {
                 </div>
                 <div>
                   <h3 className="font-bold gradient-text">CLAUTHOR</h3>
-                  <span className="text-xs text-primary/80 font-mono">Autonomia Total</span>
+                  <span className="text-[10px] text-primary/80 font-mono uppercase tracking-wider">Autonomia Orquestrada</span>
                 </div>
               </div>
-              <ul className="space-y-2 text-sm">
-                {["200 agentes que EXECUTAM", "Orquestração A2A automática", "Policy Engine + 5 portões", "CRM + Kanban + Analytics", "Setup em 5 minutos"].map(t => (
-                  <li key={t} className="flex items-start gap-2"><CheckCircle2 className="w-4 h-4 text-primary mt-0.5 shrink-0" /><span className="text-foreground">{t}</span></li>
-                ))}
-              </ul>
+              <div className="mb-3">
+                <p className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">O que combina</p>
+                <ul className="space-y-1.5 text-xs">
+                  {[
+                    "Usa Claude como cérebro de planejamento",
+                    "Usa OpenClaw como motor de execução",
+                    "Orquestração A2A com 200+ agentes",
+                    "Policy Engine + 5 portões de governança",
+                    "CRM + Kanban + Analytics nativos",
+                    "Multi-tenant + AES-256 + LGPD",
+                    "Setup em 5 min — sem dev necessário",
+                    "13 idiomas nativos, não traduzidos",
+                  ].map(t => (
+                    <li key={t} className="flex items-start gap-1.5"><CheckCircle2 className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" /><span className="text-foreground">{t}</span></li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mt-3 pt-3 border-t border-primary/10">
+                <p className="text-[10px] text-primary/80 font-semibold italic">A CLAUTHOR não compete com ferramentas — ela as orquestra. É a camada que transforma cérebros e motores em departamentos autônomos.</p>
+              </div>
             </GlassCard>
           </div>
+
+          {/* Honest self-assessment */}
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mt-10">
+            <GlassCard hover={false} className="border-primary/10 bg-muted/30">
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-xl bg-primary/5 flex items-center justify-center">
+                  <BarChart3 className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-display font-bold text-foreground">Auto-avaliação honesta — Riscos & Gaps</h3>
+                  <p className="text-[10px] text-muted-foreground">Transparência como diferencial. Todo investidor sofisticado quer saber os riscos.</p>
+                </div>
+              </div>
+              <div className="grid sm:grid-cols-2 gap-6">
+                <div>
+                  <p className="text-xs font-semibold text-foreground mb-2">⚠️ Riscos identificados</p>
+                  <ul className="space-y-2 text-xs text-muted-foreground">
+                    <li><strong className="text-foreground">Dependência de LLM providers:</strong> Mitigado com arquitetura agnóstica — circuit breaker + fallback entre Gemini, GPT e Claude.</li>
+                    <li><strong className="text-foreground">Tração early-stage:</strong> 4.100 leads em whitelist, mas conversão para pagantes ainda precisa ser validada em escala.</li>
+                    <li><strong className="text-foreground">Competição de big tech:</strong> Google, Microsoft e OpenAI podem lançar orquestradores. Nosso moat é a verticalização enterprise + speed-to-market.</li>
+                    <li><strong className="text-foreground">Unit economics em escala:</strong> Margem de 96% hoje com volume baixo. Com escala, custos de token podem pressionar margem para 80-85%.</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="text-xs font-semibold text-foreground mb-2">✅ Mitigações em execução</p>
+                  <ul className="space-y-2 text-xs text-muted-foreground">
+                    <li><strong className="text-foreground">Multi-model routing:</strong> AI Gateway roteia entre 10+ modelos. Sem vendor lock-in. Switch em runtime sem downtime.</li>
+                    <li><strong className="text-foreground">Revenue diversification:</strong> SaaS + Marketplace + Token Packs + White-label. 4 fontes de receita desde o dia 1.</li>
+                    <li><strong className="text-foreground">Defensibilidade por dados:</strong> Cada cliente gera dados de execução que treinam os agentes. Efeito flywheel que big tech não replica.</li>
+                    <li><strong className="text-foreground">Velocidade:</strong> Produto funcional em 3 meses com equipe de 1. Time-to-market é o moat mais difícil de copiar.</li>
+                  </ul>
+                </div>
+              </div>
+            </GlassCard>
+          </motion.div>
         </div>
       </Section>
 
