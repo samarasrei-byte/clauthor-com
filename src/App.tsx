@@ -85,8 +85,9 @@ const App = () => (
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Public pages with full navbar */}
-                {/* Waitlist — standalone immersive page, no navbar */}
+                {/* Standalone immersive pages — no navbar */}
                 <Route path="/waitlist" element={<Waitlist />} />
+                <Route path="/pitch" element={<Pitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />
 
                 {/* Public pages with full navbar */}
