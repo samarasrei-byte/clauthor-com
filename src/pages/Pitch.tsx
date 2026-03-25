@@ -98,11 +98,11 @@ const tocItems = [
 /* ── Investor Chat ── */
 const investorConversation = [
   { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-  { role: "agent" as const, text: "Porque você entra antes da escala com 20% de equity a R$ 1M de valuation. Produto funcional com 200 agentes de IA autônomos, 37 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a R$ 5-15M." },
+  { role: "agent" as const, text: "Porque você entra antes da escala. Duas opções: R$ 100K por 10% ou R$ 200K por 20% — valuation de R$ 1M baseado em produto real. 200 agentes de IA autônomos, 37 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a R$ 5-15M." },
   { role: "investor" as const, text: "Como monetizam?" },
   { role: "agent" as const, text: "SaaS B2B por assinatura. Ticket médio R$ 997/mês por squad. Event-driven = margem bruta de 96%+. Com 1.000 clientes, são R$ 12M/ano em MRR." },
   { role: "investor" as const, text: "Qual o retorno esperado?" },
-  { role: "agent" as const, text: "Seed (6-12 meses): valuation R$ 15-25M = 7-12x. Series A: R$ 75-150M = 37-75x. Potencial Exit em 5 anos: R$ 500M+ = 250x+. A rodada é limitada — 20% por R$ 200K." },
+  { role: "agent" as const, text: "Seed (6-12 meses): valuation R$ 15-25M = 7-12x. Series A: R$ 75-150M = 37-75x. Potencial Exit em 5 anos: R$ 500M+ = 250x+." },
 ];
 
 const InvestorChat = () => {
@@ -277,8 +277,8 @@ const Pitch = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
             {[
               { value: "R$ 1M", label: "Valuation" },
-              { value: "R$ 200K", label: "Captação" },
-              { value: "20%", label: "Equity" },
+              { value: "R$ 100K", label: "10% Equity" },
+              { value: "R$ 200K", label: "20% Equity" },
               { value: "96%+", label: "Margem Bruta" },
             ].map((m) => (
               <div key={m.label} className="text-center">
@@ -996,7 +996,7 @@ const Pitch = () => {
                   `${TOTAL_WORKFORCE_AGENTS} agentes de IA autônomos em ${TOTAL_DEPARTMENTS} departamentos`,
                   `${TOTAL_SQUADS} squads especializados operacionais`,
                   "Infraestrutura enterprise-grade desde o dia 1",
-                  "Valuation: R$ 1M (20% por R$ 200K)",
+                  "Valuation: R$ 1M (10% por R$ 100K ou 20% por R$ 200K)",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-foreground/90">
                     <CheckCircle2 className="h-4 w-4 text-primary mt-0.5 shrink-0" />
@@ -1015,9 +1015,10 @@ const Pitch = () => {
             className="p-8 rounded-2xl border border-primary/20 bg-primary/5 backdrop-blur-sm text-center"
           >
             <h3 className="font-display text-xl font-bold mb-8 text-foreground">Cenário de retorno para o investidor</h3>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
               {[
-                { label: "Investimento", value: "R$ 200K", sub: "20% equity" },
+                { label: "Opção 1", value: "R$ 100K", sub: "10% equity" },
+                { label: "Opção 2", value: "R$ 200K", sub: "20% equity" },
                 { label: "Seed (6-12m)", value: "R$ 15-25M", sub: "7-12x retorno" },
                 { label: "Series A", value: "R$ 75-150M", sub: "37-75x retorno" },
                 { label: "Exit (5 anos)", value: "R$ 500M+", sub: "250x+ retorno" },
@@ -1054,15 +1055,17 @@ const Pitch = () => {
             Rodada Aberta
           </Badge>
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Pre-Seed Aberto</h2>
-          <div className="grid sm:grid-cols-3 gap-6 mb-14">
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6 mb-14">
             {[
-              { label: "Captando", value: "R$ 200.000" },
-              { label: "Equity oferecido", value: "20%" },
-              { label: "Valuation", value: "R$ 1.000.000" },
+              { label: "Opção 1", value: "R$ 100.000", sub: "10% equity" },
+              { label: "Opção 2", value: "R$ 200.000", sub: "20% equity" },
+              { label: "Valuation", value: "R$ 1.000.000", sub: "Baseado em produto real" },
+              { label: "Diluição máxima", value: "20%", sub: "Fundador mantém controle" },
             ].map((item) => (
               <GlassCard key={item.label} hover={false} className="text-center !py-10">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
                 <p className="text-2xl md:text-3xl font-display font-bold text-foreground">{item.value}</p>
+                {item.sub && <p className="text-xs text-primary font-mono mt-1">{item.sub}</p>}
               </GlassCard>
             ))}
           </div>
@@ -1122,7 +1125,7 @@ const Pitch = () => {
         <div className="relative z-10 max-w-3xl mx-auto text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-3xl md:text-5xl font-display font-bold mb-4 tracking-tight">
-              20% de equity por US$ 50K.<br />
+               R$ 100K por 10% ou R$ 200K por 20%.<br />
               <span className="gradient-text">A janela fecha com a escala.</span>
             </h2>
             <p className="text-muted-foreground text-lg mb-8 max-w-lg mx-auto">
