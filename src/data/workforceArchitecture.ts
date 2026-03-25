@@ -624,6 +624,257 @@ export const WORKFORCE: WorkforceDepartment[] = [
       },
     ],
   },
+  // ═══════════════════════════════════════════
+  // 8. SECURITY & COMPLIANCE
+  // ═══════════════════════════════════════════
+  {
+    id: "security",
+    name: "Segurança & Compliance",
+    color: "text-red-500",
+    squads: [
+      {
+        id: "cyber_defense_squad",
+        name: "Cyber Defense Squad",
+        mission: "Monitorar e proteger a infraestrutura contra ameaças",
+        agents: [
+          { slug: "threat_monitor", name: "Threat Monitor", responsibilities: ["Threat detection", "Anomaly analysis", "Alert triage"], triggers: ["anomaly_detected", "alert_fired", "scan_complete"] },
+          { slug: "incident_responder", name: "Incident Responder", responsibilities: ["Incident response", "Containment", "Post-mortem"], triggers: ["incident_created", "severity_escalation", "containment_needed"] },
+          { slug: "vulnerability_scanner", name: "Vulnerability Scanner", responsibilities: ["Vulnerability scanning", "Patch management", "Risk scoring"], triggers: ["scan_scheduled", "cve_published", "deploy_completed"] },
+          { slug: "access_auditor", name: "Access Auditor", responsibilities: ["Access reviews", "Permission audits", "Compliance checks"], triggers: ["review_scheduled", "permission_change", "audit_requested"] },
+        ],
+        outcomes: ["MTTD <5min", "Zero critical breaches", "Patch compliance 99%+"],
+      },
+      {
+        id: "compliance_squad",
+        name: "Compliance Squad",
+        mission: "Garantir conformidade regulatória em todas as operações",
+        agents: [
+          { slug: "gdpr_agent", name: "GDPR Agent", responsibilities: ["GDPR compliance", "Data mapping", "Consent management"], triggers: ["data_request", "consent_change", "audit_scheduled"] },
+          { slug: "lgpd_agent", name: "LGPD Agent", responsibilities: ["LGPD compliance", "Data protection", "Privacy assessments"], triggers: ["data_processing", "privacy_request", "regulation_update"] },
+          { slug: "soc2_agent", name: "SOC2 Agent", responsibilities: ["SOC2 controls", "Evidence collection", "Audit preparation"], triggers: ["control_review", "audit_approaching", "evidence_needed"] },
+        ],
+        outcomes: ["Compliance score 100%", "Audit prep time -70%", "Zero violations"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 9. ENGINEERING
+  // ═══════════════════════════════════════════
+  {
+    id: "engineering",
+    name: "Engenharia",
+    color: "text-cyan-500",
+    squads: [
+      {
+        id: "devops_squad",
+        name: "DevOps Squad",
+        mission: "Automatizar deploy, infra e CI/CD",
+        agents: [
+          { slug: "ci_cd_agent", name: "CI/CD Agent", responsibilities: ["Pipeline management", "Build automation", "Deploy orchestration"], triggers: ["push_event", "pr_merged", "build_failed"] },
+          { slug: "infra_agent", name: "Infrastructure Agent", responsibilities: ["Cloud provisioning", "Auto-scaling", "Cost optimization"], triggers: ["capacity_threshold", "cost_alert", "infra_request"] },
+          { slug: "monitoring_agent", name: "Monitoring Agent", responsibilities: ["System monitoring", "Alert management", "Performance tracking"], triggers: ["metric_anomaly", "alert_triggered", "health_check"] },
+          { slug: "release_manager", name: "Release Manager", responsibilities: ["Release planning", "Rollback coordination", "Feature flags"], triggers: ["release_scheduled", "rollback_needed", "feature_toggle"] },
+        ],
+        outcomes: ["Deploy frequency 10x", "MTTR <15min", "Infra cost -30%"],
+      },
+      {
+        id: "qa_squad",
+        name: "QA & Testing Squad",
+        mission: "Garantir qualidade e cobertura de testes em toda a plataforma",
+        agents: [
+          { slug: "test_automation_agent", name: "Test Automation Agent", responsibilities: ["Test automation", "E2E testing", "Regression suites"], triggers: ["code_change", "release_candidate", "bug_reported"] },
+          { slug: "performance_tester", name: "Performance Tester", responsibilities: ["Load testing", "Stress testing", "Bottleneck identification"], triggers: ["pre_release", "performance_alert", "scale_event"] },
+          { slug: "security_tester", name: "Security Tester", responsibilities: ["Penetration testing", "Security scanning", "Vulnerability assessment"], triggers: ["deploy_completed", "security_review", "new_feature"] },
+        ],
+        outcomes: ["Test coverage 95%+", "Bug escape rate <1%", "Performance SLA 99.9%"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 10. DATA & ANALYTICS
+  // ═══════════════════════════════════════════
+  {
+    id: "data_analytics",
+    name: "Data & Analytics",
+    color: "text-indigo-500",
+    squads: [
+      {
+        id: "data_engineering_squad",
+        name: "Data Engineering Squad",
+        mission: "Construir e manter pipelines de dados confiáveis",
+        agents: [
+          { slug: "etl_agent", name: "ETL Agent", responsibilities: ["Data pipelines", "ETL processes", "Data quality"], triggers: ["pipeline_scheduled", "data_error", "source_added"] },
+          { slug: "data_warehouse_agent", name: "Data Warehouse Agent", responsibilities: ["Warehouse management", "Schema design", "Query optimization"], triggers: ["schema_change", "query_slow", "storage_threshold"] },
+          { slug: "data_quality_agent", name: "Data Quality Agent", responsibilities: ["Data validation", "Anomaly detection", "Quality scoring"], triggers: ["ingestion_complete", "quality_alert", "validation_failed"] },
+        ],
+        outcomes: ["Data freshness <1h", "Quality score 99%+", "Pipeline uptime 99.9%"],
+      },
+      {
+        id: "bi_squad",
+        name: "Business Intelligence Squad",
+        mission: "Transformar dados em insights acionáveis para o negócio",
+        agents: [
+          { slug: "bi_analyst", name: "BI Analyst", responsibilities: ["Dashboard creation", "Report automation", "Insight generation"], triggers: ["report_requested", "metric_anomaly", "period_close"] },
+          { slug: "predictive_agent", name: "Predictive Analytics Agent", responsibilities: ["Predictive modeling", "Forecasting", "Trend analysis"], triggers: ["model_scheduled", "data_updated", "forecast_requested"] },
+          { slug: "ab_test_agent", name: "A/B Test Agent", responsibilities: ["Experiment design", "Statistical analysis", "Winner selection"], triggers: ["experiment_created", "sample_reached", "test_concluded"] },
+        ],
+        outcomes: ["Decision speed +50%", "Forecast accuracy 90%+", "Test velocity 3x"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 11. COMUNICAÇÃO & PR
+  // ═══════════════════════════════════════════
+  {
+    id: "communications",
+    name: "Comunicação & PR",
+    color: "text-pink-500",
+    squads: [
+      {
+        id: "pr_squad",
+        name: "Public Relations Squad",
+        mission: "Gerenciar reputação e relações com a mídia",
+        agents: [
+          { slug: "media_relations_agent", name: "Media Relations Agent", responsibilities: ["Press releases", "Media outreach", "Interview prep"], triggers: ["news_event", "press_request", "launch_scheduled"] },
+          { slug: "crisis_comms_agent", name: "Crisis Communications Agent", responsibilities: ["Crisis management", "Response coordination", "Stakeholder comms"], triggers: ["crisis_detected", "negative_press", "incident_public"] },
+          { slug: "social_listening_agent", name: "Social Listening Agent", responsibilities: ["Brand monitoring", "Sentiment analysis", "Trend spotting"], triggers: ["mention_spike", "sentiment_shift", "competitor_news"] },
+        ],
+        outcomes: ["Media coverage +60%", "Crisis response <1h", "Brand sentiment 85%+"],
+      },
+      {
+        id: "internal_comms_squad",
+        name: "Internal Communications Squad",
+        mission: "Manter toda a empresa informada e alinhada",
+        agents: [
+          { slug: "newsletter_agent", name: "Newsletter Agent", responsibilities: ["Internal newsletters", "Company updates", "Culture content"], triggers: ["update_scheduled", "milestone_achieved", "announcement_needed"] },
+          { slug: "employee_engagement_agent", name: "Employee Engagement Agent", responsibilities: ["Engagement surveys", "Pulse checks", "Action plans"], triggers: ["survey_scheduled", "engagement_drop", "feedback_received"] },
+        ],
+        outcomes: ["Internal NPS 80+", "Update reach 95%+", "Engagement score +25%"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 12. TALENT & PEOPLE
+  // ═══════════════════════════════════════════
+  {
+    id: "talent",
+    name: "Talent & People",
+    color: "text-amber-500",
+    squads: [
+      {
+        id: "recruiting_squad",
+        name: "Recruiting Squad",
+        mission: "Atrair e selecionar os melhores talentos do mercado",
+        agents: [
+          { slug: "sourcing_agent", name: "Sourcing Agent", responsibilities: ["Candidate sourcing", "Pipeline building", "Outreach campaigns"], triggers: ["role_opened", "pipeline_low", "referral_received"] },
+          { slug: "screening_agent", name: "Screening Agent", responsibilities: ["Resume screening", "Qualification assessment", "Interview scheduling"], triggers: ["application_received", "screening_queue", "interview_requested"] },
+          { slug: "employer_brand_agent", name: "Employer Brand Agent", responsibilities: ["Employer branding", "Careers content", "Glassdoor management"], triggers: ["review_posted", "content_scheduled", "campaign_launch"] },
+        ],
+        outcomes: ["Time-to-hire -40%", "Quality of hire +35%", "Offer acceptance 90%+"],
+      },
+      {
+        id: "people_ops_squad",
+        name: "People Ops Squad",
+        mission: "Gerenciar ciclo de vida do colaborador com excelência",
+        agents: [
+          { slug: "payroll_agent", name: "Payroll Agent", responsibilities: ["Payroll processing", "Benefits admin", "Tax compliance"], triggers: ["payroll_cycle", "benefit_change", "tax_deadline"] },
+          { slug: "performance_agent", name: "Performance Agent", responsibilities: ["Performance reviews", "Goal tracking", "Feedback cycles"], triggers: ["review_cycle", "goal_deadline", "feedback_due"] },
+          { slug: "offboarding_agent", name: "Offboarding Agent", responsibilities: ["Exit process", "Knowledge transfer", "Access revocation"], triggers: ["resignation_received", "termination_approved", "last_day_approaching"] },
+        ],
+        outcomes: ["Payroll accuracy 100%", "Review completion 98%+", "Offboarding SLA met"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 13. INOVAÇÃO & R&D
+  // ═══════════════════════════════════════════
+  {
+    id: "innovation",
+    name: "Inovação & R&D",
+    color: "text-violet-500",
+    squads: [
+      {
+        id: "research_squad",
+        name: "Research Squad",
+        mission: "Pesquisar e experimentar novas tecnologias e modelos",
+        agents: [
+          { slug: "tech_scout", name: "Tech Scout", responsibilities: ["Technology research", "Trend analysis", "Competitive intel"], triggers: ["research_scheduled", "tech_trend", "competitor_launch"] },
+          { slug: "prototype_agent", name: "Prototype Agent", responsibilities: ["Rapid prototyping", "POC development", "Feasibility studies"], triggers: ["idea_approved", "prototype_requested", "poc_deadline"] },
+          { slug: "patent_agent", name: "Patent Agent", responsibilities: ["Patent research", "IP protection", "Filing management"], triggers: ["invention_disclosed", "patent_search", "filing_deadline"] },
+        ],
+        outcomes: ["Innovation pipeline 20+ ideas/quarter", "POC speed <2 weeks", "IP portfolio growth"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 14. IT & INFRAESTRUTURA
+  // ═══════════════════════════════════════════
+  {
+    id: "it_infrastructure",
+    name: "IT & Infraestrutura",
+    color: "text-slate-500",
+    squads: [
+      {
+        id: "it_support_squad",
+        name: "IT Support Squad",
+        mission: "Manter todos os sistemas operacionais e usuários produtivos",
+        agents: [
+          { slug: "helpdesk_agent", name: "Helpdesk Agent", responsibilities: ["IT support", "Ticket resolution", "User assistance"], triggers: ["ticket_created", "user_request", "system_issue"] },
+          { slug: "asset_manager", name: "Asset Manager", responsibilities: ["Asset tracking", "License management", "Procurement"], triggers: ["asset_request", "license_expiring", "inventory_review"] },
+          { slug: "network_agent", name: "Network Agent", responsibilities: ["Network monitoring", "Connectivity issues", "VPN management"], triggers: ["network_alert", "connectivity_issue", "config_change"] },
+        ],
+        outcomes: ["Ticket resolution <4h", "System uptime 99.9%", "Asset utilization +20%"],
+      },
+      {
+        id: "cloud_ops_squad",
+        name: "Cloud Operations Squad",
+        mission: "Otimizar custos e performance da infraestrutura cloud",
+        agents: [
+          { slug: "cloud_cost_agent", name: "Cloud Cost Agent", responsibilities: ["Cost optimization", "Resource rightsizing", "Budget alerts"], triggers: ["cost_spike", "budget_threshold", "monthly_review"] },
+          { slug: "backup_agent", name: "Backup & Recovery Agent", responsibilities: ["Backup management", "Disaster recovery", "RTO/RPO monitoring"], triggers: ["backup_scheduled", "recovery_test", "failure_detected"] },
+        ],
+        outcomes: ["Cloud cost -25%", "RTO <30min", "Backup success 100%"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 15. ESTRATÉGIA & INTELIGÊNCIA DE MERCADO
+  // ═══════════════════════════════════════════
+  {
+    id: "strategy",
+    name: "Estratégia & Inteligência",
+    color: "text-emerald-600",
+    squads: [
+      {
+        id: "market_intel_squad",
+        name: "Market Intelligence Squad",
+        mission: "Fornecer inteligência de mercado para decisões estratégicas",
+        agents: [
+          { slug: "competitive_analyst", name: "Competitive Analyst", responsibilities: ["Competitive analysis", "Market mapping", "Threat assessment"], triggers: ["competitor_update", "market_shift", "strategy_review"] },
+          { slug: "market_researcher", name: "Market Researcher", responsibilities: ["Market research", "Industry reports", "Opportunity sizing"], triggers: ["research_requested", "industry_event", "quarterly_review"] },
+          { slug: "pricing_strategist", name: "Pricing Strategist", responsibilities: ["Pricing analysis", "Elasticity modeling", "Revenue optimization"], triggers: ["pricing_review", "competitor_price_change", "margin_alert"] },
+        ],
+        outcomes: ["Market insight latency <24h", "Pricing accuracy +20%", "Strategic alignment 95%+"],
+      },
+      {
+        id: "expansion_squad",
+        name: "Expansion & New Markets Squad",
+        mission: "Identificar e validar oportunidades de expansão",
+        agents: [
+          { slug: "geo_expansion_agent", name: "Geo Expansion Agent", responsibilities: ["Market entry analysis", "Localization planning", "Regulatory mapping"], triggers: ["expansion_proposed", "market_validated", "regulatory_change"] },
+          { slug: "m_and_a_analyst", name: "M&A Analyst", responsibilities: ["Acquisition analysis", "Due diligence", "Integration planning"], triggers: ["target_identified", "dd_started", "deal_stage_change"] },
+        ],
+        outcomes: ["Expansion success rate 80%+", "DD speed +50%", "Market entry cost -30%"],
+      },
+    ],
+  },
 ];
 
 // ─── Computed totals ───
