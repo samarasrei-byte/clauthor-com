@@ -98,11 +98,11 @@ const tocItems = [
 /* ── Investor Chat ── */
 const investorConversation = [
   { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-  { role: "agent" as const, text: "Porque você entra antes da escala com 20% de equity a US$ 250K de valuation. Produto funcional com 200 agentes, 37 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a US$ 2-5M." },
+  { role: "agent" as const, text: "Porque você entra antes da escala com 20% de equity a R$ 500K de valuation. Produto funcional com 200 agentes, 37 squads, 15 departamentos — tudo operacional. Startups com apenas um deck captam a R$ 2-5M." },
   { role: "investor" as const, text: "Como monetizam?" },
-  { role: "agent" as const, text: "SaaS B2B por assinatura. Ticket médio US$ 199/mês por squad. Event-driven = margem bruta de 96%+. Com 1.000 clientes, são US$ 2,4M/ano em MRR." },
+  { role: "agent" as const, text: "SaaS B2B por assinatura. Ticket médio R$ 997/mês por squad. Event-driven = margem bruta de 96%+. Com 1.000 clientes, são R$ 12M/ano em MRR." },
   { role: "investor" as const, text: "Qual o retorno esperado?" },
-  { role: "agent" as const, text: "Seed (6-12 meses): valuation US$ 3-5M = 12-20x. Series A: US$ 15-30M = 60-120x. Potencial Exit em 5 anos: US$ 50M+ = 200x+. A rodada é limitada — 20% por US$ 50K." },
+  { role: "agent" as const, text: "Seed (6-12 meses): valuation R$ 15-25M = 30-50x. Series A: R$ 75-150M = 150-300x. Potencial Exit em 5 anos: R$ 250M+ = 500x+. A rodada é limitada — 20% por R$ 100K." },
 ];
 
 const InvestorChat = () => {
@@ -276,8 +276,8 @@ const Pitch = () => {
           {/* Key metrics strip */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8 }} className="flex flex-wrap justify-center gap-6 md:gap-10 mb-12">
             {[
-              { value: "US$ 250K", label: "Valuation" },
-              { value: "US$ 50K", label: "Captação" },
+              { value: "R$ 500K", label: "Valuation" },
+              { value: "R$ 100K", label: "Captação" },
               { value: "20%", label: "Equity" },
               { value: "96%+", label: "Margem Bruta" },
             ].map((m) => (
@@ -597,7 +597,7 @@ const Pitch = () => {
               </GlassCard>
               <GlassCard hover={false} className="text-center !py-6 border-primary/20 bg-primary/5">
                 <p className="text-xs text-muted-foreground mb-1 uppercase tracking-wider">Valuation potencial (5x ARR)</p>
-                <p className="text-2xl font-display font-bold gradient-text">≈ US$ <CountUp end={12} suffix="M" /></p>
+                <p className="text-2xl font-display font-bold gradient-text">≈ R$ <CountUp end={60} suffix="M" /></p>
               </GlassCard>
             </div>
           </div>
@@ -836,7 +836,7 @@ const Pitch = () => {
               Valuation
             </Badge>
             <h2 className="text-3xl md:text-5xl font-display font-bold tracking-tight mb-4">
-              US$ 250K de valuation.{" "}
+              R$ 500K de valuation.{" "}
               <span className="gradient-text">Baseado em produto real.</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-3xl mx-auto leading-relaxed">
@@ -857,7 +857,7 @@ const Pitch = () => {
                   "Apenas deck e protótipo",
                   "0 clientes / 0 tração",
                   "Equipe pequena sem produto",
-                  "Valuation: US$ 1-3M",
+                  "Valuation: R$ 5-15M",
                   "Sem infraestrutura",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-muted-foreground">
@@ -877,7 +877,7 @@ const Pitch = () => {
                   `${TOTAL_WORKFORCE_AGENTS} agentes autônomos em ${TOTAL_DEPARTMENTS} departamentos`,
                   `${TOTAL_SQUADS} squads especializados operacionais`,
                   "4.100+ leads na whitelist",
-                  "Valuation: US$ 250K (20% por US$ 50K)",
+                  "Valuation: R$ 500K (20% por R$ 100K)",
                   "Infraestrutura enterprise-grade",
                 ].map((item) => (
                   <li key={item} className="flex items-start gap-2 text-sm text-foreground/90">
@@ -899,10 +899,10 @@ const Pitch = () => {
             <h3 className="font-display text-xl font-bold mb-8 text-foreground">Cenário de retorno para o investidor</h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {[
-                { label: "Investimento", value: "US$ 50K", sub: "20% equity" },
-                { label: "Seed (6-12m)", value: "US$ 3-5M", sub: "12-20x retorno" },
-                { label: "Series A", value: "US$ 15-30M", sub: "60-120x retorno" },
-                { label: "Exit (5 anos)", value: "US$ 50M+", sub: "200x+ retorno" },
+                { label: "Investimento", value: "R$ 100K", sub: "20% equity" },
+                { label: "Seed (6-12m)", value: "R$ 15-25M", sub: "30-50x retorno" },
+                { label: "Series A", value: "R$ 75-150M", sub: "150-300x retorno" },
+                { label: "Exit (5 anos)", value: "R$ 250M+", sub: "500x+ retorno" },
               ].map((item) => (
                 <div key={item.label}>
                   <p className="text-[10px] text-muted-foreground uppercase tracking-widest mb-2">{item.label}</p>
@@ -938,9 +938,9 @@ const Pitch = () => {
           <h2 className="text-3xl md:text-5xl font-display font-bold mb-14 tracking-tight">Pre-Seed Aberto</h2>
           <div className="grid sm:grid-cols-3 gap-6 mb-14">
             {[
-              { label: "Captando", value: "US$ 50.000" },
+              { label: "Captando", value: "R$ 100.000" },
               { label: "Equity oferecido", value: "20%" },
-              { label: "Valuation", value: "US$ 250.000" },
+              { label: "Valuation", value: "R$ 500.000" },
             ].map((item) => (
               <GlassCard key={item.label} hover={false} className="text-center !py-10">
                 <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">{item.label}</p>
