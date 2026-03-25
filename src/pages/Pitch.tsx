@@ -494,9 +494,9 @@ const Pitch = () => {
               { value: TOTAL_SQUADS, label: "Squads com Missão", suffix: "" },
               { value: TOTAL_DEPARTMENTS, label: "Departamentos", suffix: "" },
               { value: 13, label: "Idiomas Suportados", suffix: "" },
-              { value: 4100, label: "Leads Whitelist", suffix: "+" },
               { value: 96, label: "Margem Bruta", suffix: "%+" },
               { value: 10, label: "Camadas de Arquitetura", suffix: "" },
+              { value: 5, label: "Portões de Governança", suffix: "" },
               { value: 5, label: "Portões de Segurança", suffix: "" },
             ].map((s) => (
               <GlassCard key={s.label} hover={false} className="text-center !py-8">
@@ -926,7 +926,7 @@ const Pitch = () => {
                   <p className="text-xs font-semibold text-foreground mb-2">⚠️ Riscos identificados</p>
                   <ul className="space-y-2 text-xs text-muted-foreground">
                     <li><strong className="text-foreground">Dependência de LLM providers:</strong> Mitigado com arquitetura agnóstica — circuit breaker + fallback entre Gemini, GPT e Claude.</li>
-                    <li><strong className="text-foreground">Tração early-stage:</strong> 4.100 leads em whitelist, mas conversão para pagantes ainda precisa ser validada em escala.</li>
+                    <li><strong className="text-foreground">Tração early-stage:</strong> Produto funcional com 200+ agentes, mas conversão para pagantes ainda precisa ser validada em escala.</li>
                     <li><strong className="text-foreground">Competição de big tech:</strong> Google, Microsoft e OpenAI podem lançar orquestradores. Nosso moat é a verticalização enterprise + speed-to-market.</li>
                     <li><strong className="text-foreground">Unit economics em escala:</strong> Margem de 96% hoje com volume baixo. Com escala, custos de token podem pressionar margem para 80-85%.</li>
                   </ul>
@@ -995,7 +995,7 @@ const Pitch = () => {
                 {[
                   `${TOTAL_WORKFORCE_AGENTS} agentes autônomos em ${TOTAL_DEPARTMENTS} departamentos`,
                   `${TOTAL_SQUADS} squads especializados operacionais`,
-                  "4.100+ leads na whitelist",
+                  "Infraestrutura enterprise-grade desde o dia 1",
                   "Valuation: R$ 500K (20% por R$ 100K)",
                   "Infraestrutura enterprise-grade",
                 ].map((item) => (
