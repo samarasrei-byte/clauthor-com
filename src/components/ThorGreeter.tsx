@@ -74,9 +74,9 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
           <filter id="glow-lg">
             <feGaussianBlur stdDeviation="4" />
           </filter>
-          <clipPath id="face-clip">
-            <circle cx={center} cy={center} r={r * 0.42} />
-          </clipPath>
+            <clipPath id="face-clip">
+              <circle cx={center} cy={center} r={r * 0.55} />
+            </clipPath>
         </defs>
 
         {/* Deep ambient glow */}
@@ -488,7 +488,7 @@ const ThorGreeter = () => {
     }
   };
 
-  const coreSize = typeof window !== "undefined" && window.innerWidth < 640 ? 180 : 260;
+  const coreSize = typeof window !== "undefined" && window.innerWidth < 640 ? 220 : 320;
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 
   /* ══ ENTRANCE — cinematic boot sequence ══ */
@@ -520,8 +520,8 @@ const ThorGreeter = () => {
             <div
               className="absolute rounded-full overflow-hidden"
               style={{
-                width: coreSize * 0.36,
-                height: coreSize * 0.36,
+                width: coreSize * 0.52,
+                height: coreSize * 0.52,
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
@@ -715,8 +715,8 @@ const ThorGreeter = () => {
             <motion.div
               className="absolute rounded-full overflow-hidden"
               style={{
-                width: coreSize * 0.36,
-                height: coreSize * 0.36,
+                width: coreSize * 0.52,
+                height: coreSize * 0.52,
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
@@ -767,15 +767,15 @@ const ThorGreeter = () => {
           {/* Speech bubble */}
           {lastMessage && !showChat && (
             <motion.div
-              className="mt-6 max-w-[92vw] sm:max-w-[420px]"
+              className="mt-4 max-w-[88vw] sm:max-w-[360px]"
               initial={{ opacity: 0, y: 12, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               key={lastMessage.content.slice(0, 20)}
             >
-              <div className="relative bg-background/70 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl px-5 py-4 shadow-2xl shadow-accent-violet/5">
+              <div className="relative bg-background/70 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl px-4 py-3 shadow-2xl shadow-accent-violet/5">
                 {/* Connector to orb */}
                 <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-5 h-5 rotate-45 bg-background/70 border-l border-t border-accent-violet/10" />
-                <div className="text-[13px] text-foreground/90 prose prose-sm dark:prose-invert max-w-none [&_p]:mb-1 leading-relaxed relative z-10">
+                <div className="text-[11px] text-foreground/90 prose prose-xs dark:prose-invert max-w-none [&_p]:mb-0.5 leading-snug relative z-10">
                   <ReactMarkdown>{lastMessage.content}</ReactMarkdown>
                 </div>
                 {isSpeaking && (
@@ -861,7 +861,7 @@ const ThorGreeter = () => {
                             : "bg-muted/20 border border-accent-violet/5"
                         }`}>
                           {msg.role === "assistant" ? (
-                            <div className="text-[12px] prose prose-sm dark:prose-invert max-w-none [&_p]:mb-1 leading-relaxed">
+                            <div className="text-[11px] prose prose-xs dark:prose-invert max-w-none [&_p]:mb-0.5 leading-snug">
                               <ReactMarkdown>{msg.content}</ReactMarkdown>
                             </div>
                           ) : (
