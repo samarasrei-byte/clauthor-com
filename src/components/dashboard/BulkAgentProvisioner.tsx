@@ -412,11 +412,11 @@ const BulkAgentProvisioner = () => {
               className="gap-2"
             >
               {status === "provisioning" ? (
-                <><Loader2 className="w-4 h-4 animate-spin" /> Deploying...</>
+                <><Loader2 className="w-4 h-4 animate-spin" /> Implantando...</>
               ) : status === "done" ? (
-                <><Zap className="w-4 h-4" /> Deploy More</>
+                <><Zap className="w-4 h-4" /> Implantar Mais</>
               ) : (
-                <><Rocket className="w-4 h-4" /> Deploy {totalSelectedAgents} Agents</>
+                <><Rocket className="w-4 h-4" /> Implantar {totalSelectedAgents} Agentes</>
               )}
             </Button>
             {totalSelectedAgents > 0 && status === "idle" && (
@@ -479,9 +479,9 @@ Support Agent,basic,Tier 1 support,Handle tickets`}
 
               <Button onClick={provisionFromCSV} disabled={status === "provisioning" || !csvData.trim()} className="gap-2">
                 {status === "provisioning" ? (
-                  <><Loader2 className="w-4 h-4 animate-spin" /> Importing...</>
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Importando...</>
                 ) : (
-                  <><Upload className="w-4 h-4" /> Import Agents</>
+                  <><Upload className="w-4 h-4" /> Importar Agentes</>
                 )}
               </Button>
             </CardContent>
