@@ -25,6 +25,7 @@ import { useRef, useMemo, useState, useCallback } from "react";
 import HelpTooltip from "@/components/HelpTooltip";
 import { useTranslation } from "react-i18next";
 import clauthorLogo from "@/assets/clauthor-logo.png";
+import Footer from "@/components/Footer";
 import helixaPhoto from "@/assets/helixa-ai.png";
 import thorPhoto from "@/assets/kaelis-ai.webp";
 
