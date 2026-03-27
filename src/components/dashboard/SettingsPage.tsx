@@ -10,13 +10,7 @@ import { CouponRedeemer } from "./CouponRedeemer";
 import CredentialsHub from "./CredentialsHub";
 import { useTranslation } from "react-i18next";
 
-const KnowledgeBase = lazy(() => import("@/pages/KnowledgeBase"));
-
-const SectionLoader = () => (
-  <div className="flex items-center justify-center py-16">
-    <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-  </div>
-);
+import SectionLoader from "@/components/ui/section-loader";
 
 interface SettingsPageProps {
   billingContent: React.ReactNode;
