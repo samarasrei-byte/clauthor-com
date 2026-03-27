@@ -5,11 +5,7 @@ import { checkRateLimit, rateLimitResponse, detectPromptInjection, scanToolArgum
 import { validateAndEnforcePolicy } from "../_shared/policy-engine.ts";
 import { autonomousExecute } from "../_shared/tool-executor.ts";
 
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers":
-    "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
 // ── Credential tools for THOR ──
 const CREDENTIAL_TOOLS = [
