@@ -502,7 +502,7 @@ const ThorGreeter = () => {
       >
         <motion.div
           className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--primary) / 0.06) 0%, hsl(var(--background) / 0.7) 60%, hsl(var(--background) / 0.85) 100%)" }}
+          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.7) 60%, hsl(var(--background) / 0.85) 100%)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
@@ -525,13 +525,13 @@ const ThorGreeter = () => {
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
-                boxShadow: `0 0 60px hsl(var(--primary) / 0.3), 0 0 120px hsl(var(--primary) / 0.1), inset 0 0 30px hsl(var(--primary) / 0.2)`,
-                border: "1px solid hsl(var(--primary) / 0.2)",
+                boxShadow: `0 0 60px hsl(var(--accent-violet) / 0.3), 0 0 120px hsl(var(--accent-violet) / 0.1), inset 0 0 30px hsl(var(--accent-violet) / 0.2)`,
+                border: "1px solid hsl(var(--accent-violet) / 0.2)",
               }}
             >
               <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
               <motion.div className="absolute inset-0" style={{
-                background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--primary) / 0.04) 2px, hsl(var(--primary) / 0.04) 3px)",
+                background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--accent-violet) / 0.04) 2px, hsl(var(--accent-violet) / 0.04) 3px)",
               }} />
             </div>
           </div>
@@ -624,7 +624,7 @@ const ThorGreeter = () => {
           transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
         >
           <span className="absolute inset-0" style={{
-            background: "conic-gradient(from 0deg, transparent 30%, hsl(var(--primary) / 0.7), hsl(var(--primary) / 0.15), transparent 75%)",
+            background: "conic-gradient(from 0deg, transparent 30%, hsl(var(--accent-violet) / 0.7), hsl(var(--accent-violet) / 0.15), transparent 75%)",
           }} />
         </motion.span>
 
@@ -644,9 +644,9 @@ const ThorGreeter = () => {
           <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover rounded-full" />
           {/* Scanline overlay */}
           <span className="absolute inset-0 rounded-full" style={{
-            background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--primary) / 0.03) 2px, hsl(var(--primary) / 0.03) 3px)",
+            background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--accent-violet) / 0.03) 2px, hsl(var(--accent-violet) / 0.03) 3px)",
           }} />
-          <span className="absolute inset-0 rounded-full shadow-[inset_0_0_15px_hsl(var(--primary)/0.15)]" />
+          <span className="absolute inset-0 rounded-full shadow-[inset_0_0_15px_hsl(var(--accent-violet)/0.15)]" />
         </span>
 
         {/* Online indicator */}
@@ -676,7 +676,7 @@ const ThorGreeter = () => {
         <div
           className="absolute inset-0 pointer-events-auto"
           onClick={minimize}
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--primary) / 0.03) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.03) 0%, transparent 70%)" }}
         />
 
         {/* Main holographic entity */}
@@ -720,22 +720,22 @@ const ThorGreeter = () => {
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
-                border: "1px solid hsl(var(--primary) / 0.25)",
+                border: "1px solid hsl(var(--accent-violet) / 0.25)",
               }}
               animate={isSpeaking ? {
                 boxShadow: [
-                  "0 0 30px hsl(var(--primary) / 0.15), 0 0 80px hsl(var(--primary) / 0.08)",
-                  "0 0 60px hsl(var(--primary) / 0.35), 0 0 140px hsl(var(--primary) / 0.15)",
-                  "0 0 30px hsl(var(--primary) / 0.15), 0 0 80px hsl(var(--primary) / 0.08)",
+                  "0 0 30px hsl(var(--accent-violet) / 0.15), 0 0 80px hsl(var(--accent-violet) / 0.08)",
+                  "0 0 60px hsl(var(--accent-violet) / 0.35), 0 0 140px hsl(var(--accent-violet) / 0.15)",
+                  "0 0 30px hsl(var(--accent-violet) / 0.15), 0 0 80px hsl(var(--accent-violet) / 0.08)",
                 ],
               } : {
-                boxShadow: "0 0 40px hsl(var(--primary) / 0.2), 0 0 80px hsl(var(--primary) / 0.08)",
+                boxShadow: "0 0 40px hsl(var(--accent-violet) / 0.2), 0 0 80px hsl(var(--accent-violet) / 0.08)",
               }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
               <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
               <motion.div className="absolute inset-0" style={{
-                background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--primary) / 0.03) 2px, hsl(var(--primary) / 0.03) 3px)",
+                background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--accent-violet) / 0.03) 2px, hsl(var(--accent-violet) / 0.03) 3px)",
               }} />
               {/* Glow overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-accent-violet/10 via-transparent to-accent-violet/5" />
