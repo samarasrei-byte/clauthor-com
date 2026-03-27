@@ -74,6 +74,8 @@ const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPi
 const SalesCallTranscriber = lazy(() => import("@/components/dashboard/SalesCallTranscriber"));
 const SquadManager = lazy(() => import("@/components/dashboard/SquadManager"));
 const BulkAgentProvisioner = lazy(() => import("@/components/dashboard/BulkAgentProvisioner"));
+const AgentNeuralNetwork = lazy(() => import("@/pages/AgentNeuralNetwork"));
+const ScrumBoard = lazy(() => import("@/pages/ScrumBoard"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
