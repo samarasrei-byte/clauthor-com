@@ -18,7 +18,6 @@ import type { PriceTier } from "@/lib/pricing";
 import type { HireIntent } from "@/pages/Auth";
 import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
 import type { CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
-import { supabase } from "@/integrations/supabase/client";
 import { createPayPalPlan, handleInlineApproval } from "@/lib/paypal-helpers";
 import { SLUG_TO_DEPT } from "@/data/departmentMap";
 
