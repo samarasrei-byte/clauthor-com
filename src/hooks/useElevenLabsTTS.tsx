@@ -16,17 +16,34 @@ function speakNative(text: string, lang: string, onStart?: () => void, onEnd?: (
 
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = 1.08;
-  utterance.pitch = 0.98;
+  utterance.pitch = 0.92; // slightly lower for masculine tone
   utterance.volume = 1;
   utterance.lang = lang;
 
-  // Pick best voice for language
+  // Pick best MALE voice for language — avoid female voices
   const voices = window.speechSynthesis.getVoices();
   const langPrefix = lang.split("-")[0];
+  const nameLower = (v: SpeechSynthesisVoice) => v.name.toLowerCase();
+  const isFemale = (v: SpeechSynthesisVoice) => {
+    const n = nameLower(v);
+    return n.includes("female") || n.includes("femin") || n.includes("mulher") ||
+           n.includes("maria") || n.includes("luciana") || n.includes("francisca") ||
+           n.includes("vitoria") || n.includes("google us english") === false && n.includes("woman");
+  };
+  const isMale = (v: SpeechSynthesisVoice) => {
+    const n = nameLower(v);
+    return n.includes("male") || n.includes("masculin") || n.includes("daniel") ||
+           n.includes("ricardo") || n.includes("google brasileiro") || n.includes("felipe") ||
+           n.includes("diego") || n.includes("jorge");
+  };
+
+  const langVoices = voices.filter((v) => v.lang.startsWith(langPrefix));
   const preferred =
-    voices.find((v) => v.lang.startsWith(langPrefix) && v.name.toLowerCase().includes("male")) ||
-    voices.find((v) => v.lang.startsWith(langPrefix)) ||
-    voices.find((v) => v.lang.startsWith("en")) ||
+    langVoices.find((v) => isMale(v) && !isFemale(v)) ||
+    langVoices.find((v) => !isFemale(v)) ||
+    langVoices[0] ||
+    voices.find((v) => v.lang.startsWith("en") && isMale(v)) ||
+    voices.find((v) => v.lang.startsWith("en") && !isFemale(v)) ||
     voices[0];
   if (preferred) utterance.voice = preferred;
 
@@ -81,10 +98,22 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const objectUrlRef = useRef<string | null>(null);
   const nativeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  // Check localStorage for persistent ElevenLabs failure flag
-  const elevenLabsFailedRef = useRef(
-    typeof window !== "undefined" && localStorage.getItem(ELEVENLABS_NATIVE_ONLY_KEY) === "1"
-  );
+  // Check localStorage — but expire after 10 minutes so we retry ElevenLabs periodically
+  const elevenLabsFailedRef = useRef(() => {
+    if (typeof window === "undefined") return false;
+    const ts = localStorage.getItem(ELEVENLABS_NATIVE_ONLY_KEY);
+    if (!ts) return false;
+    const elapsed = Date.now() - parseInt(ts, 10);
+    if (elapsed > 10 * 60 * 1000) {
+      localStorage.removeItem(ELEVENLABS_NATIVE_ONLY_KEY);
+      return false;
+    }
+    return true;
+  });
+  const isElevenLabsFailed = () => elevenLabsFailedRef.current();
+  const markElevenLabsFailed = () => {
+    localStorage.setItem(ELEVENLABS_NATIVE_ONLY_KEY, String(Date.now()));
+  };
 
   const stop = useCallback((notify = true) => {
     const wasPlaying =
@@ -150,8 +179,8 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       return true;
     };
 
-    // If ElevenLabs already failed this session, go straight to native
-    if (elevenLabsFailedRef.current) {
+    // If ElevenLabs already failed recently, go straight to native
+    if (isElevenLabsFailed()) {
       doNativeFallback();
       return true;
     }
@@ -174,10 +203,7 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
 
       if (!response.ok) {
         console.warn("ElevenLabs TTS failed, using native voice:", response.status);
-        elevenLabsFailedRef.current = true;
-        if (response.status === 401) {
-          localStorage.setItem(ELEVENLABS_NATIVE_ONLY_KEY, "1");
-        }
+        markElevenLabsFailed();
         doNativeFallback();
         return true;
       }
@@ -185,17 +211,15 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       const contentType = response.headers.get("content-type") || "";
       if (contentType.includes("application/json")) {
         console.warn("ElevenLabs TTS returned fallback payload, using native voice");
-        elevenLabsFailedRef.current = true;
-        localStorage.setItem(ELEVENLABS_NATIVE_ONLY_KEY, "1");
+        markElevenLabsFailed();
         doNativeFallback();
         return true;
       }
 
       const audioBlob = await response.blob();
       if (audioBlob.size < 100) {
-        // Too small = probably error response
         console.warn("ElevenLabs returned tiny response, using native");
-        elevenLabsFailedRef.current = true;
+        markElevenLabsFailed();
         doNativeFallback();
         return true;
       }
@@ -237,7 +261,6 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
   }, [stop, onStart, onEnd]);
 
   const resetProvider = useCallback(() => {
-    elevenLabsFailedRef.current = false;
     localStorage.removeItem(ELEVENLABS_NATIVE_ONLY_KEY);
   }, []);
 
