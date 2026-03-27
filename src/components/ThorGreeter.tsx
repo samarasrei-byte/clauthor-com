@@ -671,7 +671,7 @@ const ThorGreeter = () => {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[80] flex flex-col items-center justify-center pointer-events-none"
+        className="fixed inset-0 z-[80] pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -681,54 +681,50 @@ const ThorGreeter = () => {
           className="absolute inset-0 pointer-events-auto"
           onClick={minimize}
           initial={{ backdropFilter: "blur(0px)" }}
-          animate={{ backdropFilter: isPresenting ? "blur(6px)" : "blur(12px)" }}
+          animate={{ backdropFilter: "blur(10px)" }}
           transition={{ duration: 0.8 }}
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.5) 60%, hsl(var(--background) / 0.7) 100%)" }}
+          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.6) 60%, hsl(var(--background) / 0.75) 100%)" }}
         />
 
-        {/* Main holographic entity — moves to corner when presenting */}
-        <motion.div
-          className="relative z-10 flex flex-col pointer-events-auto"
-          initial={{ scale: 0.6, opacity: 0, y: 40 }}
-          animate={isPresenting ? {
-            scale: 1,
-            opacity: 1,
-            y: 0,
-            x: typeof window !== "undefined" && window.innerWidth < 640 ? -((window.innerWidth / 2) - 70) : -((window.innerWidth / 2) - 120),
-            transition: { type: "spring", damping: 20, stiffness: 100 },
-          } : {
-            scale: 1,
-            opacity: 1,
-            y: 0,
-            x: 0,
-          }}
-          exit={{ scale: 0.6, opacity: 0, y: 40 }}
-          transition={{ type: "spring", damping: 16, stiffness: 120 }}
-          style={{ alignItems: isPresenting ? "flex-start" : "center" }}
-        >
-          {/* Controls */}
-          <div className="absolute -top-3 right-0 sm:-right-4 flex items-center gap-1.5 z-20">
-            <button
-              onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
-              className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
-            >
-              {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-            </button>
-            <button
-              onClick={minimize}
-              className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
+        {/* Layout: when presenting = Thor left + panel right. Otherwise centered */}
+        <div className={`relative z-10 w-full h-full flex pointer-events-none ${
+          isPresenting
+            ? "flex-row items-center px-4 sm:px-8 gap-4 sm:gap-8"
+            : "flex-col items-center justify-center"
+        }`}>
 
-          {/* Neural core + face — smaller when presenting */}
-          <div
-            className="relative cursor-pointer"
-            style={{ width: isPresenting ? presentCoreSize : coreSize, height: isPresenting ? presentCoreSize : coreSize, transition: "width 0.6s, height 0.6s" }}
-            onClick={() => setShowChat(!showChat)}
+          {/* Thor orb container */}
+          <motion.div
+            className="relative pointer-events-auto flex flex-col items-center"
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.6, opacity: 0 }}
+            transition={{ type: "spring", damping: 16, stiffness: 120 }}
+            style={{ flexShrink: 0 }}
           >
-            <NeuralCore isSpeaking={isSpeaking} size={isPresenting ? presentCoreSize : coreSize} />
+            {/* Controls */}
+            <div className="absolute -top-3 right-0 sm:-right-4 flex items-center gap-1.5 z-20">
+              <button
+                onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
+                className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
+              >
+                {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+              </button>
+              <button
+                onClick={minimize}
+                className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Neural core + face */}
+            <div
+              className="relative cursor-pointer"
+              style={{ width: isPresenting ? presentCoreSize : coreSize, height: isPresenting ? presentCoreSize : coreSize, transition: "width 0.5s, height 0.5s" }}
+              onClick={() => setShowChat(!showChat)}
+            >
+              <NeuralCore isSpeaking={isSpeaking} size={isPresenting ? presentCoreSize : coreSize} />
 
             {/* Face */}
             <motion.div
