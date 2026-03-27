@@ -100,7 +100,7 @@ const AdminDashboard = () => {
   const { data: executionLogs = [] } = useQuery({
     queryKey: ["admin-execution-logs"],
     queryFn: async () => {
-      const { data, error } = await supabase.from("execution_logs").select("*, agent:agents(name)").order("created_at", { ascending: false }).limit(200);
+      const { data, error } = await supabase.from("execution_logs").select("*, agent:agents(name)").order("created_at", { ascending: false }).limit(100);
       if (error) throw error;
       return data;
     },

@@ -191,6 +191,51 @@ export type Database = {
           },
         ]
       }
+      agent_metrics: {
+        Row: {
+          agent_id: string
+          avg_execution_time_ms: number | null
+          created_at: string
+          failed_executions: number
+          id: string
+          metric_date: string
+          successful_executions: number
+          total_chat_messages: number
+          total_executions: number
+          total_tokens_used: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_id: string
+          avg_execution_time_ms?: number | null
+          created_at?: string
+          failed_executions?: number
+          id?: string
+          metric_date?: string
+          successful_executions?: number
+          total_chat_messages?: number
+          total_executions?: number
+          total_tokens_used?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_id?: string
+          avg_execution_time_ms?: number | null
+          created_at?: string
+          failed_executions?: number
+          id?: string
+          metric_date?: string
+          successful_executions?: number
+          total_chat_messages?: number
+          total_executions?: number
+          total_tokens_used?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       agent_reports: {
         Row: {
           agent_id: string | null
