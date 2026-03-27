@@ -273,8 +273,8 @@
     "footer_community_label": "Community", "footer_community_link": "Community",
     "footer_pitch": "Pitch", "footer_legal": "Rechtliches",
     "footer_terms_label": "Nutzungsbedingungen", "footer_privacy_label": "Datenschutz",
-    "footer_desc": "KI-Belegschaft, die 83 autonome Agenten in 15 Unternehmensabteilungen orchestriert.",
-    "details_arrow": "Details →", "actions_label": "Aktionen", "view_all_80": "Alle 83 Agenten anzeigen",
+    "footer_desc": "KI-Belegschaft, die 200 autonome Agenten in 15 Unternehmensabteilungen orchestriert.",
+    "details_arrow": "Details →", "actions_label": "Aktionen", "view_all_80": "Alle 200 Agenten anzeigen",
     "seo_title": "CLAUTHOR — KI-Mitarbeiter für Ihr Unternehmen",
     "seo_description": "Autonome KI-Agenten-Plattform, die ganze Abteilungen ersetzt. 83 Agenten, 15 Abteilungen, 24/7.",
     "final_cta_desc": "Bauen Sie Ihr Agenten-Team in 5 Minuten auf. Ohne Code, ohne Kreditkarte. Starten Sie jetzt und sehen Sie Ergebnisse am ersten Tag."
@@ -392,7 +392,7 @@
     "subtitle": "In 4 einfachen Schritten transformieren Sie Ihren Betrieb mit KI-Mitarbeitern, die 24/7 fehlerfrei arbeiten.",
     "step1_title": "Wählen Sie Ihren Agenten",
     "step1_desc": "Durchsuchen Sie die Bibliothek und wählen Sie den idealen Agenten für Ihren Bedarf. Jeder ersetzt 20 Mitarbeiter.",
-    "step1_stat": "83+ Agenten",
+    "step1_stat": "200+ Agenten",
     "step2_title": "Integrationen einrichten",
     "step2_desc": "Verbinden Sie Ihre Tools: WhatsApp, CRM, ERP, Tabellen. Der Agent passt sich Ihrem bestehenden Ökosystem an.",
     "step2_stat": "50+ Integrationen",
@@ -510,7 +510,7 @@
   "navbar": {
     "solutions": "Lösungen",
     "marketplace_label": "Marketplace",
-    "marketplace_desc": "83 individuelle Agenten auf Abruf",
+    "marketplace_desc": "200 individuelle Agenten auf Abruf",
     "ai_teams_label": "KI-Teams",
     "ai_teams_desc": "15 komplette Abteilungen mit 83 Agenten",
     "new_badge": "NEU"

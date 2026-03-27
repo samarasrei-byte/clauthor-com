@@ -447,12 +447,12 @@
     "footer_legal": "Legal",
     "footer_terms_label": "Términos de Uso",
     "footer_privacy_label": "Privacidad",
-    "footer_desc": "Fuerza laboral de IA que orquesta 83 agentes autónomos en 15 departamentos corporativos.",
+    "footer_desc": "Fuerza laboral de IA que orquesta 200 agentes autónomos en 15 departamentos corporativos.",
     "details_arrow": "Detalles →",
     "actions_label": "acciones",
     "view_all_80": "Ver todos los 83 agentes",
     "seo_title": "CLAUTHOR — Empleados de IA para tu Empresa",
-    "seo_description": "Plataforma de agentes autónomos de IA que reemplazan departamentos enteros. 83 agentes, 15 departamentos, 24/7.",
+    "seo_description": "Plataforma de agentes autónomos de IA que reemplazan departamentos enteros. 200 agentes, 15 departamentos, 24/7.",
     "final_cta_desc": "Arma tu equipo de agentes en 5 minutos. Sin código, sin tarjeta de crédito. Empieza ahora y ve resultados el primer día."
   },
   "pricing_page": {
@@ -500,7 +500,7 @@
   "how_it_works_page": {
     "badge": "Cómo Funciona", "title": "Automatización que", "title_hl": "realmente funciona",
     "subtitle": "En 4 simples pasos, transforma tu operación con empleados de IA que trabajan 24/7 sin errores.",
-    "step1_title": "Elige tu Agente", "step1_desc": "Navega por la biblioteca y selecciona el agente ideal para tu necesidad. Cada uno hace el trabajo de 20 empleados.", "step1_stat": "83+ agentes",
+    "step1_title": "Elige tu Agente", "step1_desc": "Navega por la biblioteca y selecciona el agente ideal para tu necesidad. Cada uno hace el trabajo de 20 empleados.", "step1_stat": "200+ agentes",
     "step2_title": "Configura las Integraciones", "step2_desc": "Conecta tus herramientas: WhatsApp, CRM, ERP, hojas de cálculo. El agente se adapta a tu ecosistema existente.", "step2_stat": "50+ integraciones",
     "step3_title": "Activa y Monitorea", "step3_desc": "Con un clic, tu agente comienza a trabajar 24/7. Acompaña métricas, logs y resultados en tiempo real en tu panel.", "step3_stat": "En minutos",
     "step4_title": "Escala tu Operación", "step4_desc": "Agrega más agentes conforme creces. CLAUTHOR coordina todos automáticamente, garantizando eficiencia máxima.", "step4_stat": "Sin límites",
@@ -653,7 +653,7 @@
   },
   "navbar": {
     "solutions": "Soluciones", "marketplace_label": "Marketplace",
-    "marketplace_desc": "83 agentes individuales para contratar", "ai_teams_label": "Equipos de IA",
+    "marketplace_desc": "200 agentes individuales para contratar", "ai_teams_label": "Equipos de IA",
     "ai_teams_desc": "15 departamentos completos con 83 agentes", "new_badge": "NUEVO"
   },
   "community": {
