@@ -15,127 +15,13 @@ import SquadConsultant from "./SquadConsultant";
 import DepartmentMiniChat from "./DepartmentMiniChat";
 import DepartmentFAQ from "./DepartmentFAQ";
 import { getRegion, formatPrice } from "@/lib/pricing";
-
+import { departments } from "@/data/departmentData";
 const squadPacks = [
   { id: "squad-3", agents: 3, discount: 10, icon: Users, recommended: false },
   { id: "squad-5", agents: 5, discount: 20, icon: Package, recommended: true },
   { id: "squad-10", agents: 10, discount: 35, icon: Building2, recommended: false },
 ];
 
-const departments = [
-  { 
-    id: "tecnologia", icon: Wrench, color: "text-blue-400", 
-    gradient: "from-blue-500/20 to-blue-500/5",
-    borderActive: "border-blue-500/40",
-    iconBg: "bg-blue-500/20",
-    popular: false,
-    tokens: "12M",
-    actions: "15.000",
-    agents: [
-      { key: "coding", icon: Wrench, role: "Dev Full-Stack Sênior", tokens: "4M" },
-      { key: "computer", icon: Building2, role: "DevOps / SRE", tokens: "3M" },
-      { key: "project_management", icon: ClipboardList, role: "Gerente de Projetos", tokens: "2M" },
-      { key: "security", icon: Shield, role: "CISO / Eng. Segurança", tokens: "3M" },
-    ],
-    headcount: 4, cltCost: 72000, prometheusCost: 1, discount: 30,
-  },
-  { 
-    id: "comercial", icon: Briefcase, color: "text-cyan-400", 
-    gradient: "from-cyan-500/20 to-cyan-500/5",
-    borderActive: "border-cyan-500/40",
-    iconBg: "bg-cyan-500/20",
-    popular: true,
-    tokens: "8M",
-    actions: "12.000",
-    agents: [
-      { key: "sales", icon: Briefcase, role: "SDR / Closer de Vendas", tokens: "2.5M" },
-      { key: "customer_success", icon: Star, role: "Customer Success Manager", tokens: "1.5M" },
-      { key: "sales_channel", icon: MessageSquare, role: "Canal de Vendas Multicanal", tokens: "2M" },
-      { key: "voice_ai", icon: Phone, role: "Operador de Telefonia", tokens: "2M" },
-    ],
-    headcount: 4, cltCost: 52000, prometheusCost: 1, discount: 25,
-  },
-  { 
-    id: "marketing", icon: Megaphone, color: "text-primary", 
-    gradient: "from-primary/20 to-primary/5",
-    borderActive: "border-primary/40",
-    iconBg: "bg-primary/20",
-    popular: false,
-    tokens: "7M",
-    actions: "10.000",
-    agents: [
-      { key: "content", icon: Sparkles, role: "Copywriter Sênior", tokens: "2M" },
-      { key: "marketing_automation", icon: Target, role: "Growth / Automação", tokens: "2M" },
-      { key: "seo_growth", icon: Globe, role: "Analista SEO / Tráfego", tokens: "1.5M" },
-      { key: "influencer", icon: Megaphone, role: "Social Media Manager", tokens: "1.5M" },
-    ],
-    headcount: 4, cltCost: 44000, prometheusCost: 1, discount: 25,
-  },
-  { 
-    id: "financeiro", icon: BarChart3, color: "text-amber-400", 
-    gradient: "from-amber-500/20 to-amber-500/5",
-    borderActive: "border-amber-500/40",
-    iconBg: "bg-amber-500/20",
-    popular: false,
-    tokens: "6M",
-    actions: "8.000",
-    agents: [
-      { key: "revenue", icon: BarChart3, role: "CFO / Controller", tokens: "2M" },
-      { key: "legal", icon: FileText, role: "Analista Fiscal / Jurídico", tokens: "1.5M" },
-      { key: "data_analytics", icon: BarChart3, role: "Analista de BI", tokens: "1.5M" },
-      { key: "ecommerce", icon: ShoppingCart, role: "Gestor Financeiro", tokens: "1M" },
-    ],
-    headcount: 4, cltCost: 48000, prometheusCost: 1, discount: 20,
-  },
-  { 
-    id: "criacao", icon: Palette, color: "text-violet-400", 
-    gradient: "from-violet-500/20 to-violet-500/5",
-    borderActive: "border-violet-500/40",
-    iconBg: "bg-violet-500/20",
-    popular: false,
-    tokens: "6M",
-    actions: "8.000",
-    agents: [
-      { key: "creative_design", icon: Palette, role: "Designer Gráfico Sênior", tokens: "2M" },
-      { key: "video_production", icon: Video, role: "Editor de Vídeo / Motion", tokens: "2M" },
-      { key: "creative_writer", icon: Sparkles, role: "Redator Criativo", tokens: "1M" },
-      { key: "content_producer", icon: Megaphone, role: "Produtor de Conteúdo", tokens: "1M" },
-    ],
-    headcount: 4, cltCost: 36000, prometheusCost: 1, discount: 20,
-  },
-  { 
-    id: "suporte", icon: MessageSquare, color: "text-emerald-400", 
-    gradient: "from-emerald-500/20 to-emerald-500/5",
-    borderActive: "border-emerald-500/40",
-    iconBg: "bg-emerald-500/20",
-    popular: false,
-    tokens: "5M",
-    actions: "10.000",
-    agents: [
-      { key: "support_channel", icon: MessageSquare, role: "Atendente N1 / N2", tokens: "1.5M" },
-      { key: "support_lead", icon: Star, role: "Líder de Suporte", tokens: "1.5M" },
-      { key: "voice_support", icon: Phone, role: "Operador Call Center", tokens: "1M" },
-      { key: "rag", icon: FileText, role: "Base de Conhecimento", tokens: "1M" },
-    ],
-    headcount: 4, cltCost: 32000, prometheusCost: 1, discount: 20,
-  },
-  { 
-    id: "rh", icon: GraduationCap, color: "text-pink-400", 
-    gradient: "from-pink-500/20 to-pink-500/5",
-    borderActive: "border-pink-500/40",
-    iconBg: "bg-pink-500/20",
-    popular: false,
-    tokens: "4M",
-    actions: "6.000",
-    agents: [
-      { key: "hr", icon: Star, role: "Recrutador / BP", tokens: "1.5M" },
-      { key: "training", icon: GraduationCap, role: "T&D / Onboarding", tokens: "1M" },
-      { key: "people_analytics", icon: BarChart3, role: "People Analytics", tokens: "1M" },
-      { key: "data_analytics", icon: BarChart3, role: "Analista de Dados RH", tokens: "0.5M" },
-    ],
-    headcount: 4, cltCost: 28000, prometheusCost: 1, discount: 15,
-  },
-];
 
 const availableAgents = [
   { key: "voice_ai", icon: Phone },
