@@ -700,7 +700,12 @@ const ThorGreeter = () => {
                   transition={{ duration: 1.5, repeat: Infinity }}
                   onClick={() => setExpanded(!expanded)}
                 >
-                  <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                  <img src={thorPhoto} alt="Thor" className={`w-full h-full object-cover ${isSpeaking ? "thor-glitch-active" : ""}`} />
+                  {isSpeaking && (
+                    <div className="absolute inset-0 thor-glitch-color-layer mix-blend-screen" style={{
+                      background: "linear-gradient(90deg, hsl(var(--accent-violet) / 0.3) 33%, hsl(var(--accent-cyan) / 0.2) 66%, transparent 100%)",
+                    }} />
+                  )}
                 </motion.div>
 
                 {/* Name badge */}
