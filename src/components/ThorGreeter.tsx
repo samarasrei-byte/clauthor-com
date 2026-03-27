@@ -776,29 +776,29 @@ const ThorGreeter = () => {
                 {!isPresenting && <span className="text-[7px] font-mono text-accent-violet/40 tracking-wider">AI</span>}
               </div>
             </motion.div>
-          </div>
+           </div>
+          </motion.div>
 
-          {/* ══ PRESENTATION PANEL — appears when Thor moves to corner ══ */}
+          {/* ══ PRESENTATION PANEL — appears next to Thor when presenting ══ */}
           {isPresenting && (
             <motion.div
-              className="fixed top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 z-20 w-[60vw] sm:w-[500px] max-w-[600px]"
+              className="pointer-events-auto flex-1 max-w-[60vw] sm:max-w-[500px] max-h-[80vh] overflow-y-auto"
               initial={{ opacity: 0, x: 40, scale: 0.95 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ delay: 0.3, type: "spring", damping: 20 }}
             >
-              <div className="bg-background/80 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl p-6 sm:p-8 shadow-2xl shadow-accent-violet/5">
-                {/* Presentation content — last assistant message rendered big */}
+              <div className="bg-background/80 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl p-5 sm:p-6 shadow-2xl shadow-accent-violet/5">
                 {lastMessage && lastMessage.role === "assistant" && (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 mb-3">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
                       <motion.span className="w-2 h-2 rounded-full bg-accent-violet" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity }} />
                       <span className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-violet/60">Thor · Apresentando</span>
                     </div>
-                    <div className="text-sm sm:text-base text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none [&_p]:mb-2">
+                    <div className="text-sm text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none [&_p]:mb-2">
                       <ReactMarkdown>{lastMessage.content}</ReactMarkdown>
                     </div>
                     {isSpeaking && (
-                      <div className="flex items-center gap-[2px] h-3 justify-start pt-2">
+                      <div className="flex items-center gap-[2px] h-3 justify-start pt-1">
                         {Array.from({ length: 30 }).map((_, i) => (
                           <motion.div
                             key={i}
@@ -812,8 +812,7 @@ const ThorGreeter = () => {
                   </div>
                 )}
 
-                {/* Inline input in presentation mode */}
-                <form onSubmit={(e) => { e.preventDefault(); sendMessage(); }} className="flex gap-2 mt-5 pt-4 border-t border-accent-violet/5">
+                <form onSubmit={(e) => { e.preventDefault(); sendMessage(); }} className="flex gap-2 mt-4 pt-3 border-t border-accent-violet/5">
                   <input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -836,7 +835,7 @@ const ThorGreeter = () => {
           {/* Speech bubble — only when NOT presenting and not chat */}
           {lastMessage && !showChat && !isPresenting && (
             <motion.div
-              className="mt-4 max-w-[88vw] sm:max-w-[340px]"
+              className="mt-4 max-w-[88vw] sm:max-w-[340px] pointer-events-auto"
               initial={{ opacity: 0, y: 12, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               key={lastMessage.content.slice(0, 20)}
@@ -870,10 +869,10 @@ const ThorGreeter = () => {
             </motion.div>
           )}
 
-          {/* Quick actions */}
-          {messages.length <= 1 && !showChat && !isLoading && messages.some(m => m.role === "assistant") && (
+          {/* Quick actions — hide when presenting */}
+          {messages.length <= 1 && !showChat && !isPresenting && !isLoading && messages.some(m => m.role === "assistant") && (
             <motion.div
-              className="mt-4 flex gap-2 flex-wrap justify-center"
+              className="mt-4 flex gap-2 flex-wrap justify-center pointer-events-auto"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -905,10 +904,9 @@ const ThorGreeter = () => {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="mt-4 w-[92vw] sm:w-[420px] overflow-hidden"
+                className="mt-4 w-[92vw] sm:w-[420px] overflow-hidden pointer-events-auto"
               >
                 <div className="bg-background/85 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl overflow-hidden shadow-2xl shadow-accent-violet/5">
-                  {/* Header bar */}
                   <div className="px-4 py-2 border-b border-accent-violet/5 flex items-center gap-2">
                     <motion.span
                       className="w-1.5 h-1.5 rounded-full bg-emerald-500"
@@ -992,7 +990,7 @@ const ThorGreeter = () => {
           {/* Inline input when chat hidden and NOT presenting */}
           {!showChat && !isPresenting && (
             <motion.div
-              className="mt-4 w-[88vw] sm:w-[380px]"
+              className="mt-4 w-[88vw] sm:w-[380px] pointer-events-auto"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -1015,7 +1013,7 @@ const ThorGreeter = () => {
               </form>
             </motion.div>
           )}
-        </motion.div>
+        </div>
       </motion.div>
     </AnimatePresence>
   );
