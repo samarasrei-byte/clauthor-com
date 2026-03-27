@@ -4,7 +4,7 @@ import { X, ChevronRight, ChevronLeft, RotateCcw, Volume2, VolumeX, MapPin } fro
 import { Button } from "@/components/ui/button";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
-import thorPhoto from "@/assets/kaelis-ai.png";
+import thorPhoto from "@/assets/kaelis-ai.webp";
 
 export interface PageTourStep {
   route?: string;
