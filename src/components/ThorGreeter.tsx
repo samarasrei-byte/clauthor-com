@@ -488,7 +488,7 @@ const ThorGreeter = () => {
     }
   };
 
-  const coreSize = typeof window !== "undefined" && window.innerWidth < 640 ? 220 : 320;
+  const coreSize = typeof window !== "undefined" && window.innerWidth < 640 ? 260 : 360;
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 
   /* ══ ENTRANCE — cinematic boot sequence ══ */
