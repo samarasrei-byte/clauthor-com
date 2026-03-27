@@ -19,12 +19,11 @@ import {
   Star, Receipt, Globe, Briefcase, DollarSign, MessageSquare,
   Activity, Terminal, ChevronRight, Cpu, Crosshair,
   Building2, Clock, Rocket, BarChart3, Fingerprint, Sparkles, Layers3, Signal,
-  Linkedin,
+  
 } from "lucide-react";
 import { useRef, useMemo, useState, useCallback } from "react";
 import HelpTooltip from "@/components/HelpTooltip";
 import { useTranslation } from "react-i18next";
-import clauthorLogo from "@/assets/clauthor-logo.png";
 import Footer from "@/components/Footer";
 import helixaPhoto from "@/assets/helixa-ai.png";
 import thorPhoto from "@/assets/kaelis-ai.webp";
