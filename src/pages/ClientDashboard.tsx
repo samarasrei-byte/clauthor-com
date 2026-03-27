@@ -328,6 +328,8 @@ const ClientDashboard = () => {
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
 
     // ── Monitoramento ──
+    { id: "neural-network", label: "Neural Network", icon: Orbit, group: monitorGroup },
+    { id: "scrum", label: "Scrum Board", icon: LayoutGrid, group: monitorGroup },
     { id: "live-timeline", label: "Timeline", icon: Clock, badge: pendingTaskCount || undefined, group: monitorGroup },
     { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Centro de Operações" }), icon: Radar, group: monitorGroup },
 
