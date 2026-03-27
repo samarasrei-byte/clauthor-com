@@ -562,14 +562,18 @@ const ClientDashboard = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2">
-                        <h1 className="font-display text-2xl font-bold">
+                        <h1 className="font-display text-2xl font-bold flex items-center gap-3">
                           {(() => {
                             const hour = new Date().getHours();
                             const firstName = user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel");
-                            if (hour < 12) return t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}} ☀️", name: firstName });
-                            if (hour < 18) return t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}} 👋", name: firstName });
-                            return t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}} 🌙", name: firstName });
+                            if (hour < 12) return t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}}", name: firstName });
+                            if (hour < 18) return t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}}", name: firstName });
+                            return t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}}", name: firstName });
                           })()}
+                          <span className="relative flex h-2.5 w-2.5">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary" />
+                          </span>
                         </h1>
                         <HelpTooltip id="dashboard-intro" text={t("dashboard.help_intro", { defaultValue: "Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções." })} position="bottom" />
                       </div>

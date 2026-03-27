@@ -436,7 +436,7 @@ export default function AgentNeuralNetwork() {
   );
 
   return (
-    <div className="h-full relative bg-background overflow-hidden">
+    <div className="relative bg-background overflow-hidden" style={{ height: "calc(100vh - 180px)", minHeight: "500px" }}>
       {/* Stats overlay */}
       <div className="absolute top-4 left-4 z-20 flex gap-3">
         {[
