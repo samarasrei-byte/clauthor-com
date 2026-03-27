@@ -9,7 +9,7 @@ import {
   LayoutDashboard, Bot, BarChart3, CreditCard,
   Sparkles, ArrowRight, Coins, Settings, Brain, MessageSquare, Plug, ChevronDown, ChevronLeft,
   Rocket, Building2, KanbanSquare, Layers3,
-  Clock, Radar, Orbit, LayoutGrid
+  Video, Clock, Radar, Orbit, LayoutGrid
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -336,8 +336,7 @@ const ClientDashboard = () => {
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
 
-  // Use shared tier colors
-  const { TIER_COLORS: tierColors } = require("@/lib/tier-colors");
+  // tierColors imported from shared module at top
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(value / 100);
