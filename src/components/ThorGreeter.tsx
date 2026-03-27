@@ -663,6 +663,10 @@ const ThorGreeter = () => {
     );
   }
 
+  const hasSpeech = messages.length > 0;
+  const isPresenting = hasSpeech && !showChat;
+  const presentCoreSize = typeof window !== "undefined" && window.innerWidth < 640 ? 100 : 140;
+
   /* ══ ACTIVE — Cinematic holographic entity ══ */
   return (
     <AnimatePresence>
@@ -672,20 +676,35 @@ const ThorGreeter = () => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
       >
-        {/* Backdrop — radial gradient, site visible */}
-        <div
+        {/* Backdrop — frosted glass blur */}
+        <motion.div
           className="absolute inset-0 pointer-events-auto"
           onClick={minimize}
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.03) 0%, transparent 70%)" }}
+          initial={{ backdropFilter: "blur(0px)" }}
+          animate={{ backdropFilter: isPresenting ? "blur(6px)" : "blur(12px)" }}
+          transition={{ duration: 0.8 }}
+          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.5) 60%, hsl(var(--background) / 0.7) 100%)" }}
         />
 
-        {/* Main holographic entity */}
+        {/* Main holographic entity — moves to corner when presenting */}
         <motion.div
-          className="relative z-10 flex flex-col items-center pointer-events-auto max-w-[95vw]"
+          className="relative z-10 flex flex-col pointer-events-auto"
           initial={{ scale: 0.6, opacity: 0, y: 40 }}
-          animate={{ scale: 1, opacity: 1, y: 0 }}
+          animate={isPresenting ? {
+            scale: 1,
+            opacity: 1,
+            y: 0,
+            x: typeof window !== "undefined" && window.innerWidth < 640 ? -((window.innerWidth / 2) - 70) : -((window.innerWidth / 2) - 120),
+            transition: { type: "spring", damping: 20, stiffness: 100 },
+          } : {
+            scale: 1,
+            opacity: 1,
+            y: 0,
+            x: 0,
+          }}
           exit={{ scale: 0.6, opacity: 0, y: 40 }}
           transition={{ type: "spring", damping: 16, stiffness: 120 }}
+          style={{ alignItems: isPresenting ? "flex-start" : "center" }}
         >
           {/* Controls */}
           <div className="absolute -top-3 right-0 sm:-right-4 flex items-center gap-1.5 z-20">
