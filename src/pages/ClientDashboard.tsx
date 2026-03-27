@@ -369,7 +369,6 @@ const ClientDashboard = () => {
     "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
     "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
     "operations-center": t("dashboard.operations_center", { defaultValue: "Centro de Operações" }),
-    "operations-center": t("dashboard.operations_center", { defaultValue: "Centro de Operações" }),
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     "content-pipeline": t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }),
