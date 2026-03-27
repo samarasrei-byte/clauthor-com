@@ -670,12 +670,12 @@ const ThorGreeter = () => {
               }}
               animate={isSpeaking ? {
                 boxShadow: [
-                  "0 0 30px hsl(var(--accent-violet) / 0.15), 0 0 80px hsl(var(--accent-violet) / 0.08)",
-                  "0 0 60px hsl(var(--accent-violet) / 0.35), 0 0 140px hsl(var(--accent-violet) / 0.15)",
-                  "0 0 30px hsl(var(--accent-violet) / 0.15), 0 0 80px hsl(var(--accent-violet) / 0.08)",
+                  "inset 0 0 15px hsl(var(--accent-violet) / 0.1)",
+                  "inset 0 0 25px hsl(var(--accent-violet) / 0.2)",
+                  "inset 0 0 15px hsl(var(--accent-violet) / 0.1)",
                 ],
               } : {
-                boxShadow: "0 0 40px hsl(var(--accent-violet) / 0.2), 0 0 80px hsl(var(--accent-violet) / 0.08)",
+                boxShadow: "inset 0 0 15px hsl(var(--accent-violet) / 0.1)",
               }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
