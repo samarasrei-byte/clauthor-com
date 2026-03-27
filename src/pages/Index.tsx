@@ -468,8 +468,8 @@ const HomePage = () => {
         <div className="max-w-5xl mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-4">
             <AnimatedStat icon={BotMessageSquare} value={200} suffix="+" label={t("home.stats_active_agents", { defaultValue: "AI AGENTS" })} />
-            <AnimatedStat icon={Layers3} value={37} suffix="" label={t("home.stats_squads", { defaultValue: "SMART SQUADS" })} />
-            <AnimatedStat icon={Building2} value={7} suffix="" label={t("home.stats_departments", { defaultValue: "DEPARTMENTS" })} />
+            <AnimatedStat icon={Layers3} value={55} suffix="" label={t("home.stats_squads", { defaultValue: "SMART SQUADS" })} />
+            <AnimatedStat icon={Building2} value={15} suffix="" label={t("home.stats_departments", { defaultValue: "DEPARTMENTS" })} />
             <AnimatedStat icon={Signal} value={99.9} suffix="%" label={t("home.stats_uptime", { defaultValue: "UPTIME SLA" })} />
           </div>
         </div>

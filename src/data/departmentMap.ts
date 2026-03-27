@@ -27,13 +27,21 @@ const DEPARTMENTS: Record<string, DepartmentInfo> = {
   compras:          { id: "compras",           label: "Compras & Procurement",    color: "text-lime-400" },
   logistica:        { id: "logistica",         label: "Logística & Supply Chain", color: "text-sky-400" },
   qualidade:        { id: "qualidade",         label: "Qualidade & Processos",    color: "text-yellow-400" },
-  // Workforce architecture departments (mapped to display depts)
+  // Workforce architecture departments
   growth:           { id: "growth",            label: "Growth",                   color: "text-emerald-400" },
   product:          { id: "product",           label: "Product",                  color: "text-violet-400" },
   sales:            { id: "sales",             label: "Sales",                    color: "text-cyan-400" },
   customer_success: { id: "customer_success",  label: "Customer Success",         color: "text-emerald-400" },
   finance:          { id: "finance",           label: "Finance",                  color: "text-amber-400" },
   operations:       { id: "operations",        label: "Operations",               color: "text-indigo-400" },
+  security:         { id: "security",          label: "Segurança & Compliance",   color: "text-red-400" },
+  engineering:      { id: "engineering",       label: "Engenharia",               color: "text-cyan-400" },
+  data_analytics:   { id: "data_analytics",    label: "Data & Analytics",         color: "text-indigo-400" },
+  communications:   { id: "communications",    label: "Comunicação & PR",         color: "text-pink-400" },
+  talent:           { id: "talent",            label: "Talent & People",          color: "text-amber-400" },
+  innovation:       { id: "innovation",        label: "Inovação & R&D",           color: "text-violet-400" },
+  it_infrastructure:{ id: "it_infrastructure", label: "IT & Infraestrutura",      color: "text-slate-400" },
+  strategy:         { id: "strategy",          label: "Estratégia & Inteligência",color: "text-emerald-400" },
 };
 
 // ─── Manual overrides for legacy slugs ───
