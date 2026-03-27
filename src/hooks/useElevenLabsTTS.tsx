@@ -22,7 +22,7 @@ function speakNative(text: string, lang: string, onStart?: () => void, onEnd?: (
 
   // Pick best voice for language
   const voices = window.speechSynthesis.getVoices();
-  const langPrefix = lang.split("-")[0]; // "pt" from "pt-BR"
+  const langPrefix = lang.split("-")[0];
   const preferred =
     voices.find((v) => v.lang.startsWith(langPrefix) && v.name.toLowerCase().includes("male")) ||
     voices.find((v) => v.lang.startsWith(langPrefix)) ||
@@ -30,9 +30,34 @@ function speakNative(text: string, lang: string, onStart?: () => void, onEnd?: (
     voices[0];
   if (preferred) utterance.voice = preferred;
 
+  let ended = false;
+  const finish = () => {
+    if (ended) return;
+    ended = true;
+    onEnd?.();
+  };
+
   utterance.onstart = () => onStart?.();
-  utterance.onend = () => onEnd?.();
-  utterance.onerror = () => onEnd?.();
+  utterance.onend = finish;
+  utterance.onerror = finish;
+
+  // Safety: Chrome sometimes doesn't fire onend for long texts
+  // Poll speechSynthesis.speaking every 500ms as backup
+  const checkInterval = setInterval(() => {
+    if (!window.speechSynthesis.speaking && !window.speechSynthesis.pending) {
+      clearInterval(checkInterval);
+      finish();
+    }
+  }, 500);
+
+  // Also clear interval after max 30s
+  setTimeout(() => {
+    clearInterval(checkInterval);
+    if (!ended) {
+      window.speechSynthesis.cancel();
+      finish();
+    }
+  }, 30_000);
 
   window.speechSynthesis.speak(utterance);
   return utterance;
