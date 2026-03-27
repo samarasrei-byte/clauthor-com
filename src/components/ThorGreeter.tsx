@@ -764,27 +764,34 @@ const ThorGreeter = () => {
             </motion.div>
           </div>
 
-          {/* Speech bubble */}
+          {/* Speech bubble — truncated to 130 chars, expandable */}
           {lastMessage && !showChat && (
             <motion.div
-              className="mt-4 max-w-[88vw] sm:max-w-[360px]"
+              className="mt-4 max-w-[88vw] sm:max-w-[340px]"
               initial={{ opacity: 0, y: 12, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               key={lastMessage.content.slice(0, 20)}
             >
-              <div className="relative bg-background/70 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl px-4 py-3 shadow-2xl shadow-accent-violet/5">
-                {/* Connector to orb */}
-                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-5 h-5 rotate-45 bg-background/70 border-l border-t border-accent-violet/10" />
-                <div className="text-[11px] text-foreground/90 prose prose-xs dark:prose-invert max-w-none [&_p]:mb-0.5 leading-snug relative z-10">
-                  <ReactMarkdown>{lastMessage.content}</ReactMarkdown>
-                </div>
+              <div
+                className="relative bg-background/70 backdrop-blur-2xl border border-accent-violet/10 rounded-xl px-3 py-2 shadow-2xl shadow-accent-violet/5 cursor-pointer"
+                onClick={() => setShowChat(true)}
+              >
+                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45 bg-background/70 border-l border-t border-accent-violet/10" />
+                <p className="text-[10px] text-foreground/80 leading-snug relative z-10 font-mono">
+                  {lastMessage.content.length > 130
+                    ? lastMessage.content.slice(0, 130) + "..."
+                    : lastMessage.content}
+                </p>
+                {lastMessage.content.length > 130 && (
+                  <span className="text-[8px] text-accent-violet/50 font-mono mt-1 block">▼ ver mais</span>
+                )}
                 {isSpeaking && (
-                  <div className="flex items-center gap-[1.5px] mt-3 h-3 justify-center">
-                    {Array.from({ length: 30 }).map((_, i) => (
+                  <div className="flex items-center gap-[1.5px] mt-1.5 h-2 justify-center">
+                    {Array.from({ length: 20 }).map((_, i) => (
                       <motion.div
                         key={i}
                         className="w-[1px] rounded-full bg-accent-violet/50"
-                        animate={{ height: [1.5, Math.random() * 10 + 3, 1.5] }}
+                        animate={{ height: [1, Math.random() * 6 + 2, 1] }}
                         transition={{ duration: 0.25 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.025 }}
                       />
                     ))}
