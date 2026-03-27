@@ -794,12 +794,6 @@ const ClientDashboard = () => {
                   </ErrorBoundary>
                 )}
 
-                {/* ═══ EQUIPE (AGENT CONTACTS) ═══ */}
-                {activeSection === "equipe" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <SquadChat agents={agents} onRequestAgent={(name) => handleSidebarNav("library")} />
-                  </Suspense>
-                )}
 
                 {/* ═══ INTEGRATIONS ═══ */}
                 {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
@@ -961,19 +955,6 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
-                {/* ═══ CONTROL TOWER (legacy route) ═══ */}
-                {activeSection === "control-tower" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <OperationsCenter onNavigate={handleSidebarNav} defaultTab="tower" />
-                  </Suspense>
-                )}
-
-                {/* ═══ MISSION CONTROL (legacy route) ═══ */}
-                {activeSection === "mission-control" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <OperationsCenter onNavigate={handleSidebarNav} defaultTab="mission" />
-                  </Suspense>
-                )}
 
                 {/* ═══ NEURAL NETWORK ═══ */}
                 {activeSection === "neural-network" && (
