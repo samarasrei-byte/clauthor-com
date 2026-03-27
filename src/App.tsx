@@ -56,6 +56,8 @@ const ControlTower = lazyRetry(() => import("./pages/ControlTower"));
 const Architecture = lazyRetry(() => import("./pages/Architecture"));
 const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
 const ThorOnboarding = lazyRetry(() => import("./pages/ThorOnboarding"));
+const AgentNeuralNetwork = lazyRetry(() => import("./pages/AgentNeuralNetwork"));
+const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -120,6 +122,8 @@ const App = () => (
                   <Route path="/monix" element={<MonixCommandCenter />} />
                   <Route path="/omnix" element={<OmnixCommandCenter />} />
                   <Route path="/control-tower" element={<ControlTower />} />
+                  <Route path="/neural-network" element={<AgentNeuralNetwork />} />
+                  <Route path="/scrum" element={<ScrumBoard />} />
                 </Route>
 
                 {/* Admin */}

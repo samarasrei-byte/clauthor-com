@@ -9,7 +9,7 @@ import {
   LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
   Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft,
   Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, Layers3,
-  Video, Clock, Radar
+  Video, Clock, Radar, Orbit, LayoutGrid
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -74,6 +74,8 @@ const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPi
 const SalesCallTranscriber = lazy(() => import("@/components/dashboard/SalesCallTranscriber"));
 const SquadManager = lazy(() => import("@/components/dashboard/SquadManager"));
 const BulkAgentProvisioner = lazy(() => import("@/components/dashboard/BulkAgentProvisioner"));
+const AgentNeuralNetwork = lazy(() => import("@/pages/AgentNeuralNetwork"));
+const ScrumBoard = lazy(() => import("@/pages/ScrumBoard"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -328,6 +330,8 @@ const ClientDashboard = () => {
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
 
     // ── Monitoramento ──
+    { id: "neural-network", label: "Neural Network", icon: Orbit, group: monitorGroup },
+    { id: "scrum", label: "Scrum Board", icon: LayoutGrid, group: monitorGroup },
     { id: "live-timeline", label: "Timeline", icon: Clock, badge: pendingTaskCount || undefined, group: monitorGroup },
     { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Centro de Operações" }), icon: Radar, group: monitorGroup },
 
@@ -384,6 +388,8 @@ const ClientDashboard = () => {
     "call-transcriber": t("dashboard.call_transcriber", { defaultValue: "Chamadas" }),
     squads: "Squads",
     "bulk-deploy": "Deploy Agents",
+    "neural-network": "Neural Network",
+    scrum: "Scrum Board",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
@@ -940,6 +946,20 @@ const ClientDashboard = () => {
                 {activeSection === "mission-control" && (
                   <Suspense fallback={<SectionLoader />}>
                     <OperationsCenter onNavigate={handleSidebarNav} defaultTab="mission" />
+                  </Suspense>
+                )}
+
+                {/* ═══ NEURAL NETWORK ═══ */}
+                {activeSection === "neural-network" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <AgentNeuralNetwork />
+                  </Suspense>
+                )}
+
+                {/* ═══ SCRUM BOARD ═══ */}
+                {activeSection === "scrum" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ScrumBoard />
                   </Suspense>
                 )}
 
