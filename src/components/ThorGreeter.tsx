@@ -24,270 +24,201 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
   const center = size / 2;
   const r = size / 2 - 30;
 
-  // Hexagonal grid points
-  const hexPoints = useMemo(() => {
-    const pts: { x: number; y: number; dist: number }[] = [];
-    const spacing = 14;
-    for (let row = -6; row <= 6; row++) {
-      for (let col = -6; col <= 6; col++) {
-        const x = center + col * spacing + (row % 2 ? spacing / 2 : 0);
-        const y = center + row * spacing * 0.866;
-        const dist = Math.sqrt((x - center) ** 2 + (y - center) ** 2);
-        if (dist < r + 10 && dist > r * 0.45) pts.push({ x, y, dist });
-      }
-    }
-    return pts;
-  }, [size]);
-
-  // DNA helix points
-  const helixPoints = useMemo(() => {
-    return Array.from({ length: 60 }, (_, i) => {
-      const t = (i / 60) * Math.PI * 4;
-      const radius1 = r + 8;
-      const radius2 = r + 8;
+  // Reticle tick marks around the circle
+  const reticleTicks = useMemo(() => {
+    return Array.from({ length: 72 }, (_, i) => {
+      const angle = (i / 72) * Math.PI * 2;
+      const isMajor = i % 9 === 0;
+      const inner = r + 2;
+      const outer = r + (isMajor ? 12 : 5);
       return {
-        x1: center + Math.cos(t) * radius1 * 0.15,
-        y1: center + (i / 60 - 0.5) * size * 0.8,
-        x2: center + Math.cos(t + Math.PI) * radius2 * 0.15,
-        y2: center + (i / 60 - 0.5) * size * 0.8,
-        t,
+        x1: center + Math.cos(angle) * inner,
+        y1: center + Math.sin(angle) * inner,
+        x2: center + Math.cos(angle) * outer,
+        y2: center + Math.sin(angle) * outer,
+        isMajor,
+        angle: (i / 72) * 360,
       };
     });
   }, [size]);
+
+  // Data arc segments
+  const arcSegments = useMemo(() => {
+    return [
+      { start: 15, end: 75, r: r + 18, width: 1.5 },
+      { start: 120, end: 195, r: r + 22, width: 1 },
+      { start: 210, end: 270, r: r + 16, width: 2 },
+      { start: 300, end: 350, r: r + 20, width: 0.8 },
+    ];
+  }, [r]);
+
+  const describeArc = (cx: number, cy: number, radius: number, startAngle: number, endAngle: number) => {
+    const startRad = (startAngle - 90) * Math.PI / 180;
+    const endRad = (endAngle - 90) * Math.PI / 180;
+    const x1 = cx + radius * Math.cos(startRad);
+    const y1 = cy + radius * Math.sin(startRad);
+    const x2 = cx + radius * Math.cos(endRad);
+    const y2 = cy + radius * Math.sin(endRad);
+    const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+    return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`;
+  };
+
+  // Waveform bars (circular EQ)
+  const waveCount = 48;
 
   return (
     <div className="absolute inset-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="absolute inset-0">
         <defs>
-          <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="hsl(var(--accent-violet))" stopOpacity="0.2" />
-            <stop offset="40%" stopColor="hsl(var(--accent-violet))" stopOpacity="0.06" />
-            <stop offset="100%" stopColor="hsl(var(--accent-violet))" stopOpacity="0" />
-          </radialGradient>
-          <radialGradient id="inner-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="hsl(var(--accent-violet))" stopOpacity="0.3" />
-            <stop offset="100%" stopColor="transparent" stopOpacity="0" />
-          </radialGradient>
-          <filter id="glow-sm">
-            <feGaussianBlur stdDeviation="1.5" />
-          </filter>
-          <filter id="glow-lg">
-            <feGaussianBlur stdDeviation="4" />
-          </filter>
-            <clipPath id="face-clip">
-              <circle cx={center} cy={center} r={r * 0.55} />
-            </clipPath>
+          <clipPath id="face-clip">
+            <circle cx={center} cy={center} r={r * 0.55} />
+          </clipPath>
         </defs>
 
-        {/* Deep ambient glow */}
-        <circle cx={center} cy={center} r={r + 25} fill="url(#core-glow)" />
+        {/* Clean targeting reticle — outer ring */}
+        <circle
+          cx={center} cy={center} r={r + 1}
+          fill="none"
+          stroke="hsl(var(--accent-violet))"
+          strokeWidth="0.5"
+          strokeOpacity="0.2"
+        />
 
-        {/* Hex grid — neural network nodes */}
-        {hexPoints.map((pt, i) => (
-          <motion.circle
-            key={`hex-${i}`}
-            cx={pt.x}
-            cy={pt.y}
-            r={1}
-            fill="hsl(var(--accent-violet))"
-            initial={{ opacity: 0 }}
-            animate={isSpeaking ? {
-              opacity: [0.05, 0.3 + Math.random() * 0.4, 0.05],
-              r: [0.8, 1.2 + Math.random(), 0.8],
-            } : {
-              opacity: [0.03, 0.08, 0.03],
-            }}
-            transition={{
-              duration: isSpeaking ? 0.4 + Math.random() * 0.6 : 3 + Math.random() * 2,
-              repeat: Infinity,
-              delay: (pt.dist / r) * 0.5,
-            }}
+        {/* Reticle tick marks */}
+        {reticleTicks.map((tick, i) => (
+          <line
+            key={`tick-${i}`}
+            x1={tick.x1} y1={tick.y1}
+            x2={tick.x2} y2={tick.y2}
+            stroke="hsl(var(--accent-violet))"
+            strokeWidth={tick.isMajor ? "1" : "0.4"}
+            strokeOpacity={tick.isMajor ? "0.4" : "0.15"}
           />
         ))}
 
-        {/* Neural connections — random lines between nearby hex points */}
-        {hexPoints.slice(0, 40).map((pt, i) => {
-          const next = hexPoints[(i * 7 + 3) % hexPoints.length];
-          const dist = Math.sqrt((pt.x - next.x) ** 2 + (pt.y - next.y) ** 2);
-          if (dist > 40) return null;
+        {/* Rotating data arcs */}
+        {arcSegments.map((seg, i) => (
+          <motion.path
+            key={`arc-${i}`}
+            d={describeArc(center, center, seg.r, seg.start, seg.end)}
+            fill="none"
+            stroke="hsl(var(--accent-violet))"
+            strokeWidth={seg.width}
+            strokeLinecap="round"
+            strokeOpacity={isSpeaking ? 0.5 : 0.15}
+            style={{ transformOrigin: `${center}px ${center}px` }}
+            animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
+            transition={{ duration: 15 + i * 8, repeat: Infinity, ease: "linear" }}
+          />
+        ))}
+
+        {/* Corner brackets — targeting UI */}
+        {[
+          { x: center - r * 0.62, y: center - r * 0.62, rot: 0 },
+          { x: center + r * 0.62, y: center - r * 0.62, rot: 90 },
+          { x: center + r * 0.62, y: center + r * 0.62, rot: 180 },
+          { x: center - r * 0.62, y: center + r * 0.62, rot: 270 },
+        ].map((corner, i) => (
+          <g key={`bracket-${i}`} transform={`translate(${corner.x}, ${corner.y}) rotate(${corner.rot})`}>
+            <line x1="0" y1="0" x2="12" y2="0" stroke="hsl(var(--accent-violet))" strokeWidth="1.5" strokeOpacity="0.4" />
+            <line x1="0" y1="0" x2="0" y2="12" stroke="hsl(var(--accent-violet))" strokeWidth="1.5" strokeOpacity="0.4" />
+          </g>
+        ))}
+
+        {/* Crosshair lines */}
+        {[0, 90, 180, 270].map(angle => {
+          const rad = (angle * Math.PI) / 180;
           return (
-            <motion.line
-              key={`conn-${i}`}
-              x1={pt.x} y1={pt.y} x2={next.x} y2={next.y}
+            <line
+              key={`cross-${angle}`}
+              x1={center + Math.cos(rad) * (r * 0.58)}
+              y1={center + Math.sin(rad) * (r * 0.58)}
+              x2={center + Math.cos(rad) * (r * 0.65)}
+              y2={center + Math.sin(rad) * (r * 0.65)}
               stroke="hsl(var(--accent-violet))"
-              strokeWidth="0.3"
-              animate={isSpeaking ? {
-                strokeOpacity: [0, 0.25, 0],
-              } : {
-                strokeOpacity: [0, 0.05, 0],
-              }}
-              transition={{
-                duration: 1.5 + Math.random(),
-                repeat: Infinity,
-                delay: i * 0.08,
-              }}
+              strokeWidth="0.8"
+              strokeOpacity="0.3"
             />
           );
         })}
 
-        {/* Orbital ring 1 — main */}
+        {/* Inner ring — face boundary */}
         <motion.circle
-          cx={center} cy={center} r={r + 4}
+          cx={center} cy={center} r={r * 0.56}
           fill="none"
           stroke="hsl(var(--accent-violet))"
-          strokeWidth={isSpeaking ? 1.2 : 0.6}
-          strokeOpacity={isSpeaking ? 0.5 : 0.15}
-          strokeDasharray={isSpeaking ? "2 6" : "1 12"}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-          style={{ transformOrigin: "center" }}
-        />
-
-        {/* Orbital ring 2 — counter-rotate */}
-        <motion.circle
-          cx={center} cy={center} r={r + 16}
-          fill="none"
-          stroke="hsl(var(--accent-violet))"
-          strokeWidth="0.4"
-          strokeOpacity={0.1}
-          strokeDasharray="3 20"
-          animate={{ rotate: -360 }}
-          transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
-          style={{ transformOrigin: "center" }}
-        />
-
-        {/* Orbital ring 3 — subtle outer */}
-        <motion.circle
-          cx={center} cy={center} r={r + 24}
-          fill="none"
-          stroke="hsl(var(--accent-violet))"
-          strokeWidth="0.3"
-          strokeOpacity={0.06}
-          strokeDasharray="1 25"
-          animate={{ rotate: 360 }}
-          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-          style={{ transformOrigin: "center" }}
-        />
-
-        {/* Pulse ring — expands when speaking */}
-        <motion.circle
-          cx={center} cy={center} r={r * 0.44}
-          fill="none"
-          stroke="hsl(var(--accent-violet))"
-          strokeWidth="1"
+          strokeWidth="0.8"
           animate={isSpeaking ? {
-            r: [r * 0.44, r * 0.48, r * 0.44],
-            strokeOpacity: [0.15, 0.4, 0.15],
-            strokeWidth: [0.5, 1.5, 0.5],
+            strokeOpacity: [0.2, 0.5, 0.2],
+            r: [r * 0.55, r * 0.57, r * 0.55],
           } : {
-            strokeOpacity: 0.08,
+            strokeOpacity: 0.15,
           }}
-          transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Circular waveform — 64 bars */}
-        {Array.from({ length: 64 }).map((_, i) => {
-          const angle = (i / 64) * Math.PI * 2 - Math.PI / 2;
-          const baseR = r * 0.44 + 3;
+        {/* Circular waveform EQ — sharp bars */}
+        {Array.from({ length: waveCount }).map((_, i) => {
+          const angle = (i / waveCount) * Math.PI * 2 - Math.PI / 2;
+          const baseR = r * 0.58;
           const x1 = center + Math.cos(angle) * baseR;
           const y1 = center + Math.sin(angle) * baseR;
-          const len = isSpeaking ? 6 + Math.random() * 16 : 3;
+          const restLen = 2;
           return (
             <motion.line
-              key={`wave-${i}`}
+              key={`eq-${i}`}
               x1={x1} y1={y1}
-              x2={center + Math.cos(angle) * (baseR + len)}
-              y2={center + Math.sin(angle) * (baseR + len)}
+              x2={center + Math.cos(angle) * (baseR + restLen)}
+              y2={center + Math.sin(angle) * (baseR + restLen)}
               stroke="hsl(var(--accent-violet))"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              filter="url(#glow-sm)"
+              strokeWidth="1.5"
+              strokeLinecap="butt"
               animate={isSpeaking ? {
                 x2: [
-                  center + Math.cos(angle) * (baseR + 3),
-                  center + Math.cos(angle) * (baseR + 6 + Math.random() * 20),
-                  center + Math.cos(angle) * (baseR + 2 + Math.random() * 8),
-                  center + Math.cos(angle) * (baseR + 4 + Math.random() * 18),
-                  center + Math.cos(angle) * (baseR + 3),
+                  center + Math.cos(angle) * (baseR + 2),
+                  center + Math.cos(angle) * (baseR + 4 + Math.random() * 14),
+                  center + Math.cos(angle) * (baseR + 1 + Math.random() * 6),
+                  center + Math.cos(angle) * (baseR + 3 + Math.random() * 12),
+                  center + Math.cos(angle) * (baseR + 2),
                 ],
                 y2: [
-                  center + Math.sin(angle) * (baseR + 3),
-                  center + Math.sin(angle) * (baseR + 6 + Math.random() * 20),
-                  center + Math.sin(angle) * (baseR + 2 + Math.random() * 8),
-                  center + Math.sin(angle) * (baseR + 4 + Math.random() * 18),
-                  center + Math.sin(angle) * (baseR + 3),
+                  center + Math.sin(angle) * (baseR + 2),
+                  center + Math.sin(angle) * (baseR + 4 + Math.random() * 14),
+                  center + Math.sin(angle) * (baseR + 1 + Math.random() * 6),
+                  center + Math.sin(angle) * (baseR + 3 + Math.random() * 12),
+                  center + Math.sin(angle) * (baseR + 2),
                 ],
-                strokeOpacity: [0.3, 0.8, 0.4, 0.9, 0.3],
+                strokeOpacity: [0.3, 0.7, 0.35, 0.8, 0.3],
               } : {
-                strokeOpacity: [0.06, 0.12, 0.06],
+                strokeOpacity: [0.08, 0.15, 0.08],
               }}
               transition={{
-                duration: isSpeaking ? 0.25 + Math.random() * 0.35 : 2.5 + Math.random(),
+                duration: isSpeaking ? 0.2 + Math.random() * 0.3 : 3,
                 repeat: Infinity,
-                delay: i * 0.012,
+                delay: i * 0.01,
                 ease: "easeInOut",
               }}
             />
           );
         })}
 
-        {/* Orbiting particles */}
-        {[0, 1, 2, 3].map(i => {
-          const orbitR = r + 4 + i * 10;
-          return (
-            <motion.circle
-              key={`particle-${i}`}
-              r={1.5 - i * 0.2}
-              fill="hsl(var(--accent-violet))"
-              filter="url(#glow-sm)"
-              animate={{
-                cx: [
-                  center + Math.cos(0) * orbitR,
-                  center + Math.cos(Math.PI / 2) * orbitR,
-                  center + Math.cos(Math.PI) * orbitR,
-                  center + Math.cos(Math.PI * 1.5) * orbitR,
-                  center + Math.cos(Math.PI * 2) * orbitR,
-                ],
-                cy: [
-                  center + Math.sin(0) * orbitR,
-                  center + Math.sin(Math.PI / 2) * orbitR,
-                  center + Math.sin(Math.PI) * orbitR,
-                  center + Math.sin(Math.PI * 1.5) * orbitR,
-                  center + Math.sin(Math.PI * 2) * orbitR,
-                ],
-                opacity: [0.3, 0.7, 0.3],
-              }}
-              transition={{
-                duration: 8 + i * 4,
-                repeat: Infinity,
-                ease: "linear",
-                delay: i * 2,
-              }}
-            />
-          );
-        })}
+        {/* Scanning sweep line */}
+        <motion.line
+          x1={center} y1={center - r - 5}
+          x2={center} y2={center + r + 5}
+          stroke="hsl(var(--accent-violet))"
+          strokeWidth="0.4"
+          strokeOpacity="0.1"
+          style={{ transformOrigin: `${center}px ${center}px` }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+        />
 
-        {/* Data streams — vertical scanlines */}
-        {isSpeaking && Array.from({ length: 6 }).map((_, i) => (
-          <motion.rect
-            key={`stream-${i}`}
-            x={center - r * 0.4 + i * (r * 0.16)}
-            width="0.5"
-            height="8"
-            fill="hsl(var(--accent-violet))"
-            rx="0.25"
-            animate={{
-              y: [center - r, center + r],
-              opacity: [0, 0.5, 0],
-            }}
-            transition={{
-              duration: 1 + Math.random(),
-              repeat: Infinity,
-              delay: i * 0.3,
-              ease: "linear",
-            }}
-          />
-        ))}
+        {/* Status text labels */}
+        <text x={center + r + 8} y={center - 4} fill="hsl(var(--accent-violet))" fontSize="5" fontFamily="monospace" opacity="0.3">SYS</text>
+        <text x={center + r + 8} y={center + 4} fill="hsl(var(--accent-violet))" fontSize="4" fontFamily="monospace" opacity="0.2">
+          {isSpeaking ? "TX" : "RX"}
+        </text>
       </svg>
     </div>
   );
