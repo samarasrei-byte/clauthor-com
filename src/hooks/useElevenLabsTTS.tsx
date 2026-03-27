@@ -179,8 +179,8 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       return true;
     };
 
-    // If ElevenLabs already failed this session, go straight to native
-    if (elevenLabsFailedRef.current) {
+    // If ElevenLabs already failed recently, go straight to native
+    if (isElevenLabsFailed()) {
       doNativeFallback();
       return true;
     }
@@ -203,10 +203,7 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
 
       if (!response.ok) {
         console.warn("ElevenLabs TTS failed, using native voice:", response.status);
-        elevenLabsFailedRef.current = true;
-        if (response.status === 401) {
-          localStorage.setItem(ELEVENLABS_NATIVE_ONLY_KEY, "1");
-        }
+        markElevenLabsFailed();
         doNativeFallback();
         return true;
       }
@@ -214,17 +211,15 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       const contentType = response.headers.get("content-type") || "";
       if (contentType.includes("application/json")) {
         console.warn("ElevenLabs TTS returned fallback payload, using native voice");
-        elevenLabsFailedRef.current = true;
-        localStorage.setItem(ELEVENLABS_NATIVE_ONLY_KEY, "1");
+        markElevenLabsFailed();
         doNativeFallback();
         return true;
       }
 
       const audioBlob = await response.blob();
       if (audioBlob.size < 100) {
-        // Too small = probably error response
         console.warn("ElevenLabs returned tiny response, using native");
-        elevenLabsFailedRef.current = true;
+        markElevenLabsFailed();
         doNativeFallback();
         return true;
       }
@@ -266,7 +261,6 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
   }, [stop, onStart, onEnd]);
 
   const resetProvider = useCallback(() => {
-    elevenLabsFailedRef.current = false;
     localStorage.removeItem(ELEVENLABS_NATIVE_ONLY_KEY);
   }, []);
 
