@@ -993,8 +993,8 @@ const ThorGreeter = () => {
             )}
           </AnimatePresence>
 
-          {/* Inline input when chat hidden */}
-          {!showChat && (
+          {/* Inline input when chat hidden and NOT presenting */}
+          {!showChat && !isPresenting && (
             <motion.div
               className="mt-4 w-[88vw] sm:w-[380px]"
               initial={{ opacity: 0, y: 10 }}
