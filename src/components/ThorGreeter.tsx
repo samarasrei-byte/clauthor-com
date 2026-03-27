@@ -665,7 +665,7 @@ const ThorGreeter = () => {
 
   const hasSpeech = messages.length > 0;
   const isPresenting = hasSpeech && !showChat;
-  const presentCoreSize = typeof window !== "undefined" && window.innerWidth < 640 ? 100 : 140;
+  const presentCoreSize = typeof window !== "undefined" && window.innerWidth < 640 ? 220 : 300;
 
   /* ══ ACTIVE — Cinematic holographic entity ══ */
   return (
@@ -686,16 +686,16 @@ const ThorGreeter = () => {
           style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.6) 60%, hsl(var(--background) / 0.75) 100%)" }}
         />
 
-        {/* Layout: when presenting = Thor left + panel right. Otherwise centered */}
+        {/* Layout: when presenting = Thor above panel. Otherwise centered */}
         <div className={`relative z-10 w-full h-full flex pointer-events-none ${
           isPresenting
-            ? "flex-row items-center px-4 sm:px-8 gap-4 sm:gap-8"
+            ? "flex-col items-center justify-center px-4 sm:px-6"
             : "flex-col items-center justify-center"
         }`}>
 
           {/* Thor orb container */}
           <motion.div
-            className="relative pointer-events-auto flex flex-col items-center"
+            className={`relative pointer-events-auto flex flex-col items-center ${isPresenting ? "z-20 -mb-10 sm:-mb-14" : ""}`}
             initial={{ scale: 0.6, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.6, opacity: 0 }}
@@ -766,28 +766,28 @@ const ThorGreeter = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <div className={`flex items-center gap-2 bg-background/80 backdrop-blur-xl px-${isPresenting ? 2 : 4} py-1 rounded-full border border-accent-violet/15 shadow-lg shadow-accent-violet/5`}>
+               <div className={`flex items-center gap-2 bg-background/80 backdrop-blur-xl py-1 rounded-full border border-accent-violet/15 shadow-lg shadow-accent-violet/5 ${isPresenting ? "px-2" : "px-4"}`}>
                 <motion.span
                   className="w-1.5 h-1.5 rounded-full bg-emerald-500"
                   animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
-                <span className={`text-[${isPresenting ? 7 : 9}px] font-mono font-bold tracking-[0.35em] uppercase text-foreground/90`}>THOR</span>
+                 <span className={`font-mono font-bold tracking-[0.35em] uppercase text-foreground/90 ${isPresenting ? "text-[7px]" : "text-[9px]"}`}>THOR</span>
                 {!isPresenting && <span className="text-[7px] font-mono text-accent-violet/40 tracking-wider">AI</span>}
               </div>
             </motion.div>
            </div>
           </motion.div>
 
-          {/* ══ PRESENTATION PANEL — appears next to Thor when presenting ══ */}
+          {/* ══ PRESENTATION PANEL — appears below Thor when presenting ══ */}
           {isPresenting && (
             <motion.div
-              className="pointer-events-auto flex-1 max-w-[60vw] sm:max-w-[500px] max-h-[80vh] overflow-y-auto"
-              initial={{ opacity: 0, x: 40, scale: 0.95 }}
-              animate={{ opacity: 1, x: 0, scale: 1 }}
+              className="pointer-events-auto w-full max-w-[92vw] sm:max-w-[640px] max-h-[70vh] overflow-y-auto pt-14 sm:pt-20"
+              initial={{ opacity: 0, y: 24, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.3, type: "spring", damping: 20 }}
             >
-              <div className="bg-background/80 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl p-5 sm:p-6 shadow-2xl shadow-accent-violet/5">
+              <div className="bg-background/80 backdrop-blur-2xl border border-accent-violet/10 rounded-[2rem] p-5 sm:p-6 shadow-2xl shadow-accent-violet/5">
                 {lastMessage && lastMessage.role === "assistant" && (
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
