@@ -570,7 +570,7 @@ const ClientDashboard = () => {
                               if (hour >= 6 && hour < 18) {
                                 // Abstract sun — minimal radial burst
                                 return (
-                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]">
+                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)] animate-[spin_12s_linear_infinite]">
                                     <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
                                     {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
                                       const rad = (angle * Math.PI) / 180;
