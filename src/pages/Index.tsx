@@ -26,7 +26,7 @@ import HelpTooltip from "@/components/HelpTooltip";
 import { useTranslation } from "react-i18next";
 import clauthorLogo from "@/assets/clauthor-logo.png";
 import helixaPhoto from "@/assets/helixa-ai.png";
-import thorPhoto from "@/assets/kaelis-ai.png";
+import thorPhoto from "@/assets/kaelis-ai.webp";
 
 /* ═══════════════════════════════════════════════════════
    TYPEWRITER HOOK
