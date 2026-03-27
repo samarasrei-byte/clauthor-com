@@ -11,7 +11,6 @@ export function useHireIntentFlow(user: any) {
   const { i18n } = useTranslation();
   const hireProcessed = useRef(false);
   const [checkoutSummary, setCheckoutSummary] = useState<CheckoutSummaryData | null>(null);
-  const [pendingCheckoutIntent, setPendingCheckoutIntent] = useState<{ intent: HireIntent; uniqueSlugs: string[] } | null>(null);
 
   useEffect(() => {
     if (!user || hireProcessed.current) return;
@@ -53,32 +52,24 @@ export function useHireIntentFlow(user: any) {
 
     if (!price || price <= 0) { toast.error("Preço inválido para este agente."); return; }
 
-    setPendingCheckoutIntent({ intent, uniqueSlugs });
-    setCheckoutSummary({ label: intent.label, slugs: uniqueSlugs, isDepartment, departmentId: deptId, price, currency: region.currency, lang });
+    // Create PayPal plan server-side, then show checkout with planId
+    const agentSlug = isDepartment ? `dept-${deptId}` : uniqueSlugs[0];
+    createPayPalPlan(agentSlug, intent.label, price, region.currency).then((planId) => {
+      setCheckoutSummary({
+        label: intent.label, slugs: uniqueSlugs, isDepartment, departmentId: deptId,
+        price, currency: region.currency, lang, planId,
+      });
+    });
   }, [user, i18n.language]);
 
-  const handleConfirmCheckout = useCallback(async () => {
-    if (!checkoutSummary || !pendingCheckoutIntent) return;
-    const { label, slugs, isDepartment, departmentId, price, currency } = checkoutSummary;
-    const region = getRegion(checkoutSummary.lang);
+  const handleApprove = useCallback(async (subscriptionId: string) => {
+    if (!checkoutSummary) return;
+    const { slugs, isDepartment, departmentId, price, currency, label } = checkoutSummary;
     const agentSlug = isDepartment ? `dept-${departmentId}` : slugs[0];
 
-    const { data, error } = await supabase.functions.invoke("paypal-checkout", {
-      body: {
-        action: "create_subscription",
-        agent_slug: agentSlug,
-        agent_name: label,
-        amount: price,
-        currency,
-        return_url: `${window.location.origin}/dashboard?subscription=success`,
-        cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
-      },
-    });
-    if (error) throw error;
-    if (!data?.success || !data?.approve_url) throw new Error(data?.error || "Falha ao criar assinatura");
-
+    // Store subscription data for usePaypalCapture to process
     sessionStorage.setItem("paypal_subscription", JSON.stringify({
-      subscription_id: data.subscription_id,
+      subscription_id: subscriptionId,
       agent_slug: agentSlug,
       agent_name: label,
       price,
@@ -87,13 +78,37 @@ export function useHireIntentFlow(user: any) {
       ...(isDepartment ? { is_department: true, department_id: departmentId, department_slugs: slugs } : {}),
     }));
 
-    window.location.href = data.approve_url;
-  }, [checkoutSummary, pendingCheckoutIntent]);
+    setCheckoutSummary(null);
+
+    // Trigger the same flow as redirect return
+    const url = new URL(window.location.href);
+    url.searchParams.set("subscription", "success");
+    window.location.href = url.toString();
+  }, [checkoutSummary]);
 
   const cancelCheckout = useCallback(() => {
     setCheckoutSummary(null);
-    setPendingCheckoutIntent(null);
   }, []);
 
-  return { checkoutSummary, handleConfirmCheckout, cancelCheckout };
+  return { checkoutSummary, handleApprove, cancelCheckout };
+}
+
+async function createPayPalPlan(agentSlug: string, agentName: string, amount: number, currency: string): Promise<string | undefined> {
+  try {
+    const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+      body: {
+        action: "create_subscription",
+        agent_slug: agentSlug,
+        agent_name: agentName,
+        amount,
+        currency,
+        return_url: `${window.location.origin}/dashboard?subscription=success`,
+        cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
+      },
+    });
+    if (error || !data?.success) return undefined;
+    return data.plan_id;
+  } catch {
+    return undefined;
+  }
 }

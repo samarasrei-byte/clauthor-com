@@ -1,12 +1,13 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Users, ShieldCheck, CreditCard, Loader2, Sparkles, CheckCircle2, ArrowRight, Zap, AlertTriangle, RefreshCw } from "lucide-react";
+import { Bot, Users, Sparkles, CheckCircle2, Zap, AlertTriangle, ShieldCheck } from "lucide-react";
 import { formatPrice } from "@/lib/pricing";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import FlowProgressBar from "./FlowProgressBar";
 import { useTranslation } from "react-i18next";
+import PayPalInlineButtons from "./PayPalInlineButtons";
 
 export interface CheckoutSummaryData {
   label: string;
@@ -16,36 +17,25 @@ export interface CheckoutSummaryData {
   price: number;
   currency: string;
   lang: string;
+  planId?: string; // PayPal plan ID for inline checkout
 }
 
 interface Props {
   data: CheckoutSummaryData | null;
-  onConfirm: () => Promise<void>;
+  onApprove: (subscriptionId: string) => void;
   onCancel: () => void;
 }
 
-const CheckoutSummaryDialog = ({ data, onConfirm, onCancel }: Props) => {
-  const [loading, setLoading] = useState(false);
+const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
 
   if (!data) return null;
 
-  const handleConfirm = async () => {
-    setLoading(true);
-    setError(null);
-    try {
-      await onConfirm();
-    } catch (err: any) {
-      setError(err?.message || t("checkout.error_generic", { defaultValue: "Erro ao processar pagamento. Tente novamente." }));
-      setLoading(false);
-    }
-  };
-
   const formattedPrice = formatPrice(data.price, data.lang);
 
   return (
-    <Dialog open={!!data} onOpenChange={(open) => !open && !loading && onCancel()}>
+    <Dialog open={!!data} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="sm:max-w-lg bg-background border-border/20 p-0 overflow-hidden">
         {/* Hero header */}
         <div className="relative px-6 pt-8 pb-6 bg-gradient-to-b from-primary/8 to-transparent">
@@ -63,8 +53,8 @@ const CheckoutSummaryDialog = ({ data, onConfirm, onCancel }: Props) => {
               <Sparkles className="h-6 w-6 text-primary" />
             </motion.div>
             <div>
-              <h2 className="font-display text-xl font-bold">{t("checkout.summary_title", { defaultValue: "Resumo do seu time" })}</h2>
-              <p className="text-sm text-muted-foreground mt-1">{t("checkout.summary_subtitle", { defaultValue: "Confira antes de prosseguir" })}</p>
+              <h2 className="font-display text-xl font-bold">{t("checkout.summary_title", { defaultValue: "Checkout" })}</h2>
+              <p className="text-sm text-muted-foreground mt-1">{t("checkout.summary_subtitle", { defaultValue: "Complete your payment without leaving the page" })}</p>
             </div>
             <FlowProgressBar currentStep="payment" className="mt-4" />
           </div>
@@ -82,25 +72,25 @@ const CheckoutSummaryDialog = ({ data, onConfirm, onCancel }: Props) => {
               <div className="space-y-1.5">
                 {data.isDepartment ? (
                   <Badge variant="secondary" className="bg-primary/10 text-primary gap-1 text-[10px]">
-                    <Users className="h-3 w-3" /> {t("checkout.department", { defaultValue: "Departamento" })}
+                    <Users className="h-3 w-3" /> {t("checkout.department", { defaultValue: "Department" })}
                   </Badge>
                 ) : (
                   <Badge variant="secondary" className="bg-accent/50 gap-1 text-[10px]">
-                    <Bot className="h-3 w-3" /> {t("checkout.individual_agent", { defaultValue: "Agente Individual" })}
+                    <Bot className="h-3 w-3" /> {t("checkout.individual_agent", { defaultValue: "Individual Agent" })}
                   </Badge>
                 )}
                 <p className="font-display font-bold text-lg leading-tight">{data.label}</p>
               </div>
               <div className="text-right shrink-0">
                 <p className="font-display text-2xl font-bold text-primary">{formattedPrice}</p>
-                <p className="text-[10px] text-muted-foreground">/{t("checkout.month", { defaultValue: "mês" })}</p>
+                <p className="text-[10px] text-muted-foreground">/{t("checkout.month", { defaultValue: "mo" })}</p>
               </div>
             </div>
 
             {data.slugs.length > 0 && (
               <div className="space-y-2">
                 <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/60">
-                  {t("checkout.agents_included", { count: data.slugs.length, defaultValue: `${data.slugs.length} agente${data.slugs.length > 1 ? "s" : ""} incluído${data.slugs.length > 1 ? "s" : ""}` })}
+                  {data.slugs.length} {t("checkout.agents_included_label", { defaultValue: "agent(s) included" })}
                 </p>
                 <div className="flex flex-wrap gap-1.5">
                   {data.slugs.slice(0, 8).map((s) => (
@@ -111,7 +101,7 @@ const CheckoutSummaryDialog = ({ data, onConfirm, onCancel }: Props) => {
                   ))}
                   {data.slugs.length > 8 && (
                     <div className="flex items-center px-2.5 py-1.5 rounded-lg bg-primary/5 border border-primary/10">
-                      <span className="text-[11px] text-primary font-medium">+{data.slugs.length - 8} {t("checkout.more", { defaultValue: "mais" })}</span>
+                      <span className="text-[11px] text-primary font-medium">+{data.slugs.length - 8} {t("checkout.more", { defaultValue: "more" })}</span>
                     </div>
                   )}
                 </div>
@@ -127,9 +117,9 @@ const CheckoutSummaryDialog = ({ data, onConfirm, onCancel }: Props) => {
             className="grid grid-cols-3 gap-2"
           >
             {[
-              { icon: Zap, text: t("checkout.benefit_activation", { defaultValue: "Ativação imediata" }) },
-              { icon: ShieldCheck, text: t("checkout.benefit_cancel", { defaultValue: "Cancele quando quiser" }) },
-              { icon: CheckCircle2, text: t("checkout.benefit_support", { defaultValue: "Suporte prioritário" }) },
+              { icon: Zap, text: t("checkout.benefit_activation", { defaultValue: "Instant activation" }) },
+              { icon: ShieldCheck, text: t("checkout.benefit_cancel", { defaultValue: "Cancel anytime" }) },
+              { icon: CheckCircle2, text: t("checkout.benefit_support", { defaultValue: "Priority support" }) },
             ].map(({ icon: Icon, text }) => (
               <div key={text} className="flex flex-col items-center gap-1.5 p-3 rounded-xl bg-card/30 border border-border/5">
                 <Icon className="h-4 w-4 text-primary/70" />
@@ -150,51 +140,35 @@ const CheckoutSummaryDialog = ({ data, onConfirm, onCancel }: Props) => {
             </motion.div>
           )}
 
-          {/* CTAs */}
+          {/* PayPal Inline Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35 }}
-            className="space-y-3 pt-1"
           >
-            <Button
-              onClick={handleConfirm}
-              disabled={loading}
-              className="w-full h-13 glow rounded-xl gap-2 text-sm font-semibold"
-            >
-              {loading ? (
-                <>
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                  {t("checkout.redirecting", { defaultValue: "Redirecionando ao PayPal..." })}
-                </>
-              ) : error ? (
-                <>
-                  <RefreshCw className="h-4 w-4" />
-                  {t("checkout.retry", { defaultValue: "Tentar novamente" })}
-                </>
-              ) : (
-                <>
-                  <CreditCard className="h-4 w-4" />
-                  {t("checkout.confirm_pay", { defaultValue: "Confirmar e pagar" })} {formattedPrice}/{t("checkout.month", { defaultValue: "mês" })}
-                  <ArrowRight className="h-4 w-4" />
-                </>
-              )}
-            </Button>
-            <Button
-              variant="ghost"
-              onClick={onCancel}
-              disabled={loading}
-              className="w-full text-xs text-muted-foreground hover:text-foreground"
-            >
-              {t("checkout.go_back", { defaultValue: "Voltar e explorar mais opções" })}
-            </Button>
+            {data.planId ? (
+              <PayPalInlineButtons
+                planId={data.planId}
+                onApprove={(subscriptionId) => onApprove(subscriptionId)}
+                onError={(err) => setError(err)}
+                onCancel={onCancel}
+              />
+            ) : (
+              <div className="flex items-center justify-center py-6">
+                <span className="text-sm text-muted-foreground animate-pulse">
+                  {t("checkout.preparing", { defaultValue: "Preparing checkout..." })}
+                </span>
+              </div>
+            )}
           </motion.div>
 
-          {/* Trust footer */}
-          <div className="flex items-center justify-center gap-2 text-[10px] text-muted-foreground/50 pt-1">
-            <ShieldCheck className="h-3 w-3" />
-            <span>{t("checkout.trust_footer", { defaultValue: "Pagamento seguro via PayPal • Dados protegidos" })}</span>
-          </div>
+          <Button
+            variant="ghost"
+            onClick={onCancel}
+            className="w-full text-xs text-muted-foreground hover:text-foreground"
+          >
+            {t("checkout.go_back", { defaultValue: "Go back and explore more options" })}
+          </Button>
         </div>
       </DialogContent>
     </Dialog>

@@ -15,6 +15,7 @@ import {
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 import { supabase } from "@/integrations/supabase/client";
+import { createPayPalPlan, handleInlineApproval } from "@/lib/paypal-helpers";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { getRegion, formatPrice } from "@/lib/pricing";
@@ -76,7 +77,7 @@ const Departamentos = () => {
     // Logged in → show checkout summary
     const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
 
-    setCheckoutData({
+    const checkoutInfo: CheckoutSummaryData = {
       label: t(`squads.dept_${dept.id}`),
       slugs: dept.agents.map(a => a.key),
       isDepartment: true,
@@ -84,54 +85,21 @@ const Departamentos = () => {
       price: deptPrice,
       currency: region.currency,
       lang,
+    };
+    setCheckoutData(checkoutInfo);
+
+    // Create PayPal plan for inline checkout
+    createPayPalPlan(`dept-${dept.id}`, `Departamento ${checkoutInfo.label}`, deptPrice, region.currency).then((planId) => {
+      setCheckoutData((prev) => prev ? { ...prev, planId } : prev);
     });
   }, [user, navigate, t, lang, region]);
 
-  const handleConfirmDeptCheckout = useCallback(async () => {
+  const handleApproveCheckout = useCallback((subscriptionId: string) => {
     if (!checkoutData) return;
-    const { label, slugs, departmentId, price, currency } = checkoutData;
-
-    setHiringDeptId(departmentId || "");
-
-    try {
-      const { data, error } = await supabase.functions.invoke("paypal-checkout", {
-        body: {
-          action: "create_subscription",
-          agent_slug: `dept-${departmentId}`,
-          agent_name: `Departamento ${label}`,
-          amount: price,
-          currency,
-          return_url: `${window.location.origin}/dashboard?subscription=success`,
-          cancel_url: `${window.location.origin}/departamentos?subscription=cancelled`,
-        },
-      });
-
-      if (error) throw error;
-      if (!data?.success || !data?.approve_url) {
-        throw new Error(data?.error || t("departments_page.subscription_error"));
-      }
-
-      sessionStorage.setItem("paypal_subscription", JSON.stringify({
-        subscription_id: data.subscription_id,
-        agent_slug: `dept-${departmentId}`,
-        agent_key: departmentId,
-        agent_name: `Departamento ${label}`,
-        price,
-        currency,
-        tier: "advanced",
-        price_tier: "mid",
-        is_department: true,
-        department_id: departmentId,
-        department_slugs: slugs,
-      }));
-
-      window.location.href = data.approve_url;
-    } catch (err: any) {
-      console.error("Department subscription error:", err);
-      toast.error(err.message || t("departments_page.subscription_error"));
-      setHiringDeptId(null);
-    }
-  }, [checkoutData, t]);
+    handleInlineApproval(subscriptionId, checkoutData, {
+      price_tier: "mid",
+    });
+  }, [checkoutData]);
 
   useEffect(() => {
     const fetchSuggestions = async () => {
@@ -630,7 +598,7 @@ const Departamentos = () => {
       {/* Checkout Summary Dialog for logged-in users */}
       <CheckoutSummaryDialog
         data={checkoutData}
-        onConfirm={handleConfirmDeptCheckout}
+        onApprove={handleApproveCheckout}
         onCancel={() => { setCheckoutData(null); setHiringDeptId(null); }}
       />
     </div>

@@ -164,7 +164,7 @@ const ClientDashboard = () => {
   const needsBoardSetup = boardCount === 0 && !boardGateSkipped;
 
   // Extracted hooks for business logic
-  const { checkoutSummary, handleConfirmCheckout, cancelCheckout } = useHireIntentFlow(user);
+  const { checkoutSummary, handleApprove, cancelCheckout } = useHireIntentFlow(user);
   const {
     postPaymentContext, showCelebration, showDeptSetup, showCompanyOnboarding,
     setShowCompanyOnboarding, onCelebrationComplete, onCompanyOnboardingDone,
@@ -478,7 +478,7 @@ const ClientDashboard = () => {
 
       <CheckoutSummaryDialog
         data={checkoutSummary}
-        onConfirm={handleConfirmCheckout}
+        onApprove={handleApprove}
         onCancel={cancelCheckout}
       />
 

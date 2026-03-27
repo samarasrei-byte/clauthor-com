@@ -17,6 +17,7 @@ import SmartAgentFinder from "@/components/library/SmartAgentFinder";
 import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
 import { getPriceDisplay, getPrice, getRegion, formatPrice } from "@/lib/pricing";
 import { supabase } from "@/integrations/supabase/client";
+import { createPayPalPlan, handleInlineApproval } from "@/lib/paypal-helpers";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import {
@@ -101,57 +102,29 @@ const LibraryPage = () => {
       return;
     }
 
-    setCheckoutData({
+    const checkoutInfo: CheckoutSummaryData = {
       label: agentName,
       slugs: [slug],
       isDepartment: false,
       price,
       currency: region.currency,
       lang,
+    };
+    setCheckoutData(checkoutInfo);
+
+    // Create PayPal plan for inline checkout
+    createPayPalPlan(slug, agentName, price, region.currency).then((planId) => {
+      setCheckoutData((prev) => prev ? { ...prev, planId } : prev);
     });
   }, [user, navigate, lang]);
 
-  const handleConfirmCheckout = useCallback(async () => {
+  const handleApproveCheckout = useCallback((subscriptionId: string) => {
     if (!checkoutData) return;
-    const { label, slugs, price, currency } = checkoutData;
-    const slug = slugs[0];
-
-    setHiringSlug(slug);
-
-    try {
-      const { data, error } = await supabase.functions.invoke("paypal-checkout", {
-        body: {
-          action: "create_subscription",
-          agent_slug: slug,
-          agent_name: label,
-          amount: price,
-          currency,
-          return_url: `${window.location.origin}/dashboard?subscription=success`,
-          cancel_url: `${window.location.origin}/library?subscription=cancelled`,
-        },
-      });
-
-      if (error) throw error;
-      if (!data?.success || !data?.approve_url) {
-        throw new Error(data?.error || "Falha ao criar assinatura PayPal");
-      }
-
-      sessionStorage.setItem("paypal_subscription", JSON.stringify({
-        subscription_id: data.subscription_id,
-        agent_slug: slug,
-        agent_name: label,
-        price,
-        currency,
-        tier: agentTiers[slug] || "basic",
-        price_tier: agentPriceTiers[slug] || "entry",
-      }));
-
-      window.location.href = data.approve_url;
-    } catch (err: any) {
-      console.error("Subscription error:", err);
-      toast.error(err.message || "Erro ao criar assinatura. Tente novamente.");
-      setHiringSlug(null);
-    }
+    const slug = checkoutData.slugs[0];
+    handleInlineApproval(subscriptionId, checkoutData, {
+      tier: agentTiers[slug] || "basic",
+      price_tier: agentPriceTiers[slug] || "entry",
+    });
   }, [checkoutData]);
 
   return (
@@ -476,7 +449,7 @@ const LibraryPage = () => {
       {/* Checkout Summary Dialog */}
       <CheckoutSummaryDialog
         data={checkoutData}
-        onConfirm={handleConfirmCheckout}
+        onApprove={handleApproveCheckout}
         onCancel={() => { setCheckoutData(null); setHiringSlug(null); }}
       />
     </div>
