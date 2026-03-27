@@ -7,7 +7,7 @@ import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ReactMarkdown from "react-markdown";
-import thorPhoto from "@/assets/kaelis-ai.png";
+import thorPhoto from "@/assets/kaelis-ai.webp";
 
 const THOR_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";
 const STORAGE_KEY = "thor_greeter_seen_v3";
