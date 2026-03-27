@@ -501,8 +501,8 @@ const ThorGreeter = () => {
         exit={{ opacity: 0 }}
       >
         <motion.div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.7) 60%, hsl(var(--background) / 0.85) 100%)" }}
+          className="absolute inset-0 backdrop-blur-xl"
+          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.08) 0%, hsl(var(--background) / 0.8) 60%, hsl(var(--background) / 0.92) 100%)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
