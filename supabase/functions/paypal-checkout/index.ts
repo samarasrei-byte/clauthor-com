@@ -126,6 +126,20 @@ serve(async (req) => {
     // ═══════════════════════════════════════════════════════
     // CREATE SUBSCRIPTION (monthly recurring for an agent)
     // ═══════════════════════════════════════════════════════
+    // ═══════════════════════════════════════════════════════
+    // GET CLIENT ID (for JS SDK on frontend)
+    // ═══════════════════════════════════════════════════════
+    if (action === "get_client_id") {
+      const clientId = Deno.env.get("PAYPAL_CLIENT_ID");
+      if (!clientId) throw new Error("PayPal client ID not configured");
+      return new Response(JSON.stringify({
+        success: true,
+        client_id: clientId,
+      }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     if (action === "create_subscription") {
       const { agent_slug, agent_name, amount, currency, return_url, cancel_url } = body;
       
