@@ -601,6 +601,8 @@ const Departamentos = () => {
         onApprove={handleApproveCheckout}
         onCancel={() => { setCheckoutData(null); setHiringDeptId(null); }}
       />
+
+      <Footer />
     </div>
   );
 };
