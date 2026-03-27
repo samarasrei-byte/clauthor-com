@@ -227,7 +227,7 @@ const ClientDashboard = () => {
   const { data: recentLogs = [] } = useQuery({
     queryKey: ["execution-logs", user?.id],
     queryFn: async () => {
-      const { data, error } = await supabase.from("execution_logs").select("*, agent:agents(name)").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(200);
+      const { data, error } = await supabase.from("execution_logs").select("*, agent:agents(name)").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(50);
       if (error) throw error;
       return data.map((log: any) => ({
         id: log.id,

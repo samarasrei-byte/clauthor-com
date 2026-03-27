@@ -350,7 +350,7 @@ const ControlTower = ({ onNavigate }: { onNavigate?: (id: string) => void }) => 
   const { data: logs = [] } = useQuery({
     queryKey: ["ct-logs", user?.id],
     queryFn: async () => {
-      const { data } = await supabase.from("execution_logs").select("*").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(500);
+      const { data } = await supabase.from("execution_logs").select("*").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(100);
       return data || [];
     },
     enabled: !!user,
