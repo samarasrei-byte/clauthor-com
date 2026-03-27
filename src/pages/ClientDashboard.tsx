@@ -947,6 +947,20 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {/* ═══ NEURAL NETWORK ═══ */}
+                {activeSection === "neural-network" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <AgentNeuralNetwork />
+                  </Suspense>
+                )}
+
+                {/* ═══ SCRUM BOARD ═══ */}
+                {activeSection === "scrum" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ScrumBoard />
+                  </Suspense>
+                )}
+
                 {/* ═══ COMING SOON FEATURES ═══ */}
                 {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
                   <ComingSoonSection feature={activeSection} />
