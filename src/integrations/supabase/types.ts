@@ -1842,6 +1842,10 @@ export type Database = {
           used_count: number
         }[]
       }
+      redeem_coupon: {
+        Args: { _code: string; _user_id: string }
+        Returns: Json
+      }
       search_knowledge: {
         Args: {
           _agent_id?: string
