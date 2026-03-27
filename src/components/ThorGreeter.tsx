@@ -456,7 +456,7 @@ const ThorGreeter = () => {
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
-                boxShadow: `0 0 60px hsl(var(--accent-violet) / 0.3), 0 0 120px hsl(var(--accent-violet) / 0.1), inset 0 0 30px hsl(var(--accent-violet) / 0.2)`,
+                boxShadow: `inset 0 0 20px hsl(var(--accent-violet) / 0.15)`,
                 border: "1px solid hsl(var(--accent-violet) / 0.2)",
               }}
             >
