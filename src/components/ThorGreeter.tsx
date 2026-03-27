@@ -614,7 +614,7 @@ const ThorGreeter = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", damping: 14 }}
         onClick={activate}
-        className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-[60] group cursor-pointer"
+        className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-[9999] group cursor-pointer"
         aria-label="Talk to Thor"
       >
         {/* Rotating conic border */}
