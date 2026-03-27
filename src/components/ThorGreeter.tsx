@@ -488,14 +488,14 @@ const ThorGreeter = () => {
     }
   };
 
-  const coreSize = typeof window !== "undefined" && window.innerWidth < 640 ? 220 : 320;
+  const coreSize = typeof window !== "undefined" && window.innerWidth < 640 ? 260 : 360;
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 
   /* ══ ENTRANCE — cinematic boot sequence ══ */
   if (phase === "entrance") {
     return (
       <motion.div
-        className="fixed inset-0 z-[90] flex items-center justify-center"
+        className="fixed inset-0 z-[9999] flex items-center justify-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -614,7 +614,7 @@ const ThorGreeter = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring", damping: 14 }}
         onClick={activate}
-        className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-[60] group cursor-pointer"
+        className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-[9999] group cursor-pointer"
         aria-label="Talk to Thor"
       >
         {/* Rotating conic border */}
@@ -671,7 +671,7 @@ const ThorGreeter = () => {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[80] pointer-events-none"
+        className="fixed inset-0 z-[9999] pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
