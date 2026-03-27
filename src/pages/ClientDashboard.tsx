@@ -383,6 +383,7 @@ const ClientDashboard = () => {
     deliverables: t("dashboard.deliverables", { defaultValue: "Entregas" }),
     "call-transcriber": t("dashboard.call_transcriber", { defaultValue: "Chamadas" }),
     squads: "Squads",
+    "bulk-deploy": "Deploy Agents",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
