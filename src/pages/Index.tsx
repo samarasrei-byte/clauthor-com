@@ -19,7 +19,7 @@ import {
   Star, Receipt, Globe, Briefcase, DollarSign, MessageSquare,
   Activity, Terminal, ChevronRight, Cpu, Crosshair,
   Building2, Clock, Rocket, BarChart3, Fingerprint, Sparkles, Layers3, Signal,
-  Linkedin, Twitter, Github
+  Linkedin,
 } from "lucide-react";
 import { useRef, useMemo, useState, useCallback } from "react";
 import HelpTooltip from "@/components/HelpTooltip";
@@ -279,7 +279,7 @@ const HomePage = () => {
       url: "https://clauthor-com.lovable.app",
       logo: "https://clauthor-com.lovable.app/favicon.png",
       description: t("home.seo_description"),
-      sameAs: ["https://linkedin.com/company/clauthor", "https://twitter.com/clauthor"],
+      sameAs: ["https://linkedin.com/company/clauthor"],
     });
     return () => {
       const el = document.getElementById("jsonld-org");
