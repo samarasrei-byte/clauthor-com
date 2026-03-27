@@ -125,48 +125,30 @@ const TeamBuilder = () => {
       return;
     }
 
-    setCheckoutData({
+    const checkoutInfo: CheckoutSummaryData = {
       label: `Time Personalizado (${totalAgents} agentes)`,
       slugs,
       isDepartment: slugs.length > 1,
       price: totalPrice,
       currency: region.currency,
       lang,
+    };
+    setCheckoutData(checkoutInfo);
+
+    // Create PayPal plan for inline checkout
+    const agentSlug = `custom-team-${Date.now()}`;
+    createPayPalPlan(agentSlug, checkoutInfo.label, totalPrice, region.currency).then((planId) => {
+      setCheckoutData((prev) => prev ? { ...prev, planId } : prev);
     });
   }, [totalAgents, totalPrice, cartItems, user, navigate, region, lang]);
 
-  const handleConfirmCheckout = useCallback(async () => {
+  const handleApproveCheckout = useCallback((subscriptionId: string) => {
     if (!checkoutData) return;
-    const { label, slugs, price, currency } = checkoutData;
-    const agentSlug = `custom-team-${Date.now()}`;
-
-    const { data, error } = await supabase.functions.invoke("paypal-checkout", {
-      body: {
-        action: "create_subscription",
-        agent_slug: agentSlug,
-        agent_name: label,
-        amount: price,
-        currency,
-        return_url: `${window.location.origin}/dashboard?subscription=success`,
-        cancel_url: `${window.location.origin}/team-builder?subscription=cancelled`,
-      },
-    });
-    if (error) throw error;
-    if (!data?.success || !data?.approve_url) throw new Error(data?.error || "Falha ao criar assinatura");
-
-    sessionStorage.setItem("paypal_subscription", JSON.stringify({
-      subscription_id: data.subscription_id,
-      agent_slug: agentSlug,
-      agent_name: label,
-      price,
-      currency,
-      tier: "advanced",
+    handleInlineApproval(subscriptionId, checkoutData, {
       is_department: true,
       department_id: "custom",
-      department_slugs: slugs,
-    }));
-
-    window.location.href = data.approve_url;
+      department_slugs: checkoutData.slugs,
+    });
   }, [checkoutData]);
 
   return (
@@ -416,7 +398,7 @@ const TeamBuilder = () => {
       {/* Checkout dialog */}
       <CheckoutSummaryDialog
         data={checkoutData}
-        onConfirm={handleConfirmCheckout}
+        onApprove={handleApproveCheckout}
         onCancel={() => setCheckoutData(null)}
       />
     </div>
