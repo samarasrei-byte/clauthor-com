@@ -529,3 +529,34 @@
 .safe-area-bottom {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
+/* Thor glitch effect when speaking */
+@keyframes thor-glitch {
+  0%, 100% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  5% { clip-path: inset(20% 0 60% 0); transform: translate(-3px, 1px); }
+  10% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  15% { clip-path: inset(60% 0 10% 0); transform: translate(2px, -1px); }
+  20% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  45% { clip-path: inset(30% 0 50% 0); transform: translate(-2px, 0); }
+  50% { clip-path: inset(0 0 0 0); transform: translate(0); }
+  75% { clip-path: inset(50% 0 20% 0); transform: translate(1px, 1px); }
+  80% { clip-path: inset(0 0 0 0); transform: translate(0); }
+}
+
+@keyframes thor-glitch-color {
+  0%, 100% { opacity: 0; }
+  5% { opacity: 0.15; }
+  10% { opacity: 0; }
+  45% { opacity: 0.1; }
+  50% { opacity: 0; }
+  75% { opacity: 0.12; }
+  80% { opacity: 0; }
+}
+
+.thor-glitch-active {
+  animation: thor-glitch 2.5s infinite steps(1);
+}
+
+.thor-glitch-color-layer {
+  animation: thor-glitch-color 2.5s infinite;
+}

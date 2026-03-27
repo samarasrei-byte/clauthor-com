@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronRight, ChevronLeft, RotateCcw, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
-import thorPhoto from "@/assets/kaelis-ai.png";
+import thorPhoto from "@/assets/kaelis-ai.webp";
 
 export interface TourStep {
   /** CSS selector to highlight (optional — if absent, Thor speaks centrally) */

@@ -7,7 +7,7 @@ import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import { useAuth } from "@/hooks/useAuth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import ReactMarkdown from "react-markdown";
-import thorPhoto from "@/assets/kaelis-ai.png";
+import thorPhoto from "@/assets/kaelis-ai.webp";
 
 const THOR_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";
 const STORAGE_KEY = "thor_greeter_seen_v3";
@@ -700,7 +700,12 @@ const ThorGreeter = () => {
                   transition={{ duration: 1.5, repeat: Infinity }}
                   onClick={() => setExpanded(!expanded)}
                 >
-                  <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                  <img src={thorPhoto} alt="Thor" className={`w-full h-full object-cover ${isSpeaking ? "thor-glitch-active" : ""}`} />
+                  {isSpeaking && (
+                    <div className="absolute inset-0 thor-glitch-color-layer mix-blend-screen" style={{
+                      background: "linear-gradient(90deg, hsl(var(--accent-violet) / 0.3) 33%, hsl(var(--accent-cyan) / 0.2) 66%, transparent 100%)",
+                    }} />
+                  )}
                 </motion.div>
 
                 {/* Name badge */}
@@ -941,8 +946,13 @@ const ThorGreeter = () => {
                 } : { boxShadow: "inset 0 0 15px hsl(var(--accent-violet) / 0.1)" }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
-                <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                <img src={thorPhoto} alt="Thor" className={`w-full h-full object-cover ${isSpeaking ? "thor-glitch-active" : ""}`} />
                 <div className="absolute inset-0 bg-gradient-to-t from-accent-violet/10 via-transparent to-accent-violet/5" />
+                {isSpeaking && (
+                  <div className="absolute inset-0 thor-glitch-color-layer mix-blend-screen" style={{
+                    background: "linear-gradient(90deg, hsl(var(--accent-violet) / 0.3) 33%, hsl(var(--accent-cyan) / 0.2) 66%, transparent 100%)",
+                  }} />
+                )}
               </motion.div>
 
               {/* Name badge */}
