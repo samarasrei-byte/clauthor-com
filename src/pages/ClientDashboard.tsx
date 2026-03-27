@@ -359,7 +359,6 @@ const ClientDashboard = () => {
   };
 
   const breadcrumbMap: Record<string, string> = useMemo(() => ({
-    results: t("dashboard.results", { defaultValue: "Results" }),
     overview: t("dashboard.command_center"),
     omnix: t("dashboard.ai_assistant_label", { defaultValue: "AI Assistant" }),
     agents: t("dashboard.agents_tab"),
@@ -369,8 +368,7 @@ const ClientDashboard = () => {
     integrations: t("dashboard.integrations", { defaultValue: "Integrations" }),
     "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
     "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
-    "control-tower": "Control Tower",
-    "mission-control": "Mission Control",
+    "operations-center": t("dashboard.operations_center", { defaultValue: "Centro de Operações" }),
     "operations-center": t("dashboard.operations_center", { defaultValue: "Centro de Operações" }),
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
