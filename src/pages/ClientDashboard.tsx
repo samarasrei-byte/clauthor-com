@@ -6,10 +6,10 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
-  LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft,
-  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, Layers3,
-  Video, Clock, Radar, Orbit, LayoutGrid
+  LayoutDashboard, Bot, BarChart3, CreditCard,
+  Sparkles, ArrowRight, Coins, Settings, Brain, MessageSquare, Plug, ChevronDown, ChevronLeft,
+  Rocket, Building2, KanbanSquare, Layers3,
+  Clock, Radar, Orbit, LayoutGrid
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -78,12 +78,7 @@ const AgentNeuralNetwork = lazy(() => import("@/pages/AgentNeuralNetwork"));
 const ScrumBoard = lazy(() => import("@/pages/ScrumBoard"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
-
-const SectionLoader = () => (
-  <div className="flex items-center justify-center py-16">
-    <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-  </div>
-);
+import SectionLoader from "@/components/ui/section-loader";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -341,12 +336,8 @@ const ClientDashboard = () => {
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
 
-  const tierColors: Record<string, string> = {
-    basic: "bg-muted text-muted-foreground",
-    intermediate: "bg-accent/15 text-accent-foreground",
-    advanced: "bg-accent-emerald/15 text-accent-emerald",
-    enterprise: "bg-primary/15 text-primary",
-  };
+  // Use shared tier colors
+  const { TIER_COLORS: tierColors } = require("@/lib/tier-colors");
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(value / 100);
