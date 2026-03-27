@@ -6,14 +6,14 @@ const CompetitiveMoat = () => {
   const { t } = useTranslation();
 
   const features = [
-    { label: t("home.moat_orchestration", { defaultValue: "Agent-to-Agent Orchestration" }), icon: Workflow, clauthor: true, chatgpt: false, crewai: "partial", autogen: "partial" },
-    { label: t("home.moat_departments", { defaultValue: "Corporate Departments (7)" }), icon: BarChart3, clauthor: true, chatgpt: false, crewai: false, autogen: false },
-    { label: t("home.moat_squads", { defaultValue: "Smart Squads (37)" }), icon: Bot, clauthor: true, chatgpt: false, crewai: "partial", autogen: false },
-    { label: t("home.moat_kanban", { defaultValue: "Built-in Mission Board" }), icon: KanbanSquare, clauthor: true, chatgpt: false, crewai: false, autogen: false },
-    { label: t("home.moat_meeting", { defaultValue: "AI Meeting Room" }), icon: MessageSquare, clauthor: true, chatgpt: false, crewai: false, autogen: false },
-    { label: t("home.moat_security", { defaultValue: "Enterprise Security & RLS" }), icon: Shield, clauthor: true, chatgpt: false, crewai: false, autogen: false },
-    { label: t("home.moat_cfo", { defaultValue: "CFO Agent with Live Data" }), icon: BarChart3, clauthor: true, chatgpt: false, crewai: false, autogen: false },
-    { label: t("home.moat_event", { defaultValue: "Event-Driven (96% margin)" }), icon: Crown, clauthor: true, chatgpt: false, crewai: false, autogen: "partial" },
+    { label: t("home.moat_orchestration", { defaultValue: "Orquestração Agente-a-Agente" }), icon: Workflow, clauthor: true, chatgpt: false, crewai: "partial", autogen: "partial" },
+    { label: t("home.moat_departments", { defaultValue: "Departamentos Corporativos (7)" }), icon: BarChart3, clauthor: true, chatgpt: false, crewai: false, autogen: false },
+    { label: t("home.moat_squads", { defaultValue: "Squads Inteligentes (37)" }), icon: Bot, clauthor: true, chatgpt: false, crewai: "partial", autogen: false },
+    { label: t("home.moat_kanban", { defaultValue: "Mission Board Integrado" }), icon: KanbanSquare, clauthor: true, chatgpt: false, crewai: false, autogen: false },
+    { label: t("home.moat_meeting", { defaultValue: "Sala de Reunião IA" }), icon: MessageSquare, clauthor: true, chatgpt: false, crewai: false, autogen: false },
+    { label: t("home.moat_security", { defaultValue: "Segurança Enterprise & RLS" }), icon: Shield, clauthor: true, chatgpt: false, crewai: false, autogen: false },
+    { label: t("home.moat_cfo", { defaultValue: "Agente CFO com Dados em Tempo Real" }), icon: BarChart3, clauthor: true, chatgpt: false, crewai: false, autogen: false },
+    { label: t("home.moat_event", { defaultValue: "Event-Driven (margem de 96%)" }), icon: Crown, clauthor: true, chatgpt: false, crewai: false, autogen: "partial" },
   ];
 
   const renderCell = (value: boolean | string) => {
@@ -29,15 +29,15 @@ const CompetitiveMoat = () => {
           <div className="flex items-center gap-3 mb-3">
             <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
             <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">
-              {t("home.moat_badge", { defaultValue: "WHY WE'RE DIFFERENT" })}
+              {t("home.moat_badge", { defaultValue: "POR QUE SOMOS DIFERENTES" })}
             </span>
             <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
           </div>
           <h2 className="font-display text-2xl sm:text-4xl font-bold text-center">
-            {t("home.moat_title", { defaultValue: "Not just another AI tool." })}
+            {t("home.moat_title", { defaultValue: "Não é só mais uma ferramenta de IA." })}
           </h2>
           <p className="text-sm text-muted-foreground text-center mt-3 max-w-xl mx-auto">
-            {t("home.moat_subtitle", { defaultValue: "Clauthor is a complete AI Operating System. Here's how we compare." })}
+            {t("home.moat_subtitle", { defaultValue: "Clauthor é um Sistema Operacional de IA completo. Veja como nos comparamos." })}
           </p>
         </motion.div>
 
@@ -50,7 +50,7 @@ const CompetitiveMoat = () => {
           {/* Header */}
           <div className="grid grid-cols-5 gap-0 border-b border-border/50">
             <div className="p-4 sm:p-5 col-span-1">
-              <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">{t("home.moat_feature", { defaultValue: "FEATURE" })}</span>
+              <span className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground/50">{t("home.moat_feature", { defaultValue: "RECURSO" })}</span>
             </div>
             <div className="p-3 sm:p-5 text-center border-l border-border/30 bg-primary/[0.04]">
               <div className="flex items-center justify-center gap-1 mb-0.5">
@@ -92,7 +92,7 @@ const CompetitiveMoat = () => {
         </motion.div>
 
         <p className="font-mono text-[9px] text-muted-foreground/30 text-center mt-4 uppercase tracking-wider">
-          {t("home.moat_disclaimer", { defaultValue: "* Comparison based on publicly available features as of March 2026." })}
+          {t("home.moat_disclaimer", { defaultValue: "* Comparação baseada em funcionalidades públicas disponíveis em março de 2026." })}
         </p>
       </div>
     </section>

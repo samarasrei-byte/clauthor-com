@@ -135,7 +135,7 @@ const ROIBenchmark = () => {
                   <span className="text-primary">24/7/365</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">{t("home.roi_annual", { defaultValue: "Annual cost" })}</span>
+                  <span className="text-muted-foreground">{t("home.roi_annual", { defaultValue: "Custo anual" })}</span>
                   <span className="text-primary">{fmt(data.aiAnnual)}</span>
                 </div>
               </div>
