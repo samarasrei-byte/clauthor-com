@@ -42,6 +42,7 @@ import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
 import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
+import { TIER_COLORS as tierColors } from "@/lib/tier-colors";
 import { agentIcons } from "@/data/libraryAgentData";
 import HelpTooltip from "@/components/HelpTooltip";
 import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
@@ -336,7 +337,7 @@ const ClientDashboard = () => {
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
 
-  // tierColors imported from shared module at top
+  
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(value / 100);
