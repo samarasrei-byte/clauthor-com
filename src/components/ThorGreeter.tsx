@@ -23,202 +23,279 @@ interface ThorMessage {
 const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: number }) => {
   const center = size / 2;
   const r = size / 2 - 30;
+  const faceR = r * 0.55;
 
-  // Reticle tick marks around the circle
-  const reticleTicks = useMemo(() => {
-    return Array.from({ length: 72 }, (_, i) => {
-      const angle = (i / 72) * Math.PI * 2;
-      const isMajor = i % 9 === 0;
-      const inner = r + 2;
-      const outer = r + (isMajor ? 12 : 5);
-      return {
-        x1: center + Math.cos(angle) * inner,
-        y1: center + Math.sin(angle) * inner,
-        x2: center + Math.cos(angle) * outer,
-        y2: center + Math.sin(angle) * outer,
-        isMajor,
-        angle: (i / 72) * 360,
-      };
+  const describeArc = (cx: number, cy: number, radius: number, startDeg: number, endDeg: number) => {
+    const s = (startDeg - 90) * Math.PI / 180;
+    const e = (endDeg - 90) * Math.PI / 180;
+    const la = endDeg - startDeg > 180 ? 1 : 0;
+    return `M ${cx + radius * Math.cos(s)} ${cy + radius * Math.sin(s)} A ${radius} ${radius} 0 ${la} 1 ${cx + radius * Math.cos(e)} ${cy + radius * Math.sin(e)}`;
+  };
+
+  // Hexagonal grid pattern for background
+  const hexGrid = useMemo(() => {
+    const pts: { x: number; y: number }[] = [];
+    const sp = 18;
+    for (let row = -8; row <= 8; row++) {
+      for (let col = -8; col <= 8; col++) {
+        const x = center + col * sp + (row % 2 ? sp / 2 : 0);
+        const y = center + row * sp * 0.866;
+        const dist = Math.sqrt((x - center) ** 2 + (y - center) ** 2);
+        if (dist < r + 25 && dist > faceR + 15) pts.push({ x, y });
+      }
+    }
+    return pts;
+  }, [size]);
+
+  // Data ring segments with different radii
+  const dataRings = useMemo(() => [
+    // Inner data ring
+    { r: faceR + 8, segments: [{ s: 0, e: 45 }, { s: 60, e: 130 }, { s: 150, e: 200 }, { s: 230, e: 310 }, { s: 325, e: 355 }], w: 2.5, speed: 25, dir: 1 },
+    // Mid analysis ring
+    { r: r - 10, segments: [{ s: 10, e: 80 }, { s: 100, e: 160 }, { s: 200, e: 290 }, { s: 310, e: 350 }], w: 1.2, speed: 40, dir: -1 },
+    // Outer telemetry ring
+    { r: r + 4, segments: [{ s: 0, e: 50 }, { s: 70, e: 170 }, { s: 190, e: 250 }, { s: 280, e: 360 }], w: 0.8, speed: 55, dir: 1 },
+    // Outermost thin ring
+    { r: r + 18, segments: [{ s: 20, e: 90 }, { s: 120, e: 210 }, { s: 240, e: 340 }], w: 0.5, speed: 70, dir: -1 },
+  ], [r, faceR]);
+
+  // Precision tick marks (like a scope)
+  const ticks = useMemo(() => {
+    return Array.from({ length: 120 }, (_, i) => {
+      const angle = (i / 120) * Math.PI * 2;
+      const isMajor = i % 10 === 0;
+      const isMid = i % 5 === 0;
+      const inner = r + 1;
+      const outer = r + (isMajor ? 14 : isMid ? 8 : 3);
+      return { x1: center + Math.cos(angle) * inner, y1: center + Math.sin(angle) * inner, x2: center + Math.cos(angle) * outer, y2: center + Math.sin(angle) * outer, isMajor, isMid };
     });
   }, [size]);
 
-  // Data arc segments
-  const arcSegments = useMemo(() => {
-    return [
-      { start: 15, end: 75, r: r + 18, width: 1.5 },
-      { start: 120, end: 195, r: r + 22, width: 1 },
-      { start: 210, end: 270, r: r + 16, width: 2 },
-      { start: 300, end: 350, r: r + 20, width: 0.8 },
-    ];
-  }, [r]);
-
-  const describeArc = (cx: number, cy: number, radius: number, startAngle: number, endAngle: number) => {
-    const startRad = (startAngle - 90) * Math.PI / 180;
-    const endRad = (endAngle - 90) * Math.PI / 180;
-    const x1 = cx + radius * Math.cos(startRad);
-    const y1 = cy + radius * Math.sin(startRad);
-    const x2 = cx + radius * Math.cos(endRad);
-    const y2 = cy + radius * Math.sin(endRad);
-    const largeArc = endAngle - startAngle > 180 ? 1 : 0;
-    return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`;
-  };
-
-  // Waveform bars (circular EQ)
-  const waveCount = 48;
+  // Floating data particles along orbits
+  const orbitParticles = useMemo(() => {
+    return Array.from({ length: 12 }, (_, i) => ({
+      orbit: faceR + 10 + (i % 4) * ((r - faceR) / 4),
+      startAngle: (i / 12) * 360,
+      speed: 8 + i * 3,
+      size: 1.5 + (i % 3) * 0.5,
+    }));
+  }, [r, faceR]);
 
   return (
     <div className="absolute inset-0" style={{ width: size, height: size }}>
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="absolute inset-0">
         <defs>
-          <clipPath id="face-clip">
-            <circle cx={center} cy={center} r={r * 0.55} />
-          </clipPath>
+          <clipPath id="face-clip"><circle cx={center} cy={center} r={faceR} /></clipPath>
+          <linearGradient id="hud-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="hsl(var(--accent-violet))" stopOpacity="0.6" />
+            <stop offset="50%" stopColor="hsl(var(--accent-cyan))" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="hsl(var(--accent-violet))" stopOpacity="0.6" />
+          </linearGradient>
+          <linearGradient id="ring-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="hsl(var(--accent-violet))" stopOpacity="0" />
+            <stop offset="30%" stopColor="hsl(var(--accent-violet))" stopOpacity="0.8" />
+            <stop offset="70%" stopColor="hsl(var(--accent-cyan))" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="hsl(var(--accent-violet))" stopOpacity="0" />
+          </linearGradient>
         </defs>
 
-        {/* Clean targeting reticle — outer ring */}
-        <circle
-          cx={center} cy={center} r={r + 1}
-          fill="none"
-          stroke="hsl(var(--accent-violet))"
-          strokeWidth="0.5"
-          strokeOpacity="0.2"
-        />
-
-        {/* Reticle tick marks */}
-        {reticleTicks.map((tick, i) => (
-          <line
-            key={`tick-${i}`}
-            x1={tick.x1} y1={tick.y1}
-            x2={tick.x2} y2={tick.y2}
-            stroke="hsl(var(--accent-violet))"
-            strokeWidth={tick.isMajor ? "1" : "0.4"}
-            strokeOpacity={tick.isMajor ? "0.4" : "0.15"}
+        {/* ── Background hex grid — subtle neural mesh ── */}
+        {hexGrid.map((pt, i) => (
+          <motion.rect
+            key={`hx-${i}`}
+            x={pt.x - 1} y={pt.y - 1}
+            width="2" height="2"
+            rx="0.3"
+            fill="hsl(var(--accent-violet))"
+            animate={isSpeaking ? {
+              opacity: [0.02, 0.12 + Math.random() * 0.15, 0.02],
+            } : {
+              opacity: [0.015, 0.04, 0.015],
+            }}
+            transition={{ duration: 2 + Math.random() * 3, repeat: Infinity, delay: Math.random() * 2 }}
           />
         ))}
 
-        {/* Rotating data arcs */}
-        {arcSegments.map((seg, i) => (
-          <motion.path
-            key={`arc-${i}`}
-            d={describeArc(center, center, seg.r, seg.start, seg.end)}
-            fill="none"
+        {/* ── Precision scope ticks ── */}
+        {ticks.map((t, i) => (
+          <motion.line
+            key={`t-${i}`}
+            x1={t.x1} y1={t.y1} x2={t.x2} y2={t.y2}
             stroke="hsl(var(--accent-violet))"
-            strokeWidth={seg.width}
-            strokeLinecap="round"
-            strokeOpacity={isSpeaking ? 0.5 : 0.15}
+            strokeWidth={t.isMajor ? "1.2" : t.isMid ? "0.6" : "0.3"}
+            animate={isSpeaking && t.isMajor ? {
+              strokeOpacity: [0.3, 0.7, 0.3],
+            } : {
+              strokeOpacity: t.isMajor ? 0.35 : t.isMid ? 0.15 : 0.06,
+            }}
+            transition={{ duration: 1.5, repeat: Infinity, delay: i * 0.02 }}
+          />
+        ))}
+
+        {/* ── Multi-layer data rings with gradient ── */}
+        {dataRings.map((ring, ri) => (
+          <motion.g
+            key={`ring-${ri}`}
             style={{ transformOrigin: `${center}px ${center}px` }}
-            animate={{ rotate: i % 2 === 0 ? 360 : -360 }}
-            transition={{ duration: 15 + i * 8, repeat: Infinity, ease: "linear" }}
-          />
+            animate={{ rotate: ring.dir * 360 }}
+            transition={{ duration: ring.speed, repeat: Infinity, ease: "linear" }}
+          >
+            {ring.segments.map((seg, si) => (
+              <motion.path
+                key={`seg-${ri}-${si}`}
+                d={describeArc(center, center, ring.r, seg.s, seg.e)}
+                fill="none"
+                stroke={ri === 0 ? "url(#ring-grad)" : "hsl(var(--accent-violet))"}
+                strokeWidth={ring.w}
+                strokeLinecap="round"
+                animate={isSpeaking ? {
+                  strokeOpacity: [0.2, 0.6 + ri * 0.05, 0.2],
+                } : {
+                  strokeOpacity: 0.12 + (3 - ri) * 0.04,
+                }}
+                transition={{ duration: 1.2 + si * 0.3, repeat: Infinity, ease: "easeInOut" }}
+              />
+            ))}
+            {/* Endpoint diamonds on major ring */}
+            {ri === 0 && ring.segments.map((seg, si) => {
+              const endRad = (seg.e - 90) * Math.PI / 180;
+              const dx = center + ring.r * Math.cos(endRad);
+              const dy = center + ring.r * Math.sin(endRad);
+              return (
+                <motion.rect
+                  key={`dia-${si}`}
+                  x={dx - 2} y={dy - 2} width="4" height="4"
+                  fill="hsl(var(--accent-cyan))"
+                  rx="0.5"
+                  style={{ transform: `rotate(45deg)`, transformOrigin: `${dx}px ${dy}px` }}
+                  animate={{ opacity: isSpeaking ? [0.4, 1, 0.4] : [0.15, 0.3, 0.15] }}
+                  transition={{ duration: 1.5, repeat: Infinity, delay: si * 0.2 }}
+                />
+              );
+            })}
+          </motion.g>
         ))}
 
-        {/* Corner brackets — targeting UI */}
+        {/* ── Corner bracket HUD frames ── */}
         {[
-          { x: center - r * 0.62, y: center - r * 0.62, rot: 0 },
-          { x: center + r * 0.62, y: center - r * 0.62, rot: 90 },
-          { x: center + r * 0.62, y: center + r * 0.62, rot: 180 },
-          { x: center - r * 0.62, y: center + r * 0.62, rot: 270 },
-        ].map((corner, i) => (
-          <g key={`bracket-${i}`} transform={`translate(${corner.x}, ${corner.y}) rotate(${corner.rot})`}>
-            <line x1="0" y1="0" x2="12" y2="0" stroke="hsl(var(--accent-violet))" strokeWidth="1.5" strokeOpacity="0.4" />
-            <line x1="0" y1="0" x2="0" y2="12" stroke="hsl(var(--accent-violet))" strokeWidth="1.5" strokeOpacity="0.4" />
+          { x: center - r * 0.7, y: center - r * 0.7, rot: 0 },
+          { x: center + r * 0.7, y: center - r * 0.7, rot: 90 },
+          { x: center + r * 0.7, y: center + r * 0.7, rot: 180 },
+          { x: center - r * 0.7, y: center + r * 0.7, rot: 270 },
+        ].map((c, i) => (
+          <g key={`br-${i}`} transform={`translate(${c.x}, ${c.y}) rotate(${c.rot})`}>
+            <line x1="0" y1="0" x2="18" y2="0" stroke="hsl(var(--accent-violet))" strokeWidth="1.5" strokeOpacity="0.5" />
+            <line x1="0" y1="0" x2="0" y2="18" stroke="hsl(var(--accent-violet))" strokeWidth="1.5" strokeOpacity="0.5" />
+            <rect x="0" y="0" width="3" height="3" fill="hsl(var(--accent-cyan))" fillOpacity="0.4" rx="0.5" />
           </g>
         ))}
 
-        {/* Crosshair lines */}
-        {[0, 90, 180, 270].map(angle => {
-          const rad = (angle * Math.PI) / 180;
-          return (
-            <line
-              key={`cross-${angle}`}
-              x1={center + Math.cos(rad) * (r * 0.58)}
-              y1={center + Math.sin(rad) * (r * 0.58)}
-              x2={center + Math.cos(rad) * (r * 0.65)}
-              y2={center + Math.sin(rad) * (r * 0.65)}
-              stroke="hsl(var(--accent-violet))"
-              strokeWidth="0.8"
-              strokeOpacity="0.3"
-            />
-          );
-        })}
-
-        {/* Inner ring — face boundary */}
+        {/* ── Face boundary ring — sharp with dashes ── */}
+        <circle cx={center} cy={center} r={faceR + 1} fill="none" stroke="hsl(var(--accent-violet))" strokeWidth="0.4" strokeOpacity="0.2" strokeDasharray="2 4" />
         <motion.circle
-          cx={center} cy={center} r={r * 0.56}
+          cx={center} cy={center} r={faceR + 3}
           fill="none"
           stroke="hsl(var(--accent-violet))"
-          strokeWidth="0.8"
+          strokeWidth="1"
+          strokeDasharray="8 4 2 4"
           animate={isSpeaking ? {
-            strokeOpacity: [0.2, 0.5, 0.2],
-            r: [r * 0.55, r * 0.57, r * 0.55],
+            strokeOpacity: [0.15, 0.45, 0.15],
+            r: [faceR + 2, faceR + 5, faceR + 2],
           } : {
-            strokeOpacity: 0.15,
+            strokeOpacity: 0.1,
           }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+          transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Circular waveform EQ — sharp bars */}
-        {Array.from({ length: waveCount }).map((_, i) => {
-          const angle = (i / waveCount) * Math.PI * 2 - Math.PI / 2;
-          const baseR = r * 0.58;
+        {/* ── Circular waveform EQ — 64 precision bars ── */}
+        {Array.from({ length: 64 }).map((_, i) => {
+          const angle = (i / 64) * Math.PI * 2 - Math.PI / 2;
+          const baseR = faceR + 6;
           const x1 = center + Math.cos(angle) * baseR;
           const y1 = center + Math.sin(angle) * baseR;
-          const restLen = 2;
           return (
             <motion.line
               key={`eq-${i}`}
               x1={x1} y1={y1}
-              x2={center + Math.cos(angle) * (baseR + restLen)}
-              y2={center + Math.sin(angle) * (baseR + restLen)}
-              stroke="hsl(var(--accent-violet))"
+              x2={center + Math.cos(angle) * (baseR + 2)}
+              y2={center + Math.sin(angle) * (baseR + 2)}
+              stroke={i % 8 === 0 ? "hsl(var(--accent-cyan))" : "hsl(var(--accent-violet))"}
               strokeWidth="1.5"
               strokeLinecap="butt"
               animate={isSpeaking ? {
                 x2: [
                   center + Math.cos(angle) * (baseR + 2),
-                  center + Math.cos(angle) * (baseR + 4 + Math.random() * 14),
-                  center + Math.cos(angle) * (baseR + 1 + Math.random() * 6),
-                  center + Math.cos(angle) * (baseR + 3 + Math.random() * 12),
+                  center + Math.cos(angle) * (baseR + 5 + Math.random() * 18),
+                  center + Math.cos(angle) * (baseR + 1 + Math.random() * 7),
+                  center + Math.cos(angle) * (baseR + 4 + Math.random() * 15),
                   center + Math.cos(angle) * (baseR + 2),
                 ],
                 y2: [
                   center + Math.sin(angle) * (baseR + 2),
-                  center + Math.sin(angle) * (baseR + 4 + Math.random() * 14),
-                  center + Math.sin(angle) * (baseR + 1 + Math.random() * 6),
-                  center + Math.sin(angle) * (baseR + 3 + Math.random() * 12),
+                  center + Math.sin(angle) * (baseR + 5 + Math.random() * 18),
+                  center + Math.sin(angle) * (baseR + 1 + Math.random() * 7),
+                  center + Math.sin(angle) * (baseR + 4 + Math.random() * 15),
                   center + Math.sin(angle) * (baseR + 2),
                 ],
-                strokeOpacity: [0.3, 0.7, 0.35, 0.8, 0.3],
+                strokeOpacity: [0.3, 0.85, 0.4, 0.9, 0.3],
               } : {
-                strokeOpacity: [0.08, 0.15, 0.08],
+                strokeOpacity: [0.06, 0.12, 0.06],
               }}
               transition={{
-                duration: isSpeaking ? 0.2 + Math.random() * 0.3 : 3,
+                duration: isSpeaking ? 0.15 + Math.random() * 0.25 : 3,
                 repeat: Infinity,
-                delay: i * 0.01,
+                delay: i * 0.008,
                 ease: "easeInOut",
               }}
             />
           );
         })}
 
-        {/* Scanning sweep line */}
-        <motion.line
-          x1={center} y1={center - r - 5}
-          x2={center} y2={center + r + 5}
-          stroke="hsl(var(--accent-violet))"
-          strokeWidth="0.4"
-          strokeOpacity="0.1"
-          style={{ transformOrigin: `${center}px ${center}px` }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-        />
+        {/* ── Orbiting data particles ── */}
+        {orbitParticles.map((p, i) => (
+          <motion.g key={`op-${i}`} style={{ transformOrigin: `${center}px ${center}px` }}
+            animate={{ rotate: [p.startAngle, p.startAngle + 360] }}
+            transition={{ duration: p.speed, repeat: Infinity, ease: "linear" }}
+          >
+            <circle cx={center + p.orbit} cy={center} r={p.size} fill={i % 3 === 0 ? "hsl(var(--accent-cyan))" : "hsl(var(--accent-violet))"} opacity={isSpeaking ? 0.7 : 0.2} />
+            {/* Trail */}
+            <line
+              x1={center + p.orbit - 6} y1={center}
+              x2={center + p.orbit} y2={center}
+              stroke={i % 3 === 0 ? "hsl(var(--accent-cyan))" : "hsl(var(--accent-violet))"}
+              strokeWidth="0.8"
+              strokeOpacity={isSpeaking ? 0.3 : 0.08}
+            />
+          </motion.g>
+        ))}
 
-        {/* Status text labels */}
-        <text x={center + r + 8} y={center - 4} fill="hsl(var(--accent-violet))" fontSize="5" fontFamily="monospace" opacity="0.3">SYS</text>
-        <text x={center + r + 8} y={center + 4} fill="hsl(var(--accent-violet))" fontSize="4" fontFamily="monospace" opacity="0.2">
-          {isSpeaking ? "TX" : "RX"}
+        {/* ── Scanning sweep — radar style ── */}
+        <motion.g style={{ transformOrigin: `${center}px ${center}px` }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+        >
+          <line x1={center} y1={center} x2={center} y2={center - r - 8} stroke="hsl(var(--accent-cyan))" strokeWidth="0.5" strokeOpacity="0.15" />
+          {/* Sweep gradient trail */}
+          <path
+            d={describeArc(center, center, r * 0.7, -30, 0)}
+            fill="none" stroke="hsl(var(--accent-cyan))" strokeWidth="12" strokeOpacity="0.03"
+          />
+        </motion.g>
+
+        {/* ── HUD text labels ── */}
+        <text x={center + r + 20} y={center - 12} fill="hsl(var(--accent-violet))" fontSize="5" fontFamily="monospace" opacity="0.35" letterSpacing="2">NEURAL</text>
+        <text x={center + r + 20} y={center - 3} fill="hsl(var(--accent-cyan))" fontSize="7" fontFamily="monospace" opacity="0.4" fontWeight="bold">
+          {isSpeaking ? "ACTIVE" : "STANDBY"}
         </text>
+        <text x={center + r + 20} y={center + 8} fill="hsl(var(--accent-violet))" fontSize="4" fontFamily="monospace" opacity="0.2">
+          {isSpeaking ? "▮▮▮▮▮▮▮▮" : "▯▯▯▮▯▯▯▯"}
+        </text>
+
+        <text x={center - r - 55} y={center - 8} fill="hsl(var(--accent-violet))" fontSize="4" fontFamily="monospace" opacity="0.25" letterSpacing="1">SYNC</text>
+        <motion.text x={center - r - 55} y={center + 2} fill="hsl(var(--accent-cyan))" fontSize="6" fontFamily="monospace"
+          animate={{ opacity: [0.2, 0.5, 0.2] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >98.7%</motion.text>
       </svg>
     </div>
   );
