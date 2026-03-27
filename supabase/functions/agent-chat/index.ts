@@ -44,10 +44,7 @@ async function decryptValueForExecution(encrypted: string): Promise<string> {
   );
   return new TextDecoder().decode(plaintext);
 }
-const corsHeaders = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version",
-};
+import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
 // Safety wrapper injected into every system prompt
 const SAFETY_LAYER = `
