@@ -1830,6 +1830,22 @@ export type Database = {
         Args: { _tenant_id: string; _user_id: string }
         Returns: boolean
       }
+      lookup_coupon_by_code: {
+        Args: { _code: string }
+        Returns: {
+          code: string
+          credits_amount: number
+          description: string
+          id: string
+          max_uses: number
+          plan_upgrade: string
+          used_count: number
+        }[]
+      }
+      redeem_coupon: {
+        Args: { _code: string; _user_id: string }
+        Returns: Json
+      }
       search_knowledge: {
         Args: {
           _agent_id?: string

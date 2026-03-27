@@ -21,74 +21,23 @@ export function CouponRedeemer() {
     setLoading(true);
 
     try {
-      // 1. Find coupon
-      const { data: coupon, error: findErr } = await supabase
-        .from("coupons")
-        .select("*")
-        .eq("code", code.trim().toUpperCase())
-        .eq("is_active", true)
-        .single();
-
-      if (findErr || !coupon) throw new Error("Cupom não encontrado ou inválido.");
-
-      // 2. Check expiration
-      if (coupon.expires_at && new Date(coupon.expires_at) < new Date()) {
-        throw new Error("Este cupom expirou.");
-      }
-
-      // 3. Check max uses
-      if (coupon.used_count >= coupon.max_uses) {
-        throw new Error("Este cupom já atingiu o limite de uso.");
-      }
-
-      // 4. Check if already redeemed by this user
-      const { data: existing } = await supabase
-        .from("coupon_redemptions")
-        .select("id")
-        .eq("coupon_id", coupon.id)
-        .eq("user_id", user.id)
-        .maybeSingle();
-
-      if (existing) throw new Error("Você já resgatou este cupom.");
-
-      // 5. Add credits
-      if (coupon.credits_amount > 0) {
-        const { data: currentCredits } = await supabase
-          .from("user_credits")
-          .select("total_credits, plan_type")
-          .eq("user_id", user.id)
-          .single();
-
-        if (currentCredits) {
-          const updatePayload: Record<string, any> = {
-            total_credits: currentCredits.total_credits + coupon.credits_amount,
-          };
-          if (coupon.plan_upgrade) {
-            updatePayload.plan_type = coupon.plan_upgrade;
-          }
-          await supabase
-            .from("user_credits")
-            .update(updatePayload)
-            .eq("user_id", user.id);
-        }
-      }
-
-      // 6. Record redemption
-      await supabase.from("coupon_redemptions").insert({
-        coupon_id: coupon.id,
-        user_id: user.id,
+      const { data, error } = await supabase.rpc("redeem_coupon", {
+        _user_id: user.id,
+        _code: code.trim(),
       });
 
-      // 7. Increment used_count (admin policy)
-      // Use a workaround: we'll handle this via the admin side or a trigger
-      // For now the admin can see redemptions count
+      if (error) throw new Error("Erro ao resgatar cupom.");
+
+      const result = data as { error?: string; success?: boolean; credits_amount?: number; plan_upgrade?: string };
+
+      if (result?.error) throw new Error(result.error);
 
       setRedeemed(true);
       setCode("");
       queryClient.invalidateQueries({ queryKey: ["user-credits"] });
 
-      const msg = coupon.credits_amount > 0
-        ? `🎉 Cupom resgatado! +${(coupon.credits_amount / 1000).toFixed(0)}k tokens adicionados.`
+      const msg = result.credits_amount && result.credits_amount > 0
+        ? `🎉 Cupom resgatado! +${(result.credits_amount / 1000).toFixed(0)}k tokens adicionados.`
         : "🎉 Cupom resgatado com sucesso!";
       toast.success(msg, { duration: 5000 });
 
