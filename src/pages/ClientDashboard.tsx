@@ -73,6 +73,7 @@ const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHu
 const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPipelinePanel"));
 const SalesCallTranscriber = lazy(() => import("@/components/dashboard/SalesCallTranscriber"));
 const SquadManager = lazy(() => import("@/components/dashboard/SquadManager"));
+const BulkAgentProvisioner = lazy(() => import("@/components/dashboard/BulkAgentProvisioner"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 
@@ -331,6 +332,7 @@ const ClientDashboard = () => {
     { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Centro de Operações" }), icon: Radar, group: monitorGroup },
 
     // ── Sistema ──
+    { id: "bulk-deploy", label: "Deploy Agents", icon: Rocket, group: systemGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
@@ -381,6 +383,7 @@ const ClientDashboard = () => {
     deliverables: t("dashboard.deliverables", { defaultValue: "Entregas" }),
     "call-transcriber": t("dashboard.call_transcriber", { defaultValue: "Chamadas" }),
     squads: "Squads",
+    "bulk-deploy": "Deploy Agents",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
@@ -851,6 +854,13 @@ const ClientDashboard = () => {
                 {activeSection === "squads" && (
                   <Suspense fallback={<SectionLoader />}>
                     <SquadManager onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
+
+                {/* ═══ BULK DEPLOY ═══ */}
+                {activeSection === "bulk-deploy" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <BulkAgentProvisioner />
                   </Suspense>
                 )}
 
