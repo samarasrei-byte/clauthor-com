@@ -106,7 +106,7 @@ const Privacy = () => {
           className="mt-12 text-center text-sm text-muted-foreground"
         >
           <p>© {new Date().getFullYear()} Clauthor. Todos os direitos reservados.</p>
-          <p className="mt-1">CNPJ: XX.XXX.XXX/0001-XX • São Paulo, SP, Brasil</p>
+          <p className="mt-1">São Paulo, SP, Brasil</p>
         </motion.div>
       </section>
     </div>
