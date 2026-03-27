@@ -671,7 +671,7 @@ const ThorGreeter = () => {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[80] flex flex-col items-center justify-center pointer-events-none"
+        className="fixed inset-0 z-[80] pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -681,54 +681,50 @@ const ThorGreeter = () => {
           className="absolute inset-0 pointer-events-auto"
           onClick={minimize}
           initial={{ backdropFilter: "blur(0px)" }}
-          animate={{ backdropFilter: isPresenting ? "blur(6px)" : "blur(12px)" }}
+          animate={{ backdropFilter: "blur(10px)" }}
           transition={{ duration: 0.8 }}
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.5) 60%, hsl(var(--background) / 0.7) 100%)" }}
+          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.6) 60%, hsl(var(--background) / 0.75) 100%)" }}
         />
 
-        {/* Main holographic entity — moves to corner when presenting */}
-        <motion.div
-          className="relative z-10 flex flex-col pointer-events-auto"
-          initial={{ scale: 0.6, opacity: 0, y: 40 }}
-          animate={isPresenting ? {
-            scale: 1,
-            opacity: 1,
-            y: 0,
-            x: typeof window !== "undefined" && window.innerWidth < 640 ? -((window.innerWidth / 2) - 70) : -((window.innerWidth / 2) - 120),
-            transition: { type: "spring", damping: 20, stiffness: 100 },
-          } : {
-            scale: 1,
-            opacity: 1,
-            y: 0,
-            x: 0,
-          }}
-          exit={{ scale: 0.6, opacity: 0, y: 40 }}
-          transition={{ type: "spring", damping: 16, stiffness: 120 }}
-          style={{ alignItems: isPresenting ? "flex-start" : "center" }}
-        >
-          {/* Controls */}
-          <div className="absolute -top-3 right-0 sm:-right-4 flex items-center gap-1.5 z-20">
-            <button
-              onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
-              className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
-            >
-              {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-            </button>
-            <button
-              onClick={minimize}
-              className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          </div>
+        {/* Layout: when presenting = Thor left + panel right. Otherwise centered */}
+        <div className={`relative z-10 w-full h-full flex pointer-events-none ${
+          isPresenting
+            ? "flex-row items-center px-4 sm:px-8 gap-4 sm:gap-8"
+            : "flex-col items-center justify-center"
+        }`}>
 
-          {/* Neural core + face — smaller when presenting */}
-          <div
-            className="relative cursor-pointer"
-            style={{ width: isPresenting ? presentCoreSize : coreSize, height: isPresenting ? presentCoreSize : coreSize, transition: "width 0.6s, height 0.6s" }}
-            onClick={() => setShowChat(!showChat)}
+          {/* Thor orb container */}
+          <motion.div
+            className="relative pointer-events-auto flex flex-col items-center"
+            initial={{ scale: 0.6, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.6, opacity: 0 }}
+            transition={{ type: "spring", damping: 16, stiffness: 120 }}
+            style={{ flexShrink: 0 }}
           >
-            <NeuralCore isSpeaking={isSpeaking} size={isPresenting ? presentCoreSize : coreSize} />
+            {/* Controls */}
+            <div className="absolute -top-3 right-0 sm:-right-4 flex items-center gap-1.5 z-20">
+              <button
+                onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
+                className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
+              >
+                {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+              </button>
+              <button
+                onClick={minimize}
+                className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Neural core + face */}
+            <div
+              className="relative cursor-pointer"
+              style={{ width: isPresenting ? presentCoreSize : coreSize, height: isPresenting ? presentCoreSize : coreSize, transition: "width 0.5s, height 0.5s" }}
+              onClick={() => setShowChat(!showChat)}
+            >
+              <NeuralCore isSpeaking={isSpeaking} size={isPresenting ? presentCoreSize : coreSize} />
 
             {/* Face */}
             <motion.div
@@ -780,29 +776,29 @@ const ThorGreeter = () => {
                 {!isPresenting && <span className="text-[7px] font-mono text-accent-violet/40 tracking-wider">AI</span>}
               </div>
             </motion.div>
-          </div>
+           </div>
+          </motion.div>
 
-          {/* ══ PRESENTATION PANEL — appears when Thor moves to corner ══ */}
+          {/* ══ PRESENTATION PANEL — appears next to Thor when presenting ══ */}
           {isPresenting && (
             <motion.div
-              className="fixed top-1/2 left-1/2 -translate-x-1/3 -translate-y-1/2 z-20 w-[60vw] sm:w-[500px] max-w-[600px]"
+              className="pointer-events-auto flex-1 max-w-[60vw] sm:max-w-[500px] max-h-[80vh] overflow-y-auto"
               initial={{ opacity: 0, x: 40, scale: 0.95 }}
               animate={{ opacity: 1, x: 0, scale: 1 }}
               transition={{ delay: 0.3, type: "spring", damping: 20 }}
             >
-              <div className="bg-background/80 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl p-6 sm:p-8 shadow-2xl shadow-accent-violet/5">
-                {/* Presentation content — last assistant message rendered big */}
+              <div className="bg-background/80 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl p-5 sm:p-6 shadow-2xl shadow-accent-violet/5">
                 {lastMessage && lastMessage.role === "assistant" && (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-2 mb-3">
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
                       <motion.span className="w-2 h-2 rounded-full bg-accent-violet" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity }} />
                       <span className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-violet/60">Thor · Apresentando</span>
                     </div>
-                    <div className="text-sm sm:text-base text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none [&_p]:mb-2">
+                    <div className="text-sm text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none [&_p]:mb-2">
                       <ReactMarkdown>{lastMessage.content}</ReactMarkdown>
                     </div>
                     {isSpeaking && (
-                      <div className="flex items-center gap-[2px] h-3 justify-start pt-2">
+                      <div className="flex items-center gap-[2px] h-3 justify-start pt-1">
                         {Array.from({ length: 30 }).map((_, i) => (
                           <motion.div
                             key={i}
@@ -816,8 +812,7 @@ const ThorGreeter = () => {
                   </div>
                 )}
 
-                {/* Inline input in presentation mode */}
-                <form onSubmit={(e) => { e.preventDefault(); sendMessage(); }} className="flex gap-2 mt-5 pt-4 border-t border-accent-violet/5">
+                <form onSubmit={(e) => { e.preventDefault(); sendMessage(); }} className="flex gap-2 mt-4 pt-3 border-t border-accent-violet/5">
                   <input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -840,7 +835,7 @@ const ThorGreeter = () => {
           {/* Speech bubble — only when NOT presenting and not chat */}
           {lastMessage && !showChat && !isPresenting && (
             <motion.div
-              className="mt-4 max-w-[88vw] sm:max-w-[340px]"
+              className="mt-4 max-w-[88vw] sm:max-w-[340px] pointer-events-auto"
               initial={{ opacity: 0, y: 12, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               key={lastMessage.content.slice(0, 20)}
@@ -874,10 +869,10 @@ const ThorGreeter = () => {
             </motion.div>
           )}
 
-          {/* Quick actions */}
-          {messages.length <= 1 && !showChat && !isLoading && messages.some(m => m.role === "assistant") && (
+          {/* Quick actions — hide when presenting */}
+          {messages.length <= 1 && !showChat && !isPresenting && !isLoading && messages.some(m => m.role === "assistant") && (
             <motion.div
-              className="mt-4 flex gap-2 flex-wrap justify-center"
+              className="mt-4 flex gap-2 flex-wrap justify-center pointer-events-auto"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.5 }}
@@ -909,10 +904,9 @@ const ThorGreeter = () => {
                 initial={{ height: 0, opacity: 0 }}
                 animate={{ height: "auto", opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
-                className="mt-4 w-[92vw] sm:w-[420px] overflow-hidden"
+                className="mt-4 w-[92vw] sm:w-[420px] overflow-hidden pointer-events-auto"
               >
                 <div className="bg-background/85 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl overflow-hidden shadow-2xl shadow-accent-violet/5">
-                  {/* Header bar */}
                   <div className="px-4 py-2 border-b border-accent-violet/5 flex items-center gap-2">
                     <motion.span
                       className="w-1.5 h-1.5 rounded-full bg-emerald-500"
@@ -996,7 +990,7 @@ const ThorGreeter = () => {
           {/* Inline input when chat hidden and NOT presenting */}
           {!showChat && !isPresenting && (
             <motion.div
-              className="mt-4 w-[88vw] sm:w-[380px]"
+              className="mt-4 w-[88vw] sm:w-[380px] pointer-events-auto"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
@@ -1019,7 +1013,7 @@ const ThorGreeter = () => {
               </form>
             </motion.div>
           )}
-        </motion.div>
+        </div>
       </motion.div>
     </AnimatePresence>
   );
