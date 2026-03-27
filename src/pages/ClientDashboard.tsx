@@ -562,13 +562,44 @@ const ClientDashboard = () => {
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                     <div>
                       <div className="flex items-center gap-2">
-                        <h1 className="font-display text-2xl font-bold flex items-center gap-3">
+                       <h1 className="font-display text-2xl font-bold flex items-center gap-3">
                           {(() => {
                             const hour = new Date().getHours();
                             const firstName = user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel");
-                            if (hour < 12) return t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}}", name: firstName });
-                            if (hour < 18) return t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}}", name: firstName });
-                            return t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}}", name: firstName });
+                            const TimeIcon = () => {
+                              if (hour >= 6 && hour < 18) {
+                                // Abstract sun — minimal radial burst
+                                return (
+                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)]">
+                                    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
+                                    {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
+                                      const rad = (angle * Math.PI) / 180;
+                                      const x1 = 12 + 6.5 * Math.cos(rad);
+                                      const y1 = 12 + 6.5 * Math.sin(rad);
+                                      const x2 = 12 + 9 * Math.cos(rad);
+                                      const y2 = 12 + 9 * Math.sin(rad);
+                                      return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />;
+                                    })}
+                                  </svg>
+                                );
+                              }
+                              // Abstract crescent moon
+                              return (
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 text-blue-300 drop-shadow-[0_0_6px_rgba(147,197,253,0.5)]">
+                                  <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                              );
+                            };
+                            return (
+                              <>
+                                <TimeIcon />
+                                {hour < 12
+                                  ? t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}}", name: firstName })
+                                  : hour < 18
+                                    ? t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}}", name: firstName })
+                                    : t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}}", name: firstName })}
+                              </>
+                            );
                           })()}
                           <span className="relative flex h-2.5 w-2.5">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
