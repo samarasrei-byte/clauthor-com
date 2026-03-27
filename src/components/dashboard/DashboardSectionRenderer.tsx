@@ -1,0 +1,129 @@
+import { lazy, Suspense } from "react";
+import SectionLoader from "@/components/ui/section-loader";
+
+const AgentLiveTimeline = lazy(() => import("./AgentLiveTimeline"));
+const HolographicMeetingRoom = lazy(() => import("./HolographicMeetingRoom"));
+const Library = lazy(() => import("@/pages/Library"));
+const Integrations = lazy(() => import("@/pages/Integrations"));
+const ComingSoonSection = lazy(() => import("./ComingSoonSection"));
+const OperationsCenter = lazy(() => import("./OperationsCenter"));
+const InsightsHub = lazy(() => import("./InsightsHub"));
+const KanbanBoard = lazy(() => import("./KanbanBoard"));
+const CompanyHub = lazy(() => import("./CompanyHub"));
+const ContentPipelinePanel = lazy(() => import("./ContentPipelinePanel"));
+const DeliverablesHub = lazy(() => import("./DeliverablesHub"));
+const SalesCallTranscriber = lazy(() => import("./SalesCallTranscriber"));
+const SquadManager = lazy(() => import("./SquadManager"));
+const BulkAgentProvisioner = lazy(() => import("./BulkAgentProvisioner"));
+const AgentNeuralNetwork = lazy(() => import("@/pages/AgentNeuralNetwork"));
+const ScrumBoard = lazy(() => import("@/pages/ScrumBoard"));
+const AgentsSection = lazy(() => import("./AgentsSection"));
+const SettingsPage = lazy(() => import("./SettingsPage"));
+const PaymentHistoryTable = lazy(() => import("./PaymentHistoryTable"));
+
+interface Props {
+  activeSection: string;
+  // Insights
+  realChartData: any[];
+  totalExecutions: number;
+  recentLogs: any[];
+  locale: string;
+  // Agents
+  agents: any[];
+  loadingAgents: boolean;
+  nameToSlug: Record<string, string>;
+  tierColors: any;
+  formatCurrency: (v: number) => string;
+  // Company
+  // Settings
+  billingContent: React.ReactNode;
+  // Navigation
+  onNavigate: (id: string) => void;
+  onSetActiveSection: (s: string) => void;
+  onSelectAgent: (agent: { id: string; name: string }) => void;
+  onSetupCompany: () => void;
+}
+
+const DashboardSectionRenderer = ({
+  activeSection, realChartData, totalExecutions, recentLogs, locale,
+  agents, loadingAgents, nameToSlug, tierColors, formatCurrency,
+  billingContent, onNavigate, onSetActiveSection, onSelectAgent, onSetupCompany,
+}: Props) => {
+  return (
+    <>
+      {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
+
+      {activeSection === "insights" && (
+        <Suspense fallback={<SectionLoader />}>
+          <InsightsHub
+            chartData={realChartData}
+            totalExecutions={totalExecutions}
+            recentLogs={recentLogs}
+            locale={locale}
+            onGoToAgents={() => onSetActiveSection("agents")}
+            onNavigate={onNavigate}
+          />
+        </Suspense>
+      )}
+
+      {activeSection === "settings" && (
+        <Suspense fallback={<SectionLoader />}>
+          <SettingsPage billingContent={billingContent} />
+        </Suspense>
+      )}
+
+      {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
+      {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
+      {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
+
+      {activeSection === "squads" && (
+        <Suspense fallback={<SectionLoader />}><SquadManager onNavigate={onNavigate} /></Suspense>
+      )}
+
+      {activeSection === "bulk-deploy" && (
+        <Suspense fallback={<SectionLoader />}><BulkAgentProvisioner /></Suspense>
+      )}
+
+      {activeSection === "agents" && (
+        <Suspense fallback={<SectionLoader />}>
+          <AgentsSection
+            agents={agents}
+            isLoading={loadingAgents}
+            nameToSlug={nameToSlug}
+            tierColors={tierColors}
+            formatCurrency={formatCurrency}
+            onOpenLibrary={() => onSetActiveSection("library")}
+            onOpenThor={() => onSetActiveSection("omnix")}
+            onOpenChat={onSelectAgent}
+          />
+        </Suspense>
+      )}
+
+      {activeSection === "empresa" && (
+        <Suspense fallback={<SectionLoader />}>
+          <CompanyHub
+            agents={agents}
+            nameToSlug={nameToSlug}
+            onNavigate={onNavigate}
+            onOpenAgent={onSelectAgent}
+            onSetupCompany={onSetupCompany}
+          />
+        </Suspense>
+      )}
+
+      {activeSection === "kanban" && <Suspense fallback={<SectionLoader />}><KanbanBoard /></Suspense>}
+      {activeSection === "content-pipeline" && <Suspense fallback={<SectionLoader />}><ContentPipelinePanel /></Suspense>}
+      {activeSection === "deliverables" && <Suspense fallback={<SectionLoader />}><DeliverablesHub onNavigate={onNavigate} /></Suspense>}
+      {activeSection === "call-transcriber" && <Suspense fallback={<SectionLoader />}><SalesCallTranscriber /></Suspense>}
+      {activeSection === "operations-center" && <Suspense fallback={<SectionLoader />}><OperationsCenter onNavigate={onNavigate} /></Suspense>}
+      {activeSection === "neural-network" && <Suspense fallback={<SectionLoader />}><AgentNeuralNetwork /></Suspense>}
+      {activeSection === "scrum" && <Suspense fallback={<SectionLoader />}><ScrumBoard /></Suspense>}
+
+      {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
+        <ComingSoonSection feature={activeSection} />
+      )}
+    </>
+  );
+};
+
+export default DashboardSectionRenderer;

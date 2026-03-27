@@ -1,5 +1,4 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useMemo, useCallback, lazy, Suspense } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -7,36 +6,27 @@ import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, CreditCard,
-  Sparkles, ArrowRight, Coins, Settings, Brain, MessageSquare, Plug, ChevronDown, ChevronLeft,
+  Sparkles, Settings, Brain, MessageSquare, Plug, ChevronLeft,
   Rocket, Building2, KanbanSquare, Layers3,
   Video, Clock, Radar, Orbit, LayoutGrid
 } from "lucide-react";
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Progress } from "@/components/ui/progress";
-import { Link, useNavigate } from "react-router-dom";
-import { toast } from "sonner";
 import { useTranslation } from "react-i18next";
 
-import { lazy, Suspense } from "react";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import type { SidebarItem, SidebarChild } from "@/components/dashboard/DashboardSidebar";
 import MobileBottomNav from "@/components/dashboard/MobileBottomNav";
-import QuickActions from "@/components/dashboard/QuickActions";
-import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
-import NotificationPanel from "@/components/dashboard/NotificationPanel";
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import MobileNavSheet from "@/components/dashboard/MobileNavSheet";
+import DashboardOverview from "@/components/dashboard/DashboardOverview";
+import DashboardSectionRenderer from "@/components/dashboard/DashboardSectionRenderer";
+import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
 import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
-const CompanyBoardAlert = lazy(() => import("@/components/dashboard/CompanyBoardAlert"));
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
-const SmartAgentRouter = lazy(() => import("@/components/dashboard/SmartAgentRouter"));
-const TaskRequestPanel = lazy(() => import("@/components/dashboard/TaskRequestPanel"));
-const AgentCollaborationPanel = lazy(() => import("@/components/dashboard/AgentCollaborationPanel"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
-const PendingActionsPanel = lazy(() => import("@/components/dashboard/PendingActionsPanel").then(m => ({ default: m.PendingActionsPanel })));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
@@ -44,51 +34,19 @@ import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
 import { TIER_COLORS as tierColors } from "@/lib/tier-colors";
 import { agentIcons } from "@/data/libraryAgentData";
-import HelpTooltip from "@/components/HelpTooltip";
 import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
-
-// Lazy-load heavy section components — only loaded when the user navigates to them
-const AgentChat = lazy(() => import("@/components/dashboard/AgentChat"));
-const ClientCommandCenter = lazy(() => import("@/components/dashboard/ClientCommandCenter"));
-const SquadChat = lazy(() => import("@/components/dashboard/SquadChat"));
-const SettingsPage = lazy(() => import("@/components/dashboard/SettingsPage"));
-const AgentsSection = lazy(() => import("@/components/dashboard/AgentsSection"));
-const PaymentHistoryTable = lazy(() => import("@/components/dashboard/PaymentHistoryTable"));
-const OmnixCommandCenter = lazy(() => import("@/pages/OmnixCommandCenter"));
-const AgentLiveTimeline = lazy(() => import("@/components/dashboard/AgentLiveTimeline"));
-const HolographicMeetingRoom = lazy(() => import("@/components/dashboard/HolographicMeetingRoom"));
-const Library = lazy(() => import("./Library"));
-const Integrations = lazy(() => import("./Integrations"));
-const ComingSoonSection = lazy(() => import("@/components/dashboard/ComingSoonSection"));
-const ControlTowerSection = lazy(() => import("@/pages/ControlTower"));
-const MissionControl = lazy(() => import("@/components/dashboard/MissionControl"));
-const OperationsCenter = lazy(() => import("@/components/dashboard/OperationsCenter"));
-const ThorLiveGuide = lazy(() => import("@/components/dashboard/ThorLiveGuide"));
-import GuidedOnboarding from "@/components/dashboard/GuidedOnboarding";
-const InsightsHub = lazy(() => import("@/components/dashboard/InsightsHub"));
-const KanbanBoard = lazy(() => import("@/components/dashboard/KanbanBoard"));
-const CompanyHub = lazy(() => import("@/components/dashboard/CompanyHub"));
-const ThorDailyBriefing = lazy(() => import("@/components/dashboard/ThorDailyBriefing"));
-const QuickWins = lazy(() => import("@/components/dashboard/QuickWins"));
-const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHub"));
-const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPipelinePanel"));
-const SalesCallTranscriber = lazy(() => import("@/components/dashboard/SalesCallTranscriber"));
-const SquadManager = lazy(() => import("@/components/dashboard/SquadManager"));
-const BulkAgentProvisioner = lazy(() => import("@/components/dashboard/BulkAgentProvisioner"));
-const AgentNeuralNetwork = lazy(() => import("@/pages/AgentNeuralNetwork"));
-const ScrumBoard = lazy(() => import("@/pages/ScrumBoard"));
-
-const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
 import SectionLoader from "@/components/ui/section-loader";
+
+const AgentChat = lazy(() => import("@/components/dashboard/AgentChat"));
+const OmnixCommandCenter = lazy(() => import("@/pages/OmnixCommandCenter"));
+const ThorLiveGuide = lazy(() => import("@/components/dashboard/ThorLiveGuide"));
 
 const ClientDashboard = () => {
   const { user } = useAuth();
   const { t, i18n } = useTranslation();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [activeSection, setActiveSection] = useState("overview");
   const [previousSection, setPreviousSection] = useState<string | null>(null);
-  const [showTour, setShowTour] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
   const [omnixMounted, setOmnixMounted] = useState(false);
@@ -98,10 +56,14 @@ const ClientDashboard = () => {
     if (typeof window === "undefined") return false;
     return !localStorage.getItem("clauthor_live_guide_dismissed");
   });
-
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
+  const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
+  const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
+    if (!user) return false;
+    return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
+  });
 
-  // Redirect first-time user to THOR (concierge) with contextual welcome
+  // ── First-time redirect to THOR ──
   useEffect(() => {
     if (!user) return;
     const key = `clauthor_concierge_seen_${user.id}`;
@@ -109,50 +71,28 @@ const ClientDashboard = () => {
       localStorage.setItem(key, "true");
       setActiveSection("omnix");
       setOmnixMounted(true);
-
-      // Build contextual welcome based on onboarding state
       const hireIntent = localStorage.getItem("hireIntent");
-      let parsed: { agentName?: string; isDepartment?: boolean; agentCount?: number; slug?: string } | null = null;
+      let parsed: { agentName?: string; isDepartment?: boolean; agentCount?: number } | null = null;
       try { parsed = hireIntent ? JSON.parse(hireIntent) : null; } catch {}
-
       if (parsed?.isDepartment && parsed.agentName) {
-        setWelcomeMessage(
-          `Acabei de entrar na plataforma e escolhi o departamento ${parsed.agentName} com ${parsed.agentCount || 'vários'} agentes. ` +
-          `Me dê boas-vindas, explique o que esse departamento pode fazer por mim e me guie nos próximos passos.`
-        );
+        setWelcomeMessage(`Acabei de entrar na plataforma e escolhi o departamento ${parsed.agentName} com ${parsed.agentCount || 'vários'} agentes. Me dê boas-vindas, explique o que esse departamento pode fazer por mim e me guie nos próximos passos.`);
       } else if (parsed?.agentName) {
-        setWelcomeMessage(
-          `Acabei de entrar na plataforma e escolhi o agente ${parsed.agentName}. ` +
-          `Me dê boas-vindas, explique o que esse agente faz e me ajude a configurá-lo.`
-        );
+        setWelcomeMessage(`Acabei de entrar na plataforma e escolhi o agente ${parsed.agentName}. Me dê boas-vindas, explique o que esse agente faz e me ajude a configurá-lo.`);
       } else {
-        setWelcomeMessage(
-          `Sou um novo usuário na plataforma. Me dê boas-vindas, se apresente como Thor (o CEO e orquestrador de todos os agentes) e me guie: ` +
-          `explique os 3 passos (Ensinar, Contratar e Comandar) de forma simples e pergunte como posso te ajudar.`
-        );
+        setWelcomeMessage(`Sou um novo usuário na plataforma. Me dê boas-vindas, se apresente como Thor (o CEO e orquestrador de todos os agentes) e me guie: explique os 3 passos (Ensinar, Contratar e Comandar) de forma simples e pergunte como posso te ajudar.`);
       }
     }
   }, [user]);
 
-  // Track when omnix is first visited so we can keep it mounted
   useEffect(() => {
-    if (activeSection === "omnix" && !omnixMounted) {
-      setOmnixMounted(true);
-    }
+    if (activeSection === "omnix" && !omnixMounted) setOmnixMounted(true);
   }, [activeSection, omnixMounted]);
-  const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
-    if (!user) return false;
-    return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
-  });
 
-  // Check if Company Board has data
+  // ── Queries ──
   const { data: boardCount = 0 } = useQuery({
     queryKey: ["company-board-count-gate", user?.id],
     queryFn: async () => {
-      const { count } = await supabase
-        .from("company_board")
-        .select("*", { count: "exact", head: true })
-        .eq("user_id", user!.id);
+      const { count } = await supabase.from("company_board").select("*", { count: "exact", head: true }).eq("user_id", user!.id);
       return count || 0;
     },
     enabled: !!user,
@@ -161,33 +101,28 @@ const ClientDashboard = () => {
 
   const needsBoardSetup = boardCount === 0 && !boardGateSkipped;
 
-  // Extracted hooks for business logic
   const { checkoutSummary, handleApprove, cancelCheckout } = useHireIntentFlow(user);
   const {
-    postPaymentContext, showCelebration, showDeptSetup, showCompanyOnboarding,
-    setShowCompanyOnboarding, onCelebrationComplete, onCompanyOnboardingDone,
+    postPaymentContext, showCelebration, showDeptSetup, showCompanyOnboarding: showCompanyOnboardingPost,
+    setShowCompanyOnboarding: setShowCompanyOnboardingPost, onCelebrationComplete, onCompanyOnboardingDone,
     onDeptSetupDone, clearPostPayment,
   } = usePostPaymentFlow();
 
-  // Show PostSignupOnboarding ONLY when there's no hireIntent (flow 4).
   useEffect(() => {
     if (!user) return;
     const done = localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
     if (done) return;
-
     const hasHireIntent = !!localStorage.getItem("hireIntent");
-
     if (hasHireIntent) {
       localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
     } else {
-      // Flow 4: no selection → show SmartOnboarding instead of empty dashboard
       setShowSmartOnboarding(true);
     }
   }, [user]);
+
   const { credits, remainingCredits, usagePercentage } = useCredits();
   usePaypalCapture();
   const { data: tokenUsage = [] } = useTokenUsage();
-
 
   const { data: agents = [], isLoading: loadingAgents } = useQuery({
     queryKey: ["my-agents", user?.id],
@@ -230,17 +165,14 @@ const ClientDashboard = () => {
       const { data, error } = await supabase.from("execution_logs").select("*, agent:agents(name)").eq("user_id", user!.id).order("created_at", { ascending: false }).limit(50);
       if (error) throw error;
       return data.map((log: any) => ({
-        id: log.id,
-        agent_name: log.agent?.name || t("dashboard.ai_assistant"),
-        action: log.action,
-        status: log.status,
-        execution_time_ms: log.execution_time_ms,
-        created_at: log.created_at,
+        id: log.id, agent_name: log.agent?.name || t("dashboard.ai_assistant"),
+        action: log.action, status: log.status, execution_time_ms: log.execution_time_ms, created_at: log.created_at,
       }));
     },
     enabled: !!user,
   });
 
+  // ── Computed ──
   const totalExecutions = agents.reduce((acc, a) => acc + (a.total_executions || 0), 0);
   const activeAgents = agents.filter((a) => a.status === "active").length;
   const totalTokensUsed = tokenUsage.reduce((acc, tu) => acc + tu.tokens_used, 0);
@@ -268,6 +200,15 @@ const ClientDashboard = () => {
     return map;
   }, [templates]);
 
+  const pendingTaskCount = useMemo(() => {
+    return recentLogs.filter(l => l.status === "running" || l.status === "pending").length;
+  }, [recentLogs]);
+
+  const formatCurrency = (value: number) => {
+    return new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(value / 100);
+  };
+
+  // ── Sidebar items ──
   const { departmentSidebarItems, soloAgentItems } = useMemo(() => {
     if (agents.length === 0) return { departmentSidebarItems: [] as SidebarItem[], soloAgentItems: [] as SidebarItem[] };
     const groups: Record<string, { dept: typeof DEPARTMENTS[string]; children: SidebarChild[] }> = {};
@@ -296,20 +237,12 @@ const ClientDashboard = () => {
     id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.nav_main", { defaultValue: "Principal" }),
   } : null;
 
-  // Lean sidebar — 3 groups
   const mainGroup = t("dashboard.nav_main", { defaultValue: "Principal" });
   const workGroup = t("dashboard.nav_work", { defaultValue: "Trabalho" });
   const monitorGroup = t("dashboard.nav_monitor", { defaultValue: "Monitoramento" });
   const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
 
-  // Count pending tasks for badge
-  const pendingTaskCount = useMemo(() => {
-    // Use recentLogs running status as proxy
-    return recentLogs.filter(l => l.status === "running" || l.status === "pending").length;
-  }, [recentLogs]);
-
   const sidebarItems: SidebarItem[] = [
-    // ── Principal ──
     { id: "omnix", label: "THOR", icon: Brain, group: mainGroup },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
@@ -317,39 +250,28 @@ const ClientDashboard = () => {
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}` }] : []),
     ...departmentSidebarItems,
     ...soloAgentItems,
-
-    // ── Trabalho ──
     { id: "squads", label: "Squads", icon: Layers3, group: workGroup },
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: workGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: workGroup },
     { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Video, group: workGroup },
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
-
-    // ── Monitoramento ──
     { id: "neural-network", label: "Neural Network", icon: Orbit, group: monitorGroup },
     { id: "scrum", label: "Scrum Board", icon: LayoutGrid, group: monitorGroup },
     { id: "live-timeline", label: "Timeline", icon: Clock, badge: pendingTaskCount || undefined, group: monitorGroup },
     { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Centro de Operações" }), icon: Radar, group: monitorGroup },
-
-    // ── Sistema ──
     { id: "bulk-deploy", label: "Deploy Agents", icon: Rocket, group: systemGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
 
-  
-
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(value / 100);
-  };
-
+  // ── Navigation ──
   const handleSidebarNav = (id: string) => {
     if (id.startsWith("agent-chat-")) {
       const agentId = id.replace("agent-chat-", "");
       const agent = agents.find(a => a.id === agentId);
       if (agent) { setPreviousSection(activeSection); setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); return; }
     }
-    if (id === "chat") { setPreviousSection(activeSection); }
+    if (id === "chat") setPreviousSection(activeSection);
     setActiveSection(id);
   };
 
@@ -371,9 +293,6 @@ const ClientDashboard = () => {
     "operations-center": t("dashboard.operations_center", { defaultValue: "Centro de Operações" }),
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
-    "content-pipeline": t("dashboard.content_pipeline", { defaultValue: "Conteúdo" }),
-    deliverables: t("dashboard.deliverables", { defaultValue: "Entregas" }),
-    "call-transcriber": t("dashboard.call_transcriber", { defaultValue: "Chamadas" }),
     squads: "Squads",
     "bulk-deploy": "Deploy Agents",
     "neural-network": "Neural Network",
@@ -383,25 +302,33 @@ const ClientDashboard = () => {
 
   const breadcrumbLabel = breadcrumbMap[activeSection] || activeSection;
 
-  // Flatten sidebar for mobile (including children)
-  const flatMobileItems = useMemo(() => {
-    const flat: { id: string; label: string; icon: React.ElementType; group?: string; badge?: string | number }[] = [];
-    for (const item of sidebarItems) {
-      if (item.children && item.children.length > 0) {
-        // Add parent as a header-like item, then children
-        for (const child of item.children) {
-          flat.push({ id: child.id, label: `${item.label} › ${child.label}`, icon: child.icon || Bot, group: item.group });
-        }
-      } else {
-        flat.push({ id: item.id, label: item.label, icon: item.icon, group: item.group, badge: item.badge });
+  // ── Task submit handler ──
+  const handleSubmitTask = useCallback((task: string, mode: string) => {
+    if (mode === "strategic" || mode === "guided") {
+      setPendingTaskMessage(task);
+      setActiveSection("omnix");
+    } else {
+      const q = task.toLowerCase();
+      const matchedSlug = agents.map(a => nameToSlug[a.name]).filter(Boolean).find(slug => q.includes(slug?.replace(/_/g, " ") || ""));
+      if (matchedSlug) {
+        const agent = agents.find(a => nameToSlug[a.name] === matchedSlug);
+        if (agent) { setPreviousSection(activeSection); setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); return; }
       }
+      setPendingTaskMessage(task);
+      setActiveSection("omnix");
     }
-    return flat;
-  }, [sidebarItems]);
+  }, [agents, nameToSlug, activeSection]);
+
+  const handleSelectAgentBySlug = useCallback((slug: string) => {
+    const agent = agents.find(a => nameToSlug[a.name] === slug);
+    if (agent) { setPreviousSection(activeSection); setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); }
+    else setActiveSection("library");
+  }, [agents, nameToSlug, activeSection]);
+
+  const actualShowCompanyOnboarding = showCompanyOnboarding || showCompanyOnboardingPost;
 
   return (
     <>
-      {/* Post-payment celebration animation */}
       {showCelebration && postPaymentContext && (
         <PostPaymentCelebration
           agentName={postPaymentContext.agentName}
@@ -411,33 +338,29 @@ const ClientDashboard = () => {
         />
       )}
 
-      {/* Company Onboarding — teach agents about the business */}
-      {showCompanyOnboarding && (
+      {actualShowCompanyOnboarding && (
         <Suspense fallback={<SectionLoader />}>
           <CompanyOnboardingWizard
             onComplete={() => {
+              setShowCompanyOnboarding(false);
               onCompanyOnboardingDone(
                 !!postPaymentContext?.isDepartment && !!postPaymentContext?.departmentId,
                 postPaymentContext?.departmentId
               );
-              if (!postPaymentContext?.isDepartment || !postPaymentContext?.departmentId) {
-                setActiveSection("omnix");
-              }
+              if (!postPaymentContext?.isDepartment || !postPaymentContext?.departmentId) setActiveSection("omnix");
             }}
             onSkip={() => {
+              setShowCompanyOnboarding(false);
               onCompanyOnboardingDone(
                 !!postPaymentContext?.isDepartment && !!postPaymentContext?.departmentId,
                 postPaymentContext?.departmentId
               );
-              if (!postPaymentContext?.isDepartment || !postPaymentContext?.departmentId) {
-                setActiveSection("omnix");
-              }
+              if (!postPaymentContext?.isDepartment || !postPaymentContext?.departmentId) setActiveSection("omnix");
             }}
           />
         </Suspense>
       )}
 
-      {/* Department Setup after company onboarding */}
       {showDeptSetup && postPaymentContext?.departmentId && (
         <div className="fixed inset-0 z-50 bg-background flex items-center justify-center p-4 overflow-y-auto">
           <div className="w-full max-w-2xl">
@@ -445,36 +368,25 @@ const ClientDashboard = () => {
               <DepartmentSetup
                 departmentId={postPaymentContext.departmentId}
                 departmentName={postPaymentContext.agentName}
-                onComplete={() => {
-                  onDeptSetupDone();
-                  setActiveSection("omnix");
-                }}
-                onSkip={() => {
-                  onDeptSetupDone();
-                  setActiveSection("omnix");
-                }}
+                onComplete={() => { onDeptSetupDone(); setActiveSection("omnix"); }}
+                onSkip={() => { onDeptSetupDone(); setActiveSection("omnix"); }}
               />
             </Suspense>
           </div>
         </div>
       )}
 
-      {/* Flow 4: No hireIntent → show SmartOnboarding wizard instead of empty dashboard */}
       {showSmartOnboarding && (
-        <SmartOnboarding 
-          isOpen={showSmartOnboarding} 
+        <SmartOnboarding
+          isOpen={showSmartOnboarding}
           onClose={() => {
             setShowSmartOnboarding(false);
             if (user) localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
-          }} 
+          }}
         />
       )}
 
-      <CheckoutSummaryDialog
-        data={checkoutSummary}
-        onApprove={handleApprove}
-        onCancel={cancelCheckout}
-      />
+      <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
 
       <div className="flex h-full">
         <div className="hidden lg:block">
@@ -482,15 +394,21 @@ const ClientDashboard = () => {
         </div>
 
         <div className="flex-1 min-w-0 overflow-hidden">
-          {/* ═══ IMMERSIVE MODE — THOR stays mounted to preserve chat history ═══ */}
+          {/* THOR — stays mounted */}
           {omnixMounted && (
             <div className={activeSection === "omnix" ? "h-full" : "hidden"}>
               <Suspense fallback={<SectionLoader />}>
-                <OmnixCommandCenter postPaymentContext={postPaymentContext} onPostPaymentHandled={clearPostPayment} initialMessage={pendingTaskMessage || welcomeMessage} onInitialMessageHandled={() => { setPendingTaskMessage(null); setWelcomeMessage(null); }} />
+                <OmnixCommandCenter
+                  postPaymentContext={postPaymentContext}
+                  onPostPaymentHandled={clearPostPayment}
+                  initialMessage={pendingTaskMessage || welcomeMessage}
+                  onInitialMessageHandled={() => { setPendingTaskMessage(null); setWelcomeMessage(null); }}
+                />
               </Suspense>
             </div>
           )}
 
+          {/* Chat — empty state */}
           {activeSection === "chat" && !selectedAgent && (
             <div className="flex flex-col items-center justify-center py-20 px-6 text-center space-y-4">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
@@ -499,30 +417,24 @@ const ClientDashboard = () => {
               <h2 className="font-display text-xl font-semibold">{t("dashboard.select_agent_chat", { defaultValue: "Selecione um agente para conversar" })}</h2>
               <p className="text-sm text-muted-foreground max-w-sm">{t("dashboard.select_agent_chat_desc", { defaultValue: "Escolha um dos seus agentes na aba Agentes para iniciar uma conversa." })}</p>
               <Button variant="outline" size="sm" className="gap-1.5" onClick={() => setActiveSection("agents")}>
-                <Bot className="h-3.5 w-3.5" />
-                {t("dashboard.agents_tab")}
+                <Bot className="h-3.5 w-3.5" /> {t("dashboard.agents_tab")}
               </Button>
             </div>
           )}
 
+          {/* Chat — with agent */}
           {activeSection === "chat" && selectedAgent && (
             <Suspense fallback={<SectionLoader />}>
               {needsBoardSetup ? (
                 <CompanyBoardGate
                   agentName={selectedAgent.name}
                   onSetupCompany={() => setShowCompanyOnboarding(true)}
-                  onSkip={() => {
-                    setBoardGateSkipped(true);
-                    if (user) localStorage.setItem(`clauthor_board_gate_skipped_${user.id}`, "true");
-                  }}
+                  onSkip={() => { setBoardGateSkipped(true); if (user) localStorage.setItem(`clauthor_board_gate_skipped_${user.id}`, "true"); }}
                 />
               ) : (
                 <div className="h-full flex flex-col">
                   <div className="shrink-0 flex items-center gap-2 px-4 py-2 border-b border-border/10 bg-background/50 backdrop-blur-sm">
-                    <button
-                      onClick={handleBack}
-                      className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group"
-                    >
+                    <button onClick={handleBack} className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors group">
                       <ChevronLeft className="h-3.5 w-3.5 group-hover:-translate-x-0.5 transition-transform" />
                       <span>{t("dashboard.back", { defaultValue: "Voltar" })}</span>
                     </button>
@@ -537,466 +449,83 @@ const ClientDashboard = () => {
             </Suspense>
           )}
 
-          {/* ═══ STANDARD MODE — padded content with header ═══ */}
+          {/* Standard sections */}
           {activeSection !== "omnix" && activeSection !== "chat" && (
             <div className="h-full overflow-y-auto">
               <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-5 pb-24 lg:pb-6 space-y-5">
-                {/* Clean Header */}
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="space-y-0.5">
-                    <h1 className="font-display text-xl sm:text-2xl font-bold flex items-center gap-2.5">
-                      {(() => {
-                        const hour = new Date().getHours();
-                        const firstName = user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel");
-                        const TimeIcon = () => {
-                          if (hour >= 6 && hour < 18) {
-                            return (
-                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.4)] animate-[spin_12s_linear_infinite]">
-                                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
-                                {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
-                                  const rad = (angle * Math.PI) / 180;
-                                  const x1 = 12 + 6.5 * Math.cos(rad);
-                                  const y1 = 12 + 6.5 * Math.sin(rad);
-                                  const x2 = 12 + 9 * Math.cos(rad);
-                                  const y2 = 12 + 9 * Math.sin(rad);
-                                  return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />;
-                                })}
-                              </svg>
-                            );
-                          }
-                          return (
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-blue-300 drop-shadow-[0_0_6px_rgba(147,197,253,0.4)]">
-                              <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          );
-                        };
-                        return (
-                          <>
-                            <TimeIcon />
-                            {hour < 12
-                              ? t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}}", name: firstName })
-                              : hour < 18
-                                ? t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}}", name: firstName })
-                                : t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}}", name: firstName })}
-                          </>
-                        );
-                      })()}
-                      <span className="relative flex h-2 w-2">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-                      </span>
-                    </h1>
-                    <p className="text-xs text-muted-foreground flex items-center gap-2">
-                      <span>{new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</span>
-                      {credits && (
-                        <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium text-[10px]">
-                          {remainingCredits.toLocaleString(locale)} {t("dashboard.credits_short", { defaultValue: "créditos" })}
-                        </span>
-                      )}
-                    </p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <NotificationPanel />
-                    <QuickActions />
-                  </div>
-                </motion.div>
+                <DashboardHeader locale={locale} remainingCredits={remainingCredits} credits={credits} />
+                <MobileNavSheet sidebarItems={sidebarItems} activeSection={activeSection} breadcrumbLabel={breadcrumbLabel} onNavigate={handleSidebarNav} />
 
-                {/* Mobile nav */}
-                <div className="lg:hidden">
-                  <Sheet>
-                    <SheetTrigger asChild>
-                      <Button variant="outline" size="sm" className="gap-2 text-xs w-full justify-start border-border/30">
-                        <LayoutDashboard className="h-3.5 w-3.5 text-primary" />
-                        <span className="font-medium text-foreground">{breadcrumbLabel}</span>
-                        <ChevronDown className="h-3 w-3 ml-auto text-muted-foreground" />
-                      </Button>
-                    </SheetTrigger>
-                    <SheetContent side="left" className="w-72 p-0">
-                      <SheetHeader className="p-4 border-b border-border/10">
-                        <SheetTitle className="font-display text-sm">{t("dashboard.navigation", { defaultValue: "Navegação" })}</SheetTitle>
-                      </SheetHeader>
-                      {flatMobileItems.length > 8 && (
-                        <div className="px-3 pt-3">
-                          <input
-                            type="text"
-                            placeholder={t("dashboard.search_nav", { defaultValue: "Buscar..." })}
-                            className="w-full h-8 px-3 text-xs rounded-lg bg-muted/30 border border-border/20 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:ring-1 focus:ring-primary/30"
-                            onChange={(e) => {
-                              const val = e.target.value.toLowerCase();
-                              const items = document.querySelectorAll("[data-mobile-nav-item]");
-                              items.forEach((el) => {
-                                const text = el.getAttribute("data-label")?.toLowerCase() || "";
-                                (el as HTMLElement).style.display = text.includes(val) ? "" : "none";
-                              });
-                            }}
-                          />
-                        </div>
-                      )}
-                      <nav className="p-2 space-y-0.5 overflow-y-auto max-h-[calc(100vh-8rem)]">
-                        {flatMobileItems.map((item, idx) => {
-                          const showGroup = item.group && (idx === 0 || flatMobileItems[idx - 1]?.group !== item.group);
-                          const isActive = activeSection === item.id || (item.id.startsWith("agent-chat-") && activeSection === "chat");
-                          return (
-                            <div key={item.id} data-mobile-nav-item data-label={item.label}>
-                              {showGroup && (
-                                <div className="px-3 pt-4 pb-1.5 first:pt-1">
-                                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">{item.group}</span>
-                                </div>
-                              )}
-                              <SheetClose asChild>
-                                <button
-                                  onClick={() => handleSidebarNav(item.id)}
-                                  className={cn(
-                                    "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
-                                    isActive
-                                      ? "bg-primary/10 text-primary font-medium border border-primary/15"
-                                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
-                                  )}
-                                >
-                                  <item.icon className={cn("h-4 w-4 shrink-0", isActive && "text-primary")} />
-                                  <span className="flex-1 text-left truncate">{item.label}</span>
-                                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
-                                  {item.badge && !isActive && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-primary/15 text-primary">{item.badge}</span>}
-                                </button>
-                              </SheetClose>
-                            </div>
-                          );
-                        })}
-                      </nav>
-                    </SheetContent>
-                  </Sheet>
-                </div>
-
-                {/* Loading state */}
-                {loadingAgents && activeSection === "overview" && (
-                  <Suspense fallback={<SectionLoader />}><DashboardSkeleton /></Suspense>
-                )}
-
-                {/* ═══ OVERVIEW ═══ */}
                 {activeSection === "overview" && (
-                  <ErrorBoundary>
-                    <Suspense fallback={<SectionLoader />}>
-                      <div className="space-y-5">
-                        {/* Step 1: Onboarding — only for incomplete users */}
-                        <GuidedOnboarding
-                          hasCompanyData={boardCount > 0}
-                          hasAgents={agents.length > 0}
-                          hasSentCommand={recentLogs.length > 0}
-                          onTeach={() => setShowCompanyOnboarding(true)}
-                          onHire={() => setActiveSection("library")}
-                          onCommand={() => setActiveSection("omnix")}
-                          onDismiss={() => {}}
-                        />
-
-                        {/* Hero action card — single clear CTA */}
-                        {agents.length === 0 && (
-                          <motion.div
-                            initial={{ opacity: 0, y: 15 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 sm:p-8 text-center"
-                          >
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.08),transparent_60%)]" />
-                            <div className="relative space-y-4">
-                              <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/15 border border-primary/20 flex items-center justify-center">
-                                <Rocket className="h-7 w-7 text-primary" />
-                              </div>
-                              <h2 className="font-display text-xl sm:text-2xl font-bold">{t("dashboard.hero_title", { defaultValue: "Seu time de IA começa aqui" })}</h2>
-                              <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-                                {t("dashboard.hero_desc", { defaultValue: "Contrate agentes especializados que trabalham 24/7. SDR, Copywriter, Analista e muito mais — prontos em minutos." })}
-                              </p>
-                              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-                                <Button size="lg" className="glow gap-2 px-6" onClick={() => setActiveSection("library")}>
-                                  <Bot className="h-4 w-4" />
-                                  {t("dashboard.hero_cta", { defaultValue: "Contratar Agentes" })}
-                                  <ArrowRight className="h-4 w-4" />
-                                </Button>
-                                <Button size="lg" variant="outline" className="gap-2 border-border/30" onClick={() => setActiveSection("omnix")}>
-                                  <Brain className="h-4 w-4" />
-                                  {t("dashboard.hero_cta2", { defaultValue: "Falar com Thor" })}
-                                </Button>
-                              </div>
-                            </div>
-                          </motion.div>
-                        )}
-
-                        {/* Quick status cards — only when user has agents */}
-                        {agents.length > 0 && (
-                          <>
-                            <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
-                            
-                            <ThorDailyBriefing
-                              data={{ activeAgents, totalExecutions, recentLogs, remainingCredits, usagePercentage }}
-                              onGoToThor={() => setActiveSection("omnix")}
-                              onDismiss={() => {}}
-                            />
-
-                            <QuickWins
-                              activeAgents={activeAgents}
-                              totalExecutions={totalExecutions}
-                              recentLogs={recentLogs}
-                              hasCompanyData={boardCount > 0}
-                              remainingCredits={remainingCredits}
-                              onNavigate={handleSidebarNav}
-                            />
-                        
-                            <TaskRequestPanel
-                              contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
-                              onSubmitTask={(task, mode) => {
-                                if (mode === "strategic" || mode === "guided") {
-                                  setPendingTaskMessage(task);
-                                  setActiveSection("omnix");
-                                } else {
-                                  const q = task.toLowerCase();
-                                  const matchedSlug = agents
-                                    .map(a => nameToSlug[a.name])
-                                    .filter(Boolean)
-                                    .find(slug => q.includes(slug?.replace(/_/g, " ") || ""));
-                                  if (matchedSlug) {
-                                    const agent = agents.find(a => nameToSlug[a.name] === matchedSlug);
-                                    if (agent) {
-                                      setPreviousSection(activeSection);
-                                      setSelectedAgent({ id: agent.id, name: agent.name });
-                                      setActiveSection("chat");
-                                      return;
-                                    }
-                                  }
-                                  setPendingTaskMessage(task);
-                                  setActiveSection("omnix");
-                                }
-                              }}
-                              onSelectAgent={(slug) => {
-                                const agent = agents.find(a => nameToSlug[a.name] === slug);
-                                if (agent) {
-                                  setPreviousSection(activeSection);
-                                  setSelectedAgent({ id: agent.id, name: agent.name });
-                                  setActiveSection("chat");
-                                } else {
-                                  setActiveSection("library");
-                                }
-                              }}
-                            />
-
-                            <PendingActionsPanel />
-                            <ClientCommandCenter
-                              activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                              usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                              remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                              recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
-                            />
-                          </>
-                        )}
-                      </div>
-                    </Suspense>
-                  </ErrorBoundary>
+                  <DashboardOverview
+                    loadingAgents={loadingAgents}
+                    boardCount={boardCount}
+                    agents={agents}
+                    activeAgents={activeAgents}
+                    totalExecutions={totalExecutions}
+                    totalTokensUsed={totalTokensUsed}
+                    usagePercentage={usagePercentage}
+                    estimatedSavings={estimatedSavings}
+                    credits={credits}
+                    remainingCredits={remainingCredits}
+                    subscriptions={subscriptions}
+                    recentLogs={recentLogs}
+                    tokenUsage={tokenUsage}
+                    nameToSlug={nameToSlug}
+                    activeSection={activeSection}
+                    onNavigate={handleSidebarNav}
+                    onSetActiveSection={setActiveSection}
+                    onTeach={() => setShowCompanyOnboarding(true)}
+                    onHire={() => setActiveSection("library")}
+                    onCommand={() => setActiveSection("omnix")}
+                    onSubmitTask={handleSubmitTask}
+                    onSelectAgentBySlug={handleSelectAgentBySlug}
+                  />
                 )}
 
-
-                {/* ═══ INTEGRATIONS ═══ */}
-                {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
-
-                {/* ═══ INSIGHTS HUB (Analytics + Results + AI Quality + Logs) ═══ */}
-                {activeSection === "insights" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <InsightsHub
-                      chartData={realChartData}
-                      totalExecutions={totalExecutions}
-                      recentLogs={recentLogs}
+                <DashboardSectionRenderer
+                  activeSection={activeSection}
+                  realChartData={realChartData}
+                  totalExecutions={totalExecutions}
+                  recentLogs={recentLogs}
+                  locale={locale}
+                  agents={agents}
+                  loadingAgents={loadingAgents}
+                  nameToSlug={nameToSlug}
+                  tierColors={tierColors}
+                  formatCurrency={formatCurrency}
+                  billingContent={
+                    <SettingsBillingContent
+                      credits={credits}
+                      usagePercentage={usagePercentage}
+                      remainingCredits={remainingCredits}
+                      subscriptions={subscriptions}
                       locale={locale}
-                      onGoToAgents={() => setActiveSection("agents")}
-                      onNavigate={handleSidebarNav}
-                    />
-                  </Suspense>
-                )}
-
-                {/* ═══ SETTINGS ═══ */}
-                {activeSection === "settings" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <SettingsPage billingContent={
-                      <div className="space-y-6">
-                        <h2 className="font-display text-xl font-bold">{t("dashboard.subscription_credits")}</h2>
-                        <div className="grid lg:grid-cols-2 gap-6">
-                          <div className="glass-card rounded-2xl p-6 space-y-5">
-                            <div className="flex items-center gap-3">
-                              <Coins className="h-5 w-5 text-primary" />
-                              <h3 className="font-display font-semibold">{t("dashboard.credits_label")}</h3>
-                              <Badge variant="secondary">{credits?.plan_type || "free"}</Badge>
-                            </div>
-                            <div>
-                              <div className="flex justify-between text-sm mb-2">
-                                <span>{credits?.used_credits?.toLocaleString(locale) || 0} {t("dashboard.used_label")}</span>
-                                <span>{credits?.total_credits?.toLocaleString(locale) || 0} {t("dashboard.total_label")}</span>
-                              </div>
-                              <Progress value={usagePercentage} className="h-3" />
-                              <p className="text-xs text-muted-foreground mt-2">{t("dashboard.pct_remaining", { pct: 100 - usagePercentage })}</p>
-                            </div>
-                            <TokenUpgradeDialog trigger={<Button className="w-full glow">{t("dashboard.token_upgrade")} <ArrowRight className="h-4 w-4 ml-2" /></Button>} />
-                          </div>
-                          <div className="glass-card rounded-2xl p-6 space-y-5">
-                            <div className="flex items-center gap-3">
-                              <CreditCard className="h-5 w-5 text-primary" />
-                              <h3 className="font-display font-semibold">{t("dashboard.active_subscriptions")}</h3>
-                            </div>
-                            {subscriptions.length === 0 ? (
-                              <p className="text-sm text-muted-foreground text-center py-4">{t("dashboard.no_subscriptions")}</p>
-                            ) : (
-                              <div className="space-y-2">
-                                {subscriptions.map((sub) => (
-                                  <div key={sub.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/5">
-                                    <div className="flex items-center gap-2">
-                                      <span className="w-2 h-2 rounded-full bg-primary" />
-                                      <span className="text-sm">{sub.agent_name}</span>
-                                    </div>
-                                    <span className="text-sm font-medium">{formatCurrency(sub.monthly_price)}/{t("dashboard.per_month_short", { defaultValue: "mo" })}</span>
-                                  </div>
-                                ))}
-                                <div className="pt-3 border-t border-border/10 flex justify-between">
-                                  <span className="text-sm font-medium">{t("dashboard.monthly_total")}</span>
-                                  <span className="font-display font-bold gradient-text">{formatCurrency(subscriptions.reduce((a, s) => a + s.monthly_price, 0))}</span>
-                                </div>
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                        <Suspense fallback={<SectionLoader />}><PaymentHistoryTable /></Suspense>
-                      </div>
-                    } />
-                  </Suspense>
-                )}
-
-                {/* ═══ WAR ROOM — Unified Meeting Room ═══ */}
-                {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
-
-                {/* ═══ LIVE TIMELINE ═══ */}
-                {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
-
-                {/* ═══ LIBRARY ═══ */}
-                {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
-
-                {/* ═══ SQUADS ═══ */}
-                {activeSection === "squads" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <SquadManager onNavigate={handleSidebarNav} />
-                  </Suspense>
-                )}
-
-                {/* ═══ BULK DEPLOY ═══ */}
-                {activeSection === "bulk-deploy" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <BulkAgentProvisioner />
-                  </Suspense>
-                )}
-
-                {/* ═══ AGENTS ═══ */}
-                {activeSection === "agents" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <AgentsSection
-                      agents={agents}
-                      isLoading={loadingAgents}
-                      nameToSlug={nameToSlug}
-                      tierColors={tierColors}
                       formatCurrency={formatCurrency}
-                      onOpenLibrary={() => setActiveSection("library")}
-                      onOpenThor={() => setActiveSection("omnix")}
-                      onOpenChat={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
                     />
-                  </Suspense>
-                )}
-
-                {/* ═══ EMPRESA (Company Hub) ═══ */}
-                {activeSection === "empresa" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <CompanyHub
-                      agents={agents}
-                      nameToSlug={nameToSlug}
-                      onNavigate={handleSidebarNav}
-                      onOpenAgent={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
-                      onSetupCompany={() => setShowCompanyOnboarding(true)}
-                    />
-                  </Suspense>
-                )}
-
-                {/* ═══ KANBAN BOARD ═══ */}
-                {activeSection === "kanban" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <KanbanBoard />
-                  </Suspense>
-                )}
-
-                {/* ═══ CONTENT PIPELINE ═══ */}
-                {activeSection === "content-pipeline" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <ContentPipelinePanel />
-                  </Suspense>
-                )}
-
-                {/* ═══ DELIVERABLES HUB ═══ */}
-                {activeSection === "deliverables" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <DeliverablesHub onNavigate={handleSidebarNav} />
-                  </Suspense>
-                )}
-
-                {/* ═══ SALES CALL TRANSCRIBER ═══ */}
-                {activeSection === "call-transcriber" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <SalesCallTranscriber />
-                  </Suspense>
-                )}
-
-
-                {/* ═══ OPERATIONS CENTER (Control Tower + Mission Control) ═══ */}
-                {activeSection === "operations-center" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <OperationsCenter onNavigate={handleSidebarNav} />
-                  </Suspense>
-                )}
-
-
-                {/* ═══ NEURAL NETWORK ═══ */}
-                {activeSection === "neural-network" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <AgentNeuralNetwork />
-                  </Suspense>
-                )}
-
-                {/* ═══ SCRUM BOARD ═══ */}
-                {activeSection === "scrum" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <ScrumBoard />
-                  </Suspense>
-                )}
-
-                {/* ═══ COMING SOON FEATURES ═══ */}
-                {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
-                  <ComingSoonSection feature={activeSection} />
-                )}
+                  }
+                  onNavigate={handleSidebarNav}
+                  onSetActiveSection={setActiveSection}
+                  onSelectAgent={(agent) => { setSelectedAgent(agent); setActiveSection("chat"); }}
+                  onSetupCompany={() => setShowCompanyOnboarding(true)}
+                />
               </div>
             </div>
           )}
         </div>
       </div>
 
-      {/* Thor Live Guide — floating onboarding assistant */}
       {showLiveGuide && (
         <Suspense fallback={null}>
           <ThorLiveGuide
             activeSection={activeSection}
             onNavigate={handleSidebarNav}
-            onDismiss={() => {
-              setShowLiveGuide(false);
-              localStorage.setItem("clauthor_live_guide_dismissed", "true");
-            }}
+            onDismiss={() => { setShowLiveGuide(false); localStorage.setItem("clauthor_live_guide_dismissed", "true"); }}
           />
         </Suspense>
       )}
 
-      {/* Persistent mobile bottom navigation */}
-      <MobileBottomNav
-        activeSection={activeSection}
-        onNavigate={handleSidebarNav}
-        agentCount={agents.length || undefined}
-      />
-
+      <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
     </>
   );
 };
