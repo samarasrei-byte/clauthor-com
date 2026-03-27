@@ -10,6 +10,7 @@ import { CouponRedeemer } from "./CouponRedeemer";
 import CredentialsHub from "./CredentialsHub";
 import { useTranslation } from "react-i18next";
 
+const KnowledgeBase = lazy(() => import("@/pages/KnowledgeBase"));
 import SectionLoader from "@/components/ui/section-loader";
 
 interface SettingsPageProps {
