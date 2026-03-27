@@ -671,7 +671,7 @@ const ThorGreeter = () => {
   return (
     <AnimatePresence>
       <motion.div
-        className="fixed inset-0 z-[80] pointer-events-none"
+        className="fixed inset-0 z-[9999] pointer-events-none"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
