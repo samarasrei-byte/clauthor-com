@@ -804,7 +804,10 @@
     "error_generic": "An error occurred. Please try again.",
     "terms_agree": "By continuing, you agree to our Terms and Privacy Policy.",
     "your_name": "Your name",
-    "your_email": "your@email.com"
+    "your_email": "your@email.com",
+    "google_signin": "Continue with Google",
+    "or_email": "or with email",
+    "forgot_password": "Forgot your password?"
   },
   "waitlist": {
     "offer_expires": "Offer expires in",
