@@ -56,6 +56,8 @@ const ControlTower = lazyRetry(() => import("./pages/ControlTower"));
 const Architecture = lazyRetry(() => import("./pages/Architecture"));
 const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
 const ThorOnboarding = lazyRetry(() => import("./pages/ThorOnboarding"));
+const AgentNeuralNetwork = lazyRetry(() => import("./pages/AgentNeuralNetwork"));
+const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
