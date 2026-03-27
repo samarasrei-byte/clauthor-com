@@ -33,7 +33,9 @@ interface Props {
   activeSection: string;
   onNavigate: (id: string) => void;
   onSetActiveSection: (s: string) => void;
-  onSetupCompany: () => void;
+  onTeach: () => void;
+  onHire: () => void;
+  onCommand: () => void;
   onSubmitTask: (task: string, mode: string) => void;
   onSelectAgentBySlug: (slug: string) => void;
 }
@@ -42,7 +44,7 @@ const DashboardOverview = ({
   loadingAgents, boardCount, agents, activeAgents, totalExecutions, totalTokensUsed,
   usagePercentage, estimatedSavings, credits, remainingCredits, subscriptions,
   recentLogs, tokenUsage, nameToSlug, activeSection,
-  onNavigate, onSetActiveSection, onSetupCompany, onSubmitTask, onSelectAgentBySlug,
+  onNavigate, onSetActiveSection, onTeach, onHire, onCommand, onSubmitTask, onSelectAgentBySlug,
 }: Props) => {
   const { t } = useTranslation();
 
@@ -58,9 +60,11 @@ const DashboardOverview = ({
             <GuidedOnboarding
               hasCompanyData={boardCount > 0}
               hasAgents={agents.length > 0}
-              onSetupCompany={onSetupCompany}
-              onHireAgents={() => onSetActiveSection("library")}
-              onTalkToThor={() => onSetActiveSection("omnix")}
+              hasSentCommand={recentLogs.length > 0}
+              onTeach={onTeach}
+              onHire={onHire}
+              onCommand={onCommand}
+              onDismiss={() => {}}
             />
 
             {/* Hero action card for new users */}
