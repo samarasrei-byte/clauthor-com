@@ -60,7 +60,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       </button>
 
       {/* Nav Items */}
-      <nav className="flex-1 py-2 px-1.5 space-y-px overflow-y-auto scrollbar-thin">
+      <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto scrollbar-thin">
         {items.map((item, idx) => {
           const showGroupHeader = item.group && (idx === 0 || items[idx - 1].group !== item.group);
           const isActive = activeItem === item.id;
@@ -81,7 +81,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                     undefined
                   }
                 >
-                  <span className="text-[8px] font-semibold uppercase tracking-[0.25em] text-muted-foreground/30">
+                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">
                     {item.group}
                   </span>
                 </div>
@@ -103,7 +103,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 }}
                 className={cn(
                   "w-full flex items-center gap-2.5 rounded-lg transition-all duration-150 group relative",
-                  collapsed ? "px-2.5 py-2.5 justify-center" : "px-2.5 py-[7px]",
+                  collapsed ? "px-2.5 py-2.5 justify-center" : "px-3 py-[8px]",
                   (typeof item.badge === "string" && item.badge.length > 3)
                     ? "text-muted-foreground/50 hover:text-muted-foreground/70 hover:bg-muted/5"
                     : isActive
@@ -128,7 +128,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                       initial={{ opacity: 0, width: 0 }}
                       animate={{ opacity: 1, width: "auto" }}
                       exit={{ opacity: 0, width: 0 }}
-                      className="text-[12.5px] font-normal truncate flex-1 text-left tracking-[-0.01em]"
+                      className="text-[13px] font-normal truncate flex-1 text-left tracking-[-0.01em]"
                     >
                       {item.label}
                     </motion.span>

@@ -540,75 +540,64 @@ const ClientDashboard = () => {
           {/* ═══ STANDARD MODE — padded content with header ═══ */}
           {activeSection !== "omnix" && activeSection !== "chat" && (
             <div className="h-full overflow-y-auto">
-              <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-6 pb-20 lg:pb-6 space-y-6">
-                {/* Breadcrumb + Header */}
-                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="space-y-1">
-                  <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground/60">
-                    <span>Dashboard</span><span>/</span>
-                    <span className="text-foreground/80 font-medium capitalize">{breadcrumbLabel}</span>
-                  </div>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                    <div>
-                      <div className="flex items-center gap-2">
-                       <h1 className="font-display text-2xl font-bold flex items-center gap-3">
-                          {(() => {
-                            const hour = new Date().getHours();
-                            const firstName = user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel");
-                            const TimeIcon = () => {
-                              if (hour >= 6 && hour < 18) {
-                                // Abstract sun — minimal radial burst
-                                return (
-                                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" className="shrink-0 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.5)] animate-[spin_12s_linear_infinite]">
-                                    <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
-                                    {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
-                                      const rad = (angle * Math.PI) / 180;
-                                      const x1 = 12 + 6.5 * Math.cos(rad);
-                                      const y1 = 12 + 6.5 * Math.sin(rad);
-                                      const x2 = 12 + 9 * Math.cos(rad);
-                                      const y2 = 12 + 9 * Math.sin(rad);
-                                      return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />;
-                                    })}
-                                  </svg>
-                                );
-                              }
-                              // Abstract crescent moon
-                              return (
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 text-blue-300 drop-shadow-[0_0_6px_rgba(147,197,253,0.5)]">
-                                  <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                              );
-                            };
+              <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-5 pb-24 lg:pb-6 space-y-5">
+                {/* Clean Header */}
+                <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-0.5">
+                    <h1 className="font-display text-xl sm:text-2xl font-bold flex items-center gap-2.5">
+                      {(() => {
+                        const hour = new Date().getHours();
+                        const firstName = user?.user_metadata?.full_name?.split(" ")[0] || t("dashboard.control_panel");
+                        const TimeIcon = () => {
+                          if (hour >= 6 && hour < 18) {
                             return (
-                              <>
-                                <TimeIcon />
-                                {hour < 12
-                                  ? t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}}", name: firstName })
-                                  : hour < 18
-                                    ? t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}}", name: firstName })
-                                    : t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}}", name: firstName })}
-                              </>
+                              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.4)] animate-[spin_12s_linear_infinite]">
+                                <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
+                                {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
+                                  const rad = (angle * Math.PI) / 180;
+                                  const x1 = 12 + 6.5 * Math.cos(rad);
+                                  const y1 = 12 + 6.5 * Math.sin(rad);
+                                  const x2 = 12 + 9 * Math.cos(rad);
+                                  const y2 = 12 + 9 * Math.sin(rad);
+                                  return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />;
+                                })}
+                              </svg>
                             );
-                          })()}
-                          <span className="relative flex h-2.5 w-2.5">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary" />
-                          </span>
-                        </h1>
-                        <HelpTooltip id="dashboard-intro" text={t("dashboard.help_intro", { defaultValue: "Este é seu painel de controle. Use a sidebar à esquerda para navegar entre seções." })} position="bottom" />
-                      </div>
-                      <div className="flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                        <span>{new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</span>
-                        {credits && (
-                          <span className="text-[10px] px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium whitespace-nowrap">
-                            {remainingCredits.toLocaleString(locale)} {t("dashboard.credits_short", { defaultValue: "créditos" })}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <NotificationPanel />
-                      <QuickActions />
-                    </div>
+                          }
+                          return (
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-blue-300 drop-shadow-[0_0_6px_rgba(147,197,253,0.4)]">
+                              <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          );
+                        };
+                        return (
+                          <>
+                            <TimeIcon />
+                            {hour < 12
+                              ? t("dashboard.good_morning", { defaultValue: "Bom dia, {{name}}", name: firstName })
+                              : hour < 18
+                                ? t("dashboard.good_afternoon", { defaultValue: "Boa tarde, {{name}}", name: firstName })
+                                : t("dashboard.good_evening", { defaultValue: "Boa noite, {{name}}", name: firstName })}
+                          </>
+                        );
+                      })()}
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+                      </span>
+                    </h1>
+                    <p className="text-xs text-muted-foreground flex items-center gap-2">
+                      <span>{new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</span>
+                      {credits && (
+                        <span className="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-medium text-[10px]">
+                          {remainingCredits.toLocaleString(locale)} {t("dashboard.credits_short", { defaultValue: "créditos" })}
+                        </span>
+                      )}
+                    </p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <NotificationPanel />
+                    <QuickActions />
                   </div>
                 </motion.div>
 
@@ -687,105 +676,115 @@ const ClientDashboard = () => {
                 {activeSection === "overview" && (
                   <ErrorBoundary>
                     <Suspense fallback={<SectionLoader />}>
-                      <div className="space-y-4">
+                      <div className="space-y-5">
+                        {/* Step 1: Onboarding — only for incomplete users */}
                         <GuidedOnboarding
                           hasCompanyData={boardCount > 0}
                           hasAgents={agents.length > 0}
                           hasSentCommand={recentLogs.length > 0}
                           onTeach={() => setShowCompanyOnboarding(true)}
                           onHire={() => setActiveSection("library")}
-                         onCommand={() => setActiveSection("omnix")}
-                          onDismiss={() => {}}
-                        />
-                        <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
-                        
-                        {/* Thor Daily Briefing — shows once per day */}
-                        <ThorDailyBriefing
-                          data={{
-                            activeAgents,
-                            totalExecutions,
-                            recentLogs,
-                            remainingCredits,
-                            usagePercentage,
-                          }}
-                          onGoToThor={() => setActiveSection("omnix")}
+                          onCommand={() => setActiveSection("omnix")}
                           onDismiss={() => {}}
                         />
 
-                        {/* Quick Wins — smart suggestions */}
-                        <QuickWins
-                          activeAgents={activeAgents}
-                          totalExecutions={totalExecutions}
-                          recentLogs={recentLogs}
-                          hasCompanyData={boardCount > 0}
-                          remainingCredits={remainingCredits}
-                          onNavigate={handleSidebarNav}
-                        />
+                        {/* Hero action card — single clear CTA */}
+                        {agents.length === 0 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 sm:p-8 text-center"
+                          >
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.08),transparent_60%)]" />
+                            <div className="relative space-y-4">
+                              <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/15 border border-primary/20 flex items-center justify-center">
+                                <Rocket className="h-7 w-7 text-primary" />
+                              </div>
+                              <h2 className="font-display text-xl sm:text-2xl font-bold">{t("dashboard.hero_title", { defaultValue: "Seu time de IA começa aqui" })}</h2>
+                              <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+                                {t("dashboard.hero_desc", { defaultValue: "Contrate agentes especializados que trabalham 24/7. SDR, Copywriter, Analista e muito mais — prontos em minutos." })}
+                              </p>
+                              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                                <Button size="lg" className="glow gap-2 px-6" onClick={() => setActiveSection("library")}>
+                                  <Bot className="h-4 w-4" />
+                                  {t("dashboard.hero_cta", { defaultValue: "Contratar Agentes" })}
+                                  <ArrowRight className="h-4 w-4" />
+                                </Button>
+                                <Button size="lg" variant="outline" className="gap-2 border-border/30" onClick={() => setActiveSection("omnix")}>
+                                  <Brain className="h-4 w-4" />
+                                  {t("dashboard.hero_cta2", { defaultValue: "Falar com Thor" })}
+                                </Button>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+
+                        {/* Quick status cards — only when user has agents */}
+                        {agents.length > 0 && (
+                          <>
+                            <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                            
+                            <ThorDailyBriefing
+                              data={{ activeAgents, totalExecutions, recentLogs, remainingCredits, usagePercentage }}
+                              onGoToThor={() => setActiveSection("omnix")}
+                              onDismiss={() => {}}
+                            />
+
+                            <QuickWins
+                              activeAgents={activeAgents}
+                              totalExecutions={totalExecutions}
+                              recentLogs={recentLogs}
+                              hasCompanyData={boardCount > 0}
+                              remainingCredits={remainingCredits}
+                              onNavigate={handleSidebarNav}
+                            />
                         
-                        {/* Smart task entry — simple or strategic modes */}
-                        <TaskRequestPanel
-                          contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
-                          onSubmitTask={(task, mode) => {
-                            // Strategic mode → send to THOR/Omnix for orchestration
-                            if (mode === "strategic" || mode === "guided") {
-                              setPendingTaskMessage(task);
-                              setActiveSection("omnix");
-                            } else {
-                              // Simple mode — try to match an agent
-                              const q = task.toLowerCase();
-                              const matchedSlug = agents
-                                .map(a => nameToSlug[a.name])
-                                .filter(Boolean)
-                                .find(slug => q.includes(slug?.replace(/_/g, " ") || ""));
-                              if (matchedSlug) {
-                                const agent = agents.find(a => nameToSlug[a.name] === matchedSlug);
+                            <TaskRequestPanel
+                              contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
+                              onSubmitTask={(task, mode) => {
+                                if (mode === "strategic" || mode === "guided") {
+                                  setPendingTaskMessage(task);
+                                  setActiveSection("omnix");
+                                } else {
+                                  const q = task.toLowerCase();
+                                  const matchedSlug = agents
+                                    .map(a => nameToSlug[a.name])
+                                    .filter(Boolean)
+                                    .find(slug => q.includes(slug?.replace(/_/g, " ") || ""));
+                                  if (matchedSlug) {
+                                    const agent = agents.find(a => nameToSlug[a.name] === matchedSlug);
+                                    if (agent) {
+                                      setPreviousSection(activeSection);
+                                      setSelectedAgent({ id: agent.id, name: agent.name });
+                                      setActiveSection("chat");
+                                      return;
+                                    }
+                                  }
+                                  setPendingTaskMessage(task);
+                                  setActiveSection("omnix");
+                                }
+                              }}
+                              onSelectAgent={(slug) => {
+                                const agent = agents.find(a => nameToSlug[a.name] === slug);
                                 if (agent) {
                                   setPreviousSection(activeSection);
                                   setSelectedAgent({ id: agent.id, name: agent.name });
                                   setActiveSection("chat");
-                                  return;
+                                } else {
+                                  setActiveSection("library");
                                 }
-                              }
-                              // Fallback to THOR
-                              setPendingTaskMessage(task);
-                              setActiveSection("omnix");
-                            }
-                          }}
-                          onSelectAgent={(slug) => {
-                            const agent = agents.find(a => nameToSlug[a.name] === slug);
-                            if (agent) {
-                              setPreviousSection(activeSection);
-                              setSelectedAgent({ id: agent.id, name: agent.name });
-                              setActiveSection("chat");
-                            } else {
-                              setActiveSection("library");
-                            }
-                          }}
-                        />
-                        
-                        {/* Quick router for direct agent access */}
-                        <SmartAgentRouter
-                          contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
-                          onSelectAgent={(slug) => {
-                            const agent = agents.find(a => nameToSlug[a.name] === slug);
-                            if (agent) {
-                              setPreviousSection(activeSection);
-                              setSelectedAgent({ id: agent.id, name: agent.name });
-                              setActiveSection("chat");
-                            } else {
-                              setActiveSection("library");
-                            }
-                          }}
-                          onAskThor={() => setActiveSection("omnix")}
-                        />
-                        
-                        <PendingActionsPanel />
-                        <ClientCommandCenter
-                          activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                          usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                          remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                          recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
-                        />
+                              }}
+                            />
+
+                            <PendingActionsPanel />
+                            <ClientCommandCenter
+                              activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                              usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                              remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                              recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
+                            />
+                          </>
+                        )}
                       </div>
                     </Suspense>
                   </ErrorBoundary>
