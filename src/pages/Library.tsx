@@ -38,6 +38,14 @@ const DEPT_COLORS: Record<string, { gradient: string; border: string; text: stri
   customer_success: { gradient: "from-amber-500/20 to-amber-500/5", border: "border-amber-500/30", text: "text-amber-400", bg: "bg-amber-500/10" },
   finance: { gradient: "from-cyan-500/20 to-cyan-500/5", border: "border-cyan-500/30", text: "text-cyan-400", bg: "bg-cyan-500/10" },
   operations: { gradient: "from-orange-500/20 to-orange-500/5", border: "border-orange-500/30", text: "text-orange-400", bg: "bg-orange-500/10" },
+  security: { gradient: "from-red-500/20 to-red-500/5", border: "border-red-500/30", text: "text-red-400", bg: "bg-red-500/10" },
+  engineering: { gradient: "from-cyan-500/20 to-cyan-500/5", border: "border-cyan-500/30", text: "text-cyan-400", bg: "bg-cyan-500/10" },
+  data_analytics: { gradient: "from-indigo-500/20 to-indigo-500/5", border: "border-indigo-500/30", text: "text-indigo-400", bg: "bg-indigo-500/10" },
+  communications: { gradient: "from-pink-500/20 to-pink-500/5", border: "border-pink-500/30", text: "text-pink-400", bg: "bg-pink-500/10" },
+  talent: { gradient: "from-amber-500/20 to-amber-500/5", border: "border-amber-500/30", text: "text-amber-400", bg: "bg-amber-500/10" },
+  innovation: { gradient: "from-violet-500/20 to-violet-500/5", border: "border-violet-500/30", text: "text-violet-400", bg: "bg-violet-500/10" },
+  it_infrastructure: { gradient: "from-slate-500/20 to-slate-500/5", border: "border-slate-500/30", text: "text-slate-400", bg: "bg-slate-500/10" },
+  strategy: { gradient: "from-emerald-500/20 to-emerald-500/5", border: "border-emerald-500/30", text: "text-emerald-400", bg: "bg-emerald-500/10" },
 };
 
 const DEFAULT_DEPT_COLOR = { gradient: "from-primary/20 to-primary/5", border: "border-primary/30", text: "text-primary", bg: "bg-primary/10" };

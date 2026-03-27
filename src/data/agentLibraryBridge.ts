@@ -30,6 +30,14 @@ const DEPT_ICON_MAP: Record<string, LucideIcon> = {
   customer_success: HeartHandshake,
   finance: DollarSign,
   operations: Settings,
+  security: Shield,
+  engineering: Cpu,
+  data_analytics: BarChart3,
+  communications: Megaphone,
+  talent: Users,
+  innovation: Lightbulb,
+  it_infrastructure: Monitor,
+  strategy: Compass,
 };
 
 // ─── Dept → default tier mapping ───
@@ -41,6 +49,14 @@ const DEPT_TIER_MAP: Record<string, string> = {
   customer_success: "intermediate",
   finance: "advanced",
   operations: "advanced",
+  security: "enterprise",
+  engineering: "advanced",
+  data_analytics: "advanced",
+  communications: "intermediate",
+  talent: "intermediate",
+  innovation: "advanced",
+  it_infrastructure: "intermediate",
+  strategy: "enterprise",
 };
 
 // ─── Dept → default price tier mapping ───
@@ -52,6 +68,14 @@ const DEPT_PRICE_MAP: Record<string, PriceTier> = {
   customer_success: "entry",
   finance: "mid",
   operations: "mid",
+  security: "premium",
+  engineering: "mid",
+  data_analytics: "mid",
+  communications: "entry",
+  talent: "entry",
+  innovation: "mid",
+  it_infrastructure: "entry",
+  strategy: "premium",
 };
 
 /**
