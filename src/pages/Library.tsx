@@ -17,6 +17,7 @@ import SmartAgentFinder from "@/components/library/SmartAgentFinder";
 import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
 import { getPriceDisplay, getPrice, getRegion, formatPrice } from "@/lib/pricing";
 import { supabase } from "@/integrations/supabase/client";
+import { createPayPalPlan, handleInlineApproval } from "@/lib/paypal-helpers";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import {
