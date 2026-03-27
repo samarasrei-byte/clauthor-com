@@ -99,7 +99,7 @@ const DashboardOverview = ({
             {/* Advanced panels — only when user has agents */}
             {agents.length > 0 && (
               <>
-                <CompanyBoardAlert onSetup={onSetupCompany} />
+                <CompanyBoardAlert onSetup={onTeach} />
 
                 <ThorDailyBriefing
                   data={{ activeAgents, totalExecutions, recentLogs, remainingCredits, usagePercentage }}
