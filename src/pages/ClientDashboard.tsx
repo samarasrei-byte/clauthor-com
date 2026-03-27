@@ -388,6 +388,8 @@ const ClientDashboard = () => {
     "call-transcriber": t("dashboard.call_transcriber", { defaultValue: "Chamadas" }),
     squads: "Squads",
     "bulk-deploy": "Deploy Agents",
+    "neural-network": "Neural Network",
+    scrum: "Scrum Board",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 
