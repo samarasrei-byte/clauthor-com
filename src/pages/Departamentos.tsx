@@ -18,6 +18,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { createPayPalPlan, handleInlineApproval } from "@/lib/paypal-helpers";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import Footer from "@/components/Footer";
 import { getRegion, formatPrice } from "@/lib/pricing";
 import {
   departments, totalPrometheusCost, totalCltCost, totalTokens,
@@ -601,6 +602,8 @@ const Departamentos = () => {
         onApprove={handleApproveCheckout}
         onCancel={() => { setCheckoutData(null); setHiringDeptId(null); }}
       />
+
+      <Footer />
     </div>
   );
 };
