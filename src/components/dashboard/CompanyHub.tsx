@@ -20,11 +20,7 @@ import { DEPARTMENTS, SLUG_TO_DEPT } from "@/data/departmentMap";
 const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPipelinePanel"));
 const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHub"));
 
-const SectionLoader = () => (
-  <div className="flex items-center justify-center py-16">
-    <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-  </div>
-);
+import SectionLoader from "@/components/ui/section-loader";
 
 interface CompanyHubProps {
   agents: any[];

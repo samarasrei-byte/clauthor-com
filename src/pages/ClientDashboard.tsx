@@ -6,9 +6,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
-  LayoutDashboard, Bot, BarChart3, Activity, CreditCard,
-  Sparkles, ArrowRight, Coins, Settings, Users, Brain, MessageSquare, Eye, BookOpen, Plug, ChevronDown, ChevronLeft,
-  Rocket, Network, Target, Mic, Store, Cpu, Building2, KanbanSquare, Layers3,
+  LayoutDashboard, Bot, BarChart3, CreditCard,
+  Sparkles, ArrowRight, Coins, Settings, Brain, MessageSquare, Plug, ChevronDown, ChevronLeft,
+  Rocket, Building2, KanbanSquare, Layers3,
   Video, Clock, Radar, Orbit, LayoutGrid
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
@@ -42,6 +42,7 @@ import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
 import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
 import { SLUG_TO_DEPT, DEPARTMENTS } from "@/data/departmentMap";
+import { TIER_COLORS as tierColors } from "@/lib/tier-colors";
 import { agentIcons } from "@/data/libraryAgentData";
 import HelpTooltip from "@/components/HelpTooltip";
 import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
@@ -78,12 +79,7 @@ const AgentNeuralNetwork = lazy(() => import("@/pages/AgentNeuralNetwork"));
 const ScrumBoard = lazy(() => import("@/pages/ScrumBoard"));
 
 const DashboardSkeleton = lazy(() => import("@/components/dashboard/DashboardSkeleton"));
-
-const SectionLoader = () => (
-  <div className="flex items-center justify-center py-16">
-    <div className="w-6 h-6 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-  </div>
-);
+import SectionLoader from "@/components/ui/section-loader";
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -341,12 +337,7 @@ const ClientDashboard = () => {
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
 
-  const tierColors: Record<string, string> = {
-    basic: "bg-muted text-muted-foreground",
-    intermediate: "bg-accent/15 text-accent-foreground",
-    advanced: "bg-accent-emerald/15 text-accent-emerald",
-    enterprise: "bg-primary/15 text-primary",
-  };
+  
 
   const formatCurrency = (value: number) => {
     return new Intl.NumberFormat(locale, { style: "currency", currency: locale.startsWith("pt") ? "BRL" : "USD", minimumFractionDigits: 0 }).format(value / 100);
@@ -368,7 +359,6 @@ const ClientDashboard = () => {
   };
 
   const breadcrumbMap: Record<string, string> = useMemo(() => ({
-    results: t("dashboard.results", { defaultValue: "Results" }),
     overview: t("dashboard.command_center"),
     omnix: t("dashboard.ai_assistant_label", { defaultValue: "AI Assistant" }),
     agents: t("dashboard.agents_tab"),
@@ -378,8 +368,6 @@ const ClientDashboard = () => {
     integrations: t("dashboard.integrations", { defaultValue: "Integrations" }),
     "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
     "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
-    "control-tower": "Control Tower",
-    "mission-control": "Mission Control",
     "operations-center": t("dashboard.operations_center", { defaultValue: "Centro de Operações" }),
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
@@ -803,12 +791,6 @@ const ClientDashboard = () => {
                   </ErrorBoundary>
                 )}
 
-                {/* ═══ EQUIPE (AGENT CONTACTS) ═══ */}
-                {activeSection === "equipe" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <SquadChat agents={agents} onRequestAgent={(name) => handleSidebarNav("library")} />
-                  </Suspense>
-                )}
 
                 {/* ═══ INTEGRATIONS ═══ */}
                 {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
@@ -970,19 +952,6 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
-                {/* ═══ CONTROL TOWER (legacy route) ═══ */}
-                {activeSection === "control-tower" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <OperationsCenter onNavigate={handleSidebarNav} defaultTab="tower" />
-                  </Suspense>
-                )}
-
-                {/* ═══ MISSION CONTROL (legacy route) ═══ */}
-                {activeSection === "mission-control" && (
-                  <Suspense fallback={<SectionLoader />}>
-                    <OperationsCenter onNavigate={handleSidebarNav} defaultTab="mission" />
-                  </Suspense>
-                )}
 
                 {/* ═══ NEURAL NETWORK ═══ */}
                 {activeSection === "neural-network" && (
