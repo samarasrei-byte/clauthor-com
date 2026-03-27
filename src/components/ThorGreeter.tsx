@@ -542,10 +542,20 @@ const ThorGreeter = () => {
     }
   }, [input, isLoading, user, location.pathname, voiceEnabled, speak, stopTTS, lang]);
 
-  const minimize = () => { stopTTS(); setPhase("minimized"); setShowChat(false); };
+  const minimize = () => {
+    stopTTS();
+    // Abort any running stream
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+    }
+    setIsLoading(false);
+    setPhase("minimized");
+    setShowChat(false);
+  };
   const activate = () => {
     setPhase("active");
-    if (messages.length === 0) {
+    if (messagesRef.current.length === 0) {
       const isPt = lang.startsWith("pt");
       const greeting = isPt ? "Voltei! 😄 Em que posso te ajudar?" : "I'm back! 😄 How can I help?";
       setMessages([{ role: "assistant", content: greeting }]);
