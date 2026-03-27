@@ -687,105 +687,115 @@ const ClientDashboard = () => {
                 {activeSection === "overview" && (
                   <ErrorBoundary>
                     <Suspense fallback={<SectionLoader />}>
-                      <div className="space-y-4">
+                      <div className="space-y-5">
+                        {/* Step 1: Onboarding — only for incomplete users */}
                         <GuidedOnboarding
                           hasCompanyData={boardCount > 0}
                           hasAgents={agents.length > 0}
                           hasSentCommand={recentLogs.length > 0}
                           onTeach={() => setShowCompanyOnboarding(true)}
                           onHire={() => setActiveSection("library")}
-                         onCommand={() => setActiveSection("omnix")}
-                          onDismiss={() => {}}
-                        />
-                        <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
-                        
-                        {/* Thor Daily Briefing — shows once per day */}
-                        <ThorDailyBriefing
-                          data={{
-                            activeAgents,
-                            totalExecutions,
-                            recentLogs,
-                            remainingCredits,
-                            usagePercentage,
-                          }}
-                          onGoToThor={() => setActiveSection("omnix")}
+                          onCommand={() => setActiveSection("omnix")}
                           onDismiss={() => {}}
                         />
 
-                        {/* Quick Wins — smart suggestions */}
-                        <QuickWins
-                          activeAgents={activeAgents}
-                          totalExecutions={totalExecutions}
-                          recentLogs={recentLogs}
-                          hasCompanyData={boardCount > 0}
-                          remainingCredits={remainingCredits}
-                          onNavigate={handleSidebarNav}
-                        />
+                        {/* Hero action card — single clear CTA */}
+                        {agents.length === 0 && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 15 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="relative overflow-hidden rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-6 sm:p-8 text-center"
+                          >
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_50%,hsl(var(--primary)/0.08),transparent_60%)]" />
+                            <div className="relative space-y-4">
+                              <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/15 border border-primary/20 flex items-center justify-center">
+                                <Rocket className="h-7 w-7 text-primary" />
+                              </div>
+                              <h2 className="font-display text-xl sm:text-2xl font-bold">{t("dashboard.hero_title", { defaultValue: "Seu time de IA começa aqui" })}</h2>
+                              <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
+                                {t("dashboard.hero_desc", { defaultValue: "Contrate agentes especializados que trabalham 24/7. SDR, Copywriter, Analista e muito mais — prontos em minutos." })}
+                              </p>
+                              <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+                                <Button size="lg" className="glow gap-2 px-6" onClick={() => setActiveSection("library")}>
+                                  <Bot className="h-4 w-4" />
+                                  {t("dashboard.hero_cta", { defaultValue: "Contratar Agentes" })}
+                                  <ArrowRight className="h-4 w-4" />
+                                </Button>
+                                <Button size="lg" variant="outline" className="gap-2 border-border/30" onClick={() => setActiveSection("omnix")}>
+                                  <Brain className="h-4 w-4" />
+                                  {t("dashboard.hero_cta2", { defaultValue: "Falar com Thor" })}
+                                </Button>
+                              </div>
+                            </div>
+                          </motion.div>
+                        )}
+
+                        {/* Quick status cards — only when user has agents */}
+                        {agents.length > 0 && (
+                          <>
+                            <CompanyBoardAlert onSetup={() => setShowCompanyOnboarding(true)} />
+                            
+                            <ThorDailyBriefing
+                              data={{ activeAgents, totalExecutions, recentLogs, remainingCredits, usagePercentage }}
+                              onGoToThor={() => setActiveSection("omnix")}
+                              onDismiss={() => {}}
+                            />
+
+                            <QuickWins
+                              activeAgents={activeAgents}
+                              totalExecutions={totalExecutions}
+                              recentLogs={recentLogs}
+                              hasCompanyData={boardCount > 0}
+                              remainingCredits={remainingCredits}
+                              onNavigate={handleSidebarNav}
+                            />
                         
-                        {/* Smart task entry — simple or strategic modes */}
-                        <TaskRequestPanel
-                          contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
-                          onSubmitTask={(task, mode) => {
-                            // Strategic mode → send to THOR/Omnix for orchestration
-                            if (mode === "strategic" || mode === "guided") {
-                              setPendingTaskMessage(task);
-                              setActiveSection("omnix");
-                            } else {
-                              // Simple mode — try to match an agent
-                              const q = task.toLowerCase();
-                              const matchedSlug = agents
-                                .map(a => nameToSlug[a.name])
-                                .filter(Boolean)
-                                .find(slug => q.includes(slug?.replace(/_/g, " ") || ""));
-                              if (matchedSlug) {
-                                const agent = agents.find(a => nameToSlug[a.name] === matchedSlug);
+                            <TaskRequestPanel
+                              contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
+                              onSubmitTask={(task, mode) => {
+                                if (mode === "strategic" || mode === "guided") {
+                                  setPendingTaskMessage(task);
+                                  setActiveSection("omnix");
+                                } else {
+                                  const q = task.toLowerCase();
+                                  const matchedSlug = agents
+                                    .map(a => nameToSlug[a.name])
+                                    .filter(Boolean)
+                                    .find(slug => q.includes(slug?.replace(/_/g, " ") || ""));
+                                  if (matchedSlug) {
+                                    const agent = agents.find(a => nameToSlug[a.name] === matchedSlug);
+                                    if (agent) {
+                                      setPreviousSection(activeSection);
+                                      setSelectedAgent({ id: agent.id, name: agent.name });
+                                      setActiveSection("chat");
+                                      return;
+                                    }
+                                  }
+                                  setPendingTaskMessage(task);
+                                  setActiveSection("omnix");
+                                }
+                              }}
+                              onSelectAgent={(slug) => {
+                                const agent = agents.find(a => nameToSlug[a.name] === slug);
                                 if (agent) {
                                   setPreviousSection(activeSection);
                                   setSelectedAgent({ id: agent.id, name: agent.name });
                                   setActiveSection("chat");
-                                  return;
+                                } else {
+                                  setActiveSection("library");
                                 }
-                              }
-                              // Fallback to THOR
-                              setPendingTaskMessage(task);
-                              setActiveSection("omnix");
-                            }
-                          }}
-                          onSelectAgent={(slug) => {
-                            const agent = agents.find(a => nameToSlug[a.name] === slug);
-                            if (agent) {
-                              setPreviousSection(activeSection);
-                              setSelectedAgent({ id: agent.id, name: agent.name });
-                              setActiveSection("chat");
-                            } else {
-                              setActiveSection("library");
-                            }
-                          }}
-                        />
-                        
-                        {/* Quick router for direct agent access */}
-                        <SmartAgentRouter
-                          contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
-                          onSelectAgent={(slug) => {
-                            const agent = agents.find(a => nameToSlug[a.name] === slug);
-                            if (agent) {
-                              setPreviousSection(activeSection);
-                              setSelectedAgent({ id: agent.id, name: agent.name });
-                              setActiveSection("chat");
-                            } else {
-                              setActiveSection("library");
-                            }
-                          }}
-                          onAskThor={() => setActiveSection("omnix")}
-                        />
-                        
-                        <PendingActionsPanel />
-                        <ClientCommandCenter
-                          activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                          usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                          remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                          recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
-                        />
+                              }}
+                            />
+
+                            <PendingActionsPanel />
+                            <ClientCommandCenter
+                              activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                              usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                              remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                              recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={handleSidebarNav}
+                            />
+                          </>
+                        )}
                       </div>
                     </Suspense>
                   </ErrorBoundary>
