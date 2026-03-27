@@ -60,12 +60,12 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
       <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="absolute inset-0">
         <defs>
           <radialGradient id="core-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.2" />
-            <stop offset="40%" stopColor="hsl(var(--primary))" stopOpacity="0.06" />
-            <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
+            <stop offset="0%" stopColor="hsl(var(--accent-violet))" stopOpacity="0.2" />
+            <stop offset="40%" stopColor="hsl(var(--accent-violet))" stopOpacity="0.06" />
+            <stop offset="100%" stopColor="hsl(var(--accent-violet))" stopOpacity="0" />
           </radialGradient>
           <radialGradient id="inner-glow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.3" />
+            <stop offset="0%" stopColor="hsl(var(--accent-violet))" stopOpacity="0.3" />
             <stop offset="100%" stopColor="transparent" stopOpacity="0" />
           </radialGradient>
           <filter id="glow-sm">
@@ -89,7 +89,7 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
             cx={pt.x}
             cy={pt.y}
             r={1}
-            fill="hsl(var(--primary))"
+            fill="hsl(var(--accent-violet))"
             initial={{ opacity: 0 }}
             animate={isSpeaking ? {
               opacity: [0.05, 0.3 + Math.random() * 0.4, 0.05],
@@ -114,7 +114,7 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
             <motion.line
               key={`conn-${i}`}
               x1={pt.x} y1={pt.y} x2={next.x} y2={next.y}
-              stroke="hsl(var(--primary))"
+              stroke="hsl(var(--accent-violet))"
               strokeWidth="0.3"
               animate={isSpeaking ? {
                 strokeOpacity: [0, 0.25, 0],
@@ -134,7 +134,7 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
         <motion.circle
           cx={center} cy={center} r={r + 4}
           fill="none"
-          stroke="hsl(var(--primary))"
+          stroke="hsl(var(--accent-violet))"
           strokeWidth={isSpeaking ? 1.2 : 0.6}
           strokeOpacity={isSpeaking ? 0.5 : 0.15}
           strokeDasharray={isSpeaking ? "2 6" : "1 12"}
@@ -147,7 +147,7 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
         <motion.circle
           cx={center} cy={center} r={r + 16}
           fill="none"
-          stroke="hsl(var(--primary))"
+          stroke="hsl(var(--accent-violet))"
           strokeWidth="0.4"
           strokeOpacity={0.1}
           strokeDasharray="3 20"
@@ -160,7 +160,7 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
         <motion.circle
           cx={center} cy={center} r={r + 24}
           fill="none"
-          stroke="hsl(var(--primary))"
+          stroke="hsl(var(--accent-violet))"
           strokeWidth="0.3"
           strokeOpacity={0.06}
           strokeDasharray="1 25"
@@ -173,7 +173,7 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
         <motion.circle
           cx={center} cy={center} r={r * 0.44}
           fill="none"
-          stroke="hsl(var(--primary))"
+          stroke="hsl(var(--accent-violet))"
           strokeWidth="1"
           animate={isSpeaking ? {
             r: [r * 0.44, r * 0.48, r * 0.44],
@@ -198,7 +198,7 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
               x1={x1} y1={y1}
               x2={center + Math.cos(angle) * (baseR + len)}
               y2={center + Math.sin(angle) * (baseR + len)}
-              stroke="hsl(var(--primary))"
+              stroke="hsl(var(--accent-violet))"
               strokeWidth="1.2"
               strokeLinecap="round"
               filter="url(#glow-sm)"
@@ -238,7 +238,7 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
             <motion.circle
               key={`particle-${i}`}
               r={1.5 - i * 0.2}
-              fill="hsl(var(--primary))"
+              fill="hsl(var(--accent-violet))"
               filter="url(#glow-sm)"
               animate={{
                 cx: [
@@ -274,7 +274,7 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
             x={center - r * 0.4 + i * (r * 0.16)}
             width="0.5"
             height="8"
-            fill="hsl(var(--primary))"
+            fill="hsl(var(--accent-violet))"
             rx="0.25"
             animate={{
               y: [center - r, center + r],
@@ -301,8 +301,8 @@ const HUDElement = ({ label, value, position }: { label: string; value: string; 
     animate={{ opacity: 1, x: 0 }}
     transition={{ delay: 1.5 }}
   >
-    <span className="text-[7px] font-mono uppercase tracking-[0.25em] text-primary/40">{label}</span>
-    <span className="text-[9px] font-mono text-primary/70 font-bold">{value}</span>
+    <span className="text-[7px] font-mono uppercase tracking-[0.25em] text-accent-violet/40">{label}</span>
+    <span className="text-[9px] font-mono text-accent-violet/70 font-bold">{value}</span>
   </motion.div>
 );
 
@@ -502,7 +502,7 @@ const ThorGreeter = () => {
       >
         <motion.div
           className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--primary) / 0.06) 0%, hsl(var(--background) / 0.7) 60%, hsl(var(--background) / 0.85) 100%)" }}
+          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.7) 60%, hsl(var(--background) / 0.85) 100%)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 1.5 }}
@@ -525,13 +525,13 @@ const ThorGreeter = () => {
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
-                boxShadow: `0 0 60px hsl(var(--primary) / 0.3), 0 0 120px hsl(var(--primary) / 0.1), inset 0 0 30px hsl(var(--primary) / 0.2)`,
-                border: "1px solid hsl(var(--primary) / 0.2)",
+                boxShadow: `0 0 60px hsl(var(--accent-violet) / 0.3), 0 0 120px hsl(var(--accent-violet) / 0.1), inset 0 0 30px hsl(var(--accent-violet) / 0.2)`,
+                border: "1px solid hsl(var(--accent-violet) / 0.2)",
               }}
             >
               <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
               <motion.div className="absolute inset-0" style={{
-                background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--primary) / 0.04) 2px, hsl(var(--primary) / 0.04) 3px)",
+                background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--accent-violet) / 0.04) 2px, hsl(var(--accent-violet) / 0.04) 3px)",
               }} />
             </div>
           </div>
@@ -557,20 +557,20 @@ const ThorGreeter = () => {
               transition={{ delay: 1.4 }}
             >
               <motion.span
-                className="h-px bg-primary/30"
+                className="h-px bg-accent-violet/30"
                 initial={{ width: 0 }}
                 animate={{ width: 40 }}
                 transition={{ delay: 1.5, duration: 0.8 }}
               />
               <motion.span
-                className="text-[8px] font-mono uppercase tracking-[0.5em] text-primary/60"
+                className="text-[8px] font-mono uppercase tracking-[0.5em] text-accent-violet/60"
                 animate={{ opacity: [0.4, 1, 0.4] }}
                 transition={{ duration: 1.5, repeat: Infinity }}
               >
                 Neural Sync
               </motion.span>
               <motion.span
-                className="h-px bg-primary/30"
+                className="h-px bg-accent-violet/30"
                 initial={{ width: 0 }}
                 animate={{ width: 40 }}
                 transition={{ delay: 1.5, duration: 0.8 }}
@@ -588,7 +588,7 @@ const ThorGreeter = () => {
             {Array.from({ length: 5 }).map((_, i) => (
               <motion.div
                 key={i}
-                className="w-6 h-[2px] rounded-full bg-primary"
+                className="w-6 h-[2px] rounded-full bg-accent-violet"
                 animate={{
                   opacity: [0.1, 0.8, 0.1],
                   scaleX: [0.3, 1, 0.3],
@@ -624,29 +624,29 @@ const ThorGreeter = () => {
           transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
         >
           <span className="absolute inset-0" style={{
-            background: "conic-gradient(from 0deg, transparent 30%, hsl(var(--primary) / 0.7), hsl(var(--primary) / 0.15), transparent 75%)",
+            background: "conic-gradient(from 0deg, transparent 30%, hsl(var(--accent-violet) / 0.7), hsl(var(--accent-violet) / 0.15), transparent 75%)",
           }} />
         </motion.span>
 
         {/* Pulse rings */}
         <motion.span
-          className="absolute inset-[-8px] rounded-full border border-primary/10"
+          className="absolute inset-[-8px] rounded-full border border-accent-violet/10"
           animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0, 0.2] }}
           transition={{ duration: 3, repeat: Infinity }}
         />
         <motion.span
-          className="absolute inset-[-14px] rounded-full border border-primary/5"
+          className="absolute inset-[-14px] rounded-full border border-accent-violet/5"
           animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0, 0.1] }}
           transition={{ duration: 3, repeat: Infinity, delay: 0.5 }}
         />
 
-        <span className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-background/95 backdrop-blur-2xl overflow-hidden border border-primary/10">
+        <span className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-background/95 backdrop-blur-2xl overflow-hidden border border-accent-violet/10">
           <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover rounded-full" />
           {/* Scanline overlay */}
           <span className="absolute inset-0 rounded-full" style={{
-            background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--primary) / 0.03) 2px, hsl(var(--primary) / 0.03) 3px)",
+            background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--accent-violet) / 0.03) 2px, hsl(var(--accent-violet) / 0.03) 3px)",
           }} />
-          <span className="absolute inset-0 rounded-full shadow-[inset_0_0_15px_hsl(var(--primary)/0.15)]" />
+          <span className="absolute inset-0 rounded-full shadow-[inset_0_0_15px_hsl(var(--accent-violet)/0.15)]" />
         </span>
 
         {/* Online indicator */}
@@ -656,7 +656,7 @@ const ThorGreeter = () => {
         </span>
 
         {/* Hover tooltip */}
-        <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-[8px] font-mono tracking-[0.3em] uppercase text-primary/50 opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap bg-background/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-primary/10">
+        <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-[8px] font-mono tracking-[0.3em] uppercase text-accent-violet/50 opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap bg-background/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-accent-violet/10">
           THOR · ONLINE
         </span>
       </motion.button>
@@ -676,7 +676,7 @@ const ThorGreeter = () => {
         <div
           className="absolute inset-0 pointer-events-auto"
           onClick={minimize}
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--primary) / 0.03) 0%, transparent 70%)" }}
+          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.03) 0%, transparent 70%)" }}
         />
 
         {/* Main holographic entity */}
@@ -691,13 +691,13 @@ const ThorGreeter = () => {
           <div className="absolute -top-3 right-0 sm:-right-4 flex items-center gap-1.5 z-20">
             <button
               onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
-              className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-primary/10 text-primary/50 hover:text-primary hover:border-primary/30 transition-all"
+              className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
             >
               {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
             </button>
             <button
               onClick={minimize}
-              className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-primary/10 text-primary/50 hover:text-primary hover:border-primary/30 transition-all"
+              className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -720,25 +720,25 @@ const ThorGreeter = () => {
                 left: "50%",
                 top: "50%",
                 transform: "translate(-50%, -50%)",
-                border: "1px solid hsl(var(--primary) / 0.25)",
+                border: "1px solid hsl(var(--accent-violet) / 0.25)",
               }}
               animate={isSpeaking ? {
                 boxShadow: [
-                  "0 0 30px hsl(var(--primary) / 0.15), 0 0 80px hsl(var(--primary) / 0.08)",
-                  "0 0 60px hsl(var(--primary) / 0.35), 0 0 140px hsl(var(--primary) / 0.15)",
-                  "0 0 30px hsl(var(--primary) / 0.15), 0 0 80px hsl(var(--primary) / 0.08)",
+                  "0 0 30px hsl(var(--accent-violet) / 0.15), 0 0 80px hsl(var(--accent-violet) / 0.08)",
+                  "0 0 60px hsl(var(--accent-violet) / 0.35), 0 0 140px hsl(var(--accent-violet) / 0.15)",
+                  "0 0 30px hsl(var(--accent-violet) / 0.15), 0 0 80px hsl(var(--accent-violet) / 0.08)",
                 ],
               } : {
-                boxShadow: "0 0 40px hsl(var(--primary) / 0.2), 0 0 80px hsl(var(--primary) / 0.08)",
+                boxShadow: "0 0 40px hsl(var(--accent-violet) / 0.2), 0 0 80px hsl(var(--accent-violet) / 0.08)",
               }}
               transition={{ duration: 1.5, repeat: Infinity }}
             >
               <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
               <motion.div className="absolute inset-0" style={{
-                background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--primary) / 0.03) 2px, hsl(var(--primary) / 0.03) 3px)",
+                background: "repeating-linear-gradient(0deg, transparent 0px, transparent 2px, hsl(var(--accent-violet) / 0.03) 2px, hsl(var(--accent-violet) / 0.03) 3px)",
               }} />
               {/* Glow overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-primary/5" />
+              <div className="absolute inset-0 bg-gradient-to-t from-accent-violet/10 via-transparent to-accent-violet/5" />
             </motion.div>
 
             {/* HUD data points */}
@@ -752,14 +752,14 @@ const ThorGreeter = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
             >
-              <div className="flex items-center gap-2 bg-background/80 backdrop-blur-xl px-4 py-1.5 rounded-full border border-primary/15 shadow-lg shadow-primary/5">
+              <div className="flex items-center gap-2 bg-background/80 backdrop-blur-xl px-4 py-1.5 rounded-full border border-accent-violet/15 shadow-lg shadow-accent-violet/5">
                 <motion.span
                   className="w-1.5 h-1.5 rounded-full bg-emerald-500"
                   animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 />
                 <span className="text-[9px] font-mono font-bold tracking-[0.35em] uppercase text-foreground/90">THOR</span>
-                <span className="text-[7px] font-mono text-primary/40 tracking-wider">AI</span>
+                <span className="text-[7px] font-mono text-accent-violet/40 tracking-wider">AI</span>
               </div>
             </motion.div>
           </div>
@@ -772,9 +772,9 @@ const ThorGreeter = () => {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               key={lastMessage.content.slice(0, 20)}
             >
-              <div className="relative bg-background/70 backdrop-blur-2xl border border-primary/10 rounded-2xl px-5 py-4 shadow-2xl shadow-primary/5">
+              <div className="relative bg-background/70 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl px-5 py-4 shadow-2xl shadow-accent-violet/5">
                 {/* Connector to orb */}
-                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-5 h-5 rotate-45 bg-background/70 border-l border-t border-primary/10" />
+                <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 w-5 h-5 rotate-45 bg-background/70 border-l border-t border-accent-violet/10" />
                 <div className="text-[13px] text-foreground/90 prose prose-sm dark:prose-invert max-w-none [&_p]:mb-1 leading-relaxed relative z-10">
                   <ReactMarkdown>{lastMessage.content}</ReactMarkdown>
                 </div>
@@ -783,7 +783,7 @@ const ThorGreeter = () => {
                     {Array.from({ length: 30 }).map((_, i) => (
                       <motion.div
                         key={i}
-                        className="w-[1px] rounded-full bg-primary/50"
+                        className="w-[1px] rounded-full bg-accent-violet/50"
                         animate={{ height: [1.5, Math.random() * 10 + 3, 1.5] }}
                         transition={{ duration: 0.25 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.025 }}
                       />
@@ -814,7 +814,7 @@ const ThorGreeter = () => {
                 <button
                   key={q.label}
                   onClick={() => sendMessage(q.label)}
-                  className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-background/60 backdrop-blur-xl border border-primary/10 hover:border-primary/30 hover:bg-primary/5 hover:shadow-lg hover:shadow-primary/10 transition-all text-[11px] font-mono tracking-wide"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-background/60 backdrop-blur-xl border border-accent-violet/10 hover:border-accent-violet/30 hover:bg-accent-violet/5 hover:shadow-lg hover:shadow-accent-violet/10 transition-all text-[11px] font-mono tracking-wide"
                 >
                   <span>{q.icon}</span>{q.label}
                 </button>
@@ -831,15 +831,15 @@ const ThorGreeter = () => {
                 exit={{ height: 0, opacity: 0 }}
                 className="mt-4 w-[92vw] sm:w-[420px] overflow-hidden"
               >
-                <div className="bg-background/85 backdrop-blur-2xl border border-primary/10 rounded-2xl overflow-hidden shadow-2xl shadow-primary/5">
+                <div className="bg-background/85 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl overflow-hidden shadow-2xl shadow-accent-violet/5">
                   {/* Header bar */}
-                  <div className="px-4 py-2 border-b border-primary/5 flex items-center gap-2">
+                  <div className="px-4 py-2 border-b border-accent-violet/5 flex items-center gap-2">
                     <motion.span
                       className="w-1.5 h-1.5 rounded-full bg-emerald-500"
                       animate={{ opacity: [0.5, 1, 0.5] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
-                    <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-primary/40">Neural Channel · Active</span>
+                    <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-accent-violet/40">Neural Channel · Active</span>
                   </div>
 
                   <div className="max-h-[40vh] overflow-y-auto p-3 space-y-3">
@@ -851,14 +851,14 @@ const ThorGreeter = () => {
                         className={`flex gap-2.5 ${msg.role === "user" ? "flex-row-reverse" : ""}`}
                       >
                         {msg.role === "assistant" && (
-                          <div className="w-6 h-6 rounded-full overflow-hidden border border-primary/15 shrink-0 mt-0.5 shadow-md shadow-primary/10">
+                          <div className="w-6 h-6 rounded-full overflow-hidden border border-accent-violet/15 shrink-0 mt-0.5 shadow-md shadow-accent-violet/10">
                             <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
                           </div>
                         )}
                         <div className={`max-w-[85%] rounded-xl px-3 py-2.5 ${
                           msg.role === "user"
-                            ? "bg-primary/90 text-primary-foreground shadow-lg shadow-primary/20"
-                            : "bg-muted/20 border border-primary/5"
+                            ? "bg-accent-violet/90 text-accent-violet-foreground shadow-lg shadow-accent-violet/20"
+                            : "bg-muted/20 border border-accent-violet/5"
                         }`}>
                           {msg.role === "assistant" ? (
                             <div className="text-[12px] prose prose-sm dark:prose-invert max-w-none [&_p]:mb-1 leading-relaxed">
@@ -872,13 +872,13 @@ const ThorGreeter = () => {
                     ))}
                     {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
                       <div className="flex gap-2.5">
-                        <div className="w-6 h-6 rounded-full overflow-hidden border border-primary/15 shrink-0">
+                        <div className="w-6 h-6 rounded-full overflow-hidden border border-accent-violet/15 shrink-0">
                           <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
                         </div>
-                        <div className="bg-muted/20 rounded-xl px-3 py-2.5 border border-primary/5">
+                        <div className="bg-muted/20 rounded-xl px-3 py-2.5 border border-accent-violet/5">
                           <div className="flex gap-1.5">
                             {[0, 1, 2].map(i => (
-                              <motion.span key={i} className="w-1.5 h-1.5 rounded-full bg-primary/60"
+                              <motion.span key={i} className="w-1.5 h-1.5 rounded-full bg-accent-violet/60"
                                 animate={{ scale: [1, 1.5, 1], opacity: [0.3, 1, 0.3] }}
                                 transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.15 }}
                               />
@@ -890,19 +890,19 @@ const ThorGreeter = () => {
                     <div ref={messagesEndRef} />
                   </div>
 
-                  <div className="p-3 border-t border-primary/5">
+                  <div className="p-3 border-t border-accent-violet/5">
                     <form onSubmit={(e) => { e.preventDefault(); sendMessage(); }} className="flex gap-2">
                       <input
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
                         placeholder={lang.startsWith("pt") ? "Fale com o Thor..." : "Talk to Thor..."}
                         disabled={isLoading}
-                        className="flex-1 bg-muted/10 border border-primary/10 rounded-lg px-3 py-2.5 text-xs font-mono focus:outline-none focus:border-primary/30 focus:shadow-md focus:shadow-primary/5 transition-all placeholder:text-muted-foreground/30"
+                        className="flex-1 bg-muted/10 border border-accent-violet/10 rounded-lg px-3 py-2.5 text-xs font-mono focus:outline-none focus:border-accent-violet/30 focus:shadow-md focus:shadow-accent-violet/5 transition-all placeholder:text-muted-foreground/30"
                       />
                       <button
                         type="submit"
                         disabled={!input.trim() || isLoading}
-                        className="h-9 w-9 rounded-lg bg-primary/90 hover:bg-primary text-primary-foreground flex items-center justify-center shrink-0 disabled:opacity-30 transition-all shadow-lg shadow-primary/20 hover:shadow-primary/40"
+                        className="h-9 w-9 rounded-lg bg-accent-violet/90 hover:bg-accent-violet text-accent-violet-foreground flex items-center justify-center shrink-0 disabled:opacity-30 transition-all shadow-lg shadow-accent-violet/20 hover:shadow-accent-violet/40"
                       >
                         {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
                       </button>
@@ -927,12 +927,12 @@ const ThorGreeter = () => {
                   onChange={(e) => setInput(e.target.value)}
                   placeholder={lang.startsWith("pt") ? "Fale com o Thor..." : "Talk to Thor..."}
                   disabled={isLoading}
-                  className="flex-1 bg-background/60 backdrop-blur-xl border border-primary/10 rounded-full px-4 py-2.5 text-xs font-mono focus:outline-none focus:border-primary/25 focus:shadow-lg focus:shadow-primary/5 transition-all placeholder:text-muted-foreground/30"
+                  className="flex-1 bg-background/60 backdrop-blur-xl border border-accent-violet/10 rounded-full px-4 py-2.5 text-xs font-mono focus:outline-none focus:border-accent-violet/25 focus:shadow-lg focus:shadow-accent-violet/5 transition-all placeholder:text-muted-foreground/30"
                 />
                 <button
                   type="submit"
                   disabled={!input.trim() || isLoading}
-                  className="h-9 w-9 rounded-full bg-primary/80 hover:bg-primary text-primary-foreground flex items-center justify-center shrink-0 disabled:opacity-30 transition-all shadow-lg shadow-primary/20"
+                  className="h-9 w-9 rounded-full bg-accent-violet/80 hover:bg-accent-violet text-accent-violet-foreground flex items-center justify-center shrink-0 disabled:opacity-30 transition-all shadow-lg shadow-accent-violet/20"
                 >
                   {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
                 </button>
