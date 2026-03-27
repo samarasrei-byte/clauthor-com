@@ -109,8 +109,8 @@ const BulkAgentProvisioner = () => {
   };
 
   const provisionFromTemplates = useCallback(async () => {
-    if (!user) { toast.error("You need to be logged in"); return; }
-    if (totalSelectedAgents === 0) { toast.error("Select at least one department"); return; }
+    if (!user) { toast.error("Você precisa estar logado"); return; }
+    if (totalSelectedAgents === 0) { toast.error("Selecione pelo menos um departamento"); return; }
 
     setStatus("provisioning");
     setProgress(0);
@@ -176,13 +176,13 @@ const BulkAgentProvisioner = () => {
     } catch (err) {
       console.error("Provision error:", err);
       setStatus("error");
-      toast.error("Error during provisioning");
+      toast.error("Erro durante a implantação");
     }
   }, [user, selectedDepts, totalSelectedAgents]);
 
   const provisionFromCSV = useCallback(async () => {
-    if (!user) { toast.error("You need to be logged in"); return; }
-    if (!csvData.trim()) { toast.error("Paste CSV/JSON data first"); return; }
+    if (!user) { toast.error("Você precisa estar logado"); return; }
+    if (!csvData.trim()) { toast.error("Cole os dados CSV/JSON primeiro"); return; }
 
     setStatus("provisioning");
     setProgress(0);
@@ -206,7 +206,7 @@ const BulkAgentProvisioner = () => {
         }
       }
 
-      if (agents.length === 0) { toast.error("No valid agents found in data"); setStatus("idle"); return; }
+      if (agents.length === 0) { toast.error("Nenhum agente válido encontrado"); setStatus("idle"); return; }
 
       const records = agents.map(a => ({
         user_id: user.id,
@@ -228,7 +228,7 @@ const BulkAgentProvisioner = () => {
     } catch (err) {
       console.error("CSV import error:", err);
       setStatus("error");
-      toast.error("Import error — check your data format");
+      toast.error("Erro na importação — verifique o formato dos dados");
     }
   }, [user, csvData]);
 

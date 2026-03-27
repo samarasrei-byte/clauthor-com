@@ -1110,12 +1110,6 @@ const HomePage = () => {
                 <a href="https://linkedin.com/company/clauthor" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-8 h-8 rounded-lg border border-border bg-card/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-colors">
                   <Linkedin className="h-3.5 w-3.5" strokeWidth={1.5} />
                 </a>
-                <a href="https://twitter.com/clauthor" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="w-8 h-8 rounded-lg border border-border bg-card/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-colors">
-                  <Twitter className="h-3.5 w-3.5" strokeWidth={1.5} />
-                </a>
-                <a href="https://github.com/clauthor" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="w-8 h-8 rounded-lg border border-border bg-card/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-colors">
-                  <Github className="h-3.5 w-3.5" strokeWidth={1.5} />
-                </a>
               </div>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-x-12 gap-y-4">
