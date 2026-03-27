@@ -122,6 +122,8 @@ const App = () => (
                   <Route path="/monix" element={<MonixCommandCenter />} />
                   <Route path="/omnix" element={<OmnixCommandCenter />} />
                   <Route path="/control-tower" element={<ControlTower />} />
+                  <Route path="/neural-network" element={<AgentNeuralNetwork />} />
+                  <Route path="/scrum" element={<ScrumBoard />} />
                 </Route>
 
                 {/* Admin */}
