@@ -109,8 +109,8 @@ const BulkAgentProvisioner = () => {
   };
 
   const provisionFromTemplates = useCallback(async () => {
-    if (!user) { toast.error("You need to be logged in"); return; }
-    if (totalSelectedAgents === 0) { toast.error("Select at least one department"); return; }
+    if (!user) { toast.error("Você precisa estar logado"); return; }
+    if (totalSelectedAgents === 0) { toast.error("Selecione pelo menos um departamento"); return; }
 
     setStatus("provisioning");
     setProgress(0);
@@ -176,13 +176,13 @@ const BulkAgentProvisioner = () => {
     } catch (err) {
       console.error("Provision error:", err);
       setStatus("error");
-      toast.error("Error during provisioning");
+      toast.error("Erro durante a implantação");
     }
   }, [user, selectedDepts, totalSelectedAgents]);
 
   const provisionFromCSV = useCallback(async () => {
-    if (!user) { toast.error("You need to be logged in"); return; }
-    if (!csvData.trim()) { toast.error("Paste CSV/JSON data first"); return; }
+    if (!user) { toast.error("Você precisa estar logado"); return; }
+    if (!csvData.trim()) { toast.error("Cole os dados CSV/JSON primeiro"); return; }
 
     setStatus("provisioning");
     setProgress(0);
@@ -206,7 +206,7 @@ const BulkAgentProvisioner = () => {
         }
       }
 
-      if (agents.length === 0) { toast.error("No valid agents found in data"); setStatus("idle"); return; }
+      if (agents.length === 0) { toast.error("Nenhum agente válido encontrado"); setStatus("idle"); return; }
 
       const records = agents.map(a => ({
         user_id: user.id,
@@ -228,7 +228,7 @@ const BulkAgentProvisioner = () => {
     } catch (err) {
       console.error("CSV import error:", err);
       setStatus("error");
-      toast.error("Import error — check your data format");
+      toast.error("Erro na importação — verifique o formato dos dados");
     }
   }, [user, csvData]);
 
@@ -246,15 +246,15 @@ const BulkAgentProvisioner = () => {
         <div>
           <h2 className="text-2xl font-bold text-foreground flex items-center gap-2">
             <Rocket className="w-6 h-6 text-primary" />
-            Bulk Agent Provisioner
+            Provisionamento em Massa
           </h2>
           <p className="text-muted-foreground text-sm mt-1">
-            Deploy your entire AI workforce in minutes — not hours.
+            Implante toda a sua força de trabalho IA em minutos — não horas.
           </p>
         </div>
         {status === "done" && (
           <Badge variant="outline" className="text-green-500 border-green-500/30 bg-green-500/10 px-3 py-1">
-            <CheckCircle className="w-4 h-4 mr-1" /> {deployedCount} agents deployed
+            <CheckCircle className="w-4 h-4 mr-1" /> {deployedCount} agentes implantados
           </Badge>
         )}
       </div>
@@ -283,10 +283,10 @@ const BulkAgentProvisioner = () => {
             <Users className="w-4 h-4" /> Templates
           </TabsTrigger>
           <TabsTrigger value="import" className="gap-1.5 text-xs sm:text-sm">
-            <Upload className="w-4 h-4" /> Import
+            <Upload className="w-4 h-4" /> Importar
           </TabsTrigger>
           <TabsTrigger value="ai" className="gap-1.5 text-xs sm:text-sm">
-            <Sparkles className="w-4 h-4" /> AI Generate
+            <Sparkles className="w-4 h-4" /> Gerar com IA
           </TabsTrigger>
         </TabsList>
 
@@ -294,10 +294,10 @@ const BulkAgentProvisioner = () => {
         <TabsContent value="templates" className="space-y-4 mt-4">
           <div className="flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              Select departments to deploy. Each includes pre-configured squads and agents.
+              Selecione departamentos para implantar. Cada um inclui squads e agentes pré-configurados.
             </p>
             <Button variant="ghost" size="sm" onClick={selectAll} className="text-xs">
-              {Array.from(selections.values()).every(s => s.selected) ? "Deselect All" : "Select All"}
+              {Array.from(selections.values()).every(s => s.selected) ? "Desmarcar Todos" : "Selecionar Todos"}
             </Button>
           </div>
 
@@ -395,8 +395,8 @@ const BulkAgentProvisioner = () => {
               <div className="flex items-center gap-3">
                 <Brain className="w-5 h-5 text-primary" />
                 <div>
-                  <p className="text-sm font-medium">AI Skill Enhancement</p>
-                  <p className="text-xs text-muted-foreground">Auto-generate detailed system prompts with AI after deployment</p>
+                  <p className="text-sm font-medium">Aprimoramento com IA</p>
+                  <p className="text-xs text-muted-foreground">Gerar prompts de sistema detalhados com IA após a implantação</p>
                 </div>
               </div>
               <Switch checked={aiEnhance} onCheckedChange={setAiEnhance} />
@@ -412,16 +412,16 @@ const BulkAgentProvisioner = () => {
               className="gap-2"
             >
               {status === "provisioning" ? (
-                <><Loader2 className="w-4 h-4 animate-spin" /> Deploying...</>
+                <><Loader2 className="w-4 h-4 animate-spin" /> Implantando...</>
               ) : status === "done" ? (
-                <><Zap className="w-4 h-4" /> Deploy More</>
+                <><Zap className="w-4 h-4" /> Implantar Mais</>
               ) : (
-                <><Rocket className="w-4 h-4" /> Deploy {totalSelectedAgents} Agents</>
+                <><Rocket className="w-4 h-4" /> Implantar {totalSelectedAgents} Agentes</>
               )}
             </Button>
             {totalSelectedAgents > 0 && status === "idle" && (
               <p className="text-xs text-muted-foreground">
-                {selectedDepts.length} departments • {totalSelectedAgents} agents ready
+                {selectedDepts.length} departamentos • {totalSelectedAgents} agentes prontos
               </p>
             )}
           </div>
@@ -433,19 +433,19 @@ const BulkAgentProvisioner = () => {
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <FileJson className="w-5 h-5 text-primary" />
-                CSV / JSON Import
+                Importar CSV / JSON
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Paste your agent data below. Supports CSV (with headers) or JSON array format.
+                Cole seus dados de agentes abaixo. Suporta formato CSV (com cabeçalhos) ou array JSON.
               </p>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <Card className="border-border/20 bg-muted/30">
                   <CardContent className="p-3">
                     <p className="text-xs font-medium mb-1 flex items-center gap-1">
-                      <FileSpreadsheet className="w-3 h-3" /> CSV Format
+                      <FileSpreadsheet className="w-3 h-3" /> Formato CSV
                     </p>
                     <pre className="text-[10px] text-muted-foreground font-mono">
 {`name,tier,description,instructions
@@ -457,7 +457,7 @@ Support Agent,basic,Tier 1 support,Handle tickets`}
                 <Card className="border-border/20 bg-muted/30">
                   <CardContent className="p-3">
                     <p className="text-xs font-medium mb-1 flex items-center gap-1">
-                      <FileJson className="w-3 h-3" /> JSON Format
+                      <FileJson className="w-3 h-3" /> Formato JSON
                     </p>
                     <pre className="text-[10px] text-muted-foreground font-mono">
 {`[
@@ -471,7 +471,7 @@ Support Agent,basic,Tier 1 support,Handle tickets`}
               </div>
 
               <Textarea
-                placeholder="Paste CSV or JSON data here..."
+                placeholder="Cole dados CSV ou JSON aqui..."
                 value={csvData}
                 onChange={e => setCsvData(e.target.value)}
                 className="min-h-[160px] font-mono text-xs"
@@ -479,9 +479,9 @@ Support Agent,basic,Tier 1 support,Handle tickets`}
 
               <Button onClick={provisionFromCSV} disabled={status === "provisioning" || !csvData.trim()} className="gap-2">
                 {status === "provisioning" ? (
-                  <><Loader2 className="w-4 h-4 animate-spin" /> Importing...</>
+                  <><Loader2 className="w-4 h-4 animate-spin" /> Importando...</>
                 ) : (
-                  <><Upload className="w-4 h-4" /> Import Agents</>
+                  <><Upload className="w-4 h-4" /> Importar Agentes</>
                 )}
               </Button>
             </CardContent>
@@ -494,17 +494,17 @@ Support Agent,basic,Tier 1 support,Handle tickets`}
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-primary" />
-                AI Auto-Generation
+                Geração Automática com IA
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Describe your business and needs. AI will generate a customized agent fleet with optimized skills, 
-                system prompts, and integrations tailored to your industry.
+                Descreva seu negócio e necessidades. A IA gerará uma frota de agentes personalizada com habilidades, 
+                prompts e integrações otimizadas para seu setor.
               </p>
 
               <Textarea
-                placeholder="Ex: I run a SaaS company with 50 employees. We need agents for marketing automation, customer support, and sales outreach. Our main channels are LinkedIn, email, and WhatsApp..."
+                placeholder="Ex: Tenho uma empresa SaaS com 50 funcionários. Preciso de agentes para automação de marketing, suporte ao cliente e prospecção de vendas. Nossos principais canais são LinkedIn, email e WhatsApp..."
                 className="min-h-[120px]"
               />
 
@@ -517,12 +517,11 @@ Support Agent,basic,Tier 1 support,Handle tickets`}
               </div>
 
               <Button className="gap-2" disabled>
-                <Brain className="w-4 h-4" /> Generate Fleet
-                <Badge variant="secondary" className="text-[10px] ml-1">Coming Soon</Badge>
+                <Brain className="w-4 h-4" /> Gerar Frota
+                <Badge variant="secondary" className="text-[10px] ml-1">Em Breve</Badge>
               </Button>
               <p className="text-xs text-muted-foreground">
-                AI generation will use your business context to create agents with optimized skills and prompts.
-                Available when Claude API key is configured.
+                A geração com IA usará o contexto do seu negócio para criar agentes com habilidades e prompts otimizados.
               </p>
             </CardContent>
           </Card>

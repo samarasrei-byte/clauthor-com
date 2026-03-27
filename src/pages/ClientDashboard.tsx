@@ -255,11 +255,11 @@ const ClientDashboard = () => {
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: workGroup },
     { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Video, group: workGroup },
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
-    { id: "neural-network", label: "Neural Network", icon: Orbit, group: monitorGroup },
-    { id: "scrum", label: "Scrum Board", icon: LayoutGrid, group: monitorGroup },
+    { id: "neural-network", label: "Rede Neural", icon: Orbit, group: monitorGroup },
+    { id: "scrum", label: "Quadro Scrum", icon: LayoutGrid, group: monitorGroup },
     { id: "live-timeline", label: "Timeline", icon: Clock, badge: pendingTaskCount || undefined, group: monitorGroup },
     { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Centro de Operações" }), icon: Radar, group: monitorGroup },
-    { id: "bulk-deploy", label: "Deploy Agents", icon: Rocket, group: systemGroup },
+    { id: "bulk-deploy", label: "Implantar Agentes", icon: Rocket, group: systemGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
@@ -294,9 +294,9 @@ const ClientDashboard = () => {
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     squads: "Squads",
-    "bulk-deploy": "Deploy Agents",
-    "neural-network": "Neural Network",
-    scrum: "Scrum Board",
+    "bulk-deploy": "Implantar Agentes",
+    "neural-network": "Rede Neural",
+    scrum: "Quadro Scrum",
     chat: selectedAgent?.name || "Chat",
   }), [t, selectedAgent]);
 

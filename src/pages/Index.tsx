@@ -19,7 +19,7 @@ import {
   Star, Receipt, Globe, Briefcase, DollarSign, MessageSquare,
   Activity, Terminal, ChevronRight, Cpu, Crosshair,
   Building2, Clock, Rocket, BarChart3, Fingerprint, Sparkles, Layers3, Signal,
-  Linkedin, Twitter, Github
+  Linkedin,
 } from "lucide-react";
 import { useRef, useMemo, useState, useCallback } from "react";
 import HelpTooltip from "@/components/HelpTooltip";
@@ -279,7 +279,7 @@ const HomePage = () => {
       url: "https://clauthor-com.lovable.app",
       logo: "https://clauthor-com.lovable.app/favicon.png",
       description: t("home.seo_description"),
-      sameAs: ["https://linkedin.com/company/clauthor", "https://twitter.com/clauthor"],
+      sameAs: ["https://linkedin.com/company/clauthor"],
     });
     return () => {
       const el = document.getElementById("jsonld-org");
@@ -1109,12 +1109,6 @@ const HomePage = () => {
               <div className="flex items-center gap-3">
                 <a href="https://linkedin.com/company/clauthor" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="w-8 h-8 rounded-lg border border-border bg-card/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-colors">
                   <Linkedin className="h-3.5 w-3.5" strokeWidth={1.5} />
-                </a>
-                <a href="https://twitter.com/clauthor" target="_blank" rel="noopener noreferrer" aria-label="Twitter" className="w-8 h-8 rounded-lg border border-border bg-card/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-colors">
-                  <Twitter className="h-3.5 w-3.5" strokeWidth={1.5} />
-                </a>
-                <a href="https://github.com/clauthor" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="w-8 h-8 rounded-lg border border-border bg-card/30 flex items-center justify-center text-muted-foreground hover:text-primary hover:border-primary/20 transition-colors">
-                  <Github className="h-3.5 w-3.5" strokeWidth={1.5} />
                 </a>
               </div>
             </div>

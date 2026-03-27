@@ -35,7 +35,7 @@ const ROIBenchmark = () => {
           <div className="flex items-center gap-3 mb-3">
             <div className="h-px flex-1 bg-gradient-to-r from-primary/20 to-transparent" />
             <span className="font-mono text-[11px] sm:text-[10px] uppercase tracking-[0.3em] text-primary/60">
-              {t("home.roi_section_badge", { defaultValue: "ROI CALCULATOR" })}
+              {t("home.roi_section_badge", { defaultValue: "CALCULADORA DE ROI" })}
             </span>
             <div className="h-px flex-1 bg-gradient-to-l from-primary/20 to-transparent" />
           </div>
@@ -59,7 +59,7 @@ const ROIBenchmark = () => {
               <div className="flex items-center gap-2">
                 <Users className="h-4 w-4 text-primary/70" />
                 <span className="font-mono text-xs uppercase tracking-wider text-muted-foreground">
-                  {t("home.roi_employees_label", { defaultValue: "Employees to replace" })}
+                  {t("home.roi_employees_label", { defaultValue: "Funcionários a substituir" })}
                 </span>
               </div>
               <div className="px-3 py-1.5 rounded-lg bg-primary/10 border border-primary/20">
@@ -87,26 +87,26 @@ const ROIBenchmark = () => {
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-2 h-2 rounded-full bg-destructive/60" />
                 <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-muted-foreground">
-                  {t("home.roi_traditional", { defaultValue: "TRADITIONAL HIRING" })}
+                  {t("home.roi_traditional", { defaultValue: "CONTRATAÇÃO TRADICIONAL" })}
                 </span>
               </div>
               <p className="font-display text-2xl sm:text-3xl font-bold text-muted-foreground line-through mb-1">
-                {fmt(data.cltWithOverhead)}<span className="text-sm font-normal">/mo</span>
+                {fmt(data.cltWithOverhead)}<span className="text-sm font-normal">/mês</span>
               </p>
               <p className="font-mono text-[10px] text-muted-foreground/60">
-                {t("home.roi_includes_overhead", { defaultValue: "Incl. taxes, benefits, office (~80% overhead)" })}
+                {t("home.roi_includes_overhead", { defaultValue: "Incl. impostos, benefícios, escritório (~80% encargos)" })}
               </p>
               <div className="mt-4 space-y-1.5">
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>{t("home.roi_base_salary", { defaultValue: "Base salary" })}</span>
+                  <span>{t("home.roi_base_salary", { defaultValue: "Salário base" })}</span>
                   <span>{fmt(data.cltMonthly)}</span>
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>{t("home.roi_overhead", { defaultValue: "Overhead (80%)" })}</span>
+                  <span>{t("home.roi_overhead", { defaultValue: "Encargos (80%)" })}</span>
                   <span>{fmt(data.cltWithOverhead - data.cltMonthly)}</span>
                 </div>
                 <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>{t("home.roi_annual", { defaultValue: "Annual cost" })}</span>
+                  <span>{t("home.roi_annual", { defaultValue: "Custo anual" })}</span>
                   <span>{fmt(data.cltAnnual * 1.8)}</span>
                 </div>
               </div>
@@ -120,22 +120,22 @@ const ROIBenchmark = () => {
                 <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-primary">CLAUTHOR AI</span>
               </div>
               <p className="font-display text-2xl sm:text-3xl font-bold text-primary mb-1">
-                {fmt(data.aiMonthly)}<span className="text-sm font-normal text-primary/60">/mo</span>
+                {fmt(data.aiMonthly)}<span className="text-sm font-normal text-primary/60">/mês</span>
               </p>
               <p className="font-mono text-[10px] text-primary/60">
-                {t("home.roi_ai_desc", { defaultValue: "24/7, no overhead, instant scale" })}
+                {t("home.roi_ai_desc", { defaultValue: "24/7, sem encargos, escala instantânea" })}
               </p>
               <div className="mt-4 space-y-1.5">
                 <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">{t("home.roi_per_agent", { defaultValue: "Per agent" })}</span>
+                  <span className="text-muted-foreground">{t("home.roi_per_agent", { defaultValue: "Por agente" })}</span>
                   <span className="text-primary">{fmt(agentCost)}</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">{t("home.roi_availability", { defaultValue: "Availability" })}</span>
+                  <span className="text-muted-foreground">{t("home.roi_availability", { defaultValue: "Disponibilidade" })}</span>
                   <span className="text-primary">24/7/365</span>
                 </div>
                 <div className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">{t("home.roi_annual", { defaultValue: "Annual cost" })}</span>
+                  <span className="text-muted-foreground">{t("home.roi_annual", { defaultValue: "Custo anual" })}</span>
                   <span className="text-primary">{fmt(data.aiAnnual)}</span>
                 </div>
               </div>
@@ -152,7 +152,7 @@ const ROIBenchmark = () => {
             <div className="flex items-center justify-center gap-2 mb-2">
               <Sparkles className="h-4 w-4 text-primary" />
               <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-primary/80">
-                {t("home.roi_your_savings", { defaultValue: "YOUR MONTHLY SAVINGS" })}
+                {t("home.roi_your_savings", { defaultValue: "SUA ECONOMIA MENSAL" })}
               </span>
             </div>
             <p className="font-display text-3xl sm:text-5xl font-bold gradient-text mb-1">
@@ -160,12 +160,12 @@ const ROIBenchmark = () => {
             </p>
             <div className="flex items-center justify-center gap-1.5">
               <TrendingDown className="h-3.5 w-3.5 text-accent-emerald" />
-              <span className="font-mono text-xs text-accent-emerald font-bold">{data.savingsPct}% {t("home.roi_less_cost", { defaultValue: "less cost" })}</span>
+              <span className="font-mono text-xs text-accent-emerald font-bold">{data.savingsPct}% {t("home.roi_less_cost", { defaultValue: "mais barato" })}</span>
             </div>
             <div className="mt-4">
               <Link to="/waitlist">
                 <Button className="glow rounded-xl h-11 px-8 gap-2 font-display font-bold text-xs uppercase tracking-wider">
-                  {t("home.roi_cta", { defaultValue: "START SAVING NOW" })}
+                  {t("home.roi_cta", { defaultValue: "COMECE A ECONOMIZAR" })}
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               </Link>

@@ -22,17 +22,17 @@ import { WORKFORCE } from "@/data/workforceArchitecture";
 // ── Column config ──
 const COLUMNS = [
   { id: "backlog", label: "Backlog", icon: Circle, color: "text-muted-foreground", bg: "bg-muted/20" },
-  { id: "open", label: "To Do", icon: Target, color: "text-blue-400", bg: "bg-blue-500/5" },
-  { id: "in_progress", label: "In Progress", icon: Flame, color: "text-amber-400", bg: "bg-amber-500/5" },
-  { id: "review", label: "Review", icon: AlertTriangle, color: "text-purple-400", bg: "bg-purple-500/5" },
-  { id: "done", label: "Done", icon: CheckCircle2, color: "text-emerald-400", bg: "bg-emerald-500/5" },
+  { id: "open", label: "A Fazer", icon: Target, color: "text-blue-400", bg: "bg-blue-500/5" },
+  { id: "in_progress", label: "Em Progresso", icon: Flame, color: "text-amber-400", bg: "bg-amber-500/5" },
+  { id: "review", label: "Revisão", icon: AlertTriangle, color: "text-purple-400", bg: "bg-purple-500/5" },
+  { id: "done", label: "Concluído", icon: CheckCircle2, color: "text-emerald-400", bg: "bg-emerald-500/5" },
 ];
 
 const PRIORITIES = [
-  { value: "critical", label: "Critical", color: "bg-red-500", icon: Zap },
-  { value: "high", label: "High", color: "bg-orange-500", icon: AlertTriangle },
-  { value: "medium", label: "Medium", color: "bg-amber-500", icon: ArrowRight },
-  { value: "low", label: "Low", color: "bg-blue-500", icon: Circle },
+  { value: "critical", label: "Crítico", color: "bg-red-500", icon: Zap },
+  { value: "high", label: "Alta", color: "bg-orange-500", icon: AlertTriangle },
+  { value: "medium", label: "Média", color: "bg-amber-500", icon: ArrowRight },
+  { value: "low", label: "Baixa", color: "bg-blue-500", icon: Circle },
 ];
 
 interface TaskRow {

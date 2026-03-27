@@ -26,11 +26,11 @@ const OperationsCenter = ({ onNavigate, defaultTab = "tower" }: OperationsCenter
         <TabsList className="bg-muted/10 border border-border/10 h-9">
           <TabsTrigger value="tower" className="text-xs gap-1.5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary">
             <Radar className="h-3.5 w-3.5" />
-            Control Tower
+            Torre de Controle
           </TabsTrigger>
           <TabsTrigger value="mission" className="text-xs gap-1.5 data-[state=active]:bg-primary/10 data-[state=active]:text-primary">
             <Orbit className="h-3.5 w-3.5" />
-            Mission Control
+            Controle de Missão
           </TabsTrigger>
         </TabsList>
 

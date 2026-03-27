@@ -21,7 +21,7 @@ const HowItWorks = () => {
       icon: Bot,
       title: "Agente Individual",
       subtitle: "1 especialista em IA para uma tarefa específica",
-      price: `A partir de ${formatPrice(0.25, lang)}/mês`,
+      price: `A partir de ${formatPrice(497, lang)}/mês`,
       bestFor: "Resolver um problema pontual",
       example: "\"Preciso de um SDR para prospectar no LinkedIn\"",
       features: [
@@ -43,7 +43,7 @@ const HowItWorks = () => {
       icon: Building2,
       title: "Departamento Pronto",
       subtitle: "Time completo pré-configurado para um setor",
-      price: `A partir de ${formatPrice(0.25, lang)}/mês`,
+      price: `A partir de ${formatPrice(2997, lang)}/mês`,
       bestFor: "Substituir ou reforçar um departamento inteiro",
       example: "\"Quero um time de vendas completo operando amanhã\"",
       features: [
