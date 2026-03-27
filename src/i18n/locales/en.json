@@ -807,7 +807,10 @@
     "your_email": "your@email.com",
     "google_signin": "Continue with Google",
     "or_email": "or with email",
-    "forgot_password": "Forgot your password?"
+    "forgot_password": "Forgot your password?",
+    "trust_secure": "Encrypted data",
+    "trust_fast": "Access in seconds",
+    "trust_companies": "Trusted by companies"
   },
   "waitlist": {
     "offer_expires": "Offer expires in",
