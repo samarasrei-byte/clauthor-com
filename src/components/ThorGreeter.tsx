@@ -44,7 +44,8 @@ const NeuralCore = ({ isSpeaking, size = 240 }: { isSpeaking: boolean; size?: nu
         size: 0.5 + Math.random() * 2.5,
         speed: 3 + Math.random() * 8,
         delay: Math.random() * 5,
-        glow: i % 4 === 0,
+      type: i % 5,
+      glow: i % 4 === 0,
         drift: (Math.random() - 0.5) * 30,
         driftY: (Math.random() - 0.5) * 30,
       };
