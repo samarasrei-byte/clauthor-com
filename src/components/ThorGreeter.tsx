@@ -354,14 +354,29 @@ const ThorGreeter = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const proactiveIndexRef = useRef(0);
   const proactiveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const messagesRef = useRef<ThorMessage[]>([]);
   const location = useLocation();
   const { user } = useAuth();
   const lang = navigator.language || "en";
+
+  // Keep messagesRef in sync to avoid stale closures
+  useEffect(() => { messagesRef.current = messages; }, [messages]);
 
   const { speak, stop: stopTTS, isSpeaking } = useElevenLabsTTS({
     onStart: () => {},
     onEnd: () => {},
   });
+
+  // Safety: force-stop native speech after 30s to prevent infinite talking
+  useEffect(() => {
+    if (!isSpeaking) return;
+    const timeout = setTimeout(() => {
+      console.warn("[Thor] Safety timeout: stopping speech after 30s");
+      stopTTS();
+    }, 30_000);
+    return () => clearTimeout(timeout);
+  }, [isSpeaking, stopTTS]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -391,18 +406,29 @@ const ThorGreeter = () => {
     }
   }, [phase]);
 
+  // Proactive messages — clear on hasInteracted or phase change
   useEffect(() => {
+    if (proactiveTimerRef.current) {
+      clearInterval(proactiveTimerRef.current);
+      proactiveTimerRef.current = null;
+    }
     if (phase !== "minimized" || hasInteracted) return;
     proactiveTimerRef.current = setInterval(() => {
       const msgs = getProactiveMessages(location.pathname, lang);
       const idx = proactiveIndexRef.current % msgs.length;
       proactiveIndexRef.current++;
+      stopTTS(); // Stop any ongoing speech before new proactive msg
       setPhase("active");
       setMessages(prev => [...prev, { role: "assistant", content: msgs[idx] }]);
       if (voiceEnabled) speak(msgs[idx].replace(/[*#🚀]/g, ""), THOR_VOICE_ID);
     }, PROACTIVE_INTERVAL);
-    return () => { if (proactiveTimerRef.current) clearInterval(proactiveTimerRef.current); };
-  }, [phase, location.pathname, hasInteracted, voiceEnabled]);
+    return () => {
+      if (proactiveTimerRef.current) {
+        clearInterval(proactiveTimerRef.current);
+        proactiveTimerRef.current = null;
+      }
+    };
+  }, [phase, location.pathname, hasInteracted, voiceEnabled, stopTTS, speak, lang]);
 
   const sendMessage = useCallback(async (text?: string) => {
     const msg = (text || input).trim();
@@ -411,8 +437,23 @@ const ThorGreeter = () => {
     setHasInteracted(true);
     setShowChat(true);
 
+    // === CRITICAL: Stop any ongoing speech and cancel previous stream ===
+    stopTTS();
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+    const controller = new AbortController();
+    abortControllerRef.current = controller;
+
+    // Clear proactive timer permanently
+    if (proactiveTimerRef.current) {
+      clearInterval(proactiveTimerRef.current);
+      proactiveTimerRef.current = null;
+    }
+
     const userMsg: ThorMessage = { role: "user", content: msg };
-    const updated = [...messages, userMsg];
+    const currentMessages = messagesRef.current;
+    const updated = [...currentMessages, userMsg];
     setMessages(updated);
     setIsLoading(true);
 
@@ -426,7 +467,7 @@ const ThorGreeter = () => {
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
           },
           body: JSON.stringify({
-            messages: updated.map(m => ({ role: m.role, content: m.content })),
+            messages: updated.slice(-12).map(m => ({ role: m.role, content: m.content })),
             context: {
               area: user ? "client" : "public",
               route: location.pathname,
@@ -434,15 +475,18 @@ const ThorGreeter = () => {
               persona: "thor",
             },
           }),
+          signal: controller.signal,
         }
       );
-      if (!response.ok) throw new Error("Failed");
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const reader = response.body?.getReader();
       if (!reader) throw new Error("No stream");
       const decoder = new TextDecoder();
       let buffer = "";
       let assistantText = "";
+
       while (true) {
+        if (controller.signal.aborted) break;
         const { done, value } = await reader.read();
         if (done) break;
         buffer += decoder.decode(value, { stream: true });
@@ -451,20 +495,22 @@ const ThorGreeter = () => {
           let line = buffer.slice(0, idx);
           buffer = buffer.slice(idx + 1);
           if (line.endsWith("\r")) line = line.slice(0, -1);
+          if (line.startsWith(":") || line.trim() === "") continue;
           if (!line.startsWith("data: ")) continue;
           const json = line.slice(6).trim();
-          if (json === "[DONE]") continue;
+          if (json === "[DONE]") break;
           try {
             const parsed = JSON.parse(json);
             const delta = parsed.choices?.[0]?.delta?.content;
             if (delta) {
               assistantText += delta;
+              const snapshot = assistantText;
               setMessages(prev => {
                 const last = prev[prev.length - 1];
                 if (last?.role === "assistant") {
-                  return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: assistantText } : m);
+                  return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: snapshot } : m);
                 }
-                return [...prev, { role: "assistant", content: assistantText }];
+                return [...prev, { role: "assistant", content: snapshot }];
               });
             }
           } catch {
@@ -473,18 +519,28 @@ const ThorGreeter = () => {
           }
         }
       }
-      if (voiceEnabled && assistantText) {
-        speak(assistantText.replace(/[*#🚀🧠💡]/g, "").slice(0, 300), THOR_VOICE_ID);
+
+      // Only speak if not aborted and text exists
+      if (!controller.signal.aborted && voiceEnabled && assistantText) {
+        const cleanText = assistantText.replace(/[*#🚀🧠💡\[\]()]/g, "").slice(0, 250);
+        speak(cleanText, THOR_VOICE_ID);
       }
-    } catch {
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        console.log("[Thor] Stream aborted by user");
+        return;
+      }
       setMessages(prev => [...prev, {
         role: "assistant",
         content: lang.startsWith("pt") ? "Ops, tive um problema. Tenta de novo?" : "Oops, had an issue. Try again?",
       }]);
     } finally {
       setIsLoading(false);
+      if (abortControllerRef.current === controller) {
+        abortControllerRef.current = null;
+      }
     }
-  }, [input, isLoading, messages, user, location.pathname, voiceEnabled, speak, lang]);
+  }, [input, isLoading, user, location.pathname, voiceEnabled, speak, stopTTS, lang]);
 
   const minimize = () => { stopTTS(); setPhase("minimized"); setShowChat(false); };
   const activate = () => {
