@@ -601,6 +601,62 @@ const TaskCard = ({ task, onDragStart, onDragEnd, onDelete, isDragged, onStatusC
   );
 };
 
+/* ═══ FOCUS ROW — Obsidian-style checkbox row ═══ */
+const FocusRow = ({ task, onToggle, onDelete, done }: {
+  task: Task; onToggle: (id: string) => void; onDelete: (id: string) => void; done?: boolean;
+}) => {
+  const pr = PRIORITY_CONFIG[task.priority] || PRIORITY_CONFIG.medium;
+  const isOverdue = task.status === "atrasada";
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -4 }}
+      animate={{ opacity: 1, x: 0 }}
+      className={cn(
+        "flex items-center gap-3 py-2 px-2 rounded-lg group transition-all hover:bg-card/30",
+        done && "opacity-40"
+      )}
+    >
+      <button
+        onClick={() => onToggle(task.id)}
+        className={cn(
+          "w-4 h-4 rounded-[4px] border-2 shrink-0 flex items-center justify-center transition-all",
+          done ? "bg-accent-emerald/20 border-accent-emerald/40" : "border-border/30 hover:border-primary/50"
+        )}
+      >
+        {done && <CheckCircle2 className="h-3 w-3 text-accent-emerald" />}
+      </button>
+      <div className="flex-1 min-w-0">
+        <p className={cn(
+          "text-sm leading-snug",
+          done && "line-through text-muted-foreground",
+          isOverdue && "text-destructive"
+        )}>
+          {task.title}
+        </p>
+        {task.description && !done && (
+          <p className="text-[10px] text-muted-foreground/50 mt-0.5 line-clamp-1 font-mono">{task.description}</p>
+        )}
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        {!done && <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", pr.color === "text-destructive" ? "bg-destructive" : pr.color === "text-primary" ? "bg-primary" : pr.color === "text-accent-amber" ? "bg-accent-amber" : "bg-muted-foreground/30")} title={pr.label} />}
+        {task.due_date && !done && (
+          <span className={cn("text-[10px] font-mono", isOverdue ? "text-destructive" : "text-muted-foreground/40")}>
+            {new Date(task.due_date).toLocaleDateString(undefined, { day: "2-digit", month: "short" })}
+          </span>
+        )}
+        {task.agent_name && !done && (
+          <span className="text-[10px] text-primary/40 font-mono hidden sm:inline">
+            {task.agent_name}
+          </span>
+        )}
+        <button onClick={() => onDelete(task.id)} className="opacity-0 group-hover:opacity-100 transition-opacity">
+          <Trash2 className="h-3 w-3 text-muted-foreground/30 hover:text-destructive" />
+        </button>
+      </div>
+    </motion.div>
+  );
+};
+
 const EmptyState = () => (
   <div className="flex flex-col items-center py-16 text-center">
     <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
