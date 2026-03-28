@@ -89,9 +89,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
   // Chat-like messages
   const messages = [
-    "Olá! Bem-vindo à CLAUTHOR.",
-    "Vamos montar o time ideal pra sua empresa em menos de 1 minuto.",
-    "Pra começar, qual é o segmento da sua empresa?",
+    t("onboarding.smart_msg1", { defaultValue: "Olá! Bem-vindo à CLAUTHOR." }),
+    t("onboarding.smart_msg2", { defaultValue: "Vamos montar o time ideal pra sua empresa em menos de 1 minuto." }),
+    t("onboarding.smart_msg3", { defaultValue: "Pra começar, qual é o segmento da sua empresa?" }),
   ];
 
   const msg0 = useTyping(messages[0], 25, 400);
@@ -360,9 +360,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                       <p className="text-sm">
-                        Ótima escolha! {industries.find(i => i.id === industry)?.label} é um setor com enorme potencial de automação.
+                        {t("onboarding.smart_great_choice", { defaultValue: "Ótima escolha! {{sector}} é um setor com enorme potencial de automação.", sector: industries.find(i => i.id === industry)?.label })}
                         <br /><br />
-                        Agora selecione: <strong>quais são seus maiores desafios?</strong>
+                        {t("onboarding.smart_select_challenges", { defaultValue: "Agora selecione:" })} <strong>{t("onboarding.smart_your_challenges", { defaultValue: "quais são seus maiores desafios?" })}</strong>
                       </p>
                     </div>
                   </div>
@@ -410,11 +410,11 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex gap-2 pt-2">
                     <Button variant="outline" onClick={() => setPhase(0)} className="h-12 rounded-xl gap-1.5 px-4">
-                      <ChevronLeft className="h-4 w-4" /> Voltar
+                      <ChevronLeft className="h-4 w-4" /> {t("onboarding.smart_back", { defaultValue: "Voltar" })}
                     </Button>
                     {selectedChallenges.length > 0 && (
                       <Button onClick={() => setPhase(2)} className="flex-1 h-12 glow rounded-xl gap-2">
-                        Continuar ({selectedChallenges.length} selecionados)
+                        {t("onboarding.smart_continue", { defaultValue: "Continuar ({{count}} selecionados)", count: selectedChallenges.length })}
                         <ChevronRight className="h-4 w-4" />
                       </Button>
                     )}
@@ -445,9 +445,9 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                       <p className="text-sm">
-                        Excelente seleção. Temos um ótimo time pra montar.
+                        {t("onboarding.smart_excellent", { defaultValue: "Excelente seleção. Temos um ótimo time pra montar." })}
                         <br /><br />
-                        Última pergunta: <strong>quantas pessoas tem na sua empresa?</strong> Isso define o tamanho do time.
+                        {t("onboarding.smart_last_question", { defaultValue: "Última pergunta:" })} <strong>{t("onboarding.smart_team_size_q", { defaultValue: "quantas pessoas tem na sua empresa?" })}</strong> {t("onboarding.smart_defines_size", { defaultValue: "Isso define o tamanho do time." })}
                       </p>
                     </div>
                   </div>
@@ -511,7 +511,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[90%] space-y-4">
                        <p className="text-sm">
-                         <strong>Pronto! Aqui está seu time personalizado:</strong>
+                         <strong>{t("onboarding.smart_result_title", { defaultValue: "Pronto! Aqui está seu time personalizado:" })}</strong>
                        </p>
 
                       {/* Squad card */}
@@ -591,7 +591,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       </div>
 
                       <p className="text-sm text-muted-foreground">
-                        Você também pode adicionar agentes individuais abaixo, ou criar sua conta pra explorar todos.
+                        {t("onboarding.smart_add_more", { defaultValue: "Você também pode adicionar agentes individuais abaixo, ou criar sua conta pra explorar todos." })}
                       </p>
                     </div>
                   </div>
@@ -661,7 +661,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                   >
                     <Button onClick={handleFinish} className="w-full h-13 glow rounded-xl gap-2 text-sm font-semibold">
                       <Rocket className="h-4 w-4" />
-                      Criar conta e ativar meu Squad
+                      {t("onboarding.smart_create_squad", { defaultValue: "Criar conta e ativar meu Squad" })}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                     <div className="flex gap-2">
@@ -669,14 +669,14 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                          <ChevronLeft className="h-3.5 w-3.5" /> Voltar
                       </Button>
                       <Button variant="outline" onClick={handleViewLibrary} className="flex-1 h-10 rounded-xl text-xs border-border/50">
-                        Explorar 80+ agentes
+                        {t("onboarding.smart_explore_agents", { defaultValue: "Explorar 200+ agentes" })}
                       </Button>
                       <Button variant="outline" onClick={() => { onClose(); navigate("/pricing"); }} className="flex-1 h-10 rounded-xl text-xs border-border/50">
-                        Ver preços
+                        {t("onboarding.smart_view_pricing", { defaultValue: "Ver preços" })}
                       </Button>
                     </div>
                     <Button variant="ghost" onClick={() => { setPhase(0); setIndustry(""); setSelectedChallenges([]); setTeamSize(""); setExtraAgents([]); }} className="w-full text-xs text-muted-foreground">
-                      ← Recomeçar
+                       ← {t("onboarding.smart_restart", { defaultValue: "Recomeçar" })}
                     </Button>
                   </motion.div>
                 </motion.div>
@@ -698,8 +698,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                     </div>
                     <div className="bg-card/60 border border-border rounded-2xl rounded-bl-sm px-4 py-3 max-w-[85%]">
                        <p className="text-sm">
-                         Sem problema! Nosso <strong>consultor especializado</strong> vai te guiar.
-                         Conta sobre sua empresa e vamos montar o time ideal pra você.
+                          {t("onboarding.smart_consultant_intro", { defaultValue: "Sem problema! Nosso consultor especializado vai te guiar. Conta sobre sua empresa e vamos montar o time ideal pra você." })}
                        </p>
                     </div>
                   </div>
@@ -733,7 +732,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                       className="w-full h-13 glow rounded-xl gap-2 text-sm font-semibold"
                     >
                       <Rocket className="h-4 w-4" />
-                      Criar conta e contratar meu Squad
+                      {t("onboarding.smart_create_squad", { defaultValue: "Criar conta e contratar meu Squad" })}
                       <ArrowRight className="h-4 w-4" />
                     </Button>
                     <div className="flex gap-2">
@@ -742,14 +741,14 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                         onClick={() => setPhase(0)}
                         className="h-10 rounded-xl gap-1.5 px-4 text-xs"
                       >
-                        <ChevronLeft className="h-3.5 w-3.5" /> Voltar ao início
+                        <ChevronLeft className="h-3.5 w-3.5" /> {t("onboarding.smart_back_start", { defaultValue: "Voltar ao início" })}
                       </Button>
                       <Button
                         variant="outline"
                         onClick={() => { onClose(); navigate("/marketplace"); }}
                         className="flex-1 h-10 rounded-xl text-xs border-border/50"
                       >
-                        Explorar todos os agentes
+                        {t("onboarding.smart_explore_all", { defaultValue: "Explorar todos os agentes" })}
                       </Button>
                     </div>
                   </motion.div>
