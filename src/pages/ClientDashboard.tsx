@@ -113,7 +113,9 @@ const ClientDashboard = () => {
     const done = localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
     if (done) return;
     const hasHireIntent = !!localStorage.getItem("hireIntent");
-    if (hasHireIntent) {
+    const conciergeJustSeen = !localStorage.getItem(`clauthor_concierge_seen_${user.id}`) === false;
+    if (hasHireIntent || conciergeJustSeen) {
+      // Skip smart onboarding — user either has a hire intent or just got redirected to THOR
       localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
     } else {
       setShowSmartOnboarding(true);
