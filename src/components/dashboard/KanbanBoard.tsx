@@ -187,6 +187,7 @@ const KanbanBoard = () => {
             {/* View toggle */}
             <div className="flex rounded-lg border border-border/20 p-0.5 bg-muted/10">
               {([
+                { id: "focus" as ViewMode, icon: Eye, label: "Focus" },
                 { id: "board" as ViewMode, icon: LayoutGrid, label: "Board" },
                 { id: "timeline" as ViewMode, icon: List, label: "Timeline" },
                 { id: "squad" as ViewMode, icon: Layers, label: "Squads" },
