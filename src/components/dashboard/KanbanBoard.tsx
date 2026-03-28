@@ -21,7 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 type TaskStatus = "open" | "in_progress" | "done" | "atrasada";
 type TaskPriority = "low" | "medium" | "high" | "critical";
-type ViewMode = "board" | "timeline" | "squad";
+type ViewMode = "board" | "timeline" | "squad" | "focus";
 
 interface Task {
   id: string;
