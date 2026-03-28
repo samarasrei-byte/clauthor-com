@@ -329,7 +329,8 @@ const ThorGreeter = () => {
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [expanded, setExpanded] = useState(false); // mobile: expand to fullscreen
+  const [expanded, setExpanded] = useState(false);
+  const [thorVoiceId, setThorVoiceId] = useState(DEFAULT_VOICE_ID);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const proactiveIndexRef = useRef(0);
   const proactiveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -339,6 +340,19 @@ const ThorGreeter = () => {
   const { user } = useAuth();
   const isMobile = useIsMobile();
   const lang = navigator.language || "en";
+
+  // Fetch dynamic voice config from platform credentials
+  useEffect(() => {
+    supabase.functions.invoke("credential-manager", {
+      body: { action: "list_platform" },
+    }).then(({ data }) => {
+      const creds = data?.credentials || [];
+      const voiceCred = creds.find((c: any) => c.integration_name === "elevenlabs" && c.credential_key === "voice_id");
+      if (voiceCred?.credential_value && voiceCred.credential_value !== "••••••••") {
+        setThorVoiceId(voiceCred.credential_value);
+      }
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => { messagesRef.current = messages; }, [messages]);
 
