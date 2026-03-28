@@ -408,7 +408,7 @@ const ThorGreeter = () => {
         proactiveTimerRef.current = null;
       }
     };
-  }, [phase, location.pathname, hasInteracted, voiceEnabled, stopTTS, speak, lang]);
+  }, [phase, location.pathname, hasInteracted, voiceEnabled, stopTTS, speak, lang, isLoading]);
 
   const sendMessage = useCallback(async (text?: string) => {
     const msg = (text || input).trim();
