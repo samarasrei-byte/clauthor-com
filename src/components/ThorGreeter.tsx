@@ -9,7 +9,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import ReactMarkdown from "react-markdown";
 import thorPhoto from "@/assets/kaelis-ai.webp";
 
-const THOR_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";
+const DEFAULT_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";
 const STORAGE_KEY = "thor_greeter_seen_v3";
 const PROACTIVE_INTERVAL = 45_000;
 
@@ -329,7 +329,8 @@ const ThorGreeter = () => {
   const [voiceEnabled, setVoiceEnabled] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [expanded, setExpanded] = useState(false); // mobile: expand to fullscreen
+  const [expanded, setExpanded] = useState(false);
+  const [thorVoiceId, setThorVoiceId] = useState(DEFAULT_VOICE_ID);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const proactiveIndexRef = useRef(0);
   const proactiveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -339,6 +340,19 @@ const ThorGreeter = () => {
   const { user } = useAuth();
   const isMobile = useIsMobile();
   const lang = navigator.language || "en";
+
+  // Fetch dynamic voice config from platform credentials
+  useEffect(() => {
+    supabase.functions.invoke("credential-manager", {
+      body: { action: "list_platform" },
+    }).then(({ data }) => {
+      const creds = data?.credentials || [];
+      const voiceCred = creds.find((c: any) => c.integration_name === "elevenlabs" && c.credential_key === "voice_id");
+      if (voiceCred?.credential_value && voiceCred.credential_value !== "••••••••") {
+        setThorVoiceId(voiceCred.credential_value);
+      }
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => { messagesRef.current = messages; }, [messages]);
 
@@ -379,7 +393,7 @@ const ThorGreeter = () => {
           ? "Olá! Eu sou o **Thor**, CEO e Orquestrador da CLAUTHOR. 🧠 Me conta: **o que te trouxe aqui hoje?**"
           : "Hello! I'm **Thor**, CEO & Orchestrator of CLAUTHOR. 🧠 Tell me: **what brought you here today?**";
         setMessages([{ role: "assistant", content: greeting }]);
-        if (voiceEnabled) speak(greeting.replace(/[*#🧠]/g, ""), THOR_VOICE_ID);
+        if (voiceEnabled) speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId);
       }, 3200);
       return () => clearTimeout(timer);
     }
@@ -400,7 +414,7 @@ const ThorGreeter = () => {
       stopTTS();
       setPhase("active");
       setMessages(prev => [...prev, { role: "assistant", content: msgs[idx] }]);
-      if (voiceEnabled) speak(msgs[idx].replace(/[*#🚀]/g, ""), THOR_VOICE_ID);
+      if (voiceEnabled) speak(msgs[idx].replace(/[*#🚀]/g, ""), thorVoiceId);
     }, PROACTIVE_INTERVAL);
     return () => {
       if (proactiveTimerRef.current) {
@@ -507,7 +521,7 @@ const ThorGreeter = () => {
 
       if (!controller.signal.aborted && voiceEnabled && assistantText) {
         const cleanText = assistantText.replace(/[*#🚀🧠💡\[\]()]/g, "").slice(0, 250);
-        speak(cleanText, THOR_VOICE_ID);
+        speak(cleanText, thorVoiceId);
       }
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return;
@@ -539,7 +553,7 @@ const ThorGreeter = () => {
       const isPt = lang.startsWith("pt");
       const greeting = isPt ? "Voltei! 😄 Em que posso te ajudar?" : "I'm back! 😄 How can I help?";
       setMessages([{ role: "assistant", content: greeting }]);
-      if (voiceEnabled) speak(greeting.replace(/[😄]/g, ""), THOR_VOICE_ID);
+      if (voiceEnabled) speak(greeting.replace(/[😄]/g, ""), thorVoiceId);
     }
   };
 

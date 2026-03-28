@@ -87,6 +87,7 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
               <thead>
                 <tr className="border-b border-white/[0.08]">
                   <th className="text-left p-3 text-muted-foreground font-medium">Name</th>
+                  <th className="text-left p-3 text-muted-foreground font-medium">Email</th>
                   <th className="text-left p-3 text-muted-foreground font-medium">Company</th>
                   <th className="text-left p-3 text-muted-foreground font-medium">Plan</th>
                   <th className="text-left p-3 text-muted-foreground font-medium">Credits</th>
@@ -101,6 +102,7 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
                   return (
                     <tr key={profile.id} className="border-b border-white/[0.05] hover:bg-accent/20">
                       <td className="p-3 font-medium">{profile.full_name || "—"}</td>
+                      <td className="p-3 text-muted-foreground text-xs font-mono">{profile.email || "—"}</td>
                       <td className="p-3 text-muted-foreground">{profile.company_name || "—"}</td>
                       <td className="p-3">
                         <Badge variant="secondary" className="text-[10px]">
