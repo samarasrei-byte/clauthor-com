@@ -299,6 +299,57 @@ const KanbanBoard = () => {
         </div>
       </div>
 
+      {/* ═══ FOCUS VIEW — Obsidian-style clean list ═══ */}
+      {view === "focus" && (
+        <div className="max-w-2xl mx-auto space-y-1">
+          {filtered.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <>
+              {/* Active / In Progress */}
+              {statusGroups.in_progress.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-accent-amber/70 mb-2 pl-1">Em execução</p>
+                  {statusGroups.in_progress.sort((a, b) => (PRIORITY_CONFIG[b.priority]?.weight || 0) - (PRIORITY_CONFIG[a.priority]?.weight || 0)).map(task => (
+                    <FocusRow key={task.id} task={task} onToggle={(id) => updateStatus.mutate({ taskId: id, newStatus: "done" })} onDelete={(id) => deleteTask.mutate(id)} />
+                  ))}
+                </div>
+              )}
+              {/* Overdue */}
+              {statusGroups.atrasada.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-destructive/70 mb-2 pl-1">Atrasadas</p>
+                  {statusGroups.atrasada.map(task => (
+                    <FocusRow key={task.id} task={task} onToggle={(id) => updateStatus.mutate({ taskId: id, newStatus: "done" })} onDelete={(id) => deleteTask.mutate(id)} />
+                  ))}
+                </div>
+              )}
+              {/* Open */}
+              {statusGroups.open.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground/50 mb-2 pl-1">A fazer</p>
+                  {statusGroups.open.sort((a, b) => (PRIORITY_CONFIG[b.priority]?.weight || 0) - (PRIORITY_CONFIG[a.priority]?.weight || 0)).map(task => (
+                    <FocusRow key={task.id} task={task} onToggle={(id) => updateStatus.mutate({ taskId: id, newStatus: "in_progress" })} onDelete={(id) => deleteTask.mutate(id)} />
+                  ))}
+                </div>
+              )}
+              {/* Done */}
+              {statusGroups.done.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-accent-emerald/50 mb-2 pl-1">Entregues</p>
+                  {statusGroups.done.slice(0, 10).map(task => (
+                    <FocusRow key={task.id} task={task} onToggle={() => {}} onDelete={(id) => deleteTask.mutate(id)} done />
+                  ))}
+                  {statusGroups.done.length > 10 && (
+                    <p className="text-[10px] text-muted-foreground/30 pl-7 font-mono">+ {statusGroups.done.length - 10} concluídas</p>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
+
       {/* ═══ BOARD VIEW ═══ */}
       {view === "board" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
