@@ -55,7 +55,7 @@ const KanbanBoard = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [view, setView] = useState<ViewMode>("board");
+  const [view, setView] = useState<ViewMode>("focus");
   const [filterPriority, setFilterPriority] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [createOpen, setCreateOpen] = useState(false);
