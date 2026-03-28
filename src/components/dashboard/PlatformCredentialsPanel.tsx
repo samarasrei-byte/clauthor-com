@@ -12,6 +12,7 @@ import { Key, Plus, Trash2, Loader2, Shield, Globe, Mail, Phone, Check, Lock } f
 import { toast } from "sonner";
 
 const PRESET_INTEGRATIONS = [
+  { name: "elevenlabs", label: "ElevenLabs (Thor Voice)", icon: Key, keys: ["api_key", "agent_id", "voice_id"], highlight: true },
   { name: "whatsapp", label: "WhatsApp Business", icon: Phone, keys: ["phone_id", "access_token", "business_account_id"] },
   { name: "email", label: "E-mail (SMTP/API)", icon: Mail, keys: ["provider", "api_key", "smtp_host", "smtp_port", "smtp_user", "smtp_password", "from_email"] },
   { name: "linkedin", label: "LinkedIn API", icon: Globe, keys: ["client_id", "client_secret", "access_token"] },
