@@ -341,17 +341,20 @@ const ThorGreeter = () => {
   const isMobile = useIsMobile();
   const lang = navigator.language || "en";
 
-  // Fetch dynamic voice config from platform credentials
+  // Fetch dynamic voice config directly from platform_credentials table
   useEffect(() => {
-    supabase.functions.invoke("credential-manager", {
-      body: { action: "list_platform" },
-    }).then(({ data }) => {
-      const creds = data?.credentials || [];
-      const voiceCred = creds.find((c: any) => c.integration_name === "elevenlabs" && c.credential_key === "voice_id");
-      if (voiceCred?.credential_value && voiceCred.credential_value !== "••••••••") {
-        setThorVoiceId(voiceCred.credential_value);
-      }
-    }).catch(() => {});
+    supabase
+      .from("platform_credentials")
+      .select("credential_value")
+      .eq("integration_name", "elevenlabs")
+      .eq("credential_key", "voice_id")
+      .eq("is_active", true)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (data?.credential_value) {
+          setThorVoiceId(data.credential_value);
+        }
+      });
   }, []);
 
   useEffect(() => { messagesRef.current = messages; }, [messages]);
