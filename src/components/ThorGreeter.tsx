@@ -393,7 +393,7 @@ const ThorGreeter = () => {
           ? "Olá! Eu sou o **Thor**, CEO e Orquestrador da CLAUTHOR. 🧠 Me conta: **o que te trouxe aqui hoje?**"
           : "Hello! I'm **Thor**, CEO & Orchestrator of CLAUTHOR. 🧠 Tell me: **what brought you here today?**";
         setMessages([{ role: "assistant", content: greeting }]);
-        if (voiceEnabled) speak(greeting.replace(/[*#🧠]/g, ""), THOR_VOICE_ID);
+        if (voiceEnabled) speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId);
       }, 3200);
       return () => clearTimeout(timer);
     }
@@ -414,7 +414,7 @@ const ThorGreeter = () => {
       stopTTS();
       setPhase("active");
       setMessages(prev => [...prev, { role: "assistant", content: msgs[idx] }]);
-      if (voiceEnabled) speak(msgs[idx].replace(/[*#🚀]/g, ""), THOR_VOICE_ID);
+      if (voiceEnabled) speak(msgs[idx].replace(/[*#🚀]/g, ""), thorVoiceId);
     }, PROACTIVE_INTERVAL);
     return () => {
       if (proactiveTimerRef.current) {
@@ -521,7 +521,7 @@ const ThorGreeter = () => {
 
       if (!controller.signal.aborted && voiceEnabled && assistantText) {
         const cleanText = assistantText.replace(/[*#🚀🧠💡\[\]()]/g, "").slice(0, 250);
-        speak(cleanText, THOR_VOICE_ID);
+        speak(cleanText, thorVoiceId);
       }
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return;
@@ -553,7 +553,7 @@ const ThorGreeter = () => {
       const isPt = lang.startsWith("pt");
       const greeting = isPt ? "Voltei! 😄 Em que posso te ajudar?" : "I'm back! 😄 How can I help?";
       setMessages([{ role: "assistant", content: greeting }]);
-      if (voiceEnabled) speak(greeting.replace(/[😄]/g, ""), THOR_VOICE_ID);
+      if (voiceEnabled) speak(greeting.replace(/[😄]/g, ""), thorVoiceId);
     }
   };
 
