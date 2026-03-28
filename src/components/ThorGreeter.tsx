@@ -391,8 +391,9 @@ const ThorGreeter = () => {
       clearInterval(proactiveTimerRef.current);
       proactiveTimerRef.current = null;
     }
-    if (phase !== "minimized" || hasInteracted) return;
+    if (phase !== "minimized" || hasInteracted || isLoading) return;
     proactiveTimerRef.current = setInterval(() => {
+      if (isLoading) return; // double guard
       const msgs = getProactiveMessages(location.pathname, lang);
       const idx = proactiveIndexRef.current % msgs.length;
       proactiveIndexRef.current++;
@@ -407,7 +408,7 @@ const ThorGreeter = () => {
         proactiveTimerRef.current = null;
       }
     };
-  }, [phase, location.pathname, hasInteracted, voiceEnabled, stopTTS, speak, lang]);
+  }, [phase, location.pathname, hasInteracted, voiceEnabled, stopTTS, speak, lang, isLoading]);
 
   const sendMessage = useCallback(async (text?: string) => {
     const msg = (text || input).trim();
@@ -459,17 +460,26 @@ const ThorGreeter = () => {
       const decoder = new TextDecoder();
       let buffer = "";
       let assistantText = "";
+      let streamStallTimer: ReturnType<typeof setTimeout> | null = null;
+      const resetStallTimer = () => {
+        if (streamStallTimer) clearTimeout(streamStallTimer);
+        streamStallTimer = setTimeout(() => {
+          console.warn("[Thor] Stream stalled for 15s, aborting");
+          controller.abort();
+        }, 15_000);
+      };
+      resetStallTimer();
 
       while (true) {
         if (controller.signal.aborted) break;
         const { done, value } = await reader.read();
         if (done) break;
+        resetStallTimer();
         buffer += decoder.decode(value, { stream: true });
-        let idx: number;
-        while ((idx = buffer.indexOf("\n")) !== -1) {
-          let line = buffer.slice(0, idx);
-          buffer = buffer.slice(idx + 1);
-          if (line.endsWith("\r")) line = line.slice(0, -1);
+        const lines = buffer.split("\n");
+        buffer = lines.pop() || ""; // keep incomplete last line
+        for (const rawLine of lines) {
+          const line = rawLine.replace(/\r$/, "");
           if (line.startsWith(":") || line.trim() === "") continue;
           if (!line.startsWith("data: ")) continue;
           const json = line.slice(6).trim();
@@ -489,11 +499,11 @@ const ThorGreeter = () => {
               });
             }
           } catch {
-            buffer = line + "\n" + buffer;
-            break;
+            // Skip malformed JSON lines instead of re-buffering (prevents infinite loop)
           }
         }
       }
+      if (streamStallTimer) clearTimeout(streamStallTimer);
 
       if (!controller.signal.aborted && voiceEnabled && assistantText) {
         const cleanText = assistantText.replace(/[*#🚀🧠💡\[\]()]/g, "").slice(0, 250);

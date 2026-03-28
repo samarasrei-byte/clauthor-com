@@ -21,7 +21,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 type TaskStatus = "open" | "in_progress" | "done" | "atrasada";
 type TaskPriority = "low" | "medium" | "high" | "critical";
-type ViewMode = "board" | "timeline" | "squad";
+type ViewMode = "board" | "timeline" | "squad" | "focus";
 
 interface Task {
   id: string;
@@ -55,7 +55,7 @@ const KanbanBoard = () => {
   const { user } = useAuth();
   const { t } = useTranslation();
   const queryClient = useQueryClient();
-  const [view, setView] = useState<ViewMode>("board");
+  const [view, setView] = useState<ViewMode>("focus");
   const [filterPriority, setFilterPriority] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
   const [createOpen, setCreateOpen] = useState(false);
@@ -187,6 +187,7 @@ const KanbanBoard = () => {
             {/* View toggle */}
             <div className="flex rounded-lg border border-border/20 p-0.5 bg-muted/10">
               {([
+                { id: "focus" as ViewMode, icon: Eye, label: "Focus" },
                 { id: "board" as ViewMode, icon: LayoutGrid, label: "Board" },
                 { id: "timeline" as ViewMode, icon: List, label: "Timeline" },
                 { id: "squad" as ViewMode, icon: Layers, label: "Squads" },
@@ -297,6 +298,57 @@ const KanbanBoard = () => {
           </div>
         </div>
       </div>
+
+      {/* ═══ FOCUS VIEW — Obsidian-style clean list ═══ */}
+      {view === "focus" && (
+        <div className="max-w-2xl mx-auto space-y-1">
+          {filtered.length === 0 ? (
+            <EmptyState />
+          ) : (
+            <>
+              {/* Active / In Progress */}
+              {statusGroups.in_progress.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-accent-amber/70 mb-2 pl-1">Em execução</p>
+                  {statusGroups.in_progress.sort((a, b) => (PRIORITY_CONFIG[b.priority]?.weight || 0) - (PRIORITY_CONFIG[a.priority]?.weight || 0)).map(task => (
+                    <FocusRow key={task.id} task={task} onToggle={(id) => updateStatus.mutate({ taskId: id, newStatus: "done" })} onDelete={(id) => deleteTask.mutate(id)} />
+                  ))}
+                </div>
+              )}
+              {/* Overdue */}
+              {statusGroups.atrasada.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-destructive/70 mb-2 pl-1">Atrasadas</p>
+                  {statusGroups.atrasada.map(task => (
+                    <FocusRow key={task.id} task={task} onToggle={(id) => updateStatus.mutate({ taskId: id, newStatus: "done" })} onDelete={(id) => deleteTask.mutate(id)} />
+                  ))}
+                </div>
+              )}
+              {/* Open */}
+              {statusGroups.open.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-muted-foreground/50 mb-2 pl-1">A fazer</p>
+                  {statusGroups.open.sort((a, b) => (PRIORITY_CONFIG[b.priority]?.weight || 0) - (PRIORITY_CONFIG[a.priority]?.weight || 0)).map(task => (
+                    <FocusRow key={task.id} task={task} onToggle={(id) => updateStatus.mutate({ taskId: id, newStatus: "in_progress" })} onDelete={(id) => deleteTask.mutate(id)} />
+                  ))}
+                </div>
+              )}
+              {/* Done */}
+              {statusGroups.done.length > 0 && (
+                <div className="mb-4">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-accent-emerald/50 mb-2 pl-1">Entregues</p>
+                  {statusGroups.done.slice(0, 10).map(task => (
+                    <FocusRow key={task.id} task={task} onToggle={() => {}} onDelete={(id) => deleteTask.mutate(id)} done />
+                  ))}
+                  {statusGroups.done.length > 10 && (
+                    <p className="text-[10px] text-muted-foreground/30 pl-7 font-mono">+ {statusGroups.done.length - 10} concluídas</p>
+                  )}
+                </div>
+              )}
+            </>
+          )}
+        </div>
+      )}
 
       {/* ═══ BOARD VIEW ═══ */}
       {view === "board" && (
@@ -544,6 +596,62 @@ const TaskCard = ({ task, onDragStart, onDragEnd, onDelete, isDragged, onStatusC
             </span>
           )}
         </div>
+      </div>
+    </motion.div>
+  );
+};
+
+/* ═══ FOCUS ROW — Obsidian-style checkbox row ═══ */
+const FocusRow = ({ task, onToggle, onDelete, done }: {
+  task: Task; onToggle: (id: string) => void; onDelete: (id: string) => void; done?: boolean;
+}) => {
+  const pr = PRIORITY_CONFIG[task.priority] || PRIORITY_CONFIG.medium;
+  const isOverdue = task.status === "atrasada";
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -4 }}
+      animate={{ opacity: 1, x: 0 }}
+      className={cn(
+        "flex items-center gap-3 py-2 px-2 rounded-lg group transition-all hover:bg-card/30",
+        done && "opacity-40"
+      )}
+    >
+      <button
+        onClick={() => onToggle(task.id)}
+        className={cn(
+          "w-4 h-4 rounded-[4px] border-2 shrink-0 flex items-center justify-center transition-all",
+          done ? "bg-accent-emerald/20 border-accent-emerald/40" : "border-border/30 hover:border-primary/50"
+        )}
+      >
+        {done && <CheckCircle2 className="h-3 w-3 text-accent-emerald" />}
+      </button>
+      <div className="flex-1 min-w-0">
+        <p className={cn(
+          "text-sm leading-snug",
+          done && "line-through text-muted-foreground",
+          isOverdue && "text-destructive"
+        )}>
+          {task.title}
+        </p>
+        {task.description && !done && (
+          <p className="text-[10px] text-muted-foreground/50 mt-0.5 line-clamp-1 font-mono">{task.description}</p>
+        )}
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        {!done && <span className={cn("w-1.5 h-1.5 rounded-full shrink-0", pr.color === "text-destructive" ? "bg-destructive" : pr.color === "text-primary" ? "bg-primary" : pr.color === "text-accent-amber" ? "bg-accent-amber" : "bg-muted-foreground/30")} title={pr.label} />}
+        {task.due_date && !done && (
+          <span className={cn("text-[10px] font-mono", isOverdue ? "text-destructive" : "text-muted-foreground/40")}>
+            {new Date(task.due_date).toLocaleDateString(undefined, { day: "2-digit", month: "short" })}
+          </span>
+        )}
+        {task.agent_name && !done && (
+          <span className="text-[10px] text-primary/40 font-mono hidden sm:inline">
+            {task.agent_name}
+          </span>
+        )}
+        <button onClick={() => onDelete(task.id)} className="opacity-0 group-hover:opacity-100 transition-opacity">
+          <Trash2 className="h-3 w-3 text-muted-foreground/30 hover:text-destructive" />
+        </button>
       </div>
     </motion.div>
   );
