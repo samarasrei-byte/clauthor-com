@@ -60,7 +60,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       </button>
 
       {/* Nav Items */}
-      <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto scrollbar-thin">
+      <nav className="flex-1 py-4 px-2.5 space-y-0.5 overflow-y-auto scrollbar-thin">
         {items.map((item, idx) => {
           const showGroupHeader = item.group && (idx === 0 || items[idx - 1].group !== item.group);
           const isActive = activeItem === item.id;
@@ -103,7 +103,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 }}
                 className={cn(
                   "w-full flex items-center gap-2.5 rounded-lg transition-all duration-150 group relative",
-                  collapsed ? "px-2.5 py-2.5 justify-center" : "px-3 py-[8px]",
+                  collapsed ? "px-2 py-2 justify-center" : "px-3 py-[7px]",
                   (typeof item.badge === "string" && item.badge.length > 3)
                     ? "text-muted-foreground/50 hover:text-muted-foreground/70 hover:bg-muted/5"
                     : isActive
