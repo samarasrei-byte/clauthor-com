@@ -290,6 +290,7 @@ const ClientDashboard = () => {
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     squads: "Squads",
+    "neural-network": "Rede Neural",
     chat: selectedAgent?.name || "Chat",
     inbox: "Inbox",
   }), [t, selectedAgent]);
