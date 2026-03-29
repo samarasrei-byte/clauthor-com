@@ -44,117 +44,119 @@ export interface RegionalPricing {
 // CLT comparison costs (same across regions for reference)
 const cltCosts = { tecnologia: 72000, comercial: 52000, marketing: 44000, financeiro: 48000, criacao: 36000, suporte: 32000, rh: 28000 };
 
+// Pricing calibrated for Claude Sonnet 4 costs ($3/1M input, $15/1M output)
+// Target margins: 80-90% — competitive yet profitable
 export const regionalPricing: Record<string, RegionalPricing> = {
   pt: {
     currency: "BRL", symbol: "R$", locale: "pt-BR",
-    plans: { starter: 1697, growth: 2997 },
-    tokenPacks: { pack5m: 497, pack15m: 997, pack50m: 2497, pack100m: 4997 },
-    comparison: { avgSalary: 4500, avgSalaryYear3: 272160, agentStarting: 497, agentYear3: 17892 },
-    departments: { tecnologia: 12997, comercial: 9997, marketing: 7997, financeiro: 9997, criacao: 5997, suporte: 5997, rh: 2997 },
+    plans: { starter: 997, growth: 1997 },
+    tokenPacks: { pack5m: 297, pack15m: 697, pack50m: 1497, pack100m: 2797 },
+    comparison: { avgSalary: 4500, avgSalaryYear3: 272160, agentStarting: 297, agentYear3: 10692 },
+    departments: { tecnologia: 2497, comercial: 1697, marketing: 1497, financeiro: 1697, criacao: 997, suporte: 597, rh: 997 },
     departmentClt: cltCosts,
   },
   "pt-pt": {
     currency: "EUR", symbol: "€", locale: "pt-PT",
-    plans: { starter: 299, growth: 599 },
-    tokenPacks: { pack5m: 89, pack15m: 219, pack50m: 549, pack100m: 1099 },
-    comparison: { avgSalary: 2200, avgSalaryYear3: 132000, agentStarting: 89, agentYear3: 3204 },
-    departments: { tecnologia: 2399, comercial: 1899, marketing: 1599, financeiro: 1899, criacao: 1199, suporte: 1199, rh: 599 },
+    plans: { starter: 179, growth: 349 },
+    tokenPacks: { pack5m: 49, pack15m: 119, pack50m: 279, pack100m: 499 },
+    comparison: { avgSalary: 2200, avgSalaryYear3: 132000, agentStarting: 49, agentYear3: 1764 },
+    departments: { tecnologia: 449, comercial: 299, marketing: 269, financeiro: 299, criacao: 179, suporte: 109, rh: 179 },
     departmentClt: cltCosts,
   },
   en: {
     currency: "USD", symbol: "$", locale: "en-US",
-    plans: { starter: 339, growth: 599 },
-    tokenPacks: { pack5m: 99, pack15m: 249, pack50m: 599, pack100m: 1199 },
-    comparison: { avgSalary: 5500, avgSalaryYear3: 330000, agentStarting: 99, agentYear3: 3564 },
-    departments: { tecnologia: 2499, comercial: 1999, marketing: 1699, financeiro: 1999, criacao: 1299, suporte: 1299, rh: 599 },
+    plans: { starter: 197, growth: 397 },
+    tokenPacks: { pack5m: 59, pack15m: 139, pack50m: 299, pack100m: 549 },
+    comparison: { avgSalary: 5500, avgSalaryYear3: 330000, agentStarting: 59, agentYear3: 2124 },
+    departments: { tecnologia: 497, comercial: 347, marketing: 297, financeiro: 347, criacao: 197, suporte: 127, rh: 197 },
     departmentClt: cltCosts,
   },
   es: {
     currency: "USD", symbol: "$", locale: "es-MX",
-    plans: { starter: 339, growth: 599 },
-    tokenPacks: { pack5m: 99, pack15m: 249, pack50m: 599, pack100m: 1199 },
-    comparison: { avgSalary: 2000, avgSalaryYear3: 120000, agentStarting: 99, agentYear3: 3564 },
-    departments: { tecnologia: 2499, comercial: 1999, marketing: 1699, financeiro: 1999, criacao: 1299, suporte: 1299, rh: 599 },
+    plans: { starter: 197, growth: 397 },
+    tokenPacks: { pack5m: 59, pack15m: 139, pack50m: 299, pack100m: 549 },
+    comparison: { avgSalary: 2000, avgSalaryYear3: 120000, agentStarting: 59, agentYear3: 2124 },
+    departments: { tecnologia: 497, comercial: 347, marketing: 297, financeiro: 347, criacao: 197, suporte: 127, rh: 197 },
     departmentClt: cltCosts,
   },
   fr: {
     currency: "EUR", symbol: "€", locale: "fr-FR",
-    plans: { starter: 299, growth: 599 },
-    tokenPacks: { pack5m: 89, pack15m: 219, pack50m: 549, pack100m: 1099 },
-    comparison: { avgSalary: 3500, avgSalaryYear3: 210000, agentStarting: 89, agentYear3: 3204 },
-    departments: { tecnologia: 2399, comercial: 1899, marketing: 1599, financeiro: 1899, criacao: 1199, suporte: 1199, rh: 599 },
+    plans: { starter: 179, growth: 349 },
+    tokenPacks: { pack5m: 49, pack15m: 119, pack50m: 279, pack100m: 499 },
+    comparison: { avgSalary: 3500, avgSalaryYear3: 210000, agentStarting: 49, agentYear3: 1764 },
+    departments: { tecnologia: 449, comercial: 299, marketing: 269, financeiro: 299, criacao: 179, suporte: 109, rh: 179 },
     departmentClt: cltCosts,
   },
   de: {
     currency: "EUR", symbol: "€", locale: "de-DE",
-    plans: { starter: 299, growth: 599 },
-    tokenPacks: { pack5m: 89, pack15m: 219, pack50m: 549, pack100m: 1099 },
-    comparison: { avgSalary: 4200, avgSalaryYear3: 252000, agentStarting: 89, agentYear3: 3204 },
-    departments: { tecnologia: 2399, comercial: 1899, marketing: 1599, financeiro: 1899, criacao: 1199, suporte: 1199, rh: 599 },
+    plans: { starter: 179, growth: 349 },
+    tokenPacks: { pack5m: 49, pack15m: 119, pack50m: 279, pack100m: 499 },
+    comparison: { avgSalary: 4200, avgSalaryYear3: 252000, agentStarting: 49, agentYear3: 1764 },
+    departments: { tecnologia: 449, comercial: 299, marketing: 269, financeiro: 299, criacao: 179, suporte: 109, rh: 179 },
     departmentClt: cltCosts,
   },
   it: {
     currency: "EUR", symbol: "€", locale: "it-IT",
-    plans: { starter: 299, growth: 599 },
-    tokenPacks: { pack5m: 89, pack15m: 219, pack50m: 549, pack100m: 1099 },
-    comparison: { avgSalary: 2800, avgSalaryYear3: 168000, agentStarting: 89, agentYear3: 3204 },
-    departments: { tecnologia: 2399, comercial: 1899, marketing: 1599, financeiro: 1899, criacao: 1199, suporte: 1199, rh: 599 },
+    plans: { starter: 179, growth: 349 },
+    tokenPacks: { pack5m: 49, pack15m: 119, pack50m: 279, pack100m: 499 },
+    comparison: { avgSalary: 2800, avgSalaryYear3: 168000, agentStarting: 49, agentYear3: 1764 },
+    departments: { tecnologia: 449, comercial: 299, marketing: 269, financeiro: 299, criacao: 179, suporte: 109, rh: 179 },
     departmentClt: cltCosts,
   },
   ja: {
     currency: "JPY", symbol: "¥", locale: "ja-JP",
-    plans: { starter: 49800, growth: 89800 },
-    tokenPacks: { pack5m: 14800, pack15m: 34800, pack50m: 89800, pack100m: 179800 },
-    comparison: { avgSalary: 400000, avgSalaryYear3: 24000000, agentStarting: 14800, agentYear3: 532800 },
-    departments: { tecnologia: 369800, comercial: 299800, marketing: 249800, financeiro: 299800, criacao: 179800, suporte: 179800, rh: 89800 },
+    plans: { starter: 29800, growth: 59800 },
+    tokenPacks: { pack5m: 8800, pack15m: 19800, pack50m: 44800, pack100m: 82800 },
+    comparison: { avgSalary: 400000, avgSalaryYear3: 24000000, agentStarting: 8800, agentYear3: 316800 },
+    departments: { tecnologia: 74800, comercial: 52800, marketing: 44800, financeiro: 52800, criacao: 29800, suporte: 19800, rh: 29800 },
     departmentClt: cltCosts,
   },
   zh: {
     currency: "CNY", symbol: "¥", locale: "zh-CN",
-    plans: { starter: 2399, growth: 4299 },
-    tokenPacks: { pack5m: 699, pack15m: 1699, pack50m: 4299, pack100m: 8299 },
-    comparison: { avgSalary: 15000, avgSalaryYear3: 900000, agentStarting: 699, agentYear3: 25164 },
-    departments: { tecnologia: 17999, comercial: 14499, marketing: 11999, financeiro: 14499, criacao: 8999, suporte: 8999, rh: 4299 },
+    plans: { starter: 1399, growth: 2799 },
+    tokenPacks: { pack5m: 399, pack15m: 999, pack50m: 2099, pack100m: 3899 },
+    comparison: { avgSalary: 15000, avgSalaryYear3: 900000, agentStarting: 399, agentYear3: 14364 },
+    departments: { tecnologia: 3499, comercial: 2499, marketing: 2099, financeiro: 2499, criacao: 1399, suporte: 899, rh: 1399 },
     departmentClt: cltCosts,
   },
   ar: {
     currency: "SAR", symbol: "﷼", locale: "ar-SA",
-    plans: { starter: 1269, growth: 2249 },
-    tokenPacks: { pack5m: 369, pack15m: 899, pack50m: 2249, pack100m: 4499 },
-    comparison: { avgSalary: 12000, avgSalaryYear3: 720000, agentStarting: 369, agentYear3: 13284 },
-    departments: { tecnologia: 9499, comercial: 7499, marketing: 6499, financeiro: 7499, criacao: 4999, suporte: 4999, rh: 2249 },
+    plans: { starter: 749, growth: 1499 },
+    tokenPacks: { pack5m: 219, pack15m: 519, pack50m: 1099, pack100m: 2049 },
+    comparison: { avgSalary: 12000, avgSalaryYear3: 720000, agentStarting: 219, agentYear3: 7884 },
+    departments: { tecnologia: 1869, comercial: 1299, marketing: 1099, financeiro: 1299, criacao: 749, suporte: 469, rh: 749 },
     departmentClt: cltCosts,
   },
   hi: {
     currency: "INR", symbol: "₹", locale: "hi-IN",
-    plans: { starter: 28299, growth: 49999 },
-    tokenPacks: { pack5m: 8299, pack15m: 19999, pack50m: 49999, pack100m: 99999 },
-    comparison: { avgSalary: 60000, avgSalaryYear3: 3600000, agentStarting: 8299, agentYear3: 298764 },
-    departments: { tecnologia: 209999, comercial: 169999, marketing: 139999, financeiro: 169999, criacao: 109999, suporte: 109999, rh: 49999 },
+    plans: { starter: 16499, growth: 32999 },
+    tokenPacks: { pack5m: 4899, pack15m: 11499, pack50m: 24999, pack100m: 45999 },
+    comparison: { avgSalary: 60000, avgSalaryYear3: 3600000, agentStarting: 4899, agentYear3: 176364 },
+    departments: { tecnologia: 41499, comercial: 28999, marketing: 24999, financeiro: 28999, criacao: 16499, suporte: 10499, rh: 16499 },
     departmentClt: cltCosts,
   },
   ru: {
     currency: "RUB", symbol: "₽", locale: "ru-RU",
-    plans: { starter: 30999, growth: 54999 },
-    tokenPacks: { pack5m: 8999, pack15m: 21999, pack50m: 54999, pack100m: 109999 },
-    comparison: { avgSalary: 100000, avgSalaryYear3: 6000000, agentStarting: 8999, agentYear3: 323964 },
-    departments: { tecnologia: 224999, comercial: 179999, marketing: 149999, financeiro: 179999, criacao: 119999, suporte: 119999, rh: 54999 },
+    plans: { starter: 17999, growth: 35999 },
+    tokenPacks: { pack5m: 5299, pack15m: 12999, pack50m: 27999, pack100m: 49999 },
+    comparison: { avgSalary: 100000, avgSalaryYear3: 6000000, agentStarting: 5299, agentYear3: 190764 },
+    departments: { tecnologia: 44999, comercial: 31999, marketing: 27999, financeiro: 31999, criacao: 17999, suporte: 11499, rh: 17999 },
     departmentClt: cltCosts,
   },
   ko: {
     currency: "KRW", symbol: "₩", locale: "ko-KR",
-    plans: { starter: 452900, growth: 799900 },
-    tokenPacks: { pack5m: 132900, pack15m: 329900, pack50m: 799900, pack100m: 1599900 },
-    comparison: { avgSalary: 4000000, avgSalaryYear3: 240000000, agentStarting: 132900, agentYear3: 4784400 },
-    departments: { tecnologia: 3329000, comercial: 2659000, marketing: 2259000, financeiro: 2659000, criacao: 1729000, suporte: 1729000, rh: 799900 },
+    plans: { starter: 269900, growth: 529900 },
+    tokenPacks: { pack5m: 79900, pack15m: 189900, pack50m: 399900, pack100m: 729900 },
+    comparison: { avgSalary: 4000000, avgSalaryYear3: 240000000, agentStarting: 79900, agentYear3: 2876400 },
+    departments: { tecnologia: 669900, comercial: 469900, marketing: 399900, financeiro: 469900, criacao: 269900, suporte: 169900, rh: 269900 },
     departmentClt: cltCosts,
   },
   tr: {
     currency: "TRY", symbol: "₺", locale: "tr-TR",
-    plans: { starter: 10799, growth: 19499 },
-    tokenPacks: { pack5m: 3199, pack15m: 7799, pack50m: 19499, pack100m: 38999 },
-    comparison: { avgSalary: 30000, avgSalaryYear3: 1800000, agentStarting: 3199, agentYear3: 115164 },
-    departments: { tecnologia: 79999, comercial: 64999, marketing: 54999, financeiro: 64999, criacao: 42999, suporte: 42999, rh: 19499 },
+    plans: { starter: 6399, growth: 12799 },
+    tokenPacks: { pack5m: 1899, pack15m: 4499, pack50m: 9699, pack100m: 17999 },
+    comparison: { avgSalary: 30000, avgSalaryYear3: 1800000, agentStarting: 1899, agentYear3: 68364 },
+    departments: { tecnologia: 15999, comercial: 11299, marketing: 9699, financeiro: 11299, criacao: 6399, suporte: 3999, rh: 6399 },
     departmentClt: cltCosts,
   },
 };
@@ -184,17 +186,17 @@ export function formatPriceShort(amount: number, lang: string): string {
 // Backward-compatible exports for Library.tsx and AgentLanding
 export type PriceTier = "starter" | "entry" | "mid" | "high" | "premium";
 
-// Real tier prices per region (monthly, per agent)
-const brlTiers: Record<PriceTier, number> = { starter: 497, entry: 997, mid: 1697, high: 2497, premium: 4997 };
-const usdTiers: Record<PriceTier, number> = { starter: 99, entry: 199, mid: 339, high: 499, premium: 999 };
-const eurTiers: Record<PriceTier, number> = { starter: 89, entry: 179, mid: 299, high: 449, premium: 899 };
-const jpyTiers: Record<PriceTier, number> = { starter: 14800, entry: 29800, mid: 49800, high: 74800, premium: 149800 };
-const cnyTiers: Record<PriceTier, number> = { starter: 699, entry: 1399, mid: 2399, high: 3499, premium: 6999 };
-const sarTiers: Record<PriceTier, number> = { starter: 369, entry: 749, mid: 1269, high: 1869, premium: 3749 };
-const inrTiers: Record<PriceTier, number> = { starter: 8299, entry: 16599, mid: 28299, high: 41499, premium: 83499 };
-const rubTiers: Record<PriceTier, number> = { starter: 8999, entry: 17999, mid: 30999, high: 44999, premium: 89999 };
-const krwTiers: Record<PriceTier, number> = { starter: 132900, entry: 265900, mid: 452900, high: 665900, premium: 1329900 };
-const tryTiers: Record<PriceTier, number> = { starter: 3199, entry: 6399, mid: 10799, high: 15999, premium: 31999 };
+// Per-agent tier prices calibrated for Claude Sonnet 4 (80-90% margin)
+const brlTiers: Record<PriceTier, number> = { starter: 297, entry: 697, mid: 997, high: 1297, premium: 2497 };
+const usdTiers: Record<PriceTier, number> = { starter: 59, entry: 139, mid: 197, high: 297, premium: 497 };
+const eurTiers: Record<PriceTier, number> = { starter: 49, entry: 119, mid: 179, high: 269, premium: 449 };
+const jpyTiers: Record<PriceTier, number> = { starter: 8800, entry: 19800, mid: 29800, high: 44800, premium: 74800 };
+const cnyTiers: Record<PriceTier, number> = { starter: 399, entry: 999, mid: 1399, high: 2099, premium: 3499 };
+const sarTiers: Record<PriceTier, number> = { starter: 219, entry: 519, mid: 749, high: 1099, premium: 1869 };
+const inrTiers: Record<PriceTier, number> = { starter: 4899, entry: 11499, mid: 16499, high: 24999, premium: 41499 };
+const rubTiers: Record<PriceTier, number> = { starter: 5299, entry: 12999, mid: 17999, high: 27999, premium: 44999 };
+const krwTiers: Record<PriceTier, number> = { starter: 79900, entry: 189900, mid: 269900, high: 399900, premium: 669900 };
+const tryTiers: Record<PriceTier, number> = { starter: 1899, entry: 4499, mid: 6399, high: 9699, premium: 15999 };
 
 const priceTierValues: Record<string, Record<PriceTier, number>> = {
   pt: brlTiers,
