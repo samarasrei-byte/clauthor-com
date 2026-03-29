@@ -302,6 +302,7 @@ const ClientDashboard = () => {
     "neural-network": "Rede Neural",
     scrum: "Quadro Scrum",
     chat: selectedAgent?.name || "Chat",
+    inbox: "Inbox",
   }), [t, selectedAgent]);
 
   const breadcrumbLabel = breadcrumbMap[activeSection] || activeSection;
