@@ -7,8 +7,8 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, CreditCard,
   Sparkles, Settings, Brain, MessageSquare, Plug, ChevronLeft,
-  Rocket, Building2, KanbanSquare, Layers3,
-  Video, Clock, Radar, Orbit, LayoutGrid, Inbox
+  Building2, KanbanSquare, Layers3,
+  Clock, Radar, Inbox
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
