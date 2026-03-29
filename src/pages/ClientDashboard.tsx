@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, useCallback, lazy, Suspense } from "react";
 import { cn } from "@/lib/utils";
+import { safeGetItem, safeSetItem } from "@/lib/safe-storage";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -59,24 +60,24 @@ const ClientDashboard = () => {
   const [showBoardGate, setShowBoardGate] = useState(false);
   const [showLiveGuide, setShowLiveGuide] = useState(() => {
     if (typeof window === "undefined") return false;
-    return !localStorage.getItem("clauthor_live_guide_dismissed");
+    return !safeGetItem("clauthor_live_guide_dismissed");
   });
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
     if (!user) return false;
-    return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
+    return !!safeGetItem(`clauthor_board_gate_skipped_${user.id}`);
   });
 
   // ── First-time redirect to THOR ──
   useEffect(() => {
     if (!user) return;
     const key = `clauthor_concierge_seen_${user.id}`;
-    if (!localStorage.getItem(key)) {
-      localStorage.setItem(key, "true");
+    if (!safeGetItem(key)) {
+      safeSetItem(key, "true");
       setActiveSection("omnix");
       setOmnixMounted(true);
-      const hireIntent = localStorage.getItem("hireIntent");
+      const hireIntent = safeGetItem("hireIntent");
       let parsed: { agentName?: string; isDepartment?: boolean; agentCount?: number } | null = null;
       try { parsed = hireIntent ? JSON.parse(hireIntent) : null; } catch {}
       if (parsed?.isDepartment && parsed.agentName) {
@@ -115,14 +116,14 @@ const ClientDashboard = () => {
 
   useEffect(() => {
     if (!user) return;
-    const done = localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
+    const done = safeGetItem(`clauthor_onboarding_done_${user.id}`);
     if (done) return;
-    const hasHireIntent = !!localStorage.getItem("hireIntent");
+    const hasHireIntent = !!safeGetItem("hireIntent");
     // If user was just redirected to THOR (concierge_seen was set in the THOR useEffect above),
     // skip the SmartOnboarding wizard — THOR already handles first-time guidance
-    const thorHandledOnboarding = !!localStorage.getItem(`clauthor_concierge_seen_${user.id}`);
+    const thorHandledOnboarding = !!safeGetItem(`clauthor_concierge_seen_${user.id}`);
     if (hasHireIntent || thorHandledOnboarding) {
-      localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
+      safeSetItem(`clauthor_onboarding_done_${user.id}`, "true");
     } else {
       setShowSmartOnboarding(true);
     }
@@ -393,7 +394,7 @@ const ClientDashboard = () => {
           isOpen={showSmartOnboarding}
           onClose={() => {
             setShowSmartOnboarding(false);
-            if (user) localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
+            if (user) safeSetItem(`clauthor_onboarding_done_${user.id}`, "true");
           }}
         />
       )}
@@ -441,7 +442,7 @@ const ClientDashboard = () => {
                 <CompanyBoardGate
                   agentName={selectedAgent.name}
                   onSetupCompany={() => setShowCompanyOnboarding(true)}
-                  onSkip={() => { setBoardGateSkipped(true); if (user) localStorage.setItem(`clauthor_board_gate_skipped_${user.id}`, "true"); }}
+                  onSkip={() => { setBoardGateSkipped(true); if (user) safeSetItem(`clauthor_board_gate_skipped_${user.id}`, "true"); }}
                 />
               ) : (
                 <div className="h-full flex flex-col">
@@ -532,7 +533,7 @@ const ClientDashboard = () => {
           <ThorLiveGuide
             activeSection={activeSection}
             onNavigate={handleSidebarNav}
-            onDismiss={() => { setShowLiveGuide(false); localStorage.setItem("clauthor_live_guide_dismissed", "true"); }}
+            onDismiss={() => { setShowLiveGuide(false); safeSetItem("clauthor_live_guide_dismissed", "true"); }}
           />
         </Suspense>
       )}

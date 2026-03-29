@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useOmnix } from "@/hooks/useOmnix";
+import { safeGetItem, safeSetItem } from "@/lib/safe-storage";
 import OmnixChat from "@/components/omnix/OmnixChat";
 import OmnixSettings from "@/components/omnix/OmnixSettings";
 
@@ -29,7 +30,7 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
     if (postPaymentContext || initialMessage) return;
 
     // If user already greeted but no messages exist (e.g. edge fn failed), retry
-    const greeted = localStorage.getItem(GREETING_KEY);
+    const greeted = safeGetItem(GREETING_KEY);
     if (greeted) {
       // Still allow retry if localStorage is set but messages are empty
       // (means previous greeting failed silently)
@@ -37,10 +38,10 @@ const OmnixCommandCenter = ({ postPaymentContext, onPostPaymentHandled, initialM
     }
 
     greetingSent.current = true;
-    localStorage.setItem(GREETING_KEY, "1");
+    safeSetItem(GREETING_KEY, "1");
 
     // Check for hire intent from onboarding
-    const hireIntent = localStorage.getItem("hireIntent");
+    const hireIntent = safeGetItem("hireIntent");
     let greeting: string;
 
     if (hireIntent) {
