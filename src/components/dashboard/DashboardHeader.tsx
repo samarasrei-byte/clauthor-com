@@ -20,22 +20,22 @@ const DashboardHeader = ({ locale, remainingCredits, credits }: DashboardHeaderP
   const TimeIcon = () => {
     if (hour >= 6 && hour < 18) {
       return (
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.4)] animate-[spin_12s_linear_infinite]">
-          <circle cx="12" cy="12" r="4" stroke="currentColor" strokeWidth="1.5" />
-          {[0, 45, 90, 135, 180, 225, 270, 315].map((angle) => {
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="shrink-0 text-primary drop-shadow-[0_0_8px_hsl(var(--primary)/0.3)]">
+          <circle cx="12" cy="12" r="5" fill="currentColor" opacity="0.15" />
+          <circle cx="12" cy="12" r="3" fill="currentColor" opacity="0.6" />
+          <circle cx="12" cy="12" r="1.5" fill="currentColor" />
+          {[0, 60, 120, 180, 240, 300].map((angle) => {
             const rad = (angle * Math.PI) / 180;
-            const x1 = 12 + 6.5 * Math.cos(rad);
-            const y1 = 12 + 6.5 * Math.sin(rad);
-            const x2 = 12 + 9 * Math.cos(rad);
-            const y2 = 12 + 9 * Math.sin(rad);
-            return <line key={angle} x1={x1} y1={y1} x2={x2} y2={y2} stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />;
+            const x = 12 + 9 * Math.cos(rad);
+            const y = 12 + 9 * Math.sin(rad);
+            return <circle key={angle} cx={x} cy={y} r="1" fill="currentColor" opacity="0.4" />;
           })}
         </svg>
       );
     }
     return (
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-blue-300 drop-shadow-[0_0_6px_rgba(147,197,253,0.4)]">
-        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" className="shrink-0 text-muted-foreground drop-shadow-[0_0_6px_hsl(var(--muted-foreground)/0.2)]">
+        <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" fill="currentColor" opacity="0.1" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
       </svg>
     );
   };
