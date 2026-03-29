@@ -392,7 +392,7 @@ const ClientDashboard = () => {
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
 
       <div className="flex h-full">
-        <div className="hidden lg:block">
+        <div className="hidden lg:block relative z-10">
           <DashboardSidebar items={sidebarItems} activeItem={activeSection} onItemChange={handleSidebarNav} />
         </div>
 

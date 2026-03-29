@@ -43,14 +43,14 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
     <motion.aside
       data-tour="sidebar"
       initial={false}
-      animate={{ width: collapsed ? 64 : 220 }}
-      transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="h-full flex flex-col bg-background/50 backdrop-blur-sm border-r border-border/5 overflow-hidden shrink-0 relative"
+      animate={{ width: collapsed ? 56 : 240 }}
+      transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+      className="h-full flex flex-col bg-background/60 backdrop-blur-xl border-r border-border/10 overflow-hidden shrink-0 relative"
     >
       {/* Toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute right-1 top-6 z-10 w-6 h-6 rounded-full bg-background border border-border/20 flex items-center justify-center hover:border-primary/30 transition-colors"
+        className="absolute -right-3 top-7 z-10 w-6 h-6 rounded-full bg-background border border-border/30 flex items-center justify-center hover:border-primary/40 hover:bg-accent/10 transition-all shadow-sm"
       >
         {collapsed ? (
           <ChevronRight className="h-3 w-3 text-muted-foreground" />
@@ -60,7 +60,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       </button>
 
       {/* Nav Items */}
-      <nav className="flex-1 py-3 px-2 space-y-0.5 overflow-y-auto scrollbar-thin">
+      <nav className="flex-1 py-4 px-2.5 space-y-0.5 overflow-y-auto scrollbar-thin">
         {items.map((item, idx) => {
           const showGroupHeader = item.group && (idx === 0 || items[idx - 1].group !== item.group);
           const isActive = activeItem === item.id;
@@ -103,7 +103,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 }}
                 className={cn(
                   "w-full flex items-center gap-2.5 rounded-lg transition-all duration-150 group relative",
-                  collapsed ? "px-2.5 py-2.5 justify-center" : "px-3 py-[8px]",
+                  collapsed ? "px-2 py-2 justify-center" : "px-3 py-[7px]",
                   (typeof item.badge === "string" && item.badge.length > 3)
                     ? "text-muted-foreground/50 hover:text-muted-foreground/70 hover:bg-muted/5"
                     : isActive
