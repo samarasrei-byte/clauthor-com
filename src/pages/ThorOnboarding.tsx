@@ -14,7 +14,7 @@ import {
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import thorOrb from "@/assets/thor-orb.png";
-import clauthorLogo from "@/assets/clauthor-logo.png";
+import clauthorLogo from "@/assets/clauthor-logo-v2.png";
 
 // ── Types ──────────────────────────────────────────
 interface ChatMessage {
