@@ -546,9 +546,9 @@ const ThorGreeter = () => {
     setPhase("active");
     if (messagesRef.current.length === 0) {
       const isPt = lang.startsWith("pt");
-      const greeting = isPt ? "Voltei! 😄 Em que posso te ajudar?" : "I'm back! 😄 How can I help?";
+      const greeting = isPt ? "Olá! Eu sou o **Thor**, seu Orquestrador IA. Em que posso ajudar?" : "Hi! I'm **Thor**, your AI Orchestrator. How can I help?";
       setMessages([{ role: "assistant", content: greeting }]);
-      if (voiceEnabled) speak(greeting.replace(/[😄]/g, ""), thorVoiceId);
+      // Don't auto-speak — user must opt-in via voice button
     }
   };
 
