@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Bot, BarChart3, CreditCard,
   Sparkles, Settings, Brain, MessageSquare, Plug, ChevronLeft,
   Rocket, Building2, KanbanSquare, Layers3,
-  Video, Clock, Radar, Orbit, LayoutGrid
+  Video, Clock, Radar, Orbit, LayoutGrid, Inbox
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -250,6 +250,7 @@ const ClientDashboard = () => {
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
     { id: "chat", label: "Chat", icon: MessageSquare, group: mainGroup },
+    { id: "inbox", label: "Inbox", icon: Inbox, group: mainGroup },
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}` }] : []),
     ...departmentSidebarItems,
     ...soloAgentItems,
@@ -301,6 +302,7 @@ const ClientDashboard = () => {
     "neural-network": "Rede Neural",
     scrum: "Quadro Scrum",
     chat: selectedAgent?.name || "Chat",
+    inbox: "Inbox",
   }), [t, selectedAgent]);
 
   const breadcrumbLabel = breadcrumbMap[activeSection] || activeSection;
