@@ -202,7 +202,6 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       );
 
       if (!response.ok) {
-        console.warn("ElevenLabs TTS failed, using native voice:", response.status);
         markElevenLabsFailed();
         doNativeFallback();
         return true;
@@ -210,7 +209,6 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
 
       const contentType = response.headers.get("content-type") || "";
       if (contentType.includes("application/json")) {
-        console.warn("ElevenLabs TTS returned fallback payload, using native voice");
         markElevenLabsFailed();
         doNativeFallback();
         return true;
@@ -218,7 +216,6 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
 
       const audioBlob = await response.blob();
       if (audioBlob.size < 100) {
-        console.warn("ElevenLabs returned tiny response, using native");
         markElevenLabsFailed();
         doNativeFallback();
         return true;
@@ -244,7 +241,6 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
         wrappedOnEnd();
       };
       audio.onerror = () => {
-        console.error("Audio playback error, using native");
         stop(false);
         doNativeFallback();
       };
@@ -252,8 +248,7 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       await audio.play();
       if (finishedPromise) await finishedPromise;
       return true;
-    } catch (err) {
-      console.error("TTS error, using fallback:", err);
+    } catch {
       doNativeFallback();
       if (finishedPromise) await finishedPromise;
       return true;

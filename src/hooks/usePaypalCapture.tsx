@@ -73,10 +73,7 @@ export function usePaypalCapture() {
               .eq("is_active", true)
               .single();
 
-            if (!template) {
-              console.warn(`Template not found for slug: ${slug}`);
-              continue;
-            }
+            if (!template) continue;
 
             // Check if agent with same name already exists for this user
             const { data: existing } = await supabase
@@ -172,10 +169,10 @@ export function usePaypalCapture() {
                   },
                   body: JSON.stringify({ agentId }),
                 }
-              ).catch(console.warn);
+              ).catch(() => {});
             }
-          } catch (e) {
-            console.warn("OpenClaw registration deferred:", e);
+          } catch {
+            // OpenClaw registration deferred — non-critical
           }
 
           toast.dismiss(loadingToast);
@@ -202,7 +199,7 @@ export function usePaypalCapture() {
               currency: subIntent.currency || "BRL",
               subscription_id: subIntent.subscription_id,
             },
-          }).catch(console.warn);
+          }).catch(() => {});
 
           queryClient.invalidateQueries({ queryKey: ["user-agents"] });
           queryClient.invalidateQueries({ queryKey: ["payment-history"] });

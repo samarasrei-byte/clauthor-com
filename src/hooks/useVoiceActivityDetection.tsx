@@ -89,8 +89,8 @@ export function useVoiceActivityDetection({
       };
 
       checkVolume();
-    } catch (err) {
-      console.warn("VAD: Could not access microphone", err);
+    } catch {
+      // Microphone access denied or unavailable
     }
   }, [threshold, consecutiveFrames]);
 

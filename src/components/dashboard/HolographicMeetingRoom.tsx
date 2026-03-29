@@ -279,8 +279,8 @@ const HolographicMeetingRoom = () => {
   const speakAgentMessage = useCallback(async (text: string) => {
     try {
       await ttsSpeak(text, undefined, true); // waitForEnd = true
-    } catch (e) {
-      console.warn("Meeting TTS error:", e);
+    } catch {
+      // TTS fallback handled by the hook
     }
   }, [ttsSpeak]);
 

@@ -180,8 +180,7 @@ export function useOmnix() {
               buf = line + "\n" + buf;
               break;
             }
-            // Otherwise skip this malformed line
-            console.warn("[OmnixStream] Skipping malformed SSE line");
+            // Skip malformed SSE line
           }
         }
       }

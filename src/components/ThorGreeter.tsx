@@ -368,7 +368,6 @@ const ThorGreeter = () => {
   useEffect(() => {
     if (!isSpeaking) return;
     const timeout = setTimeout(() => {
-      console.warn("[Thor] Safety timeout: stopping speech after 30s");
       stopTTS();
     }, 30_000);
     return () => clearTimeout(timeout);
@@ -481,7 +480,6 @@ const ThorGreeter = () => {
       const resetStallTimer = () => {
         if (streamStallTimer) clearTimeout(streamStallTimer);
         streamStallTimer = setTimeout(() => {
-          console.warn("[Thor] Stream stalled for 15s, aborting");
           controller.abort();
         }, 15_000);
       };
