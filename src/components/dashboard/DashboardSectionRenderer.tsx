@@ -24,21 +24,16 @@ const UnifiedInbox = lazy(() => import("./UnifiedInbox"));
 
 interface Props {
   activeSection: string;
-  // Insights
   realChartData: any[];
   totalExecutions: number;
   recentLogs: any[];
   locale: string;
-  // Agents
   agents: any[];
   loadingAgents: boolean;
   nameToSlug: Record<string, string>;
   tierColors: any;
   formatCurrency: (v: number) => string;
-  // Company
-  // Settings
   billingContent: React.ReactNode;
-  // Navigation
   onNavigate: (id: string) => void;
   onSetActiveSection: (s: string) => void;
   onSelectAgent: (agent: { id: string; name: string }) => void;
@@ -73,16 +68,10 @@ const DashboardSectionRenderer = ({
         </Suspense>
       )}
 
-      {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
-      {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
       {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
 
       {activeSection === "squads" && (
         <Suspense fallback={<SectionLoader />}><SquadManager onNavigate={onNavigate} /></Suspense>
-      )}
-
-      {activeSection === "bulk-deploy" && (
-        <Suspense fallback={<SectionLoader />}><BulkAgentProvisioner /></Suspense>
       )}
 
       {activeSection === "agents" && (
@@ -117,9 +106,14 @@ const DashboardSectionRenderer = ({
       {activeSection === "deliverables" && <Suspense fallback={<SectionLoader />}><DeliverablesHub onNavigate={onNavigate} /></Suspense>}
       {activeSection === "call-transcriber" && <Suspense fallback={<SectionLoader />}><SalesCallTranscriber /></Suspense>}
       {activeSection === "operations-center" && <Suspense fallback={<SectionLoader />}><OperationsCenter onNavigate={onNavigate} /></Suspense>}
+      {activeSection === "inbox" && <Suspense fallback={<SectionLoader />}><UnifiedInbox onOpenChat={onSelectAgent} /></Suspense>}
+
+      {/* Legacy routes kept accessible via internal navigation */}
+      {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
+      {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
+      {activeSection === "bulk-deploy" && <Suspense fallback={<SectionLoader />}><BulkAgentProvisioner /></Suspense>}
       {activeSection === "neural-network" && <Suspense fallback={<SectionLoader />}><AgentNeuralNetwork /></Suspense>}
       {activeSection === "scrum" && <Suspense fallback={<SectionLoader />}><ScrumBoard /></Suspense>}
-      {activeSection === "inbox" && <Suspense fallback={<SectionLoader />}><UnifiedInbox onOpenChat={onSelectAgent} /></Suspense>}
 
       {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
         <ComingSoonSection feature={activeSection} />
