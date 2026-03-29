@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Bot, BarChart3, CreditCard,
   Sparkles, Settings, Brain, MessageSquare, Plug, ChevronLeft,
   Building2, KanbanSquare, Layers3,
-  Clock, Radar, Orbit, Inbox
+  Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -249,6 +249,8 @@ const ClientDashboard = () => {
   const workGroup = t("dashboard.nav_work", { defaultValue: "Trabalho" });
   const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
 
+  const innovationGroup = "Inovação";
+
   const sidebarItems: SidebarItem[] = [
     { id: "omnix", label: "THOR", icon: Brain, group: mainGroup },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
@@ -262,6 +264,10 @@ const ClientDashboard = () => {
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: workGroup },
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
     { id: "neural-network", label: "Rede Neural", icon: Orbit, group: workGroup },
+    { id: "agent-replay", label: "Agent Replay", icon: Rewind, group: innovationGroup },
+    { id: "predictive", label: "Preditivo", icon: TrendingUp, group: innovationGroup },
+    { id: "agent-dna", label: "Agent DNA", icon: Dna, group: innovationGroup },
+    { id: "mission-composer", label: "Composer", icon: Workflow, group: innovationGroup },
     { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Operações" }), icon: Radar, badge: pendingTaskCount || undefined, group: systemGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
@@ -296,6 +302,10 @@ const ClientDashboard = () => {
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     squads: "Squads",
     "neural-network": "Rede Neural",
+    "agent-replay": "Agent Replay",
+    predictive: "Predictive Dashboard",
+    "agent-dna": "Agent DNA",
+    "mission-composer": "Mission Composer",
     chat: selectedAgent?.name || "Chat",
     inbox: "Inbox",
   }), [t, selectedAgent]);
