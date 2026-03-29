@@ -8,7 +8,7 @@ import {
   LayoutDashboard, Bot, BarChart3, CreditCard,
   Sparkles, Settings, Brain, MessageSquare, Plug, ChevronLeft,
   Building2, KanbanSquare, Layers3,
-  Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow
+  Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -264,6 +264,7 @@ const ClientDashboard = () => {
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: workGroup },
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
     { id: "neural-network", label: "Rede Neural", icon: Orbit, group: workGroup },
+    { id: "war-room-live", label: "War Room", icon: Radio, group: innovationGroup },
     { id: "agent-replay", label: "Agent Replay", icon: Rewind, group: innovationGroup },
     { id: "predictive", label: "Preditivo", icon: TrendingUp, group: innovationGroup },
     { id: "agent-dna", label: "Agent DNA", icon: Dna, group: innovationGroup },
@@ -306,6 +307,7 @@ const ClientDashboard = () => {
     predictive: "Predictive Dashboard",
     "agent-dna": "Agent DNA",
     "mission-composer": "Mission Composer",
+    "war-room-live": "War Room Live",
     chat: selectedAgent?.name || "Chat",
     inbox: "Inbox",
   }), [t, selectedAgent]);

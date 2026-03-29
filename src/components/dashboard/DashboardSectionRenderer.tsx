@@ -25,6 +25,7 @@ const AgentReplay = lazy(() => import("./AgentReplay"));
 const PredictiveDashboard = lazy(() => import("./PredictiveDashboard"));
 const AgentDNA = lazy(() => import("./AgentDNA"));
 const MissionComposer = lazy(() => import("./MissionComposer"));
+const WarRoomLive = lazy(() => import("./WarRoomLive"));
 
 interface Props {
   activeSection: string;
@@ -117,6 +118,7 @@ const DashboardSectionRenderer = ({
       {activeSection === "predictive" && <Suspense fallback={<SectionLoader />}><PredictiveDashboard /></Suspense>}
       {activeSection === "agent-dna" && <Suspense fallback={<SectionLoader />}><AgentDNA /></Suspense>}
       {activeSection === "mission-composer" && <Suspense fallback={<SectionLoader />}><MissionComposer /></Suspense>}
+      {activeSection === "war-room-live" && <Suspense fallback={<SectionLoader />}><WarRoomLive /></Suspense>}
 
       {/* Legacy routes kept accessible via internal navigation */}
       {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
