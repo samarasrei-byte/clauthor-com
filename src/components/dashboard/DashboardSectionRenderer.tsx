@@ -20,6 +20,7 @@ const ScrumBoard = lazy(() => import("@/pages/ScrumBoard"));
 const AgentsSection = lazy(() => import("./AgentsSection"));
 const SettingsPage = lazy(() => import("./SettingsPage"));
 const PaymentHistoryTable = lazy(() => import("./PaymentHistoryTable"));
+const UnifiedInbox = lazy(() => import("./UnifiedInbox"));
 
 interface Props {
   activeSection: string;
@@ -118,6 +119,7 @@ const DashboardSectionRenderer = ({
       {activeSection === "operations-center" && <Suspense fallback={<SectionLoader />}><OperationsCenter onNavigate={onNavigate} /></Suspense>}
       {activeSection === "neural-network" && <Suspense fallback={<SectionLoader />}><AgentNeuralNetwork /></Suspense>}
       {activeSection === "scrum" && <Suspense fallback={<SectionLoader />}><ScrumBoard /></Suspense>}
+      {activeSection === "inbox" && <Suspense fallback={<SectionLoader />}><UnifiedInbox onOpenChat={onSelectAgent} /></Suspense>}
 
       {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
         <ComingSoonSection feature={activeSection} />
