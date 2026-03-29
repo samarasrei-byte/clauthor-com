@@ -11,7 +11,8 @@ import thorPhoto from "@/assets/kaelis-ai.webp";
 
 const DEFAULT_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";
 const STORAGE_KEY = "thor_greeter_seen_v3";
-const PROACTIVE_INTERVAL = 45_000;
+// Proactive messages disabled — Thor only speaks when user interacts
+const PROACTIVE_INTERVAL = 0; // was 45_000 — caused Thor to auto-popup aggressively
 
 interface ThorMessage {
   role: "user" | "assistant";
@@ -326,7 +327,7 @@ const ThorGreeter = () => {
   const [messages, setMessages] = useState<ThorMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [voiceEnabled, setVoiceEnabled] = useState(true);
+  const [voiceEnabled, setVoiceEnabled] = useState(false); // Start muted — user opts in
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showChat, setShowChat] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -378,13 +379,14 @@ const ThorGreeter = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Entrance disabled — Thor starts minimized, user clicks to activate
+  // This prevents the full-screen takeover that blocks the UI
   useEffect(() => {
     const seen = localStorage.getItem(STORAGE_KEY);
     if (!seen && location.pathname === "/") {
-      const timer = setTimeout(() => setPhase("entrance"), 800);
-      return () => clearTimeout(timer);
+      localStorage.setItem(STORAGE_KEY, "1"); // mark as seen without showing entrance
     }
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (phase === "entrance") {
@@ -402,30 +404,20 @@ const ThorGreeter = () => {
     }
   }, [phase]);
 
-  // Proactive messages
+  // Proactive messages DISABLED — Thor was auto-popping every 45s causing "viajando" behavior
+  // Thor now only activates when user clicks the orb
   useEffect(() => {
     if (proactiveTimerRef.current) {
       clearInterval(proactiveTimerRef.current);
       proactiveTimerRef.current = null;
     }
-    if (phase !== "minimized" || hasInteracted || isLoading) return;
-    proactiveTimerRef.current = setInterval(() => {
-      if (isLoading) return; // double guard
-      const msgs = getProactiveMessages(location.pathname, lang);
-      const idx = proactiveIndexRef.current % msgs.length;
-      proactiveIndexRef.current++;
-      stopTTS();
-      setPhase("active");
-      setMessages(prev => [...prev, { role: "assistant", content: msgs[idx] }]);
-      if (voiceEnabled) speak(msgs[idx].replace(/[*#🚀]/g, ""), thorVoiceId);
-    }, PROACTIVE_INTERVAL);
     return () => {
       if (proactiveTimerRef.current) {
         clearInterval(proactiveTimerRef.current);
         proactiveTimerRef.current = null;
       }
     };
-  }, [phase, location.pathname, hasInteracted, voiceEnabled, stopTTS, speak, lang, isLoading]);
+  }, []);
 
   const sendMessage = useCallback(async (text?: string) => {
     const msg = (text || input).trim();
