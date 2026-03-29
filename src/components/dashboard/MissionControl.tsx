@@ -60,43 +60,13 @@ const statusConfig: Record<AgentNode["status"], { color: string; label: string; 
   idle: { color: "bg-muted-foreground/30", label: "Idle", pulse: false },
 };
 
-// ─── Mock data (will be replaced by real data) ───
-const mockAgents: AgentNode[] = [
-  { id: "thor", name: "Thor", status: "delegating", currentTask: "Orchestrating TikTok campaign", progress: 100, delegatedBy: "User" },
-  { id: "art", name: "ArtAgent", status: "working", currentTask: "Creating campaign banner", progress: 72, delegatedBy: "Thor" },
-  { id: "video", name: "VideoAgent", status: "working", currentTask: "Producing TikTok video", progress: 45, delegatedBy: "Thor" },
-  { id: "script", name: "ScriptAgent", status: "waiting", currentTask: "Awaiting video narration approval", progress: 100, delegatedBy: "VideoAgent" },
-  { id: "data", name: "DataAgent", status: "idle", delegatedBy: "Thor" },
-  { id: "sdr", name: "SDR Outbound", status: "working", currentTask: "Prospecting leads", progress: 60, delegatedBy: "Thor" },
-];
-
-const mockValidation: ValidationItem[] = [
-  { id: "v1", agentName: "ArtAgent", taskTitle: "Campaign banner creation", outputType: "image", preview: "Minimalist banner with vibrant gradient overlay and bold typography", createdAt: new Date(Date.now() - 300000).toISOString(), status: "pending" },
-  { id: "v2", agentName: "ScriptAgent", taskTitle: "Video narration script", outputType: "text", preview: "\"In a world driven by AI, your business deserves agents that think, act, and evolve...\"", createdAt: new Date(Date.now() - 600000).toISOString(), status: "pending" },
-  { id: "v3", agentName: "DataAgent", taskTitle: "Market analysis report", outputType: "report", preview: "Competitive landscape analysis with 12 key insights identified", createdAt: new Date(Date.now() - 900000).toISOString(), status: "approved" },
-];
-
-const mockTasks: RunningTask[] = [
-  { id: "t1", agentName: "VideoAgent", description: "Creating TikTok campaign video", progress: 45, dependencies: ["ScriptAgent", "ArtAgent"], delegatedBy: "Thor" },
-  { id: "t2", agentName: "ArtAgent", description: "Designing campaign banner set", progress: 72, dependencies: [], delegatedBy: "Thor" },
-  { id: "t3", agentName: "SDR Outbound", description: "Prospecting qualified leads", progress: 60, dependencies: ["DataAgent"], delegatedBy: "Thor" },
-];
-
-const mockPreferences: LearningPreference[] = [
-  { category: "Visual Style", value: "Minimalist + vibrant colors", confidence: 87, learnedFrom: 18 },
-  { category: "Video Style", value: "Fast paced + short format", confidence: 73, learnedFrom: 9 },
-  { category: "Copy Style", value: "Short and direct", confidence: 91, learnedFrom: 24 },
-  { category: "Response Tone", value: "Professional yet friendly", confidence: 82, learnedFrom: 15 },
-];
-
-const mockTimeline = [
-  { time: "09:21", event: "Thor initiated TikTok campaign", type: "info" as const },
-  { time: "09:22", event: "ScriptAgent assigned script creation", type: "info" as const },
-  { time: "09:25", event: "Script approved automatically", type: "success" as const },
-  { time: "09:27", event: "VideoAgent started production", type: "info" as const },
-  { time: "09:30", event: "ArtAgent started banner design", type: "info" as const },
-  { time: "09:35", event: "Awaiting human validation", type: "warning" as const },
-];
+// ─── Empty state component ───
+const EmptyState = ({ icon: Icon, message }: { icon: typeof Bot; message: string }) => (
+  <div className="flex flex-col items-center justify-center py-8 text-center">
+    <Icon className="h-8 w-8 text-muted-foreground/30 mb-2" />
+    <p className="text-xs text-muted-foreground">{message}</p>
+  </div>
+);
 
 // ─── Sub-components ───
 
@@ -189,9 +159,9 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
     enabled: !!user,
   });
 
-  // Build agent nodes from real data (with fallback to demo if no agents)
+  // Build agent nodes from real data
   const agentNodes: AgentNode[] = useMemo(() => {
-    if (realAgents.length === 0) return mockAgents;
+    if (realAgents.length === 0) return [];
     return realAgents.map(a => ({
       id: a.id,
       name: a.name,
@@ -204,7 +174,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
 
   // Build validation items from pending_actions
   const validationItems: ValidationItem[] = useMemo(() => {
-    if (pendingActions.length === 0) return mockValidation;
+    if (pendingActions.length === 0) return [];
     return pendingActions.map((pa: any) => ({
       id: pa.id,
       agentName: pa.title?.split(":")[0] || "Agent",
@@ -218,7 +188,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
 
   // Build running tasks from real tasks
   const runningTasks: RunningTask[] = useMemo(() => {
-    if (realTasks.length === 0) return mockTasks;
+    if (realTasks.length === 0) return [];
     return realTasks.map((t: any) => ({
       id: t.id,
       agentName: t.agent?.name || "Unassigned",
@@ -231,7 +201,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
 
   // Build timeline from real logs
   const timelineEntries = useMemo(() => {
-    if (recentLogs.length === 0) return mockTimeline;
+    if (recentLogs.length === 0) return [];
     return recentLogs.slice(0, 6).map((log: any) => ({
       time: new Date(log.created_at).toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" }),
       event: `${log.agent?.name || "Agent"}: ${log.action}`,
@@ -241,7 +211,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
 
   const selectedAgentData = agentNodes.find(a => a.id === selectedAgent);
   const pendingValidations = validationItems.filter(v => v.status === "pending");
-  const overallConfidence = Math.round(mockPreferences.reduce((a, p) => a + p.confidence, 0) / mockPreferences.length);
+  const hasData = agentNodes.length > 0;
 
   const handleSimulate = () => {
     setShowSimulation(true);
@@ -324,6 +294,9 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
           </div>
         </CardHeader>
         <CardContent>
+          {agentNodes.length === 0 ? (
+            <EmptyState icon={Bot} message="Hire your first agent to see the network map" />
+          ) : (
           <div className="flex flex-wrap items-center gap-2 justify-center py-4">
             {/* User node */}
             <div className="flex flex-col items-center gap-1.5 px-3">
@@ -344,6 +317,7 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
               </div>
             ))}
           </div>
+          )}
 
           {/* Selected agent detail */}
           <AnimatePresence>
@@ -393,6 +367,9 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
+            {validationItems.length === 0 && (
+              <EmptyState icon={CheckCircle} message="No pending validations" />
+            )}
             {validationItems.map((item) => (
               <motion.div
                 key={item.id}
@@ -446,6 +423,9 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
             </div>
           </CardHeader>
           <CardContent className="space-y-3">
+            {runningTasks.length === 0 && (
+              <EmptyState icon={Zap} message="No tasks running" />
+            )}
             {runningTasks.map((task) => (
               <motion.div
                 key={task.id}
@@ -489,42 +469,19 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
             <div className="flex items-center gap-2">
               <Brain className="h-4 w-4 text-primary" />
               <CardTitle className="text-sm">Thor Preference Learning</CardTitle>
-              <Badge variant="secondary" className="text-[9px] ml-auto gap-1">
-                <Target className="h-2.5 w-2.5" />
-                {overallConfidence}% confidence
-              </Badge>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="grid sm:grid-cols-2 gap-3 mb-4">
-              {mockPreferences.map((pref) => (
-                <div key={pref.category} className="p-3 rounded-xl border border-border/10 bg-background/20">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] text-muted-foreground uppercase tracking-wider">{pref.category}</span>
-                    <span className="text-[9px] text-muted-foreground">from {pref.learnedFrom} decisions</span>
-                  </div>
-                  <p className="text-xs font-medium mb-2">{pref.value}</p>
-                  <div className="flex items-center gap-2">
-                    <Progress value={pref.confidence} className="h-1 flex-1" />
-                    <span className="text-[10px] font-mono text-muted-foreground">{pref.confidence}%</span>
-                  </div>
+            {hasData ? (
+              <div className="p-4 rounded-xl border border-primary/20 bg-primary/5 flex items-center gap-3">
+                <Sparkles className="h-5 w-5 text-primary shrink-0" />
+                <div>
+                  <p className="text-xs font-semibold">Learning in progress</p>
+                  <p className="text-[10px] text-muted-foreground">Thor learns your preferences as you approve and reject agent outputs. Keep interacting to improve accuracy.</p>
                 </div>
-              ))}
-            </div>
-            {overallConfidence >= 80 && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="p-4 rounded-xl border border-primary/20 bg-primary/5 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-primary" />
-                  <div>
-                    <p className="text-xs font-semibold">High confidence detected</p>
-                    <p className="text-[10px] text-muted-foreground">Thor can make autonomous decisions based on learned preferences</p>
-                  </div>
-                </div>
-                <Button size="sm" className="text-[10px] h-7 gap-1">
-                  <Zap className="h-3 w-3" />
-                  Enable Autonomous
-                </Button>
-              </motion.div>
+              </div>
+            ) : (
+              <EmptyState icon={Brain} message="Preferences are learned as you interact with agents" />
             )}
           </CardContent>
         </Card>
@@ -538,6 +495,9 @@ const MissionControl = ({ onNavigate }: { onNavigate?: (id: string) => void }) =
             </div>
           </CardHeader>
           <CardContent>
+            {timelineEntries.length === 0 && (
+              <EmptyState icon={Activity} message="Activity will appear here as agents execute tasks" />
+            )}
             <div className="space-y-0">
               {timelineEntries.map((entry, i) => (
                 <div key={i} className="flex items-start gap-3 py-2.5 relative">
