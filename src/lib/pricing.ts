@@ -187,7 +187,7 @@ export function formatPriceShort(amount: number, lang: string): string {
 export type PriceTier = "starter" | "entry" | "mid" | "high" | "premium";
 
 // Per-agent tier prices calibrated for Claude Sonnet 4 (80-90% margin)
-const brlTiers: Record<PriceTier, number> = { starter: 297, entry: 697, mid: 997, high: 1297, premium: 2497 };
+const brlTiers: Record<PriceTier, number> = { starter: 345, entry: 697, mid: 997, high: 1297, premium: 2497 };
 const usdTiers: Record<PriceTier, number> = { starter: 59, entry: 139, mid: 197, high: 297, premium: 497 };
 const eurTiers: Record<PriceTier, number> = { starter: 49, entry: 119, mid: 179, high: 269, premium: 449 };
 const jpyTiers: Record<PriceTier, number> = { starter: 8800, entry: 19800, mid: 29800, high: 44800, premium: 74800 };
