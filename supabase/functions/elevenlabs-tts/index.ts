@@ -23,7 +23,7 @@ serve(async (req) => {
     }
 
     // Voz mais jovem, inovadora e firme
-    const selectedVoice = voiceId || "57fRHlU547szfU1IrRoS"; // Voz personalizada ElevenLabs do Thor
+    const selectedVoice = voiceId || "onwK4e9ZLuTAKqWW03F9"; // Daniel — voz masculina firme e profissional
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoice}/stream?output_format=mp3_22050_32`,
