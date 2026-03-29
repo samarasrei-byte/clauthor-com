@@ -33,20 +33,20 @@ export interface ConnectorData {
 export const connectors: ConnectorData[] = [
   {
     icon: Mail,
-    name: "Gmail",
-    shortDesc: "Rascunhe respostas, resuma threads e pesquise sua caixa de entrada.",
-    longDesc: "Integre sua conta Gmail para que os agentes possam ler, responder e gerenciar e-mails automaticamente. Ideal para atendimento ao cliente, follow-ups e organização de comunicações.",
+    name: "E-mail (SendGrid)",
+    shortDesc: "Envie e gerencie e-mails transacionais e de marketing via SendGrid.",
+    longDesc: "Integre sua conta SendGrid para que os agentes possam enviar e-mails automaticamente. Ideal para atendimento ao cliente, follow-ups, newsletters e notificações transacionais.",
     category: "Comunicação",
     status: "available",
     integrationKey: "sendgrid",
     popularity: 1,
-    developer: "Clauthor",
-    developerUrl: "https://clauthor.com",
+    developer: "Twilio",
+    developerUrl: "https://sendgrid.com",
     fields: [
-      { key: "api_key", label: "API Key (SendGrid)", placeholder: "SG.xxxxxxx...", type: "password", required: true },
-      { key: "from_email", label: "E-mail remetente", placeholder: "noreply@suaempresa.com", required: true },
+      { key: "api_key", label: "SendGrid API Key", placeholder: "SG.xxxxxxx...", type: "password", required: true },
+      { key: "from_email", label: "E-mail remetente verificado", placeholder: "noreply@suaempresa.com", required: true },
     ],
-    tools: ["send-email", "read-inbox", "search-emails", "draft-reply", "summarize-thread", "create-label", "archive"],
+    tools: ["send-email", "draft-reply", "summarize-thread", "create-label"],
   },
   {
     icon: Phone,
