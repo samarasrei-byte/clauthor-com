@@ -7,8 +7,8 @@ import { useCredits, useTokenUsage } from "@/hooks/useCredits";
 import {
   LayoutDashboard, Bot, BarChart3, CreditCard,
   Sparkles, Settings, Brain, MessageSquare, Plug, ChevronLeft,
-  Rocket, Building2, KanbanSquare, Layers3,
-  Video, Clock, Radar, Orbit, LayoutGrid, Inbox
+  Building2, KanbanSquare, Layers3,
+  Clock, Radar, Inbox
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -242,14 +242,12 @@ const ClientDashboard = () => {
 
   const mainGroup = t("dashboard.nav_main", { defaultValue: "Principal" });
   const workGroup = t("dashboard.nav_work", { defaultValue: "Trabalho" });
-  const monitorGroup = t("dashboard.nav_monitor", { defaultValue: "Monitoramento" });
   const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
 
   const sidebarItems: SidebarItem[] = [
     { id: "omnix", label: "THOR", icon: Brain, group: mainGroup },
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
-    { id: "chat", label: "Chat", icon: MessageSquare, group: mainGroup },
     { id: "inbox", label: "Inbox", icon: Inbox, group: mainGroup },
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}` }] : []),
     ...departmentSidebarItems,
@@ -257,13 +255,8 @@ const ClientDashboard = () => {
     { id: "squads", label: "Squads", icon: Layers3, group: workGroup },
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: workGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: workGroup },
-    { id: "war-room", label: t("dashboard.war_room", { defaultValue: "Sala de Reunião" }), icon: Video, group: workGroup },
     { id: "insights", label: t("dashboard.insights", { defaultValue: "Insights" }), icon: BarChart3, group: workGroup },
-    { id: "neural-network", label: "Rede Neural", icon: Orbit, group: monitorGroup },
-    { id: "scrum", label: "Quadro Scrum", icon: LayoutGrid, group: monitorGroup },
-    { id: "live-timeline", label: "Timeline", icon: Clock, badge: pendingTaskCount || undefined, group: monitorGroup },
-    { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Centro de Operações" }), icon: Radar, group: monitorGroup },
-    { id: "bulk-deploy", label: "Implantar Agentes", icon: Rocket, group: systemGroup },
+    { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Operações" }), icon: Radar, badge: pendingTaskCount || undefined, group: systemGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
@@ -292,15 +285,10 @@ const ClientDashboard = () => {
     settings: t("dashboard.settings"),
     library: t("dashboard.library", { defaultValue: "Library" }),
     integrations: t("dashboard.integrations", { defaultValue: "Integrations" }),
-    "war-room": t("dashboard.war_room", { defaultValue: "Meeting Room" }),
-    "live-timeline": t("dashboard.live_timeline", { defaultValue: "Timeline" }),
-    "operations-center": t("dashboard.operations_center", { defaultValue: "Centro de Operações" }),
+    "operations-center": t("dashboard.operations_center", { defaultValue: "Operações" }),
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     squads: "Squads",
-    "bulk-deploy": "Implantar Agentes",
-    "neural-network": "Rede Neural",
-    scrum: "Quadro Scrum",
     chat: selectedAgent?.name || "Chat",
     inbox: "Inbox",
   }), [t, selectedAgent]);
