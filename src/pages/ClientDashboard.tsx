@@ -37,9 +37,14 @@ import { agentIcons } from "@/data/libraryAgentData";
 import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
 import SectionLoader from "@/components/ui/section-loader";
 
-const AgentChat = lazy(() => import("@/components/dashboard/AgentChat"));
-const OmnixCommandCenter = lazy(() => import("@/pages/OmnixCommandCenter"));
-const ThorLiveGuide = lazy(() => import("@/components/dashboard/ThorLiveGuide"));
+const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
+  window.location.reload();
+  return fn();
+}));
+
+const AgentChat = lazyRetry(() => import("@/components/dashboard/AgentChat"));
+const OmnixCommandCenter = lazyRetry(() => import("@/pages/OmnixCommandCenter"));
+const ThorLiveGuide = lazyRetry(() => import("@/components/dashboard/ThorLiveGuide"));
 
 const ClientDashboard = () => {
   const { user } = useAuth();
