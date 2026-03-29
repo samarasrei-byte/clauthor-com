@@ -81,7 +81,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                     undefined
                   }
                 >
-                  <span className="text-[9px] font-bold uppercase tracking-[0.2em] text-muted-foreground/40">
+                  <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/35">
                     {item.group}
                   </span>
                 </div>
@@ -120,7 +120,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   />
                 )}
 
-                <item.icon className={cn("h-[15px] w-[15px] shrink-0", item.colorClass || (isActive ? "text-primary" : ""))} strokeWidth={1.5} />
+                <item.icon className={cn("h-[14px] w-[14px] shrink-0", item.colorClass || (isActive ? "text-primary" : ""))} strokeWidth={1.5} />
 
                 <AnimatePresence>
                   {!collapsed && (
@@ -128,7 +128,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                       initial={{ opacity: 0, width: 0 }}
                       animate={{ opacity: 1, width: "auto" }}
                       exit={{ opacity: 0, width: 0 }}
-                      className="text-[13px] font-normal truncate flex-1 text-left tracking-[-0.01em]"
+                      className="text-[11.5px] font-normal truncate flex-1 text-left tracking-[-0.01em]"
                     >
                       {item.label}
                     </motion.span>
@@ -143,7 +143,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 {/* Badge */}
                 {item.badge && !collapsed && !hasChildren && (
                   <span className={cn(
-                    "ml-auto text-[9px] font-medium px-1.5 py-0.5 rounded",
+                    "ml-auto text-[8px] font-medium px-1.5 py-0.5 rounded",
                   (typeof item.badge === "string" && item.badge.length > 3) 
                       ? "bg-muted/30 text-muted-foreground/60 italic font-medium"
                       : "bg-primary/15 text-primary"
@@ -154,7 +154,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
 
                 {/* Badge for items with children */}
                 {item.badge && !collapsed && hasChildren && (
-                  <span className="text-[9px] font-medium px-1.5 py-0.5 rounded bg-primary/10 text-primary">
+                  <span className="text-[8px] font-medium px-1.5 py-0.5 rounded bg-primary/10 text-primary">
                     {item.badge}
                   </span>
                 )}
@@ -189,7 +189,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                             key={child.id}
                             onClick={() => onItemChange(child.id)}
                             className={cn(
-                              "w-full flex items-center gap-2 px-2 py-[5px] rounded-md text-[11.5px] transition-all",
+                              "w-full flex items-center gap-2 px-2 py-[5px] rounded-md text-[10.5px] transition-all",
                               isChildActive
                                 ? "bg-primary/10 text-primary font-medium"
                                 : "text-muted-foreground hover:text-foreground hover:bg-muted/10"
