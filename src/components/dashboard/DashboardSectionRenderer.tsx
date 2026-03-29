@@ -21,6 +21,10 @@ const AgentsSection = lazy(() => import("./AgentsSection"));
 const SettingsPage = lazy(() => import("./SettingsPage"));
 const PaymentHistoryTable = lazy(() => import("./PaymentHistoryTable"));
 const UnifiedInbox = lazy(() => import("./UnifiedInbox"));
+const AgentReplay = lazy(() => import("./AgentReplay"));
+const PredictiveDashboard = lazy(() => import("./PredictiveDashboard"));
+const AgentDNA = lazy(() => import("./AgentDNA"));
+const MissionComposer = lazy(() => import("./MissionComposer"));
 
 interface Props {
   activeSection: string;
@@ -107,6 +111,12 @@ const DashboardSectionRenderer = ({
       {activeSection === "call-transcriber" && <Suspense fallback={<SectionLoader />}><SalesCallTranscriber /></Suspense>}
       {activeSection === "operations-center" && <Suspense fallback={<SectionLoader />}><OperationsCenter onNavigate={onNavigate} /></Suspense>}
       {activeSection === "inbox" && <Suspense fallback={<SectionLoader />}><UnifiedInbox onOpenChat={onSelectAgent} /></Suspense>}
+
+      {/* Innovation modules */}
+      {activeSection === "agent-replay" && <Suspense fallback={<SectionLoader />}><AgentReplay /></Suspense>}
+      {activeSection === "predictive" && <Suspense fallback={<SectionLoader />}><PredictiveDashboard /></Suspense>}
+      {activeSection === "agent-dna" && <Suspense fallback={<SectionLoader />}><AgentDNA /></Suspense>}
+      {activeSection === "mission-composer" && <Suspense fallback={<SectionLoader />}><MissionComposer /></Suspense>}
 
       {/* Legacy routes kept accessible via internal navigation */}
       {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
