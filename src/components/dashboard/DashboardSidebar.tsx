@@ -50,7 +50,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       {/* Toggle */}
       <button
         onClick={() => setCollapsed(!collapsed)}
-        className="absolute right-1 top-6 z-10 w-6 h-6 rounded-full bg-background border border-border/20 flex items-center justify-center hover:border-primary/30 transition-colors"
+        className="absolute -right-3 top-7 z-10 w-6 h-6 rounded-full bg-background border border-border/30 flex items-center justify-center hover:border-primary/40 hover:bg-accent/10 transition-all shadow-sm"
       >
         {collapsed ? (
           <ChevronRight className="h-3 w-3 text-muted-foreground" />
