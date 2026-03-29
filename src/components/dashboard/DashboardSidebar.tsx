@@ -43,9 +43,9 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
     <motion.aside
       data-tour="sidebar"
       initial={false}
-      animate={{ width: collapsed ? 64 : 220 }}
-      transition={{ duration: 0.2, ease: "easeInOut" }}
-      className="h-full flex flex-col bg-background/50 backdrop-blur-sm border-r border-border/5 overflow-hidden shrink-0 relative"
+      animate={{ width: collapsed ? 56 : 240 }}
+      transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
+      className="h-full flex flex-col bg-background/60 backdrop-blur-xl border-r border-border/10 overflow-hidden shrink-0 relative"
     >
       {/* Toggle */}
       <button
