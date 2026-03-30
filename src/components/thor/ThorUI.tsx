@@ -2,9 +2,9 @@
  * ThorUI.tsx — All visual rendering: NeuralCore, message bubbles, inputs, overlays, animations
  */
 
-import { memo, useMemo } from "react";
+import { memo, useMemo, useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, X, Loader2, Volume2, VolumeX, Maximize2, Minimize2 } from "lucide-react";
+import { Send, X, Loader2, Volume2, VolumeX, Maximize2, Minimize2, Mic, MicOff } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import thorPhoto from "@/assets/kaelis-ai.webp";
 import type { ThorCoreState, ThorCoreActions } from "./ThorCore";
