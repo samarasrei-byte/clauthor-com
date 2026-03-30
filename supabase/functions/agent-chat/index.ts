@@ -1257,9 +1257,9 @@ Exemplo de redirecionamento:
       ];
 
       if (wantStream) {
-        return streamResponse(secondMessages, planLimits, toolResults, creditWarning, optimizedMessages, fullSystemPrompt, credits, supabase, adminClient, tenantId, userId, agentId, actionType, toolCalls);
-      } else {
-        const secondResponse = await fetchAI({ model: "google/gemini-3-flash-preview", messages: secondMessages, max_tokens: planLimits.maxResponseTokens, stream: false });
+         return streamResponse(secondMessages, planLimits, toolResults, creditWarning, optimizedMessages, fullSystemPrompt, credits, supabase, adminClient, tenantId, userId, agentId, actionType, toolCalls, selectedModel);
+       } else {
+         const secondResponse = await fetchAI({ model: selectedModel, messages: secondMessages, max_tokens: planLimits.maxResponseTokens, stream: false }, { qualityMode: agentQualityMode });
         let assistantMessage = firstChoice?.message?.content || "";
         if (secondResponse.ok) {
           const secondData = await secondResponse.json();
