@@ -1062,7 +1062,7 @@ serve(async (req) => {
 
     if (agentId) {
       const { data: agent } = await adminClient
-        .from("agents").select("name, instructions, objective, tier").eq("id", agentId).single();
+        .from("agents").select("name, instructions, objective, tier, quality_mode").eq("id", agentId).single();
 
       if (agent) {
         agentTier = agent.tier || "basic";
