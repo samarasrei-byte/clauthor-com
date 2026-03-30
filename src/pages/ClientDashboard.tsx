@@ -24,6 +24,7 @@ import DashboardSectionRenderer from "@/components/dashboard/DashboardSectionRen
 import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
 import QuickOnboardingWizard from "@/components/onboarding/QuickOnboardingWizard";
+import { DashboardTour } from "@/components/dashboard/DashboardTour";
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
