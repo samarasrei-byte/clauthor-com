@@ -23,7 +23,7 @@ import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import DashboardSectionRenderer from "@/components/dashboard/DashboardSectionRenderer";
 import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
-import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
+import QuickOnboardingWizard from "@/components/onboarding/QuickOnboardingWizard";
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
