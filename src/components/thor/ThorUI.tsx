@@ -592,7 +592,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
               )}
 
               <div className="p-3 border-t border-accent-violet/5 safe-area-bottom">
-                <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} lang={lang} />
+                <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} onVoiceSubmit={(text) => sendMessage(text)} lang={lang} />
               </div>
             </div>
           </div>
