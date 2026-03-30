@@ -468,6 +468,9 @@ const ThorGreeter = () => {
     setMessages(updated);
     setIsLoading(true);
 
+    let streamStallTimer: ReturnType<typeof setTimeout> | null = null;
+    let hardTimeoutTimer: ReturnType<typeof setTimeout> | null = null;
+
     try {
       const requestStartedAt = Date.now();
       const response = await fetch(
@@ -498,8 +501,6 @@ const ThorGreeter = () => {
       let assistantText = "";
       let lastFlushedText = "";
       let lastUiFlushAt = 0;
-      let streamStallTimer: ReturnType<typeof setTimeout> | null = null;
-      let hardTimeoutTimer: ReturnType<typeof setTimeout> | null = null;
       let reachedResponseLimit = false;
       let receivedDoneSignal = false;
 
@@ -525,13 +526,13 @@ const ThorGreeter = () => {
         if (streamStallTimer) clearTimeout(streamStallTimer);
         streamStallTimer = setTimeout(() => {
           console.warn("[Thor] Stream stalled for 15s, aborting");
-          controller.abort();
+          controller.abort("stream_stalled");
         }, 15_000);
       };
 
       hardTimeoutTimer = setTimeout(() => {
         console.warn("[Thor] Hard timeout reached, aborting stream");
-        controller.abort();
+        controller.abort("hard_timeout");
       }, THOR_HARD_TIMEOUT_MS);
 
       resetStallTimer();
@@ -539,7 +540,7 @@ const ThorGreeter = () => {
       while (true) {
         if (controller.signal.aborted) break;
         if (Date.now() - requestStartedAt > THOR_HARD_TIMEOUT_MS) {
-          controller.abort();
+          controller.abort("hard_timeout");
           break;
         }
 
@@ -567,7 +568,7 @@ const ThorGreeter = () => {
                 assistantText = clampThorResponse(assistantText);
                 reachedResponseLimit = true;
                 flushAssistantMessage(true);
-                controller.abort();
+                controller.abort("response_limit");
                 break;
               }
 
@@ -593,12 +594,28 @@ const ThorGreeter = () => {
         if (shortText.length > 10) speak(shortText, thorVoiceId);
       }
     } catch (err) {
-      if (err instanceof DOMException && err.name === "AbortError") return;
+      if (err instanceof DOMException && err.name === "AbortError") {
+        if (["stream_stalled", "hard_timeout"].includes(String(controller.signal.reason))) {
+          setMessages(prev => {
+            const alreadyHasAssistant = prev[prev.length - 1]?.role === "assistant";
+            if (alreadyHasAssistant) return prev;
+            return [...prev, {
+              role: "assistant",
+              content: lang.startsWith("pt")
+                ? "Tive uma instabilidade rápida no stream. Me manda de novo em uma frase curta e eu respondo objetivamente."
+                : "I hit a brief stream issue. Send it again in one short sentence and I'll answer directly.",
+            }];
+          });
+        }
+        return;
+      }
       setMessages(prev => [...prev, {
         role: "assistant",
         content: lang.startsWith("pt") ? "Ops, tive um problema. Tenta de novo?" : "Oops, had an issue. Try again?",
       }]);
     } finally {
+      if (streamStallTimer) clearTimeout(streamStallTimer);
+      if (hardTimeoutTimer) clearTimeout(hardTimeoutTimer);
       setIsLoading(false);
       if (abortControllerRef.current === controller) abortControllerRef.current = null;
     }
