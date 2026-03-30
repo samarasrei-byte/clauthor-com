@@ -13,10 +13,10 @@ const DEFAULT_VOICE_ID = "57fRHlU547szfU1IrRoS";
 const STORAGE_KEY = "thor_greeter_seen_v3";
 // Proactive messages disabled — Thor only speaks when user interacts
 const PROACTIVE_INTERVAL = 0; // was 45_000 — caused Thor to auto-popup aggressively
-const THOR_MAX_RESPONSE_CHARS = 520;
-const THOR_MAX_RESPONSE_PARAGRAPHS = 3;
-const THOR_STREAM_UPDATE_INTERVAL_MS = 80;
-const THOR_HARD_TIMEOUT_MS = 20_000;
+const THOR_MAX_RESPONSE_CHARS = 600;
+const THOR_MAX_RESPONSE_PARAGRAPHS = 4;
+const THOR_STREAM_UPDATE_INTERVAL_MS = 100;
+const THOR_HARD_TIMEOUT_MS = 25_000;
 
 interface ThorMessage {
   role: "user" | "assistant";
