@@ -351,9 +351,9 @@ const QuickActions = ({ lang, sendMessage, mobile }: QuickActionsProps) => {
 export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   const {
     phase, messages, input, isLoading, voiceEnabled, showChat, expanded,
-    isSpeaking, isMobile, shouldUseLiteCore, lang,
+    isSpeaking, isMobile, shouldUseLiteCore, lang, visitorName,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
-    sendMessage, minimize, activate, stopTTS, messagesEndRef,
+    sendMessage, minimize, activate, stopTTS, forgetMemory, messagesEndRef,
   } = props;
 
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
@@ -526,194 +526,146 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
     );
   }
 
-  /* ══ ACTIVE — DESKTOP ══ */
-  const desktopCoreSize = 340;
-  const hasSpeech = messages.length > 0;
-  const isPresenting = hasSpeech && !showChat;
-  const presentCoreSize = 280;
+  /* ══ ACTIVE — DESKTOP: Fixed bottom-right widget (max 380x500px, non-blocking) ══ */
+  const widgetOrbSize = 80;
 
   return (
-    <AnimatePresence>
-      <motion.div className="fixed inset-0 z-[9999] pointer-events-none"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      >
-        <motion.div className="absolute inset-0 pointer-events-auto" onClick={minimize}
-          initial={{ backdropFilter: "blur(0px)" }} animate={{ backdropFilter: "blur(10px)" }}
-          transition={{ duration: 0.8 }}
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.06) 0%, hsl(var(--background) / 0.6) 60%, hsl(var(--background) / 0.75) 100%)" }}
-        />
-
-        <div className={`relative z-10 w-full h-full flex pointer-events-none ${
-          isPresenting ? "flex-col items-center justify-center px-6" : "flex-col items-center justify-center"
-        }`}>
-
+    <motion.div
+      className="fixed bottom-6 right-4 sm:right-6 z-[9999] flex flex-col items-end gap-3 pointer-events-none"
+      style={{ maxWidth: 380 }}
+      initial={{ opacity: 0, y: 40 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", damping: 20 }}
+    >
+      {/* Chat panel */}
+      <AnimatePresence>
+        {showChat && (
           <motion.div
-            className={`relative pointer-events-auto flex flex-col items-center ${isPresenting ? "z-20 -mb-14" : ""}`}
-            initial={{ scale: 0.6, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.6, opacity: 0 }}
-            transition={{ type: "spring", damping: 16, stiffness: 120 }}
-            style={{ flexShrink: 0 }}
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ type: "spring", damping: 20 }}
+            className="pointer-events-auto w-[380px]"
+            style={{ maxHeight: 500 }}
           >
-            <div className="absolute -top-3 -right-4 flex items-center gap-1.5 z-20">
-              <button onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
-                className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
-              >
-                {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-              </button>
-              <button onClick={minimize}
-                className="p-1.5 rounded-full bg-background/80 backdrop-blur-xl border border-accent-violet/10 text-accent-violet/50 hover:text-accent-violet hover:border-accent-violet/30 transition-all"
-              >
-                <X className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            <div className="relative cursor-pointer"
-              style={{
-                width: isPresenting ? presentCoreSize : desktopCoreSize,
-                height: isPresenting ? presentCoreSize : desktopCoreSize,
-                transition: "width 0.5s, height 0.5s",
-              }}
-              onClick={() => setShowChat(!showChat)}
-            >
-              <NeuralCore isSpeaking={isSpeaking} size={isPresenting ? presentCoreSize : desktopCoreSize} lite={shouldUseLiteCore} />
-              <motion.div className="absolute rounded-full overflow-hidden"
-                style={{
-                  width: (isPresenting ? presentCoreSize : desktopCoreSize) * 0.52,
-                  height: (isPresenting ? presentCoreSize : desktopCoreSize) * 0.52,
-                  left: "50%", top: "50%", transform: "translate(-50%, -50%)",
-                  border: "1px solid hsl(var(--accent-violet) / 0.25)",
-                }}
-                animate={isSpeaking ? {
-                  boxShadow: ["inset 0 0 15px hsl(var(--accent-violet) / 0.1)", "inset 0 0 25px hsl(var(--accent-violet) / 0.2)", "inset 0 0 15px hsl(var(--accent-violet) / 0.1)"],
-                } : { boxShadow: "inset 0 0 15px hsl(var(--accent-violet) / 0.1)" }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                <img src={thorPhoto} alt="Thor" className={`w-full h-full object-cover ${isSpeaking ? "thor-glitch-active" : ""}`} />
-                <div className="absolute inset-0 bg-gradient-to-t from-accent-violet/10 via-transparent to-accent-violet/5" />
-                {isSpeaking && (
-                  <div className="absolute inset-0 thor-glitch-color-layer mix-blend-screen" style={{
-                    background: "linear-gradient(90deg, hsl(var(--accent-violet) / 0.3) 33%, hsl(var(--accent-cyan) / 0.2) 66%, transparent 100%)",
-                  }} />
-                )}
-              </motion.div>
-
-              <motion.div className="absolute -bottom-3 left-1/2 -translate-x-1/2" initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
-                <div className={`flex items-center gap-2 bg-background/80 backdrop-blur-xl py-1 rounded-full border border-accent-violet/15 shadow-lg shadow-accent-violet/5 ${isPresenting ? "px-2" : "px-4"}`}>
-                  <motion.span className="w-1.5 h-1.5 rounded-full bg-emerald-500"
-                    animate={{ scale: [1, 1.3, 1], opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  <span className={`font-mono font-bold tracking-[0.35em] uppercase text-foreground/90 ${isPresenting ? "text-[7px]" : "text-[9px]"}`}>THOR</span>
-                  {!isPresenting && <span className="text-[7px] font-mono text-accent-violet/40 tracking-wider">AI</span>}
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-
-          {/* Presentation panel */}
-          {isPresenting && (
-            <motion.div className="pointer-events-auto w-full max-w-[640px] max-h-[70vh] overflow-y-auto pt-20"
-              initial={{ opacity: 0, y: 24, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }}
-              transition={{ delay: 0.3, type: "spring", damping: 20 }}
-            >
-              <div className="bg-background/80 backdrop-blur-2xl border border-accent-violet/10 rounded-[2rem] p-6 shadow-2xl shadow-accent-violet/5">
-                {lastMessage && lastMessage.role === "assistant" && (
-                  <div className="space-y-3">
-                    <div className="flex items-center gap-2">
-                      <motion.span className="w-2 h-2 rounded-full bg-accent-violet" animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.5, repeat: Infinity }} />
-                      <span className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-violet/60">Thor · Apresentando</span>
+            <div className="bg-background/95 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl overflow-hidden shadow-2xl shadow-accent-violet/10 flex flex-col" style={{ maxHeight: 500 }}>
+              {/* Header */}
+              <div className="px-4 py-2.5 border-b border-accent-violet/5 flex items-center justify-between shrink-0">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-full overflow-hidden border border-accent-violet/15">
+                    <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <motion.span className="w-1.5 h-1.5 rounded-full bg-emerald-500"
+                        animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 2, repeat: Infinity }}
+                      />
+                      <span className="text-[9px] font-mono font-bold tracking-[0.3em] uppercase text-foreground/90">THOR</span>
+                      <span className="text-[7px] font-mono text-accent-violet/40 tracking-wider">AI CEO</span>
                     </div>
-                    <div className="text-sm text-foreground/90 leading-relaxed prose prose-sm dark:prose-invert max-w-none [&_p]:mb-2">
-                      <ReactMarkdown>{lastMessage.content}</ReactMarkdown>
-                    </div>
-                    {isSpeaking && (
-                      <div className="flex items-center gap-[2px] h-3 justify-start pt-1">
-                        {Array.from({ length: 30 }).map((_, i) => (
-                          <motion.div key={i} className="w-[1.5px] rounded-full bg-accent-violet/50"
-                            animate={{ height: [1, Math.random() * 10 + 3, 1] }}
-                            transition={{ duration: 0.25 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.02 }}
-                          />
-                        ))}
-                      </div>
+                    {visitorName && (
+                      <span className="text-[8px] font-mono text-accent-violet/50">
+                        {lang.startsWith("pt") ? `Falando com ${visitorName}` : `Talking to ${visitorName}`}
+                      </span>
                     )}
                   </div>
-                )}
-                <div className="mt-4 pt-3 border-t border-accent-violet/5">
-                  <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} lang={lang} />
+                </div>
+                <div className="flex items-center gap-1">
+                  <button onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
+                    className="p-1.5 rounded-full hover:bg-muted/20 text-accent-violet/50 hover:text-accent-violet transition-all"
+                  >
+                    {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+                  </button>
+                  <button onClick={minimize}
+                    className="p-1.5 rounded-full hover:bg-muted/20 text-accent-violet/50 hover:text-accent-violet transition-all"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
                 </div>
               </div>
-            </motion.div>
-          )}
 
-          {/* Speech bubble */}
-          {lastMessage && !showChat && !isPresenting && (
-            <motion.div className="mt-4 max-w-[340px] pointer-events-auto"
-              initial={{ opacity: 0, y: 12, scale: 0.95 }} animate={{ opacity: 1, y: 0, scale: 1 }}
-              key={lastMessage.content.slice(0, 20)}
-            >
-              <div className="relative bg-background/70 backdrop-blur-2xl border border-accent-violet/10 rounded-xl px-3 py-2 shadow-2xl shadow-accent-violet/5 cursor-pointer"
-                onClick={() => setShowChat(true)}
-              >
-                <div className="absolute -top-2 left-1/2 -translate-x-1/2 w-4 h-4 rotate-45 bg-background/70 border-l border-t border-accent-violet/10" />
-                <p className="text-[10px] text-foreground/80 leading-snug relative z-10 font-mono">
-                  {lastMessage.content.length > 130 ? lastMessage.content.slice(0, 130) + "..." : lastMessage.content}
-                </p>
-                {lastMessage.content.length > 130 && (
-                  <span className="text-[8px] text-accent-violet/50 font-mono mt-1 block">▼ ver mais</span>
-                )}
-                {isSpeaking && (
-                  <div className="flex items-center gap-[1.5px] mt-1.5 h-2 justify-center">
-                    {Array.from({ length: 20 }).map((_, i) => (
-                      <motion.div key={i} className="w-[1px] rounded-full bg-accent-violet/50"
-                        animate={{ height: [1, Math.random() * 6 + 2, 1] }}
-                        transition={{ duration: 0.25 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.025 }}
-                      />
-                    ))}
-                  </div>
-                )}
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ maxHeight: 340 }}>
+                <MessageList messages={messages} isLoading={isLoading} messagesEndRef={messagesEndRef} />
               </div>
-            </motion.div>
-          )}
 
-          {/* Quick actions */}
-          {messages.length <= 1 && !showChat && !isPresenting && !isLoading && messages.some(m => m.role === "assistant") && (
-            <motion.div className="mt-4 pointer-events-auto" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
-              <QuickActions lang={lang} sendMessage={sendMessage} />
-            </motion.div>
-          )}
+              {/* Quick actions — first interaction */}
+              {messages.length <= 1 && !isLoading && messages.some(m => m.role === "assistant") && (
+                <div className="px-3 pb-1">
+                  <QuickActions lang={lang} sendMessage={sendMessage} mobile />
+                </div>
+              )}
 
-          {/* Full chat */}
-          <AnimatePresence>
-            {showChat && (
-              <motion.div
-                initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }}
-                exit={{ height: 0, opacity: 0 }}
-                className="mt-4 w-[420px] overflow-hidden pointer-events-auto"
-              >
-                <div className="bg-background/85 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl overflow-hidden shadow-2xl shadow-accent-violet/5">
-                  <div className="px-4 py-2 border-b border-accent-violet/5 flex items-center gap-2">
-                    <motion.span className="w-1.5 h-1.5 rounded-full bg-emerald-500"
-                      animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}
+              {/* Speaking indicator */}
+              {isSpeaking && (
+                <div className="flex items-center gap-[2px] h-3 justify-center px-3 pb-1">
+                  {Array.from({ length: 24 }).map((_, i) => (
+                    <motion.div key={i} className="w-[1.5px] rounded-full bg-accent-violet/50"
+                      animate={{ height: [1, Math.random() * 8 + 3, 1] }}
+                      transition={{ duration: 0.25 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.02 }}
                     />
-                    <span className="text-[8px] font-mono uppercase tracking-[0.3em] text-accent-violet/40">Neural Channel · Active</span>
-                  </div>
-                  <div className="max-h-[40vh] overflow-y-auto p-3 space-y-3">
-                    <MessageList messages={messages} isLoading={isLoading} messagesEndRef={messagesEndRef} />
-                  </div>
-                  <div className="p-3 border-t border-accent-violet/5">
-                    <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} lang={lang} />
-                  </div>
+                  ))}
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              )}
 
-          {/* Inline input when not chatting */}
-          {!showChat && !isPresenting && (
-            <motion.div className="mt-4 w-[380px] pointer-events-auto" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-              <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} lang={lang} rounded />
-            </motion.div>
-          )}
+              {/* Input + forget */}
+              <div className="p-3 border-t border-accent-violet/5 shrink-0">
+                <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} lang={lang} />
+                {messages.length > 2 && (
+                  <button
+                    onClick={forgetMemory}
+                    className="mt-1.5 w-full text-[8px] font-mono text-muted-foreground/40 hover:text-destructive/60 transition-colors"
+                  >
+                    🔒 {lang.startsWith("pt") ? "Esqueça minhas informações" : "Forget my information"}
+                  </button>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Thor orb — always visible at bottom-right */}
+      <motion.div className="pointer-events-auto flex items-end gap-3">
+        {/* Bubble preview when chat is closed */}
+        {!showChat && lastMessage && (
+          <motion.div
+            className="max-w-[260px] cursor-pointer"
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            onClick={() => setShowChat(true)}
+          >
+            <div className="bg-background/90 backdrop-blur-xl border border-accent-violet/10 rounded-xl rounded-br-sm px-3 py-2 shadow-lg shadow-accent-violet/5">
+              <p className="text-[10px] text-foreground/80 leading-snug font-mono line-clamp-2">
+                {lastMessage.content.replace(/[*#]/g, "").slice(0, 120)}
+                {lastMessage.content.length > 120 && "..."}
+              </p>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Orb button */}
+        <div className="relative cursor-pointer" onClick={() => setShowChat(!showChat)}>
+          <div className="relative" style={{ width: widgetOrbSize, height: widgetOrbSize }}>
+            <NeuralCore isSpeaking={isSpeaking} size={widgetOrbSize} lite />
+            <div className="absolute rounded-full overflow-hidden"
+              style={{
+                width: widgetOrbSize * 0.6,
+                height: widgetOrbSize * 0.6,
+                left: "50%", top: "50%",
+                transform: "translate(-50%, -50%)",
+                border: "1px solid hsl(var(--accent-violet) / 0.2)",
+              }}
+            >
+              <img src={thorPhoto} alt="Thor" className={`w-full h-full object-cover ${isSpeaking ? "thor-glitch-active" : ""}`} />
+            </div>
+          </div>
+          <span className="absolute top-0 right-0 w-3 h-3 rounded-full border-2 border-background z-10">
+            <span className="block w-full h-full rounded-full bg-emerald-500" />
+            {!showChat && <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-50" />}
+          </span>
         </div>
       </motion.div>
-    </AnimatePresence>
+    </motion.div>
   );
 }
