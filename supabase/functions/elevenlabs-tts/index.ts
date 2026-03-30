@@ -22,8 +22,9 @@ serve(async (req) => {
       });
     }
 
-    // Voz mais jovem, inovadora e firme
-    const selectedVoice = voiceId || "onwK4e9ZLuTAKqWW03F9"; // Daniel — voz masculina firme e profissional
+    // Use env var for voice ID, with centralized default fallback
+    const ELEVENLABS_VOICE_ID = Deno.env.get("ELEVENLABS_VOICE_ID") || "57fRHlU547szfU1IrRoS";
+    const selectedVoice = voiceId || ELEVENLABS_VOICE_ID;
 
     const response = await fetch(
       `https://api.elevenlabs.io/v1/text-to-speech/${selectedVoice}/stream?output_format=mp3_22050_32`,
