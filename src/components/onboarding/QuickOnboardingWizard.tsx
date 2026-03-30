@@ -157,9 +157,9 @@ const QuickOnboardingWizard = ({ isOpen, onComplete }: QuickOnboardingWizardProp
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-emerald-500/10 border border-emerald-500/20">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-500 shrink-0" />
-                  <span className="text-sm text-emerald-400 font-medium">{selected.agentResult}</span>
+                <div className="flex items-center gap-2 px-3 py-2 rounded-lg bg-primary/10 border border-primary/20">
+                  <CheckCircle2 className="h-4 w-4 text-primary shrink-0" />
+                  <span className="text-sm text-primary font-medium">{selected.agentResult}</span>
                 </div>
               </div>
 
