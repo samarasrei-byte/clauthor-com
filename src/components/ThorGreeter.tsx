@@ -405,14 +405,23 @@ const ThorGreeter = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Entrance disabled — Thor starts minimized, user clicks to activate
-  // This prevents the full-screen takeover that blocks the UI
+  // Auto-activate Thor on first visit after 4s delay (non-blocking)
   useEffect(() => {
     const seen = localStorage.getItem(STORAGE_KEY);
     if (!seen && location.pathname === "/") {
-      localStorage.setItem(STORAGE_KEY, "1"); // mark as seen without showing entrance
+      const timer = setTimeout(() => {
+        setPhase("active");
+        setShowChat(true);
+        localStorage.setItem(STORAGE_KEY, "1");
+        const isPt = lang.startsWith("pt");
+        const greeting = isPt
+          ? "Olá! Eu sou o **Thor**, CEO e Orquestrador da CLAUTHOR. 🧠 Me conta: **o que te trouxe aqui hoje?**"
+          : "Hello! I'm **Thor**, CEO & Orchestrator of CLAUTHOR. 🧠 Tell me: **what brought you here today?**";
+        setMessages([{ role: "assistant", content: greeting }]);
+      }, 4000);
+      return () => clearTimeout(timer);
     }
-  }, [location.pathname]);
+  }, [location.pathname, lang]);
 
   useEffect(() => {
     if (phase === "entrance") {
@@ -635,11 +644,13 @@ const ThorGreeter = () => {
 
   const activate = () => {
     setPhase("active");
+    setShowChat(true);
     if (messagesRef.current.length === 0) {
       const isPt = lang.startsWith("pt");
-      const greeting = isPt ? "Olá! Eu sou o **Thor**, seu Orquestrador IA. Em que posso ajudar?" : "Hi! I'm **Thor**, your AI Orchestrator. How can I help?";
+      const greeting = isPt ? "Olá! Eu sou o **Thor**, CEO da CLAUTHOR. Em que posso ajudar?" : "Hi! I'm **Thor**, CEO of CLAUTHOR. How can I help?";
       setMessages([{ role: "assistant", content: greeting }]);
-      // Don't auto-speak — user must opt-in via voice button
+      setVoiceEnabled(true);
+      speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId);
     }
   };
 
