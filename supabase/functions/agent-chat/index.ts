@@ -1059,6 +1059,7 @@ serve(async (req) => {
     let agentArea = "general";
     let agentName = "AI Agent";
     let contractPrompt = "";
+    let agentQualityMode: QualityMode = "balanced";
 
     if (agentId) {
       const { data: agent } = await adminClient
