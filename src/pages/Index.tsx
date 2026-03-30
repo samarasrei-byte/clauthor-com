@@ -396,6 +396,13 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ═══════════════════════════════════════════════════════
+          LIVE DEMO — Interactive agent simulation
+          ═══════════════════════════════════════════════════════ */}
+      <Suspense fallback={null}>
+        <LiveDemoSection />
+      </Suspense>
+
 
       {/* ═══════════════════════════════════════════════════════
           SOCIAL PROOF — Platform-level authority numbers
