@@ -198,7 +198,7 @@ const QuickOnboardingWizard = ({ isOpen, onComplete }: QuickOnboardingWizardProp
                       className="flex items-center gap-3 px-4 py-3 rounded-xl border border-border/30 bg-card/30"
                     >
                       {done ? (
-                        <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+                        <CheckCircle2 className="h-5 w-5 text-primary" />
                       ) : (
                         <div className="w-5 h-5 rounded-full border-2 border-muted-foreground/30 border-t-primary animate-spin" />
                       )}
