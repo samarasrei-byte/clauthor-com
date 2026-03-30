@@ -688,7 +688,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
 
               {/* Input + forget */}
               <div className="p-3 border-t border-accent-violet/5 shrink-0">
-                <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} lang={lang} />
+                <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} onVoiceSubmit={(text) => sendMessage(text)} lang={lang} />
                 {messages.length > 2 && (
                   <button
                     onClick={forgetMemory}
