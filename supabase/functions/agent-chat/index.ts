@@ -1068,6 +1068,7 @@ serve(async (req) => {
       if (agent) {
         agentTier = agent.tier || "basic";
         agentName = agent.name || "AI Agent";
+        agentQualityMode = (agent.quality_mode as QualityMode) || "balanced";
         agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
         const sla = getTierSLA(agentTier);
         const limits = getAreaLimits(agentArea);
