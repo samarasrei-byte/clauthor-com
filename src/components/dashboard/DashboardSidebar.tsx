@@ -84,18 +84,22 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               {showGroupHeader && !collapsed && (
                 <div
                   className="px-3 pt-5 pb-1.5 first:pt-1"
-                  data-tour={
-                    item.group?.includes("Comando") || item.group?.includes("Command") ? "overview" :
-                    item.group?.includes("Agent") ? "agents" :
-                    item.group?.includes("Oper") ? "operations" :
-                    item.group?.includes("Intel") || item.group?.includes("Intelig") ? "intelligence" :
-                    item.group?.includes("Sistem") || item.group?.includes("System") ? "settings" :
-                    undefined
-                  }
                 >
-                  <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/35">
-                    {item.group}
-                  </span>
+                  {item.group && (item.group.includes("Avançad") || item.group.includes("Advanced")) ? (
+                    <button
+                      onClick={() => toggleSection(item.group!)}
+                      className="flex items-center gap-1.5 w-full text-left group/section"
+                    >
+                      <ChevronDown className={cn("h-3 w-3 text-muted-foreground/40 transition-transform", collapsedSections.has(item.group!) && "-rotate-90")} />
+                      <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/35 group-hover/section:text-muted-foreground/60 transition-colors">
+                        {item.group}
+                      </span>
+                    </button>
+                  ) : (
+                    <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/35">
+                      {item.group}
+                    </span>
+                  )}
                 </div>
               )}
               {showGroupHeader && collapsed && (
@@ -104,8 +108,18 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 </div>
               )}
 
+              {/* Hide items in collapsed sections */}
+              {item.group && collapsedSections.has(item.group) && !collapsed ? null : (
+              <>
               {/* Main item button */}
               <button
+                data-tour={
+                  item.id === "overview" ? "nav-overview" :
+                  item.id === "agents" ? "nav-agents" :
+                  item.id === "chat" ? "nav-chat" :
+                  item.id === "insights" ? "nav-reports" :
+                  undefined
+                }
                 onClick={() => {
                   if (hasChildren && !collapsed) {
                     toggleGroup(item.id);
