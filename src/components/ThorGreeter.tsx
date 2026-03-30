@@ -644,11 +644,13 @@ const ThorGreeter = () => {
 
   const activate = () => {
     setPhase("active");
+    setShowChat(true);
     if (messagesRef.current.length === 0) {
       const isPt = lang.startsWith("pt");
-      const greeting = isPt ? "Olá! Eu sou o **Thor**, seu Orquestrador IA. Em que posso ajudar?" : "Hi! I'm **Thor**, your AI Orchestrator. How can I help?";
+      const greeting = isPt ? "Olá! Eu sou o **Thor**, CEO da CLAUTHOR. Em que posso ajudar?" : "Hi! I'm **Thor**, CEO of CLAUTHOR. How can I help?";
       setMessages([{ role: "assistant", content: greeting }]);
-      // Don't auto-speak — user must opt-in via voice button
+      setVoiceEnabled(true);
+      speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId);
     }
   };
 
