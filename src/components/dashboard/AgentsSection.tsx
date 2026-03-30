@@ -333,13 +333,14 @@ const AgentsSection = ({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="border-t border-border/10 pt-4"
+                    className="border-t border-border/10 pt-4 space-y-4"
                   >
                     <AutonomyStatusBar
                       agentName={agent.name}
                       level={autonomyLevel}
                       readonly
                     />
+                    <AgentActivityFeed agentId={agent.id} />
                   </motion.div>
                 )}
               </motion.div>
