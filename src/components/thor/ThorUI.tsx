@@ -378,47 +378,50 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   if (phase === "entrance") {
     const entranceSize = isMobile ? 200 : 360;
     return (
-      <motion.div className="fixed inset-0 z-[9999] flex items-center justify-center"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      >
-        <motion.div className="absolute inset-0 backdrop-blur-xl"
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.08) 0%, hsl(var(--background) / 0.8) 60%, hsl(var(--background) / 0.92) 100%)" }}
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}
-        />
-        <motion.div className="relative z-10 flex flex-col items-center"
-          initial={{ scale: 0.1, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3, type: "spring", damping: 12, stiffness: 60 }}
+      <>
+        {demoModal}
+        <motion.div className="fixed inset-0 z-[9999] flex items-center justify-center"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         >
-          <div className="relative" style={{ width: entranceSize, height: entranceSize }}>
-            <NeuralCore isSpeaking={false} size={entranceSize} lite={isMobile} />
-            <div className="absolute rounded-full overflow-hidden"
-              style={{ width: entranceSize * 0.52, height: entranceSize * 0.52, left: "50%", top: "50%", transform: "translate(-50%, -50%)", border: "1px solid hsl(var(--accent-violet) / 0.2)" }}
-            >
-              <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+          <motion.div className="absolute inset-0 backdrop-blur-xl"
+            style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.08) 0%, hsl(var(--background) / 0.8) 60%, hsl(var(--background) / 0.92) 100%)" }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}
+          />
+          <motion.div className="relative z-10 flex flex-col items-center"
+            initial={{ scale: 0.1, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.3, type: "spring", damping: 12, stiffness: 60 }}
+          >
+            <div className="relative" style={{ width: entranceSize, height: entranceSize }}>
+              <NeuralCore isSpeaking={false} size={entranceSize} lite={isMobile} />
+              <div className="absolute rounded-full overflow-hidden"
+                style={{ width: entranceSize * 0.52, height: entranceSize * 0.52, left: "50%", top: "50%", transform: "translate(-50%, -50%)", border: "1px solid hsl(var(--accent-violet) / 0.2)" }}
+              >
+                <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+              </div>
             </div>
-          </div>
-          <motion.div className="mt-4 text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}>
-            <motion.h2 className="font-mono text-lg sm:text-2xl font-bold tracking-[0.4em] uppercase text-foreground"
-              animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}
-            >THOR</motion.h2>
-            <motion.div className="mt-2 flex items-center justify-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}>
-              <motion.span className="h-px bg-accent-violet/30" initial={{ width: 0 }} animate={{ width: 30 }} transition={{ delay: 1.5, duration: 0.8 }} />
-              <motion.span className="text-[7px] font-mono uppercase tracking-[0.5em] text-accent-violet/60"
-                animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.5, repeat: Infinity }}
-              >Neural Sync</motion.span>
-              <motion.span className="h-px bg-accent-violet/30" initial={{ width: 0 }} animate={{ width: 30 }} transition={{ delay: 1.5, duration: 0.8 }} />
+            <motion.div className="mt-4 text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}>
+              <motion.h2 className="font-mono text-lg sm:text-2xl font-bold tracking-[0.4em] uppercase text-foreground"
+                animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}
+              >THOR</motion.h2>
+              <motion.div className="mt-2 flex items-center justify-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}>
+                <motion.span className="h-px bg-accent-violet/30" initial={{ width: 0 }} animate={{ width: 30 }} transition={{ delay: 1.5, duration: 0.8 }} />
+                <motion.span className="text-[7px] font-mono uppercase tracking-[0.5em] text-accent-violet/60"
+                  animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.5, repeat: Infinity }}
+                >Neural Sync</motion.span>
+                <motion.span className="h-px bg-accent-violet/30" initial={{ width: 0 }} animate={{ width: 30 }} transition={{ delay: 1.5, duration: 0.8 }} />
+              </motion.div>
+            </motion.div>
+            <motion.div className="mt-3 flex items-center gap-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <motion.div key={i} className="w-5 h-[2px] rounded-full bg-accent-violet"
+                  animate={{ opacity: [0.1, 0.8, 0.1], scaleX: [0.3, 1, 0.3] }}
+                  transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.12 }}
+                />
+              ))}
             </motion.div>
           </motion.div>
-          <motion.div className="mt-3 flex items-center gap-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <motion.div key={i} className="w-5 h-[2px] rounded-full bg-accent-violet"
-                animate={{ opacity: [0.1, 0.8, 0.1], scaleX: [0.3, 1, 0.3] }}
-                transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.12 }}
-              />
-            ))}
-          </motion.div>
         </motion.div>
-      </motion.div>
+      </>
     );
   }
 
