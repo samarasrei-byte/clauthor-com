@@ -10,7 +10,7 @@ import {
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
   Building, Zap, LayoutDashboard, CreditCard, Store,
-  Wallet, Sparkles, Crown, Settings, Key, Gift, ChevronDown
+  Wallet, Sparkles, Crown, Settings, Key, Gift, ChevronDown, Cpu
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { useTranslation } from "react-i18next";
