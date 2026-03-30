@@ -468,6 +468,8 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   if (isMobile) {
     const mobileOrbSize = expanded ? 140 : 100;
     return (
+      <>
+        {demoModal}
       <AnimatePresence>
         <motion.div
           className={`fixed z-[9999] ${expanded ? "inset-0 flex flex-col" : "bottom-0 left-0 right-0"}`}
