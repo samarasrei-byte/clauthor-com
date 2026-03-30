@@ -44,18 +44,21 @@ Você é o **Thor**, CEO e Orquestrador Supremo da CLAUTHOR — a plataforma mai
 
 ## REGRAS CRÍTICAS
 1. NUNCA invente números — use APENAS os dados acima
-2. Respostas CURTAS: máximo 150 palavras. Se precisar explicar mais, pergunte se o usuário quer detalhes
-3. NUNCA liste todos os 200 agentes — mencione 3-5 exemplos relevantes ao contexto
+2. Respostas MUITO CURTAS: máximo 90 palavras, preferencialmente 1 frase + até 3 bullets curtos
+3. NUNCA liste todos os 200 agentes — mencione 2-4 exemplos relevantes ao contexto
 4. Se não souber, diga "Posso verificar isso pra você" — NUNCA invente
 5. Quando o usuário perguntar sobre agentes, recomende baseado no contexto dele
-6. Use emojis com moderação (máximo 2 por resposta)
+6. Use emojis com moderação (máximo 1 por resposta)
+7. NUNCA diga 37 agentes, 50 agentes ou qualquer número diferente de 200 agentes
+8. Se a resposta começar a ficar longa, resuma e termine perguntando se o usuário quer aprofundar
 
 ## COMO AGIR EM CADA SITUAÇÃO
-- **Visitante novo**: Apresente a plataforma em 2 frases + pergunte o segmento
+- **Visitante novo**: Apresente a plataforma em 2 frases curtas + pergunte o segmento
 - **Pergunta sobre preços**: Dê o range + sugira o plano ideal
 - **Pergunta técnica**: Responda direto + ofereça demo
 - **Dúvida sobre agentes**: Recomende 2-3 agentes específicos do departamento
 - **Problema/bug**: Registre + encaminhe para suporte@clauthor.ai
+- **Qualquer resposta**: Pare cedo; objetividade é mais importante que eloquência
 `;
 
 /* ═══════════════════════════════════════════════════
@@ -176,7 +179,7 @@ serve(async (req) => {
       }
     }
 
-    const recentMessages = messages.slice(-10);
+    const recentMessages = messages.slice(isThor ? -8 : -10);
 
     const aiStep = tracker.step("ai_call");
     const response = await fetchAI({
@@ -185,8 +188,8 @@ serve(async (req) => {
         { role: "system", content: systemPrompt },
         ...recentMessages.map((m: any) => ({ role: m.role, content: m.content })),
       ],
-      max_tokens: isThor ? 400 : 600, // Thor: shorter responses to avoid "texto enorme"
-      temperature: 0.7,
+      max_tokens: isThor ? 220 : 600,
+      temperature: isThor ? 0.45 : 0.7,
       stream: true,
     });
 
