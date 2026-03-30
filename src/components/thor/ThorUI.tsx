@@ -288,11 +288,12 @@ interface ChatInputProps {
   setInput: (v: string) => void;
   isLoading: boolean;
   onSubmit: () => void;
+  onVoiceSubmit?: (text: string) => void;
   lang: string;
   rounded?: boolean;
 }
 
-const ChatInput = ({ input, setInput, isLoading, onSubmit, lang, rounded }: ChatInputProps) => {
+const ChatInput = ({ input, setInput, isLoading, onSubmit, onVoiceSubmit, lang, rounded }: ChatInputProps) => {
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef<any>(null);
 
@@ -313,10 +314,8 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, lang, rounded }: Chat
 
     recognition.onresult = (e: any) => {
       const text = e.results[0]?.[0]?.transcript?.trim();
-      if (text) {
-        setInput(text);
-        // Auto-submit after voice input
-        setTimeout(() => onSubmit(), 150);
+      if (text && onVoiceSubmit) {
+        onVoiceSubmit(text);
       }
     };
     recognition.onerror = () => setIsListening(false);
@@ -325,7 +324,7 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, lang, rounded }: Chat
     recognitionRef.current = recognition;
     recognition.start();
     setIsListening(true);
-  }, [isListening, lang, setInput, onSubmit]);
+  }, [isListening, lang, onVoiceSubmit]);
 
   useEffect(() => {
     return () => { recognitionRef.current?.abort(); };
@@ -336,9 +335,9 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, lang, rounded }: Chat
       <input
         value={input}
         onChange={(e) => setInput(e.target.value)}
-        placeholder={lang.startsWith("pt") ? (isListening ? "Ouvindo..." : "Fale com o Thor...") : (isListening ? "Listening..." : "Talk to Thor...")}
+        placeholder={lang.startsWith("pt") ? (isListening ? "🎤 Ouvindo..." : "Fale com o Thor...") : (isListening ? "🎤 Listening..." : "Talk to Thor...")}
         disabled={isLoading || isListening}
-        className={`flex-1 bg-muted/10 border ${isListening ? "border-accent-violet/40" : "border-accent-violet/10"} ${rounded ? "rounded-full px-4" : "rounded-lg px-3"} py-2.5 text-xs font-mono focus:outline-none focus:border-accent-violet/30 transition-all placeholder:text-muted-foreground/30`}
+        className={`flex-1 bg-muted/10 border ${isListening ? "border-accent-violet/40 animate-pulse" : "border-accent-violet/10"} ${rounded ? "rounded-full px-4" : "rounded-lg px-3"} py-2.5 text-xs font-mono focus:outline-none focus:border-accent-violet/30 transition-all placeholder:text-muted-foreground/30`}
       />
       <button type="button" onClick={toggleVoice} disabled={isLoading}
         className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} ${isListening ? "bg-destructive/80 hover:bg-destructive" : "bg-muted/20 hover:bg-muted/40"} flex items-center justify-center shrink-0 transition-all relative`}
@@ -346,7 +345,7 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, lang, rounded }: Chat
         {isListening ? (
           <>
             <MicOff className="h-3.5 w-3.5 text-destructive-foreground" />
-            <span className="absolute inset-0 rounded-lg border border-destructive animate-ping opacity-30" />
+            <span className={`absolute inset-0 ${rounded ? "rounded-full" : "rounded-lg"} border border-destructive animate-ping opacity-30`} />
           </>
         ) : (
           <Mic className="h-3.5 w-3.5 text-accent-violet/60" />
