@@ -397,11 +397,22 @@ const ClientDashboard = () => {
       )}
 
       {showSmartOnboarding && (
-        <SmartOnboarding
+        <QuickOnboardingWizard
           isOpen={showSmartOnboarding}
-          onClose={() => {
+          onComplete={(agentSlug) => {
             setShowSmartOnboarding(false);
-            if (user) localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
+            queryClient.invalidateQueries({ queryKey: ["profile-onboarding"] });
+            if (agentSlug) {
+              // Navigate to the agent chat or library
+              const agent = agents.find(a => nameToSlug[a.name] === agentSlug);
+              if (agent) {
+                setPreviousSection(activeSection);
+                setSelectedAgent({ id: agent.id, name: agent.name });
+                setActiveSection("chat");
+              } else {
+                setActiveSection("library");
+              }
+            }
           }}
         />
       )}
