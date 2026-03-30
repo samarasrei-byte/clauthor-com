@@ -23,8 +23,70 @@ export type QualityMode = "max_quality" | "balanced" | "economic";
 interface FetchAIOptions {
   /** Override automatic routing: "simple" → OpenClaw, "complex" → Lovable AI, "auto" → heuristic */
   complexity?: TaskComplexity;
+  /** Agent quality mode override */
+  qualityMode?: QualityMode;
   /** Extra headers for requests */
   extraHeaders?: Record<string, string>;
+}
+
+// Model costs per 1M tokens (USD) for cost estimation
+export const MODEL_COSTS: Record<string, { input: number; output: number }> = {
+  "google/gemini-2.5-flash-lite": { input: 0.075, output: 0.30 },
+  "google/gemini-2.5-flash": { input: 0.15, output: 0.60 },
+  "google/gemini-3-flash-preview": { input: 0.15, output: 0.60 },
+  "google/gemini-2.5-pro": { input: 1.25, output: 5.00 },
+};
+
+/**
+ * Selects the optimal model based on complexity and quality mode.
+ */
+export function selectModel(complexity: TaskComplexity, qualityMode: QualityMode = "balanced"): string {
+  if (qualityMode === "max_quality") return "google/gemini-2.5-pro";
+  if (qualityMode === "economic") return "google/gemini-2.5-flash-lite";
+  
+  // Balanced mode: route by complexity
+  switch (complexity) {
+    case "simple": return "google/gemini-2.5-flash-lite";
+    case "medium": return "google/gemini-2.5-flash";
+    case "complex": return "google/gemini-2.5-pro";
+    default: return "google/gemini-3-flash-preview";
+  }
+}
+
+/**
+ * Classifies task complexity into 3 tiers: simple, medium, complex.
+ */
+export function classifyTaskComplexity(message: string): "simple" | "medium" | "complex" {
+  if (!message || typeof message !== "string") return "simple";
+  const content = message.toLowerCase().trim();
+  const wordCount = content.split(/\s+/).length;
+
+  // Complex keywords
+  const complexKW = [
+    "analise", "análise", "analyze", "analysis", "estratégia", "strategy",
+    "compare", "comparar", "crie um plano", "create a plan", "planejamento",
+    "diagnóstico", "auditoria", "audit", "previsão", "forecast", "predict",
+    "otimizar", "optimize", "multi-step", "step-by-step", "raciocínio",
+    "código", "code", "implementar", "implement", "arquitetura", "architecture",
+  ];
+  
+  // Simple patterns
+  const simpleKW = [
+    "olá", "oi", "hello", "hi", "hey", "obrigado", "thanks",
+    "sim", "não", "yes", "no", "ok", "certo", "entendi",
+    "bom dia", "boa tarde", "boa noite",
+  ];
+
+  // Over 200 words or complex keywords → complex
+  if (wordCount > 200) return "complex";
+  if (complexKW.some(kw => content.includes(kw))) return "complex";
+  
+  // Under 50 words with simple keywords → simple
+  if (wordCount < 50 && simpleKW.some(kw => content.includes(kw))) return "simple";
+  if (wordCount < 50 && !complexKW.some(kw => content.includes(kw))) return "simple";
+  
+  // 50-200 words → medium
+  return "medium";
 }
 
 // Keywords that suggest complex reasoning tasks
