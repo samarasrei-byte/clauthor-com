@@ -515,8 +515,10 @@ const ThorGreeter = () => {
       if (streamStallTimer) clearTimeout(streamStallTimer);
 
       if (!controller.signal.aborted && voiceEnabled && assistantText) {
-        const cleanText = assistantText.replace(/[*#🚀🧠💡\[\]()]/g, "").slice(0, 250);
-        speak(cleanText, thorVoiceId);
+        // Only speak the first ~2 sentences to avoid long audio that hangs
+        const sentences = assistantText.replace(/[*#🚀🧠💡\[\]()]/g, "").split(/[.!?]\s+/).filter(Boolean);
+        const shortText = sentences.slice(0, 2).join(". ").slice(0, 180);
+        if (shortText.length > 10) speak(shortText, thorVoiceId);
       }
     } catch (err) {
       if (err instanceof DOMException && err.name === "AbortError") return;
