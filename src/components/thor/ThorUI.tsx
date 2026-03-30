@@ -374,9 +374,6 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
       }}
     />
   );
-
-  const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
-
   /* ══ ENTRANCE ══ */
   if (phase === "entrance") {
     const entranceSize = isMobile ? 200 : 360;
