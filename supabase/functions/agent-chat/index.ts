@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { fetchAI } from "../_shared/ai-gateway.ts";
+import { fetchAI, classifyTaskComplexity, selectModel, type QualityMode } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/security.ts";
 import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
 import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, getDepartmentScope, getAreaTone, type AgentContract } from "../_shared/agent-contract.ts";
