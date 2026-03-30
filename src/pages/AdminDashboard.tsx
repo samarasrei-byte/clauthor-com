@@ -182,6 +182,7 @@ const AdminDashboard = () => {
     { id: "openclaw", label: "Execution Engine", icon: Activity, group: t("dashboard.system", { defaultValue: "Sistema" }) },
     { id: "coupons", label: t("dashboard.coupons", { defaultValue: "Cupons" }), icon: Gift, group: t("dashboard.system", { defaultValue: "Sistema" }) },
     { id: "signup-metrics", label: "Signups", icon: Users, badge: undefined, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
+    { id: "ai-costs", label: "Custos IA", icon: Cpu, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: t("dashboard.system", { defaultValue: "Sistema" }) },
   ];
 
