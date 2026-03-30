@@ -194,6 +194,23 @@ export function useAgentChat(agentId?: string) {
         toast.warning("⚠️ Credits at 80%+. Consider upgrading.", { duration: 5000 });
       }
 
+      // Log activity
+      if (agentId && assistantSoFar) {
+        const tenantId = sessionData?.session?.user?.id;
+        if (tenantId) {
+          const desc = toolResults.length > 0
+            ? toolResults.map(t => t.tool_name).join(", ")
+            : content.slice(0, 100);
+          logAgentActivity({
+            agentId,
+            tenantId,
+            actionType: toolResults.length > 0 ? "task" : "chat",
+            actionDescription: desc,
+            modelUsed: "ai",
+          });
+        }
+      }
+
       refetchCredits();
     } catch (error: any) {
       if (error.name === "AbortError") return;
