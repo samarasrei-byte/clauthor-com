@@ -251,14 +251,11 @@ const HomePage = () => {
 
   return (
     <div className="relative overflow-x-hidden">
-      {/* Background depth layer — disabled on mobile for scroll performance */}
+      {/* Background depth — pure CSS, no scroll-linked JS */}
       {!isMobile && (
-        <motion.div
-          className="fixed inset-0 pointer-events-none"
-          style={{ opacity: bgOpacity }}
-        >
+        <div className="fixed inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-primary/[0.04]" />
-        </motion.div>
+        </div>
       )}
 
       {/* ═══════════════════════════════════════════════════════
