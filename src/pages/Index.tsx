@@ -177,8 +177,7 @@ const HomePage = () => {
   const isMobile = useIsMobile();
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
 
-  const { scrollYProgress } = useScroll();
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  // Removed useScroll/useTransform — they run 60fps and cause jank
 
   const cyclingRoles = useMemo(() => [
     "AI Employees",
