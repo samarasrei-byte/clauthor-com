@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Bot, Plus, Sparkles, Play, Pause, Zap, Eye, Handshake, Rocket, MessageSquare, Clock } from "lucide-react";
+import { Bot, Plus, Sparkles, Play, Pause, Zap, Eye, Handshake, Rocket, MessageSquare, Clock, TrendingUp, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";
@@ -10,6 +10,9 @@ import { useQueryClient, useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
 import AgentSetupChecklist from "./AgentSetupChecklist";
 import AutonomyStatusBar, { type AutonomyLevel } from "./AutonomyStatusBar";
+import { AgentActivityFeed } from "./AgentActivityFeed";
+import { useAgentActivity, estimateROI } from "@/hooks/useAgentActivity";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -49,6 +52,75 @@ const AUTONOMY_COLORS: Record<AutonomyLevel, string> = {
   executor: "text-accent-foreground",
   autonomous: "text-primary",
 };
+
+function AgentActivityMetricsInline({ agentId, agentName, onOpenChat, isActive }: { agentId: string; agentName: string; onOpenChat: () => void; isActive: boolean }) {
+  const { data: metrics } = useAgentActivity(agentId);
+  const { t } = useTranslation();
+  const hasActivity = metrics && metrics.monthCount > 0;
+  const roi = hasActivity ? estimateROI(agentName, metrics.monthCount) : 0;
+
+  const timeAgo = (dateStr: string) => {
+    const diff = Date.now() - new Date(dateStr).getTime();
+    const mins = Math.floor(diff / 60000);
+    if (mins < 1) return "agora";
+    if (mins < 60) return `${mins}min`;
+    const hours = Math.floor(mins / 60);
+    if (hours < 24) return `${hours}h`;
+    return `${Math.floor(hours / 24)}d`;
+  };
+
+  if (!hasActivity) {
+    return (
+      <div className="bg-muted/[0.04] rounded-lg px-3 py-2.5 border border-dashed border-muted/20">
+        <p className="text-[11px] text-muted-foreground">
+          {t("agents.no_activity", { defaultValue: "Seu agente ainda não começou a trabalhar." })}
+        </p>
+        {isActive && (
+          <button onClick={onOpenChat} className="text-[11px] text-primary hover:underline mt-1 inline-flex items-center gap-1">
+            {t("agents.first_command", { defaultValue: "Dê o primeiro comando →" })}
+          </button>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-1.5">
+      <div className="flex items-center gap-3 text-[11px]">
+        <span className="flex items-center gap-1 text-muted-foreground">
+          <Zap className="w-3 h-3 text-primary" />
+          {t("agents.today", { defaultValue: "Hoje" })}: <span className="text-foreground font-medium">{metrics.todayCount}</span>
+        </span>
+        <span className="flex items-center gap-1 text-muted-foreground">
+          <TrendingUp className="w-3 h-3 text-emerald-500" />
+          {t("agents.week", { defaultValue: "Semana" })}: <span className="text-foreground font-medium">{metrics.weekCount}</span>
+        </span>
+      </div>
+      {metrics.lastAction && (
+        <p className="text-[10px] text-muted-foreground truncate flex items-center gap-1">
+          <Clock className="w-3 h-3 shrink-0" />
+          {metrics.lastAction.action_description.slice(0, 50)}
+          {metrics.lastAction.action_description.length > 50 ? "…" : ""} · {timeAgo(metrics.lastAction.created_at)}
+        </p>
+      )}
+      {roi > 0 && (
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <p className="text-[10px] text-emerald-500 font-medium flex items-center gap-1 cursor-help">
+                💰 {t("agents.estimated_savings", { defaultValue: "Economia estimada" })}: R$ {roi.toLocaleString("pt-BR")}
+                <Info className="w-3 h-3 text-muted-foreground" />
+              </p>
+            </TooltipTrigger>
+            <TooltipContent side="top" className="max-w-[200px]">
+              <p className="text-xs">{t("agents.roi_tooltip", { defaultValue: "Estimativa baseada no valor médio de cada tarefa automatizada pelo agente neste mês." })}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      )}
+    </div>
+  );
+}
 
 const AgentsSection = ({
   agents, isLoading, nameToSlug, tierColors, formatCurrency,
@@ -231,16 +303,8 @@ const AgentsSection = ({
                   </div>
                 </div>
 
-                {/* Last Activity */}
-                {lastActivity[agent.id] && (
-                  <div className="flex items-center gap-2 text-[10px] text-muted-foreground bg-muted/20 rounded-lg px-3 py-2">
-                     <Clock className="h-3 w-3 shrink-0" />
-                    <span className="truncate">
-                      {t("dashboard.last_activity", { defaultValue: "Última atividade" })}: {lastActivity[agent.id].action} — {new Date(lastActivity[agent.id].date).toLocaleDateString(undefined, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
-                    </span>
-                  </div>
-                )}
-
+                {/* Activity Metrics from agent_activity_log */}
+                <AgentActivityMetricsInline agentId={agent.id} agentName={agent.name} onOpenChat={() => onOpenChat({ id: agent.id, name: agent.name })} isActive={agent.status === "active"} />
                 {/* Actions */}
                 <div className="flex gap-2">
                   <Button
@@ -269,13 +333,14 @@ const AgentsSection = ({
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
-                    className="border-t border-border/10 pt-4"
+                    className="border-t border-border/10 pt-4 space-y-4"
                   >
                     <AutonomyStatusBar
                       agentName={agent.name}
                       level={autonomyLevel}
                       readonly
                     />
+                    <AgentActivityFeed agentId={agent.id} />
                   </motion.div>
                 )}
               </motion.div>

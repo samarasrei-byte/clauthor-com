@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useCredits } from "./useCredits";
+import { logAgentActivity } from "./useAgentActivity";
 
 export interface ToolResult {
   tool_call_id: string;
@@ -191,6 +192,23 @@ export function useAgentChat(agentId?: string) {
 
       if (gotCreditWarning) {
         toast.warning("⚠️ Credits at 80%+. Consider upgrading.", { duration: 5000 });
+      }
+
+      // Log activity
+      if (agentId && assistantSoFar) {
+        const tenantId = sessionData?.session?.user?.id;
+        if (tenantId) {
+          const desc = toolResults.length > 0
+            ? toolResults.map(t => t.tool_name).join(", ")
+            : content.slice(0, 100);
+          logAgentActivity({
+            agentId,
+            tenantId,
+            actionType: toolResults.length > 0 ? "task" : "chat",
+            actionDescription: desc,
+            modelUsed: "ai",
+          });
+        }
       }
 
       refetchCredits();
