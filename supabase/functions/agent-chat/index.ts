@@ -1189,9 +1189,15 @@ Exemplo de redirecionamento:
 
     const fullSystemPrompt = `${SAFETY_LAYER}\n${OPERATIONAL_SECURITY_PROTOCOL}\n${contractPrompt}\n${MASTER_EXECUTION_PROTOCOL}\n${tenantContext}\n${companyContext}\n${ragContext}\n${memoryContext}\n${agentPrompt}\n${TOOL_USE_INSTRUCTION}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
 
+    // Smart model routing based on task complexity + agent quality mode
+    const lastUserContent = optimizedMessages.filter((m: any) => m.role === "user").pop()?.content || "";
+    const taskComplexity = classifyTaskComplexity(lastUserContent);
+    const selectedModel = selectModel(taskComplexity, agentQualityMode);
+    console.log(`[SmartRouter] complexity=${taskComplexity} quality=${agentQualityMode} model=${selectedModel}`);
+
     // === SINGLE CALL with tools — no more double call ===
     const firstResponse = await fetchAI({
-      model: "google/gemini-3-flash-preview",
+      model: selectedModel,
       messages: [
         { role: "system", content: fullSystemPrompt },
         ...optimizedMessages,
@@ -1199,7 +1205,7 @@ Exemplo de redirecionamento:
       tools: AGENT_TOOLS,
       max_tokens: planLimits.maxResponseTokens,
       stream: false,
-    });
+    }, { qualityMode: agentQualityMode });
 
     if (!firstResponse.ok) {
       if (firstResponse.status === 429) return new Response(JSON.stringify({ error: "Rate limit exceeded." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
