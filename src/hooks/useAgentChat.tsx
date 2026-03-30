@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useCredits } from "./useCredits";
+import { logAgentActivity } from "./useAgentActivity";
 
 export interface ToolResult {
   tool_call_id: string;
