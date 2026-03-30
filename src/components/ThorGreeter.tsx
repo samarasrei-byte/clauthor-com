@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect, useCallback, useMemo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { memo, useState, useRef, useEffect, useCallback, useMemo } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Send, X, Loader2, Volume2, VolumeX, Maximize2, Minimize2 } from "lucide-react";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -13,6 +13,10 @@ const DEFAULT_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";
 const STORAGE_KEY = "thor_greeter_seen_v3";
 // Proactive messages disabled — Thor only speaks when user interacts
 const PROACTIVE_INTERVAL = 0; // was 45_000 — caused Thor to auto-popup aggressively
+const THOR_MAX_RESPONSE_CHARS = 520;
+const THOR_MAX_RESPONSE_PARAGRAPHS = 3;
+const THOR_STREAM_UPDATE_INTERVAL_MS = 80;
+const THOR_HARD_TIMEOUT_MS = 20_000;
 
 interface ThorMessage {
   role: "user" | "assistant";
@@ -23,7 +27,25 @@ interface ThorMessage {
    QUANTUM NEURAL CORE — Adaptive holographic engine
    Reduces complexity on mobile for smooth performance
    ═══════════════════════════════════════════════════ */
-const NeuralCore = ({ isSpeaking, size = 240, lite = false }: { isSpeaking: boolean; size?: number; lite?: boolean }) => {
+const normalizeThorResponse = (value: string) =>
+  value
+    .replace(/\n{3,}/g, "\n\n")
+    .replace(/[ \t]{2,}/g, " ")
+    .trim();
+
+const clampThorResponse = (value: string) => {
+  const normalized = normalizeThorResponse(value);
+  const paragraphs = normalized.split(/\n\s*\n/).filter(Boolean).slice(0, THOR_MAX_RESPONSE_PARAGRAPHS);
+  return paragraphs.join("\n\n").slice(0, THOR_MAX_RESPONSE_CHARS).trim();
+};
+
+const exceededThorResponseLimit = (value: string) => {
+  const normalized = normalizeThorResponse(value);
+  const paragraphCount = normalized.split(/\n\s*\n/).filter(Boolean).length;
+  return normalized.length > THOR_MAX_RESPONSE_CHARS || paragraphCount > THOR_MAX_RESPONSE_PARAGRAPHS;
+};
+
+const NeuralCore = memo(({ isSpeaking, size = 240, lite = false }: { isSpeaking: boolean; size?: number; lite?: boolean }) => {
   const center = size / 2;
   const r = size / 2 - (lite ? 15 : 30);
   const faceR = r * 0.55;
@@ -293,7 +315,9 @@ const NeuralCore = ({ isSpeaking, size = 240, lite = false }: { isSpeaking: bool
       </svg>
     </div>
   );
-};
+});
+
+NeuralCore.displayName = "NeuralCore";
 
 /* ─── Proactive questions based on route ─── */
 const getProactiveMessages = (pathname: string, lang: string): string[] => {
@@ -340,7 +364,9 @@ const ThorGreeter = () => {
   const location = useLocation();
   const { user } = useAuth();
   const isMobile = useIsMobile();
+  const prefersReducedMotion = useReducedMotion();
   const lang = navigator.language || "en";
+  const shouldUseLiteCore = isMobile || prefersReducedMotion;
 
   // Fetch dynamic voice config directly from platform_credentials table
   useEffect(() => {
@@ -443,6 +469,7 @@ const ThorGreeter = () => {
     setIsLoading(true);
 
     try {
+      const requestStartedAt = Date.now();
       const response = await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/support-chat`,
         {
@@ -452,7 +479,7 @@ const ThorGreeter = () => {
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
           },
           body: JSON.stringify({
-            messages: updated.slice(-12).map(m => ({ role: m.role, content: m.content })),
+            messages: updated.slice(-10).map(m => ({ role: m.role, content: m.content })),
             context: {
               area: user ? "client" : "public",
               route: location.pathname,
@@ -469,7 +496,31 @@ const ThorGreeter = () => {
       const decoder = new TextDecoder();
       let buffer = "";
       let assistantText = "";
+      let lastFlushedText = "";
+      let lastUiFlushAt = 0;
       let streamStallTimer: ReturnType<typeof setTimeout> | null = null;
+      let hardTimeoutTimer: ReturnType<typeof setTimeout> | null = null;
+      let reachedResponseLimit = false;
+      let receivedDoneSignal = false;
+
+      const flushAssistantMessage = (force = false) => {
+        if (!assistantText.trim()) return;
+        const now = Date.now();
+        const snapshot = clampThorResponse(assistantText);
+        if (!snapshot || snapshot === lastFlushedText) return;
+        if (!force && now - lastUiFlushAt < THOR_STREAM_UPDATE_INTERVAL_MS) return;
+
+        lastUiFlushAt = now;
+        lastFlushedText = snapshot;
+        setMessages(prev => {
+          const last = prev[prev.length - 1];
+          if (last?.role === "assistant") {
+            return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: snapshot } : m);
+          }
+          return [...prev, { role: "assistant", content: snapshot }];
+        });
+      };
+
       const resetStallTimer = () => {
         if (streamStallTimer) clearTimeout(streamStallTimer);
         streamStallTimer = setTimeout(() => {
@@ -477,10 +528,21 @@ const ThorGreeter = () => {
           controller.abort();
         }, 15_000);
       };
+
+      hardTimeoutTimer = setTimeout(() => {
+        console.warn("[Thor] Hard timeout reached, aborting stream");
+        controller.abort();
+      }, THOR_HARD_TIMEOUT_MS);
+
       resetStallTimer();
 
       while (true) {
         if (controller.signal.aborted) break;
+        if (Date.now() - requestStartedAt > THOR_HARD_TIMEOUT_MS) {
+          controller.abort();
+          break;
+        }
+
         const { done, value } = await reader.read();
         if (done) break;
         resetStallTimer();
@@ -492,31 +554,41 @@ const ThorGreeter = () => {
           if (line.startsWith(":") || line.trim() === "") continue;
           if (!line.startsWith("data: ")) continue;
           const json = line.slice(6).trim();
-          if (json === "[DONE]") break;
+          if (json === "[DONE]") {
+            receivedDoneSignal = true;
+            break;
+          }
           try {
             const parsed = JSON.parse(json);
             const delta = parsed.choices?.[0]?.delta?.content;
             if (delta) {
               assistantText += delta;
-              const snapshot = assistantText;
-              setMessages(prev => {
-                const last = prev[prev.length - 1];
-                if (last?.role === "assistant") {
-                  return prev.map((m, i) => i === prev.length - 1 ? { ...m, content: snapshot } : m);
-                }
-                return [...prev, { role: "assistant", content: snapshot }];
-              });
+              if (exceededThorResponseLimit(assistantText)) {
+                assistantText = clampThorResponse(assistantText);
+                reachedResponseLimit = true;
+                flushAssistantMessage(true);
+                controller.abort();
+                break;
+              }
+
+              flushAssistantMessage();
             }
           } catch {
             // Skip malformed JSON lines instead of re-buffering (prevents infinite loop)
           }
         }
+
+        if (receivedDoneSignal || reachedResponseLimit) break;
       }
+
       if (streamStallTimer) clearTimeout(streamStallTimer);
+      if (hardTimeoutTimer) clearTimeout(hardTimeoutTimer);
+      flushAssistantMessage(true);
 
       if (!controller.signal.aborted && voiceEnabled && assistantText) {
         // Only speak the first ~2 sentences to avoid long audio that hangs
-        const sentences = assistantText.replace(/[*#🚀🧠💡\[\]()]/g, "").split(/[.!?]\s+/).filter(Boolean);
+        const finalAssistantText = clampThorResponse(assistantText);
+        const sentences = finalAssistantText.replace(/[*#🚀🧠💡\[\]()]/g, "").split(/[.!?]\s+/).filter(Boolean);
         const shortText = sentences.slice(0, 2).join(". ").slice(0, 180);
         if (shortText.length > 10) speak(shortText, thorVoiceId);
       }
@@ -530,7 +602,7 @@ const ThorGreeter = () => {
       setIsLoading(false);
       if (abortControllerRef.current === controller) abortControllerRef.current = null;
     }
-  }, [input, isLoading, user, location.pathname, voiceEnabled, speak, stopTTS, lang]);
+  }, [input, isLoading, user, location.pathname, voiceEnabled, speak, stopTTS, lang, thorVoiceId]);
 
   const minimize = () => {
     stopTTS();
@@ -948,7 +1020,7 @@ const ThorGreeter = () => {
               }}
               onClick={() => setShowChat(!showChat)}
             >
-              <NeuralCore isSpeaking={isSpeaking} size={isPresenting ? presentCoreSize : desktopCoreSize} />
+              <NeuralCore isSpeaking={isSpeaking} size={isPresenting ? presentCoreSize : desktopCoreSize} lite={shouldUseLiteCore} />
               <motion.div
                 className="absolute rounded-full overflow-hidden"
                 style={{
