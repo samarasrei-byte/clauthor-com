@@ -23,7 +23,7 @@ import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import DashboardSectionRenderer from "@/components/dashboard/DashboardSectionRenderer";
 import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
-import SmartOnboarding from "@/components/onboarding/SmartOnboarding";
+import QuickOnboardingWizard from "@/components/onboarding/QuickOnboardingWizard";
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
@@ -115,20 +115,26 @@ const ClientDashboard = () => {
     onDeptSetupDone, clearPostPayment,
   } = usePostPaymentFlow();
 
+  // Check onboarding_completed from profile
+  const { data: profileOnboarding } = useQuery({
+    queryKey: ["profile-onboarding", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase.from("profiles").select("onboarding_completed").eq("user_id", user!.id).maybeSingle();
+      return data?.onboarding_completed ?? false;
+    },
+    enabled: !!user,
+    staleTime: Infinity,
+  });
+
   useEffect(() => {
-    if (!user) return;
-    const done = localStorage.getItem(`clauthor_onboarding_done_${user.id}`);
-    if (done) return;
+    if (!user || profileOnboarding === undefined) return;
+    if (profileOnboarding) return;
     const hasHireIntent = !!localStorage.getItem("hireIntent");
-    // If user was just redirected to THOR (concierge_seen was set in the THOR useEffect above),
-    // skip the SmartOnboarding wizard — THOR already handles first-time guidance
     const thorHandledOnboarding = !!localStorage.getItem(`clauthor_concierge_seen_${user.id}`);
-    if (hasHireIntent || thorHandledOnboarding) {
-      localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
-    } else {
+    if (!hasHireIntent && !thorHandledOnboarding) {
       setShowSmartOnboarding(true);
     }
-  }, [user]);
+  }, [user, profileOnboarding]);
 
   const { credits, remainingCredits, usagePercentage } = useCredits();
   usePaypalCapture();
@@ -391,11 +397,22 @@ const ClientDashboard = () => {
       )}
 
       {showSmartOnboarding && (
-        <SmartOnboarding
+        <QuickOnboardingWizard
           isOpen={showSmartOnboarding}
-          onClose={() => {
+          onComplete={(agentSlug) => {
             setShowSmartOnboarding(false);
-            if (user) localStorage.setItem(`clauthor_onboarding_done_${user.id}`, "true");
+            queryClient.invalidateQueries({ queryKey: ["profile-onboarding"] });
+            if (agentSlug) {
+              // Navigate to the agent chat or library
+              const agent = agents.find(a => nameToSlug[a.name] === agentSlug);
+              if (agent) {
+                setPreviousSection(activeSection);
+                setSelectedAgent({ id: agent.id, name: agent.name });
+                setActiveSection("chat");
+              } else {
+                setActiveSection("library");
+              }
+            }
           }}
         />
       )}
