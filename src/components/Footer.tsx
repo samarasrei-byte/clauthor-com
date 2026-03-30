@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Linkedin, LockKeyhole, ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import clauthorLogo from "@/assets/clauthor-logo-v2.png";
+import clauthorLogo from "@/assets/clauthor-logo.png";
 
 const Footer = () => {
   const { t } = useTranslation();
