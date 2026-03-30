@@ -9,14 +9,14 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import ReactMarkdown from "react-markdown";
 import thorPhoto from "@/assets/kaelis-ai.webp";
 
-const DEFAULT_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";
+const DEFAULT_VOICE_ID = "57fRHlU547szfU1IrRoS";
 const STORAGE_KEY = "thor_greeter_seen_v3";
 // Proactive messages disabled — Thor only speaks when user interacts
 const PROACTIVE_INTERVAL = 0; // was 45_000 — caused Thor to auto-popup aggressively
-const THOR_MAX_RESPONSE_CHARS = 520;
-const THOR_MAX_RESPONSE_PARAGRAPHS = 3;
-const THOR_STREAM_UPDATE_INTERVAL_MS = 80;
-const THOR_HARD_TIMEOUT_MS = 20_000;
+const THOR_MAX_RESPONSE_CHARS = 600;
+const THOR_MAX_RESPONSE_PARAGRAPHS = 4;
+const THOR_STREAM_UPDATE_INTERVAL_MS = 100;
+const THOR_HARD_TIMEOUT_MS = 25_000;
 
 interface ThorMessage {
   role: "user" | "assistant";
@@ -58,10 +58,10 @@ const NeuralCore = memo(({ isSpeaking, size = 240, lite = false }: { isSpeaking:
   };
 
   // Particle counts scale down on lite mode (mobile)
-  const particleCount = lite ? 20 : 80;
-  const eqBars = lite ? 36 : 96;
-  const dnaCount = lite ? 12 : 40;
-  const tickCount = lite ? 60 : 180;
+  const particleCount = lite ? 10 : 30;
+  const eqBars = lite ? 16 : 36;
+  const dnaCount = lite ? 8 : 20;
+  const tickCount = lite ? 30 : 60;
 
   const quantumParticles = useMemo(() => {
     return Array.from({ length: particleCount }, (_, i) => {
