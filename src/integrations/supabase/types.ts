@@ -925,6 +925,7 @@ export type Database = {
           email: string | null
           id: string
           reason: string | null
+          user_id: string | null
           votes: number
         }
         Insert: {
@@ -933,6 +934,7 @@ export type Database = {
           email?: string | null
           id?: string
           reason?: string | null
+          user_id?: string | null
           votes?: number
         }
         Update: {
@@ -941,6 +943,7 @@ export type Database = {
           email?: string | null
           id?: string
           reason?: string | null
+          user_id?: string | null
           votes?: number
         }
         Relationships: []
