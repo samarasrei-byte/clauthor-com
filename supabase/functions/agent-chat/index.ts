@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { fetchAI } from "../_shared/ai-gateway.ts";
+import { fetchAI, classifyTaskComplexity, selectModel, type QualityMode } from "../_shared/ai-gateway.ts";
 import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/security.ts";
 import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
 import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, getDepartmentScope, getAreaTone, type AgentContract } from "../_shared/agent-contract.ts";
@@ -1059,14 +1059,16 @@ serve(async (req) => {
     let agentArea = "general";
     let agentName = "AI Agent";
     let contractPrompt = "";
+    let agentQualityMode: QualityMode = "balanced";
 
     if (agentId) {
       const { data: agent } = await adminClient
-        .from("agents").select("name, instructions, objective, tier").eq("id", agentId).single();
+        .from("agents").select("name, instructions, objective, tier, quality_mode").eq("id", agentId).single();
 
       if (agent) {
         agentTier = agent.tier || "basic";
         agentName = agent.name || "AI Agent";
+        agentQualityMode = (agent.quality_mode as QualityMode) || "balanced";
         agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
         const sla = getTierSLA(agentTier);
         const limits = getAreaLimits(agentArea);
@@ -1187,9 +1189,15 @@ Exemplo de redirecionamento:
 
     const fullSystemPrompt = `${SAFETY_LAYER}\n${OPERATIONAL_SECURITY_PROTOCOL}\n${contractPrompt}\n${MASTER_EXECUTION_PROTOCOL}\n${tenantContext}\n${companyContext}\n${ragContext}\n${memoryContext}\n${agentPrompt}\n${TOOL_USE_INSTRUCTION}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
 
+    // Smart model routing based on task complexity + agent quality mode
+    const lastUserContent = optimizedMessages.filter((m: any) => m.role === "user").pop()?.content || "";
+    const taskComplexity = classifyTaskComplexity(lastUserContent);
+    const selectedModel = selectModel(taskComplexity, agentQualityMode);
+    console.log(`[SmartRouter] complexity=${taskComplexity} quality=${agentQualityMode} model=${selectedModel}`);
+
     // === SINGLE CALL with tools — no more double call ===
     const firstResponse = await fetchAI({
-      model: "google/gemini-3-flash-preview",
+      model: selectedModel,
       messages: [
         { role: "system", content: fullSystemPrompt },
         ...optimizedMessages,
@@ -1197,7 +1205,7 @@ Exemplo de redirecionamento:
       tools: AGENT_TOOLS,
       max_tokens: planLimits.maxResponseTokens,
       stream: false,
-    });
+    }, { qualityMode: agentQualityMode });
 
     if (!firstResponse.ok) {
       if (firstResponse.status === 429) return new Response(JSON.stringify({ error: "Rate limit exceeded." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -1249,9 +1257,9 @@ Exemplo de redirecionamento:
       ];
 
       if (wantStream) {
-        return streamResponse(secondMessages, planLimits, toolResults, creditWarning, optimizedMessages, fullSystemPrompt, credits, supabase, adminClient, tenantId, userId, agentId, actionType, toolCalls);
-      } else {
-        const secondResponse = await fetchAI({ model: "google/gemini-3-flash-preview", messages: secondMessages, max_tokens: planLimits.maxResponseTokens, stream: false });
+         return streamResponse(secondMessages, planLimits, toolResults, creditWarning, optimizedMessages, fullSystemPrompt, credits, supabase, adminClient, tenantId, userId, agentId, actionType, toolCalls, selectedModel);
+       } else {
+         const secondResponse = await fetchAI({ model: selectedModel, messages: secondMessages, max_tokens: planLimits.maxResponseTokens, stream: false }, { qualityMode: agentQualityMode });
         let assistantMessage = firstChoice?.message?.content || "";
         if (secondResponse.ok) {
           const secondData = await secondResponse.json();
@@ -1260,7 +1268,7 @@ Exemplo de redirecionamento:
 
         const totalTokens = aiResponse.usage?.total_tokens || Math.ceil(fullSystemPrompt.length / 4);
         await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
-        await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: `tool:${toolCalls.map((t: any) => t.function?.name).join(",")}` });
+         await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: `tool:${toolCalls.map((t: any) => t.function?.name).join(",")}`, model: selectedModel });
 
         if (agentId) {
           const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
@@ -1292,7 +1300,7 @@ Exemplo de redirecionamento:
           await writer.write(encoder.encode("data: [DONE]\n\n"));
 
           await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
-          await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: actionType });
+           await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: actionType, model: selectedModel });
 
           if (agentId) {
             const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
@@ -1306,7 +1314,7 @@ Exemplo de redirecionamento:
     }
 
     await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
-    await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: actionType });
+    await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: actionType, model: selectedModel });
 
     if (agentId) {
       const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
@@ -1327,9 +1335,9 @@ async function streamResponse(
   messages: any[], planLimits: any, toolResults: any[], creditWarning: boolean,
   optimizedMessages: any[], fullSystemPrompt: string, credits: any,
   supabase: any, adminClient: any, tenantId: string, userId: string,
-  agentId: string | null, actionType: string, toolCalls: any[]
+  agentId: string | null, actionType: string, toolCalls: any[], selectedModel: string = "google/gemini-3-flash-preview"
 ) {
-  const streamResp = await fetchAI({ model: "google/gemini-3-flash-preview", messages, max_tokens: planLimits.maxResponseTokens, stream: true });
+  const streamResp = await fetchAI({ model: selectedModel, messages, max_tokens: planLimits.maxResponseTokens, stream: true });
   if (!streamResp.ok || !streamResp.body) throw new Error("Streaming failed after tool execution");
 
   const { readable, writable } = new TransformStream();
@@ -1362,7 +1370,7 @@ async function streamResponse(
       const totalTokens = inputTokens + outputTokens + Math.ceil(fullSystemPrompt.length / 4);
 
       await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
-      await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: `tool:${toolCalls.map((t: any) => t.function?.name).join(",")}` });
+      await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: `tool:${toolCalls.map((t: any) => t.function?.name).join(",")}`, model: selectedModel });
 
       if (agentId) {
         const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();

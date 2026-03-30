@@ -495,6 +495,7 @@ export type Database = {
           monthly_price: number
           name: string
           objective: string | null
+          quality_mode: string
           status: Database["public"]["Enums"]["agent_status"]
           tier: Database["public"]["Enums"]["agent_tier"]
           total_executions: number
@@ -513,6 +514,7 @@ export type Database = {
           monthly_price?: number
           name: string
           objective?: string | null
+          quality_mode?: string
           status?: Database["public"]["Enums"]["agent_status"]
           tier?: Database["public"]["Enums"]["agent_tier"]
           total_executions?: number
@@ -531,6 +533,7 @@ export type Database = {
           monthly_price?: number
           name?: string
           objective?: string | null
+          quality_mode?: string
           status?: Database["public"]["Enums"]["agent_status"]
           tier?: Database["public"]["Enums"]["agent_tier"]
           total_executions?: number

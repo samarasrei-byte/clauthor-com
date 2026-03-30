@@ -17,13 +17,76 @@ const LOVABLE_GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const AI_TIMEOUT_MS = 30000;
 const MAX_AI_RETRIES = 2;
 
-export type TaskComplexity = "simple" | "complex" | "auto";
+export type TaskComplexity = "simple" | "medium" | "complex" | "auto";
+export type QualityMode = "max_quality" | "balanced" | "economic";
 
 interface FetchAIOptions {
   /** Override automatic routing: "simple" → OpenClaw, "complex" → Lovable AI, "auto" → heuristic */
   complexity?: TaskComplexity;
+  /** Agent quality mode override */
+  qualityMode?: QualityMode;
   /** Extra headers for requests */
   extraHeaders?: Record<string, string>;
+}
+
+// Model costs per 1M tokens (USD) for cost estimation
+export const MODEL_COSTS: Record<string, { input: number; output: number }> = {
+  "google/gemini-2.5-flash-lite": { input: 0.075, output: 0.30 },
+  "google/gemini-2.5-flash": { input: 0.15, output: 0.60 },
+  "google/gemini-3-flash-preview": { input: 0.15, output: 0.60 },
+  "google/gemini-2.5-pro": { input: 1.25, output: 5.00 },
+};
+
+/**
+ * Selects the optimal model based on complexity and quality mode.
+ */
+export function selectModel(complexity: TaskComplexity, qualityMode: QualityMode = "balanced"): string {
+  if (qualityMode === "max_quality") return "google/gemini-2.5-pro";
+  if (qualityMode === "economic") return "google/gemini-2.5-flash-lite";
+  
+  // Balanced mode: route by complexity
+  switch (complexity) {
+    case "simple": return "google/gemini-2.5-flash-lite";
+    case "medium": return "google/gemini-2.5-flash";
+    case "complex": return "google/gemini-2.5-pro";
+    default: return "google/gemini-3-flash-preview";
+  }
+}
+
+/**
+ * Classifies task complexity into 3 tiers: simple, medium, complex.
+ */
+export function classifyTaskComplexity(message: string): "simple" | "medium" | "complex" {
+  if (!message || typeof message !== "string") return "simple";
+  const content = message.toLowerCase().trim();
+  const wordCount = content.split(/\s+/).length;
+
+  // Complex keywords
+  const complexKW = [
+    "analise", "análise", "analyze", "analysis", "estratégia", "strategy",
+    "compare", "comparar", "crie um plano", "create a plan", "planejamento",
+    "diagnóstico", "auditoria", "audit", "previsão", "forecast", "predict",
+    "otimizar", "optimize", "multi-step", "step-by-step", "raciocínio",
+    "código", "code", "implementar", "implement", "arquitetura", "architecture",
+  ];
+  
+  // Simple patterns
+  const simpleKW = [
+    "olá", "oi", "hello", "hi", "hey", "obrigado", "thanks",
+    "sim", "não", "yes", "no", "ok", "certo", "entendi",
+    "bom dia", "boa tarde", "boa noite",
+  ];
+
+  // Over 200 words or complex keywords → complex
+  if (wordCount > 200) return "complex";
+  if (complexKW.some(kw => content.includes(kw))) return "complex";
+  
+  // Under 50 words with simple keywords → simple
+  if (wordCount < 50 && simpleKW.some(kw => content.includes(kw))) return "simple";
+  if (wordCount < 50 && !complexKW.some(kw => content.includes(kw))) return "simple";
+  
+  // 50-200 words → medium
+  return "medium";
 }
 
 // Keywords that suggest complex reasoning tasks
@@ -55,42 +118,23 @@ const SIMPLE_KEYWORDS = [
 ];
 
 /**
- * Determines task complexity from message content using heuristics.
+ * Determines task complexity from message content using heuristics (legacy compat).
  */
 function detectComplexity(body: Record<string, any>): TaskComplexity {
   const messages = body.messages || [];
   const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
   if (!lastUserMsg) return "simple";
 
-  // Handle multimodal content (array of text/image parts)
   let rawContent = lastUserMsg.content || "";
   if (Array.isArray(rawContent)) {
-    rawContent = rawContent
-      .filter((p: any) => p.type === "text")
-      .map((p: any) => p.text || "")
-      .join(" ");
+    rawContent = rawContent.filter((p: any) => p.type === "text").map((p: any) => p.text || "").join(" ");
   }
   if (typeof rawContent !== "string") rawContent = String(rawContent);
-
-  const content = rawContent.toLowerCase();
-  const wordCount = content.split(/\s+/).length;
-
-  // Long prompts are likely complex
-  if (wordCount > 150) return "complex";
-
-  // Check for complex keywords
-  const hasComplexKeyword = COMPLEX_KEYWORDS.some(kw => content.includes(kw));
-  if (hasComplexKeyword) return "complex";
-
-  // Check for simple keywords (short messages with simple intent)
-  const hasSimpleKeyword = SIMPLE_KEYWORDS.some(kw => content.includes(kw));
-  if (hasSimpleKeyword && wordCount < 30) return "simple";
 
   // Tool calling requests are complex
   if (body.tools && body.tools.length > 0) return "complex";
 
-  // Default: simple for short, complex for longer
-  return wordCount > 60 ? "complex" : "simple";
+  return classifyTaskComplexity(rawContent);
 }
 
 /**
@@ -188,12 +232,14 @@ export async function fetchAI(
 ): Promise<Response> {
   // Support both old signature (extraHeaders) and new (options)
   let complexity: TaskComplexity = "auto";
+  let qualityMode: QualityMode = "balanced";
   let extraHeaders: Record<string, string> | undefined;
 
   if (extraHeadersOrOptions) {
-    if ("complexity" in extraHeadersOrOptions) {
+    if ("complexity" in extraHeadersOrOptions || "qualityMode" in extraHeadersOrOptions) {
       const opts = extraHeadersOrOptions as FetchAIOptions;
       complexity = opts.complexity || "auto";
+      qualityMode = opts.qualityMode || "balanced";
       extraHeaders = opts.extraHeaders;
     } else {
       extraHeaders = extraHeadersOrOptions as Record<string, string>;
@@ -202,7 +248,13 @@ export async function fetchAI(
 
   // Determine routing
   const resolved = complexity === "auto" ? detectComplexity(body) : complexity;
-  const primaryIsOpenClaw = resolved === "simple";
+  
+  // Apply smart model selection if no model is explicitly set
+  if (!body.model || body.model === "google/gemini-3-flash-preview") {
+    body.model = selectModel(resolved, qualityMode);
+  }
+  
+  const primaryIsOpenClaw = resolved === "simple" && qualityMode !== "max_quality";
 
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
   const EXTERNAL_AI_ENDPOINT = Deno.env.get("EXTERNAL_AI_ENDPOINT");
