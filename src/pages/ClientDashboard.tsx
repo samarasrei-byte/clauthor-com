@@ -45,6 +45,7 @@ const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
 const AgentChat = lazyRetry(() => import("@/components/dashboard/AgentChat"));
 const OmnixCommandCenter = lazyRetry(() => import("@/pages/OmnixCommandCenter"));
 const ThorLiveGuide = lazyRetry(() => import("@/components/dashboard/ThorLiveGuide"));
+const QuickStartWizard = lazy(() => import("@/components/dashboard/QuickStartWizard"));
 
 const ClientDashboard = () => {
   const { user } = useAuth();
