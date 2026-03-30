@@ -8,6 +8,7 @@ import { Send, X, Loader2, Volume2, VolumeX, Maximize2, Minimize2 } from "lucide
 import ReactMarkdown from "react-markdown";
 import thorPhoto from "@/assets/kaelis-ai.webp";
 import type { ThorCoreState, ThorCoreActions } from "./ThorCore";
+import { AgentDemoModal } from "./AgentDemoModal";
 
 /* ═══════════════════════════════════════════════════
    QUANTUM NEURAL CORE — Adaptive holographic engine
@@ -352,93 +353,114 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   const {
     phase, messages, input, isLoading, voiceEnabled, showChat, expanded,
     isSpeaking, isMobile, shouldUseLiteCore, lang, visitorName,
+    demoModalOpen, demoType,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
-    sendMessage, minimize, activate, stopTTS, forgetMemory, messagesEndRef,
+    sendMessage, minimize, activate, stopTTS, forgetMemory,
+    openDemo, closeDemo,
+    messagesEndRef,
   } = props;
 
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 
+  const demoModal = (
+    <AgentDemoModal
+      isOpen={demoModalOpen}
+      onClose={closeDemo}
+      demoType={demoType}
+      lang={lang}
+      onCTA={() => {
+        const isPt = lang.startsWith("pt");
+        window.location.href = "/pricing";
+      }}
+    />
+  );
   /* ══ ENTRANCE ══ */
   if (phase === "entrance") {
     const entranceSize = isMobile ? 200 : 360;
     return (
-      <motion.div className="fixed inset-0 z-[9999] flex items-center justify-center"
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-      >
-        <motion.div className="absolute inset-0 backdrop-blur-xl"
-          style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.08) 0%, hsl(var(--background) / 0.8) 60%, hsl(var(--background) / 0.92) 100%)" }}
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}
-        />
-        <motion.div className="relative z-10 flex flex-col items-center"
-          initial={{ scale: 0.1, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.3, type: "spring", damping: 12, stiffness: 60 }}
+      <>
+        {demoModal}
+        <motion.div className="fixed inset-0 z-[9999] flex items-center justify-center"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
         >
-          <div className="relative" style={{ width: entranceSize, height: entranceSize }}>
-            <NeuralCore isSpeaking={false} size={entranceSize} lite={isMobile} />
-            <div className="absolute rounded-full overflow-hidden"
-              style={{ width: entranceSize * 0.52, height: entranceSize * 0.52, left: "50%", top: "50%", transform: "translate(-50%, -50%)", border: "1px solid hsl(var(--accent-violet) / 0.2)" }}
-            >
-              <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+          <motion.div className="absolute inset-0 backdrop-blur-xl"
+            style={{ background: "radial-gradient(ellipse at center, hsl(var(--accent-violet) / 0.08) 0%, hsl(var(--background) / 0.8) 60%, hsl(var(--background) / 0.92) 100%)" }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.5 }}
+          />
+          <motion.div className="relative z-10 flex flex-col items-center"
+            initial={{ scale: 0.1, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.3, type: "spring", damping: 12, stiffness: 60 }}
+          >
+            <div className="relative" style={{ width: entranceSize, height: entranceSize }}>
+              <NeuralCore isSpeaking={false} size={entranceSize} lite={isMobile} />
+              <div className="absolute rounded-full overflow-hidden"
+                style={{ width: entranceSize * 0.52, height: entranceSize * 0.52, left: "50%", top: "50%", transform: "translate(-50%, -50%)", border: "1px solid hsl(var(--accent-violet) / 0.2)" }}
+              >
+                <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+              </div>
             </div>
-          </div>
-          <motion.div className="mt-4 text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}>
-            <motion.h2 className="font-mono text-lg sm:text-2xl font-bold tracking-[0.4em] uppercase text-foreground"
-              animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}
-            >THOR</motion.h2>
-            <motion.div className="mt-2 flex items-center justify-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}>
-              <motion.span className="h-px bg-accent-violet/30" initial={{ width: 0 }} animate={{ width: 30 }} transition={{ delay: 1.5, duration: 0.8 }} />
-              <motion.span className="text-[7px] font-mono uppercase tracking-[0.5em] text-accent-violet/60"
-                animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.5, repeat: Infinity }}
-              >Neural Sync</motion.span>
-              <motion.span className="h-px bg-accent-violet/30" initial={{ width: 0 }} animate={{ width: 30 }} transition={{ delay: 1.5, duration: 0.8 }} />
+            <motion.div className="mt-4 text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}>
+              <motion.h2 className="font-mono text-lg sm:text-2xl font-bold tracking-[0.4em] uppercase text-foreground"
+                animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 2, repeat: Infinity }}
+              >THOR</motion.h2>
+              <motion.div className="mt-2 flex items-center justify-center gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}>
+                <motion.span className="h-px bg-accent-violet/30" initial={{ width: 0 }} animate={{ width: 30 }} transition={{ delay: 1.5, duration: 0.8 }} />
+                <motion.span className="text-[7px] font-mono uppercase tracking-[0.5em] text-accent-violet/60"
+                  animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.5, repeat: Infinity }}
+                >Neural Sync</motion.span>
+                <motion.span className="h-px bg-accent-violet/30" initial={{ width: 0 }} animate={{ width: 30 }} transition={{ delay: 1.5, duration: 0.8 }} />
+              </motion.div>
+            </motion.div>
+            <motion.div className="mt-3 flex items-center gap-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}>
+              {Array.from({ length: 5 }).map((_, i) => (
+                <motion.div key={i} className="w-5 h-[2px] rounded-full bg-accent-violet"
+                  animate={{ opacity: [0.1, 0.8, 0.1], scaleX: [0.3, 1, 0.3] }}
+                  transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.12 }}
+                />
+              ))}
             </motion.div>
           </motion.div>
-          <motion.div className="mt-3 flex items-center gap-1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.8 }}>
-            {Array.from({ length: 5 }).map((_, i) => (
-              <motion.div key={i} className="w-5 h-[2px] rounded-full bg-accent-violet"
-                animate={{ opacity: [0.1, 0.8, 0.1], scaleX: [0.3, 1, 0.3] }}
-                transition={{ duration: 0.8, repeat: Infinity, delay: i * 0.12 }}
-              />
-            ))}
-          </motion.div>
         </motion.div>
-      </motion.div>
+      </>
     );
   }
 
   /* ══ MINIMIZED ══ */
   if (phase === "minimized") {
     return (
-      <motion.button
-        initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-        transition={{ type: "spring", damping: 14 }}
-        onClick={activate}
-        className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-[9999] group cursor-pointer"
-        aria-label="Talk to Thor"
-      >
-        <motion.span className="absolute inset-[-3px] rounded-full overflow-hidden"
-          animate={{ rotate: 360 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+      <>
+        {demoModal}
+        <motion.button
+          initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", damping: 14 }}
+          onClick={activate}
+          className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-[9999] group cursor-pointer"
+          aria-label="Talk to Thor"
         >
-          <span className="absolute inset-0" style={{
-            background: "conic-gradient(from 0deg, transparent 30%, hsl(var(--accent-violet) / 0.7), hsl(var(--accent-violet) / 0.15), transparent 75%)",
-          }} />
-        </motion.span>
-        <motion.span className="absolute inset-[-8px] rounded-full border border-accent-violet/10"
-          animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0, 0.2] }}
-          transition={{ duration: 3, repeat: Infinity }}
-        />
-        <span className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-background/95 backdrop-blur-2xl overflow-hidden border border-accent-violet/10">
-          <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover rounded-full" />
-          <span className="absolute inset-0 rounded-full shadow-[inset_0_0_15px_hsl(var(--accent-violet)/0.15)]" />
-        </span>
-        <span className="absolute top-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-background z-10">
-          <span className="block w-full h-full rounded-full bg-emerald-500" />
-          <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-50" />
-        </span>
-        <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-[8px] font-mono tracking-[0.3em] uppercase text-accent-violet/50 opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap bg-background/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-accent-violet/10">
-          THOR · ONLINE
-        </span>
-      </motion.button>
+          <motion.span className="absolute inset-[-3px] rounded-full overflow-hidden"
+            animate={{ rotate: 360 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+          >
+            <span className="absolute inset-0" style={{
+              background: "conic-gradient(from 0deg, transparent 30%, hsl(var(--accent-violet) / 0.7), hsl(var(--accent-violet) / 0.15), transparent 75%)",
+            }} />
+          </motion.span>
+          <motion.span className="absolute inset-[-8px] rounded-full border border-accent-violet/10"
+            animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0, 0.2] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          />
+          <span className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-background/95 backdrop-blur-2xl overflow-hidden border border-accent-violet/10">
+            <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover rounded-full" />
+            <span className="absolute inset-0 rounded-full shadow-[inset_0_0_15px_hsl(var(--accent-violet)/0.15)]" />
+          </span>
+          <span className="absolute top-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-background z-10">
+            <span className="block w-full h-full rounded-full bg-emerald-500" />
+            <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-50" />
+          </span>
+          <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-[8px] font-mono tracking-[0.3em] uppercase text-accent-violet/50 opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap bg-background/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-accent-violet/10">
+            THOR · ONLINE
+          </span>
+        </motion.button>
+      </>
     );
   }
 
@@ -446,6 +468,8 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   if (isMobile) {
     const mobileOrbSize = expanded ? 140 : 100;
     return (
+      <>
+        {demoModal}
       <AnimatePresence>
         <motion.div
           className={`fixed z-[9999] ${expanded ? "inset-0 flex flex-col" : "bottom-0 left-0 right-0"}`}
@@ -523,6 +547,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
           </div>
         </motion.div>
       </AnimatePresence>
+      </>
     );
   }
 
@@ -530,6 +555,8 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   const widgetOrbSize = 80;
 
   return (
+    <>
+      {demoModal}
     <motion.div
       className="fixed bottom-6 right-4 sm:right-6 z-[9999] flex flex-col items-end gap-3 pointer-events-none"
       style={{ maxWidth: 380 }}
@@ -667,5 +694,6 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
         </div>
       </motion.div>
     </motion.div>
+    </>
   );
 }

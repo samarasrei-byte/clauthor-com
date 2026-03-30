@@ -15,9 +15,16 @@ import {
   extractNameFromMessage, extractTopicFromMessage, isForgetRequest,
   buildProactiveGreeting, buildNameQuestion,
 } from "./ThorVoice";
+import {
+  detectIntent, detectDepartmentFromConversation,
+  buildPricingResponse, buildCompetitorResponse, buildDemoOffer,
+  type ThorIntent,
+} from "./ThorIntentDetector";
+import type { DemoType } from "./AgentDemoModal";
 
 const SESSION_GREETED_KEY = "thor_session_greeted";
 const SESSION_DISMISSED_KEY = "thor_session_dismissed";
+const SESSION_FOLLOWUP_KEY = "thor_session_followup_sent";
 
 export type ThorPhase = "entrance" | "active" | "minimized";
 
@@ -35,6 +42,9 @@ export interface ThorCoreState {
   shouldUseLiteCore: boolean;
   lang: string;
   visitorName: string | null;
+  // Demo modal state
+  demoModalOpen: boolean;
+  demoType: DemoType;
 }
 
 export interface ThorCoreActions {
@@ -47,6 +57,8 @@ export interface ThorCoreActions {
   activate: () => void;
   stopTTS: () => void;
   forgetMemory: () => void;
+  openDemo: (type: DemoType) => void;
+  closeDemo: () => void;
   messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -62,9 +74,14 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
   const [thorVoiceId, setThorVoiceId] = useState(DEFAULT_VOICE_ID);
   const [visitorName, setVisitorName] = useState<string | null>(null);
   const [askedForName, setAskedForName] = useState(false);
+  // Demo modal
+  const [demoModalOpen, setDemoModalOpen] = useState(false);
+  const [demoType, setDemoType] = useState<DemoType>("generic");
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const messagesRef = useRef<ThorMessage[]>([]);
+  const inactivityTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const location = useLocation();
   const { user } = useAuth();
   const isMobile = useIsMobile();
@@ -115,7 +132,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // ═══ MUDANÇA 1: Proactive greeting — 5s after page load, once per session ═══
+  // ═══ Proactive greeting — 5s after page load, once per session ═══
   useEffect(() => {
     const alreadyGreeted = sessionStorage.getItem(SESSION_GREETED_KEY);
     const dismissed = sessionStorage.getItem(SESSION_DISMISSED_KEY);
@@ -123,7 +140,6 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     if (location.pathname !== "/") return;
 
     const timer = setTimeout(() => {
-      // Double-check dismiss wasn't set during the timeout
       if (sessionStorage.getItem(SESSION_DISMISSED_KEY)) return;
 
       const memory = loadThorMemory();
@@ -135,7 +151,6 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       setMessages([{ role: "assistant", content: greeting }]);
       sessionStorage.setItem(SESSION_GREETED_KEY, "1");
 
-      // Speak the greeting (respect mobile autoplay)
       const canSpeak = !isMobile || userHasInteractedWithPageRef.current;
       if (canSpeak) {
         setVoiceEnabled(true);
@@ -166,30 +181,85 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     }
   }, [phase]);
 
-  // ═══ MUDANÇA 2: Memory extraction from messages ═══
+  // ═══ Inactivity follow-up — 2min after Thor opens, once per session ═══
+  useEffect(() => {
+    if (phase !== "active" || !showChat) return;
+    if (sessionStorage.getItem(SESSION_FOLLOWUP_KEY)) return;
+
+    // Reset timer on every new message
+    if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+
+    inactivityTimerRef.current = setTimeout(() => {
+      if (sessionStorage.getItem(SESSION_FOLLOWUP_KEY)) return;
+      const isPt = lang.startsWith("pt");
+      const followup = isPt
+        ? "Ainda tem dúvidas? Posso te mostrar como outras empresas estão usando nossos agentes. É só perguntar! 💡"
+        : "Still have questions? I can show you how other companies are using our agents. Just ask! 💡";
+
+      setMessages(prev => [...prev, { role: "assistant", content: followup }]);
+      sessionStorage.setItem(SESSION_FOLLOWUP_KEY, "1");
+    }, 120_000); // 2 minutes
+
+    return () => {
+      if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
+    };
+  }, [phase, showChat, messages.length, lang]);
+
+  // Memory extraction from messages
   const processMemory = useCallback((userMsg: string, assistantReply: string) => {
-    // Extract name
     const name = extractNameFromMessage(userMsg);
     if (name) {
       saveThorMemory("name", name);
       setVisitorName(name);
     }
 
-    // Extract topic/interest
     const topic = extractTopicFromMessage(userMsg);
     if (topic) {
       saveThorMemory("lastTopic", topic);
       saveThorMemory("interest", topic);
     }
 
-    // Extract company name heuristic
     const companyMatch = userMsg.match(/(?:empresa|company|trabalho\s+na|work\s+at|da\s+empresa)\s+([A-ZÀ-Ú][a-zà-ú]+(?:\s+[A-ZÀ-Ú][a-zà-ú]+)*)/i);
     if (companyMatch?.[1]) {
       saveThorMemory("company", companyMatch[1].trim());
     }
 
-    // Update last visit
     touchThorVisit();
+  }, []);
+
+  // ═══ Intent handling — intercept certain messages before sending to API ═══
+  const handleIntent = useCallback((msg: string, intent: ThorIntent): boolean => {
+    const isPt = lang.startsWith("pt");
+
+    if (intent.type === "pricing") {
+      const pricingMsg = buildPricingResponse(lang);
+      setMessages(prev => [...prev, { role: "user", content: msg }, { role: "assistant", content: pricingMsg }]);
+      return true;
+    }
+
+    if (intent.type === "competitor") {
+      const competitorMsg = buildCompetitorResponse(intent.competitor, lang);
+      setMessages(prev => [...prev, { role: "user", content: msg }, { role: "assistant", content: competitorMsg }]);
+      return true;
+    }
+
+    if (intent.type === "demo") {
+      const demoOffer = buildDemoOffer(intent.demoType, lang);
+      setMessages(prev => [...prev, { role: "user", content: msg }, { role: "assistant", content: demoOffer }]);
+      // Auto-open demo after a short delay
+      setTimeout(() => {
+        setDemoType(intent.demoType);
+        setDemoModalOpen(true);
+      }, 1500);
+      return true;
+    }
+
+    return false;
+  }, [lang]);
+
+  // Check if user is accepting a demo offer
+  const isAcceptingDemo = useCallback((msg: string): boolean => {
+    return /\b(sim|yes|quero|want|show|mostre|mostra|vamos|let'?s|ok|claro|sure|yeah|bora|go)\b/i.test(msg);
   }, []);
 
   const sendMessage = useCallback(async (text?: string) => {
@@ -215,6 +285,26 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       return;
     }
 
+    // Check if user is accepting a previous demo offer
+    const lastAssistant = messagesRef.current.filter(m => m.role === "assistant").pop();
+    if (lastAssistant?.content.includes("🎬") && isAcceptingDemo(msg)) {
+      const dept = detectDepartmentFromConversation(messagesRef.current);
+      setMessages(prev => [...prev, { role: "user", content: msg }]);
+      setTimeout(() => {
+        setDemoType(dept);
+        setDemoModalOpen(true);
+      }, 500);
+      return;
+    }
+
+    // Detect intent and handle locally if possible
+    const intent = detectIntent(msg);
+    if (intent.type !== "none" && handleIntent(msg, intent)) {
+      processMemory(msg, "");
+      return;
+    }
+
+    // ── Normal flow: send to API ──
     stopTTS();
     if (abortControllerRef.current) abortControllerRef.current.abort();
     const controller = new AbortController();
@@ -276,6 +366,25 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     // Process memory from user message + response
     processMemory(msg, fullText);
 
+    // After API response, check if response mentions a department → offer demo
+    if (fullText) {
+      const dept = detectDepartmentFromConversation([...updated, { role: "assistant", content: fullText }]);
+      if (dept !== "generic") {
+        const isPt = lang.startsWith("pt");
+        const offerMsg = isPt
+          ? `\n\n🎬 Quer ver o agente de **${dept === "sdr" ? "vendas" : dept === "support" ? "suporte" : dept === "hr" ? "RH" : dept === "content" ? "conteúdo" : "dados"}** em ação? Posso te mostrar agora!`
+          : `\n\n🎬 Want to see the **${dept}** agent in action? I can show you right now!`;
+        // Append offer to last message
+        setMessages(prev => {
+          const lastIdx = prev.length - 1;
+          if (prev[lastIdx]?.role === "assistant" && !prev[lastIdx].content.includes("🎬")) {
+            return prev.map((m, i) => i === lastIdx ? { ...m, content: m.content + offerMsg } : m);
+          }
+          return prev;
+        });
+      }
+    }
+
     // Ask for name on first interaction if we don't know it
     if (!visitorName && !askedForName && !extractNameFromMessage(msg)) {
       setAskedForName(true);
@@ -291,7 +400,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
 
     setIsLoading(false);
     if (abortControllerRef.current === controller) abortControllerRef.current = null;
-  }, [input, isLoading, user, location.pathname, voiceEnabled, speak, stopTTS, lang, thorVoiceId, processMemory, visitorName, askedForName]);
+  }, [input, isLoading, user, location.pathname, voiceEnabled, speak, stopTTS, lang, thorVoiceId, processMemory, visitorName, askedForName, handleIntent, isAcceptingDemo]);
 
   const minimize = useCallback(() => {
     stopTTS();
@@ -303,7 +412,6 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     setPhase("minimized");
     setShowChat(false);
     setExpanded(false);
-    // Mark session as dismissed so proactive won't reopen
     sessionStorage.setItem(SESSION_DISMISSED_KEY, "1");
   }, [stopTTS]);
 
@@ -334,12 +442,22 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     }]);
   }, [lang]);
 
+  const openDemo = useCallback((type: DemoType) => {
+    setDemoType(type);
+    setDemoModalOpen(true);
+  }, []);
+
+  const closeDemo = useCallback(() => {
+    setDemoModalOpen(false);
+  }, []);
+
   return {
     phase, messages, input, isLoading, voiceEnabled, hasInteracted,
     showChat, expanded, isSpeaking, isMobile, shouldUseLiteCore, lang,
-    visitorName,
+    visitorName, demoModalOpen, demoType,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
     sendMessage, minimize, activate, stopTTS, forgetMemory,
+    openDemo, closeDemo,
     messagesEndRef,
   };
 }
