@@ -232,12 +232,14 @@ export async function fetchAI(
 ): Promise<Response> {
   // Support both old signature (extraHeaders) and new (options)
   let complexity: TaskComplexity = "auto";
+  let qualityMode: QualityMode = "balanced";
   let extraHeaders: Record<string, string> | undefined;
 
   if (extraHeadersOrOptions) {
-    if ("complexity" in extraHeadersOrOptions) {
+    if ("complexity" in extraHeadersOrOptions || "qualityMode" in extraHeadersOrOptions) {
       const opts = extraHeadersOrOptions as FetchAIOptions;
       complexity = opts.complexity || "auto";
+      qualityMode = opts.qualityMode || "balanced";
       extraHeaders = opts.extraHeaders;
     } else {
       extraHeaders = extraHeadersOrOptions as Record<string, string>;
@@ -246,7 +248,13 @@ export async function fetchAI(
 
   // Determine routing
   const resolved = complexity === "auto" ? detectComplexity(body) : complexity;
-  const primaryIsOpenClaw = resolved === "simple";
+  
+  // Apply smart model selection if no model is explicitly set
+  if (!body.model || body.model === "google/gemini-3-flash-preview") {
+    body.model = selectModel(resolved, qualityMode);
+  }
+  
+  const primaryIsOpenClaw = resolved === "simple" && qualityMode !== "max_quality";
 
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
   const EXTERNAL_AI_ENDPOINT = Deno.env.get("EXTERNAL_AI_ENDPOINT");
