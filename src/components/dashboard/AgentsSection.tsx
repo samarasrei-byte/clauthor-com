@@ -234,16 +234,8 @@ const AgentsSection = ({
                   </div>
                 </div>
 
-                {/* Last Activity */}
-                {lastActivity[agent.id] && (
-                  <div className="flex items-center gap-2 text-[10px] text-muted-foreground bg-muted/20 rounded-lg px-3 py-2">
-                     <Clock className="h-3 w-3 shrink-0" />
-                    <span className="truncate">
-                      {t("dashboard.last_activity", { defaultValue: "Última atividade" })}: {lastActivity[agent.id].action} — {new Date(lastActivity[agent.id].date).toLocaleDateString(undefined, { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
-                    </span>
-                  </div>
-                )}
-
+                {/* Activity Metrics from agent_activity_log */}
+                <AgentActivityMetricsInline agentId={agent.id} agentName={agent.name} onOpenChat={() => onOpenChat({ id: agent.id, name: agent.name })} isActive={agent.status === "active"} />
                 {/* Actions */}
                 <div className="flex gap-2">
                   <Button
