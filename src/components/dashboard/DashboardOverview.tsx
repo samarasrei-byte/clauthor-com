@@ -8,6 +8,9 @@ import SectionLoader from "@/components/ui/section-loader";
 import GuidedOnboarding from "./GuidedOnboarding";
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
+const ROIDashboard = lazy(() => import("./ROIDashboard"));
+const MarketplaceReviews = lazy(() => import("./MarketplaceReviews"));
+const QuickIntegrations = lazy(() => import("./QuickIntegrations"));
 const ThorDailyBriefing = lazy(() => import("./ThorDailyBriefing"));
 const QuickWins = lazy(() => import("./QuickWins"));
 const TaskRequestPanel = lazy(() => import("./TaskRequestPanel"));
@@ -121,6 +124,17 @@ const DashboardOverview = ({
                   onSubmitTask={onSubmitTask}
                   onSelectAgent={onSelectAgentBySlug}
                 />
+
+                <ROIDashboard
+                  agents={agents}
+                  totalExecutions={totalExecutions}
+                  totalTokensUsed={totalTokensUsed}
+                  estimatedSavings={estimatedSavings}
+                />
+
+                <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
+
+                <MarketplaceReviews compact />
 
                 <PendingActionsPanel />
                 <ClientCommandCenter

@@ -45,6 +45,7 @@ const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
 const AgentChat = lazyRetry(() => import("@/components/dashboard/AgentChat"));
 const OmnixCommandCenter = lazyRetry(() => import("@/pages/OmnixCommandCenter"));
 const ThorLiveGuide = lazyRetry(() => import("@/components/dashboard/ThorLiveGuide"));
+const QuickStartWizard = lazy(() => import("@/components/dashboard/QuickStartWizard"));
 
 const ClientDashboard = () => {
   const { user } = useAuth();
@@ -63,6 +64,7 @@ const ClientDashboard = () => {
   });
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
+  const [showQuickStart, setShowQuickStart] = useState(false);
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
     if (!user) return false;
     return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
@@ -536,6 +538,16 @@ const ClientDashboard = () => {
           />
         </Suspense>
       )}
+
+      <Suspense fallback={null}>
+        <QuickStartWizard
+          isOpen={showQuickStart}
+          onClose={() => setShowQuickStart(false)}
+          onTeach={() => { setShowCompanyOnboarding(true); setShowQuickStart(false); }}
+          onHire={() => { setActiveSection("library"); setShowQuickStart(false); }}
+          onCommand={() => { setActiveSection("omnix"); setOmnixMounted(true); setShowQuickStart(false); }}
+        />
+      </Suspense>
 
       <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
     </>
