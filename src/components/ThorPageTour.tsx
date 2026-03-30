@@ -19,7 +19,7 @@ interface ThorPageTourProps {
   onComplete?: () => void;
 }
 
-const THOR_VOICE_ID = "onwK4e9ZLuTAKqWW03F9";
+import { DEFAULT_VOICE_ID as THOR_VOICE_ID } from "@/components/thor/ThorVoice";
 const TYPING_SPEED = 18;
 
 const ThorPageTour = ({ steps, storageKey, onComplete }: ThorPageTourProps) => {

@@ -20,7 +20,7 @@ interface ThorGuidedTourProps {
   onComplete?: () => void;
 }
 
-const THOR_VOICE_ID = "onwK4e9ZLuTAKqWW03F9"; // Daniel — warm male
+import { DEFAULT_VOICE_ID as THOR_VOICE_ID } from "@/components/thor/ThorVoice";
 
 const ThorGuidedTour = ({ steps, storageKey, onComplete }: ThorGuidedTourProps) => {
   const [isActive, setIsActive] = useState(false);
