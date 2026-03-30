@@ -13,8 +13,8 @@ const DEFAULT_VOICE_ID = "57fRHlU547szfU1IrRoS";
 const STORAGE_KEY = "thor_greeter_seen_v3";
 // Proactive messages disabled — Thor only speaks when user interacts
 const PROACTIVE_INTERVAL = 0; // was 45_000 — caused Thor to auto-popup aggressively
-const THOR_MAX_RESPONSE_CHARS = 600;
-const THOR_MAX_RESPONSE_PARAGRAPHS = 4;
+const THOR_MAX_RESPONSE_CHARS = 900;
+const THOR_MAX_RESPONSE_PARAGRAPHS = 5;
 const THOR_STREAM_UPDATE_INTERVAL_MS = 100;
 const THOR_HARD_TIMEOUT_MS = 25_000;
 
@@ -36,7 +36,14 @@ const normalizeThorResponse = (value: string) =>
 const clampThorResponse = (value: string) => {
   const normalized = normalizeThorResponse(value);
   const paragraphs = normalized.split(/\n\s*\n/).filter(Boolean).slice(0, THOR_MAX_RESPONSE_PARAGRAPHS);
-  return paragraphs.join("\n\n").slice(0, THOR_MAX_RESPONSE_CHARS).trim();
+  let result = paragraphs.join("\n\n");
+  if (result.length > THOR_MAX_RESPONSE_CHARS) {
+    // Cut at word boundary
+    result = result.slice(0, THOR_MAX_RESPONSE_CHARS);
+    const lastSpace = result.lastIndexOf(" ");
+    if (lastSpace > THOR_MAX_RESPONSE_CHARS * 0.8) result = result.slice(0, lastSpace);
+  }
+  return result.trim();
 };
 
 const exceededThorResponseLimit = (value: string) => {
@@ -489,6 +496,7 @@ const ThorGreeter = () => {
           headers: {
             "Content-Type": "application/json",
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
             messages: updated.slice(-10).map(m => ({ role: m.role, content: m.content })),
@@ -642,17 +650,20 @@ const ThorGreeter = () => {
     setExpanded(false);
   };
 
-  const activate = () => {
+  const activate = useCallback(() => {
     setPhase("active");
     setShowChat(true);
     if (messagesRef.current.length === 0) {
       const isPt = lang.startsWith("pt");
-      const greeting = isPt ? "Olá! Eu sou o **Thor**, CEO da CLAUTHOR. Em que posso ajudar?" : "Hi! I'm **Thor**, CEO of CLAUTHOR. How can I help?";
+      const greeting = isPt
+        ? "Olá! Eu sou o **Thor**, CEO e Orquestrador da CLAUTHOR. 🧠 Me conta: **o que te trouxe aqui hoje?**"
+        : "Hello! I'm **Thor**, CEO & Orchestrator of CLAUTHOR. 🧠 Tell me: **what brought you here today?**";
       setMessages([{ role: "assistant", content: greeting }]);
+      // Speak after a tiny delay to let state settle
       setVoiceEnabled(true);
-      speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId);
+      setTimeout(() => speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId), 150);
     }
-  };
+  }, [lang, speak, thorVoiceId]);
 
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 

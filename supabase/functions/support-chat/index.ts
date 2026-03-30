@@ -188,8 +188,8 @@ serve(async (req) => {
         { role: "system", content: systemPrompt },
         ...recentMessages.map((m: any) => ({ role: m.role, content: m.content })),
       ],
-      max_tokens: isThor ? 380 : 600,
-      temperature: isThor ? 0.35 : 0.7,
+      max_tokens: isThor ? 520 : 700,
+      temperature: isThor ? 0.3 : 0.6,
       stream: true,
     });
 
