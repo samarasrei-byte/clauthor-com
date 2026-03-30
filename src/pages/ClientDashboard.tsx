@@ -567,6 +567,7 @@ const ClientDashboard = () => {
       </Suspense>
 
       <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
+      <DashboardTour />
     </>
   );
 };
