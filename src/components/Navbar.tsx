@@ -32,13 +32,13 @@ const Navbar = () => {
         setMegaMenuOpen(false);
       }
     };
-    // Use requestAnimationFrame to skip the current event loop tick
-    const raf = requestAnimationFrame(() => {
-      document.addEventListener("mousedown", handler, true);
-    });
+    // Delay listener attachment to avoid catching the opening click
+    const timer = setTimeout(() => {
+      document.addEventListener("click", handler, true);
+    }, 0);
     return () => {
-      cancelAnimationFrame(raf);
-      document.removeEventListener("mousedown", handler, true);
+      clearTimeout(timer);
+      document.removeEventListener("click", handler, true);
     };
   }, [megaMenuOpen]);
 
