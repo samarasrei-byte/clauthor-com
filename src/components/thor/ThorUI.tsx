@@ -353,9 +353,27 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   const {
     phase, messages, input, isLoading, voiceEnabled, showChat, expanded,
     isSpeaking, isMobile, shouldUseLiteCore, lang, visitorName,
+    demoModalOpen, demoType,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
-    sendMessage, minimize, activate, stopTTS, forgetMemory, messagesEndRef,
+    sendMessage, minimize, activate, stopTTS, forgetMemory,
+    openDemo, closeDemo,
+    messagesEndRef,
   } = props;
+
+  const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+
+  const demoModal = (
+    <AgentDemoModal
+      isOpen={demoModalOpen}
+      onClose={closeDemo}
+      demoType={demoType}
+      lang={lang}
+      onCTA={() => {
+        const isPt = lang.startsWith("pt");
+        window.location.href = "/pricing";
+      }}
+    />
+  );
 
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 
