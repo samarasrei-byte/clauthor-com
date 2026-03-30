@@ -30,11 +30,23 @@ interface DashboardSidebarProps {
 const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(() => {
+    // "Ferramentas Avançadas" starts collapsed
+    return new Set(["Ferramentas Avançadas", "Advanced Tools"]);
+  });
 
   const toggleGroup = (id: string) => {
     setExpandedGroups(prev => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const toggleSection = (group: string) => {
+    setCollapsedSections(prev => {
+      const next = new Set(prev);
+      if (next.has(group)) next.delete(group); else next.add(group);
       return next;
     });
   };
