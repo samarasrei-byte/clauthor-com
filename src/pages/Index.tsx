@@ -1,4 +1,4 @@
-import { motion, useScroll, useTransform, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { lazy, Suspense, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -68,91 +68,37 @@ const useCyclingTypewriter = (words: string[], speed = 50, pauseDuration = 2500,
 /* ═══════════════════════════════════════════════════════
    MOUSE TRACKER
    ═══════════════════════════════════════════════════════ */
-const MouseReactiveField = () => {
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const smoothX = useSpring(mouseX, { stiffness: 50, damping: 20 });
-  const smoothY = useSpring(mouseY, { stiffness: 50, damping: 20 });
-
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    mouseX.set((e.clientX - rect.left) / rect.width);
-    mouseY.set((e.clientY - rect.top) / rect.height);
-  }, [mouseX, mouseY]);
-
-  return (
-    <div className="absolute inset-0 overflow-hidden" onMouseMove={handleMouseMove}>
-      <motion.div
-        className="absolute w-[500px] h-[500px] rounded-full pointer-events-none"
-        style={{
-          left: useTransform(smoothX, [0, 1], ["-10%", "70%"]),
-          top: useTransform(smoothY, [0, 1], ["-10%", "60%"]),
-          background: "radial-gradient(circle, hsl(var(--primary) / 0.08) 0%, transparent 70%)",
-        }}
-      />
-      <motion.div
-        className="absolute w-[300px] h-[300px] rounded-full pointer-events-none"
-        style={{
-          left: useTransform(smoothX, [0, 1], ["60%", "20%"]),
-          top: useTransform(smoothY, [0, 1], ["50%", "10%"]),
-          background: "radial-gradient(circle, hsl(var(--primary) / 0.04) 0%, transparent 70%)",
-        }}
-      />
-      <div className="absolute inset-0 opacity-[0.03]" style={{
-        backgroundImage: `linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)`,
-        backgroundSize: "60px 60px",
-      }} />
-    </div>
-  );
-};
+/* MouseReactiveField — replaced with pure CSS for zero JS overhead */
+const MouseReactiveField = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    <div className="absolute w-[500px] h-[500px] rounded-full top-1/4 left-1/4 animate-pulse" style={{
+      background: "radial-gradient(circle, hsl(var(--primary) / 0.06) 0%, transparent 70%)",
+      animationDuration: "6s",
+    }} />
+    <div className="absolute inset-0 opacity-[0.03]" style={{
+      backgroundImage: `linear-gradient(hsl(var(--primary) / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary) / 0.3) 1px, transparent 1px)`,
+      backgroundSize: "60px 60px",
+    }} />
+  </div>
+);
 
 /* ═══════════════════════════════════════════════════════
    ANIMATED COUNTER — counts up on view
    ═══════════════════════════════════════════════════════ */
+/* AnimatedStat — static render, no intervals */
 const AnimatedStat = ({ value, suffix = "", prefix = "", label, icon: Icon }: {
   value: number; suffix?: string; prefix?: string; label: string; icon: React.ElementType;
-}) => {
-  const [count, setCount] = useState(0);
-  const [hasAnimated, setHasAnimated] = useState(false);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
-      onViewportEnter={() => {
-        if (hasAnimated) return;
-        setHasAnimated(true);
-        const duration = 1500;
-        const steps = 40;
-        const increment = value / steps;
-        let current = 0;
-        let cleared = false;
-        const interval = setInterval(() => {
-          current += increment;
-          if (current >= value || cleared) {
-            setCount(value);
-            clearInterval(interval);
-          } else {
-            setCount(Math.floor(current));
-          }
-        }, duration / steps);
-        // Safety: clear interval if component unmounts mid-animation
-        return () => { cleared = true; clearInterval(interval); };
-      }}
-      className="text-center p-4 sm:p-5"
-    >
-      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center mx-auto mb-3 icon-container-glow">
-        <Icon className="h-5 w-5 text-primary icon-lift" strokeWidth={1.5} />
-      </div>
-      <p className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1">
-        {prefix}{count.toLocaleString()}{suffix}
-      </p>
-      <p className="font-mono text-[11px] sm:text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
-    </motion.div>
-  );
-};
+}) => (
+  <div className="text-center p-4 sm:p-5">
+    <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-primary/10 border border-primary/10 flex items-center justify-center mx-auto mb-3">
+      <Icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
+    </div>
+    <p className="font-display text-2xl sm:text-3xl md:text-4xl font-bold text-foreground mb-1">
+      {prefix}{value.toLocaleString()}{suffix}
+    </p>
+    <p className="font-mono text-[11px] sm:text-xs text-muted-foreground uppercase tracking-wider">{label}</p>
+  </div>
+);
 
 /* ═══════════════════════════════════════════════════════
    LIVE AGENT CARD
@@ -170,14 +116,7 @@ interface LiveAgentProps {
 }
 
 const LiveAgentCard = ({ name, role, icon: Icon, status, actions, index, slug, actionsLabel, detailsLabel }: LiveAgentProps) => {
-  const [currentActions, setCurrentActions] = useState(actions);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentActions(prev => prev + Math.floor(Math.random() * 3));
-    }, 3000 + index * 1000);
-    return () => clearInterval(interval);
-  }, [index]);
+  const currentActions = actions; // Static — no intervals to avoid re-renders
 
   return (
     <motion.div
@@ -238,8 +177,7 @@ const HomePage = () => {
   const isMobile = useIsMobile();
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
 
-  const { scrollYProgress } = useScroll();
-  const bgOpacity = useTransform(scrollYProgress, [0, 0.3], [0, 1]);
+  // Removed useScroll/useTransform — they run 60fps and cause jank
 
   const cyclingRoles = useMemo(() => [
     "AI Employees",
@@ -313,14 +251,11 @@ const HomePage = () => {
 
   return (
     <div className="relative overflow-x-hidden">
-      {/* Background depth layer — disabled on mobile for scroll performance */}
+      {/* Background depth — pure CSS, no scroll-linked JS */}
       {!isMobile && (
-        <motion.div
-          className="fixed inset-0 pointer-events-none"
-          style={{ opacity: bgOpacity }}
-        >
+        <div className="fixed inset-0 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/[0.02] to-primary/[0.04]" />
-        </motion.div>
+        </div>
       )}
 
       {/* ═══════════════════════════════════════════════════════
