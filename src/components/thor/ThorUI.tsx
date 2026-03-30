@@ -351,9 +351,9 @@ const QuickActions = ({ lang, sendMessage, mobile }: QuickActionsProps) => {
 export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   const {
     phase, messages, input, isLoading, voiceEnabled, showChat, expanded,
-    isSpeaking, isMobile, shouldUseLiteCore, lang,
+    isSpeaking, isMobile, shouldUseLiteCore, lang, visitorName,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
-    sendMessage, minimize, activate, stopTTS, messagesEndRef,
+    sendMessage, minimize, activate, stopTTS, forgetMemory, messagesEndRef,
   } = props;
 
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
