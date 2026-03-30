@@ -9,9 +9,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useReducedMotion } from "framer-motion";
 import { ThorMessage, streamThorResponse } from "./ThorStreaming";
-import { fetchThorVoiceId, getThorGreeting, prepareSpeechText, DEFAULT_VOICE_ID } from "./ThorVoice";
+import {
+  fetchThorVoiceId, prepareSpeechText, DEFAULT_VOICE_ID,
+  loadThorMemory, saveThorMemory, clearThorMemory, touchThorVisit,
+  extractNameFromMessage, extractTopicFromMessage, isForgetRequest,
+  buildProactiveGreeting, buildNameQuestion,
+} from "./ThorVoice";
 
-const STORAGE_KEY = "thor_greeter_seen_v3";
+const SESSION_GREETED_KEY = "thor_session_greeted";
+const SESSION_DISMISSED_KEY = "thor_session_dismissed";
 
 export type ThorPhase = "entrance" | "active" | "minimized";
 
@@ -28,6 +34,7 @@ export interface ThorCoreState {
   isMobile: boolean;
   shouldUseLiteCore: boolean;
   lang: string;
+  visitorName: string | null;
 }
 
 export interface ThorCoreActions {
@@ -39,6 +46,7 @@ export interface ThorCoreActions {
   minimize: () => void;
   activate: () => void;
   stopTTS: () => void;
+  forgetMemory: () => void;
   messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -52,8 +60,9 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
   const [showChat, setShowChat] = useState(false);
   const [expanded, setExpanded] = useState(false);
   const [thorVoiceId, setThorVoiceId] = useState(DEFAULT_VOICE_ID);
+  const [visitorName, setVisitorName] = useState<string | null>(null);
+  const [askedForName, setAskedForName] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const proactiveTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
   const messagesRef = useRef<ThorMessage[]>([]);
   const location = useLocation();
@@ -63,9 +72,25 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
   const lang = navigator.language || "en";
   const shouldUseLiteCore = isMobile || !!prefersReducedMotion;
 
-  // Fetch dynamic voice config
+  // Track if user has interacted with page (for mobile autoplay policy)
+  const userHasInteractedWithPageRef = useRef(false);
+  useEffect(() => {
+    const mark = () => { userHasInteractedWithPageRef.current = true; };
+    window.addEventListener("click", mark, { once: true });
+    window.addEventListener("touchstart", mark, { once: true });
+    window.addEventListener("keydown", mark, { once: true });
+    return () => {
+      window.removeEventListener("click", mark);
+      window.removeEventListener("touchstart", mark);
+      window.removeEventListener("keydown", mark);
+    };
+  }, []);
+
+  // Fetch dynamic voice config + load memory
   useEffect(() => {
     fetchThorVoiceId().then(setThorVoiceId);
+    const mem = loadThorMemory();
+    if (mem.name) setVisitorName(mem.name);
   }, []);
 
   useEffect(() => { messagesRef.current = messages; }, [messages]);
@@ -85,51 +110,86 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     return () => clearTimeout(timeout);
   }, [isSpeaking, stopTTS]);
 
-  // Scroll to bottom on new messages
+  // Scroll to bottom
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Auto-activate Thor on first visit after 4s delay
+  // ═══ MUDANÇA 1: Proactive greeting — 5s after page load, once per session ═══
   useEffect(() => {
-    const seen = localStorage.getItem(STORAGE_KEY);
-    if (!seen && location.pathname === "/") {
-      const timer = setTimeout(() => {
-        setPhase("active");
-        setShowChat(true);
-        localStorage.setItem(STORAGE_KEY, "1");
-        setMessages([{ role: "assistant", content: getThorGreeting(lang) }]);
-      }, 4000);
-      return () => clearTimeout(timer);
-    }
-  }, [location.pathname, lang]);
+    const alreadyGreeted = sessionStorage.getItem(SESSION_GREETED_KEY);
+    const dismissed = sessionStorage.getItem(SESSION_DISMISSED_KEY);
+    if (alreadyGreeted || dismissed) return;
+    if (location.pathname !== "/") return;
 
-  // Entrance → active transition
+    const timer = setTimeout(() => {
+      // Double-check dismiss wasn't set during the timeout
+      if (sessionStorage.getItem(SESSION_DISMISSED_KEY)) return;
+
+      const memory = loadThorMemory();
+      const greeting = buildProactiveGreeting(lang, memory);
+      touchThorVisit();
+
+      setPhase("active");
+      setShowChat(true);
+      setMessages([{ role: "assistant", content: greeting }]);
+      sessionStorage.setItem(SESSION_GREETED_KEY, "1");
+
+      // Speak the greeting (respect mobile autoplay)
+      const canSpeak = !isMobile || userHasInteractedWithPageRef.current;
+      if (canSpeak) {
+        setVoiceEnabled(true);
+        setTimeout(() => {
+          const speechText = prepareSpeechText(greeting);
+          if (speechText) speak(speechText, thorVoiceId);
+        }, 300);
+      }
+    }, 5000);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname, lang, isMobile, speak, thorVoiceId]);
+
+  // Entrance → active transition (kept for manual entrance)
   useEffect(() => {
     if (phase === "entrance") {
       const timer = setTimeout(() => {
         setPhase("active");
-        localStorage.setItem(STORAGE_KEY, "1");
-        const greeting = getThorGreeting(lang);
+        const memory = loadThorMemory();
+        const greeting = buildProactiveGreeting(lang, memory);
         setMessages([{ role: "assistant", content: greeting }]);
-        if (voiceEnabled) speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId);
+        if (voiceEnabled) {
+          const st = prepareSpeechText(greeting);
+          if (st) speak(st, thorVoiceId);
+        }
       }, 3200);
       return () => clearTimeout(timer);
     }
   }, [phase]);
 
-  // Proactive messages disabled
-  useEffect(() => {
-    if (proactiveTimerRef.current) {
-      clearInterval(proactiveTimerRef.current);
-      proactiveTimerRef.current = null;
+  // ═══ MUDANÇA 2: Memory extraction from messages ═══
+  const processMemory = useCallback((userMsg: string, assistantReply: string) => {
+    // Extract name
+    const name = extractNameFromMessage(userMsg);
+    if (name) {
+      saveThorMemory("name", name);
+      setVisitorName(name);
     }
-    return () => {
-      if (proactiveTimerRef.current) {
-        clearInterval(proactiveTimerRef.current);
-        proactiveTimerRef.current = null;
-      }
-    };
+
+    // Extract topic/interest
+    const topic = extractTopicFromMessage(userMsg);
+    if (topic) {
+      saveThorMemory("lastTopic", topic);
+      saveThorMemory("interest", topic);
+    }
+
+    // Extract company name heuristic
+    const companyMatch = userMsg.match(/(?:empresa|company|trabalho\s+na|work\s+at|da\s+empresa)\s+([A-ZÀ-Ú][a-zà-ú]+(?:\s+[A-ZÀ-Ú][a-zà-ú]+)*)/i);
+    if (companyMatch?.[1]) {
+      saveThorMemory("company", companyMatch[1].trim());
+    }
+
+    // Update last visit
+    touchThorVisit();
   }, []);
 
   const sendMessage = useCallback(async (text?: string) => {
@@ -139,15 +199,26 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     setHasInteracted(true);
     setShowChat(true);
 
+    // Handle "forget my data" command
+    if (isForgetRequest(msg)) {
+      clearThorMemory();
+      setVisitorName(null);
+      const isPt = lang.startsWith("pt");
+      setMessages(prev => [
+        ...prev,
+        { role: "user", content: msg },
+        { role: "assistant", content: isPt
+          ? "Pronto! Todas as suas informações foram apagadas. É como se fosse a primeira vez que nos vemos. 🔒"
+          : "Done! All your information has been cleared. It's like we're meeting for the first time. 🔒"
+        },
+      ]);
+      return;
+    }
+
     stopTTS();
     if (abortControllerRef.current) abortControllerRef.current.abort();
     const controller = new AbortController();
     abortControllerRef.current = controller;
-
-    if (proactiveTimerRef.current) {
-      clearInterval(proactiveTimerRef.current);
-      proactiveTimerRef.current = null;
-    }
 
     const userMsg: ThorMessage = { role: "user", content: msg };
     const currentMessages = messagesRef.current;
@@ -199,9 +270,18 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
             content: lang.startsWith("pt") ? "Ops, tive um problema. Tenta de novo?" : "Oops, had an issue. Try again?",
           }]);
         }
-        // "abort" is user-initiated, no message needed
       },
     });
+
+    // Process memory from user message + response
+    processMemory(msg, fullText);
+
+    // Ask for name on first interaction if we don't know it
+    if (!visitorName && !askedForName && !extractNameFromMessage(msg)) {
+      setAskedForName(true);
+      const nameQ = buildNameQuestion(lang);
+      setMessages(prev => [...prev, { role: "assistant", content: nameQ }]);
+    }
 
     // Speak result if voice enabled
     if (!controller.signal.aborted && voiceEnabled && fullText) {
@@ -211,7 +291,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
 
     setIsLoading(false);
     if (abortControllerRef.current === controller) abortControllerRef.current = null;
-  }, [input, isLoading, user, location.pathname, voiceEnabled, speak, stopTTS, lang, thorVoiceId]);
+  }, [input, isLoading, user, location.pathname, voiceEnabled, speak, stopTTS, lang, thorVoiceId, processMemory, visitorName, askedForName]);
 
   const minimize = useCallback(() => {
     stopTTS();
@@ -223,24 +303,43 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     setPhase("minimized");
     setShowChat(false);
     setExpanded(false);
+    // Mark session as dismissed so proactive won't reopen
+    sessionStorage.setItem(SESSION_DISMISSED_KEY, "1");
   }, [stopTTS]);
 
   const activate = useCallback(() => {
     setPhase("active");
     setShowChat(true);
     if (messagesRef.current.length === 0) {
-      const greeting = getThorGreeting(lang);
+      const memory = loadThorMemory();
+      const greeting = buildProactiveGreeting(lang, memory);
       setMessages([{ role: "assistant", content: greeting }]);
       setVoiceEnabled(true);
-      setTimeout(() => speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId), 150);
+      setTimeout(() => {
+        const st = prepareSpeechText(greeting);
+        if (st) speak(st, thorVoiceId);
+      }, 150);
     }
   }, [lang, speak, thorVoiceId]);
+
+  const forgetMemory = useCallback(() => {
+    clearThorMemory();
+    setVisitorName(null);
+    const isPt = lang.startsWith("pt");
+    setMessages(prev => [...prev, {
+      role: "assistant",
+      content: isPt
+        ? "Pronto! Todas as suas informações foram apagadas. 🔒"
+        : "Done! All your information has been cleared. 🔒",
+    }]);
+  }, [lang]);
 
   return {
     phase, messages, input, isLoading, voiceEnabled, hasInteracted,
     showChat, expanded, isSpeaking, isMobile, shouldUseLiteCore, lang,
+    visitorName,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
-    sendMessage, minimize, activate, stopTTS,
+    sendMessage, minimize, activate, stopTTS, forgetMemory,
     messagesEndRef,
   };
 }
