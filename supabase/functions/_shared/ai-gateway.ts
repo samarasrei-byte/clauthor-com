@@ -118,42 +118,23 @@ const SIMPLE_KEYWORDS = [
 ];
 
 /**
- * Determines task complexity from message content using heuristics.
+ * Determines task complexity from message content using heuristics (legacy compat).
  */
 function detectComplexity(body: Record<string, any>): TaskComplexity {
   const messages = body.messages || [];
   const lastUserMsg = [...messages].reverse().find((m: any) => m.role === "user");
   if (!lastUserMsg) return "simple";
 
-  // Handle multimodal content (array of text/image parts)
   let rawContent = lastUserMsg.content || "";
   if (Array.isArray(rawContent)) {
-    rawContent = rawContent
-      .filter((p: any) => p.type === "text")
-      .map((p: any) => p.text || "")
-      .join(" ");
+    rawContent = rawContent.filter((p: any) => p.type === "text").map((p: any) => p.text || "").join(" ");
   }
   if (typeof rawContent !== "string") rawContent = String(rawContent);
-
-  const content = rawContent.toLowerCase();
-  const wordCount = content.split(/\s+/).length;
-
-  // Long prompts are likely complex
-  if (wordCount > 150) return "complex";
-
-  // Check for complex keywords
-  const hasComplexKeyword = COMPLEX_KEYWORDS.some(kw => content.includes(kw));
-  if (hasComplexKeyword) return "complex";
-
-  // Check for simple keywords (short messages with simple intent)
-  const hasSimpleKeyword = SIMPLE_KEYWORDS.some(kw => content.includes(kw));
-  if (hasSimpleKeyword && wordCount < 30) return "simple";
 
   // Tool calling requests are complex
   if (body.tools && body.tools.length > 0) return "complex";
 
-  // Default: simple for short, complex for longer
-  return wordCount > 60 ? "complex" : "simple";
+  return classifyTaskComplexity(rawContent);
 }
 
 /**
