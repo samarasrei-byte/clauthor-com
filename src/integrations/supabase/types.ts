@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      agent_activity_log: {
+        Row: {
+          action_description: string
+          action_type: string
+          agent_id: string
+          created_at: string
+          id: string
+          model_used: string | null
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          action_description?: string
+          action_type?: string
+          agent_id: string
+          created_at?: string
+          id?: string
+          model_used?: string | null
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          action_description?: string
+          action_type?: string
+          agent_id?: string
+          created_at?: string
+          id?: string
+          model_used?: string | null
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       agent_credentials: {
         Row: {
           access_count: number
