@@ -1335,9 +1335,9 @@ async function streamResponse(
   messages: any[], planLimits: any, toolResults: any[], creditWarning: boolean,
   optimizedMessages: any[], fullSystemPrompt: string, credits: any,
   supabase: any, adminClient: any, tenantId: string, userId: string,
-  agentId: string | null, actionType: string, toolCalls: any[]
+  agentId: string | null, actionType: string, toolCalls: any[], selectedModel: string = "google/gemini-3-flash-preview"
 ) {
-  const streamResp = await fetchAI({ model: "google/gemini-3-flash-preview", messages, max_tokens: planLimits.maxResponseTokens, stream: true });
+  const streamResp = await fetchAI({ model: selectedModel, messages, max_tokens: planLimits.maxResponseTokens, stream: true });
   if (!streamResp.ok || !streamResp.body) throw new Error("Streaming failed after tool execution");
 
   const { readable, writable } = new TransformStream();
