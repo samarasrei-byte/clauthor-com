@@ -1314,7 +1314,7 @@ Exemplo de redirecionamento:
     }
 
     await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
-    await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: actionType });
+    await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: actionType, model: selectedModel });
 
     if (agentId) {
       const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
