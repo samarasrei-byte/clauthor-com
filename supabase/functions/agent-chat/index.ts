@@ -1370,7 +1370,7 @@ async function streamResponse(
       const totalTokens = inputTokens + outputTokens + Math.ceil(fullSystemPrompt.length / 4);
 
       await supabase.from("user_credits").update({ used_credits: credits.used_credits + totalTokens }).eq("user_id", userId);
-      await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: `tool:${toolCalls.map((t: any) => t.function?.name).join(",")}` });
+      await supabase.from("token_usage").insert({ user_id: userId, agent_id: agentId || null, tokens_used: totalTokens, action_type: `tool:${toolCalls.map((t: any) => t.function?.name).join(",")}`, model: selectedModel });
 
       if (agentId) {
         const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
