@@ -361,8 +361,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
               scrollToBottom();
             }
           } catch {
-            buffer = line + "\n" + buffer;
-            break;
+            // Skip malformed JSON lines — do NOT re-buffer (infinite loop risk)
           }
         }
       }
