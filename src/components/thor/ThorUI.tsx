@@ -555,6 +555,8 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   const widgetOrbSize = 80;
 
   return (
+    <>
+      {demoModal}
     <motion.div
       className="fixed bottom-6 right-4 sm:right-6 z-[9999] flex flex-col items-end gap-3 pointer-events-none"
       style={{ maxWidth: 380 }}
