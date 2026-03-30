@@ -8,6 +8,7 @@ import { Send, X, Loader2, Volume2, VolumeX, Maximize2, Minimize2 } from "lucide
 import ReactMarkdown from "react-markdown";
 import thorPhoto from "@/assets/kaelis-ai.webp";
 import type { ThorCoreState, ThorCoreActions } from "./ThorCore";
+import { AgentDemoModal } from "./AgentDemoModal";
 
 /* ═══════════════════════════════════════════════════
    QUANTUM NEURAL CORE — Adaptive holographic engine
