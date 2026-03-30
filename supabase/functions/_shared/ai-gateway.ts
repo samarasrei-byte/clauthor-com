@@ -17,7 +17,8 @@ const LOVABLE_GATEWAY = "https://ai.gateway.lovable.dev/v1/chat/completions";
 const AI_TIMEOUT_MS = 30000;
 const MAX_AI_RETRIES = 2;
 
-export type TaskComplexity = "simple" | "complex" | "auto";
+export type TaskComplexity = "simple" | "medium" | "complex" | "auto";
+export type QualityMode = "max_quality" | "balanced" | "economic";
 
 interface FetchAIOptions {
   /** Override automatic routing: "simple" → OpenClaw, "complex" → Lovable AI, "auto" → heuristic */
