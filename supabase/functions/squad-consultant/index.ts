@@ -103,6 +103,33 @@ serve(async (req) => {
   }
 
   try {
+    // ── Authentication check — require at least anon key ──
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader?.startsWith("Bearer ")) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized — Bearer token required" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Rate limit by IP to prevent abuse on public endpoint
+    const clientIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+    const rateLimitKey = `squad-consultant:${clientIp}`;
+    // Simple in-memory rate limit: max 30 requests per minute
+    if (!globalThis._sqRateMap) globalThis._sqRateMap = new Map();
+    const now = Date.now();
+    const windowMs = 60_000;
+    const maxReqs = 30;
+    const entries: number[] = (globalThis._sqRateMap.get(rateLimitKey) || []).filter((t: number) => now - t < windowMs);
+    if (entries.length >= maxReqs) {
+      return new Response(
+        JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    entries.push(now);
+    globalThis._sqRateMap.set(rateLimitKey, entries);
+
     const { messages } = await req.json();
 
     if (!Array.isArray(messages) || messages.length === 0) {
