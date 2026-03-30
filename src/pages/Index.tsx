@@ -214,8 +214,8 @@ const HomePage = () => {
       "@context": "https://schema.org",
       "@type": "Organization",
       name: "CLAUTHOR",
-      url: "https://clauthor-com.lovable.app",
-      logo: "https://clauthor-com.lovable.app/favicon.png",
+      url: "https://clauthor.com",
+      logo: "https://clauthor.com/favicon.png",
       description: t("home.seo_description"),
       sameAs: ["https://linkedin.com/company/clauthor"],
     });
