@@ -230,6 +230,8 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   </motion.div>
                 )}
               </AnimatePresence>
+              </>
+              )}
             </div>
           );
         })}
