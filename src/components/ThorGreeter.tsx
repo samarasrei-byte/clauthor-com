@@ -496,6 +496,7 @@ const ThorGreeter = () => {
           headers: {
             "Content-Type": "application/json",
             apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
           },
           body: JSON.stringify({
             messages: updated.slice(-10).map(m => ({ role: m.role, content: m.content })),
@@ -649,17 +650,20 @@ const ThorGreeter = () => {
     setExpanded(false);
   };
 
-  const activate = () => {
+  const activate = useCallback(() => {
     setPhase("active");
     setShowChat(true);
     if (messagesRef.current.length === 0) {
       const isPt = lang.startsWith("pt");
-      const greeting = isPt ? "Olá! Eu sou o **Thor**, CEO da CLAUTHOR. Em que posso ajudar?" : "Hi! I'm **Thor**, CEO of CLAUTHOR. How can I help?";
+      const greeting = isPt
+        ? "Olá! Eu sou o **Thor**, CEO e Orquestrador da CLAUTHOR. 🧠 Me conta: **o que te trouxe aqui hoje?**"
+        : "Hello! I'm **Thor**, CEO & Orchestrator of CLAUTHOR. 🧠 Tell me: **what brought you here today?**";
       setMessages([{ role: "assistant", content: greeting }]);
+      // Speak after a tiny delay to let state settle
       setVoiceEnabled(true);
-      speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId);
+      setTimeout(() => speak(greeting.replace(/[*#🧠]/g, ""), thorVoiceId), 150);
     }
-  };
+  }, [lang, speak, thorVoiceId]);
 
   const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
 
