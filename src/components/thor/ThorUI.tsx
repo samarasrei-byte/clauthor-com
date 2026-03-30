@@ -547,6 +547,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
           </div>
         </motion.div>
       </AnimatePresence>
+      </>
     );
   }
 
