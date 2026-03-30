@@ -1,0 +1,1 @@
+ALTER TABLE public.agents ADD COLUMN IF NOT EXISTS quality_mode text NOT NULL DEFAULT 'balanced';
