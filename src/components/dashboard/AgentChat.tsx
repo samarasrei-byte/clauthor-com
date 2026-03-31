@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, Bot, User, Loader2, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap, Square, Volume2, VolumeX, ArrowRightLeft, GitBranch, Sparkles, ArrowUpRight, ShieldCheck, Crown } from "lucide-react";
+import { Send, Bot, User, Loader2, Trash2, Mail, CheckSquare, BarChart3, Search, Calendar, TrendingUp, Zap, Square, Volume2, VolumeX, ArrowRightLeft, GitBranch, Sparkles, ArrowUpRight, ShieldCheck, Crown, Plug } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -239,6 +239,37 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
             Prioridade: {result.priority}
           </Badge>
         )}
+      </motion.div>
+    );
+  }
+
+  // Handle missing credentials — show CTA to connect
+  if (!toolResult.success && result.error && (
+    String(result.error).includes("No credentials") ||
+    String(result.error).includes("credentials") ||
+    String(result.error).includes("not yet implemented")
+  )) {
+    const serviceName = result.integration_key || toolResult.tool_name?.replace(/_/g, " ") || "serviço";
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="rounded-xl border border-amber-500/20 bg-amber-500/5 p-4 mt-2"
+      >
+        <div className="flex items-center gap-2 mb-2">
+          <ShieldCheck className="h-4 w-4 text-amber-400" />
+          <span className="text-xs font-semibold uppercase tracking-wide text-amber-400">Credenciais Necessárias</span>
+        </div>
+        <p className="text-sm text-muted-foreground mb-3">
+          Para executar esta ação, conecte sua conta do <strong className="text-foreground">{serviceName}</strong> na página de Integrações.
+        </p>
+        <Link to="/dashboard" onClick={() => {}} state={{ section: "integrations" }}>
+          <Button size="sm" variant="outline" className="gap-1.5 text-xs border-amber-500/20 hover:bg-amber-500/10 text-amber-400">
+            <Plug className="h-3.5 w-3.5" />
+            Conectar Integrações
+            <ArrowUpRight className="h-3 w-3" />
+          </Button>
+        </Link>
       </motion.div>
     );
   }

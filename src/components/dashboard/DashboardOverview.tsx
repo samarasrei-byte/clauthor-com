@@ -11,6 +11,7 @@ const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
 const MarketplaceReviews = lazy(() => import("./MarketplaceReviews"));
 const QuickIntegrations = lazy(() => import("./QuickIntegrations"));
+const MyIntegrationsPanel = lazy(() => import("./MyIntegrationsPanel"));
 const ThorDailyBriefing = lazy(() => import("./ThorDailyBriefing"));
 const QuickWins = lazy(() => import("./QuickWins"));
 const TaskRequestPanel = lazy(() => import("./TaskRequestPanel"));
@@ -133,6 +134,8 @@ const DashboardOverview = ({
                 />
 
                 <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
+
+                <MyIntegrationsPanel onNavigate={onSetActiveSection} />
 
                 <MarketplaceReviews compact />
 
