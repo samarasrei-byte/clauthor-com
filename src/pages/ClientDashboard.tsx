@@ -142,9 +142,13 @@ const ClientDashboard = () => {
   const { data: tokenUsage = [] } = useTokenUsage();
 
   const { data: agents = [], isLoading: loadingAgents } = useQuery({
-    queryKey: ["my-agents", user?.id],
+    queryKey: ["my-agents", user?.id, isAdmin],
     queryFn: async () => {
-      const { data, error } = await supabase.from("agents").select("*").eq("user_id", user!.id).order("created_at", { ascending: false });
+      let query = supabase.from("agents").select("*").order("created_at", { ascending: false });
+      if (!isAdmin) {
+        query = query.eq("user_id", user!.id);
+      }
+      const { data, error } = await query;
       if (error) throw error;
       return data;
     },
