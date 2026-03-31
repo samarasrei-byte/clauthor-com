@@ -654,11 +654,20 @@ Execute the task and return the result clearly. Respond in English.`;
 
 // === TOOL-TO-INTEGRATION MAPPING ===
 const TOOL_INTEGRATION_MAP: Record<string, { integration_key: string; action: string; altKey?: string; altAction?: string }> = {
-  send_email:       { integration_key: "sendgrid", action: "send-email" },
-  search_leads:     { integration_key: "hubspot",  action: "get-contacts" },
-  create_task:      { integration_key: "trello",   action: "create-card", altKey: "notion", altAction: "create-pages" },
-  schedule_meeting: { integration_key: "google_sheets", action: "append-rows" },
-  // analyze_data, generate_report, delegate_to_agent — no external integration
+  send_email:        { integration_key: "sendgrid",      action: "send-email" },
+  search_leads:      { integration_key: "hubspot",       action: "get-contacts" },
+  create_task:       { integration_key: "trello",        action: "create-card", altKey: "notion", altAction: "create-pages" },
+  schedule_meeting:  { integration_key: "google_sheets", action: "append-rows" },
+  search_crm:        { integration_key: "hubspot",       action: "get-contacts", altKey: "pipedrive", altAction: "get-deals" },
+  create_crm_record: { integration_key: "hubspot",       action: "create-contact", altKey: "pipedrive", altAction: "create-deal" },
+  update_crm_record: { integration_key: "hubspot",       action: "update-contact", altKey: "pipedrive", altAction: "update-deal" },
+  send_message:      { integration_key: "whatsapp",      action: "send-message", altKey: "slack", altAction: "send-message" },
+  read_spreadsheet:  { integration_key: "google_sheets", action: "read-cells" },
+  write_spreadsheet: { integration_key: "google_sheets", action: "write-cells" },
+  manage_campaign:   { integration_key: "meta_ads",      action: "get-insights" },
+  manage_project:    { integration_key: "trello",        action: "create-card", altKey: "notion", altAction: "create-pages" },
+  send_bulk_message: { integration_key: "sendgrid",      action: "send-email", altKey: "whatsapp", altAction: "send-message" },
+  // analyze_data, generate_report, delegate_to_agent, search_web — no external integration
 };
 
 // Try executing via integration router (external API), return null if no credentials
