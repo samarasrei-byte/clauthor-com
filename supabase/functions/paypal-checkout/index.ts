@@ -275,8 +275,8 @@ serve(async (req) => {
             brand_name: "Clauthor",
             landing_page: "NO_PREFERENCE",
             user_action: "PAY_NOW",
-            return_url: "https://clauthor-com.lovable.app/dashboard?payment=success",
-            cancel_url: "https://clauthor-com.lovable.app/dashboard?payment=cancelled",
+            return_url: `${APP_URL}/dashboard?payment=success`,
+            cancel_url: `${APP_URL}/dashboard?payment=cancelled`,
           },
         }),
       });
