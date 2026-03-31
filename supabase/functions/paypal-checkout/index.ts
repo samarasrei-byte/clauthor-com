@@ -168,8 +168,8 @@ serve(async (req) => {
             locale: "pt-BR",
             shipping_preference: "NO_SHIPPING",
             user_action: "SUBSCRIBE_NOW",
-            return_url: return_url || "https://clauthor-com.lovable.app/dashboard?subscription=success",
-            cancel_url: cancel_url || "https://clauthor-com.lovable.app/library?subscription=cancelled",
+            return_url: return_url || `${APP_URL}/dashboard?subscription=success`,
+            cancel_url: cancel_url || `${APP_URL}/library?subscription=cancelled`,
           },
         }),
       });
