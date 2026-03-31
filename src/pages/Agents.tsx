@@ -14,7 +14,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 
 const AgentsPage = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
