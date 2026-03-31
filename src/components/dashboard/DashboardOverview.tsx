@@ -135,6 +135,8 @@ const DashboardOverview = ({
 
                 <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
 
+                <MyIntegrationsPanel onNavigate={onSetActiveSection} />
+
                 <MarketplaceReviews compact />
 
                 <PendingActionsPanel />
