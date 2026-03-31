@@ -702,6 +702,39 @@ async function tryExternalIntegration(
 }
 
 function mapToolArgsToIntegrationParams(toolName: string, args: any, integrationKey: string, action: string): Record<string, any> {
+  // Tool-specific mappings first
+  switch (toolName) {
+    case "send_message":
+      if (integrationKey === "whatsapp") return { to: args.to, text: args.message };
+      if (integrationKey === "slack") return { channel: args.to, text: args.message };
+      return { to: args.to, text: args.message };
+    case "search_crm":
+      return { limit: args.limit || 10, query: args.query };
+    case "create_crm_record":
+      if (integrationKey === "hubspot") {
+        if (args.type === "contact") return { email: args.data?.email, firstname: args.data?.firstname || args.data?.name, lastname: args.data?.lastname, ...args.data };
+        return args.data || {};
+      }
+      return args.data || {};
+    case "update_crm_record":
+      return { id: args.record_id, ...args.data };
+    case "read_spreadsheet":
+      return { spreadsheet_id: args.spreadsheet_id, range: args.range };
+    case "write_spreadsheet":
+      return { spreadsheet_id: args.spreadsheet_id, range: args.range, values: args.values };
+    case "manage_campaign":
+      if (action === "get-insights") return { campaign_id: args.campaign_data?.campaign_id, ...args.campaign_data };
+      return args.campaign_data || {};
+    case "manage_project":
+      if (integrationKey === "trello") return { list_id: args.data?.list_id, name: args.data?.title, desc: args.data?.description };
+      if (integrationKey === "notion") return { parent_id: args.data?.parent_id, title: args.data?.title, content: args.data?.description };
+      return args.data || {};
+    case "send_bulk_message":
+      // Will be called once per recipient in executeTool
+      return args;
+  }
+
+  // Generic integration-level mappings
   switch (`${integrationKey}/${action}`) {
     case "sendgrid/send-email":
       return { to: args.to, subject: args.subject, body: args.body };
