@@ -116,6 +116,7 @@ serve(async (req) => {
   }
 
   try {
+    const APP_URL = Deno.env.get("APP_URL") || "https://www.clauthor.com";
     const body = await req.json();
     const { action } = body;
     const accessToken = await getAccessToken();
@@ -167,8 +168,8 @@ serve(async (req) => {
             locale: "pt-BR",
             shipping_preference: "NO_SHIPPING",
             user_action: "SUBSCRIBE_NOW",
-            return_url: return_url || "https://clauthor-com.lovable.app/dashboard?subscription=success",
-            cancel_url: cancel_url || "https://clauthor-com.lovable.app/library?subscription=cancelled",
+            return_url: return_url || `${APP_URL}/dashboard?subscription=success`,
+            cancel_url: cancel_url || `${APP_URL}/library?subscription=cancelled`,
           },
         }),
       });
@@ -274,8 +275,8 @@ serve(async (req) => {
             brand_name: "Clauthor",
             landing_page: "NO_PREFERENCE",
             user_action: "PAY_NOW",
-            return_url: "https://clauthor-com.lovable.app/dashboard?payment=success",
-            cancel_url: "https://clauthor-com.lovable.app/dashboard?payment=cancelled",
+            return_url: `${APP_URL}/dashboard?payment=success`,
+            cancel_url: `${APP_URL}/dashboard?payment=cancelled`,
           },
         }),
       });

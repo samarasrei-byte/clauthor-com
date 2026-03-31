@@ -222,6 +222,9 @@ const IntegrationsPage = () => {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{connector.shortDesc}</p>
+                {connector.status !== "soon" && !connected && (
+                  <p className="text-[10px] text-primary/60 mt-0.5">Conecte suas credenciais para habilitar automações reais</p>
+                )}
               </div>
 
               {/* Action */}
