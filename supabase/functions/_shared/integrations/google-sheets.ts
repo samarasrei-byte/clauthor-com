@@ -12,8 +12,8 @@ export async function handleGoogleSheets(
   params: Record<string, any>,
   creds: Record<string, string>,
 ): Promise<IntegrationResponse> {
-  const apiKey = creds.api_key;
-  if (!apiKey) return { success: false, error: "Missing Google Sheets API key" };
+  const apiKey = creds.access_token || creds.api_key;
+  if (!apiKey) return { success: false, error: "Missing Google Sheets access_token or API key" };
 
   // Determine auth method: Bearer token or API key query param
   const isOAuth = apiKey.startsWith("ya29.") || apiKey.length > 100;

@@ -26,11 +26,15 @@ export async function handleLinkedin(
       const { text, visibility } = params;
       if (!text) return { success: false, error: "text is required" };
 
-      // First get the user's URN
-      const meRes = await fetch(`${BASE}/userinfo`, { headers });
-      if (!meRes.ok) return { success: false, error: `LinkedIn profile error (${meRes.status}): ${await meRes.text()}` };
-      const me = await meRes.json();
-      const authorUrn = `urn:li:person:${me.sub}`;
+      let authorUrn: string;
+      if (creds.person_id) {
+        authorUrn = `urn:li:person:${creds.person_id}`;
+      } else {
+        const meRes = await fetch(`${BASE}/userinfo`, { headers });
+        if (!meRes.ok) return { success: false, error: `LinkedIn profile error (${meRes.status}): ${await meRes.text()}` };
+        const me = await meRes.json();
+        authorUrn = `urn:li:person:${me.sub}`;
+      }
 
       const res = await fetch(`${BASE}/ugcPosts`, {
         method: "POST",
