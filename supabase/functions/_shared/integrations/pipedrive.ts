@@ -12,7 +12,7 @@ export async function handlePipedrive(
   params: Record<string, any>,
   creds: Record<string, string>,
 ): Promise<IntegrationResponse> {
-  const token = creds.api_key;
+  const token = creds.api_token || creds.api_key;
   if (!token) return { success: false, error: "Missing Pipedrive API token" };
 
   const authParam = `api_token=${token}`;
