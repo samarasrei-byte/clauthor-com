@@ -312,6 +312,175 @@ const AGENT_TOOLS = [
       },
     },
   },
+  {
+    type: "function",
+    function: {
+      name: "search_crm",
+      description: "Busca contatos, deals ou empresas no CRM do usuário. Use para pesquisar no CRM integrado.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "Termo de busca" },
+          type: { type: "string", enum: ["contacts", "deals", "companies"], description: "Tipo de registro a buscar" },
+          limit: { type: "number", description: "Número máximo de resultados" },
+        },
+        required: ["query", "type"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "create_crm_record",
+      description: "Cria um novo contato, deal ou empresa no CRM do usuário.",
+      parameters: {
+        type: "object",
+        properties: {
+          type: { type: "string", enum: ["contact", "deal", "company"], description: "Tipo de registro" },
+          data: { type: "object", description: "Dados do registro (nome, email, valor, etc.)" },
+        },
+        required: ["type", "data"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "update_crm_record",
+      description: "Atualiza um registro existente no CRM do usuário.",
+      parameters: {
+        type: "object",
+        properties: {
+          type: { type: "string", description: "Tipo de registro (contact, deal, company)" },
+          record_id: { type: "string", description: "ID do registro a atualizar" },
+          data: { type: "object", description: "Campos a atualizar" },
+        },
+        required: ["type", "record_id", "data"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "send_message",
+      description: "Envia mensagem via canal de comunicação (WhatsApp, Slack ou Instagram DM).",
+      parameters: {
+        type: "object",
+        properties: {
+          channel: { type: "string", enum: ["whatsapp", "slack", "instagram"], description: "Canal de envio" },
+          to: { type: "string", description: "Destinatário (número, channel ID ou username)" },
+          message: { type: "string", description: "Texto da mensagem" },
+          template_id: { type: "string", description: "ID do template (opcional, para WhatsApp)" },
+        },
+        required: ["channel", "to", "message"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "read_spreadsheet",
+      description: "Lê dados de uma planilha Google Sheets.",
+      parameters: {
+        type: "object",
+        properties: {
+          spreadsheet_id: { type: "string", description: "ID da planilha" },
+          range: { type: "string", description: "Range a ler (ex: 'Sheet1!A1:D10')" },
+        },
+        required: ["spreadsheet_id", "range"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "write_spreadsheet",
+      description: "Escreve dados em uma planilha Google Sheets.",
+      parameters: {
+        type: "object",
+        properties: {
+          spreadsheet_id: { type: "string", description: "ID da planilha" },
+          range: { type: "string", description: "Range a escrever (ex: 'Sheet1!A1')" },
+          values: { type: "array", items: { type: "array", items: {} }, description: "Dados em formato matriz [[linha1], [linha2]]" },
+        },
+        required: ["spreadsheet_id", "range", "values"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "manage_campaign",
+      description: "Cria, atualiza, pausa ou obtém insights de campanhas de ads (Meta Ads ou Google Ads).",
+      parameters: {
+        type: "object",
+        properties: {
+          platform: { type: "string", enum: ["meta", "google"], description: "Plataforma de ads" },
+          action: { type: "string", enum: ["create", "pause", "update", "get_insights"], description: "Ação a executar" },
+          campaign_data: { type: "object", description: "Dados da campanha (nome, orçamento, público, etc.)" },
+        },
+        required: ["platform", "action"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "search_web",
+      description: "Pesquisa na web para encontrar informações atualizadas. Usa Firecrawl para busca e scraping.",
+      parameters: {
+        type: "object",
+        properties: {
+          query: { type: "string", description: "Termo de pesquisa" },
+          max_results: { type: "number", description: "Número máximo de resultados (1-10)" },
+        },
+        required: ["query"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "manage_project",
+      description: "Cria, atualiza ou lista tarefas em ferramentas de gerenciamento de projetos (Trello, Notion ou Jira).",
+      parameters: {
+        type: "object",
+        properties: {
+          platform: { type: "string", enum: ["trello", "notion", "jira"], description: "Plataforma de projetos" },
+          action: { type: "string", enum: ["create", "update", "list"], description: "Ação a executar" },
+          data: { type: "object", description: "Dados da tarefa (título, descrição, status, etc.)" },
+        },
+        required: ["platform", "action", "data"],
+        additionalProperties: false,
+      },
+    },
+  },
+  {
+    type: "function",
+    function: {
+      name: "send_bulk_message",
+      description: "Envia mensagens em massa para múltiplos destinatários. AÇÃO DE ALTO RISCO — sempre confirme com o usuário antes de executar.",
+      parameters: {
+        type: "object",
+        properties: {
+          channel: { type: "string", enum: ["whatsapp", "slack", "email"], description: "Canal de envio" },
+          recipients: { type: "array", items: { type: "string" }, description: "Lista de destinatários" },
+          message: { type: "string", description: "Texto da mensagem" },
+          template_id: { type: "string", description: "ID do template (opcional)" },
+        },
+        required: ["channel", "recipients", "message"],
+        additionalProperties: false,
+      },
+    },
+  },
 ];
 
 // === COMPANY BOARD CONTEXT LOADER ===
