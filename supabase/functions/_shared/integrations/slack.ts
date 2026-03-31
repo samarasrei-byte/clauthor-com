@@ -17,8 +17,10 @@ export async function handleSlack(
 
   switch (action) {
     case "send-message": {
-      const { channel, text, blocks } = params;
-      if (!text && !blocks) return { success: false, error: "text or blocks required" };
+      const channel = params.channel_id || params.channel;
+      const text = params.message || params.text;
+      const { blocks } = params;
+      if (!text && !blocks) return { success: false, error: "message/text or blocks required" };
 
       // If webhook URL, use simple POST
       if (token.startsWith("https://hooks.slack.com")) {
@@ -41,6 +43,23 @@ export async function handleSlack(
       const data = await res.json();
       return data.ok
         ? { success: true, data }
+        : { success: false, error: `Slack API error: ${data.error}` };
+    }
+
+    case "search-messages": {
+      if (token.startsWith("https://")) return { success: false, error: "search-messages requires a bot token" };
+      const { query } = params;
+      if (!query) return { success: false, error: "query is required" };
+      const count = params.limit || 10;
+
+      const res = await fetch(`${BASE}/search.messages`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ query, count: String(count) }).toString(),
+      });
+      const data = await res.json();
+      return data.ok
+        ? { success: true, data: data.messages }
         : { success: false, error: `Slack API error: ${data.error}` };
     }
 
