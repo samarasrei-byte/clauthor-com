@@ -49,7 +49,7 @@ const ThorLiveGuide = lazyRetry(() => import("@/components/dashboard/ThorLiveGui
 const QuickStartWizard = lazy(() => import("@/components/dashboard/QuickStartWizard"));
 
 const ClientDashboard = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const [activeSection, setActiveSection] = useState("overview");
@@ -142,9 +142,13 @@ const ClientDashboard = () => {
   const { data: tokenUsage = [] } = useTokenUsage();
 
   const { data: agents = [], isLoading: loadingAgents } = useQuery({
-    queryKey: ["my-agents", user?.id],
+    queryKey: ["my-agents", user?.id, isAdmin],
     queryFn: async () => {
-      const { data, error } = await supabase.from("agents").select("*").eq("user_id", user!.id).order("created_at", { ascending: false });
+      let query = supabase.from("agents").select("*").order("created_at", { ascending: false });
+      if (!isAdmin) {
+        query = query.eq("user_id", user!.id);
+      }
+      const { data, error } = await query;
       if (error) throw error;
       return data;
     },
@@ -161,9 +165,13 @@ const ClientDashboard = () => {
   });
 
   const { data: subscriptions = [] } = useQuery({
-    queryKey: ["my-subscriptions", user?.id],
+    queryKey: ["my-subscriptions", user?.id, isAdmin],
     queryFn: async () => {
-      const { data, error } = await supabase.from("subscriptions").select("*, agent:agents(*)").eq("user_id", user!.id).eq("status", "active");
+      let query = supabase.from("subscriptions").select("*, agent:agents(*)").eq("status", "active");
+      if (!isAdmin) {
+        query = query.eq("user_id", user!.id);
+      }
+      const { data, error } = await query;
       if (error) throw error;
       return data.map((sub: any) => ({
         id: sub.id,
