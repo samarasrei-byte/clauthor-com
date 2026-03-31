@@ -15,6 +15,8 @@ import { handleInstagram } from "./integrations/instagram.ts";
 import { handlePipedrive } from "./integrations/pipedrive.ts";
 import { handleTrello } from "./integrations/trello.ts";
 import { handleCustomApi } from "./integrations/custom-api.ts";
+import { handleStripe } from "./integrations/stripe.ts";
+import { handleFirecrawl } from "./integrations/firecrawl.ts";
 
 // ── Interfaces ──────────────────────────────────────────────────────────────
 
@@ -67,6 +69,8 @@ const handlers: Record<string, IntegrationHandler> = {
   meta_ads:      handleMetaAds,
   whatsapp:      handleWhatsapp,
   custom_api:    handleCustomApi,
+  stripe:        handleStripe,
+  firecrawl:     handleFirecrawl,
 };
 
 // ── Main router ─────────────────────────────────────────────────────────────
