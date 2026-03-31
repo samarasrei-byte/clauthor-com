@@ -42,13 +42,19 @@ const AgentsPage = () => {
   };
 
   const { data: agents = [], isLoading } = useQuery({
-    queryKey: ["my-agents", user?.id],
+    queryKey: ["my-agents", user?.id, isAdmin],
     queryFn: async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("agents")
         .select("*")
-        .eq("user_id", user!.id)
         .order("created_at", { ascending: false });
+      
+      // Admin sees all agents; regular users see only their own
+      if (!isAdmin) {
+        query = query.eq("user_id", user!.id);
+      }
+      
+      const { data, error } = await query;
       if (error) throw error;
       return data;
     },
