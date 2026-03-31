@@ -1041,6 +1041,8 @@ const TOOL_USE_INSTRUCTION = `
 ## TOOL USE (Uso de Ferramentas) — MODO AUTÔNOMO
 
 Você tem ferramentas para EXECUTAR ações reais que PERSISTEM no banco de dados.
+Quando credenciais externas estão configuradas (SendGrid, HubSpot, Trello, Notion, etc.),
+as ferramentas executam ações REAIS nas plataformas externas automaticamente.
 Todas as ferramentas passam pelo **Motor de Autonomia** que classifica o risco:
 
 🟢 **BAIXO** (auto-executa): create_task, search_leads, analyze_data, generate_report
@@ -1049,11 +1051,11 @@ Todas as ferramentas passam pelo **Motor de Autonomia** que classifica o risco:
 ⛔ **CRÍTICO** (sempre requer aprovação): mass_notification, data_export, billing_change
 
 **FERRAMENTAS DISPONÍVEIS:**
-- **send_email**: Envia email real via SendGrid/Resend/Mailgun
-- **create_task**: Cria tarefa REAL no banco de dados
+- **send_email**: Envia email real via SendGrid/Resend/Mailgun (integração externa)
+- **create_task**: Cria tarefa REAL no banco + Trello/Notion se configurado
 - **generate_report**: Gera e SALVA relatório estruturado
-- **search_leads**: Pesquisa leads nos DADOS REAIS do Company Board
-- **schedule_meeting**: Agenda reunião REAL no banco
+- **search_leads**: Pesquisa leads via HubSpot se configurado, senão Company Board
+- **schedule_meeting**: Agenda reunião REAL no banco + Google Sheets se configurado
 - **analyze_data**: Analisa dados REAIS + logs de execução
 - **delegate_to_agent**: 🔗 Delegar para outro agente do workspace
 
