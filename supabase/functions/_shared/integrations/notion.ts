@@ -21,7 +21,7 @@ export async function handleNotion(
   params: Record<string, any>,
   creds: Record<string, string>,
 ): Promise<IntegrationResponse> {
-  const token = creds.api_key;
+  const token = creds.integration_token || creds.api_key;
   if (!token) return { success: false, error: "Missing Notion integration token" };
 
   const headers = notionHeaders(token);
@@ -53,12 +53,14 @@ export async function handleNotion(
     }
 
     case "create-pages": {
-      const { parent_id, title, content, properties } = params;
-      if (!parent_id) return { success: false, error: "parent_id required" };
+      const { parent_id, database_id, title, content, properties, data } = params;
+      const pid = database_id || parent_id;
+      if (!pid) return { success: false, error: "parent_id or database_id required" };
 
+      const parentObj = database_id ? { database_id } : { page_id: pid };
       const body: any = {
-        parent: { page_id: parent_id },
-        properties: properties || {
+        parent: parentObj,
+        properties: data || properties || {
           title: { title: [{ text: { content: title || "Untitled" } }] },
         },
       };
