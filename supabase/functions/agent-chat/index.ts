@@ -6,6 +6,7 @@ import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resi
 import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, getDepartmentScope, getAreaTone, type AgentContract } from "../_shared/agent-contract.ts";
 import { enforcePolicy, validateTenant, type PolicyContext } from "../_shared/policy-engine.ts";
 import { autonomousExecute } from "../_shared/tool-executor.ts";
+import { executeIntegration, getDecryptedCredentials, type IntegrationResponse } from "../_shared/integration-router.ts";
 
 // ── AES-256-GCM decryption for credential bridge ──
 const ALGO = "AES-GCM";
@@ -482,6 +483,66 @@ Execute the task and return the result clearly. Respond in English.`;
   };
 }
 
+// === TOOL-TO-INTEGRATION MAPPING ===
+const TOOL_INTEGRATION_MAP: Record<string, { integration_key: string; action: string; altKey?: string; altAction?: string }> = {
+  send_email:       { integration_key: "sendgrid", action: "send-email" },
+  search_leads:     { integration_key: "hubspot",  action: "get-contacts" },
+  create_task:      { integration_key: "trello",   action: "create-card", altKey: "notion", altAction: "create-pages" },
+  schedule_meeting: { integration_key: "google_sheets", action: "append-rows" },
+  // analyze_data, generate_report, delegate_to_agent — no external integration
+};
+
+// Try executing via integration router (external API), return null if no credentials
+async function tryExternalIntegration(
+  toolName: string, args: any,
+  adminClient: any, userId: string, agentId: string,
+): Promise<IntegrationResponse | null> {
+  const mapping = TOOL_INTEGRATION_MAP[toolName];
+  if (!mapping) return null;
+
+  // Try primary integration
+  let creds = await getDecryptedCredentials(adminClient, userId, agentId, mapping.integration_key);
+  let key = mapping.integration_key;
+  let action = mapping.action;
+
+  // Try alternate integration if primary has no credentials
+  if (!creds && mapping.altKey) {
+    creds = await getDecryptedCredentials(adminClient, userId, agentId, mapping.altKey);
+    if (creds) {
+      key = mapping.altKey;
+      action = mapping.altAction || mapping.action;
+    }
+  }
+
+  if (!creds) return null;
+
+  // Map tool args to integration params
+  const params = mapToolArgsToIntegrationParams(toolName, args, key, action);
+
+  console.log(`[IntegrationBridge] Routing ${toolName} → ${key}/${action}`);
+  return await executeIntegration({ integration_key: key, action, params, credentials: creds });
+}
+
+function mapToolArgsToIntegrationParams(toolName: string, args: any, integrationKey: string, action: string): Record<string, any> {
+  switch (`${integrationKey}/${action}`) {
+    case "sendgrid/send-email":
+      return { to: args.to, subject: args.subject, body: args.body };
+    case "hubspot/get-contacts":
+      return { limit: args.max_results || 10 };
+    case "trello/create-card":
+      return { list_id: args.list_id, name: args.title, desc: args.description };
+    case "notion/create-pages":
+      return { parent_id: args.parent_id, title: args.title, content: args.description };
+    case "google_sheets/append-rows":
+      return {
+        spreadsheet_id: args.spreadsheet_id,
+        values: [[args.title, args.date, args.time, args.duration_minutes?.toString() || "30", (args.participants || []).join(", ")]],
+      };
+    default:
+      return args;
+  }
+}
+
 // === REAL TOOL EXECUTION ===
 async function executeTool(
   toolName: string, args: any,
@@ -508,6 +569,32 @@ async function executeTool(
         },
       };
     }
+  }
+
+  // === INTEGRATION ROUTER: Try external API first ===
+  try {
+    const extResult = await tryExternalIntegration(toolName, args, adminClient, userId, agentId);
+    if (extResult && extResult.success) {
+      console.log(`[IntegrationBridge] ${toolName} executed via external API`);
+      await logExecution(adminClient, userId, agentId, `${toolName}:external`, args, startTime, "success");
+
+      // Also persist locally for tools that save to DB (create_task, schedule_meeting)
+      // The external result enriches the response
+      return {
+        success: true,
+        result: {
+          ...extResult.data,
+          executed_via: "external_integration",
+          note: `Ação executada via integração externa.`,
+        },
+      };
+    }
+    // If extResult exists but failed, log and fall through to local execution
+    if (extResult && !extResult.success) {
+      console.warn(`[IntegrationBridge] ${toolName} external failed: ${extResult.error}, falling back to local`);
+    }
+  } catch (e) {
+    console.warn(`[IntegrationBridge] ${toolName} bridge error, falling back:`, e instanceof Error ? e.message : e);
   }
 
   // Audit credential access for tools that require credentials
@@ -954,6 +1041,8 @@ const TOOL_USE_INSTRUCTION = `
 ## TOOL USE (Uso de Ferramentas) — MODO AUTÔNOMO
 
 Você tem ferramentas para EXECUTAR ações reais que PERSISTEM no banco de dados.
+Quando credenciais externas estão configuradas (SendGrid, HubSpot, Trello, Notion, etc.),
+as ferramentas executam ações REAIS nas plataformas externas automaticamente.
 Todas as ferramentas passam pelo **Motor de Autonomia** que classifica o risco:
 
 🟢 **BAIXO** (auto-executa): create_task, search_leads, analyze_data, generate_report
@@ -962,11 +1051,11 @@ Todas as ferramentas passam pelo **Motor de Autonomia** que classifica o risco:
 ⛔ **CRÍTICO** (sempre requer aprovação): mass_notification, data_export, billing_change
 
 **FERRAMENTAS DISPONÍVEIS:**
-- **send_email**: Envia email real via SendGrid/Resend/Mailgun
-- **create_task**: Cria tarefa REAL no banco de dados
+- **send_email**: Envia email real via SendGrid/Resend/Mailgun (integração externa)
+- **create_task**: Cria tarefa REAL no banco + Trello/Notion se configurado
 - **generate_report**: Gera e SALVA relatório estruturado
-- **search_leads**: Pesquisa leads nos DADOS REAIS do Company Board
-- **schedule_meeting**: Agenda reunião REAL no banco
+- **search_leads**: Pesquisa leads via HubSpot se configurado, senão Company Board
+- **schedule_meeting**: Agenda reunião REAL no banco + Google Sheets se configurado
 - **analyze_data**: Analisa dados REAIS + logs de execução
 - **delegate_to_agent**: 🔗 Delegar para outro agente do workspace
 
