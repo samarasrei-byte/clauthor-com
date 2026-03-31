@@ -1,17 +1,26 @@
 /**
  * Integration Router — Routes agent tool calls to real external APIs.
- *
- * Each integration_key maps to a handler that performs the actual HTTP call.
- * Handlers start as stubs and are implemented incrementally.
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { handleSendgrid } from "./integrations/sendgrid.ts";
+import { handleHubspot } from "./integrations/hubspot.ts";
+import { handleSlack } from "./integrations/slack.ts";
+import { handleNotion } from "./integrations/notion.ts";
+import { handleLinkedin } from "./integrations/linkedin.ts";
+import { handleGoogleSheets } from "./integrations/google-sheets.ts";
+import { handleWhatsapp } from "./integrations/whatsapp.ts";
+import { handleMetaAds } from "./integrations/meta-ads.ts";
+import { handleInstagram } from "./integrations/instagram.ts";
+import { handlePipedrive } from "./integrations/pipedrive.ts";
+import { handleTrello } from "./integrations/trello.ts";
+import { handleCustomApi } from "./integrations/custom-api.ts";
 
 // ── Interfaces ──────────────────────────────────────────────────────────────
 
 export interface IntegrationRequest {
-  integration_key: string;   // e.g. "hubspot", "gmail", "slack"
-  action: string;            // e.g. "get-contacts", "send-email"
+  integration_key: string;
+  action: string;
   params: Record<string, any>;
   credentials: Record<string, string>;
 }
@@ -34,14 +43,6 @@ function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
   });
 }
 
-// ── Stub handler factory ────────────────────────────────────────────────────
-
-const stub = (name: string) =>
-  async (_action: string, _params: Record<string, any>, _creds: Record<string, string>): Promise<IntegrationResponse> => ({
-    success: false,
-    error: `Integration "${name}" not yet implemented`,
-  });
-
 // ── Handler type ────────────────────────────────────────────────────────────
 
 type IntegrationHandler = (
@@ -53,17 +54,19 @@ type IntegrationHandler = (
 // ── Handler registry ────────────────────────────────────────────────────────
 
 const handlers: Record<string, IntegrationHandler> = {
-  gmail:         stub("gmail"),
-  hubspot:       stub("hubspot"),
-  slack:         stub("slack"),
-  linkedin:      stub("linkedin"),
-  google_sheets: stub("google_sheets"),
-  notion:        stub("notion"),
-  pipedrive:     stub("pipedrive"),
-  trello:        stub("trello"),
-  instagram:     stub("instagram"),
-  meta_ads:      stub("meta_ads"),
-  whatsapp:      stub("whatsapp"),
+  gmail:         handleSendgrid,
+  sendgrid:      handleSendgrid,
+  hubspot:       handleHubspot,
+  slack:         handleSlack,
+  linkedin:      handleLinkedin,
+  google_sheets: handleGoogleSheets,
+  notion:        handleNotion,
+  pipedrive:     handlePipedrive,
+  trello:        handleTrello,
+  instagram:     handleInstagram,
+  meta_ads:      handleMetaAds,
+  whatsapp:      handleWhatsapp,
+  custom_api:    handleCustomApi,
 };
 
 // ── Main router ─────────────────────────────────────────────────────────────
@@ -82,7 +85,6 @@ export async function executeIntegration(
     return await withTimeout(handler(action, params, credentials), 30_000);
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown execution error";
-    // Log without credentials
     console.error(`[IntegrationRouter] ${integration_key}/${action} failed:`, message);
     return { success: false, error: message };
   }
@@ -115,4 +117,10 @@ export async function getDecryptedCredentials(
     console.error("[IntegrationRouter] Failed to fetch credentials:", err instanceof Error ? err.message : "unknown");
     return null;
   }
+}
+
+// ── Available integrations list ─────────────────────────────────────────────
+
+export function getAvailableIntegrations(): string[] {
+  return Object.keys(handlers);
 }
