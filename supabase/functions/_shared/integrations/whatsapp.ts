@@ -5,7 +5,7 @@
 
 import type { IntegrationResponse } from "../integration-router.ts";
 
-const BASE = "https://graph.facebook.com/v19.0";
+const BASE = "https://graph.facebook.com/v18.0";
 
 export async function handleWhatsapp(
   action: string,
@@ -13,7 +13,7 @@ export async function handleWhatsapp(
   creds: Record<string, string>,
 ): Promise<IntegrationResponse> {
   const token = creds.access_token;
-  const phoneId = creds.phone_id;
+  const phoneId = creds.phone_number_id || creds.phone_id;
   if (!token) return { success: false, error: "Missing WhatsApp access token" };
   if (!phoneId) return { success: false, error: "Missing WhatsApp Phone Number ID" };
 
@@ -25,18 +25,36 @@ export async function handleWhatsapp(
 
   switch (action) {
     case "send-message": {
-      const { to, text } = params;
-      if (!to || !text) return { success: false, error: "to and text required" };
+      const to = params.to;
+      const message = params.message || params.text;
+      if (!to) return { success: false, error: "to is required" };
 
+      // Template message
+      if (params.template_id) {
+        const res = await fetch(url, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({
+            messaging_product: "whatsapp",
+            to,
+            type: "template",
+            template: { name: params.template_id, language: { code: params.language || "pt_BR" } },
+          }),
+        });
+        if (!res.ok) return { success: false, error: `WhatsApp error (${res.status}): ${await res.text()}` };
+        return { success: true, data: await res.json() };
+      }
+
+      // Text message
+      if (!message) return { success: false, error: "message or template_id required" };
       const res = await fetch(url, {
         method: "POST",
         headers,
         body: JSON.stringify({
           messaging_product: "whatsapp",
-          recipient_type: "individual",
           to,
           type: "text",
-          text: { preview_url: false, body: text },
+          text: { body: message },
         }),
       });
       if (!res.ok) return { success: false, error: `WhatsApp error (${res.status}): ${await res.text()}` };
