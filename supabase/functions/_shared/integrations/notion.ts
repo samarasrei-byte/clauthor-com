@@ -21,7 +21,7 @@ export async function handleNotion(
   params: Record<string, any>,
   creds: Record<string, string>,
 ): Promise<IntegrationResponse> {
-  const token = creds.api_key;
+  const token = creds.integration_token || creds.api_key;
   if (!token) return { success: false, error: "Missing Notion integration token" };
 
   const headers = notionHeaders(token);
