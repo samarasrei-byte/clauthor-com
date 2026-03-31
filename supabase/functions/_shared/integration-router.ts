@@ -69,6 +69,8 @@ const handlers: Record<string, IntegrationHandler> = {
   meta_ads:      handleMetaAds,
   whatsapp:      handleWhatsapp,
   custom_api:    handleCustomApi,
+  stripe:        handleStripe,
+  firecrawl:     handleFirecrawl,
 };
 
 // ── Main router ─────────────────────────────────────────────────────────────
