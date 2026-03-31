@@ -7,13 +7,19 @@ import type { IntegrationResponse } from "../integration-router.ts";
 
 const BASE = "https://api.hubapi.com";
 
+function hubspotError(status: number, body: string): IntegrationResponse {
+  if (status === 401) return { success: false, error: "Token HubSpot inválido ou expirado. Reconfigure suas credenciais." };
+  if (status === 429) return { success: false, error: "Rate limit HubSpot atingido. Tente novamente em alguns minutos." };
+  return { success: false, error: `HubSpot error (${status}): ${body}` };
+}
+
 export async function handleHubspot(
   action: string,
   params: Record<string, any>,
   creds: Record<string, string>,
 ): Promise<IntegrationResponse> {
-  const token = creds.api_key;
-  if (!token) return { success: false, error: "Missing HubSpot API token" };
+  const token = creds.access_token || creds.api_key;
+  if (!token) return { success: false, error: "Missing HubSpot access_token" };
 
   const headers = {
     Authorization: `Bearer ${token}`,
@@ -22,64 +28,92 @@ export async function handleHubspot(
 
   switch (action) {
     case "get-contacts": {
+      if (params.query) {
+        const res = await fetch(`${BASE}/crm/v3/objects/contacts/search`, {
+          method: "POST",
+          headers,
+          body: JSON.stringify({ query: params.query, limit: params.limit || 10 }),
+        });
+        if (!res.ok) return hubspotError(res.status, await res.text());
+        return { success: true, data: await res.json() };
+      }
       const limit = params.limit || 10;
-      const res = await fetch(`${BASE}/crm/v3/objects/contacts?limit=${limit}`, { headers });
-      if (!res.ok) return { success: false, error: `HubSpot error (${res.status}): ${await res.text()}` };
+      const res = await fetch(
+        `${BASE}/crm/v3/objects/contacts?limit=${limit}&properties=firstname,lastname,email,phone,company`,
+        { headers },
+      );
+      if (!res.ok) return hubspotError(res.status, await res.text());
       return { success: true, data: await res.json() };
     }
 
     case "create-contact": {
-      const { email, firstname, lastname, phone, company } = params;
-      if (!email) return { success: false, error: "Email is required to create a contact" };
+      const properties = params.data || {};
+      if (params.email) properties.email = params.email;
+      if (params.firstname) properties.firstname = params.firstname;
+      if (params.lastname) properties.lastname = params.lastname;
+      if (params.phone) properties.phone = params.phone;
+      if (params.company) properties.company = params.company;
 
-      const properties: Record<string, string> = { email };
-      if (firstname) properties.firstname = firstname;
-      if (lastname) properties.lastname = lastname;
-      if (phone) properties.phone = phone;
-      if (company) properties.company = company;
+      if (!properties.email) return { success: false, error: "Email is required to create a contact" };
 
       const res = await fetch(`${BASE}/crm/v3/objects/contacts`, {
         method: "POST",
         headers,
         body: JSON.stringify({ properties }),
       });
-      if (!res.ok) return { success: false, error: `HubSpot error (${res.status}): ${await res.text()}` };
+      if (!res.ok) return hubspotError(res.status, await res.text());
+      return { success: true, data: await res.json() };
+    }
+
+    case "get-deals": {
+      const limit = params.limit || 10;
+      const res = await fetch(`${BASE}/crm/v3/objects/deals?limit=${limit}`, { headers });
+      if (!res.ok) return hubspotError(res.status, await res.text());
+      return { success: true, data: await res.json() };
+    }
+
+    case "create-deal": {
+      const properties = params.data || {};
+      if (!properties.dealname) return { success: false, error: "dealname is required to create a deal" };
+
+      const res = await fetch(`${BASE}/crm/v3/objects/deals`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ properties }),
+      });
+      if (!res.ok) return hubspotError(res.status, await res.text());
       return { success: true, data: await res.json() };
     }
 
     case "update-deal": {
-      const { deal_id, properties } = params;
+      const { deal_id } = params;
       if (!deal_id) return { success: false, error: "deal_id is required" };
+      const properties = params.data || params.properties || {};
 
       const res = await fetch(`${BASE}/crm/v3/objects/deals/${deal_id}`, {
         method: "PATCH",
         headers,
-        body: JSON.stringify({ properties: properties || {} }),
+        body: JSON.stringify({ properties }),
       });
-      if (!res.ok) return { success: false, error: `HubSpot error (${res.status}): ${await res.text()}` };
+      if (!res.ok) return hubspotError(res.status, await res.text());
       return { success: true, data: await res.json() };
     }
 
     case "search-records": {
-      const { object_type, query } = params;
-      const objectType = object_type || "contacts";
-
+      const objectType = params.object_type || "contacts";
       const res = await fetch(`${BASE}/crm/v3/objects/${objectType}/search`, {
         method: "POST",
         headers,
-        body: JSON.stringify({
-          query: query || "",
-          limit: params.limit || 10,
-        }),
+        body: JSON.stringify({ query: params.query || "", limit: params.limit || 10 }),
       });
-      if (!res.ok) return { success: false, error: `HubSpot error (${res.status}): ${await res.text()}` };
+      if (!res.ok) return hubspotError(res.status, await res.text());
       return { success: true, data: await res.json() };
     }
 
     case "get-pipeline": {
       const objectType = params.object_type || "deals";
       const res = await fetch(`${BASE}/crm/v3/pipelines/${objectType}`, { headers });
-      if (!res.ok) return { success: false, error: `HubSpot error (${res.status}): ${await res.text()}` };
+      if (!res.ok) return hubspotError(res.status, await res.text());
       return { success: true, data: await res.json() };
     }
 
@@ -98,7 +132,7 @@ export async function handleHubspot(
         headers,
         body: JSON.stringify({ properties }),
       });
-      if (!res.ok) return { success: false, error: `HubSpot error (${res.status}): ${await res.text()}` };
+      if (!res.ok) return hubspotError(res.status, await res.text());
       return { success: true, data: await res.json() };
     }
 
