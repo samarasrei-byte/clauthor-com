@@ -15,6 +15,8 @@ import { handleInstagram } from "./integrations/instagram.ts";
 import { handlePipedrive } from "./integrations/pipedrive.ts";
 import { handleTrello } from "./integrations/trello.ts";
 import { handleCustomApi } from "./integrations/custom-api.ts";
+import { handleStripe } from "./integrations/stripe.ts";
+import { handleFirecrawl } from "./integrations/firecrawl.ts";
 
 // ── Interfaces ──────────────────────────────────────────────────────────────
 
