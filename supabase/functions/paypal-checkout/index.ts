@@ -116,6 +116,7 @@ serve(async (req) => {
   }
 
   try {
+    const APP_URL = Deno.env.get("APP_URL") || "https://www.clauthor.com";
     const body = await req.json();
     const { action } = body;
     const accessToken = await getAccessToken();
