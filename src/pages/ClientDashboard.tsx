@@ -49,7 +49,7 @@ const ThorLiveGuide = lazyRetry(() => import("@/components/dashboard/ThorLiveGui
 const QuickStartWizard = lazy(() => import("@/components/dashboard/QuickStartWizard"));
 
 const ClientDashboard = () => {
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const { t, i18n } = useTranslation();
   const queryClient = useQueryClient();
   const [activeSection, setActiveSection] = useState("overview");
