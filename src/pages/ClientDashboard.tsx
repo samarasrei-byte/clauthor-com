@@ -165,9 +165,13 @@ const ClientDashboard = () => {
   });
 
   const { data: subscriptions = [] } = useQuery({
-    queryKey: ["my-subscriptions", user?.id],
+    queryKey: ["my-subscriptions", user?.id, isAdmin],
     queryFn: async () => {
-      const { data, error } = await supabase.from("subscriptions").select("*, agent:agents(*)").eq("user_id", user!.id).eq("status", "active");
+      let query = supabase.from("subscriptions").select("*, agent:agents(*)").eq("status", "active");
+      if (!isAdmin) {
+        query = query.eq("user_id", user!.id);
+      }
+      const { data, error } = await query;
       if (error) throw error;
       return data.map((sub: any) => ({
         id: sub.id,
