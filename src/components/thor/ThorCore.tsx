@@ -167,10 +167,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
         const memory = loadThorMemory();
         const greeting = buildProactiveGreeting(lang, memory);
         setMessages([{ role: "assistant", content: greeting }]);
-        if (voiceEnabled) {
-          const st = prepareSpeechText(greeting);
-          if (st) speak(st, thorVoiceId);
-        }
+      // Don't auto-speak on entrance transition — wait for user to enable voice
       }, 3200);
       return () => clearTimeout(timer);
     }
