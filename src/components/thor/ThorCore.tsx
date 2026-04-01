@@ -438,9 +438,18 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       const memory = loadThorMemory();
       const greeting = buildProactiveGreeting(lang, memory);
       setMessages([{ role: "assistant", content: greeting }]);
-      // Don't auto-enable voice or speak — user activates manually
     }
-  }, [lang, speak, thorVoiceId]);
+  }, [lang]);
+
+  // ═══ Contextual scroll triggers ═══
+  const handleScrollTrigger = useCallback((message: string) => {
+    if (phase !== "active" && phase !== "minimized") return;
+    setPhase("active");
+    setShowChat(true);
+    setMessages(prev => [...prev, { role: "assistant", content: message }]);
+  }, [phase]);
+
+  useThorScrollTrigger(handleScrollTrigger);
 
   const forgetMemory = useCallback(() => {
     clearThorMemory();
