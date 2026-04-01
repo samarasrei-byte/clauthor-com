@@ -62,6 +62,11 @@ const DashboardOverview = ({
       <ErrorBoundary>
         <Suspense fallback={<SectionLoader />}>
           <div className="space-y-5">
+            <DashboardWelcome
+              hasAgents={agents.length > 0}
+              hasIntegration={false}
+              hasExecution={recentLogs.length > 0}
+            />
             <GuidedOnboarding
               hasCompanyData={boardCount > 0}
               hasAgents={agents.length > 0}
