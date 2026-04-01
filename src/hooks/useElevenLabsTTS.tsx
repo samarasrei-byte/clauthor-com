@@ -262,9 +262,18 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
         stop(false);
         doNativeFallback();
       });
-    } catch (err) {
+      if (finishedPromise) await finishedPromise;
+      return true;
+    } catch (err: any) {
+      // Silent fallback for all TTS errors including NotAllowedError
+      if (err?.name === "NotAllowedError") {
+        console.warn("[TTS] Autoplay blocked — silent fallback");
+        setIsSpeaking(false);
+        resolveFinished?.();
+        return false;
+      }
       console.error("TTS error, using fallback:", err);
-      doNativeFallback();
+      try { doNativeFallback(); } catch { /* truly silent */ }
       if (finishedPromise) await finishedPromise;
       return true;
     }
