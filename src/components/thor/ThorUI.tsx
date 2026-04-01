@@ -4,7 +4,7 @@
 
 import { memo, useMemo, useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Send, X, Loader2, Volume2, VolumeX, Maximize2, Minimize2, Mic, MicOff } from "lucide-react";
+import { Send, X, Loader2, Volume2, VolumeX, Maximize2, Minimize2, Mic, MicOff, Play } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import thorPhoto from "@/assets/kaelis-ai.webp";
 import type { ThorCoreState, ThorCoreActions } from "./ThorCore";
@@ -404,10 +404,10 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   const {
     phase, messages, input, isLoading, voiceEnabled, showChat, expanded,
     isSpeaking, isMobile, shouldUseLiteCore, lang, visitorName,
-    demoModalOpen, demoType,
+    demoModalOpen, demoType, lastAssistantContent,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
     sendMessage, minimize, activate, stopTTS, forgetMemory,
-    openDemo, closeDemo,
+    openDemo, closeDemo, replayLastMessage,
     messagesEndRef,
   } = props;
 
@@ -674,16 +674,30 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
                 </div>
               )}
 
-              {/* Speaking indicator */}
-              {isSpeaking && (
-                <div className="flex items-center gap-[2px] h-3 justify-center px-3 pb-1">
+              {/* Speaking indicator + replay button */}
+              {isSpeaking ? (
+                <div className="flex items-center gap-[2px] h-4 justify-center px-3 pb-1">
                   {Array.from({ length: 24 }).map((_, i) => (
                     <motion.div key={i} className="w-[1.5px] rounded-full bg-accent-violet/50"
                       animate={{ height: [1, Math.random() * 8 + 3, 1] }}
                       transition={{ duration: 0.25 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.02 }}
                     />
                   ))}
+                  <button onClick={stopTTS} className="ml-2 p-1 rounded-full hover:bg-muted/20 transition-all">
+                    <VolumeX className="w-3 h-3 text-accent-violet/60" />
+                  </button>
                 </div>
+              ) : (
+                lastAssistantContent && !isLoading && (
+                  <div className="flex items-center justify-center px-3 pb-1">
+                    <button onClick={replayLastMessage}
+                      className="flex items-center gap-1 text-[8px] font-mono text-accent-violet/40 hover:text-accent-violet/70 transition-all"
+                    >
+                      <Play className="w-2.5 h-2.5" />
+                      {lang.startsWith("pt") ? "Ouvir resposta" : "Listen"}
+                    </button>
+                  </div>
+                )
               )}
 
               {/* Input + forget */}
@@ -726,13 +740,20 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
         <div className="relative cursor-pointer" onClick={() => setShowChat(!showChat)}>
           <div className="relative" style={{ width: widgetOrbSize, height: widgetOrbSize }}>
             <NeuralCore isSpeaking={isSpeaking} size={widgetOrbSize} lite />
+            {/* Pulsing ring when speaking */}
+            {isSpeaking && (
+              <motion.div className="absolute inset-[-4px] rounded-full border-2 border-accent-violet/40"
+                animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0, 0.6] }}
+                transition={{ duration: 1.2, repeat: Infinity }}
+              />
+            )}
             <div className="absolute rounded-full overflow-hidden"
               style={{
                 width: widgetOrbSize * 0.6,
                 height: widgetOrbSize * 0.6,
                 left: "50%", top: "50%",
                 transform: "translate(-50%, -50%)",
-                border: "1px solid hsl(var(--accent-violet) / 0.2)",
+                border: `1px solid hsl(var(--accent-violet) / ${isSpeaking ? '0.5' : '0.2'})`,
               }}
             >
               <img src={thorPhoto} alt="Thor" className={`w-full h-full object-cover ${isSpeaking ? "thor-glitch-active" : ""}`} />

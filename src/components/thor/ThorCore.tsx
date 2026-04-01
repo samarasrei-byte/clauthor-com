@@ -45,6 +45,7 @@ export interface ThorCoreState {
   // Demo modal state
   demoModalOpen: boolean;
   demoType: DemoType;
+  lastAssistantContent: string | null;
 }
 
 export interface ThorCoreActions {
@@ -59,6 +60,7 @@ export interface ThorCoreActions {
   forgetMemory: () => void;
   openDemo: (type: DemoType) => void;
   closeDemo: () => void;
+  replayLastMessage: () => void;
   messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -67,6 +69,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
   const [messages, setMessages] = useState<ThorMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  // Voice defaults to OFF — user must explicitly enable
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showChat, setShowChat] = useState(false);
@@ -151,14 +154,8 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       setMessages([{ role: "assistant", content: greeting }]);
       sessionStorage.setItem(SESSION_GREETED_KEY, "1");
 
-      const canSpeak = !isMobile || userHasInteractedWithPageRef.current;
-      if (canSpeak) {
-        setVoiceEnabled(true);
-        setTimeout(() => {
-          const speechText = prepareSpeechText(greeting);
-          if (speechText) speak(speechText, thorVoiceId);
-        }, 300);
-      }
+      // Never auto-play audio — browser blocks it without user interaction.
+      // Voice stays OFF until user explicitly enables it.
     }, 5000);
 
     return () => clearTimeout(timer);
@@ -172,10 +169,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
         const memory = loadThorMemory();
         const greeting = buildProactiveGreeting(lang, memory);
         setMessages([{ role: "assistant", content: greeting }]);
-        if (voiceEnabled) {
-          const st = prepareSpeechText(greeting);
-          if (st) speak(st, thorVoiceId);
-        }
+      // Don't auto-speak on entrance transition — wait for user to enable voice
       }, 3200);
       return () => clearTimeout(timer);
     }
@@ -392,10 +386,14 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       setMessages(prev => [...prev, { role: "assistant", content: nameQ }]);
     }
 
-    // Speak result if voice enabled
+    // Speak result if voice enabled — wrapped in try/catch for silent fallback
     if (!controller.signal.aborted && voiceEnabled && fullText) {
-      const speechText = prepareSpeechText(fullText);
-      if (speechText) speak(speechText, thorVoiceId);
+      try {
+        const speechText = prepareSpeechText(fullText);
+        if (speechText) speak(speechText, thorVoiceId);
+      } catch {
+        // Silent fallback — TTS failure should never break the chat
+      }
     }
 
     setIsLoading(false);
@@ -422,11 +420,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       const memory = loadThorMemory();
       const greeting = buildProactiveGreeting(lang, memory);
       setMessages([{ role: "assistant", content: greeting }]);
-      setVoiceEnabled(true);
-      setTimeout(() => {
-        const st = prepareSpeechText(greeting);
-        if (st) speak(st, thorVoiceId);
-      }, 150);
+      // Don't auto-enable voice or speak — user activates manually
     }
   }, [lang, speak, thorVoiceId]);
 
@@ -451,13 +445,29 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     setDemoModalOpen(false);
   }, []);
 
+  const replayLastMessage = useCallback(() => {
+    const lastAssistant = messagesRef.current.filter(m => m.role === "assistant").pop();
+    if (!lastAssistant?.content) return;
+    try {
+      const speechText = prepareSpeechText(lastAssistant.content);
+      if (speechText) {
+        setVoiceEnabled(true);
+        speak(speechText, thorVoiceId);
+      }
+    } catch {
+      // Silent fallback
+    }
+  }, [speak, thorVoiceId]);
+
+  const lastAssistantContent = messages.filter(m => m.role === "assistant").pop()?.content || null;
+
   return {
     phase, messages, input, isLoading, voiceEnabled, hasInteracted,
     showChat, expanded, isSpeaking, isMobile, shouldUseLiteCore, lang,
-    visitorName, demoModalOpen, demoType,
+    visitorName, demoModalOpen, demoType, lastAssistantContent,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
     sendMessage, minimize, activate, stopTTS, forgetMemory,
-    openDemo, closeDemo,
+    openDemo, closeDemo, replayLastMessage,
     messagesEndRef,
   };
 }
