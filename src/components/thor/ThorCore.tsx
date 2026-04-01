@@ -67,6 +67,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
   const [messages, setMessages] = useState<ThorMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  // Voice defaults to OFF — user must explicitly enable
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showChat, setShowChat] = useState(false);
