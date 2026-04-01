@@ -45,6 +45,7 @@ export interface ThorCoreState {
   // Demo modal state
   demoModalOpen: boolean;
   demoType: DemoType;
+  lastAssistantContent: string | null;
 }
 
 export interface ThorCoreActions {
