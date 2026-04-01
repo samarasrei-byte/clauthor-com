@@ -384,10 +384,14 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       setMessages(prev => [...prev, { role: "assistant", content: nameQ }]);
     }
 
-    // Speak result if voice enabled
+    // Speak result if voice enabled — wrapped in try/catch for silent fallback
     if (!controller.signal.aborted && voiceEnabled && fullText) {
-      const speechText = prepareSpeechText(fullText);
-      if (speechText) speak(speechText, thorVoiceId);
+      try {
+        const speechText = prepareSpeechText(fullText);
+        if (speechText) speak(speechText, thorVoiceId);
+      } catch {
+        // Silent fallback — TTS failure should never break the chat
+      }
     }
 
     setIsLoading(false);
