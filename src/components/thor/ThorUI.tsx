@@ -404,10 +404,10 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
   const {
     phase, messages, input, isLoading, voiceEnabled, showChat, expanded,
     isSpeaking, isMobile, shouldUseLiteCore, lang, visitorName,
-    demoModalOpen, demoType,
+    demoModalOpen, demoType, lastAssistantContent,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
     sendMessage, minimize, activate, stopTTS, forgetMemory,
-    openDemo, closeDemo,
+    openDemo, closeDemo, replayLastMessage,
     messagesEndRef,
   } = props;
 
