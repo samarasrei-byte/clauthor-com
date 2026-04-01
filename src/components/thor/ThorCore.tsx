@@ -60,6 +60,7 @@ export interface ThorCoreActions {
   forgetMemory: () => void;
   openDemo: (type: DemoType) => void;
   closeDemo: () => void;
+  replayLastMessage: () => void;
   messagesEndRef: React.RefObject<HTMLDivElement>;
 }
 
