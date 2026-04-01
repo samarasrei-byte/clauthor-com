@@ -29,7 +29,7 @@ const ROIBenchmark = () => {
   const fmt = (v: number) => new Intl.NumberFormat(locale, { style: "currency", currency, minimumFractionDigits: 0 }).format(v);
 
   return (
-    <section className="py-16 sm:py-24 px-4 relative" aria-label="ROI Calculator">
+    <section className="py-16 sm:py-24 px-4 relative" aria-label="ROI Calculator" data-thor-trigger="roi_section">
       <div className="max-w-4xl mx-auto">
         <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="mb-10 sm:mb-14">
           <div className="flex items-center gap-3 mb-3">
