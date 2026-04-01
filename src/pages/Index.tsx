@@ -627,9 +627,11 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           ROI BENCHMARK CALCULATOR
           ═══════════════════════════════════════════════════════ */}
-      <Suspense fallback={<div className="py-20" />}>
-        <ROIBenchmark />
-      </Suspense>
+      <div data-thor-trigger="roi_section">
+        <Suspense fallback={<div className="py-20" />}>
+          <ROIBenchmark />
+        </Suspense>
+      </div>
 
       {/* ═══════════════════════════════════════════════════════
           COMPETITIVE MOAT — Side-by-side comparison
