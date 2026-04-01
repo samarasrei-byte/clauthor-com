@@ -167,6 +167,7 @@ const ClientDashboard = () => {
     }
   }, [user, agents, loadingAgents]);
 
+  const { data: templates = [] } = useQuery({
     queryKey: ["agent-templates-slugs"],
     queryFn: async () => {
       const { data } = await supabase.from("agent_templates").select("name, slug").eq("is_active", true);
