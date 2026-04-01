@@ -157,7 +157,16 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
-  const { data: templates = [] } = useQuery({
+  // First-access onboarding modal (when user has no agents yet)
+  useEffect(() => {
+    if (!user || loadingAgents) return;
+    if (localStorage.getItem("clauthor_first_access_done")) return;
+    if (agents.length === 0) {
+      const timer = setTimeout(() => setShowFirstAccess(true), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, agents, loadingAgents]);
+
     queryKey: ["agent-templates-slugs"],
     queryFn: async () => {
       const { data } = await supabase.from("agent_templates").select("name, slug").eq("is_active", true);
