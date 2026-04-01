@@ -315,11 +315,11 @@ const LibraryPage = () => {
                           viewport={{ once: true }}
                           transition={{ delay: agentIdx * 0.02 }}
                         >
-                          <div className="group relative h-full flex flex-col rounded-xl overflow-hidden ring-1 ring-border/40 hover:ring-primary/30 bg-card/20 hover:bg-card/50 transition-all duration-300 hover:translate-y-[-1px]">
+                          <div className="group relative h-full flex flex-col rounded-xl overflow-hidden ring-1 ring-border/40 hover:ring-primary/30 bg-card/20 hover:bg-card/50 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg hover:shadow-primary/5">
                             <div className="p-4 flex flex-col flex-1">
                               {/* Agent header */}
                               <div className="flex items-start gap-3 mb-3">
-                                <div className={`w-10 h-10 rounded-xl ${colors.bg} border ${colors.border}/50 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform`}>
+                                <div className={`w-10 h-10 rounded-xl ${colors.bg} border ${colors.border}/50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}>
                                   <Icon className={`h-5 w-5 ${colors.text}`} strokeWidth={1.5} />
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -333,6 +333,19 @@ const LibraryPage = () => {
                                       <span className="text-[10px] text-muted-foreground/50">{social.rating}</span>
                                     </span>
                                   </div>
+                                </div>
+                              </div>
+
+                              {/* Animated task counter — visible on hover */}
+                              <div className="h-0 group-hover:h-7 overflow-hidden transition-all duration-300 mb-0 group-hover:mb-2">
+                                <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-accent-emerald/5 border border-accent-emerald/10">
+                                  <span className="relative flex h-1.5 w-1.5">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-emerald opacity-75" />
+                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent-emerald" />
+                                  </span>
+                                  <span className="text-[9px] font-mono text-accent-emerald/80">
+                                    Executou {(1000 + Math.floor(Math.random() * 2000)).toLocaleString()} tarefas hoje
+                                  </span>
                                 </div>
                               </div>
 
@@ -366,6 +379,18 @@ const LibraryPage = () => {
                                     <span className="text-[9px] text-muted-foreground/40 ml-1">/mês</span>
                                   </div>
                                   <div className="flex gap-1.5">
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      className="h-7 px-2 rounded-lg text-[9px] gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setPreviewAgent({ name: agent.name, desc: agent.responsibilities[0] || "" });
+                                      }}
+                                    >
+                                      <Eye className="h-3 w-3" />
+                                      Ver em ação
+                                    </Button>
                                     <Link to={`/agente/${agent.slug}`}>
                                       <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-lg">
                                         <Eye className="h-3.5 w-3.5 text-muted-foreground/50" />
