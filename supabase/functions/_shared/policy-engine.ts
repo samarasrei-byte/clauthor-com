@@ -268,6 +268,19 @@ export async function enforcePolicy(
   usedCredits: number,
   totalCredits: number
 ): Promise<PolicyResult> {
+  // Admin bypass: users with role 'admin' skip ALL policy gates
+  const { data: adminRole } = await adminClient
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", context.userId)
+    .eq("role", "admin")
+    .maybeSingle();
+
+  if (adminRole) {
+    console.log(`[PolicyEngine] Admin bypass for user ${context.userId}`);
+    return { allowed: true };
+  }
+
   // Gate 5: Credits
   const creditsCheck = validateLimits(usedCredits, totalCredits);
   if (!creditsCheck.allowed) return creditsCheck;
@@ -300,6 +313,18 @@ export async function validateAndEnforcePolicy(
   const tenantCheck = await validateTenant(adminClient, userId);
   if (!tenantCheck.valid || !tenantCheck.tenantId) {
     return { allowed: false, reason: tenantCheck.error || "Acesso não autorizado." };
+  }
+
+  // Admin bypass
+  const { data: adminRole } = await adminClient
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
+
+  if (adminRole) {
+    return { allowed: true };
   }
 
   const { data: credits } = await adminClient
