@@ -429,6 +429,15 @@ const ClientDashboard = () => {
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
 
+      <FirstAccessOnboarding
+        isOpen={showFirstAccess}
+        onClose={() => {
+          setShowFirstAccess(false);
+          localStorage.setItem("clauthor_first_access_done", "true");
+        }}
+        userName={user?.user_metadata?.full_name?.split(" ")[0]}
+      />
+
       <div className="flex h-full">
         <div className="hidden lg:block relative z-10">
           <DashboardSidebar items={sidebarItems} activeItem={activeSection} onItemChange={handleSidebarNav} />
