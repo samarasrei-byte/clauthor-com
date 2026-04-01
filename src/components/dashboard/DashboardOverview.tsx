@@ -6,6 +6,7 @@ import { useTranslation } from "react-i18next";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SectionLoader from "@/components/ui/section-loader";
 import GuidedOnboarding from "./GuidedOnboarding";
+import DashboardWelcome from "@/components/DashboardWelcome";
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
