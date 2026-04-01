@@ -139,6 +139,16 @@ const ClientDashboard = () => {
     }
   }, [user, profileOnboarding]);
 
+  // First-access onboarding modal (when user has no agents yet)
+  useEffect(() => {
+    if (!user || loadingAgents) return;
+    if (localStorage.getItem("clauthor_first_access_done")) return;
+    if (agents.length === 0) {
+      const timer = setTimeout(() => setShowFirstAccess(true), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, agents, loadingAgents]);
+
   const { credits, remainingCredits, usagePercentage } = useCredits();
   usePaypalCapture();
   const { data: tokenUsage = [] } = useTokenUsage();
