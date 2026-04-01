@@ -627,9 +627,11 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           ROI BENCHMARK CALCULATOR
           ═══════════════════════════════════════════════════════ */}
-      <Suspense fallback={<div className="py-20" />}>
-        <ROIBenchmark />
-      </Suspense>
+      <div data-thor-trigger="roi_section">
+        <Suspense fallback={<div className="py-20" />}>
+          <ROIBenchmark />
+        </Suspense>
+      </div>
 
       {/* ═══════════════════════════════════════════════════════
           COMPETITIVE MOAT — Side-by-side comparison
@@ -886,7 +888,7 @@ const HomePage = () => {
       {/* ═══════════════════════════════════════════════════════
           WAITLIST BANNER — High-conversion interstitial
           ═══════════════════════════════════════════════════════ */}
-      <section className="py-12 sm:py-16 px-4 relative overflow-hidden" aria-label="Waitlist CTA">
+      <section className="py-12 sm:py-16 px-4 relative overflow-hidden" aria-label="Waitlist CTA" data-thor-trigger="pricing_section">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.06] via-transparent to-primary/[0.06] pointer-events-none" />
         <div className="max-w-4xl mx-auto relative z-10">
           <motion.div

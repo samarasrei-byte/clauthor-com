@@ -29,6 +29,7 @@ const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardG
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
+import FirstAccessOnboarding from "@/components/onboarding/FirstAccessOnboarding";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
 import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
@@ -66,6 +67,7 @@ const ClientDashboard = () => {
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
   const [showQuickStart, setShowQuickStart] = useState(false);
+  const [showFirstAccess, setShowFirstAccess] = useState(false);
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
     if (!user) return false;
     return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
@@ -154,6 +156,16 @@ const ClientDashboard = () => {
     },
     enabled: !!user,
   });
+
+  // First-access onboarding modal (when user has no agents yet)
+  useEffect(() => {
+    if (!user || loadingAgents) return;
+    if (localStorage.getItem("clauthor_first_access_done")) return;
+    if (agents.length === 0) {
+      const timer = setTimeout(() => setShowFirstAccess(true), 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [user, agents, loadingAgents]);
 
   const { data: templates = [] } = useQuery({
     queryKey: ["agent-templates-slugs"],
@@ -426,6 +438,15 @@ const ClientDashboard = () => {
       )}
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
+
+      <FirstAccessOnboarding
+        isOpen={showFirstAccess}
+        onClose={() => {
+          setShowFirstAccess(false);
+          localStorage.setItem("clauthor_first_access_done", "true");
+        }}
+        userName={user?.user_metadata?.full_name?.split(" ")[0]}
+      />
 
       <div className="flex h-full">
         <div className="hidden lg:block relative z-10">
