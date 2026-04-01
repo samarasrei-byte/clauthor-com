@@ -5,6 +5,9 @@ import OnboardingWizard from "./onboarding/OnboardingWizard";
 import AgentLivePreview from "./library/AgentLivePreview";
 
 const ThorGreeter = lazy(() => import("./ThorGreeter"));
+const SocialProofToasts = lazy(() => import("./SocialProofToasts"));
+const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
+const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
@@ -13,6 +16,7 @@ const AppLayout = () => {
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
   const location = useLocation();
   const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname);
+  const isHomePage = location.pathname === "/";
 
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
@@ -33,6 +37,27 @@ const AppLayout = () => {
       {showThor && (
         <Suspense fallback={null}>
           <ThorGreeter />
+        </Suspense>
+      )}
+
+      {/* Social proof FOMO toasts — home page only */}
+      {isHomePage && (
+        <Suspense fallback={null}>
+          <SocialProofToasts />
+        </Suspense>
+      )}
+
+      {/* Exit intent capture — home page only */}
+      {isHomePage && (
+        <Suspense fallback={null}>
+          <ExitIntentCapture />
+        </Suspense>
+      )}
+
+      {/* Journey progress bar — home page only */}
+      {isHomePage && (
+        <Suspense fallback={null}>
+          <JourneyProgressBar />
         </Suspense>
       )}
     </div>
