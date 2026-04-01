@@ -152,14 +152,8 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       setMessages([{ role: "assistant", content: greeting }]);
       sessionStorage.setItem(SESSION_GREETED_KEY, "1");
 
-      const canSpeak = !isMobile || userHasInteractedWithPageRef.current;
-      if (canSpeak) {
-        setVoiceEnabled(true);
-        setTimeout(() => {
-          const speechText = prepareSpeechText(greeting);
-          if (speechText) speak(speechText, thorVoiceId);
-        }, 300);
-      }
+      // Never auto-play audio — browser blocks it without user interaction.
+      // Voice stays OFF until user explicitly enables it.
     }, 5000);
 
     return () => clearTimeout(timer);
