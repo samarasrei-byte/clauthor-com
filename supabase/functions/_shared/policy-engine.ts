@@ -315,6 +315,18 @@ export async function validateAndEnforcePolicy(
     return { allowed: false, reason: tenantCheck.error || "Acesso não autorizado." };
   }
 
+  // Admin bypass
+  const { data: adminRole } = await adminClient
+    .from("user_roles")
+    .select("role")
+    .eq("user_id", userId)
+    .eq("role", "admin")
+    .maybeSingle();
+
+  if (adminRole) {
+    return { allowed: true };
+  }
+
   const { data: credits } = await adminClient
     .from("user_credits")
     .select("used_credits, total_credits, plan_type")
