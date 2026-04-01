@@ -445,13 +445,29 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     setDemoModalOpen(false);
   }, []);
 
+  const replayLastMessage = useCallback(() => {
+    const lastAssistant = messagesRef.current.filter(m => m.role === "assistant").pop();
+    if (!lastAssistant?.content) return;
+    try {
+      const speechText = prepareSpeechText(lastAssistant.content);
+      if (speechText) {
+        setVoiceEnabled(true);
+        speak(speechText, thorVoiceId);
+      }
+    } catch {
+      // Silent fallback
+    }
+  }, [speak, thorVoiceId]);
+
+  const lastAssistantContent = messages.filter(m => m.role === "assistant").pop()?.content || null;
+
   return {
     phase, messages, input, isLoading, voiceEnabled, hasInteracted,
     showChat, expanded, isSpeaking, isMobile, shouldUseLiteCore, lang,
-    visitorName, demoModalOpen, demoType,
+    visitorName, demoModalOpen, demoType, lastAssistantContent,
     setInput, setExpanded, setShowChat, setVoiceEnabled,
     sendMessage, minimize, activate, stopTTS, forgetMemory,
-    openDemo, closeDemo,
+    openDemo, closeDemo, replayLastMessage,
     messagesEndRef,
   };
 }
