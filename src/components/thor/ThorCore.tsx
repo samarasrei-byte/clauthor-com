@@ -21,6 +21,24 @@ import {
   type ThorIntent,
 } from "./ThorIntentDetector";
 import type { DemoType } from "./AgentDemoModal";
+import { useThorScrollTrigger } from "@/hooks/useThorScrollTrigger";
+import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
+import { useAuth } from "@/hooks/useAuth";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { useReducedMotion } from "framer-motion";
+import { ThorMessage, streamThorResponse } from "./ThorStreaming";
+import {
+  fetchThorVoiceId, prepareSpeechText, DEFAULT_VOICE_ID,
+  loadThorMemory, saveThorMemory, clearThorMemory, touchThorVisit,
+  extractNameFromMessage, extractTopicFromMessage, isForgetRequest,
+  buildProactiveGreeting, buildNameQuestion,
+} from "./ThorVoice";
+import {
+  detectIntent, detectDepartmentFromConversation,
+  buildPricingResponse, buildCompetitorResponse, buildDemoOffer,
+  type ThorIntent,
+} from "./ThorIntentDetector";
+import type { DemoType } from "./AgentDemoModal";
 
 const SESSION_GREETED_KEY = "thor_session_greeted";
 const SESSION_DISMISSED_KEY = "thor_session_dismissed";
