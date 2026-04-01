@@ -548,7 +548,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
                     style={{ maxWidth: message.role === "user" ? "85%" : "100%", overflowWrap: "break-word", wordBreak: "break-word" }}
                   >
                     {message.role === "assistant" ? (
-                      <div className="text-[15px] leading-relaxed prose prose-sm prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0">
+                      <div className="text-[15px] leading-relaxed prose prose-sm prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 overflow-x-auto [&_pre]:overflow-x-auto [&_pre]:max-w-full [&_code]:break-words">
                         <ReactMarkdown>{message.content}</ReactMarkdown>
                         {isStreaming && idx === messages.length - 1 && (
                           <span className="inline-block w-2 h-5 bg-primary/80 animate-pulse ml-0.5 rounded-sm align-middle" />
