@@ -209,8 +209,8 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
             />
 
             {/* THE ORB — isSpeaking=true IMMEDIATELY for maximum drama */}
-            <div className="relative w-[280px] h-[280px] md:w-[420px] md:h-[420px]">
-              <NeuralCore isSpeaking={true} size={420} />
+            <div className="relative w-[300px] h-[300px] md:w-[420px] md:h-[420px]">
+              <NeuralCore isSpeaking={true} size={typeof window !== "undefined" && window.innerWidth >= 768 ? 420 : 300} />
             </div>
           </motion.div>
         )}
