@@ -29,19 +29,12 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
   const gainRef = useRef<GainNode | null>(null);
   const ttsPlayedRef = useRef(false);
 
-  // Phase progression — tighter, more dramatic
+  // Phase progression — immediate Thor speaking
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
-    timers.push(setTimeout(() => setPhase("pulse"), 600));
-    timers.push(setTimeout(() => setPhase("wave"), 1800));
-    timers.push(setTimeout(() => setPhase("intensify"), 4000));
-    timers.push(setTimeout(() => {
-      setPhase("glitch");
-      setGlitchActive(true);
-      setTimeout(() => setGlitchActive(false), 800);
-    }, 6000));
-    timers.push(setTimeout(() => setPhase("avatar"), 7000));
-    timers.push(setTimeout(() => setPhase("speech"), 9500));
+    timers.push(setTimeout(() => setPhase("pulse"), 300));
+    timers.push(setTimeout(() => setPhase("avatar"), 800));
+    timers.push(setTimeout(() => setPhase("speech"), 1500));
     return () => timers.forEach(clearTimeout);
   }, []);
 
