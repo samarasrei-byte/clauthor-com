@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import WaveCanvas from "./WaveCanvas";
-import thorHologram from "@/assets/thor-hologram.png";
+import { NeuralCore } from "@/components/thor/ThorUI";
 
 type Phase = "dark" | "pulse" | "wave" | "intensify" | "glitch" | "avatar" | "speech" | "cta";
 
