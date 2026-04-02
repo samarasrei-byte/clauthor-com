@@ -396,21 +396,32 @@ const LibraryPage = () => {
                                         <Eye className="h-3.5 w-3.5 text-muted-foreground/50" />
                                       </Button>
                                     </Link>
-                                    <Button
-                                      size="sm"
-                                      className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1"
-                                      disabled={isHiring}
-                                      onClick={() => handleHire(agent.slug, agent.name)}
-                                    >
-                                      {isHiring ? (
-                                        <Loader2 className="h-3 w-3 animate-spin" />
-                                      ) : (
-                                        <>
-                                          <Zap className="h-3 w-3" />
-                                          Contratar
-                                        </>
-                                      )}
-                                    </Button>
+                                    {isAdmin ? (
+                                      <Button
+                                        size="sm"
+                                        className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1 bg-emerald-600 hover:bg-emerald-700"
+                                        onClick={() => navigate("/dashboard")}
+                                      >
+                                        <Zap className="h-3 w-3" />
+                                        Acessar
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        size="sm"
+                                        className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1"
+                                        disabled={isHiring}
+                                        onClick={() => handleHire(agent.slug, agent.name)}
+                                      >
+                                        {isHiring ? (
+                                          <Loader2 className="h-3 w-3 animate-spin" />
+                                        ) : (
+                                          <>
+                                            <Zap className="h-3 w-3" />
+                                            Contratar
+                                          </>
+                                        )}
+                                      </Button>
+                                    )}
                                   </div>
                                 </div>
                               </div>
