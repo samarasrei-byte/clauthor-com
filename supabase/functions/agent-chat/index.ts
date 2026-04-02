@@ -831,6 +831,7 @@ async function executeTool(
         // === REAL EMAIL BRIDGE via credential-manager ===
         let emailSent = false;
         let sendError = "";
+        let providerUsed = "";
         const messageId = crypto.randomUUID().slice(0, 8);
 
         try {
