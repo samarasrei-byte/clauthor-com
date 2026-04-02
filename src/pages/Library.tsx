@@ -58,7 +58,7 @@ const LibraryPage = () => {
   const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.split("-")[0] || "pt";
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   // Total agent count
@@ -101,6 +101,12 @@ const LibraryPage = () => {
       return;
     }
 
+    // Admin bypass - direct access without payment
+    if (isAdmin) {
+      navigate("/dashboard");
+      return;
+    }
+
     const priceTier = agentPriceTiers[slug] || "entry";
     const region = getRegion(lang);
     const price = getPrice(lang, priceTier);
@@ -124,7 +130,7 @@ const LibraryPage = () => {
     createPayPalPlan(slug, agentName, price, region.currency).then((planId) => {
       setCheckoutData((prev) => prev ? { ...prev, planId } : prev);
     });
-  }, [user, navigate, lang]);
+  }, [user, navigate, lang, isAdmin]);
 
   const handleApproveCheckout = useCallback((subscriptionId: string) => {
     if (!checkoutData) return;
@@ -396,21 +402,32 @@ const LibraryPage = () => {
                                         <Eye className="h-3.5 w-3.5 text-muted-foreground/50" />
                                       </Button>
                                     </Link>
-                                    <Button
-                                      size="sm"
-                                      className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1"
-                                      disabled={isHiring}
-                                      onClick={() => handleHire(agent.slug, agent.name)}
-                                    >
-                                      {isHiring ? (
-                                        <Loader2 className="h-3 w-3 animate-spin" />
-                                      ) : (
-                                        <>
-                                          <Zap className="h-3 w-3" />
-                                          Contratar
-                                        </>
-                                      )}
-                                    </Button>
+                                    {isAdmin ? (
+                                      <Button
+                                        size="sm"
+                                        className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1 bg-emerald-600 hover:bg-emerald-700"
+                                        onClick={() => navigate("/dashboard")}
+                                      >
+                                        <Zap className="h-3 w-3" />
+                                        Acessar
+                                      </Button>
+                                    ) : (
+                                      <Button
+                                        size="sm"
+                                        className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1"
+                                        disabled={isHiring}
+                                        onClick={() => handleHire(agent.slug, agent.name)}
+                                      >
+                                        {isHiring ? (
+                                          <Loader2 className="h-3 w-3 animate-spin" />
+                                        ) : (
+                                          <>
+                                            <Zap className="h-3 w-3" />
+                                            Contratar
+                                          </>
+                                        )}
+                                      </Button>
+                                    )}
                                   </div>
                                 </div>
                               </div>
