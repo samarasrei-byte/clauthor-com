@@ -181,6 +181,10 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
         animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
         transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
         className="flex flex-col items-center"
+        style={{
+          "--accent-violet": "0 85% 50%",
+          "--accent-cyan": "0 70% 40%",
+        } as React.CSSProperties}
       >
         <div className="relative w-72 h-72 md:w-96 md:h-96">
           <NeuralCore isSpeaking={showSpeech} size={384} />
