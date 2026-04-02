@@ -406,7 +406,7 @@ const LibraryPage = () => {
                                       <Button
                                         size="sm"
                                         className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1 bg-emerald-600 hover:bg-emerald-700"
-                                        onClick={() => navigate("/dashboard")}
+                                        onClick={() => navigate(`/agente/${agent.slug}`)}
                                       >
                                         <Zap className="h-3 w-3" />
                                         Acessar
