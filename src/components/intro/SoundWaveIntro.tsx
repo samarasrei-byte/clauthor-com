@@ -191,17 +191,22 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
             initial={{ opacity: 0, scale: 0.2, filter: "blur(40px) brightness(4)" }}
             animate={{ opacity: 1, scale: 1, filter: "blur(0px) brightness(1)" }}
             transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute top-[5%] left-1/2 z-20 flex flex-col items-center"
+            className="absolute top-[5%] z-20 flex flex-col items-center"
             style={{
               "--accent-violet": "0 85% 50%",
               "--accent-cyan": "0 70% 40%",
-              transform: "translateX(-50%)",
+              left: "50%",
+              marginLeft: -190,
             } as React.CSSProperties}
           >
             {/* Intense glow behind orb */}
             <motion.div
-              className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full pointer-events-none -mt-16"
-              style={{ background: "radial-gradient(circle, hsla(0,80%,45%,0.2) 0%, hsla(0,70%,35%,0.08) 40%, transparent 65%)" }}
+              className="absolute rounded-full pointer-events-none"
+              style={{
+                width: 500, height: 500,
+                top: -60, left: -60,
+                background: "radial-gradient(circle, hsla(0,80%,45%,0.2) 0%, hsla(0,70%,35%,0.08) 40%, transparent 65%)",
+              }}
               animate={isSpeaking ? {
                 scale: [1, 1.15, 1],
                 opacity: [0.6, 1, 0.6],
@@ -210,7 +215,7 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
             />
 
             {/* THE ORB — always speaking */}
-            <div className="relative" style={{ width: 380, height: 380 }}>
+            <div style={{ width: 380, height: 380, position: "relative" }}>
               <NeuralCore isSpeaking={true} size={380} />
             </div>
           </motion.div>
