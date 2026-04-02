@@ -7,10 +7,9 @@ import { NeuralCore } from "@/components/thor/ThorUI";
 type Phase = "dark" | "reveal" | "speaking" | "cta";
 
 const SPEECH_LINES = [
-  { text: "Oi… eu sou o Thor…", delay: 0 },
-  { text: "CEO da Clauthor…", delay: 2200 },
-  { text: "Eu vou te mostrar o futuro…", delay: 4400 },
-  { text: "Seja bem-vindo.", delay: 6600 },
+  { text: "Seja bem-vindo.", delay: 0, style: "welcome" },
+  { text: "Eu sou o Thor, CEO da Clauthor.", delay: 2200, style: "normal" },
+  { text: "Eu vou te mostrar o futuro.", delay: 4400, style: "normal" },
 ];
 
 interface SoundWaveIntroProps {
