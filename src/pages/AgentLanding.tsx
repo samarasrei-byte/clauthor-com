@@ -3,16 +3,78 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { getAgentBySlug } from "@/data/agentLandingData";
-import { ArrowRight, Check, XCircle, CheckCircle2, ChevronDown, Zap, Star } from "lucide-react";
+import { ArrowRight, Check, XCircle, CheckCircle2, ChevronDown, Zap, Star, Bot } from "lucide-react";
 import { useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { WORKFORCE } from "@/data/workforceArchitecture";
+import type { AgentRole } from "@/data/workforceArchitecture";
 import NotFound from "./NotFound";
+
+const findWorkforceAgent = (slug: string): { agent: AgentRole; deptName: string; squadName: string } | null => {
+  for (const dept of WORKFORCE) {
+    for (const squad of dept.squads) {
+      const found = squad.agents.find(a => a.slug === slug);
+      if (found) return { agent: found, deptName: dept.name, squadName: squad.name };
+    }
+  }
+  return null;
+};
+
+const AgentFallback = ({ data }: { data: { agent: AgentRole; deptName: string; squadName: string } }) => (
+  <div className="min-h-screen">
+    <section className="relative pt-32 pb-20 px-4 overflow-hidden">
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-primary/[0.06] to-transparent rounded-full blur-[120px]" />
+      </div>
+      <div className="max-w-4xl mx-auto relative z-10">
+        <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center">
+          <Badge variant="outline" className="mb-6 border-primary/15 text-primary/80 px-4 py-2">
+            <Bot className="h-4 w-4 mr-2" /> {data.deptName} • {data.squadName}
+          </Badge>
+          <h1 className="font-display text-4xl sm:text-5xl font-bold mb-6">{data.agent.name}</h1>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-10">
+            Agente especializado em {data.agent.responsibilities.join(", ").toLowerCase()}.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-4 max-w-xl mx-auto mb-12">
+            <div className="rounded-xl border border-border/30 bg-card/30 p-5">
+              <h3 className="font-display text-sm font-bold mb-3">Responsabilidades</h3>
+              <ul className="space-y-2 text-left">
+                {data.agent.responsibilities.map((r, i) => (
+                  <li key={i} className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Check className="h-3.5 w-3.5 text-emerald-400 shrink-0" /> {r}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="rounded-xl border border-border/30 bg-card/30 p-5">
+              <h3 className="font-display text-sm font-bold mb-3">Gatilhos de Ação</h3>
+              <div className="flex flex-wrap gap-2">
+                {data.agent.triggers.map((t, i) => (
+                  <Badge key={i} variant="secondary" className="text-[10px]">{t.replace(/_/g, " ")}</Badge>
+                ))}
+              </div>
+            </div>
+          </div>
+          <Link to="/auth" state={{ hireIntent: { type: "agent", label: data.agent.name, slugs: [data.agent.slug] } }}>
+            <Button size="lg" className="gap-2">
+              <Zap className="h-4 w-4" /> Contratar este agente <ArrowRight className="h-4 w-4" />
+            </Button>
+          </Link>
+        </motion.div>
+      </div>
+    </section>
+  </div>
+);
 
 const AgentLanding = () => {
   const { slug } = useParams<{ slug: string }>();
   const agent = getAgentBySlug(slug || "");
 
-  if (!agent) return <NotFound />;
+  if (!agent) {
+    const workforceData = findWorkforceAgent(slug || "");
+    if (workforceData) return <AgentFallback data={workforceData} />;
+    return <NotFound />;
+  }
 
   const Icon = agent.icon;
 
