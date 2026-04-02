@@ -831,6 +831,7 @@ async function executeTool(
         // === REAL EMAIL BRIDGE via credential-manager ===
         let emailSent = false;
         let sendError = "";
+        let providerUsed = "";
         const messageId = crypto.randomUUID().slice(0, 8);
 
         try {
@@ -872,7 +873,6 @@ async function executeTool(
             || credMap["email"]?.["from_email"] || credMap["smtp"]?.["from_email"] || "noreply@clauthor.com";
           const fromName = credMap["sendgrid"]?.["from_name"] || credMap["resend"]?.["from_name"]
             || credMap["email"]?.["from_name"] || credMap["smtp"]?.["from_name"] || "Clauthor AI";
-          let providerUsed = "";
 
           // --- SENDGRID ---
           const sgKey = credMap["sendgrid"]?.["api_key"] || credMap["sendgrid"]?.["SENDGRID_API_KEY"] || credMap["sendgrid"]?.["sendgrid_api_key"];
