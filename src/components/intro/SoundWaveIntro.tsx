@@ -306,11 +306,11 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   className={`mb-3 font-display leading-relaxed tracking-wide ${
-                    i === 0 ? "text-white font-bold text-base md:text-xl" :
-                    i === 3 ? "font-semibold text-base md:text-xl" :
-                    "text-white/50 text-sm md:text-lg"
+                    line.style === "welcome"
+                      ? "font-bold text-lg md:text-2xl"
+                      : "text-white font-medium text-sm md:text-lg"
                   }`}
-                  style={i === 3 ? { color: "hsl(0, 65%, 65%)" } : undefined}
+                  style={line.style === "welcome" ? { color: "hsl(0, 70%, 55%)" } : undefined}
                 >
                   {line.text}
                 </motion.p>
