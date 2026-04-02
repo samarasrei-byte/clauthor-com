@@ -38,7 +38,7 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
     const timers = SPEECH_LINES.map((line, i) =>
       setTimeout(() => setVisibleLines(i + 1), line.delay)
     );
-    const ctaTimer = setTimeout(() => setPhase("cta"), 9000);
+    const ctaTimer = setTimeout(() => setPhase("cta"), 7500);
     return () => { timers.forEach(clearTimeout); clearTimeout(ctaTimer); };
   }, [phase]);
 
