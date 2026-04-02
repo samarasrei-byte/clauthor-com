@@ -1,5 +1,6 @@
 import { useState, lazy, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
+import { AnimatePresence } from "framer-motion";
 import Navbar from "./Navbar";
 import OnboardingWizard from "./onboarding/OnboardingWizard";
 import AgentLivePreview from "./library/AgentLivePreview";
@@ -8,6 +9,7 @@ const ThorGreeter = lazy(() => import("./ThorGreeter"));
 const SocialProofToasts = lazy(() => import("./SocialProofToasts"));
 const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
 const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
+const CinematicIntro = lazy(() => import("./intro/CinematicIntro"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
@@ -18,8 +20,20 @@ const AppLayout = () => {
   const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname);
   const isHomePage = location.pathname === "/";
 
+  // Show cinematic intro only on first visit to home page
+  const hasSeenIntro = localStorage.getItem("clauthor_intro_seen") === "true";
+  const [showIntro, setShowIntro] = useState(isHomePage && !hasSeenIntro);
+
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
+      {/* Cinematic intro overlay */}
+      <AnimatePresence>
+        {showIntro && (
+          <Suspense fallback={null}>
+            <CinematicIntro onComplete={() => setShowIntro(false)} />
+          </Suspense>
+        )}
+      </AnimatePresence>
       <Navbar />
       <main className="pt-16">
         <Outlet />
