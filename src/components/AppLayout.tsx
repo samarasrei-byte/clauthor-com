@@ -30,7 +30,7 @@ const AppLayout = () => {
       <AnimatePresence>
         {showIntro && (
           <Suspense fallback={null}>
-            <CinematicIntro onComplete={() => setShowIntro(false)} />
+            <SoundWaveIntro onComplete={() => setShowIntro(false)} />
           </Suspense>
         )}
       </AnimatePresence>
