@@ -7,10 +7,9 @@ import { NeuralCore } from "@/components/thor/ThorUI";
 type Phase = "dark" | "reveal" | "speaking" | "cta";
 
 const SPEECH_LINES = [
-  { text: "Oi… eu sou o Thor…", delay: 0 },
-  { text: "CEO da Clauthor…", delay: 2200 },
-  { text: "Eu vou te mostrar o futuro…", delay: 4400 },
-  { text: "Seja bem-vindo.", delay: 6600 },
+  { text: "Seja bem-vindo.", delay: 0, style: "welcome" },
+  { text: "Eu sou o Thor, CEO da Clauthor.", delay: 2200, style: "normal" },
+  { text: "Eu vou te mostrar o futuro.", delay: 4400, style: "normal" },
 ];
 
 interface SoundWaveIntroProps {
@@ -39,7 +38,7 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
     const timers = SPEECH_LINES.map((line, i) =>
       setTimeout(() => setVisibleLines(i + 1), line.delay)
     );
-    const ctaTimer = setTimeout(() => setPhase("cta"), 9000);
+    const ctaTimer = setTimeout(() => setPhase("cta"), 7500);
     return () => { timers.forEach(clearTimeout); clearTimeout(ctaTimer); };
   }, [phase]);
 
@@ -82,11 +81,11 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
 
   useEffect(() => { soundOn ? startAudio() : stopAudio(); }, [soundOn, startAudio, stopAudio]);
 
-  // TTS
+  // TTS — plays automatically when speaking phase starts (sound toggle controls ambient only)
   useEffect(() => {
-    if (!soundOn || phase !== "speaking" || ttsPlayedRef.current) return;
+    if (phase !== "speaking" || ttsPlayedRef.current) return;
     ttsPlayedRef.current = true;
-    (async () => {
+    const playTTS = async () => {
       try {
         const res = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-tts`,
@@ -97,16 +96,25 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
               apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
               Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
             },
-            body: JSON.stringify({ text: "Oi. Eu sou o Thor, CEO da Clauthor. Eu vou te mostrar o futuro. Seja bem-vindo.", voiceId: "JBFqnCBsd6RMkjVDRZzb" }),
+            body: JSON.stringify({
+              text: "Seja bem-vindo. Eu sou o Thor, CEO da Clauthor. Eu vou te mostrar o futuro.",
+              voiceId: "JBFqnCBsd6RMkjVDRZzb",
+            }),
           }
         );
         if (!res.ok) return;
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("audio")) return; // fallback response, skip
         const blob = await res.blob();
-        const audio = new Audio(URL.createObjectURL(blob));
-        audio.play().catch(() => {});
-      } catch {}
-    })();
-  }, [soundOn, phase]);
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        await audio.play();
+      } catch {
+        // TTS is optional — fail silently
+      }
+    };
+    playTTS();
+  }, [phase]);
 
   const handleComplete = () => {
     localStorage.setItem("clauthor_intro_seen", "true");
@@ -298,11 +306,11 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
                   animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
                   transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
                   className={`mb-3 font-display leading-relaxed tracking-wide ${
-                    i === 0 ? "text-white font-bold text-base md:text-xl" :
-                    i === 3 ? "font-semibold text-base md:text-xl" :
-                    "text-white/50 text-sm md:text-lg"
+                    line.style === "welcome"
+                      ? "font-bold text-lg md:text-2xl"
+                      : "text-white font-medium text-sm md:text-lg"
                   }`}
-                  style={i === 3 ? { color: "hsl(0, 65%, 65%)" } : undefined}
+                  style={line.style === "welcome" ? { color: "hsl(0, 70%, 55%)" } : undefined}
                 >
                   {line.text}
                 </motion.p>
