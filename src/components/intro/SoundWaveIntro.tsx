@@ -98,7 +98,7 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
             },
             body: JSON.stringify({
               text: "Seja bem-vindo. Eu sou o Thor, CEO da Clauthor. Eu vou te mostrar o futuro.",
-              voiceId: "JBFqnCBsd6RMkjVDRZzb",
+              voiceId: "57fRHlU547szfU1IrRoS",
             }),
           }
         );
