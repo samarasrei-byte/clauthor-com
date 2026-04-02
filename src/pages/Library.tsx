@@ -58,7 +58,7 @@ const LibraryPage = () => {
   const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
   const { t, i18n } = useTranslation();
   const lang = i18n.language?.split("-")[0] || "pt";
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
 
   // Total agent count
