@@ -81,11 +81,11 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
 
   useEffect(() => { soundOn ? startAudio() : stopAudio(); }, [soundOn, startAudio, stopAudio]);
 
-  // TTS
+  // TTS — plays automatically when speaking phase starts (sound toggle controls ambient only)
   useEffect(() => {
-    if (!soundOn || phase !== "speaking" || ttsPlayedRef.current) return;
+    if (phase !== "speaking" || ttsPlayedRef.current) return;
     ttsPlayedRef.current = true;
-    (async () => {
+    const playTTS = async () => {
       try {
         const res = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-tts`,
@@ -96,16 +96,25 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
               apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
               Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
             },
-            body: JSON.stringify({ text: "Oi. Eu sou o Thor, CEO da Clauthor. Eu vou te mostrar o futuro. Seja bem-vindo.", voiceId: "JBFqnCBsd6RMkjVDRZzb" }),
+            body: JSON.stringify({
+              text: "Seja bem-vindo. Eu sou o Thor, CEO da Clauthor. Eu vou te mostrar o futuro.",
+              voiceId: "JBFqnCBsd6RMkjVDRZzb",
+            }),
           }
         );
         if (!res.ok) return;
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("audio")) return; // fallback response, skip
         const blob = await res.blob();
-        const audio = new Audio(URL.createObjectURL(blob));
-        audio.play().catch(() => {});
-      } catch {}
-    })();
-  }, [soundOn, phase]);
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        await audio.play();
+      } catch {
+        // TTS is optional — fail silently
+      }
+    };
+    playTTS();
+  }, [phase]);
 
   const handleComplete = () => {
     localStorage.setItem("clauthor_intro_seen", "true");
