@@ -5,13 +5,13 @@ import { Button } from "@/components/ui/button";
 import WaveCanvas from "./WaveCanvas";
 import thorHologram from "@/assets/thor-hologram.png";
 
-type Phase = "dark" | "wave" | "intensify" | "avatar" | "speech" | "cta";
+type Phase = "dark" | "pulse" | "wave" | "intensify" | "glitch" | "avatar" | "speech" | "cta";
 
 const SPEECH_LINES = [
-  "Oi… eu sou o Thor…",
-  "CEO da Clauthor…",
-  "Eu vou te mostrar o futuro…",
-  "Seja bem-vindo.",
+  { text: "Oi… eu sou o Thor…", delay: 0 },
+  { text: "CEO da Clauthor…", delay: 2000 },
+  { text: "Eu vou te mostrar o futuro…", delay: 4000 },
+  { text: "Seja bem-vindo.", delay: 6000 },
 ];
 
 interface SoundWaveIntroProps {
@@ -23,43 +23,39 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
   const [mousePos, setMousePos] = useState({ x: 0.5, y: 0.5 });
   const [visibleLines, setVisibleLines] = useState(0);
   const [soundOn, setSoundOn] = useState(false);
-  const [avatarOpacity, setAvatarOpacity] = useState(0);
+  const [glitchActive, setGlitchActive] = useState(false);
   const audioCtxRef = useRef<AudioContext | null>(null);
   const oscillatorsRef = useRef<OscillatorNode[]>([]);
   const gainRef = useRef<GainNode | null>(null);
   const ttsPlayedRef = useRef(false);
 
-  // Phase progression
+  // Phase progression — tighter, more dramatic
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
-    timers.push(setTimeout(() => setPhase("wave"), 800));
-    timers.push(setTimeout(() => setPhase("intensify"), 3500));
+    timers.push(setTimeout(() => setPhase("pulse"), 600));
+    timers.push(setTimeout(() => setPhase("wave"), 1800));
+    timers.push(setTimeout(() => setPhase("intensify"), 4000));
     timers.push(setTimeout(() => {
-      setPhase("avatar");
-      // Gradual avatar reveal
-      let op = 0;
-      const interval = setInterval(() => {
-        op += 0.02;
-        setAvatarOpacity(Math.min(op, 1));
-        if (op >= 1) clearInterval(interval);
-      }, 50);
+      setPhase("glitch");
+      setGlitchActive(true);
+      setTimeout(() => setGlitchActive(false), 800);
     }, 6000));
-    timers.push(setTimeout(() => setPhase("speech"), 8500));
+    timers.push(setTimeout(() => setPhase("avatar"), 7000));
+    timers.push(setTimeout(() => setPhase("speech"), 9500));
     return () => timers.forEach(clearTimeout);
   }, []);
 
   // Speech lines
   useEffect(() => {
     if (phase !== "speech") return;
-    const delays = [0, 2200, 4200, 6200];
-    const timers = delays.map((d, i) =>
-      setTimeout(() => setVisibleLines(i + 1), d)
+    const timers = SPEECH_LINES.map((line, i) =>
+      setTimeout(() => setVisibleLines(i + 1), line.delay)
     );
     const ctaTimer = setTimeout(() => setPhase("cta"), 8500);
     return () => { timers.forEach(clearTimeout); clearTimeout(ctaTimer); };
   }, [phase]);
 
-  // Web Audio sub-bass
+  // Web Audio
   const startAudio = useCallback(() => {
     if (audioCtxRef.current) return;
     try {
@@ -70,40 +66,22 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
       gain.connect(ctx.destination);
       gainRef.current = gain;
 
-      // Sub-bass oscillator
-      const osc1 = ctx.createOscillator();
-      osc1.type = "sine";
-      osc1.frequency.value = 40;
-      osc1.connect(gain);
-      osc1.start();
+      const freqs = [32, 64, 128, 256];
+      const volumes = [1, 0.5, 0.15, 0.04];
+      freqs.forEach((f, i) => {
+        const osc = ctx.createOscillator();
+        osc.type = "sine";
+        osc.frequency.value = f;
+        const g = ctx.createGain();
+        g.gain.value = volumes[i];
+        osc.connect(g);
+        g.connect(gain);
+        osc.start();
+        oscillatorsRef.current.push(osc);
+      });
 
-      // Harmonic layer
-      const osc2 = ctx.createOscillator();
-      osc2.type = "sine";
-      osc2.frequency.value = 80;
-      const g2 = ctx.createGain();
-      g2.gain.value = 0.3;
-      osc2.connect(g2);
-      g2.connect(gain);
-      osc2.start();
-
-      // High shimmer
-      const osc3 = ctx.createOscillator();
-      osc3.type = "sine";
-      osc3.frequency.value = 220;
-      const g3 = ctx.createGain();
-      g3.gain.value = 0.05;
-      osc3.connect(g3);
-      g3.connect(gain);
-      osc3.start();
-
-      oscillatorsRef.current = [osc1, osc2, osc3];
-
-      // Fade in
-      gain.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 2);
-    } catch {
-      // Audio not available
-    }
+      gain.gain.linearRampToValueAtTime(0.18, ctx.currentTime + 2);
+    } catch { /* no audio */ }
   }, []);
 
   const stopAudio = useCallback(() => {
@@ -113,43 +91,33 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
         oscillatorsRef.current.forEach(o => { try { o.stop(); } catch {} });
         audioCtxRef.current?.close();
         audioCtxRef.current = null;
+        oscillatorsRef.current = [];
       }, 600);
     }
   }, []);
 
-  // Toggle sound
   useEffect(() => {
-    if (soundOn) {
-      startAudio();
-    } else {
-      stopAudio();
-    }
+    if (soundOn) startAudio(); else stopAudio();
   }, [soundOn, startAudio, stopAudio]);
 
-  // Adjust audio based on phase
+  // Audio dynamics per phase
   useEffect(() => {
     if (!gainRef.current || !audioCtxRef.current) return;
     const ctx = audioCtxRef.current;
     const gain = gainRef.current;
     const now = ctx.currentTime;
-
-    if (phase === "intensify") {
-      gain.gain.linearRampToValueAtTime(0.25, now + 1);
-      oscillatorsRef.current[0]?.frequency.linearRampToValueAtTime(55, now + 2);
-    } else if (phase === "avatar") {
-      gain.gain.linearRampToValueAtTime(0.12, now + 1);
-    } else if (phase === "speech") {
-      gain.gain.linearRampToValueAtTime(0.06, now + 0.5);
-    }
+    if (phase === "intensify") gain.gain.linearRampToValueAtTime(0.3, now + 1);
+    else if (phase === "glitch") gain.gain.linearRampToValueAtTime(0.4, now + 0.2);
+    else if (phase === "avatar") gain.gain.linearRampToValueAtTime(0.12, now + 1);
+    else if (phase === "speech") gain.gain.linearRampToValueAtTime(0.05, now + 0.5);
   }, [phase]);
 
   // TTS
   useEffect(() => {
     if (!soundOn || phase !== "speech" || ttsPlayedRef.current) return;
     ttsPlayedRef.current = true;
-    const playTTS = async () => {
+    (async () => {
       try {
-        const text = "Oi. Eu sou o Thor, CEO da Clauthor. Eu vou te mostrar o futuro. Seja bem-vindo.";
         const res = await fetch(
           `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/elevenlabs-tts`,
           {
@@ -159,30 +127,34 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
               apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
               Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
             },
-            body: JSON.stringify({ text, voiceId: "JBFqnCBsd6RMkjVDRZzb" }),
+            body: JSON.stringify({ text: "Oi. Eu sou o Thor, CEO da Clauthor. Eu vou te mostrar o futuro. Seja bem-vindo.", voiceId: "JBFqnCBsd6RMkjVDRZzb" }),
           }
         );
         if (!res.ok) return;
         const blob = await res.blob();
-        const url = URL.createObjectURL(blob);
-        const audio = new Audio(url);
+        const audio = new Audio(URL.createObjectURL(blob));
         audio.play().catch(() => {});
-      } catch { /* TTS optional */ }
-    };
-    playTTS();
+      } catch {}
+    })();
   }, [soundOn, phase]);
 
-  // Mouse tracking
+  // Mouse
   const handleMouseMove = useCallback((e: React.MouseEvent) => {
     setMousePos({ x: e.clientX / window.innerWidth, y: e.clientY / window.innerHeight });
   }, []);
-
   const handleTouchMove = useCallback((e: React.TouchEvent) => {
-    const touch = e.touches[0];
-    if (touch) setMousePos({ x: touch.clientX / window.innerWidth, y: touch.clientY / window.innerHeight });
+    const t = e.touches[0];
+    if (t) setMousePos({ x: t.clientX / window.innerWidth, y: t.clientY / window.innerHeight });
   }, []);
 
-  const intensity = phase === "dark" ? 0 : phase === "wave" ? 0.3 : phase === "intensify" ? 0.8 : phase === "avatar" ? 0.6 : phase === "speech" ? 0.4 : 0.5;
+  const intensity =
+    phase === "dark" ? 0 :
+    phase === "pulse" ? 0.1 :
+    phase === "wave" ? 0.4 :
+    phase === "intensify" ? 1.0 :
+    phase === "glitch" ? 1.2 :
+    phase === "avatar" ? 0.6 :
+    phase === "speech" ? 0.35 : 0.45;
 
   const handleComplete = () => {
     localStorage.setItem("clauthor_intro_seen", "true");
@@ -190,8 +162,11 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
     onComplete();
   };
 
-  // Cleanup
   useEffect(() => () => { stopAudio(); }, [stopAudio]);
+
+  const phaseIndex = ["dark", "pulse", "wave", "intensify", "glitch", "avatar", "speech", "cta"].indexOf(phase);
+  const showAvatar = phaseIndex >= 5;
+  const showSpeech = phaseIndex >= 6;
 
   return (
     <motion.div
@@ -200,105 +175,149 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
       onTouchMove={handleTouchMove}
       initial={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 1.2 }}
+      transition={{ duration: 1.5 }}
     >
-      {/* Wave visualization */}
-      <WaveCanvas
-        intensity={intensity}
-        mousePos={mousePos}
-        particleMode={phase !== "dark"}
-      />
-
-      {/* Radial glow behind avatar area */}
+      {/* Glitch screen flash */}
       <AnimatePresence>
-        {(phase === "avatar" || phase === "speech" || phase === "cta") && (
+        {glitchActive && (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            className="absolute top-[10%] left-1/2 -translate-x-1/2 w-[500px] h-[500px] rounded-full pointer-events-none z-[5]"
-            style={{
-              background: "radial-gradient(circle, hsla(220,80%,50%,0.15) 0%, transparent 70%)",
-            }}
+            animate={{ opacity: [0, 1, 0, 0.8, 0, 0.6, 0] }}
+            transition={{ duration: 0.8, times: [0, 0.1, 0.15, 0.3, 0.35, 0.5, 1] }}
+            className="absolute inset-0 z-[100] pointer-events-none"
+            style={{ background: "linear-gradient(180deg, rgba(100,160,255,0.15) 0%, rgba(140,80,255,0.1) 50%, rgba(100,160,255,0.05) 100%)" }}
           />
         )}
       </AnimatePresence>
 
-      {/* Thor avatar — built from wave energy */}
+      {/* Central pulse on dark phase */}
       <AnimatePresence>
-        {(phase === "avatar" || phase === "speech" || phase === "cta") && (
+        {phase === "dark" && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.8, filter: "blur(20px) brightness(2)" }}
-            animate={{
-              opacity: avatarOpacity,
-              scale: 1,
-              filter: `blur(${(1 - avatarOpacity) * 15}px) brightness(${1 + (1 - avatarOpacity) * 1.5})`,
-            }}
-            transition={{ duration: 2, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute top-[8%] md:top-[5%] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center"
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: [0, 0.8, 0.4], scale: [0, 0.5, 1] }}
+            exit={{ opacity: 0, scale: 2 }}
+            transition={{ duration: 0.6 }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full z-10"
+            style={{ background: "radial-gradient(circle, rgba(120,160,255,0.8) 0%, transparent 70%)", boxShadow: "0 0 60px 30px rgba(100,140,255,0.3)" }}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Pulse ring */}
+      <AnimatePresence>
+        {phase === "pulse" && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0 }}
+            animate={{ opacity: [0.6, 0], scale: [0, 3] }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full border-2 border-blue-400/50 z-10 pointer-events-none"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Wave canvas */}
+      <WaveCanvas intensity={intensity} mousePos={mousePos} particleMode={phaseIndex >= 2} />
+
+      {/* Radial glow behind avatar */}
+      {showAvatar && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 0.6 }}
+          transition={{ duration: 2 }}
+          className="absolute top-[5%] left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full pointer-events-none z-[5]"
+          style={{ background: "radial-gradient(circle, hsla(230,80%,50%,0.2) 0%, hsla(270,60%,40%,0.1) 40%, transparent 70%)" }}
+        />
+      )}
+
+      {/* Thor avatar */}
+      <AnimatePresence>
+        {showAvatar && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.6, y: 40, filter: "blur(30px) brightness(3)" }}
+            animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px) brightness(1)" }}
+            transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute top-[3%] md:top-[2%] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center"
           >
             <div className="relative">
-              {/* Energy pulse rings */}
+              {/* Outer energy rings */}
               <motion.div
-                animate={{ scale: [1, 1.3, 1], opacity: [0.3, 0, 0.3] }}
-                transition={{ duration: 3, repeat: Infinity }}
-                className="absolute inset-0 -m-10 rounded-full border border-[hsl(220,70%,50%)]/30 z-0"
+                animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0, 0.2] }}
+                transition={{ duration: 4, repeat: Infinity }}
+                className="absolute inset-0 -m-12 rounded-full border border-blue-500/20 z-0"
               />
               <motion.div
-                animate={{ scale: [1, 1.5, 1], opacity: [0.2, 0, 0.2] }}
-                transition={{ duration: 4, repeat: Infinity, delay: 0.5 }}
-                className="absolute inset-0 -m-16 rounded-full border border-[hsl(260,60%,50%)]/20 z-0"
+                animate={{ scale: [1, 1.6, 1], opacity: [0.15, 0, 0.15] }}
+                transition={{ duration: 5, repeat: Infinity, delay: 0.7 }}
+                className="absolute inset-0 -m-20 rounded-full border border-purple-500/15 z-0"
               />
-              {/* Glow */}
-              <div className="absolute inset-0 -m-8 rounded-full bg-[hsl(220,70%,50%)] opacity-20 blur-[50px] animate-pulse" />
-              {/* Avatar with scan-line effect */}
+              <motion.div
+                animate={{ rotateZ: 360 }}
+                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-0 -m-16 rounded-full border border-dashed border-blue-400/10 z-0"
+              />
+
+              {/* Core glow */}
+              <div className="absolute inset-0 -m-10 rounded-full bg-blue-500 opacity-15 blur-[60px] animate-pulse" />
+
+              {/* Avatar image */}
               <div className="relative">
                 <img
                   src={thorHologram}
                   alt="Thor — CEO da Clauthor"
-                  className="w-44 h-auto md:w-56 relative z-10"
+                  className="w-48 h-auto md:w-64 relative z-10"
+                  width={1024}
+                  height={1024}
                   style={{
-                    filter: `drop-shadow(0 0 25px hsla(220,80%,60%,0.5)) drop-shadow(0 0 50px hsla(260,60%,50%,0.2))`,
+                    filter: "drop-shadow(0 0 30px hsla(220,80%,60%,0.6)) drop-shadow(0 0 60px hsla(260,60%,50%,0.3))",
                     mixBlendMode: "screen",
                   }}
                 />
-                {/* Scan line overlay */}
+                {/* Scan lines */}
                 <div
-                  className="absolute inset-0 z-20 pointer-events-none opacity-10"
-                  style={{
-                    background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(100,160,255,0.1) 2px, rgba(100,160,255,0.1) 4px)",
-                  }}
+                  className="absolute inset-0 z-20 pointer-events-none opacity-[0.07]"
+                  style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(100,180,255,0.15) 2px, rgba(100,180,255,0.15) 4px)" }}
                 />
+                {/* Glitch slice effect */}
+                {glitchActive && (
+                  <motion.div
+                    animate={{ x: [-3, 5, -2, 0], opacity: [0.7, 0.3, 0.8, 0] }}
+                    transition={{ duration: 0.4 }}
+                    className="absolute inset-0 z-30 overflow-hidden pointer-events-none"
+                  >
+                    <img
+                      src={thorHologram}
+                      alt=""
+                      className="w-48 h-auto md:w-64"
+                      style={{ filter: "hue-rotate(90deg)", clipPath: "inset(30% 0 40% 0)", mixBlendMode: "screen" }}
+                    />
+                  </motion.div>
+                )}
               </div>
-              {/* Rotating rings */}
-              <motion.div
-                animate={{ rotateZ: 360 }}
-                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-52 h-52 md:w-64 md:h-64 rounded-full border border-[hsl(220,70%,50%)]/15 z-0"
-              />
             </div>
           </motion.div>
         )}
       </AnimatePresence>
 
-      {/* Speech lines — cinematic typographic reveal */}
-      <div className="absolute bottom-[22%] md:bottom-[20%] left-1/2 -translate-x-1/2 z-30 w-full max-w-lg px-6 text-center">
+      {/* Speech */}
+      <div className="absolute bottom-[20%] md:bottom-[18%] left-1/2 -translate-x-1/2 z-30 w-full max-w-xl px-6 text-center">
         <AnimatePresence mode="sync">
-          {(phase === "speech" || phase === "cta") && (
-            <div className="space-y-4">
+          {showSpeech && (
+            <div className="space-y-5">
               {SPEECH_LINES.map((line, i) =>
                 i < visibleLines ? (
                   <motion.p
                     key={i}
-                    initial={{ opacity: 0, y: 24, filter: "blur(10px)" }}
+                    initial={{ opacity: 0, y: 30, filter: "blur(12px)" }}
                     animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                    transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-                    className={`font-display leading-relaxed tracking-wide ${
-                      i === 0 ? "text-white font-bold text-base md:text-xl" :
-                      i === 3 ? "text-[hsl(220,70%,70%)] font-semibold text-base md:text-xl" :
-                      "text-white/75 text-sm md:text-lg"
+                    transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+                    className={`font-display leading-relaxed tracking-wider ${
+                      i === 0 ? "text-white font-bold text-lg md:text-2xl" :
+                      i === 3 ? "text-blue-300 font-semibold text-lg md:text-2xl" :
+                      "text-white/70 text-base md:text-xl"
                     }`}
                   >
-                    {line}
+                    {line.text}
                   </motion.p>
                 ) : null
               )}
@@ -307,39 +326,34 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
         </AnimatePresence>
       </div>
 
-      {/* CTA — emerges from wave */}
+      {/* CTA */}
       <AnimatePresence>
         {phase === "cta" && (
           <motion.div
-            initial={{ opacity: 0, y: 30, scale: 0.9 }}
+            initial={{ opacity: 0, y: 40, scale: 0.85 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute bottom-[8%] md:bottom-[10%] left-1/2 -translate-x-1/2 z-30"
+            transition={{ duration: 1.2, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="absolute bottom-[6%] md:bottom-[8%] left-1/2 -translate-x-1/2 z-30"
           >
             <Button
               onClick={handleComplete}
-              className="group relative h-14 px-10 rounded-2xl bg-transparent text-white font-display font-bold text-base md:text-lg border border-[hsl(220,70%,50%)]/50 backdrop-blur-sm hover:border-[hsl(220,70%,60%)] transition-all duration-500 overflow-hidden"
+              className="group relative h-16 px-12 rounded-2xl bg-transparent text-white font-display font-bold text-lg md:text-xl border border-blue-500/40 backdrop-blur-md hover:border-blue-400/70 transition-all duration-700 overflow-hidden"
             >
-              {/* Animated gradient background */}
               <motion.div
-                className="absolute inset-0 rounded-2xl opacity-30 group-hover:opacity-60 transition-opacity duration-500"
-                style={{
-                  background: "linear-gradient(135deg, hsla(220,70%,50%,0.4), hsla(260,60%,50%,0.4))",
-                }}
-                animate={{ backgroundPosition: ["0% 0%", "100% 100%"] }}
-                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+                className="absolute inset-0 rounded-2xl opacity-20 group-hover:opacity-50 transition-opacity duration-700"
+                style={{ background: "linear-gradient(135deg, hsla(220,80%,50%,0.5), hsla(270,70%,50%,0.5), hsla(220,80%,50%,0.5))" }}
+                animate={{ backgroundPosition: ["0% 0%", "200% 200%"] }}
+                transition={{ duration: 4, repeat: Infinity, repeatType: "reverse" }}
               />
-              {/* Vibration effect */}
               <motion.span
-                className="relative z-10 flex items-center gap-3"
-                animate={{ x: [0, 1, -1, 0] }}
-                transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
+                className="relative z-10 flex items-center gap-4"
+                animate={{ x: [0, 2, -2, 0] }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
               >
                 Entrar na experiência
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-6 w-6 group-hover:translate-x-2 transition-transform duration-500" />
               </motion.span>
-              {/* Edge glow */}
-              <div className="absolute inset-0 rounded-2xl shadow-[inset_0_0_20px_hsla(220,70%,50%,0.1),0_0_30px_hsla(220,70%,50%,0.15)] group-hover:shadow-[inset_0_0_30px_hsla(220,70%,50%,0.2),0_0_50px_hsla(220,70%,50%,0.3)] transition-shadow duration-500" />
+              <div className="absolute inset-0 rounded-2xl shadow-[inset_0_0_25px_hsla(220,70%,50%,0.08),0_0_40px_hsla(220,70%,50%,0.15)] group-hover:shadow-[inset_0_0_40px_hsla(220,70%,50%,0.15),0_0_80px_hsla(220,70%,50%,0.3)] transition-shadow duration-700" />
             </Button>
           </motion.div>
         )}
@@ -348,11 +362,11 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
       {/* Skip */}
       <motion.button
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.3 }}
+        animate={{ opacity: 0.2 }}
         whileHover={{ opacity: 1 }}
         transition={{ delay: 3 }}
         onClick={handleComplete}
-        className="absolute top-6 right-6 z-50 text-white/30 hover:text-white text-[10px] font-mono tracking-[0.2em] transition-colors uppercase"
+        className="absolute top-6 right-6 z-50 text-white/20 hover:text-white text-[9px] font-mono tracking-[0.3em] transition-colors uppercase"
       >
         Pular →
       </motion.button>
@@ -360,23 +374,23 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
       {/* Sound toggle */}
       <motion.button
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.4 }}
+        animate={{ opacity: 0.3 }}
         whileHover={{ opacity: 1 }}
         transition={{ delay: 2 }}
         onClick={() => setSoundOn(s => !s)}
-        className="absolute top-6 left-6 z-50 text-white/30 hover:text-white transition-colors p-2"
+        className="absolute top-6 left-6 z-50 text-white/20 hover:text-white transition-colors p-2"
       >
         {soundOn ? <Volume2 className="h-4 w-4" /> : <VolumeX className="h-4 w-4" />}
       </motion.button>
 
-      {/* Brand mark */}
+      {/* Brand */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 0.2 }}
-        transition={{ delay: 4 }}
+        animate={{ opacity: 0.15 }}
+        transition={{ delay: 5 }}
         className="absolute bottom-3 left-1/2 -translate-x-1/2 z-30"
       >
-        <p className="text-[9px] font-mono text-white/15 tracking-[0.4em] uppercase">
+        <p className="text-[8px] font-mono text-white/10 tracking-[0.5em] uppercase">
           Clauthor AI Platform
         </p>
       </motion.div>
