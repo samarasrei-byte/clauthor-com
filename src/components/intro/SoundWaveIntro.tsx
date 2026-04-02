@@ -157,9 +157,9 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
 
   useEffect(() => () => { stopAudio(); }, [stopAudio]);
 
-  const phaseIndex = ["dark", "pulse", "wave", "intensify", "glitch", "avatar", "speech", "cta"].indexOf(phase);
-  const showAvatar = phaseIndex >= 5;
-  const showSpeech = phaseIndex >= 6;
+  const phaseIndex = ["dark", "pulse", "avatar", "speech", "cta"].indexOf(phase);
+  const showAvatar = phaseIndex >= 2;
+  const showSpeech = phaseIndex >= 3;
 
   return (
     <motion.div
