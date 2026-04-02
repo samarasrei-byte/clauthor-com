@@ -130,7 +130,7 @@ const LibraryPage = () => {
     createPayPalPlan(slug, agentName, price, region.currency).then((planId) => {
       setCheckoutData((prev) => prev ? { ...prev, planId } : prev);
     });
-  }, [user, navigate, lang]);
+  }, [user, navigate, lang, isAdmin]);
 
   const handleApproveCheckout = useCallback((subscriptionId: string) => {
     if (!checkoutData) return;
