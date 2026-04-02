@@ -237,11 +237,60 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
             initial={{ opacity: 0, scale: 0.6, y: 40, filter: "blur(30px) brightness(3)" }}
             animate={{ opacity: 1, scale: 1, y: 0, filter: "blur(0px) brightness(1)" }}
             transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute top-[3%] md:top-[2%] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center"
+            className="absolute top-[8%] md:top-[5%] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center"
           >
-            <div className="relative w-56 h-56 md:w-72 md:h-72">
-              <NeuralCore isSpeaking={showSpeech} size={288} />
+            <div className="relative w-64 h-64 md:w-80 md:h-80">
+              <NeuralCore isSpeaking={showSpeech} size={320} />
             </div>
+            {/* THOR label */}
+            <p className="mt-2 text-[10px] md:text-xs font-mono tracking-[0.4em] text-white/40 uppercase">
+              Thor
+            </p>
+            {/* SPEAKING status */}
+            <AnimatePresence>
+              {showSpeech && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: [0.4, 1, 0.4] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="mt-1 text-[9px] md:text-[10px] font-mono tracking-[0.5em] text-red-500 uppercase"
+                >
+                  Speaking
+                </motion.p>
+              )}
+            </AnimatePresence>
+            {/* Waveform bars */}
+            <AnimatePresence>
+              {showSpeech && (
+                <motion.div
+                  initial={{ opacity: 0, scaleY: 0 }}
+                  animate={{ opacity: 1, scaleY: 1 }}
+                  exit={{ opacity: 0, scaleY: 0 }}
+                  className="mt-3 flex items-center justify-center gap-[2px]"
+                >
+                  {Array.from({ length: 32 }, (_, i) => (
+                    <motion.div
+                      key={i}
+                      className="w-[2px] rounded-full bg-red-500/80"
+                      animate={{
+                        height: [
+                          4 + Math.random() * 4,
+                          8 + Math.random() * 18,
+                          4 + Math.random() * 6,
+                          10 + Math.random() * 14,
+                        ],
+                      }}
+                      transition={{
+                        duration: 0.4 + Math.random() * 0.4,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        delay: i * 0.02,
+                      }}
+                    />
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         )}
       </AnimatePresence>
