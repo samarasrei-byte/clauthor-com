@@ -1,10 +1,10 @@
-import { useState, lazy, Suspense } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "./Navbar";
 import OnboardingWizard from "./onboarding/OnboardingWizard";
 import AgentLivePreview from "./library/AgentLivePreview";
-
+import { supabase } from "@/integrations/supabase/client";
 const ThorGreeter = lazy(() => import("./ThorGreeter"));
 const SocialProofToasts = lazy(() => import("./SocialProofToasts"));
 const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
