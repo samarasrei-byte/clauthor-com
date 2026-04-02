@@ -9,7 +9,7 @@ const ThorGreeter = lazy(() => import("./ThorGreeter"));
 const SocialProofToasts = lazy(() => import("./SocialProofToasts"));
 const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
 const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
-const CinematicIntro = lazy(() => import("./intro/CinematicIntro"));
+const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
