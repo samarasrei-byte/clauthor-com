@@ -1,0 +1,1 @@
+UPDATE public.tool_tier_requirements SET min_plan = 'free', monthly_limit = NULL WHERE tool_name = 'send_email';
