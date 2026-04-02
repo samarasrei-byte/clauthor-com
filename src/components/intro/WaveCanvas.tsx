@@ -1,14 +1,13 @@
 import { useEffect, useRef, useCallback } from "react";
 
 interface WaveCanvasProps {
-  intensity: number; // 0-1, controls wave amplitude
+  intensity: number;
   mousePos: { x: number; y: number };
   particleMode: boolean;
-  glowColor?: string;
   className?: string;
 }
 
-const WaveCanvas = ({ intensity, mousePos, particleMode, glowColor = "120,160,255", className }: WaveCanvasProps) => {
+const WaveCanvas = ({ intensity, mousePos, particleMode, className }: WaveCanvasProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameRef = useRef(0);
   const timeRef = useRef(0);
@@ -33,111 +32,118 @@ const WaveCanvas = ({ intensity, mousePos, particleMode, glowColor = "120,160,25
       ctx.scale(dpr, dpr);
     }
 
-    ctx.clearRect(0, 0, w, h);
+    // Fade trail instead of full clear for ghosting effect
+    ctx.fillStyle = "rgba(0,0,0,0.12)";
+    ctx.fillRect(0, 0, w, h);
+
     timeRef.current += 0.016;
     const t = timeRef.current;
-    const amp = 30 + intensity * 120;
+    const amp = 25 + intensity * 150;
     const cy = h * 0.5;
-
-    // Mouse influence
     const mx = mousePos.x * w;
     const my = mousePos.y * h;
 
-    // Draw multiple wave layers
+    // Wave layers — more layers, richer look
     const layers = [
-      { freq: 0.008, speed: 1.2, alpha: 0.15, offset: 0, color: `rgba(${glowColor},` },
-      { freq: 0.012, speed: 0.8, alpha: 0.25, offset: 0.5, color: `rgba(${glowColor},` },
-      { freq: 0.006, speed: 1.6, alpha: 0.4, offset: 1.0, color: `rgba(${glowColor},` },
-      { freq: 0.015, speed: 2.0, alpha: 0.6, offset: 1.5, color: `rgba(100,80,220,` },
-      { freq: 0.01, speed: 1.0, alpha: 0.8, offset: 2.0, color: `rgba(${glowColor},` },
+      { freq: 0.005, speed: 0.6, alpha: 0.06, offset: 0, r: 80, g: 120, b: 255 },
+      { freq: 0.008, speed: 1.0, alpha: 0.1, offset: 0.5, r: 100, g: 140, b: 255 },
+      { freq: 0.012, speed: 1.4, alpha: 0.18, offset: 1.0, r: 120, g: 160, b: 255 },
+      { freq: 0.006, speed: 1.8, alpha: 0.25, offset: 1.5, r: 140, g: 100, b: 240 },
+      { freq: 0.015, speed: 2.2, alpha: 0.35, offset: 2.0, r: 100, g: 160, b: 255 },
+      { freq: 0.01, speed: 0.9, alpha: 0.45, offset: 2.5, r: 130, g: 80, b: 220 },
+      { freq: 0.02, speed: 2.8, alpha: 0.15, offset: 3.0, r: 160, g: 120, b: 255 },
     ];
 
     for (const layer of layers) {
       ctx.beginPath();
-      ctx.lineWidth = 1 + intensity * 2;
+      ctx.lineWidth = 0.8 + intensity * 2.5;
 
       for (let x = 0; x < w; x += 2) {
-        const nx = x / w;
-        // Mouse proximity influence
         const dx = (mx - x) / w;
         const dy = (my - cy) / h;
         const mouseDist = Math.sqrt(dx * dx + dy * dy);
-        const mouseInfluence = Math.max(0, 1 - mouseDist * 3) * 40 * intensity;
+        const mouseInfluence = Math.max(0, 1 - mouseDist * 2.5) * 50 * intensity;
 
-        // Multiple harmonics
         const wave1 = Math.sin(x * layer.freq + t * layer.speed + layer.offset) * amp;
-        const wave2 = Math.sin(x * layer.freq * 2.3 + t * layer.speed * 0.7 + layer.offset) * amp * 0.4;
-        const wave3 = Math.sin(x * layer.freq * 0.5 + t * layer.speed * 1.3) * amp * 0.2;
+        const wave2 = Math.sin(x * layer.freq * 2.1 + t * layer.speed * 0.7 + layer.offset) * amp * 0.35;
+        const wave3 = Math.sin(x * layer.freq * 0.4 + t * layer.speed * 1.5) * amp * 0.2;
+        const noise = Math.sin(x * 0.04 + t * 2.5) * Math.sin(x * 0.015 + t * 0.8) * amp * 0.18 * intensity;
 
-        // Noise-like variation
-        const noise = Math.sin(x * 0.05 + t * 3) * Math.sin(x * 0.02 + t) * amp * 0.15 * intensity;
+        const y = cy + wave1 + wave2 + wave3 + noise + mouseInfluence * Math.sin(t * 2.5);
 
-        const y = cy + wave1 + wave2 + wave3 + noise + mouseInfluence * Math.sin(t * 2);
-
-        if (x === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
+        if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
       }
 
-      // Glow effect via shadow
-      ctx.shadowColor = `rgba(${glowColor},${layer.alpha})`;
-      ctx.shadowBlur = 15 + intensity * 30;
-      ctx.strokeStyle = `${layer.color}${layer.alpha})`;
+      const { r, g, b, alpha } = layer;
+      ctx.shadowColor = `rgba(${r},${g},${b},${alpha})`;
+      ctx.shadowBlur = 12 + intensity * 35;
+      ctx.strokeStyle = `rgba(${r},${g},${b},${alpha})`;
       ctx.stroke();
       ctx.shadowBlur = 0;
     }
 
-    // Central bright line
+    // Central bright line — the core
     ctx.beginPath();
-    ctx.lineWidth = 2 + intensity * 3;
+    ctx.lineWidth = 1.5 + intensity * 4;
     for (let x = 0; x < w; x += 1) {
       const wave = Math.sin(x * 0.01 + t * 1.0) * amp
-        + Math.sin(x * 0.023 + t * 0.7 + 2.0) * amp * 0.4;
+        + Math.sin(x * 0.023 + t * 0.7 + 2.0) * amp * 0.4
+        + Math.sin(x * 0.003 + t * 0.3) * amp * 0.15;
       const y = cy + wave;
       if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
     }
-    ctx.shadowColor = `rgba(${glowColor},0.9)`;
-    ctx.shadowBlur = 25 + intensity * 40;
-    ctx.strokeStyle = `rgba(${glowColor},0.9)`;
+    ctx.shadowColor = "rgba(120,180,255,0.95)";
+    ctx.shadowBlur = 30 + intensity * 50;
+    ctx.strokeStyle = "rgba(140,190,255,0.95)";
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // Particles emerging from wave
-    if (particleMode && Math.random() < intensity * 0.8) {
-      const spawnX = Math.random() * w;
-      const spawnWave = Math.sin(spawnX * 0.01 + t) * amp + Math.sin(spawnX * 0.023 + t * 0.7 + 2) * amp * 0.4;
-      particlesRef.current.push({
-        x: spawnX,
-        y: cy + spawnWave,
-        vx: (Math.random() - 0.5) * 2,
-        vy: -1 - Math.random() * 3 * intensity,
-        life: 0,
-        maxLife: 40 + Math.random() * 60,
-        size: 1 + Math.random() * 3,
-        hue: 220 + Math.random() * 60,
-      });
+    // Particles — denser and more varied
+    if (particleMode) {
+      const spawnRate = intensity * 1.5;
+      const spawnCount = Math.floor(spawnRate) + (Math.random() < (spawnRate % 1) ? 1 : 0);
+      for (let s = 0; s < spawnCount; s++) {
+        const spawnX = Math.random() * w;
+        const spawnWave = Math.sin(spawnX * 0.01 + t) * amp + Math.sin(spawnX * 0.023 + t * 0.7 + 2) * amp * 0.4;
+        particlesRef.current.push({
+          x: spawnX,
+          y: cy + spawnWave,
+          vx: (Math.random() - 0.5) * 3,
+          vy: -1.5 - Math.random() * 4 * intensity,
+          life: 0,
+          maxLife: 30 + Math.random() * 70,
+          size: 0.8 + Math.random() * 3.5,
+          hue: 210 + Math.random() * 70,
+        });
+      }
     }
 
-    // Update & draw particles
+    // Cap particles
+    if (particlesRef.current.length > 300) {
+      particlesRef.current = particlesRef.current.slice(-300);
+    }
+
     particlesRef.current = particlesRef.current.filter(p => {
       p.x += p.vx;
       p.y += p.vy;
-      p.vy *= 0.98;
+      p.vy *= 0.97;
+      p.vx *= 0.99;
       p.life++;
       const progress = p.life / p.maxLife;
       if (progress >= 1) return false;
-      const alpha = 1 - progress;
+      const alpha = (1 - progress) * (1 - progress);
       ctx.beginPath();
-      ctx.fillStyle = `hsla(${p.hue}, 80%, 65%, ${alpha * 0.8})`;
-      ctx.shadowColor = `hsla(${p.hue}, 80%, 65%, ${alpha * 0.5})`;
-      ctx.shadowBlur = 8;
-      ctx.arc(p.x, p.y, p.size * (1 - progress * 0.5), 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, 85%, 70%, ${alpha * 0.7})`;
+      ctx.shadowColor = `hsla(${p.hue}, 85%, 70%, ${alpha * 0.4})`;
+      ctx.shadowBlur = 10;
+      ctx.arc(p.x, p.y, p.size * (1 - progress * 0.4), 0, Math.PI * 2);
       ctx.fill();
       ctx.shadowBlur = 0;
       return true;
     });
 
     frameRef.current = requestAnimationFrame(draw);
-  }, [intensity, mousePos, particleMode, glowColor]);
+  }, [intensity, mousePos, particleMode]);
 
   useEffect(() => {
     frameRef.current = requestAnimationFrame(draw);
