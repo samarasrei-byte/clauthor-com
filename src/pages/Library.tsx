@@ -101,6 +101,12 @@ const LibraryPage = () => {
       return;
     }
 
+    // Admin bypass - direct access without payment
+    if (isAdmin) {
+      navigate("/dashboard");
+      return;
+    }
+
     const priceTier = agentPriceTiers[slug] || "entry";
     const region = getRegion(lang);
     const price = getPrice(lang, priceTier);
