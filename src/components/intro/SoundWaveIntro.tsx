@@ -239,61 +239,8 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
             transition={{ duration: 2.5, ease: [0.16, 1, 0.3, 1] }}
             className="absolute top-[3%] md:top-[2%] left-1/2 -translate-x-1/2 z-20 flex flex-col items-center"
           >
-            <div className="relative">
-              {/* Outer energy rings */}
-              <motion.div
-                animate={{ scale: [1, 1.4, 1], opacity: [0.2, 0, 0.2] }}
-                transition={{ duration: 4, repeat: Infinity }}
-                className="absolute inset-0 -m-12 rounded-full border border-blue-500/20 z-0"
-              />
-              <motion.div
-                animate={{ scale: [1, 1.6, 1], opacity: [0.15, 0, 0.15] }}
-                transition={{ duration: 5, repeat: Infinity, delay: 0.7 }}
-                className="absolute inset-0 -m-20 rounded-full border border-purple-500/15 z-0"
-              />
-              <motion.div
-                animate={{ rotateZ: 360 }}
-                transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
-                className="absolute inset-0 -m-16 rounded-full border border-dashed border-blue-400/10 z-0"
-              />
-
-              {/* Core glow */}
-              <div className="absolute inset-0 -m-10 rounded-full bg-blue-500 opacity-15 blur-[60px] animate-pulse" />
-
-              {/* Avatar image */}
-              <div className="relative">
-                <img
-                  src={thorHologram}
-                  alt="Thor — CEO da Clauthor"
-                  className="w-48 h-auto md:w-64 relative z-10"
-                  width={1024}
-                  height={1024}
-                  style={{
-                    filter: "drop-shadow(0 0 30px hsla(220,80%,60%,0.6)) drop-shadow(0 0 60px hsla(260,60%,50%,0.3))",
-                    mixBlendMode: "screen",
-                  }}
-                />
-                {/* Scan lines */}
-                <div
-                  className="absolute inset-0 z-20 pointer-events-none opacity-[0.07]"
-                  style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(100,180,255,0.15) 2px, rgba(100,180,255,0.15) 4px)" }}
-                />
-                {/* Glitch slice effect */}
-                {glitchActive && (
-                  <motion.div
-                    animate={{ x: [-3, 5, -2, 0], opacity: [0.7, 0.3, 0.8, 0] }}
-                    transition={{ duration: 0.4 }}
-                    className="absolute inset-0 z-30 overflow-hidden pointer-events-none"
-                  >
-                    <img
-                      src={thorHologram}
-                      alt=""
-                      className="w-48 h-auto md:w-64"
-                      style={{ filter: "hue-rotate(90deg)", clipPath: "inset(30% 0 40% 0)", mixBlendMode: "screen" }}
-                    />
-                  </motion.div>
-                )}
-              </div>
+            <div className="relative w-56 h-56 md:w-72 md:h-72">
+              <NeuralCore isSpeaking={showSpeech} size={288} />
             </div>
           </motion.div>
         )}
