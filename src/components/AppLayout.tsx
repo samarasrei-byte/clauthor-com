@@ -20,10 +20,16 @@ const AppLayout = () => {
   const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname);
   const isHomePage = location.pathname === "/";
 
-  // Show cinematic intro only on first visit to home page
+  // Show cinematic intro only for first-time, non-logged-in visitors
   const hasSeenIntro = localStorage.getItem("clauthor_intro_seen") === "true";
-  const [showIntro, setShowIntro] = useState(isHomePage && !hasSeenIntro);
+  const [showIntro, setShowIntro] = useState(false);
 
+  useEffect(() => {
+    if (!isHomePage || hasSeenIntro) return;
+    supabase.auth.getSession().then(({ data }) => {
+      if (!data.session) setShowIntro(true);
+    });
+  }, []);
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Cinematic intro overlay */}
