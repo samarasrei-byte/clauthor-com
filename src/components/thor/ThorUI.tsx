@@ -602,7 +602,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
     );
   }
 
-  /* ══ ACTIVE — DESKTOP: Fixed bottom-right widget (max 380x500px, non-blocking) ══ */
+  /* ══ ACTIVE — DESKTOP: Premium floating command widget ══ */
   const widgetOrbSize = 80;
 
   return (
@@ -610,7 +610,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
       {demoModal}
     <motion.div
       className="fixed bottom-6 right-4 sm:right-6 z-[9999] flex flex-col items-end gap-3 pointer-events-none"
-      style={{ maxWidth: 380 }}
+      style={{ maxWidth: 400 }}
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ type: "spring", damping: 20 }}
@@ -623,94 +623,146 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
             transition={{ type: "spring", damping: 20 }}
-            className="pointer-events-auto w-[380px]"
-            style={{ maxHeight: 500 }}
+            className="pointer-events-auto w-[400px]"
+            style={{ maxHeight: 540 }}
           >
-            <div className="bg-background/95 backdrop-blur-2xl border border-accent-violet/10 rounded-2xl overflow-hidden shadow-2xl shadow-accent-violet/10 flex flex-col" style={{ maxHeight: 500 }}>
-              {/* Header */}
-              <div className="px-4 py-2.5 border-b border-accent-violet/5 flex items-center justify-between shrink-0">
-                <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-full overflow-hidden border border-accent-violet/15">
-                    <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
-                  </div>
-                  <div>
-                    <div className="flex items-center gap-1.5">
-                      <motion.span className="w-1.5 h-1.5 rounded-full bg-emerald-500"
-                        animate={{ scale: [1, 1.3, 1] }} transition={{ duration: 2, repeat: Infinity }}
-                      />
-                      <span className="text-[9px] font-mono font-bold tracking-[0.3em] uppercase text-foreground/90">THOR</span>
-                      <span className="text-[7px] font-mono text-accent-violet/40 tracking-wider">AI CEO</span>
+            {/* Outer glow border */}
+            <div className="relative rounded-[20px] p-[1px]">
+              {/* Animated gradient border */}
+              <motion.div
+                className="absolute inset-0 rounded-[20px] overflow-hidden"
+                style={{ padding: "1px" }}
+              >
+                <motion.div
+                  className="absolute inset-[-50%] w-[200%] h-[200%]"
+                  style={{
+                    background: "conic-gradient(from 0deg, transparent 40%, hsl(var(--accent-violet) / 0.6), hsl(var(--accent-cyan) / 0.4), transparent 65%)",
+                  }}
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                />
+              </motion.div>
+
+              {/* Main container */}
+              <div className="relative bg-background/[0.97] backdrop-blur-3xl rounded-[20px] overflow-hidden flex flex-col shadow-[0_0_60px_-10px_hsl(var(--accent-violet)/0.25),0_25px_50px_-12px_hsl(0_0%_0%/0.5)]" style={{ maxHeight: 538 }}>
+
+                {/* Ambient glow effect at top */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-24 rounded-full opacity-[0.07]"
+                  style={{ background: "radial-gradient(ellipse, hsl(var(--accent-violet)), transparent)" }}
+                />
+
+                {/* Header — Premium tier */}
+                <div className="relative px-4 py-3 border-b border-accent-violet/[0.06] shrink-0">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      {/* Avatar with ring */}
+                      <div className="relative">
+                        <motion.div
+                          className="absolute inset-[-2px] rounded-full"
+                          style={{ background: "conic-gradient(from 0deg, hsl(var(--accent-violet) / 0.5), hsl(var(--accent-cyan) / 0.3), hsl(var(--accent-violet) / 0.5))" }}
+                          animate={isSpeaking ? { rotate: 360 } : {}}
+                          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                        />
+                        <div className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-background">
+                          <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                        </div>
+                        {/* Status indicator */}
+                        <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-background z-10 flex items-center justify-center">
+                          <span className="w-full h-full rounded-full bg-emerald-500" />
+                          <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-40" />
+                        </span>
+                      </div>
+
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-semibold tracking-wide text-foreground">THOR</span>
+                          <span className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-accent-violet/10 text-accent-violet/70 tracking-widest uppercase border border-accent-violet/[0.06]">AI CEO</span>
+                        </div>
+                        {visitorName ? (
+                          <span className="text-[9px] text-muted-foreground/60 font-mono">
+                            {lang.startsWith("pt") ? `Falando com ${visitorName}` : `Talking to ${visitorName}`}
+                          </span>
+                        ) : (
+                          <span className="text-[9px] text-emerald-500/70 font-mono flex items-center gap-1">
+                            <span className="w-1 h-1 rounded-full bg-emerald-500 inline-block" />
+                            Online
+                          </span>
+                        )}
+                      </div>
                     </div>
-                    {visitorName && (
-                      <span className="text-[8px] font-mono text-accent-violet/50">
-                        {lang.startsWith("pt") ? `Falando com ${visitorName}` : `Talking to ${visitorName}`}
-                      </span>
-                    )}
+
+                    <div className="flex items-center gap-0.5">
+                      <button onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
+                        className={`p-2 rounded-lg transition-all ${voiceEnabled ? "bg-accent-violet/10 text-accent-violet" : "hover:bg-muted/20 text-muted-foreground/40 hover:text-muted-foreground/60"}`}
+                      >
+                        {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
+                      </button>
+                      <button onClick={minimize}
+                        className="p-2 rounded-lg hover:bg-muted/20 text-muted-foreground/40 hover:text-muted-foreground/60 transition-all"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1">
-                  <button onClick={() => { setVoiceEnabled(!voiceEnabled); if (voiceEnabled) stopTTS(); }}
-                    className="p-1.5 rounded-full hover:bg-muted/20 text-accent-violet/50 hover:text-accent-violet transition-all"
-                  >
-                    {voiceEnabled ? <Volume2 className="w-3.5 h-3.5" /> : <VolumeX className="w-3.5 h-3.5" />}
-                  </button>
-                  <button onClick={minimize}
-                    className="p-1.5 rounded-full hover:bg-muted/20 text-accent-violet/50 hover:text-accent-violet transition-all"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-              </div>
 
-              {/* Messages */}
-              <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ maxHeight: 340 }}>
-                <MessageList messages={messages} isLoading={isLoading} messagesEndRef={messagesEndRef} />
-              </div>
-
-              {/* Quick actions — first interaction */}
-              {messages.length <= 1 && !isLoading && messages.some(m => m.role === "assistant") && (
-                <div className="px-3 pb-1">
-                  <QuickActions lang={lang} sendMessage={sendMessage} mobile />
+                {/* Messages area */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-3" style={{ maxHeight: 340 }}>
+                  <MessageList messages={messages} isLoading={isLoading} messagesEndRef={messagesEndRef} />
                 </div>
-              )}
 
-              {/* Speaking indicator + replay button */}
-              {isSpeaking ? (
-                <div className="flex items-center gap-[2px] h-4 justify-center px-3 pb-1">
-                  {Array.from({ length: 24 }).map((_, i) => (
-                    <motion.div key={i} className="w-[1.5px] rounded-full bg-accent-violet/50"
-                      animate={{ height: [1, Math.random() * 8 + 3, 1] }}
-                      transition={{ duration: 0.25 + Math.random() * 0.3, repeat: Infinity, delay: i * 0.02 }}
-                    />
-                  ))}
-                  <button onClick={stopTTS} className="ml-2 p-1 rounded-full hover:bg-muted/20 transition-all">
-                    <VolumeX className="w-3 h-3 text-accent-violet/60" />
-                  </button>
-                </div>
-              ) : (
-                lastAssistantContent && !isLoading && (
-                  <div className="flex items-center justify-center px-3 pb-1">
-                    <button onClick={replayLastMessage}
-                      className="flex items-center gap-1 text-[8px] font-mono text-accent-violet/40 hover:text-accent-violet/70 transition-all"
-                    >
-                      <Play className="w-2.5 h-2.5" />
-                      {lang.startsWith("pt") ? "Ouvir resposta" : "Listen"}
-                    </button>
+                {/* Quick actions */}
+                {messages.length <= 1 && !isLoading && messages.some(m => m.role === "assistant") && (
+                  <div className="px-4 pb-2">
+                    <QuickActions lang={lang} sendMessage={sendMessage} mobile />
                   </div>
-                )
-              )}
-
-              {/* Input + forget */}
-              <div className="p-3 border-t border-accent-violet/5 shrink-0">
-                <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} onVoiceSubmit={(text) => sendMessage(text)} lang={lang} />
-                {messages.length > 2 && (
-                  <button
-                    onClick={forgetMemory}
-                    className="mt-1.5 w-full text-[8px] font-mono text-muted-foreground/40 hover:text-destructive/60 transition-colors"
-                  >
-                    🔒 {lang.startsWith("pt") ? "Esqueça minhas informações" : "Forget my information"}
-                  </button>
                 )}
+
+                {/* Speaking visualizer */}
+                {isSpeaking ? (
+                  <div className="flex items-center gap-[2px] h-5 justify-center px-4 pb-2">
+                    <div className="flex items-center gap-[1.5px] bg-accent-violet/[0.06] rounded-full px-3 py-1.5">
+                      {Array.from({ length: 28 }).map((_, i) => (
+                        <motion.div key={i} className="w-[1.5px] rounded-full bg-accent-violet/60"
+                          animate={{ height: [1, Math.random() * 10 + 3, 1] }}
+                          transition={{ duration: 0.2 + Math.random() * 0.25, repeat: Infinity, delay: i * 0.015 }}
+                        />
+                      ))}
+                      <button onClick={stopTTS} className="ml-2 p-0.5 rounded-full hover:bg-muted/20 transition-all">
+                        <VolumeX className="w-3 h-3 text-accent-violet/60" />
+                      </button>
+                    </div>
+                  </div>
+                ) : (
+                  lastAssistantContent && !isLoading && (
+                    <div className="flex items-center justify-center px-4 pb-1">
+                      <button onClick={replayLastMessage}
+                        className="flex items-center gap-1 text-[8px] font-mono text-accent-violet/40 hover:text-accent-violet/70 transition-all px-2 py-1 rounded-full hover:bg-accent-violet/[0.04]"
+                      >
+                        <Play className="w-2.5 h-2.5" />
+                        {lang.startsWith("pt") ? "Ouvir resposta" : "Listen"}
+                      </button>
+                    </div>
+                  )
+                )}
+
+                {/* Input area */}
+                <div className="p-3 border-t border-accent-violet/[0.06] shrink-0 bg-muted/[0.02]">
+                  <ChatInput input={input} setInput={setInput} isLoading={isLoading} onSubmit={() => sendMessage()} onVoiceSubmit={(text) => sendMessage(text)} lang={lang} rounded />
+                  {messages.length > 2 && (
+                    <button
+                      onClick={forgetMemory}
+                      className="mt-2 w-full text-[8px] font-mono text-muted-foreground/30 hover:text-destructive/60 transition-colors"
+                    >
+                      🔒 {lang.startsWith("pt") ? "Esqueça minhas informações" : "Forget my information"}
+                    </button>
+                  )}
+                </div>
+
+                {/* Powered by badge */}
+                <div className="flex items-center justify-center pb-2.5 pt-0.5">
+                  <span className="text-[7px] font-mono tracking-[0.25em] uppercase text-muted-foreground/20">Powered by Clauthor Neural Engine</span>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -727,7 +779,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
             animate={{ opacity: 1, x: 0 }}
             onClick={() => setShowChat(true)}
           >
-            <div className="bg-background/90 backdrop-blur-xl border border-accent-violet/10 rounded-xl rounded-br-sm px-3 py-2 shadow-lg shadow-accent-violet/5">
+            <div className="bg-background/90 backdrop-blur-xl border border-accent-violet/10 rounded-2xl rounded-br-sm px-3.5 py-2.5 shadow-[0_8px_30px_-8px_hsl(var(--accent-violet)/0.15)]">
               <p className="text-[10px] text-foreground/80 leading-snug font-mono line-clamp-2">
                 {lastMessage.content.replace(/[*#]/g, "").slice(0, 120)}
                 {lastMessage.content.length > 120 && "..."}
@@ -740,7 +792,6 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
         <div className="relative cursor-pointer" onClick={() => setShowChat(!showChat)}>
           <div className="relative" style={{ width: widgetOrbSize, height: widgetOrbSize }}>
             <NeuralCore isSpeaking={isSpeaking} size={widgetOrbSize} lite />
-            {/* Pulsing ring when speaking */}
             {isSpeaking && (
               <motion.div className="absolute inset-[-4px] rounded-full border-2 border-accent-violet/40"
                 animate={{ scale: [1, 1.15, 1], opacity: [0.6, 0, 0.6] }}
