@@ -25,13 +25,7 @@ const AppLayout = () => {
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Cinematic intro overlay */}
-      <AnimatePresence>
-        {showIntro && (
-          <Suspense fallback={null}>
-            <SoundWaveIntro onComplete={() => setShowIntro(false)} />
-          </Suspense>
-        )}
-      </AnimatePresence>
+      {/* Intro desativada temporariamente */}
       <Navbar />
       <main className="pt-16">
         <Outlet />
