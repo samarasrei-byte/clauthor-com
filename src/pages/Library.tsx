@@ -304,137 +304,34 @@ const LibraryPage = () => {
 
                   {/* Agent Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 pl-2">
-                    {squad.agents.map((agent, agentIdx) => {
+                    {squad.agents.map((agent) => {
                       const Icon = agentIcons[agent.slug] || getDefaultIcon(agent.slug);
                       const tier = agentTiers[agent.slug] || "intermediate";
                       const priceTier = agentPriceTiers[agent.slug] || "entry";
-                      const priceDisplay = getPriceDisplay(lang, priceTier);
                       const social = agentSocialProof[agent.slug] || { companies: 100, rating: 4.7, savings: "R$ 15k" };
                       const capabilities = agentCapabilities[agent.slug] || agent.responsibilities.slice(0, 3);
-                      const integrations = agentIntegrations[agent.slug] || [];
                       const isHiring = hiringSlug === agent.slug;
 
                       return (
-                        <motion.div
+                        <AgentCardExpanded
                           key={agent.slug}
-                          initial={{ opacity: 0, y: 8 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: agentIdx * 0.02 }}
-                        >
-                          <div className="group relative h-full flex flex-col rounded-xl overflow-hidden ring-1 ring-border/40 hover:ring-primary/30 bg-card/20 hover:bg-card/50 transition-all duration-300 hover:translate-y-[-2px] hover:shadow-lg hover:shadow-primary/5">
-                            <div className="p-4 flex flex-col flex-1">
-                              {/* Agent header */}
-                              <div className="flex items-start gap-3 mb-3">
-                                <div className={`w-10 h-10 rounded-xl ${colors.bg} border ${colors.border}/50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300`}>
-                                  <Icon className={`h-5 w-5 ${colors.text}`} strokeWidth={1.5} />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <h4 className="font-semibold text-[13px] leading-tight mb-0.5 truncate">{agent.name}</h4>
-                                  <div className="flex items-center gap-1.5">
-                                    <Badge variant="outline" className={`text-[9px] px-1.5 py-0 h-4 ${tierColors[tier] || ''}`}>
-                                      {tier}
-                                    </Badge>
-                                    <span className="flex items-center gap-0.5">
-                                      <Star className="h-2.5 w-2.5 fill-primary/40 text-primary/40" />
-                                      <span className="text-[10px] text-muted-foreground/50">{social.rating}</span>
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* Animated task counter — visible on hover */}
-                              <div className="h-0 group-hover:h-7 overflow-hidden transition-all duration-300 mb-0 group-hover:mb-2">
-                                <div className="flex items-center gap-1.5 px-2 py-1 rounded-md bg-accent-emerald/5 border border-accent-emerald/10">
-                                  <span className="relative flex h-1.5 w-1.5">
-                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-emerald opacity-75" />
-                                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent-emerald" />
-                                  </span>
-                                  <span className="text-[9px] font-mono text-accent-emerald/80">
-                                    Executou {(1000 + Math.floor(Math.random() * 2000)).toLocaleString()} tarefas hoje
-                                  </span>
-                                </div>
-                              </div>
-
-                              {/* Responsibilities as capabilities */}
-                              <div className="flex flex-wrap gap-1 mb-3">
-                                {capabilities.slice(0, 3).map((cap: string, capIdx: number) => (
-                                  <span key={capIdx} className="text-[9px] px-2 py-0.5 rounded-md bg-muted/20 ring-1 ring-border/20 text-foreground/60 font-medium flex items-center gap-1">
-                                    <span className={`w-1 h-1 rounded-full shrink-0 ${
-                                      capIdx % 3 === 0 ? 'bg-emerald-400' : capIdx % 3 === 1 ? 'bg-accent-blue' : 'bg-primary/70'
-                                    }`} />
-                                    {cap}
-                                  </span>
-                                ))}
-                              </div>
-
-                              {/* Triggers */}
-                              <div className="flex items-center gap-1 mb-3">
-                                <Zap className="h-2.5 w-2.5 text-muted-foreground/30 shrink-0" />
-                                <span className="text-[9px] text-muted-foreground/40 truncate">
-                                  {agent.triggers.slice(0, 3).join(" · ")}
-                                </span>
-                              </div>
-
-                              <div className="flex-1" />
-
-                              {/* Price + Actions */}
-                              <div className="pt-3 mt-auto border-t border-border/20">
-                                <div className="flex items-center justify-between gap-2">
-                                  <div>
-                                    <span className="font-bold text-sm">{priceDisplay}</span>
-                                    <span className="text-[9px] text-muted-foreground/40 ml-1">/mês</span>
-                                  </div>
-                                  <div className="flex gap-1.5">
-                                    <Button
-                                      variant="ghost"
-                                      size="sm"
-                                      className="h-7 px-2 rounded-lg text-[9px] gap-1 opacity-0 group-hover:opacity-100 transition-opacity"
-                                      onClick={(e) => {
-                                        e.stopPropagation();
-                                        setPreviewAgent({ name: agent.name, desc: agent.responsibilities[0] || "" });
-                                      }}
-                                    >
-                                      <Eye className="h-3 w-3" />
-                                      Ver em ação
-                                    </Button>
-                                    <Link to={`/agente/${agent.slug}`}>
-                                      <Button variant="ghost" size="sm" className="h-7 w-7 p-0 rounded-lg">
-                                        <Eye className="h-3.5 w-3.5 text-muted-foreground/50" />
-                                      </Button>
-                                    </Link>
-                                    {isAdmin ? (
-                                      <Button
-                                        size="sm"
-                                        className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1 bg-emerald-600 hover:bg-emerald-700"
-                                        onClick={() => navigate(`/agente/${agent.slug}`)}
-                                      >
-                                        <Zap className="h-3 w-3" />
-                                        Acessar
-                                      </Button>
-                                    ) : (
-                                      <Button
-                                        size="sm"
-                                        className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1"
-                                        disabled={isHiring}
-                                        onClick={() => handleHire(agent.slug, agent.name)}
-                                      >
-                                        {isHiring ? (
-                                          <Loader2 className="h-3 w-3 animate-spin" />
-                                        ) : (
-                                          <>
-                                            <Zap className="h-3 w-3" />
-                                            Contratar
-                                          </>
-                                        )}
-                                      </Button>
-                                    )}
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        </motion.div>
+                          slug={agent.slug}
+                          name={agent.name}
+                          icon={Icon}
+                          tier={tier}
+                          priceTier={priceTier}
+                          capabilities={capabilities}
+                          triggers={agent.triggers}
+                          social={social}
+                          colors={colors}
+                          lang={lang}
+                          isAdmin={isAdmin}
+                          isHiring={isHiring}
+                          onHire={() => handleHire(agent.slug, agent.name)}
+                          onPreview={() => setPreviewAgent({ name: agent.name, desc: agent.responsibilities[0] || "" })}
+                          onNavigate={() => navigate(`/agente/${agent.slug}`)}
+                          tierColor={tierColors[tier] || ""}
+                        />
                       );
                     })}
                   </div>
