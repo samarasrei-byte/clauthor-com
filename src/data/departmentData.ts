@@ -75,9 +75,9 @@ export const departments: Department[] = [
   },
   {
     id: "marketing", icon: Megaphone, color: "text-primary",
-    gradient: "from-primary/20 to-primary/5",
-    borderActive: "border-primary/40",
-    iconBg: "bg-primary/20",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "8.5M", actions: "11.000",
     agents: [
       { key: "content", icon: Sparkles, role: "Copywriter Sênior", tokens: "2M" },
