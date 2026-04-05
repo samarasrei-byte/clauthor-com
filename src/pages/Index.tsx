@@ -397,45 +397,36 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ TRUST ═══════════ */}
-      <section className="py-12 sm:py-16 px-4" aria-label="Trust">
-        <div className="max-w-3xl mx-auto">
-          <div className="rounded-xl border border-border bg-card p-6 sm:p-10 text-center shadow-sm">
-            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-4">
-              <ShieldCheck className="h-6 w-6 text-primary" strokeWidth={1.5} />
-            </div>
-            <h3 className="text-xl sm:text-2xl font-bold mb-2">{t("home.trust_section_title")}</h3>
-            <p className="text-[14px] text-muted-foreground leading-relaxed max-w-lg mx-auto mb-6">
-              {t("home.trust_section_desc")}
-            </p>
-            <div className="flex flex-wrap justify-center gap-6">
-              {[
-                { icon: LockKeyhole, text: t("home.trust_encrypted") },
-                { icon: Bolt, text: t("home.trust_cancel") },
-                { icon: Headphones, text: t("home.trust_support") },
-              ].map((g) => (
-                <div key={g.text} className="flex items-center gap-1.5">
-                  <g.icon className="h-3.5 w-3.5 text-primary/60" strokeWidth={1.5} />
-                  <span className="text-[12px] font-medium text-muted-foreground">{g.text}</span>
-                </div>
-              ))}
-            </div>
+      <section className="py-16 sm:py-20 px-5" aria-label="Trust">
+        <div className="max-w-2xl mx-auto text-center">
+          <h3 className="text-xl sm:text-2xl font-semibold tracking-tight mb-3">{t("home.trust_section_title")}</h3>
+          <p className="text-[14px] text-muted-foreground leading-relaxed max-w-md mx-auto mb-6">
+            {t("home.trust_section_desc")}
+          </p>
+          <div className="flex flex-wrap justify-center gap-6">
+            {[
+              { text: t("home.trust_encrypted") },
+              { text: t("home.trust_cancel") },
+              { text: t("home.trust_support") },
+            ].map((g) => (
+              <span key={g.text} className="text-[12px] text-muted-foreground">{g.text}</span>
+            ))}
           </div>
         </div>
       </section>
 
       {/* ═══════════ TEAM ═══════════ */}
-      <section className="py-16 sm:py-20 px-4" aria-label="Team">
-        <div className="max-w-[1200px] mx-auto">
+      <section className="py-16 sm:py-24 px-5" aria-label="Team">
+        <div className="max-w-[1120px] mx-auto">
           <div className="text-center mb-12">
-            <p className="text-[12px] font-semibold text-primary uppercase tracking-wider mb-2">{t("home.section_team")}</p>
-            <h2 className="text-2xl sm:text-3xl font-bold">{t("home.team_title")}</h2>
-            <p className="text-[14px] text-muted-foreground mt-2 max-w-2xl mx-auto">{t("home.team_subtitle")}</p>
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">{t("home.team_title")}</h2>
+            <p className="text-[15px] text-muted-foreground mt-3 max-w-lg mx-auto">{t("home.team_subtitle")}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-2xl mx-auto">
             {[
-              { name: "THOR", role: t("home.thor_role"), photo: thorPhoto, bio: t("home.thor_bio"), isAI: true },
-              { name: "HELIXA AI", role: t("home.helixa_role"), photo: helixaPhoto, bio: t("home.helixa_bio"), isAI: true },
+              { name: "THOR", role: t("home.thor_role"), photo: thorPhoto, bio: t("home.thor_bio") },
+              { name: "HELIXA AI", role: t("home.helixa_role"), photo: helixaPhoto, bio: t("home.helixa_bio") },
             ].map((member, i) => (
               <motion.div
                 key={member.name}
@@ -443,7 +434,7 @@ const HomePage = () => {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="group relative rounded-xl border border-border bg-card overflow-hidden hover:shadow-md transition-all"
+                className="group relative rounded-2xl overflow-hidden"
               >
                 <div className="aspect-[3/4] overflow-hidden">
                   <img
@@ -452,21 +443,14 @@ const HomePage = () => {
                     loading="lazy"
                     width={400}
                     height={533}
-                    className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-500"
+                    className="w-full h-full object-cover object-top group-hover:scale-[1.02] transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8">
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-                    </span>
-                    {member.isAI && <span className="text-[9px] font-semibold px-1.5 py-0.5 rounded bg-primary/10 text-primary">AI</span>}
-                    <span className="text-[11px] font-medium text-muted-foreground uppercase tracking-wider">{member.role}</span>
-                  </div>
-                  <h3 className="text-lg sm:text-2xl font-bold mb-1">{member.name}</h3>
-                  <p className="text-[13px] text-muted-foreground leading-relaxed line-clamp-3">{member.bio}</p>
+                <div className="absolute bottom-0 left-0 right-0 p-6">
+                  <p className="text-[11px] text-white/60 uppercase tracking-wider mb-1">{member.role}</p>
+                  <h3 className="text-lg font-semibold text-white mb-1">{member.name}</h3>
+                  <p className="text-[13px] text-white/70 leading-relaxed line-clamp-2">{member.bio}</p>
                 </div>
               </motion.div>
             ))}
@@ -475,57 +459,39 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ PRICING ═══════════ */}
-      <section className="py-12 sm:py-16 px-4 border-y border-border" aria-label="Pricing">
-        <div className="max-w-3xl mx-auto text-center">
+      <section className="py-16 sm:py-24 px-5" aria-label="Pricing">
+        <div className="max-w-2xl mx-auto text-center">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-            <p className="text-[12px] font-semibold text-primary uppercase tracking-wider mb-2">{t("home.section_pricing")}</p>
-            <h2 className="text-2xl sm:text-3xl font-bold mb-3">
-              {t("home.pricing_from")} <span className="text-primary">{t("home.pricing_amount")}</span> {t("home.pricing_per_agent")}
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
+              {t("home.pricing_from")} {t("home.pricing_amount")} {t("home.pricing_per_agent")}
             </h2>
-            <p className="text-[14px] text-muted-foreground max-w-lg mx-auto mb-6">
+            <p className="text-[15px] text-muted-foreground max-w-md mx-auto mb-8">
               {t("home.pricing_desc")}
             </p>
 
             {/* Value comparison */}
-            <div className="flex flex-wrap justify-center gap-4 mb-6">
-              {[
-                { label: t("home.pricing_val_human", { defaultValue: "Full-time Employee" }), value: "$5,500/mo", muted: true },
-                { label: t("home.pricing_val_agent", { defaultValue: "CLAUTHOR Agent" }), value: "$139/mo", muted: false },
-              ].map((item) => (
-                <div key={item.label} className={`px-5 py-3 rounded-xl border text-center ${item.muted ? "border-border bg-muted/30 opacity-60" : "border-primary/20 bg-primary/5"}`}>
-                  <p className="text-[11px] font-medium uppercase tracking-wider text-muted-foreground mb-0.5">{item.label}</p>
-                  <p className={`text-lg font-bold ${item.muted ? "line-through text-muted-foreground" : "text-primary"}`}>{item.value}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Tiers */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-8">
-              {[
-                { label: t("home.pricing_tier_3"), discount: t("home.pricing_off_10") },
-                { label: t("home.pricing_tier_5"), discount: t("home.pricing_off_20") },
-                { label: t("home.pricing_tier_7"), discount: t("home.pricing_off_30") },
-                { label: t("home.pricing_tier_10"), discount: t("home.pricing_off_35") },
-              ].map(tier => (
-                <div key={tier.label} className="px-3 py-2 rounded-lg border border-border bg-card text-center">
-                  <p className="text-[11px] text-muted-foreground">{tier.label}</p>
-                  <p className="text-[14px] font-bold text-primary">{tier.discount}</p>
-                </div>
-              ))}
+            <div className="flex justify-center gap-8 mb-10">
+              <div className="text-center">
+                <p className="text-[12px] text-muted-foreground mb-1">{t("home.pricing_val_human", { defaultValue: "Employee" })}</p>
+                <p className="text-lg font-medium text-muted-foreground line-through">$5,500/mo</p>
+              </div>
+              <div className="text-center">
+                <p className="text-[12px] text-muted-foreground mb-1">{t("home.pricing_val_agent", { defaultValue: "AI Agent" })}</p>
+                <p className="text-lg font-semibold text-foreground">$139/mo</p>
+              </div>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link to="/waitlist">
-                <Button size="lg" className="h-12 px-10 gap-2 text-[13px] font-semibold rounded-lg">
-                  <Rocket className="h-4 w-4" strokeWidth={1.5} />
-                  {t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
-                  <ArrowRight className="h-4 w-4" />
+                <Button size="lg" className="h-11 px-8 gap-2 text-[13px] font-medium rounded-full">
+                  {t("home.cta_waitlist", { defaultValue: "Get Started" })}
+                  <ArrowRight className="h-3.5 w-3.5" />
                 </Button>
               </Link>
               <Link to="/pricing">
-                <Button variant="outline" className="h-11 px-8 text-[13px] font-medium rounded-lg">
+                <Button variant="ghost" className="h-11 px-6 text-[13px] font-medium text-primary gap-1">
                   {t("home.cta_see_pricing")}
-                  <ChevronRight className="ml-1 h-3.5 w-3.5" />
+                  <ChevronRight className="h-3.5 w-3.5" />
                 </Button>
               </Link>
             </div>
