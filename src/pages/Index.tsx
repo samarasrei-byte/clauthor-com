@@ -293,57 +293,41 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ WHY CLAUTHOR ═══════════ */}
-      <section className="py-16 sm:py-20 px-4 border-y border-border" aria-label="Why CLAUTHOR">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-[12px] font-semibold text-primary uppercase tracking-wider mb-2">{t("home.section_differentials")}</p>
-            <h2 className="text-2xl sm:text-3xl font-bold">
-              {t("home.why_title")} <span className="text-primary">CLAUTHOR</span>
+      <section className="py-16 sm:py-24 px-5" aria-label="Why CLAUTHOR">
+        <div className="max-w-[1120px] mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
+              {t("home.why_title")}
             </h2>
-            <p className="text-[14px] text-muted-foreground mt-2 max-w-xl mx-auto">
+            <p className="text-[15px] text-muted-foreground max-w-lg mx-auto">
               {t("home.why_subtitle")}
             </p>
           </div>
 
-          {/* Hero savings card */}
-          <div className="mb-6 p-6 sm:p-8 rounded-xl border-2 border-primary/20 bg-primary/[0.03] relative">
-            <div className="absolute top-4 right-4">
-              <span className="text-[10px] font-semibold uppercase px-2 py-1 rounded-full bg-primary/10 text-primary">
-                {t("home.diff_savings_badge", { defaultValue: "MAIOR IMPACTO" })}
-              </span>
-            </div>
-            <div className="flex flex-col sm:flex-row items-start gap-5">
-              <div className="w-14 h-14 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
-                <DollarSign className="h-7 w-7 text-primary" strokeWidth={1.5} />
-              </div>
-              <div>
-                <p className="text-4xl sm:text-5xl font-bold text-primary mb-2">+88%</p>
-                <h3 className="font-bold text-lg mb-1">{t("home.diff_savings")}</h3>
-                <p className="text-[14px] text-muted-foreground leading-relaxed">{t("home.diff_savings_desc")}</p>
-              </div>
-            </div>
+          {/* Highlight metric */}
+          <div className="text-center mb-12">
+            <p className="text-5xl sm:text-6xl font-semibold tracking-tight mb-2">+88%</p>
+            <p className="text-[15px] text-muted-foreground">{t("home.diff_savings")}</p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border/50 rounded-2xl border border-border/50 overflow-hidden">
             {[
-              { icon: Fingerprint, title: t("home.diff_security"), desc: t("home.diff_security_desc") },
-              { icon: Bolt, title: t("home.diff_setup"), desc: t("home.diff_setup_desc") },
-              { icon: Workflow, title: t("home.diff_orchestration"), desc: t("home.diff_orchestration_desc") },
-              { icon: Globe, title: t("home.diff_multilang"), desc: t("home.diff_multilang_desc") },
-              { icon: Rocket, title: t("home.diff_scale"), desc: t("home.diff_scale_desc") },
+              { title: t("home.diff_security"), desc: t("home.diff_security_desc") },
+              { title: t("home.diff_setup"), desc: t("home.diff_setup_desc") },
+              { title: t("home.diff_orchestration"), desc: t("home.diff_orchestration_desc") },
+              { title: t("home.diff_multilang"), desc: t("home.diff_multilang_desc") },
+              { title: t("home.diff_scale"), desc: t("home.diff_scale_desc") },
+              { title: t("home.diff_savings"), desc: t("home.diff_savings_desc") },
             ].map((item, i) => (
               <motion.div
                 key={i}
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.06 }}
-                className="group p-5 rounded-xl border border-border bg-card hover:border-primary/20 hover:shadow-sm transition-all"
+                transition={{ delay: i * 0.05 }}
+                className="bg-background p-6"
               >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-3">
-                  <item.icon className="h-5 w-5 text-primary" strokeWidth={1.5} />
-                </div>
-                <h3 className="font-semibold text-[15px] mb-1.5 group-hover:text-primary transition-colors">{item.title}</h3>
+                <h3 className="font-medium text-[15px] mb-2">{item.title}</h3>
                 <p className="text-[13px] text-muted-foreground leading-relaxed">{item.desc}</p>
               </motion.div>
             ))}
