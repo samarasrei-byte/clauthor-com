@@ -67,7 +67,7 @@ const HomePage = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const isMobile = useIsMobile();
+  const [showSmartOnboarding0] = useState(false); // placeholder removed isMobile
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
 
   const cyclingRoles = useMemo(() => [
