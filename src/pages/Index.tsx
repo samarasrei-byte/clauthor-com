@@ -259,34 +259,31 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ HOW IT WORKS ═══════════ */}
-      <section className="py-16 sm:py-20 px-4" aria-label="How it works">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-[12px] font-semibold text-primary uppercase tracking-wider mb-2">{t("home.section_protocol")}</p>
-            <h2 className="text-2xl sm:text-3xl font-bold">
-              {t("home.how_title")} <span className="text-primary">{t("home.how_steps_count")}</span>
+      <section className="py-16 sm:py-24 px-5" aria-label="How it works">
+        <div className="max-w-2xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+              {t("home.how_title")}
             </h2>
           </div>
 
-          <div className="space-y-2">
+          <div className="space-y-6">
             {[
-              { step: "01", icon: Crosshair, title: t("home.how_step1"), desc: t("home.how_step1_desc") },
-              { step: "02", icon: Layers3, title: t("home.how_step2"), desc: t("home.how_step2_desc") },
-              { step: "03", icon: Bolt, title: t("home.how_step3"), desc: t("home.how_step3_desc") },
+              { step: "1", title: t("home.how_step1"), desc: t("home.how_step1_desc") },
+              { step: "2", title: t("home.how_step2"), desc: t("home.how_step2_desc") },
+              { step: "3", title: t("home.how_step3"), desc: t("home.how_step3_desc") },
             ].map((item, idx) => (
               <motion.div
                 key={item.step}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="flex items-start gap-4 p-5 rounded-xl border border-transparent hover:border-border hover:bg-accent/30 transition-all group"
+                className="flex items-start gap-5"
               >
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-                  <span className="text-[14px] font-bold text-primary">{item.step}</span>
-                </div>
+                <span className="text-[28px] font-light text-muted-foreground/40 leading-none mt-0.5 shrink-0">{item.step}</span>
                 <div>
-                  <h4 className="font-semibold text-[15px] mb-1 group-hover:text-primary transition-colors">{item.title}</h4>
+                  <h4 className="font-medium text-[15px] mb-1">{item.title}</h4>
                   <p className="text-[14px] text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
