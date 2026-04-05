@@ -348,27 +348,26 @@ const HomePage = () => {
       </Suspense>
 
       {/* ═══════════ TESTIMONIALS ═══════════ */}
-      <section className="py-16 sm:py-20 px-4" aria-label="Testimonials">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="text-center mb-10">
-            <p className="text-[12px] font-semibold text-primary uppercase tracking-wider mb-2">{t("home.section_cases")}</p>
-            <h2 className="text-2xl sm:text-3xl font-bold">
-              {t("home.cases_title")} <span className="text-primary">{t("home.cases_title_hl")}</span>
+      <section className="py-16 sm:py-24 px-5" aria-label="Testimonials">
+        <div className="max-w-[1120px] mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+              {t("home.cases_title")}
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {[
               {
-                initials: "RM", name: t("home.case1_name"), role: t("home.case1_role"), sector: t("home.case1_sector"),
+                initials: "RM", name: t("home.case1_name"), role: t("home.case1_role"),
                 quote: t("home.case1_quote"), metric: t("home.case1_metric"), metricLabel: t("home.case1_metric_label"),
               },
               {
-                initials: "CS", name: t("home.case2_name"), role: t("home.case2_role"), sector: t("home.case2_sector"),
+                initials: "CS", name: t("home.case2_name"), role: t("home.case2_role"),
                 quote: t("home.case2_quote"), metric: t("home.case2_metric"), metricLabel: t("home.case2_metric_label"),
               },
               {
-                initials: "LP", name: t("home.case3_name"), role: t("home.case3_role"), sector: t("home.case3_sector"),
+                initials: "LP", name: t("home.case3_name"), role: t("home.case3_role"),
                 quote: t("home.case3_quote"), metric: t("home.case3_metric"), metricLabel: t("home.case3_metric_label"),
               },
             ].map((testimonial, i) => (
@@ -378,30 +377,18 @@ const HomePage = () => {
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1 }}
-                className="rounded-xl border border-border bg-card p-5 flex flex-col"
+                className="flex flex-col"
               >
-                <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-md bg-primary/10 mb-4 w-fit">
-                  <span className="text-[13px] font-bold text-primary">{testimonial.metric}</span>
-                  <span className="text-[11px] text-primary/70">{testimonial.metricLabel}</span>
-                </div>
+                <p className="text-[22px] font-semibold tracking-tight mb-1">{testimonial.metric}</p>
+                <p className="text-[12px] text-muted-foreground mb-4">{testimonial.metricLabel}</p>
 
-                <p className="text-[14px] text-foreground/90 leading-relaxed italic mb-5 flex-1">
+                <p className="text-[14px] text-muted-foreground leading-relaxed mb-6 flex-1">
                   "{testimonial.quote}"
                 </p>
 
-                <div className="flex items-center gap-3 pt-4 border-t border-border">
-                  <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-[11px] font-bold text-primary shrink-0">
-                    {testimonial.initials}
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <p className="font-semibold text-[13px] truncate">{testimonial.name}</p>
-                    <p className="text-[11px] text-muted-foreground truncate">{testimonial.role}</p>
-                  </div>
-                  <div className="flex gap-0.5 shrink-0">
-                    {[...Array(5)].map((_, j) => (
-                      <Star key={j} className="h-3 w-3 fill-primary text-primary" />
-                    ))}
-                  </div>
+                <div className="pt-4 border-t border-border/50">
+                  <p className="text-[13px] font-medium">{testimonial.name}</p>
+                  <p className="text-[12px] text-muted-foreground">{testimonial.role}</p>
                 </div>
               </motion.div>
             ))}
