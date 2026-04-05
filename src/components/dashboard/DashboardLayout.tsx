@@ -82,6 +82,7 @@ const DashboardLayout = () => {
               </Button>
             </Link>
           )}
+          <ThemeToggle />
           <LanguageSelector />
           <Button
             variant="ghost"
