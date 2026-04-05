@@ -139,91 +139,65 @@ const HomePage = () => {
     <div className="relative overflow-x-hidden">
 
       {/* ═══════════ HERO ═══════════ */}
-      <section ref={heroRef} className="relative min-h-[65svh] sm:min-h-[70vh] flex items-center px-4 sm:px-6 pt-20 pb-12 sm:pt-24 sm:pb-16" aria-label="Hero">
-        <div className="relative z-10 max-w-[1200px] mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+      <section ref={heroRef} className="relative min-h-[70svh] sm:min-h-[75vh] flex items-center px-5 sm:px-6 pt-24 pb-16 sm:pt-32 sm:pb-20" aria-label="Hero">
+        <div className="relative z-10 max-w-[1120px] mx-auto w-full">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             {/* LEFT — Text */}
             <div className="flex-1 min-w-0 text-center lg:text-left">
-              {/* Status pill */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="flex items-center justify-center lg:justify-start mb-6"
-              >
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-muted/50 text-[12px] text-muted-foreground font-medium">
-                  <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-emerald opacity-75" />
-                    <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-accent-emerald" />
-                  </span>
-                  {t("home.system_status_full", { defaultValue: "SYSTEM ACTIVE · 200 AGENTS OPERATIONAL" })}
-                </div>
-              </motion.div>
-
               {/* Headline */}
-              <div className="mb-5">
-                <h1 className="text-[2.25rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] font-bold leading-[1.05] tracking-tight">
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                className="mb-5"
+              >
+                <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.5rem] font-semibold leading-[1.05] tracking-[-0.04em]">
                   <span className="text-foreground">{typedText}</span>
-                  <span className="inline-block w-[3px] h-[0.75em] bg-primary ml-1 align-middle" style={{ animation: "blink-cursor 0.8s step-end infinite" }} />
+                  <span className="inline-block w-[2px] h-[0.7em] bg-foreground/30 ml-1 align-middle" style={{ animation: "blink-cursor 0.8s step-end infinite" }} />
                 </h1>
-              </div>
+              </motion.div>
 
               {/* Subtitle */}
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.8 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
               >
-                <p className="text-[15px] sm:text-base text-muted-foreground max-w-lg mx-auto lg:mx-0 leading-relaxed mb-8">
+                <p className="text-[16px] sm:text-[17px] text-muted-foreground max-w-md mx-auto lg:mx-0 leading-[1.6] mb-8 font-light">
                   {t("home.subtitle")}
-                  <span className="text-foreground font-medium"> {t("home.subtitle_highlight")}</span>
+                  <span className="text-foreground font-normal"> {t("home.subtitle_highlight")}</span>
                 </p>
 
-                {/* CTAs */}
+                {/* CTAs — minimal Apple style */}
                 <div className="flex flex-col sm:flex-row items-center gap-3">
                   <Link to="/waitlist" className="block w-full sm:w-auto">
-                    <Button size="lg" className="w-full sm:w-auto h-12 px-8 text-[13px] font-semibold rounded-lg gap-2">
-                      <Rocket className="h-4 w-4" strokeWidth={1.5} />
-                      {t("home.cta_waitlist", { defaultValue: "JOIN THE WAITLIST" })}
-                      <ArrowRight className="h-4 w-4" />
+                    <Button size="lg" className="w-full sm:w-auto h-11 px-7 text-[13px] font-medium rounded-full gap-2">
+                      {t("home.cta_waitlist", { defaultValue: "Get Started" })}
+                      <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                   </Link>
                   <Link to="/library" className="block">
-                    <Button variant="outline" size="lg" className="h-11 px-6 text-[13px] font-medium rounded-lg gap-1.5">
+                    <Button variant="ghost" size="lg" className="h-11 px-5 text-[13px] font-medium text-primary gap-1">
                       {t("home.cta_explore_agents")}
                       <ChevronRight className="h-3.5 w-3.5" />
                     </Button>
                   </Link>
                 </div>
-
-                {/* Trust badges */}
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 mt-8">
-                  {[
-                    { icon: LockKeyhole, label: t("home.trust_e2e", { defaultValue: "End-to-end encrypted" }) },
-                    { icon: ShieldCheck, label: t("home.trust_enterprise", { defaultValue: "Enterprise-grade" }) },
-                    { icon: Bolt, label: t("home.trust_setup", { defaultValue: "Setup in 5min" }) },
-                  ].map((item) => (
-                    <div key={item.label} className="flex items-center gap-1.5 text-muted-foreground">
-                      <item.icon className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" strokeWidth={1.5} />
-                      <span className="text-[12px] font-medium">{item.label}</span>
-                    </div>
-                  ))}
-                </div>
               </motion.div>
             </div>
 
             {/* RIGHT — Live Demo */}
-            <div className="w-full max-w-[420px] lg:w-[420px] shrink-0 mx-auto lg:mx-0">
+            <div className="w-full max-w-[400px] lg:w-[400px] shrink-0 mx-auto lg:mx-0">
               <Suspense fallback={
-                <div className="rounded-xl border border-border bg-card overflow-hidden shadow-sm">
-                  <div className="px-4 py-3 border-b border-border flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-muted animate-pulse" />
+                <div className="rounded-2xl border border-border/50 bg-card overflow-hidden">
+                  <div className="px-4 py-3 border-b border-border/50 flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
                     <div className="space-y-1.5">
                       <div className="w-28 h-3 rounded bg-muted animate-pulse" />
                       <div className="w-16 h-2 rounded bg-muted animate-pulse" />
                     </div>
                   </div>
-                  <div className="h-[280px] sm:h-[320px]" />
+                  <div className="h-[300px]" />
                 </div>
               }>
                 <LiveDemoAgent />
