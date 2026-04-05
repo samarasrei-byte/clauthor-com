@@ -104,12 +104,12 @@
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 0 0% 40%;
-    --sidebar-primary: 0 0% 9%;
+    --sidebar-primary: 0 85% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 0 0% 95%;
     --sidebar-accent-foreground: 0 0% 9%;
     --sidebar-border: 0 0% 92%;
-    --sidebar-ring: 0 0% 9%;
+    --sidebar-ring: 0 85% 48%;
 
     --glow-primary: none;
     --glow-soft: none;
