@@ -76,9 +76,9 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
 
-    --primary: 0 0% 9%;
+    --primary: 0 85% 48%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 0 0% 20%;
+    --primary-glow: 10 80% 52%;
 
     --accent-cyan: 0 0% 42%;
     --accent-emerald: 160 45% 38%;
