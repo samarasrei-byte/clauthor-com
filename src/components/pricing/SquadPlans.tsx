@@ -413,7 +413,7 @@ export default function SquadPlans() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-4">
               {departments.map((dept, i) => {
                 const DeptIcon = dept.icon;
                 const deptKey = dept.id as keyof typeof region.departments;
@@ -424,93 +424,88 @@ export default function SquadPlans() {
                 return (
                   <motion.div
                     key={dept.id}
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.06 }}
-                    className={`group relative rounded-2xl overflow-hidden transition-all duration-500 hover:scale-[1.015] ${
+                    transition={{ delay: i * 0.04 }}
+                    className={`group relative rounded-2xl bg-background border transition-all duration-300 hover:shadow-lg hover:shadow-primary/5 ${
                       dept.popular 
-                        ? "ring-1 ring-primary/40 shadow-[0_0_60px_-15px_hsl(var(--primary)/0.25)]" 
-                        : "ring-1 ring-white/[0.06] hover:ring-primary/20"
+                        ? "border-primary/30" 
+                        : "border-border hover:border-primary/20"
                     }`}
                   >
-                    <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent" />
-                    
                     {dept.popular && (
-                      <div className="absolute top-3 right-3 z-10">
-                        <Badge className="bg-primary text-primary-foreground text-[9px] font-bold px-2.5 py-1 shadow-[0_0_20px_hsl(var(--primary)/0.4)]">
+                      <div className="absolute -top-2.5 left-4 z-10">
+                        <span className="text-[10px] font-bold uppercase tracking-wider bg-primary text-primary-foreground px-3 py-1 rounded-full">
                           {t("squads.best_seller", { defaultValue: "MAIS VENDIDO" })}
-                        </Badge>
+                        </span>
                       </div>
                     )}
 
-                    {/* Header + Price */}
-                    <div className="relative p-5 pb-4">
-                      <div className="flex items-start gap-3 mb-4">
-                        <div className={`w-11 h-11 rounded-xl ${dept.iconBg} flex items-center justify-center border border-white/[0.06]`}>
-                          <DeptIcon className={`h-5 w-5 ${dept.color}`} />
+                    <div className="p-5">
+                      {/* Icon + Title */}
+                      <div className="flex items-center gap-3 mb-5">
+                        <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
+                          <DeptIcon className="h-5 w-5 text-primary" />
                         </div>
-                        <div className="flex-1 min-w-0">
-                          <h3 className="font-display font-bold text-base">{t(`squads.dept_${dept.id}`)}</h3>
-                          <p className="text-[10px] text-muted-foreground/60 mt-0.5">
-                            {dept.headcount} agentes · {dept.tokens} tokens
+                        <div>
+                          <h3 className="font-semibold text-sm">{t(`squads.dept_${dept.id}`)}</h3>
+                          <p className="text-[11px] text-muted-foreground">
+                            {dept.headcount} agentes · {dept.tokens}
                           </p>
                         </div>
                       </div>
 
-                      <div className="flex items-baseline gap-2">
-                        <span className="font-display font-bold text-3xl tracking-tight">
-                          {fp(deptPrice)}
-                        </span>
-                        <span className="text-xs text-muted-foreground/50">/{t("pricing_page.per_month").replace("/", "")}</span>
-                        <span className="ml-auto text-[11px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded-md">
-                          -{savingsPercent}%
+                      {/* Price */}
+                      <div className="flex items-baseline gap-2 mb-1">
+                        <span className="font-bold text-2xl tracking-tight">{fp(deptPrice)}</span>
+                        <span className="text-xs text-muted-foreground">/{t("pricing_page.per_month").replace("/", "")}</span>
+                        <span className="ml-auto text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded-full">
+                          -{savingsPercent}% savings
                         </span>
                       </div>
-                      <p className="text-[10px] text-muted-foreground/40 mt-1">
-                        <span className="line-through">{fp(deptClt)}</span> CLT equivalente
+                      <p className="text-[11px] text-muted-foreground mb-5">
+                        vs full-time team <span className="line-through">{fp(deptClt)}/{t("pricing_page.per_month").replace("/", "")}</span>
                       </p>
-                    </div>
 
-                    <div className="mx-5 h-px bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" />
+                      {/* Divider */}
+                      <div className="h-px bg-border mb-4" />
 
-                    {/* Agents — compact 2-col grid */}
-                    <div className="p-5 pt-4">
-                      <div className="grid grid-cols-2 gap-1.5 mb-4">
-                        {dept.agents.map((agent, idx) => {
+                      {/* Agents list — clean vertical */}
+                      <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-3">Included Agents</p>
+                      <div className="space-y-2 mb-5">
+                        {dept.agents.slice(0, 4).map((agent, idx) => {
                           const AgentIcon = agent.icon;
                           return (
                             <div
                               key={`${dept.id}-${agent.key}-${idx}`}
-                              className="flex items-center gap-2 p-1.5 rounded-lg bg-white/[0.015] border border-white/[0.03]"
+                              className="flex items-center gap-3"
                             >
-                              <div className="w-6 h-6 rounded-md bg-primary/15 flex items-center justify-center shrink-0">
-                                <AgentIcon className="h-3 w-3 text-primary/70" />
+                              <div className="w-7 h-7 rounded-lg bg-muted/50 flex items-center justify-center shrink-0">
+                                <AgentIcon className="h-3.5 w-3.5 text-primary" />
                               </div>
                               <div className="min-w-0 flex-1">
-                                <p className="text-[10px] font-medium truncate text-foreground/80">
-                                  {t(`library_page.agents.${agent.key}_title`).split("—")[0].trim().slice(0, 18)}
+                                <p className="text-xs font-medium truncate">
+                                  {t(`library_page.agents.${agent.key}_title`).split("—")[0].trim()}
                                 </p>
-                                <p className="text-[8px] text-muted-foreground/40 font-mono">{agent.tokens}</p>
+                                <p className="text-[10px] text-muted-foreground">
+                                  {t(`library_page.agents.${agent.key}_replaces`)}
+                                </p>
                               </div>
                             </div>
                           );
                         })}
+                        {dept.agents.length > 4 && (
+                          <p className="text-xs text-muted-foreground pl-10">
+                            +{dept.agents.length - 4} agents included
+                          </p>
+                        )}
                       </div>
 
-                      {/* Live orchestration — ALWAYS VISIBLE */}
-                      <DepartmentMiniChat departmentId={dept.id} autoPlay compact />
-                    </div>
-
-                    {/* CTA */}
-                    <div className="px-5 pb-5 pt-2">
+                      {/* CTA — clean red pill button */}
                       <Link to="/auth">
-                        <button className="group/btn relative w-full h-12 rounded-xl font-display font-semibold text-sm uppercase tracking-wider overflow-hidden transition-all duration-500 hover:scale-[1.02] active:scale-[0.97]">
-                          <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-xl" />
-                          <div className="absolute -inset-0.5 bg-gradient-to-r from-primary/40 via-primary-glow/40 to-primary/40 rounded-xl blur-lg opacity-0 group-hover/btn:opacity-80 transition-opacity duration-500" />
-                          <span className="relative z-10 flex items-center justify-center gap-2 text-primary-foreground font-bold">
-                            {t("squads.hire_dept", { defaultValue: "Contratar Departamento" })}
-                            <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform duration-300" />
-                          </span>
+                        <button className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.98]">
+                          {fp(deptPrice)}/{t("pricing_page.per_month").replace("/", "")}
+                          <ArrowRight className="h-4 w-4" />
                         </button>
                       </Link>
                     </div>
