@@ -455,19 +455,7 @@
   }
 }
 
-/* Navbar always dark — even in light mode */
-.navbar-always-dark {
-  background: hsl(0 0% 4% / 0.95) !important;
-  color: hsl(0 0% 96%) !important;
-}
-.navbar-always-dark * {
-  --foreground: 0 0% 96%;
-  --muted-foreground: 0 0% 60%;
-  --primary-foreground: 0 0% 100%;
-  --border: 0 0% 14%;
-  --accent: 0 0% 9%;
-  --accent-foreground: 0 0% 96%;
-}
+/* Navbar — clean glass effect, theme-aware */
 
 /* Light mode refinements — premium buttons & surfaces */
 .light .glass-btn {
