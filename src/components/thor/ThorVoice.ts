@@ -128,30 +128,41 @@ export function getProactiveMessages(pathname: string, lang: string): string[] {
   if (pathname === "/" || pathname === "") {
     return isPt
       ? [
-          "Ei! Notei que você tá olhando a home. Quer que eu te mostre como nossos agentes podem revolucionar sua empresa? 🚀",
-          "Tô vendo que você ainda não explorou os departamentos. Posso te guiar? Tenho 200 agentes prontos!",
+          "Vi que você tá explorando. Quer que eu te mostre o caminho mais rápido pro seu objetivo?\n\n1. **Vender mais**\n2. **Automatizar tarefas**\n3. **Montar meu time de IA**",
         ]
       : [
-          "Hey! Want me to show you how our agents can transform your business? 🚀",
-          "I see you haven't explored the departments yet. Can I guide you?",
+          "I see you're exploring. Want me to show you the fastest path to your goal?\n\n1. **Sell more**\n2. **Automate tasks**\n3. **Build my AI team**",
         ];
   }
   if (pathname.includes("/library")) {
     return isPt
-      ? ["Boa escolha vir na biblioteca! Posso te ajudar a encontrar o agente perfeito pro seu caso."]
-      : ["Great choice! I can help you find the perfect agent."];
+      ? ["Boa escolha. Me diz seu maior desafio e eu te indico o agente certo em 10 segundos."]
+      : ["Great choice. Tell me your biggest challenge and I'll match you with the right agent in 10 seconds."];
   }
   if (pathname.includes("/pricing")) {
     return isPt
-      ? ["Analisando preços? Posso te ajudar a escolher o plano ideal."]
-      : ["Checking prices? I can help you pick the ideal plan."];
+      ? ["Analisando planos? Me diz o tamanho da sua equipe e eu te mostro o melhor custo-benefício."]
+      : ["Looking at plans? Tell me your team size and I'll show you the best value."];
   }
-  return isPt ? ["Precisa de ajuda? Tô aqui 24/7!"] : ["Need help? I'm here 24/7!"];
+  return isPt ? ["Como posso te fazer avançar agora?"] : ["How can I help you move forward?"];
 }
 
-/** The new proactive greeting (MUDANÇA 1) */
-const PROACTIVE_GREETING_PT = "Olá! Eu sou o Thor, CEO de IA da Clauthor. Posso te mostrar como nossos agentes podem transformar sua empresa em minutos. Por onde quer começar?";
-const PROACTIVE_GREETING_EN = "Hi! I'm Thor, AI CEO of Clauthor. Let me show you how our agents can transform your business in minutes. Where would you like to start?";
+/** Engagement-driven proactive greeting */
+const PROACTIVE_GREETING_PT = `Vamos direto ao ponto. Eu sou o **Thor**, seu CEO de IA.
+
+O que você quer resolver agora?
+
+1. **Ganhar mais clientes**
+2. **Economizar tempo**
+3. **Estruturar meu negócio**`;
+
+const PROACTIVE_GREETING_EN = `Let's get straight to the point. I'm **Thor**, your AI CEO.
+
+What do you want to solve right now?
+
+1. **Get more customers**
+2. **Save time**
+3. **Structure my business**`;
 
 /**
  * Build the proactive greeting considering visitor memory.
@@ -159,16 +170,16 @@ const PROACTIVE_GREETING_EN = "Hi! I'm Thor, AI CEO of Clauthor. Let me show you
 export function buildProactiveGreeting(lang: string, memory: ThorMemory): string {
   const isPt = lang.startsWith("pt");
 
-  // Returning visitor with name
+  // Returning visitor with name — action-oriented
   if (memory.name) {
-    const topicLine = memory.lastTopic
-      ? (isPt
-          ? ` Da última vez você perguntou sobre **${memory.lastTopic}**. Quer continuar de onde paramos?`
-          : ` Last time you asked about **${memory.lastTopic}**. Want to continue where we left off?`)
-      : "";
+    if (memory.lastTopic) {
+      return isPt
+        ? `**${memory.name}**, bom te ver de novo! Da última vez você estava focado em **${memory.lastTopic}**.\n\nQuer continuar de onde parou ou explorar algo novo?`
+        : `**${memory.name}**, good to see you again! Last time you were focused on **${memory.lastTopic}**.\n\nWant to continue where you left off or explore something new?`;
+    }
     return isPt
-      ? `Bem-vindo de volta, **${memory.name}**!${topicLine}`
-      : `Welcome back, **${memory.name}**!${topicLine}`;
+      ? `**${memory.name}**, bom te ver de novo! O que vamos resolver hoje?\n\n1. **Atrair mais clientes**\n2. **Economizar tempo**\n3. **Algo diferente**`
+      : `**${memory.name}**, good to see you! What are we solving today?\n\n1. **Get more customers**\n2. **Save time**\n3. **Something else**`;
   }
 
   // First visit
