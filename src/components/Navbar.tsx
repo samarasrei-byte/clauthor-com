@@ -7,6 +7,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import ThemeToggle from "@/components/ThemeToggle";
+import ClauthorLogo from "@/components/ClauthorLogo";
 
 const Navbar = () => {
   const location = useLocation();
