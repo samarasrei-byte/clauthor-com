@@ -44,10 +44,10 @@ export interface DeptDetail {
 
 export const departments: Department[] = [
   {
-    id: "tecnologia", icon: Wrench, color: "text-blue-400",
-    gradient: "from-blue-500/20 to-blue-500/5",
-    borderActive: "border-blue-500/40",
-    iconBg: "bg-blue-500/20",
+    id: "tecnologia", icon: Wrench, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "12M", actions: "15.000",
     agents: [
       { key: "coding", icon: Wrench, role: "Dev Full-Stack Sênior", tokens: "4M" },
@@ -59,10 +59,10 @@ export const departments: Department[] = [
     headcount: 5, cltCost: 100000, prometheusCost: 5497, discount: 30,
   },
   {
-    id: "comercial", icon: Briefcase, color: "text-cyan-400",
-    gradient: "from-cyan-500/20 to-cyan-500/5",
-    borderActive: "border-cyan-500/40",
-    iconBg: "bg-cyan-500/20",
+    id: "comercial", icon: Briefcase, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: true, tokens: "8M", actions: "12.000",
     agents: [
       { key: "sales", icon: Briefcase, role: "SDR / Closer de Vendas", tokens: "2.5M" },
@@ -75,9 +75,9 @@ export const departments: Department[] = [
   },
   {
     id: "marketing", icon: Megaphone, color: "text-primary",
-    gradient: "from-primary/20 to-primary/5",
-    borderActive: "border-primary/40",
-    iconBg: "bg-primary/20",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "8.5M", actions: "11.000",
     agents: [
       { key: "content", icon: Sparkles, role: "Copywriter Sênior", tokens: "2M" },
@@ -90,10 +90,10 @@ export const departments: Department[] = [
     headcount: 6, cltCost: 54000, prometheusCost: 3997, discount: 25,
   },
   {
-    id: "financeiro", icon: BarChart3, color: "text-amber-400",
-    gradient: "from-amber-500/20 to-amber-500/5",
-    borderActive: "border-amber-500/40",
-    iconBg: "bg-amber-500/20",
+    id: "financeiro", icon: BarChart3, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "10M", actions: "12.000",
     agents: [
       { key: "revenue", icon: BarChart3, role: "CFO / Controller", tokens: "2M" },
@@ -107,10 +107,10 @@ export const departments: Department[] = [
     headcount: 7, cltCost: 66000, prometheusCost: 4497, discount: 25,
   },
   {
-    id: "criacao", icon: Palette, color: "text-violet-400",
-    gradient: "from-violet-500/20 to-violet-500/5",
-    borderActive: "border-violet-500/40",
-    iconBg: "bg-violet-500/20",
+    id: "criacao", icon: Palette, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "6M", actions: "8.000",
     agents: [
       { key: "creative_design", icon: Palette, role: "Designer Gráfico Sênior", tokens: "2M" },
@@ -122,10 +122,10 @@ export const departments: Department[] = [
     headcount: 5, cltCost: 42000, prometheusCost: 2997, discount: 20,
   },
   {
-    id: "suporte", icon: MessageSquare, color: "text-emerald-400",
-    gradient: "from-emerald-500/20 to-emerald-500/5",
-    borderActive: "border-emerald-500/40",
-    iconBg: "bg-emerald-500/20",
+    id: "suporte", icon: MessageSquare, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "7M", actions: "12.000",
     agents: [
       { key: "support_channel", icon: MessageSquare, role: "Atendente N1 / N2", tokens: "1.5M" },
@@ -138,10 +138,10 @@ export const departments: Department[] = [
     headcount: 6, cltCost: 36000, prometheusCost: 2997, discount: 20,
   },
   {
-    id: "rh", icon: GraduationCap, color: "text-pink-400",
-    gradient: "from-pink-500/20 to-pink-500/5",
-    borderActive: "border-pink-500/40",
-    iconBg: "bg-pink-500/20",
+    id: "rh", icon: GraduationCap, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "3.5M", actions: "5.000",
     agents: [
       { key: "hr", icon: Star, role: "Recrutador / BP", tokens: "1.5M" },
@@ -151,10 +151,10 @@ export const departments: Department[] = [
     headcount: 3, cltCost: 22000, prometheusCost: 1497, discount: 15,
   },
   {
-    id: "prospeccao", icon: Crosshair, color: "text-orange-400",
-    gradient: "from-orange-500/20 to-orange-500/5",
-    borderActive: "border-orange-500/40",
-    iconBg: "bg-orange-500/20",
+    id: "prospeccao", icon: Crosshair, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: true, tokens: "14M", actions: "18.000",
     agents: [
       { key: "sdr_outbound", icon: Crosshair, role: "SDR Outbound", tokens: "2M" },
@@ -173,10 +173,10 @@ export const departments: Department[] = [
     headcount: 12, cltCost: 96000, prometheusCost: 6997, discount: 35,
   },
   {
-    id: "comunicacao", icon: PenTool, color: "text-rose-400",
-    gradient: "from-rose-500/20 to-rose-500/5",
-    borderActive: "border-rose-500/40",
-    iconBg: "bg-rose-500/20",
+    id: "comunicacao", icon: PenTool, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "7.5M", actions: "9.000",
     agents: [
       { key: "copywriting", icon: PenTool, role: "Copywriter de Conversão", tokens: "1.5M" },
@@ -189,10 +189,10 @@ export const departments: Department[] = [
     headcount: 6, cltCost: 48000, prometheusCost: 3997, discount: 30,
   },
   {
-    id: "operacoes", icon: Rocket, color: "text-indigo-400",
-    gradient: "from-indigo-500/20 to-indigo-500/5",
-    borderActive: "border-indigo-500/40",
-    iconBg: "bg-indigo-500/20",
+    id: "operacoes", icon: Rocket, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "12M", actions: "14.000",
     agents: [
       { key: "orchestrator", icon: Network, role: "Orquestrador Multi-Agente", tokens: "3M" },
@@ -206,10 +206,10 @@ export const departments: Department[] = [
     headcount: 7, cltCost: 84000, prometheusCost: 5497, discount: 30,
   },
   {
-    id: "ecommerce_growth", icon: Store, color: "text-teal-400",
-    gradient: "from-teal-500/20 to-teal-500/5",
-    borderActive: "border-teal-500/40",
-    iconBg: "bg-teal-500/20",
+    id: "ecommerce_growth", icon: Store, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "11M", actions: "13.000",
     agents: [
       { key: "paid_traffic", icon: TrendingUp, role: "Gestor de Tráfego Pago", tokens: "2M" },
@@ -223,10 +223,10 @@ export const departments: Department[] = [
     headcount: 7, cltCost: 63000, prometheusCost: 4497, discount: 25,
   },
   {
-    id: "juridico", icon: Gavel, color: "text-slate-400",
-    gradient: "from-slate-500/20 to-slate-500/5",
-    borderActive: "border-slate-500/40",
-    iconBg: "bg-slate-500/20",
+    id: "juridico", icon: Gavel, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "10M", actions: "12.000",
     agents: [
       { key: "contract_analyst", icon: FileText, role: "Analista de Contratos", tokens: "2M" },
@@ -238,10 +238,10 @@ export const departments: Department[] = [
     headcount: 5, cltCost: 75000, prometheusCost: 4997, discount: 30,
   },
   {
-    id: "compras", icon: Package, color: "text-lime-400",
-    gradient: "from-lime-500/20 to-lime-500/5",
-    borderActive: "border-lime-500/40",
-    iconBg: "bg-lime-500/20",
+    id: "compras", icon: Package, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "7M", actions: "9.000",
     agents: [
       { key: "procurement", icon: Package, role: "Comprador Sênior", tokens: "2M" },
@@ -252,10 +252,10 @@ export const departments: Department[] = [
     headcount: 4, cltCost: 44000, prometheusCost: 2997, discount: 25,
   },
   {
-    id: "logistica", icon: Truck, color: "text-sky-400",
-    gradient: "from-sky-500/20 to-sky-500/5",
-    borderActive: "border-sky-500/40",
-    iconBg: "bg-sky-500/20",
+    id: "logistica", icon: Truck, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "6M", actions: "8.000",
     agents: [
       { key: "logistics", icon: Truck, role: "Coordenador Logístico", tokens: "2M" },
@@ -265,10 +265,10 @@ export const departments: Department[] = [
     headcount: 3, cltCost: 36000, prometheusCost: 2497, discount: 25,
   },
   {
-    id: "qualidade", icon: ClipboardCheck, color: "text-yellow-400",
-    gradient: "from-yellow-500/20 to-yellow-500/5",
-    borderActive: "border-yellow-500/40",
-    iconBg: "bg-yellow-500/20",
+    id: "qualidade", icon: ClipboardCheck, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "3M", actions: "4.000",
     agents: [
       { key: "quality", icon: ClipboardCheck, role: "Analista de Qualidade", tokens: "1.5M" },
