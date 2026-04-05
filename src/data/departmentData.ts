@@ -44,10 +44,10 @@ export interface DeptDetail {
 
 export const departments: Department[] = [
   {
-    id: "tecnologia", icon: Wrench, color: "text-blue-400",
-    gradient: "from-blue-500/20 to-blue-500/5",
-    borderActive: "border-blue-500/40",
-    iconBg: "bg-blue-500/20",
+    id: "tecnologia", icon: Wrench, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "12M", actions: "15.000",
     agents: [
       { key: "coding", icon: Wrench, role: "Dev Full-Stack Sênior", tokens: "4M" },
