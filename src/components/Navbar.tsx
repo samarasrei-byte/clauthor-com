@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, LogOut, ShieldCheck, ChevronDown, Bot, Sparkles, Layers3, Bolt, ShoppingCart, Building2, MessageSquare } from "lucide-react";
+import { Menu, X, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
@@ -13,159 +13,141 @@ const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [megaMenuOpen, setMegaMenuOpen] = useState(false);
-  const megaMenuRef = useRef<HTMLDivElement>(null);
+  const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const solutionsRef = useRef<HTMLDivElement>(null);
   const { user, isAdmin, signOut } = useAuth();
   const { t } = useTranslation();
 
-  // Close menus on route change
   useEffect(() => {
-    setMegaMenuOpen(false);
+    setSolutionsOpen(false);
     setMobileOpen(false);
   }, [location.pathname]);
 
-  // Close mega menu on outside click
   useEffect(() => {
-    if (!megaMenuOpen) return;
+    if (!solutionsOpen) return;
     const handler = (e: MouseEvent) => {
-      if (megaMenuRef.current && !megaMenuRef.current.contains(e.target as Node)) {
-        setMegaMenuOpen(false);
+      if (solutionsRef.current && !solutionsRef.current.contains(e.target as Node)) {
+        setSolutionsOpen(false);
       }
     };
-    // Delay listener attachment to avoid catching the opening click
-    const timer = setTimeout(() => {
-      document.addEventListener("click", handler, true);
-    }, 0);
+    const timer = setTimeout(() => document.addEventListener("click", handler, true), 0);
     return () => {
       clearTimeout(timer);
       document.removeEventListener("click", handler, true);
     };
-  }, [megaMenuOpen]);
-
-  const publicNavItems = [
-    { label: t("nav.pricing"), href: "/pricing" },
-  ];
-
-  const authNavItems = [
-    { label: t("nav.dashboard"), href: "/dashboard" },
-    { label: t("nav.my_agents"), href: "/agents" },
-  ];
-
-  const navItems = user ? authNavItems : publicNavItems;
+  }, [solutionsOpen]);
 
   const handleSignOut = async () => {
     await signOut();
     navigate("/");
   };
 
+  const navLinks = [
+    { label: t("navbar.solutions"), dropdown: true },
+    ...(user
+      ? [
+          { label: t("nav.dashboard"), href: "/dashboard" },
+          { label: t("nav.my_agents"), href: "/agents" },
+        ]
+      : [
+          { label: t("nav.pricing"), href: "/pricing" },
+        ]),
+  ];
+
   return (
     <motion.nav
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 border-b border-white/[0.06] navbar-always-dark ${mobileOpen ? "z-[9999]" : "z-50 backdrop-blur-2xl"}`}
+      transition={{ duration: 0.4 }}
+      className={`fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border/40 ${mobileOpen ? "z-[9999]" : ""}`}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="flex items-center justify-between h-16">
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <img src={clauthorLogo} alt="CLAUTHOR" className="w-8 h-8 object-contain" />
-            <span className="font-display font-bold text-base text-foreground tracking-wider">
+      <div className="max-w-[1200px] mx-auto px-4 sm:px-6">
+        <div className="flex items-center justify-between h-14">
+          {/* Logo */}
+          <Link to="/" className="flex items-center gap-2 group">
+            <img src={clauthorLogo} alt="CLAUTHOR" className="w-7 h-7 object-contain" />
+            <span className="font-semibold text-[15px] text-foreground tracking-tight">
               CLAUTHOR
             </span>
           </Link>
 
-          {/* Desktop */}
-          <div className="hidden md:flex items-center gap-1">
-            {/* Mega Menu — Solutions */}
-            <div ref={megaMenuRef} className="relative">
+          {/* Desktop Nav */}
+          <div className="hidden md:flex items-center gap-0.5">
+            {/* Solutions dropdown */}
+            <div ref={solutionsRef} className="relative">
               <button
-                onClick={() => setMegaMenuOpen(!megaMenuOpen)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
-                  ["/marketplace", "/library", "/departamentos"].includes(location.pathname)
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                onClick={() => setSolutionsOpen(!solutionsOpen)}
+                className={`px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors flex items-center gap-1 ${
+                  solutionsOpen
+                    ? "text-foreground bg-accent"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
                 }`}
               >
                 {t("navbar.solutions")}
-                <ChevronDown className={`h-3.5 w-3.5 transition-transform ${megaMenuOpen ? "rotate-180" : ""}`} />
+                <ChevronDown className={`h-3 w-3 transition-transform ${solutionsOpen ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence>
-                {megaMenuOpen && (
+                {solutionsOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: 8, scale: 0.96 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 8, scale: 0.96 }}
-                    transition={{ duration: 0.15 }}
-                    className="absolute top-full left-0 mt-2 w-[380px] rounded-2xl bg-background/95 backdrop-blur-2xl border border-white/[0.08] shadow-2xl p-3 z-50"
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 4 }}
+                    transition={{ duration: 0.12 }}
+                    className="absolute top-full left-0 mt-1 w-[280px] rounded-xl bg-popover border border-border shadow-lg p-1.5 z-50"
                   >
-                    <Link
-                      to="/marketplace"
-                      onClick={() => setMegaMenuOpen(false)}
-                      className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-accent-violet/10 flex items-center justify-center shrink-0 icon-container-glow">
-                        <Sparkles className="h-5 w-5 text-accent-violet icon-lift" strokeWidth={1.5} />
-                      </div>
-                      <div>
-                        <p className="font-semibold text-sm text-foreground">{t("navbar.marketplace_label")}</p>
-                        <p className="text-xs text-muted-foreground mt-0.5">{t("navbar.marketplace_desc")}</p>
-                      </div>
-                    </Link>
-                    <Link
-                      to="/departamentos"
-                      onClick={() => setMegaMenuOpen(false)}
-                      className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0 icon-container-glow">
-                        <Layers3 className="h-5 w-5 text-primary icon-lift" strokeWidth={1.5} />
-                      </div>
-                      <div className="flex-1">
+                    {[
+                      { href: "/marketplace", label: t("navbar.marketplace_label"), desc: t("navbar.marketplace_desc") },
+                      { href: "/departamentos", label: t("navbar.ai_teams_label"), desc: t("navbar.ai_teams_desc"), badge: t("navbar.new_badge") },
+                      { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }), desc: t("navbar.team_builder_desc", { defaultValue: "Pick agents and see costs in real time" }) },
+                    ].map((item) => (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        onClick={() => setSolutionsOpen(false)}
+                        className="flex flex-col gap-0.5 px-3 py-2.5 rounded-lg hover:bg-accent transition-colors"
+                      >
                         <div className="flex items-center gap-2">
-                          <p className="font-semibold text-sm text-foreground">{t("navbar.ai_teams_label")}</p>
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">{t("navbar.new_badge")}</span>
+                          <span className="text-[13px] font-medium text-foreground">{item.label}</span>
+                          {item.badge && (
+                            <span className="text-[9px] font-semibold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">{item.badge}</span>
+                          )}
                         </div>
-                        <p className="text-xs text-muted-foreground mt-0.5">{t("navbar.ai_teams_desc")}</p>
-                      </div>
-                    </Link>
-                    <div className="border-t border-border/30 mx-3 my-1" />
-                    <Link
-                      to="/team-builder"
-                      onClick={() => setMegaMenuOpen(false)}
-                      className="flex items-start gap-4 p-4 rounded-xl hover:bg-white/[0.04] transition-colors group"
-                    >
-                      <div className="w-10 h-10 rounded-xl bg-accent-emerald/10 flex items-center justify-center shrink-0 icon-container-glow">
-                        <ShoppingCart className="h-5 w-5 text-accent-emerald icon-lift" strokeWidth={1.5} />
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <p className="font-semibold text-sm text-foreground">{t("navbar.team_builder_label", { defaultValue: "Build Team" })}</p>
-                          <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">{t("navbar.new_badge")}</span>
-                        </div>
-                        <p className="text-xs text-muted-foreground mt-0.5">{t("navbar.team_builder_desc", { defaultValue: "Pick agents and see costs in real time" })}</p>
-                      </div>
-                    </Link>
-                    <div className="border-t border-border/30 mx-3 my-1" />
-                    <div className="grid grid-cols-2 gap-1 px-1">
-                      <Link to="/how-it-works" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.how_it_works")}</Link>
-                      <Link to="/pricing" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.pricing")}</Link>
-                      <Link to="/community" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("navbar.community", { defaultValue: "Community" })}</Link>
-                      <Link to="/api-docs" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("navbar.api_docs", { defaultValue: "API Docs" })}</Link>
-                      {user && <Link to="/integrations" onClick={() => setMegaMenuOpen(false)} className="px-3 py-2.5 rounded-lg hover:bg-white/[0.04] transition-colors text-sm text-muted-foreground hover:text-foreground">{t("nav.integrations")}</Link>}
+                        <span className="text-[11px] text-muted-foreground leading-snug">{item.desc}</span>
+                      </Link>
+                    ))}
+                    <div className="border-t border-border my-1" />
+                    <div className="grid grid-cols-2 gap-0.5">
+                      {[
+                        { href: "/how-it-works", label: t("nav.how_it_works") },
+                        { href: "/pricing", label: t("nav.pricing") },
+                        { href: "/community", label: t("navbar.community", { defaultValue: "Community" }) },
+                        { href: "/api-docs", label: t("navbar.api_docs", { defaultValue: "API Docs" }) },
+                      ].map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setSolutionsOpen(false)}
+                          className="px-3 py-2 rounded-lg text-[12px] text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                        >
+                          {item.label}
+                        </Link>
+                      ))}
                     </div>
                   </motion.div>
                 )}
               </AnimatePresence>
             </div>
 
-            {navItems.filter((item: any) => !item.mobileOnly).map((item) => (
+            {/* Direct links */}
+            {navLinks.filter(l => !l.dropdown).map((item) => (
               <Link
                 key={item.href}
-                to={item.href}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+                to={item.href!}
+                className={`px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors ${
                   location.pathname === item.href
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                    ? "text-foreground bg-accent"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
                 }`}
               >
                 {item.label}
@@ -174,10 +156,10 @@ const Navbar = () => {
             {isAdmin && (
               <Link
                 to="/admin"
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center gap-1.5 ${
+                className={`px-3 py-1.5 rounded-md text-[13px] font-medium transition-colors flex items-center gap-1 ${
                   location.pathname === "/admin"
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                    ? "text-foreground bg-accent"
+                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
                 }`}
               >
                 <ShieldCheck className="h-3.5 w-3.5" strokeWidth={1.5} />
@@ -186,22 +168,23 @@ const Navbar = () => {
             )}
           </div>
 
-          <div className="hidden md:flex items-center gap-2">
+          {/* Right side */}
+          <div className="hidden md:flex items-center gap-1.5">
             <ThemeToggle />
             <LanguageSelector />
             {user ? (
               <>
-                <Button 
-                  variant="ghost" 
-                  size="sm" 
-                  onClick={handleSignOut} 
-                  className="text-muted-foreground hover:text-foreground"
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleSignOut}
+                  className="text-muted-foreground hover:text-foreground h-8 text-[13px]"
                 >
-                   <LogOut className="h-4 w-4 mr-2" strokeWidth={1.5} />
+                  <LogOut className="h-3.5 w-3.5 mr-1.5" strokeWidth={1.5} />
                   {t("nav.logout")}
                 </Button>
                 <Link to="/create-agent">
-                  <Button size="sm" className="glow font-medium rounded-lg">
+                  <Button size="sm" className="h-8 text-[13px] rounded-lg font-medium">
                     {t("dashboard.new_agent")}
                   </Button>
                 </Link>
@@ -209,17 +192,13 @@ const Navbar = () => {
             ) : (
               <>
                 <Link to="/auth">
-                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground font-medium">
+                  <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground h-8 text-[13px] font-medium">
                     {t("nav.login")}
                   </Button>
                 </Link>
                 <Link to="/auth" state={{ signup: true }}>
-                  <Button size="sm" className="relative overflow-hidden glow font-semibold rounded-lg group">
-                    <span className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift" />
-                    <span className="relative z-10 flex items-center gap-1.5">
-                      <Bolt className="h-3.5 w-3.5" strokeWidth={1.5} />
-                      {t("auth.create_account")}
-                    </span>
+                  <Button size="sm" className="h-8 text-[13px] rounded-lg font-medium">
+                    {t("auth.create_account")}
                   </Button>
                 </Link>
               </>
@@ -228,7 +207,7 @@ const Navbar = () => {
 
           {/* Mobile toggle */}
           <button
-            className="md:hidden text-foreground p-2 hover:bg-white/5 rounded-lg transition-colors"
+            className="md:hidden text-foreground p-2 hover:bg-accent rounded-lg transition-colors"
             onClick={() => setMobileOpen(!mobileOpen)}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -237,124 +216,92 @@ const Navbar = () => {
       </div>
 
       {/* Mobile menu */}
-      {mobileOpen && (
-        <motion.div
-          key="mobile-menu"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="md:hidden fixed inset-x-0 top-16 bottom-0 z-[9990] navbar-always-dark border-t border-white/[0.05] overflow-y-auto"
-        >
-          <div className="px-4 py-6 space-y-2">
-            <Link
-              to="/marketplace"
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                location.pathname === "/marketplace" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-              }`}
-            >
-              <ShoppingCart className="h-4 w-4" strokeWidth={1.5} />
-              {t("navbar.marketplace_label")}
-            </Link>
-            <Link
-              to="/departamentos"
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                location.pathname === "/departamentos" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-              }`}
-            >
-              <Building2 className="h-4 w-4" strokeWidth={1.5} />
-              {t("navbar.ai_teams_label")}
-              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-primary/10 text-primary border border-primary/20">{t("navbar.new_badge")}</span>
-            </Link>
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                to={item.href}
-                onClick={() => setMobileOpen(false)}
-                className={`block px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                  location.pathname === item.href
-                    ? "text-primary bg-primary/10"
-                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                }`}
-              >
-                {item.label}
-              </Link>
-            ))}
-            <Link
-              to="/team-builder"
-              onClick={() => setMobileOpen(false)}
-              className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                location.pathname === "/team-builder" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-              }`}
-            >
-              <ShoppingCart className="h-4 w-4" strokeWidth={1.5} />
-              {t("navbar.team_builder_label", { defaultValue: "Build Team" })}
-              <span className="text-[9px] font-bold uppercase px-1.5 py-0.5 rounded-full bg-accent-emerald/10 text-accent-emerald border border-accent-emerald/20">{t("navbar.new_badge")}</span>
-            </Link>
-            {user && (
-              <Link
-                to="/community"
-                onClick={() => setMobileOpen(false)}
-                className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
-                  location.pathname === "/community" ? "text-primary bg-primary/10" : "text-muted-foreground hover:text-foreground hover:bg-white/5"
-                }`}
-              >
-                <MessageSquare className="h-4 w-4" strokeWidth={1.5} />
-                {t("home.footer_community_link")}
-              </Link>
-            )}
-            {isAdmin && (
-              <Link
-                to="/admin"
-                onClick={() => setMobileOpen(false)}
-                className="flex items-center gap-2 px-4 py-3 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-white/5"
-              >
-                <ShieldCheck className="h-4 w-4" strokeWidth={1.5} />
-                Admin
-              </Link>
-            )}
-            <div className="flex items-center gap-3 px-4 py-2">
-              <LanguageSelector />
-              <ThemeToggle />
-            </div>
-            <div className="pt-2 space-y-2">
-              {user ? (
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            key="mobile-menu"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-t border-border bg-background overflow-hidden"
+          >
+            <div className="px-4 py-4 space-y-1">
+              {[
+                { href: "/marketplace", label: t("navbar.marketplace_label") },
+                { href: "/departamentos", label: t("navbar.ai_teams_label") },
+                { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }) },
+                { href: "/pricing", label: t("nav.pricing") },
+                { href: "/how-it-works", label: t("nav.how_it_works") },
+              ].map((item) => (
+                <Link
+                  key={item.href}
+                  to={item.href}
+                  onClick={() => setMobileOpen(false)}
+                  className={`block px-3 py-2.5 rounded-lg text-[14px] font-medium transition-colors ${
+                    location.pathname === item.href
+                      ? "text-foreground bg-accent"
+                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              ))}
+              {user && (
                 <>
-                  <Button
-                    variant="ghost"
-                    className="w-full justify-start"
-                    onClick={() => {
-                      handleSignOut();
-                      setMobileOpen(false);
-                    }}
-                  >
-                   <LogOut className="h-4 w-4 mr-2" strokeWidth={1.5} />
-                    {t("nav.logout")}
-                  </Button>
-                  <Link to="/create-agent" onClick={() => setMobileOpen(false)}>
-                    <Button className="w-full glow">
-                      {t("dashboard.new_agent")}
-                    </Button>
+                  <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50">
+                    {t("nav.dashboard")}
                   </Link>
-                </>
-              ) : (
-                <>
-                  <Link to="/auth" onClick={() => setMobileOpen(false)}>
-                    <Button variant="ghost" className="w-full">
-                      {t("nav.login")}
-                    </Button>
-                  </Link>
-                   <Link to="/auth" state={{ signup: true }} onClick={() => setMobileOpen(false)}>
-                    <Button className="w-full glow">
-                      {t("auth.create_account")}
-                    </Button>
+                  <Link to="/agents" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50">
+                    {t("nav.my_agents")}
                   </Link>
                 </>
               )}
+              {isAdmin && (
+                <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 px-3 py-2.5 rounded-lg text-[14px] font-medium text-muted-foreground hover:text-foreground hover:bg-accent/50">
+                  <ShieldCheck className="h-4 w-4" strokeWidth={1.5} />
+                  Admin
+                </Link>
+              )}
+              <div className="flex items-center gap-2 px-3 py-2">
+                <LanguageSelector />
+                <ThemeToggle />
+              </div>
+              <div className="pt-2 border-t border-border space-y-1.5">
+                {user ? (
+                  <>
+                    <Button
+                      variant="ghost"
+                      className="w-full justify-start h-10 text-[14px]"
+                      onClick={() => { handleSignOut(); setMobileOpen(false); }}
+                    >
+                      <LogOut className="h-4 w-4 mr-2" strokeWidth={1.5} />
+                      {t("nav.logout")}
+                    </Button>
+                    <Link to="/create-agent" onClick={() => setMobileOpen(false)}>
+                      <Button className="w-full h-10 text-[14px]">
+                        {t("dashboard.new_agent")}
+                      </Button>
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <Link to="/auth" onClick={() => setMobileOpen(false)}>
+                      <Button variant="ghost" className="w-full h-10 text-[14px]">
+                        {t("nav.login")}
+                      </Button>
+                    </Link>
+                    <Link to="/auth" state={{ signup: true }} onClick={() => setMobileOpen(false)}>
+                      <Button className="w-full h-10 text-[14px]">
+                        {t("auth.create_account")}
+                      </Button>
+                    </Link>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.nav>
   );
 };
