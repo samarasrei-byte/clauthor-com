@@ -11,7 +11,7 @@ const ROIBenchmark = lazy(() => import("@/components/landing/ROIBenchmark"));
 const CompetitiveMoat = lazy(() => import("@/components/landing/CompetitiveMoat"));
 import { Button } from "@/components/ui/button";
 import {
-  ArrowRight,
+  ArrowRight, ShieldCheck,
   Code, UsersRound,
   Headphones, PenTool, ShoppingCart, Megaphone, LineChart,
   Receipt, Globe, Briefcase, DollarSign, MessageSquare,
