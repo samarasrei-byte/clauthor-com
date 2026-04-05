@@ -63,13 +63,13 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className={`fixed top-0 left-0 right-0 border-b border-white/[0.05] ${mobileOpen ? "z-[9999] bg-background" : "z-50 bg-background/70 backdrop-blur-2xl"}`}
+      className={`fixed top-0 left-0 right-0 border-b border-white/[0.06] navbar-always-dark ${mobileOpen ? "z-[9999]" : "z-50 backdrop-blur-2xl"}`}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <div className="max-w-6xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2.5 group">
-            <img src={clauthorLogo} alt="CLAUTHOR" className="w-8 h-8 object-contain mix-blend-lighten" />
+            <img src={clauthorLogo} alt="CLAUTHOR" className="w-8 h-8 object-contain" />
             <span className="font-display font-bold text-base text-foreground tracking-wider">
               CLAUTHOR
             </span>
@@ -242,7 +242,7 @@ const Navbar = () => {
           key="mobile-menu"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="md:hidden fixed inset-x-0 top-16 bottom-0 z-[9990] bg-background border-t border-white/[0.05] overflow-y-auto"
+          className="md:hidden fixed inset-x-0 top-16 bottom-0 z-[9990] navbar-always-dark border-t border-white/[0.05] overflow-y-auto"
         >
           <div className="px-4 py-6 space-y-2">
             <Link
