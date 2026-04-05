@@ -127,6 +127,9 @@
 @layer base {
   * {
     @apply border-border;
+    transition-property: color, background-color, border-color, box-shadow, opacity;
+    transition-duration: 400ms;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
   html {
     font-size: 16.5px;
