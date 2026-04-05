@@ -206,10 +206,10 @@ export const departments: Department[] = [
     headcount: 7, cltCost: 84000, prometheusCost: 5497, discount: 30,
   },
   {
-    id: "ecommerce_growth", icon: Store, color: "text-teal-400",
-    gradient: "from-teal-500/20 to-teal-500/5",
-    borderActive: "border-teal-500/40",
-    iconBg: "bg-teal-500/20",
+    id: "ecommerce_growth", icon: Store, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "11M", actions: "13.000",
     agents: [
       { key: "paid_traffic", icon: TrendingUp, role: "Gestor de Tráfego Pago", tokens: "2M" },
