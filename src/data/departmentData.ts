@@ -173,10 +173,10 @@ export const departments: Department[] = [
     headcount: 12, cltCost: 96000, prometheusCost: 6997, discount: 35,
   },
   {
-    id: "comunicacao", icon: PenTool, color: "text-rose-400",
-    gradient: "from-rose-500/20 to-rose-500/5",
-    borderActive: "border-rose-500/40",
-    iconBg: "bg-rose-500/20",
+    id: "comunicacao", icon: PenTool, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "7.5M", actions: "9.000",
     agents: [
       { key: "copywriting", icon: PenTool, role: "Copywriter de Conversão", tokens: "1.5M" },
