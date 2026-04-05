@@ -1,5 +1,4 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useIsMobile } from "@/hooks/use-mobile";
+import { motion } from "framer-motion";
 import { lazy, Suspense, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -12,15 +11,13 @@ const ROIBenchmark = lazy(() => import("@/components/landing/ROIBenchmark"));
 const CompetitiveMoat = lazy(() => import("@/components/landing/CompetitiveMoat"));
 import { Button } from "@/components/ui/button";
 import {
-  ArrowRight, ShieldCheck, Bolt,
+  ArrowRight,
   Code, UsersRound,
-  LockKeyhole, Workflow,
-  Headphones, BotMessageSquare, PenTool, ShoppingCart, Megaphone, LineChart,
-  Star, Receipt, Globe, Briefcase, DollarSign, MessageSquare,
-  ChevronRight, Layers3,
-  Building2, Clock, Rocket, Fingerprint, Crosshair,
+  Headphones, PenTool, ShoppingCart, Megaphone, LineChart,
+  Receipt, Globe, Briefcase, DollarSign, MessageSquare,
+  ChevronRight,
 } from "lucide-react";
-import { useRef, useMemo, useState, useCallback } from "react";
+import { useRef, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import helixaPhoto from "@/assets/helixa-ai.png";
