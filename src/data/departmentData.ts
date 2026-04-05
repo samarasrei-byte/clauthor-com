@@ -223,10 +223,10 @@ export const departments: Department[] = [
     headcount: 7, cltCost: 63000, prometheusCost: 4497, discount: 25,
   },
   {
-    id: "juridico", icon: Gavel, color: "text-slate-400",
-    gradient: "from-slate-500/20 to-slate-500/5",
-    borderActive: "border-slate-500/40",
-    iconBg: "bg-slate-500/20",
+    id: "juridico", icon: Gavel, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "10M", actions: "12.000",
     agents: [
       { key: "contract_analyst", icon: FileText, role: "Analista de Contratos", tokens: "2M" },
