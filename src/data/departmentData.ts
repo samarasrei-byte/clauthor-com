@@ -151,10 +151,10 @@ export const departments: Department[] = [
     headcount: 3, cltCost: 22000, prometheusCost: 1497, discount: 15,
   },
   {
-    id: "prospeccao", icon: Crosshair, color: "text-orange-400",
-    gradient: "from-orange-500/20 to-orange-500/5",
-    borderActive: "border-orange-500/40",
-    iconBg: "bg-orange-500/20",
+    id: "prospeccao", icon: Crosshair, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: true, tokens: "14M", actions: "18.000",
     agents: [
       { key: "sdr_outbound", icon: Crosshair, role: "SDR Outbound", tokens: "2M" },
