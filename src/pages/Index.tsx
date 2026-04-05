@@ -213,18 +213,18 @@ const HomePage = () => {
       </Suspense>
 
       {/* ═══════════ STATS ═══════════ */}
-      <section className="py-12 sm:py-16 px-4 border-y border-border" aria-label="Platform capabilities">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
+      <section className="py-16 sm:py-20 px-5" aria-label="Platform capabilities">
+        <div className="max-w-[1120px] mx-auto">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-12">
             {[
-              { value: "200+", label: t("home.stats_active_agents", { defaultValue: "AI Agents" }), icon: BotMessageSquare },
-              { value: "55", label: t("home.stats_squads", { defaultValue: "Smart Squads" }), icon: Layers3 },
-              { value: "15", label: t("home.stats_departments", { defaultValue: "Departments" }), icon: Building2 },
-              { value: "99.9%", label: t("home.stats_uptime", { defaultValue: "Uptime SLA" }), icon: ShieldCheck },
+              { value: "200+", label: t("home.stats_active_agents", { defaultValue: "AI Agents" }) },
+              { value: "55", label: t("home.stats_squads", { defaultValue: "Smart Squads" }) },
+              { value: "15", label: t("home.stats_departments", { defaultValue: "Departments" }) },
+              { value: "99.9%", label: t("home.stats_uptime", { defaultValue: "Uptime" }) },
             ].map((stat) => (
               <div key={stat.label} className="text-center">
-                <p className="text-3xl sm:text-4xl font-bold text-foreground mb-1">{stat.value}</p>
-                <p className="text-[12px] font-medium text-muted-foreground uppercase tracking-wider">{stat.label}</p>
+                <p className="text-3xl sm:text-4xl font-semibold text-foreground tracking-tight mb-1">{stat.value}</p>
+                <p className="text-[13px] text-muted-foreground">{stat.label}</p>
               </div>
             ))}
           </div>
