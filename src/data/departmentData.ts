@@ -107,10 +107,10 @@ export const departments: Department[] = [
     headcount: 7, cltCost: 66000, prometheusCost: 4497, discount: 25,
   },
   {
-    id: "criacao", icon: Palette, color: "text-violet-400",
-    gradient: "from-violet-500/20 to-violet-500/5",
-    borderActive: "border-violet-500/40",
-    iconBg: "bg-violet-500/20",
+    id: "criacao", icon: Palette, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "6M", actions: "8.000",
     agents: [
       { key: "creative_design", icon: Palette, role: "Designer Gráfico Sênior", tokens: "2M" },
