@@ -238,10 +238,10 @@ export const departments: Department[] = [
     headcount: 5, cltCost: 75000, prometheusCost: 4997, discount: 30,
   },
   {
-    id: "compras", icon: Package, color: "text-lime-400",
-    gradient: "from-lime-500/20 to-lime-500/5",
-    borderActive: "border-lime-500/40",
-    iconBg: "bg-lime-500/20",
+    id: "compras", icon: Package, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "7M", actions: "9.000",
     agents: [
       { key: "procurement", icon: Package, role: "Comprador Sênior", tokens: "2M" },
