@@ -29,10 +29,9 @@ const Navbar = () => {
         setSolutionsOpen(false);
       }
     };
-    const timer = setTimeout(() => document.addEventListener("click", handler, true), 0);
+    document.addEventListener("mousedown", handler);
     return () => {
-      clearTimeout(timer);
-      document.removeEventListener("click", handler, true);
+      document.removeEventListener("mousedown", handler);
     };
   }, [solutionsOpen]);
 
