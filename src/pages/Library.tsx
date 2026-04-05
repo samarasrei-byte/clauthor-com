@@ -28,6 +28,7 @@ import {
 import { getAgentName, getDefaultIcon } from "@/data/agentLibraryBridge";
 import { WORKFORCE } from "@/data/workforceArchitecture";
 import { Skeleton } from "@/components/ui/skeleton";
+import AgentCardExpanded from "@/components/library/AgentCardExpanded";
 
 // Department colors
 const DEPT_COLORS: Record<string, { gradient: string; border: string; text: string; bg: string }> = {
