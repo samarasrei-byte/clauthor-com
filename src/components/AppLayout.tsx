@@ -46,26 +46,6 @@ const AppLayout = () => {
         </Suspense>
       )}
 
-      {/* Social proof FOMO toasts — home page only */}
-      {isHomePage && (
-        <Suspense fallback={null}>
-          <SocialProofToasts />
-        </Suspense>
-      )}
-
-      {/* Exit intent capture — home page only */}
-      {isHomePage && (
-        <Suspense fallback={null}>
-          <ExitIntentCapture />
-        </Suspense>
-      )}
-
-      {/* Journey progress bar — home page only */}
-      {isHomePage && (
-        <Suspense fallback={null}>
-          <JourneyProgressBar />
-        </Suspense>
-      )}
     </div>
   );
 };
