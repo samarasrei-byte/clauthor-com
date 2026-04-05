@@ -188,12 +188,12 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       if (sessionStorage.getItem(SESSION_FOLLOWUP_KEY)) return;
       const isPt = lang.startsWith("pt");
       const followup = isPt
-        ? "Ainda tem dúvidas? Posso te mostrar como outras empresas estão usando nossos agentes. É só perguntar! 💡"
-        : "Still have questions? I can show you how other companies are using our agents. Just ask! 💡";
+        ? "Ei, ainda tá aí? Sem pressão — mas posso te mostrar um resultado rápido.\n\nEscolhe:\n1. **Ver um agente em ação**\n2. **Calcular meu ROI**\n3. **Falar com um especialista**"
+        : "Hey, still there? No pressure — but I can show you a quick result.\n\nPick one:\n1. **See an agent in action**\n2. **Calculate my ROI**\n3. **Talk to a specialist**";
 
       setMessages(prev => [...prev, { role: "assistant", content: followup }]);
       sessionStorage.setItem(SESSION_FOLLOWUP_KEY, "1");
-    }, 120_000); // 2 minutes
+    }, 90_000); // 1.5 minutes
 
     return () => {
       if (inactivityTimerRef.current) clearTimeout(inactivityTimerRef.current);
