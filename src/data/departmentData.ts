@@ -252,10 +252,10 @@ export const departments: Department[] = [
     headcount: 4, cltCost: 44000, prometheusCost: 2997, discount: 25,
   },
   {
-    id: "logistica", icon: Truck, color: "text-sky-400",
-    gradient: "from-sky-500/20 to-sky-500/5",
-    borderActive: "border-sky-500/40",
-    iconBg: "bg-sky-500/20",
+    id: "logistica", icon: Truck, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "6M", actions: "8.000",
     agents: [
       { key: "logistics", icon: Truck, role: "Coordenador Logístico", tokens: "2M" },
