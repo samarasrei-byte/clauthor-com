@@ -232,21 +232,20 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ AI CONCIERGE ═══════════ */}
-      <section className="py-16 sm:py-20 px-4" aria-label="AI Concierge">
-        <div className="max-w-4xl mx-auto">
+      <section className="py-16 sm:py-24 px-5" aria-label="AI Concierge">
+        <div className="max-w-3xl mx-auto">
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
-            <div className="text-center mb-8">
-              <p className="text-[12px] font-semibold text-primary uppercase tracking-wider mb-2">{t("home.section_concierge")}</p>
-              <h2 className="text-2xl sm:text-3xl font-bold">
-                {t("home.concierge_title")} <span className="text-primary">{t("home.concierge_title_hl")}</span>
+            <div className="text-center mb-10">
+              <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight mb-3">
+                {t("home.concierge_title")}
               </h2>
-              <p className="text-[14px] text-muted-foreground mt-2">
+              <p className="text-[15px] text-muted-foreground max-w-lg mx-auto">
                 {t("home.concierge_desc")}
               </p>
             </div>
 
-            <div className="rounded-xl border border-border bg-card p-5 sm:p-8 shadow-sm">
-              <Suspense fallback={<div className="h-[200px] rounded-lg bg-muted animate-pulse" />}>
+            <div className="rounded-2xl border border-border/50 bg-card p-5 sm:p-8">
+              <Suspense fallback={<div className="h-[200px] rounded-xl bg-muted animate-pulse" />}>
                 <SmartAgentFinder
                   agentMeta={finderMeta}
                   onHire={() => navigate("/library")}
