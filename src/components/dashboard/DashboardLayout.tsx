@@ -3,6 +3,7 @@ import { Bot, LogOut, Home, Shield, Coins, AlertTriangle, X } from "lucide-react
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageSelector } from "@/components/LanguageSelector";
+import ThemeToggle from "@/components/ThemeToggle";
 
 import { useTokenMonitor } from "@/hooks/useTokenMonitor";
 import TokenUpgradeDialog from "./TokenUpgradeDialog";
