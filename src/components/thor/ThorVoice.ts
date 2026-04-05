@@ -128,25 +128,23 @@ export function getProactiveMessages(pathname: string, lang: string): string[] {
   if (pathname === "/" || pathname === "") {
     return isPt
       ? [
-          "Ei! Notei que você tá olhando a home. Quer que eu te mostre como nossos agentes podem revolucionar sua empresa? 🚀",
-          "Tô vendo que você ainda não explorou os departamentos. Posso te guiar? Tenho 200 agentes prontos!",
+          "Vi que você tá explorando. Quer que eu te mostre o caminho mais rápido pro seu objetivo?\n\n1. **Vender mais**\n2. **Automatizar tarefas**\n3. **Montar meu time de IA**",
         ]
       : [
-          "Hey! Want me to show you how our agents can transform your business? 🚀",
-          "I see you haven't explored the departments yet. Can I guide you?",
+          "I see you're exploring. Want me to show you the fastest path to your goal?\n\n1. **Sell more**\n2. **Automate tasks**\n3. **Build my AI team**",
         ];
   }
   if (pathname.includes("/library")) {
     return isPt
-      ? ["Boa escolha vir na biblioteca! Posso te ajudar a encontrar o agente perfeito pro seu caso."]
-      : ["Great choice! I can help you find the perfect agent."];
+      ? ["Boa escolha. Me diz seu maior desafio e eu te indico o agente certo em 10 segundos."]
+      : ["Great choice. Tell me your biggest challenge and I'll match you with the right agent in 10 seconds."];
   }
   if (pathname.includes("/pricing")) {
     return isPt
-      ? ["Analisando preços? Posso te ajudar a escolher o plano ideal."]
-      : ["Checking prices? I can help you pick the ideal plan."];
+      ? ["Analisando planos? Me diz o tamanho da sua equipe e eu te mostro o melhor custo-benefício."]
+      : ["Looking at plans? Tell me your team size and I'll show you the best value."];
   }
-  return isPt ? ["Precisa de ajuda? Tô aqui 24/7!"] : ["Need help? I'm here 24/7!"];
+  return isPt ? ["Como posso te fazer avançar agora?"] : ["How can I help you move forward?"];
 }
 
 /** Engagement-driven proactive greeting */
