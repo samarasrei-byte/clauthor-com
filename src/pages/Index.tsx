@@ -499,14 +499,97 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ═══════════ WAITLIST BANNER ═══════════ */}
-      <section className="py-12 sm:py-16 px-4" aria-label="Waitlist">
-        <div className="max-w-4xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="flex flex-col sm:flex-row items-center gap-6 p-6 sm:p-8 rounded-xl border border-border bg-card shadow-sm"
+      {/* ═══════════ EARLY ADOPTERS ═══════════ */}
+      <section className="py-16 sm:py-24 px-5" aria-label="Early adopters">
+        <div className="max-w-[1120px] mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight">
+              {t("home.early_adopters_title", { defaultValue: "Quem já está usando" })}
+            </h2>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+            {[
+              {
+                id: "testimonial-ceo",
+                quote: t("home.testimonial_1", { defaultValue: "Automatizamos 80% do atendimento ao cliente no primeiro mês." }),
+                author: "CEO",
+                company: t("home.testimonial_1_company", { defaultValue: "E-commerce de Moda" }),
+                metric: "80%",
+                metricLabel: t("home.testimonial_1_metric", { defaultValue: "tickets automatizados" }),
+              },
+              {
+                id: "testimonial-cfo",
+                quote: t("home.testimonial_2", { defaultValue: "O agente financeiro concilia notas fiscais e gera relatórios. Economizamos um funcionário." }),
+                author: "CFO",
+                company: t("home.testimonial_2_company", { defaultValue: "Startup SaaS B2B" }),
+                metric: "$8k",
+                metricLabel: t("home.testimonial_2_metric", { defaultValue: "economia mensal" }),
+              },
+              {
+                id: "testimonial-growth",
+                quote: t("home.testimonial_3", { defaultValue: "Configurei o SDR em 10 minutos. Ele já prospecta e qualifica leads automaticamente." }),
+                author: "Head of Growth",
+                company: t("home.testimonial_3_company", { defaultValue: "Agência Digital" }),
+                metric: "3x",
+                metricLabel: t("home.testimonial_3_metric", { defaultValue: "mais leads qualificados" }),
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="flex flex-col"
+              >
+                <p className="text-[22px] font-semibold tracking-tight mb-1">{item.metric}</p>
+                <p className="text-[12px] text-muted-foreground mb-4">{item.metricLabel}</p>
+                <p className="text-[14px] text-muted-foreground leading-relaxed mb-5 flex-1">"{item.quote}"</p>
+                <div className="pt-4 border-t border-border/50">
+                  <p className="text-[13px] font-medium">{item.author}</p>
+                  <p className="text-[12px] text-muted-foreground">{item.company}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ INNOVATION ROADMAP ═══════════ */}
+      <Suspense fallback={null}>
+        <InnovationRoadmap />
+      </Suspense>
+
+      {/* ═══════════ FINAL CTA ═══════════ */}
+      <section className="py-24 sm:py-32 px-5" aria-label="Final CTA">
+        <div className="max-w-2xl mx-auto text-center">
+          <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}>
+            <h2 className="text-3xl sm:text-5xl font-semibold tracking-tight mb-4">
+              {t("home.final_cta_title_v2", { defaultValue: "Vagas limitadas. Garanta a sua." })}
+            </h2>
+            <p className="text-[16px] text-muted-foreground max-w-md mx-auto mb-8 leading-relaxed">
+              {t("home.final_cta_desc_v2", { defaultValue: "Os primeiros a entrar ganham acesso antecipado e desconto exclusivo de lançamento." })}
+            </p>
+            <Link to="/waitlist">
+              <Button size="lg" className="h-12 px-10 gap-2 text-[14px] font-medium rounded-full">
+                {t("home.cta_waitlist", { defaultValue: "Get Started" })}
+                <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ═══════════ FOOTER ═══════════ */}
+      <Footer />
+      <Suspense fallback={null}>
+        <SmartOnboarding isOpen={showSmartOnboarding} onClose={() => setShowSmartOnboarding(false)} />
+      </Suspense>
+    </div>
+  );
+};
+
+export default HomePage;
           >
             <div className="flex-1 text-center sm:text-left">
               <div className="flex items-center gap-2 justify-center sm:justify-start mb-2">
