@@ -265,10 +265,10 @@ export const departments: Department[] = [
     headcount: 3, cltCost: 36000, prometheusCost: 2497, discount: 25,
   },
   {
-    id: "qualidade", icon: ClipboardCheck, color: "text-yellow-400",
-    gradient: "from-yellow-500/20 to-yellow-500/5",
-    borderActive: "border-yellow-500/40",
-    iconBg: "bg-yellow-500/20",
+    id: "qualidade", icon: ClipboardCheck, color: "text-primary",
+    gradient: "from-primary/10 to-transparent",
+    borderActive: "border-primary/30",
+    iconBg: "bg-primary/10",
     popular: false, tokens: "3M", actions: "4.000",
     agents: [
       { key: "quality", icon: ClipboardCheck, role: "Analista de Qualidade", tokens: "1.5M" },
