@@ -10,6 +10,7 @@ import DashboardWelcome from "@/components/DashboardWelcome";
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
+const ExecutionHealthBanner = lazy(() => import("./ExecutionHealthBanner"));
 const MarketplaceReviews = lazy(() => import("./MarketplaceReviews"));
 const QuickIntegrations = lazy(() => import("./QuickIntegrations"));
 const MyIntegrationsPanel = lazy(() => import("./MyIntegrationsPanel"));
