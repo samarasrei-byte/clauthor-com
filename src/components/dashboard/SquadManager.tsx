@@ -286,7 +286,6 @@ const SquadManager = ({ onNavigate }: SquadManagerProps) => {
                     </select>
                   </div>
                 )}
-                </div>
 
                 {/* Footer */}
                 <div className="flex items-center justify-between pt-2 border-t border-border/10">
