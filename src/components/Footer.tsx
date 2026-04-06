@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Linkedin, LockKeyhole, ShieldCheck } from "lucide-react";
 import { useTranslation } from "react-i18next";
-import clauthorLogo from "@/assets/clauthor-logo.png";
+import ClauthorLogo from "@/components/ClauthorLogo";
 
 const Footer = () => {
   const { t } = useTranslation();
@@ -12,8 +12,7 @@ const Footer = () => {
         <div className="flex flex-col md:flex-row items-start justify-between gap-8 sm:gap-10 mb-8 sm:mb-10">
           <div>
             <div className="flex items-center gap-3 mb-3">
-              <img src={clauthorLogo} alt="CLAUTHOR" className="w-8 h-8 object-contain mix-blend-lighten" width={32} height={32} />
-              <span className="font-display font-bold text-base tracking-wider">CLAUTHOR</span>
+              <ClauthorLogo size="lg" />
             </div>
             <p className="text-sm text-muted-foreground max-w-xs mb-4">
               {t("home.footer_desc")}
