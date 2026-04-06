@@ -151,13 +151,34 @@ const WarRoomLive = () => {
     };
   }, [user, queryClient]);
 
-  // ── Stats ──
+  // ── Stats + Anomaly Detection ──
   const stats = useMemo(() => {
     const running = liveActions.filter(a => a.status === "running").length;
     const last1h = liveActions.filter(a => Date.now() - new Date(a.time).getTime() < 3_600_000).length;
     const errors = liveActions.filter(a => a.status === "error").length;
     const convos = new Set(squadChats.filter(c => c.role === "assistant").map(c => c.agentName)).size;
-    return { running, last1h, errors, convos };
+
+    // Anomaly: error spike detection (>30% error rate in last hour)
+    const last1hActions = liveActions.filter(a => Date.now() - new Date(a.time).getTime() < 3_600_000);
+    const last1hErrors = last1hActions.filter(a => a.status === "error").length;
+    const errorRateLastHour = last1hActions.length > 0 ? Math.round((last1hErrors / last1hActions.length) * 100) : 0;
+    const hasErrorSpike = errorRateLastHour > 30 && last1hErrors >= 3;
+
+    // Anomaly: slowdown detection (avg ms > 2x overall avg)
+    const withMs = liveActions.filter(a => a.ms && a.ms > 0);
+    const overallAvgMs = withMs.length > 0 ? withMs.reduce((s, a) => s + a.ms, 0) / withMs.length : 0;
+    const last1hWithMs = last1hActions.filter(a => a.ms && a.ms > 0);
+    const last1hAvgMs = last1hWithMs.length > 0 ? last1hWithMs.reduce((s, a) => s + a.ms, 0) / last1hWithMs.length : 0;
+    const hasSlowdown = overallAvgMs > 0 && last1hAvgMs > overallAvgMs * 2 && last1hWithMs.length >= 3;
+
+    // Top error agents
+    const errorByAgent = new Map<string, number>();
+    liveActions.filter(a => a.status === "error").forEach(a => {
+      errorByAgent.set(a.agentName, (errorByAgent.get(a.agentName) || 0) + 1);
+    });
+    const topErrorAgent = [...errorByAgent.entries()].sort((a, b) => b[1] - a[1])[0];
+
+    return { running, last1h, errors, convos, errorRateLastHour, hasErrorSpike, hasSlowdown, topErrorAgent };
   }, [liveActions, squadChats]);
 
   // ── Unified feed ──
