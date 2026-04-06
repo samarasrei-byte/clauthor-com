@@ -151,13 +151,34 @@ const WarRoomLive = () => {
     };
   }, [user, queryClient]);
 
-  // ── Stats ──
+  // ── Stats + Anomaly Detection ──
   const stats = useMemo(() => {
     const running = liveActions.filter(a => a.status === "running").length;
     const last1h = liveActions.filter(a => Date.now() - new Date(a.time).getTime() < 3_600_000).length;
     const errors = liveActions.filter(a => a.status === "error").length;
     const convos = new Set(squadChats.filter(c => c.role === "assistant").map(c => c.agentName)).size;
-    return { running, last1h, errors, convos };
+
+    // Anomaly: error spike detection (>30% error rate in last hour)
+    const last1hActions = liveActions.filter(a => Date.now() - new Date(a.time).getTime() < 3_600_000);
+    const last1hErrors = last1hActions.filter(a => a.status === "error").length;
+    const errorRateLastHour = last1hActions.length > 0 ? Math.round((last1hErrors / last1hActions.length) * 100) : 0;
+    const hasErrorSpike = errorRateLastHour > 30 && last1hErrors >= 3;
+
+    // Anomaly: slowdown detection (avg ms > 2x overall avg)
+    const withMs = liveActions.filter(a => a.ms && a.ms > 0);
+    const overallAvgMs = withMs.length > 0 ? withMs.reduce((s, a) => s + a.ms, 0) / withMs.length : 0;
+    const last1hWithMs = last1hActions.filter(a => a.ms && a.ms > 0);
+    const last1hAvgMs = last1hWithMs.length > 0 ? last1hWithMs.reduce((s, a) => s + a.ms, 0) / last1hWithMs.length : 0;
+    const hasSlowdown = overallAvgMs > 0 && last1hAvgMs > overallAvgMs * 2 && last1hWithMs.length >= 3;
+
+    // Top error agents
+    const errorByAgent = new Map<string, number>();
+    liveActions.filter(a => a.status === "error").forEach(a => {
+      errorByAgent.set(a.agentName, (errorByAgent.get(a.agentName) || 0) + 1);
+    });
+    const topErrorAgent = [...errorByAgent.entries()].sort((a, b) => b[1] - a[1])[0];
+
+    return { running, last1h, errors, convos, errorRateLastHour, hasErrorSpike, hasSlowdown, topErrorAgent };
   }, [liveActions, squadChats]);
 
   // ── Unified feed ──
@@ -194,6 +215,45 @@ const WarRoomLive = () => {
           <p className="text-xs text-muted-foreground">Monitoramento em tempo real de toda a operação</p>
         </div>
       </div>
+
+      {/* Anomaly Alerts */}
+      {(stats.hasErrorSpike || stats.hasSlowdown) && (
+        <div className="space-y-2">
+          {stats.hasErrorSpike && (
+            <motion.div
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="rounded-xl border border-destructive/30 bg-destructive/5 p-3 flex items-center gap-3"
+            >
+              <div className="w-8 h-8 rounded-lg bg-destructive/10 flex items-center justify-center shrink-0">
+                <XCircle className="h-4 w-4 text-destructive" />
+              </div>
+              <div className="flex-1">
+                <p className="text-xs font-semibold text-destructive">⚠️ Spike de erros detectado</p>
+                <p className="text-[10px] text-muted-foreground">
+                  {stats.errorRateLastHour}% taxa de erro na última hora
+                  {stats.topErrorAgent && ` · Agente mais afetado: ${stats.topErrorAgent[0]} (${stats.topErrorAgent[1]} erros)`}
+                </p>
+              </div>
+            </motion.div>
+          )}
+          {stats.hasSlowdown && (
+            <motion.div
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-3 flex items-center gap-3"
+            >
+              <div className="w-8 h-8 rounded-lg bg-amber-500/10 flex items-center justify-center shrink-0">
+                <Clock className="h-4 w-4 text-amber-400" />
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-amber-400">🐌 Lentidão detectada</p>
+                <p className="text-[10px] text-muted-foreground">Tempo médio de execução 2x acima do normal na última hora</p>
+              </div>
+            </motion.div>
+          )}
+        </div>
+      )}
 
       {/* KPI Strip */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">

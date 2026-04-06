@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { motion, AnimatePresence } from "framer-motion";
@@ -39,6 +39,7 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
   const [activeChannel, setActiveChannel] = useState<ChannelType>("all");
   const [search, setSearch] = useState("");
   const [selectedThread, setSelectedThread] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   // Fetch chat messages grouped by agent
   const { data: messages = [], isLoading } = useQuery({
@@ -198,13 +199,26 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
           {/* Notifications Banner */}
           {notifications.length > 0 && (
             <div className="mx-3 mt-2 p-2.5 rounded-lg bg-primary/5 border border-primary/10">
-              <div className="flex items-center gap-2">
-                <div className="relative">
-                  <Circle className="h-2 w-2 text-primary fill-primary animate-pulse" />
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <Circle className="h-2 w-2 text-primary fill-primary animate-pulse" />
+                  </div>
+                  <span className="text-[10px] text-primary font-medium">
+                    {notifications.length} alertas proativos dos agentes
+                  </span>
                 </div>
-                <span className="text-[10px] text-primary font-medium">
-                  {notifications.length} alertas proativos dos agentes
-                </span>
+                <button
+                  onClick={async () => {
+                    for (const n of notifications) {
+                      await supabase.from("notifications").update({ is_read: true }).eq("id", n.id);
+                    }
+                    queryClient.invalidateQueries({ queryKey: ["inbox-notifications"] });
+                  }}
+                  className="text-[9px] text-primary/70 hover:text-primary hover:underline transition-colors"
+                >
+                  Marcar tudo lido
+                </button>
               </div>
               <p className="text-[9.5px] text-muted-foreground mt-1 truncate">
                 {notifications[0]?.title}

@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, Plus, Bot, Trash2, Sparkles, ChevronRight, Search, Layers3 } from "lucide-react";
+import { Users, Plus, Bot, Trash2, Sparkles, ChevronRight, Search, Layers3, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
@@ -85,6 +85,40 @@ const SquadManager = ({ onNavigate }: SquadManagerProps) => {
       toast.success("Squad criado com sucesso!");
     },
     onError: () => toast.error("Erro ao criar squad"),
+  });
+
+  // Add agent to squad
+  const addAgentMutation = useMutation({
+    mutationFn: async ({ squadId, agentId }: { squadId: string; agentId: string }) => {
+      if (!tenantId) throw new Error("Sem tenant");
+      const { error } = await supabase.from("squad_agents").insert({
+        squad_id: squadId,
+        agent_id: agentId,
+        tenant_id: tenantId,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["squads"] });
+      toast.success("Agente adicionado ao squad");
+    },
+    onError: () => toast.error("Erro ao adicionar agente"),
+  });
+
+  // Remove agent from squad
+  const removeAgentMutation = useMutation({
+    mutationFn: async ({ squadId, agentId }: { squadId: string; agentId: string }) => {
+      const { error } = await supabase
+        .from("squad_agents")
+        .delete()
+        .eq("squad_id", squadId)
+        .eq("agent_id", agentId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["squads"] });
+      toast.success("Agente removido do squad");
+    },
   });
 
   // Delete squad
@@ -204,16 +238,19 @@ const SquadManager = ({ onNavigate }: SquadManagerProps) => {
                   <p className="text-xs text-muted-foreground mb-3 line-clamp-2">{squad.description}</p>
                 )}
 
-                {/* Agent avatars */}
+                {/* Agent avatars with remove */}
                 <div className="flex flex-wrap gap-1.5 mb-3">
                   {squadAgents.slice(0, 6).map((agent: any) => (
                     <Badge
                       key={agent.id}
                       variant="outline"
-                      className={`text-[9px] gap-1 ${tierColors[agent.tier] || "bg-muted text-muted-foreground"}`}
+                      className={`text-[9px] gap-1 cursor-pointer hover:line-through hover:opacity-60 transition-all ${tierColors[agent.tier] || "bg-muted text-muted-foreground"}`}
+                      onClick={() => removeAgentMutation.mutate({ squadId: squad.id, agentId: agent.id })}
+                      title={`Clique para remover ${agent.name}`}
                     >
                       <Bot className="h-2.5 w-2.5" />
                       {agent.name}
+                      <X className="h-2 w-2 opacity-0 group-hover:opacity-60" />
                     </Badge>
                   ))}
                   {squadAgents.length > 6 && (
@@ -225,6 +262,30 @@ const SquadManager = ({ onNavigate }: SquadManagerProps) => {
                     <span className="text-[10px] text-muted-foreground/50 italic">Sem agentes</span>
                   )}
                 </div>
+
+                {/* Add agent dropdown */}
+                {agents.filter(a => !squadAgents.some((sa: any) => sa.id === a.id)).length > 0 && (
+                  <div className="mb-3">
+                    <select
+                      className="w-full h-7 text-[10px] rounded-lg bg-muted/20 border border-border/20 px-2 text-muted-foreground appearance-none cursor-pointer hover:border-primary/30 transition-colors"
+                      defaultValue=""
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          addAgentMutation.mutate({ squadId: squad.id, agentId: e.target.value });
+                          e.target.value = "";
+                        }
+                      }}
+                    >
+                      <option value="" disabled>+ Adicionar agente...</option>
+                      {agents
+                        .filter(a => !squadAgents.some((sa: any) => sa.id === a.id))
+                        .map(a => (
+                          <option key={a.id} value={a.id}>{a.name}</option>
+                        ))
+                      }
+                    </select>
+                  </div>
+                )}
 
                 {/* Footer */}
                 <div className="flex items-center justify-between pt-2 border-t border-border/10">
