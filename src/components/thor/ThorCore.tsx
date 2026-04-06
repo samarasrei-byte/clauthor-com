@@ -314,6 +314,19 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
 
     let fullText = "";
 
+    // Fetch real dashboard context for authenticated users
+    let diagnostics: string | undefined;
+    if (user) {
+      try {
+        const dashCtx = await fetchThorDashboardContext(user.id);
+        if (dashCtx) {
+          diagnostics = formatContextForPrompt(dashCtx);
+        }
+      } catch {
+        // Silent — context is optional enhancement
+      }
+    }
+
     await streamThorResponse({
       messages: updated,
       supabaseUrl: import.meta.env.VITE_SUPABASE_URL,
@@ -323,6 +336,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
         route: location.pathname,
         authenticated: !!user,
         persona: "thor",
+        diagnostics,
       },
       signal: controller.signal,
       onFlush: (snapshot) => {
