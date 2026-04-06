@@ -39,6 +39,7 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
   const [activeChannel, setActiveChannel] = useState<ChannelType>("all");
   const [search, setSearch] = useState("");
   const [selectedThread, setSelectedThread] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   // Fetch chat messages grouped by agent
   const { data: messages = [], isLoading } = useQuery({
