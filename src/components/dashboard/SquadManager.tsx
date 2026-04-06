@@ -87,6 +87,40 @@ const SquadManager = ({ onNavigate }: SquadManagerProps) => {
     onError: () => toast.error("Erro ao criar squad"),
   });
 
+  // Add agent to squad
+  const addAgentMutation = useMutation({
+    mutationFn: async ({ squadId, agentId }: { squadId: string; agentId: string }) => {
+      if (!tenantId) throw new Error("Sem tenant");
+      const { error } = await supabase.from("squad_agents").insert({
+        squad_id: squadId,
+        agent_id: agentId,
+        tenant_id: tenantId,
+      });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["squads"] });
+      toast.success("Agente adicionado ao squad");
+    },
+    onError: () => toast.error("Erro ao adicionar agente"),
+  });
+
+  // Remove agent from squad
+  const removeAgentMutation = useMutation({
+    mutationFn: async ({ squadId, agentId }: { squadId: string; agentId: string }) => {
+      const { error } = await supabase
+        .from("squad_agents")
+        .delete()
+        .eq("squad_id", squadId)
+        .eq("agent_id", agentId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["squads"] });
+      toast.success("Agente removido do squad");
+    },
+  });
+
   // Delete squad
   const deleteMutation = useMutation({
     mutationFn: async (squadId: string) => {
