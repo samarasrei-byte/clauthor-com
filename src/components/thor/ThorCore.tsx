@@ -144,24 +144,52 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     if (alreadyGreeted || dismissed) return;
     if (location.pathname !== "/") return;
 
-    const timer = setTimeout(() => {
+    const timer = setTimeout(async () => {
       if (sessionStorage.getItem(SESSION_DISMISSED_KEY)) return;
 
       const memory = loadThorMemory();
-      const greeting = buildProactiveGreeting(lang, memory);
-      touchThorVisit();
+      let greeting = buildProactiveGreeting(lang, memory);
 
+      // For authenticated users, enrich greeting with real context
+      if (user) {
+        try {
+          const dashCtx = await fetchThorDashboardContext(user.id);
+          if (dashCtx) {
+            const isPt = lang.startsWith("pt");
+            const name = memory.name;
+
+            if (dashCtx.totalAgents === 0) {
+              greeting = isPt
+                ? `${name ? `**${name}**, ` : ""}bom te ver! Você ainda não contratou nenhum agente.\n\nVamos resolver isso agora?\n\n1. **Ver agentes recomendados**\n2. **Me dizer seu desafio**\n3. **Explorar por departamento**`
+                : `${name ? `**${name}**, ` : ""}good to see you! You haven't hired any agents yet.\n\nLet's fix that?\n\n1. **See recommended agents**\n2. **Tell me your challenge**\n3. **Browse by department**`;
+            } else if (dashCtx.overdueTasks > 0) {
+              greeting = isPt
+                ? `${name ? `**${name}**, ` : ""}atenção: você tem **${dashCtx.overdueTasks} tarefa(s) atrasada(s)** e ${dashCtx.activeAgents} agentes ativos.\n\nQuer que eu priorize?\n\n1. **Ver tarefas atrasadas**\n2. **Delegar para um agente**\n3. **Ignorar por agora**`
+                : `${name ? `**${name}**, ` : ""}heads up: you have **${dashCtx.overdueTasks} overdue task(s)** and ${dashCtx.activeAgents} active agents.\n\nWant me to prioritize?\n\n1. **View overdue tasks**\n2. **Delegate to an agent**\n3. **Skip for now**`;
+            } else if (dashCtx.recentExecutions === 0 && dashCtx.totalAgents > 0) {
+              greeting = isPt
+                ? `${name ? `**${name}**, ` : ""}seus ${dashCtx.totalAgents} agentes estão prontos, mas nenhum recebeu tarefa ainda.\n\nQuer começar?\n\n1. **Enviar primeira tarefa**\n2. **Ver o que cada agente faz**\n3. **Configurar minha empresa**`
+                : `${name ? `**${name}**, ` : ""}your ${dashCtx.totalAgents} agents are ready, but none received a task yet.\n\nWant to start?\n\n1. **Send first task**\n2. **See what each agent does**\n3. **Set up my company**`;
+            } else if (dashCtx.usagePercent > 80) {
+              greeting = isPt
+                ? `${name ? `**${name}**, ` : ""}alerta: você usou **${dashCtx.usagePercent}%** dos seus créditos. ${dashCtx.activeAgents} agentes ativos.\n\nO que quer fazer?\n\n1. **Ver meu consumo**\n2. **Upgrade de plano**\n3. **Otimizar uso**`
+                : `${name ? `**${name}**, ` : ""}alert: you've used **${dashCtx.usagePercent}%** of your credits. ${dashCtx.activeAgents} active agents.\n\nWhat to do?\n\n1. **View usage**\n2. **Upgrade plan**\n3. **Optimize usage**`;
+            }
+          }
+        } catch {
+          // Fallback to standard greeting
+        }
+      }
+
+      touchThorVisit();
       setPhase("active");
       setShowChat(true);
       setMessages([{ role: "assistant", content: greeting }]);
       sessionStorage.setItem(SESSION_GREETED_KEY, "1");
-
-      // Never auto-play audio — browser blocks it without user interaction.
-      // Voice stays OFF until user explicitly enables it.
     }, 5000);
 
     return () => clearTimeout(timer);
-  }, [location.pathname, lang, isMobile, speak, thorVoiceId]);
+  }, [location.pathname, lang, isMobile, speak, thorVoiceId, user]);
 
   // Entrance → active transition (kept for manual entrance)
   useEffect(() => {
