@@ -141,9 +141,11 @@ const ConsolidatedMetrics = ({
             </p>
             <p className="text-[10px] text-muted-foreground mt-0.5">
               {kpi.label}
-              {(kpi as any).tooltip && (
-                <span className="ml-1 opacity-60" title={(kpi as any).tooltip}>ⓘ</span>
-              )}
+                {(kpi as any).tooltip && (
+                  <span className="ml-1 opacity-40 cursor-help" title={(kpi as any).tooltip}>
+                    <Activity className="inline h-2.5 w-2.5" />
+                  </span>
+                )}
             </p>
           </motion.div>
         ))}
