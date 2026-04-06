@@ -38,8 +38,13 @@ const LiveDemoAgent = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
 
+  // Auto-start immediately with first system message pre-loaded
   useEffect(() => {
-    const timer = setTimeout(() => setStarted(true), 800);
+    if (SCRIPT_KEYS.length > 0) {
+      setMessages([SCRIPT_KEYS[0]]);
+      setCurrentIndex(1);
+    }
+    const timer = setTimeout(() => setStarted(true), 600);
     return () => clearTimeout(timer);
   }, []);
 
