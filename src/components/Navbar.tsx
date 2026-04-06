@@ -64,10 +64,8 @@ const Navbar = () => {
       <div className="max-w-[1120px] mx-auto px-5 sm:px-6">
         <div className="flex items-center justify-between h-12">
           {/* Logo — pure text, Apple style */}
-          <Link to="/" className="flex items-center gap-0 group">
-            <span className="text-[15px] font-semibold text-foreground tracking-[-0.03em]">
-              clauthor
-            </span>
+          <Link to="/" className="flex items-center group">
+            <ClauthorLogo size="md" />
           </Link>
 
           {/* Desktop Nav */}
