@@ -1,8 +1,11 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, DollarSign, Clock, Users, Sparkles, ArrowUpRight } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, Clock, Users, Sparkles, ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ROIDashboardProps {
   agents: any[];
@@ -11,18 +14,77 @@ interface ROIDashboardProps {
   estimatedSavings: number;
 }
 
+/** Compare this week vs last week to get real trend % */
+function computeWeeklyTrend(logs: { created_at: string }[]): number {
+  const now = Date.now();
+  const oneWeek = 7 * 86_400_000;
+  const thisWeek = logs.filter(l => now - new Date(l.created_at).getTime() < oneWeek).length;
+  const lastWeek = logs.filter(l => {
+    const age = now - new Date(l.created_at).getTime();
+    return age >= oneWeek && age < oneWeek * 2;
+  }).length;
+  if (lastWeek === 0) return thisWeek > 0 ? 100 : 0;
+  return Math.round(((thisWeek - lastWeek) / lastWeek) * 100);
+}
+
 const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavings }: ROIDashboardProps) => {
   const { t } = useTranslation();
+  const { user } = useAuth();
+
+  // Fetch real execution logs for trend computation
+  const { data: execLogs = [] } = useQuery({
+    queryKey: ["roi-exec-logs", user?.id],
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("execution_logs")
+        .select("created_at, status, execution_time_ms")
+        .eq("user_id", user!.id)
+        .gte("created_at", new Date(Date.now() - 14 * 86_400_000).toISOString())
+        .order("created_at", { ascending: false })
+        .limit(500);
+      return data || [];
+    },
+    enabled: !!user,
+    staleTime: 60_000,
+  });
 
   const metrics = useMemo(() => {
     const hoursWorked = Math.round(totalExecutions * 0.35);
-    const humanEquivalentCost = hoursWorked * 45; // R$45/h average
-    const agentCost = agents.length * 345; // R$345/dept average
+    const humanEquivalentCost = hoursWorked * 45;
+    const agentCost = agents.length * 345;
     const netSavings = Math.max(humanEquivalentCost - agentCost, 0);
     const roi = agentCost > 0 ? Math.round((netSavings / agentCost) * 100) : 0;
 
-    return { hoursWorked, humanEquivalentCost, agentCost, netSavings, roi };
-  }, [agents, totalExecutions]);
+    // Real trends from execution data
+    const execTrend = computeWeeklyTrend(execLogs);
+    const successLogs = execLogs.filter(l => l.status === "success");
+    const savingsTrend = computeWeeklyTrend(successLogs);
+
+    // Efficiency trend: compare avg execution time this week vs last
+    const now = Date.now();
+    const oneWeek = 7 * 86_400_000;
+    const thisWeekLogs = execLogs.filter(l => now - new Date(l.created_at).getTime() < oneWeek && l.execution_time_ms);
+    const lastWeekLogs = execLogs.filter(l => {
+      const age = now - new Date(l.created_at).getTime();
+      return age >= oneWeek && age < oneWeek * 2 && l.execution_time_ms;
+    });
+    const avgThis = thisWeekLogs.length > 0 ? thisWeekLogs.reduce((a, l) => a + (l.execution_time_ms || 0), 0) / thisWeekLogs.length : 0;
+    const avgLast = lastWeekLogs.length > 0 ? lastWeekLogs.reduce((a, l) => a + (l.execution_time_ms || 0), 0) / lastWeekLogs.length : 0;
+    // Faster = positive trend (inverted since lower ms is better)
+    const efficiencyTrend = avgLast > 0 ? Math.round(((avgLast - avgThis) / avgLast) * 100) : 0;
+
+    return { hoursWorked, humanEquivalentCost, agentCost, netSavings, roi, execTrend, savingsTrend, efficiencyTrend };
+  }, [agents, totalExecutions, execLogs]);
+
+  const formatTrend = (val: number) => {
+    if (val === 0) return { text: "—", icon: Minus, color: "text-muted-foreground" };
+    if (val > 0) return { text: `+${val}%`, icon: ArrowUpRight, color: "text-emerald-400" };
+    return { text: `${val}%`, icon: ArrowDownRight, color: "text-destructive" };
+  };
+
+  const hoursTrend = formatTrend(metrics.execTrend);
+  const savTrend = formatTrend(metrics.savingsTrend);
+  const roiTrend = formatTrend(metrics.efficiencyTrend);
 
   const cards = [
     {
@@ -30,7 +92,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
       label: t("roi.hours_saved", { defaultValue: "Horas Economizadas" }),
       value: `${metrics.hoursWorked}h`,
       sub: t("roi.hours_sub", { defaultValue: "vs. equipe humana" }),
-      trend: "+12%",
+      trend: hoursTrend,
       color: "text-blue-400",
       bg: "from-blue-500/10 to-blue-500/5",
     },
@@ -39,7 +101,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
       label: t("roi.savings", { defaultValue: "Economia Total" }),
       value: `R$ ${metrics.netSavings.toLocaleString("pt-BR")}`,
       sub: t("roi.savings_sub", { defaultValue: "este mês" }),
-      trend: "+18%",
+      trend: savTrend,
       color: "text-emerald-400",
       bg: "from-emerald-500/10 to-emerald-500/5",
     },
@@ -48,7 +110,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
       label: t("roi.roi", { defaultValue: "ROI" }),
       value: `${metrics.roi}%`,
       sub: t("roi.roi_sub", { defaultValue: "retorno sobre investimento" }),
-      trend: "+5%",
+      trend: roiTrend,
       color: "text-primary",
       bg: "from-primary/10 to-primary/5",
     },
@@ -57,7 +119,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
       label: t("roi.equivalent", { defaultValue: "Equiv. Humano" }),
       value: `${Math.max(1, Math.round(agents.length * 0.8))}`,
       sub: t("roi.equivalent_sub", { defaultValue: "funcionários substituídos" }),
-      trend: "",
+      trend: null,
       color: "text-amber-400",
       bg: "from-amber-500/10 to-amber-500/5",
     },
@@ -86,6 +148,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         {cards.map((card, i) => {
           const Icon = card.icon;
+          const TrendIcon = card.trend?.icon;
           return (
             <motion.div
               key={card.label}
@@ -99,9 +162,9 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
             >
               <div className="flex items-center justify-between">
                 <Icon className={cn("h-4 w-4", card.color)} />
-                {card.trend && (
-                  <span className="text-[9px] font-medium text-emerald-400 flex items-center gap-0.5">
-                    <ArrowUpRight className="h-2.5 w-2.5" /> {card.trend}
+                {card.trend && TrendIcon && (
+                  <span className={cn("text-[9px] font-medium flex items-center gap-0.5", card.trend.color)}>
+                    <TrendIcon className="h-2.5 w-2.5" /> {card.trend.text}
                   </span>
                 )}
               </div>
