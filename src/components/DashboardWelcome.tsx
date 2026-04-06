@@ -78,9 +78,9 @@ const DashboardWelcome = ({ userName, hasAgents, hasIntegration, hasExecution }:
             className="text-sm text-foreground/90"
           >
             {userName ? (
-              <>Olá, <span className="font-semibold text-primary">{userName}</span>! Vamos configurar tudo. 🚀</>
+              <>Olá, <span className="font-semibold text-primary">{userName}</span>! Vamos configurar tudo.</>
             ) : (
-              <>Bem-vindo ao CLAUTHOR! Vamos configurar tudo. 🚀</>
+              <>Bem-vindo ao CLAUTHOR! Vamos configurar tudo.</>
             )}
           </motion.p>
           <button

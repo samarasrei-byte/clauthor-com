@@ -52,10 +52,6 @@ const DashboardHeader = ({ locale, remainingCredits, credits }: DashboardHeaderP
         <h1 className="font-display text-xl sm:text-2xl font-bold flex items-center gap-2.5">
           <TimeIcon />
           {greeting}
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
-          </span>
         </h1>
         <p className="text-xs text-muted-foreground flex items-center gap-2">
           <span>{new Date().toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}</span>
