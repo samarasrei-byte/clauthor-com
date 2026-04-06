@@ -85,15 +85,17 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                   {item.group && (item.group.includes("Avançad") || item.group.includes("Advanced")) ? (
                     <button
                       onClick={() => toggleSection(item.group!)}
-                      className="flex items-center gap-1.5 w-full text-left group/section"
+                      className="flex items-center gap-2 w-full text-left group/section py-1 px-1.5 -mx-1.5 rounded-md hover:bg-primary/5 transition-colors"
                     >
-                      <ChevronDown className={cn("h-3 w-3 text-muted-foreground/40 transition-transform", collapsedSections.has(item.group!) && "-rotate-90")} />
-                      <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/35 group-hover/section:text-muted-foreground/60 transition-colors">
+                      <ChevronDown className={cn("h-3.5 w-3.5 text-primary/50 transition-transform duration-200", collapsedSections.has(item.group!) && "-rotate-90")} />
+                      <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-primary/60 group-hover/section:text-primary/80 transition-colors">
                         {item.group}
                       </span>
+                      <div className="flex-1" />
+                      <span className="text-[7px] font-medium text-primary/30 bg-primary/5 px-1.5 py-0.5 rounded-full">PRO</span>
                     </button>
                   ) : (
-                    <span className="text-[8px] font-semibold uppercase tracking-[0.2em] text-muted-foreground/35">
+                    <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground/50">
                       {item.group}
                     </span>
                   )}
