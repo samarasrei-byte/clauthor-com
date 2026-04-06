@@ -45,6 +45,7 @@ export interface StreamThorOptions {
     route: string;
     authenticated: boolean;
     persona: string;
+    diagnostics?: string;
   };
   signal: AbortSignal;
   onFlush: (text: string) => void;
