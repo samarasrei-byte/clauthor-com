@@ -22,6 +22,7 @@ import {
 } from "./ThorIntentDetector";
 import type { DemoType } from "./AgentDemoModal";
 import { useThorScrollTrigger } from "@/hooks/useThorScrollTrigger";
+import { fetchThorDashboardContext, formatContextForPrompt } from "./ThorContextProvider";
 
 const SESSION_GREETED_KEY = "thor_session_greeted";
 const SESSION_DISMISSED_KEY = "thor_session_dismissed";
