@@ -110,6 +110,8 @@ const DashboardOverview = ({
             {/* Advanced panels — only when user has agents */}
             {agents.length > 0 && (
               <>
+                <ExecutionHealthBanner onGoToWarRoom={() => onSetActiveSection("warroom")} />
+
                 <CompanyBoardAlert onSetup={onTeach} />
 
                 <ThorDailyBriefing
