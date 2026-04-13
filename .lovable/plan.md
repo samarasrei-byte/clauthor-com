@@ -1,53 +1,32 @@
 
 
-# Plano: Melhorar Visibilidade do LEX no Marketplace e Times
+# Plano: Acesso Total para Admin sem Pagamento
 
-## Diagnóstico
+## Problema
+O admin (`admin@clauthor.com`) precisa acessar todos os agentes sem pagar. Atualmente:
+- Na Library, o botão "Contratar" redireciona para `/dashboard` sem criar acesso real
+- Na AgentLanding, o CTA sempre leva para `/auth` com fluxo de pagamento
+- No Dashboard, "Agentes Contratados" mostra apenas assinaturas reais do banco
 
-O LEX **já existe** no marketplace e está funcionando. Ele aparece dentro do departamento **Operations > Legal Squad**. O problema é de **visibilidade** — ele está enterrado dentro de um departamento genérico e sem destaque visual.
+## Mudanças
 
-Evidência: ao buscar "Lex" no marketplace, aparecem 2 resultados e o card está completo com tags (DJEN, Prazos, WhatsApp), preço ($197/mês) e botão ACESSAR. A landing page `/agente/lex_guardian` também funciona.
+### 1. AgentLanding.tsx — CTA inteligente para admin
+Importar `useAuth` e verificar `isAdmin`. Se admin, o botão CTA redireciona direto para `/dashboard` (ou `/lex-cadastro` no caso do LEX) em vez de ir para `/auth` com pagamento.
 
----
+### 2. Library.tsx — Melhorar bypass do admin
+O bypass atual (linha 107) já funciona. Ajustar para mostrar um toast "Acesso admin — todos os agentes disponíveis" ao clicar.
 
-## Melhorias Propostas
+### 3. ClientDashboard.tsx — Admin vê todos os agentes como contratados
+Quando `isAdmin`, em vez de buscar apenas assinaturas reais, gerar uma lista virtual com todos os agentes do WORKFORCE como "contratados" com status ativo e preço zero. Isso faz o painel "Agentes Contratados" mostrar todos os agentes disponíveis.
 
-### 1. Adicionar "Jurídico" como filtro de departamento no Team Builder
-
-O `categoryFilters` em `TeamBuilder.tsx` não tem "Jurídico". Adicionar para que o LEX apareça ao filtrar.
-
-Arquivo: `src/pages/TeamBuilder.tsx` — adicionar `{ id: "juridico", label: "Jurídico" }` e mapear `lex_guardian` para `juridico` no `departmentMap.ts`.
-
-### 2. Adicionar cor do departamento "legal" no Library
-
-O `DEPT_COLORS` em `Library.tsx` não tem entrada para quando o legal squad aparece. Adicionar cor temática (slate/indigo) para o departamento que contém agentes jurídicos.
-
-### 3. Destacar LEX como agente "Featured" no marketplace
-
-Adicionar `lex_guardian` ao array `featuredKeys` em `libraryAgentData.ts` para que apareça em destaque no topo.
-
-### 4. Adicionar landing page dedicada no `agentLandingData.ts`
-
-Atualmente o LEX usa o fallback genérico do WORKFORCE. Criar uma entrada completa com:
-- Hero headline: "Zero Prazos Perdidos"
-- Problemas específicos do advogado (prazos vencidos, DJEN manual, etc.)
-- Soluções (monitoramento automático, WhatsApp alerts, controle de deadline)
-- Comparação com workflow manual
-- CTA redirecionando para `/lex-cadastro`
-
-### 5. Mapear `lex_guardian` no `departmentMap.ts`
-
-Adicionar `lex_guardian: "juridico"` no `MANUAL_SLUG_TO_DEPT` para que o TeamBuilder o categorize corretamente.
-
----
+### 4. ContractedAgents.tsx — Nenhuma mudança necessária
+O componente já renderiza o que recebe via props. A lógica de dados fica no ClientDashboard.
 
 ## Arquivos a Modificar
 
 | Arquivo | Mudança |
 |---------|---------|
-| `src/data/libraryAgentData.ts` | Adicionar `lex_guardian` ao `featuredKeys` |
-| `src/data/departmentMap.ts` | Mapear `lex_guardian → juridico` |
-| `src/pages/TeamBuilder.tsx` | Adicionar filtro "Jurídico" ao `categoryFilters` |
-| `src/pages/Library.tsx` | Adicionar cor "legal" ao `DEPT_COLORS` |
-| `src/data/agentLandingData.ts` | Criar landing page completa para `lex_guardian` |
+| `src/pages/AgentLanding.tsx` | Importar `useAuth`, CTA condicional para admin |
+| `src/pages/ClientDashboard.tsx` | Gerar lista virtual de todos os agentes para admin |
+| `src/pages/Library.tsx` | Toast de feedback ao admin |
 
