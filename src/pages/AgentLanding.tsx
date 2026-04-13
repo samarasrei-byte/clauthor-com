@@ -264,7 +264,7 @@ const AgentLanding = () => {
                   </div>
                   <div className="text-center">
                     <span className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center justify-center gap-1">
-                      <CheckCircle2 className="h-3 w-3" /> PROMETHEUS
+                      <CheckCircle2 className="h-3 w-3" /> CLAUTHOR
                     </span>
                   </div>
                 </div>
