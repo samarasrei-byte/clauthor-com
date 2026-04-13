@@ -339,7 +339,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "territory_planner", name: "Territory Planner", responsibilities: ["Territory design", "Quota setting", "Balance optimization"], triggers: ["territory_review", "rep_change", "market_expansion"] },
           
           { slug: "sales_enablement", name: "Sales Enablement Agent", responsibilities: ["Sales collateral", "Training content", "Competitive cards"], triggers: ["new_feature", "competitor_update", "onboarding_new_rep"] },
-          
+          { slug: "hunter_linkedin", name: "Hunter — Prospecção LinkedIn", responsibilities: ["Busca de leads no LinkedIn", "Icebreakers com IA", "Envio automático de convites"], triggers: ["campanha_criada", "leads_encontrados", "lead_respondeu"] },
         ],
         outcomes: ["Forecast accuracy 85%+", "Sales productivity +25%", "Data quality 95%+"],
       },

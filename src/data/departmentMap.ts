@@ -82,6 +82,8 @@ const MANUAL_SLUG_TO_DEPT: Record<string, string> = {
   logistics: "logistica", inventory: "logistica", supply_chain: "logistica",
   // Qualidade & Processos
   quality: "qualidade", process_analyst: "qualidade",
+  // Hunter
+  hunter_linkedin: "sales",
 };
 
 /** Combined slug → department id (manual overrides + workforce auto-mapping) */
