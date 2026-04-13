@@ -131,7 +131,12 @@ const App = () => (
                   <Route path="/control-tower" element={<ControlTower />} />
                   <Route path="/neural-network" element={<AgentNeuralNetwork />} />
                   <Route path="/scrum" element={<ScrumBoard />} />
-                  
+                  <Route path="/hunter-campaigns" element={<HunterCampaigns />} />
+                  <Route path="/hunter-nova-campanha" element={<HunterNovaCampanha />} />
+                  <Route path="/hunter-campaign/:id" element={<HunterCampaignDetail />} />
+                  <Route path="/hunter-lead/:id" element={<HunterLeadDetail />} />
+                  <Route path="/hunter-templates" element={<HunterTemplates />} />
+                  <Route path="/hunter-configuracoes" element={<HunterConfiguracoes />} />
                 </Route>
 
                 {/* Admin */}

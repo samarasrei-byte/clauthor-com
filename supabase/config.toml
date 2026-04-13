@@ -80,3 +80,18 @@ verify_jwt = false
 
 [functions.elevenlabs-conversation-token]
 verify_jwt = false
+
+[functions.hunter-verificar-cookie]
+verify_jwt = false
+
+[functions.hunter-buscar-leads]
+verify_jwt = false
+
+[functions.hunter-gerar-icebreakers]
+verify_jwt = false
+
+[functions.hunter-enviar-convites]
+verify_jwt = false
+
+[functions.hunter-notificar-resposta]
+verify_jwt = false
