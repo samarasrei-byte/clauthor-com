@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -8,6 +8,8 @@ import { useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { WORKFORCE } from "@/data/workforceArchitecture";
 import type { AgentRole } from "@/data/workforceArchitecture";
+import { useAuth } from "@/hooks/useAuth";
+import { toast } from "sonner";
 import NotFound from "./NotFound";
 
 const findWorkforceAgent = (slug: string): { agent: AgentRole; deptName: string; squadName: string } | null => {
@@ -55,19 +57,41 @@ const AgentFallback = ({ data }: { data: { agent: AgentRole; deptName: string; s
               </div>
             </div>
           </div>
-          <Link to={data.agent.slug === "lex_guardian" ? "/lex-cadastro" : "/auth"} state={data.agent.slug === "lex_guardian" ? undefined : { hireIntent: { type: "agent", label: data.agent.name, slugs: [data.agent.slug] } }}>
-            <Button size="lg" className="gap-2">
-              <Zap className="h-4 w-4" /> {data.agent.slug === "lex_guardian" ? "Ativar Lex — R$ 197/mês" : "Contratar este agente"} <ArrowRight className="h-4 w-4" />
-            </Button>
-          </Link>
+          <AdminAwareCTA slug={data.agent.slug} label={data.agent.name} fallbackText={data.agent.slug === "lex_guardian" ? "Ativar Lex — R$ 197/mês" : "Contratar este agente"} />
         </motion.div>
       </div>
     </section>
   </div>
 );
 
+const AdminAwareCTA = ({ slug, label, fallbackText }: { slug: string; label: string; fallbackText: string }) => {
+  const { isAdmin, user } = useAuth();
+  const navigate = useNavigate();
+
+  if (isAdmin) {
+    return (
+      <Button size="lg" className="gap-2" onClick={() => {
+        toast.success("Acesso admin — redirecionando...");
+        navigate(slug === "lex_guardian" ? "/lex-cadastro" : "/dashboard");
+      }}>
+        <Zap className="h-4 w-4" /> Acessar <ArrowRight className="h-4 w-4" />
+      </Button>
+    );
+  }
+
+  return (
+    <Link to={slug === "lex_guardian" ? "/lex-cadastro" : "/auth"} state={slug === "lex_guardian" ? undefined : { hireIntent: { type: "agent", label, slugs: [slug] } }}>
+      <Button size="lg" className="gap-2">
+        <Zap className="h-4 w-4" /> {fallbackText} <ArrowRight className="h-4 w-4" />
+      </Button>
+    </Link>
+  );
+};
+
 const AgentLanding = () => {
   const { slug } = useParams<{ slug: string }>();
+  const { isAdmin } = useAuth();
+  const navigate = useNavigate();
   const agent = getAgentBySlug(slug || "");
 
   if (!agent) {
@@ -99,11 +123,20 @@ const AgentLanding = () => {
             </h1>
             <p className="text-muted-foreground text-lg sm:text-xl max-w-3xl mx-auto mb-10">{agent.heroSubheadline}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link to="/auth" state={{ hireIntent: { type: "agent", label: agent.solutionTitle, slugs: [slug] } }}>
-                <Button size="lg" className="glow rounded-xl px-8 h-14 text-lg font-semibold">
-                  {agent.ctaButton} <ArrowRight className="ml-2 h-5 w-5" />
+              {isAdmin ? (
+                <Button size="lg" className="glow rounded-xl px-8 h-14 text-lg font-semibold" onClick={() => {
+                  toast.success("Acesso admin — redirecionando...");
+                  navigate(slug === "lex_guardian" ? "/lex-cadastro" : "/dashboard");
+                }}>
+                  Acessar <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-              </Link>
+              ) : (
+                <Link to="/auth" state={{ hireIntent: { type: "agent", label: agent.solutionTitle, slugs: [slug] } }}>
+                  <Button size="lg" className="glow rounded-xl px-8 h-14 text-lg font-semibold">
+                    {agent.ctaButton} <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+              )}
               <Link to="/library">
                 <Button size="lg" variant="outline" className="rounded-xl px-8 h-14 text-lg border-border hover:border-primary/20">
                   Ver todos os agentes

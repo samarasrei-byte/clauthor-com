@@ -105,6 +105,7 @@ const LibraryPage = () => {
 
     // Admin bypass - direct access without payment
     if (isAdmin) {
+      toast.success("Acesso admin — todos os agentes disponíveis");
       navigate("/dashboard");
       return;
     }
