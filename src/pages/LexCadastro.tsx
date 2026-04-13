@@ -50,14 +50,20 @@ const LexCadastro = () => {
 
     setLoading(true);
     try {
+      const cleanWhatsapp = form.whatsapp.replace(/\D/g, "");
+      if (cleanWhatsapp.length < 12) {
+        toast.error("WhatsApp deve incluir código do país + DDD + número (ex: +55 11 99999-9999)");
+        setLoading(false);
+        return;
+      }
       const { data, error } = await supabase.functions.invoke("lex-salvar-advogado", {
         body: {
           nome: form.nome,
-          cpf: form.cpf,
+          cpf: form.cpf.replace(/\D/g, ""),
           oab_numero: form.oab_numero,
           oab_estado: form.oab_estado,
-          whatsapp: form.whatsapp,
-          govbr_login: form.govbr_login,
+          whatsapp: cleanWhatsapp,
+          govbr_login: form.govbr_login.replace(/\D/g, ""),
           govbr_senha: form.govbr_senha,
         },
       });
