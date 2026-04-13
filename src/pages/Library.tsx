@@ -47,6 +47,7 @@ const DEPT_COLORS: Record<string, { gradient: string; border: string; text: stri
   innovation: { gradient: "from-violet-500/20 to-violet-500/5", border: "border-violet-500/30", text: "text-violet-400", bg: "bg-violet-500/10" },
   it_infrastructure: { gradient: "from-slate-500/20 to-slate-500/5", border: "border-slate-500/30", text: "text-slate-400", bg: "bg-slate-500/10" },
   strategy: { gradient: "from-emerald-500/20 to-emerald-500/5", border: "border-emerald-500/30", text: "text-emerald-400", bg: "bg-emerald-500/10" },
+  legal: { gradient: "from-slate-500/20 to-slate-500/5", border: "border-slate-500/30", text: "text-slate-400", bg: "bg-slate-500/10" },
 };
 
 const DEFAULT_DEPT_COLOR = { gradient: "from-primary/20 to-primary/5", border: "border-primary/30", text: "text-primary", bg: "bg-primary/10" };
