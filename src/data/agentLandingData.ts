@@ -3764,7 +3764,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "cyan",
     heroHeadline: "Prospecção LinkedIn no Piloto Automático com IA",
     heroHighlight: "Piloto Automático",
-    heroSubheadline: "O Hunter encontra leads ideais no LinkedIn, gera icebreakers personalizados com IA e envia convites automaticamente via PhantomBuster. Você só agenda reuniões.",
+    heroSubheadline: "O Hunter encontra leads ideais no LinkedIn, gera icebreakers personalizados com IA e envia convites automaticamente. Você só agenda reuniões.",
     heroStats: [
       { value: "25", label: "Leads/dia" },
       { value: "IA", label: "Icebreakers personalizados" },
@@ -3782,7 +3782,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutions: [
       { title: "Busca inteligente de leads", description: "Descreva seu público ideal em português e o Hunter encontra os perfis certos no LinkedIn automaticamente." },
       { title: "Icebreakers com IA", description: "Cada mensagem é personalizada usando IA — nome, cargo, empresa e contexto. Taxa de aceitação 3x maior." },
-      { title: "Envio automático", description: "PhantomBuster envia convites e follow-ups no seu ritmo. Limite diário configurável para segurança." },
+      { title: "Envio automático", description: "Convites e follow-ups são enviados no seu ritmo. Limite diário configurável para segurança da sua conta." },
     ],
     benefits: [
       { metric: "25", label: "Leads/dia", description: "Busca automática diária" },
