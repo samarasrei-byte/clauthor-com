@@ -31,7 +31,7 @@ export interface Department {
   agents: DepartmentAgent[];
   headcount: number;
   cltCost: number;
-  prometheusCost: number;
+  clauthorCost: number;
   discount: number;
 }
 
