@@ -249,7 +249,7 @@ export const agentTags: Record<string, string[]> = {
   customer_success: ["Churn", "NPS", "Health Score", "Retention", "Onboarding"],
   data_analytics: ["BI", "SQL", "Dashboards", "Insights", "Predictive"],
   legal: ["Contracts", "Compliance", "LGPD", "Due Diligence", "Risk"],
-  ecommerce: ["Marketplace", "Pricing", "Catalog", "Logistics", "Conversion"],
+  lex_guardian: ["Prazo", "DJEN", "WhatsApp", "Automação", "Jurídico"],
   influencer: ["Influencer", "UGC", "Creators", "Social Media", "Brand"],
   marketing_automation: ["Funis", "Lead Scoring", "Email", "Growth", "Nurturing"],
   creative_design: ["Design", "Banners", "Social Kit", "Branding", "Visual"],
@@ -403,6 +403,7 @@ export const agentIntegrations: Record<string, string[]> = {
   digital_accountant: ["Conta Azul", "Omie", "SEFAZ", "eSocial", "Google Sheets"],
   tax_compliance: ["SPED", "EFD", "SEFAZ", "TOTVS", "SAP"],
   credit_recovery: ["Serasa API", "SPC", "Boa Vista", "CRM", "WhatsApp API"],
+  lex_guardian: ["DJEN", "gov.br", "Evolution API", "WhatsApp Business"],
 };
 
 export const agentSocialProof: Record<string, { companies: number; rating: number; savings: string }> = {
@@ -489,6 +490,7 @@ export const agentSocialProof: Record<string, { companies: number; rating: numbe
   digital_accountant: { companies: 156, rating: 4.8, savings: "R$ 18k" },
   tax_compliance: { companies: 134, rating: 4.8, savings: "R$ 20k" },
   credit_recovery: { companies: 212, rating: 4.7, savings: "R$ 12k" },
+  lex_guardian: { companies: 87, rating: 4.9, savings: "R$ 30k" },
 };
 
 export const agentCapabilities: Record<string, string[]> = {
@@ -575,6 +577,7 @@ export const agentCapabilities: Record<string, string[]> = {
   digital_accountant: ["Escrituração", "Conciliação", "DAS"],
   tax_compliance: ["SPED", "EFD", "Apuração"],
   credit_recovery: ["Serasa", "Negociação", "Score"],
+  lex_guardian: ["DJEN", "Prazos", "WhatsApp"],
 };
 
 // ─── Auto-fill missing agents from workforce architecture ───
