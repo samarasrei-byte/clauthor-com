@@ -58,6 +58,12 @@ const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
 const ThorOnboarding = lazyRetry(() => import("./pages/ThorOnboarding"));
 const AgentNeuralNetwork = lazyRetry(() => import("./pages/AgentNeuralNetwork"));
 const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
+const HunterCampaigns = lazyRetry(() => import("./pages/HunterCampaigns"));
+const HunterNovaCampanha = lazyRetry(() => import("./pages/HunterNovaCampanha"));
+const HunterCampaignDetail = lazyRetry(() => import("./pages/HunterCampaignDetail"));
+const HunterLeadDetail = lazyRetry(() => import("./pages/HunterLeadDetail"));
+const HunterTemplates = lazyRetry(() => import("./pages/HunterTemplates"));
+const HunterConfiguracoes = lazyRetry(() => import("./pages/HunterConfiguracoes"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
