@@ -80,9 +80,3 @@ verify_jwt = false
 
 [functions.elevenlabs-conversation-token]
 verify_jwt = false
-
-[functions.lex-salvar-advogado]
-verify_jwt = false
-
-[functions.lex-dashboard]
-verify_jwt = false
