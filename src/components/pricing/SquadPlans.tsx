@@ -417,7 +417,7 @@ export default function SquadPlans() {
               {departments.map((dept, i) => {
                 const DeptIcon = dept.icon;
                 const deptKey = dept.id as keyof typeof region.departments;
-                const deptPrice = region.departments[deptKey] ?? dept.prometheusCost;
+                const deptPrice = region.departments[deptKey] ?? dept.clauthorCost;
                 const deptClt = region.departmentClt[deptKey] ?? dept.cltCost;
                 const savings = deptClt - deptPrice;
                 const savingsPercent = Math.round((savings / deptClt) * 100);

@@ -21,7 +21,7 @@ import { toast } from "sonner";
 import Footer from "@/components/Footer";
 import { getRegion, formatPrice } from "@/lib/pricing";
 import {
-  departments, totalPrometheusCost, totalCltCost, totalTokens,
+  departments, totalClauthorCost, totalCltCost, totalTokens,
   totalAgents, totalSavingsPercent
 } from "@/data/departmentData";
 
@@ -76,7 +76,7 @@ const Departamentos = () => {
     }
 
     // Logged in → show checkout summary
-    const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
+    const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.clauthorCost;
 
     const checkoutInfo: CheckoutSummaryData = {
       label: t(`squads.dept_${dept.id}`),
@@ -238,7 +238,7 @@ const Departamentos = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-16">
           {filteredDepartments.map((dept, i) => {
             const DeptIcon = dept.icon;
-            const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.prometheusCost;
+            const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.clauthorCost;
             const deptClt = (region.departmentClt as Record<string, number>)[dept.id] || dept.cltCost;
             const savings = deptClt - deptPrice;
             const savingsPercent = deptClt > 0 ? Math.round((savings / deptClt) * 100) : 0;
@@ -399,7 +399,7 @@ const Departamentos = () => {
               </thead>
               <tbody className="divide-y divide-border">
                 {[
-                  { criteria: t("departments_page.clt_cost"), clt: formatPrice(Math.round(totalCltCost / 3), lang), clauthor: formatPrice(Math.round(totalPrometheusCost / 3), lang), highlight: true },
+                  { criteria: t("departments_page.clt_cost"), clt: formatPrice(Math.round(totalCltCost / 3), lang), clauthor: formatPrice(Math.round(totalClauthorCost / 3), lang), highlight: true },
                   { criteria: t("departments_page.clt_availability"), clt: t("departments_page.clt_availability_val"), clauthor: t("departments_page.clauthor_availability"), highlight: false },
                   { criteria: t("departments_page.clt_onboarding"), clt: t("departments_page.clt_onboarding_val"), clauthor: t("departments_page.clauthor_onboarding"), highlight: false },
                   { criteria: t("departments_page.clt_scale"), clt: t("departments_page.clt_scale_val"), clauthor: t("departments_page.clauthor_scale"), highlight: false },
@@ -473,7 +473,7 @@ const Departamentos = () => {
             <div>
               <p className="text-xs text-emerald-400 font-medium">CLAUTHOR</p>
               <p className="font-display font-bold text-xl text-emerald-400">
-                {formatPrice(totalPrometheusCost, lang)}{t("departments_page.month")}
+                {formatPrice(totalClauthorCost, lang)}{t("departments_page.month")}
               </p>
             </div>
             <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 font-bold text-sm px-3 py-1">

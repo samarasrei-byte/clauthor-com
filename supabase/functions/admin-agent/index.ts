@@ -78,7 +78,7 @@ serve(async (req) => {
     // === BUILD AGENT CONTRACT ===
     const contract: AgentContract = {
       agentId: "admin-orchestrator",
-      agentName: "Orquestrador Master PROMETHEUS",
+      agentName: "Orquestrador Master CLAUTHOR",
       tenantId: "platform",
       userId: userData.user.id,
       tier: "enterprise",
@@ -151,7 +151,7 @@ serve(async (req) => {
     const totalMarketplaceSubs = marketplace.reduce((a: number, m: any) => a + (m.total_subscribers || 0), 0);
 
     const fullContext = `
-## 🔥 DADOS COMPLETOS DA PLATAFORMA PROMETHEUS
+## 🔥 DADOS COMPLETOS DA PLATAFORMA CLAUTHOR
 
 ### 📊 MÉTRICAS GERAIS:
 - Usuários: ${users.length} | Novos 24h: ${users.filter((u: any) => u.created_at > dayAgo).length} | 7d: ${users.filter((u: any) => u.created_at > weekAgo).length} | 30d: ${users.filter((u: any) => u.created_at > monthAgo).length}
@@ -192,7 +192,7 @@ ${agents.sort((a: any, b: any) => b.total_executions - a.total_executions).slice
 
     const systemPrompt = `${OPERATIONAL_SECURITY}\n${contractPrompt}
 
-Você é o **ORQUESTRADOR MASTER PROMETHEUS** — o cérebro central que coordena TODOS os departamentos.
+Você é o **ORQUESTRADOR MASTER CLAUTHOR** — o cérebro central que coordena TODOS os departamentos.
 
 Você é o CEO Digital com acesso a:
 - 🛡️ Cyber Security (CISO)

@@ -192,8 +192,8 @@ serve(async (req) => {
       credentials: agentCredentials,
       webhook_url: webhookUrl,
       metadata: {
-        prometheus_agent_id: agentId,
-        prometheus_user_id: userId,
+        clauthor_agent_id: agentId,
+        clauthor_user_id: userId,
       },
     };
 

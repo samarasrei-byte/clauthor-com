@@ -18,7 +18,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { departments, deptDetails, totalAgents, totalPrometheusCost, totalCltCost, totalSavingsPercent } from "@/data/departmentData";
+import { departments, deptDetails, totalAgents, totalClauthorCost, totalCltCost, totalSavingsPercent } from "@/data/departmentData";
 
 // ── Animations ──
 const fadeUp = {
@@ -202,7 +202,7 @@ const DepartmentExplorer = () => {
                   </div>
                   <div>
                     <span className="text-muted-foreground">CLAUTHOR: </span>
-                    <span className="text-accent-emerald font-semibold">R${dept.prometheusCost.toLocaleString()}</span>
+                    <span className="text-accent-emerald font-semibold">R${dept.clauthorCost.toLocaleString()}</span>
                   </div>
                   <Badge className="text-[8px] h-4 bg-accent-emerald/10 text-accent-emerald border-0 ml-auto">-{dept.discount}%</Badge>
                 </div>

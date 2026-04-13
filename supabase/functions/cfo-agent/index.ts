@@ -211,7 +211,7 @@ ${cohortAnalysis}
 
     const systemPrompt = `${OPERATIONAL_SECURITY}\n${contractPrompt}
 
-Você é o **Agente CFO** da plataforma PROMETHEUS — o Diretor Financeiro digital.
+Você é o **Agente CFO** da plataforma CLAUTHOR — o Diretor Financeiro digital.
 
 Seu papel é:
 1. Analisar receita (MRR/ARR), custos e margem operacional

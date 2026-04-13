@@ -66,7 +66,7 @@ serve(async (req) => {
       (a) => `- ${a.key}: ${a.name} (${a.category}) — ${a.keywords.join(", ")}`
     ).join("\n");
 
-    const systemPrompt = `You are the PROMETHEUS AI Concierge — the world's most intelligent consultant for AI agent recommendations.
+    const systemPrompt = `You are the CLAUTHOR AI Concierge — the world's most intelligent consultant for AI agent recommendations.
 
 Given the agent catalog below, analyze the user's description and return EXACTLY a JSON array with the 3-5 most relevant agents, ordered by relevance.
 

@@ -31,7 +31,7 @@ export interface Department {
   agents: DepartmentAgent[];
   headcount: number;
   cltCost: number;
-  prometheusCost: number;
+  clauthorCost: number;
   discount: number;
 }
 
@@ -56,7 +56,7 @@ export const departments: Department[] = [
       { key: "security", icon: Shield, role: "CISO / Eng. Segurança", tokens: "3M" },
       { key: "data_engineer", icon: Building2, role: "Engenheiro de Dados", tokens: "2M" },
     ],
-    headcount: 5, cltCost: 100000, prometheusCost: 5497, discount: 30,
+    headcount: 5, cltCost: 100000, clauthorCost: 5497, discount: 30,
   },
   {
     id: "comercial", icon: Briefcase, color: "text-primary",
@@ -71,7 +71,7 @@ export const departments: Department[] = [
       { key: "voice_ai", icon: Phone, role: "Operador de Telefonia", tokens: "2M" },
       { key: "crm_manager", icon: Star, role: "Gestor de CRM", tokens: "1.5M" },
     ],
-    headcount: 5, cltCost: 56000, prometheusCost: 4497, discount: 25,
+    headcount: 5, cltCost: 56000, clauthorCost: 4497, discount: 25,
   },
   {
     id: "marketing", icon: Megaphone, color: "text-primary",
@@ -87,7 +87,7 @@ export const departments: Department[] = [
       { key: "media_buyer", icon: Target, role: "Media Buyer", tokens: "1.5M" },
       { key: "community_mgr", icon: Users, role: "Community Manager", tokens: "1M" },
     ],
-    headcount: 6, cltCost: 54000, prometheusCost: 3997, discount: 25,
+    headcount: 6, cltCost: 54000, clauthorCost: 3997, discount: 25,
   },
   {
     id: "financeiro", icon: BarChart3, color: "text-primary",
@@ -104,7 +104,7 @@ export const departments: Department[] = [
       { key: "tax_compliance", icon: Shield, role: "Analista Fiscal", tokens: "1.5M" },
       { key: "credit_recovery", icon: Star, role: "Regularizador de Crédito", tokens: "1M" },
     ],
-    headcount: 7, cltCost: 66000, prometheusCost: 4497, discount: 25,
+    headcount: 7, cltCost: 66000, clauthorCost: 4497, discount: 25,
   },
   {
     id: "criacao", icon: Palette, color: "text-primary",
@@ -119,7 +119,7 @@ export const departments: Department[] = [
       { key: "content_producer", icon: Megaphone, role: "Produtor de Conteúdo", tokens: "1M" },
       { key: "ux_researcher", icon: Sparkles, role: "UX Researcher", tokens: "1M" },
     ],
-    headcount: 5, cltCost: 42000, prometheusCost: 2997, discount: 20,
+    headcount: 5, cltCost: 42000, clauthorCost: 2997, discount: 20,
   },
   {
     id: "suporte", icon: MessageSquare, color: "text-primary",
@@ -135,7 +135,7 @@ export const departments: Department[] = [
       { key: "onboarding_specialist", icon: Star, role: "Especialista Onboarding", tokens: "1M" },
       { key: "omnichannel", icon: MessageSquare, role: "Omnichannel 24/7", tokens: "1M" },
     ],
-    headcount: 6, cltCost: 36000, prometheusCost: 2997, discount: 20,
+    headcount: 6, cltCost: 36000, clauthorCost: 2997, discount: 20,
   },
   {
     id: "rh", icon: GraduationCap, color: "text-primary",
@@ -148,7 +148,7 @@ export const departments: Department[] = [
       { key: "training", icon: GraduationCap, role: "T&D / Onboarding", tokens: "1M" },
       { key: "people_analytics", icon: BarChart3, role: "People Analytics", tokens: "1M" },
     ],
-    headcount: 3, cltCost: 22000, prometheusCost: 1497, discount: 15,
+    headcount: 3, cltCost: 22000, clauthorCost: 1497, discount: 15,
   },
   {
     id: "prospeccao", icon: Crosshair, color: "text-primary",
@@ -170,7 +170,7 @@ export const departments: Department[] = [
       { key: "hunter", icon: Crosshair, role: "Hunter de Negócios", tokens: "1M" },
       { key: "farmer", icon: Repeat, role: "Farmer / Expansão", tokens: "1M" },
     ],
-    headcount: 12, cltCost: 96000, prometheusCost: 6997, discount: 35,
+    headcount: 12, cltCost: 96000, clauthorCost: 6997, discount: 35,
   },
   {
     id: "comunicacao", icon: PenTool, color: "text-primary",
@@ -186,7 +186,7 @@ export const departments: Department[] = [
       { key: "social_proof", icon: ThumbsUp, role: "Gestor de Prova Social", tokens: "1M" },
       { key: "events_speaker", icon: Calendar, role: "Produtor de Eventos", tokens: "1M" },
     ],
-    headcount: 6, cltCost: 48000, prometheusCost: 3997, discount: 30,
+    headcount: 6, cltCost: 48000, clauthorCost: 3997, discount: 30,
   },
   {
     id: "operacoes", icon: Rocket, color: "text-primary",
@@ -203,7 +203,7 @@ export const departments: Department[] = [
       { key: "proposal_gen", icon: FileText, role: "Gerador de Propostas", tokens: "1M" },
       { key: "research", icon: Search, role: "Pesquisador / Analista", tokens: "2M" },
     ],
-    headcount: 7, cltCost: 84000, prometheusCost: 5497, discount: 30,
+    headcount: 7, cltCost: 84000, clauthorCost: 5497, discount: 30,
   },
   {
     id: "ecommerce_growth", icon: Store, color: "text-primary",
@@ -220,7 +220,7 @@ export const departments: Department[] = [
       { key: "reputation", icon: Award, role: "Gestor de Reputação", tokens: "1.5M" },
       { key: "ecommerce", icon: ShoppingCart, role: "E-commerce Operations", tokens: "2M" },
     ],
-    headcount: 7, cltCost: 63000, prometheusCost: 4497, discount: 25,
+    headcount: 7, cltCost: 63000, clauthorCost: 4497, discount: 25,
   },
   {
     id: "juridico", icon: Gavel, color: "text-primary",
@@ -235,7 +235,7 @@ export const departments: Department[] = [
       { key: "litigation", icon: Gavel, role: "Advogado Contencioso", tokens: "2M" },
       { key: "legal", icon: FileText, role: "Analista Jurídico Geral", tokens: "2M" },
     ],
-    headcount: 5, cltCost: 75000, prometheusCost: 4997, discount: 30,
+    headcount: 5, cltCost: 75000, clauthorCost: 4997, discount: 30,
   },
   {
     id: "compras", icon: Package, color: "text-primary",
@@ -249,7 +249,7 @@ export const departments: Department[] = [
       { key: "cost_analyst", icon: Receipt, role: "Analista de Custos", tokens: "1.5M" },
       { key: "contract_negotiator", icon: Handshake, role: "Negociador", tokens: "2M" },
     ],
-    headcount: 4, cltCost: 44000, prometheusCost: 2997, discount: 25,
+    headcount: 4, cltCost: 44000, clauthorCost: 2997, discount: 25,
   },
   {
     id: "logistica", icon: Truck, color: "text-primary",
@@ -262,7 +262,7 @@ export const departments: Department[] = [
       { key: "inventory", icon: Package, role: "Analista de Estoque", tokens: "1.5M" },
       { key: "supply_chain", icon: Network, role: "Supply Chain Manager", tokens: "2.5M" },
     ],
-    headcount: 3, cltCost: 36000, prometheusCost: 2497, discount: 25,
+    headcount: 3, cltCost: 36000, clauthorCost: 2497, discount: 25,
   },
   {
     id: "qualidade", icon: ClipboardCheck, color: "text-primary",
@@ -274,15 +274,15 @@ export const departments: Department[] = [
       { key: "quality", icon: ClipboardCheck, role: "Analista de Qualidade", tokens: "1.5M" },
       { key: "process_analyst", icon: Cog, role: "Analista de Processos", tokens: "1.5M" },
     ],
-    headcount: 2, cltCost: 16000, prometheusCost: 1297, discount: 20,
+    headcount: 2, cltCost: 16000, clauthorCost: 1297, discount: 20,
   },
 ];
 
-export const totalPrometheusCost = departments.reduce((a, d) => a + d.prometheusCost, 0);
+export const totalClauthorCost = departments.reduce((a, d) => a + d.clauthorCost, 0);
 export const totalCltCost = departments.reduce((a, d) => a + d.cltCost, 0);
 export const totalTokens = "180M";
 export const totalAgents = 200;
-export const totalSavingsPercent = Math.round(((totalCltCost - totalPrometheusCost) / totalCltCost) * 100);
+export const totalSavingsPercent = Math.round(((totalCltCost - totalClauthorCost) / totalCltCost) * 100);
 
 /** Department details for the rich cards in Library page */
 export const deptDetails: Record<string, DeptDetail> = {

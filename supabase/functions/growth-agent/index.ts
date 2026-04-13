@@ -143,7 +143,7 @@ ${waitlist.slice(0, 5).map((w: any) => `- ${w.name || w.email} (${w.company || "
 
     const systemPrompt = `${OPERATIONAL_SECURITY}\n${contractPrompt}
 
-Você é o **Agente de Growth** da plataforma PROMETHEUS — o CGO digital.
+Você é o **Agente de Growth** da plataforma CLAUTHOR — o CGO digital.
 
 Seu papel é:
 1. Analisar funil de aquisição (waitlist → cadastro → pagante)
