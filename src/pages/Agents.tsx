@@ -44,19 +44,46 @@ const AgentsPage = () => {
   const { data: agents = [], isLoading } = useQuery({
     queryKey: ["my-agents", user?.id, isAdmin],
     queryFn: async () => {
-      let query = supabase
-        .from("agents")
-        .select("*")
-        .order("created_at", { ascending: false });
-      
-      // Admin sees all agents; regular users see only their own
-      if (!isAdmin) {
-        query = query.eq("user_id", user!.id);
+      // Admin gets all agents from WORKFORCE as virtual list
+      if (isAdmin) {
+        const { WORKFORCE: WF } = await import("@/data/workforceArchitecture");
+        const allAgents: any[] = [];
+        WF.forEach((dept) => {
+          dept.squads.forEach((squad) => {
+            squad.agents.forEach((agent) => {
+              allAgents.push({
+                id: `admin-${agent.slug}`,
+                name: agent.name,
+                description: agent.responsibilities?.join(", ") || null,
+                tier: "advanced",
+                status: "active",
+                total_executions: 0,
+                monthly_price: 0,
+                updated_at: new Date().toISOString(),
+                created_at: new Date().toISOString(),
+                user_id: user!.id,
+              });
+            });
+          });
+        });
+        return allAgents;
       }
-      
-      const { data, error } = await query;
-      if (error) throw error;
-      return data;
+
+      // Regular users: own agents + subscribed agents
+      const [ownResult, subResult] = await Promise.all([
+        supabase.from("agents").select("*").eq("user_id", user!.id).order("created_at", { ascending: false }),
+        supabase.from("subscriptions").select("*, agent:agents(*)").eq("user_id", user!.id).eq("status", "active"),
+      ]);
+
+      const ownAgents = ownResult.data || [];
+      const ownIds = new Set(ownAgents.map((a: any) => a.id));
+
+      // Add subscribed agents that aren't already in ownAgents
+      const subscribedAgents = (subResult.data || [])
+        .filter((s: any) => s.agent && !ownIds.has(s.agent.id))
+        .map((s: any) => s.agent);
+
+      return [...ownAgents, ...subscribedAgents];
     },
     enabled: !!user,
   });
