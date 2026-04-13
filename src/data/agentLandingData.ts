@@ -3758,6 +3758,65 @@ export const agentLandingPages: AgentLandingData[] = [
     ctaHeadline: "Clientes que ficam", ctaSubheadline: "Onboarding perfeito.", ctaButton: "Contratar Onboarding Specialist",
     tier: "basic", priceTier: "starter", tags: ["Onboarding", "Ativação", "Retenção"], integrations: ["Intercom", "HubSpot", "Slack", "Loom"],
   },
+  {
+    slug: "hunter_linkedin",
+    icon: Target,
+    accentColor: "cyan",
+    heroHeadline: "Prospecção LinkedIn no Piloto Automático com IA",
+    heroHighlight: "Piloto Automático",
+    heroSubheadline: "O Hunter encontra leads ideais no LinkedIn, gera icebreakers personalizados com IA e envia convites automaticamente via PhantomBuster. Você só agenda reuniões.",
+    heroStats: [
+      { value: "25", label: "Leads/dia" },
+      { value: "IA", label: "Icebreakers personalizados" },
+      { value: "100%", label: "Automático" },
+      { value: "R$ 997", label: "/mês" },
+    ],
+    problems: [
+      { title: "Prospecção manual consome horas", description: "Buscar perfis, escrever mensagens, enviar convites — 3-4 horas por dia que poderiam ser investidas em fechar negócios." },
+      { title: "Mensagens genéricas não convertem", description: "Copy-paste de mensagens iguais para todos resulta em taxa de aceitação abaixo de 10%." },
+      { title: "Sem consistência", description: "Prospecção depende da disciplina do vendedor. Férias, doença ou desmotivação param o pipeline." },
+      { title: "Ferramentas caras e complexas", description: "Sales Navigator + Outreach + Enrichment = R$ 3.000+/mês e semanas de setup." },
+    ],
+    solutionTitle: "Hunter — Prospecção LinkedIn com IA",
+    solutionDesc: "Agente de IA que automatiza todo o ciclo de prospecção no LinkedIn: busca, personalização e envio de convites.",
+    solutions: [
+      { title: "Busca inteligente de leads", description: "Descreva seu público ideal em português e o Hunter encontra os perfis certos no LinkedIn automaticamente." },
+      { title: "Icebreakers com IA", description: "Cada mensagem é personalizada usando IA — nome, cargo, empresa e contexto. Taxa de aceitação 3x maior." },
+      { title: "Envio automático", description: "PhantomBuster envia convites e follow-ups no seu ritmo. Limite diário configurável para segurança." },
+    ],
+    benefits: [
+      { metric: "25", label: "Leads/dia", description: "Busca automática diária" },
+      { metric: "3x", label: "Taxa de aceitação", description: "Mensagens personalizadas por IA" },
+      { metric: "0h", label: "Tempo manual", description: "100% automatizado" },
+      { metric: "R$ 0", label: "Setup PhantomBuster", description: "Plano gratuito incluso" },
+    ],
+    howItWorks: [
+      { step: "01", title: "Descreva seu público", description: "Informe cargo, setor e localização. Ex: CTOs de fintechs em São Paulo." },
+      { step: "02", title: "Cole seu cookie do LinkedIn", description: "Um passo simples no Chrome. Instruções visuais guiam você." },
+      { step: "03", title: "Hunter trabalha por você", description: "Busca leads, gera icebreakers com IA e envia convites automaticamente." },
+    ],
+    comparison: [
+      { label: "Busca de leads", traditional: "Manual, 2-3h/dia", agent: "Automática, 24/7" },
+      { label: "Personalização", traditional: "Copy-paste genérico", agent: "IA personalizada por lead" },
+      { label: "Consistência", traditional: "Depende do vendedor", agent: "Todo dia, sem falhas" },
+      { label: "Custo mensal", traditional: "R$ 3.000+ (ferramentas)", agent: "R$ 997/mês tudo incluso" },
+    ],
+    testimonials: [
+      { name: "Ricardo Alves", role: "Head de Vendas", company: "SaaS Pro", text: "O Hunter gera 25 leads qualificados por dia. Meu time só foca em fechar.", avatar: "RA" },
+    ],
+    faq: [
+      { question: "Preciso do Sales Navigator?", answer: "Não. O Hunter funciona com conta LinkedIn gratuita via PhantomBuster." },
+      { question: "É seguro para minha conta?", answer: "Sim. O limite diário configurável (padrão 20) mantém sua conta segura. O cookie é criptografado." },
+      { question: "Como funciona o PhantomBuster?", answer: "Você cria uma conta gratuita (2h/dia de execução). O Hunter configura tudo automaticamente." },
+    ],
+    ctaHeadline: "Pipeline cheio, todo dia",
+    ctaSubheadline: "Ative o Hunter e pare de prospectar manualmente.",
+    ctaButton: "Começar Agora — R$ 997/mês",
+    tier: "advanced",
+    priceTier: "professional",
+    tags: ["LinkedIn", "Prospecção", "IA", "Vendas", "PhantomBuster"],
+    integrations: ["LinkedIn", "PhantomBuster", "WhatsApp", "Evolution API"],
+  },
 ];
 
 export const getAgentBySlug = (slug: string): AgentLandingData | undefined => {
