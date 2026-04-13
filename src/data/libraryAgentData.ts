@@ -22,7 +22,7 @@ import {
 // Agent keys — ALL 200 agents from workforce architecture
 export const agentKeys = ALL_AGENT_SLUGS as readonly string[];
 
-export const featuredKeys = ["voice_ai", "orchestrator", "ceo", "lex_guardian"] as const;
+export const featuredKeys = ["voice_ai", "orchestrator", "ceo"] as const;
 
 // Auto-generate slugs for all 200 agents
 export const agentSlugs: Record<string, string> = Object.fromEntries(

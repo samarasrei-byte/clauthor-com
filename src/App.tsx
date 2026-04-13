@@ -58,8 +58,6 @@ const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
 const ThorOnboarding = lazyRetry(() => import("./pages/ThorOnboarding"));
 const AgentNeuralNetwork = lazyRetry(() => import("./pages/AgentNeuralNetwork"));
 const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
-const LexCadastro = lazyRetry(() => import("./pages/LexCadastro"));
-const LexDashboard = lazyRetry(() => import("./pages/LexDashboard"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -112,7 +110,7 @@ const App = () => (
                   <Route path="/team-builder" element={<TeamBuilder />} />
                   <Route path="/architecture" element={<Architecture />} />
                   <Route path="/timeline" element={<ProjectTimeline />} />
-                  <Route path="/lex-cadastro" element={<LexCadastro />} />
+                  
                 </Route>
 
                 {/* Dashboard pages with minimal header + sidebar only */}
@@ -127,7 +125,7 @@ const App = () => (
                   <Route path="/control-tower" element={<ControlTower />} />
                   <Route path="/neural-network" element={<AgentNeuralNetwork />} />
                   <Route path="/scrum" element={<ScrumBoard />} />
-                  <Route path="/lex-dashboard" element={<LexDashboard />} />
+                  
                 </Route>
 
                 {/* Admin */}

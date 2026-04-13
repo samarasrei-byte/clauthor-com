@@ -3758,65 +3758,6 @@ export const agentLandingPages: AgentLandingData[] = [
     ctaHeadline: "Clientes que ficam", ctaSubheadline: "Onboarding perfeito.", ctaButton: "Contratar Onboarding Specialist",
     tier: "basic", priceTier: "starter", tags: ["Onboarding", "Ativação", "Retenção"], integrations: ["Intercom", "HubSpot", "Slack", "Loom"],
   },
-  {
-    slug: "lex_guardian",
-    icon: Scale,
-    accentColor: "slate",
-    heroHeadline: "Zero Prazos Perdidos com o Guardião de Prazos",
-    heroHighlight: "Zero Prazos Perdidos",
-    heroSubheadline: "O Lex monitora suas intimações no DJEN 24/7 via gov.br e avisa no WhatsApp antes que qualquer prazo vença. Nunca mais perca um deadline.",
-    heroStats: [
-      { value: "24/7", label: "Monitoramento DJEN" },
-      { value: "0", label: "Prazos perdidos" },
-      { value: "< 5min", label: "Alerta WhatsApp" },
-      { value: "R$ 197", label: "/mês" },
-    ],
-    problems: [
-      { title: "DJEN manual e demorado", description: "Verificar intimações diariamente no portal consome horas e é propenso a falhas humanas." },
-      { title: "Prazos perdidos custam caro", description: "Um prazo perdido pode significar perda de causa, sanções disciplinares e danos irreparáveis ao cliente." },
-      { title: "Múltiplos processos", description: "Com dezenas de processos ativos, é humanamente impossível acompanhar todos os prazos manualmente." },
-      { title: "Sem alertas proativos", description: "O DJEN não envia notificações push. Você só descobre a intimação se entrar no portal." },
-    ],
-    solutionTitle: "Lex — Guardião de Prazos",
-    solutionDesc: "Agente de IA que monitora o DJEN automaticamente e envia alertas instantâneos no WhatsApp com resumo, prazo e ação necessária.",
-    solutions: [
-      { title: "Monitoramento 24/7 do DJEN", description: "Login automático via gov.br e varredura contínua de novas intimações em todos os seus processos." },
-      { title: "Alerta WhatsApp instantâneo", description: "Receba no WhatsApp o resumo da intimação, prazo e tipo de ato em menos de 5 minutos após publicação." },
-      { title: "Dashboard de prazos", description: "Visualize todos os prazos com badges de urgência: vermelho (≤3 dias), amarelo (≤7 dias), verde (>7 dias)." },
-    ],
-    benefits: [
-      { metric: "0", label: "Prazos perdidos", description: "Monitoramento contínuo elimina falhas" },
-      { metric: "3h/dia", label: "Tempo economizado", description: "Sem verificação manual do DJEN" },
-      { metric: "< 5min", label: "Tempo de alerta", description: "Da publicação ao WhatsApp" },
-      { metric: "100%", label: "Cobertura", description: "Todos os processos monitorados" },
-    ],
-    howItWorks: [
-      { step: "01", title: "Cadastre suas credenciais", description: "Informe seus dados da OAB e login gov.br. Tudo é criptografado com AES-256." },
-      { step: "02", title: "Lex monitora o DJEN", description: "O agente faz login automático e verifica novas intimações continuamente." },
-      { step: "03", title: "Receba alertas no WhatsApp", description: "Intimação nova? Você recebe no WhatsApp com resumo, prazo e ação sugerida." },
-    ],
-    comparison: [
-      { label: "Verificação DJEN", traditional: "Manual, 2-3x/dia", agent: "Automática, 24/7" },
-      { label: "Tempo de reação", traditional: "Horas ou dias", agent: "< 5 minutos" },
-      { label: "Risco de prazo perdido", traditional: "Alto (falha humana)", agent: "Zero" },
-      { label: "Custo mensal", traditional: "R$ 2.000+ (estagiário)", agent: "R$ 197/mês" },
-    ],
-    testimonials: [
-      { name: "Dr. Ricardo Mendes", role: "Advogado Cível", company: "Mendes & Associados", text: "Desde que ativei o Lex, nunca mais perdi um prazo. O alerta no WhatsApp é instantâneo.", avatar: "RM" },
-    ],
-    faq: [
-      { question: "Minhas credenciais estão seguras?", answer: "Sim. A senha gov.br é criptografada com AES-256-GCM no servidor e nunca é armazenada em texto plano." },
-      { question: "Funciona com qualquer tribunal?", answer: "O Lex monitora intimações publicadas no DJEN (Diário de Justiça Eletrônico Nacional)." },
-      { question: "Posso cadastrar mais de um advogado?", answer: "Sim. Cada advogado cadastrado é monitorado independentemente." },
-    ],
-    ctaHeadline: "Nunca mais perca um prazo",
-    ctaSubheadline: "Ative o Lex e durma tranquilo sabendo que suas intimações estão sendo monitoradas 24/7.",
-    ctaButton: "Ativar Lex — R$ 197/mês",
-    tier: "advanced",
-    priceTier: "professional",
-    tags: ["DJEN", "Prazos", "WhatsApp", "Jurídico", "gov.br"],
-    integrations: ["WhatsApp", "gov.br", "DJEN"],
-  },
 ];
 
 export const getAgentBySlug = (slug: string): AgentLandingData | undefined => {

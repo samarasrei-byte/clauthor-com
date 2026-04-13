@@ -57,7 +57,7 @@ const AgentFallback = ({ data }: { data: { agent: AgentRole; deptName: string; s
               </div>
             </div>
           </div>
-          <AdminAwareCTA slug={data.agent.slug} label={data.agent.name} fallbackText={data.agent.slug === "lex_guardian" ? "Ativar Lex — R$ 197/mês" : "Contratar este agente"} />
+          <AdminAwareCTA slug={data.agent.slug} label={data.agent.name} fallbackText="Contratar este agente" />
         </motion.div>
       </div>
     </section>
@@ -72,7 +72,7 @@ const AdminAwareCTA = ({ slug, label, fallbackText }: { slug: string; label: str
     return (
       <Button size="lg" className="gap-2" onClick={() => {
         toast.success("Acesso admin — redirecionando...");
-        navigate(slug === "lex_guardian" ? "/lex-cadastro" : "/dashboard");
+        navigate("/dashboard");
       }}>
         <Zap className="h-4 w-4" /> Acessar <ArrowRight className="h-4 w-4" />
       </Button>
@@ -80,7 +80,7 @@ const AdminAwareCTA = ({ slug, label, fallbackText }: { slug: string; label: str
   }
 
   return (
-    <Link to={slug === "lex_guardian" ? "/lex-cadastro" : "/auth"} state={slug === "lex_guardian" ? undefined : { hireIntent: { type: "agent", label, slugs: [slug] } }}>
+    <Link to="/auth" state={{ hireIntent: { type: "agent", label, slugs: [slug] } }}>
       <Button size="lg" className="gap-2">
         <Zap className="h-4 w-4" /> {fallbackText} <ArrowRight className="h-4 w-4" />
       </Button>
@@ -126,7 +126,7 @@ const AgentLanding = () => {
               {isAdmin ? (
                 <Button size="lg" className="glow rounded-xl px-8 h-14 text-lg font-semibold" onClick={() => {
                   toast.success("Acesso admin — redirecionando...");
-                  navigate(slug === "lex_guardian" ? "/lex-cadastro" : "/dashboard");
+                  navigate("/dashboard");
                 }}>
                   Acessar <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
