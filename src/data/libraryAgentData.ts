@@ -94,6 +94,7 @@ export const agentIcons: Record<string, React.ElementType> = {
   digital_accountant: FileText,
   tax_compliance: Shield,
   credit_recovery: Star,
+  lex_guardian: Scale,
 };
 
 export const agentTiers: Record<string, string> = {
@@ -161,6 +162,7 @@ export const agentTiers: Record<string, string> = {
   digital_accountant: "advanced",
   tax_compliance: "advanced",
   credit_recovery: "intermediate",
+  lex_guardian: "enterprise",
 };
 
 export const agentPriceTiers: Record<string, PriceTier> = {
@@ -228,6 +230,7 @@ export const agentPriceTiers: Record<string, PriceTier> = {
   digital_accountant: "mid",
   tax_compliance: "mid",
   credit_recovery: "entry",
+  lex_guardian: "mid",
 };
 
 export const agentTags: Record<string, string[]> = {
