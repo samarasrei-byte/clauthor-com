@@ -58,6 +58,12 @@ const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
 const ThorOnboarding = lazyRetry(() => import("./pages/ThorOnboarding"));
 const AgentNeuralNetwork = lazyRetry(() => import("./pages/AgentNeuralNetwork"));
 const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
+const HunterCampaigns = lazyRetry(() => import("./pages/HunterCampaigns"));
+const HunterNovaCampanha = lazyRetry(() => import("./pages/HunterNovaCampanha"));
+const HunterCampaignDetail = lazyRetry(() => import("./pages/HunterCampaignDetail"));
+const HunterLeadDetail = lazyRetry(() => import("./pages/HunterLeadDetail"));
+const HunterTemplates = lazyRetry(() => import("./pages/HunterTemplates"));
+const HunterConfiguracoes = lazyRetry(() => import("./pages/HunterConfiguracoes"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -125,7 +131,12 @@ const App = () => (
                   <Route path="/control-tower" element={<ControlTower />} />
                   <Route path="/neural-network" element={<AgentNeuralNetwork />} />
                   <Route path="/scrum" element={<ScrumBoard />} />
-                  
+                  <Route path="/hunter-campaigns" element={<HunterCampaigns />} />
+                  <Route path="/hunter-nova-campanha" element={<HunterNovaCampanha />} />
+                  <Route path="/hunter-campaign/:id" element={<HunterCampaignDetail />} />
+                  <Route path="/hunter-lead/:id" element={<HunterLeadDetail />} />
+                  <Route path="/hunter-templates" element={<HunterTemplates />} />
+                  <Route path="/hunter-configuracoes" element={<HunterConfiguracoes />} />
                 </Route>
 
                 {/* Admin */}

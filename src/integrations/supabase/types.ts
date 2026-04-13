@@ -1025,6 +1025,271 @@ export type Database = {
           },
         ]
       }
+      hunter_campaigns: {
+        Row: {
+          cargo_alvo: string
+          created_at: string
+          id: string
+          limite_diario: number
+          linkedin_cookie_encrypted: string
+          localizacao_alvo: string
+          nome: string
+          publico_alvo: string
+          setor_alvo: string
+          status: string
+          total_conectados: number
+          total_leads: number
+          total_responderam: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          cargo_alvo?: string
+          created_at?: string
+          id?: string
+          limite_diario?: number
+          linkedin_cookie_encrypted?: string
+          localizacao_alvo?: string
+          nome: string
+          publico_alvo?: string
+          setor_alvo?: string
+          status?: string
+          total_conectados?: number
+          total_leads?: number
+          total_responderam?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          cargo_alvo?: string
+          created_at?: string
+          id?: string
+          limite_diario?: number
+          linkedin_cookie_encrypted?: string
+          localizacao_alvo?: string
+          nome?: string
+          publico_alvo?: string
+          setor_alvo?: string
+          status?: string
+          total_conectados?: number
+          total_leads?: number
+          total_responderam?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      hunter_config: {
+        Row: {
+          bot_last_run: string | null
+          created_at: string
+          evolution_api_key_encrypted: string
+          evolution_instance: string
+          evolution_notify_number: string
+          evolution_url: string
+          id: string
+          phantombuster_api_key_encrypted: string
+          phantombuster_connect_agent_id: string
+          phantombuster_search_agent_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bot_last_run?: string | null
+          created_at?: string
+          evolution_api_key_encrypted?: string
+          evolution_instance?: string
+          evolution_notify_number?: string
+          evolution_url?: string
+          id?: string
+          phantombuster_api_key_encrypted?: string
+          phantombuster_connect_agent_id?: string
+          phantombuster_search_agent_id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bot_last_run?: string | null
+          created_at?: string
+          evolution_api_key_encrypted?: string
+          evolution_instance?: string
+          evolution_notify_number?: string
+          evolution_url?: string
+          id?: string
+          phantombuster_api_key_encrypted?: string
+          phantombuster_connect_agent_id?: string
+          phantombuster_search_agent_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      hunter_leads: {
+        Row: {
+          campaign_id: string
+          cargo: string
+          created_at: string
+          empresa: string
+          icebreaker: string
+          id: string
+          linkedin_url: string
+          nome_completo: string
+          notas: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          campaign_id: string
+          cargo?: string
+          created_at?: string
+          empresa?: string
+          icebreaker?: string
+          id?: string
+          linkedin_url?: string
+          nome_completo?: string
+          notas?: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          campaign_id?: string
+          cargo?: string
+          created_at?: string
+          empresa?: string
+          icebreaker?: string
+          id?: string
+          linkedin_url?: string
+          nome_completo?: string
+          notas?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hunter_leads_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "hunter_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hunter_logs: {
+        Row: {
+          campaign_id: string | null
+          created_at: string
+          id: string
+          mensagem: string
+          tipo: string
+          user_id: string
+        }
+        Insert: {
+          campaign_id?: string | null
+          created_at?: string
+          id?: string
+          mensagem?: string
+          tipo?: string
+          user_id: string
+        }
+        Update: {
+          campaign_id?: string | null
+          created_at?: string
+          id?: string
+          mensagem?: string
+          tipo?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hunter_logs_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "hunter_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hunter_messages: {
+        Row: {
+          campaign_id: string
+          conteudo: string
+          created_at: string
+          id: string
+          lead_id: string
+          status: string
+          tipo: string
+          user_id: string
+        }
+        Insert: {
+          campaign_id: string
+          conteudo?: string
+          created_at?: string
+          id?: string
+          lead_id: string
+          status?: string
+          tipo?: string
+          user_id: string
+        }
+        Update: {
+          campaign_id?: string
+          conteudo?: string
+          created_at?: string
+          id?: string
+          lead_id?: string
+          status?: string
+          tipo?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hunter_messages_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "hunter_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "hunter_messages_lead_id_fkey"
+            columns: ["lead_id"]
+            isOneToOne: false
+            referencedRelation: "hunter_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hunter_templates: {
+        Row: {
+          ativo: boolean
+          conteudo: string
+          created_at: string
+          id: string
+          nome: string
+          tipo: string
+          user_id: string
+        }
+        Insert: {
+          ativo?: boolean
+          conteudo?: string
+          created_at?: string
+          id?: string
+          nome?: string
+          tipo?: string
+          user_id: string
+        }
+        Update: {
+          ativo?: boolean
+          conteudo?: string
+          created_at?: string
+          id?: string
+          nome?: string
+          tipo?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       knowledge_documents: {
         Row: {
           agent_id: string | null
