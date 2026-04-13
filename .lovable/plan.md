@@ -1,98 +1,53 @@
 
 
-# Plano: Construir o Agente LEX — Guardião de Prazos
+# Plano: Melhorar Visibilidade do LEX no Marketplace e Times
 
-## Visão Geral
-Criar o agente LEX completo: tabelas, edge functions, páginas de cadastro e dashboard, e card no marketplace.
+## Diagnóstico
 
----
+O LEX **já existe** no marketplace e está funcionando. Ele aparece dentro do departamento **Operations > Legal Squad**. O problema é de **visibilidade** — ele está enterrado dentro de um departamento genérico e sem destaque visual.
 
-## Etapa 1 — Migração de Banco de Dados
-
-Criar duas tabelas com RLS:
-
-**`lex_advogados`**: id, user_id, nome, cpf, oab_numero, oab_estado, whatsapp, govbr_login, govbr_senha_encrypted, ativo (default true), created_at. RLS: usuários veem/editam os próprios; admins veem tudo.
-
-**`lex_intimacoes`**: id, advogado_id (referencia lex_advogados), numero_processo, tribunal, tipo_ato, texto_resumo, data_publicacao, prazo_dias, data_limite, status (default 'novo'), whatsapp_enviado (default false), created_at. RLS: usuários veem intimações dos próprios advogados; admins veem tudo.
+Evidência: ao buscar "Lex" no marketplace, aparecem 2 resultados e o card está completo com tags (DJEN, Prazos, WhatsApp), preço ($197/mês) e botão ACESSAR. A landing page `/agente/lex_guardian` também funciona.
 
 ---
 
-## Etapa 2 — Secrets
+## Melhorias Propostas
 
-Solicitar ao usuário as seguintes chaves via `add_secret`:
-- `LEX_ENCRYPTION_KEY`
-- `EVOLUTION_URL`
-- `EVOLUTION_INSTANCE`
-- `EVOLUTION_API_KEY`
+### 1. Adicionar "Jurídico" como filtro de departamento no Team Builder
 
-(ANTHROPIC_API_KEY e RAILWAY_LEX_URL ficam para depois, quando o serviço Railway estiver pronto.)
+O `categoryFilters` em `TeamBuilder.tsx` não tem "Jurídico". Adicionar para que o LEX apareça ao filtrar.
 
----
+Arquivo: `src/pages/TeamBuilder.tsx` — adicionar `{ id: "juridico", label: "Jurídico" }` e mapear `lex_guardian` para `juridico` no `departmentMap.ts`.
 
-## Etapa 3 — Edge Function `lex-salvar-advogado`
+### 2. Adicionar cor do departamento "legal" no Library
 
-- POST com body validado via Zod
-- Criptografa `govbr_senha` com AES-256-GCM usando `LEX_ENCRYPTION_KEY`
-- Insere na tabela `lex_advogados`
-- Retorna `{ success: true, advogado_id }`
-- CORS + autenticação JWT via `getClaims()`
+O `DEPT_COLORS` em `Library.tsx` não tem entrada para quando o legal squad aparece. Adicionar cor temática (slate/indigo) para o departamento que contém agentes jurídicos.
 
----
+### 3. Destacar LEX como agente "Featured" no marketplace
 
-## Etapa 4 — Edge Function `lex-dashboard`
+Adicionar `lex_guardian` ao array `featuredKeys` em `libraryAgentData.ts` para que apareça em destaque no topo.
 
-- GET autenticado
-- Busca intimações do advogado logado via join com `lex_advogados`
-- Ordena por `data_limite ASC`
-- Retorna array de intimações
+### 4. Adicionar landing page dedicada no `agentLandingData.ts`
 
----
+Atualmente o LEX usa o fallback genérico do WORKFORCE. Criar uma entrada completa com:
+- Hero headline: "Zero Prazos Perdidos"
+- Problemas específicos do advogado (prazos vencidos, DJEN manual, etc.)
+- Soluções (monitoramento automático, WhatsApp alerts, controle de deadline)
+- Comparação com workflow manual
+- CTA redirecionando para `/lex-cadastro`
 
-## Etapa 5 — Página `/lex-cadastro`
+### 5. Mapear `lex_guardian` no `departmentMap.ts`
 
-Formulário com:
-- Campos: Nome, CPF (máscara), OAB número, Estado OAB (select), WhatsApp (máscara), Login gov.br, Senha gov.br
-- Checkbox de autorização
-- Botão "Ativar Lex — R$ 197/mês"
-- Chama `lex-salvar-advogado` no submit
-- Mensagem de sucesso após ativação
-- Rota pública dentro do `AppLayout`
+Adicionar `lex_guardian: "juridico"` no `MANUAL_SLUG_TO_DEPT` para que o TeamBuilder o categorize corretamente.
 
 ---
 
-## Etapa 6 — Página `/lex-dashboard`
+## Arquivos a Modificar
 
-Tabela com:
-- Número do processo, Tribunal, Tipo do ato
-- Data limite com badge colorido (vermelho ≤3d, amarelo ≤7d, verde >7d)
-- Status, Resumo
-- Chama edge function `lex-dashboard`
-- Rota protegida dentro do `DashboardLayout`
-
----
-
-## Etapa 7 — Card no Marketplace
-
-Adicionar o agente LEX ao `libraryAgentData.ts` e/ou ao `workforceArchitecture.ts` com:
-- Badges: ALTO IMPACTO, JURÍDICO
-- Ícone: `Scale` (balança)
-- Nome: Lex — Guardião de Prazos
-- Descrição, tags, preço R$ 197/mês
-- Botão ACESSAR → `/lex-cadastro`
-
----
-
-## Etapa 8 — Rotas no App.tsx
-
-- `/lex-cadastro` → rota pública com AppLayout
-- `/lex-dashboard` → rota protegida com DashboardLayout
-
----
-
-## Detalhes Técnicos
-
-- Criptografia AES-256-GCM no edge function usando Web Crypto API (similar ao padrão já existente em `src/lib/crypto.ts`, mas server-side com chave fixa)
-- Input validation com Zod em ambas edge functions
-- Máscaras de CPF e WhatsApp no frontend com regex
-- Badges de prazo calculados com `differenceInDays` da data limite vs hoje
+| Arquivo | Mudança |
+|---------|---------|
+| `src/data/libraryAgentData.ts` | Adicionar `lex_guardian` ao `featuredKeys` |
+| `src/data/departmentMap.ts` | Mapear `lex_guardian → juridico` |
+| `src/pages/TeamBuilder.tsx` | Adicionar filtro "Jurídico" ao `categoryFilters` |
+| `src/pages/Library.tsx` | Adicionar cor "legal" ao `DEPT_COLORS` |
+| `src/data/agentLandingData.ts` | Criar landing page completa para `lex_guardian` |
 
