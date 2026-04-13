@@ -571,6 +571,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "compliance_officer", name: "Compliance Officer", responsibilities: ["LGPD compliance", "Regulatory adherence", "Policy management"], triggers: ["regulation_change", "audit_scheduled", "compliance_gap"] },
           { slug: "labor_law_agent", name: "Labor Law Agent", responsibilities: ["Labor compliance", "eSocial", "Employee relations"], triggers: ["hr_event", "legislation_change", "dispute_filed"] },
           { slug: "legal_researcher", name: "Legal Researcher", responsibilities: ["Legal research", "Jurisprudence analysis", "Case law"], triggers: ["research_needed", "legal_question", "case_preparation"] },
+          { slug: "lex_guardian", name: "Lex — Guardião de Prazos", responsibilities: ["Monitoramento DJEN", "Alertas WhatsApp", "Controle de prazos judiciais"], triggers: ["intimacao_publicada", "prazo_vencendo", "nova_publicacao_djen"] },
         ],
         outcomes: ["Legal risk score low", "Compliance 100%", "Contract turnaround -60%"],
       },

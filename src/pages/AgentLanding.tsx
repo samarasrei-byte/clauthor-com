@@ -55,9 +55,9 @@ const AgentFallback = ({ data }: { data: { agent: AgentRole; deptName: string; s
               </div>
             </div>
           </div>
-          <Link to="/auth" state={{ hireIntent: { type: "agent", label: data.agent.name, slugs: [data.agent.slug] } }}>
+          <Link to={data.agent.slug === "lex_guardian" ? "/lex-cadastro" : "/auth"} state={data.agent.slug === "lex_guardian" ? undefined : { hireIntent: { type: "agent", label: data.agent.name, slugs: [data.agent.slug] } }}>
             <Button size="lg" className="gap-2">
-              <Zap className="h-4 w-4" /> Contratar este agente <ArrowRight className="h-4 w-4" />
+              <Zap className="h-4 w-4" /> {data.agent.slug === "lex_guardian" ? "Ativar Lex — R$ 197/mês" : "Contratar este agente"} <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </motion.div>
