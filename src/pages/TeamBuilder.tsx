@@ -34,6 +34,7 @@ const categoryFilters = [
   { id: "financeiro", label: "Financeiro" },
   { id: "rh", label: "RH" },
   { id: "criacao", label: "Criação" },
+  { id: "juridico", label: "Jurídico" },
 ];
 
 function getAgentCategory(key: string): string {
