@@ -54,6 +54,7 @@ const AgentsPage = () => {
             squad.agents.forEach((agent) => {
               allAgents.push({
                 id: `admin-${agent.slug}`,
+                slug: agent.slug,
                 name: agent.name,
                 description: agent.responsibilities?.join(", ") || null,
                 tier: "advanced",
@@ -79,7 +80,6 @@ const AgentsPage = () => {
       const ownAgents = ownResult.data || [];
       const ownIds = new Set(ownAgents.map((a: any) => a.id));
 
-      // Add subscribed agents that aren't already in ownAgents
       const subscribedAgents = (subResult.data || [])
         .filter((s: any) => s.agent && !ownIds.has(s.agent.id))
         .map((s: any) => s.agent);
@@ -159,28 +159,19 @@ const AgentsPage = () => {
                   <div className="flex gap-2">
                     <Button
                       size="sm"
-                      variant="outline"
                       className="flex-1 text-xs"
-                      onClick={() => navigate("/dashboard")}
+                      onClick={() => navigate(getAgentTarget(a.slug || nameToSlugFallback(a.name), { isAdmin, user }))}
                     >
-                      <Settings className="h-3 w-3 mr-1" /> {t("agents.configure", { defaultValue: "Configurar" })}
+                      <ArrowRight className="h-3 w-3 mr-1" /> {t("agents.open_workspace", { defaultValue: "Abrir Workspace" })}
                     </Button>
-                    <Button
-                      size="sm"
-                      variant="outline"
-                      className={`text-xs ${a.status === "active" ? "border-primary/30 text-primary" : ""}`}
-                      onClick={() => toggleStatus(a)}
-                    >
-                      {a.status === "active" ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
-                    </Button>
-                    {a.status === "active" && (
+                    {!isAdmin && (
                       <Button
                         size="sm"
                         variant="outline"
-                        className="text-xs"
-                        onClick={() => navigate("/dashboard")}
+                        className={`text-xs ${a.status === "active" ? "border-primary/30 text-primary" : ""}`}
+                        onClick={() => toggleStatus(a)}
                       >
-                        <MessageSquare className="h-3 w-3" />
+                        {a.status === "active" ? <Pause className="h-3 w-3" /> : <Play className="h-3 w-3" />}
                       </Button>
                     )}
                   </div>
