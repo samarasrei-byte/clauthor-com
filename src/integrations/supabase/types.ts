@@ -1089,10 +1089,13 @@ export type Database = {
         Row: {
           cargo_alvo: string
           created_at: string
+          daily_schedule: string
           id: string
+          last_run_at: string | null
           limite_diario: number
           linkedin_cookie_encrypted: string
           localizacao_alvo: string
+          message_template: string
           nome: string
           publico_alvo: string
           setor_alvo: string
@@ -1106,10 +1109,13 @@ export type Database = {
         Insert: {
           cargo_alvo?: string
           created_at?: string
+          daily_schedule?: string
           id?: string
+          last_run_at?: string | null
           limite_diario?: number
           linkedin_cookie_encrypted?: string
           localizacao_alvo?: string
+          message_template?: string
           nome: string
           publico_alvo?: string
           setor_alvo?: string
@@ -1123,10 +1129,13 @@ export type Database = {
         Update: {
           cargo_alvo?: string
           created_at?: string
+          daily_schedule?: string
           id?: string
+          last_run_at?: string | null
           limite_diario?: number
           linkedin_cookie_encrypted?: string
           localizacao_alvo?: string
+          message_template?: string
           nome?: string
           publico_alvo?: string
           setor_alvo?: string
@@ -1236,6 +1245,39 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hunter_linkedin_session: {
+        Row: {
+          connected_at: string
+          id: string
+          linkedin_cookie: string
+          profile_avatar_url: string
+          profile_name: string
+          profile_url: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          connected_at?: string
+          id?: string
+          linkedin_cookie?: string
+          profile_avatar_url?: string
+          profile_name?: string
+          profile_url?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          connected_at?: string
+          id?: string
+          linkedin_cookie?: string
+          profile_avatar_url?: string
+          profile_name?: string
+          profile_url?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       hunter_logs: {
         Row: {

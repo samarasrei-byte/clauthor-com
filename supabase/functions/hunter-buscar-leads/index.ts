@@ -1,6 +1,8 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { handleCors, jsonResponse, errorResponse } from "../_shared/cors.ts";
 
+// Hunter v2 — Reads PhantomBuster credentials from environment (not user config).
+// Body: { campaign_id: string }
 Deno.serve(async (req) => {
   const cors = handleCors(req);
   if (cors) return cors;
@@ -12,7 +14,7 @@ Deno.serve(async (req) => {
     const supabase = createClient(
       Deno.env.get("SUPABASE_URL")!,
       Deno.env.get("SUPABASE_ANON_KEY")!,
-      { global: { headers: { Authorization: authHeader } } }
+      { global: { headers: { Authorization: authHeader } } },
     );
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
@@ -21,37 +23,34 @@ Deno.serve(async (req) => {
     const { campaign_id } = await req.json();
     if (!campaign_id) return errorResponse("campaign_id obrigatório", 400);
 
-    // Get campaign
     const { data: campaign, error: campErr } = await supabase
       .from("hunter_campaigns")
       .select("*")
       .eq("id", campaign_id)
       .eq("user_id", user.id)
       .single();
-
     if (campErr || !campaign) return errorResponse("Campanha não encontrada", 404);
 
-    // Get user's PhantomBuster config
-    const { data: config } = await supabase
-      .from("hunter_config")
-      .select("*")
+    const { data: session } = await supabase
+      .from("hunter_linkedin_session")
+      .select("linkedin_cookie")
       .eq("user_id", user.id)
       .single();
 
-    const pbKey = config?.phantombuster_api_key_encrypted;
-    const searchAgentId = config?.phantombuster_search_agent_id;
+    const pbKey = Deno.env.get("PHANTOMBUSTER_API_KEY");
+    const searchAgentId = Deno.env.get("PHANTOMBUSTER_SEARCH_AGENT_ID");
+    const cookie = session?.linkedin_cookie;
 
-    // Log start
     await supabase.from("hunter_logs").insert({
       campaign_id,
       user_id: user.id,
       tipo: "info",
-      mensagem: `Busca de leads iniciada para campanha "${campaign.nome}"`,
+      mensagem: `Execução iniciada para "${campaign.nome}" (limite: ${campaign.limite_diario}/dia)`,
     });
 
-    if (!pbKey || !searchAgentId) {
-      // No PhantomBuster configured — create demo leads
-      const demoLeads = Array.from({ length: 5 }, (_, i) => ({
+    // Fallback: no PhantomBuster or no LinkedIn session — generate demo leads
+    if (!pbKey || !searchAgentId || !cookie) {
+      const demoLeads = Array.from({ length: Math.min(5, campaign.limite_diario) }, (_, i) => ({
         campaign_id,
         user_id: user.id,
         nome_completo: `Lead Demo ${i + 1}`,
@@ -62,31 +61,24 @@ Deno.serve(async (req) => {
       }));
 
       await supabase.from("hunter_leads").insert(demoLeads);
-      await supabase.from("hunter_campaigns").update({ total_leads: 5 }).eq("id", campaign_id);
+      await supabase.from("hunter_campaigns").update({
+        total_leads: (campaign.total_leads || 0) + demoLeads.length,
+        last_run_at: new Date().toISOString(),
+      }).eq("id", campaign_id);
 
       await supabase.from("hunter_logs").insert({
         campaign_id,
         user_id: user.id,
         tipo: "info",
-        mensagem: "PhantomBuster não configurado — leads de demonstração criados. Configure em /hunter-configuracoes.",
+        mensagem: !cookie
+          ? "LinkedIn não conectado — gerados leads de demonstração."
+          : "Modo demo — gerados leads de demonstração.",
       });
 
-      // Generate icebreakers for demo leads
-      try {
-        await fetch(`${Deno.env.get("SUPABASE_URL")}/functions/v1/hunter-gerar-icebreakers`, {
-          method: "POST",
-          headers: {
-            Authorization: authHeader,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ campaign_id }),
-        });
-      } catch { /* non-blocking */ }
-
-      return jsonResponse({ success: true, leads_count: 5, demo: true });
+      return jsonResponse({ success: true, demo: true, leads_count: demoLeads.length });
     }
 
-    // Call PhantomBuster Search
+    // Real PhantomBuster Search call
     try {
       const pbResponse = await fetch("https://api.phantombuster.com/api/v2/agents/launch", {
         method: "POST",
@@ -97,24 +89,28 @@ Deno.serve(async (req) => {
         body: JSON.stringify({
           id: searchAgentId,
           argument: {
-            cookie: campaign.linkedin_cookie_encrypted,
-            searches: `${campaign.cargo_alvo} ${campaign.setor_alvo}`,
+            sessionCookie: cookie,
+            searches: `${campaign.cargo_alvo} ${campaign.setor_alvo}`.trim(),
             location: campaign.localizacao_alvo,
-            numberOfResultsPerSearch: 25,
+            numberOfResultsPerSearch: campaign.limite_diario || 20,
           },
         }),
       });
 
       if (!pbResponse.ok) {
         const errText = await pbResponse.text();
-        throw new Error(`PhantomBuster error [${pbResponse.status}]: ${errText}`);
+        throw new Error(`PhantomBuster [${pbResponse.status}]: ${errText}`);
       }
+
+      await supabase.from("hunter_campaigns").update({
+        last_run_at: new Date().toISOString(),
+      }).eq("id", campaign_id);
 
       await supabase.from("hunter_logs").insert({
         campaign_id,
         user_id: user.id,
         tipo: "sucesso",
-        mensagem: `PhantomBuster Search iniciado. Leads serão importados quando o Phantom concluir.`,
+        mensagem: `PhantomBuster Search disparado (limite ${campaign.limite_diario}). Leads chegam por webhook.`,
       });
 
       return jsonResponse({ success: true, message: "Busca iniciada no PhantomBuster" });
@@ -123,11 +119,11 @@ Deno.serve(async (req) => {
         campaign_id,
         user_id: user.id,
         tipo: "erro",
-        mensagem: `Erro no PhantomBuster: ${e.message}`,
+        mensagem: `Erro PhantomBuster: ${(e as Error).message}`,
       });
-      return errorResponse(e.message, 500);
+      return errorResponse((e as Error).message, 500);
     }
   } catch (e) {
-    return errorResponse(e.message || "Erro interno", 500);
+    return errorResponse((e as Error).message || "Erro interno", 500);
   }
 });

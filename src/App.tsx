@@ -58,12 +58,12 @@ const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
 const ThorOnboarding = lazyRetry(() => import("./pages/ThorOnboarding"));
 const AgentNeuralNetwork = lazyRetry(() => import("./pages/AgentNeuralNetwork"));
 const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
-const HunterCampaigns = lazyRetry(() => import("./pages/HunterCampaigns"));
-const HunterNovaCampanha = lazyRetry(() => import("./pages/HunterNovaCampanha"));
-const HunterCampaignDetail = lazyRetry(() => import("./pages/HunterCampaignDetail"));
+const HunterDashboard = lazyRetry(() => import("./pages/HunterDashboard"));
+const HunterLinkedIn = lazyRetry(() => import("./pages/HunterLinkedIn"));
+const HunterICP = lazyRetry(() => import("./pages/HunterICP"));
+const HunterMensagem = lazyRetry(() => import("./pages/HunterMensagem"));
+const HunterAtivar = lazyRetry(() => import("./pages/HunterAtivar"));
 const HunterLeadDetail = lazyRetry(() => import("./pages/HunterLeadDetail"));
-const HunterTemplates = lazyRetry(() => import("./pages/HunterTemplates"));
-const HunterConfiguracoes = lazyRetry(() => import("./pages/HunterConfiguracoes"));
 const AgentWorkspace = lazyRetry(() => import("./pages/AgentWorkspace"));
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -132,12 +132,12 @@ const App = () => (
                   <Route path="/control-tower" element={<ControlTower />} />
                   <Route path="/neural-network" element={<AgentNeuralNetwork />} />
                   <Route path="/scrum" element={<ScrumBoard />} />
-                  <Route path="/hunter-campaigns" element={<HunterCampaigns />} />
-                  <Route path="/hunter-nova-campanha" element={<HunterNovaCampanha />} />
-                  <Route path="/hunter-campaign/:id" element={<HunterCampaignDetail />} />
+                  <Route path="/hunter" element={<HunterDashboard />} />
+                  <Route path="/hunter-linkedin" element={<HunterLinkedIn />} />
+                  <Route path="/hunter-icp" element={<HunterICP />} />
+                  <Route path="/hunter-mensagem" element={<HunterMensagem />} />
+                  <Route path="/hunter-ativar" element={<HunterAtivar />} />
                   <Route path="/hunter-lead/:id" element={<HunterLeadDetail />} />
-                  <Route path="/hunter-templates" element={<HunterTemplates />} />
-                  <Route path="/hunter-configuracoes" element={<HunterConfiguracoes />} />
                   <Route path="/app/agente/:slug" element={<AgentWorkspace />} />
                 </Route>
 
