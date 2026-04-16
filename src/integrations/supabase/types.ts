@@ -542,6 +542,66 @@ export type Database = {
         }
         Relationships: []
       }
+      agents_catalog: {
+        Row: {
+          config_schema: Json
+          created_at: string
+          department: string
+          description: string | null
+          faq: Json
+          how_it_works: Json
+          id: string
+          is_active: boolean
+          monthly_price_cents: number
+          name: string
+          output_schema: Json
+          responsibilities: Json
+          slug: string
+          squad: string
+          tagline: string | null
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          config_schema?: Json
+          created_at?: string
+          department?: string
+          description?: string | null
+          faq?: Json
+          how_it_works?: Json
+          id?: string
+          is_active?: boolean
+          monthly_price_cents?: number
+          name: string
+          output_schema?: Json
+          responsibilities?: Json
+          slug: string
+          squad?: string
+          tagline?: string | null
+          tier?: string
+          updated_at?: string
+        }
+        Update: {
+          config_schema?: Json
+          created_at?: string
+          department?: string
+          description?: string | null
+          faq?: Json
+          how_it_works?: Json
+          id?: string
+          is_active?: boolean
+          monthly_price_cents?: number
+          name?: string
+          output_schema?: Json
+          responsibilities?: Json
+          slug?: string
+          squad?: string
+          tagline?: string | null
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       chat_feedback: {
         Row: {
           agent_id: string | null
@@ -2024,6 +2084,36 @@ export type Database = {
         }
         Relationships: []
       }
+      user_agents: {
+        Row: {
+          activated_at: string
+          active: boolean
+          agent_slug: string
+          config: Json
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          activated_at?: string
+          active?: boolean
+          agent_slug: string
+          config?: Json
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          activated_at?: string
+          active?: boolean
+          agent_slug?: string
+          config?: Json
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_credits: {
         Row: {
           created_at: string
@@ -2219,6 +2309,7 @@ export type Database = {
           title: string
         }[]
       }
+      seed_admin_agents: { Args: { _user_id: string }; Returns: number }
     }
     Enums: {
       agent_status: "draft" | "active" | "paused" | "archived"
