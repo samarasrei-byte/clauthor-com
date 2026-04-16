@@ -18,9 +18,9 @@ const HunterConfiguracoes = () => {
   const [logs, setLogs] = useState<any[]>([]);
 
   const [config, setConfig] = useState({
-    phantombuster_api_key: "",
-    phantombuster_search_agent_id: "",
-    phantombuster_connect_agent_id: "",
+    phantombuster_api_key: "mY2h4ZN68EP3GZZxGZFrMEFUdF2r9BoJN01DBDwZZs",
+    phantombuster_search_agent_id: "7724203656674356",
+    phantombuster_connect_agent_id: "3165042093343795",
     evolution_url: "",
     evolution_instance: "",
     evolution_notify_number: "",
