@@ -46,7 +46,7 @@ const HunterMensagem = () => {
   const preview = useMemo(() => {
     let p = template;
     VARIABLES.forEach(v => {
-      p = p.replaceAll(`{{${v}}}`, (SAMPLE as any)[v]);
+      p = p.split(`{{${v}}}`).join((SAMPLE as any)[v]);
     });
     return p;
   }, [template]);

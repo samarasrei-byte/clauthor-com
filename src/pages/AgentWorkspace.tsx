@@ -149,7 +149,7 @@ const AgentWorkspace = () => {
             <p className="font-semibold text-sm">Hunter possui interface dedicada</p>
             <p className="text-xs text-muted-foreground">Use o painel completo para criar campanhas e gerenciar leads.</p>
           </div>
-          <Link to="/hunter-campaigns"><Button>Abrir Hunter</Button></Link>
+          <Link to="/hunter"><Button>Abrir Hunter</Button></Link>
         </div>
       )}
 
