@@ -189,7 +189,7 @@ const AgentsSection = ({
         </div>
       </div>
 
-      {agents.length > 0 && (
+      {agents.length > 0 && !isAdmin && (
         <AgentSetupChecklist agents={agents} nameToSlug={nameToSlug} onOpenThor={onOpenThor} />
       )}
 
