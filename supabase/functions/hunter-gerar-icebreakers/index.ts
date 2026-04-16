@@ -23,7 +23,6 @@ Deno.serve(async (req) => {
     const { campaign_id } = await req.json();
     if (!campaign_id) return errorResponse("campaign_id obrigatório", 400);
 
-    // Get leads without icebreakers
     const { data: leads, error: leadsErr } = await supabase
       .from("hunter_leads")
       .select("id, nome_completo, cargo, empresa")
@@ -69,7 +68,6 @@ Deno.serve(async (req) => {
           const aiData = await aiRes.json();
           icebreaker = aiData.choices?.[0]?.message?.content?.trim() || "";
         } else {
-          // Fallback template
           icebreaker = `Oi ${lead.nome_completo}, vi que você é ${lead.cargo} na ${lead.empresa}. Adoraria trocar uma ideia.`;
         }
 
