@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { cn } from "@/lib/utils";
 
 interface ClauthorLogoProps {
@@ -10,7 +11,7 @@ interface ClauthorLogoProps {
  * Automatically adapts to light/dark mode via CSS currentColor.
  * The dot on the "o" is always primary (red).
  */
-const ClauthorLogo = ({ className, size = "md" }: ClauthorLogoProps) => {
+const ClauthorLogo = forwardRef<HTMLDivElement, ClauthorLogoProps>(({ className, size = "md" }, ref) => {
   const sizeClasses = {
     sm: "h-[18px]",
     md: "h-[22px]",
@@ -18,7 +19,7 @@ const ClauthorLogo = ({ className, size = "md" }: ClauthorLogoProps) => {
   };
 
   return (
-    <div className={cn("flex items-center gap-0", sizeClasses[size], className)}>
+    <div ref={ref} className={cn("flex items-center gap-0", sizeClasses[size], className)}>
       <span
         className={cn(
           "font-semibold tracking-[-0.04em] text-foreground leading-none",
@@ -36,6 +37,9 @@ const ClauthorLogo = ({ className, size = "md" }: ClauthorLogoProps) => {
       </span>
     </div>
   );
-};
+});
+
+ClauthorLogo.displayName = "ClauthorLogo";
 
 export default ClauthorLogo;
+
