@@ -127,7 +127,7 @@ const AgentsSection = ({
   onOpenLibrary, onOpenThor, onOpenChat,
 }: AgentsSectionProps) => {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const queryClient = useQueryClient();
   const [expandedAgent, setExpandedAgent] = useState<string | null>(null);
 
