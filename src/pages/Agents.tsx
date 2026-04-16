@@ -160,7 +160,7 @@ const AgentsPage = () => {
                     <Button
                       size="sm"
                       className="flex-1 text-xs"
-                      onClick={() => navigate(getAgentTarget(a.slug || nameToSlugFallback(a.name), { isAdmin, user }))}
+                      onClick={() => navigate(getAgentTarget(a.slug || a.name?.toLowerCase().replace(/\s+/g, "_") || "agent", { isAdmin, user }))}
                     >
                       <ArrowRight className="h-3 w-3 mr-1" /> {t("agents.open_workspace", { defaultValue: "Abrir Workspace" })}
                     </Button>
