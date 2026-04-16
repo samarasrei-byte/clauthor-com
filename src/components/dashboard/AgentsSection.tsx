@@ -127,7 +127,7 @@ const AgentsSection = ({
   onOpenLibrary, onOpenThor, onOpenChat,
 }: AgentsSectionProps) => {
   const { t } = useTranslation();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const queryClient = useQueryClient();
   const [expandedAgent, setExpandedAgent] = useState<string | null>(null);
 
@@ -189,7 +189,7 @@ const AgentsSection = ({
         </div>
       </div>
 
-      {agents.length > 0 && (
+      {agents.length > 0 && !isAdmin && (
         <AgentSetupChecklist agents={agents} nameToSlug={nameToSlug} onOpenThor={onOpenThor} />
       )}
 
