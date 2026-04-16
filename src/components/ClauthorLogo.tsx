@@ -19,7 +19,7 @@ const ClauthorLogo = forwardRef<HTMLDivElement, ClauthorLogoProps>(({ className,
   };
 
   return (
-    <div className={cn("flex items-center gap-0", sizeClasses[size], className)}>
+    <div ref={ref} className={cn("flex items-center gap-0", sizeClasses[size], className)}>
       <span
         className={cn(
           "font-semibold tracking-[-0.04em] text-foreground leading-none",
@@ -37,6 +37,9 @@ const ClauthorLogo = forwardRef<HTMLDivElement, ClauthorLogoProps>(({ className,
       </span>
     </div>
   );
-};
+});
+
+ClauthorLogo.displayName = "ClauthorLogo";
 
 export default ClauthorLogo;
+
