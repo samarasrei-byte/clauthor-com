@@ -64,6 +64,7 @@ const HunterCampaignDetail = lazyRetry(() => import("./pages/HunterCampaignDetai
 const HunterLeadDetail = lazyRetry(() => import("./pages/HunterLeadDetail"));
 const HunterTemplates = lazyRetry(() => import("./pages/HunterTemplates"));
 const HunterConfiguracoes = lazyRetry(() => import("./pages/HunterConfiguracoes"));
+const AgentWorkspace = lazyRetry(() => import("./pages/AgentWorkspace"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -137,6 +138,7 @@ const App = () => (
                   <Route path="/hunter-lead/:id" element={<HunterLeadDetail />} />
                   <Route path="/hunter-templates" element={<HunterTemplates />} />
                   <Route path="/hunter-configuracoes" element={<HunterConfiguracoes />} />
+                  <Route path="/app/agente/:slug" element={<AgentWorkspace />} />
                 </Route>
 
                 {/* Admin */}

@@ -103,10 +103,9 @@ const LibraryPage = () => {
       return;
     }
 
-    // Admin bypass - direct access without payment
+    // Admin bypass - direct access to agent workspace
     if (isAdmin) {
-      toast.success("Acesso admin — todos os agentes disponíveis");
-      navigate("/dashboard");
+      navigate(`/app/agente/${slug}`);
       return;
     }
 
