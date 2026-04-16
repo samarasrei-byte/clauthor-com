@@ -1,13 +1,35 @@
 import { motion } from "framer-motion";
-import { Coins, TrendingUp } from "lucide-react";
+import { Coins, TrendingUp, Infinity as InfinityIcon } from "lucide-react";
 import { useCredits } from "@/hooks/useCredits";
+import { useAuth } from "@/hooks/useAuth";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { useTranslation } from "react-i18next";
 
 export function CreditsDisplay() {
   const { credits, remainingCredits, usagePercentage, isLoading } = useCredits();
+  const { isAdmin } = useAuth();
   const { t } = useTranslation();
+
+  if (isAdmin) {
+    return (
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-xl p-5">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+              <InfinityIcon className="h-5 w-5 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">{t("credits.title", { defaultValue: "Credits" })}</p>
+              <p className="font-display font-bold text-2xl gradient-text">∞</p>
+            </div>
+          </div>
+          <Badge className="bg-primary/15 text-primary border-0">ADMIN</Badge>
+        </div>
+        <p className="text-xs text-muted-foreground">Acesso ilimitado a todos os agentes</p>
+      </motion.div>
+    );
+  }
 
   if (isLoading || !credits) {
     return (
@@ -24,13 +46,7 @@ export function CreditsDisplay() {
     return num.toString();
   };
 
-  const planLabels: Record<string, string> = {
-    free: "Free",
-    starter: "Starter",
-    pro: "Pro",
-    enterprise: "Enterprise",
-  };
-
+  const planLabels: Record<string, string> = { free: "Free", starter: "Starter", pro: "Pro", enterprise: "Enterprise" };
   const planColors: Record<string, string> = {
     free: "bg-muted/80 text-muted-foreground",
     starter: "bg-cyan-500/15 text-cyan-400",
@@ -39,11 +55,7 @@ export function CreditsDisplay() {
   };
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="glass-card rounded-xl p-5"
-    >
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="glass-card rounded-xl p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
@@ -51,25 +63,19 @@ export function CreditsDisplay() {
           </div>
           <div>
             <p className="text-sm text-muted-foreground">{t("credits.title", { defaultValue: "Credits" })}</p>
-            <p className="font-display font-bold text-xl gradient-text">
-              {formatCredits(remainingCredits)}
-            </p>
+            <p className="font-display font-bold text-xl gradient-text">{formatCredits(remainingCredits)}</p>
           </div>
         </div>
         <Badge className={planColors[credits.plan_type] || planColors.free}>
           {planLabels[credits.plan_type] || "Free"}
         </Badge>
       </div>
-
       <div className="space-y-2">
         <div className="flex justify-between text-xs text-muted-foreground">
           <span>{t("credits.used", { defaultValue: "Used" })}: {formatCredits(credits.used_credits)}</span>
           <span>{t("credits.total", { defaultValue: "Total" })}: {formatCredits(credits.total_credits)}</span>
         </div>
-        <Progress 
-          value={usagePercentage} 
-          className="h-2"
-        />
+        <Progress value={usagePercentage} className="h-2" />
         {usagePercentage > 80 && (
           <p className="text-xs text-cyan-400 flex items-center gap-1 mt-2">
             <TrendingUp className="h-3 w-3" />
