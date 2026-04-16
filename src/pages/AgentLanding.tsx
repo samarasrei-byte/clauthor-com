@@ -70,11 +70,8 @@ const AdminAwareCTA = ({ slug, label, fallbackText }: { slug: string; label: str
 
   if (isAdmin) {
     return (
-      <Button size="lg" className="gap-2" onClick={() => {
-        toast.success("Acesso admin — redirecionando...");
-        navigate("/dashboard");
-      }}>
-        <Zap className="h-4 w-4" /> Acessar <ArrowRight className="h-4 w-4" />
+      <Button size="lg" className="gap-2" onClick={() => navigate(`/app/agente/${slug}`)}>
+        <Zap className="h-4 w-4" /> Abrir Workspace <ArrowRight className="h-4 w-4" />
       </Button>
     );
   }
@@ -124,11 +121,8 @@ const AgentLanding = () => {
             <p className="text-muted-foreground text-lg sm:text-xl max-w-3xl mx-auto mb-10">{agent.heroSubheadline}</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               {isAdmin ? (
-                <Button size="lg" className="glow rounded-xl px-8 h-14 text-lg font-semibold" onClick={() => {
-                  toast.success("Acesso admin — redirecionando...");
-                  navigate("/dashboard");
-                }}>
-                  Acessar <ArrowRight className="ml-2 h-5 w-5" />
+                <Button size="lg" className="glow rounded-xl px-8 h-14 text-lg font-semibold" onClick={() => navigate(`/app/agente/${slug}`)}>
+                  Abrir Workspace <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               ) : (
                 <Link to="/auth" state={{ hireIntent: { type: "agent", label: agent.solutionTitle, slugs: [slug] } }}>
