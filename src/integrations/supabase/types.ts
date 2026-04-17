@@ -1248,32 +1248,44 @@ export type Database = {
       }
       hunter_linkedin_session: {
         Row: {
+          access_token: string | null
           connected_at: string
+          expires_at: string | null
           id: string
           linkedin_cookie: string
+          linkedin_user_id: string | null
           profile_avatar_url: string
           profile_name: string
           profile_url: string
+          refresh_token: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
+          access_token?: string | null
           connected_at?: string
+          expires_at?: string | null
           id?: string
           linkedin_cookie?: string
+          linkedin_user_id?: string | null
           profile_avatar_url?: string
           profile_name?: string
           profile_url?: string
+          refresh_token?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
+          access_token?: string | null
           connected_at?: string
+          expires_at?: string | null
           id?: string
           linkedin_cookie?: string
+          linkedin_user_id?: string | null
           profile_avatar_url?: string
           profile_name?: string
           profile_url?: string
+          refresh_token?: string | null
           updated_at?: string
           user_id?: string
         }
