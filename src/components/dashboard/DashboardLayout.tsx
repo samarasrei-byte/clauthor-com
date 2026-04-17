@@ -1,5 +1,6 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
-import { Bot, LogOut, Home, Shield, Coins, AlertTriangle, X } from "lucide-react";
+import { LogOut, Home, Shield, Coins, AlertTriangle, X } from "lucide-react";
+import ClauthorLogo from "@/components/ClauthorLogo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { LanguageSelector } from "@/components/LanguageSelector";
@@ -62,11 +63,8 @@ const DashboardLayout = () => {
 
       {/* Fixed top bar */}
       <header className="h-14 border-b border-white/[0.05] bg-background/80 backdrop-blur-2xl flex items-center justify-between px-4 sm:px-6 shrink-0 z-40">
-        <Link to="/" className="flex items-center gap-2.5 group">
-          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-            <Bot className="h-4 w-4 text-primary" />
-          </div>
-          <span className="font-display font-bold text-base text-foreground tracking-wider">CLAUTHOR</span>
+        <Link to="/" className="flex items-center group">
+          <ClauthorLogo size="md" />
         </Link>
 
         <div className="flex items-center gap-2">
