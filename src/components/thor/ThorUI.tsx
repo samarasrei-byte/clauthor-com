@@ -476,43 +476,9 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
     );
   }
 
-  /* ══ MINIMIZED ══ */
+  /* ══ MINIMIZED — hidden per user request ══ */
   if (phase === "minimized") {
-    return (
-      <>
-        {demoModal}
-        <motion.button
-          initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", damping: 14 }}
-          onClick={activate}
-          className="fixed bottom-6 right-4 sm:bottom-8 sm:right-6 z-[9999] group cursor-pointer"
-          aria-label="Talk to Thor"
-        >
-          <motion.span className="absolute inset-[-3px] rounded-full overflow-hidden"
-            animate={{ rotate: 360 }} transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-          >
-            <span className="absolute inset-0" style={{
-              background: "conic-gradient(from 0deg, transparent 30%, hsl(var(--accent-violet) / 0.7), hsl(var(--accent-violet) / 0.15), transparent 75%)",
-            }} />
-          </motion.span>
-          <motion.span className="absolute inset-[-8px] rounded-full border border-accent-violet/10"
-            animate={{ scale: [1, 1.15, 1], opacity: [0.2, 0, 0.2] }}
-            transition={{ duration: 3, repeat: Infinity }}
-          />
-          <span className="relative flex items-center justify-center w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-background/95 backdrop-blur-2xl overflow-hidden border border-accent-violet/10">
-            <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover rounded-full" />
-            <span className="absolute inset-0 rounded-full shadow-[inset_0_0_15px_hsl(var(--accent-violet)/0.15)]" />
-          </span>
-          <span className="absolute top-0 right-0 w-3.5 h-3.5 rounded-full border-2 border-background z-10">
-            <span className="block w-full h-full rounded-full bg-emerald-500" />
-            <span className="absolute inset-0 rounded-full bg-emerald-500 animate-ping opacity-50" />
-          </span>
-          <span className="absolute -top-9 left-1/2 -translate-x-1/2 text-[8px] font-mono tracking-[0.3em] uppercase text-accent-violet/50 opacity-0 group-hover:opacity-100 transition-all whitespace-nowrap bg-background/90 backdrop-blur-md px-3 py-1.5 rounded-md border border-accent-violet/10">
-            THOR · ONLINE
-          </span>
-        </motion.button>
-      </>
-    );
+    return <>{demoModal}</>;
   }
 
   /* ══ ACTIVE — MOBILE ══ */
