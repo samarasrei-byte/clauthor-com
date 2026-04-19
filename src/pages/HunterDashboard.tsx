@@ -5,7 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Target, Users, UserCheck, MessageSquare, Linkedin, Settings, ExternalLink, Loader2 } from "lucide-react";
+import { Target, Users, UserCheck, MessageSquare, Linkedin, Settings, ExternalLink, Loader2, Inbox } from "lucide-react";
 
 interface HotLead {
   id: string;
@@ -23,13 +23,14 @@ const HunterDashboard = () => {
   const [stats, setStats] = useState({ enviados: 0, aceitos: 0, responderam: 0 });
   const [hotLeads, setHotLeads] = useState<HotLead[]>([]);
   const [hasSession, setHasSession] = useState(false);
+  const [unreadInbox, setUnreadInbox] = useState(0);
 
   useEffect(() => {
     if (!user) return;
     (async () => {
       const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
 
-      const [{ data: session }, { data: leads }] = await Promise.all([
+      const [{ data: session }, { data: leads }, { data: convs }] = await Promise.all([
         supabase.from("hunter_linkedin_session").select("user_id").eq("user_id", user.id).maybeSingle(),
         supabase
           .from("hunter_leads")
@@ -37,6 +38,10 @@ const HunterDashboard = () => {
           .eq("user_id", user.id)
           .gte("updated_at", sevenDaysAgo)
           .order("updated_at", { ascending: false }),
+        supabase
+          .from("hunter_conversations")
+          .select("unread_count")
+          .eq("user_id", user.id),
       ]);
 
       setHasSession(!!session);
@@ -47,6 +52,7 @@ const HunterDashboard = () => {
         responderam: all.filter(l => l.status === "respondeu").length,
       });
       setHotLeads(all.filter(l => l.status === "respondeu").slice(0, 20) as HotLead[]);
+      setUnreadInbox((convs || []).reduce((s, c: any) => s + (c.unread_count || 0), 0));
       setLoading(false);
     })();
   }, [user]);
@@ -66,9 +72,19 @@ const HunterDashboard = () => {
           <Target className="w-7 h-7 text-primary" />
           <h1 className="text-2xl font-bold text-foreground">Hunter</h1>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
+          <Button asChild variant="default" className="gap-2 relative">
+            <Link to="/hunter-inbox">
+              <Inbox className="w-4 h-4" /> Inbox
+              {unreadInbox > 0 && (
+                <Badge variant="destructive" className="ml-1 rounded-full h-5 min-w-5 px-1.5 text-[10px]">
+                  {unreadInbox}
+                </Badge>
+              )}
+            </Link>
+          </Button>
           {!hasSession && (
-            <Button asChild variant="default" className="gap-2">
+            <Button asChild variant="outline" className="gap-2">
               <Link to="/hunter-linkedin"><Linkedin className="w-4 h-4" /> Conectar LinkedIn</Link>
             </Button>
           )}

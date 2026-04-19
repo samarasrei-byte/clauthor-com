@@ -7,6 +7,7 @@ const STEPS = [
   { n: 2, label: "ICP", path: "/hunter-icp" },
   { n: 3, label: "Mensagem", path: "/hunter-mensagem" },
   { n: 4, label: "Ativar", path: "/hunter-ativar" },
+  { n: 5, label: "Inbox", path: "/hunter-inbox" },
 ];
 
 const HunterStepper = ({ current }: { current: number }) => {
