@@ -1193,6 +1193,54 @@ export type Database = {
         }
         Relationships: []
       }
+      hunter_conversations: {
+        Row: {
+          created_at: string
+          id: string
+          last_message_at: string
+          last_message_preview: string
+          lead_headline: string
+          lead_linkedin_id: string
+          lead_name: string
+          lead_picture_url: string
+          lead_profile_url: string
+          status: string
+          unread_count: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          last_message_preview?: string
+          lead_headline?: string
+          lead_linkedin_id: string
+          lead_name?: string
+          lead_picture_url?: string
+          lead_profile_url?: string
+          status?: string
+          unread_count?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          last_message_at?: string
+          last_message_preview?: string
+          lead_headline?: string
+          lead_linkedin_id?: string
+          lead_name?: string
+          lead_picture_url?: string
+          lead_profile_url?: string
+          status?: string
+          unread_count?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       hunter_leads: {
         Row: {
           campaign_id: string
@@ -1370,6 +1418,47 @@ export type Database = {
             columns: ["lead_id"]
             isOneToOne: false
             referencedRelation: "hunter_leads"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      hunter_messages_inbox: {
+        Row: {
+          content: string
+          conversation_id: string
+          created_at: string
+          id: string
+          read_at: string | null
+          sender: string
+          sent_at: string
+          user_id: string
+        }
+        Insert: {
+          content?: string
+          conversation_id: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender?: string
+          sent_at?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          conversation_id?: string
+          created_at?: string
+          id?: string
+          read_at?: string | null
+          sender?: string
+          sent_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "hunter_messages_inbox_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "hunter_conversations"
             referencedColumns: ["id"]
           },
         ]

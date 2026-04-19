@@ -64,6 +64,7 @@ const HunterICP = lazyRetry(() => import("./pages/HunterICP"));
 const HunterMensagem = lazyRetry(() => import("./pages/HunterMensagem"));
 const HunterAtivar = lazyRetry(() => import("./pages/HunterAtivar"));
 const HunterLeadDetail = lazyRetry(() => import("./pages/HunterLeadDetail"));
+const HunterInbox = lazyRetry(() => import("./pages/HunterInbox"));
 const AgentWorkspace = lazyRetry(() => import("./pages/AgentWorkspace"));
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -138,6 +139,7 @@ const App = () => (
                   <Route path="/hunter-mensagem" element={<HunterMensagem />} />
                   <Route path="/hunter-ativar" element={<HunterAtivar />} />
                   <Route path="/hunter-lead/:id" element={<HunterLeadDetail />} />
+                  <Route path="/hunter-inbox" element={<HunterInbox />} />
                   <Route path="/app/agente/:slug" element={<AgentWorkspace />} />
                 </Route>
 
