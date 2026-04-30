@@ -71,12 +71,12 @@ const HomePage = () => {
   const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
 
   const cyclingRoles = useMemo(() => [
-    "AI Employees",
-    "AI Sales Rep",
-    "AI Support Agent",
-    "AI Growth Hacker",
-    "AI CFO Assistant",
-    "AI Content Creator",
+    "Funcionários de IA",
+    "Vendedor de IA",
+    "Agente de Suporte IA",
+    "Growth Hacker de IA",
+    "Assistente de CFO IA",
+    "Criador de Conteúdo IA",
   ], []);
   const { displayed: typedText } = useCyclingTypewriter(cyclingRoles, 45, 2200, 600);
 
