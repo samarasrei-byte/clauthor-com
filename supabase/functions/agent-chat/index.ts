@@ -7,6 +7,7 @@ import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, getDepar
 import { enforcePolicy, validateTenant, type PolicyContext } from "../_shared/policy-engine.ts";
 import { autonomousExecute } from "../_shared/tool-executor.ts";
 import { executeIntegration, getDecryptedCredentials, type IntegrationResponse } from "../_shared/integration-router.ts";
+import { getLegalPrompt } from "../_shared/legal-prompts.ts";
 
 // ── AES-256-GCM decryption for credential bridge ──
 const ALGO = "AES-GCM";
@@ -1289,7 +1290,7 @@ serve(async (req) => {
     const rl = checkRateLimit(`agent-chat:${clientIP}`, 20, 60_000);
     if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
 
-    const { messages, agentId, actionType = "chat", stream: wantStream = false } = await req.json();
+    const { messages, agentId, agentSlug, actionType = "chat", stream: wantStream = false } = await req.json();
 
     const validation = validateInput(messages);
     if (!validation.valid) {
@@ -1393,6 +1394,16 @@ serve(async (req) => {
 Objective: ${agent.objective || "Help the user"}
 Instructions: ${agent.instructions}`;
         }
+      }
+    }
+
+    // ─── LEGAL OVERRIDE: if request carries a legal slug, force OAB-compliant prompt ───
+    const legalPrompt = getLegalPrompt(agentSlug);
+    if (legalPrompt) {
+      agentPrompt = legalPrompt;
+      agentArea = "legal";
+      if (!agentName || agentName === "AI Agent") {
+        agentName = `Squad Jurídica · ${agentSlug}`;
       }
     }
 

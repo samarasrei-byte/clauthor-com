@@ -28,9 +28,13 @@ export function useHireIntentFlow(user: any) {
 
     let price: number;
     let deptId: string | undefined;
+    const setupFee = typeof intent.setupFee === "number" ? intent.setupFee : 0;
 
-    if (isDepartment) {
-      deptId = (intent as any).departmentId || SLUG_TO_DEPT[uniqueSlugs[0]] || "comercial";
+    if (typeof intent.monthlyOverride === "number" && intent.monthlyOverride > 0) {
+      price = intent.monthlyOverride;
+      deptId = intent.departmentId;
+    } else if (isDepartment) {
+      deptId = intent.departmentId || SLUG_TO_DEPT[uniqueSlugs[0]] || "comercial";
       price = (region.departments as Record<string, number>)[deptId] || region.departments.comercial;
     } else {
       const slug = uniqueSlugs[0];
@@ -52,9 +56,8 @@ export function useHireIntentFlow(user: any) {
 
     if (!price || price <= 0) { toast.error("Preço inválido para este agente."); return; }
 
-    // Create PayPal plan server-side, then show checkout with planId
     const agentSlug = isDepartment ? `dept-${deptId}` : uniqueSlugs[0];
-    createPayPalPlan(agentSlug, intent.label, price, region.currency).then((planId) => {
+    createPayPalPlan(agentSlug, intent.label, price, region.currency, setupFee).then((planId) => {
       setCheckoutSummary({
         label: intent.label, slugs: uniqueSlugs, isDepartment, departmentId: deptId,
         price, currency: region.currency, lang, planId,
@@ -93,7 +96,7 @@ export function useHireIntentFlow(user: any) {
   return { checkoutSummary, handleApprove, cancelCheckout };
 }
 
-async function createPayPalPlan(agentSlug: string, agentName: string, amount: number, currency: string): Promise<string | undefined> {
+async function createPayPalPlan(agentSlug: string, agentName: string, amount: number, currency: string, setupFee: number = 0): Promise<string | undefined> {
   try {
     const { data, error } = await supabase.functions.invoke("paypal-checkout", {
       body: {
@@ -102,6 +105,7 @@ async function createPayPalPlan(agentSlug: string, agentName: string, amount: nu
         agent_name: agentName,
         amount,
         currency,
+        setup_fee: setupFee > 0 ? setupFee / 100 : 0,
         return_url: `${window.location.origin}/dashboard?subscription=success`,
         cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
       },

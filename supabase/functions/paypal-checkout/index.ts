@@ -55,8 +55,10 @@ async function findOrCreatePlan(
   productId: string,
   agentSlug: string,
   amount: number,
-  currency: string
+  currency: string,
+  setupFee: number = 0,
 ): Promise<string> {
+  const planName = `plan-${agentSlug}-${currency}-${amount}-setup${setupFee}`;
   // List plans for this product
   const listRes = await fetch(`${PAYPAL_BASE}/v1/billing/plans?product_id=${productId}&page_size=20&total_required=true`, {
     headers: { "Authorization": `Bearer ${accessToken}`, "Content-Type": "application/json" },
@@ -64,9 +66,8 @@ async function findOrCreatePlan(
 
   if (listRes.ok) {
     const listData = await listRes.json();
-    // Find active plan with matching price
-    const existing = listData.plans?.find((p: any) => 
-      p.status === "ACTIVE" && p.name === `plan-${agentSlug}-${currency}-${amount}`
+    const existing = listData.plans?.find((p: any) =>
+      p.status === "ACTIVE" && p.name === planName
     );
     if (existing) return existing.id;
   }
@@ -77,12 +78,14 @@ async function findOrCreatePlan(
     headers: {
       "Authorization": `Bearer ${accessToken}`,
       "Content-Type": "application/json",
-      "PayPal-Request-Id": `plan-${agentSlug}-${currency}-${amount}-${Date.now()}`,
+      "PayPal-Request-Id": `plan-${agentSlug}-${currency}-${amount}-${setupFee}-${Date.now()}`,
     },
     body: JSON.stringify({
       product_id: productId,
-      name: `plan-${agentSlug}-${currency}-${amount}`,
-      description: `Assinatura mensal — ${agentSlug}`,
+      name: planName,
+      description: setupFee > 0
+        ? `Setup ${currency} ${setupFee.toFixed(2)} + Mensalidade — ${agentSlug}`
+        : `Assinatura mensal — ${agentSlug}`,
       status: "ACTIVE",
       billing_cycles: [
         {
@@ -101,7 +104,7 @@ async function findOrCreatePlan(
       payment_preferences: {
         auto_bill_outstanding: true,
         payment_failure_threshold: 3,
-        setup_fee: { value: "0", currency_code: currency },
+        setup_fee: { value: setupFee.toFixed(2), currency_code: currency },
         setup_fee_failure_action: "CONTINUE",
       },
     }),
@@ -139,19 +142,20 @@ serve(async (req) => {
     }
 
     if (action === "create_subscription") {
-      const { agent_slug, agent_name, amount, currency, return_url, cancel_url } = body;
+      const { agent_slug, agent_name, amount, currency, return_url, cancel_url, setup_fee } = body;
       
       if (!agent_slug || !amount || amount <= 0) {
         throw new Error("agent_slug and amount are required");
       }
 
       const cur = currency || "BRL";
+      const setupFeeAmount = typeof setup_fee === "number" && setup_fee > 0 ? setup_fee : 0;
 
       // 1. Find or create product
       const productId = await findOrCreateProduct(accessToken, agent_slug, agent_name || agent_slug);
 
-      // 2. Find or create plan
-      const planId = await findOrCreatePlan(accessToken, productId, agent_slug, amount, cur);
+      // 2. Find or create plan (with optional one-time setup fee charged at first billing)
+      const planId = await findOrCreatePlan(accessToken, productId, agent_slug, amount, cur, setupFeeAmount);
 
       // 3. Create subscription
       const subRes = await fetch(`${PAYPAL_BASE}/v1/billing/subscriptions`, {

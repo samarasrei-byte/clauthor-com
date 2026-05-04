@@ -19,6 +19,10 @@ export interface HireIntent {
   label: string;
   slugs?: string[];
   departmentId?: string;
+  /** Optional one-time setup fee in cents (charged on first billing cycle) */
+  setupFee?: number;
+  /** Optional monthly override in cents — bypasses pricing tier lookup */
+  monthlyOverride?: number;
 }
 
 const AuthPage = () => {
