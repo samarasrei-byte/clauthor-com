@@ -98,3 +98,9 @@ verify_jwt = false
 
 [functions.advocacia-health-check]
 verify_jwt = false
+
+[functions.clicksign-send-document]
+verify_jwt = true
+
+[functions.astrea-sync-lead]
+verify_jwt = true
