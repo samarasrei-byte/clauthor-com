@@ -7,6 +7,7 @@ import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, getDepar
 import { enforcePolicy, validateTenant, type PolicyContext } from "../_shared/policy-engine.ts";
 import { autonomousExecute } from "../_shared/tool-executor.ts";
 import { executeIntegration, getDecryptedCredentials, type IntegrationResponse } from "../_shared/integration-router.ts";
+import { getLegalPrompt } from "../_shared/legal-prompts.ts";
 
 // ── AES-256-GCM decryption for credential bridge ──
 const ALGO = "AES-GCM";
