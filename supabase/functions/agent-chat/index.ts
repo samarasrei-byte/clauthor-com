@@ -1290,7 +1290,7 @@ serve(async (req) => {
     const rl = checkRateLimit(`agent-chat:${clientIP}`, 20, 60_000);
     if (!rl.allowed) return rateLimitResponse(rl.retryAfter!, corsHeaders);
 
-    const { messages, agentId, actionType = "chat", stream: wantStream = false } = await req.json();
+    const { messages, agentId, agentSlug, actionType = "chat", stream: wantStream = false } = await req.json();
 
     const validation = validateInput(messages);
     if (!validation.valid) {
