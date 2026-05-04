@@ -28,9 +28,13 @@ export function useHireIntentFlow(user: any) {
 
     let price: number;
     let deptId: string | undefined;
+    const setupFee = typeof intent.setupFee === "number" ? intent.setupFee : 0;
 
-    if (isDepartment) {
-      deptId = (intent as any).departmentId || SLUG_TO_DEPT[uniqueSlugs[0]] || "comercial";
+    if (typeof intent.monthlyOverride === "number" && intent.monthlyOverride > 0) {
+      price = intent.monthlyOverride;
+      deptId = intent.departmentId;
+    } else if (isDepartment) {
+      deptId = intent.departmentId || SLUG_TO_DEPT[uniqueSlugs[0]] || "comercial";
       price = (region.departments as Record<string, number>)[deptId] || region.departments.comercial;
     } else {
       const slug = uniqueSlugs[0];
@@ -52,9 +56,8 @@ export function useHireIntentFlow(user: any) {
 
     if (!price || price <= 0) { toast.error("Preço inválido para este agente."); return; }
 
-    // Create PayPal plan server-side, then show checkout with planId
     const agentSlug = isDepartment ? `dept-${deptId}` : uniqueSlugs[0];
-    createPayPalPlan(agentSlug, intent.label, price, region.currency).then((planId) => {
+    createPayPalPlan(agentSlug, intent.label, price, region.currency, setupFee).then((planId) => {
       setCheckoutSummary({
         label: intent.label, slugs: uniqueSlugs, isDepartment, departmentId: deptId,
         price, currency: region.currency, lang, planId,
