@@ -22,6 +22,8 @@ export type Database = {
           created_at: string
           crm_provider: string | null
           crm_status: string
+          evolution_instance_name: string | null
+          feature_lock: boolean
           id: string
           oab_number: string | null
           office_name: string | null
@@ -38,6 +40,8 @@ export type Database = {
           created_at?: string
           crm_provider?: string | null
           crm_status?: string
+          evolution_instance_name?: string | null
+          feature_lock?: boolean
           id?: string
           oab_number?: string | null
           office_name?: string | null
@@ -54,6 +58,8 @@ export type Database = {
           created_at?: string
           crm_provider?: string | null
           crm_status?: string
+          evolution_instance_name?: string | null
+          feature_lock?: boolean
           id?: string
           oab_number?: string | null
           office_name?: string | null
