@@ -14,6 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
+      advocacia_onboarding: {
+        Row: {
+          clicksign_status: string
+          clicksign_token: string | null
+          completed: boolean
+          created_at: string
+          crm_provider: string | null
+          crm_status: string
+          id: string
+          oab_number: string | null
+          office_name: string | null
+          practice_areas: string[] | null
+          updated_at: string
+          user_id: string
+          whatsapp_number: string | null
+          whatsapp_status: string
+        }
+        Insert: {
+          clicksign_status?: string
+          clicksign_token?: string | null
+          completed?: boolean
+          created_at?: string
+          crm_provider?: string | null
+          crm_status?: string
+          id?: string
+          oab_number?: string | null
+          office_name?: string | null
+          practice_areas?: string[] | null
+          updated_at?: string
+          user_id: string
+          whatsapp_number?: string | null
+          whatsapp_status?: string
+        }
+        Update: {
+          clicksign_status?: string
+          clicksign_token?: string | null
+          completed?: boolean
+          created_at?: string
+          crm_provider?: string | null
+          crm_status?: string
+          id?: string
+          oab_number?: string | null
+          office_name?: string | null
+          practice_areas?: string[] | null
+          updated_at?: string
+          user_id?: string
+          whatsapp_number?: string | null
+          whatsapp_status?: string
+        }
+        Relationships: []
+      }
       agent_activity_log: {
         Row: {
           action_description: string
