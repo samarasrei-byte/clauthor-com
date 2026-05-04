@@ -221,6 +221,33 @@ export default function Advocacia() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      {/* HEADER */}
+      <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/40">
+        <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+            <ClauthorLogo size="md" />
+            <span className="hidden sm:inline-block text-xs text-muted-foreground border-l border-border/60 pl-2 ml-1">
+              para Advocacia
+            </span>
+          </Link>
+          <nav className="flex items-center gap-2">
+            <a href="#agentes" className="hidden md:inline-block text-sm text-muted-foreground hover:text-foreground px-3 py-2 transition-colors">
+              Squad
+            </a>
+            <a href="#planos" className="hidden md:inline-block text-sm text-muted-foreground hover:text-foreground px-3 py-2 transition-colors">
+              Planos
+            </a>
+            <ThemeToggle />
+            <Button size="sm" variant="outline" asChild className="border-border/60">
+              <Link to="/auth">Entrar</Link>
+            </Button>
+            <Button size="sm" className="glow" asChild>
+              <a href="#planos">Começar</a>
+            </Button>
+          </nav>
+        </div>
+      </header>
+
       {/* HERO */}
       <section className="relative overflow-hidden border-b border-border/40">
         <div className="absolute inset-0 opacity-[0.08] pointer-events-none">
