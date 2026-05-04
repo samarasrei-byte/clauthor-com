@@ -87,8 +87,8 @@ const HowItWorks = () => {
   const comparisonRows = [
     { label: "Tempo de setup", agent: "5 min", dept: "10 min", team: "15 min" },
     { label: "Nº de agentes", agent: "1", dept: "3–8", team: "Você escolhe" },
-    { label: "Pré-configurado", agent: "✓", dept: "✓✓✓", team: "—" },
-    { label: "Colaboração entre agentes", agent: "—", dept: "✓", team: "✓" },
+    { label: "Pré-configurado", agent: "✓", dept: "✓✓✓", team: "-" },
+    { label: "Colaboração entre agentes", agent: "-", dept: "✓", team: "✓" },
     { label: "Flexibilidade", agent: "Média", dept: "Baixa", team: "Máxima" },
     { label: "Melhor para", agent: "Testar / pontual", dept: "Escalar rápido", team: "Sob medida" },
   ];
@@ -118,7 +118,7 @@ const HowItWorks = () => {
             Qual é a melhor opção <span className="gradient-text">para você?</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Agente, Departamento ou Time — entenda a diferença e escolha com confiança.
+            Agente, Departamento ou Time - entenda a diferença e escolha com confiança.
           </p>
         </motion.div>
 

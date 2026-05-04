@@ -41,7 +41,7 @@ async function findOrCreateProduct(accessToken: string, agentSlug: string, agent
     },
     body: JSON.stringify({
       name: `clauthor-agent-${agentSlug}`,
-      description: `Assinatura mensal do agente ${agentName} — Clauthor`,
+      description: `Assinatura mensal do agente ${agentName} - Clauthor`,
       type: "SERVICE",
       category: "SOFTWARE",
     }),
@@ -84,8 +84,8 @@ async function findOrCreatePlan(
       product_id: productId,
       name: planName,
       description: setupFee > 0
-        ? `Setup ${currency} ${setupFee.toFixed(2)} + Mensalidade — ${agentSlug}`
-        : `Assinatura mensal — ${agentSlug}`,
+        ? `Setup ${currency} ${setupFee.toFixed(2)} + Mensalidade - ${agentSlug}`
+        : `Assinatura mensal - ${agentSlug}`,
       status: "ACTIVE",
       billing_cycles: [
         {

@@ -165,7 +165,7 @@ const PredictiveDashboard = () => {
     const usedCredits = credits?.used_credits || 0;
     const now = Date.now();
 
-    // ═══ 1. CREDIT EXHAUSTION — Linear regression on daily token consumption ═══
+    // ═══ 1. CREDIT EXHAUSTION - Linear regression on daily token consumption ═══
     if (tokenHistory.length >= 3) {
       const dailyTokens = groupByDay(tokenHistory);
       const entries = Array.from(dailyTokens.entries()).sort();
@@ -190,7 +190,7 @@ const PredictiveDashboard = () => {
               icon: CreditCard,
               title: daysLeft <= 3 ? "⚠️ Créditos esgotam em breve" : `Esgotamento previsto: ${daysLeft} dias`,
               description: `Consumo médio: ${Math.round(bestRate).toLocaleString()} tokens/dia (${trendDirection}). R² = ${(reg.r2 * 100).toFixed(0)}% de confiança no modelo. ${
-                reg.slope > 10 ? "Tendência de aumento detectada — considere upgrade." : ""
+                reg.slope > 10 ? "Tendência de aumento detectada - considere upgrade." : ""
               }`,
               timeframe: daysLeft <= 3 ? "Crítico" : `~${daysLeft} dias`,
               confidence: confidenceBase,
@@ -207,7 +207,7 @@ const PredictiveDashboard = () => {
       }
     }
 
-    // ═══ 2. DAY-OF-WEEK PEAK DETECTION — Real pattern from logs ═══
+    // ═══ 2. DAY-OF-WEEK PEAK DETECTION - Real pattern from logs ═══
     if (recentLogs.length >= 15) {
       const dowDist = dayOfWeekDistribution(recentLogs);
       const totalExecs = dowDist.reduce((a, b) => a + b, 0);
@@ -242,7 +242,7 @@ const PredictiveDashboard = () => {
       }
     }
 
-    // ═══ 3. ERROR RATE TREND — Detect if errors are increasing ═══
+    // ═══ 3. ERROR RATE TREND - Detect if errors are increasing ═══
     if (recentLogs.length >= 10) {
       const halfPoint = Math.floor(recentLogs.length / 2);
       const firstHalf = recentLogs.slice(0, halfPoint);
@@ -280,7 +280,7 @@ const PredictiveDashboard = () => {
       }
     }
 
-    // ═══ 4. AGENT EFFICIENCY SCORE — Based on real metrics ═══
+    // ═══ 4. AGENT EFFICIENCY SCORE - Based on real metrics ═══
     if (agentMetrics.length > 0 && agents.length > 0) {
       // Calculate per-agent efficiency
       const agentScores = agents.map((agent: any) => {
@@ -323,7 +323,7 @@ const PredictiveDashboard = () => {
       }
     }
 
-    // ═══ 5. INACTIVE AGENTS — Real data ═══
+    // ═══ 5. INACTIVE AGENTS - Real data ═══
     const inactiveAgents = agents.filter((a: any) => a.total_executions === 0 && a.status === "active");
     if (inactiveAgents.length > 0) {
       const names = inactiveAgents.map((a: any) => a.name).slice(0, 3);
@@ -344,7 +344,7 @@ const PredictiveDashboard = () => {
       });
     }
 
-    // ═══ 6. EXECUTION VOLUME TREND — Linear regression ═══
+    // ═══ 6. EXECUTION VOLUME TREND - Linear regression ═══
     if (recentLogs.length >= 10) {
       const dailyExecs = groupByDay(recentLogs);
       const entries = Array.from(dailyExecs.entries()).sort();
@@ -393,7 +393,7 @@ const PredictiveDashboard = () => {
       }
     }
 
-    // ═══ 7. GROWTH OPPORTUNITY — Based on real usage patterns ═══
+    // ═══ 7. GROWTH OPPORTUNITY - Based on real usage patterns ═══
     if (activeAgents > 0 && activeAgents < 8 && recentLogs.length > 5) {
       const avgExecsPerAgent = recentLogs.length / Math.max(1, activeAgents);
       const hasHighUtilization = avgExecsPerAgent > 5;
@@ -402,7 +402,7 @@ const PredictiveDashboard = () => {
         preds.push({
           id: "growth-opportunity",
           icon: Target,
-          title: "Alta utilização — hora de escalar",
+          title: "Alta utilização - hora de escalar",
           description: `${Math.round(avgExecsPerAgent)} execuções/agente nos últimos 30 dias. Seus agentes estão bem utilizados. Adicionar mais pode multiplicar resultados.`,
           timeframe: "Recomendação",
           confidence: 75,
@@ -417,7 +417,7 @@ const PredictiveDashboard = () => {
       }
     }
 
-    // ═══ 8. ROI ESTIMATION — Based on actual execution data ═══
+    // ═══ 8. ROI ESTIMATION - Based on actual execution data ═══
     if (agents.length > 0) {
       const totalExecs = agents.reduce((s: number, a: any) => s + (a.total_executions || 0), 0);
       // Conservative estimate: each execution saves 15min of human time at R$50/h

@@ -64,7 +64,7 @@ export default function AdvocaciaAudit() {
         id: `catalog-${slug}`,
         label: `Catálogo: ${slug}`,
         status: present ? "ok" : "fail",
-        detail: present ? "Agente cadastrado e ativo no catálogo." : "Agente AUSENTE no agents_catalog — checkout falhará.",
+        detail: present ? "Agente cadastrado e ativo no catálogo." : "Agente AUSENTE no agents_catalog - checkout falhará.",
       });
     });
 
@@ -81,7 +81,7 @@ export default function AdvocaciaAudit() {
       status: ownedCount === 6 ? "ok" : ownedCount > 0 ? "warn" : "fail",
       detail: ownedCount === 6
         ? "6 de 6 agentes provisionados na sua conta."
-        : `${ownedCount} de 6 agentes ativos. Faltam: ${REQUIRED_SLUGS.filter((s) => !activeUserSlugs.has(s)).join(", ") || "—"}`,
+        : `${ownedCount} de 6 agentes ativos. Faltam: ${REQUIRED_SLUGS.filter((s) => !activeUserSlugs.has(s)).join(", ") || "-"}`,
       fixHref: ownedCount < 6 ? "/advocacia#planos" : undefined,
       fixLabel: ownedCount < 6 ? "Ver planos" : undefined,
     });
@@ -104,7 +104,7 @@ export default function AdvocaciaAudit() {
         id,
         label,
         status,
-        detail: status === "ok" ? "Configurado e operacional." : status === "warn" ? "Em configuração — finalize o wizard." : "Não configurado. Sem isso o agente não opera nesse canal.",
+        detail: status === "ok" ? "Configurado e operacional." : status === "warn" ? "Em configuração - finalize o wizard." : "Não configurado. Sem isso o agente não opera nesse canal.",
         fixHref: status === "ok" ? undefined : href,
         fixLabel: status === "ok" ? undefined : "Configurar",
       });
@@ -115,7 +115,7 @@ export default function AdvocaciaAudit() {
       id: "oab",
       label: "Identificação OAB do escritório",
       status: o.oab_number ? "ok" : "warn",
-      detail: o.oab_number ? `OAB ${o.oab_number} cadastrada.` : "Sem OAB cadastrada — exigida para disclaimer ético nas mensagens.",
+      detail: o.oab_number ? `OAB ${o.oab_number} cadastrada.` : "Sem OAB cadastrada - exigida para disclaimer ético nas mensagens.",
       fixHref: o.oab_number ? undefined : "/advocacia/onboarding",
       fixLabel: o.oab_number ? undefined : "Cadastrar OAB",
     });
@@ -148,17 +148,17 @@ export default function AdvocaciaAudit() {
 
   const copyReport = () => {
     const text = [
-      `# Auditoria Squad Jurídica — ${new Date().toISOString()}`,
+      `# Auditoria Squad Jurídica - ${new Date().toISOString()}`,
       `User: ${user?.email}`,
       `Status: ${overall.toUpperCase()} (${okCount} ok / ${warnCount} warn / ${failCount} fail)`,
       "",
-      ...checks.map((c) => `[${c.status.toUpperCase()}] ${c.label} — ${c.detail}`),
+      ...checks.map((c) => `[${c.status.toUpperCase()}] ${c.label} - ${c.detail}`),
       "",
       "## Últimas execuções",
       ...logs.slice(0, 10).map((l) => `${l.created_at} · ${l.action} · ${l.status}`),
     ].join("\n");
     navigator.clipboard.writeText(text);
-    toast.success("Relatório copiado — envie ao suporte.");
+    toast.success("Relatório copiado - envie ao suporte.");
   };
 
   return (

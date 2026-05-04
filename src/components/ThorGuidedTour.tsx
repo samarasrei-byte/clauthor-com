@@ -6,7 +6,7 @@ import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import thorPhoto from "@/assets/kaelis-ai.webp";
 
 export interface TourStep {
-  /** CSS selector to highlight (optional — if absent, Thor speaks centrally) */
+  /** CSS selector to highlight (optional - if absent, Thor speaks centrally) */
   selector?: string;
   /** Thor's spoken text */
   speech: string;

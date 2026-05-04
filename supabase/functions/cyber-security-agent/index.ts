@@ -132,7 +132,7 @@ ${(() => { const d: Record<string, number> = {}; credits.forEach((c: any) => { d
 
     const systemPrompt = `${OPERATIONAL_SECURITY}\n${contractPrompt}
 
-Você é o **Agente de Cyber Security** — o CISO digital.
+Você é o **Agente de Cyber Security** - o CISO digital.
 
 Seu papel é:
 1. Monitorar atividades suspeitas e anomalias

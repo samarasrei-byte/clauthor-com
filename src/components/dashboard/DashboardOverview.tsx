@@ -91,7 +91,7 @@ const DashboardOverview = ({
                 </div>
                 <h2 className="font-display text-xl sm:text-2xl font-bold">{t("dashboard.hero_title", { defaultValue: "Seu time de IA começa aqui" })}</h2>
                 <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-                  {t("dashboard.hero_desc", { defaultValue: "Contrate agentes especializados que trabalham 24/7. SDR, Copywriter, Analista e muito mais — prontos em minutos." })}
+                  {t("dashboard.hero_desc", { defaultValue: "Contrate agentes especializados que trabalham 24/7. SDR, Copywriter, Analista e muito mais - prontos em minutos." })}
                 </p>
                 <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
                   <Button size="lg" className="glow gap-2 px-6" onClick={() => onSetActiveSection("library")}>
@@ -107,7 +107,7 @@ const DashboardOverview = ({
               </motion.div>
             )}
 
-            {/* Advanced panels — only when user has agents */}
+            {/* Advanced panels - only when user has agents */}
             {agents.length > 0 && (
               <>
                 <ExecutionHealthBanner onGoToWarRoom={() => onSetActiveSection("warroom")} />

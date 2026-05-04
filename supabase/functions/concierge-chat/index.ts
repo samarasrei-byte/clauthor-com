@@ -193,7 +193,7 @@ serve(async (req) => {
     const activeAgents = (agents || []).filter((a: any) => a.status === "active");
 
     const agentsList = activeAgents.map((a: any, i: number) => {
-      return `${i + 1}. **${a.name}** (${a.tier}) [ID: ${a.id}] — ${a.objective || a.description || "Agente especializado"}`;
+      return `${i + 1}. **${a.name}** (${a.tier}) [ID: ${a.id}] - ${a.objective || a.description || "Agente especializado"}`;
     }).join("\n");
 
     // Check if user seems to be providing credentials
@@ -202,7 +202,7 @@ serve(async (req) => {
 
     const systemPrompt = `${contractPrompt}
 
-Você é o **CLAUTHOR Concierge** — o guia pessoal mais simpático e eficiente para novos clientes.
+Você é o **CLAUTHOR Concierge** - o guia pessoal mais simpático e eficiente para novos clientes.
 
 ## AGENTES DO CLIENTE (${activeAgents.length} ativos):
 ${agentsList || "Nenhum agente ativo ainda."}
@@ -227,7 +227,7 @@ Quando o usuário fornecer dados de acesso (senhas, tokens, API keys, telefones,
 1. Use a ferramenta **save_credentials** para salvar IMEDIATAMENTE no cofre criptografado
 2. Se o usuário não especificar qual agente, use o primeiro agente ativo: ${activeAgents[0]?.id || "nenhum"}
 3. Confirme que salvou com sucesso e que os dados estão protegidos com criptografia AES-256
-4. NUNCA repita os valores das credenciais na sua resposta — apenas confirme que foram salvas
+4. NUNCA repita os valores das credenciais na sua resposta - apenas confirme que foram salvas
 5. Se o usuário quiser passar várias credenciais de uma vez, colete todas e salve em uma chamada
 6. Integrações suportadas: whatsapp, email, linkedin, instagram, hubspot, apollo, slack, google, meta_ads`;
 
@@ -333,7 +333,7 @@ Quando o usuário fornecer dados de acesso (senhas, tokens, API keys, telefones,
         });
       }
 
-      // No tool call — fall through to normal streaming with the content
+      // No tool call - fall through to normal streaming with the content
       if (choice?.message?.content) {
         aiStep.done();
         // Convert to SSE format

@@ -1,5 +1,5 @@
 /**
- * Integration Router — Routes agent tool calls to real external APIs.
+ * Integration Router - Routes agent tool calls to real external APIs.
  */
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";

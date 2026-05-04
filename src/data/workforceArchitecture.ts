@@ -339,7 +339,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "territory_planner", name: "Territory Planner", responsibilities: ["Territory design", "Quota setting", "Balance optimization"], triggers: ["territory_review", "rep_change", "market_expansion"] },
           
           { slug: "sales_enablement", name: "Sales Enablement Agent", responsibilities: ["Sales collateral", "Training content", "Competitive cards"], triggers: ["new_feature", "competitor_update", "onboarding_new_rep"] },
-          { slug: "hunter_linkedin", name: "Hunter — Prospecção LinkedIn", responsibilities: ["Busca de leads no LinkedIn", "Icebreakers com IA", "Envio automático de convites"], triggers: ["campanha_criada", "leads_encontrados", "lead_respondeu"] },
+          { slug: "hunter_linkedin", name: "Hunter - Prospecção LinkedIn", responsibilities: ["Busca de leads no LinkedIn", "Icebreakers com IA", "Envio automático de convites"], triggers: ["campanha_criada", "leads_encontrados", "lead_respondeu"] },
         ],
         outcomes: ["Forecast accuracy 85%+", "Sales productivity +25%", "Data quality 95%+"],
       },
@@ -875,7 +875,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
       {
         id: "captacao_juridica_squad",
         name: "Squad de Captação & Atendimento Jurídico",
-        mission: "Transformar o escritório em uma operação previsível de captação, conversão e execução jurídica — com ética OAB",
+        mission: "Transformar o escritório em uma operação previsível de captação, conversão e execução jurídica - com ética OAB",
         agents: [
           { slug: "captacao_juridica", name: "Especialista em Captação Jurídica", responsibilities: ["Captação de leads via WhatsApp e landing pages", "Qualificação inicial do caso", "Agendamento de atendimento com o advogado"], triggers: ["lead_recebido", "form_preenchido", "mensagem_whatsapp"] },
           { slug: "diagnostico_juridico", name: "Consultor de Diagnóstico Jurídico", responsibilities: ["Pré-atendimento estruturado", "Identificação da área do direito", "Educação do cliente sobre o processo"], triggers: ["lead_qualificado", "atendimento_iniciado"] },

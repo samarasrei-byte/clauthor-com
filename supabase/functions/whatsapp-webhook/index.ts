@@ -76,7 +76,7 @@ serve(async (req) => {
     let companyContext = "";
 
     if (creds && creds.length > 0) {
-      // Platform-level credential — get access token
+      // Platform-level credential - get access token
       const { data: tokenCred } = await supabaseAdmin
         .from("platform_credentials")
         .select("credential_value")
@@ -153,7 +153,7 @@ ${companyContext ? `## Contexto da Empresa\n${companyContext}` : "Você está re
 
 ## Regras:
 - Responda em português do Brasil
-- Seja conciso (máximo 300 palavras) — WhatsApp tem limite de leitura
+- Seja conciso (máximo 300 palavras) - WhatsApp tem limite de leitura
 - Se não souber a resposta, diga que vai encaminhar para um humano
 - Nunca invente informações sobre preços ou serviços que não estejam no contexto
 - Use emojis com moderação

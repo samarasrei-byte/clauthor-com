@@ -1,7 +1,7 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { handleCors, jsonResponse, errorResponse } from "../_shared/cors.ts";
 
-// Hunter v2 — Reads PhantomBuster credentials from environment (not user config).
+// Hunter v2 - Reads PhantomBuster credentials from environment (not user config).
 // Body: { campaign_id: string }
 Deno.serve(async (req) => {
   const cors = handleCors(req);
@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
       mensagem: `Execução iniciada para "${campaign.nome}" (limite: ${campaign.limite_diario}/dia)`,
     });
 
-    // Fallback: no PhantomBuster or no LinkedIn session — generate demo leads
+    // Fallback: no PhantomBuster or no LinkedIn session - generate demo leads
     if (!pbKey || !searchAgentId || !cookie) {
       const demoLeads = Array.from({ length: Math.min(5, campaign.limite_diario) }, (_, i) => ({
         campaign_id,
@@ -71,8 +71,8 @@ Deno.serve(async (req) => {
         user_id: user.id,
         tipo: "info",
         mensagem: !cookie
-          ? "LinkedIn não conectado — gerados leads de demonstração."
-          : "Modo demo — gerados leads de demonstração.",
+          ? "LinkedIn não conectado - gerados leads de demonstração."
+          : "Modo demo - gerados leads de demonstração.",
       });
 
       return jsonResponse({ success: true, demo: true, leads_count: demoLeads.length });

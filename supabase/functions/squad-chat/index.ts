@@ -229,7 +229,7 @@ MEETING RULES:
 - DO NOT repeat what other agents already said in the conversation
 - If another agent already covered the topic, only add something NEW from your perspective
 - If the subject is NOT your area, briefly respond: "That's more in [colleague]'s area. I can help with [your area]."
-- Speak naturally, like a professional in a meeting — without excessive formality
+- Speak naturally, like a professional in a meeting - without excessive formality
 - DO NOT start with "Hello" or "Good afternoon" in every message, get straight to the point
 - ALWAYS respond in Brazilian Portuguese (pt-BR)
 ${companyContext}`;

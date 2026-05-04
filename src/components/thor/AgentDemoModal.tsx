@@ -1,5 +1,5 @@
 /**
- * AgentDemoModal.tsx — Live simulated demo of agents working in real-time
+ * AgentDemoModal.tsx - Live simulated demo of agents working in real-time
  */
 
 import { useState, useEffect, useCallback } from "react";
@@ -24,18 +24,18 @@ interface DemoStep {
 
 const DEMO_SCENARIOS: Record<DemoType, { title: string; agent: string; emoji: string; steps: DemoStep[] }> = {
   sdr: {
-    title: "SDR Agent — Prospecção",
+    title: "SDR Agent - Prospecção",
     agent: "Apollo SDR",
     emoji: "🎯",
     steps: [
       { label: "Analisando perfil do lead...", content: "Lead: Carlos Mendes, CTO @ TechNova (SaaS B2B, 50 funcionários, São Paulo)", delayMs: 1200 },
       { label: "Pesquisando empresa...", content: "TechNova levantou R$8M Série A em Jan/2026. Stack: React, AWS. Dor provável: escalar operações sem aumentar headcount.", delayMs: 1800 },
       { label: "Gerando email personalizado...", content: "", delayMs: 800 },
-      { label: "✅ Email pronto!", content: `Assunto: Carlos, como a TechNova pode escalar sem contratar +20 pessoas\n\nOlá Carlos,\n\nParabéns pela Série A da TechNova! Vi que vocês estão expandindo rápido.\n\nEmpresas no mesmo estágio que a TechNova costumam enfrentar um dilema: escalar operações sem triplicar o time. Nossos agentes de IA resolvem isso automatizando prospecção, suporte e análise — como um departamento inteiro, 24h/dia.\n\nPosso te mostrar em 15 min como funciona?\n\nAbraço,\nApollo SDR`, delayMs: 0 },
+      { label: "✅ Email pronto!", content: `Assunto: Carlos, como a TechNova pode escalar sem contratar +20 pessoas\n\nOlá Carlos,\n\nParabéns pela Série A da TechNova! Vi que vocês estão expandindo rápido.\n\nEmpresas no mesmo estágio que a TechNova costumam enfrentar um dilema: escalar operações sem triplicar o time. Nossos agentes de IA resolvem isso automatizando prospecção, suporte e análise - como um departamento inteiro, 24h/dia.\n\nPosso te mostrar em 15 min como funciona?\n\nAbraço,\nApollo SDR`, delayMs: 0 },
     ],
   },
   support: {
-    title: "Support Agent — Ticket",
+    title: "Support Agent - Ticket",
     agent: "Athena Support",
     emoji: "🛡️",
     steps: [
@@ -46,7 +46,7 @@ const DEMO_SCENARIOS: Record<DemoType, { title: string; agent: string; emoji: st
     ],
   },
   hr: {
-    title: "HR Agent — Triagem",
+    title: "HR Agent - Triagem",
     agent: "Diana HR",
     emoji: "👥",
     steps: [
@@ -57,29 +57,29 @@ const DEMO_SCENARIOS: Record<DemoType, { title: string; agent: string; emoji: st
     ],
   },
   content: {
-    title: "Content Agent — Post",
+    title: "Content Agent - Post",
     agent: "Hermes Content",
     emoji: "✍️",
     steps: [
       { label: "Analisando tendências...", content: "Trending: IA no trabalho, automação de processos, produtividade. Melhor formato: LinkedIn carousel.", delayMs: 1200 },
-      { label: "Pesquisando dados...", content: "Fonte: McKinsey 2026 — \"67% das empresas que adotaram IA aumentaram receita em 15%+\"", delayMs: 1400 },
+      { label: "Pesquisando dados...", content: "Fonte: McKinsey 2026 - \"67% das empresas que adotaram IA aumentaram receita em 15%+\"", delayMs: 1400 },
       { label: "Criando conteúdo...", content: "", delayMs: 800 },
       { label: "✅ Post pronto!", content: `🚀 Sua empresa ainda opera como em 2020?\n\nEnquanto 67% das empresas que adotaram IA já aumentaram receita em 15%+, muitas ainda gastam horas em tarefas que um agente resolve em minutos.\n\n3 sinais de que você precisa de IA:\n→ Sua equipe gasta +50% do tempo em tarefas repetitivas\n→ Leads esfriam porque ninguém responde em <5min\n→ Relatórios levam dias ao invés de segundos\n\nA pergunta não é "se" você vai adotar, mas "quando".\n\n#IA #Produtividade #Automação`, delayMs: 0 },
     ],
   },
   data: {
-    title: "Data Agent — Análise",
+    title: "Data Agent - Análise",
     agent: "Oracle Analytics",
     emoji: "📊",
     steps: [
       { label: "Coletando dados de vendas...", content: "Período: últimos 90 dias | 1.247 transações | 3 canais", delayMs: 1100 },
       { label: "Processando análise...", content: "Padrão detectado: queda de 12% no canal orgânico, crescimento de 34% via referral.", delayMs: 1600 },
       { label: "Gerando insights...", content: "", delayMs: 900 },
-      { label: "✅ Relatório pronto!", content: `📈 Resumo Executivo Q1/2026:\n\nReceita: R$487K (+18% vs Q4)\nMelhor canal: Referral (+34%)\n⚠️ Alerta: Orgânico caiu 12%\n\nRecomendações:\n1. Investir em programa de indicação (ROI 4.2x)\n2. Revisar SEO — 3 keywords perderam posição\n3. Upsell para base ativa: potencial R$89K\n\nPróxima ação sugerida: Reunião de estratégia amanhã 9h.`, delayMs: 0 },
+      { label: "✅ Relatório pronto!", content: `📈 Resumo Executivo Q1/2026:\n\nReceita: R$487K (+18% vs Q4)\nMelhor canal: Referral (+34%)\n⚠️ Alerta: Orgânico caiu 12%\n\nRecomendações:\n1. Investir em programa de indicação (ROI 4.2x)\n2. Revisar SEO - 3 keywords perderam posição\n3. Upsell para base ativa: potencial R$89K\n\nPróxima ação sugerida: Reunião de estratégia amanhã 9h.`, delayMs: 0 },
     ],
   },
   generic: {
-    title: "Agente IA — Demo",
+    title: "Agente IA - Demo",
     agent: "Thor AI",
     emoji: "⚡",
     steps: [
@@ -118,7 +118,7 @@ export function AgentDemoModal({ isOpen, onClose, demoType, lang, onCTA }: Agent
     const step = scenario.steps[currentStep];
     
     if (currentStep === scenario.steps.length - 1) {
-      // Last step — typewriter effect
+      // Last step - typewriter effect
       const fullText = step.content;
       let charIdx = 0;
       setTypewriterText("");
@@ -132,7 +132,7 @@ export function AgentDemoModal({ isOpen, onClose, demoType, lang, onCTA }: Agent
       }, 12);
       return () => clearInterval(interval);
     } else {
-      // Intermediate steps — auto-advance
+      // Intermediate steps - auto-advance
       const t = setTimeout(() => setCurrentStep(prev => prev + 1), step.delayMs);
       return () => clearTimeout(t);
     }

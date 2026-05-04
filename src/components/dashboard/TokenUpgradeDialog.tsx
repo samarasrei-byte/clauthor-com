@@ -390,7 +390,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                 </div>
               </div>
 
-              {/* Payment Method — PayPal only */}
+              {/* Payment Method - PayPal only */}
               <div>
                 <p className="text-sm font-medium mb-3">{t("token_upgrade.payment_method", { defaultValue: "Método de pagamento:" })}</p>
                 <motion.div
@@ -410,7 +410,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                 </motion.div>
               </div>
 
-              {/* PayPal Details — always shown */}
+              {/* PayPal Details - always shown */}
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -442,7 +442,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     </>
                   ) : (
                     <>
-                      <ExternalLink className="h-4 w-4" /> {t("token_upgrade.pay_with_paypal", { defaultValue: "Pagar com PayPal" })} — {selectedItemPrice}
+                      <ExternalLink className="h-4 w-4" /> {t("token_upgrade.pay_with_paypal", { defaultValue: "Pagar com PayPal" })} - {selectedItemPrice}
                     </>
                   )}
                 </Button>
@@ -456,7 +456,7 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
                     onClick={handleTestBypass}
                     disabled={paypalLoading}
                   >
-                    <FlaskConical className="h-4 w-4" /> {t("token_upgrade.test_bypass", { defaultValue: "Modo Teste — Creditar sem pagar" })}
+                    <FlaskConical className="h-4 w-4" /> {t("token_upgrade.test_bypass", { defaultValue: "Modo Teste - Creditar sem pagar" })}
                   </Button>
                 )}
               </motion.div>

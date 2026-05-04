@@ -228,7 +228,7 @@ const BulkAgentProvisioner = () => {
     } catch (err) {
       console.error("CSV import error:", err);
       setStatus("error");
-      toast.error("Erro na importação — verifique o formato dos dados");
+      toast.error("Erro na importação - verifique o formato dos dados");
     }
   }, [user, csvData]);
 
@@ -249,7 +249,7 @@ const BulkAgentProvisioner = () => {
             Provisionamento em Massa
           </h2>
           <p className="text-muted-foreground text-sm mt-1">
-            Implante toda a sua força de trabalho IA em minutos — não horas.
+            Implante toda a sua força de trabalho IA em minutos - não horas.
           </p>
         </div>
         {status === "done" && (

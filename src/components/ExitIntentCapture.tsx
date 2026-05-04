@@ -82,7 +82,7 @@ const ExitIntentCapture = () => {
             </div>
 
             <p className="text-sm text-foreground/90 leading-relaxed mb-6">
-              Antes de ir — posso te mostrar um resultado real em <span className="text-primary font-bold">60 segundos</span>.
+              Antes de ir - posso te mostrar um resultado real em <span className="text-primary font-bold">60 segundos</span>.
               Deixe seu email e ganhe <span className="text-primary font-bold">30% OFF</span> exclusivo no lançamento.
             </p>
 

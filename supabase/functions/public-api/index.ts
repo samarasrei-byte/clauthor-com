@@ -39,7 +39,7 @@ async function authenticateApiKey(req: Request) {
     return { user, supabase, error: null };
   }
 
-  // x-api-key auth — look up in platform_credentials
+  // x-api-key auth - look up in platform_credentials
   const admin = createClient(supabaseUrl, serviceKey);
   const { data: cred } = await admin
     .from("platform_credentials")
@@ -52,7 +52,7 @@ async function authenticateApiKey(req: Request) {
 
   if (!cred) return { user: null, error: "Invalid API key" };
 
-  // API keys act as service-level — return admin client
+  // API keys act as service-level - return admin client
   return { user: { id: "api-key-user", api_key: true }, supabase: admin, error: null };
 }
 
@@ -67,7 +67,7 @@ Deno.serve(async (req) => {
   const resourceId = pathParts[1] || "";
   const method = req.method;
 
-  // Health check — no auth required
+  // Health check - no auth required
   if (resource === "" || resource === "health") {
     return json({
       status: "operational",

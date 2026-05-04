@@ -182,7 +182,7 @@ const AdminWarRoom = () => {
 
   return (
     <div className="flex h-[calc(100vh-12rem)] gap-4">
-      {/* Left Panel — C-Suite */}
+      {/* Left Panel - C-Suite */}
       <AnimatePresence>
         {showPanel && (
           <motion.div
@@ -286,7 +286,7 @@ const AdminWarRoom = () => {
         )}
       </AnimatePresence>
 
-      {/* Right — Unified Chat */}
+      {/* Right - Unified Chat */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Chat Header */}
         <div className="flex items-center justify-between mb-3">
@@ -300,12 +300,12 @@ const AdminWarRoom = () => {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-display font-bold text-base">War Room — Sala de Comando</h2>
+                <h2 className="font-display font-bold text-base">War Room - Sala de Comando</h2>
                 <Badge className="bg-amber-500/10 text-amber-400 text-[9px] border-0">PRESIDENCIAL</Badge>
               </div>
               <p className="text-[10px] text-muted-foreground flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
-                {DEPARTMENTS.length} C-Levels + {SECURITY_TEAM.length} agentes de segurança — Todos os departamentos unificados
+                {DEPARTMENTS.length} C-Levels + {SECURITY_TEAM.length} agentes de segurança - Todos os departamentos unificados
               </p>
             </div>
           </div>
@@ -334,7 +334,7 @@ const AdminWarRoom = () => {
                   </div>
                 </div>
               </div>
-              <h3 className="font-display text-xl font-bold mb-1">War Room — Sala de Comando</h3>
+              <h3 className="font-display text-xl font-bold mb-1">War Room - Sala de Comando</h3>
               <p className="text-xs text-muted-foreground mb-1">Todos os departamentos unificados em um único canal</p>
               <p className="text-[10px] text-muted-foreground mb-6 max-w-md">
                 O Orquestrador Master coordena CISO, CFO, CGO e COO simultaneamente. 
@@ -458,7 +458,7 @@ const AdminWarRoom = () => {
           </Button>
         </div>
         <p className="text-[10px] text-muted-foreground text-center mt-1.5">
-          Canal seguro — Somente o Presidente tem acesso à War Room
+          Canal seguro - Somente o Presidente tem acesso à War Room
         </p>
       </div>
     </div>

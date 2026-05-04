@@ -246,7 +246,7 @@ const AdminCommandCenter = ({
 
       {/* Main Row: Orchestrator Chat + Charts */}
       <div className="grid lg:grid-cols-5 gap-4">
-        {/* Orchestrator Chat — Main */}
+        {/* Orchestrator Chat - Main */}
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }} className="lg:col-span-3 flex flex-col">
           <div className="glass-card rounded-2xl border border-white/[0.06] flex flex-col h-[420px]">
             {/* Chat Header */}
@@ -261,7 +261,7 @@ const AdminCommandCenter = ({
                     <h3 className="font-display font-bold text-sm">Orquestrador Master</h3>
                     <Badge className="bg-primary/10 text-primary text-[8px] border-0">LIVE</Badge>
                   </div>
-                  <p className="text-[10px] text-muted-foreground">CEO Digital — Coordena todos os departamentos</p>
+                  <p className="text-[10px] text-muted-foreground">CEO Digital - Coordena todos os departamentos</p>
                 </div>
               </div>
               {messages.length > 0 && (

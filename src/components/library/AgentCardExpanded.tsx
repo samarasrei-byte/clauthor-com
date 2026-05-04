@@ -101,7 +101,7 @@ export default function AgentCardExpanded({
             </div>
             <div className="flex-1 min-w-0">
               <h4 className="font-semibold text-sm leading-tight mb-1">{name}</h4>
-              {/* One-liner — outcome focused */}
+              {/* One-liner - outcome focused */}
               {desc && (
                 <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">
                   {desc.oneLiner}
@@ -129,7 +129,7 @@ export default function AgentCardExpanded({
             </span>
           </div>
 
-          {/* Expected Outcome — the hook */}
+          {/* Expected Outcome - the hook */}
           {desc && (
             <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-emerald-500/5 ring-1 ring-emerald-500/15 mb-3">
               <TrendingUp className="h-3.5 w-3.5 text-emerald-400 shrink-0" />

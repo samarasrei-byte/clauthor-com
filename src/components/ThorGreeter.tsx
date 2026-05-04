@@ -1,5 +1,5 @@
 /**
- * ThorGreeter.tsx — Thin wrapper composing ThorCore (logic) + ThorUI (rendering)
+ * ThorGreeter.tsx - Thin wrapper composing ThorCore (logic) + ThorUI (rendering)
  * All behavior, visual, and functionality preserved identically.
  */
 

@@ -45,7 +45,7 @@ const GuidedOnboarding = ({
       icon: ShoppingBag,
       title: t("onboarding.step_hire", { defaultValue: "Contratar" }),
       subtitle: t("onboarding.step_hire_sub", { defaultValue: "Monte seu time de IA" }),
-      desc: t("onboarding.step_hire_desc", { defaultValue: "Escolha agentes especializados na Biblioteca — SDR, Copywriter, Analista, ou squads completos por departamento." }),
+      desc: t("onboarding.step_hire_desc", { defaultValue: "Escolha agentes especializados na Biblioteca - SDR, Copywriter, Analista, ou squads completos por departamento." }),
       cta: t("onboarding.step_hire_cta", { defaultValue: "Ir à Biblioteca" }),
     },
     {

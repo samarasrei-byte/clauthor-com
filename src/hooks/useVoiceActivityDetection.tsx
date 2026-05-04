@@ -54,7 +54,7 @@ export function useVoiceActivityDetection({
       analyserRef.current = analyser;
 
       source.connect(analyser);
-      // Don't connect to destination — we only want to analyse, not play back
+      // Don't connect to destination - we only want to analyse, not play back
 
       activeRef.current = true;
       consecutiveCountRef.current = 0;

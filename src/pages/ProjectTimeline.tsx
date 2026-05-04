@@ -65,7 +65,7 @@ const TIMELINE_STEPS: TimelineStep[] = [
     description: "Dashboard completo com KPIs, timeline ao vivo, feed de atividades, sistema de notificações e onboarding imersivo.",
     details: [
       "✅ KPIs em tempo real com Supabase Realtime",
-      "✅ Thor Live Guide — onboarding com IA guia",
+      "✅ Thor Live Guide - onboarding com IA guia",
       "✅ Neural Waveform Visualizer (SVG radial)",
       "✅ Smart Activity Feed com filtros",
       "✅ Sistema de créditos e tokens com alertas automáticos",
@@ -83,7 +83,7 @@ const TIMELINE_STEPS: TimelineStep[] = [
     details: [
       "✅ 30+ Edge Functions (Deno/TypeScript)",
       "✅ PayPal Subscriptions API integrado",
-      "✅ ElevenLabs TTS — voz neural para Thor",
+      "✅ ElevenLabs TTS - voz neural para Thor",
       "✅ WhatsApp Business API webhook",
       "✅ Credential Manager com criptografia",
       "✅ Firecrawl para web scraping",
@@ -104,7 +104,7 @@ const TIMELINE_STEPS: TimelineStep[] = [
       "✅ Framer Motion em 50+ componentes",
       "✅ Voice Activity Detection (WebRTC)",
       "✅ Audio Spectrum Visualizer",
-      "✅ Responsive — mobile-first",
+      "✅ Responsive - mobile-first",
     ],
     icon: <Sparkles className="h-5 w-5" />,
     metric: "13 idiomas",
@@ -147,7 +147,7 @@ const TIMELINE_STEPS: TimelineStep[] = [
     id: 8,
     phase: "FASE 08",
     title: "Lançamento MVP 🚀",
-    date: "17 de Março de 2026 — Terça-feira",
+    date: "17 de Março de 2026 - Terça-feira",
     status: "pending",
     description: "Deploy oficial do MVP completo com agentes autônomos reais. Lançamento marcado para terça-feira, 17 de março.",
     details: [
@@ -155,8 +155,8 @@ const TIMELINE_STEPS: TimelineStep[] = [
       "🚀 Orquestração autônoma 24/7",
       "🚀 Custo estimado: ~R$290/mês para infraestrutura",
       "🚀 Margem bruta projetada: 96-99%",
-      "👤 Guilherme — Desenvolvimento, lançamento, software, UX/UI, prospecção de leads",
-      "👤 Gabriel — Auditoria, APIs, análise da plataforma, gestão do admin",
+      "👤 Guilherme - Desenvolvimento, lançamento, software, UX/UI, prospecção de leads",
+      "👤 Gabriel - Auditoria, APIs, análise da plataforma, gestão do admin",
     ],
     icon: <Rocket className="h-5 w-5" />,
     metric: "17/03",
@@ -347,7 +347,7 @@ const ProjectTimeline = () => {
 
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight">
               Projeto Clauthor
-              <span className="block text-primary">— Timeline de Desenvolvimento</span>
+              <span className="block text-primary">- Timeline de Desenvolvimento</span>
             </h1>
             <p className="text-sm text-muted-foreground mt-3 max-w-xl leading-relaxed">
               Acompanhe em tempo real cada etapa da construção da plataforma de IA corporativa mais ambiciosa do Brasil. 200 agentes. 37 squads. 12h por dia. 2 meses e meio de trabalho intenso.

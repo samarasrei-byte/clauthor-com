@@ -222,7 +222,7 @@ const AdminDashboard = () => {
                 } />
               </div>
             </div>
-            <p className="text-xs text-muted-foreground">Command Center — {t("dashboard.full_control", { defaultValue: "Controle total da plataforma" })}</p>
+            <p className="text-xs text-muted-foreground">Command Center - {t("dashboard.full_control", { defaultValue: "Controle total da plataforma" })}</p>
           </motion.div>
 
           {/* Mobile nav */}

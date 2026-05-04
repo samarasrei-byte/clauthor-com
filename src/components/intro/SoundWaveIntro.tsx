@@ -507,7 +507,7 @@ const SoundWaveIntro = ({ onComplete }: SoundWaveIntroProps) => {
             </AnimatePresence>
           </div>
 
-          {/* ═══ SHOWCASE — departments preview ═══ */}
+          {/* ═══ SHOWCASE - departments preview ═══ */}
           <AnimatePresence>
             {(phase === "showcase" || phase === "cta") && (
               <motion.div

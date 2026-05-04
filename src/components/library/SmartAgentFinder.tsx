@@ -13,7 +13,7 @@ interface Recommendation {
   match: number;
 }
 
-// We need icons/metadata from Library — pass them as props
+// We need icons/metadata from Library - pass them as props
 interface AgentMeta {
   icon: React.ElementType;
   tier: string;
@@ -144,7 +144,7 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
           </p>
         </div>
 
-        {/* Search bar — the star of the show */}
+        {/* Search bar - the star of the show */}
         <div className="max-w-2xl mx-auto">
           <form
             onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
@@ -309,7 +309,7 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
                         </div>
                       </div>
 
-                      {/* Actions — full width on mobile */}
+                      {/* Actions - full width on mobile */}
                       <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto pl-13 sm:pl-0">
                         <Link to={`/agente/${rec.key}`} className="flex-1 sm:flex-none">
                           <Button variant="ghost" size="sm" className="text-xs h-9 sm:h-8 px-3 text-muted-foreground hover:text-foreground w-full sm:w-auto">
@@ -381,8 +381,8 @@ const SmartAgentFinder = ({ agentMeta, onHire, onPreview, hiringSlug }: SmartAge
                 {results.length > 0 && (
                   <p className="text-xs text-muted-foreground mt-2">
                     {lang === "pt"
-                      ? `${results.length} resultado(s) parcial(is) acima — mas nenhum com mais de 60% de match.`
-                      : `${results.length} partial result(s) above — but none above 60% match.`}
+                      ? `${results.length} resultado(s) parcial(is) acima - mas nenhum com mais de 60% de match.`
+                      : `${results.length} partial result(s) above - but none above 60% match.`}
                   </p>
                 )}
               </div>

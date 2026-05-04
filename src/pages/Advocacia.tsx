@@ -46,7 +46,7 @@ const agents = [
     bullets: [
       "Conduz a triagem inicial do caso",
       "Identifica fatos, prazos e documentos necessários",
-      "Educa o cliente sobre o processo — sem orientação definitiva",
+      "Educa o cliente sobre o processo - sem orientação definitiva",
     ],
     example: '"Pelo que você me contou, parece um caso da área trabalhista. Vou organizar o resumo para o advogado validar."',
   },
@@ -92,7 +92,7 @@ const agents = [
       "Pesquisa de jurisprudência (validação humana obrigatória)",
       "Organização de documentos do caso",
     ],
-    example: '"Rascunhei a contestação com base no caso. Revise antes de protocolar — não substitui sua análise final."',
+    example: '"Rascunhei a contestação com base no caso. Revise antes de protocolar - não substitui sua análise final."',
   },
 ];
 
@@ -138,7 +138,7 @@ const plans: Array<{
     highlight: false,
     intent: {
       type: "squad",
-      label: "Squad Jurídica — Start",
+      label: "Squad Jurídica - Start",
       slugs: ["captacao_juridica", "diagnostico_juridico"],
       departmentId: "advocacia",
       monthlyOverride: 49700,
@@ -162,7 +162,7 @@ const plans: Array<{
     highlight: true,
     intent: {
       type: "squad",
-      label: "Squad Jurídica — Growth",
+      label: "Squad Jurídica - Growth",
       slugs: ["captacao_juridica", "diagnostico_juridico", "fechamento_juridico", "recuperacao_leads_juridico", "risco_contratual", "producao_juridica"],
       departmentId: "advocacia",
       monthlyOverride: 99700,
@@ -193,7 +193,7 @@ export default function Advocacia() {
   const { user } = useAuth();
 
   useEffect(() => {
-    document.title = "Squad Jurídica com IA — Mais clientes para seu escritório | Clauthor";
+    document.title = "Squad Jurídica com IA - Mais clientes para seu escritório | Clauthor";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
@@ -282,7 +282,7 @@ export default function Advocacia() {
 
             <p className="mt-6 text-lg md:text-xl text-muted-foreground leading-relaxed">
               Uma squad de 6 agentes de IA jurídica especializados em <strong className="text-foreground">captação, qualificação e
-              fechamento</strong> — operando 24/7, com ética OAB e validação humana em todas as decisões.
+              fechamento</strong> - operando 24/7, com ética OAB e validação humana em todas as decisões.
             </p>
 
             <div className="mt-10 flex flex-wrap gap-3">
@@ -325,7 +325,7 @@ export default function Advocacia() {
               Você reconhece esses problemas?
             </h2>
             <p className="mt-3 text-muted-foreground text-lg">
-              Os mesmos gargalos travam 9 em cada 10 escritórios — independentemente da área de atuação.
+              Os mesmos gargalos travam 9 em cada 10 escritórios - independentemente da área de atuação.
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -356,10 +356,10 @@ export default function Advocacia() {
             A Solução
           </Badge>
           <h2 className="text-3xl md:text-5xl font-display font-semibold tracking-tight max-w-3xl mx-auto">
-            Seu time jurídico com IA — operando enquanto você dorme.
+            Seu time jurídico com IA - operando enquanto você dorme.
           </h2>
           <p className="mt-5 text-lg text-muted-foreground max-w-2xl mx-auto">
-            Não é mais uma ferramenta. É uma squad completa, integrada ao seu WhatsApp, CRM e fluxo de trabalho —
+            Não é mais uma ferramenta. É uma squad completa, integrada ao seu WhatsApp, CRM e fluxo de trabalho -
             com responsabilidades claras e fronteiras éticas.
           </p>
         </div>
@@ -373,7 +373,7 @@ export default function Advocacia() {
               Conheça os 6 agentes da squad
             </h2>
             <p className="mt-3 text-muted-foreground text-lg">
-              Cada agente tem função, fluxo e tom próprios. Nenhum substitui o advogado — todos amplificam.
+              Cada agente tem função, fluxo e tom próprios. Nenhum substitui o advogado - todos amplificam.
             </p>
           </div>
 

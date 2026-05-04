@@ -250,7 +250,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           }}
         />
 
-        {/* ── Layer 6: Core orb — liquid morphing ── */}
+        {/* ── Layer 6: Core orb - liquid morphing ── */}
         <motion.circle
           cx={center}
           cy={center}
@@ -271,7 +271,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           }}
         />
 
-        {/* ── Layer 7: Inner nucleus — bright hot center ── */}
+        {/* ── Layer 7: Inner nucleus - bright hot center ── */}
         <motion.circle
           cx={center}
           cy={center}
@@ -290,7 +290,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           }}
         />
 
-        {/* ── Layer 8: Specular highlight — glass-like reflection ── */}
+        {/* ── Layer 8: Specular highlight - glass-like reflection ── */}
         <ellipse
           cx={center - coreR * 0.22}
           cy={center - coreR * 0.28}

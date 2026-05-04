@@ -137,7 +137,7 @@ serve(async (req) => {
           }
         }
 
-        // Generic SMTP — we can only validate format since Deno can't do raw SMTP
+        // Generic SMTP - we can only validate format since Deno can't do raw SMTP
         if (smtp_host && smtp_port && smtp_user) {
           const portNum = parseInt(smtp_port);
           if (![25, 465, 587, 2525].includes(portNum)) {

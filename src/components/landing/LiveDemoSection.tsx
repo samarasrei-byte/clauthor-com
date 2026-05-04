@@ -1,5 +1,5 @@
 /**
- * LiveDemoSection.tsx — Interactive "See an Agent Working Now" section for the landing page.
+ * LiveDemoSection.tsx - Interactive "See an Agent Working Now" section for the landing page.
  * Visitor types a company name → simulated SDR agent works in real-time with typewriter effect.
  */
 
@@ -26,20 +26,20 @@ function buildSteps(company: string): DemoStep[] {
 }
 
 function buildEmail(company: string): string {
-  return `Assunto: ${company} — Como escalar operações sem triplicar o time
+  return `Assunto: ${company} - Como escalar operações sem triplicar o time
 
 Olá,
 
 Notei que a ${company} está em fase de crescimento. Empresas nesse estágio costumam enfrentar um dilema: escalar rápido sem inflar a folha de pagamento.
 
-Nossos agentes de IA resolvem isso — automatizam prospecção, suporte e análise como um departamento inteiro, funcionando 24h/dia.
+Nossos agentes de IA resolvem isso - automatizam prospecção, suporte e análise como um departamento inteiro, funcionando 24h/dia.
 
 Empresas similares à ${company} reduziram custos operacionais em até 60% nos primeiros 90 dias.
 
 Posso te mostrar em 15 minutos como funciona para o seu setor?
 
 Abraço,
-Apollo — SDR Agent · Clauthor`;
+Apollo - SDR Agent · Clauthor`;
 }
 
 export default function LiveDemoSection() {
@@ -191,7 +191,7 @@ export default function LiveDemoSection() {
                     </button>
                   </div>
                   <p className="font-mono text-[10px] text-muted-foreground/40 text-center">
-                    ↑ Experimente com qualquer empresa — a simulação é instantânea
+                    ↑ Experimente com qualquer empresa - a simulação é instantânea
                   </p>
                 </motion.div>
               )}
@@ -241,7 +241,7 @@ export default function LiveDemoSection() {
                     >
                       <div className="flex items-center gap-2 mb-2 pb-2 border-b border-border/30">
                         <Mail className="w-3.5 h-3.5 text-primary/60" />
-                        <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Output — Email gerado</span>
+                        <span className="font-mono text-[10px] text-muted-foreground uppercase tracking-wider">Output - Email gerado</span>
                       </div>
                       <pre className="font-mono text-[11px] sm:text-xs text-foreground/80 whitespace-pre-wrap leading-relaxed">
                         {typewriterText}

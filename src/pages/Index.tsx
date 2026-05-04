@@ -139,7 +139,7 @@ const HomePage = () => {
       <section ref={heroRef} className="relative min-h-[70svh] sm:min-h-[75vh] flex items-center px-5 sm:px-6 pt-24 pb-16 sm:pt-32 sm:pb-20" aria-label="Hero">
         <div className="relative z-10 max-w-[1120px] mx-auto w-full">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            {/* LEFT — Text */}
+            {/* LEFT - Text */}
             <div className="flex-1 min-w-0 text-center lg:text-left">
               {/* Headline */}
               <motion.div
@@ -165,7 +165,7 @@ const HomePage = () => {
                   <span className="text-foreground font-normal"> {t("home.subtitle_highlight")}</span>
                 </p>
 
-                {/* CTAs — minimal Apple style */}
+                {/* CTAs - minimal Apple style */}
                 <div className="flex flex-col sm:flex-row items-center gap-3">
                   <Link to="/waitlist" className="block w-full sm:w-auto">
                     <Button size="lg" className="w-full sm:w-auto h-11 px-7 text-[13px] font-medium rounded-full gap-2">
@@ -183,7 +183,7 @@ const HomePage = () => {
               </motion.div>
             </div>
 
-            {/* RIGHT — Live Demo */}
+            {/* RIGHT - Live Demo */}
             <div className="w-full max-w-[400px] lg:w-[400px] shrink-0 mx-auto lg:mx-0">
               <Suspense fallback={
                 <div className="rounded-2xl border border-border/50 bg-card overflow-hidden">

@@ -1,5 +1,5 @@
 /**
- * ThorVoice.ts — Voice configuration, speech helpers, queue management, visitor memory
+ * ThorVoice.ts - Voice configuration, speech helpers, queue management, visitor memory
  */
 
 import { supabase } from "@/integrations/supabase/client";
@@ -170,7 +170,7 @@ What do you want to solve right now?
 export function buildProactiveGreeting(lang: string, memory: ThorMemory): string {
   const isPt = lang.startsWith("pt");
 
-  // Returning visitor with name — action-oriented
+  // Returning visitor with name - action-oriented
   if (memory.name) {
     if (memory.lastTopic) {
       return isPt

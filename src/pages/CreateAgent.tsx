@@ -335,7 +335,7 @@ const CreateAgentPage = () => {
                 >
                   <Database className="h-8 w-8 text-primary mx-auto mb-2" />
                   <p className="text-sm text-muted-foreground">Arraste arquivos ou clique para upload</p>
-                  <p className="text-xs text-muted-foreground mt-1">PDF, DOCX, TXT, CSV — Em breve</p>
+                  <p className="text-xs text-muted-foreground mt-1">PDF, DOCX, TXT, CSV - Em breve</p>
                 </div>
               </div>
             )}

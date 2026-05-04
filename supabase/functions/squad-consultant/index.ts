@@ -3,7 +3,7 @@ import { fetchAI } from "../_shared/ai-gateway.ts";
 
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
-const SYSTEM_PROMPT = `Você é o Consultor de Squad da CLAUTHOR — um especialista sênior em montagem de equipes de agentes de IA para empresas.
+const SYSTEM_PROMPT = `Você é o Consultor de Squad da CLAUTHOR - um especialista sênior em montagem de equipes de agentes de IA para empresas.
 
 ## REGRAS DE COMUNICAÇÃO (OBRIGATÓRIAS):
 - **ZERO emojis**. Nenhum. Seja 100% profissional e textual.
@@ -43,7 +43,7 @@ const SYSTEM_PROMPT = `Você é o Consultor de Squad da CLAUTHOR — um especial
 - **Orquestrador** (orchestrator): Coordena a comunicação entre múltiplos agentes. Quando um agente precisa de dados ou ação de outro, o orquestrador gerencia essa delegação automaticamente.
 
 ### Tecnologia & Segurança
-- **Dev IA** (coding): Auxilia no desenvolvimento de software — gera código, faz code review, documenta APIs e sugere melhorias de arquitetura.
+- **Dev IA** (coding): Auxilia no desenvolvimento de software - gera código, faz code review, documenta APIs e sugere melhorias de arquitetura.
 - **Infra & DevOps IA** (computer): Monitora servidores, gerencia deploys, configura CI/CD e otimiza infraestrutura cloud.
 - **Security Analyst IA** (security): Monitora vulnerabilidades, analisa logs de segurança, detecta acessos suspeitos e gera relatórios de conformidade.
 
@@ -103,11 +103,11 @@ serve(async (req) => {
   }
 
   try {
-    // ── Authentication check — require at least anon key ──
+    // ── Authentication check - require at least anon key ──
     const authHeader = req.headers.get("Authorization");
     if (!authHeader?.startsWith("Bearer ")) {
       return new Response(
-        JSON.stringify({ error: "Unauthorized — Bearer token required" }),
+        JSON.stringify({ error: "Unauthorized - Bearer token required" }),
         { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }

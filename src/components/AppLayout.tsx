@@ -39,7 +39,7 @@ const AppLayout = () => {
         onClose={() => setTestDriveAgent(null)}
       />
 
-      {/* Thor — immersive AI greeter & persistent guide (hidden on pitch page and during intro) */}
+      {/* Thor - immersive AI greeter & persistent guide (hidden on pitch page and during intro) */}
       {showThor && !showIntro && (
         <Suspense fallback={null}>
           <ThorGreeter />

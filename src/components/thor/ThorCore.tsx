@@ -1,5 +1,5 @@
 /**
- * ThorCore.tsx — State management, API calls, credit validation, all hooks
+ * ThorCore.tsx - State management, API calls, credit validation, all hooks
  */
 
 import { useState, useRef, useEffect, useCallback } from "react";
@@ -71,7 +71,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
   const [messages, setMessages] = useState<ThorMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // Voice defaults to OFF — user must explicitly enable
+  // Voice defaults to OFF - user must explicitly enable
   const [voiceEnabled, setVoiceEnabled] = useState(false);
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showChat, setShowChat] = useState(false);
@@ -137,7 +137,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // ═══ Proactive greeting — 5s after page load, once per session ═══
+  // ═══ Proactive greeting - 5s after page load, once per session ═══
   useEffect(() => {
     const alreadyGreeted = sessionStorage.getItem(SESSION_GREETED_KEY);
     const dismissed = sessionStorage.getItem(SESSION_DISMISSED_KEY);
@@ -199,13 +199,13 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
         const memory = loadThorMemory();
         const greeting = buildProactiveGreeting(lang, memory);
         setMessages([{ role: "assistant", content: greeting }]);
-      // Don't auto-speak on entrance transition — wait for user to enable voice
+      // Don't auto-speak on entrance transition - wait for user to enable voice
       }, 3200);
       return () => clearTimeout(timer);
     }
   }, [phase]);
 
-  // ═══ Inactivity follow-up — 2min after Thor opens, once per session ═══
+  // ═══ Inactivity follow-up - 2min after Thor opens, once per session ═══
   useEffect(() => {
     if (phase !== "active" || !showChat) return;
     if (sessionStorage.getItem(SESSION_FOLLOWUP_KEY)) return;
@@ -217,8 +217,8 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       if (sessionStorage.getItem(SESSION_FOLLOWUP_KEY)) return;
       const isPt = lang.startsWith("pt");
       const followup = isPt
-        ? "Ei, ainda tá aí? Sem pressão — mas posso te mostrar um resultado rápido.\n\nEscolhe:\n1. **Ver um agente em ação**\n2. **Calcular meu ROI**\n3. **Falar com um especialista**"
-        : "Hey, still there? No pressure — but I can show you a quick result.\n\nPick one:\n1. **See an agent in action**\n2. **Calculate my ROI**\n3. **Talk to a specialist**";
+        ? "Ei, ainda tá aí? Sem pressão - mas posso te mostrar um resultado rápido.\n\nEscolhe:\n1. **Ver um agente em ação**\n2. **Calcular meu ROI**\n3. **Falar com um especialista**"
+        : "Hey, still there? No pressure - but I can show you a quick result.\n\nPick one:\n1. **See an agent in action**\n2. **Calculate my ROI**\n3. **Talk to a specialist**";
 
       setMessages(prev => [...prev, { role: "assistant", content: followup }]);
       sessionStorage.setItem(SESSION_FOLLOWUP_KEY, "1");
@@ -251,7 +251,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
     touchThorVisit();
   }, []);
 
-  // ═══ Intent handling — intercept certain messages before sending to API ═══
+  // ═══ Intent handling - intercept certain messages before sending to API ═══
   const handleIntent = useCallback((msg: string, intent: ThorIntent): boolean => {
     const isPt = lang.startsWith("pt");
 
@@ -351,7 +351,7 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
           diagnostics = formatContextForPrompt(dashCtx);
         }
       } catch {
-        // Silent — context is optional enhancement
+        // Silent - context is optional enhancement
       }
     }
 
@@ -430,13 +430,13 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
       setMessages(prev => [...prev, { role: "assistant", content: nameQ }]);
     }
 
-    // Speak result if voice enabled — wrapped in try/catch for silent fallback
+    // Speak result if voice enabled - wrapped in try/catch for silent fallback
     if (!controller.signal.aborted && voiceEnabled && fullText) {
       try {
         const speechText = prepareSpeechText(fullText);
         if (speechText) speak(speechText, thorVoiceId);
       } catch {
-        // Silent fallback — TTS failure should never break the chat
+        // Silent fallback - TTS failure should never break the chat
       }
     }
 

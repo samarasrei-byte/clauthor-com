@@ -138,7 +138,7 @@ export function useAgentChat(agentId?: string) {
                 // Toast warning for blocked delegations
                 const blocked = parsed.tool_results.filter((t: ToolResult) => t.tool_name === "delegate_to_agent" && !t.success);
                 if (blocked.length > 0) {
-                  toast.info("🔀 Um agente recomendou outro especialista — veja a sugestão no chat", { duration: 5000 });
+                  toast.info("🔀 Um agente recomendou outro especialista - veja a sugestão no chat", { duration: 5000 });
                 }
               }
               if (parsed.credit_warning) gotCreditWarning = true;

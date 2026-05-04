@@ -273,7 +273,7 @@ const HolographicMeetingRoom = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const recognitionRef = useRef<any>(null);
 
-  // TTS — agents speak aloud
+  // TTS - agents speak aloud
   const { speak: ttsSpeak, stop: ttsStop, isSpeaking: ttsSpeaking } = useElevenLabsTTS();
 
   const speakAgentMessage = useCallback(async (text: string) => {
@@ -418,7 +418,7 @@ Dê sua contribuição profissional em 2-3 frases, focando na sua especialidade.
             }
           );
           if (response.ok) {
-            // omnix-chat returns SSE stream — parse it
+            // omnix-chat returns SSE stream - parse it
             const text = await response.text();
             const chunks = text.split("\n").filter(l => l.startsWith("data: ") && !l.includes("[DONE]"));
             let parsed = "";
@@ -864,7 +864,7 @@ Apenas o texto, sem introduções.`;
                 </Button>
                 {useDemo && (
                   <p className="text-xs text-muted-foreground mt-4">
-                    {t("meeting.demo_mode", { defaultValue: "Modo demonstração — contrate agentes para reuniões personalizadas" })}
+                    {t("meeting.demo_mode", { defaultValue: "Modo demonstração - contrate agentes para reuniões personalizadas" })}
                   </p>
                 )}
               </div>
@@ -902,7 +902,7 @@ Apenas o texto, sem introduções.`;
             {/* Main content */}
             <div className="flex-1 flex flex-col-reverse lg:flex-row min-h-0">
               
-              {/* ═══ HOLOGRAPHIC TABLE AREA — hidden on mobile during active meeting ═══ */}
+              {/* ═══ HOLOGRAPHIC TABLE AREA - hidden on mobile during active meeting ═══ */}
               <div className="hidden lg:flex flex-1 relative items-end justify-center pb-8 min-h-0">
                 
                 {/* Table surface */}

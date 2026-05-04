@@ -30,7 +30,7 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
   const Icon = meta.icon;
   const result = toolResult.result;
 
-  // Handle failed delegation — show upgrade/hire card
+  // Handle failed delegation - show upgrade/hire card
   if (toolResult.tool_name === "delegate_to_agent" && !toolResult.success) {
     const reason = result.reason || "not_contracted";
     const isUpgrade = reason === "plan_insufficient" || reason === "tier_insufficient";
@@ -243,7 +243,7 @@ function ToolResultCard({ toolResult }: { toolResult: ToolResult }) {
     );
   }
 
-  // Handle missing credentials — show CTA to connect
+  // Handle missing credentials - show CTA to connect
   if (!toolResult.success && result.error && (
     String(result.error).includes("No credentials") ||
     String(result.error).includes("credentials") ||

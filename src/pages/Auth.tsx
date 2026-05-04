@@ -21,7 +21,7 @@ export interface HireIntent {
   departmentId?: string;
   /** Optional one-time setup fee in cents (charged on first billing cycle) */
   setupFee?: number;
-  /** Optional monthly override in cents — bypasses pricing tier lookup */
+  /** Optional monthly override in cents - bypasses pricing tier lookup */
   monthlyOverride?: number;
 }
 
@@ -155,7 +155,7 @@ const AuthPage = () => {
         )}
 
         <div className="glass-card rounded-2xl p-6 sm:p-8">
-          {/* Google OAuth — primary action */}
+          {/* Google OAuth - primary action */}
           <Button
             type="button"
             variant="outline"

@@ -55,7 +55,7 @@ const HunterAtivar = () => {
       return;
     }
     setActive(val);
-    toast.success(val ? "Hunter ativado — execução diária às 9h" : "Hunter pausado");
+    toast.success(val ? "Hunter ativado - execução diária às 9h" : "Hunter pausado");
   };
 
   const handleLimitChange = async (val: number) => {
@@ -88,7 +88,7 @@ const HunterAtivar = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Power className="w-5 h-5 text-primary" /> Passo 4 — Ativar Hunter
+            <Power className="w-5 h-5 text-primary" /> Passo 4 - Ativar Hunter
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
@@ -122,7 +122,7 @@ const HunterAtivar = () => {
           {active && (
             <div className="flex items-center gap-2 p-3 rounded-lg border border-green-500/30 bg-green-500/5 text-sm">
               <CheckCircle2 className="w-4 h-4 text-green-400" />
-              <span className="text-foreground">Hunter ativo — próxima execução amanhã às 9h</span>
+              <span className="text-foreground">Hunter ativo - próxima execução amanhã às 9h</span>
             </div>
           )}
 

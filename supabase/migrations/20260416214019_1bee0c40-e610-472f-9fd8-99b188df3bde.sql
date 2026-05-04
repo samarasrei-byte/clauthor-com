@@ -87,7 +87,7 @@ INSERT INTO public.agents_catalog (slug, name, department, squad, responsibiliti
 ('sales_forecaster', 'Sales Forecaster', 'sales', 'sales_ops_squad', '["Revenue forecasting","Pipeline analysis","Trend modeling"]'::jsonb),
 ('territory_planner', 'Territory Planner', 'sales', 'sales_ops_squad', '["Territory design","Quota setting","Balance optimization"]'::jsonb),
 ('sales_enablement', 'Sales Enablement Agent', 'sales', 'sales_ops_squad', '["Sales collateral","Training content","Competitive cards"]'::jsonb),
-('hunter_linkedin', 'Hunter — Prospecção LinkedIn', 'sales', 'sales_ops_squad', '["Busca de leads no LinkedIn","Icebreakers com IA","Envio automático de convites"]'::jsonb),
+('hunter_linkedin', 'Hunter - Prospecção LinkedIn', 'sales', 'sales_ops_squad', '["Busca de leads no LinkedIn","Icebreakers com IA","Envio automático de convites"]'::jsonb),
 ('channel_manager', 'Channel Manager', 'sales', 'channel_sales_squad', '["Channel strategy","Partner relationships","Revenue tracking"]'::jsonb),
 ('reseller_recruiter', 'Reseller Recruiter', 'sales', 'channel_sales_squad', '["Reseller identification","Onboarding","Certification"]'::jsonb),
 ('channel_revenue', 'Channel Revenue Analyst', 'sales', 'channel_sales_squad', '["Channel analytics","Partner performance","ROI analysis"]'::jsonb),

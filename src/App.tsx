@@ -72,7 +72,7 @@ const AdvocaciaAudit = lazyRetry(() => import("./pages/AdvocaciaAudit"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 5 * 60 * 1000, // 5 min — reduce refetches
+      staleTime: 5 * 60 * 1000, // 5 min - reduce refetches
       gcTime: 10 * 60 * 1000,
       retry: 1,
       refetchOnWindowFocus: false,
@@ -98,7 +98,7 @@ const App = () => (
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Public pages with full navbar */}
-                {/* Standalone immersive pages — no navbar */}
+                {/* Standalone immersive pages - no navbar */}
                 <Route path="/waitlist" element={<Waitlist />} />
                 <Route path="/pitch" element={<Pitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />

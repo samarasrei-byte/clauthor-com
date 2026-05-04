@@ -1,6 +1,6 @@
 /**
  * Shared CORS headers and helpers for all edge functions.
- * Single source of truth — import this instead of defining inline.
+ * Single source of truth - import this instead of defining inline.
  */
 
 export const corsHeaders: Record<string, string> = {

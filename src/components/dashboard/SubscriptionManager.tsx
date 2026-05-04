@@ -84,7 +84,7 @@ const SubscriptionManager = ({ subscriptions }: SubscriptionManagerProps) => {
             <p className="font-display text-xl font-bold">
               {nextBilling
                 ? nextBilling.toLocaleDateString(locale, { day: "2-digit", month: "short" })
-                : "—"}
+                : "-"}
             </p>
           </div>
         </div>

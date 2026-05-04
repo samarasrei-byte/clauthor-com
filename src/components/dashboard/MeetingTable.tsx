@@ -42,7 +42,7 @@ const MeetingTable = ({ agents, onMention, canSend }: MeetingTableProps) => {
 
   return (
     <div className="relative w-full aspect-square max-w-[460px] mx-auto">
-      {/* Ambient background grid — holographic feel */}
+      {/* Ambient background grid - holographic feel */}
       <div className="absolute inset-0 rounded-full opacity-20">
         <div
           className="w-full h-full rounded-full"
@@ -77,7 +77,7 @@ const MeetingTable = ({ agents, onMention, canSend }: MeetingTableProps) => {
         />
       </motion.div>
 
-      {/* The Table — Premium oval with depth & holographic core */}
+      {/* The Table - Premium oval with depth & holographic core */}
       <div className="absolute inset-[16%] rounded-full bg-gradient-to-br from-card/90 via-card/70 to-card/50 border border-border/30 shadow-[0_0_80px_-10px_hsl(var(--primary)/0.2),inset_0_2px_0_0_hsl(0_0%_100%/0.06)]">
         {/* Inner rings */}
         <div className="absolute inset-3 rounded-full border border-border/10" />
@@ -170,7 +170,7 @@ const MeetingTable = ({ agents, onMention, canSend }: MeetingTableProps) => {
             title={`Clique para @${agent.name}`}
           >
             <div className="relative">
-              {/* Speaking ring animation — triple ring */}
+              {/* Speaking ring animation - triple ring */}
               {agent.isSpeaking && (
                 <>
                   <motion.div
@@ -206,7 +206,7 @@ const MeetingTable = ({ agents, onMention, canSend }: MeetingTableProps) => {
                 <span className="text-sm font-bold text-white drop-shadow-md">{agent.initials}</span>
               </motion.div>
 
-              {/* Status indicator — larger and clearer */}
+              {/* Status indicator - larger and clearer */}
               <div className={`absolute -bottom-0.5 -right-0.5 w-5 h-5 rounded-full border-2 border-background flex items-center justify-center ${
                 agent.isSpeaking ? "bg-primary" : agent.isSilent ? "bg-muted" : "bg-accent-emerald"
               }`}>
@@ -266,7 +266,7 @@ const MeetingTable = ({ agents, onMention, canSend }: MeetingTableProps) => {
         );
       })}
 
-      {/* Help button — floating */}
+      {/* Help button - floating */}
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}

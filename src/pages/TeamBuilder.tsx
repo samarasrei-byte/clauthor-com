@@ -294,7 +294,7 @@ const TeamBuilder = () => {
         </motion.div>
 
         <div className="grid lg:grid-cols-[1fr_360px] gap-6">
-          {/* Left — Agent Catalog */}
+          {/* Left - Agent Catalog */}
           <div>
             <div className="flex flex-col sm:flex-row gap-3 mb-5">
               <div className="relative flex-1">
@@ -406,7 +406,7 @@ const TeamBuilder = () => {
             )}
           </div>
 
-          {/* Right — Cart sidebar */}
+          {/* Right - Cart sidebar */}
           <div className="lg:sticky lg:top-24 lg:self-start">
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="rounded-2xl border border-border/10 bg-card overflow-hidden">
               <div className="px-5 py-4 border-b border-border/10 flex items-center justify-between">

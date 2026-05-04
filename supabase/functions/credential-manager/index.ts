@@ -330,7 +330,7 @@ serve(async (req) => {
         }), { headers });
       }
 
-      // ── DECRYPT FOR EXECUTION (internal use — agent execution bridge) ──
+      // ── DECRYPT FOR EXECUTION (internal use - agent execution bridge) ──
       // Hybrid model: client credentials override platform defaults
       case "decrypt_for_execution": {
         if (!agent_id) {
@@ -443,7 +443,7 @@ serve(async (req) => {
         }), { headers });
       }
 
-      // ── LIST PLATFORM CREDENTIALS (all authenticated users — masked values only) ──
+      // ── LIST PLATFORM CREDENTIALS (all authenticated users - masked values only) ──
       case "list_platform": {
         const { data: platCreds } = await adminClient
           .from("platform_credentials")
@@ -492,7 +492,7 @@ serve(async (req) => {
 
         // Use a deterministic "virtual agent" ID per user+integration to avoid needing a real agent
         // Store in platform_credentials-like structure but scoped to user via agent_credentials
-        // First, check if user has any agent — if not, create a system placeholder
+        // First, check if user has any agent - if not, create a system placeholder
         let targetAgentId = body.agent_id;
         
         if (!targetAgentId) {

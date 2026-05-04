@@ -1,5 +1,5 @@
 /**
- * ThorIntentDetector.ts — Detect user intent from messages and map to actions
+ * ThorIntentDetector.ts - Detect user intent from messages and map to actions
  */
 
 import type { DemoType } from "./AgentDemoModal";
@@ -79,14 +79,14 @@ export function buildPricingResponse(lang: string): string {
   const isPt = lang.startsWith("pt");
   return isPt
     ? `💰 Ótima pergunta! Nossos planos foram feitos para caber no seu bolso:\n\n` +
-      `🟢 **Starter** — R$197/mês → 1 agente, ideal para começar\n` +
-      `🔵 **Professional** — R$497/mês → 3 agentes + squad\n` +
-      `🟣 **Enterprise** — Sob medida → Agentes ilimitados\n\n` +
+      `🟢 **Starter** - R$197/mês → 1 agente, ideal para começar\n` +
+      `🔵 **Professional** - R$497/mês → 3 agentes + squad\n` +
+      `🟣 **Enterprise** - Sob medida → Agentes ilimitados\n\n` +
       `👉 Quer que eu te ajude a escolher o melhor plano? Ou pode ver todos os detalhes em [Preços](/pricing).`
     : `💰 Great question! Our plans are designed to fit your budget:\n\n` +
-      `🟢 **Starter** — $47/mo → 1 agent, perfect to start\n` +
-      `🔵 **Professional** — $127/mo → 3 agents + squad\n` +
-      `🟣 **Enterprise** — Custom → Unlimited agents\n\n` +
+      `🟢 **Starter** - $47/mo → 1 agent, perfect to start\n` +
+      `🔵 **Professional** - $127/mo → 3 agents + squad\n` +
+      `🟣 **Enterprise** - Custom → Unlimited agents\n\n` +
       `👉 Want me to help you choose the best plan? Or see all details at [Pricing](/pricing).`;
 }
 
@@ -96,32 +96,32 @@ export function buildCompetitorResponse(competitor: string, lang: string): strin
   const differentials: Record<string, { pt: string; en: string }> = {
     CrewAI: {
       pt: `Conheço bem o ${competitor}! É um framework excelente para devs, mas a Clauthor é diferente:\n\n` +
-        `✅ **Interface pronta** — Não precisa escrever código\n` +
-        `✅ **Governança enterprise** — RLS, audit logs, multi-tenant\n` +
-        `✅ **Orquestração A2A** — Agentes colaboram entre si automaticamente\n` +
-        `✅ **Dashboard completo** — Métricas, ROI, logs em tempo real\n\n` +
+        `✅ **Interface pronta** - Não precisa escrever código\n` +
+        `✅ **Governança enterprise** - RLS, audit logs, multi-tenant\n` +
+        `✅ **Orquestração A2A** - Agentes colaboram entre si automaticamente\n` +
+        `✅ **Dashboard completo** - Métricas, ROI, logs em tempo real\n\n` +
         `O ${competitor} é tipo montar um carro do zero. A Clauthor é o carro pronto, com GPS e motorista. 🚗`,
       en: `I know ${competitor} well! It's an excellent dev framework, but Clauthor is different:\n\n` +
-        `✅ **Ready-to-use UI** — No coding needed\n` +
-        `✅ **Enterprise governance** — RLS, audit logs, multi-tenant\n` +
-        `✅ **A2A Orchestration** — Agents collaborate automatically\n` +
-        `✅ **Full dashboard** — Metrics, ROI, real-time logs\n\n` +
+        `✅ **Ready-to-use UI** - No coding needed\n` +
+        `✅ **Enterprise governance** - RLS, audit logs, multi-tenant\n` +
+        `✅ **A2A Orchestration** - Agents collaborate automatically\n` +
+        `✅ **Full dashboard** - Metrics, ROI, real-time logs\n\n` +
         `${competitor} is like building a car from scratch. Clauthor is the car, ready to drive. 🚗`,
     },
   };
 
   const defaultResp = {
     pt: `Conheço o ${competitor}! Boa ferramenta, mas a Clauthor oferece:\n\n` +
-      `✅ **Sem código** — Configure agentes em minutos\n` +
-      `✅ **Segurança enterprise** — RLS, criptografia, audit logs\n` +
-      `✅ **Departamentos completos** — Vendas, Suporte, RH, Marketing, tudo integrado\n` +
-      `✅ **ROI mensurável** — Veja exatamente quanto cada agente gera de valor\n\n` +
+      `✅ **Sem código** - Configure agentes em minutos\n` +
+      `✅ **Segurança enterprise** - RLS, criptografia, audit logs\n` +
+      `✅ **Departamentos completos** - Vendas, Suporte, RH, Marketing, tudo integrado\n` +
+      `✅ **ROI mensurável** - Veja exatamente quanto cada agente gera de valor\n\n` +
       `Quer ver a diferença na prática? Posso te mostrar uma demo agora! 🚀`,
     en: `I know ${competitor}! Good tool, but Clauthor offers:\n\n` +
-      `✅ **No-code** — Set up agents in minutes\n` +
-      `✅ **Enterprise security** — RLS, encryption, audit logs\n` +
-      `✅ **Full departments** — Sales, Support, HR, Marketing, all integrated\n` +
-      `✅ **Measurable ROI** — See exactly how much value each agent generates\n\n` +
+      `✅ **No-code** - Set up agents in minutes\n` +
+      `✅ **Enterprise security** - RLS, encryption, audit logs\n` +
+      `✅ **Full departments** - Sales, Support, HR, Marketing, all integrated\n` +
+      `✅ **Measurable ROI** - See exactly how much value each agent generates\n\n` +
       `Want to see the difference? I can show you a demo right now! 🚀`,
   };
 

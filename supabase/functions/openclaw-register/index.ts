@@ -112,7 +112,7 @@ serve(async (req) => {
     const OPENCLAW_BASE_URL = Deno.env.get("OPENCLAW_BASE_URL") || "https://api.openclaw.ai";
 
     if (!OPENCLAW_API_KEY) {
-      // No API key — register as pending
+      // No API key - register as pending
       const { data: registration, error: regError } = await supabase
         .from("openclaw_registrations")
         .insert({

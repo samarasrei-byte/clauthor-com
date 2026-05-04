@@ -1,5 +1,5 @@
 /**
- * ThorUI.tsx — All visual rendering: NeuralCore, message bubbles, inputs, overlays, animations
+ * ThorUI.tsx - All visual rendering: NeuralCore, message bubbles, inputs, overlays, animations
  */
 
 import { memo, useMemo, useState, useRef, useCallback, useEffect } from "react";
@@ -11,7 +11,7 @@ import type { ThorCoreState, ThorCoreActions } from "./ThorCore";
 import { AgentDemoModal } from "./AgentDemoModal";
 
 /* ═══════════════════════════════════════════════════
-   QUANTUM NEURAL CORE — Adaptive holographic engine
+   QUANTUM NEURAL CORE - Adaptive holographic engine
    ═══════════════════════════════════════════════════ */
 export const NeuralCore = memo(({ isSpeaking, size = 240, lite = false }: { isSpeaking: boolean; size?: number; lite?: boolean }) => {
   const center = size / 2;
@@ -397,7 +397,7 @@ const QuickActions = ({ lang, sendMessage, mobile }: QuickActionsProps) => {
 };
 
 /* ═══════════════════════════════════════════════════
-   THOR RENDERER — Composes all visual phases
+   THOR RENDERER - Composes all visual phases
    ═══════════════════════════════════════════════════ */
 
 export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
@@ -476,12 +476,12 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
     );
   }
 
-  /* ══ MINIMIZED — hidden per user request ══ */
+  /* ══ MINIMIZED - hidden per user request ══ */
   if (phase === "minimized") {
     return <>{demoModal}</>;
   }
 
-  /* ══ ACTIVE — MOBILE ══ */
+  /* ══ ACTIVE - MOBILE ══ */
   if (isMobile) {
     const mobileOrbSize = expanded ? 140 : 100;
     return (
@@ -568,7 +568,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
     );
   }
 
-  /* ══ ACTIVE — DESKTOP: Premium floating command widget ══ */
+  /* ══ ACTIVE - DESKTOP: Premium floating command widget ══ */
   const widgetOrbSize = 80;
 
   return (
@@ -617,7 +617,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
                   style={{ background: "radial-gradient(ellipse, hsl(var(--accent-violet)), transparent)" }}
                 />
 
-                {/* Header — Premium tier */}
+                {/* Header - Premium tier */}
                 <div className="relative px-4 py-3 border-b border-accent-violet/[0.06] shrink-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -735,7 +735,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
         )}
       </AnimatePresence>
 
-      {/* Thor orb — always visible at bottom-right */}
+      {/* Thor orb - always visible at bottom-right */}
       <motion.div className="pointer-events-auto flex items-end gap-3">
         {/* Bubble preview when chat is closed */}
         {!showChat && lastMessage && (

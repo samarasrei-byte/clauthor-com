@@ -84,7 +84,7 @@ const AdminAgentSettings = () => {
       {/* Header */}
       <div>
         <h2 className="font-display text-xl font-bold flex items-center gap-2">
-          <Settings className="h-5 w-5 text-primary" /> Configurações de Agentes — Admin
+          <Settings className="h-5 w-5 text-primary" /> Configurações de Agentes - Admin
         </h2>
         <p className="text-sm text-muted-foreground mt-1">
           Gerencie prompts, integrações e canais de todos os agentes da plataforma

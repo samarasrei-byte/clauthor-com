@@ -1,5 +1,5 @@
 /**
- * AutonomyStatusBar — Mostra o nível de autonomia de um agente
+ * AutonomyStatusBar - Mostra o nível de autonomia de um agente
  * e permite ao usuário ajustar o nível diretamente.
  */
 import { useState } from "react";

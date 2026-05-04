@@ -7,7 +7,7 @@
  * Skills: DontHackMe · PromptInjectionGuard · FeatherShield
  */
 
-// ─── Rate Limiter (per Deno isolate — resets on cold start) ───
+// ─── Rate Limiter (per Deno isolate - resets on cold start) ───
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 
@@ -100,7 +100,7 @@ export function rateLimitResponse(retryAfter: number, corsHeaders: Record<string
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SKILL 1: PromptInjectionGuard
-// Real-time prompt firewall — blocks injection attempts
+// Real-time prompt firewall - blocks injection attempts
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 const INJECTION_PATTERNS: RegExp[] = [
@@ -209,7 +209,7 @@ export function scanConversation(messages: Array<{ role: string; content: string
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SKILL 2: DontHackMe
-// System audit — checks environment for security weaknesses
+// System audit - checks environment for security weaknesses
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 export interface AuditFinding {
@@ -246,7 +246,7 @@ export function auditEnvironment(): AuditFinding[] {
     findings.push({
       severity: "critical",
       category: "key_misconfiguration",
-      description: "Service role key is identical to anon key — possible misconfiguration.",
+      description: "Service role key is identical to anon key - possible misconfiguration.",
       recommendation: "Verify that SUPABASE_SERVICE_ROLE_KEY contains the actual service role key, not the anon key.",
     });
   }
@@ -281,7 +281,7 @@ export function auditEnvironment(): AuditFinding[] {
 
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // SKILL 3: FeatherShield
-// Tool security scanner — validates tool arguments before execution
+// Tool security scanner - validates tool arguments before execution
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 export interface ToolScanResult {

@@ -180,7 +180,7 @@ serve(async (req) => {
 - Posts: ${community.length} | Likes: ${community.reduce((a: number, p: any) => a + (p.likes_count || 0), 0)} | Comments: ${community.reduce((a: number, p: any) => a + (p.comments_count || 0), 0)}
 
 ### 🏆 TOP 10 AGENTES:
-${agents.sort((a: any, b: any) => b.total_executions - a.total_executions).slice(0, 10).map((a: any, i: number) => `${i + 1}. ${a.name} — ${a.total_executions} exec (${a.tier}/${a.status})`).join("\n")}
+${agents.sort((a: any, b: any) => b.total_executions - a.total_executions).slice(0, 10).map((a: any, i: number) => `${i + 1}. ${a.name} - ${a.total_executions} exec (${a.tier}/${a.status})`).join("\n")}
 `;
 
     const OPERATIONAL_SECURITY = `
@@ -192,7 +192,7 @@ ${agents.sort((a: any, b: any) => b.total_executions - a.total_executions).slice
 
     const systemPrompt = `${OPERATIONAL_SECURITY}\n${contractPrompt}
 
-Você é o **ORQUESTRADOR MASTER CLAUTHOR** — o cérebro central que coordena TODOS os departamentos.
+Você é o **ORQUESTRADOR MASTER CLAUTHOR** - o cérebro central que coordena TODOS os departamentos.
 
 Você é o CEO Digital com acesso a:
 - 🛡️ Cyber Security (CISO)

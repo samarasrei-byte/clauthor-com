@@ -39,10 +39,10 @@ export default function AdminSubscriptionsTable({ allSubscriptions, locale }: Ad
               <tbody>
                 {allSubscriptions.map((sub: any) => (
                   <tr key={sub.id} className="border-b border-white/[0.05] hover:bg-accent/20">
-                    <td className="p-3 font-medium">{sub.agent?.name || (sub.agent_id ? sub.agent_id.slice(0, 8) : "—")}</td>
+                    <td className="p-3 font-medium">{sub.agent?.name || (sub.agent_id ? sub.agent_id.slice(0, 8) : "-")}</td>
                     <td className="p-3">{fmt(sub.monthly_price / 100)}/{locale.startsWith("pt") ? "mês" : "mo"}</td>
                     <td className="p-3 text-muted-foreground text-xs">
-                      {sub.current_period_start ? new Date(sub.current_period_start).toLocaleDateString(locale) : "—"} → {sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString(locale) : "—"}
+                      {sub.current_period_start ? new Date(sub.current_period_start).toLocaleDateString(locale) : "-"} → {sub.current_period_end ? new Date(sub.current_period_end).toLocaleDateString(locale) : "-"}
                     </td>
                     <td className="p-3"><Badge variant="secondary" className="bg-primary/20 text-primary">{sub.status}</Badge></td>
                   </tr>

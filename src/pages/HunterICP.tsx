@@ -79,7 +79,7 @@ const HunterICP = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Target className="w-5 h-5 text-primary" /> Passo 2 — Definir ICP (cliente ideal)
+            <Target className="w-5 h-5 text-primary" /> Passo 2 - Definir ICP (cliente ideal)
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

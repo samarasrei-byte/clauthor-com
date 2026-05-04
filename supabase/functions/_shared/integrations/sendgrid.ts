@@ -48,7 +48,7 @@ export async function handleSendgrid(
 
     case "draft-reply":
     case "summarize-thread": {
-      // These are AI-assisted actions — return guidance for the AI planner
+      // These are AI-assisted actions - return guidance for the AI planner
       return {
         success: true,
         data: {

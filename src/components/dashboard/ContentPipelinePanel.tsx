@@ -53,8 +53,8 @@ const ContentPipelinePanel = () => {
       if (!tenantId) throw new Error("Tenant não encontrado");
 
       const titles: Record<string, string> = {
-        instagram: `Roteiro Instagram — ${new Date().toLocaleDateString("pt-BR")}`,
-        youtube: `Roteiro YouTube — ${new Date().toLocaleDateString("pt-BR")}`,
+        instagram: `Roteiro Instagram - ${new Date().toLocaleDateString("pt-BR")}`,
+        youtube: `Roteiro YouTube - ${new Date().toLocaleDateString("pt-BR")}`,
       };
 
       const descriptions: Record<string, string> = {

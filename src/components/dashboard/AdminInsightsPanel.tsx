@@ -93,7 +93,7 @@ function computeChurnRisk(
   return {
     userId: profile.user_id,
     name: profile.full_name || "Sem nome",
-    company: profile.company_name || "—",
+    company: profile.company_name || "-",
     riskScore: score,
     riskLevel,
     reasons,
@@ -175,7 +175,7 @@ function generateInsights(
     insights.push({
       id: "no-revenue",
       type: "action",
-      title: "Receita zerada — ative o monetização",
+      title: "Receita zerada - ative o monetização",
       description: "Nenhuma assinatura ativa ainda. Considere oferecer planos trial para converter usuários da waitlist.",
       impact: "high",
       icon: DollarSign,

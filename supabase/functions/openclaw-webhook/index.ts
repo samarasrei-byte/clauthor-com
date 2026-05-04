@@ -48,7 +48,7 @@ serve(async (req) => {
         });
       }
     } else {
-      console.warn("OPENCLAW_WEBHOOK_SECRET not set — skipping signature validation");
+      console.warn("OPENCLAW_WEBHOOK_SECRET not set - skipping signature validation");
     }
 
     const body = JSON.parse(rawBody);

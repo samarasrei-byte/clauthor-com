@@ -123,7 +123,7 @@ const AdminCostsDashboard = () => {
     <div className="space-y-6">
       <div>
         <h2 className="font-display text-xl font-bold flex items-center gap-2">
-          <Cpu className="h-5 w-5 text-primary" /> Custos de IA — Smart Routing
+          <Cpu className="h-5 w-5 text-primary" /> Custos de IA - Smart Routing
         </h2>
         <p className="text-sm text-muted-foreground mt-1">Roteamento inteligente de modelos para otimização de custos</p>
       </div>
@@ -181,7 +181,7 @@ const AdminCostsDashboard = () => {
       </div>
 
       <div className="glass-card rounded-2xl p-4">
-        <h3 className="text-sm font-bold mb-3">Custo Diário — Últimos 30 Dias (USD)</h3>
+        <h3 className="text-sm font-bold mb-3">Custo Diário - Últimos 30 Dias (USD)</h3>
         <ResponsiveContainer width="100%" height={220}>
           <LineChart data={dailyCosts}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border) / 0.15)" />

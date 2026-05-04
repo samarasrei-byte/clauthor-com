@@ -60,7 +60,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutionDesc: "Um agente de voz com IA que faz ligações outbound e atende inbound com naturalidade humana, 24 horas por dia.",
     solutions: [
       { title: "Voz natural com IA generativa", description: "Conversas fluidas que seus clientes não distinguem de um humano. Empatia, contexto e persuasão em tempo real." },
-      { title: "Integração com CRM e WhatsApp", description: "Sincroniza automaticamente com seu pipeline. Liga, registra, agenda follow-up e envia mensagem — tudo sozinho." },
+      { title: "Integração com CRM e WhatsApp", description: "Sincroniza automaticamente com seu pipeline. Liga, registra, agenda follow-up e envia mensagem - tudo sozinho." },
       { title: "Escala ilimitada instantânea", description: "Precisa de 1.000 ligações amanhã? Sem problema. Sem contratação, sem onboarding, sem dor de cabeça." },
     ],
     benefits: [
@@ -247,7 +247,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { title: "Dependência de pessoas", description: "O dev-chave sai e leva o conhecimento. Bus factor = 1 é um risco real." },
     ],
     solutionTitle: "Autonomous Coding Agent",
-    solutionDesc: "IA que escreve código de produção, faz code review, roda testes e deploya — tudo sozinha.",
+    solutionDesc: "IA que escreve código de produção, faz code review, roda testes e deploya - tudo sozinha.",
     solutions: [
       { title: "Código de produção", description: "Escreve código limpo, testado e documentado em qualquer linguagem." },
       { title: "CI/CD autônomo", description: "Integra com GitHub, roda testes, faz deploy. Ciclo completo sem intervenção." },
@@ -296,7 +296,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "green",
     heroHeadline: "Atendimento Unificado em Todos os Canais",
     heroHighlight: "Todos os Canais",
-    heroSubheadline: "WhatsApp, Instagram, Chat, E-mail e Telegram — um único agente com contexto unificado que nunca esquece seu cliente.",
+    heroSubheadline: "WhatsApp, Instagram, Chat, E-mail e Telegram - um único agente com contexto unificado que nunca esquece seu cliente.",
     heroStats: [
       { value: "5", label: "Canais integrados" },
       { value: "< 3s", label: "Tempo de resposta" },
@@ -359,7 +359,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "emerald",
     heroHeadline: "Automatize Finanças e Multiplique Receita",
     heroHighlight: "Multiplique Receita",
-    heroSubheadline: "Cobranças automáticas, conciliação bancária, NF-e e forecast de receita — tudo sem um departamento financeiro.",
+    heroSubheadline: "Cobranças automáticas, conciliação bancária, NF-e e forecast de receita - tudo sem um departamento financeiro.",
     heroStats: [
       { value: "R$ 200k", label: "Recuperado/mês" },
       { value: "99%", label: "Precisão contábil" },
@@ -512,7 +512,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { metric: "99%", label: "Precisão", description: "Baseada nos seus documentos reais" },
     ],
     howItWorks: [
-      { step: "01", title: "Conecte suas fontes", description: "SharePoint, Google Drive, Notion, Confluence — conecte tudo." },
+      { step: "01", title: "Conecte suas fontes", description: "SharePoint, Google Drive, Notion, Confluence - conecte tudo." },
       { step: "02", title: "IA indexa tudo", description: "O agente lê, entende e organiza toda sua base de conhecimento." },
       { step: "03", title: "Pergunte qualquer coisa", description: "Chat inteligente com respostas precisas baseadas nos seus documentos." },
     ],
@@ -548,7 +548,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "orange",
     heroHeadline: "RPA com IA que Opera Qualquer Sistema",
     heroHighlight: "Qualquer Sistema",
-    heroSubheadline: "Opera interfaces de ERPs legados, portais governamentais e sistemas bancários como um humano — mas 100x mais rápido.",
+    heroSubheadline: "Opera interfaces de ERPs legados, portais governamentais e sistemas bancários como um humano - mas 100x mais rápido.",
     heroStats: [
       { value: "100x", label: "Mais rápido" },
       { value: "0", label: "Erros operacionais" },
@@ -564,9 +564,9 @@ export const agentLandingPages: AgentLandingData[] = [
     solutionTitle: "Computer Use Agent",
     solutionDesc: "IA com visão computacional que opera qualquer interface gráfica como um humano, mas sem erros e 24/7.",
     solutions: [
-      { title: "Visão computacional", description: "Enxerga telas, clica botões, preenche campos — opera qualquer sistema sem API." },
+      { title: "Visão computacional", description: "Enxerga telas, clica botões, preenche campos - opera qualquer sistema sem API." },
       { title: "Adaptação inteligente", description: "Quando a interface muda, o agente se adapta sozinho. Zero manutenção." },
-      { title: "Multi-sistema", description: "Opera SAP, TOTVS, portais gov, bancos online — tudo simultaneamente." },
+      { title: "Multi-sistema", description: "Opera SAP, TOTVS, portais gov, bancos online - tudo simultaneamente." },
     ],
     benefits: [
       { metric: "100x", label: "Mais rápido", description: "que processos manuais" },
@@ -592,7 +592,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { name: "Sandra Moura", role: "Head de TI", company: "Banco Digital", text: "Processos bancários que levavam 3h agora rodam em 2 minutos. Sem erros.", avatar: "SM" },
     ],
     faq: [
-      { question: "Funciona com qualquer sistema?", answer: "Sim. Qualquer sistema com interface gráfica — web, desktop, terminal." },
+      { question: "Funciona com qualquer sistema?", answer: "Sim. Qualquer sistema com interface gráfica - web, desktop, terminal." },
       { question: "E se a tela mudar?", answer: "O agente se adapta automaticamente graças à visão computacional + IA generativa." },
       { question: "É seguro para sistemas bancários?", answer: "Sim. Opera com credenciais criptografadas e logs de auditoria completos." },
       { question: "Pode operar múltiplos sistemas?", answer: "Sim. Opera SAP, TOTVS, portais gov e bancos simultaneamente." },
@@ -721,7 +721,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { question: "Funciona com minha infraestrutura?", answer: "Sim. AWS, Azure, GCP, on-premise e híbrido." },
       { question: "Substitui toda a equipe de security?", answer: "Complementa ou substitui. Ideal para empresas sem SOC ou com equipe reduzida." },
       { question: "E se detectar algo crítico?", answer: "Contém a ameaça automaticamente e notifica imediatamente via Slack, e-mail ou SMS." },
-      { question: "Gera relatórios de compliance?", answer: "Sim. LGPD, SOC2, ISO 27001, PCI-DSS — automaticamente." },
+      { question: "Gera relatórios de compliance?", answer: "Sim. LGPD, SOC2, ISO 27001, PCI-DSS - automaticamente." },
     ],
     ctaHeadline: "Proteja sua empresa como as Fortune 500",
     ctaSubheadline: "SOC com IA por uma fração do custo. 24/7, sem falhas.",
@@ -751,7 +751,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { title: "Turnover alto", description: "Sem people analytics, problemas de retenção são detectados tarde demais." },
     ],
     solutionTitle: "HR & People Agent",
-    solutionDesc: "IA que automatiza todo o ciclo de RH — do recrutamento à retenção.",
+    solutionDesc: "IA que automatiza todo o ciclo de RH - do recrutamento à retenção.",
     solutions: [
       { title: "Recrutamento autônomo", description: "Triagem de CVs, agendamento de entrevistas e scoring de candidatos com IA." },
       { title: "Onboarding inteligente", description: "Programa personalizado por cargo. O agente guia o novo funcionário passo a passo." },
@@ -879,7 +879,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutionTitle: "Data Analytics Agent",
     solutionDesc: "IA que responde qualquer pergunta sobre seus dados em linguagem natural, com visualizações automáticas.",
     solutions: [
-      { title: "Pergunte em português", description: "\"Qual o faturamento do mês?\" — resposta instantânea sem SQL." },
+      { title: "Pergunte em português", description: "\"Qual o faturamento do mês?\" - resposta instantânea sem SQL." },
       { title: "Dashboards automáticos", description: "Gera visualizações e dashboards em segundos, não dias." },
       { title: "Insights preditivos", description: "Identifica padrões, anomalias e tendências antes que você pergunte." },
     ],
@@ -890,7 +890,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { metric: "R$ 10k", label: "Economia/mês", description: "vs. analista de dados CLT" },
     ],
     howItWorks: [
-      { step: "01", title: "Conecte seus dados", description: "BigQuery, PostgreSQL, Google Sheets, APIs — tudo integrado." },
+      { step: "01", title: "Conecte seus dados", description: "BigQuery, PostgreSQL, Google Sheets, APIs - tudo integrado." },
       { step: "02", title: "Pergunte em português", description: "Faça perguntas sobre seus dados em linguagem natural." },
       { step: "03", title: "Receba insights", description: "Gráficos, dashboards e recomendações em segundos." },
     ],
@@ -926,7 +926,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "slate",
     heroHeadline: "Jurídico Corporativo no Piloto Automático",
     heroHighlight: "Piloto Automático",
-    heroSubheadline: "Revisão de contratos, compliance regulatório e gestão jurídica — sem escritório de advocacia.",
+    heroSubheadline: "Revisão de contratos, compliance regulatório e gestão jurídica - sem escritório de advocacia.",
     heroStats: [
       { value: "15min", label: "Revisão de contrato" },
       { value: "-80%", label: "Custo jurídico" },
@@ -936,7 +936,7 @@ export const agentLandingPages: AgentLandingData[] = [
     problems: [
       { title: "Jurídico é caro", description: "Escritórios cobram R$ 500-2.000/hora. Consultorias mensais R$ 15.000+." },
       { title: "Revisão de contratos lenta", description: "Cada contrato leva 5-10 dias para ser revisado. Negócios atrasam." },
-      { title: "Risco de compliance", description: "LGPD, regulações setoriais, trabalhista — são muitas frentes para cobrir." },
+      { title: "Risco de compliance", description: "LGPD, regulações setoriais, trabalhista - são muitas frentes para cobrir." },
       { title: "Cláusulas perigosas passam", description: "Sem revisão detalhada, cláusulas de risco ficam escondidas." },
     ],
     solutionTitle: "Legal & Contract Agent",
@@ -989,7 +989,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "orange",
     heroHeadline: "Seu E-commerce no Piloto Automático",
     heroHighlight: "Piloto Automático",
-    heroSubheadline: "Gestão de catálogo, pricing dinâmico, logística e otimização de conversão — tudo gerenciado por IA.",
+    heroSubheadline: "Gestão de catálogo, pricing dinâmico, logística e otimização de conversão - tudo gerenciado por IA.",
     heroStats: [
       { value: "+40%", label: "Conversão" },
       { value: "+25%", label: "Ticket médio" },
@@ -1016,7 +1016,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { metric: "R$ 15k", label: "Economia/mês", description: "vs. gestores manuais" },
     ],
     howItWorks: [
-      { step: "01", title: "Conecte sua loja", description: "Shopify, Mercado Livre, Amazon, VTEX — integração em minutos." },
+      { step: "01", title: "Conecte sua loja", description: "Shopify, Mercado Livre, Amazon, VTEX - integração em minutos." },
       { step: "02", title: "IA otimiza tudo", description: "Preços, catálogo, logística e conversão no piloto automático." },
       { step: "03", title: "Escale vendas", description: "Dashboard de performance com insights e recomendações diárias." },
     ],
@@ -1061,7 +1061,7 @@ export const agentLandingPages: AgentLandingData[] = [
     ],
     problems: [
       { title: "Escolher influenciadores é um tiro no escuro", description: "Seguidores falsos, engajamento inflado, público errado. Dinheiro jogado fora." },
-      { title: "Gestão de campanhas manual", description: "Briefings, prazos, entregas — gerenciar 20+ influenciadores é caótico." },
+      { title: "Gestão de campanhas manual", description: "Briefings, prazos, entregas - gerenciar 20+ influenciadores é caótico." },
       { title: "ROI imensurável", description: "Não sabe se o investimento em influência realmente traz resultados." },
       { title: "Negociação desgastante", description: "Cada parceria é uma negociação individual. Sem escala, sem padrão." },
     ],
@@ -1069,7 +1069,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutionDesc: "IA que encontra os influenciadores certos, negocia, gerencia e mede ROI real de cada campanha.",
     solutions: [
       { title: "Discovery inteligente", description: "Analisa milhões de perfis e encontra influenciadores com audiência real e relevante." },
-      { title: "Gestão autônoma", description: "Briefings, prazos, aprovações e entregas — tudo gerenciado automaticamente." },
+      { title: "Gestão autônoma", description: "Briefings, prazos, aprovações e entregas - tudo gerenciado automaticamente." },
       { title: "ROI real-time", description: "Tracking de conversão por influenciador. Sabe exatamente quanto cada um gera." },
     ],
     benefits: [
@@ -1159,9 +1159,9 @@ export const agentLandingPages: AgentLandingData[] = [
       { name: "Natália Duarte", role: "Head de Growth", company: "EdTech Plus", text: "Lead scoring preditivo aumentou as vendas em 180%. Vendedores só falam com quem vai comprar.", avatar: "ND" },
     ],
     faq: [
-      { question: "Que tipo de funis cria?", answer: "Lead gen, webinar, trial, e-commerce, B2B enterprise — qualquer modelo." },
+      { question: "Que tipo de funis cria?", answer: "Lead gen, webinar, trial, e-commerce, B2B enterprise - qualquer modelo." },
       { question: "Integra com minhas ferramentas?", answer: "Sim. HubSpot, Mailchimp, ActiveCampaign, RD Station, Google Ads e mais." },
-      { question: "Cria conteúdo para os funis?", answer: "Sim. Landing pages, emails, CTAs e copies — tudo otimizado por IA." },
+      { question: "Cria conteúdo para os funis?", answer: "Sim. Landing pages, emails, CTAs e copies - tudo otimizado por IA." },
       { question: "Funciona para B2B e B2C?", answer: "Sim. Modelos de funil adaptados para cada modelo de negócio." },
     ],
     ctaHeadline: "Funis que vendem enquanto você dorme",
@@ -1196,7 +1196,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutions: [
       { title: "Geração instantânea", description: "Banners, posts, carrosséis e kits visuais em 30 segundos." },
       { title: "Brand consistency", description: "Aprende sua identidade visual e mantém 100% de consistência." },
-      { title: "Multi-formato", description: "Instagram, Facebook, LinkedIn, YouTube, Display — todos os tamanhos automaticamente." },
+      { title: "Multi-formato", description: "Instagram, Facebook, LinkedIn, YouTube, Display - todos os tamanhos automaticamente." },
     ],
     benefits: [
       { metric: "30s", label: "Por peça", description: "vs. 2-5 dias" },
@@ -1206,7 +1206,7 @@ export const agentLandingPages: AgentLandingData[] = [
     ],
     howItWorks: [
       { step: "01", title: "Upload da marca", description: "Logo, cores, fontes e referências visuais." },
-      { step: "02", title: "Descreva a peça", description: "\"Banner de Black Friday para Instagram Stories\" — simples assim." },
+      { step: "02", title: "Descreva a peça", description: "\"Banner de Black Friday para Instagram Stories\" - simples assim." },
       { step: "03", title: "IA cria variações", description: "Receba 5-10 variações em segundos. Escolha, ajuste e publique." },
     ],
     comparison: [
@@ -1252,7 +1252,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { title: "Produção de vídeo é cara", description: "Videomaker + editor = R$ 15.000+/mês. Cada vídeo custa R$ 1.000+." },
       { title: "Demora excessiva", description: "Um Reel simples leva 2-3 dias. Um vídeo institucional, semanas." },
       { title: "Sem escala", description: "Precisa de vídeo diário mas só produz 2-3 por semana." },
-      { title: "Formatos múltiplos", description: "Reels, Shorts, Stories, Landscape — adaptar para cada formato é trabalhoso." },
+      { title: "Formatos múltiplos", description: "Reels, Shorts, Stories, Landscape - adaptar para cada formato é trabalhoso." },
     ],
     solutionTitle: "Video Production Agent",
     solutionDesc: "IA que cria e edita vídeos profissionais para todas as plataformas em minutos.",
@@ -1269,7 +1269,7 @@ export const agentLandingPages: AgentLandingData[] = [
     ],
     howItWorks: [
       { step: "01", title: "Descreva o vídeo", description: "Tema, estilo, duração e plataforma de destino." },
-      { step: "02", title: "IA produz e edita", description: "Script, narração, edição, legendas e música — tudo automático." },
+      { step: "02", title: "IA produz e edita", description: "Script, narração, edição, legendas e música - tudo automático." },
       { step: "03", title: "Revise e publique", description: "Ajuste se quiser e publique direto nas plataformas." },
     ],
     comparison: [
@@ -1304,7 +1304,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "lime",
     heroHeadline: "Tráfego Orgânico 10x Sem Pagar por Clique",
     heroHighlight: "10x",
-    heroSubheadline: "Auditoria SEO, pesquisa de keywords, otimização on-page e link building — tudo automatizado por IA.",
+    heroSubheadline: "Auditoria SEO, pesquisa de keywords, otimização on-page e link building - tudo automatizado por IA.",
     heroStats: [
       { value: "10x", label: "Tráfego orgânico" },
       { value: "R$ 0", label: "Custo por clique" },
@@ -1322,7 +1322,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutions: [
       { title: "Auditoria técnica completa", description: "Analisa 200+ fatores de SEO técnico e corrige automaticamente." },
       { title: "Keyword research IA", description: "Encontra keywords de alto volume e baixa concorrência com IA." },
-      { title: "Otimização contínua", description: "On-page, off-page, link building e conteúdo — otimização 24/7." },
+      { title: "Otimização contínua", description: "On-page, off-page, link building e conteúdo - otimização 24/7." },
     ],
     benefits: [
       { metric: "10x", label: "Tráfego", description: "Orgânico em 6 meses" },
@@ -1430,7 +1430,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "amber",
     heroHeadline: "Supply Chain Inteligente com IA",
     heroHighlight: "Inteligente",
-    heroSubheadline: "Previsão de demanda, otimização de estoque, gestão de fornecedores e rotas — tudo automatizado.",
+    heroSubheadline: "Previsão de demanda, otimização de estoque, gestão de fornecedores e rotas - tudo automatizado.",
     heroStats: [
       { value: "-35%", label: "Custos logísticos" },
       { value: "0", label: "Rupturas de estoque" },
@@ -1444,7 +1444,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { title: "Gestão de fornecedores manual", description: "Compras reativas. Sem análise de performance de fornecedores." },
     ],
     solutionTitle: "Supply Chain Agent",
-    solutionDesc: "IA que otimiza toda a cadeia de suprimentos — da previsão de demanda à entrega final.",
+    solutionDesc: "IA que otimiza toda a cadeia de suprimentos - da previsão de demanda à entrega final.",
     solutions: [
       { title: "Previsão de demanda IA", description: "Prevê demanda por SKU com 99% de precisão usando machine learning." },
       { title: "Otimização de estoque", description: "Estoque ideal por produto. Zero ruptura, zero excesso." },
@@ -1458,7 +1458,7 @@ export const agentLandingPages: AgentLandingData[] = [
     ],
     howItWorks: [
       { step: "01", title: "Conecte seus sistemas", description: "ERP, WMS, TMS e dados de vendas." },
-      { step: "02", title: "IA otimiza a cadeia", description: "Previsão, estoque, compras e rotas — tudo automatizado." },
+      { step: "02", title: "IA otimiza a cadeia", description: "Previsão, estoque, compras e rotas - tudo automatizado." },
       { step: "03", title: "Monitore e economize", description: "Dashboard de supply chain com métricas e economia em tempo real." },
     ],
     comparison: [
@@ -1537,7 +1537,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { name: "Camila Nunes", role: "CHRO", company: "RetailGroup", text: "Onboarding que levava 3 meses agora leva 3 semanas com trilhas personalizadas.", avatar: "CN" },
     ],
     faq: [
-      { question: "Cria conteúdo automaticamente?", answer: "Sim. Módulos, quizzes, simulações e materiais — tudo gerado por IA." },
+      { question: "Cria conteúdo automaticamente?", answer: "Sim. Módulos, quizzes, simulações e materiais - tudo gerado por IA." },
       { question: "Funciona como LMS?", answer: "Sim. LMS completo com gestão de alunos, trilhas, certificados e analytics." },
       { question: "Suporta gamificação?", answer: "Sim. Pontos, badges, rankings, desafios e recompensas configuráveis." },
       { question: "Integra com RH?", answer: "Sim. Performance reviews, people analytics e planos de desenvolvimento." },
@@ -1557,7 +1557,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "rose",
     heroHeadline: "Seu Assistente Pessoal de IA que Antecipa Suas Necessidades",
     heroHighlight: "Antecipa Suas Necessidades",
-    heroSubheadline: "Um concierge digital de elite que gerencia sua agenda, organiza prioridades, filtra ruídos e executa tarefas do dia a dia — para que você foque apenas no que importa.",
+    heroSubheadline: "Um concierge digital de elite que gerencia sua agenda, organiza prioridades, filtra ruídos e executa tarefas do dia a dia - para que você foque apenas no que importa.",
     heroStats: [
       { value: "4h", label: "Recuperadas/dia" },
       { value: "24/7", label: "Sempre disponível" },
@@ -1567,7 +1567,7 @@ export const agentLandingPages: AgentLandingData[] = [
     problems: [
       { title: "Agenda caótica e sobrecarregada", description: "Reuniões se sobrepõem, compromissos se perdem, e-mails urgentes ficam sem resposta. Você vive apagando incêndios." },
       { title: "Tempo desperdiçado em operacional", description: "Reservar voos, agendar reuniões, organizar documentos. Tarefas que não geram receita consomem 40% do seu dia." },
-      { title: "Informações espalhadas em 15 apps", description: "Slack, WhatsApp, e-mail, CRM, calendário — nada conversa com nada e você perde contexto o tempo todo." },
+      { title: "Informações espalhadas em 15 apps", description: "Slack, WhatsApp, e-mail, CRM, calendário - nada conversa com nada e você perde contexto o tempo todo." },
       { title: "Nenhum assistente humano é 24/7", description: "Seu assistente vai embora às 18h. Aquele e-mail que chegou às 22h? Só será visto amanhã. Oportunidade perdida." },
     ],
     solutionTitle: "Concierge AI Agent",
@@ -1575,7 +1575,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutions: [
       { title: "Gestão inteligente de agenda", description: "Prioriza reuniões, resolve conflitos de horário, prepara briefings e envia lembretes contextuais automáticos." },
       { title: "Triagem e resposta de comunicações", description: "Filtra e-mails, classifica urgências, redige respostas e escala apenas o que realmente precisa da sua atenção." },
-      { title: "Execução autônoma de tarefas", description: "Reserva viagens, organiza documentos, agenda compromissos, pesquisa informações — tudo sem você pedir duas vezes." },
+      { title: "Execução autônoma de tarefas", description: "Reserva viagens, organiza documentos, agenda compromissos, pesquisa informações - tudo sem você pedir duas vezes." },
     ],
     benefits: [
       { metric: "4h/dia", label: "Tempo recuperado", description: "Horas que voltam para decisões estratégicas" },
@@ -1622,7 +1622,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "amber",
     heroHeadline: "Um CEO de IA que Toma Decisões Estratégicas Por Você",
     heroHighlight: "Decisões Estratégicas",
-    heroSubheadline: "Inteligência artificial de nível C-Suite que analisa cenários, prevê riscos, otimiza operações e toma decisões baseadas em dados — como um CEO incansável que nunca erra de cálculo.",
+    heroSubheadline: "Inteligência artificial de nível C-Suite que analisa cenários, prevê riscos, otimiza operações e toma decisões baseadas em dados - como um CEO incansável que nunca erra de cálculo.",
     heroStats: [
       { value: "3x", label: "Melhor tomada de decisão" },
       { value: "85%", label: "Riscos antecipados" },
@@ -1632,7 +1632,7 @@ export const agentLandingPages: AgentLandingData[] = [
     problems: [
       { title: "Decisões baseadas em gut feeling", description: "80% dos CEOs tomam decisões com dados incompletos ou desatualizados. Instinto não escala." },
       { title: "Visão fragmentada do negócio", description: "Dados espalhados em 20 ferramentas. Nenhum dashboard mostra o quadro completo em tempo real." },
-      { title: "Riscos invisíveis até explodirem", description: "Problemas de caixa, churn crescente, ineficiências operacionais — você só descobre quando já é tarde." },
+      { title: "Riscos invisíveis até explodirem", description: "Problemas de caixa, churn crescente, ineficiências operacionais - você só descobre quando já é tarde." },
       { title: "Sobrecarga de decisões diárias", description: "Decision fatigue é real. Depois da 50ª decisão do dia, a qualidade despenca. Seu cérebro não foi feito para isso." },
     ],
     solutionTitle: "CEO AI Agent",
@@ -1649,7 +1649,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { metric: "10min", label: "Board report", description: "Relatórios executivos automatizados" },
     ],
     howItWorks: [
-      { step: "01", title: "Conecte suas fontes de dados", description: "ERP, CRM, financeiro, RH, marketing — o CEO IA integra tudo e constrói uma visão unificada." },
+      { step: "01", title: "Conecte suas fontes de dados", description: "ERP, CRM, financeiro, RH, marketing - o CEO IA integra tudo e constrói uma visão unificada." },
       { step: "02", title: "IA analisa e simula cenários", description: "Modelos preditivos rodam 24/7, cruzando variáveis internas e externas para antecipar tendências." },
       { step: "03", title: "Receba recomendações executivas", description: "Decisões estratégicas com dados, projeções de impacto e planos de ação prontos para implementar." },
     ],
@@ -1666,7 +1666,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { name: "Fernanda Reis", role: "COO", company: "RetailFuture", text: "Nossas reuniões de board mudaram completamente. Dados em tempo real, cenários simulados, decisões em minutos.", avatar: "FR" },
     ],
     faq: [
-      { question: "Ele realmente 'toma' decisões?", answer: "Ele recomenda com dados e projeções. A decisão final é sua — mas agora embasada em análise profunda, não achismo." },
+      { question: "Ele realmente 'toma' decisões?", answer: "Ele recomenda com dados e projeções. A decisão final é sua - mas agora embasada em análise profunda, não achismo." },
       { question: "Preciso de muitos dados históricos?", answer: "Quanto mais dados, melhor. Mas ele começa a gerar valor com 3-6 meses de histórico." },
       { question: "Funciona para empresas pequenas?", answer: "Sim. Na verdade, PMEs se beneficiam ainda mais porque raramente têm acesso a análise estratégica de qualidade." },
       { question: "É seguro com dados financeiros?", answer: "Criptografia enterprise, compliance SOC2 e LGPD. Seus dados nunca saem do ambiente seguro." },
@@ -1687,7 +1687,7 @@ export const agentLandingPages: AgentLandingData[] = [
     accentColor: "violet",
     heroHeadline: "Transforme Sua Ideia em uma Startup de Sucesso com IA",
     heroHighlight: "Startup de Sucesso",
-    heroSubheadline: "Da validação da ideia ao product-market fit, este agente é o co-fundador técnico que todo empreendedor precisa — sem diluir equity, sem burnout, sem achismo.",
+    heroSubheadline: "Da validação da ideia ao product-market fit, este agente é o co-fundador técnico que todo empreendedor precisa - sem diluir equity, sem burnout, sem achismo.",
     heroStats: [
       { value: "10x", label: "Mais rápido ao MVP" },
       { value: "90%", label: "Menos risco" },
@@ -1695,7 +1695,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { value: "500+", label: "Startups lançadas" },
     ],
     problems: [
-      { title: "Ideia boa, execução travada", description: "Você tem a visão mas não sabe por onde começar. Business plan, MVP, pitch deck — tudo parece uma montanha." },
+      { title: "Ideia boa, execução travada", description: "Você tem a visão mas não sabe por onde começar. Business plan, MVP, pitch deck - tudo parece uma montanha." },
       { title: "Co-founder técnico impossível de achar", description: "Você precisa de alguém que construa, mas encontrar um CTO alinhado leva meses e custa equity preciosa." },
       { title: "Validação demorada e cara", description: "Pesquisa de mercado, entrevistas com clientes, protótipos. Meses de trabalho antes de saber se a ideia funciona." },
       { title: "Capital inicial queimado errado", description: "92% das startups falham. A maioria porque gastou dinheiro construindo o produto errado para o público errado." },
@@ -1703,7 +1703,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutionTitle: "Startup Creator Agent",
     solutionDesc: "Um co-fundador de IA que valida sua ideia, cria o business plan, constrói o MVP, prepara o pitch deck e te guia até o product-market fit.",
     solutions: [
-      { title: "Validação instantânea de mercado", description: "Analisa TAM/SAM/SOM, pesquisa concorrentes, identifica gaps e valida demanda real em minutos — não meses." },
+      { title: "Validação instantânea de mercado", description: "Analisa TAM/SAM/SOM, pesquisa concorrentes, identifica gaps e valida demanda real em minutos - não meses." },
       { title: "Business plan + pitch deck com IA", description: "Gera documentos profissionais prontos para investidores, com projeções financeiras e unit economics calibrados." },
       { title: "MVP blueprint e roadmap", description: "Cria a arquitetura técnica, define features do MVP, estima custos e cria um roadmap realista de 90 dias." },
     ],
@@ -1715,7 +1715,7 @@ export const agentLandingPages: AgentLandingData[] = [
     ],
     howItWorks: [
       { step: "01", title: "Descreva sua ideia", description: "Conte sua visão em linguagem natural. O agente faz perguntas estratégicas para entender profundamente." },
-      { step: "02", title: "IA valida e estrutura", description: "Análise de mercado, concorrência, persona, unit economics e viabilidade técnica — tudo automatizado." },
+      { step: "02", title: "IA valida e estrutura", description: "Análise de mercado, concorrência, persona, unit economics e viabilidade técnica - tudo automatizado." },
       { step: "03", title: "Receba o pacote completo", description: "Business plan, pitch deck, MVP blueprint, roadmap, projeção financeira e go-to-market strategy." },
     ],
     comparison: [
@@ -1734,7 +1734,7 @@ export const agentLandingPages: AgentLandingData[] = [
     faq: [
       { question: "Preciso ter experiência com startups?", answer: "Não. O agente te guia passo a passo, desde a validação da ideia até o go-to-market. Feito para first-time founders." },
       { question: "Ele constrói o produto?", answer: "Ele cria o blueprint técnico completo e o roadmap do MVP. Para construir, use nosso Coding Agent em conjunto." },
-      { question: "Funciona para qualquer tipo de startup?", answer: "Sim. SaaS, marketplace, fintech, healthtech, edtech — qualquer vertical. Ele adapta a metodologia ao seu mercado." },
+      { question: "Funciona para qualquer tipo de startup?", answer: "Sim. SaaS, marketplace, fintech, healthtech, edtech - qualquer vertical. Ele adapta a metodologia ao seu mercado." },
       { question: "O pitch deck é profissional?", answer: "Sim. Segue frameworks usados por Y Combinator, 500 Startups e Sequoia. Pronto para investidores." },
       { question: "Posso iterar depois de receber o plano?", answer: "Sim. O agente é iterativo. Pivotou a ideia? Ele atualiza tudo: plano, projeções, roadmap." },
     ],
@@ -1835,7 +1835,7 @@ export const agentLandingPages: AgentLandingData[] = [
     solutions: [
       { title: "Roteiro inteligente de live", description: "Cria roteiros com gatilhos de urgência, prova social e CTAs otimizados por minuto." },
       { title: "Dashboard de live commerce", description: "Métricas em tempo real: viewers, engajamento, carrinho, conversão e revenue." },
-      { title: "Gestão de influencers 360°", description: "Recrutamento, briefing, contrato, entrega e medição de ROI — tudo automatizado." },
+      { title: "Gestão de influencers 360°", description: "Recrutamento, briefing, contrato, entrega e medição de ROI - tudo automatizado." },
     ],
     benefits: [
       { metric: "3x", label: "Vendas em live", description: "Com roteiros e gatilhos otimizados" },
@@ -2031,7 +2031,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { metric: "R$ 10k", label: "Economia", description: "vs. CM + moderadores CLT" },
     ],
     howItWorks: [
-      { step: "01", title: "Conecte sua comunidade", description: "Discord, Telegram, Slack ou Circle — integra em minutos." },
+      { step: "01", title: "Conecte sua comunidade", description: "Discord, Telegram, Slack ou Circle - integra em minutos." },
       { step: "02", title: "Defina as regras", description: "O agente aprende suas guidelines e tom de voz da marca." },
       { step: "03", title: "Moderação + growth", description: "Modera, engaja e gera relatórios de saúde da comunidade." },
     ],
@@ -2116,7 +2116,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { question: "E trocas/devoluções?", answer: "O agente gerencia todo o pós-venda: rastreamento, trocas e devoluções." },
     ],
     ctaHeadline: "O WhatsApp é sua maior loja. Trate como tal.",
-    ctaSubheadline: "IA que transforma cada conversa em venda — do catálogo ao PIX.",
+    ctaSubheadline: "IA que transforma cada conversa em venda - do catálogo ao PIX.",
     ctaButton: "Contratar WhatsApp Commerce",
     tier: "advanced",
     priceTier: "mid",
@@ -2269,7 +2269,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { title: "Reviews negativos sem resposta", description: "Cada avaliação negativa sem resposta afasta 22% dos potenciais clientes." },
       { title: "Crises viralizam", description: "Reclamações em redes sociais ganham tração antes de serem detectadas." },
       { title: "Sem solicitação de reviews", description: "Clientes satisfeitos não avaliam espontaneamente. Apenas insatisfeitos." },
-      { title: "Monitoramento impossível", description: "Google, Reclame Aqui, Instagram, Twitter, Facebook — impossível cobrir tudo manualmente." },
+      { title: "Monitoramento impossível", description: "Google, Reclame Aqui, Instagram, Twitter, Facebook - impossível cobrir tudo manualmente." },
     ],
     solutionTitle: "Reputation Manager Agent",
     solutionDesc: "IA que protege e fortalece sua reputação digital em todas as plataformas.",
@@ -2285,7 +2285,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { metric: "R$ 15k", label: "Economia", description: "vs. analista de reputação" },
     ],
     howItWorks: [
-      { step: "01", title: "Conecte suas contas", description: "Google Business, Reclame Aqui, redes sociais — integra em minutos." },
+      { step: "01", title: "Conecte suas contas", description: "Google Business, Reclame Aqui, redes sociais - integra em minutos." },
       { step: "02", title: "IA monitora e responde", description: "Classifica menções, responde automaticamente e escala urgências." },
       { step: "03", title: "Solicite e cresça", description: "Fluxo automático de solicitação de reviews para clientes satisfeitos." },
     ],
@@ -2348,7 +2348,7 @@ export const agentLandingPages: AgentLandingData[] = [
     ],
     howItWorks: [
       { step: "01", title: "Colete o briefing", description: "O agente faz perguntas-chave sobre o cliente e necessidades." },
-      { step: "02", title: "IA gera a proposta", description: "PDF profissional com pricing, ROI e termos — pronto em minutos." },
+      { step: "02", title: "IA gera a proposta", description: "PDF profissional com pricing, ROI e termos - pronto em minutos." },
       { step: "03", title: "Envie, track e feche", description: "Tracking de abertura, follow-up automático e assinatura digital." },
     ],
     comparison: [
@@ -2364,8 +2364,8 @@ export const agentLandingPages: AgentLandingData[] = [
     ],
     faq: [
       { question: "Posso customizar o template?", answer: "Sim. Upload sua logo, cores e fontes. O agente segue sua identidade visual." },
-      { question: "Integra com CRM?", answer: "Sim. HubSpot, Salesforce, Pipedrive — puxa dados do lead automaticamente." },
-      { question: "A assinatura digital tem validade jurídica?", answer: "Sim, via integração com DocuSign ou PandaDoc — validade legal ICP-Brasil." },
+      { question: "Integra com CRM?", answer: "Sim. HubSpot, Salesforce, Pipedrive - puxa dados do lead automaticamente." },
+      { question: "A assinatura digital tem validade jurídica?", answer: "Sim, via integração com DocuSign ou PandaDoc - validade legal ICP-Brasil." },
       { question: "Gera propostas em inglês?", answer: "Sim. Suporta português, inglês, espanhol e mais idiomas." },
     ],
     ctaHeadline: "Propostas que vendem enquanto você dorme",
@@ -2489,7 +2489,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { question: "Posso aprovar antes de publicar?", answer: "Sim, você pode configurar fluxo de aprovação manual ou automático." },
     ],
     ctaHeadline: "Conteúdo estratégico em escala",
-    ctaSubheadline: "Planejamento, criação e distribuição — tudo automatizado.",
+    ctaSubheadline: "Planejamento, criação e distribuição - tudo automatizado.",
     ctaButton: "Contratar Content Producer",
     tier: "intermediate",
     priceTier: "mid",
@@ -2665,7 +2665,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { name: "André Costa", role: "Gerente de Suporte", company: "HelpMax", text: "A IA detecta problemas antes de virarem crises. Nosso SLA nunca esteve tão alto.", avatar: "" },
     ],
     faq: [
-      { question: "Substitui o gerente de suporte?", answer: "Complementa — automatiza monitoramento e libera o gestor para decisões estratégicas." },
+      { question: "Substitui o gerente de suporte?", answer: "Complementa - automatiza monitoramento e libera o gestor para decisões estratégicas." },
       { question: "Integra com qual helpdesk?", answer: "Zendesk, Freshdesk, Intercom, Hubspot Service Hub e outros." },
     ],
     ctaHeadline: "Supervisão de suporte 24/7 com IA",
@@ -2725,7 +2725,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { name: "Mariana Santos", role: "Diretora de CX", company: "CallPro", text: "Eliminamos filas de espera. Clientes não acreditam que é IA.", avatar: "" },
     ],
     faq: [
-      { question: "A voz parece robótica?", answer: "Não — usamos síntese de voz de última geração, indistinguível de humano." },
+      { question: "A voz parece robótica?", answer: "Não - usamos síntese de voz de última geração, indistinguível de humano." },
       { question: "Integra com qual telefonia?", answer: "Twilio, Vonage, PABX IP e principais operadoras." },
     ],
     ctaHeadline: "Suporte telefônico sem filas, sem limites",
@@ -2785,7 +2785,7 @@ export const agentLandingPages: AgentLandingData[] = [
       { name: "Patricia Oliveira", role: "CHRO", company: "PeopleFirst", text: "Previmos e evitamos a saída de 12 talentos-chave no último trimestre. ROI absurdo.", avatar: "" },
     ],
     faq: [
-      { question: "Preciso de muitos dados para começar?", answer: "Não — funciona com dados básicos de RH e melhora conforme mais dados são integrados." },
+      { question: "Preciso de muitos dados para começar?", answer: "Não - funciona com dados básicos de RH e melhora conforme mais dados são integrados." },
       { question: "É compatível com LGPD?", answer: "Sim, totalmente compliance com LGPD e anonimização de dados sensíveis." },
     ],
     ctaHeadline: "RH estratégico com inteligência de dados",
@@ -3745,7 +3745,7 @@ export const agentLandingPages: AgentLandingData[] = [
   {
     slug: "onboarding_specialist", icon: UserCheck, accentColor: "emerald",
     heroHeadline: "Onboarding que Ativa Clientes", heroHighlight: "Ativa",
-    heroSubheadline: "Do primeiro login ao primeiro valor — automaticamente.",
+    heroSubheadline: "Do primeiro login ao primeiro valor - automaticamente.",
     heroStats: [{ value: "3x", label: "Time-to-Value" }, { value: "60%", label: "Menos churn D30" }, { value: "24/7", label: "Suporte" }],
     problems: [{ title: "Ativação baixa", description: "Clientes não usam o produto." }, { title: "Churn precoce", description: "Desistem antes de ver valor." }],
     solutionTitle: "Onboarding Specialist Agent", solutionDesc: "Onboarding autônomo com IA.",
@@ -3772,16 +3772,16 @@ export const agentLandingPages: AgentLandingData[] = [
       { value: "R$ 997", label: "/mês" },
     ],
     problems: [
-      { title: "Prospecção manual consome horas", description: "Buscar perfis, escrever mensagens, enviar convites — 3-4 horas por dia que poderiam ser investidas em fechar negócios." },
+      { title: "Prospecção manual consome horas", description: "Buscar perfis, escrever mensagens, enviar convites - 3-4 horas por dia que poderiam ser investidas em fechar negócios." },
       { title: "Mensagens genéricas não convertem", description: "Copy-paste de mensagens iguais para todos resulta em taxa de aceitação abaixo de 10%." },
       { title: "Sem consistência", description: "Prospecção depende da disciplina do vendedor. Férias, doença ou desmotivação param o pipeline." },
       { title: "Ferramentas caras e complexas", description: "Sales Navigator + Outreach + Enrichment = R$ 3.000+/mês e semanas de setup." },
     ],
-    solutionTitle: "Hunter — Prospecção LinkedIn com IA",
+    solutionTitle: "Hunter - Prospecção LinkedIn com IA",
     solutionDesc: "Agente de IA que automatiza todo o ciclo de prospecção no LinkedIn: busca, personalização e envio de convites.",
     solutions: [
       { title: "Busca inteligente de leads", description: "Descreva seu público ideal em português e o Hunter encontra os perfis certos no LinkedIn automaticamente." },
-      { title: "Icebreakers com IA", description: "Cada mensagem é personalizada usando IA — nome, cargo, empresa e contexto. Taxa de aceitação 3x maior." },
+      { title: "Icebreakers com IA", description: "Cada mensagem é personalizada usando IA - nome, cargo, empresa e contexto. Taxa de aceitação 3x maior." },
       { title: "Envio automático", description: "Convites e follow-ups são enviados no seu ritmo. Limite diário configurável para segurança da sua conta." },
     ],
     benefits: [
@@ -3811,7 +3811,7 @@ export const agentLandingPages: AgentLandingData[] = [
     ],
     ctaHeadline: "Pipeline cheio, todo dia",
     ctaSubheadline: "Ative o Hunter e pare de prospectar manualmente.",
-    ctaButton: "Começar Agora — R$ 997/mês",
+    ctaButton: "Começar Agora - R$ 997/mês",
     tier: "advanced",
     priceTier: "professional",
     tags: ["LinkedIn", "Prospecção", "IA", "Vendas", "PhantomBuster"],

@@ -60,7 +60,7 @@ export default function PaymentHistoryTable() {
   };
 
   const formatCurrency = (cents: number, currency: string) => {
-    if (cents === 0) return "—";
+    if (cents === 0) return "-";
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: currency || "USD",

@@ -198,8 +198,8 @@ async function callOpenClaw(body: Record<string, any>): Promise<Response> {
 
   const cb = circuitBreaker("ai-openclaw", 3, 300_000); // 5min cooldown
   if (cb.isOpen) {
-    // Don't throw — return a signal so the router silently skips to fallback
-    throw new Error("OpenClaw circuit breaker OPEN — skipping");
+    // Don't throw - return a signal so the router silently skips to fallback
+    throw new Error("OpenClaw circuit breaker OPEN - skipping");
   }
 
   try {
@@ -224,7 +224,7 @@ async function callOpenClaw(body: Record<string, any>): Promise<Response> {
 }
 
 /**
- * Main entry point — smart routing with mutual fallback.
+ * Main entry point - smart routing with mutual fallback.
  */
 export async function fetchAI(
   body: Record<string, any>,
@@ -274,7 +274,7 @@ export async function fetchAI(
       }
       console.warn(`[AI Router] OpenClaw returned ${response.status}, falling back to Lovable`);
     } catch (e) {
-      // Silent fallback — OpenClaw is down, just use Lovable
+      // Silent fallback - OpenClaw is down, just use Lovable
       console.warn("[AI Router] OpenClaw unavailable, using Lovable");
     }
 

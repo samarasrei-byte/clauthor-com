@@ -19,7 +19,7 @@ import {
   getDefaultSocialProof
 } from "./agentLibraryBridge";
 
-// Agent keys — ALL 200 agents from workforce architecture
+// Agent keys - ALL 200 agents from workforce architecture
 export const agentKeys = ALL_AGENT_SLUGS as readonly string[];
 
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo", "hunter_linkedin"] as const;
