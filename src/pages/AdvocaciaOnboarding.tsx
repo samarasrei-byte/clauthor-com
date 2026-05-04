@@ -180,6 +180,12 @@ export default function AdvocaciaOnboarding() {
         )}
 
         {saving && <p className="text-xs text-center text-muted-foreground">Salvando...</p>}
+
+        <div className="text-center pt-4">
+          <Link to="/advocacia/auditoria" className="text-xs text-muted-foreground hover:text-foreground underline underline-offset-4">
+            Abrir auditoria de ativação →
+          </Link>
+        </div>
       </main>
     </div>
   );
