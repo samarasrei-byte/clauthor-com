@@ -863,6 +863,31 @@ export const WORKFORCE: WorkforceDepartment[] = [
       },
     ],
   },
+
+  // ═══════════════════════════════════════════
+  // 16. ADVOCACIA - Squad Jurídica para Escritórios
+  // ═══════════════════════════════════════════
+  {
+    id: "advocacia",
+    name: "Advocacia",
+    color: "text-primary",
+    squads: [
+      {
+        id: "captacao_juridica_squad",
+        name: "Squad de Captação & Atendimento Jurídico",
+        mission: "Transformar o escritório em uma operação previsível de captação, conversão e execução jurídica — com ética OAB",
+        agents: [
+          { slug: "captacao_juridica", name: "Especialista em Captação Jurídica", responsibilities: ["Captação de leads via WhatsApp e landing pages", "Qualificação inicial do caso", "Agendamento de atendimento com o advogado"], triggers: ["lead_recebido", "form_preenchido", "mensagem_whatsapp"] },
+          { slug: "diagnostico_juridico", name: "Consultor de Diagnóstico Jurídico", responsibilities: ["Pré-atendimento estruturado", "Identificação da área do direito", "Educação do cliente sobre o processo"], triggers: ["lead_qualificado", "atendimento_iniciado"] },
+          { slug: "risco_contratual", name: "Analista de Risco Contratual", responsibilities: ["Leitura e análise de contratos", "Identificação de cláusulas críticas", "Relatório de riscos para o advogado revisar"], triggers: ["documento_enviado", "contrato_recebido"] },
+          { slug: "fechamento_juridico", name: "Especialista em Fechamento Jurídico", responsibilities: ["Geração de propostas personalizadas", "Apresentação de honorários", "Condução do lead até a contratação"], triggers: ["diagnostico_concluido", "proposta_solicitada"] },
+          { slug: "recuperacao_leads_juridico", name: "Gestor de Recuperação de Leads", responsibilities: ["Follow-ups automáticos e humanizados", "Reativação de leads frios", "Reagendamentos"], triggers: ["lead_inativo_72h", "proposta_sem_resposta", "no_show"] },
+          { slug: "producao_juridica", name: "Assistente de Produção Jurídica", responsibilities: ["Apoio na elaboração de minutas e peças", "Organização de documentos do caso", "Pesquisa de jurisprudência (validação humana obrigatória)"], triggers: ["peca_solicitada", "caso_aberto"] },
+        ],
+        outcomes: ["+40% novos clientes captados", "Conversão de leads +25%", "Atendimento 24/7 com triagem inteligente", "Tempo operacional do advogado -50%"],
+      },
+    ],
+  },
 ];
 
 // ─── Computed totals ───
