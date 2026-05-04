@@ -141,6 +141,8 @@ const plans: Array<{
       label: "Squad Jurídica — Start",
       slugs: ["captacao_juridica", "diagnostico_juridico"],
       departmentId: "advocacia",
+      monthlyOverride: 49700,
+      setupFee: 199700,
     },
   },
   {
@@ -163,6 +165,8 @@ const plans: Array<{
       label: "Squad Jurídica — Growth",
       slugs: ["captacao_juridica", "diagnostico_juridico", "fechamento_juridico", "recuperacao_leads_juridico"],
       departmentId: "advocacia",
+      monthlyOverride: 99700,
+      setupFee: 399700,
     },
   },
   {
