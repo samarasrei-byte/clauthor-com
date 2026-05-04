@@ -68,6 +68,7 @@ const HunterInbox = lazyRetry(() => import("./pages/HunterInbox"));
 const AgentWorkspace = lazyRetry(() => import("./pages/AgentWorkspace"));
 const Advocacia = lazyRetry(() => import("./pages/Advocacia"));
 const AdvocaciaOnboarding = lazyRetry(() => import("./pages/AdvocaciaOnboarding"));
+const AdvocaciaAudit = lazyRetry(() => import("./pages/AdvocaciaAudit"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -103,6 +104,7 @@ const App = () => (
                 <Route path="/onboarding" element={<ThorOnboarding />} />
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/advocacia/onboarding" element={<ProtectedRoute><AdvocaciaOnboarding /></ProtectedRoute>} />
+                <Route path="/advocacia/auditoria" element={<ProtectedRoute><AdvocaciaAudit /></ProtectedRoute>} />
 
                 {/* Public pages with full navbar */}
                 <Route element={<AppLayout />}>

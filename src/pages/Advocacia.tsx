@@ -163,7 +163,7 @@ const plans: Array<{
     intent: {
       type: "squad",
       label: "Squad Jurídica — Growth",
-      slugs: ["captacao_juridica", "diagnostico_juridico", "fechamento_juridico", "recuperacao_leads_juridico"],
+      slugs: ["captacao_juridica", "diagnostico_juridico", "fechamento_juridico", "recuperacao_leads_juridico", "risco_contratual", "producao_juridica"],
       departmentId: "advocacia",
       monthlyOverride: 99700,
       setupFee: 399700,
