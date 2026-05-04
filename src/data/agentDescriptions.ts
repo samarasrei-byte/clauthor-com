@@ -46,10 +46,10 @@ const DEPT_CATEGORY: Record<string, string> = {
 
 // ─── Outcome patterns per department ───
 const DEPT_OUTCOMES: Record<string, { outcome: string; impact: "low" | "medium" | "high" }> = {
-  marketing: { outcome: "+20–40% em engajamento e leads", impact: "high" },
-  growth: { outcome: "+15–30% em crescimento de receita", impact: "high" },
+  marketing: { outcome: "+20-40% em engajamento e leads", impact: "high" },
+  growth: { outcome: "+15-30% em crescimento de receita", impact: "high" },
   product: { outcome: "Ciclo de entrega 2x mais rápido", impact: "high" },
-  sales: { outcome: "+10–25% em taxa de conversão", impact: "high" },
+  sales: { outcome: "+10-25% em taxa de conversão", impact: "high" },
   customer_success: { outcome: "-30% em churn e +NPS", impact: "medium" },
   finance: { outcome: "Economia de 15h/semana em processos", impact: "medium" },
   operations: { outcome: "+40% em eficiência operacional", impact: "high" },

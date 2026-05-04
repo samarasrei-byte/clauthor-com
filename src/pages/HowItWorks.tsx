@@ -86,7 +86,7 @@ const HowItWorks = () => {
 
   const comparisonRows = [
     { label: "Tempo de setup", agent: "5 min", dept: "10 min", team: "15 min" },
-    { label: "Nº de agentes", agent: "1", dept: "3–8", team: "Você escolhe" },
+    { label: "Nº de agentes", agent: "1", dept: "3-8", team: "Você escolhe" },
     { label: "Pré-configurado", agent: "✓", dept: "✓✓✓", team: "-" },
     { label: "Colaboração entre agentes", agent: "-", dept: "✓", team: "✓" },
     { label: "Flexibilidade", agent: "Média", dept: "Baixa", team: "Máxima" },
