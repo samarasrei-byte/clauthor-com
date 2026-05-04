@@ -16,6 +16,7 @@ const REQUIRED_SLUGS = [
   "fechamento_juridico",
   "recuperacao_leads_juridico",
   "producao_juridica",
+  "compliance_lgpd_juridico",
 ] as const;
 
 type CheckStatus = "ok" | "warn" | "fail" | "loading";
