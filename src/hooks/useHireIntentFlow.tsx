@@ -96,7 +96,7 @@ export function useHireIntentFlow(user: any) {
   return { checkoutSummary, handleApprove, cancelCheckout };
 }
 
-async function createPayPalPlan(agentSlug: string, agentName: string, amount: number, currency: string): Promise<string | undefined> {
+async function createPayPalPlan(agentSlug: string, agentName: string, amount: number, currency: string, setupFee: number = 0): Promise<string | undefined> {
   try {
     const { data, error } = await supabase.functions.invoke("paypal-checkout", {
       body: {
@@ -105,6 +105,7 @@ async function createPayPalPlan(agentSlug: string, agentName: string, amount: nu
         agent_name: agentName,
         amount,
         currency,
+        setup_fee: setupFee > 0 ? setupFee / 100 : 0,
         return_url: `${window.location.origin}/dashboard?subscription=success`,
         cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
       },
