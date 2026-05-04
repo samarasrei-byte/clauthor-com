@@ -142,19 +142,20 @@ serve(async (req) => {
     }
 
     if (action === "create_subscription") {
-      const { agent_slug, agent_name, amount, currency, return_url, cancel_url } = body;
+      const { agent_slug, agent_name, amount, currency, return_url, cancel_url, setup_fee } = body;
       
       if (!agent_slug || !amount || amount <= 0) {
         throw new Error("agent_slug and amount are required");
       }
 
       const cur = currency || "BRL";
+      const setupFeeAmount = typeof setup_fee === "number" && setup_fee > 0 ? setup_fee : 0;
 
       // 1. Find or create product
       const productId = await findOrCreateProduct(accessToken, agent_slug, agent_name || agent_slug);
 
-      // 2. Find or create plan
-      const planId = await findOrCreatePlan(accessToken, productId, agent_slug, amount, cur);
+      // 2. Find or create plan (with optional one-time setup fee charged at first billing)
+      const planId = await findOrCreatePlan(accessToken, productId, agent_slug, amount, cur, setupFeeAmount);
 
       // 3. Create subscription
       const subRes = await fetch(`${PAYPAL_BASE}/v1/billing/subscriptions`, {
