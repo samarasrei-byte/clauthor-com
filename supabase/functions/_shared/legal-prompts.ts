@@ -330,10 +330,60 @@ FORMATAÇÃO:
 ${OAB_DISCLAIMER}`,
 };
 
+/** Bump when prompts change - exposed via health-check for monitoring. */
+export const LEGAL_PROMPTS_VERSION = "2026.05.04-v2";
+
+/** Required slugs for the Advocacia squad (must match agents_catalog and AdvocaciaAudit). */
+export const REQUIRED_LEGAL_SLUGS = [
+  "captacao_juridica",
+  "diagnostico_juridico",
+  "risco_contratual",
+  "fechamento_juridico",
+  "recuperacao_leads_juridico",
+  "producao_juridica",
+  "compliance_lgpd_juridico",
+] as const;
+
+/** Phrases every OAB-compliant prompt MUST contain (anti-regression guard). */
+export const OAB_REQUIRED_MARKERS = [
+  "CÓDIGO DE ÉTICA OAB",
+  "validação do(a) advogado(a) responsável",
+  "NÃO faça promessas de resultado",
+  "sigilo profissional",
+];
+
 /**
  * Returns specialized legal prompt for the given agent slug, or null if not a legal agent.
  */
 export function getLegalPrompt(slug: string | null | undefined): string | null {
   if (!slug) return null;
   return LEGAL_AGENT_PROMPTS[slug] || null;
+}
+
+/** Validates that all required legal agents have OAB-compliant prompts injected. */
+export function validateLegalPrompts(): {
+  ok: boolean;
+  version: string;
+  missingSlugs: string[];
+  nonCompliantSlugs: Array<{ slug: string; missingMarkers: string[] }>;
+} {
+  const missingSlugs: string[] = [];
+  const nonCompliantSlugs: Array<{ slug: string; missingMarkers: string[] }> = [];
+
+  for (const slug of REQUIRED_LEGAL_SLUGS) {
+    const prompt = LEGAL_AGENT_PROMPTS[slug];
+    if (!prompt) {
+      missingSlugs.push(slug);
+      continue;
+    }
+    const missing = OAB_REQUIRED_MARKERS.filter((m) => !prompt.includes(m));
+    if (missing.length > 0) nonCompliantSlugs.push({ slug, missingMarkers: missing });
+  }
+
+  return {
+    ok: missingSlugs.length === 0 && nonCompliantSlugs.length === 0,
+    version: LEGAL_PROMPTS_VERSION,
+    missingSlugs,
+    nonCompliantSlugs,
+  };
 }

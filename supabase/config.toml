@@ -95,3 +95,6 @@ verify_jwt = false
 
 [functions.hunter-notificar-resposta]
 verify_jwt = false
+
+[functions.advocacia-health-check]
+verify_jwt = false
