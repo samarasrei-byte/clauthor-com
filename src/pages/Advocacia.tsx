@@ -23,6 +23,8 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import ClauthorLogo from "@/components/ClauthorLogo";
+import ThemeToggle from "@/components/ThemeToggle";
 import type { HireIntent } from "@/pages/Auth";
 
 const agents = [
