@@ -1397,6 +1397,16 @@ Instructions: ${agent.instructions}`;
       }
     }
 
+    // ─── LEGAL OVERRIDE: if request carries a legal slug, force OAB-compliant prompt ───
+    const legalPrompt = getLegalPrompt(agentSlug);
+    if (legalPrompt) {
+      agentPrompt = legalPrompt;
+      agentArea = "legal";
+      if (!agentName || agentName === "AI Agent") {
+        agentName = `Squad Jurídica · ${agentSlug}`;
+      }
+    }
+
     // Build policy context for tool enforcement
     const policyContext: PolicyContext = {
       userId,
