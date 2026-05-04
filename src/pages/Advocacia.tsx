@@ -212,6 +212,8 @@ export default function Advocacia() {
 
     // Persist intent so checkout flow picks it up post-auth
     localStorage.setItem("hireIntent", JSON.stringify(plan.intent));
+    // Flag so post-payment redirect lands on the onboarding wizard, not generic dashboard
+    localStorage.setItem("advocacia_post_checkout", "1");
 
     if (user) {
       toast.success("Redirecionando para o checkout...");
