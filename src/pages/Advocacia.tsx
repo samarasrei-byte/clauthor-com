@@ -94,6 +94,18 @@ const agents = [
     ],
     example: '"Rascunhei a contestação com base no caso. Revise antes de protocolar - não substitui sua análise final."',
   },
+  {
+    icon: Lock,
+    name: "Oficial de Compliance LGPD & Anti-PLD",
+    role: "KYC reforçado + monitoramento PEP/listas restritivas",
+    bullets: [
+      "KYC reforçado PF/PJ + beneficiário final (Provimento OAB 188/2018)",
+      "Monitoramento PEP, OFAC, ONU e listas restritivas COAF",
+      "Relatórios RIPD (LGPD art. 38) e PLD prontos para revisão",
+    ],
+    example: '"Cliente Y - PEP detectado. Diligência reforçada sugerida. Decisão final: advogado responsável."',
+    exclusive: "Compliance" as const,
+  },
 ];
 
 const pains = [
@@ -205,7 +217,7 @@ export default function Advocacia() {
     if (meta) {
       meta.setAttribute(
         "content",
-        "Transforme seu escritório de advocacia em uma operação previsível de captação e conversão. 6 agentes de IA especializados, 24/7, com ética OAB."
+        "Transforme seu escritório de advocacia em uma operação previsível de captação e conversão. Squad jurídica de IA com ética OAB e validação humana."
       );
     }
   }, []);
@@ -288,7 +300,7 @@ export default function Advocacia() {
             </h1>
 
             <p className="mt-6 text-lg md:text-xl text-muted-foreground leading-relaxed">
-              Uma squad de 6 agentes de IA jurídica especializados em <strong className="text-foreground">captação, qualificação e
+              Uma squad de agentes de IA jurídica especializados em <strong className="text-foreground">captação, qualificação e
               fechamento</strong> - operando 24/7, com ética OAB e validação humana em todas as decisões.
             </p>
 
@@ -377,7 +389,7 @@ export default function Advocacia() {
         <div className="max-w-6xl mx-auto px-6">
           <div className="mb-14 max-w-2xl">
             <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
-              Conheça os 6 agentes da squad
+              Conheça a squad jurídica completa
             </h2>
             <p className="mt-3 text-muted-foreground text-lg">
               Cada agente tem função, fluxo e tom próprios. Nenhum substitui o advogado - todos amplificam.
@@ -393,11 +405,16 @@ export default function Advocacia() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.06 }}
               >
-                <Card className="p-6 h-full bg-card/60 border-border/40 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all flex flex-col">
+                <Card className="p-6 h-full bg-card/60 border-border/40 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all flex flex-col relative">
+                  {(a as any).exclusive && (
+                    <Badge className="absolute top-4 right-4 bg-primary/15 text-primary border border-primary/30 text-[10px] uppercase tracking-wider">
+                      Exclusivo {(a as any).exclusive}
+                    </Badge>
+                  )}
                   <div className="w-11 h-11 rounded-lg flex items-center justify-center mb-4 bg-primary/10 text-primary">
                     <a.icon className="w-5 h-5" />
                   </div>
-                  <h3 className="font-semibold leading-tight">{a.name}</h3>
+                  <h3 className="font-semibold leading-tight pr-20">{a.name}</h3>
                   <p className="text-sm mt-1 text-primary">{a.role}</p>
                   <ul className="mt-4 space-y-2 flex-1">
                     {a.bullets.map((b, j) => (

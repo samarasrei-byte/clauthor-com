@@ -20,7 +20,7 @@ const sections = [
   {
     icon: Shield,
     title: "4. Privacidade e Proteção de Dados",
-    content: `A Clauthor opera em conformidade com a Lei Geral de Proteção de Dados (LGPD – Lei nº 13.709/2018) e padrões SOC 2 Type II. Todas as credenciais são armazenadas com criptografia AES-256-GCM, e a comunicação é protegida por SSL de 256-bit. Os dados dos usuários são processados exclusivamente para a prestação dos serviços contratados e não são compartilhados com terceiros sem consentimento explícito. Para mais detalhes, consulte nossa Política de Privacidade.`,
+    content: `A Clauthor opera em conformidade com a Lei Geral de Proteção de Dados (LGPD - Lei nº 13.709/2018) e padrões SOC 2 Type II. Todas as credenciais são armazenadas com criptografia AES-256-GCM, e a comunicação é protegida por SSL de 256-bit. Os dados dos usuários são processados exclusivamente para a prestação dos serviços contratados e não são compartilhados com terceiros sem consentimento explícito. Para mais detalhes, consulte nossa Política de Privacidade.`,
   },
   {
     icon: AlertTriangle,
