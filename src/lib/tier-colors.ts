@@ -1,5 +1,5 @@
 /**
- * Shared tier color mappings — single source of truth.
+ * Shared tier color mappings - single source of truth.
  * Use semantic tokens where possible.
  */
 export const TIER_COLORS: Record<string, string> = {

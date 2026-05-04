@@ -75,7 +75,7 @@ const STEPS = [
       "Selecione seu app",
       "Adicione permissões: ads_management, ads_read, business_management",
       "Clique em 'Generate Access Token'",
-      "⚠️ Token de teste expira em ~1h — gere um de longa duração na aba de configurações",
+      "⚠️ Token de teste expira em ~1h - gere um de longa duração na aba de configurações",
     ],
     estimatedTime: "5 min",
   },
@@ -223,7 +223,7 @@ const MetaAdsSetupGuide = () => {
           onClick={skipToCredentials}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Já tenho as credenciais — pular para o último passo
+          Já tenho as credenciais - pular para o último passo
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
       )}
@@ -277,13 +277,13 @@ const MetaAdsSetupGuide = () => {
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                      <TermTooltip term="Access Token" /> — gerado no Graph API Explorer
+                      <TermTooltip term="Access Token" /> - gerado no Graph API Explorer
                     </label>
                     <Input placeholder="Access Token" type="password" value={accessToken} onChange={(e) => setAccessToken(e.target.value)} className="text-sm" />
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                      <TermTooltip term="Ad Account ID" /> — formato: act_XXXXXXXXX
+                      <TermTooltip term="Ad Account ID" /> - formato: act_XXXXXXXXX
                     </label>
                     <Input placeholder="Ad Account ID (act_XXXXXXXXX)" value={adAccountId} onChange={(e) => setAdAccountId(e.target.value)} className="text-sm" />
                   </div>
@@ -373,7 +373,7 @@ const MetaAdsSetupGuide = () => {
               <p className="text-sm font-medium">Custos do Meta Ads</p>
               <p className="text-xs text-muted-foreground mt-1">
                 O uso da Marketing API é gratuito. Os custos dos anúncios dependem do budget que você configurar
-                em cada campanha. Os agentes apenas gerenciam — você controla o investimento.
+                em cada campanha. Os agentes apenas gerenciam - você controla o investimento.
               </p>
             </div>
           </div>

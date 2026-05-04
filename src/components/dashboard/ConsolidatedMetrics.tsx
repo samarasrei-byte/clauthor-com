@@ -111,7 +111,7 @@ const ConsolidatedMetrics = ({
         <Badge className="bg-emerald-500/10 text-emerald-400 border-0 text-[9px]">ONLINE</Badge>
       </motion.div>
 
-      {/* Hero KPIs — 3 cards with embedded health */}
+      {/* Hero KPIs - 3 cards with embedded health */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         {heroKpis.map((kpi, i) => (
           <motion.div
@@ -213,7 +213,7 @@ const ConsolidatedMetrics = ({
               <div className="flex items-center justify-between mt-2">
                 <Badge variant="secondary" className="text-[9px] uppercase">{credits.plan_type}</Badge>
                 <span className="text-[9px] text-muted-foreground">
-                  {t("dashboard.reset_label")}: {credits.credits_reset_at ? new Date(credits.credits_reset_at).toLocaleDateString(locale, { day: "2-digit", month: "short" }) : "—"}
+                  {t("dashboard.reset_label")}: {credits.credits_reset_at ? new Date(credits.credits_reset_at).toLocaleDateString(locale, { day: "2-digit", month: "short" }) : "-"}
                 </span>
               </div>
             </div>

@@ -383,7 +383,7 @@ export default function ScrumBoard() {
               SCRUM BOARD
             </h1>
             <p className="text-[10px] text-muted-foreground">
-              Sprint management — {tasks.length} tasks across {COLUMNS.length} stages
+              Sprint management - {tasks.length} tasks across {COLUMNS.length} stages
             </p>
           </div>
           <div className="flex items-center gap-2">

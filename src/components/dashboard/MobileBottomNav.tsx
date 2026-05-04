@@ -22,7 +22,7 @@ const MobileBottomNav = ({ activeSection, onNavigate, agentCount }: MobileBottom
   // "more" opens the mobile sheet nav via overview section's Sheet
   const handleNav = (id: string) => {
     if (id === "more") {
-      // Trigger the mobile sheet — we navigate to current section which shows the sheet button
+      // Trigger the mobile sheet - we navigate to current section which shows the sheet button
       // We'll just not navigate but the button exists as a hint
       onNavigate(activeSection);
       return;

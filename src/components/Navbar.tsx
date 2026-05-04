@@ -63,7 +63,7 @@ const Navbar = () => {
     >
       <div className="max-w-[1120px] mx-auto px-5 sm:px-6">
         <div className="flex items-center justify-between h-12">
-          {/* Logo — pure text, Apple style */}
+          {/* Logo - pure text, Apple style */}
           <Link to="/" className="flex items-center group">
             <ClauthorLogo size="md" />
           </Link>

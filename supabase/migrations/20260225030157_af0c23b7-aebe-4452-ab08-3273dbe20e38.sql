@@ -5,7 +5,7 @@ CREATE POLICY "Authenticated can submit suggestions"
 ON public.department_suggestions FOR INSERT TO authenticated
 WITH CHECK (true);
 
--- FIX: The remaining "RLS always true" is this one — replace with user check
+-- FIX: The remaining "RLS always true" is this one - replace with user check
 -- Actually this is fine for suggestions since anyone authenticated should be able to submit
 -- The scanner warns about INSERT with true but this is authenticated-only now
 

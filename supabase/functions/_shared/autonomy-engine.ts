@@ -1,5 +1,5 @@
 /**
- * Autonomy Engine — Action Classification & Execution
+ * Autonomy Engine - Action Classification & Execution
  * 
  * Risk Levels:
  *   🟢 LOW    → Auto-execute (respond WhatsApp, create task, log activity)
@@ -19,7 +19,7 @@ export interface ActionClassification {
 
 // Action → Risk mapping
 const ACTION_RISK_MAP: Record<string, { risk: RiskLevel; reason: string }> = {
-  // 🟢 LOW — Auto-execute silently
+  // 🟢 LOW - Auto-execute silently
   "respond_whatsapp": { risk: "low", reason: "Resposta automática a cliente via WhatsApp" },
   "respond_chat": { risk: "low", reason: "Resposta a mensagem no chat interno" },
   "create_task": { risk: "low", reason: "Criação de tarefa interna" },
@@ -28,14 +28,14 @@ const ACTION_RISK_MAP: Record<string, { risk: RiskLevel; reason: string }> = {
   "analyze_data": { risk: "low", reason: "Análise de dados internos" },
   "generate_report": { risk: "low", reason: "Geração de relatório" },
 
-  // 🟡 MEDIUM — Auto-execute + notify
+  // 🟡 MEDIUM - Auto-execute + notify
   "send_email_single": { risk: "medium", reason: "Envio de email individual" },
   "schedule_meeting": { risk: "medium", reason: "Agendamento de reunião" },
   "update_lead_status": { risk: "medium", reason: "Atualização de status de lead" },
   "delegate_to_agent": { risk: "medium", reason: "Delegação entre agentes" },
   "send_followup": { risk: "medium", reason: "Envio de follow-up automático" },
 
-  // 🔴 HIGH — Requires approval
+  // 🔴 HIGH - Requires approval
   "send_email_bulk": { risk: "high", reason: "Envio de emails em massa" },
   "delete_data": { risk: "high", reason: "Exclusão de dados" },
   "modify_credentials": { risk: "high", reason: "Alteração de credenciais" },
@@ -43,7 +43,7 @@ const ACTION_RISK_MAP: Record<string, { risk: RiskLevel; reason: string }> = {
   "update_pricing": { risk: "high", reason: "Alteração de preços" },
   "publish_content": { risk: "high", reason: "Publicação de conteúdo" },
 
-  // ⛔ CRITICAL — Always requires explicit approval
+  // ⛔ CRITICAL - Always requires explicit approval
   "mass_notification": { risk: "critical", reason: "Notificação em massa" },
   "data_export": { risk: "critical", reason: "Exportação de dados" },
   "billing_change": { risk: "critical", reason: "Alteração de cobrança" },

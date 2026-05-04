@@ -18,7 +18,7 @@ interface SmartAgentRouterProps {
 
 type Suggestion = { slug: string; score: number; reason: string };
 
-// Extended intent map — covers more natural language patterns
+// Extended intent map - covers more natural language patterns
 const INTENT_MAP: Record<string, string[]> = {
   "email": ["sales", "marketing_automation", "copywriting", "sdr_outbound"],
   "venda": ["sales", "sdr_outbound", "hunter", "revenue"],
@@ -347,7 +347,7 @@ export default function SmartAgentRouter({ contractedAgentSlugs, onSelectAgent, 
                 className="w-full flex items-center gap-2 p-2 rounded-xl text-xs text-muted-foreground hover:text-foreground hover:bg-accent/20 transition-all"
               >
                 <Rocket className="h-3.5 w-3.5 text-primary/50" />
-                <span>Ou pergunte ao <strong>THOR</strong> — nosso consultor de IA</span>
+                <span>Ou pergunte ao <strong>THOR</strong> - nosso consultor de IA</span>
                 <ArrowRight className="h-3 w-3 ml-auto" />
               </button>
             </motion.div>

@@ -296,7 +296,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
                   className="min-h-[140px] bg-accent/20 border-white/[0.08] font-mono text-xs"
                 />
                 <p className="text-[10px] text-muted-foreground mt-1">
-                  {instructions.length} caracteres — Este prompt define como o agente se comporta e responde
+                  {instructions.length} caracteres - Este prompt define como o agente se comporta e responde
                 </p>
               </div>
 
@@ -421,7 +421,7 @@ const AgentCard = ({ agent, isExpanded, onToggle }: AgentCardProps) => {
                 </div>
               </div>
 
-              {/* Integrations — agent-specific */}
+              {/* Integrations - agent-specific */}
               <AgentIntegrationsPanel
                 agentId={agent.id}
                 agentName={agent.name}
@@ -543,7 +543,7 @@ const AgentIntegrationsPanel = ({ agentId, agentName, integrations, onToggle }: 
   return (
     <div>
       <label className="text-xs font-medium text-muted-foreground mb-1 block">
-        Integrações {agentKey ? `— ${agentName}` : "— Genéricas"}
+        Integrações {agentKey ? `- ${agentName}` : "- Genéricas"}
       </label>
       <p className="text-[10px] text-muted-foreground/60 mb-3">
         Ative e configure as credenciais das ferramentas que este agente precisa

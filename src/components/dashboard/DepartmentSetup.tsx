@@ -501,7 +501,7 @@ export default function DepartmentSetup({ departmentId, departmentName, onComple
             {progress === 100 ? (
               <>
                 <Sparkles className="h-4 w-4" />
-                Tudo pronto — Acessar Dashboard
+                Tudo pronto - Acessar Dashboard
               </>
             ) : (
               <>

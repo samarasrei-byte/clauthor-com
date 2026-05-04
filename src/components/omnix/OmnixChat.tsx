@@ -192,7 +192,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
     return "idle";
   };
 
-  // ─── Start listening — BARGE-IN ───
+  // ─── Start listening - BARGE-IN ───
   const startListening = useCallback(async () => {
     if (!("webkitSpeechRecognition" in window || "SpeechRecognition" in window)) {
       toast.error("Seu navegador não suporta reconhecimento de voz. Use o campo de texto.");
@@ -275,7 +275,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           if (currentLive.isStreaming) onStop();
           recognition.stop();
           setIsListening(false);
-          // Do NOT restart listening — user explicitly asked to stop
+          // Do NOT restart listening - user explicitly asked to stop
           return;
         }
 
@@ -479,7 +479,7 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           />
         </div>
 
-        {/* Orb — responsive sizing */}
+        {/* Orb - responsive sizing */}
         <div className="scale-[0.55] sm:scale-[0.7] lg:scale-100 transition-transform duration-300">
           <OmnixOrb state={getOrbState()} name={config.name} immersive />
         </div>

@@ -88,7 +88,7 @@ export function usePaypalCapture() {
               .maybeSingle();
 
             if (existing) {
-              // Agent already exists — reuse it instead of creating a duplicate
+              // Agent already exists - reuse it instead of creating a duplicate
               provisionedAgents.push(existing.id);
               // Ensure it's active
               await supabase.from("agents").update({ status: "active" }).eq("id", existing.id);

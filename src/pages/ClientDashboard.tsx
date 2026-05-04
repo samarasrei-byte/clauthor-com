@@ -471,7 +471,7 @@ const ClientDashboard = () => {
         </div>
 
         <div className="flex-1 min-w-0 overflow-hidden">
-          {/* THOR — stays mounted */}
+          {/* THOR - stays mounted */}
           {omnixMounted && (
             <div className={activeSection === "omnix" ? "h-full" : "hidden"}>
               <Suspense fallback={<SectionLoader />}>
@@ -485,7 +485,7 @@ const ClientDashboard = () => {
             </div>
           )}
 
-          {/* Chat — empty state */}
+          {/* Chat - empty state */}
           {activeSection === "chat" && !selectedAgent && (
             <div className="flex flex-col items-center justify-center py-20 px-6 text-center space-y-4">
               <div className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center">
@@ -499,7 +499,7 @@ const ClientDashboard = () => {
             </div>
           )}
 
-          {/* Chat — with agent */}
+          {/* Chat - with agent */}
           {activeSection === "chat" && selectedAgent && (
             <Suspense fallback={<SectionLoader />}>
               {needsBoardSetup ? (

@@ -45,7 +45,7 @@ export interface RegionalPricing {
 const cltCosts = { tecnologia: 72000, comercial: 52000, marketing: 44000, financeiro: 48000, criacao: 36000, suporte: 32000, rh: 28000 };
 
 // Pricing calibrated for Claude Sonnet 4 costs ($3/1M input, $15/1M output)
-// Target margins: 80-90% — competitive yet profitable
+// Target margins: 80-90% - competitive yet profitable
 export const regionalPricing: Record<string, RegionalPricing> = {
   pt: {
     currency: "BRL", symbol: "R$", locale: "pt-BR",

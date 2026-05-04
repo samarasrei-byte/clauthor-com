@@ -223,7 +223,7 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
               </motion.div>
             )}
 
-            {/* URL scan — REAL scraping */}
+            {/* URL scan - REAL scraping */}
             {mode === "url" && (
               <motion.div
                 key="url"

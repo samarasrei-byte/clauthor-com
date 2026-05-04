@@ -53,10 +53,10 @@ export default function AdminWaitlistTable({ waitlist, waitingCount, locale }: A
               {filtered.map((entry: any) => (
                 <tr key={entry.id} className="border-b border-white/[0.05] hover:bg-accent/20">
                   <td className="p-3"><span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">{entry.position}</span></td>
-                  <td className="p-3 font-medium">{entry.name || "—"}</td>
+                  <td className="p-3 font-medium">{entry.name || "-"}</td>
                   <td className="p-3 text-muted-foreground"><span className="flex items-center gap-1"><Mail className="h-3 w-3" /> {entry.email}</span></td>
                   <td className="p-3 text-muted-foreground"><span className="flex items-center gap-1"><Phone className="h-3 w-3" /> {entry.whatsapp}</span></td>
-                  <td className="p-3 text-muted-foreground"><span className="flex items-center gap-1"><Building className="h-3 w-3" /> {entry.company || "—"}</span></td>
+                  <td className="p-3 text-muted-foreground"><span className="flex items-center gap-1"><Building className="h-3 w-3" /> {entry.company || "-"}</span></td>
                   <td className="p-3"><Badge variant="secondary" className={entry.status === "waiting" ? "bg-cyan-500/10 text-cyan-400" : "bg-primary/20 text-primary"}>{entry.status === "waiting" ? t("dashboard.waiting", { defaultValue: "Aguardando" }) : entry.status}</Badge></td>
                   <td className="p-3 text-muted-foreground text-xs">{new Date(entry.created_at).toLocaleDateString(locale)}</td>
                 </tr>

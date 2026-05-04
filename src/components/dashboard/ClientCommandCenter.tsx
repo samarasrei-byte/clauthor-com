@@ -167,7 +167,7 @@ const ClientCommandCenter = ({
         >
           <Sparkles className="h-4 w-4 text-primary animate-pulse" />
           <p className="text-xs text-muted-foreground">
-            <strong className="text-primary">{t("cmd.demo_mode", { defaultValue: "Modo demonstração" })}</strong> — {t("cmd.demo_desc", { defaultValue: "Você está vendo agentes simulados. Contrate agentes reais na" })} <button onClick={() => onNavigate?.("library")} className="underline text-primary hover:text-primary/80 transition-colors">{t("cmd.library", { defaultValue: "Biblioteca" })}</button>.
+            <strong className="text-primary">{t("cmd.demo_mode", { defaultValue: "Modo demonstração" })}</strong> - {t("cmd.demo_desc", { defaultValue: "Você está vendo agentes simulados. Contrate agentes reais na" })} <button onClick={() => onNavigate?.("library")} className="underline text-primary hover:text-primary/80 transition-colors">{t("cmd.library", { defaultValue: "Biblioteca" })}</button>.
           </p>
         </motion.div>
       )}

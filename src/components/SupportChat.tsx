@@ -242,7 +242,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
     setTimeout(() => scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" }), 50);
   };
 
-  // System health monitor — only runs when chat is open
+  // System health monitor - only runs when chat is open
   useEffect(() => {
     if (!open) return;
 
@@ -361,7 +361,7 @@ const SupportChat = ({ area = "public", embedded = false }: SupportChatProps) =>
               scrollToBottom();
             }
           } catch {
-            // Skip malformed JSON lines — do NOT re-buffer (infinite loop risk)
+            // Skip malformed JSON lines - do NOT re-buffer (infinite loop risk)
           }
         }
       }

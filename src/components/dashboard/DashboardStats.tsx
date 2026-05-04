@@ -63,14 +63,14 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
     { 
       icon: CheckCircle, 
       label: t("dashboard.success_rate_label"), 
-      value: effectiveExecutions > 0 ? `${effectiveSuccessRate}%` : "—", 
+      value: effectiveExecutions > 0 ? `${effectiveSuccessRate}%` : "-", 
       trend: effectiveExecutions > 0 ? `${effectiveExecutions} ${t("dashboard.executions_label")}` : t("dashboard.no_data"),
       color: "text-primary/80"
     },
     { 
       icon: DollarSign, 
       label: t("dashboard.estimated_savings_label"), 
-      value: effectiveAgents > 0 ? new Intl.NumberFormat(locale, { style: "currency", currency: currencyCode, minimumFractionDigits: 0 }).format(estimatedSavings) : "—", 
+      value: effectiveAgents > 0 ? new Intl.NumberFormat(locale, { style: "currency", currency: currencyCode, minimumFractionDigits: 0 }).format(estimatedSavings) : "-", 
       trend: effectiveAgents > 0 ? t("dashboard.vs_clt_month") : t("dashboard.hire_agents"),
       color: "text-cyan-400"
     },
@@ -95,14 +95,14 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
     { 
       icon: Clock, 
       label: t("dashboard.hours_saved_label"), 
-      value: effectiveAgents > 0 ? `${Math.round(effectiveExecutions * 0.03)}h` : "—",
+      value: effectiveAgents > 0 ? `${Math.round(effectiveExecutions * 0.03)}h` : "-",
       trend: effectiveAgents > 0 ? t("dashboard.this_period") : t("dashboard.no_data"),
       color: "text-primary/80"
     },
     { 
       icon: TrendingUp, 
       label: t("dashboard.roi_label"), 
-      value: effectiveAgents > 0 ? `${Math.round(((estimatedSavings - (effectiveAgents * 3997)) / Math.max(effectiveAgents * 3997, 1)) * 100)}%` : "—",
+      value: effectiveAgents > 0 ? `${Math.round(((estimatedSavings - (effectiveAgents * 3997)) / Math.max(effectiveAgents * 3997, 1)) * 100)}%` : "-",
       trend: effectiveAgents > 0 ? t("dashboard.return_month") : t("dashboard.hire_agents"),
       color: "text-cyan-400"
     },
@@ -119,7 +119,7 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
         >
           <Sparkles className="h-4 w-4 text-primary shrink-0" />
           <span className="text-xs text-muted-foreground">
-            {t("dashboard.demo_mode_banner", { defaultValue: "📊 Demo mode — these are simulated metrics. Hire your first agent to see real data!" })}
+            {t("dashboard.demo_mode_banner", { defaultValue: "📊 Demo mode - these are simulated metrics. Hire your first agent to see real data!" })}
           </span>
         </motion.div>
       )}
@@ -169,7 +169,7 @@ const DashboardStats = ({ activeAgents, totalExecutions, successRate, monthlyGro
               {formatNum(remainingCredits)} tokens {t("dashboard.tokens_remaining")}
             </span>
             <span className="text-xs text-muted-foreground">
-              {t("dashboard.reset_label")} {credits.credits_reset_at ? new Date(credits.credits_reset_at).toLocaleDateString(locale, { day: "2-digit", month: "short" }) : "—"}
+              {t("dashboard.reset_label")} {credits.credits_reset_at ? new Date(credits.credits_reset_at).toLocaleDateString(locale, { day: "2-digit", month: "short" }) : "-"}
             </span>
           </div>
         </motion.div>

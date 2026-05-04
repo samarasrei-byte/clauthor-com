@@ -48,7 +48,7 @@ const STEPS = [
       'Clique em "Create API Key"',
       'Escolha "Restricted Access" para mais segurança',
       'Ative apenas a permissão "Mail Send"',
-      "⚠️ Copie a chave — ela só aparece uma vez!",
+      "⚠️ Copie a chave - ela só aparece uma vez!",
     ],
     estimatedTime: "3 min",
   },
@@ -200,7 +200,7 @@ const SendGridSetupGuide = () => {
           onClick={skipToCredentials}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Já tenho a API Key — pular para o último passo
+          Já tenho a API Key - pular para o último passo
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
       )}
@@ -258,7 +258,7 @@ const SendGridSetupGuide = () => {
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                      <TermTooltip term="API Key" /> — copiada do painel do SendGrid
+                      <TermTooltip term="API Key" /> - copiada do painel do SendGrid
                     </label>
                     <Input
                       placeholder="API Key (SG.xxxxxxx...)"

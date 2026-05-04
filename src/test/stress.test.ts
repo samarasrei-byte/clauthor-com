@@ -1,12 +1,12 @@
 import { describe, it, expect } from "vitest";
 
 /**
- * STRESS TEST — CLAUTHOR Platform
+ * STRESS TEST - CLAUTHOR Platform
  * Tests critical paths, routing, imports, and data integrity
  */
 
 // ═══════════════════════════════════════════════════════
-// 1. ROUTING — All pages load without import errors
+// 1. ROUTING - All pages load without import errors
 // ═══════════════════════════════════════════════════════
 describe("Page Imports (lazy load stress)", () => {
   const pages = [
@@ -39,7 +39,7 @@ describe("Page Imports (lazy load stress)", () => {
 });
 
 // ═══════════════════════════════════════════════════════
-// 2. HOOKS — Core hooks export correctly
+// 2. HOOKS - Core hooks export correctly
 // ═══════════════════════════════════════════════════════
 describe("Core Hook Exports", () => {
   it("useAuth exports correctly", async () => {
@@ -76,7 +76,7 @@ describe("Core Hook Exports", () => {
 });
 
 // ═══════════════════════════════════════════════════════
-// 3. DATA INTEGRITY — Static data is well-formed
+// 3. DATA INTEGRITY - Static data is well-formed
 // ═══════════════════════════════════════════════════════
 describe("Agent Data Integrity", () => {
   it("libraryAgentData has valid structure", async () => {
@@ -109,7 +109,7 @@ describe("Agent Data Integrity", () => {
 });
 
 // ═══════════════════════════════════════════════════════
-// 4. i18n — All locales load and have required keys
+// 4. i18n - All locales load and have required keys
 // ═══════════════════════════════════════════════════════
 describe("i18n Locale Integrity", () => {
   const locales = ["en", "pt", "es", "fr", "de", "it", "ja", "ko", "zh", "ar", "hi", "ru", "tr"];
@@ -135,7 +135,7 @@ describe("i18n Locale Integrity", () => {
 });
 
 // ═══════════════════════════════════════════════════════
-// 5. UTILS & LIB — Core utilities work
+// 5. UTILS & LIB - Core utilities work
 // ═══════════════════════════════════════════════════════
 describe("Core Utilities", () => {
   it("cn() merges classes correctly", async () => {
@@ -151,7 +151,7 @@ describe("Core Utilities", () => {
 });
 
 // ═══════════════════════════════════════════════════════
-// 6. SUPABASE CLIENT — Exports are valid
+// 6. SUPABASE CLIENT - Exports are valid
 // ═══════════════════════════════════════════════════════
 describe("Supabase Client", () => {
   it("exports supabase client instance", async () => {
@@ -163,7 +163,7 @@ describe("Supabase Client", () => {
 });
 
 // ═══════════════════════════════════════════════════════
-// 7. COMPONENT IMPORTS — Critical dashboard components
+// 7. COMPONENT IMPORTS - Critical dashboard components
 // ═══════════════════════════════════════════════════════
 describe("Dashboard Component Imports", () => {
   const components = [
@@ -182,7 +182,7 @@ describe("Dashboard Component Imports", () => {
 });
 
 // ═══════════════════════════════════════════════════════
-// 8. CONCURRENT LOAD TEST — Simulate parallel imports
+// 8. CONCURRENT LOAD TEST - Simulate parallel imports
 // ═══════════════════════════════════════════════════════
 describe("Concurrent Import Stress", () => {
   it("loads 15+ modules in parallel without errors", async () => {

@@ -121,7 +121,7 @@ const AdminSignupMetrics = ({ allProfiles, locale }: Props) => {
           <Card className="bg-background/30 backdrop-blur-2xl border border-white/[0.06]">
             <CardHeader className="py-3 px-4">
               <CardTitle className="font-display text-xs flex items-center gap-2">
-                <CalendarDays className="h-3.5 w-3.5 text-cyan-400" /> Signups — Últimos 7 dias
+                <CalendarDays className="h-3.5 w-3.5 text-cyan-400" /> Signups - Últimos 7 dias
               </CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-3">
@@ -147,7 +147,7 @@ const AdminSignupMetrics = ({ allProfiles, locale }: Props) => {
           <Card className="bg-background/30 backdrop-blur-2xl border border-white/[0.06]">
             <CardHeader className="py-3 px-4">
               <CardTitle className="font-display text-xs flex items-center gap-2">
-                <Clock className="h-3.5 w-3.5 text-amber-400" /> Signups — Últimas 24h
+                <Clock className="h-3.5 w-3.5 text-amber-400" /> Signups - Últimas 24h
               </CardTitle>
             </CardHeader>
             <CardContent className="px-4 pb-3">
@@ -193,7 +193,7 @@ const AdminSignupMetrics = ({ allProfiles, locale }: Props) => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-xs font-medium truncate">{profile.full_name || "Sem nome"}</p>
-                    <p className="text-[9px] text-muted-foreground">{profile.company_name || "—"}</p>
+                    <p className="text-[9px] text-muted-foreground">{profile.company_name || "-"}</p>
                   </div>
                   <span className="text-[9px] text-muted-foreground shrink-0">{timeLabel}</span>
                 </div>

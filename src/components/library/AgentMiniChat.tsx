@@ -42,7 +42,7 @@ const agentDemos: Record<string, ChatMessage[]> = {
   ],
   revenue: [
     { role: "user", text: "How's the cash flow?" },
-    { role: "agent", text: "Positive at $142k. 90-day forecast: stable. 3 invoices due Friday — reminders sent automatically. 💰" },
+    { role: "agent", text: "Positive at $142k. 90-day forecast: stable. 3 invoices due Friday - reminders sent automatically. 💰" },
   ],
   customer_success: [
     { role: "user", text: "Any customers at risk of churning?" },
@@ -150,7 +150,7 @@ const agentDemos: Record<string, ChatMessage[]> = {
   ],
   compliance_officer: [
     { role: "user", text: "Are we in compliance with data protection regulations?" },
-    { role: "agent", text: "Full scan: 3 gaps identified — incomplete cookie consent, missing retention policy, DPO not appointed. Action plan generated. 🛡️" },
+    { role: "agent", text: "Full scan: 3 gaps identified - incomplete cookie consent, missing retention policy, DPO not appointed. Action plan generated. 🛡️" },
   ],
   labor_law: [
     { role: "user", text: "Calculate the severance for employee John." },
@@ -186,7 +186,7 @@ const agentDemos: Record<string, ChatMessage[]> = {
   ],
   quality: [
     { role: "user", text: "When's the next ISO audit?" },
-    { role: "agent", text: "ISO 9001 audit in 45 days. Checklist: 89% compliant. 4 non-conformities open — 2 with corrective action. Pre-audit report generated. ✅" },
+    { role: "agent", text: "ISO 9001 audit in 45 days. Checklist: 89% compliant. 4 non-conformities open - 2 with corrective action. Pre-audit report generated. ✅" },
   ],
   process_analyst: [
     { role: "user", text: "The onboarding process is too slow." },
@@ -289,7 +289,7 @@ export default function AgentMiniChat({ agentKey, agentName }: AgentMiniChatProp
                     <span className="w-0.5 h-0.5 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "150ms" }} />
                     <span className="w-0.5 h-0.5 rounded-full bg-muted-foreground/40 animate-bounce" style={{ animationDelay: "300ms" }} />
                   </div>
-                  <span className="text-[8px] text-muted-foreground">{agentName.split("—")[0].trim()} typing...</span>
+                  <span className="text-[8px] text-muted-foreground">{agentName.split("-")[0].trim()} typing...</span>
                 </div>
               )}
             </div>

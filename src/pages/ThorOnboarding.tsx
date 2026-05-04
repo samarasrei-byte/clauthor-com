@@ -61,7 +61,7 @@ const PAIN_OPTIONS: OptionItem[] = [
 // ── Model options ──────────────────────────────────
 const MODEL_OPTIONS: OptionItem[] = [
   { id: "department", label: "Departamentos Prontos", icon: "🏢", desc: "Departamento completo com vários agentes" },
-  { id: "squad", label: "Montar meu Squad", icon: "⚡", desc: "Recomendado — pequeno time personalizado" },
+  { id: "squad", label: "Montar meu Squad", icon: "⚡", desc: "Recomendado - pequeno time personalizado" },
   { id: "library", label: "Biblioteca de 200+ Agentes", icon: "📚", desc: "Escolha agente por agente" },
 ];
 
@@ -609,7 +609,7 @@ const ThorOnboarding = () => {
             >
               <ThorAvatar size="lg" />
               <div className="text-center">
-                <h1 className="font-display text-xl font-bold">Thor — Consultor de IA</h1>
+                <h1 className="font-display text-xl font-bold">Thor - Consultor de IA</h1>
                 <p className="text-xs text-muted-foreground mt-1">Seu time de agentes em menos de 2 minutos</p>
               </div>
             </motion.div>

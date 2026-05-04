@@ -478,7 +478,7 @@ const Waitlist = () => {
       </header>
 
       {/* ═══════════════════════════════════════════════════════ */}
-      {/* ─── 1. HERO — LIVE CHAT SIMULATION TOP BANNER ─── */}
+      {/* ─── 1. HERO - LIVE CHAT SIMULATION TOP BANNER ─── */}
       {/* ═══════════════════════════════════════════════════════ */}
       <section ref={heroRef} className="relative z-10 min-h-screen flex flex-col">
         {/* Ambient glow background */}
@@ -702,7 +702,7 @@ const Waitlist = () => {
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-10 items-start">
-            {/* Left — Value props */}
+            {/* Left - Value props */}
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} className="space-y-5">
               {[
                 { icon: Crown, text: "Acesso antecipado exclusivo", tag: "VIP" },
@@ -741,7 +741,7 @@ const Waitlist = () => {
 
             </motion.div>
 
-            {/* Right — Form */}
+            {/* Right - Form */}
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <GlassCard hover={false} className="p-8 md:p-10 relative overflow-hidden">
                 <div className="absolute -top-20 -right-20 w-40 h-40 bg-primary/10 rounded-full blur-[80px]" />
@@ -826,7 +826,7 @@ const Waitlist = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <GlassCard hover={false} className="inline-flex items-center gap-3 px-6 py-3">
               <Globe className="h-5 w-5 text-primary" />
-              <span className="text-sm font-medium text-foreground/80">🔥 Febre em 10+ países — White list exclusiva</span>
+              <span className="text-sm font-medium text-foreground/80">🔥 Febre em 10+ países - White list exclusiva</span>
               <CheckCircle2 className="h-4 w-4 text-accent-emerald" />
             </GlassCard>
           </motion.div>

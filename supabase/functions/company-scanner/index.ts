@@ -24,7 +24,7 @@ serve(async (req) => {
         if (!response.ok) throw new Error(`HTTP ${response.status}`);
         const html = await response.text();
         
-        // Strip HTML tags, scripts, styles — keep text content
+        // Strip HTML tags, scripts, styles - keep text content
         contentToAnalyze = html
           .replace(/<script[^>]*>[\s\S]*?<\/script>/gi, "")
           .replace(/<style[^>]*>[\s\S]*?<\/style>/gi, "")

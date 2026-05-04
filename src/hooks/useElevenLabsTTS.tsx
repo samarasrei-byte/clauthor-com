@@ -20,7 +20,7 @@ function speakNative(text: string, lang: string, onStart?: () => void, onEnd?: (
   utterance.volume = 1;
   utterance.lang = lang;
 
-  // Pick best MALE voice for language — avoid female voices
+  // Pick best MALE voice for language - avoid female voices
   const voices = window.speechSynthesis.getVoices();
   const langPrefix = lang.split("-")[0];
   const nameLower = (v: SpeechSynthesisVoice) => v.name.toLowerCase();
@@ -98,7 +98,7 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const objectUrlRef = useRef<string | null>(null);
   const nativeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  // Check localStorage — but expire after 10 minutes so we retry ElevenLabs periodically
+  // Check localStorage - but expire after 10 minutes so we retry ElevenLabs periodically
   const elevenLabsFailedRef = useRef(() => {
     if (typeof window === "undefined") return false;
     const ts = localStorage.getItem(ELEVENLABS_NATIVE_ONLY_KEY);
@@ -250,9 +250,9 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
       };
 
       await audio.play().catch((playErr) => {
-        // NotAllowedError = browser autoplay policy — silent fallback, no crash
+        // NotAllowedError = browser autoplay policy - silent fallback, no crash
         if (playErr?.name === "NotAllowedError") {
-          console.warn("[TTS] Autoplay blocked by browser policy — skipping audio");
+          console.warn("[TTS] Autoplay blocked by browser policy - skipping audio");
           stop(false);
           setIsSpeaking(false);
           resolveFinished?.();
@@ -267,7 +267,7 @@ export function useElevenLabsTTS({ onStart, onEnd }: UseElevenLabsTTSOptions = {
     } catch (err: any) {
       // Silent fallback for all TTS errors including NotAllowedError
       if (err?.name === "NotAllowedError") {
-        console.warn("[TTS] Autoplay blocked — silent fallback");
+        console.warn("[TTS] Autoplay blocked - silent fallback");
         setIsSpeaking(false);
         resolveFinished?.();
         return false;

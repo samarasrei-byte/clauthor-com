@@ -11,7 +11,7 @@ interface FAQ {
 const departmentFAQs: Record<string, FAQ[]> = {
   tecnologia: [
     { q: "Os agentes conseguem acessar meu código real?", a: "Sim, via integrações com GitHub/GitLab. Eles revisam PRs, sugerem melhorias e detectam vulnerabilidades automaticamente." },
-    { q: "Como funciona a orquestração entre Dev e DevOps?", a: "O Dev finaliza o código, o CISO revisa segurança, e o DevOps faz deploy — tudo automatizado em sequência, sem intervenção humana." },
+    { q: "Como funciona a orquestração entre Dev e DevOps?", a: "O Dev finaliza o código, o CISO revisa segurança, e o DevOps faz deploy - tudo automatizado em sequência, sem intervenção humana." },
     { q: "Posso usar meu stack atual?", a: "Sim. Os agentes se adaptam a qualquer stack (React, Python, Node, etc.) e aprendem com seu codebase existente." },
   ],
   comercial: [
@@ -30,7 +30,7 @@ const departmentFAQs: Record<string, FAQ[]> = {
     { q: "O CFO pode prever cenários?", a: "Sim. Ele gera projeções de 30/60/90 dias baseadas em dados históricos e tendências de mercado." },
   ],
   criacao: [
-    { q: "Que tipos de design ele cria?", a: "Posts, banners, apresentações, identidade visual, UI/UX e motion graphics — tudo em alta resolução." },
+    { q: "Que tipos de design ele cria?", a: "Posts, banners, apresentações, identidade visual, UI/UX e motion graphics - tudo em alta resolução." },
     { q: "Posso usar minha identidade visual?", a: "Sim. Você configura cores, fontes, logo e guidelines. Todos os assets seguem seu brand book automaticamente." },
     { q: "Os vídeos precisam de edição manual?", a: "Não. O Editor de Vídeo entrega peças finalizadas com cortes, transições, legendas e motion graphics." },
   ],
@@ -64,7 +64,7 @@ export default function DepartmentFAQ({ departmentId }: DepartmentFAQProps) {
   const [openKey, setOpenKey] = useState<string | null>(null);
   const { t } = useTranslation();
 
-  // "all" mode — show grouped FAQs for all departments
+  // "all" mode - show grouped FAQs for all departments
   if (departmentId === "all") {
     return (
       <div className="space-y-4">

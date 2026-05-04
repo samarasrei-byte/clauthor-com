@@ -154,7 +154,7 @@ const AgentSetupChecklist = ({ agents, nameToSlug, onOpenThor }: AgentSetupCheck
               {overallPct === 100
                 ? t("setup_checklist.all_done", { defaultValue: "✅ All agents configured!" })
                 : t("setup_checklist.progress", {
-                    defaultValue: "{{pct}}% complete — {{count}} agent(s) pending",
+                    defaultValue: "{{pct}}% complete - {{count}} agent(s) pending",
                     pct: overallPct,
                     count: pendingCount,
                   })}

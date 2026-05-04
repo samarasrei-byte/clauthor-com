@@ -66,7 +66,7 @@ const AgentTrainingTips = ({ onNavigate }: AgentTrainingTipsProps) => {
               {t("training.title", { defaultValue: "Como treinar seus agentes" })}
             </h3>
             <p className="text-[10px] text-muted-foreground">
-              {t("training.subtitle", { defaultValue: "Sem código, sem datasets — apenas informação da sua empresa" })}
+              {t("training.subtitle", { defaultValue: "Sem código, sem datasets - apenas informação da sua empresa" })}
             </p>
           </div>
         </div>

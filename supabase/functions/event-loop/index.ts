@@ -4,7 +4,7 @@ import { classifyAction, formatActionForApproval } from "../_shared/autonomy-eng
 import { autonomousExecute } from "../_shared/tool-executor.ts";
 
 /**
- * Event Loop — Autonomous Agent Triggers
+ * Event Loop - Autonomous Agent Triggers
  * 
  * Runs on a schedule (every 5 minutes via pg_cron).
  * Checks for trigger conditions and dispatches autonomous actions.
@@ -129,7 +129,7 @@ serve(async (req) => {
       console.error("[EventLoop] Trigger 2 (overdue tasks) error:", e);
     }
 
-    // ─── TRIGGER 3: Meetings today — send prep notification ───
+    // ─── TRIGGER 3: Meetings today - send prep notification ───
     try {
       const today = new Date().toISOString().split("T")[0];
       const { data: todayMeetings } = await supabase
@@ -164,7 +164,7 @@ serve(async (req) => {
       console.error("[EventLoop] Trigger 3 (meetings today) error:", e);
     }
 
-    // ─── TRIGGER 4: Company Board empty — nudge user ───
+    // ─── TRIGGER 4: Company Board empty - nudge user ───
     try {
       // Get all users with active agents but no company board entries
       const { data: usersWithAgents } = await supabase
@@ -273,7 +273,7 @@ serve(async (req) => {
                   {
                     user_id: userId,
                     tenant_id: tenantId,
-                    title: `Roteiro Instagram — ${today}`,
+                    title: `Roteiro Instagram - ${today}`,
                     description: "Roteiro diário automático: gancho, desenvolvimento, CTA, hashtags e sugestão visual.",
                     priority: "medium",
                     category: "content_instagram",
@@ -282,7 +282,7 @@ serve(async (req) => {
                   {
                     user_id: userId,
                     tenant_id: tenantId,
-                    title: `Roteiro YouTube — ${today}`,
+                    title: `Roteiro YouTube - ${today}`,
                     description: "Roteiro diário automático: título SEO, intro hook, seções, CTA e descrição.",
                     priority: "medium",
                     category: "content_youtube",

@@ -194,11 +194,11 @@ const OpenClawStatusPanel = () => {
                         <td className="p-3">
                           <div className="flex items-center gap-2">
                             <Bot className="h-4 w-4 text-primary/60" />
-                            <span className="font-medium">{reg.agents?.name || "—"}</span>
+                            <span className="font-medium">{reg.agents?.name || "-"}</span>
                           </div>
                         </td>
                         <td className="p-3">
-                          <Badge variant="secondary" className="text-[10px]">{reg.agents?.tier || "—"}</Badge>
+                          <Badge variant="secondary" className="text-[10px]">{reg.agents?.tier || "-"}</Badge>
                         </td>
                         <td className="p-3">
                           <Badge className={`${cfg.color} border text-[10px] gap-1`}>
@@ -208,7 +208,7 @@ const OpenClawStatusPanel = () => {
                         </td>
                         <td className="p-3">
                           <span className="font-mono text-[11px] text-muted-foreground">
-                            {reg.openclaw_agent_id ? reg.openclaw_agent_id.slice(0, 12) + "…" : "—"}
+                            {reg.openclaw_agent_id ? reg.openclaw_agent_id.slice(0, 12) + "…" : "-"}
                           </span>
                         </td>
                         <td className="p-3 font-mono text-xs">
@@ -217,7 +217,7 @@ const OpenClawStatusPanel = () => {
                         <td className="p-3 text-muted-foreground text-xs">
                           {reg.last_webhook_at
                             ? new Date(reg.last_webhook_at).toLocaleString("en-US", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })
-                            : "—"}
+                            : "-"}
                         </td>
                         <td className="p-3">
                           {reg.error_message ? (
@@ -225,7 +225,7 @@ const OpenClawStatusPanel = () => {
                               {reg.error_message.slice(0, 40)}…
                             </span>
                           ) : (
-                            <span className="text-emerald-400/50 text-xs">—</span>
+                            <span className="text-emerald-400/50 text-xs">-</span>
                           )}
                         </td>
                       </motion.tr>

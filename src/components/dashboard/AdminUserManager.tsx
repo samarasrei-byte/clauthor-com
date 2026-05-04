@@ -101,9 +101,9 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
                   const pct = userCredit ? Math.round((userCredit.used_credits / userCredit.total_credits) * 100) : 0;
                   return (
                     <tr key={profile.id} className="border-b border-white/[0.05] hover:bg-accent/20">
-                      <td className="p-3 font-medium">{profile.full_name || "—"}</td>
-                      <td className="p-3 text-muted-foreground text-xs font-mono">{profile.email || "—"}</td>
-                      <td className="p-3 text-muted-foreground">{profile.company_name || "—"}</td>
+                      <td className="p-3 font-medium">{profile.full_name || "-"}</td>
+                      <td className="p-3 text-muted-foreground text-xs font-mono">{profile.email || "-"}</td>
+                      <td className="p-3 text-muted-foreground">{profile.company_name || "-"}</td>
                       <td className="p-3">
                         <Badge variant="secondary" className="text-[10px]">
                           {userCredit?.plan_type || "free"}
@@ -117,7 +117,7 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
                               {userCredit.used_credits.toLocaleString()}/{userCredit.total_credits.toLocaleString()}
                             </span>
                           </div>
-                        ) : "—"}
+                        ) : "-"}
                       </td>
                       <td className="p-3 text-muted-foreground text-xs">
                         {new Date(profile.created_at).toLocaleDateString(locale)}

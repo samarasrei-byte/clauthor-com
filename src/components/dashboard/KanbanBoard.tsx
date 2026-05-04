@@ -299,7 +299,7 @@ const KanbanBoard = () => {
         </div>
       </div>
 
-      {/* ═══ FOCUS VIEW — Obsidian-style clean list ═══ */}
+      {/* ═══ FOCUS VIEW - Obsidian-style clean list ═══ */}
       {view === "focus" && (
         <div className="max-w-2xl mx-auto space-y-1">
           {filtered.length === 0 ? (
@@ -601,7 +601,7 @@ const TaskCard = ({ task, onDragStart, onDragEnd, onDelete, isDragged, onStatusC
   );
 };
 
-/* ═══ FOCUS ROW — Obsidian-style checkbox row ═══ */
+/* ═══ FOCUS ROW - Obsidian-style checkbox row ═══ */
 const FocusRow = ({ task, onToggle, onDelete, done }: {
   task: Task; onToggle: (id: string) => void; onDelete: (id: string) => void; done?: boolean;
 }) => {

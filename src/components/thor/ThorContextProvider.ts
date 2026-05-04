@@ -1,5 +1,5 @@
 /**
- * ThorContextProvider.ts — Fetches real-time dashboard data to inject into Thor's context
+ * ThorContextProvider.ts - Fetches real-time dashboard data to inject into Thor's context
  * Makes Thor aware of the user's current state: agents, credits, tasks, activity
  */
 
@@ -126,7 +126,7 @@ export function formatContextForPrompt(ctx: ThorDashboardContext): string {
       lines.push(`- Última ação: ${ctx.lastExecutionAction} (${ctx.lastExecutionStatus})`);
     }
   } else {
-    lines.push(`- Nenhuma execução recente — usuário pode precisar de orientação`);
+    lines.push(`- Nenhuma execução recente - usuário pode precisar de orientação`);
   }
 
   if (ctx.squadsCount > 0) {
@@ -138,7 +138,7 @@ export function formatContextForPrompt(ctx: ThorDashboardContext): string {
   }
 
   if (!ctx.hasCompanyData) {
-    lines.push(`- ⚠️ Dados da empresa NÃO configurados — sugira que configure`);
+    lines.push(`- ⚠️ Dados da empresa NÃO configurados - sugira que configure`);
   }
 
   if (ctx.topAgentByExecutions) {

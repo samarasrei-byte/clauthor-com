@@ -54,7 +54,7 @@ const SplineShowcase = ({ variant = "home" }: SplineShowcaseProps) => {
                 <p className="text-sm sm:text-base text-muted-foreground leading-relaxed max-w-md mb-8">
                   {t("spline.desc", {
                     defaultValue:
-                      "Agentes de IA autônomos que trabalham 24/7 — vendendo, atendendo e escalando seu negócio enquanto você foca no que importa.",
+                      "Agentes de IA autônomos que trabalham 24/7 - vendendo, atendendo e escalando seu negócio enquanto você foca no que importa.",
                   })}
                 </p>
 
@@ -85,7 +85,7 @@ const SplineShowcase = ({ variant = "home" }: SplineShowcaseProps) => {
               </motion.div>
             </div>
 
-            {/* Right content — Animated Visual */}
+            {/* Right content - Animated Visual */}
             <div className="flex-1 relative min-h-[300px] lg:min-h-0">
               <SplineScene className="w-full h-full" />
               <div className="absolute inset-0 pointer-events-none bg-gradient-to-r from-card/60 via-transparent to-transparent lg:bg-gradient-to-r lg:from-card/40 lg:via-transparent lg:to-transparent" />

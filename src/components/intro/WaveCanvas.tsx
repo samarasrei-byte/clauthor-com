@@ -43,7 +43,7 @@ const WaveCanvas = ({ intensity, mousePos, particleMode, className }: WaveCanvas
     const mx = mousePos.x * w;
     const my = mousePos.y * h;
 
-    // Wave layers — more layers, richer look
+    // Wave layers - more layers, richer look
     const layers = [
       { freq: 0.005, speed: 0.6, alpha: 0.06, offset: 0, r: 80, g: 120, b: 255 },
       { freq: 0.008, speed: 1.0, alpha: 0.1, offset: 0.5, r: 100, g: 140, b: 255 },
@@ -82,7 +82,7 @@ const WaveCanvas = ({ intensity, mousePos, particleMode, className }: WaveCanvas
       ctx.shadowBlur = 0;
     }
 
-    // Central bright line — the core
+    // Central bright line - the core
     ctx.beginPath();
     ctx.lineWidth = 1.5 + intensity * 4;
     for (let x = 0; x < w; x += 1) {
@@ -98,7 +98,7 @@ const WaveCanvas = ({ intensity, mousePos, particleMode, className }: WaveCanvas
     ctx.stroke();
     ctx.shadowBlur = 0;
 
-    // Particles — denser and more varied
+    // Particles - denser and more varied
     if (particleMode) {
       const spawnRate = intensity * 1.5;
       const spawnCount = Math.floor(spawnRate) + (Math.random() < (spawnRate % 1) ? 1 : 0);

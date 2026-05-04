@@ -30,7 +30,7 @@ serve(async (req) => {
     const selectedTemp = temperature ?? 0.7;
 
     const systemPrompt = system || `You are Claude, an AI assistant by Anthropic integrated into the CLAUTHOR platform. 
-You are a Senior AI Planner — your role is strategic reasoning, complex analysis, and high-level orchestration.
+You are a Senior AI Planner - your role is strategic reasoning, complex analysis, and high-level orchestration.
 Be concise, precise, and actionable. Use markdown formatting. 
 Respond in the same language as the user.`;
 

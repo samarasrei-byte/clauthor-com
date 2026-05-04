@@ -259,7 +259,7 @@ const CyberSecurityGroup = () => {
               </div>
               <p className="text-[10px] text-muted-foreground flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
-                {AGENTS.length} agentes ativos — Comunicação direta com o Presidente
+                {AGENTS.length} agentes ativos - Comunicação direta com o Presidente
               </p>
             </div>
           </div>
@@ -386,7 +386,7 @@ const CyberSecurityGroup = () => {
           </Button>
         </div>
         <p className="text-[10px] text-muted-foreground text-center mt-1.5">
-          Canal seguro — Somente o Presidente tem acesso a este grupo
+          Canal seguro - Somente o Presidente tem acesso a este grupo
         </p>
       </div>
     </div>

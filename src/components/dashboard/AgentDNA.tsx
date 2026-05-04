@@ -96,7 +96,7 @@ const DNAVisualization = ({ profile }: { profile: AgentDNAProfile }) => {
           );
         })}
         
-        {/* Center core — pulses based on overall score */}
+        {/* Center core - pulses based on overall score */}
         <motion.circle
           cx="100" cy="100" r="14"
           fill={`hsla(var(--primary), ${profile.overallScore / 500})`}
@@ -243,7 +243,7 @@ const AgentDNA = () => {
         <div>
           <h2 className="text-xl font-bold flex items-center gap-2">
             <Dna className="h-5 w-5 text-primary" />
-            Agent DNA — Performance Biometrics
+            Agent DNA - Performance Biometrics
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
             DNA visual gerado a partir de métricas reais: taxa de sucesso, velocidade, eficiência e tendência de uso.
@@ -287,7 +287,7 @@ const AgentDNA = () => {
                   <span className="text-[10px] font-mono font-semibold w-8 text-right">{profile.overallScore}</span>
                 </div>
 
-                {/* Detailed metrics — shown on hover */}
+                {/* Detailed metrics - shown on hover */}
                 <div className="space-y-1.5 max-h-0 overflow-hidden group-hover:max-h-40 transition-all duration-300">
                   <div className="flex items-center gap-2">
                     <Shield className="h-3 w-3 text-emerald-400 shrink-0" />
@@ -307,7 +307,7 @@ const AgentDNA = () => {
                   <div className="flex items-center gap-2">
                     <Clock className="h-3 w-3 text-blue-400 shrink-0" />
                     <span className="text-[9px] text-muted-foreground flex-1">Tempo médio</span>
-                    <span className="text-[9px] font-mono">{profile.avgResponseMs > 0 ? `${(profile.avgResponseMs / 1000).toFixed(1)}s` : "—"}</span>
+                    <span className="text-[9px] font-mono">{profile.avgResponseMs > 0 ? `${(profile.avgResponseMs / 1000).toFixed(1)}s` : "-"}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Bot className="h-3 w-3 text-muted-foreground shrink-0" />

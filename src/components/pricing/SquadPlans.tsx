@@ -405,7 +405,7 @@ export default function SquadPlans() {
             </div>
           </TabsContent>
 
-          {/* DEPARTMENTS — Premium redesign */}
+          {/* DEPARTMENTS - Premium redesign */}
           <TabsContent value="departments" className="mt-8">
             <div className="text-center mb-8">
               <p className="text-muted-foreground text-sm max-w-xl mx-auto">
@@ -470,7 +470,7 @@ export default function SquadPlans() {
                       {/* Divider */}
                       <div className="h-px bg-border mb-4" />
 
-                      {/* Agents list — clean vertical */}
+                      {/* Agents list - clean vertical */}
                       <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-3">Included Agents</p>
                       <div className="space-y-2 mb-5">
                         {dept.agents.slice(0, 4).map((agent, idx) => {
@@ -485,7 +485,7 @@ export default function SquadPlans() {
                               </div>
                               <div className="min-w-0 flex-1">
                                 <p className="text-xs font-medium truncate">
-                                  {t(`library_page.agents.${agent.key}_title`).split("—")[0].trim()}
+                                  {t(`library_page.agents.${agent.key}_title`).split("-")[0].trim()}
                                 </p>
                                 <p className="text-[10px] text-muted-foreground">
                                   {t(`library_page.agents.${agent.key}_replaces`)}
@@ -501,7 +501,7 @@ export default function SquadPlans() {
                         )}
                       </div>
 
-                      {/* CTA — clean red pill button */}
+                      {/* CTA - clean red pill button */}
                       <Link to="/auth">
                         <button className="w-full h-11 rounded-xl bg-primary text-primary-foreground font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-200 hover:brightness-110 active:scale-[0.98]">
                           {fp(deptPrice)}/{t("pricing_page.per_month").replace("/", "")}
@@ -514,7 +514,7 @@ export default function SquadPlans() {
               })}
             </div>
 
-            {/* FAQ — separate clean section */}
+            {/* FAQ - separate clean section */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -524,7 +524,7 @@ export default function SquadPlans() {
               <DepartmentFAQ departmentId="all" />
             </motion.div>
 
-            {/* Bottom CTA — full company */}
+            {/* Bottom CTA - full company */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

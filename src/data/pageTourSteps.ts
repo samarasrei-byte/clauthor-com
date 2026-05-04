@@ -6,28 +6,28 @@ export const FULL_PLATFORM_TOUR: PageTourStep[] = [
     label: "Home",
     pageTitle: "Landing Page",
     speech:
-      "E aí! Eu sou o Thor, CEO e orquestrador de toda a equipe de IA da CLAUTHOR. Vou te levar pra um tour completo pela plataforma — navegando página por página. Bora comigo!",
+      "E aí! Eu sou o Thor, CEO e orquestrador de toda a equipe de IA da CLAUTHOR. Vou te levar pra um tour completo pela plataforma - navegando página por página. Bora comigo!",
   },
   {
     route: "/",
     label: "Plataforma",
     pageTitle: "Landing Page",
     speech:
-      "Aqui na home você vê a proposta central: substituir equipes inteiras por agentes de IA especializados. Cada agente é treinado pra uma função específica — de SDR a CFO. E o melhor? Eu orquestro todos eles automaticamente.",
+      "Aqui na home você vê a proposta central: substituir equipes inteiras por agentes de IA especializados. Cada agente é treinado pra uma função específica - de SDR a CFO. E o melhor? Eu orquestro todos eles automaticamente.",
   },
   {
     route: "/library",
     label: "Marketplace",
     pageTitle: "Biblioteca de Agentes",
     speech:
-      "Bem-vindo ao Marketplace! Aqui ficam mais de 200 agentes especializados, organizados por departamento. Você pode testar qualquer um antes de contratar — é só clicar em 'Test Drive'. Cada agente tem ROI calculado e nível de autonomia.",
+      "Bem-vindo ao Marketplace! Aqui ficam mais de 200 agentes especializados, organizados por departamento. Você pode testar qualquer um antes de contratar - é só clicar em 'Test Drive'. Cada agente tem ROI calculado e nível de autonomia.",
   },
   {
     route: "/departamentos",
     label: "Departamentos",
     pageTitle: "Departamentos",
     speech:
-      "Essa página mostra os departamentos completos: Marketing, Vendas, Financeiro, Jurídico, TI, RH e mais. Cada departamento tem um squad pré-montado de agentes que trabalham juntos — tipo um dream team de IA.",
+      "Essa página mostra os departamentos completos: Marketing, Vendas, Financeiro, Jurídico, TI, RH e mais. Cada departamento tem um squad pré-montado de agentes que trabalham juntos - tipo um dream team de IA.",
   },
   {
     route: "/pricing",
@@ -55,6 +55,6 @@ export const FULL_PLATFORM_TOUR: PageTourStep[] = [
     label: "Começar",
     pageTitle: "Próximos Passos",
     speech:
-      "Voltamos pra home! Agora você conhece toda a plataforma. Clica em 'Começar Grátis' pra criar sua conta — eu vou te guiar pessoalmente no setup e montar sua equipe de IA em menos de 2 minutos. Te espero lá dentro!",
+      "Voltamos pra home! Agora você conhece toda a plataforma. Clica em 'Começar Grátis' pra criar sua conta - eu vou te guiar pessoalmente no setup e montar sua equipe de IA em menos de 2 minutos. Te espero lá dentro!",
   },
 ];

@@ -77,7 +77,7 @@ const ROIDashboard = ({ agents, totalExecutions, totalTokensUsed, estimatedSavin
   }, [agents, totalExecutions, execLogs]);
 
   const formatTrend = (val: number) => {
-    if (val === 0) return { text: "—", icon: Minus, color: "text-muted-foreground" };
+    if (val === 0) return { text: "-", icon: Minus, color: "text-muted-foreground" };
     if (val > 0) return { text: `+${val}%`, icon: ArrowUpRight, color: "text-emerald-400" };
     return { text: `${val}%`, icon: ArrowDownRight, color: "text-destructive" };
   };

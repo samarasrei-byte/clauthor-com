@@ -32,7 +32,7 @@ const QuickStartWizard = ({ isOpen, onClose, onTeach, onHire, onCommand }: Quick
     {
       icon: Bot,
       title: t("quickstart.step2_title", { defaultValue: "Contrate seu 1º agente" }),
-      desc: t("quickstart.step2_desc", { defaultValue: "Escolha um agente pronto — SDR, Copywriter ou Analista. Ele já vem configurado e treinado." }),
+      desc: t("quickstart.step2_desc", { defaultValue: "Escolha um agente pronto - SDR, Copywriter ou Analista. Ele já vem configurado e treinado." }),
       time: "20s",
       color: "from-primary/20 to-accent/10",
       action: () => { onHire(); onClose(); },

@@ -205,7 +205,7 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold"
           >
             <Sparkles className="h-3.5 w-3.5" />
-            Passo essencial — Ensine seus agentes sobre sua empresa
+            Passo essencial - Ensine seus agentes sobre sua empresa
           </motion.div>
           <h1 className="font-display text-2xl font-bold">
             {currentStep === 0 ? "Como você quer ensinar seus agentes?" : "Seus agentes estão aprendendo"}
@@ -224,7 +224,7 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
             <div className="flex items-center justify-between text-xs text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 {aiExtracted && <Zap className="h-3 w-3 text-primary" />}
-                {aiExtracted ? "Dados extraídos por IA — revise e ajuste" : `Etapa ${currentStep} de ${STEPS.length - 1}`}
+                {aiExtracted ? "Dados extraídos por IA - revise e ajuste" : `Etapa ${currentStep} de ${STEPS.length - 1}`}
               </span>
               <span>{progress}%</span>
             </div>
@@ -252,7 +252,7 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
                           <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-bold">RECOMENDADO</span>
                         </div>
                         <p className="text-xs text-muted-foreground mt-1">
-                          Cole a URL do seu site e a IA extrai nome, serviços, preços, contato — tudo automaticamente.
+                          Cole a URL do seu site e a IA extrai nome, serviços, preços, contato - tudo automaticamente.
                         </p>
                         {scanMethod === "url" && (
                           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} className="mt-3 space-y-2">
@@ -293,7 +293,7 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold">Colar texto ou documento</h3>
                         <p className="text-xs text-muted-foreground mt-1">
-                          Cole qualquer texto: apresentação, proposta comercial, bio do Instagram, PDF copiado — a IA organiza tudo.
+                          Cole qualquer texto: apresentação, proposta comercial, bio do Instagram, PDF copiado - a IA organiza tudo.
                         </p>
                         {scanMethod === "paste" && (
                           <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} className="mt-3 space-y-2">
@@ -326,7 +326,7 @@ export default function CompanyOnboardingWizard({ onComplete, onSkip }: CompanyO
                       <div className="flex-1">
                         <h3 className="font-semibold">Preencher manualmente</h3>
                         <p className="text-xs text-muted-foreground mt-1">
-                          Preencha campo por campo — ideal para quem ainda não tem site.
+                          Preencha campo por campo - ideal para quem ainda não tem site.
                         </p>
                       </div>
                       <ArrowRight className="h-4 w-4 text-muted-foreground mt-1" />

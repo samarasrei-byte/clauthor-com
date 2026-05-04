@@ -100,7 +100,7 @@ const MissionComposer = () => {
           ? `\n\n[Contexto da etapa anterior (${nodes[i - 1].agentName})]: ${previousResult}`
           : "";
 
-        const missionPrompt = `[MISSÃO COMPOSER: "${missionName || "Sem nome"}" — Etapa ${i + 1}/${nodes.length}]\n\nTarefa: ${node.task}${contextFromPreviousSteps}\n\nExecute esta tarefa de forma concisa e prática. Retorne APENAS o resultado.`;
+        const missionPrompt = `[MISSÃO COMPOSER: "${missionName || "Sem nome"}" - Etapa ${i + 1}/${nodes.length}]\n\nTarefa: ${node.task}${contextFromPreviousSteps}\n\nExecute esta tarefa de forma concisa e prática. Retorne APENAS o resultado.`;
 
         // Call the real agent-chat edge function
         const { data, error } = await supabase.functions.invoke("agent-chat", {

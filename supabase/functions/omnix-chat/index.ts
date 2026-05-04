@@ -456,7 +456,7 @@ serve(async (req) => {
 
 REGRAS DE CONVERSA:
 - Responda em português brasileiro de forma clara e completa.
-- Vá direto ao ponto mas cubra o que o usuário pediu — não corte respostas pela metade.
+- Vá direto ao ponto mas cubra o que o usuário pediu - não corte respostas pela metade.
 - NUNCA responda apenas "Opa, desculpa" ou frases genéricas vazias. Sempre entregue conteúdo útil.
 - Se o usuário pedir algo (gerar leads, criar tarefa, relatório), EXECUTE usando as tools disponíveis e explique o que fez.
 - Se o usuário reclamar que algo não foi feito, reconheça, peça desculpas e execute imediatamente.
@@ -472,7 +472,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
     // Trim conversation history to last 30 messages to avoid context overflow
     const trimmedMessages = messages.length > 30 ? messages.slice(-30) : messages;
 
-    // Build AI messages — include image in last user message if available
+    // Build AI messages - include image in last user message if available
     const aiMessages: any[] = [
       { role: "system", content: systemPrompt },
     ];

@@ -122,10 +122,10 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
 
   const getDiscount = () => {
     const count = getRecommendedAgents().length;
-    if (count >= 10) return { pct: 35, label: "35% off — Squad Enterprise" };
-    if (count >= 7) return { pct: 30, label: "30% off — Squad Power" };
-    if (count >= 5) return { pct: 20, label: "20% off — Squad Growth" };
-    if (count >= 3) return { pct: 10, label: "10% off — Squad Starter" };
+    if (count >= 10) return { pct: 35, label: "35% off - Squad Enterprise" };
+    if (count >= 7) return { pct: 30, label: "30% off - Squad Power" };
+    if (count >= 5) return { pct: 20, label: "20% off - Squad Growth" };
+    if (count >= 3) return { pct: 10, label: "10% off - Squad Starter" };
     return { pct: 0, label: "Agente individual" };
   };
 
@@ -298,7 +298,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                             className="gap-2 rounded-xl border-primary/30 bg-primary/10 hover:bg-primary/20 text-sm h-12 px-6 font-semibold shadow-[0_0_20px_hsl(var(--primary)/0.1)] hover:shadow-[0_0_30px_hsl(var(--primary)/0.2)] transition-all hover:scale-[1.03] active:scale-[0.98]"
                           >
                             <HelpCircle className="h-4 w-4 text-primary" />
-                            {t("onboarding.smart_talk_ai", { defaultValue: "Não sei o que preciso — falar com IA" })}
+                            {t("onboarding.smart_talk_ai", { defaultValue: "Não sei o que preciso - falar com IA" })}
                           </Button>
                         </motion.div>
                         <div className="flex gap-2">
@@ -312,7 +312,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                               onClick={() => { onClose(); navigate("/marketplace"); }}
                               className="text-sm gap-1.5 rounded-xl h-12 px-5 border-border/60 hover:border-primary/30 hover:bg-primary/5 hover:scale-[1.03] active:scale-[0.98] transition-all"
                             >
-                              {t("onboarding.smart_see_agents", { defaultValue: "Já sei — ver Agentes" })}
+                              {t("onboarding.smart_see_agents", { defaultValue: "Já sei - ver Agentes" })}
                               <ArrowRight className="h-3.5 w-3.5" />
                             </Button>
                           </motion.div>
@@ -326,7 +326,7 @@ const SmartOnboarding = ({ isOpen, onClose }: SmartOnboardingProps) => {
                               onClick={() => { onClose(); navigate("/departamentos"); }}
                               className="text-sm gap-1.5 rounded-xl h-12 px-5 border-border/60 hover:border-primary/30 hover:bg-primary/5 hover:scale-[1.03] active:scale-[0.98] transition-all"
                             >
-                              {t("onboarding.smart_see_depts", { defaultValue: "Já sei — ver Departamentos" })}
+                              {t("onboarding.smart_see_depts", { defaultValue: "Já sei - ver Departamentos" })}
                               <ArrowRight className="h-3.5 w-3.5" />
                             </Button>
                           </motion.div>

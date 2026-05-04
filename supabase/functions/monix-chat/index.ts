@@ -85,7 +85,7 @@ NÍVEL DE AUTONOMIA: ${autonomy}
 CONTEXTO OPERACIONAL EM TEMPO REAL:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 🤖 Agentes Ativos: ${activeAgents.length}/${agents.length}
-${activeAgents.map(a => `  → ${a.name} (${a.tier}) — ${a.total_executions} execuções`).join("\n")}
+${activeAgents.map(a => `  → ${a.name} (${a.tier}) - ${a.total_executions} execuções`).join("\n")}
 
 📊 KPIs CONSOLIDADOS:
   • Execuções totais: ${totalExecs}

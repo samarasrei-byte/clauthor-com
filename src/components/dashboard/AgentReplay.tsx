@@ -259,7 +259,7 @@ const AgentReplay = () => {
         <div>
           <h2 className="text-xl font-bold flex items-center gap-2">
             <Rewind className="h-5 w-5 text-primary" />
-            Agent Replay — Raciocínio em Tempo Real
+            Agent Replay - Raciocínio em Tempo Real
           </h2>
           <p className="text-xs text-muted-foreground mt-1">
             Reveja cada decisão dos seus agentes. Steps extraídos de dados reais de execução.

@@ -390,7 +390,7 @@ const UnifiedInbox = ({ onOpenChat }: { onOpenChat?: (agent: { id: string; name:
                 </div>
                 <p className="text-[11px] text-muted-foreground/50">Selecione uma conversa</p>
                 <p className="text-[9.5px] text-muted-foreground/30 mt-1">
-                  WhatsApp · Chat · E-mail — tudo aqui
+                  WhatsApp · Chat · E-mail - tudo aqui
                 </p>
               </div>
             </motion.div>

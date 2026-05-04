@@ -2,7 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
 
-// Only load PT (default) synchronously — others loaded on demand
+// Only load PT (default) synchronously - others loaded on demand
 import pt from "./locales/pt.json";
 import en from "./locales/en.json";
 
@@ -24,7 +24,7 @@ export const languages = [
 
 const supportedLngs = ["pt", ...languages.map((l) => l.code).filter(c => c !== "pt")];
 
-// Dynamic locale loaders — only fetched when needed
+// Dynamic locale loaders - only fetched when needed
 const localeLoaders: Record<string, () => Promise<{ default: Record<string, any> }>> = {
   "pt-pt": () => import("./locales/pt.json"),
   en: () => import("./locales/en.json"),
@@ -54,7 +54,7 @@ async function loadLocale(lng: string) {
   }
 }
 
-// Pre-load a locale before switching — ensures translations are available immediately
+// Pre-load a locale before switching - ensures translations are available immediately
 export async function changeLanguageSafe(lng: string) {
   await loadLocale(lng);
   await i18n.changeLanguage(lng);

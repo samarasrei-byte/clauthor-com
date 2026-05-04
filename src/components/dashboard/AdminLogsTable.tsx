@@ -59,10 +59,10 @@ export default function AdminLogsTable({ executionLogs, locale }: AdminLogsTable
             <tbody>
               {filtered.map((log: any) => (
                 <tr key={log.id} className="border-b border-white/[0.05] hover:bg-accent/20">
-                  <td className="p-3 font-medium">{log.agent?.name || "—"}</td>
+                  <td className="p-3 font-medium">{log.agent?.name || "-"}</td>
                   <td className="p-3 text-muted-foreground">{log.action}</td>
                   <td className="p-3"><Badge variant="secondary" className={log.status === "success" ? "bg-emerald-500/10 text-emerald-400" : log.status === "error" ? "bg-destructive/10 text-destructive" : "bg-primary/10 text-primary/80"}>{log.status}</Badge></td>
-                  <td className="p-3 text-muted-foreground">{log.execution_time_ms ? `${log.execution_time_ms}ms` : "—"}</td>
+                  <td className="p-3 text-muted-foreground">{log.execution_time_ms ? `${log.execution_time_ms}ms` : "-"}</td>
                   <td className="p-3 text-muted-foreground text-xs">{new Date(log.created_at).toLocaleString(locale, { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}</td>
                 </tr>
               ))}

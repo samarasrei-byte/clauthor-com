@@ -189,7 +189,7 @@ const OmnixDashboard = ({ messages, isSpeaking, compact }: OmnixDashboardProps) 
       <div className="bg-card/30 border border-border/20 rounded-xl p-3">
         <div className="flex items-center gap-2 mb-2">
           <TrendingUp className="h-3.5 w-3.5 text-primary" />
-          <span className="text-[10px] font-semibold uppercase tracking-wider">{t("omnix.exec_7days", { defaultValue: "Execuções — 7 dias" })}</span>
+          <span className="text-[10px] font-semibold uppercase tracking-wider">{t("omnix.exec_7days", { defaultValue: "Execuções - 7 dias" })}</span>
         </div>
         <div className="h-[120px]">
           <ResponsiveContainer width="100%" height="100%">

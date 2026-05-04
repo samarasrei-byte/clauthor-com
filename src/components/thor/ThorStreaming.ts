@@ -1,5 +1,5 @@
 /**
- * ThorStreaming.ts — SSE parser, stall timeout, response clamping, reconnection logic
+ * ThorStreaming.ts - SSE parser, stall timeout, response clamping, reconnection logic
  */
 
 export const THOR_MAX_RESPONSE_CHARS = 900;

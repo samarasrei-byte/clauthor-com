@@ -75,7 +75,7 @@ const AudioWaveform = ({ active, mode, className }: AudioWaveformProps) => {
       {seeds.map(([r1, r2, r3], i) => {
         const center = BAR_COUNT / 2;
         const dist = Math.abs(i - center) / center;
-        // Parabolic envelope — tallest at center, fading at edges
+        // Parabolic envelope - tallest at center, fading at edges
         const envelope = 1 - dist * dist;
         const maxH = isSpeaking ? 48 : isListening ? 36 : 20;
         const minH = 2;

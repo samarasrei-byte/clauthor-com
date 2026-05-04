@@ -20,7 +20,7 @@ Deno.serve(async (req) => {
 
     const body = await req.json();
 
-    // Test mode — send test notification
+    // Test mode - send test notification
     if (body.test === true) {
       const { data: config } = await supabase
         .from("hunter_config")

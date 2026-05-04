@@ -12,7 +12,7 @@ export const LANDING_TOUR_STEPS: TourStep[] = [
   {
     label: "Sua equipe de IA",
     speech:
-      "Aqui é onde tudo começa. A CLAUTHOR te dá acesso a mais de 200 agentes de IA especializados — de SDR a CFO, de copywriter a analista de segurança. Cada um é treinado para uma função específica do seu negócio.",
+      "Aqui é onde tudo começa. A CLAUTHOR te dá acesso a mais de 200 agentes de IA especializados - de SDR a CFO, de copywriter a analista de segurança. Cada um é treinado para uma função específica do seu negócio.",
   },
   {
     label: "Como funciona",
@@ -27,7 +27,7 @@ export const LANDING_TOUR_STEPS: TourStep[] = [
   {
     label: "Próximos passos",
     speech:
-      "Clica em 'Começar Grátis' pra criar sua conta. Eu vou te guiar pessoalmente no setup — vamos montar sua equipe de IA em menos de 2 minutos. Te espero lá dentro!",
+      "Clica em 'Começar Grátis' pra criar sua conta. Eu vou te guiar pessoalmente no setup - vamos montar sua equipe de IA em menos de 2 minutos. Te espero lá dentro!",
   },
 ];
 
@@ -85,6 +85,6 @@ export const DASHBOARD_TOUR_STEPS: TourStep[] = [
   {
     label: "Pronto pra começar!",
     speech:
-      "Agora você sabe onde tudo fica! Minha dica: comece ensinando sobre sua empresa no Company Board, depois contrate seus primeiros agentes. E lembra — estou sempre aqui pra te ajudar. É só me chamar!",
+      "Agora você sabe onde tudo fica! Minha dica: comece ensinando sobre sua empresa no Company Board, depois contrate seus primeiros agentes. E lembra - estou sempre aqui pra te ajudar. É só me chamar!",
   },
 ];

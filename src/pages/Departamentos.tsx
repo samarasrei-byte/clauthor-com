@@ -172,7 +172,7 @@ const Departamentos = () => {
       </div>
 
       <div className="max-w-7xl mx-auto relative">
-        {/* Hero Header — compact */}
+        {/* Hero Header - compact */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

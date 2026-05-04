@@ -102,7 +102,7 @@ export default function CompanyBoardGate({ agentName, onSetupCompany, onSkip }: 
             <ArrowRight className="h-4 w-4" />
           </Button>
           <Button variant="ghost" onClick={onSkip} className="w-full text-xs text-muted-foreground hover:text-foreground">
-            {t("gate.skip_enhanced", { defaultValue: "Pular por agora — configurar depois" })}
+            {t("gate.skip_enhanced", { defaultValue: "Pular por agora - configurar depois" })}
           </Button>
         </div>
       </motion.div>

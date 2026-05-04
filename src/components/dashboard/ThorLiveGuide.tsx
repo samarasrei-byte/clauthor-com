@@ -19,22 +19,22 @@ const GUIDE_STEPS: GuideStep[] = [
   {
     section: "overview",
     title: "Command Center",
-    message: "Bem-vindo! Este é o seu Command Center — o hub central onde você monitora tudo. Desempenho dos agentes, tarefas pendentes e ações rápidas, tudo em um só lugar.",
+    message: "Bem-vindo! Este é o seu Command Center - o hub central onde você monitora tudo. Desempenho dos agentes, tarefas pendentes e ações rápidas, tudo em um só lugar.",
   },
   {
     section: "omnix",
     title: "Thor IA",
-    message: "Aqui é onde eu moro! Pode falar comigo a qualquer momento — delegue tarefas, faça perguntas estratégicas ou me deixe orquestrar toda a sua equipe de IA. Sou seu co-piloto.",
+    message: "Aqui é onde eu moro! Pode falar comigo a qualquer momento - delegue tarefas, faça perguntas estratégicas ou me deixe orquestrar toda a sua equipe de IA. Sou seu co-piloto.",
   },
   {
     section: "agents",
     title: "Seus Agentes",
-    message: "Aqui você encontra todos os agentes de IA trabalhando para você. Cada um é especializado em uma área diferente — de prospecção de vendas a criação de conteúdo. Pense neles como seus funcionários digitais.",
+    message: "Aqui você encontra todos os agentes de IA trabalhando para você. Cada um é especializado em uma área diferente - de prospecção de vendas a criação de conteúdo. Pense neles como seus funcionários digitais.",
   },
   {
     section: "library",
     title: "Biblioteca de Agentes",
-    message: "Esta é a Biblioteca — seu marketplace com 200+ agentes de IA em 37 squads e 15 departamentos. Navegue, compare e contrate os que combinam com suas necessidades.",
+    message: "Esta é a Biblioteca - seu marketplace com 200+ agentes de IA em 37 squads e 15 departamentos. Navegue, compare e contrate os que combinam com suas necessidades.",
   },
   {
     section: "war-room",
@@ -44,7 +44,7 @@ const GUIDE_STEPS: GuideStep[] = [
   {
     section: "live-timeline",
     title: "Timeline",
-    message: "Esta é a Timeline. Mostra tudo que seus agentes estão fazendo em tempo real — cada tarefa, cada execução, cada resultado. Transparência total nas suas operações de IA.",
+    message: "Esta é a Timeline. Mostra tudo que seus agentes estão fazendo em tempo real - cada tarefa, cada execução, cada resultado. Transparência total nas suas operações de IA.",
   },
   {
     section: "mission-control",
@@ -59,12 +59,12 @@ const GUIDE_STEPS: GuideStep[] = [
   {
     section: "insights",
     title: "Insights",
-    message: "Insights traz análises profundas do desempenho da sua equipe de IA — taxas de sucesso, tendências de execução, uso de tokens e métricas de qualidade.",
+    message: "Insights traz análises profundas do desempenho da sua equipe de IA - taxas de sucesso, tendências de execução, uso de tokens e métricas de qualidade.",
   },
   {
     section: "control-tower",
     title: "Torre de Controle",
-    message: "A Torre de Controle centraliza o comando de toda sua frota de agentes — credenciais, feedback de execução e métricas globais em um dashboard poderoso.",
+    message: "A Torre de Controle centraliza o comando de toda sua frota de agentes - credenciais, feedback de execução e métricas globais em um dashboard poderoso.",
   },
   {
     section: "settings",
@@ -160,7 +160,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
           transition={{ duration: isSpeaking ? 0.5 : 2, repeat: Infinity, ease: "easeInOut" }}
         />
 
-        {/* Neural ring segments — each bar radiates outward from center */}
+        {/* Neural ring segments - each bar radiates outward from center */}
         {seeds.map(([r1, r2, r3], i) => {
           const angleStep = (2 * Math.PI) / RING_SEGMENTS;
           const angle = angleStep * i;
@@ -258,7 +258,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
           }}
         />
 
-        {/* Second orbital arc — counter-rotating */}
+        {/* Second orbital arc - counter-rotating */}
         <motion.circle
           cx={CENTER} cy={CENTER}
           r={BASE_RADIUS + (isSpeaking ? 28 : isListening ? 16 : 8)}
@@ -361,7 +361,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
   const [hasGreeted, setHasGreeted] = useState(false);
   const typingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro da ClauThor. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral — eu explico cada seção enquanto você explora.";
+  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro da ClauThor. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral - eu explico cada seção enquanto você explora.";
 
   // Typewriter effect
   const typeText = useCallback((text: string) => {

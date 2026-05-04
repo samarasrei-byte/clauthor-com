@@ -87,7 +87,7 @@ const HunterMensagem = () => {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <MessageSquare className="w-5 h-5 text-primary" /> Passo 3 — Mensagem (icebreaker)
+            <MessageSquare className="w-5 h-5 text-primary" /> Passo 3 - Mensagem (icebreaker)
           </CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">

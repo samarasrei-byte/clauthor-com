@@ -1,7 +1,7 @@
 /**
  * Client-side AES-GCM encryption for agent credentials.
  * Uses Web Crypto API with a deterministic key derived from user ID + agent ID.
- * This adds a defense-in-depth layer — even if DB is compromised, values are encrypted.
+ * This adds a defense-in-depth layer - even if DB is compromised, values are encrypted.
  * 
  * Security features:
  * - AES-256-GCM with 12-byte random IV per encryption
@@ -84,7 +84,7 @@ export async function decryptCredential(
   agentId: string
 ): Promise<string> {
   if (!encrypted.startsWith("enc:")) {
-    // Legacy unencrypted value — return as-is
+    // Legacy unencrypted value - return as-is
     return encrypted;
   }
 

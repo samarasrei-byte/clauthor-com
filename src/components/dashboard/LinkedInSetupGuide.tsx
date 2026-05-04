@@ -33,9 +33,9 @@ const STEPS = [
     link: "https://www.linkedin.com/developers/apps",
     linkLabel: "Abrir Meus Apps",
     details: [
-      '"Share on LinkedIn" — para postar conteúdo',
-      '"Sign In with LinkedIn using OpenID Connect" — para autenticação',
-      '"Marketing Developer Platform" — para campanhas (requer aprovação)',
+      '"Share on LinkedIn" - para postar conteúdo',
+      '"Sign In with LinkedIn using OpenID Connect" - para autenticação',
+      '"Marketing Developer Platform" - para campanhas (requer aprovação)',
       "⏱ Alguns produtos são aprovados automaticamente, outros levam dias",
     ],
     estimatedTime: "5-10 min",
@@ -223,7 +223,7 @@ const LinkedInSetupGuide = () => {
           onClick={skipToCredentials}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Já tenho as credenciais — pular para o último passo
+          Já tenho as credenciais - pular para o último passo
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
       )}
@@ -277,19 +277,19 @@ const LinkedInSetupGuide = () => {
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                      <TermTooltip term="Client ID" /> — encontrado na aba Auth do app
+                      <TermTooltip term="Client ID" /> - encontrado na aba Auth do app
                     </label>
                     <Input placeholder="Client ID" value={clientId} onChange={(e) => setClientId(e.target.value)} className="text-sm" />
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                      <TermTooltip term="Client Secret" /> — gerado na aba Auth
+                      <TermTooltip term="Client Secret" /> - gerado na aba Auth
                     </label>
                     <Input placeholder="Client Secret" type="password" value={clientSecret} onChange={(e) => setClientSecret(e.target.value)} className="text-sm" />
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                      <TermTooltip term="Access Token" /> — gerado pelo Token Generator
+                      <TermTooltip term="Access Token" /> - gerado pelo Token Generator
                     </label>
                     <Input placeholder="Access Token" type="password" value={accessToken} onChange={(e) => setAccessToken(e.target.value)} className="text-sm" />
                   </div>

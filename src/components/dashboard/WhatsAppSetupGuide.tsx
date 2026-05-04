@@ -239,7 +239,7 @@ const WhatsAppSetupGuide = () => {
           onClick={skipToCredentials}
         >
           <Sparkles className="h-3.5 w-3.5" />
-          Já tenho as credenciais — pular para o último passo
+          Já tenho as credenciais - pular para o último passo
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
       )}
@@ -298,7 +298,7 @@ const WhatsAppSetupGuide = () => {
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                      <TermTooltip term="Phone Number ID" /> — encontrado no painel do WhatsApp
+                      <TermTooltip term="Phone Number ID" /> - encontrado no painel do WhatsApp
                     </label>
                     <Input
                       placeholder="Phone Number ID"
@@ -309,7 +309,7 @@ const WhatsAppSetupGuide = () => {
                   </div>
                   <div>
                     <label className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
-                      <TermTooltip term="Access Token" /> — gerado nas configurações do app
+                      <TermTooltip term="Access Token" /> - gerado nas configurações do app
                     </label>
                     <Input
                       placeholder="Access Token"

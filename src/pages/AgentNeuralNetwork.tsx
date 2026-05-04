@@ -409,7 +409,7 @@ function InfoPanel({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
-          <span className="text-[10px] text-emerald-400">Online — Ready</span>
+          <span className="text-[10px] text-emerald-400">Online - Ready</span>
         </div>
       </div>
     </motion.div>
@@ -505,7 +505,7 @@ export default function AgentNeuralNetwork() {
           NEURAL NETWORK
         </h1>
         <p className="text-[10px] text-muted-foreground">
-          AI Workforce — Real-time Agent Topology
+          AI Workforce - Real-time Agent Topology
         </p>
       </div>
     </div>

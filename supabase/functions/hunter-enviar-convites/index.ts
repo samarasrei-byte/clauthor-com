@@ -141,7 +141,7 @@ Deno.serve(async (req) => {
         mensagem: `${leads.length} mensagens criadas como pendentes. Configure PhantomBuster para envio automático.`,
       });
 
-      return jsonResponse({ success: true, queued: leads.length, message: "PhantomBuster não configurado — mensagens ficaram na fila" });
+      return jsonResponse({ success: true, queued: leads.length, message: "PhantomBuster não configurado - mensagens ficaram na fila" });
     }
   } catch (e) {
     return errorResponse(e.message || "Erro interno", 500);

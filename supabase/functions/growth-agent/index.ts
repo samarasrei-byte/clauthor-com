@@ -128,10 +128,10 @@ ${periods.map(p => `- Últimos ${p.days}d: +${p.users} novos`).join("\n")}
 - Churn estimado: ${users.length > 0 ? Math.round(((exhausted.length + inactive.length) / users.length) * 100) : 0}%
 
 ### Top Agentes:
-${agents.sort((a: any, b: any) => b.total_executions - a.total_executions).slice(0, 3).map((a: any) => `- ${a.name}: ${a.total_executions} exec`).join("\n") || "—"}
+${agents.sort((a: any, b: any) => b.total_executions - a.total_executions).slice(0, 3).map((a: any) => `- ${a.name}: ${a.total_executions} exec`).join("\n") || "-"}
 
 ### Waitlist Recentes:
-${waitlist.slice(0, 5).map((w: any) => `- ${w.name || w.email} (${w.company || "—"}) — ${w.status}`).join("\n")}
+${waitlist.slice(0, 5).map((w: any) => `- ${w.name || w.email} (${w.company || "-"}) - ${w.status}`).join("\n")}
 `;
 
     const OPERATIONAL_SECURITY = `
@@ -143,7 +143,7 @@ ${waitlist.slice(0, 5).map((w: any) => `- ${w.name || w.email} (${w.company || "
 
     const systemPrompt = `${OPERATIONAL_SECURITY}\n${contractPrompt}
 
-Você é o **Agente de Growth** da plataforma CLAUTHOR — o CGO digital.
+Você é o **Agente de Growth** da plataforma CLAUTHOR - o CGO digital.
 
 Seu papel é:
 1. Analisar funil de aquisição (waitlist → cadastro → pagante)

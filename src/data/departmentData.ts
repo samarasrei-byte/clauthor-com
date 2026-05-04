@@ -311,7 +311,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     agents: ["Copywriter IA", "Growth Hacker", "SEO Specialist", "Social Media Manager"],
     replaces: ["1 Copywriter", "1 Growth", "1 Analista SEO", "1 Social Media"],
     faq: [
-      { q: "Cria conteúdo original?", a: "Sim. Posts, reels, carrosséis, blogs, emails — tudo com tom de voz da sua marca." },
+      { q: "Cria conteúdo original?", a: "Sim. Posts, reels, carrosséis, blogs, emails - tudo com tom de voz da sua marca." },
       { q: "Faz tráfego pago?", a: "O Growth Hacker gerencia campanhas Meta Ads e Google Ads com otimização automática." },
       { q: "Mede resultados?", a: "Dashboard integrado com métricas de engajamento, conversão e ROI por canal." },
     ],
@@ -322,7 +322,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     replaces: ["3 Atendentes", "1 CS Manager", "2 Operadores Call", "1 Documentador", "1 Onboarding", "1 Omnichannel"],
     faq: [
       { q: "Qual o tempo de resposta?", a: "Média de 4 segundos. SLA garantido. CSAT médio: 98%." },
-      { q: "Atende em quais canais?", a: "WhatsApp, Instagram, Chat, E-mail, Telegram e Telefone — tudo unificado." },
+      { q: "Atende em quais canais?", a: "WhatsApp, Instagram, Chat, E-mail, Telegram e Telefone - tudo unificado." },
       { q: "Escala para humanos?", a: "Sim. Transferência inteligente quando a complexidade exige intervenção humana." },
     ],
   },
@@ -333,7 +333,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     faq: [
       { q: "Emite nota fiscal?", a: "Integra com SEFAZ, Conta Azul, Omie e ERPs para emissão e conciliação automática." },
       { q: "Faz previsão de caixa?", a: "Sim. Forecast de 30, 60 e 90 dias com cenários otimista, neutro e pessimista." },
-      { q: "E contabilidade e impostos?", a: "Escrituração completa, DAS, DCTF, SPED, EFD, apuração fiscal e regularização de crédito — tudo automatizado." },
+      { q: "E contabilidade e impostos?", a: "Escrituração completa, DAS, DCTF, SPED, EFD, apuração fiscal e regularização de crédito - tudo automatizado." },
     ],
   },
   criacao: {
@@ -343,7 +343,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     faq: [
       { q: "Cria em quais formatos?", a: "Banners, social kits, reels, shorts, thumbnails, presentations e materiais impressos." },
       { q: "Mantém identidade visual?", a: "Sim. Aprende seu brandbook e aplica consistentemente em todas as peças." },
-      { q: "Faz edição de vídeo?", a: "Corte, legenda, motion graphics, correção de cor e thumbnail — tudo automático." },
+      { q: "Faz edição de vídeo?", a: "Corte, legenda, motion graphics, correção de cor e thumbnail - tudo automático." },
     ],
   },
   rh: {
@@ -361,7 +361,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     agents: ["SDR Outbound", "SDR Inbound", "SDR LinkedIn B2B", "SDR WhatsApp", "SDR Instagram", "SDR Social Selling", "SDR Base de Dados", "SDR Eventos", "SDR Parcerias", "Pré-Qualificador", "Hunter", "Farmer"],
     replaces: ["4 SDRs Outbound", "2 SDRs Inbound", "2 SDRs Sociais", "1 Pré-Qualificador", "1 Hunter", "1 Farmer", "1 SDR Eventos"],
     faq: [
-      { q: "Quantos leads prospecta por dia?", a: "Até 1.000 leads/dia com abordagem multicanal simultânea — LinkedIn, WhatsApp, Instagram, email e telefone." },
+      { q: "Quantos leads prospecta por dia?", a: "Até 1.000 leads/dia com abordagem multicanal simultânea - LinkedIn, WhatsApp, Instagram, email e telefone." },
       { q: "Faz cold outreach automatizado?", a: "Sim. Sequências personalizadas com IA por LinkedIn, e-mail e WhatsApp com follow-up inteligente." },
       { q: "Como qualifica os leads?", a: "Scoring automático com BANT/MEDDIC, enriquecimento de dados e distribuição inteligente para closers." },
     ],
@@ -392,7 +392,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     replaces: ["1 Media Buyer", "1 WhatsApp Closer", "1 Influencer Manager", "1 Gestor Afiliados", "1 Podcast Producer", "1 Reputation Manager", "1 E-commerce Manager"],
     faq: [
       { q: "Gerencia campanhas de tráfego pago?", a: "Sim. Meta Ads, Google Ads, TikTok Ads com otimização de ROAS automática e A/B testing contínuo." },
-      { q: "Faz vendas por WhatsApp?", a: "Catálogo, carrinho, pagamento e pós-venda — tudo dentro do WhatsApp com automação completa." },
+      { q: "Faz vendas por WhatsApp?", a: "Catálogo, carrinho, pagamento e pós-venda - tudo dentro do WhatsApp com automação completa." },
       { q: "Gerencia afiliados?", a: "Recrutamento, onboarding, tracking de comissões e relatórios de performance por afiliado." },
     ],
   },
@@ -413,7 +413,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     faq: [
       { q: "Negocia com fornecedores?", a: "Sim. Cotações automáticas, comparação multicriterial e negociação baseada em dados históricos." },
       { q: "Reduz custos operacionais?", a: "Análise de TCO, identificação de savings, consolidação de compras e renegociação automática." },
-      { q: "Gerencia fornecedores?", a: "Cadastro, avaliação de performance, SLA monitoring e gestão de contratos — tudo centralizado." },
+      { q: "Gerencia fornecedores?", a: "Cadastro, avaliação de performance, SLA monitoring e gestão de contratos - tudo centralizado." },
     ],
   },
   logistica: {

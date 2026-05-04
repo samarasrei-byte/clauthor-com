@@ -270,7 +270,7 @@ const SHOWCASE_AGENTS = [
   { name: "Data Analyst", dept: "Analytics", emoji: "📊", task: "Pipeline de dados e dashboards", status: "working" },
   { name: "Funnel Analyst", dept: "Growth", emoji: "🎯", task: "Análise de funil de conversão", status: "idle" },
   { name: "SDR Outbound", dept: "Vendas", emoji: "🚀", task: "Prospecção de 47 leads B2B", status: "working" },
-  { name: "Support Agent", dept: "Suporte", emoji: "🎧", task: "Ticket #4521 — resolução em 2min", status: "working" },
+  { name: "Support Agent", dept: "Suporte", emoji: "🎧", task: "Ticket #4521 - resolução em 2min", status: "working" },
   { name: "CFO Virtual", dept: "Financeiro", emoji: "💰", task: "Relatório mensal de fluxo de caixa", status: "working" },
   { name: "Dev Full-Stack", dept: "Tecnologia", emoji: "👨‍💻", task: "Refactor do módulo de autenticação", status: "working" },
   { name: "Growth Hacker", dept: "Growth", emoji: "📈", task: "A/B test campanha #12", status: "working" },
@@ -284,7 +284,7 @@ const SHOWCASE_AGENTS = [
 const THOR_RESPONSIBILITIES = [
   { icon: Workflow, title: "Distribuição de Tarefas", desc: "Classifica e roteia cada demanda para o departamento e squad correto automaticamente." },
   { icon: Users, title: "Coordenação de Squads", desc: "Gerencia a colaboração entre squads, garantindo que dependências sejam resolvidas." },
-  { icon: Zap, title: "Acionamento de Agentes", desc: "Agentes não rodam continuamente — são acionados por eventos sob demanda." },
+  { icon: Zap, title: "Acionamento de Agentes", desc: "Agentes não rodam continuamente - são acionados por eventos sob demanda." },
   { icon: Bell, title: "Gestão de Eventos", desc: "Monitora triggers (métricas, tickets, relatórios) e aciona workflows automaticamente." },
   { icon: AlertTriangle, title: "Priorização Inteligente", desc: "Avalia urgência, impacto e recursos disponíveis para definir ordem de execução." },
 ];
@@ -479,7 +479,7 @@ const PLATFORM_FEATURES = [
   { icon: Workflow, title: "Automação de Tarefas", tag: "Automação", desc: "Defina rotinas automatizadas: análise de tráfego, relatórios semanais, criativos diários.", details: ["Workflow visual", "Triggers cron/evento", "Sequências de agentes", "Notificações WhatsApp"] },
   { icon: Activity, title: "Atividade em Tempo Real", tag: "Monitoramento", desc: "Logs visuais ao vivo de qual agente está rodando, a tarefa e o tempo.", details: ["Feed de atividade em tempo real", "Filtros por agente e tipo", "Alertas automáticos de erro", "Histórico exportável"] },
   { icon: Shield, title: "Segurança Avançada", tag: "Segurança", desc: "Criptografia AES-256, RLS, audit logs, controle de acesso por papel.", details: ["Credenciais criptografadas por agente", "Logs de auditoria", "Row Level Security (RLS)", "Controle de acesso por tenant"] },
-  { icon: Kanban, title: "AI Scrum Board", tag: "Gestão", desc: "Backlog, Em Progresso, Teste, Concluído — cada agente como tarefa visual.", details: ["Kanban drag-and-drop", "Prioridades e prazos", "Histórico de execução", "Métricas de throughput"] },
+  { icon: Kanban, title: "AI Scrum Board", tag: "Gestão", desc: "Backlog, Em Progresso, Teste, Concluído - cada agente como tarefa visual.", details: ["Kanban drag-and-drop", "Prioridades e prazos", "Histórico de execução", "Métricas de throughput"] },
   { icon: BookOpen, title: "Base de Conhecimento", tag: "Conhecimento", desc: "Base de conhecimento com busca vetorial que alimenta todos os agentes.", details: ["Upload de documentos", "Busca full-text", "Integração RAG", "Categorização automática"] },
   { icon: LineChart, title: "Dashboards de Dados", tag: "Analytics", desc: "Tráfego, ROI, conversões, criativos e campanhas em dashboards interativos.", details: ["Gráficos interativos em tempo real", "KPIs por departamento", "Exportação de relatórios", "Alertas de anomalia"] },
 ];
@@ -605,7 +605,7 @@ const Architecture = () => {
 
       <Divider />
 
-      {/* ═══ SECTION 1 — SYSTEM OVERVIEW ═══ */}
+      {/* ═══ SECTION 1 - SYSTEM OVERVIEW ═══ */}
       <Section id="overview">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={{ visible: { transition: { staggerChildren: 0.08 } } }} className="text-center">
           <motion.div variants={fadeUp}><SectionTag>Seção 1 · Visão Geral do Sistema</SectionTag></motion.div>
@@ -664,13 +664,13 @@ const Architecture = () => {
 
       <Divider />
 
-      {/* ═══ SECTION 2 — ORCHESTRATION LAYER ═══ */}
+      {/* ═══ SECTION 2 - ORCHESTRATION LAYER ═══ */}
       <Section id="orchestration">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={{ visible: { transition: { staggerChildren: 0.06 } } }}>
           <motion.div variants={fadeUp}><SectionTag>Seção 2 · Camada de Orquestração</SectionTag></motion.div>
           <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-4xl font-bold mb-3">Thor · Orquestrador Central</motion.h2>
           <motion.p variants={fadeUp} className="text-muted-foreground max-w-2xl text-sm leading-relaxed mb-8">
-            Thor é o CEO Digital da plataforma. Recebe todas as demandas, classifica, prioriza e distribui para o departamento e squad corretos. Agentes <span className="text-foreground font-medium">não rodam continuamente</span> — são acionados apenas quando necessário.
+            Thor é o CEO Digital da plataforma. Recebe todas as demandas, classifica, prioriza e distribui para o departamento e squad corretos. Agentes <span className="text-foreground font-medium">não rodam continuamente</span> - são acionados apenas quando necessário.
           </motion.p>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
@@ -731,7 +731,7 @@ const Architecture = () => {
 
       <Divider />
 
-      {/* ═══ SECTION 3 — DEPARTMENTS ═══ */}
+      {/* ═══ SECTION 3 - DEPARTMENTS ═══ */}
       <Section id="departments">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={{ visible: { transition: { staggerChildren: 0.04 } } }}>
           <motion.div variants={fadeUp}><SectionTag>Seção 3 · Departamentos</SectionTag></motion.div>
@@ -745,7 +745,7 @@ const Architecture = () => {
 
       <Divider />
 
-      {/* ═══ SECTION 4 — SQUADS ═══ */}
+      {/* ═══ SECTION 4 - SQUADS ═══ */}
       <Section id="squads">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={{ visible: { transition: { staggerChildren: 0.06 } } }}>
           <motion.div variants={fadeUp}><SectionTag>Seção 4 · Squads</SectionTag></motion.div>
@@ -776,7 +776,7 @@ const Architecture = () => {
 
       <Divider />
 
-      {/* ═══ SECTION 5 — AGENTS ═══ */}
+      {/* ═══ SECTION 5 - AGENTS ═══ */}
       <Section id="agents">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={{ visible: { transition: { staggerChildren: 0.04 } } }}>
           <motion.div variants={fadeUp}><SectionTag>Seção 5 · Agentes</SectionTag></motion.div>

@@ -33,7 +33,7 @@ const ReputationBadge = ({ rating, companies, savings, compact = false }: Reputa
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
               <Star className={`h-4 w-4 ${tier.color} fill-current`} />
-              <span className="font-semibold text-sm">{tier.label} — {rating}/5.0</span>
+              <span className="font-semibold text-sm">{tier.label} - {rating}/5.0</span>
             </div>
             <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Users className="h-3 w-3" />

@@ -14,7 +14,7 @@ interface Message {
   content: string;
 }
 
-const CONSULTANT_PROMPT = `Consultor de Squad CLAUTHOR — prompt delegado ao edge function.`;
+const CONSULTANT_PROMPT = `Consultor de Squad CLAUTHOR - prompt delegado ao edge function.`;
 
 export default function SquadConsultant() {
   const { t } = useTranslation();
