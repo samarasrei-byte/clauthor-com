@@ -16,6 +16,7 @@ const REQUIRED_SLUGS = [
   "fechamento_juridico",
   "recuperacao_leads_juridico",
   "producao_juridica",
+  "compliance_lgpd_juridico",
 ] as const;
 
 type CheckStatus = "ok" | "warn" | "fail" | "loading";
@@ -75,15 +76,16 @@ export default function AdvocaciaAudit() {
       .eq("user_id", user.id);
     const activeUserSlugs = new Set((userAgents ?? []).filter((a: any) => a.active).map((a: any) => a.agent_slug));
     const ownedCount = REQUIRED_SLUGS.filter((s) => activeUserSlugs.has(s)).length;
+    const totalRequired = REQUIRED_SLUGS.length;
     rows.push({
       id: "subscription",
       label: "Sua assinatura jurídica",
-      status: ownedCount === 6 ? "ok" : ownedCount > 0 ? "warn" : "fail",
-      detail: ownedCount === 6
-        ? "6 de 6 agentes provisionados na sua conta."
-        : `${ownedCount} de 6 agentes ativos. Faltam: ${REQUIRED_SLUGS.filter((s) => !activeUserSlugs.has(s)).join(", ") || "-"}`,
-      fixHref: ownedCount < 6 ? "/advocacia#planos" : undefined,
-      fixLabel: ownedCount < 6 ? "Ver planos" : undefined,
+      status: ownedCount === totalRequired ? "ok" : ownedCount > 0 ? "warn" : "fail",
+      detail: ownedCount === totalRequired
+        ? `${totalRequired} de ${totalRequired} agentes provisionados na sua conta.`
+        : `${ownedCount} de ${totalRequired} agentes ativos. Faltam: ${REQUIRED_SLUGS.filter((s) => !activeUserSlugs.has(s)).join(", ") || "-"}`,
+      fixHref: ownedCount < totalRequired ? "/advocacia#planos" : undefined,
+      fixLabel: ownedCount < totalRequired ? "Ver planos" : undefined,
     });
 
     // 3. Onboarding de infra (WhatsApp, CRM, ClickSign)
