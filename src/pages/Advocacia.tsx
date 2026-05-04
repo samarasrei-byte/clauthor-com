@@ -139,7 +139,7 @@ const plans: Array<{
     intent: {
       type: "squad",
       label: "Squad Jurídica — Start",
-      slugs: ["legal_intake", "legal_diagnosis"],
+      slugs: ["captacao_juridica", "diagnostico_juridico"],
       departmentId: "advocacia",
     },
   },
@@ -161,7 +161,7 @@ const plans: Array<{
     intent: {
       type: "squad",
       label: "Squad Jurídica — Growth",
-      slugs: ["legal_intake", "legal_diagnosis", "legal_closer", "legal_recovery"],
+      slugs: ["captacao_juridica", "diagnostico_juridico", "fechamento_juridico", "recuperacao_leads_juridico"],
       departmentId: "advocacia",
     },
   },
