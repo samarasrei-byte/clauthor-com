@@ -57,15 +57,33 @@ import ThemeToggle from "@/components/ThemeToggle";
  * Configurações = painel completo (Equipe, Suporte, WhatsApp, Integrações, Conta).
  */
 
-type SidebarItem = { to: string; label: string; icon: any; end?: boolean };
-const SIDEBAR_ITEMS: SidebarItem[] = [
-  { to: "/advocacia/painel", label: "Visão geral", icon: Scale, end: true },
-  { to: "/advocacia/painel/contratos", label: "Contratos & Risco", icon: ShieldAlert },
-  { to: "/advocacia/painel/propostas", label: "Propostas", icon: Handshake },
-  { to: "/advocacia/painel/captacao", label: "Captação", icon: Inbox },
-  { to: "/advocacia/painel/documentos", label: "Documentos", icon: FileText },
-  { to: "/advocacia/painel/configuracoes", label: "Configurações", icon: SettingsIcon },
+type SidebarItem = { to: string; label: string; icon: any; end?: boolean; soon?: boolean };
+type SidebarGroup = { label?: string; items: SidebarItem[] };
+
+const SIDEBAR_GROUPS: SidebarGroup[] = [
+  {
+    items: [
+      { to: "/advocacia/painel", label: "Visão geral", icon: Scale, end: true },
+      { to: "/advocacia/painel/captacao", label: "Leads & Captação", icon: Inbox },
+      { to: "/advocacia/painel/propostas", label: "Propostas", icon: Handshake },
+      { to: "/advocacia/painel/contratos", label: "Contratos & Risco", icon: ShieldAlert },
+      { to: "/advocacia/painel/documentos", label: "Documentos", icon: FileText },
+      { to: "/advocacia/painel/configuracoes", label: "Configurações", icon: SettingsIcon },
+    ],
+  },
+  {
+    label: "Em breve",
+    items: [
+      { to: "/advocacia/painel", label: "Clientes (CRM)", icon: Users, soon: true },
+      { to: "/advocacia/painel", label: "Agenda", icon: Clock, soon: true },
+      { to: "/advocacia/painel", label: "Produção jurídica", icon: ClipboardCheck, soon: true },
+      { to: "/advocacia/painel", label: "Compliance LGPD/PLD", icon: ShieldAlert, soon: true },
+    ],
+  },
 ];
+
+// Flat list kept for legacy refs
+const SIDEBAR_ITEMS: SidebarItem[] = SIDEBAR_GROUPS[0].items;
 
 const CROSS_SELL_DISMISS_KEY = "clauthor_advocacia_crosssell_dismissed";
 const CHECKLIST_DISMISS_KEY = "clauthor_advocacia_checklist_dismissed";
