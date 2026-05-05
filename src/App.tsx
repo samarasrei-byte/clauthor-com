@@ -69,6 +69,8 @@ const AgentWorkspace = lazyRetry(() => import("./pages/AgentWorkspace"));
 const Advocacia = lazyRetry(() => import("./pages/Advocacia"));
 const AdvocaciaOnboarding = lazyRetry(() => import("./pages/AdvocaciaOnboarding"));
 const AdvocaciaAudit = lazyRetry(() => import("./pages/AdvocaciaAudit"));
+const AdvocaciaPainel = lazyRetry(() => import("./pages/AdvocaciaPainel"));
+const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVertical"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -105,6 +107,16 @@ const App = () => (
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/advocacia/onboarding" element={<ProtectedRoute><AdvocaciaOnboarding /></ProtectedRoute>} />
                 <Route path="/advocacia/auditoria" element={<ProtectedRoute><AdvocaciaAudit /></ProtectedRoute>} />
+
+                {/* Painel vertical isolado para advogados (multitenant via RLS) */}
+                <Route path="/advocacia/painel" element={<ProtectedRoute><AdvocaciaPainel /></ProtectedRoute>}>
+                  <Route index element={<AdvocaciaPainelHomeLazy />} />
+                  <Route path="contratos" element={<AdvocaciaPainelContratosLazy />} />
+                  <Route path="propostas" element={<AdvocaciaPainelPropostasLazy />} />
+                  <Route path="captacao" element={<AdvocaciaPainelCaptacaoLazy />} />
+                  <Route path="documentos" element={<AdvocaciaPainelDocumentosLazy />} />
+                  <Route path="configuracoes" element={<AdvocaciaPainelConfigLazy />} />
+                </Route>
 
                 {/* Public pages with full navbar */}
                 <Route element={<AppLayout />}>
@@ -152,6 +164,7 @@ const App = () => (
                 {/* Admin */}
                 <Route element={<ProtectedRoute requireAdmin><DashboardLayout /></ProtectedRoute>}>
                   <Route path="/admin" element={<AdminDashboard />} />
+                  <Route path="/admin/verticals/advocacia" element={<AdminAdvocaciaVertical />} />
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
