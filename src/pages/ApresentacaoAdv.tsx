@@ -250,51 +250,133 @@ const AGENTS: AgentCard[] = [
 // ------------------------------------------------------------
 // Planos resumidos para a apresentação (link para /advocacia)
 // ------------------------------------------------------------
-const PLANS = [
+type Plan = {
+  name: string;
+  monthly: string;
+  setup: string;
+  desc: string;
+  ideal: string;
+  agents: string[];
+  features: string[];
+  benefits: string[];
+  roi: string;
+  highlight?: boolean;
+  badge?: string;
+};
+
+const PLANS: Plan[] = [
   {
     name: "Start",
     monthly: "R$ 497",
     setup: "R$ 1.497",
-    desc: "Advogado autônomo validando captação previsível",
-    bullets: [
-      "2 agentes (Captação + Diagnóstico)",
-      "WhatsApp Business integrado",
-      "200 atendimentos/mês",
+    desc: "Captação previsível para o advogado autônomo que quer parar de perder lead.",
+    ideal: "Advogado solo ou recém-aberto",
+    agents: [
+      "Captação Jurídica (WhatsApp 24/7)",
+      "Diagnóstico Jurídico (triagem guiada)",
     ],
+    features: [
+      "WhatsApp Business oficial integrado",
+      "Até 200 atendimentos qualificados/mês",
+      "Agenda sincronizada (Google Calendar)",
+      "Roteiro de triagem por área do direito",
+      "Resumo do caso pronto para o advogado",
+      "Conformidade OAB Provimento 205/2021",
+    ],
+    benefits: [
+      "Resposta em até 30 segundos a qualquer hora",
+      "Aumento médio de 40% na conversão",
+      "Você só fala com lead já qualificado",
+    ],
+    roi: "1 contrato recuperado de R$ 3.000 paga 6 meses do plano",
   },
   {
     name: "Growth",
     monthly: "R$ 1.497",
     setup: "R$ 3.497",
     highlight: true,
-    desc: "Escritórios em crescimento que querem previsibilidade",
-    bullets: [
-      "6 agentes — squad jurídica completa",
-      "WhatsApp + CRM + Clicksign",
-      "800 atendimentos/mês",
+    badge: "Mais escolhido",
+    desc: "Squad jurídica completa para escritórios em crescimento que querem previsibilidade.",
+    ideal: "Escritórios com 2 a 8 advogados",
+    agents: [
+      "Captação + Diagnóstico + Fechamento",
+      "Recuperação de Leads",
+      "Redator Jurídico",
+      "Financeiro Jurídico",
     ],
+    features: [
+      "6 agentes operando em conjunto",
+      "WhatsApp + CRM + Clicksign integrados",
+      "Até 800 atendimentos/mês",
+      "Propostas com honorários (fixo, êxito, híbrido)",
+      "Reativação automática de leads frios",
+      "Minutas a partir de templates do escritório",
+      "Relatórios mensais para sócios e clientes",
+    ],
+    benefits: [
+      "Funil de captação ao fechamento totalmente automatizado",
+      "Recupera em média 18% do funil que esfriaria",
+      "Padronização total de propostas e peças",
+    ],
+    roi: "Substitui 2 a 3 contratações CLT (economia mensal acima de R$ 6.000)",
   },
   {
     name: "Compliance",
     monthly: "R$ 2.497",
     setup: "R$ 5.997",
-    desc: "Growth + Operacional + LGPD/Anti-PLD",
-    bullets: [
-      "8 agentes (squad + Compliance)",
-      "KYC reforçado + PEP/COAF/OFAC",
-      "Relatórios RIPD e PLD prontos",
+    desc: "Growth somado ao núcleo operacional, LGPD e Anti-PLD para escritórios regulados.",
+    ideal: "Escritórios que atendem PJ, alto patrimônio ou setor regulado",
+    agents: [
+      "Toda a squad Growth",
+      "Risco Contratual",
+      "Compliance Empresarial & Anti-PLD",
     ],
+    features: [
+      "8 agentes orquestrados",
+      "KYC reforçado PF e PJ + beneficiário final",
+      "Listas PEP, OFAC, ONU e COAF integradas",
+      "Análise contratual (PT, EN, ES) com classificação de risco",
+      "Relatórios RIPD (LGPD art. 38) prontos",
+      "Relatórios PLD em conformidade com a Lei 9.613/98",
+      "Trilha de auditoria por execução",
+    ],
+    benefits: [
+      "Bloqueia operações de risco antes de assinar",
+      "Reduz exposição a multas de até R$ 20mi (PLD)",
+      "Documentação pronta para fiscalização da OAB",
+    ],
+    roi: "Evita uma única falha de KYC e o plano se paga por mais de 8 anos",
   },
   {
     name: "MCP Enterprise",
     monthly: "R$ 4.997",
     setup: "R$ 9.997",
-    desc: "Sistema operacional jurídico completo — 15 agentes",
-    bullets: [
-      "Todos os 15 agentes orquestrados",
-      "Arquitetura MCP com Segurança obrigatória",
-      "SLA dedicado + atendimentos ilimitados",
+    badge: "Squad completa",
+    desc: "Sistema operacional jurídico completo, com os 15 agentes orquestrados pelo MCP.",
+    ideal: "Bancas estruturadas, departamentos jurídicos, escritórios de médio e grande porte",
+    agents: [
+      "Orquestrador MCP + Segurança & LGPD",
+      "Processual + Prazos + Redator",
+      "Estratégico + Financeiro Jurídico",
+      "Captação + Diagnóstico + Fechamento + Recuperação",
+      "Risco Contratual + Produção + Operacional + Compliance",
     ],
+    features: [
+      "Todos os 15 agentes ativos e orquestrados",
+      "Arquitetura MCP com Segurança obrigatória em toda execução",
+      "Atendimentos ilimitados",
+      "SLA dedicado e gerente de sucesso",
+      "Cálculo de prazos (CPC art. 219) com bloqueio automático",
+      "Estratégia + tese + jurisprudência por caso",
+      "Aprovação humana obrigatória em risco crítico",
+      "Auditoria completa: quem pediu, qual agente rodou, qual humano validou",
+    ],
+    benefits: [
+      "Equivale a 4 a 6 contratações CLT (economia acima de R$ 30k/mês)",
+      "Zero prazos perdidos, zero leads esquecidos",
+      "Você passa de operador a gestor estratégico",
+    ],
+    roi: "ROI mínimo médio de 22 vezes sobre o investimento mensal",
   },
 ];
 
