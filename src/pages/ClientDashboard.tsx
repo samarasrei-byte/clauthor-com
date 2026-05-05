@@ -127,15 +127,22 @@ const ClientDashboard = () => {
     staleTime: Infinity,
   });
 
+  // ── Checkout-pending guard: bloqueia TODOS os onboardings/tours/cards
+  //    enquanto o usuário ainda não pagou (hireIntent presente OU dialog aberto). ──
+  const hasPendingCheckout = useMemo(() => {
+    if (typeof window === "undefined") return false;
+    return !!localStorage.getItem("hireIntent") || !!checkoutSummary;
+  }, [checkoutSummary]);
+
   useEffect(() => {
     if (!user || profileOnboarding === undefined) return;
     if (profileOnboarding) return;
-    const hasHireIntent = !!localStorage.getItem("hireIntent");
+    if (hasPendingCheckout) return; // não abrir SmartOnboarding sobre o checkout
     const thorHandledOnboarding = !!localStorage.getItem(`clauthor_concierge_seen_${user.id}`);
-    if (!hasHireIntent && !thorHandledOnboarding) {
+    if (!thorHandledOnboarding) {
       setShowSmartOnboarding(true);
     }
-  }, [user, profileOnboarding]);
+  }, [user, profileOnboarding, hasPendingCheckout]);
 
   const { credits, remainingCredits, usagePercentage } = useCredits();
   usePaypalCapture();
@@ -158,12 +165,14 @@ const ClientDashboard = () => {
   // First-access onboarding modal (when user has no agents yet)
   useEffect(() => {
     if (!user || loadingAgents) return;
+    if (hasPendingCheckout) return; // não abrir sobre o checkout
     if (localStorage.getItem("clauthor_first_access_done")) return;
     if (agents.length === 0) {
       const timer = setTimeout(() => setShowFirstAccess(true), 2000);
       return () => clearTimeout(timer);
     }
-  }, [user, agents, loadingAgents]);
+  }, [user, agents, loadingAgents, hasPendingCheckout]);
+
 
   const { data: templates = [] } = useQuery({
     queryKey: ["agent-templates-slugs"],
