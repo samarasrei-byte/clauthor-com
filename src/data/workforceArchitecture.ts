@@ -883,6 +883,7 @@ export const WORKFORCE: WorkforceDepartment[] = [
           { slug: "fechamento_juridico", name: "Especialista em Fechamento Jurídico", responsibilities: ["Geração de propostas personalizadas", "Apresentação de honorários", "Condução do lead até a contratação"], triggers: ["diagnostico_concluido", "proposta_solicitada"] },
           { slug: "recuperacao_leads_juridico", name: "Gestor de Recuperação de Leads", responsibilities: ["Follow-ups automáticos e humanizados", "Reativação de leads frios", "Reagendamentos"], triggers: ["lead_inativo_72h", "proposta_sem_resposta", "no_show"] },
           { slug: "producao_juridica", name: "Assistente de Produção Jurídica", responsibilities: ["Apoio na elaboração de minutas e peças", "Organização de documentos do caso", "Pesquisa de jurisprudência (validação humana obrigatória)"], triggers: ["peca_solicitada", "caso_aberto"] },
+          { slug: "assistente_juridico_operacional", name: "Assistente Jurídico Operacional", responsibilities: ["Análise de contratos e relatório de risco", "Geração de propostas de honorários (fixo/êxito/híbrido)", "Apoio ao fechamento e pré-triagem KYC/LGPD/PLD"], triggers: ["contrato_para_analise", "proposta_solicitada", "fechamento_em_andamento"] },
         ],
         outcomes: ["+40% novos clientes captados", "Conversão de leads +25%", "Atendimento 24/7 com triagem inteligente", "Tempo operacional do advogado -50%"],
       },
