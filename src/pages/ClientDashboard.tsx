@@ -599,7 +599,7 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-      {showLiveGuide && (
+      {showLiveGuide && !hasPendingCheckout && (
         <Suspense fallback={null}>
           <ThorLiveGuide
             activeSection={activeSection}
@@ -609,18 +609,20 @@ const ClientDashboard = () => {
         </Suspense>
       )}
 
-      <Suspense fallback={null}>
-        <QuickStartWizard
-          isOpen={showQuickStart}
-          onClose={() => setShowQuickStart(false)}
-          onTeach={() => { setShowCompanyOnboarding(true); setShowQuickStart(false); }}
-          onHire={() => { setActiveSection("library"); setShowQuickStart(false); }}
-          onCommand={() => { setActiveSection("omnix"); setOmnixMounted(true); setShowQuickStart(false); }}
-        />
-      </Suspense>
+      {!hasPendingCheckout && (
+        <Suspense fallback={null}>
+          <QuickStartWizard
+            isOpen={showQuickStart}
+            onClose={() => setShowQuickStart(false)}
+            onTeach={() => { setShowCompanyOnboarding(true); setShowQuickStart(false); }}
+            onHire={() => { setActiveSection("library"); setShowQuickStart(false); }}
+            onCommand={() => { setActiveSection("omnix"); setOmnixMounted(true); setShowQuickStart(false); }}
+          />
+        </Suspense>
+      )}
 
       <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
-      <DashboardTour />
+      {!hasPendingCheckout && <DashboardTour />}
     </>
   );
 };
