@@ -70,6 +70,12 @@ const Advocacia = lazyRetry(() => import("./pages/Advocacia"));
 const AdvocaciaOnboarding = lazyRetry(() => import("./pages/AdvocaciaOnboarding"));
 const AdvocaciaAudit = lazyRetry(() => import("./pages/AdvocaciaAudit"));
 const AdvocaciaPainel = lazyRetry(() => import("./pages/AdvocaciaPainel"));
+const AdvocaciaPainelHomeLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelHome })));
+const AdvocaciaPainelContratosLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelContratos })));
+const AdvocaciaPainelPropostasLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelPropostas })));
+const AdvocaciaPainelCaptacaoLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelCaptacao })));
+const AdvocaciaPainelDocumentosLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelDocumentos })));
+const AdvocaciaPainelConfigLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelConfiguracoes })));
 const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVertical"));
 const queryClient = new QueryClient({
   defaultOptions: {
