@@ -42,14 +42,15 @@ import { toast } from "sonner";
  * - Admin: tem acesso completo via /admin/verticals/advocacia.
  */
 
-const SIDEBAR_ITEMS = [
+type SidebarItem = { to: string; label: string; icon: any; end?: boolean };
+const SIDEBAR_ITEMS: SidebarItem[] = [
   { to: "/advocacia/painel", label: "Visão geral", icon: Scale, end: true },
   { to: "/advocacia/painel/contratos", label: "Contratos & Risco", icon: ShieldAlert },
   { to: "/advocacia/painel/propostas", label: "Propostas", icon: Handshake },
   { to: "/advocacia/painel/captacao", label: "Captação", icon: Inbox },
   { to: "/advocacia/painel/documentos", label: "Documentos", icon: FileText },
   { to: "/advocacia/painel/configuracoes", label: "Configurações", icon: SettingsIcon },
-] as const;
+];
 
 const CROSS_SELL_DISMISS_KEY = "clauthor_advocacia_crosssell_dismissed";
 const CROSS_SELL_MIN_DAYS = 7;
