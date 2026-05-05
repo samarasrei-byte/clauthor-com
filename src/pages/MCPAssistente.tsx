@@ -284,9 +284,9 @@ export default function MCPAssistente() {
   const isEmpty = turns.length === 0;
 
   return (
-    <div className="h-full flex flex-col bg-background">
+    <div className="flex flex-col bg-background" style={{ minHeight: "calc(100vh - 3.5rem)" }}>
       {/* Header */}
-      <header className="shrink-0 border-b border-border/40 bg-background/60 backdrop-blur-xl">
+      <header className="sticky top-0 z-20 shrink-0 border-b border-border/40 bg-background/80 backdrop-blur-xl">
         <div className="max-w-4xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative">
