@@ -66,6 +66,7 @@ const SIDEBAR_GROUPS: SidebarGroup[] = [
     items: [
       { to: "/advocacia/painel", label: "Visão geral", icon: Scale, end: true },
       { to: "/advocacia/painel/mcp", label: "Assistente MCP", icon: Workflow },
+      { to: "/advocacia/execucoes", label: "Auditoria MCP", icon: ShieldAlert },
       { to: "/advocacia/painel/captacao", label: "Leads & Captação", icon: Inbox },
       { to: "/advocacia/painel/propostas", label: "Propostas", icon: Handshake },
       { to: "/advocacia/painel/contratos", label: "Contratos & Risco", icon: ShieldAlert },
