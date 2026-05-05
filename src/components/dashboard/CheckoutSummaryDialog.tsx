@@ -18,6 +18,7 @@ export interface CheckoutSummaryData {
   currency: string;
   lang: string;
   planId?: string; // PayPal plan ID for inline checkout
+  setupFee?: number; // One-time setup fee in WHOLE units (reais), charged at first billing
 }
 
 interface Props {
@@ -33,6 +34,9 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
   if (!data) return null;
 
   const formattedPrice = formatPrice(data.price, data.lang);
+  const hasSetup = typeof data.setupFee === "number" && data.setupFee > 0;
+  const formattedSetup = hasSetup ? formatPrice(data.setupFee!, data.lang) : null;
+  const formattedTotalToday = hasSetup ? formatPrice(data.price + data.setupFee!, data.lang) : formattedPrice;
 
   return (
     <Dialog open={!!data} onOpenChange={(open) => !open && onCancel()}>
@@ -86,6 +90,23 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
                 <p className="text-[10px] text-muted-foreground">/{t("checkout.month", { defaultValue: "mo" })}</p>
               </div>
             </div>
+
+            {hasSetup && (
+              <div className="rounded-lg border border-primary/20 bg-primary/5 p-3 space-y-1.5">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-muted-foreground">Setup único (hoje)</span>
+                  <span className="font-semibold">{formattedSetup}</span>
+                </div>
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-muted-foreground">Mensalidade (recorrente)</span>
+                  <span className="font-semibold">{formattedPrice}/mês</span>
+                </div>
+                <div className="border-t border-primary/15 pt-1.5 flex items-center justify-between">
+                  <span className="text-xs font-semibold">Cobrado hoje</span>
+                  <span className="font-display font-bold text-primary">{formattedTotalToday}</span>
+                </div>
+              </div>
+            )}
 
             {data.slugs.length > 0 && (
               <div className="space-y-2">
