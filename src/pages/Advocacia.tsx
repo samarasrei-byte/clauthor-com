@@ -219,6 +219,47 @@ const plans: Array<{
       setupFee: 599700,
     },
   },
+  {
+    name: "MCP Enterprise",
+    setup: "R$ 9.997",
+    monthlyLabel: "R$ 4.997",
+    monthlyValue: 499700,
+    desc: "Sistema operacional jurídico completo com arquitetura MCP — 14 agentes orquestrados",
+    features: [
+      "14 agentes (squad comercial + 6 agentes MCP especializados)",
+      "Orquestrador inteligente: Segurança, Processual, Prazos, Redator, Estratégico, Financeiro",
+      "Validação obrigatória de segurança em cada ação (LGPD + sigilo OAB)",
+      "Cálculo automático de prazos com feriados forenses",
+      "Análise estratégica com probabilidade de êxito",
+      "Atendimentos ilimitados + SLA dedicado",
+      "Onboarding white-glove + integração com sistema do escritório",
+    ],
+    cta: "Operar com MCP",
+    highlight: false,
+    intent: {
+      type: "squad",
+      label: "Squad Jurídica - MCP Enterprise",
+      slugs: [
+        "captacao_juridica",
+        "diagnostico_juridico",
+        "fechamento_juridico",
+        "recuperacao_leads_juridico",
+        "risco_contratual",
+        "producao_juridica",
+        "assistente_juridico_operacional",
+        "compliance_lgpd_juridico",
+        "mcp_seguranca_juridico",
+        "mcp_processual_juridico",
+        "mcp_prazos_juridico",
+        "mcp_redator_juridico",
+        "mcp_estrategico_juridico",
+        "mcp_financeiro_juridico",
+      ],
+      departmentId: "advocacia",
+      monthlyOverride: 499700,
+      setupFee: 999700,
+    },
+  },
 ];
 
 export default function Advocacia() {
@@ -249,11 +290,11 @@ export default function Advocacia() {
     localStorage.setItem("advocacia_post_checkout", "1");
 
     if (user) {
-      toast.success("Redirecionando para o checkout...");
-      navigate("/dashboard");
+      toast.success("Redirecionando para o painel do advogado...");
+      navigate("/advocacia/painel");
     } else {
       navigate("/auth", {
-        state: { hireIntent: plan.intent, signup: true, from: { pathname: "/dashboard" } },
+        state: { hireIntent: plan.intent, signup: true, from: { pathname: "/advocacia/painel" } },
       });
     }
   };
@@ -523,7 +564,7 @@ export default function Advocacia() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
             {plans.map((p, i) => (
               <Card
                 key={i}
