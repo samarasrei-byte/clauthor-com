@@ -67,7 +67,7 @@ const AGENTS: AgentCard[] = [
     icon: Brain,
     name: "Orquestrador MCP",
     layer: "MCP",
-    tagline: "Master Control Program — interpreta, valida e roteia",
+    tagline: "Master Control Program: interpreta, valida e roteia",
     highlight: true,
     bullets: [
       "Classifica intenção do usuário em < 800ms",
@@ -731,7 +731,7 @@ export default function ApresentacaoAdv() {
               Como uma intenção vira execução auditável
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Toda solicitação passa por 4 camadas. O Agente de Segurança é obrigatório — risco crítico bloqueia e exige aprovação humana.
+              Toda solicitação passa por 4 camadas. O Agente de Segurança é obrigatório: risco crítico bloqueia e exige aprovação humana.
             </p>
           </div>
 
@@ -770,7 +770,7 @@ export default function ApresentacaoAdv() {
               15 agentes · zero duplicidade
             </Badge>
             <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
-              Toda a squad — um por um
+              Toda a squad, um por um
             </h2>
             <p className="mt-3 text-muted-foreground">
               7 agentes MCP (núcleo inteligente) + 4 comerciais + 4 operacionais. Cada um com escopo único.
@@ -837,7 +837,7 @@ export default function ApresentacaoAdv() {
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-semibold">Compromisso ético — OAB & LGPD</h4>
+              <h4 className="font-semibold">Compromisso ético · OAB & LGPD</h4>
               <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
                 Nenhum agente fornece aconselhamento jurídico definitivo. Toda peça, parecer ou orientação técnica passa por
                 validação obrigatória do advogado responsável. Operamos dentro do Código de Ética e Disciplina da OAB e da Lei Geral de Proteção de Dados.
@@ -855,7 +855,7 @@ export default function ApresentacaoAdv() {
               Por que vale o investimento
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Compare com o custo real de uma equipe equivalente — e o que você ganha em previsibilidade.
+              Compare com o custo real de uma equipe equivalente, e veja o que você ganha em previsibilidade.
             </p>
           </div>
 
@@ -924,7 +924,7 @@ export default function ApresentacaoAdv() {
               Software de gestão <span className="text-muted-foreground">vs.</span> Squad jurídica viva
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Astrea, Jusfy, ADVBox e CPJ-3C são <strong className="text-foreground">cadernos digitais</strong> — você ainda
+              Astrea, Jusfy, ADVBox e CPJ-3C são <strong className="text-foreground">cadernos digitais</strong>. Você ainda
               faz tudo. A Clauthor é uma <strong className="text-foreground">equipe de IA orquestrada</strong> que executa por você.
             </p>
           </div>
@@ -959,7 +959,7 @@ export default function ApresentacaoAdv() {
                   ["Recuperação de leads frios", false, "Esquece", true],
                   ["Auditoria por execução (LGPD)", "Limitada", false, true],
                   ["Estratégia + tese + jurisprudência", false, "Júnior", true],
-                  ["Validação humana obrigatória", "—", "—", true],
+                  ["Validação humana obrigatória", "N/A", "N/A", true],
                   ["Encargos / 13º / FGTS / férias", "Não", "+68% sobre salário", "Não"],
                 ] as [string, any, any, any][]).map(([label, astrea, clt, clauthor], i) => {
                   const cell = (v: any) =>
@@ -985,7 +985,7 @@ export default function ApresentacaoAdv() {
             <Flame className="w-5 h-5 text-primary shrink-0 mt-0.5" />
             <p className="text-sm text-foreground/85 leading-relaxed">
               <strong className="text-primary">Diferença essencial:</strong> softwares de gestão organizam o trabalho que você
-              <em> ainda vai fazer</em>. A Clauthor <strong>executa o trabalho</strong> — atende, qualifica, redige, calcula,
+              <em> ainda vai fazer</em>. A Clauthor <strong>executa o trabalho</strong>: atende, qualifica, redige, calcula,
               fecha e relata. Você vira o <strong>gestor estratégico</strong>, não o operador.
             </p>
           </div>
@@ -1004,7 +1004,7 @@ export default function ApresentacaoAdv() {
               Quanto a Clauthor te <span className="text-primary">devolve por mês</span>
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Três cenários reais. Calcule você mesmo — depois fale com a Advogada IA para refinar com seus números.
+              Três cenários reais. Calcule você mesmo, depois fale com a Advogada IA para refinar com seus números.
             </p>
           </div>
 
@@ -1033,7 +1033,7 @@ export default function ApresentacaoAdv() {
                 title: "Substitui 4 contratações",
                 value: "−R$ 30.000",
                 period: "/mês em folha CLT",
-                bullets: ["Captador + atendente + paralegal + compliance", "Custo CLT real (com encargos +68%): R$ 35k+/mês", "MCP Enterprise: R$ 4.997/mês — economia de 86%"],
+                bullets: ["Captador + atendente + paralegal + compliance", "Custo CLT real (com encargos +68%): R$ 35k+/mês", "MCP Enterprise: R$ 4.997/mês, economia de 86%"],
                 color: "from-amber-500/10 to-transparent border-amber-500/30",
                 highlight: false,
               },
