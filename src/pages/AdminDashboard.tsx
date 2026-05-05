@@ -261,7 +261,7 @@ const AdminDashboard = () => {
                         )}
                         <SheetClose asChild>
                           <button
-                            onClick={() => setActiveTab(item.id)}
+                            onClick={() => handleTabChange(item.id)}
                             className={cn(
                               "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
                               activeTab === item.id ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
