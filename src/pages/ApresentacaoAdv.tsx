@@ -67,7 +67,7 @@ const AGENTS: AgentCard[] = [
     icon: Brain,
     name: "Orquestrador MCP",
     layer: "MCP",
-    tagline: "Master Control Program — interpreta, valida e roteia",
+    tagline: "Master Control Program: interpreta, valida e roteia",
     highlight: true,
     bullets: [
       "Classifica intenção do usuário em < 800ms",
@@ -250,51 +250,133 @@ const AGENTS: AgentCard[] = [
 // ------------------------------------------------------------
 // Planos resumidos para a apresentação (link para /advocacia)
 // ------------------------------------------------------------
-const PLANS = [
+type Plan = {
+  name: string;
+  monthly: string;
+  setup: string;
+  desc: string;
+  ideal: string;
+  agents: string[];
+  features: string[];
+  benefits: string[];
+  roi: string;
+  highlight?: boolean;
+  badge?: string;
+};
+
+const PLANS: Plan[] = [
   {
     name: "Start",
     monthly: "R$ 497",
     setup: "R$ 1.497",
-    desc: "Advogado autônomo validando captação previsível",
-    bullets: [
-      "2 agentes (Captação + Diagnóstico)",
-      "WhatsApp Business integrado",
-      "200 atendimentos/mês",
+    desc: "Captação previsível para o advogado autônomo que quer parar de perder lead.",
+    ideal: "Advogado solo ou recém-aberto",
+    agents: [
+      "Captação Jurídica (WhatsApp 24/7)",
+      "Diagnóstico Jurídico (triagem guiada)",
     ],
+    features: [
+      "WhatsApp Business oficial integrado",
+      "Até 200 atendimentos qualificados/mês",
+      "Agenda sincronizada (Google Calendar)",
+      "Roteiro de triagem por área do direito",
+      "Resumo do caso pronto para o advogado",
+      "Conformidade OAB Provimento 205/2021",
+    ],
+    benefits: [
+      "Resposta em até 30 segundos a qualquer hora",
+      "Aumento médio de 40% na conversão",
+      "Você só fala com lead já qualificado",
+    ],
+    roi: "1 contrato recuperado de R$ 3.000 paga 6 meses do plano",
   },
   {
     name: "Growth",
     monthly: "R$ 1.497",
     setup: "R$ 3.497",
     highlight: true,
-    desc: "Escritórios em crescimento que querem previsibilidade",
-    bullets: [
-      "6 agentes — squad jurídica completa",
-      "WhatsApp + CRM + Clicksign",
-      "800 atendimentos/mês",
+    badge: "Mais escolhido",
+    desc: "Squad jurídica completa para escritórios em crescimento que querem previsibilidade.",
+    ideal: "Escritórios com 2 a 8 advogados",
+    agents: [
+      "Captação + Diagnóstico + Fechamento",
+      "Recuperação de Leads",
+      "Redator Jurídico",
+      "Financeiro Jurídico",
     ],
+    features: [
+      "6 agentes operando em conjunto",
+      "WhatsApp + CRM + Clicksign integrados",
+      "Até 800 atendimentos/mês",
+      "Propostas com honorários (fixo, êxito, híbrido)",
+      "Reativação automática de leads frios",
+      "Minutas a partir de templates do escritório",
+      "Relatórios mensais para sócios e clientes",
+    ],
+    benefits: [
+      "Funil de captação ao fechamento totalmente automatizado",
+      "Recupera em média 18% do funil que esfriaria",
+      "Padronização total de propostas e peças",
+    ],
+    roi: "Substitui 2 a 3 contratações CLT (economia mensal acima de R$ 6.000)",
   },
   {
     name: "Compliance",
     monthly: "R$ 2.497",
     setup: "R$ 5.997",
-    desc: "Growth + Operacional + LGPD/Anti-PLD",
-    bullets: [
-      "8 agentes (squad + Compliance)",
-      "KYC reforçado + PEP/COAF/OFAC",
-      "Relatórios RIPD e PLD prontos",
+    desc: "Growth somado ao núcleo operacional, LGPD e Anti-PLD para escritórios regulados.",
+    ideal: "Escritórios que atendem PJ, alto patrimônio ou setor regulado",
+    agents: [
+      "Toda a squad Growth",
+      "Risco Contratual",
+      "Compliance Empresarial & Anti-PLD",
     ],
+    features: [
+      "8 agentes orquestrados",
+      "KYC reforçado PF e PJ + beneficiário final",
+      "Listas PEP, OFAC, ONU e COAF integradas",
+      "Análise contratual (PT, EN, ES) com classificação de risco",
+      "Relatórios RIPD (LGPD art. 38) prontos",
+      "Relatórios PLD em conformidade com a Lei 9.613/98",
+      "Trilha de auditoria por execução",
+    ],
+    benefits: [
+      "Bloqueia operações de risco antes de assinar",
+      "Reduz exposição a multas de até R$ 20mi (PLD)",
+      "Documentação pronta para fiscalização da OAB",
+    ],
+    roi: "Evita uma única falha de KYC e o plano se paga por mais de 8 anos",
   },
   {
     name: "MCP Enterprise",
     monthly: "R$ 4.997",
     setup: "R$ 9.997",
-    desc: "Sistema operacional jurídico completo — 15 agentes",
-    bullets: [
-      "Todos os 15 agentes orquestrados",
-      "Arquitetura MCP com Segurança obrigatória",
-      "SLA dedicado + atendimentos ilimitados",
+    badge: "Squad completa",
+    desc: "Sistema operacional jurídico completo, com os 15 agentes orquestrados pelo MCP.",
+    ideal: "Bancas estruturadas, departamentos jurídicos, escritórios de médio e grande porte",
+    agents: [
+      "Orquestrador MCP + Segurança & LGPD",
+      "Processual + Prazos + Redator",
+      "Estratégico + Financeiro Jurídico",
+      "Captação + Diagnóstico + Fechamento + Recuperação",
+      "Risco Contratual + Produção + Operacional + Compliance",
     ],
+    features: [
+      "Todos os 15 agentes ativos e orquestrados",
+      "Arquitetura MCP com Segurança obrigatória em toda execução",
+      "Atendimentos ilimitados",
+      "SLA dedicado e gerente de sucesso",
+      "Cálculo de prazos (CPC art. 219) com bloqueio automático",
+      "Estratégia + tese + jurisprudência por caso",
+      "Aprovação humana obrigatória em risco crítico",
+      "Auditoria completa: quem pediu, qual agente rodou, qual humano validou",
+    ],
+    benefits: [
+      "Equivale a 4 a 6 contratações CLT (economia acima de R$ 30k/mês)",
+      "Zero prazos perdidos, zero leads esquecidos",
+      "Você passa de operador a gestor estratégico",
+    ],
+    roi: "ROI mínimo médio de 22 vezes sobre o investimento mensal",
   },
 ];
 
@@ -412,130 +494,144 @@ function ChatWidget() {
 
   return (
     <>
-      {/* Floating button */}
+      {/* Floating trigger button */}
       <motion.button
-        onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-6 right-6 z-[60] h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-2xl shadow-primary/30 flex items-center justify-center hover:scale-105 transition-transform"
-        initial={{ scale: 0, rotate: -180 }}
-        animate={{ scale: 1, rotate: 0 }}
+        onClick={() => setOpen(true)}
+        className="fixed bottom-6 right-6 z-[60] h-14 px-5 rounded-full bg-primary text-primary-foreground shadow-2xl shadow-primary/30 flex items-center gap-2 hover:scale-105 transition-transform"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
         transition={{ delay: 1, type: "spring" }}
-        aria-label="Abrir chat"
+        aria-label="Abrir Advogada IA"
       >
-        <AnimatePresence mode="wait">
-          {open ? (
-            <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
-              <X className="w-6 h-6" />
-            </motion.span>
-          ) : (
-            <motion.span key="msg" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
-              <Sparkles className="w-6 h-6" />
-            </motion.span>
-          )}
-        </AnimatePresence>
-        {!open && (
-          <span className="absolute -top-1 -right-1 h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60"></span>
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
-          </span>
-        )}
+        <Sparkles className="w-5 h-5" />
+        <span className="text-sm font-semibold hidden sm:inline">Falar com a Advogada IA</span>
+        <span className="absolute -top-1 -right-1 h-3 w-3">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60"></span>
+          <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
+        </span>
       </motion.button>
 
-      {/* Panel */}
+      {/* Centered modal */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 280, damping: 24 }}
-            className="fixed bottom-24 right-6 z-[60] w-[min(92vw,420px)] h-[min(80vh,640px)] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
+            className="fixed inset-0 z-[70] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <div className="px-4 py-3 border-b border-border bg-gradient-to-r from-primary/10 via-card to-card flex items-center gap-3">
-              <div className="h-9 w-9 rounded-full bg-primary/15 flex items-center justify-center">
-                <Scale className="w-4 h-4 text-primary" />
+            {/* Backdrop */}
+            <motion.div
+              className="absolute inset-0 bg-background/80 backdrop-blur-md"
+              onClick={() => setOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+
+            {/* Panel */}
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 24, scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 280, damping: 26 }}
+              className="relative w-[min(96vw,640px)] h-[min(85vh,720px)] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
+            >
+              <div className="px-5 py-4 border-b border-border bg-gradient-to-r from-primary/10 via-card to-card flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-primary/15 flex items-center justify-center">
+                  <Scale className="w-5 h-5 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold leading-tight">Advogada IA · Clauthor</p>
+                  <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online · responde em segundos
+                  </p>
+                </div>
+                <button
+                  onClick={() => setOpen(false)}
+                  className="h-8 w-8 rounded-full hover:bg-muted flex items-center justify-center transition-colors"
+                  aria-label="Fechar"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold leading-tight">Advogada IA · Clauthor</p>
-                <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online · responde em segundos
+
+              <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-5 space-y-3">
+                {messages.map((m, i) => (
+                  <div
+                    key={i}
+                    className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                        m.role === "user"
+                          ? "bg-primary text-primary-foreground rounded-br-sm"
+                          : "bg-muted rounded-bl-sm"
+                      }`}
+                    >
+                      {m.role === "assistant" ? (
+                        <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-strong:text-foreground">
+                          <ReactMarkdown>{m.content}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        m.content
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {loading && (
+                  <div className="flex justify-start">
+                    <div className="bg-muted rounded-2xl rounded-bl-sm px-3.5 py-2.5 flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "120ms" }} />
+                      <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "240ms" }} />
+                    </div>
+                  </div>
+                )}
+
+                {messages.length === 1 && !loading && (
+                  <div className="pt-2 grid sm:grid-cols-2 gap-1.5">
+                    {suggestions.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => {
+                          setInput(s);
+                          setTimeout(() => send(), 50);
+                        }}
+                        className="text-left text-xs px-3 py-2 rounded-lg border border-border bg-background hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 border-t border-border bg-card">
+                <div className="flex items-center gap-2">
+                  <Input
+                    autoFocus
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && send()}
+                    placeholder="Pergunte sobre a squad, planos, segurança, ROI..."
+                    className="h-11 text-sm"
+                    disabled={loading}
+                  />
+                  <Button
+                    size="icon"
+                    className="h-11 w-11 shrink-0"
+                    onClick={send}
+                    disabled={loading || !input.trim()}
+                  >
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  </Button>
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-2 text-center">
+                  IA consultiva. Não substitui aconselhamento jurídico.
                 </p>
               </div>
-            </div>
-
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
-                      m.role === "user"
-                        ? "bg-primary text-primary-foreground rounded-br-sm"
-                        : "bg-muted rounded-bl-sm"
-                    }`}
-                  >
-                    {m.role === "assistant" ? (
-                      <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-strong:text-foreground">
-                        <ReactMarkdown>{m.content}</ReactMarkdown>
-                      </div>
-                    ) : (
-                      m.content
-                    )}
-                  </div>
-                </div>
-              ))}
-              {loading && (
-                <div className="flex justify-start">
-                  <div className="bg-muted rounded-2xl rounded-bl-sm px-3.5 py-2.5 flex items-center gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "120ms" }} />
-                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "240ms" }} />
-                  </div>
-                </div>
-              )}
-
-              {messages.length === 1 && !loading && (
-                <div className="pt-2 space-y-1.5">
-                  {suggestions.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => {
-                        setInput(s);
-                        setTimeout(() => send(), 50);
-                      }}
-                      className="w-full text-left text-xs px-3 py-2 rounded-lg border border-border bg-background hover:border-primary/40 hover:bg-primary/5 transition-colors"
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="p-3 border-t border-border bg-card">
-              <div className="flex items-center gap-2">
-                <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && send()}
-                  placeholder="Pergunte sobre a squad, planos, segurança..."
-                  className="h-10 text-sm"
-                  disabled={loading}
-                />
-                <Button
-                  size="icon"
-                  className="h-10 w-10 shrink-0"
-                  onClick={send}
-                  disabled={loading || !input.trim()}
-                >
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                </Button>
-              </div>
-              <p className="text-[10px] text-muted-foreground mt-2 text-center">
-                IA consultiva · Não substitui aconselhamento jurídico
-              </p>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -635,7 +731,7 @@ export default function ApresentacaoAdv() {
               Como uma intenção vira execução auditável
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Toda solicitação passa por 4 camadas. O Agente de Segurança é obrigatório — risco crítico bloqueia e exige aprovação humana.
+              Toda solicitação passa por 4 camadas. O Agente de Segurança é obrigatório: risco crítico bloqueia e exige aprovação humana.
             </p>
           </div>
 
@@ -674,7 +770,7 @@ export default function ApresentacaoAdv() {
               15 agentes · zero duplicidade
             </Badge>
             <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
-              Toda a squad — um por um
+              Toda a squad, um por um
             </h2>
             <p className="mt-3 text-muted-foreground">
               7 agentes MCP (núcleo inteligente) + 4 comerciais + 4 operacionais. Cada um com escopo único.
@@ -741,7 +837,7 @@ export default function ApresentacaoAdv() {
               <Lock className="w-5 h-5" />
             </div>
             <div>
-              <h4 className="font-semibold">Compromisso ético — OAB & LGPD</h4>
+              <h4 className="font-semibold">Compromisso ético · OAB & LGPD</h4>
               <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
                 Nenhum agente fornece aconselhamento jurídico definitivo. Toda peça, parecer ou orientação técnica passa por
                 validação obrigatória do advogado responsável. Operamos dentro do Código de Ética e Disciplina da OAB e da Lei Geral de Proteção de Dados.
@@ -759,7 +855,7 @@ export default function ApresentacaoAdv() {
               Por que vale o investimento
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Compare com o custo real de uma equipe equivalente — e o que você ganha em previsibilidade.
+              Compare com o custo real de uma equipe equivalente, e veja o que você ganha em previsibilidade.
             </p>
           </div>
 
@@ -828,7 +924,7 @@ export default function ApresentacaoAdv() {
               Software de gestão <span className="text-muted-foreground">vs.</span> Squad jurídica viva
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Astrea, Jusfy, ADVBox e CPJ-3C são <strong className="text-foreground">cadernos digitais</strong> — você ainda
+              Astrea, Jusfy, ADVBox e CPJ-3C são <strong className="text-foreground">cadernos digitais</strong>. Você ainda
               faz tudo. A Clauthor é uma <strong className="text-foreground">equipe de IA orquestrada</strong> que executa por você.
             </p>
           </div>
@@ -863,7 +959,7 @@ export default function ApresentacaoAdv() {
                   ["Recuperação de leads frios", false, "Esquece", true],
                   ["Auditoria por execução (LGPD)", "Limitada", false, true],
                   ["Estratégia + tese + jurisprudência", false, "Júnior", true],
-                  ["Validação humana obrigatória", "—", "—", true],
+                  ["Validação humana obrigatória", "N/A", "N/A", true],
                   ["Encargos / 13º / FGTS / férias", "Não", "+68% sobre salário", "Não"],
                 ] as [string, any, any, any][]).map(([label, astrea, clt, clauthor], i) => {
                   const cell = (v: any) =>
@@ -889,7 +985,7 @@ export default function ApresentacaoAdv() {
             <Flame className="w-5 h-5 text-primary shrink-0 mt-0.5" />
             <p className="text-sm text-foreground/85 leading-relaxed">
               <strong className="text-primary">Diferença essencial:</strong> softwares de gestão organizam o trabalho que você
-              <em> ainda vai fazer</em>. A Clauthor <strong>executa o trabalho</strong> — atende, qualifica, redige, calcula,
+              <em> ainda vai fazer</em>. A Clauthor <strong>executa o trabalho</strong>: atende, qualifica, redige, calcula,
               fecha e relata. Você vira o <strong>gestor estratégico</strong>, não o operador.
             </p>
           </div>
@@ -908,7 +1004,7 @@ export default function ApresentacaoAdv() {
               Quanto a Clauthor te <span className="text-primary">devolve por mês</span>
             </h2>
             <p className="mt-3 text-muted-foreground">
-              Três cenários reais. Calcule você mesmo — depois fale com a Advogada IA para refinar com seus números.
+              Três cenários reais. Calcule você mesmo, depois fale com a Advogada IA para refinar com seus números.
             </p>
           </div>
 
@@ -937,7 +1033,7 @@ export default function ApresentacaoAdv() {
                 title: "Substitui 4 contratações",
                 value: "−R$ 30.000",
                 period: "/mês em folha CLT",
-                bullets: ["Captador + atendente + paralegal + compliance", "Custo CLT real (com encargos +68%): R$ 35k+/mês", "MCP Enterprise: R$ 4.997/mês — economia de 86%"],
+                bullets: ["Captador + atendente + paralegal + compliance", "Custo CLT real (com encargos +68%): R$ 35k+/mês", "MCP Enterprise: R$ 4.997/mês, economia de 86%"],
                 color: "from-amber-500/10 to-transparent border-amber-500/30",
                 highlight: false,
               },
@@ -1073,17 +1169,22 @@ export default function ApresentacaoAdv() {
                 key={p.name}
                 className={`p-6 flex flex-col bg-card/60 transition-all ${
                   p.highlight
-                    ? "border-2 border-primary shadow-xl shadow-primary/10 scale-[1.02] relative"
+                    ? "border-2 border-primary shadow-xl shadow-primary/10 xl:scale-[1.02] relative"
                     : "border border-border/40"
                 }`}
               >
-                {p.highlight && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
-                    Mais escolhido
+                {p.badge && (
+                  <Badge className={`absolute -top-3 left-1/2 -translate-x-1/2 ${p.highlight ? "bg-primary text-primary-foreground" : "bg-foreground text-background"}`}>
+                    {p.badge}
                   </Badge>
                 )}
                 <h3 className="text-lg font-display font-semibold">{p.name}</h3>
-                <p className="text-xs text-muted-foreground mt-1 min-h-[40px]">{p.desc}</p>
+                <p className="text-xs text-muted-foreground mt-1 min-h-[48px] leading-relaxed">{p.desc}</p>
+
+                <div className="mt-3 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-primary/80 bg-primary/5 border border-primary/20 rounded-full px-2 py-1 w-fit">
+                  <Target className="w-3 h-3" /> {p.ideal}
+                </div>
+
                 <div className="mt-5 pb-5 border-b border-border/40">
                   <div className="text-[10px] uppercase tracking-wider text-muted-foreground/70">Setup</div>
                   <div className="text-base font-semibold">{p.setup}</div>
@@ -1093,14 +1194,62 @@ export default function ApresentacaoAdv() {
                     <span className="text-xs text-muted-foreground">/mês</span>
                   </div>
                 </div>
-                <ul className="mt-5 space-y-2 flex-1">
-                  {p.bullets.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-xs text-foreground/85">
-                      <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
+
+                {/* Agentes inclusos */}
+                <div className="mt-5">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-2 flex items-center gap-1.5">
+                    <Brain className="w-3 h-3" /> Agentes inclusos
+                  </div>
+                  <ul className="space-y-1.5">
+                    {p.agents.map((a) => (
+                      <li key={a} className="flex items-start gap-2 text-xs text-foreground/90">
+                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                        <span>{a}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Recursos */}
+                <div className="mt-5">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-2 flex items-center gap-1.5">
+                    <Workflow className="w-3 h-3" /> O que está incluso
+                  </div>
+                  <ul className="space-y-1.5">
+                    {p.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-xs text-foreground/85">
+                        <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Benefícios */}
+                <div className="mt-5">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-2 flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3" /> Benefícios
+                  </div>
+                  <ul className="space-y-1.5">
+                    {p.benefits.map((b) => (
+                      <li key={b} className="flex items-start gap-2 text-xs text-foreground/85">
+                        <Zap className="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-500" />
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* ROI */}
+                <div className="mt-5 mb-5 p-3 rounded-lg bg-primary/5 border border-primary/20 flex items-start gap-2">
+                  <TrendingUp className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <p className="text-[11px] text-foreground/90 leading-relaxed">
+                    <strong className="text-primary">ROI:</strong> {p.roi}
+                  </p>
+                </div>
+
+                <div className="flex-1" />
+
                 <Button
                   className={`mt-6 w-full ${p.highlight ? "glow" : ""}`}
                   variant={p.highlight ? "default" : "outline"}
