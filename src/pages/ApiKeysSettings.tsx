@@ -44,7 +44,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
-import { Helmet } from "react-helmet-async";
 
 type ApiKey = {
   id: string;
@@ -75,7 +74,8 @@ function relativeTime(iso: string | null): string {
 }
 
 export default function ApiKeysSettings() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
+  useEffect(() => { document.title = "API Keys · CLAUTHOR"; }, []);
   const [keys, setKeys] = useState<ApiKey[]>([]);
   const [loading, setLoading] = useState(true);
   const [createOpen, setCreateOpen] = useState(false);
@@ -184,11 +184,6 @@ export default function ApiKeysSettings() {
 
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>API Keys · CLAUTHOR</title>
-        <meta name="description" content="Manage CLAUTHOR API keys: create, rotate and revoke programmatic access tokens." />
-      </Helmet>
-
       <div className="max-w-5xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-start justify-between mb-12 gap-6 flex-wrap">
