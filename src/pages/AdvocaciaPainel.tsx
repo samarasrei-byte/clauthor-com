@@ -34,6 +34,7 @@ import {
   Send,
   Mail,
   Loader2,
+  Workflow,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -64,6 +65,7 @@ const SIDEBAR_GROUPS: SidebarGroup[] = [
   {
     items: [
       { to: "/advocacia/painel", label: "Visão geral", icon: Scale, end: true },
+      { to: "/advocacia/painel/mcp", label: "Assistente MCP", icon: Workflow },
       { to: "/advocacia/painel/captacao", label: "Leads & Captação", icon: Inbox },
       { to: "/advocacia/painel/propostas", label: "Propostas", icon: Handshake },
       { to: "/advocacia/painel/contratos", label: "Contratos & Risco", icon: ShieldAlert },
