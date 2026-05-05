@@ -77,6 +77,7 @@ const AdvocaciaPainelCaptacaoLazy = lazyRetry(() => import("./pages/AdvocaciaPai
 const AdvocaciaPainelDocumentosLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelDocumentos })));
 const AdvocaciaPainelConfigLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelConfiguracoes })));
 const AdvocaciaPainelMCPLazy = lazyRetry(() => import("./pages/MCPAssistente"));
+const AdvocaciaExecucoesLazy = lazyRetry(() => import("./pages/AdvocaciaExecucoes"));
 const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVertical"));
 const ApiKeysSettings = lazyRetry(() => import("./pages/ApiKeysSettings"));
 const queryClient = new QueryClient({
@@ -115,6 +116,7 @@ const App = () => (
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/advocacia/onboarding" element={<ProtectedRoute><AdvocaciaOnboarding /></ProtectedRoute>} />
                 <Route path="/advocacia/auditoria" element={<ProtectedRoute><AdvocaciaAudit /></ProtectedRoute>} />
+                <Route path="/advocacia/execucoes" element={<ProtectedRoute><AdvocaciaExecucoesLazy /></ProtectedRoute>} />
 
                 {/* Painel vertical isolado para advogados (multitenant via RLS) */}
                 <Route path="/advocacia/painel" element={<ProtectedRoute><AdvocaciaPainel /></ProtectedRoute>}>

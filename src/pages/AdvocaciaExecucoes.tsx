@@ -132,7 +132,7 @@ export default function AdvocaciaExecucoes() {
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Link to="/advocacia/painel" aria-label="Voltar ao painel">
-              <ClauthorLogo size={28} />
+              <ClauthorLogo size="sm" />
             </Link>
             <div className="leading-tight">
               <h1 className="text-sm font-semibold tracking-tight">
