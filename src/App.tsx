@@ -80,6 +80,7 @@ const AdvocaciaPainelMCPLazy = lazyRetry(() => import("./pages/MCPAssistente"));
 const AdvocaciaExecucoesLazy = lazyRetry(() => import("./pages/AdvocaciaExecucoes"));
 const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVertical"));
 const ApiKeysSettings = lazyRetry(() => import("./pages/ApiKeysSettings"));
+const ApresentacaoAdv = lazyRetry(() => import("./pages/ApresentacaoAdv"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -114,6 +115,8 @@ const App = () => (
                 <Route path="/pitch" element={<Pitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />
                 <Route path="/advocacia" element={<Advocacia />} />
+                <Route path="/apresentacaoadv" element={<ApresentacaoAdv />} />
+                <Route path="/apresentacao-adv" element={<ApresentacaoAdv />} />
                 <Route path="/advocacia/onboarding" element={<ProtectedRoute><AdvocaciaOnboarding /></ProtectedRoute>} />
                 <Route path="/advocacia/auditoria" element={<ProtectedRoute><AdvocaciaAudit /></ProtectedRoute>} />
                 <Route path="/advocacia/execucoes" element={<ProtectedRoute><AdvocaciaExecucoesLazy /></ProtectedRoute>} />
