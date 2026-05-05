@@ -209,9 +209,10 @@ export function usePaypalCapture() {
           queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
 
           // ── Vertical-specific post-checkout redirect (Advocacia) ──
+          // UX: leva direto ao painel isolado pra evitar overload do dashboard genérico.
           if (localStorage.getItem("advocacia_post_checkout") === "1") {
             localStorage.removeItem("advocacia_post_checkout");
-            setTimeout(() => navigate("/advocacia/onboarding", { replace: true }), 600);
+            setTimeout(() => navigate("/advocacia/painel", { replace: true }), 600);
           }
 
         } catch (err: any) {

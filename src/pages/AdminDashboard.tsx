@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -10,7 +11,7 @@ import {
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
   Building, Zap, LayoutDashboard, CreditCard, Store,
-  Wallet, Sparkles, Crown, Settings, Key, Gift, ChevronDown, Cpu
+  Wallet, Sparkles, Crown, Settings, Key, Gift, ChevronDown, Cpu, Scale
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { useTranslation } from "react-i18next";
@@ -40,6 +41,14 @@ import AdminCostsDashboard from "@/components/dashboard/AdminCostsDashboard";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
+  const handleTabChange = (id: string) => {
+    if (id === "vertical-advocacia") {
+      navigate("/admin/verticals/advocacia");
+      return;
+    }
+    setActiveTab(id);
+  };
   const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
@@ -184,6 +193,7 @@ const AdminDashboard = () => {
     { id: "signup-metrics", label: "Signups", icon: Users, badge: undefined, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "ai-costs", label: "Custos IA", icon: Cpu, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: t("dashboard.system", { defaultValue: "Sistema" }) },
+    { id: "vertical-advocacia", label: "Vertical: Advocacia", icon: Scale, group: "Verticais" },
   ];
 
   const breadcrumbLabel = sidebarItems.find(i => i.id === activeTab)?.label || activeTab;
@@ -191,7 +201,7 @@ const AdminDashboard = () => {
   return (
     <div className="flex h-full">
       <div className="hidden lg:block">
-        <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={setActiveTab} />
+        <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={handleTabChange} />
       </div>
 
       <div className="flex-1 min-w-0 overflow-y-auto">
@@ -251,7 +261,7 @@ const AdminDashboard = () => {
                         )}
                         <SheetClose asChild>
                           <button
-                            onClick={() => setActiveTab(item.id)}
+                            onClick={() => handleTabChange(item.id)}
                             className={cn(
                               "w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-colors",
                               activeTab === item.id ? "bg-primary/10 text-primary font-medium" : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
