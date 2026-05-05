@@ -76,6 +76,7 @@ const AdvocaciaPainelPropostasLazy = lazyRetry(() => import("./pages/AdvocaciaPa
 const AdvocaciaPainelCaptacaoLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelCaptacao })));
 const AdvocaciaPainelDocumentosLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelDocumentos })));
 const AdvocaciaPainelConfigLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelConfiguracoes })));
+const AdvocaciaPainelMCPLazy = lazyRetry(() => import("./pages/MCPAssistente"));
 const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVertical"));
 const ApiKeysSettings = lazyRetry(() => import("./pages/ApiKeysSettings"));
 const queryClient = new QueryClient({
