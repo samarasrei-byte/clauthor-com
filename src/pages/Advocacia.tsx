@@ -96,6 +96,17 @@ const agents = [
     example: '"Rascunhei a contestação com base no caso. Revise antes de protocolar - não substitui sua análise final."',
   },
   {
+    icon: Briefcase,
+    name: "Assistente Jurídico Operacional",
+    role: "Análise de contratos, propostas e apoio ao fechamento",
+    bullets: [
+      "Lê contratos e gera relatório de risco (baixo/médio/alto)",
+      "Monta propostas de honorários (fixo, êxito, híbrido)",
+      "Apoia produção jurídica e pré-triagem de KYC/LGPD",
+    ],
+    example: '"Identifiquei 2 cláusulas críticas e preparei proposta híbrida de honorários. Revisão humana obrigatória antes do envio."',
+  },
+  {
     icon: Lock,
     name: "Oficial de Compliance LGPD & Anti-PLD",
     role: "KYC reforçado + monitoramento PEP/listas restritivas",
