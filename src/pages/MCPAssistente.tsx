@@ -329,6 +329,7 @@ export default function MCPAssistente() {
               {turns.map((t) => (
                 <TurnView key={t.id} turn={t} />
               ))}
+              <div ref={endRef} />
             </div>
           )}
         </div>
