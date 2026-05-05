@@ -1234,14 +1234,8 @@ export default function ApresentacaoAdv() {
                   </p>
                 </div>
 
-                <ul className="hidden">
-                  {[].map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-xs text-foreground/85">
-                      <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
-                      <span>{f}</span>
-                    </li>
-                  ))}
-                </ul>
+                <div className="flex-1" />
+
                 <Button
                   className={`mt-6 w-full ${p.highlight ? "glow" : ""}`}
                   variant={p.highlight ? "default" : "outline"}
