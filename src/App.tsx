@@ -124,6 +124,7 @@ const App = () => (
                   <Route path="captacao" element={<AdvocaciaPainelCaptacaoLazy />} />
                   <Route path="documentos" element={<AdvocaciaPainelDocumentosLazy />} />
                   <Route path="configuracoes" element={<AdvocaciaPainelConfigLazy />} />
+                  <Route path="mcp" element={<AdvocaciaPainelMCPLazy />} />
                 </Route>
 
                 {/* Public pages with full navbar */}
