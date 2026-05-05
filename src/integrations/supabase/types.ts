@@ -1749,6 +1749,69 @@ export type Database = {
           },
         ]
       }
+      mcp_executions: {
+        Row: {
+          approval_notes: string | null
+          approval_status: string
+          approved_at: string | null
+          approved_by: string | null
+          created_at: string
+          id: string
+          message: string
+          results: Json | null
+          routing: Json | null
+          security_blocked: boolean
+          security_level: string | null
+          security_output: string | null
+          selected_agents: Json
+          status: string
+          total_ms: number
+          triggered_agents: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approval_notes?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          id?: string
+          message: string
+          results?: Json | null
+          routing?: Json | null
+          security_blocked?: boolean
+          security_level?: string | null
+          security_output?: string | null
+          selected_agents?: Json
+          status?: string
+          total_ms?: number
+          triggered_agents?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approval_notes?: string | null
+          approval_status?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          created_at?: string
+          id?: string
+          message?: string
+          results?: Json | null
+          routing?: Json | null
+          security_blocked?: boolean
+          security_level?: string | null
+          security_output?: string | null
+          selected_agents?: Json
+          status?: string
+          total_ms?: number
+          triggered_agents?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string

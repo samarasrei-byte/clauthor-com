@@ -552,6 +552,88 @@ export default function Advocacia() {
         </div>
       </section>
 
+      {/* WORKFORCE MCP — Vitrine completa */}
+      <section className="py-20 border-t border-border/40 bg-muted/20">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center mb-12 max-w-2xl mx-auto">
+            <Badge variant="outline" className="mb-3 border-primary/30 text-primary bg-primary/5 text-[10px]">
+              Workforce MCP · 15 agentes
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
+              Toda a squad jurídica orquestrada
+            </h2>
+            <p className="mt-3 text-muted-foreground text-base">
+              Squad comercial (8 agentes) + arquitetura MCP (6 especialistas + 1 Orquestrador). Sem duplicidade — cada agente tem papel único.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {/* Comercial */}
+            <div className="rounded-2xl border border-border/50 bg-card p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Briefcase className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">Squad Comercial & Operacional</p>
+                  <p className="text-[11px] text-muted-foreground">8 agentes · captação ao fechamento</p>
+                </div>
+              </div>
+              <ul className="space-y-1.5 text-xs text-muted-foreground">
+                {[
+                  "Captação Jurídica",
+                  "Diagnóstico Jurídico",
+                  "Fechamento Jurídico",
+                  "Recuperação de Leads",
+                  "Análise de Risco Contratual",
+                  "Produção Jurídica",
+                  "Assistente Operacional",
+                  "Compliance Empresarial & Anti-PLD (KYC/PEP/COAF)",
+                ].map((n) => (
+                  <li key={n} className="flex items-center gap-2">
+                    <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
+                    <span>{n}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* MCP */}
+            <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 to-card p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <Sparkles className="w-4 h-4 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm font-semibold">Arquitetura MCP · Master Control Program</p>
+                  <p className="text-[11px] text-muted-foreground">1 Orquestrador + 6 especialistas · roteamento inteligente</p>
+                </div>
+              </div>
+              <ul className="space-y-1.5 text-xs text-muted-foreground">
+                {[
+                  ["🧠", "Orquestrador MCP — classifica e roteia"],
+                  ["🔒", "Segurança & LGPD — sigilo OAB, dados sensíveis"],
+                  ["⚖️", "Processual — fase, classificação documental"],
+                  ["⏱️", "Prazos — feriados forenses, CPC art. 219"],
+                  ["✍️", "Redator — peças, contratos, opiniões"],
+                  ["🎯", "Estratégico — tese, probabilidade de êxito"],
+                  ["💰", "Financeiro — honorários, custas"],
+                ].map(([emoji, n]) => (
+                  <li key={n} className="flex items-center gap-2">
+                    <span className="text-[10px]">{emoji}</span>
+                    <span>{n}</span>
+                  </li>
+                ))}
+              </ul>
+              <div className="mt-4 pt-3 border-t border-border/40 flex items-center gap-2 text-[10px] text-muted-foreground">
+                <Lock className="w-3 h-3" />
+                <span>Risco CRÍTICO exige aprovação humana antes de qualquer ação</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* PLANOS */}
       <section id="planos" className="py-24">
         <div className="max-w-6xl mx-auto px-6">
