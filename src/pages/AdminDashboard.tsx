@@ -1,6 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,14 @@ import AdminCostsDashboard from "@/components/dashboard/AdminCostsDashboard";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
+  const handleTabChange = (id: string) => {
+    if (id === "vertical-advocacia") {
+      navigate("/admin/verticals/advocacia");
+      return;
+    }
+    setActiveTab(id);
+  };
   const queryClient = useQueryClient();
   const { t, i18n } = useTranslation();
   const locale = i18n.language === "pt" ? "pt-BR" : i18n.language;
@@ -192,7 +201,7 @@ const AdminDashboard = () => {
   return (
     <div className="flex h-full">
       <div className="hidden lg:block">
-        <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={setActiveTab} />
+        <DashboardSidebar items={sidebarItems} activeItem={activeTab} onItemChange={handleTabChange} />
       </div>
 
       <div className="flex-1 min-w-0 overflow-y-auto">
