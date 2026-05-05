@@ -659,6 +659,83 @@ export type Database = {
         }
         Relationships: []
       }
+      api_keys: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          is_active: boolean
+          key_hash: string
+          key_prefix: string
+          last_used_at: string | null
+          name: string
+          plan: string
+          revoked_at: string | null
+          total_calls: number
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          key_hash: string
+          key_prefix: string
+          last_used_at?: string | null
+          name: string
+          plan?: string
+          revoked_at?: string | null
+          total_calls?: number
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean
+          key_hash?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          name?: string
+          plan?: string
+          revoked_at?: string | null
+          total_calls?: number
+          user_id?: string
+        }
+        Relationships: []
+      }
+      api_rate_limits: {
+        Row: {
+          api_key_id: string
+          called_at: string
+          endpoint: string | null
+          id: number
+          status_code: number | null
+        }
+        Insert: {
+          api_key_id: string
+          called_at?: string
+          endpoint?: string | null
+          id?: number
+          status_code?: number | null
+        }
+        Update: {
+          api_key_id?: string
+          called_at?: string
+          endpoint?: string | null
+          id?: number
+          status_code?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_rate_limits_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_feedback: {
         Row: {
           agent_id: string | null
@@ -2532,6 +2609,10 @@ export type Database = {
       }
     }
     Functions: {
+      check_rate_limit: {
+        Args: { _api_key_id: string; _plan: string }
+        Returns: Json
+      }
       get_user_tenant_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
@@ -2540,6 +2621,7 @@ export type Database = {
         }
         Returns: boolean
       }
+      hash_api_key: { Args: { _key: string }; Returns: string }
       increment_agent_executions: {
         Args: { p_agent_id: string }
         Returns: undefined
@@ -2551,6 +2633,10 @@ export type Database = {
       is_tenant_member: {
         Args: { _tenant_id: string; _user_id: string }
         Returns: boolean
+      }
+      log_api_call: {
+        Args: { _api_key_id: string; _endpoint: string; _status: number }
+        Returns: undefined
       }
       lookup_coupon_by_code: {
         Args: { _code: string }
@@ -2584,6 +2670,14 @@ export type Database = {
         }[]
       }
       seed_admin_agents: { Args: { _user_id: string }; Returns: number }
+      verify_api_key: {
+        Args: { _key: string }
+        Returns: {
+          api_key_id: string
+          plan: string
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       agent_status: "draft" | "active" | "paused" | "archived"
