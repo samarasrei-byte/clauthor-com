@@ -494,130 +494,144 @@ function ChatWidget() {
 
   return (
     <>
-      {/* Floating button */}
+      {/* Floating trigger button */}
       <motion.button
-        onClick={() => setOpen((o) => !o)}
-        className="fixed bottom-6 right-6 z-[60] h-14 w-14 rounded-full bg-primary text-primary-foreground shadow-2xl shadow-primary/30 flex items-center justify-center hover:scale-105 transition-transform"
-        initial={{ scale: 0, rotate: -180 }}
-        animate={{ scale: 1, rotate: 0 }}
+        onClick={() => setOpen(true)}
+        className="fixed bottom-6 right-6 z-[60] h-14 px-5 rounded-full bg-primary text-primary-foreground shadow-2xl shadow-primary/30 flex items-center gap-2 hover:scale-105 transition-transform"
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
         transition={{ delay: 1, type: "spring" }}
-        aria-label="Abrir chat"
+        aria-label="Abrir Advogada IA"
       >
-        <AnimatePresence mode="wait">
-          {open ? (
-            <motion.span key="x" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
-              <X className="w-6 h-6" />
-            </motion.span>
-          ) : (
-            <motion.span key="msg" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }}>
-              <Sparkles className="w-6 h-6" />
-            </motion.span>
-          )}
-        </AnimatePresence>
-        {!open && (
-          <span className="absolute -top-1 -right-1 h-3 w-3">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60"></span>
-            <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
-          </span>
-        )}
+        <Sparkles className="w-5 h-5" />
+        <span className="text-sm font-semibold hidden sm:inline">Falar com a Advogada IA</span>
+        <span className="absolute -top-1 -right-1 h-3 w-3">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60"></span>
+          <span className="relative inline-flex h-3 w-3 rounded-full bg-primary"></span>
+        </span>
       </motion.button>
 
-      {/* Panel */}
+      {/* Centered modal */}
       <AnimatePresence>
         {open && (
           <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            transition={{ type: "spring", stiffness: 280, damping: 24 }}
-            className="fixed bottom-24 right-6 z-[60] w-[min(92vw,420px)] h-[min(80vh,640px)] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
+            className="fixed inset-0 z-[70] flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <div className="px-4 py-3 border-b border-border bg-gradient-to-r from-primary/10 via-card to-card flex items-center gap-3">
-              <div className="h-9 w-9 rounded-full bg-primary/15 flex items-center justify-center">
-                <Scale className="w-4 h-4 text-primary" />
+            {/* Backdrop */}
+            <motion.div
+              className="absolute inset-0 bg-background/80 backdrop-blur-md"
+              onClick={() => setOpen(false)}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+
+            {/* Panel */}
+            <motion.div
+              initial={{ opacity: 0, y: 24, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 24, scale: 0.96 }}
+              transition={{ type: "spring", stiffness: 280, damping: 26 }}
+              className="relative w-[min(96vw,640px)] h-[min(85vh,720px)] rounded-2xl border border-border bg-card shadow-2xl flex flex-col overflow-hidden"
+            >
+              <div className="px-5 py-4 border-b border-border bg-gradient-to-r from-primary/10 via-card to-card flex items-center gap-3">
+                <div className="h-10 w-10 rounded-full bg-primary/15 flex items-center justify-center">
+                  <Scale className="w-5 h-5 text-primary" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold leading-tight">Advogada IA · Clauthor</p>
+                  <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online · responde em segundos
+                  </p>
+                </div>
+                <button
+                  onClick={() => setOpen(false)}
+                  className="h-8 w-8 rounded-full hover:bg-muted flex items-center justify-center transition-colors"
+                  aria-label="Fechar"
+                >
+                  <X className="w-4 h-4" />
+                </button>
               </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold leading-tight">Advogada IA · Clauthor</p>
-                <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" /> Online · responde em segundos
+
+              <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-5 space-y-3">
+                {messages.map((m, i) => (
+                  <div
+                    key={i}
+                    className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
+                        m.role === "user"
+                          ? "bg-primary text-primary-foreground rounded-br-sm"
+                          : "bg-muted rounded-bl-sm"
+                      }`}
+                    >
+                      {m.role === "assistant" ? (
+                        <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-strong:text-foreground">
+                          <ReactMarkdown>{m.content}</ReactMarkdown>
+                        </div>
+                      ) : (
+                        m.content
+                      )}
+                    </div>
+                  </div>
+                ))}
+                {loading && (
+                  <div className="flex justify-start">
+                    <div className="bg-muted rounded-2xl rounded-bl-sm px-3.5 py-2.5 flex items-center gap-1.5">
+                      <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "0ms" }} />
+                      <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "120ms" }} />
+                      <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "240ms" }} />
+                    </div>
+                  </div>
+                )}
+
+                {messages.length === 1 && !loading && (
+                  <div className="pt-2 grid sm:grid-cols-2 gap-1.5">
+                    {suggestions.map((s) => (
+                      <button
+                        key={s}
+                        onClick={() => {
+                          setInput(s);
+                          setTimeout(() => send(), 50);
+                        }}
+                        className="text-left text-xs px-3 py-2 rounded-lg border border-border bg-background hover:border-primary/40 hover:bg-primary/5 transition-colors"
+                      >
+                        {s}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="p-4 border-t border-border bg-card">
+                <div className="flex items-center gap-2">
+                  <Input
+                    autoFocus
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && send()}
+                    placeholder="Pergunte sobre a squad, planos, segurança, ROI..."
+                    className="h-11 text-sm"
+                    disabled={loading}
+                  />
+                  <Button
+                    size="icon"
+                    className="h-11 w-11 shrink-0"
+                    onClick={send}
+                    disabled={loading || !input.trim()}
+                  >
+                    {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+                  </Button>
+                </div>
+                <p className="text-[10px] text-muted-foreground mt-2 text-center">
+                  IA consultiva. Não substitui aconselhamento jurídico.
                 </p>
               </div>
-            </div>
-
-            <div ref={scrollRef} className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-              {messages.map((m, i) => (
-                <div
-                  key={i}
-                  className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`max-w-[85%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed ${
-                      m.role === "user"
-                        ? "bg-primary text-primary-foreground rounded-br-sm"
-                        : "bg-muted rounded-bl-sm"
-                    }`}
-                  >
-                    {m.role === "assistant" ? (
-                      <div className="prose prose-sm dark:prose-invert max-w-none prose-p:my-1 prose-strong:text-foreground">
-                        <ReactMarkdown>{m.content}</ReactMarkdown>
-                      </div>
-                    ) : (
-                      m.content
-                    )}
-                  </div>
-                </div>
-              ))}
-              {loading && (
-                <div className="flex justify-start">
-                  <div className="bg-muted rounded-2xl rounded-bl-sm px-3.5 py-2.5 flex items-center gap-1.5">
-                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "0ms" }} />
-                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "120ms" }} />
-                    <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/60 animate-bounce" style={{ animationDelay: "240ms" }} />
-                  </div>
-                </div>
-              )}
-
-              {messages.length === 1 && !loading && (
-                <div className="pt-2 space-y-1.5">
-                  {suggestions.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => {
-                        setInput(s);
-                        setTimeout(() => send(), 50);
-                      }}
-                      className="w-full text-left text-xs px-3 py-2 rounded-lg border border-border bg-background hover:border-primary/40 hover:bg-primary/5 transition-colors"
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            <div className="p-3 border-t border-border bg-card">
-              <div className="flex items-center gap-2">
-                <Input
-                  value={input}
-                  onChange={(e) => setInput(e.target.value)}
-                  onKeyDown={(e) => e.key === "Enter" && send()}
-                  placeholder="Pergunte sobre a squad, planos, segurança..."
-                  className="h-10 text-sm"
-                  disabled={loading}
-                />
-                <Button
-                  size="icon"
-                  className="h-10 w-10 shrink-0"
-                  onClick={send}
-                  disabled={loading || !input.trim()}
-                >
-                  {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                </Button>
-              </div>
-              <p className="text-[10px] text-muted-foreground mt-2 text-center">
-                IA consultiva · Não substitui aconselhamento jurídico
-              </p>
-            </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
