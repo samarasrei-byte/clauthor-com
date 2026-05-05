@@ -552,10 +552,10 @@ export default function Advocacia() {
         </div>
       </section>
 
-      {/* WORKFORCE MCP — Vitrine completa */}
+      {/* WORKFORCE MCP — Vitrine completa com 15 agentes (ícones lucide, sem emoji) */}
       <section className="py-20 border-t border-border/40 bg-muted/20">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-12 max-w-2xl mx-auto">
+          <div className="text-center mb-10 max-w-2xl mx-auto">
             <Badge variant="outline" className="mb-3 border-primary/30 text-primary bg-primary/5 text-[10px]">
               Workforce MCP · 15 agentes
             </Badge>
@@ -563,73 +563,61 @@ export default function Advocacia() {
               Toda a squad jurídica orquestrada
             </h2>
             <p className="mt-3 text-muted-foreground text-base">
-              Squad comercial (8 agentes) + arquitetura MCP (6 especialistas + 1 Orquestrador). Sem duplicidade — cada agente tem papel único.
+              7 agentes MCP (núcleo inteligente) + 4 comerciais + 4 operacionais. Sem duplicidade — cada agente tem papel único.
             </p>
+            <div className="mt-5">
+              <Link to="/apresentacaoadv">
+                <Button variant="outline" size="sm" className="h-9">
+                  <Sparkles className="w-3.5 h-3.5 mr-2" />
+                  Ver apresentação completa
+                </Button>
+              </Link>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {/* Comercial */}
-            <div className="rounded-2xl border border-border/50 bg-card p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Briefcase className="w-4 h-4 text-primary" />
+          {/* Grid 15 cards */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            {[
+              { Icon: Sparkles, name: "Orquestrador MCP", layer: "MCP", desc: "Classifica e roteia em < 800ms" },
+              { Icon: Lock, name: "Segurança & LGPD", layer: "MCP", desc: "Validação obrigatória OAB" },
+              { Icon: Scale, name: "Processual", layer: "MCP", desc: "Fase + classificação documental" },
+              { Icon: Clock, name: "Prazos", layer: "MCP", desc: "CPC art. 219 + feriados" },
+              { Icon: FileText, name: "Redator", layer: "MCP", desc: "Peças, contratos, pareceres" },
+              { Icon: TrendingUp, name: "Estratégico", layer: "MCP", desc: "Tese + probabilidade de êxito" },
+              { Icon: Briefcase, name: "Financeiro", layer: "MCP", desc: "Honorários, custas, relatórios" },
+              { Icon: MessageSquare, name: "Captação", layer: "Comercial", desc: "WhatsApp + LP 24/7" },
+              { Icon: ClipboardCheck, name: "Diagnóstico", layer: "Comercial", desc: "Triagem estruturada" },
+              { Icon: Handshake, name: "Fechamento", layer: "Comercial", desc: "Proposta + contratação" },
+              { Icon: RefreshCw, name: "Recuperação", layer: "Comercial", desc: "Reativa leads frios" },
+              { Icon: ShieldAlert, name: "Risco Contratual", layer: "Op", desc: "Análise em segundos" },
+              { Icon: FileText, name: "Produção Jurídica", layer: "Op", desc: "Minutas + jurisprudência" },
+              { Icon: Briefcase, name: "Op. Jurídico", layer: "Op", desc: "Análise + propostas" },
+              { Icon: Lock, name: "Compliance KYC/PLD", layer: "Op", desc: "PEP, OFAC, COAF" },
+            ].map((a) => {
+              const colors =
+                a.layer === "MCP"
+                  ? "border-primary/30 bg-primary/5 text-primary"
+                  : a.layer === "Comercial"
+                  ? "border-emerald-500/25 bg-emerald-500/5 text-emerald-500"
+                  : "border-amber-500/25 bg-amber-500/5 text-amber-500";
+              return (
+                <div
+                  key={a.name}
+                  className="rounded-xl border border-border/50 bg-card p-3.5 hover:border-primary/30 hover:shadow-sm transition-all"
+                >
+                  <div className={`w-9 h-9 rounded-lg border ${colors} flex items-center justify-center mb-2.5`}>
+                    <a.Icon className="w-4 h-4" />
+                  </div>
+                  <p className="text-xs font-semibold leading-tight">{a.name}</p>
+                  <p className="text-[10px] text-muted-foreground mt-1 leading-snug">{a.desc}</p>
                 </div>
-                <div>
-                  <p className="text-sm font-semibold">Squad Comercial & Operacional</p>
-                  <p className="text-[11px] text-muted-foreground">8 agentes · captação ao fechamento</p>
-                </div>
-              </div>
-              <ul className="space-y-1.5 text-xs text-muted-foreground">
-                {[
-                  "Captação Jurídica",
-                  "Diagnóstico Jurídico",
-                  "Fechamento Jurídico",
-                  "Recuperação de Leads",
-                  "Análise de Risco Contratual",
-                  "Produção Jurídica",
-                  "Assistente Operacional",
-                  "Compliance Empresarial & Anti-PLD (KYC/PEP/COAF)",
-                ].map((n) => (
-                  <li key={n} className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
-                    <span>{n}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+              );
+            })}
+          </div>
 
-            {/* MCP */}
-            <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/5 to-card p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-primary" />
-                </div>
-                <div>
-                  <p className="text-sm font-semibold">Arquitetura MCP · Master Control Program</p>
-                  <p className="text-[11px] text-muted-foreground">1 Orquestrador + 6 especialistas · roteamento inteligente</p>
-                </div>
-              </div>
-              <ul className="space-y-1.5 text-xs text-muted-foreground">
-                {[
-                  ["🧠", "Orquestrador MCP — classifica e roteia"],
-                  ["🔒", "Segurança & LGPD — sigilo OAB, dados sensíveis"],
-                  ["⚖️", "Processual — fase, classificação documental"],
-                  ["⏱️", "Prazos — feriados forenses, CPC art. 219"],
-                  ["✍️", "Redator — peças, contratos, opiniões"],
-                  ["🎯", "Estratégico — tese, probabilidade de êxito"],
-                  ["💰", "Financeiro — honorários, custas"],
-                ].map(([emoji, n]) => (
-                  <li key={n} className="flex items-center gap-2">
-                    <span className="text-[10px]">{emoji}</span>
-                    <span>{n}</span>
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-4 pt-3 border-t border-border/40 flex items-center gap-2 text-[10px] text-muted-foreground">
-                <Lock className="w-3 h-3" />
-                <span>Risco CRÍTICO exige aprovação humana antes de qualquer ação</span>
-              </div>
-            </div>
+          <div className="mt-6 flex items-center justify-center gap-2 text-[11px] text-muted-foreground">
+            <Lock className="w-3 h-3" />
+            <span>Risco CRÍTICO exige aprovação humana antes de qualquer ação sensível</span>
           </div>
         </div>
       </section>
