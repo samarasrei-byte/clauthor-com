@@ -28,10 +28,12 @@ export function useHireIntentFlow(user: any) {
 
     let price: number;
     let deptId: string | undefined;
-    const setupFee = typeof intent.setupFee === "number" ? intent.setupFee : 0;
+    // Intent values from Advocacia plans are stored in CENTS (e.g. 49700 = R$ 497,00).
+    // Convert to whole units for display & PayPal (which expects "497.00" reais).
+    const setupFee = typeof intent.setupFee === "number" && intent.setupFee > 0 ? intent.setupFee / 100 : 0;
 
     if (typeof intent.monthlyOverride === "number" && intent.monthlyOverride > 0) {
-      price = intent.monthlyOverride;
+      price = intent.monthlyOverride / 100;
       deptId = intent.departmentId;
     } else if (isDepartment) {
       deptId = intent.departmentId || SLUG_TO_DEPT[uniqueSlugs[0]] || "comercial";
@@ -60,7 +62,7 @@ export function useHireIntentFlow(user: any) {
     createPayPalPlan(agentSlug, intent.label, price, region.currency, setupFee).then((planId) => {
       setCheckoutSummary({
         label: intent.label, slugs: uniqueSlugs, isDepartment, departmentId: deptId,
-        price, currency: region.currency, lang, planId,
+        price, currency: region.currency, lang, planId, setupFee,
       });
     });
   }, [user, i18n.language]);
@@ -97,6 +99,7 @@ export function useHireIntentFlow(user: any) {
 }
 
 async function createPayPalPlan(agentSlug: string, agentName: string, amount: number, currency: string, setupFee: number = 0): Promise<string | undefined> {
+  // amount and setupFee are already in WHOLE units (reais), not cents.
   try {
     const { data, error } = await supabase.functions.invoke("paypal-checkout", {
       body: {
@@ -105,7 +108,7 @@ async function createPayPalPlan(agentSlug: string, agentName: string, amount: nu
         agent_name: agentName,
         amount,
         currency,
-        setup_fee: setupFee > 0 ? setupFee / 100 : 0,
+        setup_fee: setupFee > 0 ? setupFee : 0,
         return_url: `${window.location.origin}/dashboard?subscription=success`,
         cancel_url: `${window.location.origin}/dashboard?subscription=cancelled`,
       },
