@@ -321,7 +321,7 @@ export default function MCPAssistente() {
       </header>
 
       {/* Conteúdo */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto">
+      <div ref={scrollRef} className="flex-1">
         <div className="max-w-4xl mx-auto px-6 py-8">
           {isEmpty ? (
             <EmptyState onPick={(p) => sendMessage(p)} />
