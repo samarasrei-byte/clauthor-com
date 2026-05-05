@@ -816,6 +816,245 @@ export default function ApresentacaoAdv() {
         </div>
       </section>
 
+      {/* COMPARATIVO COMPETITIVO */}
+      <section className="py-20 border-b border-border/40 bg-card/30">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <Badge variant="outline" className="mb-3 border-primary/30 text-primary bg-primary/5">
+              <Trophy className="w-3 h-3 mr-1.5" />
+              Onde a Clauthor se posiciona
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
+              Software de gestão <span className="text-muted-foreground">vs.</span> Squad jurídica viva
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              Astrea, Jusfy, ADVBox e CPJ-3C são <strong className="text-foreground">cadernos digitais</strong> — você ainda
+              faz tudo. A Clauthor é uma <strong className="text-foreground">equipe de IA orquestrada</strong> que executa por você.
+            </p>
+          </div>
+
+          <div className="overflow-x-auto rounded-2xl border border-border/50 bg-card/60">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-border/60 bg-muted/30">
+                  <th className="text-left p-4 font-semibold text-xs uppercase tracking-wider text-muted-foreground">Critério</th>
+                  <th className="text-center p-4 font-semibold text-xs uppercase tracking-wider text-muted-foreground">
+                    Astrea / Jusfy
+                    <div className="text-[10px] font-normal normal-case mt-0.5 text-muted-foreground/70">R$ 150 – R$ 300/mês</div>
+                  </th>
+                  <th className="text-center p-4 font-semibold text-xs uppercase tracking-wider text-muted-foreground">
+                    Estagiário CLT
+                    <div className="text-[10px] font-normal normal-case mt-0.5 text-muted-foreground/70">R$ 2.500+/mês</div>
+                  </th>
+                  <th className="text-center p-4 font-semibold text-xs uppercase tracking-wider text-primary bg-primary/5">
+                    Clauthor MCP
+                    <div className="text-[10px] font-normal normal-case mt-0.5 text-primary/70">R$ 497 – R$ 4.997/mês</div>
+                  </th>
+                </tr>
+              </thead>
+              <tbody className="text-foreground/90">
+                {([
+                  ["Atendimento 24/7 sem férias", false, false, true],
+                  ["Captação automática de leads", false, "Parcial", true],
+                  ["Cálculo de prazos com bloqueio", "Manual", "Risco humano", true],
+                  ["Redação de peças padronizada", false, "Demora", true],
+                  ["Análise de risco contratual", false, false, true],
+                  ["KYC + PEP/COAF integrado", false, false, true],
+                  ["Recuperação de leads frios", false, "Esquece", true],
+                  ["Auditoria por execução (LGPD)", "Limitada", false, true],
+                  ["Estratégia + tese + jurisprudência", false, "Júnior", true],
+                  ["Validação humana obrigatória", "—", "—", true],
+                  ["Encargos / 13º / FGTS / férias", "Não", "+68% sobre salário", "Não"],
+                ] as [string, any, any, any][]).map(([label, astrea, clt, clauthor], i) => {
+                  const cell = (v: any) =>
+                    v === true ? <CheckCircle2 className="w-4 h-4 text-emerald-500 mx-auto" /> :
+                    v === false ? <XCircle className="w-4 h-4 text-muted-foreground/40 mx-auto" /> :
+                    <span className="text-xs">{v}</span>;
+                  return (
+                    <tr key={i} className="border-b border-border/30 last:border-0 hover:bg-muted/10 transition-colors">
+                      <td className="p-3.5 font-medium">{label}</td>
+                      <td className="p-3.5 text-center text-muted-foreground">{cell(astrea)}</td>
+                      <td className="p-3.5 text-center text-muted-foreground">{cell(clt)}</td>
+                      <td className="p-3.5 text-center bg-primary/[0.03]">
+                        {clauthor === true ? <CheckCircle2 className="w-4 h-4 text-primary mx-auto" /> : <span className="text-xs font-semibold text-primary">{clauthor}</span>}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-6 flex items-start gap-3 p-4 rounded-xl border border-primary/20 bg-primary/5">
+            <Flame className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+            <p className="text-sm text-foreground/85 leading-relaxed">
+              <strong className="text-primary">Diferença essencial:</strong> softwares de gestão organizam o trabalho que você
+              <em> ainda vai fazer</em>. A Clauthor <strong>executa o trabalho</strong> — atende, qualifica, redige, calcula,
+              fecha e relata. Você vira o <strong>gestor estratégico</strong>, não o operador.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* CALCULADORA DE ROI — 3 CENÁRIOS */}
+      <section className="py-20 border-b border-border/40">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <Badge variant="outline" className="mb-3 border-primary/30 text-primary bg-primary/5">
+              <Calculator className="w-3 h-3 mr-1.5" />
+              ROI mensurável
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
+              Quanto a Clauthor te <span className="text-primary">devolve por mês</span>
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              Três cenários reais. Calcule você mesmo — depois fale com a Advogada IA para refinar com seus números.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-5">
+            {[
+              {
+                icon: HeartHandshake,
+                title: "Recuperação de 1 contrato",
+                value: "R$ 3.000",
+                period: "= 6 meses pagos",
+                bullets: ["Lead que ia esfriar por demora no atendimento", "Agente comercial responde em 30s e qualifica", "1 contrato fechado paga 6 meses do plano Start"],
+                color: "from-emerald-500/10 to-transparent border-emerald-500/30",
+                highlight: false,
+              },
+              {
+                icon: Timer,
+                title: "10 horas devolvidas/semana",
+                value: "R$ 8.000",
+                period: "/mês em hora técnica",
+                bullets: ["Sua hora técnica vale R$ 200 (mínimo)", "10h × 4 semanas × R$ 200 = R$ 8.000/mês", "Você passa de operador a estrategista"],
+                color: "from-primary/10 to-transparent border-primary/30",
+                highlight: true,
+              },
+              {
+                icon: Users,
+                title: "Substitui 4 contratações",
+                value: "−R$ 30.000",
+                period: "/mês em folha CLT",
+                bullets: ["Captador + atendente + paralegal + compliance", "Custo CLT real (com encargos +68%): R$ 35k+/mês", "MCP Enterprise: R$ 4.997/mês — economia de 86%"],
+                color: "from-amber-500/10 to-transparent border-amber-500/30",
+                highlight: false,
+              },
+            ].map((c, i) => (
+              <motion.div
+                key={c.title}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08 }}
+              >
+                <Card className={`p-6 h-full bg-gradient-to-br ${c.color} flex flex-col relative overflow-hidden ${c.highlight ? "ring-1 ring-primary/30 shadow-xl shadow-primary/10" : ""}`}>
+                  {c.highlight && <Badge className="absolute top-4 right-4 bg-primary text-primary-foreground text-[10px]">Mais comum</Badge>}
+                  <div className="w-11 h-11 rounded-lg bg-background/60 backdrop-blur flex items-center justify-center mb-4">
+                    <c.icon className="w-5 h-5 text-foreground" />
+                  </div>
+                  <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider">{c.title}</h3>
+                  <div className="mt-2 flex items-baseline gap-2">
+                    <span className="text-3xl md:text-4xl font-display font-bold text-foreground">{c.value}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground mt-1">{c.period}</p>
+                  <ul className="mt-5 space-y-2 flex-1">
+                    {c.bullets.map((b) => (
+                      <li key={b} className="flex items-start gap-2 text-xs text-foreground/85">
+                        <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary/70" />
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          <Card className="mt-8 p-6 md:p-8 bg-gradient-to-r from-primary/10 via-card to-card border-primary/30">
+            <div className="flex flex-col md:flex-row items-center gap-6">
+              <div className="w-14 h-14 rounded-2xl bg-primary/20 text-primary flex items-center justify-center shrink-0">
+                <TrendingUp className="w-7 h-7" />
+              </div>
+              <div className="flex-1 text-center md:text-left">
+                <p className="text-sm text-muted-foreground">Combinando os três cenários (cliente médio):</p>
+                <p className="mt-1 text-2xl md:text-3xl font-display font-semibold">
+                  Retorno mensal entre <span className="text-primary">R$ 11.000 e R$ 41.000</span>
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  Para investimento a partir de R$ 497/mês. ROI mínimo: <strong className="text-primary">22×</strong>.
+                </p>
+              </div>
+              <Button size="lg" className="glow shrink-0" onClick={() => navigate("/advocacia#planos")}>
+                Quero esse retorno <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </section>
+
+      {/* GATILHOS — CUSTO DE NÃO DECIDIR + AUTORIDADE */}
+      <section className="py-20 border-b border-border/40 bg-card/30">
+        <div className="max-w-6xl mx-auto px-6">
+          <div className="text-center max-w-2xl mx-auto mb-14">
+            <Badge variant="outline" className="mb-3 border-destructive/30 text-destructive bg-destructive/5">
+              <AlertTriangle className="w-3 h-3 mr-1.5" />
+              Custo de não decidir hoje
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
+              Cada mês adiando custa mais que <span className="text-primary">12 meses de Clauthor</span>
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-5 mb-10">
+            {[
+              { icon: XCircle, title: "Lead perdido por demora", cost: "R$ 3.000 – R$ 15.000", desc: "73% dos leads contratam o primeiro escritório que responde. Demorou >2h? Perdeu." },
+              { icon: Clock4, title: "Prazo perdido", cost: "R$ 15.000+ por caso", desc: "Indenização + dano reputacional + risco disciplinar OAB. Um único prazo paga 3 anos de Clauthor." },
+              { icon: ShieldAlert, title: "Falha de KYC / PLD", cost: "Multa até R$ 20 milhões", desc: "Provimento OAB 188 e Lei 9.613/98. Risco real para escritórios que atendem PJ ou alto patrimônio." },
+              { icon: Coins, title: "Sócio em tarefa operacional", cost: "R$ 8.000+/mês", desc: "Cada hora sua em tarefa repetitiva é hora não vendida. 10h/semana = R$ 8k em receita perdida." },
+            ].map((g, i) => (
+              <motion.div
+                key={g.title}
+                initial={{ opacity: 0, x: i % 2 === 0 ? -12 : 12 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+              >
+                <Card className="p-5 bg-card/60 border-border/40 hover:border-destructive/40 transition-colors flex items-start gap-4">
+                  <div className="w-11 h-11 rounded-lg bg-destructive/10 text-destructive flex items-center justify-center shrink-0">
+                    <g.icon className="w-5 h-5" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-baseline justify-between gap-3 flex-wrap">
+                      <h3 className="font-semibold">{g.title}</h3>
+                      <span className="text-sm font-display font-semibold text-destructive">{g.cost}</span>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">{g.desc}</p>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { icon: ShieldCheck, title: "OAB Provimento 205/2021", desc: "Compatível com publicidade ética e captação." },
+              { icon: Lock, title: "LGPD por design", desc: "Criptografia AES-256-GCM, RIPD pronto, multi-tenant RLS." },
+              { icon: BadgeCheck, title: "Validação humana 100%", desc: "Nenhuma decisão jurídica sai sem o advogado responsável aprovar." },
+            ].map((a) => (
+              <div key={a.title} className="flex items-start gap-3 p-4 rounded-xl border border-border/40 bg-card/40">
+                <a.icon className="w-5 h-5 text-primary shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-sm">{a.title}</p>
+                  <p className="text-xs text-muted-foreground mt-0.5">{a.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* PLANOS — resumo */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">
