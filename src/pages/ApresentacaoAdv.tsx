@@ -1155,17 +1155,22 @@ export default function ApresentacaoAdv() {
                 key={p.name}
                 className={`p-6 flex flex-col bg-card/60 transition-all ${
                   p.highlight
-                    ? "border-2 border-primary shadow-xl shadow-primary/10 scale-[1.02] relative"
+                    ? "border-2 border-primary shadow-xl shadow-primary/10 xl:scale-[1.02] relative"
                     : "border border-border/40"
                 }`}
               >
-                {p.highlight && (
-                  <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground">
-                    Mais escolhido
+                {p.badge && (
+                  <Badge className={`absolute -top-3 left-1/2 -translate-x-1/2 ${p.highlight ? "bg-primary text-primary-foreground" : "bg-foreground text-background"}`}>
+                    {p.badge}
                   </Badge>
                 )}
                 <h3 className="text-lg font-display font-semibold">{p.name}</h3>
-                <p className="text-xs text-muted-foreground mt-1 min-h-[40px]">{p.desc}</p>
+                <p className="text-xs text-muted-foreground mt-1 min-h-[48px] leading-relaxed">{p.desc}</p>
+
+                <div className="mt-3 inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-primary/80 bg-primary/5 border border-primary/20 rounded-full px-2 py-1 w-fit">
+                  <Target className="w-3 h-3" /> {p.ideal}
+                </div>
+
                 <div className="mt-5 pb-5 border-b border-border/40">
                   <div className="text-[10px] uppercase tracking-wider text-muted-foreground/70">Setup</div>
                   <div className="text-base font-semibold">{p.setup}</div>
@@ -1175,8 +1180,62 @@ export default function ApresentacaoAdv() {
                     <span className="text-xs text-muted-foreground">/mês</span>
                   </div>
                 </div>
-                <ul className="mt-5 space-y-2 flex-1">
-                  {p.bullets.map((f) => (
+
+                {/* Agentes inclusos */}
+                <div className="mt-5">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-2 flex items-center gap-1.5">
+                    <Brain className="w-3 h-3" /> Agentes inclusos
+                  </div>
+                  <ul className="space-y-1.5">
+                    {p.agents.map((a) => (
+                      <li key={a} className="flex items-start gap-2 text-xs text-foreground/90">
+                        <span className="mt-1 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
+                        <span>{a}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Recursos */}
+                <div className="mt-5">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-2 flex items-center gap-1.5">
+                    <Workflow className="w-3 h-3" /> O que está incluso
+                  </div>
+                  <ul className="space-y-1.5">
+                    {p.features.map((f) => (
+                      <li key={f} className="flex items-start gap-2 text-xs text-foreground/85">
+                        <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Benefícios */}
+                <div className="mt-5">
+                  <div className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mb-2 flex items-center gap-1.5">
+                    <Sparkles className="w-3 h-3" /> Benefícios
+                  </div>
+                  <ul className="space-y-1.5">
+                    {p.benefits.map((b) => (
+                      <li key={b} className="flex items-start gap-2 text-xs text-foreground/85">
+                        <Zap className="w-3.5 h-3.5 mt-0.5 shrink-0 text-emerald-500" />
+                        <span>{b}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* ROI */}
+                <div className="mt-5 mb-5 p-3 rounded-lg bg-primary/5 border border-primary/20 flex items-start gap-2">
+                  <TrendingUp className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                  <p className="text-[11px] text-foreground/90 leading-relaxed">
+                    <strong className="text-primary">ROI:</strong> {p.roi}
+                  </p>
+                </div>
+
+                <ul className="hidden">
+                  {[].map((f) => (
                     <li key={f} className="flex items-start gap-2 text-xs text-foreground/85">
                       <CheckCircle2 className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary" />
                       <span>{f}</span>
