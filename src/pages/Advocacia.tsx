@@ -290,11 +290,11 @@ export default function Advocacia() {
     localStorage.setItem("advocacia_post_checkout", "1");
 
     if (user) {
-      toast.success("Redirecionando para o checkout...");
-      navigate("/dashboard");
+      toast.success("Redirecionando para o painel do advogado...");
+      navigate("/advocacia/painel");
     } else {
       navigate("/auth", {
-        state: { hireIntent: plan.intent, signup: true, from: { pathname: "/dashboard" } },
+        state: { hireIntent: plan.intent, signup: true, from: { pathname: "/advocacia/painel" } },
       });
     }
   };
