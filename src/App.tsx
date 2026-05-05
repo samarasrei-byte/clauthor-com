@@ -77,6 +77,7 @@ const AdvocaciaPainelCaptacaoLazy = lazyRetry(() => import("./pages/AdvocaciaPai
 const AdvocaciaPainelDocumentosLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelDocumentos })));
 const AdvocaciaPainelConfigLazy = lazyRetry(() => import("./pages/AdvocaciaPainel").then(m => ({ default: m.AdvocaciaPainelConfiguracoes })));
 const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVertical"));
+const ApiKeysSettings = lazyRetry(() => import("./pages/ApiKeysSettings"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -165,6 +166,7 @@ const App = () => (
                   <Route path="/hunter-lead/:id" element={<HunterLeadDetail />} />
                   <Route path="/hunter-inbox" element={<HunterInbox />} />
                   <Route path="/app/agente/:slug" element={<AgentWorkspace />} />
+                  <Route path="/settings/api-keys" element={<ApiKeysSettings />} />
                 </Route>
 
                 {/* Admin */}
