@@ -29,6 +29,15 @@ import {
   ShieldAlert,
   BadgeCheck,
   Zap,
+  TrendingUp,
+  Coins,
+  Timer,
+  AlertTriangle,
+  Flame,
+  Users,
+  XCircle,
+  Trophy,
+  Calculator,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
