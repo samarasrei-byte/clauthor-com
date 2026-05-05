@@ -221,34 +221,72 @@ const AdvocaciaPainelLayout = () => {
           </div>
 
           {/* Nav */}
-          <nav className={`flex-1 ${collapsed ? "px-2" : "px-2"} py-3 space-y-0.5 overflow-y-auto`}>
-            {SIDEBAR_ITEMS.map((item) => {
-              const link = (
-                <NavLink
-                  key={item.to}
-                  to={item.to}
-                  end={item.end}
-                  className={({ isActive }) =>
-                    `flex items-center ${collapsed ? "justify-center" : "gap-3"} px-2.5 py-2 rounded-md text-sm transition-colors ${
-                      isActive
-                        ? "bg-primary/10 text-primary font-medium"
-                        : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
-                    }`
+          <nav className={`flex-1 ${collapsed ? "px-2" : "px-2"} py-3 space-y-4 overflow-y-auto`}>
+            {SIDEBAR_GROUPS.map((group, gi) => (
+              <div key={gi} className="space-y-0.5">
+                {group.label && !collapsed && (
+                  <div className="px-2.5 pt-1 pb-1.5 text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 font-medium">
+                    {group.label}
+                  </div>
+                )}
+                {group.label && collapsed && gi > 0 && (
+                  <div className="mx-auto my-1 h-px w-6 bg-border/60" />
+                )}
+                {group.items.map((item) => {
+                  if (item.soon) {
+                    const soonBtn = (
+                      <div
+                        key={`${item.to}-${item.label}`}
+                        className={`flex items-center ${collapsed ? "justify-center" : "gap-3"} px-2.5 py-2 rounded-md text-sm text-muted-foreground/50 cursor-not-allowed select-none`}
+                      >
+                        <item.icon className="h-4 w-4 shrink-0" />
+                        {!collapsed && (
+                          <>
+                            <span className="truncate">{item.label}</span>
+                            <span className="ml-auto text-[9px] uppercase tracking-wider text-muted-foreground/50 border border-border/60 rounded px-1 py-px">
+                              em breve
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    );
+                    return collapsed ? (
+                      <Tooltip key={`${item.to}-${item.label}`}>
+                        <TooltipTrigger asChild>{soonBtn}</TooltipTrigger>
+                        <TooltipContent side="right">{item.label} · em breve</TooltipContent>
+                      </Tooltip>
+                    ) : (
+                      soonBtn
+                    );
                   }
-                >
-                  <item.icon className="h-4 w-4 shrink-0" />
-                  {!collapsed && <span className="truncate">{item.label}</span>}
-                </NavLink>
-              );
-              return collapsed ? (
-                <Tooltip key={item.to}>
-                  <TooltipTrigger asChild>{link}</TooltipTrigger>
-                  <TooltipContent side="right">{item.label}</TooltipContent>
-                </Tooltip>
-              ) : (
-                link
-              );
-            })}
+                  const link = (
+                    <NavLink
+                      key={item.to}
+                      to={item.to}
+                      end={item.end}
+                      className={({ isActive }) =>
+                        `flex items-center ${collapsed ? "justify-center" : "gap-3"} px-2.5 py-2 rounded-md text-sm transition-colors ${
+                          isActive
+                            ? "bg-primary/10 text-primary font-medium"
+                            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                        }`
+                      }
+                    >
+                      <item.icon className="h-4 w-4 shrink-0" />
+                      {!collapsed && <span className="truncate">{item.label}</span>}
+                    </NavLink>
+                  );
+                  return collapsed ? (
+                    <Tooltip key={item.to}>
+                      <TooltipTrigger asChild>{link}</TooltipTrigger>
+                      <TooltipContent side="right">{item.label}</TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    link
+                  );
+                })}
+              </div>
+            ))}
           </nav>
 
           {/* Onboarding checklist */}
