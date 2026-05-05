@@ -184,6 +184,7 @@ const AdminDashboard = () => {
     { id: "signup-metrics", label: "Signups", icon: Users, badge: undefined, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "ai-costs", label: "Custos IA", icon: Cpu, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: t("dashboard.system", { defaultValue: "Sistema" }) },
+    { id: "vertical-advocacia", label: "Vertical: Advocacia", icon: Scale, group: "Verticais" },
   ];
 
   const breadcrumbLabel = sidebarItems.find(i => i.id === activeTab)?.label || activeTab;
