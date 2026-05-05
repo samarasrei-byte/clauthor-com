@@ -336,7 +336,7 @@ export default function MCPAssistente() {
       </div>
 
       {/* Composer */}
-      <div className="shrink-0 border-t border-border/40 bg-background/60 backdrop-blur-xl">
+      <div className="sticky bottom-0 z-20 shrink-0 border-t border-border/40 bg-background/90 backdrop-blur-xl">
         <div className="max-w-4xl mx-auto px-6 py-4">
           <div className="relative rounded-2xl border border-border/60 bg-card shadow-sm focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/10 transition-all">
             <Textarea
