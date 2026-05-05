@@ -564,7 +564,7 @@ export default function Advocacia() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5">
             {plans.map((p, i) => (
               <Card
                 key={i}
