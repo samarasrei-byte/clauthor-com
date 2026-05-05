@@ -597,7 +597,7 @@ const ContaTab = () => {
               {sub?.status === "active" ? "Assinatura ativa" : "Sem assinatura ativa"}
             </p>
             <Badge className="mt-2" variant={sub?.status === "active" ? "default" : "secondary"}>
-              {sub?.plan_id || "—"}
+              {sub?.agent_id ? `Agente ${sub.agent_id.slice(0, 8)}` : "—"}
             </Badge>
           </div>
           <Button asChild variant="outline" size="sm">
