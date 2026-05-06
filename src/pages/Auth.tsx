@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart, Shield, Zap, Users } from "lucide-react";
+import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart, Shield, Zap, Users, Scale, CheckCircle2 } from "lucide-react";
 import HelpTooltip from "@/components/HelpTooltip";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
