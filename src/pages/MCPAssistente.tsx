@@ -307,11 +307,18 @@ export default function MCPAssistente() {
       const useExplicitSelection =
         selectedArr.length < ALL_AGENTS.length && selectedArr.length > 0;
 
+      // Converte turns para formato de histórico simples (memória de curto prazo)
+      const history = turns
+        .filter(t => t.role === "user" || t.role === "assistant")
+        .slice(-6)
+        .map(t => ({ role: t.role, content: t.content }));
+
       const { data, error } = await supabase.functions.invoke(
         "mcp-orquestrador",
         {
           body: {
             message: trimmed,
+            history, // Injeção de memória
             userId: user?.id,
             selected_agents: useExplicitSelection ? selectedArr : undefined,
             approved_execution_id: opts?.resumeApprovedId,
