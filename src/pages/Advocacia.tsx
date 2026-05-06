@@ -274,14 +274,22 @@ export default function Advocacia() {
   const { user } = useAuth();
 
   useEffect(() => {
-    document.title = "Squad Jurídica com IA - Mais clientes para seu escritório | Clauthor";
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) {
-      meta.setAttribute(
-        "content",
-        "Transforme seu escritório de advocacia em uma operação previsível de captação e conversão. Squad jurídica de IA com ética OAB e validação humana."
-      );
-    }
+    document.title = "Squad de Advocacia com IA | Clauthor";
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        const [, name] = selector.match(/\[(name|property)="([^"]+)"\]/) || [];
+        // Fallback: extract attribute from selector
+        const m = selector.match(/\[(name|property)="([^"]+)"\]/);
+        if (m) el.setAttribute(m[1], m[2]);
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attr, value);
+    };
+    setMeta('meta[name="description"]', "content", "6 agentes de IA especializados em advocacia. Captação, qualificação, contratos e relacionamento — tudo automatizado e em conformidade com a OAB.");
+    setMeta('meta[property="og:title"]', "content", "Squad Jurídico com IA | Clauthor");
+    setMeta('meta[property="og:description"]', "content", "Automatize captação e atendimento jurídico com 6 agentes de IA prontos para usar.");
   }, []);
 
   const handleHire = (plan: (typeof plans)[number]) => {
