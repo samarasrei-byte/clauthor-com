@@ -187,24 +187,24 @@ const ALL_AGENTS: AgentName[] = [
 
 const SAMPLE_PROMPTS = [
   {
-    title: "Calcular prazo + redigir contestação",
-    body: "Recebi uma intimação hoje para apresentar contestação em 15 dias úteis em ação de cobrança contra cliente PJ. Calcule o prazo e me dê um esboço da peça.",
-    icon: Clock,
+    title: "Geração de Contrato Profissional",
+    body: "Preciso de um contrato de prestação de serviços de software entre uma empresa de consultoria e um cliente PJ, com cláusula de confidencialidade e foro em São Paulo.",
+    icon: Lock,
   },
   {
-    title: "Analisar risco de contrato",
-    body: "Vou enviar um contrato de prestação de serviços de TI para revisão. Quais cláusulas devo checar primeiro e que riscos costumam aparecer?",
-    icon: ShieldCheck,
+    title: "Esboço de Petição Inicial",
+    body: "Redija uma petição inicial de ação de cobrança de aluguéis atrasados, citando os fundamentos legais do CPC e da Lei do Inquilinato.",
+    icon: PenLine,
   },
   {
-    title: "Estratégia para ação trabalhista",
-    body: "Reclamada quer fazer acordo em audiência inicial em ação de horas extras. Qual a melhor estratégia e probabilidade de êxito mantendo a defesa?",
-    icon: Brain,
+    title: "Análise de Riscos Jurídicos",
+    body: "Analise o risco de uma empresa demitir um funcionário que está em gozo de estabilidade provisória após acidente de trabalho. Quais as implicações?",
+    icon: ShieldAlert,
   },
   {
-    title: "Honorários para caso recorrente",
-    body: "Cliente PJ quer contratar consultoria jurídica preventiva mensal. Sugira modelo de honorários e como apresentar a proposta.",
-    icon: DollarSign,
+    title: "Consulta sobre Ritos",
+    body: "Explique como funciona o rito sumário no processo civil e em que casos ele é obrigatoriamente aplicado hoje.",
+    icon: Sparkles,
   },
 ];
 
