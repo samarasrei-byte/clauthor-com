@@ -28,41 +28,34 @@ import ClauthorLogo from "@/components/ClauthorLogo";
 import ThemeToggle from "@/components/ThemeToggle";
 import type { HireIntent } from "@/pages/Auth";
 
+// Squad oficial — 6 agentes alinhados aos slugs do plano Growth (sem duplicidade)
 const agents = [
   {
+    slug: "captacao_juridica",
     icon: MessageSquare,
     name: "Especialista em Captação Jurídica",
-    role: "Capta & qualifica leads 24/7",
+    role: "Capta leads 24/7",
     bullets: [
       "Atende leads via WhatsApp, site e landing pages",
-      "Qualifica caso e área do direito",
+      "Identifica área do direito e urgência do caso",
       "Agenda atendimento direto na agenda do advogado",
     ],
     example: '"Olá, recebi sua mensagem sobre rescisão. Posso te fazer 3 perguntas rápidas para encaminhar ao Dr. Paulo?"',
   },
   {
+    slug: "qualificacao_juridica",
     icon: ClipboardCheck,
-    name: "Consultor de Diagnóstico Jurídico",
-    role: "Pré-atendimento estruturado",
+    name: "Especialista em Qualificação Jurídica",
+    role: "Triagem estruturada do caso",
     bullets: [
-      "Conduz a triagem inicial do caso",
+      "Conduz triagem inicial e qualifica o caso",
       "Identifica fatos, prazos e documentos necessários",
-      "Educa o cliente sobre o processo - sem orientação definitiva",
+      "Educa o cliente sobre o processo, sem orientação definitiva",
     ],
-    example: '"Pelo que você me contou, parece um caso da área trabalhista. Vou organizar o resumo para o advogado validar."',
+    example: '"Pelo que você me contou, parece um caso trabalhista. Vou organizar o resumo para o advogado validar."',
   },
   {
-    icon: ShieldAlert,
-    name: "Analista de Risco Contratual",
-    role: "Lê contratos em segundos",
-    bullets: [
-      "Análise automatizada de contratos e documentos",
-      "Identifica cláusulas críticas e ambiguidades",
-      "Gera relatório de risco para revisão humana",
-    ],
-    example: '"Identifiquei 4 pontos de atenção: cláusula 7.2 (multa desproporcional), 11 (foro abusivo)... revisar com o advogado."',
-  },
-  {
+    slug: "fechamento_juridico",
     icon: Handshake,
     name: "Especialista em Fechamento Jurídico",
     role: "Conduz a contratação",
@@ -74,49 +67,40 @@ const agents = [
     example: '"Preparei sua proposta de honorários: entrada + êxito. Posso te enviar agora pelo WhatsApp?"',
   },
   {
+    slug: "risco_contratual",
+    icon: ShieldAlert,
+    name: "Analista de Risco Contratual",
+    role: "Lê contratos em segundos",
+    bullets: [
+      "Análise automatizada de contratos e documentos",
+      "Identifica cláusulas críticas e ambiguidades",
+      "Gera relatório de risco para revisão humana",
+    ],
+    example: '"Identifiquei 4 pontos de atenção: cláusula 7.2 (multa desproporcional), 11 (foro abusivo). Revisar com o advogado."',
+  },
+  {
+    slug: "producao_juridica",
+    icon: FileText,
+    name: "Assistente de Produção Jurídica",
+    role: "Apoio operacional ao advogado",
+    bullets: [
+      "Minutas e rascunhos de peças",
+      "Pesquisa de jurisprudência com validação humana obrigatória",
+      "Organização de documentos do caso",
+    ],
+    example: '"Rascunhei a contestação com base no caso. Revise antes de protocolar; não substitui sua análise final."',
+  },
+  {
+    slug: "relacionamento_juridico",
     icon: RefreshCw,
-    name: "Gestor de Recuperação de Leads",
-    role: "Reativa oportunidades perdidas",
+    name: "Gestor de Relacionamento Jurídico",
+    role: "Pós-venda e reativação",
     bullets: [
       "Follow-ups humanizados e cadenciados",
       "Reagenda no-shows automaticamente",
-      "Reativa leads frios com novos gatilhos",
+      "Reativa leads frios e mantém clientes engajados",
     ],
     example: '"Oi João, vi que conversamos há 5 dias sobre o seu caso. Ainda faz sentido conversarmos esta semana?"',
-  },
-  {
-    icon: FileText,
-    name: "Assistente de Produção Jurídica",
-    role: "Apoio operacional, não substitui o advogado",
-    bullets: [
-      "Minutas e rascunhos de peças",
-      "Pesquisa de jurisprudência (validação humana obrigatória)",
-      "Organização de documentos do caso",
-    ],
-    example: '"Rascunhei a contestação com base no caso. Revise antes de protocolar - não substitui sua análise final."',
-  },
-  {
-    icon: Briefcase,
-    name: "Assistente Jurídico Operacional",
-    role: "Análise de contratos, propostas e apoio ao fechamento",
-    bullets: [
-      "Lê contratos e gera relatório de risco (baixo/médio/alto)",
-      "Monta propostas de honorários (fixo, êxito, híbrido)",
-      "Apoia produção jurídica e pré-triagem de KYC/LGPD",
-    ],
-    example: '"Identifiquei 2 cláusulas críticas e preparei proposta híbrida de honorários. Revisão humana obrigatória antes do envio."',
-  },
-  {
-    icon: Lock,
-    name: "Oficial de Compliance LGPD & Anti-PLD",
-    role: "KYC reforçado + monitoramento PEP/listas restritivas",
-    bullets: [
-      "KYC reforçado PF/PJ + beneficiário final (Provimento OAB 188/2018)",
-      "Monitoramento PEP, OFAC, ONU e listas restritivas COAF",
-      "Relatórios RIPD (LGPD art. 38) e PLD prontos para revisão",
-    ],
-    example: '"Cliente Y - PEP detectado. Diligência reforçada sugerida. Decisão final: advogado responsável."',
-    exclusive: "Compliance" as const,
   },
 ];
 
