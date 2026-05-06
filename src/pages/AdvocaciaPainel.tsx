@@ -843,6 +843,23 @@ const WhatsAppTab = () => {
 
   return (
     <div className="space-y-4">
+      {/* Block 4.1 — WhatsApp Beta Notice */}
+      <Card className="p-4 bg-amber-500/5 border-amber-500/30">
+        <div className="flex items-start gap-3">
+          <div className="shrink-0 w-8 h-8 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <MessageSquare className="w-4 h-4" />
+          </div>
+          <div className="flex-1">
+            <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 hover:bg-amber-500/20 mb-1.5 text-[10px]">
+              Beta — Máximo 5 escritórios nesta fase
+            </Badge>
+            <p className="text-xs text-foreground/80">
+              Cada escritório opera em instância isolada. Seus dados de clientes nunca se misturam com outros escritórios.
+            </p>
+          </div>
+        </div>
+      </Card>
+
       <Card className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
