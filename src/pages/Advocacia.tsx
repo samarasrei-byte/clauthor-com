@@ -700,7 +700,7 @@ export default function Advocacia() {
       </section>
 
       {/* INTEGRAÇÕES */}
-      <section className="py-20 bg-card/30 border-t border-border/40">
+      <section className="py-16 md:py-20 bg-card/30 border-t border-border/40">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <h3 className="text-2xl font-display font-semibold">Integra com o que você já usa</h3>
           <p className="text-muted-foreground mt-2">WhatsApp Business · CRMs jurídicos · Assinatura digital · Google Agenda</p>
@@ -714,6 +714,25 @@ export default function Advocacia() {
                 {t}
               </Badge>
             ))}
+          </div>
+
+          {/* WhatsApp Beta Notice */}
+          <div className="mt-10 max-w-2xl mx-auto">
+            <Card className="p-5 bg-amber-500/5 border-amber-500/30 text-left">
+              <div className="flex items-start gap-3">
+                <div className="shrink-0 w-9 h-9 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                  <MessageSquare className="w-4 h-4" />
+                </div>
+                <div className="flex-1">
+                  <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 hover:bg-amber-500/20 mb-2">
+                    Beta — Máximo 5 escritórios nesta fase
+                  </Badge>
+                  <p className="text-sm text-foreground/80">
+                    Cada escritório opera em instância isolada. Seus dados de clientes nunca se misturam com outros escritórios.
+                  </p>
+                </div>
+              </div>
+            </Card>
           </div>
         </div>
       </section>
