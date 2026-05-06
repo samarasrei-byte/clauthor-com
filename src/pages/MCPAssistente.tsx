@@ -53,9 +53,11 @@ import ReactMarkdown from "react-markdown";
 // ───────────────────────────────────────────────
 type AgentName =
   | "AGENTE_SEGURANCA"
-  | "AGENTE_PROCESSUAL"
+  | "AGENTE_CONTRATOS"
+  | "AGENTE_PETICOES"
+  | "AGENTE_ANALISE"
+  | "AGENTE_CONSULTIVO"
   | "AGENTE_PRAZOS"
-  | "AGENTE_REDATOR"
   | "AGENTE_ESTRATEGICO"
   | "AGENTE_FINANCEIRO";
 
