@@ -39,14 +39,34 @@ const AuthPage = () => {
   const location = useLocation();
 
   const state = location.state as { from?: { pathname: string }; hireIntent?: HireIntent; signup?: boolean } | null;
-  const from = state?.from?.pathname || "/dashboard";
+
+  // Parse URL search params (Block 2.3): /auth?redirect=/advocacia/onboarding&vertical=advocacia
+  const searchParams = new URLSearchParams(location.search);
+  const redirectParam = searchParams.get("redirect");
+  const verticalParam = searchParams.get("vertical");
+
+  const from = redirectParam || state?.from?.pathname || "/dashboard";
   const hireIntent = state?.hireIntent || null;
+
+  // Block 2.1 + 2.2 — detect advocacia context (URL param, redirect target, or referrer)
+  const isAdvocaciaContext =
+    verticalParam === "advocacia" ||
+    (redirectParam?.includes("/advocacia") ?? false) ||
+    (state?.from?.pathname?.startsWith("/advocacia") ?? false) ||
+    (typeof document !== "undefined" && document.referrer.includes("/advocacia"));
 
   useEffect(() => {
     if (state?.signup) {
       setIsLogin(false);
     }
   }, [state?.signup]);
+
+  // Block 2.1 — page title based on context
+  useEffect(() => {
+    document.title = isAdvocaciaContext
+      ? "Entrar | Clauthor Advocacia"
+      : "Entrar | Clauthor";
+  }, [isAdvocaciaContext]);
 
   useEffect(() => {
     if (user) {
