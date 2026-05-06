@@ -248,9 +248,9 @@ const plans: Array<{
       label: "Squad Jurídica - MCP Enterprise",
       slugs: [
         "captacao_juridica",
-        "diagnostico_juridico",
+        "qualificacao_juridica",
         "fechamento_juridico",
-        "recuperacao_leads_juridico",
+        "relacionamento_juridico",
         "risco_contratual",
         "producao_juridica",
         "assistente_juridico_operacional",
