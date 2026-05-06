@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart, Shield, Zap, Users } from "lucide-react";
+import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart, Shield, Zap, Users, Scale, CheckCircle2 } from "lucide-react";
 import HelpTooltip from "@/components/HelpTooltip";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -39,14 +39,34 @@ const AuthPage = () => {
   const location = useLocation();
 
   const state = location.state as { from?: { pathname: string }; hireIntent?: HireIntent; signup?: boolean } | null;
-  const from = state?.from?.pathname || "/dashboard";
+
+  // Parse URL search params (Block 2.3): /auth?redirect=/advocacia/onboarding&vertical=advocacia
+  const searchParams = new URLSearchParams(location.search);
+  const redirectParam = searchParams.get("redirect");
+  const verticalParam = searchParams.get("vertical");
+
+  const from = redirectParam || state?.from?.pathname || "/dashboard";
   const hireIntent = state?.hireIntent || null;
+
+  // Block 2.1 + 2.2 — detect advocacia context (URL param, redirect target, or referrer)
+  const isAdvocaciaContext =
+    verticalParam === "advocacia" ||
+    (redirectParam?.includes("/advocacia") ?? false) ||
+    (state?.from?.pathname?.startsWith("/advocacia") ?? false) ||
+    (typeof document !== "undefined" && document.referrer.includes("/advocacia"));
 
   useEffect(() => {
     if (state?.signup) {
       setIsLogin(false);
     }
   }, [state?.signup]);
+
+  // Block 2.1 — page title based on context
+  useEffect(() => {
+    document.title = isAdvocaciaContext
+      ? "Entrar | Clauthor Advocacia"
+      : "Entrar | Clauthor";
+  }, [isAdvocaciaContext]);
 
   useEffect(() => {
     if (user) {
@@ -124,11 +144,23 @@ const AuthPage = () => {
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <motion.div initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} transition={{ delay: 0.1 }} className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mx-auto mb-5">
-            <Bot className="h-7 w-7 text-primary" />
+            {isAdvocaciaContext ? <Scale className="h-7 w-7 text-primary" /> : <Bot className="h-7 w-7 text-primary" />}
           </motion.div>
-          <h1 className="font-display text-2xl sm:text-3xl font-bold mb-2">{isLogin ? t("auth.welcome") : t("auth.create_account")}</h1>
+          {isAdvocaciaContext && (
+            <Badge className="mb-3 bg-emerald-500/15 text-emerald-700 dark:text-emerald-400 border border-emerald-500/30 hover:bg-emerald-500/15 gap-1.5">
+              <CheckCircle2 className="h-3 w-3" />
+              Squad Jurídico Ativo
+            </Badge>
+          )}
+          <h1 className="font-display text-2xl sm:text-3xl font-bold mb-2">
+            {isAdvocaciaContext
+              ? "Acesse sua área jurídica"
+              : isLogin ? t("auth.welcome") : t("auth.create_account")}
+          </h1>
           <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-            {isLogin
+            {isAdvocaciaContext
+              ? "Seus agentes de advocacia estão esperando por você."
+              : isLogin
               ? t("auth.login_subtitle")
               : t("auth.register_subtitle_enhanced", { defaultValue: "Crie sua conta gratuita e tenha acesso imediato a 200 agentes de IA." })}
           </p>

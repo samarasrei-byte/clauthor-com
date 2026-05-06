@@ -451,6 +451,16 @@ export const AdvocaciaPainelHome = () => {
         <p className="text-sm text-muted-foreground mt-1">Aqui está o que seus agentes fizeram por você.</p>
       </div>
 
+      {/* Block 3.1 — Onboarding checklist (localStorage advocacia_onboarding_v1) */}
+      <OnboardingChecklistCard />
+
+      {/* Block 3.2 — KPI placeholders */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <KpiCard icon={Inbox} label="Leads captados este mês" value="0" hint="Atualizado em tempo real" />
+        <KpiCard icon={FileText} label="Contratos gerados" value="0" hint="Análises e propostas" />
+        <KpiCard icon={CheckCircle2} label="Execuções de agente" value={isLoading ? "—" : String(stats?.execToday ?? 0)} hint="Ações automatizadas hoje" />
+      </div>
+
       {nextStep && (
         <Card className="p-4 border-primary/20 bg-primary/[0.03]">
           <div className="flex items-start gap-3">
@@ -470,17 +480,6 @@ export const AdvocaciaPainelHome = () => {
           </div>
         </Card>
       )}
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <KpiCard icon={CheckCircle2} label="Ações hoje" value={isLoading ? "—" : String(stats?.execToday ?? 0)} hint="Execuções dos seus agentes" />
-        <KpiCard icon={Briefcase} label="Agentes ativos" value={isLoading ? "—" : String(stats?.agentsActive ?? 0)} hint="Trabalhando agora" />
-        <KpiCard
-          icon={TrendingUp}
-          label="Status"
-          value={!progress ? "—" : progress.completed === progress.total ? "Pronto" : `${progress.completed}/${progress.total}`}
-          hint={!progress || progress.completed === progress.total ? "Configuração completa" : "Etapas de configuração"}
-        />
-      </div>
 
       <Card className="p-5">
         <div className="flex items-center justify-between mb-4">
@@ -521,6 +520,70 @@ export const AdvocaciaPainelHome = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+// ─── Block 3.1 — Onboarding Checklist Card ───
+const ONBOARDING_KEY = "advocacia_onboarding_v1";
+type OnboardingStep = { id: string; label: string };
+const ONBOARDING_STEPS: OnboardingStep[] = [
+  { id: "whatsapp", label: "Conectar WhatsApp" },
+  { id: "client", label: "Adicionar primeiro cliente" },
+  { id: "contract", label: "Configurar contrato padrão" },
+  { id: "agent", label: "Executar primeiro agente" },
+];
+
+const OnboardingChecklistCard = () => {
+  const [done, setDone] = useState<Record<string, boolean>>(() => {
+    if (typeof window === "undefined") return {};
+    try {
+      return JSON.parse(localStorage.getItem(ONBOARDING_KEY) || "{}");
+    } catch {
+      return {};
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem(ONBOARDING_KEY, JSON.stringify(done));
+  }, [done]);
+
+  const toggle = (id: string) => setDone((prev) => ({ ...prev, [id]: !prev[id] }));
+  const completed = ONBOARDING_STEPS.filter((s) => done[s.id]).length;
+  const allDone = completed === ONBOARDING_STEPS.length;
+
+  if (allDone) return null;
+
+  return (
+    <Card className="p-5 border-primary/20 bg-primary/[0.02]">
+      <div className="flex items-center justify-between mb-3">
+        <div>
+          <h3 className="text-sm font-semibold">Configuração inicial</h3>
+          <p className="text-xs text-muted-foreground mt-0.5">{completed} de {ONBOARDING_STEPS.length} concluídos</p>
+        </div>
+        <Badge variant="outline" className="text-[10px]">
+          {Math.round((completed / ONBOARDING_STEPS.length) * 100)}%
+        </Badge>
+      </div>
+      <Progress value={(completed / ONBOARDING_STEPS.length) * 100} className="h-1.5 mb-4" />
+      <ul className="space-y-2">
+        {ONBOARDING_STEPS.map((step) => {
+          const isDone = !!done[step.id];
+          return (
+            <li key={step.id}>
+              <button
+                onClick={() => toggle(step.id)}
+                className="w-full flex items-center gap-3 px-3 py-2 rounded-md hover:bg-muted/40 transition-colors text-left"
+              >
+                <div className={`w-5 h-5 rounded-md border-2 flex items-center justify-center shrink-0 transition-colors ${isDone ? "bg-primary border-primary" : "border-border"}`}>
+                  {isDone && <CheckCircle2 className="w-3 h-3 text-primary-foreground" />}
+                </div>
+                <span className={`text-sm flex-1 ${isDone ? "line-through text-muted-foreground" : ""}`}>{step.label}</span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </Card>
   );
 };
 
@@ -780,6 +843,23 @@ const WhatsAppTab = () => {
 
   return (
     <div className="space-y-4">
+      {/* Block 4.1 — WhatsApp Beta Notice */}
+      <Card className="p-4 bg-amber-500/5 border-amber-500/30">
+        <div className="flex items-start gap-3">
+          <div className="shrink-0 w-8 h-8 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+            <MessageSquare className="w-4 h-4" />
+          </div>
+          <div className="flex-1">
+            <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 hover:bg-amber-500/20 mb-1.5 text-[10px]">
+              Beta — Máximo 5 escritórios nesta fase
+            </Badge>
+            <p className="text-xs text-foreground/80">
+              Cada escritório opera em instância isolada. Seus dados de clientes nunca se misturam com outros escritórios.
+            </p>
+          </div>
+        </div>
+      </Card>
+
       <Card className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">

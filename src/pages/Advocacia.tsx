@@ -28,41 +28,34 @@ import ClauthorLogo from "@/components/ClauthorLogo";
 import ThemeToggle from "@/components/ThemeToggle";
 import type { HireIntent } from "@/pages/Auth";
 
+// Squad oficial — 6 agentes alinhados aos slugs do plano Growth (sem duplicidade)
 const agents = [
   {
+    slug: "captacao_juridica",
     icon: MessageSquare,
     name: "Especialista em Captação Jurídica",
-    role: "Capta & qualifica leads 24/7",
+    role: "Capta leads 24/7",
     bullets: [
       "Atende leads via WhatsApp, site e landing pages",
-      "Qualifica caso e área do direito",
+      "Identifica área do direito e urgência do caso",
       "Agenda atendimento direto na agenda do advogado",
     ],
     example: '"Olá, recebi sua mensagem sobre rescisão. Posso te fazer 3 perguntas rápidas para encaminhar ao Dr. Paulo?"',
   },
   {
+    slug: "qualificacao_juridica",
     icon: ClipboardCheck,
-    name: "Consultor de Diagnóstico Jurídico",
-    role: "Pré-atendimento estruturado",
+    name: "Especialista em Qualificação Jurídica",
+    role: "Triagem estruturada do caso",
     bullets: [
-      "Conduz a triagem inicial do caso",
+      "Conduz triagem inicial e qualifica o caso",
       "Identifica fatos, prazos e documentos necessários",
-      "Educa o cliente sobre o processo - sem orientação definitiva",
+      "Educa o cliente sobre o processo, sem orientação definitiva",
     ],
-    example: '"Pelo que você me contou, parece um caso da área trabalhista. Vou organizar o resumo para o advogado validar."',
+    example: '"Pelo que você me contou, parece um caso trabalhista. Vou organizar o resumo para o advogado validar."',
   },
   {
-    icon: ShieldAlert,
-    name: "Analista de Risco Contratual",
-    role: "Lê contratos em segundos",
-    bullets: [
-      "Análise automatizada de contratos e documentos",
-      "Identifica cláusulas críticas e ambiguidades",
-      "Gera relatório de risco para revisão humana",
-    ],
-    example: '"Identifiquei 4 pontos de atenção: cláusula 7.2 (multa desproporcional), 11 (foro abusivo)... revisar com o advogado."',
-  },
-  {
+    slug: "fechamento_juridico",
     icon: Handshake,
     name: "Especialista em Fechamento Jurídico",
     role: "Conduz a contratação",
@@ -74,49 +67,40 @@ const agents = [
     example: '"Preparei sua proposta de honorários: entrada + êxito. Posso te enviar agora pelo WhatsApp?"',
   },
   {
+    slug: "risco_contratual",
+    icon: ShieldAlert,
+    name: "Analista de Risco Contratual",
+    role: "Lê contratos em segundos",
+    bullets: [
+      "Análise automatizada de contratos e documentos",
+      "Identifica cláusulas críticas e ambiguidades",
+      "Gera relatório de risco para revisão humana",
+    ],
+    example: '"Identifiquei 4 pontos de atenção: cláusula 7.2 (multa desproporcional), 11 (foro abusivo). Revisar com o advogado."',
+  },
+  {
+    slug: "producao_juridica",
+    icon: FileText,
+    name: "Assistente de Produção Jurídica",
+    role: "Apoio operacional ao advogado",
+    bullets: [
+      "Minutas e rascunhos de peças",
+      "Pesquisa de jurisprudência com validação humana obrigatória",
+      "Organização de documentos do caso",
+    ],
+    example: '"Rascunhei a contestação com base no caso. Revise antes de protocolar; não substitui sua análise final."',
+  },
+  {
+    slug: "relacionamento_juridico",
     icon: RefreshCw,
-    name: "Gestor de Recuperação de Leads",
-    role: "Reativa oportunidades perdidas",
+    name: "Gestor de Relacionamento Jurídico",
+    role: "Pós-venda e reativação",
     bullets: [
       "Follow-ups humanizados e cadenciados",
       "Reagenda no-shows automaticamente",
-      "Reativa leads frios com novos gatilhos",
+      "Reativa leads frios e mantém clientes engajados",
     ],
     example: '"Oi João, vi que conversamos há 5 dias sobre o seu caso. Ainda faz sentido conversarmos esta semana?"',
-  },
-  {
-    icon: FileText,
-    name: "Assistente de Produção Jurídica",
-    role: "Apoio operacional, não substitui o advogado",
-    bullets: [
-      "Minutas e rascunhos de peças",
-      "Pesquisa de jurisprudência (validação humana obrigatória)",
-      "Organização de documentos do caso",
-    ],
-    example: '"Rascunhei a contestação com base no caso. Revise antes de protocolar - não substitui sua análise final."',
-  },
-  {
-    icon: Briefcase,
-    name: "Assistente Jurídico Operacional",
-    role: "Análise de contratos, propostas e apoio ao fechamento",
-    bullets: [
-      "Lê contratos e gera relatório de risco (baixo/médio/alto)",
-      "Monta propostas de honorários (fixo, êxito, híbrido)",
-      "Apoia produção jurídica e pré-triagem de KYC/LGPD",
-    ],
-    example: '"Identifiquei 2 cláusulas críticas e preparei proposta híbrida de honorários. Revisão humana obrigatória antes do envio."',
-  },
-  {
-    icon: Lock,
-    name: "Oficial de Compliance LGPD & Anti-PLD",
-    role: "KYC reforçado + monitoramento PEP/listas restritivas",
-    bullets: [
-      "KYC reforçado PF/PJ + beneficiário final (Provimento OAB 188/2018)",
-      "Monitoramento PEP, OFAC, ONU e listas restritivas COAF",
-      "Relatórios RIPD (LGPD art. 38) e PLD prontos para revisão",
-    ],
-    example: '"Cliente Y - PEP detectado. Diligência reforçada sugerida. Decisão final: advogado responsável."',
-    exclusive: "Compliance" as const,
   },
 ];
 
@@ -153,7 +137,7 @@ const plans: Array<{
     monthlyValue: 49700,
     desc: "Advogado autônomo validando captação previsível",
     features: [
-      "2 agentes (Captação + Diagnóstico)",
+      "2 agentes: Captação Jurídica + Qualificação Jurídica",
       "Integração WhatsApp Business",
       "Até 200 atendimentos/mês",
       "Prompts OAB-compliant + auditoria",
@@ -164,7 +148,7 @@ const plans: Array<{
     intent: {
       type: "squad",
       label: "Squad Jurídica - Start",
-      slugs: ["captacao_juridica", "diagnostico_juridico"],
+      slugs: ["captacao_juridica", "qualificacao_juridica"],
       departmentId: "advocacia",
       monthlyOverride: 49700,
       setupFee: 149700,
@@ -177,10 +161,10 @@ const plans: Array<{
     monthlyValue: 149700,
     desc: "Escritórios em crescimento que querem previsibilidade",
     features: [
-      "6 agentes (squad jurídica completa)",
-      "WhatsApp + CRM + Clicksign incluídos",
+      "6 agentes da squad jurídica completa: Captação, Qualificação, Fechamento, Risco Contratual, Produção e Relacionamento",
+      "WhatsApp Business + CRM + Clicksign integrados",
       "Até 800 atendimentos/mês",
-      "Recuperação automática + análise de risco",
+      "Recuperação automática + análise de risco contratual",
       "Suporte prioritário + onboarding guiado",
     ],
     cta: "Ativar minha máquina jurídica",
@@ -188,7 +172,14 @@ const plans: Array<{
     intent: {
       type: "squad",
       label: "Squad Jurídica - Growth",
-      slugs: ["captacao_juridica", "diagnostico_juridico", "fechamento_juridico", "recuperacao_leads_juridico", "risco_contratual", "producao_juridica"],
+      slugs: [
+        "captacao_juridica",
+        "qualificacao_juridica",
+        "fechamento_juridico",
+        "risco_contratual",
+        "producao_juridica",
+        "relacionamento_juridico",
+      ],
       departmentId: "advocacia",
       monthlyOverride: 149700,
       setupFee: 349700,
@@ -199,9 +190,11 @@ const plans: Array<{
     setup: "R$ 5.997",
     monthlyLabel: "R$ 2.497",
     monthlyValue: 249700,
-    desc: "Growth + Operacional + LGPD/Anti-PLD para escritórios empresariais",
+    desc: "Growth + camada operacional + LGPD/Anti-PLD para escritórios empresariais",
     features: [
-      "8 agentes (squad completa + Operacional + Compliance)",
+      "Tudo do Growth (6 agentes)",
+      "+ Assistente Jurídico Operacional",
+      "+ Compliance LGPD & Anti-PLD",
       "KYC reforçado PF/PJ + beneficiário final",
       "Monitoramento PEP, OFAC, ONU e COAF",
       "Relatórios LGPD (RIPD) e PLD prontos",
@@ -213,7 +206,16 @@ const plans: Array<{
     intent: {
       type: "squad",
       label: "Squad Jurídica - Compliance",
-      slugs: ["captacao_juridica", "diagnostico_juridico", "fechamento_juridico", "recuperacao_leads_juridico", "risco_contratual", "producao_juridica", "assistente_juridico_operacional", "compliance_lgpd_juridico"],
+      slugs: [
+        "captacao_juridica",
+        "qualificacao_juridica",
+        "fechamento_juridico",
+        "risco_contratual",
+        "producao_juridica",
+        "relacionamento_juridico",
+        "assistente_juridico_operacional",
+        "compliance_lgpd_juridico",
+      ],
       departmentId: "advocacia",
       monthlyOverride: 249700,
       setupFee: 599700,
@@ -241,9 +243,9 @@ const plans: Array<{
       label: "Squad Jurídica - MCP Enterprise",
       slugs: [
         "captacao_juridica",
-        "diagnostico_juridico",
+        "qualificacao_juridica",
         "fechamento_juridico",
-        "recuperacao_leads_juridico",
+        "relacionamento_juridico",
         "risco_contratual",
         "producao_juridica",
         "assistente_juridico_operacional",
@@ -267,14 +269,22 @@ export default function Advocacia() {
   const { user } = useAuth();
 
   useEffect(() => {
-    document.title = "Squad Jurídica com IA - Mais clientes para seu escritório | Clauthor";
-    const meta = document.querySelector('meta[name="description"]');
-    if (meta) {
-      meta.setAttribute(
-        "content",
-        "Transforme seu escritório de advocacia em uma operação previsível de captação e conversão. Squad jurídica de IA com ética OAB e validação humana."
-      );
-    }
+    document.title = "Squad de Advocacia com IA | Clauthor";
+    const setMeta = (selector: string, attr: string, value: string) => {
+      let el = document.querySelector(selector) as HTMLMetaElement | null;
+      if (!el) {
+        el = document.createElement("meta");
+        const [, name] = selector.match(/\[(name|property)="([^"]+)"\]/) || [];
+        // Fallback: extract attribute from selector
+        const m = selector.match(/\[(name|property)="([^"]+)"\]/);
+        if (m) el.setAttribute(m[1], m[2]);
+        document.head.appendChild(el);
+      }
+      el.setAttribute(attr, value);
+    };
+    setMeta('meta[name="description"]', "content", "6 agentes de IA especializados em advocacia. Captação, qualificação, contratos e relacionamento — tudo automatizado e em conformidade com a OAB.");
+    setMeta('meta[property="og:title"]', "content", "Squad Jurídico com IA | Clauthor");
+    setMeta('meta[property="og:description"]', "content", "Automatize captação e atendimento jurídico com 6 agentes de IA prontos para usar.");
   }, []);
 
   const handleHire = (plan: (typeof plans)[number]) => {
@@ -293,8 +303,9 @@ export default function Advocacia() {
       toast.success("Redirecionando para o painel do advogado...");
       navigate("/advocacia/painel");
     } else {
-      navigate("/auth", {
-        state: { hireIntent: plan.intent, signup: true, from: { pathname: "/advocacia/painel" } },
+      // Block 2.3 — preserve redirect target via search param + state
+      navigate("/auth?redirect=/advocacia/onboarding&vertical=advocacia", {
+        state: { hireIntent: plan.intent, signup: true, from: { pathname: "/advocacia/onboarding" } },
       });
     }
   };
@@ -623,7 +634,7 @@ export default function Advocacia() {
       </section>
 
       {/* PLANOS */}
-      <section id="planos" className="py-24">
+      <section id="planos" className="py-16 md:py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-14 max-w-2xl mx-auto">
             <h2 className="text-3xl md:text-4xl font-display font-semibold tracking-tight">
@@ -690,7 +701,7 @@ export default function Advocacia() {
       </section>
 
       {/* INTEGRAÇÕES */}
-      <section className="py-20 bg-card/30 border-t border-border/40">
+      <section className="py-16 md:py-20 bg-card/30 border-t border-border/40">
         <div className="max-w-5xl mx-auto px-6 text-center">
           <h3 className="text-2xl font-display font-semibold">Integra com o que você já usa</h3>
           <p className="text-muted-foreground mt-2">WhatsApp Business · CRMs jurídicos · Assinatura digital · Google Agenda</p>
@@ -704,6 +715,25 @@ export default function Advocacia() {
                 {t}
               </Badge>
             ))}
+          </div>
+
+          {/* WhatsApp Beta Notice */}
+          <div className="mt-10 max-w-2xl mx-auto">
+            <Card className="p-5 bg-amber-500/5 border-amber-500/30 text-left">
+              <div className="flex items-start gap-3">
+                <div className="shrink-0 w-9 h-9 rounded-lg bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                  <MessageSquare className="w-4 h-4" />
+                </div>
+                <div className="flex-1">
+                  <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 hover:bg-amber-500/20 mb-2">
+                    Beta — Máximo 5 escritórios nesta fase
+                  </Badge>
+                  <p className="text-sm text-foreground/80">
+                    Cada escritório opera em instância isolada. Seus dados de clientes nunca se misturam com outros escritórios.
+                  </p>
+                </div>
+              </div>
+            </Card>
           </div>
         </div>
       </section>
