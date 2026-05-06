@@ -303,8 +303,9 @@ export default function Advocacia() {
       toast.success("Redirecionando para o painel do advogado...");
       navigate("/advocacia/painel");
     } else {
-      navigate("/auth", {
-        state: { hireIntent: plan.intent, signup: true, from: { pathname: "/advocacia/painel" } },
+      // Block 2.3 — preserve redirect target via search param + state
+      navigate("/auth?redirect=/advocacia/onboarding&vertical=advocacia", {
+        state: { hireIntent: plan.intent, signup: true, from: { pathname: "/advocacia/onboarding" } },
       });
     }
   };
