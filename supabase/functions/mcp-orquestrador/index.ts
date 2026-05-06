@@ -492,17 +492,27 @@ function formatFinalResponse(args: {
   alerta?: string;
 }): string {
   const { analise, agentes, respostas, confianca, alerta } = args;
+  
+  // Auditoria de grounding: verifica se os agentes seguiram o template de fundamentação
+  const hasGrounding = respostas.every(r => 
+    r.error || (r.output.includes("Base Legal") && r.output.includes("Ressalva"))
+  );
+
   const respostaConsolidada = respostas
     .map((r) =>
-      r.error ? `**${r.agent}** — ⚠️ ${r.error}` : `**${r.agent}**\n${r.output.trim()}`,
+      r.error ? `### ❌ ${r.agent}\n⚠️ Erro: ${r.error}` : `### 🏛️ ${r.agent}\n${r.output.trim()}`
     )
     .join("\n\n---\n\n");
 
+  const auditBadge = hasGrounding 
+    ? "✅ **GROUNDING JURÍDICO VALIDADO**: Fundamentação legal e ressalvas detectadas." 
+    : "⚠️ **AVISO DE AUDITORIA**: Alguns agentes podem ter omitido a fundamentação legal explícita.";
+
   return [
-    `[ANÁLISE]\n${analise}`,
-    `[AGENTES ACIONADOS]\n${agentes.join(", ")}`,
-    `[RESPOSTA]\n${respostaConsolidada}`,
-    `[CONFIANÇA]\n${confianca}`,
-    `[ALERTA]\n${alerta && alerta.length > 0 ? alerta : "Nenhum"}`,
+    `# ⚖️ PARECER DO ORQUESTRADOR MCP\n\n**ANÁLISE INICIAL:** ${analise}`,
+    `**AGENTES MOBILIZADOS:** ${agentes.map(a => `\`${a}\``).join(", ")}`,
+    `---\n\n${respostaConsolidada}`,
+    `---\n\n**🔍 STATUS DE AUDITORIA:**\n${auditBadge}\n\n**NÍVEL DE CONFIANÇA:** ${confianca}\n\n**ALERTAS DE SEGURANÇA:** ${alerta && alerta.length > 0 ? alerta : "Nenhum risco imediato detectado."}`,
+    `*Nota: Este documento foi gerado por inteligência artificial e deve ser validado por um advogado inscrito na OAB.*`
   ].join("\n\n");
 }
