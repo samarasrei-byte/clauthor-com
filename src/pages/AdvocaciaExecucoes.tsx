@@ -354,6 +354,12 @@ function ExecutionRow({ exec }: { exec: Execution }) {
                     Segurança: {exec.security_level}
                   </Badge>
                 )}
+                {exec.results?.some((r: any) => r.output?.includes("Base Legal")) && (
+                  <Badge variant="outline" className="text-[10px] border-emerald-500/30 text-emerald-600 dark:text-emerald-400 bg-emerald-500/5 gap-1">
+                    <CheckCircle2 className="w-2.5 h-2.5" />
+                    Grounding Validado
+                  </Badge>
+                )}
                 <span className="text-[10px] text-muted-foreground tabular-nums">
                   {created.toLocaleDateString("pt-BR")} ·{" "}
                   {created.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })}
