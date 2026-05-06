@@ -452,7 +452,7 @@ export default function MCPAssistente() {
             <div className="leading-tight">
               <h1 className="text-sm font-semibold tracking-tight">Assistente MCP</h1>
               <p className="text-[11px] text-muted-foreground">
-                Orquestrador jurídico · {selectedCount}/6 agentes selecionados
+                Orquestrador jurídico · {selectedCount}/8 agentes selecionados
               </p>
             </div>
           </div>
