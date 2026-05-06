@@ -53,9 +53,11 @@ import ReactMarkdown from "react-markdown";
 // ───────────────────────────────────────────────
 type AgentName =
   | "AGENTE_SEGURANCA"
-  | "AGENTE_PROCESSUAL"
+  | "AGENTE_CONTRATOS"
+  | "AGENTE_PETICOES"
+  | "AGENTE_ANALISE"
+  | "AGENTE_CONSULTIVO"
   | "AGENTE_PRAZOS"
-  | "AGENTE_REDATOR"
   | "AGENTE_ESTRATEGICO"
   | "AGENTE_FINANCEIRO";
 
@@ -101,54 +103,72 @@ const AGENT_META: Record<
   AGENTE_SEGURANCA: {
     label: "Segurança & LGPD",
     short: "Segurança",
-    desc: "LGPD, sigilo OAB, dados sensíveis. Sempre ativo.",
+    desc: "LGPD, sigilo OAB e proteção de dados.",
     icon: ShieldCheck,
-    color: "text-rose-500 dark:text-rose-400",
+    color: "text-rose-500",
     ring: "ring-rose-500/30",
     bg: "bg-rose-500/10",
   },
-  AGENTE_PROCESSUAL: {
-    label: "Processual",
-    short: "Processual",
-    desc: "Classificação documental, fase processual, próximos passos.",
-    icon: Scale,
-    color: "text-blue-500 dark:text-blue-400",
+  AGENTE_CONTRATOS: {
+    label: "Contratos",
+    short: "Contratos",
+    desc: "Geração e revisão de contratos jurídicos formais.",
+    icon: Lock,
+    color: "text-blue-500",
     ring: "ring-blue-500/30",
     bg: "bg-blue-500/10",
+  },
+  AGENTE_PETICOES: {
+    label: "Petições",
+    short: "Petições",
+    desc: "Criação de peças processuais estruturadas.",
+    icon: PenLine,
+    color: "text-violet-500",
+    ring: "ring-violet-500/30",
+    bg: "bg-violet-500/10",
+  },
+  AGENTE_ANALISE: {
+    label: "Análise de Risco",
+    short: "Análise",
+    desc: "Avaliação de documentos e vulnerabilidades.",
+    icon: ShieldAlert,
+    color: "text-amber-500",
+    ring: "ring-amber-500/30",
+    bg: "bg-amber-500/10",
+  },
+  AGENTE_CONSULTIVO: {
+    label: "Consultivo",
+    short: "Consultivo",
+    desc: "Explicação de conceitos e orientação jurídica.",
+    icon: Sparkles,
+    color: "text-indigo-500",
+    ring: "ring-indigo-500/30",
+    bg: "bg-indigo-500/10",
   },
   AGENTE_PRAZOS: {
     label: "Prazos",
     short: "Prazos",
-    desc: "Cálculo de prazos com feriados forenses (CPC art. 219).",
+    desc: "Cálculo de tempestividade e prazos fatais.",
     icon: Clock,
-    color: "text-amber-500 dark:text-amber-400",
-    ring: "ring-amber-500/30",
-    bg: "bg-amber-500/10",
-  },
-  AGENTE_REDATOR: {
-    label: "Redator",
-    short: "Redator",
-    desc: "Minutas, peças, contratos, opiniões.",
-    icon: PenLine,
-    color: "text-violet-500 dark:text-violet-400",
-    ring: "ring-violet-500/30",
-    bg: "bg-violet-500/10",
+    color: "text-emerald-500",
+    ring: "ring-emerald-500/30",
+    bg: "bg-emerald-500/10",
   },
   AGENTE_ESTRATEGICO: {
     label: "Estratégico",
     short: "Estratégico",
-    desc: "Teses, probabilidade de êxito, contra-argumentos.",
+    desc: "Teses e probabilidade de êxito processual.",
     icon: Brain,
-    color: "text-emerald-500 dark:text-emerald-400",
-    ring: "ring-emerald-500/30",
-    bg: "bg-emerald-500/10",
+    color: "text-orange-500",
+    ring: "ring-orange-500/30",
+    bg: "bg-orange-500/10",
   },
   AGENTE_FINANCEIRO: {
     label: "Financeiro",
     short: "Financeiro",
-    desc: "Honorários, custas, comunicação financeira.",
+    desc: "Honorários, custas e ROI jurídico.",
     icon: DollarSign,
-    color: "text-teal-500 dark:text-teal-400",
+    color: "text-teal-500",
     ring: "ring-teal-500/30",
     bg: "bg-teal-500/10",
   },
@@ -156,33 +176,35 @@ const AGENT_META: Record<
 
 const ALL_AGENTS: AgentName[] = [
   "AGENTE_SEGURANCA",
-  "AGENTE_PROCESSUAL",
+  "AGENTE_CONTRATOS",
+  "AGENTE_PETICOES",
+  "AGENTE_ANALISE",
+  "AGENTE_CONSULTIVO",
   "AGENTE_PRAZOS",
-  "AGENTE_REDATOR",
   "AGENTE_ESTRATEGICO",
   "AGENTE_FINANCEIRO",
 ];
 
 const SAMPLE_PROMPTS = [
   {
-    title: "Calcular prazo + redigir contestação",
-    body: "Recebi uma intimação hoje para apresentar contestação em 15 dias úteis em ação de cobrança contra cliente PJ. Calcule o prazo e me dê um esboço da peça.",
-    icon: Clock,
+    title: "Geração de Contrato Profissional",
+    body: "Preciso de um contrato de prestação de serviços de software entre uma empresa de consultoria e um cliente PJ, com cláusula de confidencialidade e foro em São Paulo.",
+    icon: Lock,
   },
   {
-    title: "Analisar risco de contrato",
-    body: "Vou enviar um contrato de prestação de serviços de TI para revisão. Quais cláusulas devo checar primeiro e que riscos costumam aparecer?",
-    icon: ShieldCheck,
+    title: "Esboço de Petição Inicial",
+    body: "Redija uma petição inicial de ação de cobrança de aluguéis atrasados, citando os fundamentos legais do CPC e da Lei do Inquilinato.",
+    icon: PenLine,
   },
   {
-    title: "Estratégia para ação trabalhista",
-    body: "Reclamada quer fazer acordo em audiência inicial em ação de horas extras. Qual a melhor estratégia e probabilidade de êxito mantendo a defesa?",
-    icon: Brain,
+    title: "Análise de Riscos Jurídicos",
+    body: "Analise o risco de uma empresa demitir um funcionário que está em gozo de estabilidade provisória após acidente de trabalho. Quais as implicações?",
+    icon: ShieldAlert,
   },
   {
-    title: "Honorários para caso recorrente",
-    body: "Cliente PJ quer contratar consultoria jurídica preventiva mensal. Sugira modelo de honorários e como apresentar a proposta.",
-    icon: DollarSign,
+    title: "Consulta sobre Ritos",
+    body: "Explique como funciona o rito sumário no processo civil e em que casos ele é obrigatoriamente aplicado hoje.",
+    icon: Sparkles,
   },
 ];
 
@@ -285,11 +307,18 @@ export default function MCPAssistente() {
       const useExplicitSelection =
         selectedArr.length < ALL_AGENTS.length && selectedArr.length > 0;
 
+      // Converte turns para formato de histórico simples (memória de curto prazo)
+      const history = turns
+        .filter(t => t.role === "user" || t.role === "assistant")
+        .slice(-6)
+        .map(t => ({ role: t.role, content: t.content }));
+
       const { data, error } = await supabase.functions.invoke(
         "mcp-orquestrador",
         {
           body: {
             message: trimmed,
+            history, // Injeção de memória
             userId: user?.id,
             selected_agents: useExplicitSelection ? selectedArr : undefined,
             approved_execution_id: opts?.resumeApprovedId,
@@ -423,7 +452,7 @@ export default function MCPAssistente() {
             <div className="leading-tight">
               <h1 className="text-sm font-semibold tracking-tight">Assistente MCP</h1>
               <p className="text-[11px] text-muted-foreground">
-                Orquestrador jurídico · {selectedCount}/6 agentes selecionados
+                Orquestrador jurídico · {selectedCount}/8 agentes selecionados
               </p>
             </div>
           </div>
