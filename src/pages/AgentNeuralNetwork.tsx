@@ -474,7 +474,7 @@ function InfoPanel({
           </div>
           <div className="bg-muted/30 rounded-lg p-2">
             <div className="flex items-center gap-1 text-[10px] text-muted-foreground mb-0.5">
-              <Target className="h-3 w-3" /> Dept
+              <Target className="h-3 w-3" /> Depto
             </div>
             <p className="text-xs font-medium text-foreground">{agent.dept}</p>
           </div>
@@ -484,7 +484,7 @@ function InfoPanel({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
-          <span className="text-[10px] text-emerald-400">Online - Ready</span>
+          <span className="text-[10px] text-emerald-400">Online — Pronto</span>
         </div>
       </div>
     </motion.div>
