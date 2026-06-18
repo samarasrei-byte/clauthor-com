@@ -6,7 +6,24 @@ import { memo, useMemo, useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, X, Loader2, Volume2, VolumeX, Maximize2, Minimize2, Mic, MicOff, Play } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-import thorPhoto from "@/assets/kaelis-ai.webp";
+// Avatar minimalista (orb) — substitui foto do Thor no chat
+const ThorAvatar = ({ size = 24 }: { size?: number }) => (
+  <div
+    className="rounded-full shrink-0 mt-0.5 relative overflow-hidden"
+    style={{
+      width: size,
+      height: size,
+      background:
+        "radial-gradient(circle at 30% 30%, hsl(var(--accent-violet)) 0%, hsl(var(--accent-cyan)) 60%, transparent 100%)",
+      boxShadow: "0 0 12px hsl(var(--accent-violet) / 0.35), inset 0 0 6px hsl(var(--accent-cyan) / 0.4)",
+    }}
+  >
+    <span
+      className="absolute inset-0 rounded-full"
+      style={{ background: "radial-gradient(circle at 70% 70%, transparent 55%, hsl(var(--background)) 100%)" }}
+    />
+  </div>
+);
 import type { ThorCoreState, ThorCoreActions } from "./ThorCore";
 import { AgentDemoModal } from "./AgentDemoModal";
 
@@ -242,11 +259,7 @@ const MessageList = ({ messages, isLoading, messagesEndRef, compact }: MessageLi
       <motion.div key={idx} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
         className={`flex gap-${compact ? "2" : "2.5"} ${msg.role === "user" ? "flex-row-reverse" : ""}`}
       >
-        {msg.role === "assistant" && (
-          <div className={`w-6 h-6 rounded-full overflow-hidden border border-accent-violet/15 shrink-0 mt-0.5 ${compact ? "" : "shadow-md shadow-accent-violet/10"}`}>
-            <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
-          </div>
-        )}
+        {msg.role === "assistant" && <ThorAvatar size={compact ? 22 : 26} />}
         <div className={`max-w-[${compact ? "80" : "85"}%] rounded-xl px-3 py-${compact ? "2" : "2.5"} ${
           msg.role === "user"
             ? `bg-accent-violet/90 text-accent-violet-foreground${compact ? "" : " shadow-lg shadow-accent-violet/20"}`
@@ -264,9 +277,7 @@ const MessageList = ({ messages, isLoading, messagesEndRef, compact }: MessageLi
     ))}
     {isLoading && messages[messages.length - 1]?.role !== "assistant" && (
       <div className={`flex gap-${compact ? "2" : "2.5"}`}>
-        <div className="w-6 h-6 rounded-full overflow-hidden border border-accent-violet/15 shrink-0">
-          <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
-        </div>
+        <ThorAvatar size={compact ? 22 : 26} />
         <div className={`bg-muted/20 rounded-xl px-3 py-${compact ? "2" : "2.5"} border border-accent-violet/5`}>
           <div className="flex gap-1.5">
             {[0, 1, 2].map(i => (
@@ -447,7 +458,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
               <div className="absolute rounded-full overflow-hidden"
                 style={{ width: entranceSize * 0.52, height: entranceSize * 0.52, left: "50%", top: "50%", transform: "translate(-50%, -50%)", border: "1px solid hsl(var(--accent-violet) / 0.2)" }}
               >
-                <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                <ThorAvatar size={entranceSize * 0.52} />
               </div>
             </div>
             <motion.div className="mt-4 text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}>
@@ -507,7 +518,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
                 <motion.div className="absolute rounded-full overflow-hidden"
                   style={{ width: mobileOrbSize * 0.52, height: mobileOrbSize * 0.52, left: "50%", top: "50%", transform: "translate(-50%, -50%)", border: "1px solid hsl(var(--accent-violet) / 0.2)" }}
                 >
-                  <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                  <ThorAvatar size={mobileOrbSize * 0.52} />
                 </motion.div>
               </div>
 
@@ -629,9 +640,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
                           animate={isSpeaking ? { rotate: 360 } : {}}
                           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                         />
-                        <div className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-background">
-                          <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
-                        </div>
+                        <ThorAvatar size={36} />
                         {/* Status indicator */}
                         <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-background z-10 flex items-center justify-center">
                           <span className="w-full h-full rounded-full bg-emerald-500" />
@@ -773,7 +782,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
                 border: `1px solid hsl(var(--accent-violet) / ${isSpeaking ? '0.5' : '0.2'})`,
               }}
             >
-              <img src={thorPhoto} alt="Thor" className={`w-full h-full object-cover ${isSpeaking ? "thor-glitch-active" : ""}`} />
+              <ThorAvatar size={widgetOrbSize * 0.6} />
             </div>
           </div>
           <span className="absolute top-0 right-0 w-3 h-3 rounded-full border-2 border-background z-10">

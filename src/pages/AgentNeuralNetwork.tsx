@@ -2,7 +2,9 @@ import { Suspense, useMemo, useRef, useState, useCallback } from "react";
 import { Canvas, useFrame, ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Float, Text, Billboard, Html } from "@react-three/drei";
 import * as THREE from "three";
-import { WORKFORCE } from "@/data/workforceArchitecture";
+import { WORKFORCE as ALL_WORKFORCE } from "@/data/workforceArchitecture";
+// Exibimos apenas departamentos corporativos padrão (oculta vertical "Advocacia")
+const WORKFORCE = ALL_WORKFORCE.filter((d) => d.id !== "advocacia");
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Zap, Users, Target } from "lucide-react";
 
@@ -38,11 +40,11 @@ const DEPT_PT: Record<string, string> = {
   Engenharia: "Engenharia",
   "Data & Analytics": "Dados & Analytics",
   "Comunicação & PR": "Comunicação & RP",
-  "Talent & People": "Talentos & Pessoas",
+  "Talent & People": "Recursos Humanos",
+  "Talentos & Pessoas": "Recursos Humanos",
   "Inovação & R&D": "Inovação & P&D",
   "IT & Infraestrutura": "TI & Infraestrutura",
   "Estratégia & Inteligência": "Estratégia & Inteligência",
-  Advocacia: "Advocacia",
 };
 const ptDept = (n: string) => DEPT_PT[n] || n;
 
