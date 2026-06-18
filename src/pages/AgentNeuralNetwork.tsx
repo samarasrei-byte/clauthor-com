@@ -515,9 +515,9 @@ export default function AgentNeuralNetwork() {
       {/* Stats overlay */}
       <div className="absolute top-4 left-4 z-20 flex gap-3">
         {[
-          { label: "Agents", value: totalAgents, color: "text-primary" },
+          { label: "Agentes", value: totalAgents, color: "text-primary" },
           { label: "Squads", value: totalSquads, color: "text-accent-violet" },
-          { label: "Depts", value: WORKFORCE.length, color: "text-accent-emerald" },
+          { label: "Deptos", value: WORKFORCE.length, color: "text-accent-emerald" },
         ].map((stat) => (
           <div
             key={stat.label}
