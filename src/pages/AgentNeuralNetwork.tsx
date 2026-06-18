@@ -350,7 +350,7 @@ function NetworkScene({
           const ar = squadRadius + 0.5 + ai * 0.15;
           return {
             slug: agent.slug,
-            name: agent.name,
+            name: ptAgent(agent.name),
             squadName: squad.name,
             pos: [
               dx + Math.cos(agentAngle) * ar,
@@ -364,7 +364,7 @@ function NetworkScene({
 
       deptPositions.push({
         id: dept.id,
-        name: dept.name,
+        name: ptDept(dept.name),
         color,
         pos: [dx, dy, dz],
         agentCount: totalAgents,
