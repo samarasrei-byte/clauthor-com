@@ -531,7 +531,7 @@ export default function AgentNeuralNetwork() {
 
       {/* Legend */}
       <div className="absolute bottom-4 left-4 z-20 bg-background/60 backdrop-blur-xl border border-border/10 rounded-lg p-3 max-h-48 overflow-y-auto">
-        <p className="text-[10px] text-muted-foreground mb-2 uppercase tracking-wider">Departments</p>
+        <p className="text-[10px] text-muted-foreground mb-2 uppercase tracking-wider">Departamentos</p>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           {WORKFORCE.map((dept) => (
             <button
