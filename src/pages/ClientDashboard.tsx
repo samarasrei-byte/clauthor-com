@@ -302,7 +302,8 @@ const ClientDashboard = () => {
   const advancedGroup = t("dashboard.nav_advanced", { defaultValue: "Ferramentas Avançadas" });
   const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
 
-  const sidebarItems: SidebarItem[] = [
+  // Itens completos (vistos por admin). Cliente vê apenas o subset estável.
+  const allSidebarItems: SidebarItem[] = [
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
     { id: "chat", label: "Chat", icon: MessageSquare, group: mainGroup },
@@ -325,6 +326,20 @@ const ClientDashboard = () => {
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
+
+  // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
+  const CLIENT_ALLOWED = new Set([
+    "overview", "agents", "chat", "agent-chat-active",
+    "insights", "omnix", "empresa", "kanban",
+    "operations-center", "integrations", "settings",
+  ]);
+  const sidebarItems: SidebarItem[] = isAdmin
+    ? allSidebarItems
+    : allSidebarItems.filter((it) =>
+        CLIENT_ALLOWED.has(it.id) ||
+        it.id.startsWith("dept-") ||
+        it.id === "solo-agents"
+      );
 
   // ── Navigation ──
   const handleSidebarNav = (id: string) => {
