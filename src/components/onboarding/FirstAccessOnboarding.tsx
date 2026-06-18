@@ -101,7 +101,7 @@ const FirstAccessOnboarding = ({ isOpen, onClose, userName }: FirstAccessOnboard
               {step === "question" ? (
                 <motion.div key="q" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                   <p className="text-sm text-foreground/90 leading-relaxed mb-6">
-                    Bem-vindo{userName ? `, ${userName}` : ""}! 👋
+                    Bem-vindo{userName ? `, ${userName}` : ""}.
                     <br /><br />
                     Me conta em uma frase: <span className="text-primary font-semibold">qual é o maior problema da sua operação hoje?</span>
                   </p>
@@ -126,7 +126,7 @@ const FirstAccessOnboarding = ({ isOpen, onClose, userName }: FirstAccessOnboard
               ) : (
                 <motion.div key="r" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}>
                   <p className="text-sm text-foreground/90 leading-relaxed mb-5">
-                    Perfeito! Para <span className="text-primary font-semibold">{selectedPain?.label}</span>, recomendo estes 3 agentes:
+                    Perfeito! Para <span className="text-primary font-semibold">{selectedPain?.label}</span>, recomendo estes 3 assistentes:
                   </p>
 
                   <div className="space-y-2.5 mb-6">
@@ -152,7 +152,7 @@ const FirstAccessOnboarding = ({ isOpen, onClose, userName }: FirstAccessOnboard
                   <div className="flex gap-3">
                     <Button onClick={handleActivate} className="flex-1 h-11 rounded-xl gap-2">
                       <Sparkles className="h-3.5 w-3.5" />
-                      Ativar esses agentes
+                      Ativar esses assistentes
                       <ArrowRight className="h-3.5 w-3.5" />
                     </Button>
                     <Button variant="outline" onClick={onClose} className="h-11 rounded-xl px-4">

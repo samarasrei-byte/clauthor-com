@@ -22,12 +22,12 @@ const challenges = [
   { id: "hr", label: "Gestão de RH", sub: "Recrute, onboarde e engaje sua equipe", icon: Users, agent: "hr", agentName: "HR Manager", agentDesc: "Automatiza recrutamento, onboarding e gestão de pessoas", agentResult: "Redução de 60% no tempo de contratação" },
   { id: "marketing", label: "Marketing de Conteúdo", sub: "Crie posts, emails e campanhas que convertem", icon: PenTool, agent: "content", agentName: "Content Creator", agentDesc: "Gera conteúdo otimizado para todos os canais", agentResult: "50+ peças de conteúdo/semana" },
   { id: "data", label: "Análise de Dados", sub: "Dashboards e insights em tempo real", icon: BarChart3, agent: "data_analytics", agentName: "Data Analyst", agentDesc: "Analisa dados e gera relatórios com insights acionáveis", agentResult: "Decisões 3x mais rápidas baseadas em dados" },
-  { id: "other", label: "Outro", sub: "Conte-nos seu desafio e indicamos o agente ideal", icon: Sparkles, agent: "orchestrator", agentName: "Orquestrador IA", agentDesc: "Coordena múltiplos agentes para qualquer tarefa", agentResult: "Automação completa do seu workflow" },
+  { id: "other", label: "Outro", sub: "Conte-nos seu desafio e indicamos o assistente ideal", icon: Sparkles, agent: "orchestrator", agentName: "Orquestrador IA", agentDesc: "Coordena múltiplos assistentes para qualquer tarefa", agentResult: "Automação completa do seu fluxo de trabalho" },
 ];
 
 const setupTasks = [
   "Perfil criado",
-  "Agente configurado",
+  "Assistente configurado",
   "Primeiras tarefas programadas",
   "Conectando aos seus canais",
 ];
@@ -76,7 +76,7 @@ const QuickOnboardingWizard = ({ isOpen, onComplete }: QuickOnboardingWizardProp
 
   const handleFinish = async () => {
     await markComplete();
-    toast.success("Seu agente está pronto! 🎉");
+    toast.success("Seu assistente está pronto!");
     onComplete(selected?.agent);
   };
 
@@ -111,7 +111,7 @@ const QuickOnboardingWizard = ({ isOpen, onComplete }: QuickOnboardingWizardProp
                   <Rocket className="h-6 w-6 text-primary" />
                 </div>
                 <h2 className="font-display text-xl sm:text-2xl font-bold">Qual é o maior desafio da sua empresa?</h2>
-                <p className="text-sm text-muted-foreground">Escolha um e teremos um agente pronto em 60 segundos</p>
+                <p className="text-sm text-muted-foreground">Escolha um e teremos um assistente pronto em 60 segundos</p>
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -142,7 +142,7 @@ const QuickOnboardingWizard = ({ isOpen, onComplete }: QuickOnboardingWizardProp
             <motion.div key="s1" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-5">
               <div className="text-center space-y-2">
                 <h2 className="font-display text-xl sm:text-2xl font-bold">
-                  Perfeito! Seu agente ideal é:
+                  Perfeito! Seu assistente ideal é:
                 </h2>
               </div>
 
@@ -165,7 +165,7 @@ const QuickOnboardingWizard = ({ isOpen, onComplete }: QuickOnboardingWizardProp
 
               <div className="flex flex-col gap-2">
                 <Button size="lg" className="w-full gap-2" onClick={handleWantAgent}>
-                  Quero esse agente <ArrowRight className="h-4 w-4" />
+                  Quero esse assistente <ArrowRight className="h-4 w-4" />
                 </Button>
                 <Button variant="ghost" size="sm" onClick={() => setStep(0)} className="text-xs text-muted-foreground">
                   ← Voltar
@@ -182,7 +182,7 @@ const QuickOnboardingWizard = ({ isOpen, onComplete }: QuickOnboardingWizardProp
           {step === 2 && (
             <motion.div key="s2" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} className="space-y-6">
               <div className="text-center space-y-2">
-                <h2 className="font-display text-xl sm:text-2xl font-bold">Configurando seu agente...</h2>
+                <h2 className="font-display text-xl sm:text-2xl font-bold">Configurando seu assistente...</h2>
                 <p className="text-sm text-muted-foreground">Isso leva apenas alguns segundos</p>
               </div>
 
@@ -211,7 +211,7 @@ const QuickOnboardingWizard = ({ isOpen, onComplete }: QuickOnboardingWizardProp
               {completedTasks.length >= setupTasks.length && (
                 <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="space-y-3 pt-2">
                   <div className="text-center">
-                    <p className="text-lg font-bold text-primary">🎉 Seu agente está pronto!</p>
+                    <p className="text-lg font-bold text-primary">Seu assistente está pronto.</p>
                   </div>
                   <Button size="lg" className="w-full gap-2" onClick={handleFinish}>
                     Diga olá para ele <ArrowRight className="h-4 w-4" />
