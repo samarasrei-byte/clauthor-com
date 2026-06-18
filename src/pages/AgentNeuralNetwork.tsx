@@ -545,7 +545,7 @@ export default function AgentNeuralNetwork() {
                 className="w-2 h-2 rounded-full shrink-0"
                 style={{ backgroundColor: DEPT_COLORS[dept.id] || "#888" }}
               />
-              <span className="text-foreground truncate">{dept.name}</span>
+              <span className="text-foreground truncate">{ptDept(dept.name)}</span>
             </button>
           ))}
         </div>
