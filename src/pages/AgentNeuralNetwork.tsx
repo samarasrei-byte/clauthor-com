@@ -25,6 +25,81 @@ const DEPT_COLORS: Record<string, string> = {
   strategy: "#0ea5e9",
 };
 
+// ── Tradução PT-BR ──
+const DEPT_PT: Record<string, string> = {
+  Marketing: "Marketing",
+  Growth: "Crescimento",
+  Product: "Produto",
+  Sales: "Vendas",
+  "Customer Success": "Sucesso do Cliente",
+  Finance: "Financeiro",
+  Operations: "Operações",
+  "Segurança & Compliance": "Segurança & Compliance",
+  Engenharia: "Engenharia",
+  "Data & Analytics": "Dados & Analytics",
+  "Comunicação & PR": "Comunicação & RP",
+  "Talent & People": "Talentos & Pessoas",
+  "Inovação & R&D": "Inovação & P&D",
+  "IT & Infraestrutura": "TI & Infraestrutura",
+  "Estratégia & Inteligência": "Estratégia & Inteligência",
+  Advocacia: "Advocacia",
+};
+const ptDept = (n: string) => DEPT_PT[n] || n;
+
+const AGENT_WORD_PT: Array<[RegExp, string]> = [
+  [/\bManager\b/g, "Gerente"],
+  [/\bSpecialist\b/g, "Especialista"],
+  [/\bStrategist\b/g, "Estrategista"],
+  [/\bAnalyst\b/g, "Analista"],
+  [/\bWriter\b/g, "Redator"],
+  [/\bDesigner\b/g, "Designer"],
+  [/\bDeveloper\b/g, "Desenvolvedor"],
+  [/\bEngineer\b/g, "Engenheiro"],
+  [/\bAgent\b/g, "Agente"],
+  [/\bOptimizer\b/g, "Otimizador"],
+  [/\bAllocator\b/g, "Alocador"],
+  [/\bBuilder\b/g, "Construtor"],
+  [/\bBuyer\b/g, "Comprador"],
+  [/\bCopywriter\b/g, "Copywriter"],
+  [/\bResearcher\b/g, "Pesquisador"],
+  [/\bScientist\b/g, "Cientista"],
+  [/\bCoordinator\b/g, "Coordenador"],
+  [/\bDirector\b/g, "Diretor"],
+  [/\bLead\b/g, "Líder"],
+  [/\bAssistant\b/g, "Assistente"],
+  [/\bAuditor\b/g, "Auditor"],
+  [/\bAdvisor\b/g, "Consultor"],
+  [/\bAccount Executive\b/g, "Executivo de Conta"],
+  [/\bSales\b/g, "Vendas"],
+  [/\bSupport\b/g, "Suporte"],
+  [/\bCustomer Success\b/g, "Sucesso do Cliente"],
+  [/\bOnboarding\b/g, "Onboarding"],
+  [/\bRetention\b/g, "Retenção"],
+  [/\bChurn\b/g, "Churn"],
+  [/\bGrowth\b/g, "Crescimento"],
+  [/\bContent\b/g, "Conteúdo"],
+  [/\bPerformance\b/g, "Performance"],
+  [/\bBrand\b/g, "Marca"],
+  [/\bVoice\b/g, "Voz"],
+  [/\bCampaign\b/g, "Campanha"],
+  [/\bInfluencer\b/g, "Influenciador"],
+  [/\bBlog\b/g, "Blog"],
+  [/\bSocial Media\b/g, "Mídia Social"],
+  [/\bVideo Script\b/g, "Roteiro de Vídeo"],
+  [/\bIdentity\b/g, "Identidade"],
+  [/\bVisual\b/g, "Visual"],
+  [/\bPositioning\b/g, "Posicionamento"],
+  [/\bAttribution\b/g, "Atribuição"],
+  [/\bBudget\b/g, "Orçamento"],
+  [/\bRetargeting\b/g, "Retargeting"],
+  [/\bMedia\b/g, "Mídia"],
+  [/\bTechnical\b/g, "Técnico"],
+  [/\bLink\b/g, "Link"],
+  [/\bPR\b/g, "RP"],
+];
+const ptAgent = (n: string) =>
+  AGENT_WORD_PT.reduce((acc, [r, v]) => acc.replace(r, v), n);
+
 // ── 3D Node for each agent ──
 function AgentNode({
   position,
@@ -191,7 +266,7 @@ function DeptHub({
           anchorY="top"
           position={[0, -0.02, 0]}
         >
-          {agentCount} agents
+          {agentCount} agentes
         </Text>
       </Billboard>
     </group>
@@ -275,7 +350,7 @@ function NetworkScene({
           const ar = squadRadius + 0.5 + ai * 0.15;
           return {
             slug: agent.slug,
-            name: agent.name,
+            name: ptAgent(agent.name),
             squadName: squad.name,
             pos: [
               dx + Math.cos(agentAngle) * ar,
@@ -289,7 +364,7 @@ function NetworkScene({
 
       deptPositions.push({
         id: dept.id,
-        name: dept.name,
+        name: ptDept(dept.name),
         color,
         pos: [dx, dy, dz],
         agentCount: totalAgents,
@@ -399,7 +474,7 @@ function InfoPanel({
           </div>
           <div className="bg-muted/30 rounded-lg p-2">
             <div className="flex items-center gap-1 text-[10px] text-muted-foreground mb-0.5">
-              <Target className="h-3 w-3" /> Dept
+              <Target className="h-3 w-3" /> Depto
             </div>
             <p className="text-xs font-medium text-foreground">{agent.dept}</p>
           </div>
@@ -409,7 +484,7 @@ function InfoPanel({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
-          <span className="text-[10px] text-emerald-400">Online - Ready</span>
+          <span className="text-[10px] text-emerald-400">Online — Pronto</span>
         </div>
       </div>
     </motion.div>
@@ -440,9 +515,9 @@ export default function AgentNeuralNetwork() {
       {/* Stats overlay */}
       <div className="absolute top-4 left-4 z-20 flex gap-3">
         {[
-          { label: "Agents", value: totalAgents, color: "text-primary" },
+          { label: "Agentes", value: totalAgents, color: "text-primary" },
           { label: "Squads", value: totalSquads, color: "text-accent-violet" },
-          { label: "Depts", value: WORKFORCE.length, color: "text-accent-emerald" },
+          { label: "Deptos", value: WORKFORCE.length, color: "text-accent-emerald" },
         ].map((stat) => (
           <div
             key={stat.label}
@@ -456,7 +531,7 @@ export default function AgentNeuralNetwork() {
 
       {/* Legend */}
       <div className="absolute bottom-4 left-4 z-20 bg-background/60 backdrop-blur-xl border border-border/10 rounded-lg p-3 max-h-48 overflow-y-auto">
-        <p className="text-[10px] text-muted-foreground mb-2 uppercase tracking-wider">Departments</p>
+        <p className="text-[10px] text-muted-foreground mb-2 uppercase tracking-wider">Departamentos</p>
         <div className="grid grid-cols-2 gap-x-4 gap-y-1">
           {WORKFORCE.map((dept) => (
             <button
@@ -470,7 +545,7 @@ export default function AgentNeuralNetwork() {
                 className="w-2 h-2 rounded-full shrink-0"
                 style={{ backgroundColor: DEPT_COLORS[dept.id] || "#888" }}
               />
-              <span className="text-foreground truncate">{dept.name}</span>
+              <span className="text-foreground truncate">{ptDept(dept.name)}</span>
             </button>
           ))}
         </div>
@@ -502,10 +577,10 @@ export default function AgentNeuralNetwork() {
       {/* Title */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 text-center">
         <h1 className="text-lg font-bold text-foreground tracking-wider">
-          NEURAL NETWORK
+          REDE NEURAL
         </h1>
         <p className="text-[10px] text-muted-foreground">
-          AI Workforce - Real-time Agent Topology
+          Workforce de IA — Topologia de Agentes em Tempo Real
         </p>
       </div>
     </div>
