@@ -266,7 +266,7 @@ function DeptHub({
           anchorY="top"
           position={[0, -0.02, 0]}
         >
-          {agentCount} agents
+          {agentCount} agentes
         </Text>
       </Billboard>
     </group>
