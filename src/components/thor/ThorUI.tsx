@@ -458,7 +458,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
               <div className="absolute rounded-full overflow-hidden"
                 style={{ width: entranceSize * 0.52, height: entranceSize * 0.52, left: "50%", top: "50%", transform: "translate(-50%, -50%)", border: "1px solid hsl(var(--accent-violet) / 0.2)" }}
               >
-                <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                <ThorAvatar size={entranceSize * 0.52} />
               </div>
             </div>
             <motion.div className="mt-4 text-center" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1 }}>
@@ -518,7 +518,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
                 <motion.div className="absolute rounded-full overflow-hidden"
                   style={{ width: mobileOrbSize * 0.52, height: mobileOrbSize * 0.52, left: "50%", top: "50%", transform: "translate(-50%, -50%)", border: "1px solid hsl(var(--accent-violet) / 0.2)" }}
                 >
-                  <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
+                  <ThorAvatar size={mobileOrbSize * 0.52} />
                 </motion.div>
               </div>
 
@@ -640,9 +640,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
                           animate={isSpeaking ? { rotate: 360 } : {}}
                           transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
                         />
-                        <div className="relative w-9 h-9 rounded-full overflow-hidden border-2 border-background">
-                          <img src={thorPhoto} alt="Thor" className="w-full h-full object-cover" />
-                        </div>
+                        <ThorAvatar size={36} />
                         {/* Status indicator */}
                         <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-background z-10 flex items-center justify-center">
                           <span className="w-full h-full rounded-full bg-emerald-500" />
@@ -784,7 +782,7 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
                 border: `1px solid hsl(var(--accent-violet) / ${isSpeaking ? '0.5' : '0.2'})`,
               }}
             >
-              <img src={thorPhoto} alt="Thor" className={`w-full h-full object-cover ${isSpeaking ? "thor-glitch-active" : ""}`} />
+              <ThorAvatar size={widgetOrbSize * 0.6} />
             </div>
           </div>
           <span className="absolute top-0 right-0 w-3 h-3 rounded-full border-2 border-background z-10">
