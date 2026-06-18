@@ -577,10 +577,10 @@ export default function AgentNeuralNetwork() {
       {/* Title */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 text-center">
         <h1 className="text-lg font-bold text-foreground tracking-wider">
-          NEURAL NETWORK
+          REDE NEURAL
         </h1>
         <p className="text-[10px] text-muted-foreground">
-          AI Workforce - Real-time Agent Topology
+          Workforce de IA — Topologia de Agentes em Tempo Real
         </p>
       </div>
     </div>
