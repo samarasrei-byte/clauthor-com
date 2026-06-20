@@ -59,7 +59,7 @@ export default function CreateWorkforce() {
     switch (state.step) {
       case 0: return state.objective.trim().length > 10;
       case 1: return !!state.scale;
-      case 2: return state.selectedTemplates.length > 0 && state.name.trim().length > 0;
+      case 2: return state.selectedTemplates.length > 0; // nome é opcional (auto-preenchido)
       case 3: return !!state.autonomy;
       case 4: return true;
       case 5: return true;
@@ -67,6 +67,17 @@ export default function CreateWorkforce() {
       default: return true;
     }
   }, [state]);
+
+  const advanceHint = useMemo(() => {
+    if (canAdvance) return null;
+    switch (state.step) {
+      case 0: return "Descreva seu objetivo com mais detalhes (pelo menos 10 caracteres).";
+      case 1: return "Escolha uma escala para continuar.";
+      case 2: return "Selecione pelo menos um cargo para continuar.";
+      case 3: return "Selecione um nível de autonomia.";
+      default: return null;
+    }
+  }, [canAdvance, state.step]);
 
   // ─── AI Architect ──────────────────────────────────────────────────────
   const aiArchitect = async () => {
