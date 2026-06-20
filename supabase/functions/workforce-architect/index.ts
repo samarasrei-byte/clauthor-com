@@ -1,5 +1,5 @@
 // Workforce Architect — sugere blueprint a partir do objetivo de negócio
-import { createLovableAiGatewayProvider } from "../_shared/ai-gateway.ts";
+import { createOpenAICompatible } from "npm:@ai-sdk/openai-compatible";
 import { generateText, Output } from "npm:ai";
 import { z } from "npm:zod";
 
@@ -37,7 +37,11 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "objective required" }), { status: 400, headers: corsHeaders });
     }
 
-    const gateway = createLovableAiGatewayProvider(key);
+    const gateway = createOpenAICompatible({
+      name: "lovable",
+      baseURL: "https://ai.gateway.lovable.dev/v1",
+      headers: { "Lovable-API-Key": key, "X-Lovable-AIG-SDK": "vercel-ai-sdk" },
+    });
     const { output } = await generateText({
       model: gateway("google/gemini-3-flash-preview"),
       system: `Você é um Principal Product Architect da Clauthor. Recebe um objetivo de negócio e propõe uma estrutura de força de trabalho digital (agentes IA). Devolve um blueprint estruturado em PT-BR. Escolha apenas template IDs desta lista: ${TEMPLATE_IDS.join(", ")}.`,
