@@ -2615,6 +2615,42 @@ export type Database = {
         }
         Relationships: []
       }
+      workforce_blueprints: {
+        Row: {
+          blueprint: Json
+          created_at: string
+          id: string
+          name: string
+          objective: string | null
+          scale: string
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          blueprint?: Json
+          created_at?: string
+          id?: string
+          name: string
+          objective?: string | null
+          scale: string
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          blueprint?: Json
+          created_at?: string
+          id?: string
+          name?: string
+          objective?: string | null
+          scale?: string
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       agent_credentials_safe: {
