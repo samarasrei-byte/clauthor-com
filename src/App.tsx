@@ -38,6 +38,7 @@ const HowItWorks = lazyRetry(() => import("./pages/HowItWorks"));
 const Waitlist = lazyRetry(() => import("./pages/Waitlist"));
 const Community = lazyRetry(() => import("./pages/Community"));
 const CreateAgent = lazyRetry(() => import("./pages/CreateAgent"));
+const CreateWorkforce = lazyRetry(() => import("./pages/CreateWorkforce"));
 const Integrations = lazyRetry(() => import("./pages/Integrations"));
 const Auth = lazyRetry(() => import("./pages/Auth"));
 const NotFound = lazyRetry(() => import("./pages/NotFound"));
@@ -157,7 +158,8 @@ const App = () => (
                 <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                   <Route path="/dashboard" element={<ClientDashboard />} />
                   <Route path="/agents" element={<Agents />} />
-                  <Route path="/create-agent" element={<CreateAgent />} />
+                  <Route path="/create-agent" element={<CreateWorkforce />} />
+                  <Route path="/create-agent/classic" element={<CreateAgent />} />
                   <Route path="/integrations" element={<Integrations />} />
                   <Route path="/knowledge-base" element={<KnowledgeBase />} />
                   <Route path="/monix" element={<MonixCommandCenter />} />
