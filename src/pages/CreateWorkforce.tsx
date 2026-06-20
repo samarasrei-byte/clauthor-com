@@ -48,6 +48,16 @@ export default function CreateWorkforce() {
   const [deploying, setDeploying] = useState(false);
 
   const advance = () => {
+    // Auto-fill name when leaving step 2 (Função e cargo) if user didn't type one
+    if (state.step === 2 && !state.name.trim() && state.selectedTemplates.length > 0) {
+      const first = WORKFORCE_CATALOG.find((t) => t.id === state.selectedTemplates[0]);
+      const auto =
+        state.scale === "agent" ? (first?.role ?? "Meu Assistente") :
+        state.scale === "squad" ? `Equipe de ${first?.role ?? "Trabalho"}` :
+        state.scale === "department" ? "Meu Departamento" :
+        "Minha Organização IA";
+      dispatch({ type: "PATCH", patch: { name: auto } });
+    }
     const next = Math.min(state.step + 1, STEPS.length - 1);
     dispatch({ type: "SET_STEP", step: next });
     setReachable((r) => Math.max(r, next));
@@ -59,7 +69,7 @@ export default function CreateWorkforce() {
     switch (state.step) {
       case 0: return state.objective.trim().length > 10;
       case 1: return !!state.scale;
-      case 2: return state.selectedTemplates.length > 0 && state.name.trim().length > 0;
+      case 2: return state.selectedTemplates.length > 0; // nome é opcional (auto-preenchido)
       case 3: return !!state.autonomy;
       case 4: return true;
       case 5: return true;
@@ -67,6 +77,17 @@ export default function CreateWorkforce() {
       default: return true;
     }
   }, [state]);
+
+  const advanceHint = useMemo(() => {
+    if (canAdvance) return null;
+    switch (state.step) {
+      case 0: return "Descreva seu objetivo com mais detalhes (pelo menos 10 caracteres).";
+      case 1: return "Escolha uma escala para continuar.";
+      case 2: return "Selecione pelo menos um cargo para continuar.";
+      case 3: return "Selecione um nível de autonomia.";
+      default: return null;
+    }
+  }, [canAdvance, state.step]);
 
   // ─── AI Architect ──────────────────────────────────────────────────────
   const aiArchitect = async () => {
@@ -202,9 +223,14 @@ export default function CreateWorkforce() {
                 <ArrowLeft className="h-4 w-4 mr-1" /> Voltar
               </Button>
               {state.step < STEPS.length - 1 ? (
-                <Button onClick={advance} disabled={!canAdvance} className="gap-1.5">
-                  Avançar <ArrowRight className="h-4 w-4" />
-                </Button>
+                <div className="flex flex-col items-end gap-1.5">
+                  {advanceHint && (
+                    <p className="text-[11px] text-amber-500/90">{advanceHint}</p>
+                  )}
+                  <Button onClick={advance} disabled={!canAdvance} className="gap-1.5">
+                    Avançar <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
               ) : null}
             </div>
           </div>
