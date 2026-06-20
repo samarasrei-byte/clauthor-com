@@ -48,6 +48,16 @@ export default function CreateWorkforce() {
   const [deploying, setDeploying] = useState(false);
 
   const advance = () => {
+    // Auto-fill name when leaving step 2 (Função e cargo) if user didn't type one
+    if (state.step === 2 && !state.name.trim() && state.selectedTemplates.length > 0) {
+      const first = WORKFORCE_CATALOG.find((t) => t.id === state.selectedTemplates[0]);
+      const auto =
+        state.scale === "agent" ? (first?.role ?? "Meu Assistente") :
+        state.scale === "squad" ? `Equipe de ${first?.role ?? "Trabalho"}` :
+        state.scale === "department" ? "Meu Departamento" :
+        "Minha Organização IA";
+      dispatch({ type: "PATCH", patch: { name: auto } });
+    }
     const next = Math.min(state.step + 1, STEPS.length - 1);
     dispatch({ type: "SET_STEP", step: next });
     setReachable((r) => Math.max(r, next));
@@ -213,9 +223,14 @@ export default function CreateWorkforce() {
                 <ArrowLeft className="h-4 w-4 mr-1" /> Voltar
               </Button>
               {state.step < STEPS.length - 1 ? (
-                <Button onClick={advance} disabled={!canAdvance} className="gap-1.5">
-                  Avançar <ArrowRight className="h-4 w-4" />
-                </Button>
+                <div className="flex flex-col items-end gap-1.5">
+                  {advanceHint && (
+                    <p className="text-[11px] text-amber-500/90">{advanceHint}</p>
+                  )}
+                  <Button onClick={advance} disabled={!canAdvance} className="gap-1.5">
+                    Avançar <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </div>
               ) : null}
             </div>
           </div>
