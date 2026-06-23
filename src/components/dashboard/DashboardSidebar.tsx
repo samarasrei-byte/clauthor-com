@@ -387,7 +387,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         )}
 
         {/* Recents */}
-        {!collapsed && !q && recentItems.length > 1 && (
+        {!collapsed && !q && recentItems.length > 0 && (
           <div className="mb-1">
             <div className="px-3 pt-2 pb-1.5 flex items-center gap-1.5">
               <Clock className="h-2.5 w-2.5 text-muted-foreground/50" strokeWidth={1.5} />
