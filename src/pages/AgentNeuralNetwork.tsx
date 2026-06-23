@@ -560,21 +560,47 @@ export default function AgentNeuralNetwork() {
         )}
       </AnimatePresence>
 
-      {/* 3D Canvas */}
-      <Canvas
-        camera={{ position: [0, 3, 7], fov: 50 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true }}
-        style={{ background: "transparent" }}
-      >
-        <Suspense fallback={null}>
-          <NetworkScene
-            onSelectDept={setSelectedDept}
-            onSelectAgent={setSelectedAgent}
-            selectedDept={selectedDept}
-          />
-        </Suspense>
-      </Canvas>
+      {/* 3D Canvas - with WebGL fallback */}
+      {(() => {
+        let hasWebGL = false;
+        try {
+          const c = document.createElement("canvas");
+          hasWebGL = !!(c.getContext("webgl2") || c.getContext("webgl") || c.getContext("experimental-webgl"));
+        } catch {
+          hasWebGL = false;
+        }
+        if (!hasWebGL) {
+          return (
+            <div className="absolute inset-0 flex items-center justify-center z-10">
+              <div className="text-center p-6 rounded-xl border border-border bg-card/60 max-w-md">
+                <p className="font-display font-semibold mb-2">Visualização 3D indisponível</p>
+                <p className="text-sm text-muted-foreground">
+                  Seu navegador ou ambiente não suporta WebGL. Abra em um navegador atualizado com aceleração de hardware ativada.
+                </p>
+              </div>
+            </div>
+          );
+        }
+        return (
+          <Canvas
+            camera={{ position: [0, 3, 7], fov: 50 }}
+            dpr={[1, 1.5]}
+            gl={{ antialias: true, alpha: true, failIfMajorPerformanceCaveat: false, powerPreference: "default" }}
+            onCreated={({ gl }) => {
+              gl.domElement.addEventListener("webglcontextlost", (e) => e.preventDefault());
+            }}
+            style={{ background: "transparent" }}
+          >
+            <Suspense fallback={null}>
+              <NetworkScene
+                onSelectDept={setSelectedDept}
+                onSelectAgent={setSelectedAgent}
+                selectedDept={selectedDept}
+              />
+            </Suspense>
+          </Canvas>
+        );
+      })()}
 
       {/* Title */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 text-center">
