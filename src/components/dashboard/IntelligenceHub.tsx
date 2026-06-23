@@ -1,12 +1,13 @@
 import { useState, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart3, Radio, TrendingUp } from "lucide-react";
+import { BarChart3, Radio, TrendingUp, DollarSign } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
 
 const InsightsHub = lazy(() => import("./InsightsHub"));
 const WarRoomLive = lazy(() => import("./WarRoomLive"));
 const PredictiveDashboard = lazy(() => import("./PredictiveDashboard"));
+const OutcomeBilling = lazy(() => import("./OutcomeBilling"));
 
 interface IntelligenceHubProps {
   chartData: any[];
