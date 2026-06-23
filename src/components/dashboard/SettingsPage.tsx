@@ -8,6 +8,7 @@ import TeamMembers from "./TeamMembers";
 import SupportChat from "@/components/SupportChat";
 import { CouponRedeemer } from "./CouponRedeemer";
 import CredentialsHub from "./CredentialsHub";
+import OutcomePricingRules from "./OutcomePricingRules";
 import { useTranslation } from "react-i18next";
 
 const KnowledgeBase = lazy(() => import("@/pages/KnowledgeBase"));
