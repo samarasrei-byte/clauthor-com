@@ -433,116 +433,108 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
 
   const progress = visitedSections.size / GUIDE_STEPS.length;
 
-  // ─── Minimized state ───
+  // ─── Minimized state: slim spotlight pill (bottom-center) ───
   if (!isExpanded) {
     return (
       <motion.button
-        initial={{ scale: 0, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0, opacity: 0 }}
+        initial={{ y: 24, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 24, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 320, damping: 28 }}
         onClick={() => setIsExpanded(true)}
-        className="fixed bottom-6 right-6 z-50 w-14 h-14 rounded-2xl bg-primary/90 backdrop-blur-xl border border-primary/30 shadow-[0_4px_24px_hsl(var(--primary)/0.3)] flex items-center justify-center hover:scale-105 transition-transform group"
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 group flex items-center gap-2.5 pl-2.5 pr-3.5 py-1.5 rounded-full bg-background/70 backdrop-blur-xl border border-border/30 shadow-[0_4px_24px_hsl(0_0%_0%/0.18)] hover:border-primary/40 transition-colors"
       >
-        <Brain className="h-6 w-6 text-primary-foreground" />
-        {/* Pulse ring */}
-        <span className="absolute inset-0 rounded-2xl border-2 border-primary/40 animate-ping opacity-30" />
-        {/* Tooltip */}
-        <div className="absolute right-full mr-3 px-3 py-1.5 rounded-lg bg-background border border-border/20 text-xs font-medium opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap shadow-xl">
-          Thor está te guiando
-        </div>
+        <span className="relative flex h-2 w-2 shrink-0">
+          <span className="absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75 animate-ping" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+        </span>
+        <span className="text-[11px] font-medium text-foreground/90">Thor</span>
+        <span className="text-[10px] text-muted-foreground tabular-nums">
+          {visitedSections.size}/{GUIDE_STEPS.length}
+        </span>
+        <span className="hidden sm:inline text-[10px] text-muted-foreground/70 truncate max-w-[180px]">
+          · {isPaused ? "Pausado" : isTyping ? "Falando…" : "Toque para continuar"}
+        </span>
+        <ChevronRight className="h-3 w-3 text-muted-foreground/60 group-hover:text-primary transition-colors" />
       </motion.button>
     );
   }
 
-  // ─── Expanded panel ───
+  // ─── Expanded panel: compact, modern, bottom-center ───
   return (
     <AnimatePresence>
       <motion.div
-        initial={{ opacity: 0, y: 40, scale: 0.95 }}
+        initial={{ opacity: 0, y: 20, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
-        exit={{ opacity: 0, y: 40, scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 300, damping: 28 }}
-        className="fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border/20 bg-card/95 backdrop-blur-2xl shadow-[0_8px_40px_hsl(0_0%_0%/0.4),0_0_0_1px_hsl(0_0%_100%/0.03)_inset] overflow-hidden"
+        exit={{ opacity: 0, y: 20, scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 320, damping: 28 }}
+        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[340px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border/20 bg-background/85 backdrop-blur-2xl shadow-[0_12px_40px_hsl(0_0%_0%/0.25)] overflow-hidden"
       >
-        {/* Header with glow */}
-        <div className="relative px-4 pt-4 pb-3">
-          {/* Subtle glow behind avatar */}
-          <div className="absolute top-2 left-4 w-10 h-10 bg-primary/20 rounded-full blur-xl" />
-          
-          <div className="flex items-center gap-3 relative">
-            {/* Thor avatar */}
-            <div className="relative shrink-0">
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/20 to-primary/5 border border-primary/20 flex items-center justify-center">
-                <Brain className="h-5 w-5 text-primary" />
-              </div>
-              <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-emerald-500 border-2 border-card" />
-            </div>
+        {/* Header: slim — dot + label + inline waveform + controls */}
+        <div className="px-3.5 pt-3 pb-2 flex items-center gap-2.5">
+          <span className="relative flex h-2 w-2 shrink-0">
+            <span className="absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75 animate-ping" />
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+          </span>
+          <span className="text-[12px] font-semibold tracking-tight">Thor</span>
+          <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium">GUIA</span>
 
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5">
-                <span className="text-sm font-semibold">Thor</span>
-                <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-primary/10 text-primary font-medium">GUIA</span>
-              </div>
-              <span className="text-[10px] text-muted-foreground mt-0.5 block">
-                {isPaused ? "Pausado" : isTyping ? "Falando..." : "Ouvindo"}
-              </span>
-            </div>
-
-            {/* Controls */}
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setIsMuted(!isMuted)}
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
-              >
-                {isMuted ? <VolumeX className="h-3.5 w-3.5" /> : <Volume2 className="h-3.5 w-3.5" />}
-              </button>
-              <button
-                onClick={() => setIsExpanded(false)}
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Progress bar */}
-          <div className="mt-3 flex items-center gap-2">
-            <div className="flex-1 h-1 rounded-full bg-muted/20 overflow-hidden">
-              <motion.div
-                className="h-full bg-primary/60 rounded-full"
-                animate={{ width: `${progress * 100}%` }}
-                transition={{ duration: 0.5, ease: "easeOut" }}
+          {/* Inline equalizer (replaces big waveform block) */}
+          <div className="flex-1 flex items-center justify-center gap-[2px] h-3 overflow-hidden">
+            {[3, 6, 4, 8, 5, 7, 4, 6, 3].map((h, i) => (
+              <motion.span
+                key={i}
+                className="w-[2px] rounded-full bg-primary/50"
+                animate={{
+                  height: isPaused ? 2 : isTyping ? [h, h * 1.6, h] : [h * 0.6, h, h * 0.6],
+                }}
+                transition={{ duration: 0.6 + i * 0.08, repeat: Infinity, ease: "easeInOut" }}
               />
-            </div>
-            <span className="text-[9px] text-muted-foreground font-mono">
-              {visitedSections.size}/{GUIDE_STEPS.length}
-            </span>
+            ))}
           </div>
+
+          <span className="text-[10px] text-muted-foreground tabular-nums shrink-0">
+            {visitedSections.size}/{GUIDE_STEPS.length}
+          </span>
+          <button
+            onClick={() => setIsMuted(!isMuted)}
+            aria-label="Som"
+            className="w-6 h-6 rounded-md flex items-center justify-center text-muted-foreground/70 hover:text-foreground hover:bg-muted/30 transition-colors"
+          >
+            {isMuted ? <VolumeX className="h-3 w-3" /> : <Volume2 className="h-3 w-3" />}
+          </button>
+          <button
+            onClick={() => setIsExpanded(false)}
+            aria-label="Minimizar"
+            className="w-6 h-6 rounded-md flex items-center justify-center text-muted-foreground/70 hover:text-foreground hover:bg-muted/30 transition-colors"
+          >
+            <X className="h-3 w-3" />
+          </button>
         </div>
 
-        {/* Neural waveform visualizer */}
-        <div className="px-4 pb-1">
-          <div className="rounded-xl bg-background/20 border border-border/5 flex items-center justify-center">
-            <NeuralWaveform mode={isPaused ? "idle" : isTyping ? "speaking" : "listening"} />
-          </div>
+        {/* Thin progress line */}
+        <div className="h-[2px] bg-muted/20">
+          <motion.div
+            className="h-full bg-primary/70"
+            animate={{ width: `${progress * 100}%` }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+          />
         </div>
 
-        {/* Message area */}
-        <div className="px-4 pb-3">
-          <div className="p-3 rounded-xl bg-background/40 border border-border/10 min-h-[50px]">
-            <p className="text-[13px] leading-relaxed text-foreground/90">
-              {displayedText}
-              {isTyping && <span className="inline-block w-[2px] h-[14px] bg-primary ml-0.5 animate-pulse align-text-bottom" />}
-            </p>
-          </div>
+        {/* Message — denser, no extra card chrome */}
+        <div className="px-3.5 py-3">
+          <p className="text-[12.5px] leading-relaxed text-foreground/90">
+            {displayedText}
+            {isTyping && <span className="inline-block w-[2px] h-[12px] bg-primary ml-0.5 animate-pulse align-text-bottom" />}
+          </p>
         </div>
 
-        {/* Action buttons */}
-        <div className="px-4 pb-4 flex items-center gap-2">
+        {/* Action row — compact icon-led buttons */}
+        <div className="px-2.5 pb-2.5 flex items-center gap-1">
           <Button
             size="sm"
-            variant={isPaused ? "default" : "outline"}
-            className="h-8 text-[11px] gap-1.5 flex-1"
+            variant="ghost"
+            className="h-7 px-2 text-[10.5px] gap-1 text-muted-foreground hover:text-foreground"
             onClick={() => setIsPaused(!isPaused)}
           >
             {isPaused ? <Play className="h-3 w-3" /> : <Pause className="h-3 w-3" />}
@@ -552,41 +544,36 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
           {nextStep && (
             <Button
               size="sm"
-              variant="outline"
-              className="h-8 text-[11px] gap-1.5 flex-1"
+              variant="ghost"
+              className="h-7 px-2 text-[10.5px] gap-1 text-primary hover:text-primary hover:bg-primary/10 flex-1 justify-start truncate"
               onClick={() => onNavigate(nextStep.section)}
             >
-              Próximo: {nextStep.title}
-              <ChevronRight className="h-3 w-3" />
+              <ChevronRight className="h-3 w-3 shrink-0" />
+              <span className="truncate">{nextStep.title}</span>
             </Button>
           )}
 
           <Button
             size="sm"
             variant="ghost"
-            className="h-8 text-[11px] gap-1.5"
-            onClick={() => {
-              onNavigate("omnix");
-              onDismiss();
-            }}
+            className="h-7 px-2 text-[10.5px] gap-1 text-muted-foreground hover:text-foreground"
+            onClick={() => { onNavigate("omnix"); onDismiss(); }}
           >
             <MessageSquare className="h-3 w-3" />
-            Perguntar
           </Button>
-        </div>
 
-        {/* Dismiss / End tour */}
-        <div className="px-4 pb-3 pt-0">
           <button
             onClick={onDismiss}
-            className="w-full text-center text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors py-1"
+            aria-label="Encerrar tour"
+            className="h-7 px-2 text-[10px] text-muted-foreground/50 hover:text-muted-foreground transition-colors"
           >
-            Encerrar tour · Vou explorar sozinho
+            Encerrar
           </button>
         </div>
       </motion.div>
     </AnimatePresence>
   );
 };
+
 
 export default ThorLiveGuide;
