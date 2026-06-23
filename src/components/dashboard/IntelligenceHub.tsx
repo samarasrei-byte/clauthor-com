@@ -87,6 +87,12 @@ const IntelligenceHub = ({
             <PredictiveDashboard />
           </Suspense>
         </TabsContent>
+
+        <TabsContent value="outcomes" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <OutcomeBilling />
+          </Suspense>
+        </TabsContent>
       </Tabs>
     </div>
   );
