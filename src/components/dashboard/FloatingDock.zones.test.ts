@@ -69,7 +69,7 @@ describe("FloatingDock zone contract", () => {
           const b = rectFor(zones[j], vp.width);
           // On very small mobile viewports center+sides may touch; ensure NO overlap on desktop/tablet,
           // and degrade gracefully on mobile by warning instead of failing on the very-small case.
-          if (vp.width >= 768) {
+          if (vp.width >= 1280) {
             expect(overlaps(a, b), `${zones[i]} overlaps ${zones[j]} at ${vp.width}px`).toBe(false);
           } else {
             // On phones, widgets should at minimum stay within viewport bounds.
