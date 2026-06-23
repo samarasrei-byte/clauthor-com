@@ -26,6 +26,7 @@ const PredictiveDashboard = lazy(() => import("./PredictiveDashboard"));
 const AgentDNA = lazy(() => import("./AgentDNA"));
 const MissionComposer = lazy(() => import("./MissionComposer"));
 const WarRoomLive = lazy(() => import("./WarRoomLive"));
+const IntelligenceHub = lazy(() => import("./IntelligenceHub"));
 
 interface Props {
   activeSection: string;
@@ -54,15 +55,20 @@ const DashboardSectionRenderer = ({
     <>
       {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
 
-      {activeSection === "insights" && (
+      {(activeSection === "insights" || activeSection === "intelligence-hub" ||
+        activeSection === "war-room-live" || activeSection === "predictive") && (
         <Suspense fallback={<SectionLoader />}>
-          <InsightsHub
+          <IntelligenceHub
             chartData={realChartData}
             totalExecutions={totalExecutions}
             recentLogs={recentLogs}
             locale={locale}
             onGoToAgents={() => onSetActiveSection("agents")}
             onNavigate={onNavigate}
+            defaultTab={
+              activeSection === "war-room-live" ? "war-room" :
+              activeSection === "predictive" ? "predictive" : "reports"
+            }
           />
         </Suspense>
       )}
@@ -115,10 +121,8 @@ const DashboardSectionRenderer = ({
 
       {/* Innovation modules */}
       {activeSection === "agent-replay" && <Suspense fallback={<SectionLoader />}><AgentReplay /></Suspense>}
-      {activeSection === "predictive" && <Suspense fallback={<SectionLoader />}><PredictiveDashboard /></Suspense>}
       {activeSection === "agent-dna" && <Suspense fallback={<SectionLoader />}><AgentDNA /></Suspense>}
       {activeSection === "mission-composer" && <Suspense fallback={<SectionLoader />}><MissionComposer /></Suspense>}
-      {activeSection === "war-room-live" && <Suspense fallback={<SectionLoader />}><WarRoomLive /></Suspense>}
 
       {/* Legacy routes kept accessible via internal navigation */}
       {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}

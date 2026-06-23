@@ -172,8 +172,12 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
   );
   const recentItems = useMemo(() => {
     const map = new Map(items.map(it => [it.id, it]));
-    return recent.map(id => map.get(id)).filter(Boolean) as SidebarItem[];
-  }, [items, recent]);
+    // Exclude the currently-active item so it doesn't duplicate the highlighted entry below.
+    return recent
+      .filter(id => id !== activeItem)
+      .map(id => map.get(id))
+      .filter(Boolean) as SidebarItem[];
+  }, [items, recent, activeItem]);
 
   const renderItem = (item: SidebarItem, idx: number, opts: { showGroupHeader?: boolean; compactRow?: boolean } = {}) => {
     const isActive = activeItem === item.id;
@@ -383,7 +387,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         )}
 
         {/* Recents */}
-        {!collapsed && !q && recentItems.length > 1 && (
+        {!collapsed && !q && recentItems.length > 0 && (
           <div className="mb-1">
             <div className="px-3 pt-2 pb-1.5 flex items-center gap-1.5">
               <Clock className="h-2.5 w-2.5 text-muted-foreground/50" strokeWidth={1.5} />
