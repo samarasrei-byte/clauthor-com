@@ -299,33 +299,42 @@ const ClientDashboard = () => {
   } : null;
 
   const mainGroup = t("dashboard.nav_main", { defaultValue: "Principal" });
+  const intelligenceGroup = t("dashboard.nav_intelligence", { defaultValue: "Inteligência" });
   const advancedGroup = t("dashboard.nav_advanced", { defaultValue: "Ferramentas Avançadas" });
   const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
 
   // Itens completos (vistos por admin). Cliente vê apenas o subset estável.
   const allSidebarItems: SidebarItem[] = [
+    // ─── Principal: navegação do dia-a-dia ───
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
     { id: "chat", label: "Chat", icon: MessageSquare, group: mainGroup },
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}`, group: mainGroup }] : []),
-    { id: "insights", label: t("dashboard.insights", { defaultValue: "Relatórios" }), icon: BarChart3, group: mainGroup },
     ...departmentSidebarItems,
     ...soloAgentItems,
+
+    // ─── Inteligência: relatórios, análise e visão preditiva ───
+    { id: "insights", label: t("dashboard.insights", { defaultValue: "Relatórios" }), icon: BarChart3, group: intelligenceGroup },
+    { id: "war-room-live", label: "War Room", icon: Radio, badge: "PRO", group: intelligenceGroup },
+    { id: "predictive", label: "Preditivo", icon: TrendingUp, badge: "PRO", group: intelligenceGroup },
+    { id: "neural-network", label: "Rede Neural", icon: Orbit, badge: "PRO", group: intelligenceGroup },
+    { id: "agent-replay", label: "Agent Replay", icon: Rewind, badge: "NOVO", group: intelligenceGroup },
+    { id: "agent-dna", label: "Agent DNA", icon: Dna, badge: "NOVO", group: intelligenceGroup },
+
+    // ─── Ferramentas Avançadas: produtividade e orquestração ───
     { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: advancedGroup },
     { id: "inbox", label: "Inbox", icon: Inbox, badge: "NOVO", group: advancedGroup },
     { id: "squads", label: "Squads", icon: Layers3, group: advancedGroup },
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: advancedGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: advancedGroup },
-    { id: "neural-network", label: "Rede Neural", icon: Orbit, badge: "PRO", group: advancedGroup },
-    { id: "war-room-live", label: "War Room", icon: Radio, badge: "PRO", group: advancedGroup },
-    { id: "agent-replay", label: "Agent Replay", icon: Rewind, badge: "NOVO", group: advancedGroup },
-    { id: "predictive", label: "Preditivo", icon: TrendingUp, badge: "PRO", group: advancedGroup },
-    { id: "agent-dna", label: "Agent DNA", icon: Dna, badge: "NOVO", group: advancedGroup },
     { id: "mission-composer", label: "Composer", icon: Workflow, badge: "PRO", group: advancedGroup },
+
+    // ─── Sistema: operações, integrações e ajustes ───
     { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Operações" }), icon: Radar, badge: pendingTaskCount || undefined, group: systemGroup },
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
+
 
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
   const CLIENT_ALLOWED = new Set([
