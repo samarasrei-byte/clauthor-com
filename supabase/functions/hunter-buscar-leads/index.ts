@@ -37,8 +37,14 @@ Deno.serve(async (req) => {
       .eq("user_id", user.id)
       .single();
 
-    const pbKey = Deno.env.get("PHANTOMBUSTER_API_KEY");
-    const searchAgentId = Deno.env.get("PHANTOMBUSTER_SEARCH_AGENT_ID");
+    // Per-tenant credentials (fallback to global env for backwards compatibility)
+    const { data: cfg } = await supabase
+      .from("hunter_config")
+      .select("phantombuster_api_key_encrypted, phantombuster_search_agent_id")
+      .eq("user_id", user.id)
+      .maybeSingle();
+    const pbKey = cfg?.phantombuster_api_key_encrypted || Deno.env.get("PHANTOMBUSTER_API_KEY");
+    const searchAgentId = cfg?.phantombuster_search_agent_id || Deno.env.get("PHANTOMBUSTER_SEARCH_AGENT_ID");
     const cookie = session?.linkedin_cookie;
 
     await supabase.from("hunter_logs").insert({
