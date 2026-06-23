@@ -1,4 +1,19 @@
-import { Suspense, useMemo, useRef, useState, useCallback } from "react";
+import { Suspense, useMemo, useRef, useState, useCallback, useEffect } from "react";
+
+// Pre-flight WebGL probe — avoids the R3F `Error creating WebGL context` crash
+// on devices/browsers without GPU acceleration (headless, locked-down enterprise, etc).
+const isWebGLAvailable = (): boolean => {
+  if (typeof window === "undefined") return false;
+  try {
+    const canvas = document.createElement("canvas");
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext("webgl2") || canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
+    );
+  } catch {
+    return false;
+  }
+};
 import { Canvas, useFrame, ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Float, Text, Billboard, Html } from "@react-three/drei";
 import * as THREE from "three";
@@ -560,24 +575,36 @@ export default function AgentNeuralNetwork() {
         )}
       </AnimatePresence>
 
-      {/* 3D Canvas */}
-      <Canvas
-        camera={{ position: [0, 3, 7], fov: 50 }}
-        dpr={[1, 1.5]}
-        gl={{ antialias: true, alpha: true, failIfMajorPerformanceCaveat: false, powerPreference: "default" }}
-        onCreated={({ gl }) => {
-          gl.domElement.addEventListener("webglcontextlost", (e) => e.preventDefault());
-        }}
-        style={{ background: "transparent" }}
-      >
-        <Suspense fallback={null}>
-          <NetworkScene
-            onSelectDept={setSelectedDept}
-            onSelectAgent={setSelectedAgent}
-            selectedDept={selectedDept}
-          />
-        </Suspense>
-      </Canvas>
+      {/* 3D Canvas — only mount if WebGL is available */}
+      {isWebGLAvailable() ? (
+        <Canvas
+          camera={{ position: [0, 3, 7], fov: 50 }}
+          dpr={[1, 1.5]}
+          gl={{ antialias: true, alpha: true, failIfMajorPerformanceCaveat: false, powerPreference: "default" }}
+          onCreated={({ gl }) => {
+            gl.domElement.addEventListener("webglcontextlost", (e) => e.preventDefault());
+          }}
+          style={{ background: "transparent" }}
+        >
+          <Suspense fallback={null}>
+            <NetworkScene
+              onSelectDept={setSelectedDept}
+              onSelectAgent={setSelectedAgent}
+              selectedDept={selectedDept}
+            />
+          </Suspense>
+        </Canvas>
+      ) : (
+        <div className="absolute inset-0 flex items-center justify-center p-6 text-center">
+          <div className="max-w-md space-y-2">
+            <h2 className="text-base font-semibold text-foreground">Rede Neural 3D indisponível</h2>
+            <p className="text-xs text-muted-foreground">
+              Seu navegador ou dispositivo não tem suporte a WebGL ativo. Ative a aceleração de hardware
+              ou abra em outro navegador (Chrome/Edge/Firefox) para visualizar a rede neural.
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Title */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 text-center">
