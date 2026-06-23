@@ -560,79 +560,24 @@ export default function AgentNeuralNetwork() {
         )}
       </AnimatePresence>
 
-      {/* 3D Canvas - with WebGL fallback */}
-      {(() => {
-        let hasWebGL = false;
-        try {
-          const c = document.createElement("canvas");
-          hasWebGL = !!(c.getContext("webgl2") || c.getContext("webgl") || c.getContext("experimental-webgl"));
-        } catch {
-          hasWebGL = false;
-        }
-        if (!hasWebGL) {
-          // 2D SVG fallback — radial neural map
-          const cx = 500, cy = 500, R = 340;
-          return (
-            <div className="absolute inset-0 flex items-center justify-center z-10">
-              <svg viewBox="0 0 1000 1000" className="w-full h-full max-w-[900px] max-h-[900px]">
-                <defs>
-                  <radialGradient id="coreGrad">
-                    <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
-                    <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0" />
-                  </radialGradient>
-                </defs>
-                {/* Core glow */}
-                <circle cx={cx} cy={cy} r={90} fill="url(#coreGrad)" />
-                <circle cx={cx} cy={cy} r={28} fill="hsl(var(--primary))" opacity="0.85">
-                  <animate attributeName="r" values="26;32;26" dur="3s" repeatCount="indefinite" />
-                </circle>
-                {WORKFORCE.map((dept, i) => {
-                  const angle = (i / WORKFORCE.length) * Math.PI * 2 - Math.PI / 2;
-                  const x = cx + Math.cos(angle) * R;
-                  const y = cy + Math.sin(angle) * R;
-                  const color = DEPT_COLORS[dept.id] || "#888";
-                  const isActive = selectedDept === dept.id;
-                  return (
-                    <g key={dept.id} onClick={() => setSelectedDept(isActive ? null : dept.id)} style={{ cursor: "pointer" }}>
-                      <line x1={cx} y1={cy} x2={x} y2={y} stroke={color} strokeOpacity={isActive ? 0.7 : 0.25} strokeWidth={isActive ? 2 : 1} />
-                      <circle cx={x} cy={y} r={isActive ? 24 : 18} fill={color} fillOpacity={0.18} stroke={color} strokeWidth={1.5}>
-                        <animate attributeName="r" values={`${isActive ? 24 : 18};${isActive ? 28 : 21};${isActive ? 24 : 18}`} dur={`${2 + (i % 3)}s`} repeatCount="indefinite" />
-                      </circle>
-                      <circle cx={x} cy={y} r={5} fill={color} />
-                      <text x={x} y={y + (Math.sin(angle) > 0 ? 44 : -30)} textAnchor="middle" fontSize="13" fill="hsl(var(--foreground))" fontWeight={isActive ? 700 : 500}>
-                        {ptDept(dept.name)}
-                      </text>
-                      <text x={x} y={y + (Math.sin(angle) > 0 ? 60 : -14)} textAnchor="middle" fontSize="10" fill="hsl(var(--muted-foreground))">
-                        {dept.squads.reduce((acc, s) => acc + s.agents.length, 0)} agentes
-                      </text>
-                    </g>
-                  );
-                })}
-                <text x={cx} y={cy + 5} textAnchor="middle" fontSize="14" fontWeight="700" fill="hsl(var(--primary-foreground))">CORE</text>
-              </svg>
-            </div>
-          );
-        }
-        return (
-          <Canvas
-            camera={{ position: [0, 3, 7], fov: 50 }}
-            dpr={[1, 1.5]}
-            gl={{ antialias: true, alpha: true, failIfMajorPerformanceCaveat: false, powerPreference: "default" }}
-            onCreated={({ gl }) => {
-              gl.domElement.addEventListener("webglcontextlost", (e) => e.preventDefault());
-            }}
-            style={{ background: "transparent" }}
-          >
-            <Suspense fallback={null}>
-              <NetworkScene
-                onSelectDept={setSelectedDept}
-                onSelectAgent={setSelectedAgent}
-                selectedDept={selectedDept}
-              />
-            </Suspense>
-          </Canvas>
-        );
-      })()}
+      {/* 3D Canvas */}
+      <Canvas
+        camera={{ position: [0, 3, 7], fov: 50 }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, alpha: true, failIfMajorPerformanceCaveat: false, powerPreference: "default" }}
+        onCreated={({ gl }) => {
+          gl.domElement.addEventListener("webglcontextlost", (e) => e.preventDefault());
+        }}
+        style={{ background: "transparent" }}
+      >
+        <Suspense fallback={null}>
+          <NetworkScene
+            onSelectDept={setSelectedDept}
+            onSelectAgent={setSelectedAgent}
+            selectedDept={selectedDept}
+          />
+        </Suspense>
+      </Canvas>
 
       {/* Title */}
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-20 text-center">
