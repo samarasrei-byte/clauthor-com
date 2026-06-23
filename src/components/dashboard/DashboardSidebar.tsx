@@ -172,8 +172,12 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
   );
   const recentItems = useMemo(() => {
     const map = new Map(items.map(it => [it.id, it]));
-    return recent.map(id => map.get(id)).filter(Boolean) as SidebarItem[];
-  }, [items, recent]);
+    // Exclude the currently-active item so it doesn't duplicate the highlighted entry below.
+    return recent
+      .filter(id => id !== activeItem)
+      .map(id => map.get(id))
+      .filter(Boolean) as SidebarItem[];
+  }, [items, recent, activeItem]);
 
   const renderItem = (item: SidebarItem, idx: number, opts: { showGroupHeader?: boolean; compactRow?: boolean } = {}) => {
     const isActive = activeItem === item.id;
