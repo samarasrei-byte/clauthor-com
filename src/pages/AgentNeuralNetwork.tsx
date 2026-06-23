@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useRef, useState, useCallback, useEffect } from "react";
+import { Suspense, useMemo, useRef, useState, useCallback } from "react";
 
 // Pre-flight WebGL probe — avoids the R3F `Error creating WebGL context` crash
 // on devices/browsers without GPU acceleration (headless, locked-down enterprise, etc).
