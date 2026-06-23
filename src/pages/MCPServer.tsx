@@ -119,16 +119,15 @@ export default function MCPServer() {
     [],
   );
 
+  useEffect(() => {
+    document.title = "MCP Server — CLAUTHOR | Conecte 206 agentes ao Claude Code, Cursor e Claude Desktop";
+    const meta = document.querySelector('meta[name="description"]') ?? document.head.appendChild(Object.assign(document.createElement("meta"), { name: "description" }));
+    meta.setAttribute("content", "Setup do CLAUTHOR MCP Server: expõe 206 agentes WORKFORCE como tools nativas para Claude Code, Claude Desktop, Cursor e qualquer cliente MCP.");
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
-      <Helmet>
-        <title>MCP Server — CLAUTHOR | Conecte 206 agentes ao Claude Code, Cursor e Claude Desktop</title>
-        <meta
-          name="description"
-          content="Setup do CLAUTHOR MCP Server: expõe 206 agentes WORKFORCE como tools nativas para Claude Code, Claude Desktop, Cursor e qualquer cliente MCP."
-        />
-        <link rel="canonical" href="https://clauthor.com/mcp" />
-      </Helmet>
+
 
       <div className="max-w-5xl mx-auto px-6 py-10 space-y-10">
         {/* Header */}
