@@ -102,8 +102,8 @@ const DashboardLayout = () => {
         <Outlet />
       </div>
 
-      <LiveTasksTicker />
-      <HelpButton />
+      <FloatingDock />
+
     </div>
   );
 };
