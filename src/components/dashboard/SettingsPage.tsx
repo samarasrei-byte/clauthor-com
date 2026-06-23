@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings, User, Users, CreditCard, MessageSquare, Bot, Link2, Database } from "lucide-react";
+import { Settings, User, Users, CreditCard, MessageSquare, Bot, Link2, Database, Plug } from "lucide-react";
 import HelpTooltip from "@/components/HelpTooltip";
 import AgentSettings from "./AgentSettings";
 import UserProfileEditor from "./UserProfileEditor";
@@ -11,6 +11,7 @@ import CredentialsHub from "./CredentialsHub";
 import { useTranslation } from "react-i18next";
 
 const KnowledgeBase = lazy(() => import("@/pages/KnowledgeBase"));
+const Integrations = lazy(() => import("@/pages/Integrations"));
 import SectionLoader from "@/components/ui/section-loader";
 
 interface SettingsPageProps {
@@ -25,6 +26,7 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
   const tabs = [
     { id: "agents", label: t("settings.tab_agents", { defaultValue: "Configurações" }), icon: Bot },
     { id: "credentials", label: t("settings.tab_credentials", { defaultValue: "Conexões" }), icon: Link2 },
+    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug },
     { id: "knowledge", label: t("dashboard.knowledge_base", { defaultValue: "Knowledge Base" }), icon: Database },
     { id: "profile", label: t("settings.tab_profile", { defaultValue: "Meu Perfil" }), icon: User },
     { id: "team", label: t("settings.tab_team", { defaultValue: "Equipe" }), icon: Users },
@@ -61,6 +63,12 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
 
         <TabsContent value="credentials">
           <CredentialsHub />
+        </TabsContent>
+
+        <TabsContent value="integrations">
+          <Suspense fallback={<SectionLoader />}>
+            <Integrations />
+          </Suspense>
         </TabsContent>
 
         <TabsContent value="knowledge">
