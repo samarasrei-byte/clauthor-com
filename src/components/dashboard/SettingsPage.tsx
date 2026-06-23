@@ -89,6 +89,7 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
         <TabsContent value="billing">
           <div className="space-y-4">
             {billingContent}
+            <OutcomePricingRules />
             <CouponRedeemer />
           </div>
         </TabsContent>
