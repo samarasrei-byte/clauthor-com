@@ -16,7 +16,7 @@ interface IntelligenceHubProps {
   locale: string;
   onNavigate: (id: string) => void;
   onGoToAgents: () => void;
-  defaultTab?: "reports" | "war-room" | "predictive";
+  defaultTab?: "reports" | "war-room" | "predictive" | "outcomes";
 }
 
 /**
