@@ -40,6 +40,8 @@ const Community = lazyRetry(() => import("./pages/Community"));
 const CreateAgent = lazyRetry(() => import("./pages/CreateAgent"));
 const CreateWorkforce = lazyRetry(() => import("./pages/CreateWorkforce"));
 const Integrations = lazyRetry(() => import("./pages/Integrations"));
+const MCPServer = lazyRetry(() => import("./pages/MCPServer"));
+
 const Auth = lazyRetry(() => import("./pages/Auth"));
 const NotFound = lazyRetry(() => import("./pages/NotFound"));
 const AgentLanding = lazyRetry(() => import("./pages/AgentLanding"));
@@ -161,6 +163,8 @@ const App = () => (
                   <Route path="/create-agent" element={<CreateWorkforce />} />
                   <Route path="/create-agent/classic" element={<CreateAgent />} />
                   <Route path="/integrations" element={<Integrations />} />
+                  <Route path="/mcp" element={<MCPServer />} />
+
                   <Route path="/knowledge-base" element={<KnowledgeBase />} />
                   <Route path="/monix" element={<MonixCommandCenter />} />
                   <Route path="/omnix" element={<OmnixCommandCenter />} />
