@@ -56,7 +56,21 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
     try { return localStorage.getItem(LS_KEYS.collapsed) === "1"; } catch { return false; }
   });
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => readSet(LS_KEYS.expanded));
-  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(() => readSet(LS_KEYS.sections));
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(() => {
+    const stored = readSet(LS_KEYS.sections);
+    // Default: "Avançado/Advanced" sections start collapsed for a cleaner sidebar
+    if (stored.size === 0) {
+      try {
+        const seen = localStorage.getItem("sb:sections-seeded");
+        if (!seen) {
+          localStorage.setItem("sb:sections-seeded", "1");
+          return new Set(["Avançado", "Advanced"]);
+        }
+      } catch { /* noop */ }
+    }
+    return stored;
+  });
+
   const [pinned, setPinned] = useState<Set<string>>(() => readSet(LS_KEYS.pinned));
   const [recent, setRecent] = useState<string[]>(() => readList(LS_KEYS.recent));
   const [query, setQuery] = useState("");
