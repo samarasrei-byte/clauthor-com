@@ -46,7 +46,7 @@ const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
 
 const AgentChat = lazyRetry(() => import("@/components/dashboard/AgentChat"));
 const OmnixCommandCenter = lazyRetry(() => import("@/pages/OmnixCommandCenter"));
-const ThorLiveGuide = lazyRetry(() => import("@/components/dashboard/ThorLiveGuide"));
+import { useFloatingDock } from "@/components/dashboard/FloatingDock";
 const QuickStartWizard = lazy(() => import("@/components/dashboard/QuickStartWizard"));
 
 const ClientDashboard = () => {
@@ -624,15 +624,8 @@ const ClientDashboard = () => {
         </div>
       </div>
 
-      {showLiveGuide && !hasPendingCheckout && (
-        <Suspense fallback={null}>
-          <ThorLiveGuide
-            activeSection={activeSection}
-            onNavigate={handleSidebarNav}
-            onDismiss={() => { setShowLiveGuide(false); localStorage.setItem("clauthor_live_guide_dismissed", "true"); }}
-          />
-        </Suspense>
-      )}
+      {/* ThorLiveGuide is rendered globally by FloatingDock (bottom-center zone). */}
+
 
       {!hasPendingCheckout && (
         <Suspense fallback={null}>
