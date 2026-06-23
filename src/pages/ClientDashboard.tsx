@@ -362,6 +362,22 @@ const ClientDashboard = () => {
     setActiveSection(id);
   };
 
+  // Register Thor in the FloatingDock (bottom-center reserved zone).
+  const { registerThor } = useFloatingDock();
+  const dismissLiveGuide = useCallback(() => {
+    setShowLiveGuide(false);
+    localStorage.setItem("clauthor_live_guide_dismissed", "true");
+  }, []);
+  useEffect(() => {
+    if (showLiveGuide && !hasPendingCheckout) {
+      registerThor({ activeSection, onNavigate: handleSidebarNav, onDismiss: dismissLiveGuide });
+    } else {
+      registerThor(null);
+    }
+    return () => registerThor(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showLiveGuide, hasPendingCheckout, activeSection]);
+
   const handleBack = () => {
     setActiveSection(previousSection || "overview");
     setPreviousSection(null);
