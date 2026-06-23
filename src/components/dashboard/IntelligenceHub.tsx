@@ -57,6 +57,10 @@ const IntelligenceHub = ({
             <TrendingUp className="h-3.5 w-3.5" />
             {t("dashboard.intelligence_tab_predictive", { defaultValue: "Preditivo" })}
           </TabsTrigger>
+          <TabsTrigger value="outcomes" className="gap-1.5 text-xs">
+            <DollarSign className="h-3.5 w-3.5" />
+            {t("dashboard.intelligence_tab_outcomes", { defaultValue: "Receita por Resultado" })}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="reports" className="mt-4">
