@@ -102,9 +102,11 @@ const DashboardLayout = () => {
         <Outlet />
       </div>
 
-      
+      <LiveTasksTicker />
+      <HelpButton />
     </div>
   );
 };
+
 
 export default DashboardLayout;
