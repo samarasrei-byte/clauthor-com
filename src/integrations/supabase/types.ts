@@ -1895,6 +1895,141 @@ export type Database = {
           },
         ]
       }
+      outcome_events: {
+        Row: {
+          agent_id: string | null
+          agent_slug: string | null
+          billed_at: string | null
+          computed_charge_brl: number
+          created_at: string
+          id: string
+          invoice_id: string | null
+          metadata: Json
+          outcome_type: Database["public"]["Enums"]["outcome_type"]
+          paid_at: string | null
+          pricing_rule_id: string | null
+          reference_id: string | null
+          status: Database["public"]["Enums"]["outcome_status"]
+          tenant_id: string
+          updated_at: string
+          user_id: string
+          value_brl: number
+        }
+        Insert: {
+          agent_id?: string | null
+          agent_slug?: string | null
+          billed_at?: string | null
+          computed_charge_brl?: number
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          metadata?: Json
+          outcome_type: Database["public"]["Enums"]["outcome_type"]
+          paid_at?: string | null
+          pricing_rule_id?: string | null
+          reference_id?: string | null
+          status?: Database["public"]["Enums"]["outcome_status"]
+          tenant_id: string
+          updated_at?: string
+          user_id: string
+          value_brl?: number
+        }
+        Update: {
+          agent_id?: string | null
+          agent_slug?: string | null
+          billed_at?: string | null
+          computed_charge_brl?: number
+          created_at?: string
+          id?: string
+          invoice_id?: string | null
+          metadata?: Json
+          outcome_type?: Database["public"]["Enums"]["outcome_type"]
+          paid_at?: string | null
+          pricing_rule_id?: string | null
+          reference_id?: string | null
+          status?: Database["public"]["Enums"]["outcome_status"]
+          tenant_id?: string
+          updated_at?: string
+          user_id?: string
+          value_brl?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "outcome_events_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "outcome_events_pricing_rule_id_fkey"
+            columns: ["pricing_rule_id"]
+            isOneToOne: false
+            referencedRelation: "outcome_pricing_rules"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "outcome_events_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      outcome_pricing_rules: {
+        Row: {
+          agent_slug: string | null
+          created_at: string
+          created_by: string | null
+          id: string
+          is_active: boolean
+          max_charge_brl: number | null
+          min_charge_brl: number
+          outcome_type: Database["public"]["Enums"]["outcome_type"]
+          percentage: number
+          price_brl: number
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          agent_slug?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          max_charge_brl?: number | null
+          min_charge_brl?: number
+          outcome_type: Database["public"]["Enums"]["outcome_type"]
+          percentage?: number
+          price_brl?: number
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          agent_slug?: string | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          is_active?: boolean
+          max_charge_brl?: number | null
+          min_charge_brl?: number
+          outcome_type?: Database["public"]["Enums"]["outcome_type"]
+          percentage?: number
+          price_brl?: number
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "outcome_pricing_rules_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payment_history: {
         Row: {
           amount_cents: number
@@ -2824,6 +2959,15 @@ export type Database = {
         | "showcase"
         | "anuncios"
         | "geral"
+      outcome_status: "pending" | "billed" | "paid" | "disputed" | "voided"
+      outcome_type:
+        | "lead_qualified"
+        | "meeting_booked"
+        | "contract_signed"
+        | "sale_closed"
+        | "document_generated"
+        | "task_completed"
+        | "custom"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2960,6 +3104,16 @@ export const Constants = {
         "showcase",
         "anuncios",
         "geral",
+      ],
+      outcome_status: ["pending", "billed", "paid", "disputed", "voided"],
+      outcome_type: [
+        "lead_qualified",
+        "meeting_booked",
+        "contract_signed",
+        "sale_closed",
+        "document_generated",
+        "task_completed",
+        "custom",
       ],
     },
   },

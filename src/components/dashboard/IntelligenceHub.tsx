@@ -1,12 +1,13 @@
 import { useState, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart3, Radio, TrendingUp } from "lucide-react";
+import { BarChart3, Radio, TrendingUp, DollarSign } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
 
 const InsightsHub = lazy(() => import("./InsightsHub"));
 const WarRoomLive = lazy(() => import("./WarRoomLive"));
 const PredictiveDashboard = lazy(() => import("./PredictiveDashboard"));
+const OutcomeBilling = lazy(() => import("./OutcomeBilling"));
 
 interface IntelligenceHubProps {
   chartData: any[];
@@ -15,7 +16,7 @@ interface IntelligenceHubProps {
   locale: string;
   onNavigate: (id: string) => void;
   onGoToAgents: () => void;
-  defaultTab?: "reports" | "war-room" | "predictive";
+  defaultTab?: "reports" | "war-room" | "predictive" | "outcomes";
 }
 
 /**
@@ -56,6 +57,10 @@ const IntelligenceHub = ({
             <TrendingUp className="h-3.5 w-3.5" />
             {t("dashboard.intelligence_tab_predictive", { defaultValue: "Preditivo" })}
           </TabsTrigger>
+          <TabsTrigger value="outcomes" className="gap-1.5 text-xs">
+            <DollarSign className="h-3.5 w-3.5" />
+            {t("dashboard.intelligence_tab_outcomes", { defaultValue: "Receita por Resultado" })}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="reports" className="mt-4">
@@ -80,6 +85,12 @@ const IntelligenceHub = ({
         <TabsContent value="predictive" className="mt-4">
           <Suspense fallback={<SectionLoader />}>
             <PredictiveDashboard />
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="outcomes" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <OutcomeBilling />
           </Suspense>
         </TabsContent>
       </Tabs>
