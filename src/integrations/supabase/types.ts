@@ -2615,6 +2615,42 @@ export type Database = {
         }
         Relationships: []
       }
+      workforce_agents_catalog: {
+        Row: {
+          created_at: string
+          department: string
+          id: string
+          name: string
+          responsibilities: string[]
+          slug: string
+          squad: string
+          triggers: string[]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department: string
+          id?: string
+          name: string
+          responsibilities?: string[]
+          slug: string
+          squad: string
+          triggers?: string[]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department?: string
+          id?: string
+          name?: string
+          responsibilities?: string[]
+          slug?: string
+          squad?: string
+          triggers?: string[]
+          updated_at?: string
+        }
+        Relationships: []
+      }
       workforce_blueprints: {
         Row: {
           blueprint: Json
