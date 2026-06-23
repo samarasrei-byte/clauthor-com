@@ -313,10 +313,8 @@ const ClientDashboard = () => {
     ...departmentSidebarItems,
     ...soloAgentItems,
 
-    // ─── Inteligência: relatórios, análise e visão preditiva ───
-    { id: "insights", label: t("dashboard.insights", { defaultValue: "Relatórios" }), icon: BarChart3, group: intelligenceGroup },
-    { id: "war-room-live", label: "War Room", icon: Radio, badge: "PRO", group: intelligenceGroup },
-    { id: "predictive", label: "Preditivo", icon: TrendingUp, badge: "PRO", group: intelligenceGroup },
+    // ─── Inteligência: hub unificado (Relatórios + War Room + Preditivo) ───
+    { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3, group: intelligenceGroup },
     { id: "neural-network", label: "Rede Neural", icon: Orbit, badge: "PRO", group: intelligenceGroup },
     { id: "agent-replay", label: "Agent Replay", icon: Rewind, badge: "NOVO", group: intelligenceGroup },
     { id: "agent-dna", label: "Agent DNA", icon: Dna, badge: "NOVO", group: intelligenceGroup },
@@ -329,9 +327,8 @@ const ClientDashboard = () => {
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: advancedGroup },
     { id: "mission-composer", label: "Composer", icon: Workflow, badge: "PRO", group: advancedGroup },
 
-    // ─── Sistema: operações, integrações e ajustes ───
+    // ─── Sistema: operações e ajustes (Integrações movido para Configurações) ───
     { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Operações" }), icon: Radar, badge: pendingTaskCount || undefined, group: systemGroup },
-    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
   ];
 
@@ -339,9 +336,9 @@ const ClientDashboard = () => {
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "chat", "agent-chat-active",
-    "insights", "omnix", "empresa", "kanban",
-    "neural-network", "war-room-live", "predictive",
-    "operations-center", "integrations", "settings",
+    "intelligence-hub", "omnix", "empresa", "kanban",
+    "neural-network",
+    "operations-center", "settings",
   ]);
   const sidebarItems: SidebarItem[] = isAdmin
     ? allSidebarItems
