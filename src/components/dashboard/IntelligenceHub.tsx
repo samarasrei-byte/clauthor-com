@@ -1,4 +1,5 @@
 import { useState, lazy, Suspense } from "react";
+import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart3, Radio, TrendingUp } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
@@ -25,27 +26,35 @@ const IntelligenceHub = ({
   chartData, totalExecutions, recentLogs, locale,
   onNavigate, onGoToAgents, defaultTab = "reports",
 }: IntelligenceHubProps) => {
+  const { t } = useTranslation();
   const [tab, setTab] = useState<string>(defaultTab);
 
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="font-display text-xl font-bold">Inteligência</h2>
+        <h2 className="font-display text-xl font-bold">
+          {t("dashboard.intelligence_hub", { defaultValue: "Inteligência" })}
+        </h2>
         <p className="text-sm text-muted-foreground mt-1">
-          Relatórios, War Room ao vivo e visão preditiva em um único lugar.
+          {t("dashboard.intelligence_hub_subtitle", {
+            defaultValue: "Relatórios, War Room ao vivo e visão preditiva em um único lugar.",
+          })}
         </p>
       </div>
 
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="bg-muted/30 p-1">
           <TabsTrigger value="reports" className="gap-1.5 text-xs">
-            <BarChart3 className="h-3.5 w-3.5" /> Relatórios
+            <BarChart3 className="h-3.5 w-3.5" />
+            {t("dashboard.intelligence_tab_reports", { defaultValue: "Relatórios" })}
           </TabsTrigger>
           <TabsTrigger value="war-room" className="gap-1.5 text-xs">
-            <Radio className="h-3.5 w-3.5" /> War Room
+            <Radio className="h-3.5 w-3.5" />
+            {t("dashboard.intelligence_tab_war_room", { defaultValue: "War Room" })}
           </TabsTrigger>
           <TabsTrigger value="predictive" className="gap-1.5 text-xs">
-            <TrendingUp className="h-3.5 w-3.5" /> Preditivo
+            <TrendingUp className="h-3.5 w-3.5" />
+            {t("dashboard.intelligence_tab_predictive", { defaultValue: "Preditivo" })}
           </TabsTrigger>
         </TabsList>
 
