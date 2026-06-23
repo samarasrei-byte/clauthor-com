@@ -56,7 +56,21 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
     try { return localStorage.getItem(LS_KEYS.collapsed) === "1"; } catch { return false; }
   });
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => readSet(LS_KEYS.expanded));
-  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(() => readSet(LS_KEYS.sections));
+  const [collapsedSections, setCollapsedSections] = useState<Set<string>>(() => {
+    const stored = readSet(LS_KEYS.sections);
+    // Default: "Avançado/Advanced" sections start collapsed for a cleaner sidebar
+    if (stored.size === 0) {
+      try {
+        const seen = localStorage.getItem("sb:sections-seeded");
+        if (!seen) {
+          localStorage.setItem("sb:sections-seeded", "1");
+          return new Set(["Avançado", "Advanced"]);
+        }
+      } catch { /* noop */ }
+    }
+    return stored;
+  });
+
   const [pinned, setPinned] = useState<Set<string>>(() => readSet(LS_KEYS.pinned));
   const [recent, setRecent] = useState<string[]>(() => readList(LS_KEYS.recent));
   const [query, setQuery] = useState("");
@@ -393,17 +407,6 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
         )}
       </nav>
 
-      {/* Footer hint */}
-      {!collapsed && (
-        <div className="px-3 py-2 border-t border-border/10 flex items-center justify-between text-[9px] text-muted-foreground/50">
-          <span className="flex items-center gap-1">
-            <kbd className="bg-muted/30 border border-border/30 rounded px-1 py-0.5">/</kbd> buscar
-          </span>
-          <span className="flex items-center gap-1">
-            <kbd className="bg-muted/30 border border-border/30 rounded px-1 py-0.5">[</kbd> colapsar
-          </span>
-        </div>
-      )}
     </motion.aside>
   );
 };
