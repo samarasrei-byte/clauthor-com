@@ -15,7 +15,7 @@ const isWebGLAvailable = (): boolean => {
   }
 };
 import { Canvas, useFrame, ThreeEvent } from "@react-three/fiber";
-import { OrbitControls, Float, Text, Billboard, Html } from "@react-three/drei";
+import { OrbitControls, Float, Text, Billboard } from "@react-three/drei";
 import * as THREE from "three";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 // Estrutura oficial Clauthor: CEO Virtual (orquestrador) + 9 departamentos com sub-especialidades
