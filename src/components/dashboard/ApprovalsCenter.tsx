@@ -5,8 +5,11 @@ import {
   CheckCircle2, XCircle, MessageSquareWarning, RefreshCw, Clock,
   TrendingUp, ListChecks, Sparkles, Eye, History, Send, Heart,
   MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram,
-  ArrowUpRight, Wand2, Zap, ShieldCheck, Images,
+  ArrowUpRight, Wand2, Zap, ShieldCheck, Images, Pencil, Save, X,
+  FileSignature, FileText, FileCheck2, Film, Image as ImageIcon,
+  StickyNote, CalendarDays, DollarSign,
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
@@ -30,7 +33,7 @@ import approvalSlide7 from "@/assets/approval-carousel/approval-slide-7.png.asse
 
 
 type Status = "pending" | "in_revision" | "approved" | "rejected";
-type DeliveryType = "creative" | "video" | "article" | "post" | "email" | "landing" | "report" | "automation" | "other";
+type DeliveryType = "creative" | "video" | "article" | "post" | "email" | "landing" | "report" | "automation" | "stories" | "document" | "contract" | "proposal" | "other";
 
 interface Approval {
   id: string;
@@ -67,7 +70,8 @@ interface AppComment {
 const DELIVERY_LABEL: Record<DeliveryType, string> = {
   creative: "Criativo", video: "Vídeo", article: "Artigo", post: "Post Social",
   email: "E-mail", landing: "Landing Page", report: "Relatório",
-  automation: "Automação", other: "Outro",
+  automation: "Automação", stories: "Stories", document: "Documento",
+  contract: "Contrato", proposal: "Proposta", other: "Outro",
 };
 
 const STATUS_META: Record<Status, { label: string; chip: string; dot: string; icon: React.ElementType }> = {
@@ -155,7 +159,103 @@ const DEMO_APPROVALS: Approval[] = [
     __demo: true,
     content: { headline: "Sua equipe de IA, montada em 5 minutos" },
   },
+  {
+    id: "demo-contract-1",
+    title: "Contrato — Prestação de serviços (Cliente Aurora Ltda)",
+    delivery_type: "contract",
+    status: "pending",
+    preview_url: null,
+    current_version: 1,
+    agent_id: null,
+    agent_name: "Lex · Legal Agent",
+    created_at: new Date(now - 1000 * 60 * 45).toISOString(),
+    updated_at: new Date(now - 1000 * 60 * 10).toISOString(),
+    approved_at: null,
+    __demo: true,
+    content: {
+      contract_party_a: "Clauthor Tecnologia LTDA",
+      contract_party_b: "Aurora Marketing LTDA",
+      contract_value: "R$ 18.500,00 / mês",
+      contract_term: "12 meses, renovação automática",
+      clauses: [
+        "Objeto: licenciamento da plataforma Clauthor + 4 agentes dedicados.",
+        "Pagamento: dia 5 de cada mês via Pix ou boleto.",
+        "Confidencialidade mútua por 5 anos após o término.",
+        "Foro eleito: comarca de São Paulo / SP.",
+      ],
+      signature_required: true,
+    },
+  },
+  {
+    id: "demo-proposal-1",
+    title: "Proposta Comercial — Squad de Vendas IA",
+    delivery_type: "proposal",
+    status: "pending",
+    preview_url: null,
+    current_version: 1,
+    agent_id: null,
+    agent_name: "Nova · Sales Agent",
+    created_at: new Date(now - 1000 * 60 * 90).toISOString(),
+    updated_at: new Date(now - 1000 * 60 * 90).toISOString(),
+    approved_at: null,
+    __demo: true,
+    content: {
+      client: "TechFlow Soluções",
+      headline: "Squad de Vendas com IA — 3 agentes 24/7",
+      summary: "Time autônomo cobrindo prospecção, qualificação e follow-up. Setup em 7 dias.",
+      items: [
+        { title: "Hunter — prospecção LinkedIn", price: "R$ 2.900/mês" },
+        { title: "SDR — qualificação por WhatsApp", price: "R$ 3.400/mês" },
+        { title: "Closer — follow-up e fechamento", price: "R$ 4.200/mês" },
+      ],
+      total: "R$ 10.500/mês",
+      validity: "Válido por 7 dias",
+    },
+  },
+  {
+    id: "demo-stories-1",
+    title: "Stories — Anúncio Black Friday (3 frames)",
+    delivery_type: "stories",
+    status: "pending",
+    preview_url: null,
+    current_version: 1,
+    agent_id: null,
+    agent_name: "Pixel · Creative Agent",
+    created_at: new Date(now - 1000 * 60 * 15).toISOString(),
+    updated_at: new Date(now - 1000 * 60 * 15).toISOString(),
+    approved_at: null,
+    __demo: true,
+    content: {
+      caption: "Stories vertical 9:16 — gancho forte, CTA clicável, swipe up para checkout.",
+      cta: "Arrasta pra cima",
+    },
+  },
+  {
+    id: "demo-document-1",
+    title: "Documento — Briefing de campanha Q4",
+    delivery_type: "document",
+    status: "in_revision",
+    preview_url: null,
+    current_version: 2,
+    agent_id: null,
+    agent_name: "Sage · Strategy Agent",
+    created_at: new Date(now - 1000 * 60 * 60 * 5).toISOString(),
+    updated_at: new Date(now - 1000 * 60 * 40).toISOString(),
+    approved_at: null,
+    __demo: true,
+    content: {
+      doc_title: "Campanha Q4 — Estratégia 360º",
+      sections: [
+        "1. Contexto e objetivos",
+        "2. Persona, dor e gatilhos",
+        "3. Mix de canais e calendário",
+        "4. KPIs e metas de conversão",
+      ],
+    },
+  },
 ];
+
+
 
 
 const ApprovalsCenter = () => {
@@ -166,6 +266,14 @@ const ApprovalsCenter = () => {
   const [selected, setSelected] = useState<Approval | null>(null);
   const [feedbackOpen, setFeedbackOpen] = useState<{ mode: "reject" | "request_changes"; approval: Approval } | null>(null);
   const [feedbackText, setFeedbackText] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<any>(null);
+  const [quickNote, setQuickNote] = useState("");
+
+  useEffect(() => {
+    if (selected) { setDraft(selected.content); setEditing(false); setQuickNote(""); }
+  }, [selected?.id]);
+
 
   const { data: real = [], isLoading } = useQuery({
     queryKey: ["approvals", tenantId],
@@ -283,6 +391,49 @@ const ApprovalsCenter = () => {
     },
   });
 
+  const saveEdits = useMutation({
+    mutationFn: async ({ approval, newContent }: { approval: Approval; newContent: any }) => {
+      if (approval.__demo) return;
+      const nextV = approval.current_version + 1;
+      await supabase.from("approval_versions").insert({
+        approval_id: approval.id, tenant_id: tenantId, version_number: nextV,
+        content: newContent, preview_url: approval.preview_url,
+        generated_by_agent: approval.agent_id, notes: "Edição manual no card de aprovação",
+      });
+      await supabase.from("approvals")
+        .update({ content: newContent, current_version: nextV, status: "pending" })
+        .eq("id", approval.id);
+      await supabase.from("approval_actions").insert({
+        approval_id: approval.id, tenant_id: tenantId, user_id: user!.id,
+        action: "edit_inline", details: { version: nextV },
+      });
+    },
+    onSuccess: (_, vars) => {
+      toast.success(vars.approval.__demo ? "Exemplo: alterações aplicadas" : "Alterações salvas como nova versão");
+      qc.invalidateQueries({ queryKey: ["approvals", tenantId] });
+      setEditing(false);
+      // refletir localmente
+      setSelected((s) => s ? { ...s, content: vars.newContent } : s);
+    },
+  });
+
+  const addQuickNote = useMutation({
+    mutationFn: async ({ approval, body }: { approval: Approval; body: string }) => {
+      if (approval.__demo) return;
+      await supabase.from("approval_comments").insert({
+        approval_id: approval.id, tenant_id: tenantId, user_id: user!.id,
+        body, is_rejection_reason: false, version_number: approval.current_version,
+      });
+    },
+    onSuccess: (_, vars) => {
+      toast.success(vars.approval.__demo ? "Exemplo: observação registrada" : "Observação registrada");
+      qc.invalidateQueries({ queryKey: ["approval-comments", vars.approval.id] });
+      setQuickNote("");
+    },
+  });
+
+
+
   // ── Metrics ──
   const metrics = useMemo(() => {
     const total = approvals.length;
@@ -296,7 +447,9 @@ const ApprovalsCenter = () => {
       return Math.round(sum / done.length / 3600000);
     })();
     const revisions = approvals.reduce((acc, a) => acc + Math.max(0, a.current_version - 1), 0);
-    return { total, approved, pending, rate, avgHours, revisions };
+    const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
+    const today = approvals.filter((a) => new Date(a.created_at) >= startOfDay).length;
+    return { total, approved, pending, rate, avgHours, revisions, today };
   }, [approvals]);
 
   const filtered = approvals.filter((a) => a.status === tab);
@@ -337,7 +490,8 @@ const ApprovalsCenter = () => {
       </div>
 
       {/* ── Metrics ─────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+        <MetricCard icon={CalendarDays} label="Hoje"         value={metrics.today}   accent="primary" />
         <MetricCard icon={ListChecks}   label="Geradas"      value={metrics.total} />
         <MetricCard icon={CheckCircle2} label="Aprovadas"    value={metrics.approved} accent="emerald" />
         <MetricCard icon={Clock}        label="Pendentes"    value={metrics.pending}  accent="amber" />
@@ -345,6 +499,8 @@ const ApprovalsCenter = () => {
         <MetricCard icon={Sparkles}     label="Tempo médio"  value={`${metrics.avgHours}h`} />
         <MetricCard icon={RefreshCw}    label="Revisões"     value={metrics.revisions} accent="sky" />
       </div>
+
+
 
       {/* ── Tabs ────────────────────────────────────────────────── */}
       <Tabs value={tab} onValueChange={(v) => setTab(v as Status)}>
@@ -414,7 +570,26 @@ const ApprovalsCenter = () => {
                     <Badge variant="secondary">{DELIVERY_LABEL[selected.delivery_type]}</Badge>
                     <span>há {timeAgo(selected.created_at)}</span>
                   </div>
-                  <SheetTitle className="text-xl mt-2">{selected.title}</SheetTitle>
+                  <div className="flex items-start justify-between gap-3 mt-2">
+                    <SheetTitle className="text-xl">{selected.title}</SheetTitle>
+                    {!editing ? (
+                      <Button size="sm" variant="outline" className="gap-1.5 shrink-0"
+                        onClick={() => { setDraft(selected.content); setEditing(true); }}>
+                        <Pencil className="h-3.5 w-3.5" /> Editar
+                      </Button>
+                    ) : (
+                      <div className="flex gap-1.5 shrink-0">
+                        <Button size="sm" variant="ghost" className="gap-1.5"
+                          onClick={() => { setEditing(false); setDraft(selected.content); }}>
+                          <X className="h-3.5 w-3.5" /> Cancelar
+                        </Button>
+                        <Button size="sm" className="gap-1.5"
+                          onClick={() => saveEdits.mutate({ approval: selected, newContent: draft })}>
+                          <Save className="h-3.5 w-3.5" /> Salvar + OK
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                   {selected.agent_name && (
                     <div className="text-xs text-muted-foreground flex items-center gap-1.5">
                       <Sparkles className="h-3 w-3 text-primary" /> Gerado por {selected.agent_name}
@@ -424,7 +599,34 @@ const ApprovalsCenter = () => {
               </div>
 
               <div className="p-6 space-y-6">
-                <PreviewBlock approval={selected} />
+                <PreviewBlock
+                  approval={selected}
+                  editing={editing}
+                  draft={draft}
+                  setDraft={setDraft}
+                />
+
+                {/* Observação rápida no próprio card */}
+                <div className="rounded-xl border border-border/50 bg-muted/20 p-3 space-y-2">
+                  <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                    <StickyNote className="h-3 w-3" /> Observação rápida neste {DELIVERY_LABEL[selected.delivery_type].toLowerCase()}
+                  </div>
+                  <Textarea
+                    value={quickNote}
+                    onChange={(e) => setQuickNote(e.target.value)}
+                    rows={2}
+                    placeholder={`Ex: ${selected.delivery_type === "video" ? "Cortar os 2s finais e legendar." : selected.delivery_type === "contract" ? "Revisar cláusula 3 antes de assinar." : "Deixar o título mais direto."}`}
+                    className="resize-none text-sm"
+                  />
+                  <div className="flex justify-end">
+                    <Button size="sm" variant="outline" className="gap-1.5"
+                      disabled={!quickNote.trim() || addQuickNote.isPending}
+                      onClick={() => addQuickNote.mutate({ approval: selected, body: quickNote.trim() })}>
+                      <Send className="h-3 w-3" /> Anexar observação
+                    </Button>
+                  </div>
+                </div>
+
 
                 <Section icon={History} title="Histórico de versões">
                   <div className="space-y-1.5">
@@ -561,35 +763,216 @@ const MetricCard = ({ icon: Icon, label, value, accent }: { icon: React.ElementT
   </Card>
 );
 
-// ─── Preview: renderiza diferente por tipo, incluindo carrossel Instagram para posts ───
-const PreviewBlock = ({ approval }: { approval: Approval }) => {
-  const { delivery_type, content, preview_url, title } = approval;
+// ─── Preview: renderiza diferente por tipo e suporta edição inline ───
+interface PreviewBlockProps {
+  approval: Approval;
+  editing: boolean;
+  draft: any;
+  setDraft: (v: any) => void;
+}
 
+const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps) => {
+  const { delivery_type, preview_url, title } = approval;
+  const content = editing ? draft : approval.content;
+  const patch = (p: any) => setDraft({ ...draft, ...p });
+
+  // ─── Post Instagram ───
   if (delivery_type === "post" && content?.platform === "instagram") {
     return (
-      <InstagramMockup
-        caption={content.caption}
-        hook={content.hook}
-        cta={content.cta}
-        stats={content.stats}
-        slides={content.carousel_slides}
-      />
+      <div className="space-y-3">
+        <InstagramMockup
+          caption={content.caption}
+          hook={content.hook}
+          cta={content.cta}
+          stats={content.stats}
+          slides={content.carousel_slides}
+        />
+        {editing && (
+          <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-3">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary flex items-center gap-1.5">
+              <Pencil className="h-3 w-3" /> Editar postagem
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[11px] text-muted-foreground">Gancho</label>
+              <Input value={content.hook || ""} onChange={(e) => patch({ hook: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[11px] text-muted-foreground">Legenda</label>
+              <Textarea rows={5} value={content.caption || ""} onChange={(e) => patch({ caption: e.target.value })} className="resize-none" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-[11px] text-muted-foreground">CTA</label>
+                <Input value={content.cta || ""} onChange={(e) => patch({ cta: e.target.value })} />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[11px] text-muted-foreground">Hashtags (separadas por espaço)</label>
+                <Input
+                  value={(content.hashtags || []).join(" ")}
+                  onChange={(e) => patch({ hashtags: e.target.value.split(/\s+/).filter(Boolean) })}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     );
   }
 
+  // ─── E-mail ───
   if (delivery_type === "email") {
     return (
       <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
-        <div className="bg-muted/40 px-4 py-3 border-b border-border/40 space-y-1">
+        <div className="bg-muted/40 px-4 py-3 border-b border-border/40 space-y-2">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Assunto</div>
-          <div className="text-sm font-medium">{content?.subject || "—"}</div>
-          {content?.preheader && <div className="text-xs text-muted-foreground">{content.preheader}</div>}
+          {editing ? (
+            <>
+              <Input value={content?.subject || ""} onChange={(e) => patch({ subject: e.target.value })} />
+              <Input value={content?.preheader || ""} onChange={(e) => patch({ preheader: e.target.value })} placeholder="Preheader" />
+            </>
+          ) : (
+            <>
+              <div className="text-sm font-medium">{content?.subject || "—"}</div>
+              {content?.preheader && <div className="text-xs text-muted-foreground">{content.preheader}</div>}
+            </>
+          )}
         </div>
         <div className="p-6 text-sm text-muted-foreground leading-relaxed space-y-3">
           <p>Olá Roberto,</p>
           <p>Seu primeiro agente está armado e pronto para rodar. Em 90 segundos você ativa, conecta uma fonte de dados e vê os primeiros outputs aparecerem em tempo real.</p>
           <Button size="sm" className="mt-2">Ativar agente agora</Button>
         </div>
+      </div>
+    );
+  }
+
+  // ─── Contrato ───
+  if (delivery_type === "contract") {
+    return (
+      <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
+        <div className="bg-gradient-to-br from-amber-500/10 via-card to-card px-5 py-4 border-b border-border/40 flex items-center gap-3">
+          <FileSignature className="h-5 w-5 text-amber-500" />
+          <div className="flex-1">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato — análise antes da assinatura</div>
+            <div className="text-sm font-semibold">{content?.contract_party_a} ⇄ {content?.contract_party_b}</div>
+          </div>
+          {content?.signature_required && <Badge className="bg-amber-500/15 text-amber-600 border-amber-500/30">Assinatura</Badge>}
+        </div>
+        <div className="p-5 space-y-3 text-sm">
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Valor" editing={editing} value={content?.contract_value} onChange={(v) => patch({ contract_value: v })} />
+            <Field label="Vigência" editing={editing} value={content?.contract_term} onChange={(v) => patch({ contract_term: v })} />
+          </div>
+          <div className="space-y-1.5">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Cláusulas</div>
+            {(content?.clauses || []).map((c: string, i: number) => (
+              editing ? (
+                <Input key={i} value={c}
+                  onChange={(e) => {
+                    const next = [...(content.clauses || [])]; next[i] = e.target.value;
+                    patch({ clauses: next });
+                  }} />
+              ) : (
+                <div key={i} className="flex gap-2 p-2.5 rounded-lg bg-muted/30 border border-border/40 text-xs leading-relaxed">
+                  <FileCheck2 className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" /> {c}
+                </div>
+              )
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Proposta ───
+  if (delivery_type === "proposal") {
+    return (
+      <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
+        <div className="bg-gradient-to-br from-primary/10 via-card to-card px-5 py-4 border-b border-border/40">
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Proposta comercial — {content?.client}</div>
+          {editing ? (
+            <Input className="mt-1" value={content?.headline || ""} onChange={(e) => patch({ headline: e.target.value })} />
+          ) : (
+            <div className="text-base font-semibold mt-1">{content?.headline}</div>
+          )}
+          {editing ? (
+            <Textarea rows={2} className="mt-2 resize-none" value={content?.summary || ""} onChange={(e) => patch({ summary: e.target.value })} />
+          ) : (
+            <div className="text-xs text-muted-foreground mt-1">{content?.summary}</div>
+          )}
+        </div>
+        <div className="p-5 space-y-2">
+          {(content?.items || []).map((it: any, i: number) => (
+            <div key={i} className="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-muted/30 border border-border/40 text-xs">
+              {editing ? (
+                <>
+                  <Input value={it.title}
+                    onChange={(e) => { const next = [...content.items]; next[i] = { ...it, title: e.target.value }; patch({ items: next }); }} />
+                  <Input className="w-32" value={it.price}
+                    onChange={(e) => { const next = [...content.items]; next[i] = { ...it, price: e.target.value }; patch({ items: next }); }} />
+                </>
+              ) : (
+                <><span className="flex-1">{it.title}</span><span className="font-semibold">{it.price}</span></>
+              )}
+            </div>
+          ))}
+          <div className="flex items-center justify-between pt-3 border-t border-border/40 text-sm">
+            <span className="text-muted-foreground flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Total</span>
+            {editing ? (
+              <Input className="w-40 text-right" value={content?.total || ""} onChange={(e) => patch({ total: e.target.value })} />
+            ) : (
+              <span className="font-bold text-primary">{content?.total}</span>
+            )}
+          </div>
+          <div className="text-[10px] text-muted-foreground text-right">{content?.validity}</div>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Documento ───
+  if (delivery_type === "document") {
+    return (
+      <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
+        <div className="bg-muted/30 px-5 py-4 border-b border-border/40 flex items-center gap-3">
+          <FileText className="h-5 w-5 text-sky-500" />
+          {editing ? (
+            <Input value={content?.doc_title || ""} onChange={(e) => patch({ doc_title: e.target.value })} />
+          ) : (
+            <div className="text-sm font-semibold">{content?.doc_title}</div>
+          )}
+        </div>
+        <div className="p-5 space-y-2">
+          {(content?.sections || []).map((s: string, i: number) => (
+            editing ? (
+              <Input key={i} value={s}
+                onChange={(e) => { const next = [...(content.sections || [])]; next[i] = e.target.value; patch({ sections: next }); }} />
+            ) : (
+              <div key={i} className="text-xs p-2.5 rounded bg-muted/30 border border-border/40">{s}</div>
+            )
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Stories ───
+  if (delivery_type === "stories") {
+    return (
+      <div className="space-y-3">
+        <div className="mx-auto aspect-[9/16] max-w-[260px] rounded-2xl border border-border/60 bg-gradient-to-br from-fuchsia-600 via-rose-500 to-amber-500 relative overflow-hidden shadow-xl">
+          <div className="absolute inset-x-3 top-3 flex gap-1">
+            {[0,1,2].map(i => <div key={i} className="h-0.5 flex-1 rounded-full bg-white/70" />)}
+          </div>
+          <div className="absolute inset-x-4 bottom-6 text-center text-white space-y-2">
+            <div className="text-[10px] uppercase tracking-[0.25em] opacity-80">Stories • 9:16</div>
+            <div className="text-lg font-bold leading-tight">{content?.cta || "Arrasta pra cima"}</div>
+          </div>
+        </div>
+        {editing && (
+          <Textarea rows={3} value={content?.caption || ""} onChange={(e) => patch({ caption: e.target.value })}
+            className="resize-none" placeholder="Texto do stories" />
+        )}
       </div>
     );
   }
@@ -607,6 +990,14 @@ const PreviewBlock = ({ approval }: { approval: Approval }) => {
     </div>
   );
 };
+
+const Field = ({ label, value, editing, onChange }: { label: string; value: string; editing: boolean; onChange: (v: string) => void }) => (
+  <div className="space-y-1">
+    <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
+    {editing ? <Input value={value || ""} onChange={(e) => onChange(e.target.value)} /> : <div className="text-sm font-medium">{value || "—"}</div>}
+  </div>
+);
+
 
 interface InstagramSlide {
   url: string;
@@ -852,6 +1243,52 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
       </div>
     );
   }
+
+  if (delivery_type === "contract") {
+    return (
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-amber-500/15 via-background to-background p-4 border-b border-border/40">
+        <FileSignature className="h-5 w-5 text-amber-500 mb-2" />
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato — assinatura</div>
+        <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.contract_party_a} ⇄ {content?.contract_party_b}</div>
+        <div className="text-[11px] text-muted-foreground mt-1">{content?.contract_value}</div>
+      </div>
+    );
+  }
+
+  if (delivery_type === "proposal") {
+    return (
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-primary/15 via-background to-background p-4 border-b border-border/40">
+        <FileText className="h-5 w-5 text-primary mb-2" />
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Proposta — {content?.client}</div>
+        <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.headline}</div>
+        <div className="text-[11px] text-primary font-semibold mt-1">{content?.total}</div>
+      </div>
+    );
+  }
+
+  if (delivery_type === "document") {
+    return (
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-sky-500/15 via-background to-background p-4 border-b border-border/40">
+        <FileText className="h-5 w-5 text-sky-500 mb-2" />
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Documento</div>
+        <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.doc_title}</div>
+        <div className="text-[11px] text-muted-foreground mt-1">{(content?.sections || []).length} seções</div>
+      </div>
+    );
+  }
+
+  if (delivery_type === "stories") {
+    return (
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-fuchsia-600 via-rose-500 to-amber-500 flex items-center justify-center overflow-hidden">
+        <Film className="absolute top-3 right-3 h-4 w-4 text-white/80" />
+        <div className="text-center text-white space-y-1 px-4">
+          <div className="text-[10px] uppercase tracking-[0.25em] opacity-80">Stories • 9:16</div>
+          <div className="text-sm font-bold leading-tight line-clamp-2">{content?.cta || approval.title}</div>
+        </div>
+      </div>
+    );
+  }
+
 
   if (preview_url) {
     if (delivery_type === "video") return <video src={preview_url} className="aspect-[16/10] w-full object-cover" />;
