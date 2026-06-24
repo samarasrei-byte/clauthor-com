@@ -1499,7 +1499,7 @@ Instructions: ${agent.instructions}`;
 
     // Load Company Board + memory + RAG knowledge in parallel
     const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop()?.content || "";
-    const [companyContext, memoryContext, ragContext] = await Promise.all([
+    const [companyContext, memoryContext, ragContext, episodicContext] = await Promise.all([
       loadCompanyBoard(adminClient, userId),
       agentId ? loadRecentMemory(adminClient, tenantId, userId, agentId) : Promise.resolve(""),
       // RAG: Full-text search on knowledge_documents
@@ -1520,7 +1520,9 @@ Instructions: ${agent.instructions}`;
           return "";
         }
       })(),
+      agentId ? recallEpisodicMemories(adminClient, tenantId, agentId, lastUserMsg, 5) : Promise.resolve(""),
     ]);
+
 
     const tenantContext = `
 ## CONTEXTO DE EXECUÇÃO (IMUTÁVEL):
