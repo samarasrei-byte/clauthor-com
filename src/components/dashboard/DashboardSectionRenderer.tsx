@@ -132,6 +132,8 @@ const DashboardSectionRenderer = ({
       {activeSection === "bulk-deploy" && <Suspense fallback={<SectionLoader />}><BulkAgentProvisioner /></Suspense>}
       {activeSection === "neural-network" && <Suspense fallback={<SectionLoader />}><AgentNeuralNetwork /></Suspense>}
       {activeSection === "scrum" && <Suspense fallback={<SectionLoader />}><ScrumBoard /></Suspense>}
+      {activeSection === "approvals" && <Suspense fallback={<SectionLoader />}><ApprovalsCenter /></Suspense>}
+      {activeSection === "files" && <Suspense fallback={<SectionLoader />}><FilesLibrary /></Suspense>}
 
       {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
         <ComingSoonSection feature={activeSection} />
