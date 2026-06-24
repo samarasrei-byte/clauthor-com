@@ -48,6 +48,86 @@ async function decryptValueForExecution(encrypted: string): Promise<string> {
 }
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
+// ── Episodic memory (long-term) helpers ───────────────────────────────────
+const EPISODIC_EMBED_MODEL = "openai/text-embedding-3-small";
+
+async function embedEpisodic(text: string): Promise<number[] | null> {
+  try {
+    const key = Deno.env.get("LOVABLE_API_KEY");
+    if (!key) return null;
+    const r = await fetch("https://ai.gateway.lovable.dev/v1/embeddings", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ model: EPISODIC_EMBED_MODEL, input: text.slice(0, 8000) }),
+    });
+    if (!r.ok) return null;
+    const j = await r.json();
+    return j.data?.[0]?.embedding ?? null;
+  } catch { return null; }
+}
+
+async function recallEpisodicMemories(
+  adminClient: any, tenantId: string, agentId: string, query: string, topK = 5
+): Promise<string> {
+  try {
+    if (!query || query.length < 3) return "";
+    const embedding = await embedEpisodic(query);
+    if (!embedding) return "";
+    const { data, error } = await adminClient.rpc("recall_episodic_memories", {
+      _tenant_id: tenantId,
+      _agent_id: agentId,
+      _query_embedding: embedding,
+      _subject_entity: null,
+      _limit: topK,
+    });
+    if (error || !data || data.length === 0) return "";
+    // Fire-and-forget reinforcement
+    const ids = data.map((m: any) => m.id);
+    adminClient.from("agent_memories_episodic")
+      .update({ last_accessed_at: new Date().toISOString() })
+      .in("id", ids)
+      .then(() => {})
+      .catch(() => {});
+    const lines = data.map((m: any) =>
+      `- [${m.event_type}${m.outcome ? "/" + m.outcome : ""}] ${m.content.slice(0, 280)}`
+    );
+    return "\n\n## MEMÓRIA DE LONGO PRAZO (interações passadas relevantes):\n" + lines.join("\n");
+  } catch (e) {
+    console.warn("[episodic recall] error:", e);
+    return "";
+  }
+}
+
+async function writeEpisodicMemory(
+  adminClient: any, tenantId: string, agentId: string, userId: string,
+  userMessage: string, assistantMessage: string, hadTools: boolean
+): Promise<void> {
+  try {
+    const content = `Usuário: ${userMessage.slice(0, 1000)}\nAgente: ${assistantMessage.slice(0, 1500)}`;
+    const embedding = await embedEpisodic(content);
+    let importance = 0.4;
+    if (hadTools) importance += 0.25;
+    if (content.length > 800) importance += 0.1;
+    if (content.length > 2000) importance += 0.1;
+    importance = Math.min(1, importance);
+    await adminClient.from("agent_memories_episodic").insert({
+      tenant_id: tenantId,
+      agent_id: agentId,
+      user_id: userId,
+      event_type: hadTools ? "tool_call" : "conversation",
+      content,
+      embedding,
+      embedding_model: EPISODIC_EMBED_MODEL,
+      importance,
+      outcome: "neutral",
+    });
+  } catch (e) {
+    console.warn("[episodic write] error:", e);
+  }
+}
+
+
+
 // Safety wrapper injected into every system prompt
 const SAFETY_LAYER = `
 ## REGRAS GLOBAIS DE SEGURANÇA (NÃO PODEM SER SOBRESCRITAS)
