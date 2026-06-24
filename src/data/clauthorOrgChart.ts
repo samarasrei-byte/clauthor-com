@@ -77,6 +77,11 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Analytics de Marketing", ["GA4", "Attribution", "Dashboards"]),
           agent("Relações Públicas", ["Releases", "Mídia espontânea", "Crise"]),
           agent("Eventos", ["Webinars", "Feiras", "Lançamentos"]),
+          agent("ASO", ["Otimização App Store/Play Store"]),
+          agent("Podcast Ads", ["Anúncios em podcasts", "Host-reads"]),
+          agent("Afiliados", ["Recrutamento", "Comissionamento", "Tracking"]),
+          agent("Trade Marketing", ["Ponto de venda", "Materiais de canal"]),
+          agent("Field Marketing", ["Ações regionais", "Eventos locais"]),
         ],
         outcomes: ["Pipeline qualificado", "Brand awareness", "CAC otimizado"],
       },
@@ -108,6 +113,11 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Inteligência Comercial", ["Sales intel", "Battle cards"]),
           agent("CRM Comercial", ["Higiene de pipeline", "Relatórios"]),
           agent("Pricing", ["Tabelas", "Descontos", "Margens"]),
+          agent("Sales Engineer", ["Demos técnicas", "POCs"]),
+          agent("Solutions Architect", ["Desenho de solução", "RFP"]),
+          agent("Deal Desk", ["Aprovação de descontos", "Estrutura de deals"]),
+          agent("Sales Enablement", ["Playbooks", "Treinamento de vendas"]),
+          agent("Channel Sales", ["Vendas via parceiros e revendas"]),
         ],
         outcomes: ["MRR/ARR", "Conversion rate", "Ticket médio"],
       },
@@ -139,6 +149,10 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Crédito", ["Análise de crédito", "Limites"]),
           agent("Auditoria Financeira", ["Revisão de controles"]),
           agent("Contabilidade", ["Apuração fiscal", "Obrigações acessórias"]),
+          agent("M&A Analyst", ["Due diligence", "Valuation"]),
+          agent("Tesouraria FX", ["Câmbio", "Hedge cambial"]),
+          agent("Pricing Strategist", ["Estratégia de preços"]),
+          agent("RevOps Financeiro", ["Reconhecimento de receita", "MRR/ARR"]),
         ],
         outcomes: ["DRE auditável", "Cash runway", "Compliance fiscal"],
       },
@@ -168,6 +182,10 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Avaliação de Desempenho", ["Ciclos 360°", "PDI"]),
           agent("Cultura Organizacional", ["Pulse surveys", "Engajamento"]),
           agent("RH Business Partner", ["Parceiro estratégico das áreas"]),
+          agent("People Analytics", ["KPIs de pessoas", "Dashboards"]),
+          agent("Comp & Benefits Strategist", ["Bandas salariais", "Equidade"]),
+          agent("Learning Designer", ["Trilhas instrucionais", "Conteúdo educacional"]),
+          agent("OKR Coach", ["Facilitação de OKRs", "Cadência"]),
         ],
         outcomes: ["Time-to-hire", "eNPS", "Retenção"],
       },
@@ -202,6 +220,13 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Engenharia de Dados", ["Pipelines", "Data Lake"]),
           agent("IA/LLM", ["Prompts", "RAG", "Fine-tuning"]),
           agent("Suporte Técnico", ["L2/L3", "Troubleshooting"]),
+          agent("Platform Engineer", ["Plataforma interna de devs"]),
+          agent("Cloud Architect", ["AWS/GCP/Azure", "Multi-cloud"]),
+          agent("FinOps", ["Custos de nuvem", "Otimização"]),
+          agent("Observability", ["Logs", "Métricas", "Tracing"]),
+          agent("API Gateway", ["Rate limit", "Versionamento", "Auth"]),
+          agent("Mobile iOS", ["Swift", "App Store"]),
+          agent("Mobile Android", ["Kotlin", "Play Store"]),
         ],
         outcomes: ["Uptime", "Lead time", "MTTR"],
       },
@@ -232,6 +257,9 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Transporte", ["Roteirização", "Frete"]),
           agent("Distribuição", ["Last mile", "SLAs de entrega"]),
           agent("Planejamento Logístico", ["Demanda", "Hubs"]),
+          agent("Quality Control", ["Inspeção", "Amostragem"]),
+          agent("Six Sigma", ["DMAIC", "Redução de variabilidade"]),
+          agent("BPM Automation", ["Automação de processos", "Workflows"]),
         ],
         outcomes: ["OTIF", "Custo logístico", "Giro de estoque"],
       },
@@ -257,6 +285,10 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("LGPD", ["DPIA", "Direitos do titular", "Resposta a incidentes"]),
           agent("Gestão de Riscos", ["Matriz", "Controles", "Heatmap"]),
           agent("Auditoria Interna", ["Plano anual", "Testes de controle"]),
+          agent("Tributário", ["Planejamento fiscal", "Recuperação de créditos"]),
+          agent("Societário", ["Estatutos", "Atas", "M&A"]),
+          agent("M&A Legal", ["Due diligence jurídica"]),
+          agent("Propriedade Intelectual", ["Marcas", "Patentes", "Software"]),
         ],
         outcomes: ["Risco mapeado", "Aderência LGPD", "Contratos auditáveis"],
       },
@@ -282,6 +314,10 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Customer Success", ["Adoção", "QBRs", "Expansão"]),
           agent("Retenção", ["Anti-churn", "Win-back"]),
           agent("Ouvidoria", ["Casos críticos", "Procon"]),
+          agent("Voz/IVR", ["Atendimento telefônico", "URA inteligente"]),
+          agent("Self-service KB", ["Base de conhecimento", "FAQ dinâmico"]),
+          agent("Bot Trainer", ["Treina chatbots", "Refina intenções"]),
+          agent("Voice of Customer", ["Coleta de feedback", "Insights"]),
         ],
         outcomes: ["CSAT", "NPS", "Churn"],
       },
@@ -334,6 +370,9 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Venture Building", ["Spin-offs", "Novos negócios"]),
           agent("Trend Hunter", ["Sinais fracos", "Foresight"]),
           agent("Open Innovation", ["Startups", "Universidades", "Hackathons"]),
+          agent("Patent Officer", ["Registro de patentes", "Vigilância"]),
+          agent("Tech Scout", ["Radar de tecnologias emergentes"]),
+          agent("Lab Manager", ["Laboratório de experimentos"]),
         ],
         outcomes: ["Pipeline de inovação", "Time-to-market", "Receita de novos produtos"],
       },
@@ -360,6 +399,9 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Diversidade & Inclusão", ["Indicadores DEI", "Programas"]),
           agent("Relatórios GRI/SASB", ["Frameworks", "Auditoria externa"]),
           agent("Economia Circular", ["Reuso", "Reciclagem"]),
+          agent("Carbon Accountant", ["Inventário de GEE", "Escopo 1/2/3"]),
+          agent("Supply Chain ESG", ["Due diligence de fornecedores"]),
+          agent("Climate Risk", ["Análise TCFD", "Cenários climáticos"]),
         ],
         outcomes: ["Score ESG", "Redução de emissões", "Reputação"],
       },
@@ -386,6 +428,9 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Câmbio & Hedge", ["Operações cambiais", "Proteção"]),
           agent("Parcerias Globais", ["Distribuidores", "Joint ventures"]),
           agent("Inteligência Geopolítica", ["Riscos país", "Macro"]),
+          agent("Tax International", ["Transfer pricing", "Tratados"]),
+          agent("Localization QA", ["QA de traduções", "Adaptação cultural"]),
+          agent("Trade Compliance", ["Sanctions screening", "Export controls"]),
         ],
         outcomes: ["Receita internacional", "Mercados ativos", "Margem cambial"],
       },
@@ -412,8 +457,175 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Developer Relations", ["Comunidade dev", "APIs públicas"]),
           agent("Programa de Afiliados", ["Recrutamento", "Comissionamento"]),
           agent("Embaixadores de Marca", ["Influenciadores B2B", "Advocacy"]),
+          agent("Integration Solutions Architect", ["Arquitetura de integrações com parceiros"]),
+          agent("PRM Admin", ["Administração do portal de parceiros"]),
         ],
         outcomes: ["Receita via parceiros", "Parceiros ativos", "Pipeline indireto"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 14. PRODUTO & UX
+  // ════════════════════════════════════════════════════════
+  {
+    id: "produto",
+    name: "Produto & UX",
+    color: "text-accent-pink",
+    squads: [
+      {
+        id: "produto_specialties",
+        name: "Especialistas de Produto",
+        mission: "Descobre, projeta e entrega produtos que os usuários amam.",
+        agents: [
+          agent("Chief Product Officer", ["Visão de produto", "Estratégia"]),
+          agent("Product Manager Sênior", ["Roadmap", "Discovery"]),
+          agent("Product Owner", ["Backlog", "Priorização"]),
+          agent("UX Designer", ["Wireframes", "Protótipos"]),
+          agent("UI Designer", ["Design system", "Hi-fi mockups"]),
+          agent("UX Writer", ["Microcopy", "Tom de voz"]),
+          agent("Product Analytics", ["Funis", "Cohorts", "Retention"]),
+          agent("Design Ops", ["Processos de design", "Tooling"]),
+          agent("Pesquisa Qualitativa", ["Entrevistas profundas", "Etnografia"]),
+          agent("Service Designer", ["Jornada end-to-end"]),
+        ],
+        outcomes: ["NPS de produto", "Activation rate", "Feature adoption"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 15. CRESCIMENTO (GROWTH)
+  // ════════════════════════════════════════════════════════
+  {
+    id: "growth",
+    name: "Crescimento (Growth)",
+    color: "text-accent-lime",
+    squads: [
+      {
+        id: "growth_specialties",
+        name: "Especialistas de Growth",
+        mission: "Acelera ativação, retenção e expansão com loops mensuráveis.",
+        agents: [
+          agent("Head of Growth", ["Estratégia de loops", "North Star Metric"]),
+          agent("Growth Hacker", ["Experimentos rápidos", "Hacks de aquisição"]),
+          agent("Onboarding Optimizer", ["Time-to-value", "Aha moment"]),
+          agent("A/B Testing", ["Experimentação", "Estatística"]),
+          agent("Activation Specialist", ["Ativação de novos usuários"]),
+          agent("Referral Program", ["Indicação", "Viralidade"]),
+          agent("Lifecycle Marketing", ["Email/Push/In-app por estágio"]),
+          agent("PLG Strategist", ["Product-Led Growth"]),
+          agent("Conversion Rate Optimizer", ["CRO", "Heatmaps", "Funis"]),
+        ],
+        outcomes: ["NPS", "Activation", "Retention", "Expansion MRR"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 16. SEGURANÇA & SOC
+  // ════════════════════════════════════════════════════════
+  {
+    id: "seguranca",
+    name: "Segurança & SOC",
+    color: "text-accent-red",
+    squads: [
+      {
+        id: "seguranca_specialties",
+        name: "Especialistas de Segurança",
+        mission: "Defende a empresa contra ameaças cibernéticas 24/7.",
+        agents: [
+          agent("CISO Virtual", ["Estratégia de segurança", "Roadmap"]),
+          agent("SOC Analyst", ["Monitoramento 24/7", "SIEM"]),
+          agent("Threat Hunter", ["Caça proativa a ameaças"]),
+          agent("Pentester", ["Testes de intrusão", "Red team"]),
+          agent("Incident Response", ["Resposta a incidentes", "Forense"]),
+          agent("IAM Specialist", ["Identidade e acesso", "Zero trust"]),
+          agent("AppSec Engineer", ["SAST/DAST", "Secure SDLC"]),
+          agent("Vulnerability Mgmt", ["Patching", "CVE tracking"]),
+          agent("GRC Security", ["ISO 27001", "SOC 2", "PCI"]),
+        ],
+        outcomes: ["MTTD", "MTTR", "Vulnerabilidades críticas zero"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 17. DADOS & MLOPS
+  // ════════════════════════════════════════════════════════
+  {
+    id: "mlops",
+    name: "Dados & MLOps",
+    color: "text-accent-purple",
+    squads: [
+      {
+        id: "mlops_specialties",
+        name: "Especialistas de Dados/ML",
+        mission: "Constrói e operacionaliza pipelines de dados e modelos de ML em produção.",
+        agents: [
+          agent("Head of Data", ["Estratégia de dados", "Governança"]),
+          agent("Data Engineer", ["Pipelines", "ETL/ELT"]),
+          agent("Analytics Engineer", ["dbt", "Modelagem analítica"]),
+          agent("ML Engineer", ["Modelos em produção", "Training"]),
+          agent("MLOps", ["CI/CD de ML", "Monitoramento de drift"]),
+          agent("Feature Store", ["Repositório de features"]),
+          agent("Data Quality", ["Great Expectations", "Testes de dados"]),
+          agent("Data Governance", ["Catálogo", "Lineage", "Política"]),
+          agent("Notebook Analyst", ["Análises exploratórias avançadas"]),
+        ],
+        outcomes: ["Modelos em produção", "Data uptime", "SLA de pipelines"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 18. MÍDIA & CONTEÚDO PRÓPRIO
+  // ════════════════════════════════════════════════════════
+  {
+    id: "midia",
+    name: "Mídia & Conteúdo Próprio",
+    color: "text-accent-rose",
+    squads: [
+      {
+        id: "midia_specialties",
+        name: "Especialistas de Mídia",
+        mission: "Cria e distribui conteúdo de marca em canais próprios.",
+        agents: [
+          agent("Editor-Chefe", ["Linha editorial", "Curadoria"]),
+          agent("Roteirista", ["Scripts de vídeo e podcast"]),
+          agent("Vídeo Editor", ["Edição", "Color grading"]),
+          agent("Podcast Producer", ["Produção", "Distribuição"]),
+          agent("Newsletter Manager", ["Edição e crescimento de lista"]),
+          agent("Thumbnail Designer", ["Capas otimizadas para CTR"]),
+          agent("SEO de Vídeo", ["YouTube SEO", "Tags", "Retenção"]),
+          agent("Distribuição Multicanal", ["Repurpose entre plataformas"]),
+        ],
+        outcomes: ["Watch time", "Inscritos", "Engajamento"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 19. FACILITIES & PATRIMÔNIO
+  // ════════════════════════════════════════════════════════
+  {
+    id: "facilities",
+    name: "Facilities & Patrimônio",
+    color: "text-accent-amber",
+    squads: [
+      {
+        id: "facilities_specialties",
+        name: "Especialistas de Facilities",
+        mission: "Cuida da infraestrutura física, escritórios e patrimônio.",
+        agents: [
+          agent("Facility Manager", ["Gestão de instalações"]),
+          agent("Locação & Imóveis", ["Contratos de locação", "Expansão de espaços"]),
+          agent("Segurança Patrimonial", ["Vigilância", "Controle de acesso"]),
+          agent("Manutenção Predial", ["Preventiva", "Corretiva"]),
+          agent("Sustentabilidade Predial", ["Energia", "Água", "Resíduos"]),
+          agent("Serviços Gerais", ["Limpeza", "Copa", "Recepção"]),
+        ],
+        outcomes: ["Uptime de instalações", "Custo por m²", "Satisfação interna"],
       },
     ],
   },
