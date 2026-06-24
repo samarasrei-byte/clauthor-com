@@ -262,9 +262,10 @@ const MessageList = ({ messages, isLoading, messagesEndRef, compact }: MessageLi
         {msg.role === "assistant" && <ThorAvatar size={compact ? 22 : 26} />}
         <div className={`max-w-[${compact ? "80" : "85"}%] rounded-xl px-3 py-${compact ? "2" : "2.5"} ${
           msg.role === "user"
-            ? `bg-accent-violet/90 text-accent-violet-foreground${compact ? "" : " shadow-lg shadow-accent-violet/20"}`
-            : "bg-muted/20 border border-accent-violet/5"
+            ? `bg-accent-violet text-accent-violet-foreground${compact ? "" : " shadow-lg shadow-accent-violet/30"}`
+            : "bg-muted/40 dark:bg-muted/20 border border-accent-violet/15 dark:border-accent-violet/10 text-foreground"
         }`}>
+
           {msg.role === "assistant" ? (
             <div className="text-[11px] prose prose-xs dark:prose-invert max-w-none [&_p]:mb-0.5 leading-snug">
               <ReactMarkdown>{msg.content}</ReactMarkdown>
