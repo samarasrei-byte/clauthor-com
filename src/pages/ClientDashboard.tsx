@@ -8,7 +8,8 @@ import {
   LayoutDashboard, Bot, BarChart3, CreditCard,
   Sparkles, Settings, Brain, MessageSquare, Plug, ChevronLeft,
   Building2, KanbanSquare, Layers3,
-  Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio
+  Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio,
+  CheckSquare, FolderOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
