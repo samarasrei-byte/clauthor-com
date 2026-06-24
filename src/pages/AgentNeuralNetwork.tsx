@@ -248,7 +248,7 @@ function DeptHub({
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
-  const Icon = DEPT_ICONS[deptId];
+  
 
   useFrame((state) => {
     if (!meshRef.current) return;
