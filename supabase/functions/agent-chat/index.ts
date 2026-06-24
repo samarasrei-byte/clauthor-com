@@ -1773,7 +1773,10 @@ async function streamResponse(
 
       if (agentId) {
         const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
-        if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, fullText);
+        if (lastUserMsg) {
+          await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, fullText);
+          writeEpisodicMemory(adminClient, tenantId, agentId, userId, lastUserMsg.content, fullText, true).catch(() => {});
+        }
       }
     } catch (e) { console.error("Stream pipe error:", e); }
     finally { await writer.close(); }
