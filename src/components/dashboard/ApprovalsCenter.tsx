@@ -391,6 +391,49 @@ const ApprovalsCenter = () => {
     },
   });
 
+  const saveEdits = useMutation({
+    mutationFn: async ({ approval, newContent }: { approval: Approval; newContent: any }) => {
+      if (approval.__demo) return;
+      const nextV = approval.current_version + 1;
+      await supabase.from("approval_versions").insert({
+        approval_id: approval.id, tenant_id: tenantId, version_number: nextV,
+        content: newContent, preview_url: approval.preview_url,
+        generated_by_agent: approval.agent_id, notes: "Edição manual no card de aprovação",
+      });
+      await supabase.from("approvals")
+        .update({ content: newContent, current_version: nextV, status: "pending" })
+        .eq("id", approval.id);
+      await supabase.from("approval_actions").insert({
+        approval_id: approval.id, tenant_id: tenantId, user_id: user!.id,
+        action: "edit_inline", details: { version: nextV },
+      });
+    },
+    onSuccess: (_, vars) => {
+      toast.success(vars.approval.__demo ? "Exemplo: alterações aplicadas" : "Alterações salvas como nova versão");
+      qc.invalidateQueries({ queryKey: ["approvals", tenantId] });
+      setEditing(false);
+      // refletir localmente
+      setSelected((s) => s ? { ...s, content: vars.newContent } : s);
+    },
+  });
+
+  const addQuickNote = useMutation({
+    mutationFn: async ({ approval, body }: { approval: Approval; body: string }) => {
+      if (approval.__demo) return;
+      await supabase.from("approval_comments").insert({
+        approval_id: approval.id, tenant_id: tenantId, user_id: user!.id,
+        body, is_rejection_reason: false, version_number: approval.current_version,
+      });
+    },
+    onSuccess: (_, vars) => {
+      toast.success(vars.approval.__demo ? "Exemplo: observação registrada" : "Observação registrada");
+      qc.invalidateQueries({ queryKey: ["approval-comments", vars.approval.id] });
+      setQuickNote("");
+    },
+  });
+
+
+
   // ── Metrics ──
   const metrics = useMemo(() => {
     const total = approvals.length;
