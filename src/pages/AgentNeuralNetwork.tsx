@@ -323,22 +323,8 @@ function DeptHub({
           {agentCount} agentes
         </Text>
       </Billboard>
-      {Icon && (
-        <Html position={position} center distanceFactor={6} zIndexRange={[10, 0]} occlude={false}>
-          <div
-            style={{
-              background: "rgba(15, 15, 20, 0.55)",
-              border: `1px solid ${color}33`,
-              boxShadow: isSelected ? `0 0 8px ${color}44` : "none",
-              transform: `scale(${isSelected ? 1.15 : hovered ? 1.08 : 1})`,
-            }}
-            className="w-8 h-8 rounded-full flex items-center justify-center pointer-events-none transition-transform backdrop-blur-md"
-          >
-            <Icon className="w-4 h-4" style={{ color: `${color}cc`, opacity: 0.7 }} />
-          </div>
 
-        </Html>
-      )}
+
     </group>
   );
 }
