@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 
 // ── Icon per department ──
-const DEPT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+const DEPT_ICONS: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement> & { className?: string }>> = {
   executivo: Crown,
   marketing: Megaphone,
   vendas: Target,
