@@ -39,6 +39,12 @@ const DEPT_COLORS: Record<string, string> = {
   sustentabilidade: "#10b981",// emerald
   internacional: "#3b82f6",  // blue
   parcerias: "#facc15",      // yellow
+  produto: "#ec4899",        // pink
+  growth: "#84cc16",         // lime
+  seguranca: "#dc2626",      // red-deep
+  mlops: "#a855f7",          // purple
+  midia: "#f43f5e",          // rose
+  facilities: "#d97706",     // amber
 };
 
 // ── Tradução PT-BR ──
