@@ -18,6 +18,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 import { useRef, useMemo, useState } from "react";
+import { CLAUTHOR_ORG_CHART, CLAUTHOR_AGENT_COUNT } from "@/data/clauthorOrgChart";
 import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import helixaPhoto from "@/assets/helixa-ai.png";
@@ -214,9 +215,9 @@ const HomePage = () => {
         <div className="max-w-[1120px] mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-12">
             {[
-              { value: "200+", label: t("home.stats_active_agents", { defaultValue: "AI Agents" }) },
-              { value: "55", label: t("home.stats_squads", { defaultValue: "Smart Squads" }) },
-              { value: "15", label: t("home.stats_departments", { defaultValue: "Departments" }) },
+              { value: `${CLAUTHOR_AGENT_COUNT}+`, label: t("home.stats_active_agents", { defaultValue: "AI Agents" }) },
+              { value: String(CLAUTHOR_ORG_CHART.reduce((s, d) => s + d.squads.length, 0)), label: t("home.stats_squads", { defaultValue: "Smart Squads" }) },
+              { value: String(CLAUTHOR_ORG_CHART.length), label: t("home.stats_departments", { defaultValue: "Departments" }) },
               { value: "99.9%", label: t("home.stats_uptime", { defaultValue: "Uptime" }) },
             ].map((stat) => (
               <div key={stat.label} className="text-center">

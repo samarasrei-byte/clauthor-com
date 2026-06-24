@@ -27,6 +27,7 @@ import {
 } from "@/data/libraryAgentData";
 import { getAgentName, getDefaultIcon } from "@/data/agentLibraryBridge";
 import { WORKFORCE } from "@/data/workforceArchitecture";
+import { CLAUTHOR_ORG_CHART, CLAUTHOR_AGENT_COUNT } from "@/data/clauthorOrgChart";
 import { Skeleton } from "@/components/ui/skeleton";
 import AgentCardExpanded from "@/components/library/AgentCardExpanded";
 
@@ -157,7 +158,7 @@ const LibraryPage = () => {
         <div className="relative z-10 space-y-4">
           <Badge variant="outline" className="border-primary/20 text-primary/90 px-4 py-1.5 text-sm">
             <Flame className="h-3.5 w-3.5 mr-1.5" />
-            {totalAgents} Agentes Autônomos · {WORKFORCE.length} Departamentos · {WORKFORCE.reduce((s, d) => s + d.squads.length, 0)} Squads
+            {CLAUTHOR_AGENT_COUNT} Agentes Autônomos · {CLAUTHOR_ORG_CHART.length} Departamentos · {CLAUTHOR_ORG_CHART.reduce((s, d) => s + d.squads.length, 0)} Squads
           </Badge>
           
           <h1 className="font-display text-3xl md:text-4xl font-bold tracking-tight">

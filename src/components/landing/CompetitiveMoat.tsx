@@ -1,14 +1,18 @@
 import { motion } from "framer-motion";
 import { Check, X, Crown, Bot, Workflow, Shield, BarChart3, MessageSquare, KanbanSquare } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
+
+const _DEPTS = CLAUTHOR_ORG_CHART.length;
+const _SQUADS = CLAUTHOR_ORG_CHART.reduce((s, d) => s + d.squads.length, 0);
 
 const CompetitiveMoat = () => {
   const { t } = useTranslation();
 
   const features = [
     { label: t("home.moat_orchestration", { defaultValue: "Orquestração Agente-a-Agente" }), icon: Workflow, clauthor: true, chatgpt: false, crewai: "partial", autogen: "partial" },
-    { label: t("home.moat_departments", { defaultValue: "Departamentos Corporativos (7)" }), icon: BarChart3, clauthor: true, chatgpt: false, crewai: false, autogen: false },
-    { label: t("home.moat_squads", { defaultValue: "Squads Inteligentes (37)" }), icon: Bot, clauthor: true, chatgpt: false, crewai: "partial", autogen: false },
+    { label: t("home.moat_departments", { defaultValue: `Departamentos Corporativos (${_DEPTS})` }), icon: BarChart3, clauthor: true, chatgpt: false, crewai: false, autogen: false },
+    { label: t("home.moat_squads", { defaultValue: `Squads Inteligentes (${_SQUADS})` }), icon: Bot, clauthor: true, chatgpt: false, crewai: "partial", autogen: false },
     { label: t("home.moat_kanban", { defaultValue: "Mission Board Integrado" }), icon: KanbanSquare, clauthor: true, chatgpt: false, crewai: false, autogen: false },
     { label: t("home.moat_meeting", { defaultValue: "Sala de Reunião IA" }), icon: MessageSquare, clauthor: true, chatgpt: false, crewai: false, autogen: false },
     { label: t("home.moat_security", { defaultValue: "Segurança Enterprise & RLS" }), icon: Shield, clauthor: true, chatgpt: false, crewai: false, autogen: false },
