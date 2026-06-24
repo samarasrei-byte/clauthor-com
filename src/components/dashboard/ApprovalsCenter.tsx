@@ -1,11 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   CheckCircle2, XCircle, MessageSquareWarning, RefreshCw, Clock,
   TrendingUp, ListChecks, Sparkles, Eye, History, Send, Heart,
   MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram,
-  ArrowUpRight, Wand2, Zap, ShieldCheck,
+  ArrowUpRight, Wand2, Zap, ShieldCheck, Images,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,11 +14,20 @@ import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, type CarouselApi } from "@/components/ui/carousel";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useTenantId } from "@/hooks/useTenantId";
 import { cn } from "@/lib/utils";
+import approvalSlide1 from "@/assets/approval-carousel/approval-slide-1.png.asset.json";
+import approvalSlide2 from "@/assets/approval-carousel/approval-slide-2.png.asset.json";
+import approvalSlide3 from "@/assets/approval-carousel/approval-slide-3.png.asset.json";
+import approvalSlide4 from "@/assets/approval-carousel/approval-slide-4.png.asset.json";
+import approvalSlide5 from "@/assets/approval-carousel/approval-slide-5.png.asset.json";
+import approvalSlide6 from "@/assets/approval-carousel/approval-slide-6.png.asset.json";
+import approvalSlide7 from "@/assets/approval-carousel/approval-slide-7.png.asset.json";
+
 
 type Status = "pending" | "in_revision" | "approved" | "rejected";
 type DeliveryType = "creative" | "video" | "article" | "post" | "email" | "landing" | "report" | "automation" | "other";
@@ -78,12 +87,22 @@ function timeAgo(iso: string) {
   return `${Math.floor(h / 24)}d`;
 }
 
+const INSTAGRAM_CAROUSEL_SLIDES = [
+  { url: approvalSlide1.url, alt: "Slide do carrossel com chamada para comentários" },
+  { url: approvalSlide2.url, alt: "Slide do carrossel explicando VS Code e prompt" },
+  { url: approvalSlide3.url, alt: "Slide do carrossel explicando LLM e token" },
+  { url: approvalSlide4.url, alt: "Slide do carrossel explicando MCP e API" },
+  { url: approvalSlide5.url, alt: "Slide do carrossel explicando arquivos markdown e skills" },
+  { url: approvalSlide6.url, alt: "Slide do carrossel explicando subagentes e agent teams" },
+  { url: approvalSlide7.url, alt: "Capa do carrossel sobre inteligência artificial em português claro" },
+] as const;
+
 // ─────────────── DEMO DATA (exemplo de post para revisão) ───────────────
 const now = Date.now();
 const DEMO_APPROVALS: Approval[] = [
   {
     id: "demo-post-1",
-    title: "Post Instagram — Lançamento Black Friday",
+    title: "Post Instagram — Carrossel educacional sobre IA",
     delivery_type: "post",
     status: "pending",
     preview_url: null,
@@ -96,12 +115,14 @@ const DEMO_APPROVALS: Approval[] = [
     __demo: true,
     content: {
       platform: "instagram",
+      post_format: "carousel",
+      carousel_slides: INSTAGRAM_CAROUSEL_SLIDES,
       caption:
-        "🔥 Black Friday Clauthor chegou.\n\nAté 60% OFF em todos os agentes de IA. Automatize vendas, marketing e operações em minutos — sem código.\n\n👉 Link na bio. Termina domingo, 23h59.\n\n#IA #Automacao #BlackFriday #Clauthor",
-      hashtags: ["#IA", "#Automacao", "#BlackFriday", "#Clauthor"],
-      hook: "Sua operação roda no piloto automático esta semana?",
-      cta: "Garantir minha vaga →",
-      stats: { likes: 0, comments: 0, reach_estimate: "12k–18k" },
+        "Carrossel pronto para aprovação: uma sequência educativa explicando IA em português claro, com capa forte, glossário visual e CTA final para comentários.\n\nObjetivo: aumentar retenção, salvamentos e compartilhamentos com linguagem acessível.\n\n#IA #InteligenciaArtificial #ConteudoEducativo #Instagram #Clauthor",
+      hashtags: ["#IA", "#InteligenciaArtificial", "#ConteudoEducativo", "#Instagram", "#Clauthor"],
+      hook: "Carrossel Instagram • 7 slides",
+      cta: "Aprovar carrossel →",
+      stats: { likes: 0, comments: 0, reach_estimate: "18k–24k", slides_count: INSTAGRAM_CAROUSEL_SLIDES.length },
     },
   },
   {
@@ -135,6 +156,7 @@ const DEMO_APPROVALS: Approval[] = [
     content: { headline: "Sua equipe de IA, montada em 5 minutos" },
   },
 ];
+
 
 const ApprovalsCenter = () => {
   const { user } = useAuth();
@@ -539,12 +561,20 @@ const MetricCard = ({ icon: Icon, label, value, accent }: { icon: React.ElementT
   </Card>
 );
 
-// ─── Preview: renderiza diferente por tipo, incluindo mockup Instagram para posts ───
+// ─── Preview: renderiza diferente por tipo, incluindo carrossel Instagram para posts ───
 const PreviewBlock = ({ approval }: { approval: Approval }) => {
   const { delivery_type, content, preview_url, title } = approval;
 
   if (delivery_type === "post" && content?.platform === "instagram") {
-    return <InstagramMockup caption={content.caption} hook={content.hook} cta={content.cta} stats={content.stats} />;
+    return (
+      <InstagramMockup
+        caption={content.caption}
+        hook={content.hook}
+        cta={content.cta}
+        stats={content.stats}
+        slides={content.carousel_slides}
+      />
+    );
   }
 
   if (delivery_type === "email") {
@@ -578,62 +608,131 @@ const PreviewBlock = ({ approval }: { approval: Approval }) => {
   );
 };
 
-const InstagramMockup = ({ caption, hook, cta, stats }: { caption: string; hook?: string; cta?: string; stats?: any }) => (
-  <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-lg max-w-md mx-auto">
-    {/* header */}
-    <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
-      <div className="flex items-center gap-2.5">
-        <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-rose-500 via-fuchsia-500 to-amber-400 p-[2px]">
-          <div className="h-full w-full rounded-full bg-card flex items-center justify-center text-[10px] font-bold">CL</div>
-        </div>
-        <div>
-          <div className="text-xs font-semibold leading-tight">clauthor.ai</div>
-          <div className="text-[10px] text-muted-foreground leading-tight">Patrocinado</div>
-        </div>
-      </div>
-      <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
-    </div>
+interface InstagramSlide {
+  url: string;
+  alt: string;
+}
 
-    {/* "image" — hero card */}
-    <div className="aspect-square relative bg-gradient-to-br from-primary via-rose-500 to-fuchsia-600 flex items-center justify-center p-8">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_60%)]" />
-      <div className="absolute top-3 right-3">
-        <Badge className="bg-background/90 text-foreground border-0 backdrop-blur text-[10px]">60% OFF</Badge>
-      </div>
-      <div className="relative text-center space-y-2">
-        <div className="text-[10px] uppercase tracking-[0.25em] text-white/80">Black Friday Clauthor</div>
-        <div className="text-2xl font-bold text-white leading-tight">{hook || "Sua operação no automático"}</div>
-        {cta && <div className="inline-flex items-center gap-1 text-xs text-white/90 mt-2 border border-white/30 rounded-full px-3 py-1 backdrop-blur">{cta}</div>}
-      </div>
-      <div className="absolute bottom-3 left-3">
-        <Badge variant="outline" className="bg-background/80 backdrop-blur border-0 text-[10px] gap-1">
-          <Instagram className="h-3 w-3" /> Feed
-        </Badge>
-      </div>
-    </div>
+interface InstagramMockupProps {
+  caption: string;
+  hook?: string;
+  cta?: string;
+  stats?: {
+    likes?: number;
+    comments?: number;
+    reach_estimate?: string;
+    slides_count?: number;
+  };
+  slides?: readonly InstagramSlide[];
+}
 
-    {/* actions */}
-    <div className="px-4 pt-3 pb-2 flex items-center gap-4">
-      <Heart className="h-5 w-5" strokeWidth={1.6} />
-      <MessageCircle className="h-5 w-5" strokeWidth={1.6} />
-      <Share2 className="h-5 w-5" strokeWidth={1.6} />
-      <Bookmark className="h-5 w-5 ml-auto" strokeWidth={1.6} />
-    </div>
+const InstagramMockup = ({ caption, hook, cta, stats, slides = [] }: InstagramMockupProps) => {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
 
-    {/* caption */}
-    <div className="px-4 pb-4 text-xs space-y-1.5">
-      <div className="text-muted-foreground">
-        <span className="font-semibold text-foreground">clauthor.ai</span>{" "}
-        <span className="whitespace-pre-line leading-relaxed">{caption}</span>
-      </div>
-      {stats?.reach_estimate && (
-        <div className="text-[10px] text-muted-foreground pt-2 border-t border-border/40 mt-3">
-          Alcance estimado pela IA: <span className="font-medium text-foreground">{stats.reach_estimate}</span>
+  const totalSlides = slides.length || 1;
+
+  useEffect(() => {
+    if (!api) return;
+
+    const onSelect = () => setCurrent(api.selectedScrollSnap());
+    onSelect();
+    api.on("select", onSelect);
+
+    return () => {
+      api.off("select", onSelect);
+    };
+  }, [api]);
+
+
+  return (
+    <div className="rounded-2xl border border-border/60 bg-card overflow-hidden shadow-lg max-w-md mx-auto">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border/40">
+        <div className="flex items-center gap-2.5">
+          <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-rose-500 via-fuchsia-500 to-amber-400 p-[2px]">
+            <div className="h-full w-full rounded-full bg-card flex items-center justify-center text-[10px] font-bold">CL</div>
+          </div>
+          <div>
+            <div className="text-xs font-semibold leading-tight">clauthor.ai</div>
+            <div className="text-[10px] text-muted-foreground leading-tight">Carrossel patrocinado</div>
+          </div>
         </div>
-      )}
+        <div className="flex items-center gap-2">
+          <Badge variant="outline" className="text-[10px] gap-1 border-border/60 bg-background/70">
+            <Images className="h-3 w-3" /> {current + 1}/{totalSlides}
+          </Badge>
+          <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+        </div>
+      </div>
+
+      <div className="relative bg-muted/20 border-b border-border/40">
+        {slides.length > 0 ? (
+          <Carousel setApi={setApi} opts={{ loop: false }} className="w-full">
+            <CarouselContent className="ml-0">
+              {slides.map((slide) => (
+                <CarouselItem key={slide.url} className="pl-0">
+                  <div className="aspect-square overflow-hidden bg-background">
+                    <img src={slide.url} alt={slide.alt} className="h-full w-full object-cover" loading="lazy" />
+                  </div>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+            <CarouselPrevious className="left-3 top-1/2 h-9 w-9 -translate-y-1/2 border-border/60 bg-background/85 text-foreground backdrop-blur hover:bg-background" />
+            <CarouselNext className="right-3 top-1/2 h-9 w-9 -translate-y-1/2 border-border/60 bg-background/85 text-foreground backdrop-blur hover:bg-background" />
+          </Carousel>
+        ) : (
+          <div className="aspect-square relative bg-gradient-to-br from-primary via-rose-500 to-fuchsia-600 flex items-center justify-center p-8">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.25),transparent_60%)]" />
+            <div className="relative text-center space-y-2">
+              <div className="text-[10px] uppercase tracking-[0.25em] text-white/80">Instagram</div>
+              <div className="text-2xl font-bold text-white leading-tight">{hook || "Sua operação no automático"}</div>
+              {cta && <div className="inline-flex items-center gap-1 text-xs text-white/90 mt-2 border border-white/30 rounded-full px-3 py-1 backdrop-blur">{cta}</div>}
+            </div>
+          </div>
+        )}
+
+        {slides.length > 1 && (
+          <div className="absolute left-1/2 top-3 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-border/50 bg-background/75 px-2 py-1 backdrop-blur">
+            {slides.map((slide, index) => (
+              <span
+                key={slide.url}
+                className={cn(
+                  "h-1.5 w-1.5 rounded-full transition-all",
+                  index === current ? "bg-foreground" : "bg-foreground/30"
+                )}
+              />
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className="px-4 pt-3 pb-2 flex items-center gap-4">
+        <Heart className="h-5 w-5" strokeWidth={1.6} />
+        <MessageCircle className="h-5 w-5" strokeWidth={1.6} />
+        <Share2 className="h-5 w-5" strokeWidth={1.6} />
+        <Bookmark className="h-5 w-5 ml-auto" strokeWidth={1.6} />
+      </div>
+
+      <div className="px-4 pb-4 text-xs space-y-1.5">
+        <div className="font-semibold text-foreground">{hook || "Carrossel Instagram"}</div>
+        <div className="text-muted-foreground">
+          <span className="font-semibold text-foreground">clauthor.ai</span>{" "}
+          <span className="whitespace-pre-line leading-relaxed">{caption}</span>
+        </div>
+        <div className="flex flex-wrap gap-1.5 pt-1">
+          {cta && <Badge variant="secondary" className="text-[10px]">{cta}</Badge>}
+          {stats?.slides_count && <Badge variant="outline" className="text-[10px]">{stats.slides_count} slides</Badge>}
+        </div>
+        {stats?.reach_estimate && (
+          <div className="text-[10px] text-muted-foreground pt-2 border-t border-border/40 mt-3">
+            Alcance estimado pela IA: <span className="font-medium text-foreground">{stats.reach_estimate}</span>
+          </div>
+        )}
+      </div>
     </div>
-  </div>
-);
+  );
+};
+
 
 interface CardProps {
   approval: Approval;
@@ -699,22 +798,39 @@ const ApprovalCard = ({ approval, onOpen, onApprove, onRequestChanges, onReject,
 const CardPreview = ({ approval }: { approval: Approval }) => {
   const { delivery_type, content, preview_url } = approval;
 
-  // Post Instagram — mini mockup colorido
+  // Post Instagram — mini preview de carrossel
   if (delivery_type === "post" && content?.platform === "instagram") {
+    const firstSlide = content?.carousel_slides?.[0]?.url;
+    const slidesCount = content?.carousel_slides?.length ?? 0;
+
     return (
-      <div className="aspect-[16/10] relative bg-gradient-to-br from-primary via-rose-500 to-fuchsia-600 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.25),transparent_60%)]" />
+      <div className="aspect-[16/10] relative overflow-hidden bg-muted/20">
+        {firstSlide ? (
+          <img src={firstSlide} alt={content?.carousel_slides?.[0]?.alt || approval.title} className="h-full w-full object-cover" loading="lazy" />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-primary via-rose-500 to-fuchsia-600" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
         <div className="absolute top-3 left-3 flex items-center gap-1.5">
-          <Instagram className="h-3.5 w-3.5 text-white" />
-          <span className="text-[10px] text-white/90 font-medium">Instagram • Feed</span>
+          <Badge className="border-0 bg-background/80 text-foreground text-[10px] gap-1 backdrop-blur">
+            <Instagram className="h-3 w-3" /> Carrossel
+          </Badge>
         </div>
+        {slidesCount > 0 && (
+          <div className="absolute top-3 right-3">
+            <Badge variant="outline" className="border-0 bg-background/80 text-foreground text-[10px] backdrop-blur">
+              1/{slidesCount}
+            </Badge>
+          </div>
+        )}
         <div className="absolute bottom-3 left-3 right-3">
-          <div className="text-[10px] uppercase tracking-wider text-white/80">Black Friday</div>
+          <div className="text-[10px] uppercase tracking-wider text-white/80">Instagram • Aprovação</div>
           <div className="text-sm font-bold text-white leading-tight line-clamp-2 mt-0.5">{content.hook}</div>
         </div>
       </div>
     );
   }
+
 
   if (delivery_type === "email") {
     return (
