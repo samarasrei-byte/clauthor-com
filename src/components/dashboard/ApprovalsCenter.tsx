@@ -344,12 +344,17 @@ const ApprovalsCenter = () => {
             {isLoading ? (
               <div className="text-sm text-muted-foreground py-12 text-center">Carregando...</div>
             ) : filtered.length === 0 ? (
-              <Card className="border-dashed bg-muted/10">
-                <div className="py-20 text-center space-y-2">
-                  <STATUS_META[s].icon className="h-8 w-8 mx-auto text-muted-foreground/40" strokeWidth={1.4} />
-                  <p className="text-sm text-muted-foreground">Nada em "{STATUS_META[s].label}" por enquanto.</p>
-                </div>
-              </Card>
+              {(() => {
+                const EmptyIcon = STATUS_META[s].icon;
+                return (
+                  <Card className="border-dashed bg-muted/10">
+                    <div className="py-20 text-center space-y-2">
+                      <EmptyIcon className="h-8 w-8 mx-auto text-muted-foreground/40" strokeWidth={1.4} />
+                      <p className="text-sm text-muted-foreground">Nada em "{STATUS_META[s].label}" por enquanto.</p>
+                    </div>
+                  </Card>
+                );
+              })()
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                 <AnimatePresence>
