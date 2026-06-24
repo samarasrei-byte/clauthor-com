@@ -811,6 +811,186 @@ export type Database = {
           },
         ]
       }
+      approval_actions: {
+        Row: {
+          action: string
+          approval_id: string
+          created_at: string
+          details: Json | null
+          id: string
+          tenant_id: string
+          user_id: string
+        }
+        Insert: {
+          action: string
+          approval_id: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          tenant_id: string
+          user_id: string
+        }
+        Update: {
+          action?: string
+          approval_id?: string
+          created_at?: string
+          details?: Json | null
+          id?: string
+          tenant_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_actions_approval_id_fkey"
+            columns: ["approval_id"]
+            isOneToOne: false
+            referencedRelation: "approvals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      approval_comments: {
+        Row: {
+          approval_id: string
+          body: string
+          created_at: string
+          id: string
+          is_rejection_reason: boolean | null
+          tenant_id: string
+          user_id: string
+          version_number: number | null
+        }
+        Insert: {
+          approval_id: string
+          body: string
+          created_at?: string
+          id?: string
+          is_rejection_reason?: boolean | null
+          tenant_id: string
+          user_id: string
+          version_number?: number | null
+        }
+        Update: {
+          approval_id?: string
+          body?: string
+          created_at?: string
+          id?: string
+          is_rejection_reason?: boolean | null
+          tenant_id?: string
+          user_id?: string
+          version_number?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_comments_approval_id_fkey"
+            columns: ["approval_id"]
+            isOneToOne: false
+            referencedRelation: "approvals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      approval_versions: {
+        Row: {
+          approval_id: string
+          content: Json | null
+          created_at: string
+          generated_by_agent: string | null
+          id: string
+          notes: string | null
+          preview_url: string | null
+          tenant_id: string
+          version_number: number
+        }
+        Insert: {
+          approval_id: string
+          content?: Json | null
+          created_at?: string
+          generated_by_agent?: string | null
+          id?: string
+          notes?: string | null
+          preview_url?: string | null
+          tenant_id: string
+          version_number: number
+        }
+        Update: {
+          approval_id?: string
+          content?: Json | null
+          created_at?: string
+          generated_by_agent?: string | null
+          id?: string
+          notes?: string | null
+          preview_url?: string | null
+          tenant_id?: string
+          version_number?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "approval_versions_approval_id_fkey"
+            columns: ["approval_id"]
+            isOneToOne: false
+            referencedRelation: "approvals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      approvals: {
+        Row: {
+          agent_id: string | null
+          approved_at: string | null
+          approved_by: string | null
+          content: Json | null
+          created_at: string
+          created_by: string | null
+          current_version: number
+          delivery_type: string
+          id: string
+          preview_url: string | null
+          project_id: string | null
+          status: string
+          task_id: string | null
+          tenant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          content?: Json | null
+          created_at?: string
+          created_by?: string | null
+          current_version?: number
+          delivery_type: string
+          id?: string
+          preview_url?: string | null
+          project_id?: string | null
+          status?: string
+          task_id?: string | null
+          tenant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          approved_at?: string | null
+          approved_by?: string | null
+          content?: Json | null
+          created_at?: string
+          created_by?: string | null
+          current_version?: number
+          delivery_type?: string
+          id?: string
+          preview_url?: string | null
+          project_id?: string | null
+          status?: string
+          task_id?: string | null
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       chat_feedback: {
         Row: {
           agent_id: string | null
@@ -1293,6 +1473,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      files: {
+        Row: {
+          bucket_path: string
+          created_at: string
+          file_type: string
+          folder: string | null
+          id: string
+          mime: string | null
+          name: string
+          size_bytes: number | null
+          tags: string[] | null
+          tenant_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          bucket_path: string
+          created_at?: string
+          file_type: string
+          folder?: string | null
+          id?: string
+          mime?: string | null
+          name: string
+          size_bytes?: number | null
+          tags?: string[] | null
+          tenant_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          bucket_path?: string
+          created_at?: string
+          file_type?: string
+          folder?: string | null
+          id?: string
+          mime?: string | null
+          name?: string
+          size_bytes?: number | null
+          tags?: string[] | null
+          tenant_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       hunter_campaigns: {
         Row: {
@@ -2327,6 +2552,33 @@ export type Database = {
           tour_completed?: boolean
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      project_approval_settings: {
+        Row: {
+          created_at: string
+          id: string
+          mode: string
+          project_id: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mode?: string
+          project_id: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mode?: string
+          project_id?: string
+          tenant_id?: string
+          updated_at?: string
         }
         Relationships: []
       }
