@@ -603,44 +603,99 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
             className="pointer-events-auto w-[400px]"
             style={{ maxHeight: 540 }}
           >
-            {/* Outer glow border */}
-            <div className="relative rounded-[20px] p-[1px]">
-              {/* Animated gradient border */}
+            {/* Outer glow border - holographic edge */}
+            <div className="relative rounded-[22px] p-[1.5px]">
+              {/* Animated conic gradient border */}
               <motion.div
-                className="absolute inset-0 rounded-[20px] overflow-hidden"
-                style={{ padding: "1px" }}
+                className="absolute inset-0 rounded-[22px] overflow-hidden"
+                style={{ padding: "1.5px" }}
               >
                 <motion.div
                   className="absolute inset-[-50%] w-[200%] h-[200%]"
                   style={{
-                    background: "conic-gradient(from 0deg, transparent 40%, hsl(var(--accent-violet) / 0.6), hsl(var(--accent-cyan) / 0.4), transparent 65%)",
+                    background:
+                      "conic-gradient(from 0deg, transparent 0%, hsl(var(--accent-cyan)/0.9) 12%, transparent 22%, hsl(var(--accent-violet)/0.9) 50%, transparent 60%, hsl(var(--accent-cyan)/0.6) 85%, transparent 100%)",
                   }}
                   animate={{ rotate: 360 }}
-                  transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
                 />
               </motion.div>
 
-              {/* Main container */}
-              <div className="relative bg-background/[0.97] backdrop-blur-3xl rounded-[20px] overflow-hidden flex flex-col shadow-[0_0_60px_-10px_hsl(var(--accent-violet)/0.25),0_25px_50px_-12px_hsl(0_0%_0%/0.5)]" style={{ maxHeight: 538 }}>
+              {/* Outer halo bloom */}
+              <div
+                className="absolute -inset-6 rounded-[28px] opacity-60 pointer-events-none blur-2xl"
+                style={{
+                  background:
+                    "radial-gradient(50% 60% at 50% 40%, hsl(var(--accent-violet)/0.25), transparent 70%)",
+                }}
+              />
+
+              {/* Main container - obsidian glass */}
+              <div
+                className="relative rounded-[21px] overflow-hidden flex flex-col shadow-[0_0_80px_-10px_hsl(var(--accent-violet)/0.45),0_30px_60px_-20px_hsl(0_0%_0%/0.7)]"
+                style={{
+                  maxHeight: 538,
+                  background:
+                    "linear-gradient(180deg, hsl(var(--background)/0.92) 0%, hsl(var(--background)/0.98) 100%)",
+                  backdropFilter: "blur(28px) saturate(1.4)",
+                }}
+              >
+                {/* Holographic grid overlay */}
+                <div
+                  className="absolute inset-0 pointer-events-none opacity-[0.07] mix-blend-screen"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(hsl(var(--accent-cyan)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--accent-cyan)) 1px, transparent 1px)",
+                    backgroundSize: "22px 22px",
+                    maskImage:
+                      "radial-gradient(ellipse at 50% 0%, black 0%, transparent 75%)",
+                  }}
+                />
+
+                {/* Scanline sweep */}
+                <motion.div
+                  className="absolute left-0 right-0 h-[1px] pointer-events-none opacity-50"
+                  style={{
+                    background:
+                      "linear-gradient(90deg, transparent, hsl(var(--accent-cyan)/0.7), transparent)",
+                    boxShadow: "0 0 12px hsl(var(--accent-cyan)/0.8)",
+                  }}
+                  animate={{ top: ["0%", "100%", "0%"] }}
+                  transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                />
+
+                {/* Corner HUD brackets */}
+                {[
+                  { pos: "top-2 left-2", rot: 0 },
+                  { pos: "top-2 right-2", rot: 90 },
+                  { pos: "bottom-2 right-2", rot: 180 },
+                  { pos: "bottom-2 left-2", rot: 270 },
+                ].map((c, i) => (
+                  <div key={i} className={`absolute ${c.pos} w-3 h-3 pointer-events-none`} style={{ transform: `rotate(${c.rot}deg)` }}>
+                    <span className="absolute top-0 left-0 w-3 h-[1px] bg-accent-cyan/50" />
+                    <span className="absolute top-0 left-0 w-[1px] h-3 bg-accent-cyan/50" />
+                  </div>
+                ))}
 
                 {/* Ambient glow effect at top */}
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[70%] h-24 rounded-full opacity-[0.07]"
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[80%] h-28 rounded-full opacity-[0.12] pointer-events-none"
                   style={{ background: "radial-gradient(ellipse, hsl(var(--accent-violet)), transparent)" }}
                 />
 
                 {/* Header - Premium tier */}
-                <div className="relative px-4 py-3 border-b border-accent-violet/[0.06] shrink-0">
+                <div className="relative px-4 py-3 border-b border-accent-violet/[0.1] shrink-0">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       {/* Avatar with ring */}
                       <div className="relative">
                         <motion.div
-                          className="absolute inset-[-2px] rounded-full"
-                          style={{ background: "conic-gradient(from 0deg, hsl(var(--accent-violet) / 0.5), hsl(var(--accent-cyan) / 0.3), hsl(var(--accent-violet) / 0.5))" }}
-                          animate={isSpeaking ? { rotate: 360 } : {}}
-                          transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+                          className="absolute inset-[-3px] rounded-full"
+                          style={{ background: "conic-gradient(from 0deg, hsl(var(--accent-violet)/0.8), hsl(var(--accent-cyan)/0.6), hsl(var(--accent-violet)/0.8))" }}
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: isSpeaking ? 2 : 6, repeat: Infinity, ease: "linear" }}
                         />
                         <ThorAvatar size={36} />
+
                         {/* Status indicator */}
                         <span className="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full border-2 border-background z-10 flex items-center justify-center">
                           <span className="w-full h-full rounded-full bg-emerald-500" />
