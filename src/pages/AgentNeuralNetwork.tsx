@@ -21,7 +21,36 @@ import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 // Estrutura oficial Clauthor: CEO Virtual (orquestrador) + 9 departamentos com sub-especialidades
 const WORKFORCE = CLAUTHOR_ORG_CHART;
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Zap, Users, Target } from "lucide-react";
+import {
+  X, Zap, Users, Target,
+  Crown, Megaphone, DollarSign, Briefcase, Code2, Truck, Scale, Headphones,
+  BarChart3, Lightbulb, Leaf, Globe, Handshake, Layers, TrendingUp, ShieldAlert,
+  Database, Film, Building2,
+} from "lucide-react";
+
+// ── Icon per department ──
+const DEPT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  executivo: Crown,
+  marketing: Megaphone,
+  vendas: Target,
+  financeiro: DollarSign,
+  rh: Briefcase,
+  ti: Code2,
+  operacoes: Truck,
+  juridico: Scale,
+  atendimento: Headphones,
+  dados: BarChart3,
+  inovacao: Lightbulb,
+  sustentabilidade: Leaf,
+  internacional: Globe,
+  parcerias: Handshake,
+  produto: Layers,
+  growth: TrendingUp,
+  seguranca: ShieldAlert,
+  mlops: Database,
+  midia: Film,
+  facilities: Building2,
+};
 
 // ── Color palette per department (matches CLAUTHOR_ORG_CHART ids) ──
 const DEPT_COLORS: Record<string, string> = {
@@ -232,7 +261,12 @@ function DeptHub({
   position,
   color,
   name,
+function DeptHub({
+  position,
+  color,
+  name,
   agentCount,
+  deptId,
   onClick,
   isSelected,
 }: {
@@ -240,6 +274,13 @@ function DeptHub({
   color: string;
   name: string;
   agentCount: number;
+  deptId: string;
+  onClick: () => void;
+  isSelected: boolean;
+}) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const [hovered, setHovered] = useState(false);
+  const Icon = DEPT_ICONS[deptId];
   onClick: () => void;
   isSelected: boolean;
 }) {
