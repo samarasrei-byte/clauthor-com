@@ -352,7 +352,7 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, onVoiceSubmit, lang, 
         className={`flex-1 bg-muted/40 dark:bg-muted/10 border ${isListening ? "border-accent-violet/50 animate-pulse" : "border-accent-violet/20 dark:border-accent-violet/10"} ${rounded ? "rounded-full px-4" : "rounded-lg px-3"} py-2.5 text-xs font-mono text-foreground focus:outline-none focus:border-accent-violet/60 focus:ring-2 focus:ring-accent-violet/20 transition-all placeholder:text-muted-foreground/50`}
       />
       <button type="button" onClick={toggleVoice} disabled={isLoading}
-        className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} ${isListening ? "bg-destructive/80 hover:bg-destructive" : "bg-muted/20 hover:bg-muted/40"} flex items-center justify-center shrink-0 transition-all relative`}
+        className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} ${isListening ? "bg-destructive/80 hover:bg-destructive" : "bg-muted/40 dark:bg-muted/20 hover:bg-accent-violet/15 border border-accent-violet/15 dark:border-transparent"} flex items-center justify-center shrink-0 transition-all relative focus:outline-none focus:ring-2 focus:ring-accent-violet/40`}
       >
         {isListening ? (
           <>
@@ -360,9 +360,10 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, onVoiceSubmit, lang, 
             <span className={`absolute inset-0 ${rounded ? "rounded-full" : "rounded-lg"} border border-destructive animate-ping opacity-30`} />
           </>
         ) : (
-          <Mic className="h-3.5 w-3.5 text-accent-violet/60" />
+          <Mic className="h-3.5 w-3.5 text-accent-violet/80" />
         )}
       </button>
+
       <button type="submit" disabled={!input.trim() || isLoading}
         className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} bg-accent-violet/90 hover:bg-accent-violet text-accent-violet-foreground flex items-center justify-center shrink-0 disabled:opacity-30 transition-all shadow-lg shadow-accent-violet/20`}
       >
