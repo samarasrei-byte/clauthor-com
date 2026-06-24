@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 
 // ── Icon per department ──
-const DEPT_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+const DEPT_ICONS: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement> & { className?: string }>> = {
   executivo: Crown,
   marketing: Megaphone,
   vendas: Target,
@@ -327,13 +327,14 @@ function DeptHub({
         <Html position={position} center distanceFactor={6} zIndexRange={[10, 0]} occlude={false}>
           <div
             style={{
-              background: color,
-              boxShadow: `0 0 24px ${color}`,
-              transform: `scale(${isSelected ? 1.3 : hovered ? 1.15 : 1})`,
+              background: `${color}33`,
+              border: `1px solid ${color}66`,
+              boxShadow: isSelected ? `0 0 10px ${color}55` : "none",
+              transform: `scale(${isSelected ? 1.2 : hovered ? 1.1 : 1})`,
             }}
-            className="w-8 h-8 rounded-full flex items-center justify-center pointer-events-none transition-transform"
+            className="w-8 h-8 rounded-full flex items-center justify-center pointer-events-none transition-transform backdrop-blur-sm"
           >
-            <Icon className="w-4 h-4 text-white" />
+            <Icon className="w-4 h-4" style={{ color, opacity: 0.85 }} />
           </div>
         </Html>
       )}
