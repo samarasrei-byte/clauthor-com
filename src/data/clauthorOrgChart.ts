@@ -457,8 +457,175 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
           agent("Developer Relations", ["Comunidade dev", "APIs públicas"]),
           agent("Programa de Afiliados", ["Recrutamento", "Comissionamento"]),
           agent("Embaixadores de Marca", ["Influenciadores B2B", "Advocacy"]),
+          agent("Integration Solutions Architect", ["Arquitetura de integrações com parceiros"]),
+          agent("PRM Admin", ["Administração do portal de parceiros"]),
         ],
         outcomes: ["Receita via parceiros", "Parceiros ativos", "Pipeline indireto"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 14. PRODUTO & UX
+  // ════════════════════════════════════════════════════════
+  {
+    id: "produto",
+    name: "Produto & UX",
+    color: "text-accent-pink",
+    squads: [
+      {
+        id: "produto_specialties",
+        name: "Especialistas de Produto",
+        mission: "Descobre, projeta e entrega produtos que os usuários amam.",
+        agents: [
+          agent("Chief Product Officer", ["Visão de produto", "Estratégia"]),
+          agent("Product Manager Sênior", ["Roadmap", "Discovery"]),
+          agent("Product Owner", ["Backlog", "Priorização"]),
+          agent("UX Designer", ["Wireframes", "Protótipos"]),
+          agent("UI Designer", ["Design system", "Hi-fi mockups"]),
+          agent("UX Writer", ["Microcopy", "Tom de voz"]),
+          agent("Product Analytics", ["Funis", "Cohorts", "Retention"]),
+          agent("Design Ops", ["Processos de design", "Tooling"]),
+          agent("Pesquisa Qualitativa", ["Entrevistas profundas", "Etnografia"]),
+          agent("Service Designer", ["Jornada end-to-end"]),
+        ],
+        outcomes: ["NPS de produto", "Activation rate", "Feature adoption"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 15. CRESCIMENTO (GROWTH)
+  // ════════════════════════════════════════════════════════
+  {
+    id: "growth",
+    name: "Crescimento (Growth)",
+    color: "text-accent-lime",
+    squads: [
+      {
+        id: "growth_specialties",
+        name: "Especialistas de Growth",
+        mission: "Acelera ativação, retenção e expansão com loops mensuráveis.",
+        agents: [
+          agent("Head of Growth", ["Estratégia de loops", "North Star Metric"]),
+          agent("Growth Hacker", ["Experimentos rápidos", "Hacks de aquisição"]),
+          agent("Onboarding Optimizer", ["Time-to-value", "Aha moment"]),
+          agent("A/B Testing", ["Experimentação", "Estatística"]),
+          agent("Activation Specialist", ["Ativação de novos usuários"]),
+          agent("Referral Program", ["Indicação", "Viralidade"]),
+          agent("Lifecycle Marketing", ["Email/Push/In-app por estágio"]),
+          agent("PLG Strategist", ["Product-Led Growth"]),
+          agent("Conversion Rate Optimizer", ["CRO", "Heatmaps", "Funis"]),
+        ],
+        outcomes: ["NPS", "Activation", "Retention", "Expansion MRR"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 16. SEGURANÇA & SOC
+  // ════════════════════════════════════════════════════════
+  {
+    id: "seguranca",
+    name: "Segurança & SOC",
+    color: "text-accent-red",
+    squads: [
+      {
+        id: "seguranca_specialties",
+        name: "Especialistas de Segurança",
+        mission: "Defende a empresa contra ameaças cibernéticas 24/7.",
+        agents: [
+          agent("CISO Virtual", ["Estratégia de segurança", "Roadmap"]),
+          agent("SOC Analyst", ["Monitoramento 24/7", "SIEM"]),
+          agent("Threat Hunter", ["Caça proativa a ameaças"]),
+          agent("Pentester", ["Testes de intrusão", "Red team"]),
+          agent("Incident Response", ["Resposta a incidentes", "Forense"]),
+          agent("IAM Specialist", ["Identidade e acesso", "Zero trust"]),
+          agent("AppSec Engineer", ["SAST/DAST", "Secure SDLC"]),
+          agent("Vulnerability Mgmt", ["Patching", "CVE tracking"]),
+          agent("GRC Security", ["ISO 27001", "SOC 2", "PCI"]),
+        ],
+        outcomes: ["MTTD", "MTTR", "Vulnerabilidades críticas zero"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 17. DADOS & MLOPS
+  // ════════════════════════════════════════════════════════
+  {
+    id: "mlops",
+    name: "Dados & MLOps",
+    color: "text-accent-purple",
+    squads: [
+      {
+        id: "mlops_specialties",
+        name: "Especialistas de Dados/ML",
+        mission: "Constrói e operacionaliza pipelines de dados e modelos de ML em produção.",
+        agents: [
+          agent("Head of Data", ["Estratégia de dados", "Governança"]),
+          agent("Data Engineer", ["Pipelines", "ETL/ELT"]),
+          agent("Analytics Engineer", ["dbt", "Modelagem analítica"]),
+          agent("ML Engineer", ["Modelos em produção", "Training"]),
+          agent("MLOps", ["CI/CD de ML", "Monitoramento de drift"]),
+          agent("Feature Store", ["Repositório de features"]),
+          agent("Data Quality", ["Great Expectations", "Testes de dados"]),
+          agent("Data Governance", ["Catálogo", "Lineage", "Política"]),
+          agent("Notebook Analyst", ["Análises exploratórias avançadas"]),
+        ],
+        outcomes: ["Modelos em produção", "Data uptime", "SLA de pipelines"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 18. MÍDIA & CONTEÚDO PRÓPRIO
+  // ════════════════════════════════════════════════════════
+  {
+    id: "midia",
+    name: "Mídia & Conteúdo Próprio",
+    color: "text-accent-rose",
+    squads: [
+      {
+        id: "midia_specialties",
+        name: "Especialistas de Mídia",
+        mission: "Cria e distribui conteúdo de marca em canais próprios.",
+        agents: [
+          agent("Editor-Chefe", ["Linha editorial", "Curadoria"]),
+          agent("Roteirista", ["Scripts de vídeo e podcast"]),
+          agent("Vídeo Editor", ["Edição", "Color grading"]),
+          agent("Podcast Producer", ["Produção", "Distribuição"]),
+          agent("Newsletter Manager", ["Edição e crescimento de lista"]),
+          agent("Thumbnail Designer", ["Capas otimizadas para CTR"]),
+          agent("SEO de Vídeo", ["YouTube SEO", "Tags", "Retenção"]),
+          agent("Distribuição Multicanal", ["Repurpose entre plataformas"]),
+        ],
+        outcomes: ["Watch time", "Inscritos", "Engajamento"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 19. FACILITIES & PATRIMÔNIO
+  // ════════════════════════════════════════════════════════
+  {
+    id: "facilities",
+    name: "Facilities & Patrimônio",
+    color: "text-accent-amber",
+    squads: [
+      {
+        id: "facilities_specialties",
+        name: "Especialistas de Facilities",
+        mission: "Cuida da infraestrutura física, escritórios e patrimônio.",
+        agents: [
+          agent("Facility Manager", ["Gestão de instalações"]),
+          agent("Locação & Imóveis", ["Contratos de locação", "Expansão de espaços"]),
+          agent("Segurança Patrimonial", ["Vigilância", "Controle de acesso"]),
+          agent("Manutenção Predial", ["Preventiva", "Corretiva"]),
+          agent("Sustentabilidade Predial", ["Energia", "Água", "Resíduos"]),
+          agent("Serviços Gerais", ["Limpeza", "Copa", "Recepção"]),
+        ],
+        outcomes: ["Uptime de instalações", "Custo por m²", "Satisfação interna"],
       },
     ],
   },
