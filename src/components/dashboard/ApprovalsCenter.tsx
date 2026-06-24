@@ -758,35 +758,216 @@ const MetricCard = ({ icon: Icon, label, value, accent }: { icon: React.ElementT
   </Card>
 );
 
-// ─── Preview: renderiza diferente por tipo, incluindo carrossel Instagram para posts ───
-const PreviewBlock = ({ approval }: { approval: Approval }) => {
-  const { delivery_type, content, preview_url, title } = approval;
+// ─── Preview: renderiza diferente por tipo e suporta edição inline ───
+interface PreviewBlockProps {
+  approval: Approval;
+  editing: boolean;
+  draft: any;
+  setDraft: (v: any) => void;
+}
 
+const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps) => {
+  const { delivery_type, preview_url, title } = approval;
+  const content = editing ? draft : approval.content;
+  const patch = (p: any) => setDraft({ ...draft, ...p });
+
+  // ─── Post Instagram ───
   if (delivery_type === "post" && content?.platform === "instagram") {
     return (
-      <InstagramMockup
-        caption={content.caption}
-        hook={content.hook}
-        cta={content.cta}
-        stats={content.stats}
-        slides={content.carousel_slides}
-      />
+      <div className="space-y-3">
+        <InstagramMockup
+          caption={content.caption}
+          hook={content.hook}
+          cta={content.cta}
+          stats={content.stats}
+          slides={content.carousel_slides}
+        />
+        {editing && (
+          <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-3">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.15em] text-primary flex items-center gap-1.5">
+              <Pencil className="h-3 w-3" /> Editar postagem
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[11px] text-muted-foreground">Gancho</label>
+              <Input value={content.hook || ""} onChange={(e) => patch({ hook: e.target.value })} />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[11px] text-muted-foreground">Legenda</label>
+              <Textarea rows={5} value={content.caption || ""} onChange={(e) => patch({ caption: e.target.value })} className="resize-none" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <label className="text-[11px] text-muted-foreground">CTA</label>
+                <Input value={content.cta || ""} onChange={(e) => patch({ cta: e.target.value })} />
+              </div>
+              <div className="space-y-1.5">
+                <label className="text-[11px] text-muted-foreground">Hashtags (separadas por espaço)</label>
+                <Input
+                  value={(content.hashtags || []).join(" ")}
+                  onChange={(e) => patch({ hashtags: e.target.value.split(/\s+/).filter(Boolean) })}
+                />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     );
   }
 
+  // ─── E-mail ───
   if (delivery_type === "email") {
     return (
       <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
-        <div className="bg-muted/40 px-4 py-3 border-b border-border/40 space-y-1">
+        <div className="bg-muted/40 px-4 py-3 border-b border-border/40 space-y-2">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Assunto</div>
-          <div className="text-sm font-medium">{content?.subject || "—"}</div>
-          {content?.preheader && <div className="text-xs text-muted-foreground">{content.preheader}</div>}
+          {editing ? (
+            <>
+              <Input value={content?.subject || ""} onChange={(e) => patch({ subject: e.target.value })} />
+              <Input value={content?.preheader || ""} onChange={(e) => patch({ preheader: e.target.value })} placeholder="Preheader" />
+            </>
+          ) : (
+            <>
+              <div className="text-sm font-medium">{content?.subject || "—"}</div>
+              {content?.preheader && <div className="text-xs text-muted-foreground">{content.preheader}</div>}
+            </>
+          )}
         </div>
         <div className="p-6 text-sm text-muted-foreground leading-relaxed space-y-3">
           <p>Olá Roberto,</p>
           <p>Seu primeiro agente está armado e pronto para rodar. Em 90 segundos você ativa, conecta uma fonte de dados e vê os primeiros outputs aparecerem em tempo real.</p>
           <Button size="sm" className="mt-2">Ativar agente agora</Button>
         </div>
+      </div>
+    );
+  }
+
+  // ─── Contrato ───
+  if (delivery_type === "contract") {
+    return (
+      <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
+        <div className="bg-gradient-to-br from-amber-500/10 via-card to-card px-5 py-4 border-b border-border/40 flex items-center gap-3">
+          <FileSignature className="h-5 w-5 text-amber-500" />
+          <div className="flex-1">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato — análise antes da assinatura</div>
+            <div className="text-sm font-semibold">{content?.contract_party_a} ⇄ {content?.contract_party_b}</div>
+          </div>
+          {content?.signature_required && <Badge className="bg-amber-500/15 text-amber-600 border-amber-500/30">Assinatura</Badge>}
+        </div>
+        <div className="p-5 space-y-3 text-sm">
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="Valor" editing={editing} value={content?.contract_value} onChange={(v) => patch({ contract_value: v })} />
+            <Field label="Vigência" editing={editing} value={content?.contract_term} onChange={(v) => patch({ contract_term: v })} />
+          </div>
+          <div className="space-y-1.5">
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Cláusulas</div>
+            {(content?.clauses || []).map((c: string, i: number) => (
+              editing ? (
+                <Input key={i} value={c}
+                  onChange={(e) => {
+                    const next = [...(content.clauses || [])]; next[i] = e.target.value;
+                    patch({ clauses: next });
+                  }} />
+              ) : (
+                <div key={i} className="flex gap-2 p-2.5 rounded-lg bg-muted/30 border border-border/40 text-xs leading-relaxed">
+                  <FileCheck2 className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" /> {c}
+                </div>
+              )
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Proposta ───
+  if (delivery_type === "proposal") {
+    return (
+      <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
+        <div className="bg-gradient-to-br from-primary/10 via-card to-card px-5 py-4 border-b border-border/40">
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Proposta comercial — {content?.client}</div>
+          {editing ? (
+            <Input className="mt-1" value={content?.headline || ""} onChange={(e) => patch({ headline: e.target.value })} />
+          ) : (
+            <div className="text-base font-semibold mt-1">{content?.headline}</div>
+          )}
+          {editing ? (
+            <Textarea rows={2} className="mt-2 resize-none" value={content?.summary || ""} onChange={(e) => patch({ summary: e.target.value })} />
+          ) : (
+            <div className="text-xs text-muted-foreground mt-1">{content?.summary}</div>
+          )}
+        </div>
+        <div className="p-5 space-y-2">
+          {(content?.items || []).map((it: any, i: number) => (
+            <div key={i} className="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-muted/30 border border-border/40 text-xs">
+              {editing ? (
+                <>
+                  <Input value={it.title}
+                    onChange={(e) => { const next = [...content.items]; next[i] = { ...it, title: e.target.value }; patch({ items: next }); }} />
+                  <Input className="w-32" value={it.price}
+                    onChange={(e) => { const next = [...content.items]; next[i] = { ...it, price: e.target.value }; patch({ items: next }); }} />
+                </>
+              ) : (
+                <><span className="flex-1">{it.title}</span><span className="font-semibold">{it.price}</span></>
+              )}
+            </div>
+          ))}
+          <div className="flex items-center justify-between pt-3 border-t border-border/40 text-sm">
+            <span className="text-muted-foreground flex items-center gap-1.5"><DollarSign className="h-3.5 w-3.5" /> Total</span>
+            {editing ? (
+              <Input className="w-40 text-right" value={content?.total || ""} onChange={(e) => patch({ total: e.target.value })} />
+            ) : (
+              <span className="font-bold text-primary">{content?.total}</span>
+            )}
+          </div>
+          <div className="text-[10px] text-muted-foreground text-right">{content?.validity}</div>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Documento ───
+  if (delivery_type === "document") {
+    return (
+      <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
+        <div className="bg-muted/30 px-5 py-4 border-b border-border/40 flex items-center gap-3">
+          <FileText className="h-5 w-5 text-sky-500" />
+          {editing ? (
+            <Input value={content?.doc_title || ""} onChange={(e) => patch({ doc_title: e.target.value })} />
+          ) : (
+            <div className="text-sm font-semibold">{content?.doc_title}</div>
+          )}
+        </div>
+        <div className="p-5 space-y-2">
+          {(content?.sections || []).map((s: string, i: number) => (
+            editing ? (
+              <Input key={i} value={s}
+                onChange={(e) => { const next = [...(content.sections || [])]; next[i] = e.target.value; patch({ sections: next }); }} />
+            ) : (
+              <div key={i} className="text-xs p-2.5 rounded bg-muted/30 border border-border/40">{s}</div>
+            )
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Stories ───
+  if (delivery_type === "stories") {
+    return (
+      <div className="space-y-3">
+        <div className="mx-auto aspect-[9/16] max-w-[260px] rounded-2xl border border-border/60 bg-gradient-to-br from-fuchsia-600 via-rose-500 to-amber-500 relative overflow-hidden shadow-xl">
+          <div className="absolute inset-x-3 top-3 flex gap-1">
+            {[0,1,2].map(i => <div key={i} className="h-0.5 flex-1 rounded-full bg-white/70" />)}
+          </div>
+          <div className="absolute inset-x-4 bottom-6 text-center text-white space-y-2">
+            <div className="text-[10px] uppercase tracking-[0.25em] opacity-80">Stories • 9:16</div>
+            <div className="text-lg font-bold leading-tight">{content?.cta || "Arrasta pra cima"}</div>
+          </div>
+        </div>
+        {editing && (
+          <Textarea rows={3} value={content?.caption || ""} onChange={(e) => patch({ caption: e.target.value })}
+            className="resize-none" placeholder="Texto do stories" />
+        )}
       </div>
     );
   }
@@ -804,6 +985,14 @@ const PreviewBlock = ({ approval }: { approval: Approval }) => {
     </div>
   );
 };
+
+const Field = ({ label, value, editing, onChange }: { label: string; value: string; editing: boolean; onChange: (v: string) => void }) => (
+  <div className="space-y-1">
+    <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
+    {editing ? <Input value={value || ""} onChange={(e) => onChange(e.target.value)} /> : <div className="text-sm font-medium">{value || "—"}</div>}
+  </div>
+);
+
 
 interface InstagramSlide {
   url: string;
