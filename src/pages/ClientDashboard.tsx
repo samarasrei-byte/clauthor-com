@@ -326,6 +326,8 @@ const ClientDashboard = () => {
     { id: "squads", label: "Squads", icon: Layers3, group: advancedGroup },
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: advancedGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: advancedGroup },
+    { id: "files", label: "Arquivos", icon: FolderOpen, group: advancedGroup },
+    { id: "approvals", label: "Aprovações", icon: CheckSquare, group: advancedGroup },
     { id: "mission-composer", label: "Composer", icon: Workflow, badge: "PRO", group: advancedGroup },
 
     // ─── Sistema: operações e ajustes (Integrações movido para Configurações) ───
