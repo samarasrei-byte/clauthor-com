@@ -261,10 +261,6 @@ function DeptHub({
   position,
   color,
   name,
-function DeptHub({
-  position,
-  color,
-  name,
   agentCount,
   deptId,
   onClick,
@@ -281,11 +277,6 @@ function DeptHub({
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
   const Icon = DEPT_ICONS[deptId];
-  onClick: () => void;
-  isSelected: boolean;
-}) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const [hovered, setHovered] = useState(false);
 
   useFrame((state) => {
     if (!meshRef.current) return;
