@@ -798,22 +798,39 @@ const ApprovalCard = ({ approval, onOpen, onApprove, onRequestChanges, onReject,
 const CardPreview = ({ approval }: { approval: Approval }) => {
   const { delivery_type, content, preview_url } = approval;
 
-  // Post Instagram — mini mockup colorido
+  // Post Instagram — mini preview de carrossel
   if (delivery_type === "post" && content?.platform === "instagram") {
+    const firstSlide = content?.carousel_slides?.[0]?.url;
+    const slidesCount = content?.carousel_slides?.length ?? 0;
+
     return (
-      <div className="aspect-[16/10] relative bg-gradient-to-br from-primary via-rose-500 to-fuchsia-600 overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_30%,rgba(255,255,255,0.25),transparent_60%)]" />
+      <div className="aspect-[16/10] relative overflow-hidden bg-muted/20">
+        {firstSlide ? (
+          <img src={firstSlide} alt={content?.carousel_slides?.[0]?.alt || approval.title} className="h-full w-full object-cover" loading="lazy" />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-primary via-rose-500 to-fuchsia-600" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
         <div className="absolute top-3 left-3 flex items-center gap-1.5">
-          <Instagram className="h-3.5 w-3.5 text-white" />
-          <span className="text-[10px] text-white/90 font-medium">Instagram • Feed</span>
+          <Badge className="border-0 bg-background/80 text-foreground text-[10px] gap-1 backdrop-blur">
+            <Instagram className="h-3 w-3" /> Carrossel
+          </Badge>
         </div>
+        {slidesCount > 0 && (
+          <div className="absolute top-3 right-3">
+            <Badge variant="outline" className="border-0 bg-background/80 text-foreground text-[10px] backdrop-blur">
+              1/{slidesCount}
+            </Badge>
+          </div>
+        )}
         <div className="absolute bottom-3 left-3 right-3">
-          <div className="text-[10px] uppercase tracking-wider text-white/80">Black Friday</div>
+          <div className="text-[10px] uppercase tracking-wider text-white/80">Instagram • Aprovação</div>
           <div className="text-sm font-bold text-white leading-tight line-clamp-2 mt-0.5">{content.hook}</div>
         </div>
       </div>
     );
   }
+
 
   if (delivery_type === "email") {
     return (
