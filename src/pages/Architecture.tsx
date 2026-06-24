@@ -19,6 +19,11 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { departments, deptDetails, totalAgents, totalClauthorCost, totalCltCost, totalSavingsPercent } from "@/data/departmentData";
+import { CLAUTHOR_ORG_CHART, CLAUTHOR_AGENT_COUNT } from "@/data/clauthorOrgChart";
+
+const ORG_DEPTS = CLAUTHOR_ORG_CHART.length;
+const ORG_SQUADS = CLAUTHOR_ORG_CHART.reduce((s, d) => s + d.squads.length, 0);
+const ORG_AGENTS = CLAUTHOR_AGENT_COUNT;
 
 // ── Animations ──
 const fadeUp = {
@@ -94,9 +99,9 @@ const FlowNode = ({ icon: Icon, label, sublabel, accent = false, glow = false, o
 const architectureDetails: Record<string, { title: string; desc: string; stats: string[] }> = {
   "AI Command Center": { title: "AI Command Center", desc: "Painel central onde o CEO humano monitora e gerencia toda a operação de IA. Interface de controle e visibilidade total.", stats: ["Dashboard em tempo real", "KPIs por departamento", "Alertas inteligentes"] },
   "Thor": { title: "Thor · Orquestrador", desc: "CEO Digital. Recebe todas as demandas, classifica prioridade e distribui para o departamento correto.", stats: ["Latência: 120ms", "Uptime: 99.97%", "2.400 tarefas/dia"] },
-  "Departamentos": { title: "15 Departamentos", desc: "Organização empresarial completa. Cada departamento tem squads especializados com agentes dedicados.", stats: ["15 departamentos", "37 squads", `${totalAgents} agentes`] },
-  "Squads": { title: "37 Squads Inteligentes", desc: "Equipes temáticas dentro de cada departamento. Coordenam agentes especializados para resultados específicos.", stats: ["Coordenação automática", "Roteamento inteligente", "Escalabilidade infinita"] },
-  [`${totalAgents} Agentes`]: { title: `${totalAgents} Agentes Especializados`, desc: "Cada agente é um especialista em sua área. Trabalha 24/7, acionado por eventos.", stats: ["15 departamentos", "Operação 24/7", "Escala infinita"] },
+  "Departamentos": { title: `${ORG_DEPTS} Departamentos`, desc: "Organização empresarial completa. Cada departamento tem squads especializados com agentes dedicados.", stats: [`${ORG_DEPTS} departamentos`, `${ORG_SQUADS} squads`, `${ORG_AGENTS} agentes`] },
+  "Squads": { title: `${ORG_SQUADS} Squads Inteligentes`, desc: "Equipes temáticas dentro de cada departamento. Coordenam agentes especializados para resultados específicos.", stats: ["Coordenação automática", "Roteamento inteligente", "Escalabilidade infinita"] },
+  [`${totalAgents} Agentes`]: { title: `${ORG_AGENTS} Agentes Especializados`, desc: "Cada agente é um especialista em sua área. Trabalha 24/7, acionado por eventos.", stats: [`${ORG_DEPTS} departamentos`, "Operação 24/7", "Escala infinita"] },
   "Execution Engine": { title: "Execution Engine · Motor Proprietário", desc: "Runtime proprietário que transforma planos em ações reais: cria arquivos, executa comandos, roda testes.", stats: ["12 agentes em paralelo", "Acesso completo ao filesystem", "~180 exec/hora"] },
   "AI Gateway": { title: "AI Gateway · Roteador Inteligente", desc: "Roteamento dinâmico entre modelos. Tarefas simples → VPS local, tarefas complexas → modelos premium.", stats: ["Fallback automático", "Circuit breaker", "Multi-modelo"] },
   "AI Planner": { title: "AI Planner · Planejamento Estratégico", desc: "Módulo de inteligência para planejamento estratégico, code review e raciocínio complexo.", stats: ["Context: 200K tokens", "Precisão: 94.2%", "Multi-modelo"] },
@@ -622,9 +627,9 @@ const Architecture = () => {
             <FlowArrow />
             <ClickableArchNode icon={Zap} label="Thor" sublabel="Orquestrador Central" accent />
             <FlowArrow />
-            <ClickableArchNode icon={Users} label="Departamentos" sublabel="15 departamentos" />
+            <ClickableArchNode icon={Users} label="Departamentos" sublabel={`${ORG_DEPTS} departamentos`} />
             <FlowArrow />
-            <ClickableArchNode icon={Network} label="Squads" sublabel="37 squads inteligentes" />
+            <ClickableArchNode icon={Network} label="Squads" sublabel={`${ORG_SQUADS} squads inteligentes`} />
             <FlowArrow />
             <ClickableArchNode icon={Bot} label={`${totalAgents} Agentes`} sublabel="Workers especializados" />
             <FlowArrow />
@@ -749,7 +754,7 @@ const Architecture = () => {
       <Section id="squads">
         <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={{ visible: { transition: { staggerChildren: 0.06 } } }}>
           <motion.div variants={fadeUp}><SectionTag>Seção 4 · Squads</SectionTag></motion.div>
-          <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-4xl font-bold mb-3">37 Squads Inteligentes</motion.h2>
+          <motion.h2 variants={fadeUp} className="font-display text-3xl sm:text-4xl font-bold mb-3">{ORG_SQUADS} Squads Inteligentes</motion.h2>
           <motion.p variants={fadeUp} className="text-muted-foreground max-w-2xl text-sm leading-relaxed mb-8">
             Cada departamento contém squads responsáveis por resultados específicos. Os squads coordenam grupos de agentes especializados.
           </motion.p>

@@ -8,6 +8,9 @@ import {
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import APICredentialEditor from "@/components/timeline/APICredentialEditor";
+import { CLAUTHOR_ORG_CHART, CLAUTHOR_AGENT_COUNT } from "@/data/clauthorOrgChart";
+
+const _SQUADS = CLAUTHOR_ORG_CHART.reduce((s, d) => s + d.squads.length, 0);
 
 // ─── Timeline Data ───
 interface TimelineStep {
@@ -165,8 +168,8 @@ const TIMELINE_STEPS: TimelineStep[] = [
 
 // ─── Stats ───
 const PROJECT_STATS = [
-  { label: "Agentes Criados", value: "200", icon: <Bot className="h-5 w-5" /> },
-  { label: "Squads Inteligentes", value: "37", icon: <Users className="h-5 w-5" /> },
+  { label: "Agentes Criados", value: String(CLAUTHOR_AGENT_COUNT), icon: <Bot className="h-5 w-5" /> },
+  { label: "Squads Inteligentes", value: String(_SQUADS), icon: <Users className="h-5 w-5" /> },
   { label: "Edge Functions", value: "30+", icon: <Code2 className="h-5 w-5" /> },
   { label: "Horas de Trabalho", value: "900+", icon: <Clock className="h-5 w-5" /> },
 ];
