@@ -365,10 +365,11 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, onVoiceSubmit, lang, 
       </button>
 
       <button type="submit" disabled={!input.trim() || isLoading}
-        className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} bg-accent-violet/90 hover:bg-accent-violet text-accent-violet-foreground flex items-center justify-center shrink-0 disabled:opacity-30 transition-all shadow-lg shadow-accent-violet/20`}
+        className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} bg-accent-violet hover:bg-accent-violet/90 text-accent-violet-foreground flex items-center justify-center shrink-0 disabled:opacity-40 transition-all shadow-lg shadow-accent-violet/30 focus:outline-none focus:ring-2 focus:ring-accent-violet/50`}
       >
         {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
       </button>
+
     </form>
   );
 };
