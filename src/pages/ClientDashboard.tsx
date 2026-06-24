@@ -395,6 +395,8 @@ const ClientDashboard = () => {
     "operations-center": t("dashboard.operations_center", { defaultValue: "Operações" }),
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
+    files: "Arquivos",
+    approvals: "Aprovações",
     squads: "Squads",
     "neural-network": "Rede Neural",
     "agent-replay": "Agent Replay",
