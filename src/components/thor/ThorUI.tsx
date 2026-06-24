@@ -349,7 +349,7 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, onVoiceSubmit, lang, 
         onChange={(e) => setInput(e.target.value)}
         placeholder={lang.startsWith("pt") ? (isListening ? "🎤 Ouvindo..." : "Fale com o Thor...") : (isListening ? "🎤 Listening..." : "Talk to Thor...")}
         disabled={isLoading || isListening}
-        className={`flex-1 bg-muted/10 border ${isListening ? "border-accent-violet/40 animate-pulse" : "border-accent-violet/10"} ${rounded ? "rounded-full px-4" : "rounded-lg px-3"} py-2.5 text-xs font-mono focus:outline-none focus:border-accent-violet/30 transition-all placeholder:text-muted-foreground/30`}
+        className={`flex-1 bg-muted/40 dark:bg-muted/10 border ${isListening ? "border-accent-violet/50 animate-pulse" : "border-accent-violet/20 dark:border-accent-violet/10"} ${rounded ? "rounded-full px-4" : "rounded-lg px-3"} py-2.5 text-xs font-mono text-foreground focus:outline-none focus:border-accent-violet/60 focus:ring-2 focus:ring-accent-violet/20 transition-all placeholder:text-muted-foreground/50`}
       />
       <button type="button" onClick={toggleVoice} disabled={isLoading}
         className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} ${isListening ? "bg-destructive/80 hover:bg-destructive" : "bg-muted/20 hover:bg-muted/40"} flex items-center justify-center shrink-0 transition-all relative`}
