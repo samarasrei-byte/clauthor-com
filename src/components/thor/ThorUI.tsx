@@ -804,19 +804,58 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
         {/* Bubble preview when chat is closed */}
         {!showChat && lastMessage && (
           <motion.div
-            className="max-w-[260px] cursor-pointer"
+            className="max-w-[260px] cursor-pointer group"
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
+            whileHover={{ scale: 1.02 }}
             onClick={() => setShowChat(true)}
           >
-            <div className="bg-background/90 backdrop-blur-xl border border-accent-violet/10 rounded-2xl rounded-br-sm px-3.5 py-2.5 shadow-[0_8px_30px_-8px_hsl(var(--accent-violet)/0.15)]">
-              <p className="text-[10px] text-foreground/80 leading-snug font-mono line-clamp-2">
-                {lastMessage.content.replace(/[*#]/g, "").slice(0, 120)}
-                {lastMessage.content.length > 120 && "..."}
-              </p>
+            <div className="relative rounded-2xl rounded-br-sm p-[1.5px] overflow-hidden">
+              {/* Animated holographic border */}
+              <motion.div
+                className="absolute inset-[-50%] w-[200%] h-[200%]"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, transparent 0%, hsl(var(--accent-cyan)/0.7) 15%, transparent 30%, hsl(var(--accent-violet)/0.8) 55%, transparent 75%)",
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+              />
+              {/* Halo */}
+              <div
+                className="absolute -inset-4 rounded-3xl opacity-50 blur-xl pointer-events-none"
+                style={{ background: "radial-gradient(50% 60% at 50% 50%, hsl(var(--accent-violet)/0.25), transparent 70%)" }}
+              />
+              <div
+                className="relative rounded-2xl rounded-br-sm px-3.5 py-2.5 shadow-[0_12px_40px_-10px_hsl(var(--accent-violet)/0.3)] overflow-hidden"
+                style={{
+                  background: "linear-gradient(180deg, hsl(var(--background)/0.95), hsl(var(--background)/0.98))",
+                  backdropFilter: "blur(20px) saturate(1.4)",
+                }}
+              >
+                {/* Subtle grid */}
+                <div
+                  className="absolute inset-0 pointer-events-none opacity-[0.06] mix-blend-overlay"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(hsl(var(--accent-cyan)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--accent-cyan)) 1px, transparent 1px)",
+                    backgroundSize: "16px 16px",
+                  }}
+                />
+                {/* Corner HUD */}
+                <span className="absolute top-1 left-1 w-2 h-[1px] bg-accent-cyan/60" />
+                <span className="absolute top-1 left-1 w-[1px] h-2 bg-accent-cyan/60" />
+                <span className="absolute bottom-1 right-1 w-2 h-[1px] bg-accent-cyan/60" />
+                <span className="absolute bottom-1 right-1 w-[1px] h-2 bg-accent-cyan/60" />
+                <p className="relative text-[10px] text-foreground leading-snug font-mono line-clamp-2">
+                  {lastMessage.content.replace(/[*#]/g, "").slice(0, 120)}
+                  {lastMessage.content.length > 120 && "..."}
+                </p>
+              </div>
             </div>
           </motion.div>
         )}
+
 
         {/* Orb button */}
         <div className="relative cursor-pointer" onClick={() => setShowChat(!showChat)}>
