@@ -1697,7 +1697,10 @@ Exemplo de redirecionamento:
 
           if (agentId) {
             const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
-            if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+            if (lastUserMsg) {
+              await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+              writeEpisodicMemory(adminClient, tenantId, agentId, userId, lastUserMsg.content, assistantMessage, false).catch(() => {});
+            }
           }
         } catch (e) { console.error("Stream pipe error:", e); }
         finally { await writer.close(); }
