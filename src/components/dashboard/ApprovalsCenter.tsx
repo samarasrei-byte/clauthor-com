@@ -344,7 +344,7 @@ const ApprovalsCenter = () => {
             {isLoading ? (
               <div className="text-sm text-muted-foreground py-12 text-center">Carregando...</div>
             ) : filtered.length === 0 ? (
-              {(() => {
+              (() => {
                 const EmptyIcon = STATUS_META[s].icon;
                 return (
                   <Card className="border-dashed bg-muted/10">
