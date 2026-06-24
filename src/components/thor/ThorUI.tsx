@@ -262,9 +262,10 @@ const MessageList = ({ messages, isLoading, messagesEndRef, compact }: MessageLi
         {msg.role === "assistant" && <ThorAvatar size={compact ? 22 : 26} />}
         <div className={`max-w-[${compact ? "80" : "85"}%] rounded-xl px-3 py-${compact ? "2" : "2.5"} ${
           msg.role === "user"
-            ? `bg-accent-violet/90 text-accent-violet-foreground${compact ? "" : " shadow-lg shadow-accent-violet/20"}`
-            : "bg-muted/20 border border-accent-violet/5"
+            ? `bg-accent-violet text-accent-violet-foreground${compact ? "" : " shadow-lg shadow-accent-violet/30"}`
+            : "bg-muted/40 dark:bg-muted/20 border border-accent-violet/15 dark:border-accent-violet/10 text-foreground"
         }`}>
+
           {msg.role === "assistant" ? (
             <div className="text-[11px] prose prose-xs dark:prose-invert max-w-none [&_p]:mb-0.5 leading-snug">
               <ReactMarkdown>{msg.content}</ReactMarkdown>
@@ -348,10 +349,10 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, onVoiceSubmit, lang, 
         onChange={(e) => setInput(e.target.value)}
         placeholder={lang.startsWith("pt") ? (isListening ? "🎤 Ouvindo..." : "Fale com o Thor...") : (isListening ? "🎤 Listening..." : "Talk to Thor...")}
         disabled={isLoading || isListening}
-        className={`flex-1 bg-muted/10 border ${isListening ? "border-accent-violet/40 animate-pulse" : "border-accent-violet/10"} ${rounded ? "rounded-full px-4" : "rounded-lg px-3"} py-2.5 text-xs font-mono focus:outline-none focus:border-accent-violet/30 transition-all placeholder:text-muted-foreground/30`}
+        className={`flex-1 bg-muted/40 dark:bg-muted/10 border ${isListening ? "border-accent-violet/50 animate-pulse" : "border-accent-violet/20 dark:border-accent-violet/10"} ${rounded ? "rounded-full px-4" : "rounded-lg px-3"} py-2.5 text-xs font-mono text-foreground focus:outline-none focus:border-accent-violet/60 focus:ring-2 focus:ring-accent-violet/20 transition-all placeholder:text-muted-foreground/50`}
       />
       <button type="button" onClick={toggleVoice} disabled={isLoading}
-        className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} ${isListening ? "bg-destructive/80 hover:bg-destructive" : "bg-muted/20 hover:bg-muted/40"} flex items-center justify-center shrink-0 transition-all relative`}
+        className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} ${isListening ? "bg-destructive/80 hover:bg-destructive" : "bg-muted/40 dark:bg-muted/20 hover:bg-accent-violet/15 border border-accent-violet/15 dark:border-transparent"} flex items-center justify-center shrink-0 transition-all relative focus:outline-none focus:ring-2 focus:ring-accent-violet/40`}
       >
         {isListening ? (
           <>
@@ -359,14 +360,16 @@ const ChatInput = ({ input, setInput, isLoading, onSubmit, onVoiceSubmit, lang, 
             <span className={`absolute inset-0 ${rounded ? "rounded-full" : "rounded-lg"} border border-destructive animate-ping opacity-30`} />
           </>
         ) : (
-          <Mic className="h-3.5 w-3.5 text-accent-violet/60" />
+          <Mic className="h-3.5 w-3.5 text-accent-violet/80" />
         )}
       </button>
+
       <button type="submit" disabled={!input.trim() || isLoading}
-        className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} bg-accent-violet/90 hover:bg-accent-violet text-accent-violet-foreground flex items-center justify-center shrink-0 disabled:opacity-30 transition-all shadow-lg shadow-accent-violet/20`}
+        className={`h-9 w-9 ${rounded ? "rounded-full" : "rounded-lg"} bg-accent-violet hover:bg-accent-violet/90 text-accent-violet-foreground flex items-center justify-center shrink-0 disabled:opacity-40 transition-all shadow-lg shadow-accent-violet/30 focus:outline-none focus:ring-2 focus:ring-accent-violet/50`}
       >
         {isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Send className="h-3.5 w-3.5" />}
       </button>
+
     </form>
   );
 };
@@ -804,19 +807,58 @@ export function ThorRenderer(props: ThorCoreState & ThorCoreActions) {
         {/* Bubble preview when chat is closed */}
         {!showChat && lastMessage && (
           <motion.div
-            className="max-w-[260px] cursor-pointer"
+            className="max-w-[260px] cursor-pointer group"
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
+            whileHover={{ scale: 1.02 }}
             onClick={() => setShowChat(true)}
           >
-            <div className="bg-background/90 backdrop-blur-xl border border-accent-violet/10 rounded-2xl rounded-br-sm px-3.5 py-2.5 shadow-[0_8px_30px_-8px_hsl(var(--accent-violet)/0.15)]">
-              <p className="text-[10px] text-foreground/80 leading-snug font-mono line-clamp-2">
-                {lastMessage.content.replace(/[*#]/g, "").slice(0, 120)}
-                {lastMessage.content.length > 120 && "..."}
-              </p>
+            <div className="relative rounded-2xl rounded-br-sm p-[1.5px] overflow-hidden">
+              {/* Animated holographic border */}
+              <motion.div
+                className="absolute inset-[-50%] w-[200%] h-[200%]"
+                style={{
+                  background:
+                    "conic-gradient(from 0deg, transparent 0%, hsl(var(--accent-cyan)/0.7) 15%, transparent 30%, hsl(var(--accent-violet)/0.8) 55%, transparent 75%)",
+                }}
+                animate={{ rotate: 360 }}
+                transition={{ duration: 7, repeat: Infinity, ease: "linear" }}
+              />
+              {/* Halo */}
+              <div
+                className="absolute -inset-4 rounded-3xl opacity-50 blur-xl pointer-events-none"
+                style={{ background: "radial-gradient(50% 60% at 50% 50%, hsl(var(--accent-violet)/0.25), transparent 70%)" }}
+              />
+              <div
+                className="relative rounded-2xl rounded-br-sm px-3.5 py-2.5 shadow-[0_12px_40px_-10px_hsl(var(--accent-violet)/0.3)] overflow-hidden"
+                style={{
+                  background: "linear-gradient(180deg, hsl(var(--background)/0.95), hsl(var(--background)/0.98))",
+                  backdropFilter: "blur(20px) saturate(1.4)",
+                }}
+              >
+                {/* Subtle grid */}
+                <div
+                  className="absolute inset-0 pointer-events-none opacity-[0.06] mix-blend-overlay"
+                  style={{
+                    backgroundImage:
+                      "linear-gradient(hsl(var(--accent-cyan)) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--accent-cyan)) 1px, transparent 1px)",
+                    backgroundSize: "16px 16px",
+                  }}
+                />
+                {/* Corner HUD */}
+                <span className="absolute top-1 left-1 w-2 h-[1px] bg-accent-cyan/60" />
+                <span className="absolute top-1 left-1 w-[1px] h-2 bg-accent-cyan/60" />
+                <span className="absolute bottom-1 right-1 w-2 h-[1px] bg-accent-cyan/60" />
+                <span className="absolute bottom-1 right-1 w-[1px] h-2 bg-accent-cyan/60" />
+                <p className="relative text-[10px] text-foreground leading-snug font-mono line-clamp-2">
+                  {lastMessage.content.replace(/[*#]/g, "").slice(0, 120)}
+                  {lastMessage.content.length > 120 && "..."}
+                </p>
+              </div>
             </div>
           </motion.div>
         )}
+
 
         {/* Orb button */}
         <div className="relative cursor-pointer" onClick={() => setShowChat(!showChat)}>
