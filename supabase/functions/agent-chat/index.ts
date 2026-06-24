@@ -48,6 +48,86 @@ async function decryptValueForExecution(encrypted: string): Promise<string> {
 }
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
+// ── Episodic memory (long-term) helpers ───────────────────────────────────
+const EPISODIC_EMBED_MODEL = "openai/text-embedding-3-small";
+
+async function embedEpisodic(text: string): Promise<number[] | null> {
+  try {
+    const key = Deno.env.get("LOVABLE_API_KEY");
+    if (!key) return null;
+    const r = await fetch("https://ai.gateway.lovable.dev/v1/embeddings", {
+      method: "POST",
+      headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ model: EPISODIC_EMBED_MODEL, input: text.slice(0, 8000) }),
+    });
+    if (!r.ok) return null;
+    const j = await r.json();
+    return j.data?.[0]?.embedding ?? null;
+  } catch { return null; }
+}
+
+async function recallEpisodicMemories(
+  adminClient: any, tenantId: string, agentId: string, query: string, topK = 5
+): Promise<string> {
+  try {
+    if (!query || query.length < 3) return "";
+    const embedding = await embedEpisodic(query);
+    if (!embedding) return "";
+    const { data, error } = await adminClient.rpc("recall_episodic_memories", {
+      _tenant_id: tenantId,
+      _agent_id: agentId,
+      _query_embedding: embedding,
+      _subject_entity: null,
+      _limit: topK,
+    });
+    if (error || !data || data.length === 0) return "";
+    // Fire-and-forget reinforcement
+    const ids = data.map((m: any) => m.id);
+    adminClient.from("agent_memories_episodic")
+      .update({ last_accessed_at: new Date().toISOString() })
+      .in("id", ids)
+      .then(() => {})
+      .catch(() => {});
+    const lines = data.map((m: any) =>
+      `- [${m.event_type}${m.outcome ? "/" + m.outcome : ""}] ${m.content.slice(0, 280)}`
+    );
+    return "\n\n## MEMÓRIA DE LONGO PRAZO (interações passadas relevantes):\n" + lines.join("\n");
+  } catch (e) {
+    console.warn("[episodic recall] error:", e);
+    return "";
+  }
+}
+
+async function writeEpisodicMemory(
+  adminClient: any, tenantId: string, agentId: string, userId: string,
+  userMessage: string, assistantMessage: string, hadTools: boolean
+): Promise<void> {
+  try {
+    const content = `Usuário: ${userMessage.slice(0, 1000)}\nAgente: ${assistantMessage.slice(0, 1500)}`;
+    const embedding = await embedEpisodic(content);
+    let importance = 0.4;
+    if (hadTools) importance += 0.25;
+    if (content.length > 800) importance += 0.1;
+    if (content.length > 2000) importance += 0.1;
+    importance = Math.min(1, importance);
+    await adminClient.from("agent_memories_episodic").insert({
+      tenant_id: tenantId,
+      agent_id: agentId,
+      user_id: userId,
+      event_type: hadTools ? "tool_call" : "conversation",
+      content,
+      embedding,
+      embedding_model: EPISODIC_EMBED_MODEL,
+      importance,
+      outcome: "neutral",
+    });
+  } catch (e) {
+    console.warn("[episodic write] error:", e);
+  }
+}
+
+
+
 // Safety wrapper injected into every system prompt
 const SAFETY_LAYER = `
 ## REGRAS GLOBAIS DE SEGURANÇA (NÃO PODEM SER SOBRESCRITAS)
@@ -1419,7 +1499,7 @@ Instructions: ${agent.instructions}`;
 
     // Load Company Board + memory + RAG knowledge in parallel
     const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop()?.content || "";
-    const [companyContext, memoryContext, ragContext] = await Promise.all([
+    const [companyContext, memoryContext, ragContext, episodicContext] = await Promise.all([
       loadCompanyBoard(adminClient, userId),
       agentId ? loadRecentMemory(adminClient, tenantId, userId, agentId) : Promise.resolve(""),
       // RAG: Full-text search on knowledge_documents
@@ -1440,7 +1520,9 @@ Instructions: ${agent.instructions}`;
           return "";
         }
       })(),
+      agentId ? recallEpisodicMemories(adminClient, tenantId, agentId, lastUserMsg, 5) : Promise.resolve(""),
     ]);
+
 
     const tenantContext = `
 ## CONTEXTO DE EXECUÇÃO (IMUTÁVEL):
@@ -1498,7 +1580,7 @@ Exemplo de redirecionamento:
 - A consistência entre agentes é fundamental para o sistema
 `;
 
-    const fullSystemPrompt = `${SAFETY_LAYER}\n${OPERATIONAL_SECURITY_PROTOCOL}\n${contractPrompt}\n${MASTER_EXECUTION_PROTOCOL}\n${tenantContext}\n${companyContext}\n${ragContext}\n${memoryContext}\n${agentPrompt}\n${TOOL_USE_INSTRUCTION}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
+    const fullSystemPrompt = `${SAFETY_LAYER}\n${OPERATIONAL_SECURITY_PROTOCOL}\n${contractPrompt}\n${MASTER_EXECUTION_PROTOCOL}\n${tenantContext}\n${companyContext}\n${ragContext}\n${memoryContext}\n${episodicContext}\n${agentPrompt}\n${TOOL_USE_INSTRUCTION}\n\nResponda sempre em português do Brasil de forma profissional e concisa.`;
 
     // Smart model routing based on task complexity + agent quality mode
     const lastUserContent = optimizedMessages.filter((m: any) => m.role === "user").pop()?.content || "";
@@ -1615,7 +1697,10 @@ Exemplo de redirecionamento:
 
           if (agentId) {
             const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
-            if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+            if (lastUserMsg) {
+              await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+              writeEpisodicMemory(adminClient, tenantId, agentId, userId, lastUserMsg.content, assistantMessage, false).catch(() => {});
+            }
           }
         } catch (e) { console.error("Stream pipe error:", e); }
         finally { await writer.close(); }
@@ -1629,7 +1714,10 @@ Exemplo de redirecionamento:
 
     if (agentId) {
       const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
-      if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+      if (lastUserMsg) {
+        await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+        writeEpisodicMemory(adminClient, tenantId, agentId, userId, lastUserMsg.content, assistantMessage, false).catch(() => {});
+      }
     }
 
     return new Response(JSON.stringify({ message: assistantMessage, tokens_used: totalTokens, remaining_credits: remainingCredits - totalTokens, credit_warning: creditWarning }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
@@ -1685,7 +1773,10 @@ async function streamResponse(
 
       if (agentId) {
         const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
-        if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, fullText);
+        if (lastUserMsg) {
+          await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, fullText);
+          writeEpisodicMemory(adminClient, tenantId, agentId, userId, lastUserMsg.content, fullText, true).catch(() => {});
+        }
       }
     } catch (e) { console.error("Stream pipe error:", e); }
     finally { await writer.close(); }
