@@ -8,7 +8,8 @@ import {
   LayoutDashboard, Bot, BarChart3, CreditCard,
   Sparkles, Settings, Brain, MessageSquare, Plug, ChevronLeft,
   Building2, KanbanSquare, Layers3,
-  Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio
+  Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio,
+  CheckSquare, FolderOpen
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -325,6 +326,8 @@ const ClientDashboard = () => {
     { id: "squads", label: "Squads", icon: Layers3, group: advancedGroup },
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: advancedGroup },
     { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: advancedGroup },
+    { id: "files", label: "Arquivos", icon: FolderOpen, group: advancedGroup },
+    { id: "approvals", label: "Aprovações", icon: CheckSquare, group: advancedGroup },
     { id: "mission-composer", label: "Composer", icon: Workflow, badge: "PRO", group: advancedGroup },
 
     // ─── Sistema: operações e ajustes (Integrações movido para Configurações) ───
@@ -337,6 +340,7 @@ const ClientDashboard = () => {
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "chat", "agent-chat-active",
     "intelligence-hub", "omnix", "empresa", "kanban",
+    "files", "approvals",
     "neural-network",
     "operations-center", "settings",
   ]);
@@ -391,6 +395,8 @@ const ClientDashboard = () => {
     "operations-center": t("dashboard.operations_center", { defaultValue: "Operações" }),
     empresa: t("dashboard.company", { defaultValue: "Empresa" }),
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
+    files: "Arquivos",
+    approvals: "Aprovações",
     squads: "Squads",
     "neural-network": "Rede Neural",
     "agent-replay": "Agent Replay",
