@@ -445,6 +445,7 @@ function NetworkScene({
             color={dept.color}
             name={dept.name}
             agentCount={dept.agentCount}
+            deptId={dept.id}
             onClick={() => onSelectDept(selectedDept === dept.id ? null : dept.id)}
             isSelected={selectedDept === dept.id}
           />
