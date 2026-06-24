@@ -565,7 +565,26 @@ const ApprovalsCenter = () => {
                     <Badge variant="secondary">{DELIVERY_LABEL[selected.delivery_type]}</Badge>
                     <span>há {timeAgo(selected.created_at)}</span>
                   </div>
-                  <SheetTitle className="text-xl mt-2">{selected.title}</SheetTitle>
+                  <div className="flex items-start justify-between gap-3 mt-2">
+                    <SheetTitle className="text-xl">{selected.title}</SheetTitle>
+                    {!editing ? (
+                      <Button size="sm" variant="outline" className="gap-1.5 shrink-0"
+                        onClick={() => { setDraft(selected.content); setEditing(true); }}>
+                        <Pencil className="h-3.5 w-3.5" /> Editar
+                      </Button>
+                    ) : (
+                      <div className="flex gap-1.5 shrink-0">
+                        <Button size="sm" variant="ghost" className="gap-1.5"
+                          onClick={() => { setEditing(false); setDraft(selected.content); }}>
+                          <X className="h-3.5 w-3.5" /> Cancelar
+                        </Button>
+                        <Button size="sm" className="gap-1.5"
+                          onClick={() => saveEdits.mutate({ approval: selected, newContent: draft })}>
+                          <Save className="h-3.5 w-3.5" /> Salvar + OK
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                   {selected.agent_name && (
                     <div className="text-xs text-muted-foreground flex items-center gap-1.5">
                       <Sparkles className="h-3 w-3 text-primary" /> Gerado por {selected.agent_name}
@@ -575,7 +594,34 @@ const ApprovalsCenter = () => {
               </div>
 
               <div className="p-6 space-y-6">
-                <PreviewBlock approval={selected} />
+                <PreviewBlock
+                  approval={selected}
+                  editing={editing}
+                  draft={draft}
+                  setDraft={setDraft}
+                />
+
+                {/* Observação rápida no próprio card */}
+                <div className="rounded-xl border border-border/50 bg-muted/20 p-3 space-y-2">
+                  <div className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                    <StickyNote className="h-3 w-3" /> Observação rápida neste {DELIVERY_LABEL[selected.delivery_type].toLowerCase()}
+                  </div>
+                  <Textarea
+                    value={quickNote}
+                    onChange={(e) => setQuickNote(e.target.value)}
+                    rows={2}
+                    placeholder={`Ex: ${selected.delivery_type === "video" ? "Cortar os 2s finais e legendar." : selected.delivery_type === "contract" ? "Revisar cláusula 3 antes de assinar." : "Deixar o título mais direto."}`}
+                    className="resize-none text-sm"
+                  />
+                  <div className="flex justify-end">
+                    <Button size="sm" variant="outline" className="gap-1.5"
+                      disabled={!quickNote.trim() || addQuickNote.isPending}
+                      onClick={() => addQuickNote.mutate({ approval: selected, body: quickNote.trim() })}>
+                      <Send className="h-3 w-3" /> Anexar observação
+                    </Button>
+                  </div>
+                </div>
+
 
                 <Section icon={History} title="Histórico de versões">
                   <div className="space-y-1.5">
