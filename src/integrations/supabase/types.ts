@@ -223,6 +223,81 @@ export type Database = {
           },
         ]
       }
+      agent_memories_episodic: {
+        Row: {
+          access_count: number
+          agent_id: string
+          content: string
+          created_at: string
+          decay_score: number
+          embedding: string | null
+          embedding_model: string
+          event_type: string
+          id: string
+          importance: number
+          last_accessed_at: string
+          metadata: Json
+          outcome: string | null
+          subject_entity: string | null
+          tenant_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_count?: number
+          agent_id: string
+          content: string
+          created_at?: string
+          decay_score?: number
+          embedding?: string | null
+          embedding_model?: string
+          event_type: string
+          id?: string
+          importance?: number
+          last_accessed_at?: string
+          metadata?: Json
+          outcome?: string | null
+          subject_entity?: string | null
+          tenant_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_count?: number
+          agent_id?: string
+          content?: string
+          created_at?: string
+          decay_score?: number
+          embedding?: string | null
+          embedding_model?: string
+          event_type?: string
+          id?: string
+          importance?: number
+          last_accessed_at?: string
+          metadata?: Json
+          outcome?: string | null
+          subject_entity?: string | null
+          tenant_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_memories_episodic_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_memories_episodic_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agent_memory: {
         Row: {
           agent_id: string
@@ -2879,6 +2954,7 @@ export type Database = {
       }
     }
     Functions: {
+      apply_memory_decay: { Args: never; Returns: number }
       check_rate_limit: {
         Args: { _api_key_id: string; _plan: string }
         Returns: Json
@@ -2918,6 +2994,26 @@ export type Database = {
           max_uses: number
           plan_upgrade: string
           used_count: number
+        }[]
+      }
+      recall_episodic_memories: {
+        Args: {
+          _agent_id: string
+          _limit?: number
+          _query_embedding: string
+          _subject_entity?: string
+          _tenant_id: string
+        }
+        Returns: {
+          composite_score: number
+          content: string
+          created_at: string
+          event_type: string
+          id: string
+          importance: number
+          outcome: string
+          similarity: number
+          subject_entity: string
         }[]
       }
       redeem_coupon: {
