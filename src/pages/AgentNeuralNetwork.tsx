@@ -15,42 +15,14 @@ const isWebGLAvailable = (): boolean => {
   }
 };
 import { Canvas, useFrame, ThreeEvent } from "@react-three/fiber";
-import { OrbitControls, Float, Text, Billboard, Html } from "@react-three/drei";
+import { OrbitControls, Float, Text, Billboard } from "@react-three/drei";
 import * as THREE from "three";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 // Estrutura oficial Clauthor: CEO Virtual (orquestrador) + 9 departamentos com sub-especialidades
 const WORKFORCE = CLAUTHOR_ORG_CHART;
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  X, Zap, Users, Target,
-  Crown, Megaphone, DollarSign, Briefcase, Code2, Truck, Scale, Headphones,
-  BarChart3, Lightbulb, Leaf, Globe, Handshake, Layers, TrendingUp, ShieldAlert,
-  Database, Film, Building2,
-} from "lucide-react";
+import { X, Zap, Users, Target } from "lucide-react";
 
-// ── Icon per department ──
-const DEPT_ICONS: Record<string, React.ComponentType<React.SVGProps<SVGSVGElement> & { className?: string }>> = {
-  executivo: Crown,
-  marketing: Megaphone,
-  vendas: Target,
-  financeiro: DollarSign,
-  rh: Briefcase,
-  ti: Code2,
-  operacoes: Truck,
-  juridico: Scale,
-  atendimento: Headphones,
-  dados: BarChart3,
-  inovacao: Lightbulb,
-  sustentabilidade: Leaf,
-  internacional: Globe,
-  parcerias: Handshake,
-  produto: Layers,
-  growth: TrendingUp,
-  seguranca: ShieldAlert,
-  mlops: Database,
-  midia: Film,
-  facilities: Building2,
-};
 
 // ── Color palette per department (matches CLAUTHOR_ORG_CHART ids) ──
 const DEPT_COLORS: Record<string, string> = {
@@ -276,7 +248,7 @@ function DeptHub({
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
-  const Icon = DEPT_ICONS[deptId];
+  
 
   useFrame((state) => {
     if (!meshRef.current) return;
@@ -323,22 +295,8 @@ function DeptHub({
           {agentCount} agentes
         </Text>
       </Billboard>
-      {Icon && (
-        <Html position={position} center distanceFactor={6} zIndexRange={[10, 0]} occlude={false}>
-          <div
-            style={{
-              background: "rgba(15, 15, 20, 0.55)",
-              border: `1px solid ${color}33`,
-              boxShadow: isSelected ? `0 0 8px ${color}44` : "none",
-              transform: `scale(${isSelected ? 1.15 : hovered ? 1.08 : 1})`,
-            }}
-            className="w-8 h-8 rounded-full flex items-center justify-center pointer-events-none transition-transform backdrop-blur-md"
-          >
-            <Icon className="w-4 h-4" style={{ color: `${color}cc`, opacity: 0.7 }} />
-          </div>
 
-        </Html>
-      )}
+
     </group>
   );
 }
