@@ -340,6 +340,7 @@ const ClientDashboard = () => {
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "chat", "agent-chat-active",
     "intelligence-hub", "omnix", "empresa", "kanban",
+    "files", "approvals",
     "neural-network",
     "operations-center", "settings",
   ]);
