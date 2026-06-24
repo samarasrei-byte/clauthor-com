@@ -17,9 +17,9 @@ const isWebGLAvailable = (): boolean => {
 import { Canvas, useFrame, ThreeEvent } from "@react-three/fiber";
 import { OrbitControls, Float, Text, Billboard, Html } from "@react-three/drei";
 import * as THREE from "three";
-import { WORKFORCE as ALL_WORKFORCE } from "@/data/workforceArchitecture";
-// Exibimos apenas departamentos corporativos padrão (oculta vertical "Advocacia")
-const WORKFORCE = ALL_WORKFORCE.filter((d) => d.id !== "advocacia");
+import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
+// Estrutura oficial Clauthor: CEO Virtual (orquestrador) + 9 departamentos com sub-especialidades
+const WORKFORCE = CLAUTHOR_ORG_CHART;
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Zap, Users, Target } from "lucide-react";
 
