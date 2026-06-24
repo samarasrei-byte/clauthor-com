@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { SEO } from "@/components/SEO";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Users, MessageSquare, TrendingUp } from "lucide-react";
@@ -113,6 +114,7 @@ const Community = () => {
 
   return (
     <div className="min-h-screen pt-24 pb-16 px-4">
+      <SEO title="Community — Builders, Templates & Showcases | Clauthor" description="Share templates, ask questions and discover what other operators build with Clauthor's AI workforce." path="/community" />
       <div className="max-w-5xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

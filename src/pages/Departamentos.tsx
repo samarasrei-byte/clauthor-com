@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import { SEO } from "@/components/SEO";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
@@ -165,6 +166,7 @@ const Departamentos = () => {
 
   return (
     <div className="min-h-screen pt-20 pb-16 px-4 relative">
+      <SEO title="AI Departments — Pre-built Squads | Clauthor" description="Explore 20 ready-made AI departments: Sales, Marketing, Legal, Finance, HR, Support and more. Deploy in minutes." path="/departamentos" />
       {/* Background effects */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />

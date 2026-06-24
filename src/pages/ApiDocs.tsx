@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SEO } from "@/components/SEO";
 import { motion } from "framer-motion";
 import { Copy, Check, ChevronDown, ChevronRight, Terminal, Zap, Shield, Book, Code2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -355,6 +356,7 @@ const EndpointCard = ({ ep }: { ep: Endpoint }) => {
 const ApiDocs = () => {
   return (
     <div className="min-h-screen bg-background">
+      <SEO title="API Reference — Clauthor Developer Docs" description="REST API documentation for Clauthor: authenticate, create agents, run executions, manage credits and outcomes." path="/api-docs" />
       <div className="max-w-4xl mx-auto px-4 py-16 space-y-12">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4">
