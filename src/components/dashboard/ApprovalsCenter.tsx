@@ -447,7 +447,9 @@ const ApprovalsCenter = () => {
       return Math.round(sum / done.length / 3600000);
     })();
     const revisions = approvals.reduce((acc, a) => acc + Math.max(0, a.current_version - 1), 0);
-    return { total, approved, pending, rate, avgHours, revisions };
+    const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
+    const today = approvals.filter((a) => new Date(a.created_at) >= startOfDay).length;
+    return { total, approved, pending, rate, avgHours, revisions, today };
   }, [approvals]);
 
   const filtered = approvals.filter((a) => a.status === tab);
