@@ -69,17 +69,15 @@ Deno.serve(async (req) => {
 
     if (error) throw error;
 
-    // Reinforcement: bump access_count and last_accessed_at
+    // Reinforcement: bump last_accessed_at (decay reduzido) — fire-and-forget
     const ids = (data ?? []).map((m: { id: string }) => m.id);
     if (ids.length > 0) {
-      await supabase
+      supabase
         .from("agent_memories_episodic")
         .update({ last_accessed_at: new Date().toISOString() })
-        .in("id", ids);
-      // increment access_count via raw update (one round trip)
-      for (const id of ids) {
-        await supabase.rpc("increment_agent_executions", { p_agent_id: id }).catch(() => {});
-      }
+        .in("id", ids)
+        .then(() => {})
+        .catch((e) => console.warn("[memory-recall] reinforcement failed", e));
     }
 
     return new Response(JSON.stringify({ memories: data ?? [] }), {
