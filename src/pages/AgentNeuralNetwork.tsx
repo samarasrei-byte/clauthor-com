@@ -23,23 +23,22 @@ const WORKFORCE = CLAUTHOR_ORG_CHART;
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Zap, Users, Target } from "lucide-react";
 
-// ── Color palette per department ──
+// ── Color palette per department (matches CLAUTHOR_ORG_CHART ids) ──
 const DEPT_COLORS: Record<string, string> = {
-  marketing: "#ef4444",
-  sales: "#f97316",
-  customer_success: "#eab308",
-  finance: "#22c55e",
-  hr: "#06b6d4",
-  operations: "#8b5cf6",
-  legal: "#ec4899",
-  product: "#3b82f6",
-  it: "#6366f1",
-  executive: "#f59e0b",
-  security: "#dc2626",
-  engineering: "#14b8a6",
-  data_analytics: "#a855f7",
-  innovation: "#10b981",
-  strategy: "#0ea5e9",
+  executivo: "#f59e0b",      // amber
+  marketing: "#ec4899",      // pink
+  vendas: "#ef4444",         // red
+  financeiro: "#22c55e",     // green
+  rh: "#06b6d4",             // cyan
+  ti: "#8b5cf6",             // violet
+  operacoes: "#f97316",      // orange
+  juridico: "#64748b",       // slate
+  atendimento: "#0ea5e9",    // sky
+  dados: "#14b8a6",          // teal
+  inovacao: "#a855f7",       // purple
+  sustentabilidade: "#10b981",// emerald
+  internacional: "#3b82f6",  // blue
+  parcerias: "#facc15",      // yellow
 };
 
 // ── Tradução PT-BR ──
