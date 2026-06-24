@@ -1,121 +1,65 @@
-## Redesign do Onboarding de Criação — "Digital Workforce OS"
+# Central de Aprovações Inteligentes + Módulo Arquivos
 
-Transformar `/create-agent` em um sistema operacional de força de trabalho digital, não um criador de chatbot.
+Feature grande. Vou dividir em 3 fases entregáveis. Confirme antes de implementar.
 
----
+## Escopo
 
-### 1. Nova rota e arquitetura
+**Novo no menu principal:** `Arquivos` e `Aprovações` (Dashboard, Agentes, Projetos, Tarefas, Configurações já existem).
 
-- **Nova página**: `src/pages/CreateWorkforce.tsx` (substitui `CreateAgent.tsx` na rota `/create-agent`, mantendo a antiga em `/create-agent/classic` como fallback admin).
-- **Layout full-screen** sem Navbar — modo "cockpit" inspirado em Linear/Vercel: sidebar esquerda com etapas verticais, canvas central, painel direito de "Live Preview" da organização sendo montada.
-- **State machine** via `useReducer` em `src/lib/workforce/builderState.ts` (etapas, hierarquia, autonomia, integrações).
+## Fase 1 — Backend (migração única)
 
-### 2. Fluxo consultivo (8 etapas, navegáveis)
+**Tabelas novas (`public`, RLS multi-tenant via `is_tenant_member`):**
 
-```
-1. Objetivo de negócio   →  textarea + sugestões (Thor consultor)
-2. Escala                →  Agente | Squad | Departamento | Organização
-3. Função/Cargo          →  busca semântica em 201+ templates
-4. Nível de autonomia    →  Assistente → Operador → Especialista → Coordenador → Executivo
-5. Stack de capacidades  →  4 abas: Ferramentas | Integrações | Conhecimento | Canais | Memória
-6. Hierarquia & Supervisão → drag-and-drop org chart (IA→IA→Humano)
-7. Governança            →  aprovações, limites, escalonamento, auditoria
-8. Blueprint Preview     →  estrutura, fluxos, custos, KPIs, deploy
-```
+- `files` — uploads gerais
+  - `tenant_id, user_id, name, type` (video|audio|image|pdf|doc|brandbook|logo|marketing), `bucket_path, size_bytes, mime, folder, tags[]`
+- `approvals` — entregas em revisão
+  - `tenant_id, project_id (nullable), agent_id, task_id (nullable), title, delivery_type` (creative|video|article|post|email|landing|report|automation), `status` (pending|approved|rejected|in_revision), `current_version_id, preview_url, content jsonb, created_by`
+- `approval_versions` — histórico
+  - `approval_id, version_number, content jsonb, preview_url, generated_by_agent, created_at`
+- `approval_comments` — feedback
+  - `approval_id, version_id, user_id, body, is_rejection_reason bool`
+- `approval_actions` — auditoria (approve/reject/request_changes/new_version)
+- `project_approval_settings` — por projeto: `mode` (required|optional|auto)
 
-Sidebar mostra progresso e permite saltar para qualquer etapa concluída.
+**Bucket Storage novo:** `approval-files` (privado) — uploads de mídia.
+RLS em `storage.objects` por `tenant_id` no path.
 
-### 3. Biblioteca de 201+ agentes
+**Edge function:** `approval-request-revision` — recebe rejeição+feedback, marca `in_revision`, dispara o agente responsável (via `agent_tasks`) para gerar nova versão; ao concluir cria `approval_versions` e volta para `pending`.
 
-- `src/data/workforceCatalog.ts` — catálogo expandido (reaproveita `agentLibraryBridge` + `departmentData` + novos templates por departamento brasileiro):
-  - Vendas, Marketing, RH, Financeiro, Jurídico, Atendimento, Operações, TI/DevOps, Produto, Dados, Compliance, Sucesso do Cliente, Suprimentos, Logística, Executivo (C-Level virtuais).
-- Cada template: `{ id, role, department, tier, suggestedTools, suggestedIntegrations, suggestedChannels, defaultKPIs, baselineCost }`.
-- Busca com filtro por departamento, nível e tag de resultado ("gerar leads", "reduzir churn"...).
+## Fase 2 — Página `/arquivos`
 
-### 4. Níveis de autonomia (semântica clara)
+- Grid com filtros por tipo (vídeo/áudio/imagem/pdf/doc/brandbook/logo/marketing) e busca
+- Upload drag-and-drop (multi), preview por tipo (thumbnail img/vídeo, ícone para pdf/doc)
+- Pastas + tags, ações: renomear, mover, excluir, copiar URL
 
-| Nível | Descrição | Aprovação humana |
-|---|---|---|
-| Assistente | Responde e sugere | Sempre |
-| Operador | Executa tarefas simples | Antes de ações externas |
-| Especialista | Domínio profundo, decide dentro do escopo | Apenas ações sensíveis |
-| Coordenador | Delega para outros agentes | Em mudanças estruturais |
-| Executivo | Define metas, supervisiona squads | Apenas governance |
+## Fase 3 — Página `/aprovacoes` (Central)
 
-Configuração granular por categoria de ação (enviar email, gastar crédito, contatar cliente, etc.).
+**Layout SaaS estilo ClickUp/Monday:**
 
-### 5. Stack de capacidades (5 abas separadas)
+- Sidebar com contadores por status
+- Header com métricas: Geradas | Aprovadas | Pendentes | Taxa aprovação % | Tempo médio | Nº revisões
+- Tabs: Aguardando | Em Ajuste | Aprovado | Reprovado
+- Cards/lista alternável com:
+  - Preview visual (img/video/iframe para landing/email)
+  - Título, agente, tipo, data, versão atual (vN)
+  - Botões: **Aprovar**, **Solicitar Ajustes**, **Reprovar**, **Nova Versão**
+- Drawer de detalhe: histórico de versões (timeline), diff visual, comentários threaded, motivo de reprovação
 
-- **Ferramentas**: skills internas (gerar texto, analisar PDF, classificar).
-- **Integrações**: conectores (HubSpot, Slack, WhatsApp, Sheets...) com sugestão automática.
-- **Conhecimento**: upload de docs, URLs, base RAG — preview de chunks.
-- **Canais**: por onde o agente é acionado (Inbox, WhatsApp, API, Web, Email).
-- **Memória**: curta (sessão), longa (vetorial), compartilhada (squad).
+**Configuração por projeto:** seção em `/projetos/[id]/settings` com toggle `required | optional | auto`.
 
-Cada aba mostra **"Sugerido pela IA"** no topo com base na função+autonomia escolhidas.
+## Stack
 
-### 6. Hierarquia & Supervisão
+React + shadcn (Card, Drawer, Tabs, Badge, Tooltip), Framer Motion para transições, TanStack Query para dados, react-dropzone para upload, design tokens semânticos (sem cores hard-coded), dark mode nativo.
 
-- Org chart visual (react-flow-style, mas leve com SVG + framer-motion) em `src/components/workforce/OrgChartBuilder.tsx`.
-- Permite: agente reporta a → agente coordenador → humano supervisor.
-- Loops de supervisão IA→IA com limite anti-recursão (já existe em `_shared/autonomy-engine.ts`).
-- Squads agrupam agentes; departamentos agrupam squads.
+## Entregáveis estimados
 
-### 7. Consultor IA (Thor Architect)
+- 1 migração (6 tabelas + RLS + grants + bucket policies)
+- 1 edge function (`approval-request-revision`)
+- 2 páginas + 8-10 componentes (`FileGrid`, `FileUploader`, `ApprovalCard`, `ApprovalDrawer`, `VersionTimeline`, `FeedbackForm`, `ApprovalMetrics`, `ProjectApprovalSettings`)
+- Update do menu lateral (`AppSidebar` ou equivalente)
 
-- Edge function nova: `supabase/functions/workforce-architect/index.ts`
-- Input: objetivo de negócio + contexto da empresa.
-- Output (structured via AI SDK + Gemini 3 Flash): blueprint completo sugerido em JSON.
-- Botão "**Deixar a IA arquitetar**" em qualquer etapa → preenche tudo automaticamente, usuário só revisa.
+## Confirmar antes de começar
 
-### 8. Blueprint Preview (etapa final)
-
-Cartão único premium com:
-- **Estrutura organizacional** (mini org chart).
-- **Fluxos** principais (lista de gatilhos → ações).
-- **Stack** (ferramentas, integrações, canais, conhecimento).
-- **Custos estimados** (créditos/mês baseado em volume previsto).
-- **KPIs** com metas iniciais.
-- **Nível de autonomia** consolidado.
-- Ações: **Implantar agora** | **Salvar rascunho** | **Compartilhar blueprint**.
-
-### 9. Persistência
-
-Nova tabela `workforce_blueprints` (cliente pode salvar/versionar) — schema:
-```
-id, user_id, name, scale (agent|squad|department|org),
-objective, blueprint jsonb, status (draft|deployed), created_at
-```
-Tabelas existentes `agents`, `squads`, `agent_tools` recebem os agentes individuais ao implantar.
-
-### 10. Visual / Identidade
-
-- Tipografia: Inter (já no projeto), display em peso 700 com tracking ajustado.
-- Paleta: dark glass + accent ruby (já é core), sutil gradient mesh no background.
-- Microanimações: framer-motion em transições de etapa (slide+fade), spring leve em cards de template.
-- Inspiração: Linear (densidade), Stripe (clareza), Notion (modularidade), Vercel (preview cards), OpenAI/Claude (consultivo).
-
----
-
-### Escopo desta entrega
-
-Vou implementar tudo em **4 sub-deliveries paralelos**:
-
-1. **Estrutura & dados**: tipos, catálogo 201+, state machine, rota.
-2. **UI cockpit**: layout, sidebar de etapas, navegação, preview lateral.
-3. **Etapas 1–4** (Objetivo, Escala, Função, Autonomia) com biblioteca + busca.
-4. **Etapas 5–8** (Stack, Hierarquia, Governança, Blueprint) + edge function consultor + persistência.
-
-Cliente vê só "Assistente/Equipe/Departamento" (sem jargão). Admin vê tudo + "Organização".
-
----
-
-### Detalhes técnicos (para revisão)
-
-- Sem novas dependências pesadas — uso framer-motion, lucide, shadcn existentes.
-- Edge function `workforce-architect` usa Lovable AI Gateway (`google/gemini-3-flash-preview`) com `Output.object` para blueprint estruturado.
-- Migration: tabela `workforce_blueprints` com RLS por `user_id` + GRANTs padrão.
-- i18n: strings em pt.json sob `workforce.*`.
-- Rota antiga `CreateAgent.tsx` preservada em `/create-agent/classic` para não quebrar admin.
-
-**Pronto para construir?** Posso começar pelos 4 sub-deliveries em paralelo. Confirma para eu executar.
+1. **Agente "responsável" pela regeração**: usar o `agent_id` que originou a entrega, ou permitir reatribuir?
+2. **Preview de landing/email**: iframe sandbox do HTML salvo em `content.html`, OK?
+3. Posso começar pela **Fase 1 (migração)** já?
