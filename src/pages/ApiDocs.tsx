@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { SEO } from "@/components/SEO";
 import { motion } from "framer-motion";
 import { Copy, Check, ChevronDown, ChevronRight, Terminal, Zap, Shield, Book, Code2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { SEO } from "@/components/SEO";
 import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { Users, MessageSquare, TrendingUp } from "lucide-react";
