@@ -52,15 +52,24 @@ Deno.serve(async (req) => {
 
     const templateText = templates?.[0]?.conteudo || "{{icebreaker}} Posso te adicionar?";
 
-    // Get PhantomBuster config
+    // Get PhantomBuster config (per-tenant, fallback to env)
     const { data: config } = await supabase
       .from("hunter_config")
-      .select("*")
+      .select("phantombuster_api_key_encrypted, phantombuster_connect_agent_id")
       .eq("user_id", user.id)
-      .single();
+      .maybeSingle();
 
-    const pbKey = config?.phantombuster_api_key_encrypted;
-    const connectAgentId = config?.phantombuster_connect_agent_id;
+    // LinkedIn cookie lives in hunter_linkedin_session, not on the campaign
+    const { data: session } = await supabase
+      .from("hunter_linkedin_session")
+      .select("linkedin_cookie")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    const pbKey = config?.phantombuster_api_key_encrypted || Deno.env.get("PHANTOMBUSTER_API_KEY");
+    const connectAgentId = config?.phantombuster_connect_agent_id || Deno.env.get("PHANTOMBUSTER_CONNECT_AGENT_ID");
+    const linkedinCookie = session?.linkedin_cookie;
+
 
     // Prepare messages for each lead
     const messagesInserts = leads.map(lead => {
@@ -82,7 +91,7 @@ Deno.serve(async (req) => {
 
     await supabase.from("hunter_messages").insert(messagesInserts);
 
-    if (pbKey && connectAgentId) {
+    if (pbKey && connectAgentId && linkedinCookie) {
       // Send via PhantomBuster
       try {
         const profileUrls = leads.map(l => l.linkedin_url).filter(Boolean);
@@ -95,7 +104,7 @@ Deno.serve(async (req) => {
           body: JSON.stringify({
             id: connectAgentId,
             argument: {
-              cookie: campaign.linkedin_cookie_encrypted,
+              sessionCookie: linkedinCookie,
               spreadsheetUrl: "",
               profileUrls,
               message: messagesInserts[0]?.conteudo || "",
@@ -103,6 +112,7 @@ Deno.serve(async (req) => {
             },
           }),
         });
+
 
         if (!pbRes.ok) {
           const errText = await pbRes.text();

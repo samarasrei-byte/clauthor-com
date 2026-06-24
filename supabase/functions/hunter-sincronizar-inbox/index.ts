@@ -44,7 +44,7 @@ Deno.serve(async (req) => {
         .maybeSingle();
 
       const pbApiKey = cfg?.phantombuster_api_key_encrypted || Deno.env.get("PHANTOMBUSTER_API_KEY") || "";
-      const pbAgentId = cfg?.phantombuster_search_agent_id || Deno.env.get("PHANTOMBUSTER_SEARCH_AGENT_ID") || "";
+      const pbAgentId = Deno.env.get("PHANTOMBUSTER_INBOX_AGENT_ID") || cfg?.phantombuster_search_agent_id || Deno.env.get("PHANTOMBUSTER_SEARCH_AGENT_ID") || "";
       if (!pbApiKey || !pbAgentId) continue;
 
       try {
