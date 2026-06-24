@@ -312,6 +312,111 @@ export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
       },
     ],
   },
+
+  // ════════════════════════════════════════════════════════
+  // 10. INOVAÇÃO & P&D
+  // ════════════════════════════════════════════════════════
+  {
+    id: "inovacao",
+    name: "Inovação & P&D",
+    color: "text-accent-purple",
+    squads: [
+      {
+        id: "inovacao_specialties",
+        name: "Especialistas de Inovação",
+        mission: "Explora novas tecnologias, produtos e modelos de negócio.",
+        agents: [
+          agent("Head de Inovação", ["Visão de longo prazo", "Portfólio de bets"]),
+          agent("Pesquisa & Desenvolvimento", ["Provas de conceito", "Patentes"]),
+          agent("Design Thinking", ["Workshops", "Prototipação rápida"]),
+          agent("UX Research", ["Entrevistas", "Testes de usabilidade"]),
+          agent("Prototipagem", ["Mockups", "MVPs"]),
+          agent("Venture Building", ["Spin-offs", "Novos negócios"]),
+          agent("Trend Hunter", ["Sinais fracos", "Foresight"]),
+          agent("Open Innovation", ["Startups", "Universidades", "Hackathons"]),
+        ],
+        outcomes: ["Pipeline de inovação", "Time-to-market", "Receita de novos produtos"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 11. SUSTENTABILIDADE & ESG
+  // ════════════════════════════════════════════════════════
+  {
+    id: "sustentabilidade",
+    name: "Sustentabilidade & ESG",
+    color: "text-accent-emerald",
+    squads: [
+      {
+        id: "esg_specialties",
+        name: "Especialistas ESG",
+        mission: "Garante impacto ambiental, social e de governança positivo.",
+        agents: [
+          agent("Diretor ESG", ["Estratégia ESG", "Reporting"]),
+          agent("Sustentabilidade Ambiental", ["Pegada de carbono", "Net zero"]),
+          agent("Impacto Social", ["Comunidades", "Voluntariado"]),
+          agent("Governança Corporativa", ["Conselho", "Políticas"]),
+          agent("Diversidade & Inclusão", ["Indicadores DEI", "Programas"]),
+          agent("Relatórios GRI/SASB", ["Frameworks", "Auditoria externa"]),
+          agent("Economia Circular", ["Reuso", "Reciclagem"]),
+        ],
+        outcomes: ["Score ESG", "Redução de emissões", "Reputação"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 12. INTERNACIONAL & EXPANSÃO
+  // ════════════════════════════════════════════════════════
+  {
+    id: "internacional",
+    name: "Internacional & Expansão",
+    color: "text-accent-blue",
+    squads: [
+      {
+        id: "intl_specialties",
+        name: "Especialistas Internacionais",
+        mission: "Lidera expansão para novos mercados e operações globais.",
+        agents: [
+          agent("Diretor Internacional", ["Estratégia global", "Entrada em mercados"]),
+          agent("Localização", ["Tradução", "Adaptação cultural"]),
+          agent("Comércio Exterior", ["Importação", "Exportação", "Drawback"]),
+          agent("Compliance Internacional", ["Sanctions", "FCPA"]),
+          agent("Câmbio & Hedge", ["Operações cambiais", "Proteção"]),
+          agent("Parcerias Globais", ["Distribuidores", "Joint ventures"]),
+          agent("Inteligência Geopolítica", ["Riscos país", "Macro"]),
+        ],
+        outcomes: ["Receita internacional", "Mercados ativos", "Margem cambial"],
+      },
+    ],
+  },
+
+  // ════════════════════════════════════════════════════════
+  // 13. PARCERIAS & ECOSSISTEMA
+  // ════════════════════════════════════════════════════════
+  {
+    id: "parcerias",
+    name: "Parcerias & Ecossistema",
+    color: "text-accent-yellow",
+    squads: [
+      {
+        id: "parcerias_specialties",
+        name: "Especialistas em Alianças",
+        mission: "Constrói e gerencia parcerias estratégicas e canais.",
+        agents: [
+          agent("Head de Parcerias", ["Estratégia de canais"]),
+          agent("Gestor de Canais", ["Revenda", "VARs", "Marketplaces"]),
+          agent("Aliança Tecnológica", ["Integrações", "Co-engineering"]),
+          agent("Co-marketing", ["Campanhas conjuntas", "MDF"]),
+          agent("Developer Relations", ["Comunidade dev", "APIs públicas"]),
+          agent("Programa de Afiliados", ["Recrutamento", "Comissionamento"]),
+          agent("Embaixadores de Marca", ["Influenciadores B2B", "Advocacy"]),
+        ],
+        outcomes: ["Receita via parceiros", "Parceiros ativos", "Pipeline indireto"],
+      },
+    ],
+  },
 ];
 
 /** Conta total de agentes especialistas (excluindo orquestrador CEO). */
