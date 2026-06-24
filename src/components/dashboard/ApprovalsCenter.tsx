@@ -266,6 +266,14 @@ const ApprovalsCenter = () => {
   const [selected, setSelected] = useState<Approval | null>(null);
   const [feedbackOpen, setFeedbackOpen] = useState<{ mode: "reject" | "request_changes"; approval: Approval } | null>(null);
   const [feedbackText, setFeedbackText] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState<any>(null);
+  const [quickNote, setQuickNote] = useState("");
+
+  useEffect(() => {
+    if (selected) { setDraft(selected.content); setEditing(false); setQuickNote(""); }
+  }, [selected?.id]);
+
 
   const { data: real = [], isLoading } = useQuery({
     queryKey: ["approvals", tenantId],
