@@ -27,6 +27,8 @@ const AgentDNA = lazy(() => import("./AgentDNA"));
 const MissionComposer = lazy(() => import("./MissionComposer"));
 const WarRoomLive = lazy(() => import("./WarRoomLive"));
 const IntelligenceHub = lazy(() => import("./IntelligenceHub"));
+const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
+const FilesLibrary = lazy(() => import("./FilesLibrary"));
 
 interface Props {
   activeSection: string;
