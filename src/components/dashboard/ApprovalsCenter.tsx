@@ -5,8 +5,11 @@ import {
   CheckCircle2, XCircle, MessageSquareWarning, RefreshCw, Clock,
   TrendingUp, ListChecks, Sparkles, Eye, History, Send, Heart,
   MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram,
-  ArrowUpRight, Wand2, Zap, ShieldCheck, Images,
+  ArrowUpRight, Wand2, Zap, ShieldCheck, Images, Pencil, Save, X,
+  FileSignature, FileText, FileCheck2, Film, Image as ImageIcon,
+  StickyNote, CalendarDays, DollarSign,
 } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
