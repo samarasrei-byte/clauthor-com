@@ -33,7 +33,7 @@ import approvalSlide7 from "@/assets/approval-carousel/approval-slide-7.png.asse
 
 
 type Status = "pending" | "in_revision" | "approved" | "rejected";
-type DeliveryType = "creative" | "video" | "article" | "post" | "email" | "landing" | "report" | "automation" | "other";
+type DeliveryType = "creative" | "video" | "article" | "post" | "email" | "landing" | "report" | "automation" | "stories" | "document" | "contract" | "proposal" | "other";
 
 interface Approval {
   id: string;
@@ -70,7 +70,8 @@ interface AppComment {
 const DELIVERY_LABEL: Record<DeliveryType, string> = {
   creative: "Criativo", video: "Vídeo", article: "Artigo", post: "Post Social",
   email: "E-mail", landing: "Landing Page", report: "Relatório",
-  automation: "Automação", other: "Outro",
+  automation: "Automação", stories: "Stories", document: "Documento",
+  contract: "Contrato", proposal: "Proposta", other: "Outro",
 };
 
 const STATUS_META: Record<Status, { label: string; chip: string; dot: string; icon: React.ElementType }> = {
