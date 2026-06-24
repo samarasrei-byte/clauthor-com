@@ -1239,6 +1239,52 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
     );
   }
 
+  if (delivery_type === "contract") {
+    return (
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-amber-500/15 via-background to-background p-4 border-b border-border/40">
+        <FileSignature className="h-5 w-5 text-amber-500 mb-2" />
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato — assinatura</div>
+        <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.contract_party_a} ⇄ {content?.contract_party_b}</div>
+        <div className="text-[11px] text-muted-foreground mt-1">{content?.contract_value}</div>
+      </div>
+    );
+  }
+
+  if (delivery_type === "proposal") {
+    return (
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-primary/15 via-background to-background p-4 border-b border-border/40">
+        <FileText className="h-5 w-5 text-primary mb-2" />
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Proposta — {content?.client}</div>
+        <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.headline}</div>
+        <div className="text-[11px] text-primary font-semibold mt-1">{content?.total}</div>
+      </div>
+    );
+  }
+
+  if (delivery_type === "document") {
+    return (
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-sky-500/15 via-background to-background p-4 border-b border-border/40">
+        <FileText className="h-5 w-5 text-sky-500 mb-2" />
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Documento</div>
+        <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.doc_title}</div>
+        <div className="text-[11px] text-muted-foreground mt-1">{(content?.sections || []).length} seções</div>
+      </div>
+    );
+  }
+
+  if (delivery_type === "stories") {
+    return (
+      <div className="aspect-[16/10] relative bg-gradient-to-br from-fuchsia-600 via-rose-500 to-amber-500 flex items-center justify-center overflow-hidden">
+        <Film className="absolute top-3 right-3 h-4 w-4 text-white/80" />
+        <div className="text-center text-white space-y-1 px-4">
+          <div className="text-[10px] uppercase tracking-[0.25em] opacity-80">Stories • 9:16</div>
+          <div className="text-sm font-bold leading-tight line-clamp-2">{content?.cta || approval.title}</div>
+        </div>
+      </div>
+    );
+  }
+
+
   if (preview_url) {
     if (delivery_type === "video") return <video src={preview_url} className="aspect-[16/10] w-full object-cover" />;
     return <img src={preview_url} alt="" className="aspect-[16/10] w-full object-cover" />;
