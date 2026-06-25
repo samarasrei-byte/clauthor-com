@@ -547,7 +547,7 @@ const ApprovalsCenter = () => {
       <Sheet open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
         <SheetContent
           side="right"
-          className="w-[95vw] sm:max-w-3xl overflow-y-auto p-0 !left-1/2 !right-auto !top-1/2 !-translate-x-1/2 !-translate-y-1/2 !h-auto !max-h-[92vh] !rounded-2xl !border data-[state=open]:!animate-in data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=open]:!fade-in-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95 data-[state=closed]:!slide-out-to-left-0 data-[state=closed]:!slide-out-to-right-0 data-[state=open]:!slide-in-from-left-0 data-[state=open]:!slide-in-from-right-0"
+          className="w-[95vw] sm:max-w-3xl overflow-y-auto p-0 !left-1/2 !right-auto !top-1/2 !-translate-x-1/2 !-translate-y-1/2 !h-[96vh] !max-h-[96vh] !min-h-[96vh] !rounded-2xl !border data-[state=open]:!animate-in data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=open]:!fade-in-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95 data-[state=closed]:!slide-out-to-left-0 data-[state=closed]:!slide-out-to-right-0 data-[state=open]:!slide-in-from-left-0 data-[state=open]:!slide-in-from-right-0"
         >
           {selected && (
             <>
