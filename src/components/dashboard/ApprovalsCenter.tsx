@@ -23,13 +23,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useTenantId } from "@/hooks/useTenantId";
 import { cn } from "@/lib/utils";
-import approvalSlide1 from "@/assets/approval-carousel/approval-slide-1.png.asset.json";
-import approvalSlide2 from "@/assets/approval-carousel/approval-slide-2.png.asset.json";
-import approvalSlide3 from "@/assets/approval-carousel/approval-slide-3.png.asset.json";
-import approvalSlide4 from "@/assets/approval-carousel/approval-slide-4.png.asset.json";
-import approvalSlide5 from "@/assets/approval-carousel/approval-slide-5.png.asset.json";
-import approvalSlide6 from "@/assets/approval-carousel/approval-slide-6.png.asset.json";
-import approvalSlide7 from "@/assets/approval-carousel/approval-slide-7.png.asset.json";
+import ironbergSlide1 from "@/assets/approval-ironberg/ironberg-1.png.asset.json";
+import ironbergSlide2 from "@/assets/approval-ironberg/ironberg-2.png.asset.json";
 
 
 type Status = "pending" | "in_revision" | "approved" | "rejected";
@@ -92,13 +87,8 @@ function timeAgo(iso: string) {
 }
 
 const INSTAGRAM_CAROUSEL_SLIDES = [
-  { url: approvalSlide1.url, alt: "Slide do carrossel com chamada para comentários" },
-  { url: approvalSlide2.url, alt: "Slide do carrossel explicando VS Code e prompt" },
-  { url: approvalSlide3.url, alt: "Slide do carrossel explicando LLM e token" },
-  { url: approvalSlide4.url, alt: "Slide do carrossel explicando MCP e API" },
-  { url: approvalSlide5.url, alt: "Slide do carrossel explicando arquivos markdown e skills" },
-  { url: approvalSlide6.url, alt: "Slide do carrossel explicando subagentes e agent teams" },
-  { url: approvalSlide7.url, alt: "Capa do carrossel sobre inteligência artificial em português claro" },
+  { url: ironbergSlide1.url, alt: "Post Ironberg — A maioria desiste, os fortes continuam" },
+  { url: ironbergSlide2.url, alt: "Post Ironberg — Não é sobre treinar, é sobre se tornar uma máquina" },
 ] as const;
 
 // ─────────────── DEMO DATA (exemplo de post para revisão) ───────────────
@@ -106,7 +96,7 @@ const now = Date.now();
 const DEMO_APPROVALS: Approval[] = [
   {
     id: "demo-post-1",
-    title: "Post Instagram — Carrossel educacional sobre IA",
+    title: "Post Instagram — Ironberg Training Center",
     delivery_type: "post",
     status: "pending",
     preview_url: null,
@@ -122,11 +112,11 @@ const DEMO_APPROVALS: Approval[] = [
       post_format: "carousel",
       carousel_slides: INSTAGRAM_CAROUSEL_SLIDES,
       caption:
-        "Carrossel pronto para aprovação: uma sequência educativa explicando IA em português claro, com capa forte, glossário visual e CTA final para comentários.\n\nObjetivo: aumentar retenção, salvamentos e compartilhamentos com linguagem acessível.\n\n#IA #InteligenciaArtificial #ConteudoEducativo #Instagram #Clauthor",
-      hashtags: ["#IA", "#InteligenciaArtificial", "#ConteudoEducativo", "#Instagram", "#Clauthor"],
-      hook: "Carrossel Instagram • 7 slides",
+        "A MAIORIA DESISTE. OS FORTES CONTINUAM. 🔥\n\nAqui você não compra uma mensalidade. Você constrói uma nova versão de si mesmo.\n\nDisciplina. Foco. Constância. Resultados.\n\n#Ironberg #TrainingCenter #Bodybuilder #Disciplina #NoPainNoGain",
+      hashtags: ["#Ironberg", "#TrainingCenter", "#Bodybuilder", "#Disciplina", "#NoPainNoGain"],
+      hook: "Carrossel Ironberg • 2 slides",
       cta: "Aprovar carrossel →",
-      stats: { likes: 0, comments: 0, reach_estimate: "18k–24k", slides_count: INSTAGRAM_CAROUSEL_SLIDES.length },
+      stats: { likes: 0, comments: 0, reach_estimate: "22k–30k", slides_count: INSTAGRAM_CAROUSEL_SLIDES.length },
     },
   },
   {
@@ -160,30 +150,29 @@ const DEMO_APPROVALS: Approval[] = [
     content: { headline: "Sua equipe de IA, montada em 5 minutos" },
   },
   {
-    id: "demo-contract-1",
-    title: "Contrato — Prestação de serviços (Cliente Aurora Ltda)",
-    delivery_type: "contract",
+    id: "demo-video-1",
+    title: "Vídeo — Influencer Avatar IA (edição final)",
+    delivery_type: "video",
     status: "pending",
-    preview_url: null,
-    current_version: 1,
+    preview_url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    current_version: 2,
     agent_id: null,
-    agent_name: "Lex · Legal Agent",
+    agent_name: "Reel · Video Editor Agent",
     created_at: new Date(now - 1000 * 60 * 45).toISOString(),
     updated_at: new Date(now - 1000 * 60 * 10).toISOString(),
     approved_at: null,
     __demo: true,
     content: {
-      contract_party_a: "Clauthor Tecnologia LTDA",
-      contract_party_b: "Aurora Marketing LTDA",
-      contract_value: "R$ 18.500,00 / mês",
-      contract_term: "12 meses, renovação automática",
-      clauses: [
-        "Objeto: licenciamento da plataforma Clauthor + 4 agentes dedicados.",
-        "Pagamento: dia 5 de cada mês via Pix ou boleto.",
-        "Confidencialidade mútua por 5 anos após o término.",
-        "Foro eleito: comarca de São Paulo / SP.",
+      format: "Reels 9:16 • 32s",
+      avatar: "Influencer Avatar — Sofia (HeyGen)",
+      script:
+        "Hook (0–3s): Você ainda edita vídeo manualmente?\nDesenvolvimento (3–22s): mostre o agente clonando voz, cortando silêncios e gerando legendas.\nCTA (22–32s): Teste grátis em clauthor.com",
+      cuts: [
+        { at: "00:00", note: "Hook com zoom no avatar" },
+        { at: "00:08", note: "B-roll: timeline editando sozinha" },
+        { at: "00:22", note: "Logo + CTA piscando" },
       ],
-      signature_required: true,
+      caption_overlay: "Edição 100% por IA — voz, cortes e legenda automáticos.",
     },
   },
   {
@@ -556,7 +545,10 @@ const ApprovalsCenter = () => {
 
       {/* ── Drawer ─────────────────────────────────────────────── */}
       <Sheet open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
-        <SheetContent className="w-full sm:max-w-2xl overflow-y-auto p-0">
+        <SheetContent
+          side="right"
+          className="w-[95vw] sm:max-w-3xl overflow-y-auto p-0 !left-1/2 !right-auto !top-1/2 !-translate-x-1/2 !-translate-y-1/2 !h-auto !max-h-[92vh] !rounded-2xl !border data-[state=open]:!animate-in data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=open]:!fade-in-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95 data-[state=closed]:!slide-out-to-left-0 data-[state=closed]:!slide-out-to-right-0 data-[state=open]:!slide-in-from-left-0 data-[state=open]:!slide-in-from-right-0"
+        >
           {selected && (
             <>
               <div className="sticky top-0 z-10 bg-background/85 backdrop-blur-xl border-b border-border/50 px-6 py-4">
