@@ -675,7 +675,7 @@ const ApprovalsCenter = () => {
               </div>
 
               {/* Action bar fixa */}
-              <div className="sticky bottom-0 bg-background/85 backdrop-blur-xl border-t border-border/50 px-6 py-3 flex flex-wrap gap-2">
+              <div className="shrink-0 bg-background/85 backdrop-blur-xl border-t border-border/50 px-6 py-3 flex flex-wrap gap-2">
                 <Button size="sm" className="gap-1.5 flex-1 min-w-[120px]"
                   onClick={() => { updateStatus.mutate({ approval: selected, status: "approved", action: "approve" }); setSelected(null); }}>
                   <CheckCircle2 className="h-3.5 w-3.5" /> Aprovar
