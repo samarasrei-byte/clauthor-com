@@ -7,7 +7,7 @@ import {
   MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram,
   ArrowUpRight, Wand2, Zap, ShieldCheck, Images, Pencil, Save, X,
   FileSignature, FileText, FileCheck2, Film, Image as ImageIcon,
-  StickyNote, CalendarDays, DollarSign,
+  StickyNote, CalendarDays, DollarSign, Maximize2, Minimize2,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
