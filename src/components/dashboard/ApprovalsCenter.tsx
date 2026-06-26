@@ -570,23 +570,35 @@ const ApprovalsCenter = () => {
                   </div>
                   <div className="flex items-start justify-between gap-3 mt-2">
                     <SheetTitle className="text-xl">{selected.title}</SheetTitle>
-                    {!editing ? (
-                      <Button size="sm" variant="outline" className="gap-1.5 shrink-0"
-                        onClick={() => { setDraft(selected.content); setEditing(true); }}>
-                        <Pencil className="h-3.5 w-3.5" /> Editar
+                    <div className="flex gap-1.5 shrink-0 items-center">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="gap-1.5"
+                        onClick={() => setExpanded((v) => !v)}
+                        title={expanded ? "Reduzir" : "Expandir"}
+                      >
+                        {expanded ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
+                        {expanded ? "Reduzir" : "Expandir"}
                       </Button>
-                    ) : (
-                      <div className="flex gap-1.5 shrink-0">
-                        <Button size="sm" variant="ghost" className="gap-1.5"
-                          onClick={() => { setEditing(false); setDraft(selected.content); }}>
-                          <X className="h-3.5 w-3.5" /> Cancelar
+                      {!editing ? (
+                        <Button size="sm" variant="outline" className="gap-1.5"
+                          onClick={() => { setDraft(selected.content); setEditing(true); }}>
+                          <Pencil className="h-3.5 w-3.5" /> Editar
                         </Button>
-                        <Button size="sm" className="gap-1.5"
-                          onClick={() => saveEdits.mutate({ approval: selected, newContent: draft })}>
-                          <Save className="h-3.5 w-3.5" /> Salvar + OK
-                        </Button>
-                      </div>
-                    )}
+                      ) : (
+                        <>
+                          <Button size="sm" variant="ghost" className="gap-1.5"
+                            onClick={() => { setEditing(false); setDraft(selected.content); }}>
+                            <X className="h-3.5 w-3.5" /> Cancelar
+                          </Button>
+                          <Button size="sm" className="gap-1.5"
+                            onClick={() => saveEdits.mutate({ approval: selected, newContent: draft })}>
+                            <Save className="h-3.5 w-3.5" /> Salvar + OK
+                          </Button>
+                        </>
+                      )}
+                    </div>
                   </div>
                   {selected.agent_name && (
                     <div className="text-xs text-muted-foreground flex items-center gap-1.5">
