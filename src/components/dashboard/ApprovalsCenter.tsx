@@ -557,7 +557,7 @@ const ApprovalsCenter = () => {
         >
           {selected && (
             <>
-              <div className="sticky top-0 z-10 bg-background/85 backdrop-blur-xl border-b border-border/50 px-6 py-4">
+              <div className="shrink-0 bg-background/85 backdrop-blur-xl border-b border-border/50 px-6 py-4 pr-14">
                 <SheetHeader>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Badge className={cn("border", STATUS_META[selected.status].chip)}>
