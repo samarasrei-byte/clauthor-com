@@ -608,7 +608,7 @@ const ApprovalsCenter = () => {
                 </SheetHeader>
               </div>
 
-              <div className="p-6 space-y-6">
+              <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-6 space-y-6">
                 <PreviewBlock
                   approval={selected}
                   editing={editing}
