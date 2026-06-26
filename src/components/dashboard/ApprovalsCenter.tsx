@@ -258,6 +258,7 @@ const ApprovalsCenter = () => {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<any>(null);
   const [quickNote, setQuickNote] = useState("");
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (selected) { setDraft(selected.content); setEditing(false); setQuickNote(""); }
