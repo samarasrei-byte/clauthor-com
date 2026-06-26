@@ -7,7 +7,7 @@ import {
   MessageCircle, Share2, Bookmark, MoreHorizontal, Instagram,
   ArrowUpRight, Wand2, Zap, ShieldCheck, Images, Pencil, Save, X,
   FileSignature, FileText, FileCheck2, Film, Image as ImageIcon,
-  StickyNote, CalendarDays, DollarSign,
+  StickyNote, CalendarDays, DollarSign, Maximize2, Minimize2,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -258,6 +258,7 @@ const ApprovalsCenter = () => {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState<any>(null);
   const [quickNote, setQuickNote] = useState("");
+  const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     if (selected) { setDraft(selected.content); setEditing(false); setQuickNote(""); }
@@ -547,11 +548,16 @@ const ApprovalsCenter = () => {
       <Sheet open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
         <SheetContent
           side="right"
-          className="w-[95vw] sm:max-w-3xl overflow-y-auto p-0 !left-1/2 !right-auto !top-1/2 !-translate-x-1/2 !-translate-y-1/2 !h-[96vh] !max-h-[96vh] !min-h-[96vh] !rounded-2xl !border data-[state=open]:!animate-in data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=open]:!fade-in-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95 data-[state=closed]:!slide-out-to-left-0 data-[state=closed]:!slide-out-to-right-0 data-[state=open]:!slide-in-from-left-0 data-[state=open]:!slide-in-from-right-0"
+          className={cn(
+            "p-0 flex flex-col !left-1/2 !right-auto !top-1/2 !-translate-x-1/2 !-translate-y-1/2 !rounded-2xl !border data-[state=open]:!animate-in data-[state=closed]:!animate-out data-[state=closed]:!fade-out-0 data-[state=open]:!fade-in-0 data-[state=closed]:!zoom-out-95 data-[state=open]:!zoom-in-95 data-[state=closed]:!slide-out-to-left-0 data-[state=closed]:!slide-out-to-right-0 data-[state=open]:!slide-in-from-left-0 data-[state=open]:!slide-in-from-right-0 transition-[width,height,max-width] duration-300",
+            expanded
+              ? "!w-[98vw] !max-w-[1600px] !h-[98vh] !max-h-[98vh]"
+              : "!w-[95vw] sm:!max-w-3xl !h-[88vh] !max-h-[88vh]",
+          )}
         >
           {selected && (
             <>
-              <div className="sticky top-0 z-10 bg-background/85 backdrop-blur-xl border-b border-border/50 px-6 py-4">
+              <div className="shrink-0 bg-background/85 backdrop-blur-xl border-b border-border/50 px-6 py-4 pr-14">
                 <SheetHeader>
                   <div className="flex items-center gap-2 text-xs text-muted-foreground">
                     <Badge className={cn("border", STATUS_META[selected.status].chip)}>
@@ -564,23 +570,35 @@ const ApprovalsCenter = () => {
                   </div>
                   <div className="flex items-start justify-between gap-3 mt-2">
                     <SheetTitle className="text-xl">{selected.title}</SheetTitle>
-                    {!editing ? (
-                      <Button size="sm" variant="outline" className="gap-1.5 shrink-0"
-                        onClick={() => { setDraft(selected.content); setEditing(true); }}>
-                        <Pencil className="h-3.5 w-3.5" /> Editar
+                    <div className="flex gap-1.5 shrink-0 items-center">
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        className="gap-1.5"
+                        onClick={() => setExpanded((v) => !v)}
+                        title={expanded ? "Reduzir" : "Expandir"}
+                      >
+                        {expanded ? <Minimize2 className="h-3.5 w-3.5" /> : <Maximize2 className="h-3.5 w-3.5" />}
+                        {expanded ? "Reduzir" : "Expandir"}
                       </Button>
-                    ) : (
-                      <div className="flex gap-1.5 shrink-0">
-                        <Button size="sm" variant="ghost" className="gap-1.5"
-                          onClick={() => { setEditing(false); setDraft(selected.content); }}>
-                          <X className="h-3.5 w-3.5" /> Cancelar
+                      {!editing ? (
+                        <Button size="sm" variant="outline" className="gap-1.5"
+                          onClick={() => { setDraft(selected.content); setEditing(true); }}>
+                          <Pencil className="h-3.5 w-3.5" /> Editar
                         </Button>
-                        <Button size="sm" className="gap-1.5"
-                          onClick={() => saveEdits.mutate({ approval: selected, newContent: draft })}>
-                          <Save className="h-3.5 w-3.5" /> Salvar + OK
-                        </Button>
-                      </div>
-                    )}
+                      ) : (
+                        <>
+                          <Button size="sm" variant="ghost" className="gap-1.5"
+                            onClick={() => { setEditing(false); setDraft(selected.content); }}>
+                            <X className="h-3.5 w-3.5" /> Cancelar
+                          </Button>
+                          <Button size="sm" className="gap-1.5"
+                            onClick={() => saveEdits.mutate({ approval: selected, newContent: draft })}>
+                            <Save className="h-3.5 w-3.5" /> Salvar + OK
+                          </Button>
+                        </>
+                      )}
+                    </div>
                   </div>
                   {selected.agent_name && (
                     <div className="text-xs text-muted-foreground flex items-center gap-1.5">
@@ -590,7 +608,7 @@ const ApprovalsCenter = () => {
                 </SheetHeader>
               </div>
 
-              <div className="p-6 space-y-6">
+              <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain p-6 space-y-6">
                 <PreviewBlock
                   approval={selected}
                   editing={editing}
@@ -657,7 +675,7 @@ const ApprovalsCenter = () => {
               </div>
 
               {/* Action bar fixa */}
-              <div className="sticky bottom-0 bg-background/85 backdrop-blur-xl border-t border-border/50 px-6 py-3 flex flex-wrap gap-2">
+              <div className="shrink-0 bg-background/85 backdrop-blur-xl border-t border-border/50 px-6 py-3 flex flex-wrap gap-2">
                 <Button size="sm" className="gap-1.5 flex-1 min-w-[120px]"
                   onClick={() => { updateStatus.mutate({ approval: selected, status: "approved", action: "approve" }); setSelected(null); }}>
                   <CheckCircle2 className="h-3.5 w-3.5" /> Aprovar
