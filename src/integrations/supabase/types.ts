@@ -104,6 +104,62 @@ export type Database = {
         }
         Relationships: []
       }
+      agent_audit_trail: {
+        Row: {
+          action_type: string
+          agent_id: string | null
+          agent_name: string | null
+          cost_credits: number | null
+          created_at: string
+          entry_hash: string
+          id: string
+          input: Json
+          output: Json
+          prev_hash: string | null
+          status: string
+          tenant_id: string
+          user_id: string | null
+        }
+        Insert: {
+          action_type: string
+          agent_id?: string | null
+          agent_name?: string | null
+          cost_credits?: number | null
+          created_at?: string
+          entry_hash: string
+          id?: string
+          input?: Json
+          output?: Json
+          prev_hash?: string | null
+          status?: string
+          tenant_id: string
+          user_id?: string | null
+        }
+        Update: {
+          action_type?: string
+          agent_id?: string | null
+          agent_name?: string | null
+          cost_credits?: number | null
+          created_at?: string
+          entry_hash?: string
+          id?: string
+          input?: Json
+          output?: Json
+          prev_hash?: string | null
+          status?: string
+          tenant_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_audit_trail_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agent_credentials: {
         Row: {
           access_count: number
@@ -3338,6 +3394,20 @@ export type Database = {
       }
     }
     Functions: {
+      append_audit_entry: {
+        Args: {
+          _action_type: string
+          _agent_id: string
+          _agent_name: string
+          _cost: number
+          _input: Json
+          _output: Json
+          _status: string
+          _tenant_id: string
+          _user_id: string
+        }
+        Returns: string
+      }
       apply_memory_decay: { Args: never; Returns: number }
       check_rate_limit: {
         Args: { _api_key_id: string; _plan: string }
