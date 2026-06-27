@@ -497,10 +497,11 @@ const ClientDashboard = () => {
           onComplete={(agentSlug) => {
             setShowSmartOnboarding(false);
             queryClient.invalidateQueries({ queryKey: ["profile-onboarding"] });
+            let agentName: string | undefined;
             if (agentSlug) {
-              // Navigate to the agent chat or library
               const agent = agents.find(a => nameToSlug[a.name] === agentSlug);
               if (agent) {
+                agentName = agent.name;
                 setPreviousSection(activeSection);
                 setSelectedAgent({ id: agent.id, name: agent.name });
                 setActiveSection("chat");
@@ -508,9 +509,22 @@ const ClientDashboard = () => {
                 setActiveSection("library");
               }
             }
+            // Magic Moment — show first-value card right after onboarding
+            setMagicMomentAgent(agentName);
+            setTimeout(() => setShowMagicMoment(true), 400);
           }}
         />
       )}
+
+      <MagicMomentCard
+        isOpen={showMagicMoment}
+        onClose={() => setShowMagicMoment(false)}
+        agentName={magicMomentAgent}
+        onGoToApprovals={() => {
+          setShowMagicMoment(false);
+          setActiveSection("approvals");
+        }}
+      />
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
 
