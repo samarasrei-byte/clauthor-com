@@ -213,6 +213,59 @@ export type Database = {
           },
         ]
       }
+      agent_feedback: {
+        Row: {
+          agent_id: string | null
+          agent_name: string | null
+          applied: boolean
+          assistant_message: string | null
+          comment: string | null
+          created_at: string
+          id: string
+          message_id: string | null
+          rating: number
+          tenant_id: string
+          user_id: string
+          user_message: string | null
+        }
+        Insert: {
+          agent_id?: string | null
+          agent_name?: string | null
+          applied?: boolean
+          assistant_message?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          message_id?: string | null
+          rating: number
+          tenant_id: string
+          user_id: string
+          user_message?: string | null
+        }
+        Update: {
+          agent_id?: string | null
+          agent_name?: string | null
+          applied?: boolean
+          assistant_message?: string | null
+          comment?: string | null
+          created_at?: string
+          id?: string
+          message_id?: string | null
+          rating?: number
+          tenant_id?: string
+          user_id?: string
+          user_message?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_feedback_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       agent_meetings: {
         Row: {
           agent_id: string | null
