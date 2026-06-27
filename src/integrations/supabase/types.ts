@@ -991,6 +991,47 @@ export type Database = {
         }
         Relationships: []
       }
+      benchmark_metrics: {
+        Row: {
+          company_size: string | null
+          created_at: string
+          id: string
+          industry: string | null
+          metric_key: string
+          metric_value: number
+          period_start: string
+          tenant_id: string
+        }
+        Insert: {
+          company_size?: string | null
+          created_at?: string
+          id?: string
+          industry?: string | null
+          metric_key: string
+          metric_value: number
+          period_start?: string
+          tenant_id: string
+        }
+        Update: {
+          company_size?: string | null
+          created_at?: string
+          id?: string
+          industry?: string | null
+          metric_key?: string
+          metric_value?: number
+          period_start?: string
+          tenant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "benchmark_metrics_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_feedback: {
         Row: {
           agent_id: string | null
@@ -3210,6 +3251,22 @@ export type Database = {
       check_rate_limit: {
         Args: { _api_key_id: string; _plan: string }
         Returns: Json
+      }
+      get_benchmark_percentiles: {
+        Args: {
+          _company_size?: string
+          _industry?: string
+          _metric_key: string
+        }
+        Returns: {
+          avg_value: number
+          metric_key: string
+          p25: number
+          p50: number
+          p75: number
+          p90: number
+          sample_size: number
+        }[]
       }
       get_user_tenant_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
