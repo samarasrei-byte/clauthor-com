@@ -31,6 +31,7 @@ const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetu
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
 import FirstAccessOnboarding from "@/components/onboarding/FirstAccessOnboarding";
+import MagicMomentCard from "@/components/onboarding/MagicMomentCard";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
 import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
