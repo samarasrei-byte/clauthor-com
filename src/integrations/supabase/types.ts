@@ -2869,24 +2869,30 @@ export type Database = {
       }
       tenants: {
         Row: {
+          company_size: string | null
           created_at: string
           id: string
+          industry: string | null
           name: string
           plan_type: string
           slug: string
           updated_at: string
         }
         Insert: {
+          company_size?: string | null
           created_at?: string
           id?: string
+          industry?: string | null
           name: string
           plan_type?: string
           slug: string
           updated_at?: string
         }
         Update: {
+          company_size?: string | null
           created_at?: string
           id?: string
+          industry?: string | null
           name?: string
           plan_type?: string
           slug?: string
