@@ -405,6 +405,7 @@ const ClientDashboard = () => {
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     files: "Arquivos",
     approvals: "Aprovações",
+    benchmarks: "Benchmarks",
     squads: "Squads",
     "neural-network": "Rede Neural",
     "agent-replay": "Agent Replay",
