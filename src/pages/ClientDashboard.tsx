@@ -31,6 +31,7 @@ const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetu
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
 import FirstAccessOnboarding from "@/components/onboarding/FirstAccessOnboarding";
+import MagicMomentCard from "@/components/onboarding/MagicMomentCard";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
 import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
@@ -69,6 +70,8 @@ const ClientDashboard = () => {
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
   const [showQuickStart, setShowQuickStart] = useState(false);
   const [showFirstAccess, setShowFirstAccess] = useState(false);
+  const [showMagicMoment, setShowMagicMoment] = useState(false);
+  const [magicMomentAgent, setMagicMomentAgent] = useState<string | undefined>(undefined);
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
     if (!user) return false;
     return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
@@ -79,6 +82,10 @@ const ClientDashboard = () => {
   // O hireIntent precisa ser processado pelo CheckoutSummaryDialog primeiro.
   useEffect(() => {
     if (!user) return;
+    // Stamp the signup/first-visit timestamp once, for Magic Moment timing
+    if (!localStorage.getItem("clauthor_signup_ts")) {
+      localStorage.setItem("clauthor_signup_ts", String(Date.now()));
+    }
     const key = `clauthor_concierge_seen_${user.id}`;
     if (localStorage.getItem(key)) return;
 
@@ -490,10 +497,11 @@ const ClientDashboard = () => {
           onComplete={(agentSlug) => {
             setShowSmartOnboarding(false);
             queryClient.invalidateQueries({ queryKey: ["profile-onboarding"] });
+            let agentName: string | undefined;
             if (agentSlug) {
-              // Navigate to the agent chat or library
               const agent = agents.find(a => nameToSlug[a.name] === agentSlug);
               if (agent) {
+                agentName = agent.name;
                 setPreviousSection(activeSection);
                 setSelectedAgent({ id: agent.id, name: agent.name });
                 setActiveSection("chat");
@@ -501,9 +509,22 @@ const ClientDashboard = () => {
                 setActiveSection("library");
               }
             }
+            // Magic Moment — show first-value card right after onboarding
+            setMagicMomentAgent(agentName);
+            setTimeout(() => setShowMagicMoment(true), 400);
           }}
         />
       )}
+
+      <MagicMomentCard
+        isOpen={showMagicMoment}
+        onClose={() => setShowMagicMoment(false)}
+        agentName={magicMomentAgent}
+        onGoToApprovals={() => {
+          setShowMagicMoment(false);
+          setActiveSection("approvals");
+        }}
+      />
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
 
