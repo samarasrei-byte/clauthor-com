@@ -150,6 +150,8 @@ const DashboardOverview = ({
 
                 <ReferralsPanel />
 
+                <TrustCenterPanel />
+
                 <MarketplaceReviews compact />
 
                 <PendingActionsPanel />
