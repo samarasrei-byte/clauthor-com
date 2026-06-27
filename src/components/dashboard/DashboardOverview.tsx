@@ -14,6 +14,7 @@ const ExecutionHealthBanner = lazy(() => import("./ExecutionHealthBanner"));
 const MarketplaceReviews = lazy(() => import("./MarketplaceReviews"));
 const QuickIntegrations = lazy(() => import("./QuickIntegrations"));
 const MyIntegrationsPanel = lazy(() => import("./MyIntegrationsPanel"));
+const ReferralsPanel = lazy(() => import("./ReferralsPanel"));
 const ThorDailyBriefing = lazy(() => import("./ThorDailyBriefing"));
 const QuickWins = lazy(() => import("./QuickWins"));
 const TaskRequestPanel = lazy(() => import("./TaskRequestPanel"));
@@ -145,6 +146,8 @@ const DashboardOverview = ({
                 <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
 
                 <MyIntegrationsPanel onNavigate={onSetActiveSection} />
+
+                <ReferralsPanel />
 
                 <MarketplaceReviews compact />
 
