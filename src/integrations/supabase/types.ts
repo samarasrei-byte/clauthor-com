@@ -2623,6 +2623,91 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          metadata: Json
+          referral_id: string
+          visitor_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          metadata?: Json
+          referral_id: string
+          visitor_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          metadata?: Json
+          referral_id?: string
+          visitor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_events_referral_id_fkey"
+            columns: ["referral_id"]
+            isOneToOne: false
+            referencedRelation: "referrals"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      referrals: {
+        Row: {
+          active: boolean
+          bonus_credits: number
+          clicks: number
+          code: string
+          conversions: number
+          created_at: string
+          id: string
+          owner_user_id: string
+          signups: number
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          bonus_credits?: number
+          clicks?: number
+          code: string
+          conversions?: number
+          created_at?: string
+          id?: string
+          owner_user_id: string
+          signups?: number
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          bonus_credits?: number
+          clicks?: number
+          code?: string
+          conversions?: number
+          created_at?: string
+          id?: string
+          owner_user_id?: string
+          signups?: number
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referrals_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       squad_agents: {
         Row: {
           agent_id: string
