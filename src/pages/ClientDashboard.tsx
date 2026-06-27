@@ -82,6 +82,10 @@ const ClientDashboard = () => {
   // O hireIntent precisa ser processado pelo CheckoutSummaryDialog primeiro.
   useEffect(() => {
     if (!user) return;
+    // Stamp the signup/first-visit timestamp once, for Magic Moment timing
+    if (!localStorage.getItem("clauthor_signup_ts")) {
+      localStorage.setItem("clauthor_signup_ts", String(Date.now()));
+    }
     const key = `clauthor_concierge_seen_${user.id}`;
     if (localStorage.getItem(key)) return;
 
