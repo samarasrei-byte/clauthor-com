@@ -1721,6 +1721,7 @@ Exemplo de redirecionamento:
             if (lastUserMsg) {
               await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
               writeEpisodicMemory(adminClient, tenantId, agentId, userId, lastUserMsg.content, assistantMessage, false).catch(() => {});
+              appendAudit(adminClient, tenantId, agentId, agentName, userId, lastUserMsg.content, assistantMessage, totalTokens).catch(() => {});
             }
           }
         } catch (e) { console.error("Stream pipe error:", e); }
@@ -1738,6 +1739,7 @@ Exemplo de redirecionamento:
       if (lastUserMsg) {
         await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
         writeEpisodicMemory(adminClient, tenantId, agentId, userId, lastUserMsg.content, assistantMessage, false).catch(() => {});
+        appendAudit(adminClient, tenantId, agentId, agentName, userId, lastUserMsg.content, assistantMessage, totalTokens).catch(() => {});
       }
     }
 
