@@ -326,6 +326,7 @@ const ClientDashboard = () => {
     { id: "neural-network", label: "Rede Neural", icon: Orbit, badge: "PRO", group: intelligenceGroup },
     { id: "agent-replay", label: "Agent Replay", icon: Rewind, badge: "NOVO", group: intelligenceGroup },
     { id: "agent-dna", label: "Agent DNA", icon: Dna, badge: "NOVO", group: intelligenceGroup },
+    { id: "benchmarks", label: "Benchmarks", icon: TrendingUp, badge: "NOVO", group: intelligenceGroup },
 
     // ─── Ferramentas Avançadas: produtividade e orquestração ───
     { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: advancedGroup },
