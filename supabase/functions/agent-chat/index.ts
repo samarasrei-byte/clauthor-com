@@ -1683,7 +1683,10 @@ Exemplo de redirecionamento:
 
         if (agentId) {
           const lastUserMsg = optimizedMessages.filter((m: any) => m.role === "user").pop();
-          if (lastUserMsg) await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+          if (lastUserMsg) {
+            await saveMemory(adminClient, tenantId, userId, agentId, lastUserMsg.content, assistantMessage);
+            appendAudit(adminClient, tenantId, agentId, agentName, userId, lastUserMsg.content, assistantMessage, totalTokens).catch(() => {});
+          }
         }
 
         return new Response(JSON.stringify({ message: assistantMessage, tokens_used: totalTokens, remaining_credits: remainingCredits - totalTokens, credit_warning: creditWarning, tool_results: toolResults }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
