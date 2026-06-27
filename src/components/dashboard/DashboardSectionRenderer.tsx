@@ -29,6 +29,7 @@ const WarRoomLive = lazy(() => import("./WarRoomLive"));
 const IntelligenceHub = lazy(() => import("./IntelligenceHub"));
 const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const FilesLibrary = lazy(() => import("./FilesLibrary"));
+const BenchmarksPanel = lazy(() => import("./BenchmarksPanel"));
 
 interface Props {
   activeSection: string;
@@ -134,6 +135,7 @@ const DashboardSectionRenderer = ({
       {activeSection === "scrum" && <Suspense fallback={<SectionLoader />}><ScrumBoard /></Suspense>}
       {activeSection === "approvals" && <Suspense fallback={<SectionLoader />}><ApprovalsCenter /></Suspense>}
       {activeSection === "files" && <Suspense fallback={<SectionLoader />}><FilesLibrary /></Suspense>}
+      {activeSection === "benchmarks" && <Suspense fallback={<SectionLoader />}><BenchmarksPanel /></Suspense>}
 
       {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
         <ComingSoonSection feature={activeSection} />

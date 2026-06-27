@@ -326,6 +326,7 @@ const ClientDashboard = () => {
     { id: "neural-network", label: "Rede Neural", icon: Orbit, badge: "PRO", group: intelligenceGroup },
     { id: "agent-replay", label: "Agent Replay", icon: Rewind, badge: "NOVO", group: intelligenceGroup },
     { id: "agent-dna", label: "Agent DNA", icon: Dna, badge: "NOVO", group: intelligenceGroup },
+    { id: "benchmarks", label: "Benchmarks", icon: TrendingUp, badge: "NOVO", group: intelligenceGroup },
 
     // ─── Ferramentas Avançadas: produtividade e orquestração ───
     { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: advancedGroup },
@@ -347,7 +348,7 @@ const ClientDashboard = () => {
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "chat", "agent-chat-active",
     "intelligence-hub", "omnix", "empresa", "kanban",
-    "files", "approvals",
+    "files", "approvals", "benchmarks",
     "neural-network",
     "operations-center", "settings",
   ]);
@@ -404,6 +405,7 @@ const ClientDashboard = () => {
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     files: "Arquivos",
     approvals: "Aprovações",
+    benchmarks: "Benchmarks",
     squads: "Squads",
     "neural-network": "Rede Neural",
     "agent-replay": "Agent Replay",
