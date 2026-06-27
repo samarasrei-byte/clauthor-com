@@ -98,14 +98,39 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
+    const { getStoredReferral } = await import("@/lib/referral");
+    const ref = getStoredReferral();
     const { error } = await supabase.auth.signUp({
       email,
       password,
       options: {
         emailRedirectTo: window.location.origin,
-        data: { full_name: fullName },
+        data: { full_name: fullName, ref_code: ref ?? null },
       },
     });
+    if (!error && ref) {
+      try {
+        const { data: r } = await supabase
+          .from("referrals")
+          .select("id, signups, bonus_credits")
+          .eq("code", ref)
+          .maybeSingle();
+        if (r) {
+          await supabase.from("referral_events").insert({
+            referral_id: r.id,
+            event_type: "signup",
+            metadata: { email, ts: new Date().toISOString() },
+          });
+          await supabase
+            .from("referrals")
+            .update({
+              signups: (r.signups ?? 0) + 1,
+              bonus_credits: (r.bonus_credits ?? 0) + 500,
+            })
+            .eq("id", r.id);
+        }
+      } catch {/* silent */}
+    }
     return { error };
   };
 
