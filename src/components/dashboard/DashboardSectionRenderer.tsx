@@ -29,6 +29,7 @@ const WarRoomLive = lazy(() => import("./WarRoomLive"));
 const IntelligenceHub = lazy(() => import("./IntelligenceHub"));
 const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const FilesLibrary = lazy(() => import("./FilesLibrary"));
+const BenchmarksPanel = lazy(() => import("./BenchmarksPanel"));
 
 interface Props {
   activeSection: string;
