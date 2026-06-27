@@ -70,6 +70,8 @@ const ClientDashboard = () => {
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
   const [showQuickStart, setShowQuickStart] = useState(false);
   const [showFirstAccess, setShowFirstAccess] = useState(false);
+  const [showMagicMoment, setShowMagicMoment] = useState(false);
+  const [magicMomentAgent, setMagicMomentAgent] = useState<string | undefined>(undefined);
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
     if (!user) return false;
     return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
