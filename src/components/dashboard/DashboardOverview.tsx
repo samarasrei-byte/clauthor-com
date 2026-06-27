@@ -16,6 +16,7 @@ const QuickIntegrations = lazy(() => import("./QuickIntegrations"));
 const MyIntegrationsPanel = lazy(() => import("./MyIntegrationsPanel"));
 const ReferralsPanel = lazy(() => import("./ReferralsPanel"));
 const TrustCenterPanel = lazy(() => import("./TrustCenterPanel"));
+const FeedbackTrendsPanel = lazy(() => import("./FeedbackTrendsPanel"));
 const ThorDailyBriefing = lazy(() => import("./ThorDailyBriefing"));
 const QuickWins = lazy(() => import("./QuickWins"));
 const TaskRequestPanel = lazy(() => import("./TaskRequestPanel"));
