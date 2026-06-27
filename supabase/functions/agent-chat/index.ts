@@ -1288,6 +1288,24 @@ async function saveMemory(adminClient: any, tenantId: string, userId: string, ag
   } catch (err) { console.error("Error saving memory:", err); }
 }
 
+async function appendAudit(
+  adminClient: any, tenantId: string, agentId: string | null, agentName: string,
+  userId: string, userMsg: string, assistantMsg: string, tokens: number
+) {
+  try {
+    await adminClient.rpc("append_audit_entry", {
+      _tenant_id: tenantId,
+      _agent_id: agentId,
+      _agent_name: agentName,
+      _action_type: "chat_completion",
+      _input: { prompt: userMsg.slice(0, 2000) },
+      _output: { response: assistantMsg.slice(0, 2000), tokens },
+      _status: "success",
+      _cost: tokens,
+      _user_id: userId,
+    });
+  } catch (err) { console.error("Audit append failed:", err); }
+
 async function loadRecentMemory(adminClient: any, tenantId: string, userId: string, agentId: string, limit: number = 5): Promise<string> {
   // Load all memory types: conversation, semantic, procedural, delegation
   const { data, error } = await adminClient
