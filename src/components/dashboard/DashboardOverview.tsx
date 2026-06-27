@@ -153,6 +153,9 @@ const DashboardOverview = ({
 
                 <TrustCenterPanel />
 
+                <FeedbackTrendsPanel />
+
+
                 <MarketplaceReviews compact />
 
                 <PendingActionsPanel />
