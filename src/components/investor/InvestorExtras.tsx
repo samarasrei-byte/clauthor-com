@@ -104,8 +104,13 @@ export const SourcesSection = () => (
             className="p-6 rounded-2xl border border-border/60 bg-card/30 hover:border-primary/40 transition-all"
           >
             <div className="flex items-start justify-between gap-4 mb-3">
-              <div>
-                <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{a.metric}</div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{a.metric}</span>
+                  <span className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-primary/40 bg-primary/10 text-primary">
+                    {a.badge}
+                  </span>
+                </div>
                 <div className="text-2xl font-bold text-foreground">{a.value}</div>
               </div>
               <FileText className="h-4 w-4 text-primary mt-1 shrink-0" />
