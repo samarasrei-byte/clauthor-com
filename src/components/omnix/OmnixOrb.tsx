@@ -128,7 +128,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
               strokeWidth={arc.strokeW}
               strokeLinecap="round"
               strokeDasharray={`${visibleLength} ${gapLength}`}
-              strokeOpacity={isActive ? 0.25 + (i % 3) * 0.08 : 0.04}
+              strokeOpacity={isActive ? 0.25 + (i % 3) * 0.08 : 0.18 + (i % 3) * 0.06}
               style={{ transformOrigin: `${center}px ${center}px` }}
               animate={{
                 rotate: [arc.offset, arc.offset + 360 * arc.direction],
