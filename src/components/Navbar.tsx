@@ -96,6 +96,7 @@ const Navbar = () => {
                       { href: "/marketplace", label: t("navbar.marketplace_label"), desc: t("navbar.marketplace_desc") },
                       { href: "/departamentos", label: t("navbar.ai_teams_label"), desc: t("navbar.ai_teams_desc") },
                       { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }), desc: t("navbar.team_builder_desc", { defaultValue: "Pick agents and see costs in real time" }) },
+                      { href: "/enterprise", label: "Enterprise", desc: "Squads dedicadas, SSO, SLA 99.9% e suporte white-glove" },
                     ].map((item) => (
                       <Link
                         key={item.href}
@@ -219,6 +220,7 @@ const Navbar = () => {
                 { href: "/marketplace", label: t("navbar.marketplace_label") },
                 { href: "/departamentos", label: t("navbar.ai_teams_label") },
                 { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }) },
+                { href: "/enterprise", label: "Enterprise" },
                 { href: "/pricing", label: t("nav.pricing") },
                 { href: "/how-it-works", label: t("nav.how_it_works") },
               ].map((item) => (
