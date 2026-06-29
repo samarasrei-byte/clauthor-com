@@ -438,7 +438,10 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ChartsSection />
+
       {/* INVESTMENT ROUND */}
+
       <section id="investimento" className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-20">
