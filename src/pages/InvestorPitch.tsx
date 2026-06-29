@@ -43,6 +43,8 @@ import parallaxSquads from "@/assets/investor-extra-squads.jpg";
 import parallaxMemory from "@/assets/investor-extra-memory.jpg";
 import parallaxGrowth from "@/assets/investor-extra-growth.jpg";
 import heroBanner from "@/assets/investor-hero-banner.jpg";
+import parallaxBrain from "@/assets/investor-parallax-brain.jpg";
+import parallaxCommand from "@/assets/investor-parallax-command.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -485,6 +487,16 @@ const InvestorPitch = () => {
         subtitle="Empresas vão comprar resultado entregue por IA autônoma — não mais software para humanos operarem. Clauthor está construído para essa transição."
       />
 
+      <ParallaxBand
+        image={parallaxBrain}
+        eyebrow="Inteligência Coletiva"
+        title="Um cérebro vivo. Pulsando 24/7."
+        subtitle="Memória hierárquica em 4 camadas, embeddings vetoriais e auto-aprendizado contínuo — cada interação torna o sistema inteiro mais inteligente."
+        align="left"
+      />
+
+
+
       {/* Problem */}
       <section className="py-32 px-6">
         <motion.div {...fadeUp} className="max-w-4xl mx-auto text-center">
@@ -532,6 +544,14 @@ const InvestorPitch = () => {
         eyebrow="Workforce"
         title="225 agentes. 20 squads. Um único cérebro."
         subtitle="Arquitetura proprietária multi-tenant com roteamento inteligente, memória hierárquica e auditoria criptográfica — pronta para escalar para milhares de empresas."
+      />
+
+      <ParallaxBand
+        image={parallaxCommand}
+        eyebrow="Command Center"
+        title="Orquestração global em tempo real"
+        subtitle="Um único painel para ver, aprovar e auditar tudo o que centenas de agentes executam — em 14 idiomas, 24/7, com governança criptográfica."
+        align="right"
       />
 
       {/* COMPETITIVE ANALYSIS */}
