@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
-import ThorGreeter from "@/components/ThorGreeter";
+import ThorLiveGuide from "@/components/dashboard/ThorLiveGuide";
 
 import {
   SourcesSection,
@@ -881,8 +881,8 @@ const InvestorPitch = () => {
         </div>
       </footer>
 
-      {/* Thor — assistente IA persistente */}
-      <ThorGreeter />
+      {/* Thor — guia ao vivo (mesmo do painel) */}
+      <ThorLiveGuide activeSection="investidores" onNavigate={() => {}} onDismiss={() => {}} />
     </div>
   );
 
