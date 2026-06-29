@@ -42,7 +42,7 @@ import parallaxGlobal from "@/assets/investor-parallax-3.jpg";
 import parallaxSquads from "@/assets/investor-extra-squads.jpg";
 import parallaxMemory from "@/assets/investor-extra-memory.jpg";
 import parallaxGrowth from "@/assets/investor-extra-growth.jpg";
-import heroBanner from "@/assets/investor-hero-banner.jpg";
+import heroBanner from "@/assets/thor-ceo.png.asset.json";
 import parallaxBrain from "@/assets/investor-parallax-brain.jpg";
 import parallaxCommand from "@/assets/investor-parallax-command.jpg";
 
@@ -257,12 +257,26 @@ const InvestorPitch = () => {
             {/* The image */}
             <div className="relative h-full w-full rounded-3xl overflow-hidden border border-foreground/15 shadow-[0_40px_120px_-20px_hsl(210_90%_55%/0.35)]">
               <img
-                src={heroBanner}
-                alt="Clauthor — Rede neural de 225 agentes de IA"
+                src={heroBanner.url}
+                alt="Thor — CEO AI da Clauthor"
                 width={1280}
                 height={1280}
-                className="absolute inset-0 h-full w-full object-cover"
+                className="absolute inset-0 h-full w-full object-cover object-top"
               />
+              {/* Thor identity tag */}
+              <div className="absolute top-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10">
+                <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-primary/90 bg-background/60 backdrop-blur px-3 py-1 rounded-full border border-primary/30">
+                  Chief Executive Officer
+                </span>
+              </div>
+              <div className="absolute bottom-16 left-1/2 -translate-x-1/2 text-center z-10">
+                <div className="font-display text-3xl font-bold tracking-[0.3em] text-foreground drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]">
+                  THOR
+                </div>
+                <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary mt-1">
+                  AI Orchestrator
+                </div>
+              </div>
               {/* Soft contrast overlay — no red tint */}
               <div className="absolute inset-0 bg-gradient-to-tr from-background/50 via-transparent to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/70" />
