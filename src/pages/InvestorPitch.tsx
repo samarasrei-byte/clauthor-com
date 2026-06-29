@@ -906,31 +906,33 @@ const InvestorPitch = () => {
         </div>
       </section>
 
-      {/* Contact */}
-      <section id="contact" className="py-32 px-6 bg-card/30 border-t border-border/40">
-        <div className="max-w-2xl mx-auto text-center">
+      {/* Closing — strong narrative, no CTA */}
+      <section id="contact" className="relative py-40 px-6 bg-card/30 border-t border-border/40 overflow-hidden">
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full bg-[radial-gradient(circle_at_center,hsl(var(--primary)/0.18),transparent_65%)] blur-3xl" />
+        </div>
+        <div className="max-w-4xl mx-auto text-center">
           <motion.div {...fadeUp}>
-            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Contato</div>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-              Pronto para Redefinir<br />o Futuro?
+            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-8">O Próximo Capítulo</div>
+            <h2 className="text-5xl md:text-7xl font-bold tracking-tight mb-10 leading-[1.05]">
+              A próxima década<br />
+              <span className="bg-gradient-to-r from-primary via-foreground to-primary bg-clip-text text-transparent">
+                não vai ser construída por software.
+              </span><br />
+              Vai ser construída por agentes.
             </h2>
-            <p className="text-lg text-muted-foreground mb-12">
-              Clauthor não é uma aposta no futuro da IA. É um investimento na redefinição da produtividade global.
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed font-light mb-12">
+              Clauthor já tem a arquitetura, os 225 agentes, a memória hierárquica e o modelo de cobrança por resultado.
+              <br className="hidden md:block" />
+              O que falta agora é apenas <span className="text-foreground font-medium">capital para escalar o inevitável.</span>
             </p>
+            <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full border border-primary/30 bg-primary/5 backdrop-blur">
+              <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+              <span className="font-mono text-xs uppercase tracking-[0.3em] text-foreground">
+                Quem entra agora, define o padrão da próxima década.
+              </span>
+            </div>
           </motion.div>
-
-          <motion.form
-            {...fadeUp}
-            onSubmit={(e) => e.preventDefault()}
-            className="space-y-4 p-8 rounded-2xl bg-background border border-border/60 backdrop-blur"
-          >
-            <Input placeholder="Seu Nome" className="h-12" />
-            <Input type="email" placeholder="Seu E-mail Corporativo" className="h-12" />
-            <Input placeholder="Empresa / Fundo de Investimento" className="h-12" />
-            <Button type="submit" size="lg" className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground h-14 text-base shadow-[0_0_40px_hsl(var(--primary)/0.4)]">
-              Quero Investir no Pré-Seed <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
-          </motion.form>
         </div>
       </section>
 
