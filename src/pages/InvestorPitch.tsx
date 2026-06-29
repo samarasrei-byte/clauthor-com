@@ -416,7 +416,7 @@ const InvestorPitch = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             {[
               { label: "Estágio", value: "MVP", delta: "Plataforma 100% funcional · pré-receita", icon: Rocket, tag: "Hoje" },
-              { label: "Agentes Operacionais", value: "225", delta: "20 squads · 10 departamentos prontos", icon: Sparkles, tag: "Hoje" },
+              { label: "Agentes Operacionais", value: "225", delta: "20 squads · 20 departamentos prontos", icon: Sparkles, tag: "Hoje" },
               { label: "Idiomas Suportados", value: "14", delta: "Infra i18n nativa — pronta p/ global", icon: Target, tag: "Hoje" },
               { label: "MRR Projetado 12m", value: "R$ 1,2M", delta: "Pós Pré-Seed · 800 tenants alvo", icon: TrendingUp, tag: "Meta" },
               { label: "Gross Margin", value: "82%", delta: "SaaS top-quartile (modelo)", icon: PieChart, tag: "Modelo" },
