@@ -84,6 +84,7 @@ const AdvocaciaExecucoesLazy = lazyRetry(() => import("./pages/AdvocaciaExecucoe
 const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVertical"));
 const ApiKeysSettings = lazyRetry(() => import("./pages/ApiKeysSettings"));
 const ApresentacaoAdv = lazyRetry(() => import("./pages/ApresentacaoAdv"));
+const InvestorPitch = lazyRetry(() => import("./pages/InvestorPitch"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -116,6 +117,8 @@ const App = () => (
                 {/* Standalone immersive pages - no navbar */}
                 <Route path="/waitlist" element={<Waitlist />} />
                 <Route path="/pitch" element={<Pitch />} />
+                <Route path="/investidores" element={<InvestorPitch />} />
+                <Route path="/investors" element={<InvestorPitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/apresentacaoadv" element={<ApresentacaoAdv />} />
