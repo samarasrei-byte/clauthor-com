@@ -386,16 +386,6 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
           </div>
         )}
 
-        {/* Recents */}
-        {!collapsed && !q && recentItems.length > 0 && (
-          <div className="mb-1">
-            <div className="px-3 pt-2 pb-1.5 flex items-center gap-1.5">
-              <Clock className="h-2.5 w-2.5 text-muted-foreground/50" strokeWidth={1.5} />
-              <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground/50">Recentes</span>
-            </div>
-            {recentItems.slice(0, 3).map((it, i) => renderItem(it, i, { compactRow: true }))}
-          </div>
-        )}
 
         {/* Main list */}
         {filteredItems.map((item, idx) => {
