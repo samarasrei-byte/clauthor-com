@@ -18,7 +18,10 @@ import {
   PieChart,
   Calendar,
   HelpCircle,
+  Play,
 } from "lucide-react";
+import { useState } from "react";
+import PresentationMode from "@/components/investor/PresentationMode";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
