@@ -27,6 +27,7 @@ interface FileRow {
   mime: string | null;
   created_at: string;
   tags: string[] | null;
+  folder: string | null;
 }
 
 const TYPE_META: Record<FileType, { label: string; singular: string; icon: React.ElementType; gradient: string; ring: string }> = {
@@ -69,6 +70,8 @@ const FilesLibrary = () => {
   const [query, setQuery] = useState("");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [dragging, setDragging] = useState(false);
+  const [activeFolder, setActiveFolder] = useState<string | null>(null);
+  const [extraFolders, setExtraFolders] = useState<string[]>([]);
 
   const { data: files = [], isLoading } = useQuery({
     queryKey: ["files", tenantId],
@@ -91,6 +94,7 @@ const FilesLibrary = () => {
         const { error: dbErr } = await supabase.from("files").insert({
           tenant_id: tenantId, user_id: user.id, name: f.name, file_type: type,
           bucket_path: path, size_bytes: f.size, mime: f.type || "application/octet-stream",
+          folder: activeFolder,
         });
         if (dbErr) throw dbErr;
       }
@@ -116,11 +120,27 @@ const FilesLibrary = () => {
 
   const totalSize = useMemo(() => files.reduce((acc, f) => acc + (f.size_bytes || 0), 0), [files]);
 
+  const folders = useMemo(() => {
+    const set = new Set<string>(extraFolders);
+    files.forEach((f) => { if (f.folder) set.add(f.folder); });
+    return Array.from(set).sort();
+  }, [files, extraFolders]);
+
   const filtered = useMemo(() => files.filter((f) => {
     if (filter !== "all" && f.file_type !== filter) return false;
+    if (activeFolder !== null && (f.folder || "") !== activeFolder) return false;
     if (query && !f.name.toLowerCase().includes(query.toLowerCase())) return false;
     return true;
-  }), [files, filter, query]);
+  }), [files, filter, query, activeFolder]);
+
+  const createFolder = () => {
+    const name = window.prompt("Nome da nova pasta")?.trim();
+    if (!name) return;
+    if (folders.includes(name)) { toast.info("Pasta já existe"); setActiveFolder(name); return; }
+    setExtraFolders((prev) => [...prev, name]);
+    setActiveFolder(name);
+    toast.success(`Pasta "${name}" criada. Próximos uploads irão para ela.`);
+  };
 
   async function copyLink(row: FileRow) {
     const { data, error } = await supabase.storage.from("approval-files").createSignedUrl(row.bucket_path, 60 * 60);
@@ -176,7 +196,7 @@ const FilesLibrary = () => {
               ref={inputRef} type="file" multiple className="hidden"
               onChange={(e) => e.target.files && uploadMutation.mutate(e.target.files)}
             />
-            <Button variant="outline" className="gap-1.5"><FolderOpen className="h-3.5 w-3.5" />Nova pasta</Button>
+            <Button variant="outline" className="gap-1.5" onClick={createFolder}><FolderOpen className="h-3.5 w-3.5" />Nova pasta</Button>
             <Button onClick={() => inputRef.current?.click()} disabled={uploadMutation.isPending} className="gap-1.5">
               <Upload className="h-3.5 w-3.5" /> Enviar arquivos
             </Button>
@@ -211,6 +231,36 @@ const FilesLibrary = () => {
           </Button>
         </div>
       </div>
+
+      {/* Folder chips */}
+      {folders.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[10px] uppercase tracking-wider text-muted-foreground mr-1">Pastas</span>
+          <button
+            onClick={() => setActiveFolder(null)}
+            className={cn(
+              "px-3 h-8 rounded-full text-xs font-medium border transition-all",
+              activeFolder === null
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-muted/30 text-muted-foreground border-border/50 hover:text-foreground"
+            )}
+          >Todas</button>
+          {folders.map((name) => (
+            <button
+              key={name}
+              onClick={() => setActiveFolder(name)}
+              className={cn(
+                "flex items-center gap-1.5 px-3 h-8 rounded-full text-xs font-medium border transition-all",
+                activeFolder === name
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-muted/30 text-muted-foreground border-border/50 hover:text-foreground"
+              )}
+            >
+              <FolderOpen className="h-3 w-3" />{name}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Category chips — replace tabs */}
       <div className="flex flex-wrap gap-2">
