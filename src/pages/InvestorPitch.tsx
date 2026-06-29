@@ -401,6 +401,88 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      {/* DEPARTMENT COST COMPARISON */}
+      <section id="comparativo-departamento" className="py-32 px-6">
+        <div className="max-w-7xl mx-auto">
+          <motion.div {...fadeUp} className="text-center mb-16">
+            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Custo Real vs Clauthor</div>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">Um departamento de 20 pessoas custa <span className="text-primary">R$ 240K/mês</span></h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Na Clauthor, o mesmo departamento (20 agentes especializados, 24/7, multilíngue) custa a partir de <strong className="text-foreground">R$ 1.997/mês</strong>. É <strong className="text-primary">120× mais barato</strong> — e entrega mais.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            {/* Traditional */}
+            <motion.div {...fadeUp} className="relative p-10 rounded-2xl bg-card/40 border border-border/60 overflow-hidden">
+              <div className="absolute top-6 right-6 px-3 py-1 rounded-full bg-destructive/10 border border-destructive/30 text-destructive text-[10px] font-mono uppercase tracking-wider">Modelo Antigo</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground mb-3">Departamento Humano</div>
+              <h3 className="text-2xl font-bold mb-6">20 pessoas CLT</h3>
+              <div className="text-5xl font-bold text-foreground mb-2">R$ 240.000</div>
+              <div className="text-sm text-muted-foreground mb-8">/mês · R$ 2,88M por ano</div>
+              <ul className="space-y-3 text-sm">
+                {[
+                  "20 salários médios (R$ 8K) + encargos (70%) = R$ 13,6K/pessoa",
+                  "Horário comercial limitado (8h/dia, 5 dias)",
+                  "Férias, atestados, turnover ~25% ao ano",
+                  "Treinamento contínuo, onboarding 3-6 meses",
+                  "Infra física, software, BI, gestão de pessoas",
+                  "Escala = contratar mais gente (linear e lento)",
+                ].map((t) => (
+                  <li key={t} className="flex items-start gap-2 text-muted-foreground">
+                    <X className="h-4 w-4 text-destructive shrink-0 mt-0.5" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* Clauthor */}
+            <motion.div {...fadeUp} transition={{ ...fadeUp.transition, delay: 0.1 }} className="relative p-10 rounded-2xl bg-gradient-to-br from-primary/15 to-primary/5 border border-primary/40 overflow-hidden">
+              <div className="absolute top-6 right-6 px-3 py-1 rounded-full bg-primary/20 border border-primary/40 text-primary text-[10px] font-mono uppercase tracking-wider">Clauthor</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary mb-3">Departamento de IA</div>
+              <h3 className="text-2xl font-bold mb-6">20 agentes autônomos</h3>
+              <div className="text-5xl font-bold text-foreground mb-2">R$ 1.997</div>
+              <div className="text-sm text-muted-foreground mb-8">/mês · R$ 23,9K por ano</div>
+              <ul className="space-y-3 text-sm">
+                {[
+                  "Squad completo pré-treinado (Vendas, Marketing, etc.)",
+                  "Operação 24/7/365 sem pausas, em 14 idiomas",
+                  "Zero turnover, zero férias, zero RH",
+                  "Onboarding em minutos com memória hierárquica",
+                  "Infra, integrações e BI incluídos",
+                  "Escala instantânea: 1 ou 1.000 tarefas em paralelo",
+                ].map((t) => (
+                  <li key={t} className="flex items-start gap-2 text-foreground/90">
+                    <Check className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                    <span>{t}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          </div>
+
+          {/* Headline savings */}
+          <motion.div {...fadeUp} className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { v: "120×", l: "Mais barato" },
+              { v: "R$ 238K", l: "Economia mensal" },
+              { v: "R$ 2,85M", l: "Economia anual" },
+              { v: "< 24h", l: "Para ativar squad" },
+            ].map((s) => (
+              <div key={s.l} className="p-6 rounded-xl bg-background border border-border/60 text-center">
+                <div className="text-3xl md:text-4xl font-bold text-primary mb-2">{s.v}</div>
+                <div className="text-[11px] font-mono uppercase tracking-[0.2em] text-muted-foreground">{s.l}</div>
+              </div>
+            ))}
+          </motion.div>
+
+          <p className="text-center text-xs text-muted-foreground mt-8 max-w-2xl mx-auto">
+            * Base: salário médio CLT R$ 8.000 + 70% encargos (FGTS, INSS, 13º, férias, vale-transporte, vale-refeição). Fonte: Catho / Glassdoor / pesquisa Robert Half 2025.
+          </p>
+        </div>
+      </section>
+
       {/* MRR PROJECTION */}
       <section className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
