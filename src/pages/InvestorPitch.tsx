@@ -102,7 +102,7 @@ const reasons = [
   { icon: Target, title: "Timing Perfeito", desc: "Entramos antes da consolidação: zero incumbente dominante em agentes autônomos B2B em português." },
   { icon: LineChart, title: "Potencial Exponencial", desc: "Modelo projeta R$ 15M de MRR em 36 meses com unit economics SaaS top-quartile." },
   { icon: ShieldCheck, title: "Plataforma Pronta", desc: "MVP 100% funcional, multi-tenant, com auditoria criptográfica e infraestrutura para 14 idiomas." },
-  { icon: Rocket, title: "Capital-Eficiência", desc: "MVP construído com bootstrapping. R$ 200k de pré-seed destravam validação comercial em escala." },
+  { icon: Rocket, title: "Capital-Eficiência", desc: "MVP construído 100% com investimento próprio do fundador. R$ 200k de pré-seed destravam validação comercial em escala." },
 ];
 
 const InvestorPitch = () => {
@@ -709,12 +709,12 @@ const InvestorPitch = () => {
       <section id="investimento" className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-20">
-            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">A Rodada · 4ª Captação</div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">A Rodada · 1ª Captação Externa</div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
               Pré-Seed: R$ 200K por 10%
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Esta é a <span className="text-foreground font-semibold">4ª rodada</span> da Clauthor após bootstrapping, FFF e anjos estratégicos. Para alcançar <span className="text-foreground font-semibold">100.000 usuários e R$ 15M de MRR</span>, o capital total mapeado é de <span className="text-primary font-semibold">R$ 3 milhões</span>, distribuído em rodadas sequenciais com diluição controlada e marcos de tração validados.
+              Esta é a <span className="text-foreground font-semibold">1ª rodada externa</span> da Clauthor — todo o MVP foi construído com <span className="text-foreground font-semibold">investimento próprio do fundador</span>, sem FFF nem anjos. Para alcançar <span className="text-foreground font-semibold">100.000 usuários e R$ 15M de MRR</span>, o capital total mapeado é de <span className="text-primary font-semibold">R$ 3 milhões</span>, distribuído em rodadas sequenciais com diluição controlada e marcos de tração validados.
             </p>
           </motion.div>
 
