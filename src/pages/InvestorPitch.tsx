@@ -530,27 +530,28 @@ const InvestorPitch = () => {
       <section id="investimento" className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-20">
-            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">A Rodada</div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">A Rodada · 4ª Captação</div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
               Pré-Seed: R$ 200K por 10%
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Valuation pré-money de <span className="text-foreground font-semibold">R$ 1,8M</span>. Capital total necessário para atingir 100K usuários é de <span className="text-foreground font-semibold">~R$ 400K</span>, complementado por rodadas Seed e Série A sequenciais.
+              Esta é a <span className="text-foreground font-semibold">4ª rodada</span> da Clauthor após bootstrapping, FFF e anjos estratégicos. Para alcançar <span className="text-foreground font-semibold">100.000 usuários e R$ 15M de MRR</span>, o capital total mapeado é de <span className="text-primary font-semibold">R$ 3 milhões</span>, distribuído em rodadas sequenciais com diluição controlada e marcos de tração validados.
             </p>
           </motion.div>
 
           {/* Round structure */}
-          <div className="grid md:grid-cols-3 gap-6 mb-16">
+          <div className="grid md:grid-cols-4 gap-6 mb-16">
             {[
-              { tag: "AGORA", round: "Pré-Seed", amount: "R$ 200K", equity: "10%", desc: "Aceleração de marketing e expansão multilíngue.", highlight: true },
-              { tag: "Q3 2026", round: "Seed", amount: "R$ 200K+", equity: "TBD", desc: "Escala internacional após validação de unit economics." },
-              { tag: "2027", round: "Série A", amount: "US$ 3M+", equity: "TBD", desc: "Dominância global em outcome-based AI workforce." },
+              { tag: "AGORA · 4ª", round: "Pré-Seed", amount: "R$ 200K", equity: "10%", desc: "Marketing, expansão multilíngue e G8 Prospect em 7 mercados.", highlight: true, muted: false },
+              { tag: "Q3 2026", round: "Seed", amount: "R$ 800K", equity: "12-15%", desc: "Escala em LATAM e Europa após 5.000 usuários pagantes.", highlight: false, muted: false },
+              { tag: "Q2 2027", round: "Série A", amount: "R$ 2M", equity: "15-18%", desc: "Dominância global em outcome-based AI workforce.", highlight: false, muted: false },
+              { tag: "TOTAL", round: "Capital Mapeado", amount: "R$ 3M", equity: "~35%", desc: "Caminho completo até 100K usuários e R$ 15M MRR.", highlight: false, muted: true },
             ].map((r, i) => (
               <motion.div
                 key={r.round}
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: i * 0.1 }}
-                className={`relative p-8 rounded-2xl border transition-all ${r.highlight ? "border-primary bg-primary/5 shadow-[0_0_60px_-20px_hsl(var(--primary)/0.5)]" : "border-border/60 bg-background"}`}
+                className={`relative p-8 rounded-2xl border transition-all ${r.highlight ? "border-primary bg-primary/5 shadow-[0_0_60px_-20px_hsl(var(--primary)/0.5)]" : r.muted ? "border-dashed border-border/60 bg-background/40" : "border-border/60 bg-background"}`}
               >
                 <div className={`inline-block px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider mb-6 ${r.highlight ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground"}`}>
                   {r.tag}
@@ -562,6 +563,7 @@ const InvestorPitch = () => {
               </motion.div>
             ))}
           </div>
+
 
           {/* Why 10% */}
           <motion.div {...fadeUp} className="mb-16 p-10 rounded-2xl border border-border/60 bg-background">
