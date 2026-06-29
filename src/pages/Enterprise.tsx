@@ -69,7 +69,6 @@ const Enterprise = () => {
       <SEO
         title="Clauthor Enterprise — AI Workforce for Large Organizations"
         description="Dedicated AI squads, white-glove support, SSO, SCIM, VPC peering and signed audit trails. Built for Fortune 500 and large enterprises."
-        canonical="https://clauthor.com/enterprise"
       />
 
       <div className="min-h-screen bg-background">

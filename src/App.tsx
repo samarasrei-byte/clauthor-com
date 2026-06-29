@@ -55,6 +55,7 @@ const KnowledgeBase = lazyRetry(() => import("./pages/KnowledgeBase"));
 const ResetPassword = lazyRetry(() => import("./pages/ResetPassword"));
 const ApiDocs = lazyRetry(() => import("./pages/ApiDocs"));
 const TeamBuilder = lazyRetry(() => import("./pages/TeamBuilder"));
+const Enterprise = lazyRetry(() => import("./pages/Enterprise"));
 const ControlTower = lazyRetry(() => import("./pages/ControlTower"));
 const Architecture = lazyRetry(() => import("./pages/Architecture"));
 const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
@@ -154,6 +155,7 @@ const App = () => (
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/api-docs" element={<ApiDocs />} />
                   <Route path="/team-builder" element={<TeamBuilder />} />
+                  <Route path="/enterprise" element={<Enterprise />} />
                   <Route path="/architecture" element={<Architecture />} />
                   <Route path="/timeline" element={<ProjectTimeline />} />
                   
