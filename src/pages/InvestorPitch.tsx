@@ -136,106 +136,159 @@ const InvestorPitch = () => {
         </div>
       </header>
 
-      {/* Hero — Apple-grade minimalism */}
-      <section className="relative min-h-screen flex items-center justify-center px-6 pt-24 overflow-hidden">
-        {/* Mesh gradient background */}
+      {/* Hero — split layout: title left, cinematic image right */}
+      <section className="relative min-h-screen flex items-center px-6 pt-28 pb-20 overflow-hidden">
+        {/* Atmospheric background */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 2, ease: "easeOut" }}
-            className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1200px] h-[1200px] rounded-full bg-[radial-gradient(circle_at_center,hsl(var(--primary)/0.35),transparent_60%)] blur-3xl"
+            className="absolute top-[-20%] right-[-10%] w-[1100px] h-[1100px] rounded-full bg-[radial-gradient(circle_at_center,hsl(var(--primary)/0.28),transparent_60%)] blur-3xl"
           />
           <motion.div
-            animate={{ x: [0, 60, 0], y: [0, -40, 0] }}
+            animate={{ x: [0, 50, 0], y: [0, -30, 0] }}
             transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute top-1/3 -left-40 w-[600px] h-[600px] rounded-full bg-primary/20 blur-[140px]"
+            className="absolute top-1/3 -left-40 w-[600px] h-[600px] rounded-full bg-primary/15 blur-[140px]"
           />
           <motion.div
-            animate={{ x: [0, -50, 0], y: [0, 50, 0] }}
+            animate={{ x: [0, -40, 0], y: [0, 40, 0] }}
             transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-            className="absolute bottom-0 -right-40 w-[700px] h-[700px] rounded-full bg-foreground/10 blur-[160px]"
+            className="absolute bottom-0 right-1/4 w-[600px] h-[600px] rounded-full bg-foreground/10 blur-[160px]"
           />
         </div>
 
         {/* Precision grid */}
-        <div className="absolute inset-0 -z-10 opacity-[0.035] bg-[linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
+        <div className="absolute inset-0 -z-10 opacity-[0.04] bg-[linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]" />
 
-        {/* Floating orb — futuristic centerpiece */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.6 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1.4, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none"
-        >
-          <div className="relative w-[460px] h-[460px] md:w-[640px] md:h-[640px]">
+        <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
+          {/* LEFT — copy */}
+          <div className="text-left">
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-background/60 backdrop-blur-xl mb-8 shadow-[0_8px_32px_-12px_hsl(var(--primary)/0.4)]"
+            >
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 animate-ping" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
+              </span>
+              <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary">Pré-Seed · 4ª Rodada · R$ 200K · 10% Equity</span>
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+              className="text-5xl md:text-6xl lg:text-7xl xl:text-[5.5rem] font-bold tracking-[-0.04em] leading-[0.95] mb-8"
+            >
+              A força de trabalho
+              <br />
+              <span className="bg-gradient-to-br from-primary via-foreground to-primary bg-clip-text text-transparent">
+                autônoma do futuro.
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.3 }}
+              className="text-lg md:text-xl text-muted-foreground max-w-xl mb-10 leading-relaxed font-light"
+            >
+              225 agentes. 20 departamentos. 14+ idiomas.
+              <br className="hidden md:block" />
+              Meta: <span className="text-foreground font-medium">100K usuários e R$ 15M de MRR em 24 meses.</span>
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.45 }}
+              className="flex flex-wrap gap-4"
+            >
+              <Button asChild variant="outline" size="lg" className="rounded-full h-14 px-8 text-base border-border/60 bg-background/40 backdrop-blur-xl hover:bg-background/60">
+                <a href="#concorrencia">Ver Análise Competitiva</a>
+              </Button>
+            </motion.div>
+          </div>
+
+          {/* RIGHT — cinematic image */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.92, x: 40 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            transition={{ duration: 1.2, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="relative aspect-square w-full max-w-[640px] mx-auto"
+          >
+            {/* Outer rotating ring */}
             <motion.div
               animate={{ rotate: 360 }}
-              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-0 rounded-full border border-primary/20"
+              transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+              className="absolute -inset-6 rounded-full border border-primary/20"
             />
             <motion.div
               animate={{ rotate: -360 }}
-              transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-8 rounded-full border border-foreground/10"
-            />
-            <motion.div
-              animate={{ rotate: 360 }}
               transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-              className="absolute inset-20 rounded-full border border-primary/10"
+              className="absolute -inset-12 rounded-full border border-foreground/10 [mask-image:linear-gradient(45deg,black,transparent)]"
             />
-            <div className="absolute inset-[35%] rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.4),transparent_70%)] blur-2xl animate-pulse" />
-          </div>
+
+            {/* Glow halo */}
+            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.4),transparent_70%)] blur-3xl scale-110" />
+
+            {/* The image */}
+            <div className="relative h-full w-full rounded-3xl overflow-hidden border border-primary/30 shadow-[0_40px_120px_-20px_hsl(var(--primary)/0.6)]">
+              <img
+                src={heroBanner}
+                alt="Clauthor — IA autônoma"
+                width={1280}
+                height={1280}
+                className="absolute inset-0 h-full w-full object-cover"
+              />
+              {/* Color/contrast overlays */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-background/60 via-transparent to-primary/20 mix-blend-overlay" />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80" />
+              {/* Scanline effect */}
+              <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[repeating-linear-gradient(0deg,transparent,transparent_3px,hsl(var(--primary)/0.15)_3px,hsl(var(--primary)/0.15)_4px)]" />
+              {/* HUD corners */}
+              <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/70" />
+              <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/70" />
+              <div className="absolute bottom-4 left-4 w-8 h-8 border-l-2 border-b-2 border-primary/70" />
+              <div className="absolute bottom-4 right-4 w-8 h-8 border-r-2 border-b-2 border-primary/70" />
+              {/* Bottom data strip */}
+              <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.25em] text-primary/90">
+                <span className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                  System Online
+                </span>
+                <span>225 Agentes · 20 Squads</span>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* KPI strip — moved out of hero for breathing room */}
+      <section className="relative px-6 -mt-10 mb-20">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-px rounded-2xl border border-border/40 bg-border/40 overflow-hidden backdrop-blur-xl">
+          {[
+            { v: "225", l: "Agentes IA" },
+            { v: "20", l: "Departamentos" },
+            { v: "14+", l: "Idiomas" },
+            { v: "88%", l: "Redução de Custo" },
+          ].map((kpi) => (
+            <div key={kpi.l} className="bg-background/70 px-6 py-6 text-center">
+              <div className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-br from-primary to-foreground bg-clip-text text-transparent">{kpi.v}</div>
+              <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground mt-2">{kpi.l}</div>
+            </div>
+          ))}
         </motion.div>
+      </section>
 
-        <div className="relative z-10 max-w-5xl mx-auto text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-background/60 backdrop-blur-xl mb-8 shadow-[0_8px_32px_-12px_hsl(var(--primary)/0.4)]"
-          >
-            <span className="relative flex h-1.5 w-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 animate-ping" />
-              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
-            </span>
-            <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary">Pré-Seed · 4ª Rodada · R$ 200K · 10% Equity</span>
-          </motion.div>
-
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
-            className="text-5xl md:text-7xl lg:text-[8.5rem] font-bold tracking-[-0.04em] leading-[0.95] mb-8"
-          >
-            A força de trabalho
-            <br />
-            <span className="bg-gradient-to-br from-primary via-foreground to-primary bg-clip-text text-transparent">
-              autônoma do futuro.
-            </span>
-          </motion.h1>
-
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed font-light"
-          >
-            225 agentes. 20 departamentos. 14+ idiomas.
-            <br className="hidden md:block" />
-            Meta: <span className="text-foreground font-medium">100K usuários e R$ 15M de MRR em 24 meses.</span>
-          </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.45 }}
-            className="flex justify-center"
-          >
-            <Button asChild variant="outline" size="lg" className="rounded-full h-14 px-8 text-base border-border/60 bg-background/40 backdrop-blur-xl hover:bg-background/60">
-              <a href="#concorrencia">Ver Análise Competitiva</a>
-            </Button>
-          </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
