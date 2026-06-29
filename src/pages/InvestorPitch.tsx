@@ -57,7 +57,7 @@ const competitors = [
 // Alocação de capital — pré-seed R$ 200k
 const allocation = [
   { pct: "45%", title: "Marketing & Aquisição", desc: "Tráfego pago, influenciadores, campanhas G8 Prospect em BR, AR, MX, PT, ES, IT, US.", color: "from-primary/40 to-primary/10" },
-  { pct: "30%", title: "Tecnologia & Produto", desc: "Infra de IA (Lovable AI Gateway), pgvector, edge functions, marketplace de agentes.", color: "from-foreground/30 to-foreground/5" },
+  { pct: "30%", title: "Tecnologia & Produto", desc: "Infraestrutura de IA proprietária, banco vetorial (pgvector), edge functions serverless e marketplace de agentes.", color: "from-foreground/30 to-foreground/5", help: "Stack técnico: orquestração multi-modelo (GPT-5, Claude Opus 4, Gemini 3) com roteamento inteligente por custo/qualidade, memória hierárquica em 4 camadas (episódica, semântica, procedural, reflexiva) usando embeddings pgvector, +50 edge functions serverless para integrações (WhatsApp, LinkedIn, CRMs), e MCP Server nativo para distribuição dos 225 agentes em ferramentas externas como Claude Desktop e Cursor." },
   { pct: "25%", title: "Pessoas & Operação", desc: "Squad de growth, customer success multilíngue e parcerias estratégicas.", color: "from-primary/30 to-foreground/5" },
 ];
 
