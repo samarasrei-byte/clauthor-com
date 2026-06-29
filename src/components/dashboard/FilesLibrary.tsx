@@ -70,6 +70,8 @@ const FilesLibrary = () => {
   const [query, setQuery] = useState("");
   const [view, setView] = useState<"grid" | "list">("grid");
   const [dragging, setDragging] = useState(false);
+  const [activeFolder, setActiveFolder] = useState<string | null>(null);
+  const [extraFolders, setExtraFolders] = useState<string[]>([]);
 
   const { data: files = [], isLoading } = useQuery({
     queryKey: ["files", tenantId],
