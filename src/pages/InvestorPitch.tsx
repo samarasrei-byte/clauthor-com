@@ -18,7 +18,10 @@ import {
   PieChart,
   Calendar,
   HelpCircle,
+  Play,
 } from "lucide-react";
+import { useState } from "react";
+import PresentationMode from "@/components/investor/PresentationMode";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -111,6 +114,7 @@ const reasons = [
 ];
 
 const InvestorPitch = () => {
+  const [presenting, setPresenting] = useState(false);
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SEO
@@ -129,9 +133,19 @@ const InvestorPitch = () => {
             <a href="#calculadora" className="hover:text-primary transition-colors">Calculadora</a>
             <a href="#investimento" className="hover:text-primary transition-colors">Rodada</a>
           </nav>
-          <div className="hidden md:flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-            Pitch Investidor
+          <div className="hidden md:flex items-center gap-3">
+            <button
+              onClick={() => setPresenting(true)}
+              className="flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 hover:bg-primary/20 transition px-4 h-9 font-mono text-[11px] uppercase tracking-[0.25em] text-primary"
+              title="Apresentar (modo cinema)"
+            >
+              <Play className="h-3 w-3 fill-current" />
+              Apresentar
+            </button>
+            <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-primary">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              Pitch Investidor
+            </div>
           </div>
         </div>
       </header>
@@ -982,7 +996,11 @@ const InvestorPitch = () => {
       </footer>
 
       {/* Thor — guia ao vivo (mesmo do painel) */}
-      <ThorLiveGuide activeSection="investidores" onNavigate={() => {}} onDismiss={() => {}} />
+      <div data-thor-guide>
+        <ThorLiveGuide activeSection="investidores" onNavigate={() => {}} onDismiss={() => {}} />
+      </div>
+
+      <PresentationMode active={presenting} onExit={() => setPresenting(false)} />
     </div>
   );
 
