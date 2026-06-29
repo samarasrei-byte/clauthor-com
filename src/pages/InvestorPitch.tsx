@@ -114,6 +114,7 @@ const reasons = [
 ];
 
 const InvestorPitch = () => {
+  const [presenting, setPresenting] = useState(false);
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SEO
