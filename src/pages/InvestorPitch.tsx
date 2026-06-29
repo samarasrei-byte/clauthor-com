@@ -22,6 +22,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
+import {
+  SourcesSection,
+  ChartsSection,
+  CompetitorDetailSection,
+  FundingCalculator,
+} from "@/components/investor/InvestorExtras";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
