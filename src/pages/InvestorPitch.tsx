@@ -228,11 +228,8 @@ const InvestorPitch = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.45 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex justify-center"
           >
-            <Button asChild size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8 h-14 text-base shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.6)] transition-all hover:scale-[1.02]">
-              <a href="#contact">Investir no Pré-Seed <ArrowRight className="ml-2 h-4 w-4" /></a>
-            </Button>
             <Button asChild variant="outline" size="lg" className="rounded-full h-14 px-8 text-base border-border/60 bg-background/40 backdrop-blur-xl hover:bg-background/60">
               <a href="#concorrencia">Ver Análise Competitiva</a>
             </Button>
