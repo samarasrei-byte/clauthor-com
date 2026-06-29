@@ -387,6 +387,13 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ParallaxBand
+        image={parallaxOrb}
+        eyebrow="A Tese"
+        title="A próxima década é de agentes, não de ferramentas"
+        subtitle="Empresas vão comprar resultado entregue por IA autônoma — não mais software para humanos operarem. Clauthor está construído para essa transição."
+      />
+
       {/* Problem */}
       <section className="py-32 px-6">
         <motion.div {...fadeUp} className="max-w-4xl mx-auto text-center">
@@ -534,6 +541,14 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ParallaxBand
+        image={parallaxGlobal}
+        eyebrow="Mercado Endereçável"
+        title="US$ 47B em IA workforce até 2030"
+        subtitle="Nascemos multilíngues e multi-região. A mesma plataforma atende um SaaS em São Paulo, uma agência em Milão e uma fintech em Miami."
+        align="left"
+      />
+
       {/* GLOBAL REACH */}
       <section className="py-32 px-6">
         <div className="max-w-6xl mx-auto text-center">
@@ -665,6 +680,13 @@ const InvestorPitch = () => {
           </p>
         </div>
       </section>
+
+      <ParallaxBand
+        image={parallaxDatacenter}
+        eyebrow="Infraestrutura Pronta"
+        title="Construído para escalar do dia 1"
+        subtitle="225 agentes, edge functions serverless, memória hierárquica em pgvector e roteamento multi-modelo — a stack já suporta milhares de tenants sem refactor."
+      />
 
       {/* MRR PROJECTION */}
       <section className="py-32 px-6">
