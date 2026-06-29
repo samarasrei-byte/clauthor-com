@@ -350,9 +350,9 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       <button
         onClick={() => setCollapsed(!collapsed)}
         aria-label={collapsed ? "Expandir" : "Colapsar"}
-        className="absolute -right-3 top-7 z-10 w-6 h-6 rounded-full bg-background border border-border/30 flex items-center justify-center hover:border-primary/40 hover:bg-accent/10 transition-all shadow-sm"
+        className="absolute -right-3 top-7 z-20 w-7 h-7 rounded-full bg-primary text-primary-foreground border border-primary/60 flex items-center justify-center hover:scale-110 hover:shadow-[0_0_0_4px_hsl(var(--primary)/0.15)] transition-all shadow-md ring-1 ring-background"
       >
-        {collapsed ? <ChevronRight className="h-3 w-3 text-muted-foreground" /> : <ChevronLeft className="h-3 w-3 text-muted-foreground" />}
+        {collapsed ? <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.5} /> : <ChevronLeft className="h-3.5 w-3.5" strokeWidth={2.5} />}
       </button>
 
       {/* Search */}
