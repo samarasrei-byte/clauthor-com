@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { SEO } from "@/components/SEO";
+import PlatformStatsBanner from "@/components/PlatformStatsBanner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Cpu, Zap, Layers, Terminal,
