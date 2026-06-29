@@ -359,12 +359,12 @@ const InvestorPitch = () => {
           <motion.div {...fadeUp} className="mt-8 p-8 rounded-2xl bg-card/60 border border-amber-500/30">
             <div className="flex items-center gap-2 mb-4">
               <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber-500">Transparência Radical · Standby Técnico Controlado</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber-500">Transparência Radical · Pré-Produção · Aguardando Investimento de Infra</span>
             </div>
-            <h3 className="text-2xl font-bold mb-3">Em testes finais — produção em até 10 dias, escalada para 3.000–4.000 usuários simultâneos</h3>
+            <h3 className="text-2xl font-bold mb-3">Plataforma ainda <span className="text-amber-500">não está em produção</span> — go-live em até 10 dias após aporte em tecnologia</h3>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-              A plataforma está <span className="text-foreground font-semibold">100% funcional ponta a ponta</span> (225 agentes, 20 squads, multi-tenant, auditoria criptográfica, 14 idiomas) e atualmente em <span className="text-foreground font-semibold">standby controlado</span> enquanto concluímos a bateria final de testes de carga, segurança e UX.
-              O go-live em produção acontece em <span className="text-foreground font-semibold">no máximo 10 dias</span>, já dimensionado para atender <span className="text-foreground font-semibold">3.000 a 4.000 usuários simultâneos</span> desde o primeiro dia. As peças abaixo são os investimentos de infraestrutura que sustentam essa escala — fornecedores definidos, custos previsíveis:
+              Sejamos diretos: a plataforma está <span className="text-foreground font-semibold">100% funcional ponta a ponta</span> em ambiente de testes (225 agentes, 20 squads, 20 departamentos, multi-tenant, auditoria criptográfica, 14 idiomas), mas <span className="text-foreground font-semibold">ainda não opera em produção</span>. Estamos em <span className="text-foreground font-semibold">standby controlado</span> rodando a bateria final de testes de carga, segurança e UX.
+              Para sustentar <span className="text-foreground font-semibold">3.000 a 4.000 usuários simultâneos</span> com performance e confiabilidade, é necessário <span className="text-foreground font-semibold">investimento direcionado em infraestrutura</span> (servidor dedicado, vector DB, observabilidade, CDN, fila distribuída). Com o aporte, o go-live acontece em <span className="text-foreground font-semibold">no máximo 10 dias</span>:
             </p>
             <div className="grid md:grid-cols-2 gap-3 mb-6">
               {[
@@ -387,8 +387,10 @@ const InvestorPitch = () => {
             <div className="p-4 rounded-xl bg-primary/5 border border-primary/20">
               <p className="text-sm leading-relaxed">
                 <span className="text-primary font-semibold">Por que isso é positivo para o investidor:</span>{" "}
-                <span className="text-muted-foreground">o produto já existe, está testado e entra em produção em até 10 dias com capacidade para milhares de usuários simultâneos. O risco técnico já foi pago com capital próprio do fundador. Os R$ 200k entram para </span>
-                <span className="text-foreground font-semibold">acelerar comercialização e blindar a infra para o próximo salto</span>
+                <span className="text-muted-foreground">o produto já existe e está testado — falta apenas o </span>
+                <span className="text-foreground font-semibold">investimento em tecnologia de produção</span>
+                <span className="text-muted-foreground"> para destravar o go-live em até 10 dias com capacidade para milhares de usuários simultâneos. O risco técnico de construção já foi pago com capital próprio do fundador. Os R$ 200k entram para </span>
+                <span className="text-foreground font-semibold">subir a infra de produção e acelerar comercialização</span>
                 <span className="text-muted-foreground">, não para descobrir se a tecnologia funciona — isso já está provado.</span>
               </p>
             </div>
