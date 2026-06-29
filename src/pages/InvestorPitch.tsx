@@ -304,6 +304,9 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <CompetitorDetailSection />
+
+
       {/* Unfair Advantage — G8 Prospect */}
       <section className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
