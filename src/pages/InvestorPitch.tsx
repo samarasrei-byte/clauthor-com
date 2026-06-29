@@ -522,7 +522,26 @@ const InvestorPitch = () => {
                   className={`relative p-10 rounded-2xl bg-gradient-to-br ${a.color} border border-border/60 overflow-hidden`}
                 >
                   <div className="text-6xl font-bold text-foreground mb-4">{a.pct}</div>
-                  <h4 className="text-xl font-bold mb-3">{a.title}</h4>
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <h4 className="text-xl font-bold">{a.title}</h4>
+                    {a.help && (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button
+                            type="button"
+                            aria-label={`Saiba mais sobre ${a.title}`}
+                            className="shrink-0 inline-flex items-center justify-center h-7 w-7 rounded-full border border-border/60 bg-background/60 backdrop-blur hover:bg-primary/10 hover:border-primary/40 transition-colors"
+                          >
+                            <HelpCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent side="top" className="w-80 text-sm leading-relaxed">
+                          <div className="font-semibold mb-2">{a.title}</div>
+                          <p className="text-muted-foreground">{a.help}</p>
+                        </PopoverContent>
+                      </Popover>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">{a.desc}</p>
                 </motion.div>
               ))}
