@@ -24,6 +24,8 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
+import ThorGreeter from "@/components/ThorGreeter";
+
 import {
   SourcesSection,
   ChartsSection,
