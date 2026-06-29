@@ -59,7 +59,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
   const stateLabel = { idle: "", listening: "LISTENING", speaking: "SPEAKING", processing: "THINKING" }[state];
 
   // Intensity multipliers per state
-  const intensity = isSpeaking ? 1.4 : isListening ? 1.1 : isProcessing ? 0.8 : 0.2;
+  const intensity = isSpeaking ? 1.4 : isListening ? 1.1 : isProcessing ? 0.8 : 0.65;
 
   return (
     <div
