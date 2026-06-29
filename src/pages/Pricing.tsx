@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { SEO } from "@/components/SEO";
+import PlatformStatsBanner from "@/components/PlatformStatsBanner";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
