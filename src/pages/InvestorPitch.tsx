@@ -17,9 +17,11 @@ import {
   TrendingUp,
   PieChart,
   Calendar,
+  HelpCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import {
