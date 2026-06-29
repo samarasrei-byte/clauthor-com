@@ -290,26 +290,6 @@ const InvestorPitch = () => {
       </section>
 
 
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 0.8 }}
-            className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-px max-w-4xl mx-auto rounded-2xl border border-border/40 bg-border/40 overflow-hidden backdrop-blur-xl"
-          >
-            {[
-              { v: "225", l: "Agentes de IA" },
-              { v: "14+", l: "Idiomas" },
-              { v: "12+", l: "Países alvo" },
-              { v: "88%", l: "Redução de Custo" },
-            ].map((s) => (
-              <div key={s.l} className="bg-background/80 backdrop-blur-xl p-6">
-                <div className="text-3xl md:text-5xl font-bold text-foreground tracking-tight">{s.v}</div>
-                <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mt-2">{s.l}</div>
-              </div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
 
       {/* 60s Pitch */}
       <section id="pitch-60s" className="relative py-32 px-6 overflow-hidden">
