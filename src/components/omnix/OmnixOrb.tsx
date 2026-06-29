@@ -59,7 +59,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
   const stateLabel = { idle: "", listening: "LISTENING", speaking: "SPEAKING", processing: "THINKING" }[state];
 
   // Intensity multipliers per state
-  const intensity = isSpeaking ? 1.4 : isListening ? 1.1 : isProcessing ? 0.8 : 0.2;
+  const intensity = isSpeaking ? 1.4 : isListening ? 1.1 : isProcessing ? 0.8 : 0.65;
 
   return (
     <div
@@ -105,8 +105,8 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
           r={size * 0.42}
           fill="url(#orb-nebula)"
           animate={{
-            r: isActive ? [size * 0.38, size * 0.45, size * 0.38] : size * 0.35,
-            opacity: isActive ? [0.5, 1, 0.5] : 0.15,
+            r: isActive ? [size * 0.38, size * 0.45, size * 0.38] : [size * 0.34, size * 0.4, size * 0.34],
+            opacity: isActive ? [0.5, 1, 0.5] : [0.4, 0.65, 0.4],
           }}
           transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
         />
@@ -128,13 +128,13 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
               strokeWidth={arc.strokeW}
               strokeLinecap="round"
               strokeDasharray={`${visibleLength} ${gapLength}`}
-              strokeOpacity={isActive ? 0.25 + (i % 3) * 0.08 : 0.04}
+              strokeOpacity={isActive ? 0.25 + (i % 3) * 0.08 : 0.18 + (i % 3) * 0.06}
               style={{ transformOrigin: `${center}px ${center}px` }}
               animate={{
                 rotate: [arc.offset, arc.offset + 360 * arc.direction],
                 strokeOpacity: isActive
                   ? [0.15, 0.35 * intensity, 0.15]
-                  : 0.04,
+                  : [0.12, 0.28, 0.12],
                 strokeWidth: isSpeaking
                   ? [arc.strokeW, arc.strokeW * 2, arc.strokeW]
                   : arc.strokeW,
@@ -191,8 +191,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
 
         {/* ── Layer 4: Particle field ── */}
         <AnimatePresence>
-          {isActive &&
-            particles.map((p, i) => {
+          {particles.map((p, i) => {
               const rad = (p.angle * Math.PI) / 180;
               const cx = center + Math.cos(rad) * p.dist;
               const cy = center + Math.sin(rad) * p.dist;
@@ -241,7 +240,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
               : [coreR + 2, coreR + 6, coreR + 2],
             opacity: isActive
               ? [0.08, 0.2 * intensity, 0.08]
-              : [0.02, 0.04, 0.02],
+              : [0.06, 0.14, 0.06],
           }}
           transition={{
             duration: isSpeaking ? 0.5 : 2.5,

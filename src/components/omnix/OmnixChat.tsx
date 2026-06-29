@@ -491,12 +491,12 @@ const OmnixChat = ({ messages, isLoading, isStreaming, config, onSend, onStop, o
           animate={{ opacity: 1 }}
           className="-mt-6 sm:-mt-2 lg:mt-4"
         >
-           <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground/30">
+           <span className="font-mono text-[11px] uppercase tracking-[0.35em] text-primary/70">
              {isListening ? t("omnix.status_listening", { defaultValue: "Ouvindo..." })
                : isSpeaking ? t("omnix.status_speaking", { defaultValue: "Falando..." })
                : isStreaming ? t("omnix.status_thinking", { defaultValue: "Pensando..." })
                : isLoading ? t("omnix.status_processing", { defaultValue: "Processando..." })
-               : t("omnix.status_ready", { defaultValue: "Pronto" })}
+               : t("omnix.status_ready", { defaultValue: "Online · Pronto para ajudar" })}
            </span>
         </motion.div>
 
