@@ -996,7 +996,11 @@ const InvestorPitch = () => {
       </footer>
 
       {/* Thor — guia ao vivo (mesmo do painel) */}
-      <ThorLiveGuide activeSection="investidores" onNavigate={() => {}} onDismiss={() => {}} />
+      <div data-thor-guide>
+        <ThorLiveGuide activeSection="investidores" onNavigate={() => {}} onDismiss={() => {}} />
+      </div>
+
+      <PresentationMode active={presenting} onExit={() => setPresenting(false)} />
     </div>
   );
 
