@@ -128,9 +128,9 @@ const InvestorPitch = () => {
             <a href="#calculadora" className="hover:text-primary transition-colors">Calculadora</a>
             <a href="#investimento" className="hover:text-primary transition-colors">Rodada</a>
           </nav>
-          <Button asChild size="sm" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
-            <a href="#contact">Investir</a>
-          </Button>
+          <div className="hidden md:block font-mono text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
+            Apresentação para Investidores
+          </div>
         </div>
       </header>
 
