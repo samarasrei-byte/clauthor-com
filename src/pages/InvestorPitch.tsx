@@ -54,7 +54,7 @@ const competitors = [
   { name: "Cognosys", squads: false, agents: "Workflows", langs: "EN apenas", outcome: false, marketplace: false, audit: false, price: "US$ 15–99/mês" },
 ];
 
-// Alocação de capital — pré-seed R$ 200k
+// Alocação de capital pré-seed R$ 200k
 const allocation = [
   { pct: "45%", title: "Marketing & Aquisição", desc: "Tráfego pago, influenciadores, campanhas G8 Prospect em BR, AR, MX, PT, ES, IT, US.", color: "from-primary/40 to-primary/10", help: "Campanhas de performance (Meta, Google, TikTok, LinkedIn), parcerias com criadores B2B em 7 mercados, ativação do programa G8 Prospect (8 verticais de alta conversão) e expansão para Europa e LATAM com conteúdo localizado em 14 idiomas." },
   { pct: "30%", title: "Tecnologia & Produto", desc: "Infraestrutura de IA proprietária, banco vetorial (pgvector), edge functions serverless e marketplace de agentes.", color: "from-foreground/30 to-foreground/5", help: "Stack técnico: orquestração multi-modelo (GPT-5, Claude Opus 4, Gemini 3) com roteamento inteligente por custo/qualidade, memória hierárquica em 4 camadas (episódica, semântica, procedural, reflexiva) usando embeddings pgvector, +50 edge functions serverless para integrações (WhatsApp, LinkedIn, CRMs), e MCP Server nativo para distribuição dos 225 agentes em ferramentas externas como Claude Desktop e Cursor." },
@@ -76,7 +76,7 @@ const regions = [
   { flag: "🇺🇸", name: "EUA" },
 ];
 
-// Projeção MRR — 24 meses
+// Projeção MRR 24 meses
 const mrrProjection = [
   { month: "M3", users: "500", mrr: "R$ 75K" },
   { month: "M6", users: "2.500", mrr: "R$ 375K" },
@@ -107,7 +107,7 @@ const InvestorPitch = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SEO
-        title="Clauthor — Invest in the Autonomous AI Workforce"
+        title="Clauthor Invest in the Autonomous AI Workforce"
         description="Pre-seed R$200K for 10%. Roadmap to 100K users and R$15M MRR in 24 months across 12+ countries and 14+ languages."
       />
 
@@ -294,8 +294,8 @@ const InvestorPitch = () => {
           <motion.div {...fadeUp} className="mt-12 grid md:grid-cols-3 gap-6">
             {[
               { icon: Languages, t: "14+ Idiomas Nativos", d: "PT, EN, ES, FR, DE, IT, JA, KO, ZH, AR, RU, TR + variantes regionais." },
-              { icon: ShieldCheck, t: "Audit Trail Criptográfico", d: "SHA-256 hash chain imutável — único no mercado para compliance enterprise." },
-              { icon: Sparkles, t: "Outcome-Based Pricing", d: "Cliente paga por resultado entregue, não por seat — alinhamento total." },
+              { icon: ShieldCheck, t: "Audit Trail Criptográfico", d: "SHA-256 hash chain imutável único no mercado para compliance enterprise." },
+              { icon: Sparkles, t: "Outcome-Based Pricing", d: "Cliente paga por resultado entregue, não por seat alinhamento total." },
             ].map((m, i) => (
               <motion.div key={m.t} {...fadeUp} transition={{ ...fadeUp.transition, delay: i * 0.1 }} className="p-6 rounded-xl border border-border/60 bg-background">
                 <m.icon className="h-5 w-5 text-primary mb-4" />
@@ -310,7 +310,7 @@ const InvestorPitch = () => {
       <CompetitorDetailSection />
 
 
-      {/* Unfair Advantage — G8 Prospect */}
+      {/* Unfair Advantage G8 Prospect */}
       <section className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-20">
@@ -358,7 +358,7 @@ const InvestorPitch = () => {
             <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Alcance Global</div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">12+ Países, 14+ Idiomas</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-16">
-              América do Sul, América do Norte e Europa — Clauthor já fala a língua dos seus clientes desde o dia 1.
+              América do Sul, América do Norte e Europa Clauthor já fala a língua dos seus clientes desde o dia 1.
             </p>
           </motion.div>
 
@@ -408,7 +408,7 @@ const InvestorPitch = () => {
             <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Custo Real vs Clauthor</div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">Um departamento de 20 pessoas custa <span className="text-primary">R$ 240K/mês</span></h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Na Clauthor, o mesmo departamento (20 agentes especializados, 24/7, multilíngue) custa a partir de <strong className="text-foreground">R$ 1.997/mês</strong>. É <strong className="text-primary">120× mais barato</strong> — e entrega mais.
+              Na Clauthor, o mesmo departamento (20 agentes especializados, 24/7, multilíngue) custa a partir de <strong className="text-foreground">R$ 1.997/mês</strong>. É <strong className="text-primary">120× mais barato</strong> e entrega mais.
             </p>
           </motion.div>
 
@@ -570,7 +570,7 @@ const InvestorPitch = () => {
                 <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-4">Por Que 10%?</div>
                 <h3 className="text-3xl md:text-4xl font-bold mb-6">Equity Justo para Capital Estratégico</h3>
                 <p className="text-muted-foreground leading-relaxed mb-4">
-                  10% reflete um valuation pré-money de <strong className="text-foreground">R$ 1,8M</strong> — abaixo do múltiplo de mercado para SaaS de IA com tração comprovada, dando ao investidor pré-seed espaço significativo de upside.
+                  10% reflete um valuation pré-money de <strong className="text-foreground">R$ 1,8M</strong> abaixo do múltiplo de mercado para SaaS de IA com tração comprovada, dando ao investidor pré-seed espaço significativo de upside.
                 </p>
                 <p className="text-muted-foreground leading-relaxed">
                   Mantém o cap table limpo para as próximas rodadas (Seed + Série A), preservando incentivo e velocidade dos founders.
