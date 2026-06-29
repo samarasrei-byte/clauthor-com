@@ -835,6 +835,13 @@ const InvestorPitch = () => {
 
       <ChartsSection />
 
+      <ParallaxBand
+        image={parallaxGrowth}
+        eyebrow="Trajetória"
+        title="Curva exponencial pronta para destravar"
+        subtitle="Plataforma construída, mercado validado, modelo de monetização provado. Falta apenas o capital de produção para acelerar a curva."
+      />
+
       {/* INVESTMENT ROUND */}
 
       <section id="investimento" className="py-32 px-6 bg-card/30 border-y border-border/40">
