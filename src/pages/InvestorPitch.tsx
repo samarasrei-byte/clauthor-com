@@ -39,6 +39,9 @@ import ParallaxBand from "@/components/investor/ParallaxBand";
 import parallaxOrb from "@/assets/investor-parallax-1.jpg";
 import parallaxDatacenter from "@/assets/investor-parallax-2.jpg";
 import parallaxGlobal from "@/assets/investor-parallax-3.jpg";
+import parallaxSquads from "@/assets/investor-extra-squads.jpg";
+import parallaxMemory from "@/assets/investor-extra-memory.jpg";
+import parallaxGrowth from "@/assets/investor-extra-growth.jpg";
 import heroBanner from "@/assets/investor-hero-banner.jpg";
 
 const fadeUp = {
@@ -246,23 +249,23 @@ const InvestorPitch = () => {
               className="absolute -inset-12 rounded-full border border-foreground/10 [mask-image:linear-gradient(45deg,black,transparent)]"
             />
 
-            {/* Glow halo */}
-            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.4),transparent_70%)] blur-3xl scale-110" />
+            {/* Glow halo — soft cyan instead of strong red */}
+            <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,hsl(210_90%_55%/0.25),transparent_70%)] blur-3xl scale-110" />
 
             {/* The image */}
-            <div className="relative h-full w-full rounded-3xl overflow-hidden border border-primary/30 shadow-[0_40px_120px_-20px_hsl(var(--primary)/0.6)]">
+            <div className="relative h-full w-full rounded-3xl overflow-hidden border border-foreground/15 shadow-[0_40px_120px_-20px_hsl(210_90%_55%/0.35)]">
               <img
                 src={heroBanner}
-                alt="Clauthor — IA autônoma"
+                alt="Clauthor — Rede neural de 225 agentes de IA"
                 width={1280}
                 height={1280}
                 className="absolute inset-0 h-full w-full object-cover"
               />
-              {/* Color/contrast overlays */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-background/60 via-transparent to-primary/20 mix-blend-overlay" />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/80" />
-              {/* Scanline effect */}
-              <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[repeating-linear-gradient(0deg,transparent,transparent_3px,hsl(var(--primary)/0.15)_3px,hsl(var(--primary)/0.15)_4px)]" />
+              {/* Soft contrast overlay — no red tint */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-background/50 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/70" />
+              {/* Subtle scanline */}
+              <div className="absolute inset-0 opacity-15 mix-blend-overlay bg-[repeating-linear-gradient(0deg,transparent,transparent_3px,hsl(210_90%_70%/0.12)_3px,hsl(210_90%_70%/0.12)_4px)]" />
               {/* HUD corners */}
               <div className="absolute top-4 left-4 w-8 h-8 border-l-2 border-t-2 border-primary/70" />
               <div className="absolute top-4 right-4 w-8 h-8 border-r-2 border-t-2 border-primary/70" />
@@ -524,6 +527,13 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ParallaxBand
+        image={parallaxSquads}
+        eyebrow="Workforce"
+        title="225 agentes. 20 squads. Um único cérebro."
+        subtitle="Arquitetura proprietária multi-tenant com roteamento inteligente, memória hierárquica e auditoria criptográfica — pronta para escalar para milhares de empresas."
+      />
+
       {/* COMPETITIVE ANALYSIS */}
       <section id="concorrencia" className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
@@ -687,6 +697,13 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ParallaxBand
+        image={parallaxMemory}
+        eyebrow="Memória Hierárquica"
+        title="4 camadas de memória que aprendem com cada interação"
+        subtitle="Episódica, semântica, procedural e reflexiva — agentes que evoluem com o uso, criando um moat técnico difícil de replicar."
+      />
+
       {/* DEPARTMENT COST COMPARISON */}
       <section id="comparativo-departamento" className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
@@ -817,6 +834,13 @@ const InvestorPitch = () => {
       </section>
 
       <ChartsSection />
+
+      <ParallaxBand
+        image={parallaxGrowth}
+        eyebrow="Trajetória"
+        title="Curva exponencial pronta para destravar"
+        subtitle="Plataforma construída, mercado validado, modelo de monetização provado. Falta apenas o capital de produção para acelerar a curva."
+      />
 
       {/* INVESTMENT ROUND */}
 
