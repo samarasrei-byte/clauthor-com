@@ -129,8 +129,9 @@ const InvestorPitch = () => {
             <a href="#calculadora" className="hover:text-primary transition-colors">Calculadora</a>
             <a href="#investimento" className="hover:text-primary transition-colors">Rodada</a>
           </nav>
-          <div className="hidden md:block font-mono text-[11px] uppercase tracking-[0.3em] text-muted-foreground">
-            Apresentação para Investidores
+          <div className="hidden md:flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-primary">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+            Pitch Investidor
           </div>
         </div>
       </header>
