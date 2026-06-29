@@ -345,12 +345,13 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
       initial={false}
       animate={{ width: collapsed ? 56 : 248 }}
       transition={{ duration: 0.25, ease: [0.25, 0.1, 0.25, 1] }}
-      className="h-full flex flex-col bg-background/60 backdrop-blur-xl border-r border-border/10 overflow-hidden shrink-0 relative"
+      className="h-full flex flex-col bg-background/60 backdrop-blur-xl border-r border-border/10 shrink-0 relative [&>*:not(.sb-toggle)]:min-w-0"
+      style={{ overflow: "visible" }}
     >
       <button
         onClick={() => setCollapsed(!collapsed)}
         aria-label={collapsed ? "Expandir" : "Colapsar"}
-        className="absolute -right-2.5 top-8 z-30 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-all shadow-md ring-2 ring-background"
+        className="sb-toggle absolute -right-2.5 top-8 z-50 w-5 h-5 rounded-full bg-primary text-primary-foreground flex items-center justify-center hover:scale-110 transition-all shadow-md ring-2 ring-background"
       >
         {collapsed ? <ChevronRight className="h-3 w-3" strokeWidth={3} /> : <ChevronLeft className="h-3 w-3" strokeWidth={3} />}
       </button>
