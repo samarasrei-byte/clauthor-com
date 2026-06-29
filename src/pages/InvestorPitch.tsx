@@ -447,7 +447,7 @@ const InvestorPitch = () => {
 
           <motion.div {...fadeUp} className="grid md:grid-cols-3 gap-4">
             {[
-              { when: "Hoje", title: "MVP em produção", desc: "Plataforma funcional · 225 agentes · 14 idiomas · zero clientes pagantes", done: true },
+              { when: "Hoje", title: "MVP em testes finais (pré-produção)", desc: "Plataforma funcional · 225 agentes · 14 idiomas · standby aguardando investimento em infra", done: true },
               { when: "Q1 2026", title: "Pré-Seed · R$ 200k", desc: "Capital para destravar GTM e converter pilotos em receita recorrente" },
               { when: "Q3 2026", title: "Seed Round", desc: "R$ 800k · meta 5k tenants · MRR R$ 600k · expansão LATAM" },
               { when: "Q2 2027", title: "Série A", desc: "R$ 2M · meta 30k tenants · MRR R$ 4M · Europa + US" },
