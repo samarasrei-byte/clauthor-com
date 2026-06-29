@@ -133,9 +133,19 @@ const InvestorPitch = () => {
             <a href="#calculadora" className="hover:text-primary transition-colors">Calculadora</a>
             <a href="#investimento" className="hover:text-primary transition-colors">Rodada</a>
           </nav>
-          <div className="hidden md:flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-primary">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-            Pitch Investidor
+          <div className="hidden md:flex items-center gap-3">
+            <button
+              onClick={() => setPresenting(true)}
+              className="flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 hover:bg-primary/20 transition px-4 h-9 font-mono text-[11px] uppercase tracking-[0.25em] text-primary"
+              title="Apresentar (modo cinema)"
+            >
+              <Play className="h-3 w-3 fill-current" />
+              Apresentar
+            </button>
+            <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.3em] text-primary">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              Pitch Investidor
+            </div>
           </div>
         </div>
       </header>
