@@ -232,6 +232,36 @@ const FilesLibrary = () => {
         </div>
       </div>
 
+      {/* Folder chips */}
+      {folders.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-[10px] uppercase tracking-wider text-muted-foreground mr-1">Pastas</span>
+          <button
+            onClick={() => setActiveFolder(null)}
+            className={cn(
+              "px-3 h-8 rounded-full text-xs font-medium border transition-all",
+              activeFolder === null
+                ? "bg-primary text-primary-foreground border-primary"
+                : "bg-muted/30 text-muted-foreground border-border/50 hover:text-foreground"
+            )}
+          >Todas</button>
+          {folders.map((name) => (
+            <button
+              key={name}
+              onClick={() => setActiveFolder(name)}
+              className={cn(
+                "flex items-center gap-1.5 px-3 h-8 rounded-full text-xs font-medium border transition-all",
+                activeFolder === name
+                  ? "bg-primary text-primary-foreground border-primary"
+                  : "bg-muted/30 text-muted-foreground border-border/50 hover:text-foreground"
+              )}
+            >
+              <FolderOpen className="h-3 w-3" />{name}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Category chips — replace tabs */}
       <div className="flex flex-wrap gap-2">
         <CategoryChip active={filter === "all"} onClick={() => setFilter("all")} icon={Filter} label="Todos" count={counts.all || 0} />
