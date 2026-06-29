@@ -241,7 +241,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
               : [coreR + 2, coreR + 6, coreR + 2],
             opacity: isActive
               ? [0.08, 0.2 * intensity, 0.08]
-              : [0.02, 0.04, 0.02],
+              : [0.06, 0.14, 0.06],
           }}
           transition={{
             duration: isSpeaking ? 0.5 : 2.5,
