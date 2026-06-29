@@ -527,6 +527,13 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ParallaxBand
+        image={parallaxSquads}
+        eyebrow="Workforce"
+        title="225 agentes. 20 squads. Um único cérebro."
+        subtitle="Arquitetura proprietária multi-tenant com roteamento inteligente, memória hierárquica e auditoria criptográfica — pronta para escalar para milhares de empresas."
+      />
+
       {/* COMPETITIVE ANALYSIS */}
       <section id="concorrencia" className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
