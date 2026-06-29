@@ -53,7 +53,7 @@ const assumptions = [
     metric: "LTV (24m)",
     value: "R$ 3.600",
     note: "Churn mensal 4%, retention líquido 102% com expansion revenue.",
-    source: "Modelo cohort SaaS — benchmark OpenView 2025",
+    source: "Modelo cohort SaaS benchmark OpenView 2025",
   },
   {
     metric: "Expansão EU + LATAM",
@@ -428,7 +428,7 @@ export const FundingCalculator = () => {
           <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Interativo</div>
           <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">Calculadora de Financiamento</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Ajuste pré-seed, equity, CAC e MRR — payback e projeção de 24 meses recalculam em tempo real.
+            Ajuste pré-seed, equity, CAC e MRR payback e projeção de 24 meses recalculam em tempo real.
           </p>
         </motion.div>
 
