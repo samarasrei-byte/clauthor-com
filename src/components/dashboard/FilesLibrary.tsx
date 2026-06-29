@@ -27,6 +27,7 @@ interface FileRow {
   mime: string | null;
   created_at: string;
   tags: string[] | null;
+  folder: string | null;
 }
 
 const TYPE_META: Record<FileType, { label: string; singular: string; icon: React.ElementType; gradient: string; ring: string }> = {
