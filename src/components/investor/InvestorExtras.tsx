@@ -34,8 +34,8 @@ const assumptions = [
   {
     metric: "Estágio Atual",
     badge: "MVP",
-    value: "MVP em produção",
-    note: "Plataforma 100% funcional com 225 agentes, 20 squads e clientes-piloto B2B onboardados em Q1/2026. Pré-receita recorrente: estamos validando ticket e ICP antes de abrir comercialização em escala.",
+    value: "MVP em produção · pré-receita",
+    note: "Plataforma 100% funcional com 225 agentes, 20 squads e 10 departamentos prontos para uso. Ainda não há clientes pagantes — estamos finalizando ICP e ticket antes de iniciar comercialização em escala. O capital pré-seed destrava exatamente essa fase.",
     source: "Dashboard interno Clauthor · ambiente de produção",
   },
   {
@@ -47,10 +47,10 @@ const assumptions = [
   },
   {
     metric: "Ticket Médio Alvo",
-    badge: "Validando",
+    badge: "Hipótese",
     value: "R$ 150/mês",
-    note: "Plano Starter + add-ons de squads. Upsell para R$ 280 com outcome-pricing já contratualizado em pilotos.",
-    source: "Pilotos pagantes Q1–Q2 2026 (amostra <50 tenants)",
+    note: "Plano Starter + add-ons de squads. Hipótese a validar nos primeiros 90 dias pós pré-seed via testes A/B de pricing.",
+    source: "Benchmark SaaS B2B LATAM · OpenView 2025",
   },
   {
     metric: "CAC Modelado",

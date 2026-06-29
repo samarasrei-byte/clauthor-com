@@ -97,12 +97,12 @@ const unitEconomics = [
 ];
 
 const reasons = [
-  { icon: TrendingDown, title: "Mercado Exponencial", desc: "A demanda por IA que entrega resultado, não ferramenta, está explodindo globalmente." },
-  { icon: Sparkles, title: "Diferencial Insuperável", desc: "Squads de IA autônomos + máquina de prospecção G8 Prospect é uma combinação única." },
-  { icon: Target, title: "Timing Perfeito", desc: "Lançamento capitalizando o pico de interesse global em automação com IA." },
-  { icon: LineChart, title: "ROI Exponencial", desc: "Meta de 100K usuários em 24 meses projeta retorno significativo para investidores." },
-  { icon: ShieldCheck, title: "Equipe Experiente", desc: "Liderança com décadas em tecnologia, IA e crescimento de negócios de alto impacto." },
-  { icon: Rocket, title: "Tração Comprovada", desc: "Pipeline de clientes enterprise e demanda validada em múltiplos verticais." },
+  { icon: TrendingDown, title: "Mercado Exponencial", desc: "Demanda global por IA que entrega resultado — não mais uma ferramenta — cresce 44% ao ano (Gartner)." },
+  { icon: Sparkles, title: "Diferencial Insuperável", desc: "225 agentes em 20 squads, memória hierárquica e outcome-based pricing — arquitetura proprietária difícil de replicar." },
+  { icon: Target, title: "Timing Perfeito", desc: "Entramos antes da consolidação: zero incumbente dominante em agentes autônomos B2B em português." },
+  { icon: LineChart, title: "Potencial Exponencial", desc: "Modelo projeta R$ 15M de MRR em 36 meses com unit economics SaaS top-quartile." },
+  { icon: ShieldCheck, title: "Plataforma Pronta", desc: "MVP 100% funcional, multi-tenant, com auditoria criptográfica e infraestrutura para 14 idiomas." },
+  { icon: Rocket, title: "Capital-Eficiência", desc: "MVP construído com bootstrapping. R$ 200k de pré-seed destravam validação comercial em escala." },
 ];
 
 const InvestorPitch = () => {
@@ -313,25 +313,25 @@ const InvestorPitch = () => {
           <motion.div {...fadeUp} className="text-center mb-16">
             <div className="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-full border border-primary/40 bg-primary/10">
               <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Estágio MVP · pilotos pagantes ativos</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Estágio MVP · pré-receita · validando ICP</span>
             </div>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Números que Importam</h2>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Potencial & Diferencial</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Estamos em MVP com plataforma 100% funcional e pilotos B2B em produção. Os números abaixo combinam
-              <span className="text-foreground font-semibold"> realidade hoje</span> e
-              <span className="text-foreground font-semibold"> projeções modeladas</span> — cada card indica o status.
+              Ainda <span className="text-foreground font-semibold">sem clientes pagantes</span> — somos um MVP com plataforma 100% funcional pronta para comercialização.
+              Os números abaixo refletem <span className="text-foreground font-semibold">o que já está construído</span> e
+              <span className="text-foreground font-semibold"> as projeções modeladas</span> que o capital irá validar.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             {[
-              { label: "Estágio", value: "MVP", delta: "Plataforma em produção · pilotos pagantes", icon: Rocket, tag: "Hoje" },
-              { label: "MRR Projetado 12m", value: "R$ 1,2M", delta: "Pós Pré-Seed · 800 tenants", icon: TrendingUp, tag: "Meta" },
-              { label: "ARR Meta 36m", value: "R$ 180M", delta: "100k usuários · 20 idiomas", icon: Target, tag: "Visão" },
+              { label: "Estágio", value: "MVP", delta: "Plataforma 100% funcional · pré-receita", icon: Rocket, tag: "Hoje" },
+              { label: "Agentes Operacionais", value: "225", delta: "20 squads · 10 departamentos prontos", icon: Sparkles, tag: "Hoje" },
+              { label: "Idiomas Suportados", value: "14", delta: "Infra i18n nativa — pronta p/ global", icon: Target, tag: "Hoje" },
+              { label: "MRR Projetado 12m", value: "R$ 1,2M", delta: "Pós Pré-Seed · 800 tenants alvo", icon: TrendingUp, tag: "Meta" },
               { label: "Gross Margin", value: "82%", delta: "SaaS top-quartile (modelo)", icon: PieChart, tag: "Modelo" },
               { label: "CAC Blended", value: "R$ 180", delta: "Payback <1 mês (premissa)", icon: DollarSign, tag: "Premissa" },
               { label: "LTV / CAC", value: "40x", delta: "Benchmark mercado: 3x+", icon: LineChart, tag: "Modelo" },
-              { label: "Churn / NRR", value: "2,1% / 128%", delta: "Premissa cohort 24m", icon: ShieldCheck, tag: "Modelo" },
               { label: "Burn Multiple", value: "0,4x", delta: "Eficiência by design", icon: Zap, tag: "Meta" },
             ].map((m, i) => (
               <motion.div
@@ -357,11 +357,11 @@ const InvestorPitch = () => {
 
           <motion.div {...fadeUp} className="grid md:grid-cols-3 gap-4">
             {[
-              { when: "Q1 2026", title: "Pré-Seed fechado", desc: "R$ 200k @ 10% · 500 tenants ativos · MRR R$ 120k", done: true },
-              { when: "Q3 2026", title: "Seed Round", desc: "R$ 800k · 5k tenants · MRR R$ 600k · expansão LATAM" },
-              { when: "Q2 2027", title: "Série A", desc: "R$ 2M · 30k tenants · MRR R$ 4M · Europa + US" },
+              { when: "Hoje", title: "MVP em produção", desc: "Plataforma funcional · 225 agentes · 14 idiomas · zero clientes pagantes", done: true },
+              { when: "Q1 2026", title: "Pré-Seed · R$ 200k", desc: "Capital para destravar GTM e converter pilotos em receita recorrente" },
+              { when: "Q3 2026", title: "Seed Round", desc: "R$ 800k · meta 5k tenants · MRR R$ 600k · expansão LATAM" },
+              { when: "Q2 2027", title: "Série A", desc: "R$ 2M · meta 30k tenants · MRR R$ 4M · Europa + US" },
               { when: "Q4 2027", title: "Marketplace público", desc: "Receita de terceiros >15% do GMV de agentes" },
-              { when: "Q2 2028", title: "Break-even operacional", desc: "EBITDA positivo com burn multiple <0,3x" },
               { when: "Q4 2028", title: "100k usuários · R$ 15M MRR", desc: "Liderança consolidada em PT/ES/IT e top-3 em EN" },
             ].map((mk, i) => (
               <motion.div
