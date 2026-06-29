@@ -191,8 +191,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
 
         {/* ── Layer 4: Particle field ── */}
         <AnimatePresence>
-          {isActive &&
-            particles.map((p, i) => {
+          {particles.map((p, i) => {
               const rad = (p.angle * Math.PI) / 180;
               const cx = center + Math.cos(rad) * p.dist;
               const cy = center + Math.sin(rad) * p.dist;
