@@ -32,6 +32,10 @@ import {
   CompetitorDetailSection,
   FundingCalculator,
 } from "@/components/investor/InvestorExtras";
+import ParallaxBand from "@/components/investor/ParallaxBand";
+import parallaxOrb from "@/assets/investor-parallax-1.jpg";
+import parallaxDatacenter from "@/assets/investor-parallax-2.jpg";
+import parallaxGlobal from "@/assets/investor-parallax-3.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -102,7 +106,7 @@ const reasons = [
   { icon: Target, title: "Timing Perfeito", desc: "Entramos antes da consolidação: zero incumbente dominante em agentes autônomos B2B em português." },
   { icon: LineChart, title: "Potencial Exponencial", desc: "Modelo projeta R$ 15M de MRR em 36 meses com unit economics SaaS top-quartile." },
   { icon: ShieldCheck, title: "Plataforma Pronta", desc: "MVP 100% funcional, multi-tenant, com auditoria criptográfica e infraestrutura para 14 idiomas." },
-  { icon: Rocket, title: "Capital-Eficiência", desc: "MVP construído com bootstrapping. R$ 200k de pré-seed destravam validação comercial em escala." },
+  { icon: Rocket, title: "Capital-Eficiência", desc: "MVP construído 100% com investimento próprio do fundador. R$ 200k de pré-seed destravam validação comercial em escala." },
 ];
 
 const InvestorPitch = () => {
@@ -383,6 +387,13 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ParallaxBand
+        image={parallaxOrb}
+        eyebrow="A Tese"
+        title="A próxima década é de agentes, não de ferramentas"
+        subtitle="Empresas vão comprar resultado entregue por IA autônoma — não mais software para humanos operarem. Clauthor está construído para essa transição."
+      />
+
       {/* Problem */}
       <section className="py-32 px-6">
         <motion.div {...fadeUp} className="max-w-4xl mx-auto text-center">
@@ -530,6 +541,14 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ParallaxBand
+        image={parallaxGlobal}
+        eyebrow="Mercado Endereçável"
+        title="US$ 47B em IA workforce até 2030"
+        subtitle="Nascemos multilíngues e multi-região. A mesma plataforma atende um SaaS em São Paulo, uma agência em Milão e uma fintech em Miami."
+        align="left"
+      />
+
       {/* GLOBAL REACH */}
       <section className="py-32 px-6">
         <div className="max-w-6xl mx-auto text-center">
@@ -662,6 +681,13 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ParallaxBand
+        image={parallaxDatacenter}
+        eyebrow="Infraestrutura Pronta"
+        title="Construído para escalar do dia 1"
+        subtitle="225 agentes, edge functions serverless, memória hierárquica em pgvector e roteamento multi-modelo — a stack já suporta milhares de tenants sem refactor."
+      />
+
       {/* MRR PROJECTION */}
       <section className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
@@ -709,19 +735,19 @@ const InvestorPitch = () => {
       <section id="investimento" className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-20">
-            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">A Rodada · 4ª Captação</div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">A Rodada · 1ª Captação Externa</div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
               Pré-Seed: R$ 200K por 10%
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Esta é a <span className="text-foreground font-semibold">4ª rodada</span> da Clauthor após bootstrapping, FFF e anjos estratégicos. Para alcançar <span className="text-foreground font-semibold">100.000 usuários e R$ 15M de MRR</span>, o capital total mapeado é de <span className="text-primary font-semibold">R$ 3 milhões</span>, distribuído em rodadas sequenciais com diluição controlada e marcos de tração validados.
+              Esta é a <span className="text-foreground font-semibold">1ª rodada externa</span> da Clauthor — todo o MVP foi construído com <span className="text-foreground font-semibold">investimento próprio do fundador</span>, sem FFF nem anjos. Para alcançar <span className="text-foreground font-semibold">100.000 usuários e R$ 15M de MRR</span>, o capital total mapeado é de <span className="text-primary font-semibold">R$ 3 milhões</span>, distribuído em rodadas sequenciais com diluição controlada e marcos de tração validados.
             </p>
           </motion.div>
 
           {/* Round structure */}
           <div className="grid md:grid-cols-4 gap-6 mb-16">
             {[
-              { tag: "AGORA · 4ª", round: "Pré-Seed", amount: "R$ 200K", equity: "10%", desc: "Marketing, expansão multilíngue e G8 Prospect em 7 mercados.", highlight: true, muted: false },
+              { tag: "AGORA · 1ª EXTERNA", round: "Pré-Seed", amount: "R$ 200K", equity: "10%", desc: "Marketing, expansão multilíngue e G8 Prospect em 7 mercados.", highlight: true, muted: false },
               { tag: "Q3 2026", round: "Seed", amount: "R$ 800K", equity: "12-15%", desc: "Escala em LATAM e Europa após 5.000 usuários pagantes.", highlight: false, muted: false },
               { tag: "Q2 2027", round: "Série A", amount: "R$ 2M", equity: "15-18%", desc: "Dominância global em outcome-based AI workforce.", highlight: false, muted: false },
               { tag: "TOTAL", round: "Capital Mapeado", amount: "R$ 3M", equity: "~35%", desc: "Caminho completo até 100K usuários e R$ 15M MRR.", highlight: false, muted: true },
