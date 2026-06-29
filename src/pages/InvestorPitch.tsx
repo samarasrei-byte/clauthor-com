@@ -525,6 +525,11 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <FundingCalculator />
+      <SourcesSection />
+
+
+
       {/* Why Invest */}
       <section className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
