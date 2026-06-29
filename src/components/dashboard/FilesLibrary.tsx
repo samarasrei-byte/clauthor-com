@@ -94,6 +94,7 @@ const FilesLibrary = () => {
         const { error: dbErr } = await supabase.from("files").insert({
           tenant_id: tenantId, user_id: user.id, name: f.name, file_type: type,
           bucket_path: path, size_bytes: f.size, mime: f.type || "application/octet-stream",
+          folder: activeFolder,
         });
         if (dbErr) throw dbErr;
       }
