@@ -615,3 +615,19 @@
 .thor-glitch-color-layer {
   animation: thor-glitch-color 2.5s infinite;
 }
+
+/* Investor pitch — presentation mode */
+body.presentation-mode header.fixed,
+body.presentation-mode footer,
+body.presentation-mode [data-thor-guide],
+body.presentation-mode [data-presentation-hide] {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transition: opacity 0.4s ease;
+}
+body.presentation-mode {
+  cursor: none;
+}
+body.presentation-mode:hover {
+  cursor: auto;
+}
