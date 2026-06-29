@@ -336,28 +336,60 @@ const InvestorPitch = () => {
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
               A Tese em <span className="text-primary">60 Segundos</span>
             </h2>
-            <p className="text-muted-foreground">Leia em voz alta. É exatamente esse o tempo que você precisa para entender por que Clauthor vai dominar.</p>
+            <p className="text-muted-foreground">Cinco blocos. Cinco respostas. A tese completa do investimento, sem rodeios.</p>
           </motion.div>
 
           <motion.div {...fadeUp} className="grid md:grid-cols-5 gap-4">
             {[
-              { tag: "Problema", color: "text-red-500", title: "Folha de pagamento devorando margem", body: "Empresas gastam R$ 240k/mês com 20 pessoas para tarefas repetitivas, lentas e inconsistentes. O trabalho de conhecimento ainda é manual." },
-              { tag: "Solução", color: "text-primary", title: "20 squads de IA prontos pra operar", body: "225 agentes especializados, organizados em 20 departamentos, executam Marketing, Vendas, RH, Jurídico, Financeiro e mais. 24/7. Multilíngue. Auditável." },
-              { tag: "Diferencial", color: "text-emerald-500", title: "O que ninguém mais entrega", body: "Outcome-based pricing, memória hierárquica em 4 camadas, MCP nativo, Trust Center com audit trail criptográfico e 14+ idiomas. Lindy, Relevance e MultiOn não chegam perto." },
-              { tag: "Uso do Capital", color: "text-amber-500", title: "R$ 200k agora · R$ 3M no roadmap", body: "45% Marketing (G8 Prospect em 7 países), 30% Tecnologia (memória, MCP, marketplace), 25% Pessoas (growth + CS multilíngue). Payback do round em <12 meses." },
-              { tag: "Por Que Agora", color: "text-fuchsia-500", title: "Janela de 18 meses", body: "Modelos atingiram maturidade (GPT-5, Claude Opus 4, Gemini 3), CAC de SaaS B2B no menor patamar histórico e nenhum player ainda consolidou squads multilíngues. Quem capturar agora vence a década." },
+              {
+                tag: "Problema",
+                color: "text-red-500",
+                title: "Folha de pagamento devorando margem",
+                body: "Hoje, uma operação média mantém ~20 colaboradores executando tarefas repetitivas de conhecimento (relatórios, prospecção, triagem jurídica, atendimento, cobrança). Isso custa cerca de R$ 240k/mês em folha — sem contar encargos, turnover e retrabalho. É lento, inconsistente e não escala junto com a demanda.",
+                explain: "Por que importa: a maior linha de custo do SaaS B2B brasileiro é gente fazendo trabalho que IA já consegue executar melhor.",
+              },
+              {
+                tag: "Solução",
+                color: "text-primary",
+                title: "20 squads de IA prontos pra operar",
+                body: "Entregamos 225 agentes especializados, organizados em 20 departamentos (Marketing, Vendas, RH, Jurídico, Financeiro, Operações, BI e mais). Cada agente tem prompt, ferramentas e integrações próprias, opera 24/7, fala 14+ idiomas e gera trilha auditável de cada ação.",
+                explain: "Diferente de um chatbot: é uma força de trabalho digital plugável que substitui processos inteiros, não só respostas.",
+              },
+              {
+                tag: "Diferencial",
+                color: "text-emerald-500",
+                title: "O que ninguém mais entrega",
+                body: "Quatro moats combinados: (1) outcome-based pricing — o cliente paga por resultado entregue, não por seat; (2) memória hierárquica em 4 camadas (episódica, semântica, procedural, identidade) via pgvector; (3) MCP nativo, plugável em Claude Desktop, Cursor e qualquer cliente compatível; (4) Trust Center com audit trail criptográfico ponta a ponta.",
+                explain: "Lindy, Relevance AI e MultiOn entregam pedaços disso. Nenhum combina os quatro — e nenhum nasceu multilíngue de verdade.",
+              },
+              {
+                tag: "Uso do Capital",
+                color: "text-amber-500",
+                title: "R$ 200k agora · R$ 3M no roadmap",
+                body: "Round atual de R$ 200k por 10% para destravar go-live: 45% Marketing (campanha G8 Prospect em 7 países), 30% Tecnologia (infra de memória vetorial, MCP em produção, marketplace de agentes) e 25% Pessoas (líder de growth e CS multilíngue). Próxima rodada de R$ 3M planejada após atingir as métricas do trimestre seguinte.",
+                explain: "Cada real tem destino definido e métrica associada. Payback projetado em menos de 12 meses sob premissas conservadoras.",
+              },
+              {
+                tag: "Por Que Agora",
+                color: "text-fuchsia-500",
+                title: "Janela de 18 meses",
+                body: "Três forças se alinharam exatamente agora: modelos de fronteira atingiram maturidade comercial (GPT-5, Claude Opus 4, Gemini 3), o CAC de SaaS B2B está no menor patamar histórico pós-correção de mercado, e nenhum player consolidou ainda uma operação multilíngue de squads de agentes.",
+                explain: "Janelas de plataforma assim duram ~18 meses. Quem capturar mindshare e dados proprietários agora vence a próxima década.",
+              },
             ].map((p, i) => (
               <motion.div
                 key={p.tag}
                 {...fadeUp}
                 transition={{ ...fadeUp.transition, delay: i * 0.08 }}
-                className="relative p-6 rounded-2xl bg-card border border-border/60 hover:border-primary/40 transition-all"
+                className="relative p-6 rounded-2xl bg-card border border-border/60 hover:border-primary/40 transition-all flex flex-col"
               >
                 <div className={`font-mono text-[10px] uppercase tracking-[0.25em] mb-3 ${p.color}`}>{p.tag}</div>
                 <h3 className="text-base font-bold mb-2 leading-tight">{p.title}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{p.body}</p>
+                <p className="text-xs text-muted-foreground leading-relaxed mb-3">{p.body}</p>
+                <p className="text-[11px] text-foreground/80 leading-relaxed pt-3 mt-auto border-t border-border/40 italic">{p.explain}</p>
               </motion.div>
             ))}
+
           </motion.div>
 
           <motion.div {...fadeUp} className="mt-10 p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-card to-card border border-primary/20 text-center">
