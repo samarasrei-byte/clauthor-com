@@ -697,6 +697,13 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ParallaxBand
+        image={parallaxMemory}
+        eyebrow="Memória Hierárquica"
+        title="4 camadas de memória que aprendem com cada interação"
+        subtitle="Episódica, semântica, procedural e reflexiva — agentes que evoluem com o uso, criando um moat técnico difícil de replicar."
+      />
+
       {/* DEPARTMENT COST COMPARISON */}
       <section id="comparativo-departamento" className="py-32 px-6">
         <div className="max-w-7xl mx-auto">
