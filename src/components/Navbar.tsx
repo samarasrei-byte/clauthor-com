@@ -98,8 +98,8 @@ const Navbar = () => {
                     className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[260px] rounded-xl bg-popover border border-border/50 shadow-lg shadow-black/[0.08] dark:shadow-black/[0.3] p-1 z-50"
                   >
                     {[
-                      { href: "/marketplace", label: t("navbar.marketplace_label"), desc: t("navbar.marketplace_desc") },
-                      { href: "/departamentos", label: t("navbar.ai_teams_label"), desc: t("navbar.ai_teams_desc") },
+                      { href: "/marketplace", label: t("navbar.marketplace_label"), desc: "225 agentes individuais para contratar avulso" },
+                      { href: "/departamentos", label: t("navbar.ai_teams_label"), desc: "20 departamentos completos com 225 agentes" },
                       { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }), desc: t("navbar.team_builder_desc", { defaultValue: "Pick agents and see costs in real time" }) },
                       { href: "/enterprise", label: "Enterprise", desc: "Squads dedicadas, SSO, SLA 99.9% e suporte white-glove" },
                     ].map((item) => (
