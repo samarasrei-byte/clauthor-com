@@ -308,6 +308,45 @@ const InvestorPitch = () => {
               <span className="text-muted-foreground"> em 36 meses.</span>
             </p>
           </motion.div>
+
+          {/* Transparência: estágio MVP + gaps técnicos para escala */}
+          <motion.div {...fadeUp} className="mt-8 p-8 rounded-2xl bg-card/60 border border-amber-500/30">
+            <div className="flex items-center gap-2 mb-4">
+              <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber-500">Transparência Radical · Estágio Atual</span>
+            </div>
+            <h3 className="text-2xl font-bold mb-3">Estamos em MVP — e isso é uma vantagem para quem entra agora</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+              A plataforma está <span className="text-foreground font-semibold">100% funcional ponta a ponta</span> (225 agentes, 20 squads, multi-tenant, auditoria criptográfica, 14 idiomas).
+              Para operar em <span className="text-foreground font-semibold">escala massiva</span> (100k+ usuários simultâneos), mapeamos com honestidade as peças que o capital irá destravar — todas com fornecedores definidos e custos previsíveis:
+            </p>
+            <div className="grid md:grid-cols-2 gap-3 mb-6">
+              {[
+                { gap: "Observabilidade em escala", solution: "Datadog/Grafana Cloud · ~R$ 8k/mês", when: "Mês 2" },
+                { gap: "Vector DB dedicado para memória", solution: "Pinecone/Weaviate cluster · ~R$ 6k/mês", when: "Mês 3" },
+                { gap: "Fila de jobs distribuída", solution: "Inngest/Trigger.dev para 10M+ execuções/mês", when: "Mês 2" },
+                { gap: "CDN global + edge cache", solution: "Cloudflare Enterprise para 14 regiões", when: "Mês 4" },
+                { gap: "SOC 2 Type II + ISO 27001", solution: "Vanta + auditoria · ~R$ 80k one-time", when: "Mês 6" },
+                { gap: "Multi-region failover", solution: "Réplicas DB em US/EU/APAC", when: "Mês 8" },
+              ].map((item) => (
+                <div key={item.gap} className="p-4 rounded-xl bg-background/60 border border-border/40">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-sm font-semibold">{item.gap}</span>
+                    <span className="font-mono text-[10px] uppercase tracking-wider text-primary">{item.when}</span>
+                  </div>
+                  <p className="text-xs text-muted-foreground">{item.solution}</p>
+                </div>
+              ))}
+            </div>
+            <div className="p-4 rounded-xl bg-primary/5 border border-primary/20">
+              <p className="text-sm leading-relaxed">
+                <span className="text-primary font-semibold">Por que isso é positivo para o investidor:</span>{" "}
+                <span className="text-muted-foreground">o produto já existe e funciona. O risco técnico de "construir do zero" foi eliminado com capital próprio. Os R$ 200k entram para </span>
+                <span className="text-foreground font-semibold">acelerar comercialização e blindagem de infra</span>
+                <span className="text-muted-foreground">, não para descobrir se a tecnologia funciona — isso já está provado.</span>
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
