@@ -130,57 +130,106 @@ const InvestorPitch = () => {
         </div>
       </header>
 
-      {/* Hero */}
+      {/* Hero — Apple-grade minimalism */}
       <section className="relative min-h-screen flex items-center justify-center px-6 pt-24 overflow-hidden">
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-1/4 -left-32 w-[500px] h-[500px] rounded-full bg-primary/20 blur-[120px] animate-pulse" />
-          <div className="absolute bottom-1/4 -right-32 w-[600px] h-[600px] rounded-full bg-primary/10 blur-[140px] animate-pulse" style={{ animationDelay: "1s" }} />
+        {/* Mesh gradient background */}
+        <div className="absolute inset-0 -z-10 overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 2, ease: "easeOut" }}
+            className="absolute top-[-20%] left-1/2 -translate-x-1/2 w-[1200px] h-[1200px] rounded-full bg-[radial-gradient(circle_at_center,hsl(var(--primary)/0.35),transparent_60%)] blur-3xl"
+          />
+          <motion.div
+            animate={{ x: [0, 60, 0], y: [0, -40, 0] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-1/3 -left-40 w-[600px] h-[600px] rounded-full bg-primary/20 blur-[140px]"
+          />
+          <motion.div
+            animate={{ x: [0, -50, 0], y: [0, 50, 0] }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-0 -right-40 w-[700px] h-[700px] rounded-full bg-foreground/10 blur-[160px]"
+          />
         </div>
-        <div className="absolute inset-0 -z-10 opacity-[0.04] bg-[linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] bg-[size:64px_64px]" />
+
+        {/* Precision grid */}
+        <div className="absolute inset-0 -z-10 opacity-[0.035] bg-[linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_75%)]" />
+
+        {/* Floating orb — futuristic centerpiece */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.6 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1.4, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none"
+        >
+          <div className="relative w-[460px] h-[460px] md:w-[640px] md:h-[640px]">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-0 rounded-full border border-primary/20"
+            />
+            <motion.div
+              animate={{ rotate: -360 }}
+              transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-8 rounded-full border border-foreground/10"
+            />
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
+              className="absolute inset-20 rounded-full border border-primary/10"
+            />
+            <div className="absolute inset-[35%] rounded-full bg-[radial-gradient(circle,hsl(var(--primary)/0.4),transparent_70%)] blur-2xl animate-pulse" />
+          </div>
+        </motion.div>
 
         <div className="relative z-10 max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-primary/5 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-primary/30 bg-background/60 backdrop-blur-xl mb-8 shadow-[0_8px_32px_-12px_hsl(var(--primary)/0.4)]"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-primary">Pré-Seed · R$ 200K · 10% Equity</span>
+            <span className="relative flex h-1.5 w-1.5">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 animate-ping" />
+              <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-primary" />
+            </span>
+            <span className="font-mono text-[11px] uppercase tracking-[0.25em] text-primary">Pré-Seed · 4ª Rodada · R$ 200K · 10% Equity</span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight leading-[1.05] mb-8"
+            transition={{ duration: 0.9, delay: 0.15, ease: [0.22, 1, 0.36, 1] }}
+            className="text-5xl md:text-7xl lg:text-[8.5rem] font-bold tracking-[-0.04em] leading-[0.95] mb-8"
           >
-            A Revolução da<br />
-            <span className="bg-gradient-to-r from-primary via-primary to-foreground bg-clip-text text-transparent">
-              Força de Trabalho com IA
+            A força de trabalho
+            <br />
+            <span className="bg-gradient-to-br from-primary via-foreground to-primary bg-clip-text text-transparent">
+              autônoma do futuro.
             </span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed"
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto mb-12 leading-relaxed font-light"
           >
-            225 agentes autônomos, 20 departamentos, 14+ idiomas.
-            Meta: <span className="text-foreground font-semibold">100.000 usuários e R$ 15M de MRR em 24 meses.</span>
+            225 agentes. 20 departamentos. 14+ idiomas.
+            <br className="hidden md:block" />
+            Meta: <span className="text-foreground font-medium">100K usuários e R$ 15M de MRR em 24 meses.</span>
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
+            transition={{ duration: 0.8, delay: 0.45 }}
             className="flex flex-col sm:flex-row gap-4 justify-center items-center"
           >
-            <Button asChild size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8 h-14 text-base shadow-[0_0_40px_hsl(var(--primary)/0.4)]">
+            <Button asChild size="lg" className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground px-8 h-14 text-base shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.6)] transition-all hover:scale-[1.02]">
               <a href="#contact">Investir no Pré-Seed <ArrowRight className="ml-2 h-4 w-4" /></a>
             </Button>
-            <Button asChild variant="outline" size="lg" className="rounded-full h-14 px-8 text-base border-border/60">
+            <Button asChild variant="outline" size="lg" className="rounded-full h-14 px-8 text-base border-border/60 bg-background/40 backdrop-blur-xl hover:bg-background/60">
               <a href="#concorrencia">Ver Análise Competitiva</a>
             </Button>
           </motion.div>
@@ -188,8 +237,8 @@ const InvestorPitch = () => {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.6, duration: 0.8 }}
-            className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto pt-8 border-t border-border/40"
+            transition={{ delay: 0.8, duration: 0.8 }}
+            className="mt-24 grid grid-cols-2 md:grid-cols-4 gap-px max-w-4xl mx-auto rounded-2xl border border-border/40 bg-border/40 overflow-hidden backdrop-blur-xl"
           >
             {[
               { v: "225", l: "Agentes de IA" },
@@ -197,14 +246,15 @@ const InvestorPitch = () => {
               { v: "12+", l: "Países alvo" },
               { v: "88%", l: "Redução de Custo" },
             ].map((s) => (
-              <div key={s.l}>
-                <div className="text-3xl md:text-4xl font-bold text-foreground">{s.v}</div>
-                <div className="text-xs font-mono uppercase tracking-wider text-muted-foreground mt-1">{s.l}</div>
+              <div key={s.l} className="bg-background/80 backdrop-blur-xl p-6">
+                <div className="text-3xl md:text-5xl font-bold text-foreground tracking-tight">{s.v}</div>
+                <div className="text-[10px] font-mono uppercase tracking-[0.2em] text-muted-foreground mt-2">{s.l}</div>
               </div>
             ))}
           </motion.div>
         </div>
       </section>
+
 
       {/* Problem */}
       <section className="py-32 px-6">
