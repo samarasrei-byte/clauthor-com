@@ -25,14 +25,19 @@ const Navbar = () => {
 
   useEffect(() => {
     if (!solutionsOpen) return;
-    const handler = (e: MouseEvent) => {
+    const onClick = (e: MouseEvent) => {
       if (solutionsRef.current && !solutionsRef.current.contains(e.target as Node)) {
         setSolutionsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handler);
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSolutionsOpen(false);
+    };
+    document.addEventListener("click", onClick);
+    document.addEventListener("keydown", onKey);
     return () => {
-      document.removeEventListener("mousedown", handler);
+      document.removeEventListener("click", onClick);
+      document.removeEventListener("keydown", onKey);
     };
   }, [solutionsOpen]);
 
