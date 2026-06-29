@@ -32,44 +32,57 @@ const fadeUp = {
 // ============================================================
 const assumptions = [
   {
-    metric: "MRR Atual",
-    value: "R$ 45K",
-    note: "Base de clientes early-adopter B2B em produção desde Q1/2026.",
-    source: "Dashboard interno Clauthor · Stripe + PayPal",
+    metric: "Estágio Atual",
+    badge: "MVP",
+    value: "MVP em produção",
+    note: "Plataforma 100% funcional com 225 agentes, 20 squads e clientes-piloto B2B onboardados em Q1/2026. Pré-receita recorrente: estamos validando ticket e ICP antes de abrir comercialização em escala.",
+    source: "Dashboard interno Clauthor · ambiente de produção",
   },
   {
-    metric: "Ticket Médio",
+    metric: "MRR Projetado (12m)",
+    badge: "Meta",
+    value: "R$ 1,2M",
+    note: "Projeção pós-Pré-Seed assumindo 800 tenants pagantes a ticket médio de R$ 150 com 10% em outcome-based pricing. Premissa conservadora vs. benchmark SaaS B2B LATAM.",
+    source: "Modelo financeiro interno · cohort top-down + bottom-up",
+  },
+  {
+    metric: "Ticket Médio Alvo",
+    badge: "Validando",
     value: "R$ 150/mês",
-    note: "Plano Starter + add-ons de squads. Sobe para R$ 280 com upsell de outcome-pricing.",
-    source: "Cohort analysis 90d · cohorts Q1–Q2 2026",
+    note: "Plano Starter + add-ons de squads. Upsell para R$ 280 com outcome-pricing já contratualizado em pilotos.",
+    source: "Pilotos pagantes Q1–Q2 2026 (amostra <50 tenants)",
   },
   {
-    metric: "CAC Médio",
-    value: "R$ 90",
-    note: "Custo blended via G8 Prospect (WhatsApp + email) + tráfego pago LATAM.",
-    source: "Meta Ads + WhatsApp Business API · últimos 60 dias",
+    metric: "CAC Modelado",
+    badge: "Premissa",
+    value: "R$ 90 blended",
+    note: "Custo via G8 Prospect (WhatsApp + email outbound próprio) + tráfego pago LATAM. Margem para subir até R$ 180 mantendo LTV/CAC saudável.",
+    source: "Meta Ads + WhatsApp Business API · testes iniciais 60d",
   },
   {
-    metric: "LTV (24m)",
+    metric: "LTV Modelado (24m)",
+    badge: "Premissa",
     value: "R$ 3.600",
-    note: "Churn mensal 4%, retention líquido 102% com expansion revenue.",
+    note: "Churn mensal 4%, NRR 102% com expansion revenue. Modelo a ser recalibrado conforme cohorts maduram pós-Seed.",
     source: "Modelo cohort SaaS benchmark OpenView 2025",
   },
   {
-    metric: "Expansão EU + LATAM",
-    value: "12+ países",
-    note: "Localização nativa em 14 idiomas já implementada via i18next.",
+    metric: "Infra Multi-idioma",
+    badge: "Pronto",
+    value: "14 idiomas",
+    note: "Localização nativa via i18next já implementada — destrava expansão EU + LATAM sem refactor.",
     source: "Stack i18n do projeto · src/i18n/locales",
     link: "https://www.openviewpartners.com/2024-saas-benchmarks-report/",
   },
   {
-    metric: "Mercado de IA Workforce",
+    metric: "TAM — IA Workforce",
+    badge: "Mercado",
     value: "US$ 47B em 2030",
     note: "CAGR de 44% para agentic AI segundo Gartner & McKinsey.",
     source: "Gartner Hype Cycle for AI 2025 · McKinsey State of AI 2025",
     link: "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
   },
-];
+] as Array<{ metric: string; badge: string; value: string; note: string; source: string; link?: string }>;
 
 export const SourcesSection = () => (
   <section id="fontes" className="py-32 px-6">
@@ -91,8 +104,13 @@ export const SourcesSection = () => (
             className="p-6 rounded-2xl border border-border/60 bg-card/30 hover:border-primary/40 transition-all"
           >
             <div className="flex items-start justify-between gap-4 mb-3">
-              <div>
-                <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">{a.metric}</div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                  <span className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{a.metric}</span>
+                  <span className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-primary/40 bg-primary/10 text-primary">
+                    {a.badge}
+                  </span>
+                </div>
                 <div className="text-2xl font-bold text-foreground">{a.value}</div>
               </div>
               <FileText className="h-4 w-4 text-primary mt-1 shrink-0" />

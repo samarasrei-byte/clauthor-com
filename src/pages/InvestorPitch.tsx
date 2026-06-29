@@ -311,23 +311,28 @@ const InvestorPitch = () => {
       <section id="metricas-investidor" className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-16">
-            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Métricas para Investidores</div>
+            <div className="inline-flex items-center gap-2 mb-6 px-3 py-1 rounded-full border border-primary/40 bg-primary/10">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Estágio MVP · pilotos pagantes ativos</span>
+            </div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Números que Importam</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Metas, marcos e unit economics com premissas conservadoras. Valores em BRL salvo indicação.
+              Estamos em MVP com plataforma 100% funcional e pilotos B2B em produção. Os números abaixo combinam
+              <span className="text-foreground font-semibold"> realidade hoje</span> e
+              <span className="text-foreground font-semibold"> projeções modeladas</span> — cada card indica o status.
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
             {[
-              { label: "MRR Atual", value: "R$ 48k", delta: "+38% MoM", icon: TrendingUp },
-              { label: "Meta MRR 12m", value: "R$ 1,2M", delta: "25x atual", icon: Target },
-              { label: "ARR Meta 36m", value: "R$ 180M", delta: "100k usuários", icon: Rocket },
-              { label: "Gross Margin", value: "82%", delta: "SaaS top-quartile", icon: PieChart },
-              { label: "CAC Blended", value: "R$ 180", delta: "Payback <1 mês", icon: DollarSign },
-              { label: "LTV / CAC", value: "40x", delta: "Benchmark: 3x+", icon: LineChart },
-              { label: "Churn Logo", value: "2,1%", delta: "Net Revenue Retention 128%", icon: ShieldCheck },
-              { label: "Burn Multiple", value: "0,4x", delta: "Eficiente por design", icon: Zap },
+              { label: "Estágio", value: "MVP", delta: "Plataforma em produção · pilotos pagantes", icon: Rocket, tag: "Hoje" },
+              { label: "MRR Projetado 12m", value: "R$ 1,2M", delta: "Pós Pré-Seed · 800 tenants", icon: TrendingUp, tag: "Meta" },
+              { label: "ARR Meta 36m", value: "R$ 180M", delta: "100k usuários · 20 idiomas", icon: Target, tag: "Visão" },
+              { label: "Gross Margin", value: "82%", delta: "SaaS top-quartile (modelo)", icon: PieChart, tag: "Modelo" },
+              { label: "CAC Blended", value: "R$ 180", delta: "Payback <1 mês (premissa)", icon: DollarSign, tag: "Premissa" },
+              { label: "LTV / CAC", value: "40x", delta: "Benchmark mercado: 3x+", icon: LineChart, tag: "Modelo" },
+              { label: "Churn / NRR", value: "2,1% / 128%", delta: "Premissa cohort 24m", icon: ShieldCheck, tag: "Modelo" },
+              { label: "Burn Multiple", value: "0,4x", delta: "Eficiência by design", icon: Zap, tag: "Meta" },
             ].map((m, i) => (
               <motion.div
                 key={m.label}
@@ -340,7 +345,12 @@ const InvestorPitch = () => {
                   <m.icon className="h-4 w-4 text-primary/70" />
                 </div>
                 <div className="text-3xl font-bold tracking-tight mb-1">{m.value}</div>
-                <div className="text-xs text-primary">{m.delta}</div>
+                <div className="flex items-center justify-between gap-2">
+                  <div className="text-xs text-primary">{m.delta}</div>
+                  <span className="font-mono text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-full border border-border bg-card/50 text-muted-foreground shrink-0">
+                    {m.tag}
+                  </span>
+                </div>
               </motion.div>
             ))}
           </div>
