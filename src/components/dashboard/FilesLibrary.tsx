@@ -120,11 +120,27 @@ const FilesLibrary = () => {
 
   const totalSize = useMemo(() => files.reduce((acc, f) => acc + (f.size_bytes || 0), 0), [files]);
 
+  const folders = useMemo(() => {
+    const set = new Set<string>(extraFolders);
+    files.forEach((f) => { if (f.folder) set.add(f.folder); });
+    return Array.from(set).sort();
+  }, [files, extraFolders]);
+
   const filtered = useMemo(() => files.filter((f) => {
     if (filter !== "all" && f.file_type !== filter) return false;
+    if (activeFolder !== null && (f.folder || "") !== activeFolder) return false;
     if (query && !f.name.toLowerCase().includes(query.toLowerCase())) return false;
     return true;
-  }), [files, filter, query]);
+  }), [files, filter, query, activeFolder]);
+
+  const createFolder = () => {
+    const name = window.prompt("Nome da nova pasta")?.trim();
+    if (!name) return;
+    if (folders.includes(name)) { toast.info("Pasta já existe"); setActiveFolder(name); return; }
+    setExtraFolders((prev) => [...prev, name]);
+    setActiveFolder(name);
+    toast.success(`Pasta "${name}" criada. Próximos uploads irão para ela.`);
+  };
 
   async function copyLink(row: FileRow) {
     const { data, error } = await supabase.storage.from("approval-files").createSignedUrl(row.bucket_path, 60 * 60);
