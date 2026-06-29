@@ -753,8 +753,12 @@ const InvestorPitch = () => {
           </p>
         </div>
       </footer>
+
+      {/* Thor — assistente IA persistente */}
+      <ThorGreeter />
     </div>
   );
+
 };
 
 export default InvestorPitch;
