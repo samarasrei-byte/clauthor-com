@@ -117,6 +117,8 @@ const App = () => (
                 {/* Standalone immersive pages - no navbar */}
                 <Route path="/waitlist" element={<Waitlist />} />
                 <Route path="/pitch" element={<Pitch />} />
+                <Route path="/investidores" element={<InvestorPitch />} />
+                <Route path="/investors" element={<InvestorPitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/apresentacaoadv" element={<ApresentacaoAdv />} />
