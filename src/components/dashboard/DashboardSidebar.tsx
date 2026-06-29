@@ -367,9 +367,6 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
               placeholder="Buscar"
               className="w-full pl-7 pr-9 py-1.5 text-[11px] rounded-md bg-muted/20 border border-border/20 focus:border-primary/40 focus:bg-background outline-none transition-all placeholder:text-muted-foreground/50"
             />
-            <kbd className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] text-muted-foreground/60 bg-background/60 border border-border/30 rounded px-1 py-0.5 flex items-center gap-0.5">
-              <Command className="h-2 w-2" />K
-            </kbd>
           </div>
         </div>
       )}
