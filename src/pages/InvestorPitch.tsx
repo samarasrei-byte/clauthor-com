@@ -22,6 +22,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
+import {
+  SourcesSection,
+  ChartsSection,
+  CompetitorDetailSection,
+  FundingCalculator,
+} from "@/components/investor/InvestorExtras";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -111,6 +117,7 @@ const InvestorPitch = () => {
             <a href="#solucao" className="hover:text-primary transition-colors">Solução</a>
             <a href="#concorrencia" className="hover:text-primary transition-colors">Concorrência</a>
             <a href="#economia" className="hover:text-primary transition-colors">Economia</a>
+            <a href="#calculadora" className="hover:text-primary transition-colors">Calculadora</a>
             <a href="#investimento" className="hover:text-primary transition-colors">Rodada</a>
           </nav>
           <Button asChild size="sm" className="rounded-full bg-primary text-primary-foreground hover:bg-primary/90">
@@ -298,6 +305,9 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <CompetitorDetailSection />
+
+
       {/* Unfair Advantage — G8 Prospect */}
       <section className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
@@ -429,7 +439,10 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <ChartsSection />
+
       {/* INVESTMENT ROUND */}
+
       <section id="investimento" className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-20">
@@ -515,6 +528,11 @@ const InvestorPitch = () => {
           </motion.div>
         </div>
       </section>
+
+      <FundingCalculator />
+      <SourcesSection />
+
+
 
       {/* Why Invest */}
       <section className="py-32 px-6">
