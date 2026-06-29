@@ -255,6 +255,123 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      {/* 60s Pitch */}
+      <section id="pitch-60s" className="relative py-32 px-6 overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-primary/5 via-transparent to-transparent pointer-events-none" />
+        <div className="relative max-w-5xl mx-auto">
+          <motion.div {...fadeUp} className="text-center mb-12">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/30 mb-6">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              <span className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary">Pitch de 60 Segundos</span>
+            </div>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
+              A Tese em <span className="text-primary">60 Segundos</span>
+            </h2>
+            <p className="text-muted-foreground">Leia em voz alta. É exatamente esse o tempo que você precisa para entender por que Clauthor vai dominar.</p>
+          </motion.div>
+
+          <motion.div {...fadeUp} className="grid md:grid-cols-5 gap-4">
+            {[
+              { tag: "Problema", color: "text-red-500", title: "Folha de pagamento devorando margem", body: "Empresas gastam R$ 240k/mês com 20 pessoas para tarefas repetitivas, lentas e inconsistentes. O trabalho de conhecimento ainda é manual." },
+              { tag: "Solução", color: "text-primary", title: "20 squads de IA prontos pra operar", body: "225 agentes especializados, organizados em 20 departamentos, executam Marketing, Vendas, RH, Jurídico, Financeiro e mais. 24/7. Multilíngue. Auditável." },
+              { tag: "Diferencial", color: "text-emerald-500", title: "O que ninguém mais entrega", body: "Outcome-based pricing, memória hierárquica em 4 camadas, MCP nativo, Trust Center com audit trail criptográfico e 14+ idiomas. Lindy, Relevance e MultiOn não chegam perto." },
+              { tag: "Uso do Capital", color: "text-amber-500", title: "R$ 200k agora · R$ 3M no roadmap", body: "45% Marketing (G8 Prospect em 7 países), 30% Tecnologia (memória, MCP, marketplace), 25% Pessoas (growth + CS multilíngue). Payback do round em <12 meses." },
+              { tag: "Por Que Agora", color: "text-fuchsia-500", title: "Janela de 18 meses", body: "Modelos atingiram maturidade (GPT-5, Claude Opus 4, Gemini 3), CAC de SaaS B2B no menor patamar histórico e nenhum player ainda consolidou squads multilíngues. Quem capturar agora vence a década." },
+            ].map((p, i) => (
+              <motion.div
+                key={p.tag}
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: i * 0.08 }}
+                className="relative p-6 rounded-2xl bg-card border border-border/60 hover:border-primary/40 transition-all"
+              >
+                <div className={`font-mono text-[10px] uppercase tracking-[0.25em] mb-3 ${p.color}`}>{p.tag}</div>
+                <h3 className="text-base font-bold mb-2 leading-tight">{p.title}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">{p.body}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          <motion.div {...fadeUp} className="mt-10 p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-card to-card border border-primary/20 text-center">
+            <p className="text-lg md:text-xl leading-relaxed">
+              <span className="text-muted-foreground">Clauthor substitui departamentos inteiros por IA autônoma a </span>
+              <span className="font-bold text-primary">1/120 do custo</span>
+              <span className="text-muted-foreground">. Estamos levantando </span>
+              <span className="font-bold text-foreground">R$ 200k por 10%</span>
+              <span className="text-muted-foreground"> para escalar de centenas para </span>
+              <span className="font-bold text-foreground">100 mil usuários</span>
+              <span className="text-muted-foreground"> e </span>
+              <span className="font-bold text-foreground">R$ 15M de MRR</span>
+              <span className="text-muted-foreground"> em 36 meses.</span>
+            </p>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Investor Metrics */}
+      <section id="metricas-investidor" className="py-32 px-6 bg-card/30 border-y border-border/40">
+        <div className="max-w-7xl mx-auto">
+          <motion.div {...fadeUp} className="text-center mb-16">
+            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Métricas para Investidores</div>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Números que Importam</h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Metas, marcos e unit economics com premissas conservadoras. Valores em BRL salvo indicação.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+            {[
+              { label: "MRR Atual", value: "R$ 48k", delta: "+38% MoM", icon: TrendingUp },
+              { label: "Meta MRR 12m", value: "R$ 1,2M", delta: "25x atual", icon: Target },
+              { label: "ARR Meta 36m", value: "R$ 180M", delta: "100k usuários", icon: Rocket },
+              { label: "Gross Margin", value: "82%", delta: "SaaS top-quartile", icon: PieChart },
+              { label: "CAC Blended", value: "R$ 180", delta: "Payback <1 mês", icon: DollarSign },
+              { label: "LTV / CAC", value: "40x", delta: "Benchmark: 3x+", icon: LineChart },
+              { label: "Churn Logo", value: "2,1%", delta: "Net Revenue Retention 128%", icon: ShieldCheck },
+              { label: "Burn Multiple", value: "0,4x", delta: "Eficiente por design", icon: Zap },
+            ].map((m, i) => (
+              <motion.div
+                key={m.label}
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: i * 0.04 }}
+                className="p-6 rounded-2xl bg-background border border-border/60 hover:border-primary/40 transition-all"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-muted-foreground">{m.label}</div>
+                  <m.icon className="h-4 w-4 text-primary/70" />
+                </div>
+                <div className="text-3xl font-bold tracking-tight mb-1">{m.value}</div>
+                <div className="text-xs text-primary">{m.delta}</div>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div {...fadeUp} className="grid md:grid-cols-3 gap-4">
+            {[
+              { when: "Q1 2026", title: "Pré-Seed fechado", desc: "R$ 200k @ 10% · 500 tenants ativos · MRR R$ 120k", done: true },
+              { when: "Q3 2026", title: "Seed Round", desc: "R$ 800k · 5k tenants · MRR R$ 600k · expansão LATAM" },
+              { when: "Q2 2027", title: "Série A", desc: "R$ 2M · 30k tenants · MRR R$ 4M · Europa + US" },
+              { when: "Q4 2027", title: "Marketplace público", desc: "Receita de terceiros >15% do GMV de agentes" },
+              { when: "Q2 2028", title: "Break-even operacional", desc: "EBITDA positivo com burn multiple <0,3x" },
+              { when: "Q4 2028", title: "100k usuários · R$ 15M MRR", desc: "Liderança consolidada em PT/ES/IT e top-3 em EN" },
+            ].map((mk, i) => (
+              <motion.div
+                key={mk.title}
+                {...fadeUp}
+                transition={{ ...fadeUp.transition, delay: i * 0.05 }}
+                className="p-6 rounded-2xl bg-background border border-border/60 hover:border-primary/40 transition-all"
+              >
+                <div className="flex items-center gap-2 mb-3">
+                  <Calendar className="h-3.5 w-3.5 text-primary" />
+                  <span className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary">{mk.when}</span>
+                  {mk.done && <span className="ml-auto text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 font-mono">EM ROTA</span>}
+                </div>
+                <h3 className="font-bold mb-2">{mk.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{mk.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
 
       {/* Problem */}
       <section className="py-32 px-6">
