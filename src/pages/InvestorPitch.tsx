@@ -32,6 +32,10 @@ import {
   CompetitorDetailSection,
   FundingCalculator,
 } from "@/components/investor/InvestorExtras";
+import ParallaxBand from "@/components/investor/ParallaxBand";
+import parallaxOrb from "@/assets/investor-parallax-1.jpg";
+import parallaxDatacenter from "@/assets/investor-parallax-2.jpg";
+import parallaxGlobal from "@/assets/investor-parallax-3.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -721,7 +725,7 @@ const InvestorPitch = () => {
           {/* Round structure */}
           <div className="grid md:grid-cols-4 gap-6 mb-16">
             {[
-              { tag: "AGORA · 4ª", round: "Pré-Seed", amount: "R$ 200K", equity: "10%", desc: "Marketing, expansão multilíngue e G8 Prospect em 7 mercados.", highlight: true, muted: false },
+              { tag: "AGORA · 1ª EXTERNA", round: "Pré-Seed", amount: "R$ 200K", equity: "10%", desc: "Marketing, expansão multilíngue e G8 Prospect em 7 mercados.", highlight: true, muted: false },
               { tag: "Q3 2026", round: "Seed", amount: "R$ 800K", equity: "12-15%", desc: "Escala em LATAM e Europa após 5.000 usuários pagantes.", highlight: false, muted: false },
               { tag: "Q2 2027", round: "Série A", amount: "R$ 2M", equity: "15-18%", desc: "Dominância global em outcome-based AI workforce.", highlight: false, muted: false },
               { tag: "TOTAL", round: "Capital Mapeado", amount: "R$ 3M", equity: "~35%", desc: "Caminho completo até 100K usuários e R$ 15M MRR.", highlight: false, muted: true },
