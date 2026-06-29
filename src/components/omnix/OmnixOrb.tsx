@@ -134,7 +134,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
                 rotate: [arc.offset, arc.offset + 360 * arc.direction],
                 strokeOpacity: isActive
                   ? [0.15, 0.35 * intensity, 0.15]
-                  : 0.04,
+                  : [0.12, 0.28, 0.12],
                 strokeWidth: isSpeaking
                   ? [arc.strokeW, arc.strokeW * 2, arc.strokeW]
                   : arc.strokeW,
