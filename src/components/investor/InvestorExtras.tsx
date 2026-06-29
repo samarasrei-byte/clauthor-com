@@ -82,7 +82,7 @@ const assumptions = [
     source: "Gartner Hype Cycle for AI 2025 · McKinsey State of AI 2025",
     link: "https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai",
   },
-] as const;
+] as Array<{ metric: string; badge: string; value: string; note: string; source: string; link?: string }>;
 
 export const SourcesSection = () => (
   <section id="fontes" className="py-32 px-6">
