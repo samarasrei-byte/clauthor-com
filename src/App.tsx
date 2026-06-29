@@ -84,6 +84,7 @@ const AdvocaciaExecucoesLazy = lazyRetry(() => import("./pages/AdvocaciaExecucoe
 const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVertical"));
 const ApiKeysSettings = lazyRetry(() => import("./pages/ApiKeysSettings"));
 const ApresentacaoAdv = lazyRetry(() => import("./pages/ApresentacaoAdv"));
+const InvestorPitch = lazyRetry(() => import("./pages/InvestorPitch"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
