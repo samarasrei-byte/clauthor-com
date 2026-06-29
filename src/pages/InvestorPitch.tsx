@@ -313,21 +313,21 @@ const InvestorPitch = () => {
           <motion.div {...fadeUp} className="mt-8 p-8 rounded-2xl bg-card/60 border border-amber-500/30">
             <div className="flex items-center gap-2 mb-4">
               <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber-500">Transparência Radical · Estágio Atual</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber-500">Transparência Radical · Standby Técnico Controlado</span>
             </div>
-            <h3 className="text-2xl font-bold mb-3">Estamos em MVP — e isso é uma vantagem para quem entra agora</h3>
+            <h3 className="text-2xl font-bold mb-3">Em testes finais — produção em até 10 dias, escalada para 3.000–4.000 usuários simultâneos</h3>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-              A plataforma está <span className="text-foreground font-semibold">100% funcional ponta a ponta</span> (225 agentes, 20 squads, multi-tenant, auditoria criptográfica, 14 idiomas).
-              Para operar em <span className="text-foreground font-semibold">escala massiva</span> (100k+ usuários simultâneos), mapeamos com honestidade as peças que o capital irá destravar — todas com fornecedores definidos e custos previsíveis:
+              A plataforma está <span className="text-foreground font-semibold">100% funcional ponta a ponta</span> (225 agentes, 20 squads, multi-tenant, auditoria criptográfica, 14 idiomas) e atualmente em <span className="text-foreground font-semibold">standby controlado</span> enquanto concluímos a bateria final de testes de carga, segurança e UX.
+              O go-live em produção acontece em <span className="text-foreground font-semibold">no máximo 10 dias</span>, já dimensionado para atender <span className="text-foreground font-semibold">3.000 a 4.000 usuários simultâneos</span> desde o primeiro dia. As peças abaixo são os investimentos de infraestrutura que sustentam essa escala — fornecedores definidos, custos previsíveis:
             </p>
             <div className="grid md:grid-cols-2 gap-3 mb-6">
               {[
+                { gap: "Servidor de produção dimensionado", solution: "Cluster dedicado para 3–4k usuários simultâneos", when: "Go-live" },
                 { gap: "Observabilidade em escala", solution: "Datadog/Grafana Cloud · ~R$ 8k/mês", when: "Mês 2" },
                 { gap: "Vector DB dedicado para memória", solution: "Pinecone/Weaviate cluster · ~R$ 6k/mês", when: "Mês 3" },
                 { gap: "Fila de jobs distribuída", solution: "Inngest/Trigger.dev para 10M+ execuções/mês", when: "Mês 2" },
                 { gap: "CDN global + edge cache", solution: "Cloudflare Enterprise para 14 regiões", when: "Mês 4" },
                 { gap: "SOC 2 Type II + ISO 27001", solution: "Vanta + auditoria · ~R$ 80k one-time", when: "Mês 6" },
-                { gap: "Multi-region failover", solution: "Réplicas DB em US/EU/APAC", when: "Mês 8" },
               ].map((item) => (
                 <div key={item.gap} className="p-4 rounded-xl bg-background/60 border border-border/40">
                   <div className="flex items-center justify-between mb-1.5">
@@ -341,12 +341,13 @@ const InvestorPitch = () => {
             <div className="p-4 rounded-xl bg-primary/5 border border-primary/20">
               <p className="text-sm leading-relaxed">
                 <span className="text-primary font-semibold">Por que isso é positivo para o investidor:</span>{" "}
-                <span className="text-muted-foreground">o produto já existe e funciona. O risco técnico de "construir do zero" foi eliminado com capital próprio. Os R$ 200k entram para </span>
-                <span className="text-foreground font-semibold">acelerar comercialização e blindagem de infra</span>
+                <span className="text-muted-foreground">o produto já existe, está testado e entra em produção em até 10 dias com capacidade para milhares de usuários simultâneos. O risco técnico já foi pago com capital próprio do fundador. Os R$ 200k entram para </span>
+                <span className="text-foreground font-semibold">acelerar comercialização e blindar a infra para o próximo salto</span>
                 <span className="text-muted-foreground">, não para descobrir se a tecnologia funciona — isso já está provado.</span>
               </p>
             </div>
           </motion.div>
+
         </div>
       </section>
 
