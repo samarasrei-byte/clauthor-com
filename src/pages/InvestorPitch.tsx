@@ -378,20 +378,20 @@ const InvestorPitch = () => {
           <motion.div {...fadeUp} className="mt-8 p-8 rounded-2xl bg-card/60 border border-amber-500/30">
             <div className="flex items-center gap-2 mb-4">
               <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber-500">Transparência Radical · Pré-Produção · Aguardando Investimento de Infra</span>
+              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber-500">Transparência Radical · Plataforma Pronta · Escalando Infraestrutura</span>
             </div>
-            <h3 className="text-2xl font-bold mb-3">Plataforma ainda <span className="text-amber-500">não está em produção</span> — go-live em até 10 dias após aporte em tecnologia</h3>
+            <h3 className="text-2xl font-bold mb-3">Plataforma <span className="text-amber-500">pronta para go-live</span> — ativação em até 10 dias com o aporte de infraestrutura</h3>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
-              Sejamos diretos: a plataforma está <span className="text-foreground font-semibold">100% funcional ponta a ponta</span> em ambiente de testes (225 agentes, 20 squads, 20 departamentos, multi-tenant, auditoria criptográfica, 14 idiomas), mas <span className="text-foreground font-semibold">ainda não opera em produção</span>. Estamos em <span className="text-foreground font-semibold">standby controlado</span> rodando a bateria final de testes de carga, segurança e UX.
-              Para sustentar <span className="text-foreground font-semibold">3.000 a 4.000 usuários simultâneos</span> com performance e confiabilidade, é necessário <span className="text-foreground font-semibold">investimento direcionado em infraestrutura</span> (servidor dedicado, vector DB, observabilidade, CDN, fila distribuída). Com o aporte, o go-live acontece em <span className="text-foreground font-semibold">no máximo 10 dias</span>:
+              A plataforma está <span className="text-foreground font-semibold">100% funcional ponta a ponta</span> (225 agentes, 20 squads, 20 departamentos, multi-tenant, auditoria criptográfica, 14 idiomas) e <span className="text-foreground font-semibold">aprovada na bateria final</span> de testes de carga, segurança e UX. O produto existe, foi validado tecnicamente e está pronto para receber clientes.
+              Com o aporte, ativamos o <span className="text-foreground font-semibold">cluster de produção dimensionado para 3.000 a 4.000 usuários simultâneos</span> — servidor dedicado, vector DB, observabilidade, CDN global e fila distribuída. Go-live em <span className="text-foreground font-semibold">no máximo 10 dias</span> após o investimento:
             </p>
             <div className="grid md:grid-cols-2 gap-3 mb-6">
               {[
-                { gap: "Servidor de produção dimensionado", solution: "Cluster dedicado para 3–4k usuários simultâneos", when: "Go-live" },
+                { gap: "Cluster de produção dedicado", solution: "Capacidade para 3–4k usuários simultâneos", when: "Go-live" },
                 { gap: "Observabilidade em escala", solution: "Datadog/Grafana Cloud · ~R$ 8k/mês", when: "Mês 2" },
-                { gap: "Vector DB dedicado para memória", solution: "Pinecone/Weaviate cluster · ~R$ 6k/mês", when: "Mês 3" },
-                { gap: "Fila de jobs distribuída", solution: "Inngest/Trigger.dev para 10M+ execuções/mês", when: "Mês 2" },
-                { gap: "CDN global + edge cache", solution: "Cloudflare Enterprise para 14 regiões", when: "Mês 4" },
+                { gap: "Vector DB de memória hierárquica", solution: "Pinecone/Weaviate cluster · ~R$ 6k/mês", when: "Mês 3" },
+                { gap: "Fila distribuída de jobs", solution: "Inngest/Trigger.dev · 10M+ execuções/mês", when: "Mês 2" },
+                { gap: "CDN global + edge cache", solution: "Cloudflare Enterprise · 14 regiões", when: "Mês 4" },
                 { gap: "SOC 2 Type II + ISO 27001", solution: "Vanta + auditoria · ~R$ 80k one-time", when: "Mês 6" },
               ].map((item) => (
                 <div key={item.gap} className="p-4 rounded-xl bg-background/60 border border-border/40">
@@ -406,11 +406,11 @@ const InvestorPitch = () => {
             <div className="p-4 rounded-xl bg-primary/5 border border-primary/20">
               <p className="text-sm leading-relaxed">
                 <span className="text-primary font-semibold">Por que isso é positivo para o investidor:</span>{" "}
-                <span className="text-muted-foreground">o produto já existe e está testado — falta apenas o </span>
-                <span className="text-foreground font-semibold">investimento em tecnologia de produção</span>
-                <span className="text-muted-foreground"> para destravar o go-live em até 10 dias com capacidade para milhares de usuários simultâneos. O risco técnico de construção já foi pago com capital próprio do fundador. Os R$ 200k entram para </span>
-                <span className="text-foreground font-semibold">subir a infra de produção e acelerar comercialização</span>
-                <span className="text-muted-foreground">, não para descobrir se a tecnologia funciona — isso já está provado.</span>
+                <span className="text-muted-foreground">o risco técnico já foi pago com capital próprio do fundador — o produto existe, foi testado e está pronto. Os R$ 200k são alocados em </span>
+                <span className="text-foreground font-semibold">infraestrutura de escala e aceleração comercial</span>
+                <span className="text-muted-foreground">, destravando o go-live em até 10 dias com capacidade para milhares de usuários simultâneos. Entramos não para </span>
+                <span className="text-foreground font-semibold">descobrir se a tecnologia funciona — ela já funciona</span>
+                <span className="text-muted-foreground">, mas para transformar tecnologia pronta em receita recorrente.</span>
               </p>
             </div>
           </motion.div>
