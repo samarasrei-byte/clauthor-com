@@ -40,6 +40,7 @@ import { TIER_COLORS as tierColors } from "@/lib/tier-colors";
 import { agentIcons } from "@/data/libraryAgentData";
 import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
 import SectionLoader from "@/components/ui/section-loader";
+import PlatformStatsBanner from "@/components/PlatformStatsBanner";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
@@ -606,6 +607,8 @@ const ClientDashboard = () => {
               <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-5 pb-24 lg:pb-6 space-y-5">
                 <DashboardHeader locale={locale} remainingCredits={remainingCredits} credits={credits} />
                 <MobileNavSheet sidebarItems={sidebarItems} activeSection={activeSection} breadcrumbLabel={breadcrumbLabel} onNavigate={handleSidebarNav} />
+
+                <PlatformStatsBanner />
 
                 {activeSection === "overview" && (
                   <DashboardOverview

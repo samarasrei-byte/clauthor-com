@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { SEO } from "@/components/SEO";
+import PlatformStatsBanner from "@/components/PlatformStatsBanner";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Cpu, Zap, Layers, Terminal,
@@ -556,6 +557,11 @@ const Architecture = () => {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SEO title="Platform Architecture — Clauthor AI Stack" description="Deep dive into Clauthor's autonomous AI architecture: orchestration, RAG, memory, integrations and command center." path="/architecture" />
+
+      <div className="max-w-6xl mx-auto px-4 pt-6">
+        <PlatformStatsBanner />
+      </div>
+
 
       {/* ═══ STICKY NAV ═══ */}
       <div className="sticky top-16 z-30 border-b border-border/20 bg-background/80 backdrop-blur-xl">
