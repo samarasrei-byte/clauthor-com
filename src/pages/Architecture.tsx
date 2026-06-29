@@ -557,6 +557,11 @@ const Architecture = () => {
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SEO title="Platform Architecture — Clauthor AI Stack" description="Deep dive into Clauthor's autonomous AI architecture: orchestration, RAG, memory, integrations and command center." path="/architecture" />
 
+      <div className="max-w-6xl mx-auto px-4 pt-6">
+        <PlatformStatsBanner />
+      </div>
+
+
       {/* ═══ STICKY NAV ═══ */}
       <div className="sticky top-16 z-30 border-b border-border/20 bg-background/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-4 flex items-center gap-1 overflow-x-auto no-scrollbar py-2">
