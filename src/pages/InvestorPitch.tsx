@@ -17,9 +17,11 @@ import {
   TrendingUp,
   PieChart,
   Calendar,
+  HelpCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import {
@@ -54,9 +56,9 @@ const competitors = [
 
 // Alocação de capital — pré-seed R$ 200k
 const allocation = [
-  { pct: "45%", title: "Marketing & Aquisição", desc: "Tráfego pago, influenciadores, campanhas G8 Prospect em BR, AR, MX, PT, ES, IT, US.", color: "from-primary/40 to-primary/10" },
-  { pct: "30%", title: "Tecnologia & Produto", desc: "Infra de IA (Lovable AI Gateway), pgvector, edge functions, marketplace de agentes.", color: "from-foreground/30 to-foreground/5" },
-  { pct: "25%", title: "Pessoas & Operação", desc: "Squad de growth, customer success multilíngue e parcerias estratégicas.", color: "from-primary/30 to-foreground/5" },
+  { pct: "45%", title: "Marketing & Aquisição", desc: "Tráfego pago, influenciadores, campanhas G8 Prospect em BR, AR, MX, PT, ES, IT, US.", color: "from-primary/40 to-primary/10", help: "Campanhas de performance (Meta, Google, TikTok, LinkedIn), parcerias com criadores B2B em 7 mercados, ativação do programa G8 Prospect (8 verticais de alta conversão) e expansão para Europa e LATAM com conteúdo localizado em 14 idiomas." },
+  { pct: "30%", title: "Tecnologia & Produto", desc: "Infraestrutura de IA proprietária, banco vetorial (pgvector), edge functions serverless e marketplace de agentes.", color: "from-foreground/30 to-foreground/5", help: "Stack técnico: orquestração multi-modelo (GPT-5, Claude Opus 4, Gemini 3) com roteamento inteligente por custo/qualidade, memória hierárquica em 4 camadas (episódica, semântica, procedural, reflexiva) usando embeddings pgvector, +50 edge functions serverless para integrações (WhatsApp, LinkedIn, CRMs), e MCP Server nativo para distribuição dos 225 agentes em ferramentas externas como Claude Desktop e Cursor." },
+  { pct: "25%", title: "Pessoas & Operação", desc: "Squad de growth, customer success multilíngue e parcerias estratégicas.", color: "from-primary/30 to-foreground/5", help: "Contratação de líderes seniores em growth, engenharia de IA e CS multilíngue (PT/ES/EN/IT), além de parcerias com integradores, agências e consultorias para acelerar adoção enterprise." },
 ];
 
 const regions = [
@@ -520,7 +522,26 @@ const InvestorPitch = () => {
                   className={`relative p-10 rounded-2xl bg-gradient-to-br ${a.color} border border-border/60 overflow-hidden`}
                 >
                   <div className="text-6xl font-bold text-foreground mb-4">{a.pct}</div>
-                  <h4 className="text-xl font-bold mb-3">{a.title}</h4>
+                  <div className="flex items-start justify-between gap-3 mb-3">
+                    <h4 className="text-xl font-bold">{a.title}</h4>
+                    {a.help && (
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button
+                            type="button"
+                            aria-label={`Saiba mais sobre ${a.title}`}
+                            className="shrink-0 inline-flex items-center justify-center h-7 w-7 rounded-full border border-border/60 bg-background/60 backdrop-blur hover:bg-primary/10 hover:border-primary/40 transition-colors"
+                          >
+                            <HelpCircle className="h-3.5 w-3.5 text-muted-foreground" />
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent side="top" className="w-80 text-sm leading-relaxed">
+                          <div className="font-semibold mb-2">{a.title}</div>
+                          <p className="text-muted-foreground">{a.help}</p>
+                        </PopoverContent>
+                      </Popover>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground leading-relaxed">{a.desc}</p>
                 </motion.div>
               ))}
