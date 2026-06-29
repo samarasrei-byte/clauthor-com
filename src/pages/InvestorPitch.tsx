@@ -36,6 +36,7 @@ import ParallaxBand from "@/components/investor/ParallaxBand";
 import parallaxOrb from "@/assets/investor-parallax-1.jpg";
 import parallaxDatacenter from "@/assets/investor-parallax-2.jpg";
 import parallaxGlobal from "@/assets/investor-parallax-3.jpg";
+import heroBanner from "@/assets/investor-hero-banner.jpg";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
