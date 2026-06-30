@@ -740,10 +740,10 @@ const InvestorPitch = () => {
       <section id="economia" className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-20">
-            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Unit Economics</div>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">Números que Falam por Si</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ticket médio, CAC, LTV e payback validados na operação atual.
+            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Unit Economics Projetado</div>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">A economia por trás do modelo</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Ainda não há operação comercial ativa. Os números abaixo são as premissas que guiam o plano de go-live e foram construídas a partir de benchmarks de SaaS B2B no Brasil, do custo real de produção da plataforma e do preço médio que substituir um departamento humano permite cobrar.
             </p>
           </motion.div>
 
@@ -755,14 +755,25 @@ const InvestorPitch = () => {
                 transition={{ ...fadeUp.transition, delay: (i % 3) * 0.1 }}
                 className="p-8 rounded-2xl bg-background border border-border/60 hover:border-primary/40 transition-all"
               >
-                <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">{m.label}</div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{m.label}</div>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-full border border-primary/30 text-primary bg-primary/5">Projeção</span>
+                </div>
                 <div className="text-4xl md:text-5xl font-bold text-foreground mb-2">{m.value}</div>
                 <div className="text-sm text-muted-foreground">{m.sub}</div>
               </motion.div>
             ))}
           </div>
+
+          <motion.div {...fadeUp} className="mt-12 p-8 rounded-2xl border border-primary/30 bg-primary/5">
+            <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary mb-3">Por que esses números se sustentam</div>
+            <p className="text-base text-foreground/85 leading-relaxed">
+              Um departamento de vinte pessoas custa cerca de R$ 240 mil por mês em folha. A Clauthor entrega o mesmo escopo de execução por uma fração desse valor, o que abre espaço confortável para um ticket médio entre R$ 150 e R$ 280 sem pressão de preço. O custo marginal de servir cada novo cliente é dominado por inferência de IA, que cai de preço todo trimestre, enquanto a memória hierárquica aumenta a retenção a cada mês de uso. É essa combinação que sustenta margem bruta acima de 80% e payback abaixo de um mês.
+            </p>
+          </motion.div>
         </div>
-      </section>
+      </section></motion.div>
+
 
       <ParallaxBand
         image={parallaxMemory}
