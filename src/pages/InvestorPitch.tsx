@@ -36,6 +36,7 @@ import {
   FundingCalculator,
 } from "@/components/investor/InvestorExtras";
 import ParallaxBand from "@/components/investor/ParallaxBand";
+import InvestorFAQ from "@/components/investor/InvestorFAQ";
 import parallaxOrb from "@/assets/investor-parallax-1.jpg";
 import parallaxDatacenter from "@/assets/investor-parallax-2.jpg";
 import parallaxGlobal from "@/assets/investor-parallax-3.jpg";
