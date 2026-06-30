@@ -104,13 +104,13 @@ export default function InvestorFAQ() {
         >
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary/30 bg-primary/5 mb-6">
             <Swords className="h-3 w-3 text-primary" />
-            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Perguntas Difíceis · Respostas Diretas</span>
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary">Perguntas Frequentes</span>
           </div>
           <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
-            O Investidor Vai Jogar Sujo.
+            Respostas para as perguntas que importam.
           </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Aqui estão as 14 perguntas mais cínicas, mais cortantes e mais reais que um investidor pode fazer, com a resposta que ele merece ouvir.
+            Concorrência, moat, tração, time, regulação, diluição e plano de execução, com a profundidade que uma decisão de investimento exige.
           </p>
         </motion.div>
 
