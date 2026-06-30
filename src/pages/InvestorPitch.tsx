@@ -27,7 +27,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
-import ThorLiveGuide from "@/components/dashboard/ThorLiveGuide";
+
 
 import {
   SourcesSection,
@@ -255,32 +255,22 @@ const InvestorPitch = () => {
             {/* Glow halo, soft cyan instead of strong red */}
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,hsl(210_90%_55%/0.25),transparent_70%)] blur-3xl scale-110" />
 
-            {/* The image */}
-            <div className="relative h-full w-full rounded-3xl overflow-hidden border border-foreground/15 shadow-[0_40px_120px_-20px_hsl(210_90%_55%/0.35)]">
-              <img
-                src={heroBanner.url}
-                alt="Thor, CEO AI da Clauthor"
-                width={1280}
-                height={1280}
-                className="absolute inset-0 h-full w-full object-cover object-top"
+            {/* Abstract holographic core */}
+            <div className="relative h-full w-full rounded-3xl overflow-hidden border border-foreground/15 shadow-[0_40px_120px_-20px_hsl(210_90%_55%/0.35)] bg-[radial-gradient(circle_at_center,hsl(210_90%_45%/0.35),hsl(210_90%_10%/0.9)_70%)]">
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,hsl(210_90%_70%/0.4),transparent_55%)]" />
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-10 rounded-full border border-primary/40"
               />
-              {/* Thor identity tag */}
-              <div className="absolute top-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 z-10">
-                <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-primary/90 bg-background/60 backdrop-blur px-3 py-1 rounded-full border border-primary/30">
-                  Chief Executive Officer
-                </span>
+              <motion.div
+                animate={{ rotate: -360 }}
+                transition={{ duration: 90, repeat: Infinity, ease: "linear" }}
+                className="absolute inset-20 rounded-full border border-primary/25"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="h-24 w-24 rounded-full bg-primary/60 blur-2xl" />
               </div>
-              <div className="absolute bottom-16 left-1/2 -translate-x-1/2 text-center z-10">
-                <div className="font-display text-3xl font-bold tracking-[0.3em] text-foreground drop-shadow-[0_2px_20px_rgba(0,0,0,0.8)]">
-                  THOR
-                </div>
-                <div className="font-mono text-[10px] uppercase tracking-[0.3em] text-primary mt-1">
-                  AI Orchestrator
-                </div>
-              </div>
-              {/* Soft contrast overlay, no red tint */}
-              <div className="absolute inset-0 bg-gradient-to-tr from-background/50 via-transparent to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/70" />
               {/* Subtle scanline */}
               <div className="absolute inset-0 opacity-15 mix-blend-overlay bg-[repeating-linear-gradient(0deg,transparent,transparent_3px,hsl(210_90%_70%/0.12)_3px,hsl(210_90%_70%/0.12)_4px)]" />
               {/* HUD corners */}
@@ -1102,10 +1092,6 @@ const InvestorPitch = () => {
         </div>
       </footer>
 
-      {/* Thor, guia ao vivo (mesmo do painel) */}
-      <div data-thor-guide>
-        <ThorLiveGuide activeSection="investidores" onNavigate={() => {}} onDismiss={() => {}} />
-      </div>
 
       <PresentationMode active={presenting} onExit={() => setPresenting(false)} />
     </div>
