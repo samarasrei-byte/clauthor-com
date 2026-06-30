@@ -36,6 +36,7 @@ import {
   FundingCalculator,
 } from "@/components/investor/InvestorExtras";
 import ParallaxBand from "@/components/investor/ParallaxBand";
+import InvestorFAQ from "@/components/investor/InvestorFAQ";
 import parallaxOrb from "@/assets/investor-parallax-1.jpg";
 import parallaxDatacenter from "@/assets/investor-parallax-2.jpg";
 import parallaxGlobal from "@/assets/investor-parallax-3.jpg";
@@ -1046,6 +1047,8 @@ const InvestorPitch = () => {
           </div>
         </div>
       </section>
+
+      <InvestorFAQ />
 
       {/* Closing — strong narrative, no CTA */}
       <section id="contact" className="relative py-40 px-6 bg-card/30 border-t border-border/40 overflow-hidden">
