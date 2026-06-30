@@ -1048,6 +1048,8 @@ const InvestorPitch = () => {
         </div>
       </section>
 
+      <InvestorFAQ />
+
       {/* Closing — strong narrative, no CTA */}
       <section id="contact" className="relative py-40 px-6 bg-card/30 border-t border-border/40 overflow-hidden">
         <div className="absolute inset-0 -z-10 overflow-hidden">
