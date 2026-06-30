@@ -772,7 +772,8 @@ const InvestorPitch = () => {
             </p>
           </motion.div>
         </div>
-      </section></motion.div>
+      </section>
+
 
 
       <ParallaxBand
