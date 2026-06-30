@@ -102,12 +102,12 @@ const mrrProjection = [
 ];
 
 const unitEconomics = [
-  { label: "Ticket Médio Atual", value: "R$ 150", sub: "/mês por usuário" },
-  { label: "Ticket Médio Projetado", value: "R$ 280", sub: "M24 (com upsell de squads)" },
-  { label: "CAC Estimado", value: "R$ 90", sub: "via G8 Prospect" },
-  { label: "LTV (24m)", value: "R$ 3.600", sub: "LTV/CAC = 40x" },
-  { label: "Payback", value: "< 1 mês", sub: "do CAC investido" },
-  { label: "Margem Bruta", value: "82%", sub: "modelo SaaS + AI" },
+  { label: "Ticket Médio de Entrada", value: "R$ 150", sub: "Premissa por usuário/mês no plano inicial" },
+  { label: "Ticket Médio no Mês 24", value: "R$ 280", sub: "Projeção com expansão para squads completos" },
+  { label: "CAC Projetado", value: "R$ 90", sub: "Aquisição via canais próprios e parcerias B2B" },
+  { label: "LTV em 24 meses", value: "R$ 3.600", sub: "Relação LTV sobre CAC de 40 vezes" },
+  { label: "Payback do CAC", value: "< 1 mês", sub: "Retorno do custo de aquisição na primeira fatura" },
+  { label: "Margem Bruta Alvo", value: "82%", sub: "Estrutura SaaS combinada com agentes de IA" },
 ];
 
 const reasons = [
