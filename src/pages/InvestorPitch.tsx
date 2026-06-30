@@ -102,17 +102,17 @@ const mrrProjection = [
 ];
 
 const unitEconomics = [
-  { label: "Ticket Médio Atual", value: "R$ 150", sub: "/mês por usuário" },
-  { label: "Ticket Médio Projetado", value: "R$ 280", sub: "M24 (com upsell de squads)" },
-  { label: "CAC Estimado", value: "R$ 90", sub: "via G8 Prospect" },
-  { label: "LTV (24m)", value: "R$ 3.600", sub: "LTV/CAC = 40x" },
-  { label: "Payback", value: "< 1 mês", sub: "do CAC investido" },
-  { label: "Margem Bruta", value: "82%", sub: "modelo SaaS + AI" },
+  { label: "Ticket Médio de Entrada", value: "R$ 150", sub: "Premissa por usuário/mês no plano inicial" },
+  { label: "Ticket Médio no Mês 24", value: "R$ 280", sub: "Projeção com expansão para squads completos" },
+  { label: "CAC Projetado", value: "R$ 90", sub: "Aquisição via canais próprios e parcerias B2B" },
+  { label: "LTV em 24 meses", value: "R$ 3.600", sub: "Relação LTV sobre CAC de 40 vezes" },
+  { label: "Payback do CAC", value: "< 1 mês", sub: "Retorno do custo de aquisição na primeira fatura" },
+  { label: "Margem Bruta Alvo", value: "82%", sub: "Estrutura SaaS combinada com agentes de IA" },
 ];
 
 const reasons = [
-  { icon: TrendingDown, title: "Mercado Exponencial", desc: "Demanda global por IA que entrega resultado — não mais uma ferramenta — cresce 44% ao ano (Gartner)." },
-  { icon: Sparkles, title: "Diferencial Insuperável", desc: "225 agentes em 20 squads, memória hierárquica e outcome-based pricing — arquitetura proprietária difícil de replicar." },
+  { icon: TrendingDown, title: "Mercado Exponencial", desc: "Demanda global por IA que entrega resultado, não mais uma ferramenta, cresce 44% ao ano (Gartner)." },
+  { icon: Sparkles, title: "Diferencial Insuperável", desc: "225 agentes em 20 squads, memória hierárquica e outcome-based pricing, arquitetura proprietária difícil de replicar." },
   { icon: Target, title: "Timing Perfeito", desc: "Entramos antes da consolidação: zero incumbente dominante em agentes autônomos B2B em português." },
   { icon: LineChart, title: "Potencial Exponencial", desc: "Modelo projeta R$ 15M de MRR em 36 meses com unit economics SaaS top-quartile." },
   { icon: ShieldCheck, title: "Plataforma Pronta", desc: "MVP 100% funcional, multi-tenant, com auditoria criptográfica e infraestrutura para 14 idiomas." },
@@ -156,7 +156,7 @@ const InvestorPitch = () => {
         </div>
       </header>
 
-      {/* Hero — split layout: title left, cinematic image right */}
+      {/* Hero, split layout: title left, cinematic image right */}
       <section className="relative min-h-screen flex items-center px-6 pt-28 pb-20 overflow-hidden">
         {/* Atmospheric background */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -182,7 +182,7 @@ const InvestorPitch = () => {
         <div className="absolute inset-0 -z-10 opacity-[0.04] bg-[linear-gradient(to_right,hsl(var(--foreground))_1px,transparent_1px),linear-gradient(to_bottom,hsl(var(--foreground))_1px,transparent_1px)] bg-[size:80px_80px] [mask-image:radial-gradient(ellipse_at_center,black_40%,transparent_80%)]" />
 
         <div className="relative z-10 max-w-7xl mx-auto w-full grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-16 items-center">
-          {/* LEFT — copy */}
+          {/* LEFT, copy */}
           <div className="text-left">
             <motion.div
               initial={{ opacity: 0, y: 12 }}
@@ -233,7 +233,7 @@ const InvestorPitch = () => {
             </motion.div>
           </div>
 
-          {/* RIGHT — cinematic image */}
+          {/* RIGHT, cinematic image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.92, x: 40 }}
             animate={{ opacity: 1, scale: 1, x: 0 }}
@@ -252,14 +252,14 @@ const InvestorPitch = () => {
               className="absolute -inset-12 rounded-full border border-foreground/10 [mask-image:linear-gradient(45deg,black,transparent)]"
             />
 
-            {/* Glow halo — soft cyan instead of strong red */}
+            {/* Glow halo, soft cyan instead of strong red */}
             <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle,hsl(210_90%_55%/0.25),transparent_70%)] blur-3xl scale-110" />
 
             {/* The image */}
             <div className="relative h-full w-full rounded-3xl overflow-hidden border border-foreground/15 shadow-[0_40px_120px_-20px_hsl(210_90%_55%/0.35)]">
               <img
                 src={heroBanner.url}
-                alt="Thor — CEO AI da Clauthor"
+                alt="Thor, CEO AI da Clauthor"
                 width={1280}
                 height={1280}
                 className="absolute inset-0 h-full w-full object-cover object-top"
@@ -278,7 +278,7 @@ const InvestorPitch = () => {
                   AI Orchestrator
                 </div>
               </div>
-              {/* Soft contrast overlay — no red tint */}
+              {/* Soft contrast overlay, no red tint */}
               <div className="absolute inset-0 bg-gradient-to-tr from-background/50 via-transparent to-transparent" />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-background/70" />
               {/* Subtle scanline */}
@@ -301,7 +301,7 @@ const InvestorPitch = () => {
         </div>
       </section>
 
-      {/* KPI strip — moved out of hero for breathing room */}
+      {/* KPI strip, moved out of hero for breathing room */}
       <section className="relative px-6 -mt-10 mb-20">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -346,7 +346,7 @@ const InvestorPitch = () => {
                 tag: "Problema",
                 color: "text-red-500",
                 title: "Folha de pagamento devorando margem",
-                body: "Hoje, uma operação média mantém ~20 colaboradores executando tarefas repetitivas de conhecimento (relatórios, prospecção, triagem jurídica, atendimento, cobrança). Isso custa cerca de R$ 240k/mês em folha — sem contar encargos, turnover e retrabalho. É lento, inconsistente e não escala junto com a demanda.",
+                body: "Hoje, uma operação média mantém ~20 colaboradores executando tarefas repetitivas de conhecimento (relatórios, prospecção, triagem jurídica, atendimento, cobrança). Isso custa cerca de R$ 240k/mês em folha, sem contar encargos, turnover e retrabalho. É lento, inconsistente e não escala junto com a demanda.",
                 explain: "Por que importa: a maior linha de custo do SaaS B2B brasileiro é gente fazendo trabalho que IA já consegue executar melhor.",
               },
               {
@@ -360,8 +360,8 @@ const InvestorPitch = () => {
                 tag: "Diferencial",
                 color: "text-emerald-500",
                 title: "O que ninguém mais entrega",
-                body: "Quatro moats combinados: (1) outcome-based pricing — o cliente paga por resultado entregue, não por seat; (2) memória hierárquica em 4 camadas (episódica, semântica, procedural, identidade) via pgvector; (3) MCP nativo, plugável em Claude Desktop, Cursor e qualquer cliente compatível; (4) Trust Center com audit trail criptográfico ponta a ponta.",
-                explain: "Lindy, Relevance AI e MultiOn entregam pedaços disso. Nenhum combina os quatro — e nenhum nasceu multilíngue de verdade.",
+                body: "Quatro moats combinados: (1) outcome-based pricing, o cliente paga por resultado entregue, não por seat; (2) memória hierárquica em 4 camadas (episódica, semântica, procedural, identidade) via pgvector; (3) MCP nativo, plugável em Claude Desktop, Cursor e qualquer cliente compatível; (4) Trust Center com audit trail criptográfico ponta a ponta.",
+                explain: "Lindy, Relevance AI e MultiOn entregam pedaços disso. Nenhum combina os quatro, e nenhum nasceu multilíngue de verdade.",
               },
               {
                 tag: "Uso do Capital",
@@ -413,10 +413,10 @@ const InvestorPitch = () => {
               <span className="h-2 w-2 rounded-full bg-amber-500 animate-pulse" />
               <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amber-500">Transparência Radical · Plataforma Pronta · Escalando Infraestrutura</span>
             </div>
-            <h3 className="text-2xl font-bold mb-3">Plataforma <span className="text-amber-500">pronta para go-live</span> — ativação em até 10 dias com o aporte de infraestrutura</h3>
+            <h3 className="text-2xl font-bold mb-3">Plataforma <span className="text-amber-500">pronta para go-live</span>, ativação em até 10 dias com o aporte de infraestrutura</h3>
             <p className="text-sm text-muted-foreground leading-relaxed mb-6">
               A plataforma está <span className="text-foreground font-semibold">100% funcional ponta a ponta</span> (225 agentes, 20 squads, 20 departamentos, multi-tenant, auditoria criptográfica, 14 idiomas) e <span className="text-foreground font-semibold">aprovada na bateria final</span> de testes de carga, segurança e UX. O produto existe, foi validado tecnicamente e está pronto para receber clientes.
-              Com o aporte, ativamos o <span className="text-foreground font-semibold">cluster de produção dimensionado para 3.000 a 4.000 usuários simultâneos</span> — servidor dedicado, vector DB, observabilidade, CDN global e fila distribuída. Go-live em <span className="text-foreground font-semibold">no máximo 10 dias</span> após o investimento:
+              Com o aporte, ativamos o <span className="text-foreground font-semibold">cluster de produção dimensionado para 3.000 a 4.000 usuários simultâneos</span>, servidor dedicado, vector DB, observabilidade, CDN global e fila distribuída. Go-live em <span className="text-foreground font-semibold">no máximo 10 dias</span> após o investimento:
             </p>
             <div className="grid md:grid-cols-2 gap-3 mb-6">
               {[
@@ -439,10 +439,10 @@ const InvestorPitch = () => {
             <div className="p-4 rounded-xl bg-primary/5 border border-primary/20">
               <p className="text-sm leading-relaxed">
                 <span className="text-primary font-semibold">Por que isso é positivo para o investidor:</span>{" "}
-                <span className="text-muted-foreground">o risco técnico já foi pago com capital próprio do fundador — o produto existe, foi testado e está pronto. Os R$ 200k são alocados em </span>
+                <span className="text-muted-foreground">o risco técnico já foi pago com capital próprio do fundador, o produto existe, foi testado e está pronto. Os R$ 200k são alocados em </span>
                 <span className="text-foreground font-semibold">infraestrutura de escala e aceleração comercial</span>
                 <span className="text-muted-foreground">, destravando o go-live em até 10 dias com capacidade para milhares de usuários simultâneos. Entramos não para </span>
-                <span className="text-foreground font-semibold">descobrir se a tecnologia funciona — ela já funciona</span>
+                <span className="text-foreground font-semibold">descobrir se a tecnologia funciona, ela já funciona</span>
                 <span className="text-muted-foreground">, mas para transformar tecnologia pronta em receita recorrente.</span>
               </p>
             </div>
@@ -461,7 +461,7 @@ const InvestorPitch = () => {
             </div>
             <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">Potencial & Diferencial</h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ainda <span className="text-foreground font-semibold">sem clientes pagantes</span> — somos um MVP com plataforma 100% funcional pronta para comercialização.
+              Ainda <span className="text-foreground font-semibold">sem clientes pagantes</span>, somos um MVP com plataforma 100% funcional pronta para comercialização.
               Os números abaixo refletem <span className="text-foreground font-semibold">o que já está construído</span> e
               <span className="text-foreground font-semibold"> as projeções modeladas</span> que o capital irá validar.
             </p>
@@ -471,7 +471,7 @@ const InvestorPitch = () => {
             {[
               { label: "Estágio", value: "MVP", delta: "Plataforma 100% funcional · pré-receita", icon: Rocket, tag: "Hoje" },
               { label: "Agentes Operacionais", value: "225", delta: "20 squads · 20 departamentos prontos", icon: Sparkles, tag: "Hoje" },
-              { label: "Idiomas Suportados", value: "14", delta: "Infra i18n nativa — pronta p/ global", icon: Target, tag: "Hoje" },
+              { label: "Idiomas Suportados", value: "14", delta: "Infra i18n nativa, pronta p/ global", icon: Target, tag: "Hoje" },
               { label: "MRR Projetado 12m", value: "R$ 1,2M", delta: "Pós Pré-Seed · 800 tenants alvo", icon: TrendingUp, tag: "Meta" },
               { label: "Gross Margin", value: "82%", delta: "SaaS top-quartile (modelo)", icon: PieChart, tag: "Modelo" },
               { label: "CAC Blended", value: "R$ 180", delta: "Payback <1 mês (premissa)", icon: DollarSign, tag: "Premissa" },
@@ -531,14 +531,14 @@ const InvestorPitch = () => {
         image={parallaxOrb}
         eyebrow="A Tese"
         title="A próxima década é de agentes, não de ferramentas"
-        subtitle="Empresas vão comprar resultado entregue por IA autônoma — não mais software para humanos operarem. Clauthor está construído para essa transição."
+        subtitle="Empresas vão comprar resultado entregue por IA autônoma, não mais software para humanos operarem. Clauthor está construído para essa transição."
       />
 
       <ParallaxBand
         image={parallaxBrain}
         eyebrow="Inteligência Coletiva"
         title="Um cérebro vivo. Pulsando 24/7."
-        subtitle="Memória hierárquica em 4 camadas, embeddings vetoriais e auto-aprendizado contínuo — cada interação torna o sistema inteiro mais inteligente."
+        subtitle="Memória hierárquica em 4 camadas, embeddings vetoriais e auto-aprendizado contínuo, cada interação torna o sistema inteiro mais inteligente."
         align="left"
       />
 
@@ -590,14 +590,14 @@ const InvestorPitch = () => {
         image={parallaxSquads}
         eyebrow="Workforce"
         title="225 agentes. 20 squads. Um único cérebro."
-        subtitle="Arquitetura proprietária multi-tenant com roteamento inteligente, memória hierárquica e auditoria criptográfica — pronta para escalar para milhares de empresas."
+        subtitle="Arquitetura proprietária multi-tenant com roteamento inteligente, memória hierárquica e auditoria criptográfica, pronta para escalar para milhares de empresas."
       />
 
       <ParallaxBand
         image={parallaxCommand}
         eyebrow="Command Center"
         title="Orquestração global em tempo real"
-        subtitle="Um único painel para ver, aprovar e auditar tudo o que centenas de agentes executam — em 14 idiomas, 24/7, com governança criptográfica."
+        subtitle="Um único painel para ver, aprovar e auditar tudo o que centenas de agentes executam, em 14 idiomas, 24/7, com governança criptográfica."
         align="right"
       />
 
@@ -740,10 +740,10 @@ const InvestorPitch = () => {
       <section id="economia" className="py-32 px-6 bg-card/30 border-y border-border/40">
         <div className="max-w-7xl mx-auto">
           <motion.div {...fadeUp} className="text-center mb-20">
-            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Unit Economics</div>
-            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">Números que Falam por Si</h2>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Ticket médio, CAC, LTV e payback validados na operação atual.
+            <div className="font-mono text-[11px] uppercase tracking-[0.3em] text-primary mb-6">Unit Economics Projetado</div>
+            <h2 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">A economia por trás do modelo</h2>
+            <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
+              Ainda não há operação comercial ativa. Os números abaixo são as premissas que guiam o plano de go-live e foram construídas a partir de benchmarks de SaaS B2B no Brasil, do custo real de produção da plataforma e do preço médio que substituir um departamento humano permite cobrar.
             </p>
           </motion.div>
 
@@ -755,20 +755,32 @@ const InvestorPitch = () => {
                 transition={{ ...fadeUp.transition, delay: (i % 3) * 0.1 }}
                 className="p-8 rounded-2xl bg-background border border-border/60 hover:border-primary/40 transition-all"
               >
-                <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">{m.label}</div>
+                <div className="flex items-center justify-between mb-3">
+                  <div className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{m.label}</div>
+                  <span className="font-mono text-[9px] uppercase tracking-[0.2em] px-2 py-0.5 rounded-full border border-primary/30 text-primary bg-primary/5">Projeção</span>
+                </div>
                 <div className="text-4xl md:text-5xl font-bold text-foreground mb-2">{m.value}</div>
                 <div className="text-sm text-muted-foreground">{m.sub}</div>
               </motion.div>
             ))}
           </div>
+
+          <motion.div {...fadeUp} className="mt-12 p-8 rounded-2xl border border-primary/30 bg-primary/5">
+            <div className="font-mono text-[10px] uppercase tracking-[0.25em] text-primary mb-3">Por que esses números se sustentam</div>
+            <p className="text-base text-foreground/85 leading-relaxed">
+              Um departamento de vinte pessoas custa cerca de R$ 240 mil por mês em folha. A Clauthor entrega o mesmo escopo de execução por uma fração desse valor, o que abre espaço confortável para um ticket médio entre R$ 150 e R$ 280 sem pressão de preço. O custo marginal de servir cada novo cliente é dominado por inferência de IA, que cai de preço todo trimestre, enquanto a memória hierárquica aumenta a retenção a cada mês de uso. É essa combinação que sustenta margem bruta acima de 80% e payback abaixo de um mês.
+            </p>
+          </motion.div>
         </div>
       </section>
+
+
 
       <ParallaxBand
         image={parallaxMemory}
         eyebrow="Memória Hierárquica"
         title="4 camadas de memória que aprendem com cada interação"
-        subtitle="Episódica, semântica, procedural e reflexiva — agentes que evoluem com o uso, criando um moat técnico difícil de replicar."
+        subtitle="Episódica, semântica, procedural e reflexiva, agentes que evoluem com o uso, criando um moat técnico difícil de replicar."
       />
 
       {/* DEPARTMENT COST COMPARISON */}
@@ -857,7 +869,7 @@ const InvestorPitch = () => {
         image={parallaxDatacenter}
         eyebrow="Infraestrutura Pronta"
         title="Construído para escalar do dia 1"
-        subtitle="225 agentes, edge functions serverless, memória hierárquica em pgvector e roteamento multi-modelo — a stack já suporta milhares de tenants sem refactor."
+        subtitle="225 agentes, edge functions serverless, memória hierárquica em pgvector e roteamento multi-modelo, a stack já suporta milhares de tenants sem refactor."
       />
 
       {/* MRR PROJECTION */}
@@ -919,7 +931,7 @@ const InvestorPitch = () => {
               Pré-Seed: R$ 200K por 10%
             </h2>
             <p className="text-lg text-muted-foreground max-w-3xl mx-auto">
-              Esta é a <span className="text-foreground font-semibold">1ª rodada externa</span> da Clauthor — todo o MVP foi construído com <span className="text-foreground font-semibold">investimento próprio do fundador</span>, sem FFF nem anjos. Para alcançar <span className="text-foreground font-semibold">100.000 usuários e R$ 15M de MRR</span>, o capital total mapeado é de <span className="text-primary font-semibold">R$ 3 milhões</span>, distribuído em rodadas sequenciais com diluição controlada e marcos de tração validados.
+              Esta é a <span className="text-foreground font-semibold">1ª rodada externa</span> da Clauthor, todo o MVP foi construído com <span className="text-foreground font-semibold">investimento próprio do fundador</span>, sem FFF nem anjos. Para alcançar <span className="text-foreground font-semibold">100.000 usuários e R$ 15M de MRR</span>, o capital total mapeado é de <span className="text-primary font-semibold">R$ 3 milhões</span>, distribuído em rodadas sequenciais com diluição controlada e marcos de tração validados.
             </p>
           </motion.div>
 
@@ -1050,7 +1062,7 @@ const InvestorPitch = () => {
 
       <InvestorFAQ />
 
-      {/* Closing — strong narrative, no CTA */}
+      {/* Closing, strong narrative, no CTA */}
       <section id="contact" className="relative py-40 px-6 bg-card/30 border-t border-border/40 overflow-hidden">
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[900px] h-[900px] rounded-full bg-[radial-gradient(circle_at_center,hsl(var(--primary)/0.18),transparent_65%)] blur-3xl" />
@@ -1090,7 +1102,7 @@ const InvestorPitch = () => {
         </div>
       </footer>
 
-      {/* Thor — guia ao vivo (mesmo do painel) */}
+      {/* Thor, guia ao vivo (mesmo do painel) */}
       <div data-thor-guide>
         <ThorLiveGuide activeSection="investidores" onNavigate={() => {}} onDismiss={() => {}} />
       </div>

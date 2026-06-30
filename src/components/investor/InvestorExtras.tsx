@@ -35,7 +35,7 @@ const assumptions = [
     metric: "Estágio Atual",
     badge: "MVP",
     value: "MVP em produção · pré-receita",
-    note: "Plataforma 100% funcional com 225 agentes, 20 squads e 10 departamentos prontos para uso. Ainda não há clientes pagantes — estamos finalizando ICP e ticket antes de iniciar comercialização em escala. O capital pré-seed destrava exatamente essa fase.",
+    note: "Plataforma 100% funcional com 225 agentes, 20 squads e 10 departamentos prontos para uso. Ainda não há clientes pagantes, estamos finalizando ICP e ticket antes de iniciar comercialização em escala. O capital pré-seed destrava exatamente essa fase.",
     source: "Dashboard interno Clauthor · ambiente de produção",
   },
   {
@@ -70,12 +70,12 @@ const assumptions = [
     metric: "Infra Multi-idioma",
     badge: "Pronto",
     value: "14 idiomas",
-    note: "Localização nativa via i18next já implementada — destrava expansão EU + LATAM sem refactor.",
+    note: "Localização nativa via i18next já implementada, destrava expansão EU + LATAM sem refactor.",
     source: "Stack i18n do projeto · src/i18n/locales",
     link: "https://www.openviewpartners.com/2024-saas-benchmarks-report/",
   },
   {
-    metric: "TAM — IA Workforce",
+    metric: "TAM, IA Workforce",
     badge: "Mercado",
     value: "US$ 47B em 2030",
     note: "CAGR de 44% para agentic AI segundo Gartner & McKinsey.",
