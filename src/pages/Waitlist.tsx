@@ -663,7 +663,7 @@ const Waitlist = () => {
         <div className="max-w-5xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-100px" }} className="text-center mb-16">
             <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold mb-4">
-              Por que entrar na <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.25)' }}>White List?</span>
+              Por que entrar na <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.25)' }}>Waitlist?</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
               Benefícios exclusivos para quem garantir sua vaga antes do lançamento oficial.
@@ -674,7 +674,7 @@ const Waitlist = () => {
             {[
               { icon: Zap, title: "Acesso Antecipado", desc: "Seja o primeiro a montar seus squads de IA. Configure agentes especializados e coloque-os para trabalhar antes de todos." },
               { icon: Headphones, title: "Suporte Premium", desc: "Equipe dedicada de onboarding. Setup personalizado 1:1 para garantir que seus squads comecem voando desde o dia 1." },
-              { icon: Crown, title: "Preço Exclusivo", desc: "50% de desconto no lançamento para membros da white list. Monte squads ilimitados com a melhor taxa do mercado." },
+              { icon: Crown, title: "Preço Exclusivo", desc: "50% de desconto no lançamento para membros da waitlist. Monte squads ilimitados com a melhor taxa do mercado." },
             ].map((benefit, i) => (
               <motion.div key={benefit.title} initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, margin: "-50px" }} transition={{ delay: i * 0.15, duration: 0.6 }}>
                 <GlassCard className="p-8 h-full group">
@@ -700,7 +700,7 @@ const Waitlist = () => {
               Garanta Sua Vaga <span className="gradient-text" style={{ textShadow: '0 0 30px hsl(var(--primary) / 0.25)' }}>Agora</span>
             </h2>
             <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-              Somente membros da white list têm acesso prioritário. Entre agora e garanta sua posição VIP.
+              Somente membros da waitlist têm acesso prioritário. Entre agora e garanta sua posição VIP.
             </p>
           </motion.div>
 
@@ -756,7 +756,7 @@ const Waitlist = () => {
                       className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4 backdrop-blur-sm shadow-[0_0_25px_hsl(var(--primary)/0.15)]">
                       <BrainCircuit className="h-8 w-8 text-primary" strokeWidth={1.5} />
                     </motion.div>
-                    <h3 className="font-display text-2xl font-bold mb-2">Entrar na White List</h3>
+                    <h3 className="font-display text-2xl font-bold mb-2">Entrar na Waitlist</h3>
                     <p className="text-muted-foreground text-sm">Preencha seus dados e garanta acesso prioritário</p>
                   </div>
 
@@ -829,7 +829,7 @@ const Waitlist = () => {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-12">
             <GlassCard hover={false} className="inline-flex items-center gap-3 px-6 py-3">
               <Globe className="h-5 w-5 text-primary" />
-              <span className="text-sm font-medium text-foreground/80">🔥 Febre em 10+ países - White list exclusiva</span>
+              <span className="text-sm font-medium text-foreground/80">🔥 Febre em 10+ países - Waitlist exclusiva</span>
               <CheckCircle2 className="h-4 w-4 text-accent-emerald" />
             </GlassCard>
           </motion.div>
