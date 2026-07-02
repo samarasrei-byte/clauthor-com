@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
-  Zap, CheckCircle2, Clock, ArrowRight, Sparkles, Shield, Star, Timer,
+  Zap, CheckCircle2, Clock, ArrowRight, Shield, Timer,
   Rocket, Gift, Crown, Lock, Play, Cpu, Users, Headphones, Target,
   Globe, Instagram, Twitter, Linkedin, Mail, TrendingUp, Bot, BrainCircuit,
   Send, MessageSquare, Crosshair, PenTool, BarChart3, DollarSign, Smartphone,
@@ -81,7 +81,7 @@ const CHAT_SCRIPT: SimMessage[] = [
   { id: 6, sender: "SDR Outbound", emoji: "🎯", content: "Sequência de 5 toques configurada. LinkedIn + Email + WhatsApp. Disparando para os 847 leads em ondas de 100/dia." },
   { id: 7, sender: "Designer IA", emoji: "🎨", content: "Criativos prontos: 8 banners responsivos + 4 stories + 2 vídeos curtos. Tudo no brand guide do cliente." },
   { id: 8, sender: "CFO Agent", emoji: "💰", content: "Estimativa de custo da campanha: R$ 12.400. ROI projetado: 340%. Budget aprovado automaticamente (baixo risco)." },
-  { id: 9, sender: "Thor", emoji: "⚡", content: "Squad TechNova: campanha no ar em 47 minutos. Isso é o poder de 200 agentes autônomos trabalhando juntos. 🚀", isOrchestrator: true },
+  { id: 9, sender: "Thor", emoji: "⚡", content: "Squad TechNova: campanha no ar em 47 minutos. Isso é o poder de 225 agentes autônomos trabalhando juntos. 🚀", isOrchestrator: true },
   { id: 10, sender: "Sistema", emoji: "✅", content: "Missão concluída · 847 leads engajados · 12 criativos publicados · ROI projetado: 340%", isSystem: true },
   { id: 11, sender: "CS Agent", emoji: "🎧", content: "Monitorando feedback dos leads em tempo real. 23 respostas positivas nos primeiros 15 minutos. Encaminhando para Closer Pro." },
   { id: 12, sender: "Closer Pro", emoji: "🤝", content: "Recebi 23 leads quentes. Iniciando cadência de fechamento personalizada. Meta: 8 conversões hoje." },
@@ -546,7 +546,7 @@ const Waitlist = () => {
                 </motion.div>
 
                 <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                  <span className="text-foreground font-medium">+200 agentes autônomos</span> organizados em{" "}
+                  <span className="text-foreground font-medium">225 agentes autônomos</span> organizados em{" "}
                   <span className="text-foreground font-medium">squads inteligentes</span>.
                   Um orquestrador. Zero complexidade.
                   <span className="text-primary font-semibold"> Economize 88%</span> vs contratação tradicional.
@@ -640,7 +640,7 @@ const Waitlist = () => {
           <GlassCard hover={false} className="p-6">
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
               {[
-                { value: "+30", label: "Agentes Autônomos", icon: Bot },
+                { value: "225", label: "Agentes Autônomos", icon: Bot },
                 { value: "∞", label: "Squads sob Demanda", icon: Users },
                 { value: "88%", label: "Economia", icon: TrendingUp },
                 { value: "24/7", label: "Operação Contínua", icon: Zap },
@@ -754,7 +754,7 @@ const Waitlist = () => {
                   <div className="text-center mb-8">
                     <motion.div animate={{ rotate: [0, 5, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                       className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4 backdrop-blur-sm shadow-[0_0_25px_hsl(var(--primary)/0.15)]">
-                      <Sparkles className="h-8 w-8 text-primary" />
+                      <BrainCircuit className="h-8 w-8 text-primary" strokeWidth={1.5} />
                     </motion.div>
                     <h3 className="font-display text-2xl font-bold mb-2">Entrar na White List</h3>
                     <p className="text-muted-foreground text-sm">Preencha seus dados e garanta acesso prioritário</p>
