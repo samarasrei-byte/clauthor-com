@@ -546,7 +546,7 @@ const Waitlist = () => {
                 </motion.div>
 
                 <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                  <span className="text-foreground font-medium">+200 agentes autônomos</span> organizados em{" "}
+                  <span className="text-foreground font-medium">225 agentes autônomos</span> organizados em{" "}
                   <span className="text-foreground font-medium">squads inteligentes</span>.
                   Um orquestrador. Zero complexidade.
                   <span className="text-primary font-semibold"> Economize 88%</span> vs contratação tradicional.
