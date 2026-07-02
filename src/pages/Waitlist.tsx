@@ -451,8 +451,7 @@ const Waitlist = () => {
         <div className="backdrop-blur-xl bg-background/40 border-b border-primary/5">
           <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2">
-              <img src={clauthorLogo} alt="Clauthor" className="h-8 w-auto" />
-              <span className="font-display font-bold text-foreground text-sm tracking-tight">Clauthor</span>
+              <ClauthorLogo size="md" />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
               {/* Big live counter */}
