@@ -14,7 +14,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { z } from "zod";
 import thorOrb from "@/assets/thor-orb.png";
-import clauthorLogo from "@/assets/clauthor-logo.png";
+import ClauthorLogo from "@/components/ClauthorLogo";
 
 const waitlistSchema = z.object({
   email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
@@ -361,16 +361,20 @@ const Waitlist = () => {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   useEffect(() => {
-    const getNextThursday = () => {
-      const now = new Date();
-      const thursday = new Date(now);
-      const day = now.getDay();
-      const daysUntilThursday = (4 - day + 7) % 7 || 7;
-      thursday.setDate(now.getDate() + daysUntilThursday);
-      thursday.setHours(10, 0, 0, 0);
-      return thursday;
-    };
-    const target = getNextThursday();
+    // Lançamento fixo: 17 dias a partir do primeiro carregamento (persistido)
+    const LAUNCH_KEY = "clauthor_launch_target";
+    let stored = localStorage.getItem(LAUNCH_KEY);
+    let target: Date;
+    if (stored) {
+      target = new Date(stored);
+      if (isNaN(target.getTime()) || target.getTime() < Date.now()) {
+        target = new Date(Date.now() + 17 * 24 * 60 * 60 * 1000);
+        localStorage.setItem(LAUNCH_KEY, target.toISOString());
+      }
+    } else {
+      target = new Date(Date.now() + 17 * 24 * 60 * 60 * 1000);
+      localStorage.setItem(LAUNCH_KEY, target.toISOString());
+    }
     const timer = setInterval(() => {
       const now = new Date();
       const diff = target.getTime() - now.getTime();
@@ -451,8 +455,7 @@ const Waitlist = () => {
         <div className="backdrop-blur-xl bg-background/40 border-b border-primary/5">
           <div className="mx-auto max-w-7xl px-4 py-3 flex items-center justify-between">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-2">
-              <img src={clauthorLogo} alt="Clauthor" className="h-8 w-auto" />
-              <span className="font-display font-bold text-foreground text-sm tracking-tight">Clauthor</span>
+              <ClauthorLogo size="md" />
             </motion.div>
             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center gap-3">
               {/* Big live counter */}
