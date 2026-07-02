@@ -9,8 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Bot, Target, FileText, Zap, Globe, Database,
-  Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Sparkles
+  Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Sparkles,
+  Rocket, Wand2, FolderPlus, FolderOpen, MessageSquareText
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -79,6 +81,27 @@ const CreateAgentPage = () => {
   const [saving, setSaving] = useState(false);
   const [showTemplateSuggestions, setShowTemplateSuggestions] = useState(false);
 
+  // NEW: intake flow
+  const [mode, setMode] = useState<null | "express" | "guided">(null);
+  const [projectMode, setProjectMode] = useState<"existing" | "new" | null>(null);
+  const [projectName, setProjectName] = useState<string>("");
+  const [expressPrompt, setExpressPrompt] = useState("");
+
+  // Fetch user projects (derived from existing agents' description prefix "Projeto: X ·")
+  const { data: existingProjects = [] } = useQuery({
+    queryKey: ["user-projects", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase.from("agents").select("description").eq("user_id", user!.id);
+      const projects = new Set<string>();
+      (data || []).forEach((r: any) => {
+        const m = /Projeto:\s*([^·\.]+)/i.exec(r.description || "");
+        if (m) projects.add(m[1].trim());
+      });
+      return Array.from(projects);
+    },
+  });
+
   // Form state
   const [name, setName] = useState("");
   const [objective, setObjective] = useState("");
@@ -135,7 +158,7 @@ const CreateAgentPage = () => {
         user_id: user.id,
         name: name.trim(),
         objective: objective || null,
-        description: `${sector ? `Setor: ${sector}. ` : ""}${tone ? `Tom: ${tone}.` : ""}`,
+        description: `${projectName ? `Projeto: ${projectName} · ` : ""}${sector ? `Setor: ${sector}. ` : ""}${tone ? `Tom: ${tone}.` : ""}`,
         instructions: instructions || null,
         channels: selectedChannels.length > 0 ? selectedChannels : null,
         integrations: selectedIntegrations.length > 0 ? selectedIntegrations : null,
@@ -156,11 +179,190 @@ const CreateAgentPage = () => {
     }
   };
 
+  const handleExpressCreate = async () => {
+    if (!user || !expressPrompt.trim()) {
+      toast.error("Descreva seu agente em poucas linhas.");
+      return;
+    }
+    setSaving(true);
+    try {
+      const matches = matchTemplates(expressPrompt);
+      const best = matches[0];
+      const derivedName = best?.name || expressPrompt.split(/[\.\n]/)[0].slice(0, 60) || "Novo Agente";
+      const { error } = await supabase.from("agents").insert({
+        user_id: user.id,
+        name: derivedName,
+        objective: expressPrompt.trim(),
+        description: `${projectName ? `Projeto: ${projectName} · ` : ""}${best ? `Setor: ${best.sector}. Tom: ${best.tone}.` : "Criado via Express."}`,
+        instructions: `Você é ${derivedName}. Missão: ${expressPrompt.trim()}. Aja de forma proativa, clara e alinhada ao objetivo.`,
+        status: "active",
+        tier: "basic",
+        monthly_price: 0,
+        knowledge_base: [{ type: "config", content: { exec_limit: 500, timeout_seconds: 30, audit_level: "Detalhado", schedule: { mode: "24/7" } } }],
+      });
+      if (error) throw error;
+      queryClient.invalidateQueries({ queryKey: ["my-agents"] });
+      toast.success(`Agente "${derivedName}" criado!`);
+      navigate("/dashboard");
+    } catch (err: any) {
+      toast.error(err.message || "Erro ao criar agente");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  // INTAKE: pick project scope + mode
+  if (!mode) {
+    return (
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-8">
+        <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary">
+            <Sparkles className="h-3 w-3" /> Novo agente
+          </div>
+          <h1 className="font-display text-4xl font-bold">Vamos criar seu agente</h1>
+          <p className="text-muted-foreground max-w-lg mx-auto">Escolha o projeto e o caminho que combina com você. Leva menos de 60 segundos no Express.</p>
+        </motion.div>
+
+        {/* Project scope */}
+        <Card className="glass border-border">
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base flex items-center gap-2"><FolderOpen className="h-4 w-4 text-primary" /> Para qual projeto?</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid sm:grid-cols-2 gap-3">
+              <button
+                onClick={() => setProjectMode("existing")}
+                disabled={existingProjects.length === 0}
+                className={`p-4 rounded-xl border text-left transition-all ${projectMode === "existing" ? "border-primary bg-primary/5" : "border-border hover:border-primary/40"} disabled:opacity-40 disabled:cursor-not-allowed`}
+              >
+                <FolderOpen className="h-5 w-5 text-primary mb-2" />
+                <p className="font-semibold text-sm">Projeto atual</p>
+                <p className="text-xs text-muted-foreground">{existingProjects.length > 0 ? `${existingProjects.length} disponíveis` : "Nenhum ainda"}</p>
+              </button>
+              <button
+                onClick={() => { setProjectMode("new"); setProjectName(""); }}
+                className={`p-4 rounded-xl border text-left transition-all ${projectMode === "new" ? "border-primary bg-primary/5" : "border-border hover:border-primary/40"}`}
+              >
+                <FolderPlus className="h-5 w-5 text-primary mb-2" />
+                <p className="font-semibold text-sm">Novo projeto</p>
+                <p className="text-xs text-muted-foreground">Começar do zero</p>
+              </button>
+            </div>
+
+            {projectMode === "existing" && (
+              <div className="flex flex-wrap gap-2 pt-1">
+                {existingProjects.map(p => (
+                  <Badge key={p} variant="secondary" onClick={() => setProjectName(p)} className={`cursor-pointer px-3 py-1.5 ${projectName === p ? "bg-primary/20 text-primary" : "hover:bg-primary/10"}`}>{p}</Badge>
+                ))}
+              </div>
+            )}
+            {projectMode === "new" && (
+              <Input placeholder="Nome do projeto (ex: Lançamento Q1)" value={projectName} onChange={e => setProjectName(e.target.value)} className="glass" />
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Path selector */}
+        <div className="grid sm:grid-cols-2 gap-4">
+          <motion.button
+            whileHover={{ y: -3 }}
+            onClick={() => setMode("express")}
+            className="group text-left p-6 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent hover:shadow-[0_0_40px_hsl(var(--primary)/0.2)] transition-all"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center"><Rocket className="h-5 w-5 text-primary" /></div>
+              <div>
+                <p className="font-bold">Express</p>
+                <p className="text-[11px] text-muted-foreground">~60 segundos</p>
+              </div>
+              <Badge className="ml-auto bg-primary/20 text-primary border-0 text-[10px]">Recomendado</Badge>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">Descreva o agente em linguagem natural. Nós preenchemos o resto.</p>
+            <div className="flex items-center gap-2 text-sm font-medium text-primary">Começar <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" /></div>
+          </motion.button>
+
+          <motion.button
+            whileHover={{ y: -3 }}
+            onClick={() => setMode("guided")}
+            className="group text-left p-6 rounded-2xl border border-border hover:border-primary/30 transition-all"
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center"><Wand2 className="h-5 w-5" /></div>
+              <div>
+                <p className="font-bold">Guiado</p>
+                <p className="text-[11px] text-muted-foreground">8 passos, controle total</p>
+              </div>
+            </div>
+            <p className="text-sm text-muted-foreground mb-4">Configure canais, ações, integrações, limites e agenda em detalhe.</p>
+            <div className="flex items-center gap-2 text-sm font-medium">Configurar passo a passo <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" /></div>
+          </motion.button>
+        </div>
+      </div>
+    );
+  }
+
+  // EXPRESS mode: single natural-language input
+  if (mode === "express") {
+    const matches = matchTemplates(expressPrompt);
+    return (
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-6">
+        <button onClick={() => setMode(null)} className="text-xs text-muted-foreground hover:text-foreground">← Voltar</button>
+        <div className="space-y-2">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-xs font-medium text-primary">
+            <Rocket className="h-3 w-3" /> Express{projectName && ` · ${projectName}`}
+          </div>
+          <h1 className="font-display text-3xl font-bold">Descreva seu agente</h1>
+          <p className="text-muted-foreground">Uma frase ou um parágrafo. Quanto mais claro o objetivo, melhor.</p>
+        </div>
+
+        <Card className="glass border-border">
+          <CardContent className="pt-6 space-y-4">
+            <div className="relative">
+              <MessageSquareText className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+              <Textarea
+                autoFocus
+                value={expressPrompt}
+                onChange={e => setExpressPrompt(e.target.value)}
+                placeholder="Ex: Quero um SDR que qualifique leads de LinkedIn e agende reuniões no meu Google Calendar, com tom corporativo."
+                className="glass min-h-[160px] pl-10 pt-3 text-base"
+              />
+            </div>
+
+            {matches.length > 0 && (
+              <div className="space-y-2">
+                <p className="text-xs text-muted-foreground">Template detectado:</p>
+                <div className="flex items-center gap-3 p-3 rounded-xl border border-primary/20 bg-primary/5">
+                  <span className="text-2xl">{matches[0].icon}</span>
+                  <div className="flex-1">
+                    <p className="text-sm font-semibold">{matches[0].name}</p>
+                    <p className="text-xs text-muted-foreground">{matches[0].description}</p>
+                  </div>
+                  <CheckCircle className="h-4 w-4 text-primary" />
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-2 pt-2">
+              <Button variant="outline" onClick={() => setMode("guided")} className="flex-1">Ajustar detalhes</Button>
+              <Button onClick={handleExpressCreate} disabled={saving || !expressPrompt.trim()} className="flex-1 glow">
+                {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Rocket className="h-4 w-4 mr-2" />}
+                Criar agente
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="font-display text-3xl font-bold mb-1">{t("create_agent.title", { defaultValue: "Criar Novo Agente" })}</h1>
-        <p className="text-muted-foreground">{t("create_agent.subtitle", { defaultValue: "Configure seu funcionário digital passo a passo." })}</p>
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-start justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-bold mb-1">{t("create_agent.title", { defaultValue: "Criar Novo Agente" })}</h1>
+          <p className="text-muted-foreground">{projectName ? `Projeto: ${projectName}` : t("create_agent.subtitle", { defaultValue: "Configure seu funcionário digital passo a passo." })}</p>
+        </div>
+        <Button variant="ghost" size="sm" onClick={() => setMode(null)}>← Trocar caminho</Button>
       </motion.div>
 
       {/* Steps indicator */}
