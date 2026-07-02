@@ -81,6 +81,27 @@ const CreateAgentPage = () => {
   const [saving, setSaving] = useState(false);
   const [showTemplateSuggestions, setShowTemplateSuggestions] = useState(false);
 
+  // NEW: intake flow
+  const [mode, setMode] = useState<null | "express" | "guided">(null);
+  const [projectMode, setProjectMode] = useState<"existing" | "new" | null>(null);
+  const [projectName, setProjectName] = useState<string>("");
+  const [expressPrompt, setExpressPrompt] = useState("");
+
+  // Fetch user projects (derived from existing agents' description prefix "Projeto: X ·")
+  const { data: existingProjects = [] } = useQuery({
+    queryKey: ["user-projects", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const { data } = await supabase.from("agents").select("description").eq("user_id", user!.id);
+      const projects = new Set<string>();
+      (data || []).forEach((r: any) => {
+        const m = /Projeto:\s*([^·\.]+)/i.exec(r.description || "");
+        if (m) projects.add(m[1].trim());
+      });
+      return Array.from(projects);
+    },
+  });
+
   // Form state
   const [name, setName] = useState("");
   const [objective, setObjective] = useState("");
