@@ -361,16 +361,20 @@ const Waitlist = () => {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   useEffect(() => {
-    const getNextThursday = () => {
-      const now = new Date();
-      const thursday = new Date(now);
-      const day = now.getDay();
-      const daysUntilThursday = (4 - day + 7) % 7 || 7;
-      thursday.setDate(now.getDate() + daysUntilThursday);
-      thursday.setHours(10, 0, 0, 0);
-      return thursday;
-    };
-    const target = getNextThursday();
+    // Lançamento fixo: 17 dias a partir do primeiro carregamento (persistido)
+    const LAUNCH_KEY = "clauthor_launch_target";
+    let stored = localStorage.getItem(LAUNCH_KEY);
+    let target: Date;
+    if (stored) {
+      target = new Date(stored);
+      if (isNaN(target.getTime()) || target.getTime() < Date.now()) {
+        target = new Date(Date.now() + 17 * 24 * 60 * 60 * 1000);
+        localStorage.setItem(LAUNCH_KEY, target.toISOString());
+      }
+    } else {
+      target = new Date(Date.now() + 17 * 24 * 60 * 60 * 1000);
+      localStorage.setItem(LAUNCH_KEY, target.toISOString());
+    }
     const timer = setInterval(() => {
       const now = new Date();
       const diff = target.getTime() - now.getTime();
