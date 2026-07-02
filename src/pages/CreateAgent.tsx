@@ -9,8 +9,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Bot, Target, FileText, Zap, Globe, Database,
-  Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Sparkles
+  Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Sparkles,
+  Rocket, Wand2, FolderPlus, FolderOpen, MessageSquareText
 } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
