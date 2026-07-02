@@ -158,7 +158,7 @@ const CreateAgentPage = () => {
         user_id: user.id,
         name: name.trim(),
         objective: objective || null,
-        description: `${sector ? `Setor: ${sector}. ` : ""}${tone ? `Tom: ${tone}.` : ""}`,
+        description: `${projectName ? `Projeto: ${projectName} · ` : ""}${sector ? `Setor: ${sector}. ` : ""}${tone ? `Tom: ${tone}.` : ""}`,
         instructions: instructions || null,
         channels: selectedChannels.length > 0 ? selectedChannels : null,
         integrations: selectedIntegrations.length > 0 ? selectedIntegrations : null,
