@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
-  Zap, CheckCircle2, Clock, ArrowRight, Sparkles, Shield, Star, Timer,
+  Zap, CheckCircle2, Clock, ArrowRight, Shield, Timer,
   Rocket, Gift, Crown, Lock, Play, Cpu, Users, Headphones, Target,
   Globe, Instagram, Twitter, Linkedin, Mail, TrendingUp, Bot, BrainCircuit,
   Send, MessageSquare, Crosshair, PenTool, BarChart3, DollarSign, Smartphone,
