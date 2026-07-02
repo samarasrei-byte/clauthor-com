@@ -754,7 +754,7 @@ const Waitlist = () => {
                   <div className="text-center mb-8">
                     <motion.div animate={{ rotate: [0, 5, -5, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
                       className="w-16 h-16 rounded-2xl bg-primary/10 border border-primary/15 flex items-center justify-center mx-auto mb-4 backdrop-blur-sm shadow-[0_0_25px_hsl(var(--primary)/0.15)]">
-                      <Sparkles className="h-8 w-8 text-primary" />
+                      <BrainCircuit className="h-8 w-8 text-primary" strokeWidth={1.5} />
                     </motion.div>
                     <h3 className="font-display text-2xl font-bold mb-2">Entrar na White List</h3>
                     <p className="text-muted-foreground text-sm">Preencha seus dados e garanta acesso prioritário</p>
