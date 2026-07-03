@@ -29,6 +29,8 @@ interface AgentCardExpandedProps {
   onPreview: () => void;
   onNavigate: () => void;
   tierColor: string;
+  onTrial?: () => void;
+  trialAvailable?: boolean;
 }
 
 const IMPACT_CONFIG = {
