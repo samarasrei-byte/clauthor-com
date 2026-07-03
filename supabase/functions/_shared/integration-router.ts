@@ -59,7 +59,9 @@ type IntegrationHandler = (
 // ── Handler registry ────────────────────────────────────────────────────────
 
 const handlers: Record<string, IntegrationHandler> = {
-  gmail:         handleSendgrid,
+  // Note: "gmail" is intentionally NOT mapped. Gmail requires OAuth2/SMTP,
+  // not a SendGrid API key. Users must connect SendGrid, Resend, or use
+  // the future Gmail OAuth handler for outbound email.
   sendgrid:      handleSendgrid,
   hubspot:       handleHubspot,
   slack:         handleSlack,

@@ -498,11 +498,11 @@ const AGENT_TOOLS = [
     type: "function",
     function: {
       name: "manage_campaign",
-      description: "Cria, atualiza, pausa ou obtém insights de campanhas de ads (Meta Ads ou Google Ads).",
+      description: "Cria, atualiza, pausa ou obtém insights de campanhas de ads (Meta Ads). Google Ads ainda não disponível.",
       parameters: {
         type: "object",
         properties: {
-          platform: { type: "string", enum: ["meta", "google"], description: "Plataforma de ads" },
+          platform: { type: "string", enum: ["meta"], description: "Plataforma de ads" },
           action: { type: "string", enum: ["create", "pause", "update", "get_insights"], description: "Ação a executar" },
           campaign_data: { type: "object", description: "Dados da campanha (nome, orçamento, público, etc.)" },
         },
@@ -531,11 +531,11 @@ const AGENT_TOOLS = [
     type: "function",
     function: {
       name: "manage_project",
-      description: "Cria, atualiza ou lista tarefas em ferramentas de gerenciamento de projetos (Trello, Notion ou Jira).",
+      description: "Cria, atualiza ou lista tarefas em ferramentas de gerenciamento de projetos (Trello ou Notion). Jira ainda não disponível.",
       parameters: {
         type: "object",
         properties: {
-          platform: { type: "string", enum: ["trello", "notion", "jira"], description: "Plataforma de projetos" },
+          platform: { type: "string", enum: ["trello", "notion"], description: "Plataforma de projetos" },
           action: { type: "string", enum: ["create", "update", "list"], description: "Ação a executar" },
           data: { type: "object", description: "Dados da tarefa (título, descrição, status, etc.)" },
         },
