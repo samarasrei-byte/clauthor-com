@@ -3,7 +3,7 @@ import {
   FileSpreadsheet, BookOpen, Trello, BarChart3,
   TrendingUp, Code, Linkedin, Megaphone,
   Instagram, ShoppingCart, CreditCard, Database,
-  Phone, Slack, type LucideIcon
+  Phone, Slack, FileSignature, type LucideIcon
 } from "lucide-react";
 
 export interface CredentialField {
@@ -206,6 +206,21 @@ export const connectors: ConnectorData[] = [
       { key: "token", label: "Token", placeholder: "Token de autorização", type: "password", required: true },
     ],
     tools: ["create-card", "move-card", "list-boards", "add-comment", "create-checklist", "archive-card"],
+  },
+  {
+    icon: FileSignature,
+    name: "Cobanky",
+    shortDesc: "Crie propostas e contratos com assinatura digital.",
+    longDesc: "Integre com a Cobanky para criar propostas comerciais, gerar contratos com signatários e disparar assinaturas automaticamente via API v1.",
+    category: "Pagamentos",
+    status: "available",
+    integrationKey: "cobanky",
+    developer: "Cobanky",
+    developerUrl: "https://cobanky.com.br/api-docs",
+    fields: [
+      { key: "api_key", label: "API Key", placeholder: "ck_live_...", type: "password", required: true },
+    ],
+    tools: ["health", "create-proposal", "get-proposal", "create-contract", "get-contract", "send-contract"],
   },
   {
     icon: Facebook,
