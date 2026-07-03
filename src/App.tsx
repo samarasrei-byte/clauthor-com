@@ -41,6 +41,7 @@ const CreateAgent = lazyRetry(() => import("./pages/CreateAgent"));
 const CreateWorkforce = lazyRetry(() => import("./pages/CreateWorkforce"));
 const Integrations = lazyRetry(() => import("./pages/Integrations"));
 const MCPServer = lazyRetry(() => import("./pages/MCPServer"));
+const SettingsConnections = lazyRetry(() => import("./pages/SettingsConnections"));
 
 const Auth = lazyRetry(() => import("./pages/Auth"));
 const NotFound = lazyRetry(() => import("./pages/NotFound"));
