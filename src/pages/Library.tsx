@@ -133,6 +133,7 @@ const LibraryPage = () => {
       return;
     }
 
+    // Paid checkout flow (fallback / after trial used)
     const priceTier = agentPriceTiers[slug] || "entry";
     const region = getRegion(lang);
     const price = getPrice(lang, priceTier);
@@ -157,6 +158,22 @@ const LibraryPage = () => {
       setCheckoutData((prev) => prev ? { ...prev, planId } : prev);
     });
   }, [user, navigate, lang, isAdmin]);
+
+  const handleStartTrial = useCallback(async (slug: string, agentName: string) => {
+    if (!user) {
+      navigate("/auth", {
+        state: {
+          signup: true,
+          hireIntent: { type: "agent" as const, label: agentName, slugs: [slug] },
+        },
+      });
+      return;
+    }
+    const result = await startTrial(slug, agentName);
+    if (result) {
+      navigate(`/app/agente/${slug}`);
+    }
+  }, [user, navigate, startTrial]);
 
   const handleApproveCheckout = useCallback((subscriptionId: string) => {
     if (!checkoutData) return;
