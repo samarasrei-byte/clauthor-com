@@ -18,6 +18,8 @@ import { handleCustomApi } from "./integrations/custom-api.ts";
 import { handleStripe } from "./integrations/stripe.ts";
 import { handleFirecrawl } from "./integrations/firecrawl.ts";
 import { handleCobanky } from "./integrations/cobanky.ts";
+import { handleClicksign } from "./integrations/clicksign.ts";
+import { handleDocusign } from "./integrations/docusign.ts";
 
 // ── Interfaces ──────────────────────────────────────────────────────────────
 
@@ -73,6 +75,8 @@ const handlers: Record<string, IntegrationHandler> = {
   stripe:        handleStripe,
   firecrawl:     handleFirecrawl,
   cobanky:       handleCobanky,
+  clicksign:     handleClicksign,
+  docusign:      handleDocusign,
 };
 
 // ── Main router ─────────────────────────────────────────────────────────────
