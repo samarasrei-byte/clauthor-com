@@ -170,6 +170,8 @@ const App = () => (
                   <Route path="/create-agent/classic" element={<CreateAgent />} />
                   <Route path="/integrations" element={<Integrations />} />
                   <Route path="/mcp" element={<MCPServer />} />
+                  <Route path="/settings/connections" element={<SettingsConnections />} />
+
 
                   <Route path="/knowledge-base" element={<KnowledgeBase />} />
                   <Route path="/monix" element={<MonixCommandCenter />} />
