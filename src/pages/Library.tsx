@@ -215,6 +215,31 @@ const LibraryPage = () => {
         </div>
       </motion.section>
 
+      {/* ============ FREE TRIAL BANNER (eligible users only) ============ */}
+      {user && trialEligible && (
+        <motion.section
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/15 via-primary/5 to-background p-6 md:p-8 relative overflow-hidden"
+        >
+          <div className="absolute -top-16 -right-16 w-64 h-64 bg-primary/15 rounded-full blur-3xl pointer-events-none" />
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center gap-4 md:gap-6">
+            <div className="w-12 h-12 rounded-xl bg-primary/20 border border-primary/30 flex items-center justify-center shrink-0">
+              <Zap className="h-6 w-6 text-primary" />
+            </div>
+            <div className="flex-1 space-y-1">
+              <div className="flex items-center gap-2 flex-wrap">
+                <h3 className="font-display text-lg md:text-xl font-bold">7 dias grátis em qualquer agente</h3>
+                <Badge className="bg-primary/20 text-primary border-primary/30 hover:bg-primary/30">Novo</Badge>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Teste o agente que quiser sem cartão de crédito. Escolha abaixo e clique em <strong>"Testar Grátis"</strong>.
+              </p>
+            </div>
+          </div>
+        </motion.section>
+      )}
+
       {/* ============ AI CONCIERGE ============ */}
       <SmartAgentFinder
         agentMeta={Object.fromEntries(
