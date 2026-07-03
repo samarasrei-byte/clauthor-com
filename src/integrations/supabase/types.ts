@@ -2134,6 +2134,42 @@ export type Database = {
           },
         ]
       }
+      linkedin_posts: {
+        Row: {
+          content: string
+          created_at: string
+          error_message: string | null
+          id: string
+          link_url: string | null
+          linkedin_urn: string
+          status: string
+          user_id: string
+          visibility: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          link_url?: string | null
+          linkedin_urn: string
+          status?: string
+          user_id: string
+          visibility?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          link_url?: string | null
+          linkedin_urn?: string
+          status?: string
+          user_id?: string
+          visibility?: string
+        }
+        Relationships: []
+      }
       marketplace_agents: {
         Row: {
           agent_id: string

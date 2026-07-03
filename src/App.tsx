@@ -42,6 +42,7 @@ const CreateWorkforce = lazyRetry(() => import("./pages/CreateWorkforce"));
 const Integrations = lazyRetry(() => import("./pages/Integrations"));
 const MCPServer = lazyRetry(() => import("./pages/MCPServer"));
 const SettingsConnections = lazyRetry(() => import("./pages/SettingsConnections"));
+const SocialConnections = lazyRetry(() => import("./pages/SocialConnections"));
 
 const Auth = lazyRetry(() => import("./pages/Auth"));
 const NotFound = lazyRetry(() => import("./pages/NotFound"));
@@ -171,6 +172,7 @@ const App = () => (
                   <Route path="/integrations" element={<Integrations />} />
                   <Route path="/mcp" element={<MCPServer />} />
                   <Route path="/settings/connections" element={<SettingsConnections />} />
+                  <Route path="/settings/social" element={<SocialConnections />} />
 
 
                   <Route path="/knowledge-base" element={<KnowledgeBase />} />
