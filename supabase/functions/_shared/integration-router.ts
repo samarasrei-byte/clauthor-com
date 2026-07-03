@@ -17,6 +17,7 @@ import { handleTrello } from "./integrations/trello.ts";
 import { handleCustomApi } from "./integrations/custom-api.ts";
 import { handleStripe } from "./integrations/stripe.ts";
 import { handleFirecrawl } from "./integrations/firecrawl.ts";
+import { handleCobanky } from "./integrations/cobanky.ts";
 
 // ── Interfaces ──────────────────────────────────────────────────────────────
 
@@ -71,6 +72,7 @@ const handlers: Record<string, IntegrationHandler> = {
   custom_api:    handleCustomApi,
   stripe:        handleStripe,
   firecrawl:     handleFirecrawl,
+  cobanky:       handleCobanky,
 };
 
 // ── Main router ─────────────────────────────────────────────────────────────
