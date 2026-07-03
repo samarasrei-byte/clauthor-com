@@ -59,6 +59,7 @@ const SECTION_ICONS: { key: string; icon: LucideIcon; label: string }[] = [
 export default function AgentCardExpanded({
   slug, name, icon: Icon, tier, priceTier, capabilities, triggers,
   social, colors, lang, isAdmin, isHiring, onHire, onPreview, onNavigate, tierColor,
+  onTrial, trialAvailable = false,
 }: AgentCardExpandedProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [openSection, setOpenSection] = useState<string | null>(null);
