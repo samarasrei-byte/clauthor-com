@@ -223,6 +223,39 @@ export const connectors: ConnectorData[] = [
     tools: ["health", "create-proposal", "get-proposal", "create-contract", "get-contract", "send-contract"],
   },
   {
+    icon: FileSignature,
+    name: "ClickSign",
+    shortDesc: "Envie documentos e colete assinaturas eletrônicas.",
+    longDesc: "Integre com a ClickSign para criar documentos, adicionar signatários e disparar notificações de assinatura por e-mail, WhatsApp ou SMS.",
+    category: "Assinatura",
+    status: "available",
+    integrationKey: "clicksign",
+    developer: "ClickSign",
+    developerUrl: "https://developers.clicksign.com",
+    fields: [
+      { key: "access_token", label: "Access Token", placeholder: "Token de acesso da API", type: "password", required: true },
+      { key: "base_url", label: "Base URL", placeholder: "https://app.clicksign.com/api/v1 (ou sandbox)" },
+    ],
+    tools: ["create-document", "get-document", "add-signer", "add-signer-to-document", "send-notifications", "cancel-document"],
+  },
+  {
+    icon: FileSignature,
+    name: "DocuSign",
+    shortDesc: "Crie envelopes e gerencie assinaturas globalmente.",
+    longDesc: "Integre com a DocuSign eSignature API para criar envelopes, enviar para signatários, acompanhar status e cancelar quando necessário.",
+    category: "Assinatura",
+    status: "available",
+    integrationKey: "docusign",
+    developer: "DocuSign",
+    developerUrl: "https://developers.docusign.com/docs/esign-rest-api/",
+    fields: [
+      { key: "access_token", label: "Access Token (OAuth)", placeholder: "Token OAuth 2.0", type: "password", required: true },
+      { key: "account_id", label: "Account ID", placeholder: "API Account ID (do userinfo)", required: true },
+      { key: "base_uri", label: "Base URI", placeholder: "https://demo.docusign.net/restapi ou https://na3.docusign.net/restapi" },
+    ],
+    tools: ["create-envelope", "send-envelope", "get-envelope", "list-recipients", "void-envelope"],
+  },
+  {
     icon: Facebook,
     name: "Facebook",
     shortDesc: "Gerencie mensagens e posts no Facebook.",
@@ -282,4 +315,4 @@ export const connectors: ConnectorData[] = [
   },
 ];
 
-export const categories = ["Todas", "Comunicação", "Social", "Ads", "CRM", "Produtividade", "E-commerce", "Pagamentos", "Automação", "Desenvolvimento"];
+export const categories = ["Todas", "Comunicação", "Social", "Ads", "CRM", "Produtividade", "E-commerce", "Pagamentos", "Assinatura", "Automação", "Desenvolvimento"];
