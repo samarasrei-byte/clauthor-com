@@ -3,7 +3,7 @@ import {
   FileSpreadsheet, BookOpen, Trello, BarChart3,
   TrendingUp, Code, Linkedin, Megaphone,
   Instagram, ShoppingCart, CreditCard, Database,
-  Phone, Slack, type LucideIcon
+  Phone, Slack, FileSignature, type LucideIcon
 } from "lucide-react";
 
 export interface CredentialField {
