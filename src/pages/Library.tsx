@@ -67,6 +67,25 @@ const LibraryPage = () => {
   const lang = i18n.language?.split("-")[0] || "pt";
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const { startTrial, loading: trialLoading } = useTrialAgent();
+
+  // One-shot trial eligibility check (cached). true = user has never used trial.
+  const { data: trialEligible = false } = useQuery({
+    queryKey: ["trial-eligibility", user?.id],
+    queryFn: async () => {
+      if (!user) return false;
+      const { data } = await supabase
+        .from("subscriptions")
+        .select("id")
+        .eq("user_id", user.id)
+        .like("stripe_subscription_id", "TRIAL-%")
+        .limit(1)
+        .maybeSingle();
+      return !data;
+    },
+    enabled: !!user,
+    staleTime: 60_000,
+  });
 
   // Total agent count
   const totalAgents = useMemo(() => WORKFORCE.reduce((sum, dept) => 
