@@ -1305,6 +1305,7 @@ async function appendAudit(
       _user_id: userId,
     });
   } catch (err) { console.error("Audit append failed:", err); }
+}
 
 async function loadRecentMemory(adminClient: any, tenantId: string, userId: string, agentId: string, limit: number = 5): Promise<string> {
   // Load all memory types: conversation, semantic, procedural, delegation

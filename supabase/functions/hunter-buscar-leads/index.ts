@@ -54,35 +54,34 @@ Deno.serve(async (req) => {
       mensagem: `Execução iniciada para "${campaign.nome}" (limite: ${campaign.limite_diario}/dia)`,
     });
 
-    // Fallback: no PhantomBuster or no LinkedIn session - generate demo leads
+    // Guard: PhantomBuster and LinkedIn cookie are required for real prospecting.
+    // Previously this branch silently inserted fake demo leads — now we fail loudly.
     if (!pbKey || !searchAgentId || !cookie) {
-      const demoLeads = Array.from({ length: Math.min(5, campaign.limite_diario) }, (_, i) => ({
-        campaign_id,
-        user_id: user.id,
-        nome_completo: `Lead Demo ${i + 1}`,
-        cargo: campaign.cargo_alvo || "Gerente",
-        empresa: `Empresa ${i + 1}`,
-        linkedin_url: `https://linkedin.com/in/demo-lead-${i + 1}`,
-        status: "novo",
-      }));
+      const missing: string[] = [];
+      if (!pbKey) missing.push("PhantomBuster API key");
+      if (!searchAgentId) missing.push("PhantomBuster search agent ID");
+      if (!cookie) missing.push("LinkedIn session cookie");
 
-      await supabase.from("hunter_leads").insert(demoLeads);
-      await supabase.from("hunter_campaigns").update({
-        total_leads: (campaign.total_leads || 0) + demoLeads.length,
-        last_run_at: new Date().toISOString(),
-      }).eq("id", campaign_id);
+      const message = `Configuração incompleta: faltam ${missing.join(", ")}. Configure em Hunter → Configurações antes de executar campanhas.`;
 
       await supabase.from("hunter_logs").insert({
         campaign_id,
         user_id: user.id,
-        tipo: "info",
-        mensagem: !cookie
-          ? "LinkedIn não conectado - gerados leads de demonstração."
-          : "Modo demo - gerados leads de demonstração.",
+        tipo: "erro",
+        mensagem: message,
       });
 
-      return jsonResponse({ success: true, demo: true, leads_count: demoLeads.length });
+      return jsonResponse(
+        {
+          success: false,
+          error: "configuration_incomplete",
+          message,
+          missing,
+        },
+        422,
+      );
     }
+
 
     // Real PhantomBuster Search call
     try {
