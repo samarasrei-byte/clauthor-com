@@ -107,3 +107,9 @@ verify_jwt = true
 
 [functions.mcp-server]
 verify_jwt = false
+
+[functions.clicksign-webhook]
+verify_jwt = false
+
+[functions.docusign-webhook]
+verify_jwt = false
