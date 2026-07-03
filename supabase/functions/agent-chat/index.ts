@@ -531,11 +531,11 @@ const AGENT_TOOLS = [
     type: "function",
     function: {
       name: "manage_project",
-      description: "Cria, atualiza ou lista tarefas em ferramentas de gerenciamento de projetos (Trello, Notion ou Jira).",
+      description: "Cria, atualiza ou lista tarefas em ferramentas de gerenciamento de projetos (Trello ou Notion). Jira ainda não disponível.",
       parameters: {
         type: "object",
         properties: {
-          platform: { type: "string", enum: ["trello", "notion", "jira"], description: "Plataforma de projetos" },
+          platform: { type: "string", enum: ["trello", "notion"], description: "Plataforma de projetos" },
           action: { type: "string", enum: ["create", "update", "list"], description: "Ação a executar" },
           data: { type: "object", description: "Dados da tarefa (título, descrição, status, etc.)" },
         },
