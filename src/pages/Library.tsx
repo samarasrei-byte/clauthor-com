@@ -32,6 +32,8 @@ import { WORKFORCE } from "@/data/workforceArchitecture";
 import { CLAUTHOR_ORG_CHART, CLAUTHOR_AGENT_COUNT } from "@/data/clauthorOrgChart";
 import { Skeleton } from "@/components/ui/skeleton";
 import AgentCardExpanded from "@/components/library/AgentCardExpanded";
+import { useTrialAgent } from "@/hooks/useTrialAgent";
+import { useQuery } from "@tanstack/react-query";
 
 // Department colors
 const DEPT_COLORS: Record<string, { gradient: string; border: string; text: string; bg: string }> = {
