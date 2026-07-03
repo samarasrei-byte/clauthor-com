@@ -2853,6 +2853,51 @@ export type Database = {
           },
         ]
       }
+      signed_documents: {
+        Row: {
+          created_at: string
+          document_name: string | null
+          external_id: string
+          id: string
+          payload: Json | null
+          provider: string
+          signed_at: string | null
+          signer_email: string | null
+          signer_name: string | null
+          status: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          document_name?: string | null
+          external_id: string
+          id?: string
+          payload?: Json | null
+          provider: string
+          signed_at?: string | null
+          signer_email?: string | null
+          signer_name?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          document_name?: string | null
+          external_id?: string
+          id?: string
+          payload?: Json | null
+          provider?: string
+          signed_at?: string | null
+          signer_email?: string | null
+          signer_name?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       squad_agents: {
         Row: {
           agent_id: string
