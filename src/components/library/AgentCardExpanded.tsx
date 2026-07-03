@@ -189,21 +189,35 @@ export default function AgentCardExpanded({
                   Acessar
                 </Button>
               ) : (
-                <Button
-                  size="sm"
-                  className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1"
-                  disabled={isHiring}
-                  onClick={onHire}
-                >
-                  {isHiring ? (
-                    <Loader2 className="h-3 w-3 animate-spin" />
-                  ) : (
-                    <>
-                      <Sparkles className="h-3 w-3" />
-                      Contratar
-                    </>
+                <div className="flex flex-col items-end gap-1">
+                  {trialAvailable && onTrial && (
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1 border-primary/40 text-primary hover:bg-primary/10"
+                      disabled={isHiring}
+                      onClick={(e) => { e.stopPropagation(); onTrial(); }}
+                    >
+                      <Zap className="h-3 w-3" />
+                      Testar Grátis
+                    </Button>
                   )}
-                </Button>
+                  <Button
+                    size="sm"
+                    className="h-7 px-3 rounded-lg text-[10px] font-bold uppercase tracking-wider gap-1"
+                    disabled={isHiring}
+                    onClick={onHire}
+                  >
+                    {isHiring ? (
+                      <Loader2 className="h-3 w-3 animate-spin" />
+                    ) : (
+                      <>
+                        <Sparkles className="h-3 w-3" />
+                        Contratar
+                      </>
+                    )}
+                  </Button>
+                </div>
               )}
             </div>
           </div>
