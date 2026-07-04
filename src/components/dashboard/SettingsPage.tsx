@@ -1,6 +1,6 @@
 import { useState, lazy, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings, User, Users, CreditCard, MessageSquare, Bot, Link2, Database, Plug } from "lucide-react";
+import { Settings, User, Users, CreditCard, MessageSquare, Bot, Database } from "lucide-react";
 import HelpTooltip from "@/components/HelpTooltip";
 import AgentSettings from "./AgentSettings";
 import UserProfileEditor from "./UserProfileEditor";
