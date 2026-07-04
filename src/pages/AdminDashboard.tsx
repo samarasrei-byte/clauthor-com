@@ -11,7 +11,7 @@ import {
   CheckCircle, XCircle, Clock, BarChart3, Shield,
   Activity, Coins, ListOrdered, Mail, Phone,
   Building, Zap, LayoutDashboard, CreditCard, Store,
-  Wallet, Sparkles, Crown, Settings, Key, Gift, ChevronDown, Cpu, Scale
+  Wallet, Sparkles, Crown, Settings, Key, Gift, ChevronDown, Cpu, Scale, PlayCircle
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger, SheetClose } from "@/components/ui/sheet";
 import { useTranslation } from "react-i18next";
@@ -38,6 +38,7 @@ import AdminRevenuePanel from "@/components/dashboard/AdminRevenuePanel";
 import AdminSubscriptionsTable from "@/components/dashboard/AdminSubscriptionsTable";
 import AdminSignupMetrics from "@/components/dashboard/AdminSignupMetrics";
 import AdminCostsDashboard from "@/components/dashboard/AdminCostsDashboard";
+import AdminSimulationsPanel from "@/components/dashboard/AdminSimulationsPanel";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -192,6 +193,7 @@ const AdminDashboard = () => {
     { id: "coupons", label: t("dashboard.coupons", { defaultValue: "Cupons" }), icon: Gift, group: t("dashboard.system", { defaultValue: "Sistema" }) },
     { id: "signup-metrics", label: "Signups", icon: Users, badge: undefined, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "ai-costs", label: "Custos IA", icon: Cpu, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
+    { id: "simulations", label: "Simulações", icon: PlayCircle, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: t("dashboard.system", { defaultValue: "Sistema" }) },
     { id: "vertical-advocacia", label: "Vertical: Advocacia", icon: Scale, group: "Verticais" },
   ];
@@ -324,6 +326,7 @@ const AdminDashboard = () => {
               {activeTab === "subscriptions" && <AdminSubscriptionsTable allSubscriptions={allSubscriptions} locale={locale} />}
               {activeTab === "signup-metrics" && <AdminSignupMetrics allProfiles={allProfiles} locale={locale} />}
               {activeTab === "ai-costs" && <AdminCostsDashboard />}
+              {activeTab === "simulations" && <AdminSimulationsPanel />}
             </motion.div>
           </AnimatePresence>
         </div>
