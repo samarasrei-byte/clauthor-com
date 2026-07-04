@@ -14,6 +14,7 @@ import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
 import SendGridSetupGuide from "@/components/dashboard/SendGridSetupGuide";
 import LinkedInSetupGuide from "@/components/dashboard/LinkedInSetupGuide";
 import MetaAdsSetupGuide from "@/components/dashboard/MetaAdsSetupGuide";
+import IntegrationsTutorial from "@/components/integrations/IntegrationsTutorial";
 
 const SORT_OPTIONS = [
   { value: "popular", label: "Mais populares" },
@@ -110,6 +111,11 @@ const IntegrationsPage = () => {
           Conecte os agentes Clauthor aos seus aplicativos, arquivos e serviços. Os conectores permitem que seus agentes acessem dados e executem ações em ferramentas externas.
         </p>
       </motion.div>
+
+      {/* Interactive tutorial */}
+      <IntegrationsTutorial />
+
+
 
       {/* Search & Filters */}
       <motion.div
