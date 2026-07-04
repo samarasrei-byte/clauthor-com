@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import AdminCommandCenter from "@/components/dashboard/AdminCommandCenter";
+import { LiveActivityFeed } from "@/components/dashboard/LiveActivityFeed";
 import AdminUserManager from "@/components/dashboard/AdminUserManager";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
 import PaymentsPanel from "@/components/dashboard/PaymentsPanel";
@@ -302,13 +303,16 @@ const AdminDashboard = () => {
               {activeTab === "openclaw" && <OpenClawStatusPanel />}
 
               {activeTab === "overview" && (
-                <AdminCommandCenter
-                  usersCount={usersCount} activeAgents={activeAgents} totalRevenue={totalRevenue}
-                  pendingCount={pendingAgents.length} totalTokensUsed={totalTokensUsed} totalExecutions={totalExecutions}
-                  successRate={successRate} waitingCount={waitingCount} allAgents={allAgents} allCredits={allCredits}
-                  allProfiles={allProfiles} executionLogs={executionLogs} revenueData={revenueData}
-                  planDistribution={planDistribution} onTabChange={setActiveTab}
-                />
+                <div className="space-y-6">
+                  <AdminCommandCenter
+                    usersCount={usersCount} activeAgents={activeAgents} totalRevenue={totalRevenue}
+                    pendingCount={pendingAgents.length} totalTokensUsed={totalTokensUsed} totalExecutions={totalExecutions}
+                    successRate={successRate} waitingCount={waitingCount} allAgents={allAgents} allCredits={allCredits}
+                    allProfiles={allProfiles} executionLogs={executionLogs} revenueData={revenueData}
+                    planDistribution={planDistribution} onTabChange={setActiveTab}
+                  />
+                  <LiveActivityFeed />
+                </div>
               )}
 
               {activeTab === "payments" && <PaymentsPanel totalRevenue={totalRevenue} subscriptionCount={allSubscriptions.length} />}
