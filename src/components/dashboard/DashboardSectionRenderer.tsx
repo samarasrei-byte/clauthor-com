@@ -30,6 +30,7 @@ const IntelligenceHub = lazy(() => import("./IntelligenceHub"));
 const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const FilesLibrary = lazy(() => import("./FilesLibrary"));
 const BenchmarksPanel = lazy(() => import("./BenchmarksPanel"));
+const WorkspaceHub = lazy(() => import("./WorkspaceHub"));
 
 interface Props {
   activeSection: string;
