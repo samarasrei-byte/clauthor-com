@@ -532,6 +532,80 @@ const SocialConnections = () => {
         ))}
       </div>
 
+      {/* OAuth Debug Panel */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+        <Card className="border-border/60">
+          <CardContent className="p-4 sm:p-5 space-y-3">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Bug className="w-4 h-4 text-primary" />
+                <h2 className="text-sm font-semibold">Debug OAuth</h2>
+                <Badge variant="outline" className="text-[10px]">{oauthLogs.length} evento{oauthLogs.length !== 1 ? "s" : ""}</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    navigator.clipboard.writeText(JSON.stringify(oauthLogs, null, 2));
+                    toast.success("Logs copiados");
+                  }}
+                  disabled={oauthLogs.length === 0}
+                >
+                  <Copy className="w-3.5 h-3.5 mr-1.5" /> Copiar
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => setOauthLogs([])} disabled={oauthLogs.length === 0}>
+                  <Trash2 className="w-3.5 h-3.5 mr-1.5" /> Limpar
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => setDebugOpen((v) => !v)}>
+                  {debugOpen ? "Ocultar" : "Mostrar"}
+                </Button>
+              </div>
+            </div>
+            {debugOpen && (
+              <div className="max-h-80 overflow-y-auto rounded-md border border-border/60 bg-muted/20 divide-y divide-border/40 text-xs font-mono">
+                {oauthLogs.length === 0 ? (
+                  <div className="p-4 text-muted-foreground text-center">
+                    Nenhum evento ainda. Clique em <b>Conectar</b> em um provedor para começar a rastrear state, callback URL e mensagens do provedor.
+                  </div>
+                ) : (
+                  oauthLogs.map((l, idx) => (
+                    <div key={idx} className="p-2.5 space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span
+                          className={
+                            l.level === "error"
+                              ? "text-destructive font-semibold"
+                              : l.level === "success"
+                              ? "text-emerald-600 font-semibold"
+                              : l.level === "warn"
+                              ? "text-amber-600 font-semibold"
+                              : "text-primary font-semibold"
+                          }
+                        >
+                          [{l.level.toUpperCase()}]
+                        </span>
+                        {l.provider && <Badge variant="outline" className="text-[10px] h-4 px-1">{l.provider}</Badge>}
+                        <span className="text-foreground">{l.event}</span>
+                        <span className="text-muted-foreground ml-auto">
+                          {new Date(l.ts).toLocaleTimeString("pt-BR")}
+                        </span>
+                      </div>
+                      {l.detail && (
+                        <pre className="whitespace-pre-wrap break-all text-[11px] text-muted-foreground bg-background/60 rounded p-2 border border-border/40">
+{JSON.stringify(l.detail, null, 2)}
+                        </pre>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+
+
       {/* LinkedIn metrics section */}
       {isLinkedInConnected && (
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
