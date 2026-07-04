@@ -26,8 +26,6 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
 
   const tabs = [
     { id: "agents", label: t("settings.tab_agents", { defaultValue: "Configurações" }), icon: Bot },
-    { id: "credentials", label: t("settings.tab_credentials", { defaultValue: "Conexões" }), icon: Link2 },
-    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug },
     { id: "knowledge", label: t("dashboard.knowledge_base", { defaultValue: "Knowledge Base" }), icon: Database },
     { id: "profile", label: t("settings.tab_profile", { defaultValue: "Meu Perfil" }), icon: User },
     { id: "team", label: t("settings.tab_team", { defaultValue: "Equipe" }), icon: Users },
