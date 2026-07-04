@@ -24,6 +24,7 @@ const PlatformStatsBanner = lazy(() => import("@/components/PlatformStatsBanner"
 const PendingActionsPanel = lazy(() => import("./PendingActionsPanel").then(m => ({ default: m.PendingActionsPanel })));
 const ClientCommandCenter = lazy(() => import("./ClientCommandCenter"));
 const DashboardSkeleton = lazy(() => import("./DashboardSkeleton"));
+const LiveActivityFeed = lazy(() => import("./LiveActivityFeed").then(m => ({ default: m.LiveActivityFeed })));
 
 interface Props {
   loadingAgents: boolean;
