@@ -284,25 +284,12 @@ const AdminSimulationsPanel = () => {
                   variant="outline"
                   className="gap-1.5 border-primary/30 text-primary"
                   disabled={analyzing}
-                  onClick={async () => {
-                    setAnalyzing(true);
-                    setAnalysis(null);
-                    try {
-                      const { data, error } = await supabase.functions.invoke("analyze-objections", {
-                        body: { agentSlug: drillSlug, contexts: drillRows.map((r) => r.context) },
-                      });
-                      if (error) throw error;
-                      setAnalysis(data);
-                    } catch (e) {
-                      console.error(e);
-                      toast.error("Análise falhou. Tente novamente.");
-                    } finally {
-                      setAnalyzing(false);
-                    }
-                  }}
+                  onClick={() => runAnalysis(!!analysis)}
                 >
                   {analyzing ? (
                     <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Analisando…</>
+                  ) : analysis ? (
+                    <><Sparkles className="h-3.5 w-3.5" /> Refazer análise</>
                   ) : (
                     <><Sparkles className="h-3.5 w-3.5" /> Analisar objeções com IA</>
                   )}
