@@ -35,9 +35,17 @@ interface Simulation {
 
 const PERIOD_DAYS: Record<Period, number | null> = { "7d": 7, "30d": 30, "90d": 90, all: null };
 
+interface Analysis {
+  patterns?: { label: string; count: number; examples: string[] }[];
+  objections?: string[];
+  recommendations?: { title: string; action: string; impact: string }[];
+}
+
 const AdminSimulationsPanel = () => {
   const [period, setPeriod] = useState<Period>("30d");
   const [drillSlug, setDrillSlug] = useState<string | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [analysis, setAnalysis] = useState<Analysis | null>(null);
 
   const sinceIso = (() => {
     const d = PERIOD_DAYS[period];
