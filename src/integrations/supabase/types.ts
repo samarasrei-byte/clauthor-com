@@ -2898,6 +2898,42 @@ export type Database = {
         }
         Relationships: []
       }
+      simulations: {
+        Row: {
+          agent_name: string | null
+          agent_slug: string
+          context: string
+          converted_to_hire: boolean
+          created_at: string
+          id: string
+          projection: Json | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_name?: string | null
+          agent_slug: string
+          context: string
+          converted_to_hire?: boolean
+          created_at?: string
+          id?: string
+          projection?: Json | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_name?: string | null
+          agent_slug?: string
+          context?: string
+          converted_to_hire?: boolean
+          created_at?: string
+          id?: string
+          projection?: Json | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       squad_agents: {
         Row: {
           agent_id: string
