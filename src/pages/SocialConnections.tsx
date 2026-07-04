@@ -266,21 +266,21 @@ const SocialConnections = () => {
   }, [isLinkedInConnected, isMetaConnected, linkedin?.profile?.name, metaStatus?.connection]);
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
+    <div className="container mx-auto max-w-7xl px-6 lg:px-10 py-10 lg:py-12 space-y-10">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
+      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-5 h-5 text-primary" />
           <Badge variant="outline" className="text-xs">OAuth por usuário</Badge>
         </div>
-        <h1 className="text-3xl font-semibold tracking-tight">Conexões Sociais</h1>
-        <p className="text-muted-foreground max-w-2xl">
+        <h1 className="text-4xl lg:text-5xl font-semibold tracking-tight">Conexões Sociais</h1>
+        <p className="text-base text-muted-foreground max-w-3xl leading-relaxed">
           Cada cliente conecta sua própria conta. Os tokens ficam isolados por usuário e criptografados no cofre — a CLAUTHOR nunca compartilha credenciais entre workspaces.
         </p>
       </motion.div>
 
       {/* Provider cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {providerStatus.map((p, i) => (
           <motion.div
             key={p.key}
