@@ -148,7 +148,7 @@ const AdminSimulationsPanel = () => {
     },
   });
 
-  // Auto-load cache when drill opens
+  // Auto-load cache when drill opens; auto-regenerate if stale (>7d) or sample size drifted (>20%)
   useEffect(() => {
     if (!drillSlug) {
       setAnalysis(null);
@@ -158,19 +158,28 @@ const AdminSimulationsPanel = () => {
     (async () => {
       const { data } = await supabase
         .from("simulation_insights")
-        .select("analysis, updated_at")
+        .select("analysis, updated_at, sample_size")
         .eq("agent_slug", drillSlug)
         .eq("period", period)
         .maybeSingle();
       if (data) {
         setAnalysis(data.analysis as Analysis);
         setCachedAt(data.updated_at);
+        const ageDays = (Date.now() - new Date(data.updated_at).getTime()) / 86400_000;
+        const currentSize = drillRows?.length ?? 0;
+        const drift = data.sample_size > 0
+          ? Math.abs(currentSize - data.sample_size) / data.sample_size
+          : 0;
+        if (currentSize >= 2 && (ageDays > 7 || drift > 0.2)) {
+          runAnalysis(true);
+        }
       } else {
         setAnalysis(null);
         setCachedAt(null);
       }
     })();
-  }, [drillSlug, period]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [drillSlug, period, drillRows?.length]);
 
 
   const totals = data?.reduce(
