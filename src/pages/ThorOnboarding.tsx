@@ -426,6 +426,75 @@ const ThorOnboarding = () => {
     );
   };
 
+  // ── Upload de documento (PDF/DOC/TXT) ────────────
+  const handleUploadDocument = async (file: File) => {
+    if (file.size > 10 * 1024 * 1024) {
+      await thorSays("Esse arquivo é grande demais (>10MB). Tenta um PDF menor ou envie o site.");
+      return;
+    }
+
+    addMessage({ role: "user", content: `📎 ${file.name}` });
+    setStep("analyzing");
+
+    for (let i = 0; i < ANALYSIS_STEPS.length; i++) {
+      setAnalysisStep(i);
+      setAnalysisProgress(((i + 1) / ANALYSIS_STEPS.length) * 100);
+      await new Promise(r => setTimeout(r, 400));
+    }
+
+    // Converte para base64
+    const data_base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result.split(",")[1] || "");
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
+
+    let analysis: SiteAnalysis;
+    try {
+      const { data, error } = await supabase.functions.invoke("document-parser", {
+        body: { filename: file.name, mime: file.type || "application/octet-stream", data_base64 },
+      });
+      if (error) throw error;
+      const d = data?.data;
+      if (d?.companyName) {
+        analysis = {
+          company: d.companyName,
+          industry: d.industry || "serviços",
+          services: d.products ? d.products.split(/[,;\n]/).map((s: string) => s.trim()).filter(Boolean).slice(0, 5) : ["serviços gerais"],
+          faqs: d.commonQuestions ? d.commonQuestions.split(/[,;\n]/).map((s: string) => s.trim()).filter(Boolean).slice(0, 5) : ["preços", "horários", "localização"],
+          city: d.contactInfo || undefined,
+        };
+      } else {
+        throw new Error("no data");
+      }
+    } catch {
+      const base = file.name.replace(/\.[^.]+$/, "");
+      analysis = {
+        company: base.charAt(0).toUpperCase() + base.slice(1),
+        industry: "serviços",
+        services: ["serviços especializados", "consultoria", "atendimento"],
+        faqs: ["preços", "horários de atendimento", "agendamento"],
+      };
+    }
+
+    setSiteData(analysis);
+    setStep("analysis_done");
+
+    await thorSays(
+      `Perfeito. Já processei seu documento. ✅\n\nIdentifiquei que a **${analysis.company}** atua no setor de ${analysis.industry}.\n\n**Serviços principais:**\n${analysis.services.map(s => `• ${s}`).join("\n")}\n\nProváveis dúvidas dos clientes:\n${analysis.faqs.map(f => `• ${f}`).join("\n")}`
+    );
+
+    setStep("pain");
+    await thorSays(
+      "Agora me conta uma coisa.\n\nQual desses desafios acontece mais no seu negócio?",
+      { type: "options", options: PAIN_OPTIONS }
+    );
+  };
+
   // ── Handle pain selection ────────────────────────
   const handlePainSelect = async (painId: string) => {
     const pain = PAIN_OPTIONS.find(p => p.id === painId);
