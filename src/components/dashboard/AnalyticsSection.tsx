@@ -17,7 +17,7 @@ const AnalyticsSection = ({ chartData, totalExecutions, recentLogs, locale, onGo
 
   return (
     <div className="space-y-6">
-      <h2 className="font-display text-xl font-bold">{t("dashboard.analytics")}</h2>
+      
       <div className="glass-card rounded-2xl p-6">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
