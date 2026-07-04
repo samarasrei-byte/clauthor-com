@@ -433,7 +433,7 @@ const SocialConnections = () => {
             <Sparkles className="w-4 h-4 text-primary" />
             <h2 className="text-lg font-semibold">Métricas LinkedIn — últimos 30 dias</h2>
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <Card><CardContent className="p-4">
               <div className="text-2xl font-semibold">{linkedin?.metrics?.total_published ?? 0}</div>
               <div className="text-xs text-muted-foreground mt-1">Publicados no total</div>
