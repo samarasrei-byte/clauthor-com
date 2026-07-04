@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Bot, Plus, Sparkles, Play, Pause, Zap, Eye, Handshake, Rocket, MessageSquare, Clock, TrendingUp, Info } from "lucide-react";
+import { Bot, Plus, Play, Pause, Zap, Eye, Handshake, Rocket, MessageSquare, Clock, TrendingUp, Info } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";

@@ -5,7 +5,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
-import { TrendingUp, TrendingDown, Minus, Sparkles, Users, ShieldCheck } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus, Users, ShieldCheck } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import SEO from "@/components/SEO";
 
 type MetricKey =

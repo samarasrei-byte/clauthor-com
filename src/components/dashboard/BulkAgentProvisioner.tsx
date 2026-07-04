@@ -1,10 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Rocket, Upload, Sparkles, CheckCircle, Loader2, 
-  ChevronDown, ChevronRight, Users, Bot, Zap,
-  FileJson, FileSpreadsheet, Brain, Shield
-} from "lucide-react";
+import { Rocket, Upload, CheckCircle, Loader2, ChevronDown, ChevronRight, Users, Bot, Zap, FileJson, FileSpreadsheet, Brain, Shield } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

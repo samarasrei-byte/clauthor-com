@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Dna, Fingerprint, Activity, Sparkles, Bot, TrendingUp, TrendingDown, Zap, Shield, Clock } from "lucide-react";
+import { Dna, Fingerprint, Activity, Bot, TrendingUp, TrendingDown, Zap, Shield, Clock } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";

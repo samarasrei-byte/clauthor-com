@@ -1,10 +1,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { 
-  TrendingUp, TrendingDown, AlertTriangle, Zap, Clock, 
-  CreditCard, Users, Brain, Sparkles, ArrowUpRight, ShieldAlert,
-  Activity, BarChart3, Target
-} from "lucide-react";
+import { TrendingUp, TrendingDown, AlertTriangle, Zap, Clock, CreditCard, Users, Brain, ArrowUpRight, ShieldAlert, Activity, BarChart3, Target } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";

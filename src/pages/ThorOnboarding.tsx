@@ -5,12 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import {
-  Globe, ArrowRight, Bot, Sparkles, MessageSquare, Users,
-  Clock, AlertTriangle, Calendar, HeadphonesIcon, Zap,
-  Building2, ShoppingCart, BookOpen, CheckCircle2, Loader2,
-  Phone, Upload, ChevronRight, Star, Shield, X
-} from "lucide-react";
+import { Globe, ArrowRight, Bot, MessageSquare, Users, Clock, AlertTriangle, Calendar, HeadphonesIcon, Zap, Building2, ShoppingCart, BookOpen, CheckCircle2, Loader2, Phone, Upload, ChevronRight, Star, Shield, X } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import thorOrb from "@/assets/thor-orb.png";

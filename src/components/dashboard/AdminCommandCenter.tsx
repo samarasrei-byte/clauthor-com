@@ -5,14 +5,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Users, Bot, DollarSign, TrendingUp, Coins, Zap,
-  CheckCircle, ListOrdered, Globe, Cpu, Signal,
-  Clock, Eye,
-  Shield, Rocket, Wallet, ShieldCheck, Send, Loader2,
-  RotateCcw, Sparkles, Activity, Server, Database,
-  MessageSquare, Store, BarChart3, Radio, Brain
-} from "lucide-react";
+import { Users, Bot, DollarSign, TrendingUp, Coins, Zap, CheckCircle, ListOrdered, Globe, Cpu, Signal, Clock, Eye, Shield, Rocket, Wallet, ShieldCheck, Send, Loader2, RotateCcw, Activity, Server, Database, MessageSquare, Store, BarChart3, Radio, Brain } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useTranslation } from "react-i18next";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from "recharts";
 import AnimatedCounter from "./AnimatedCounter";

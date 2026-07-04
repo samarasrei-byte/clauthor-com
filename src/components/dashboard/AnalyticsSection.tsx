@@ -1,4 +1,5 @@
-import { BarChart3, Sparkles } from "lucide-react";
+import { BarChart3 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { useTranslation } from "react-i18next";

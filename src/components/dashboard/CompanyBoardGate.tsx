@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Building2, Sparkles, ArrowRight, Clock, Bot, Globe, ClipboardPaste } from "lucide-react";
+import { Building2, ArrowRight, Clock, Bot, Globe, ClipboardPaste } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 

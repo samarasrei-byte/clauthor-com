@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { AlertTriangle, ArrowRight, Building2, Sparkles } from "lucide-react";
+import { AlertTriangle, ArrowRight, Building2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";

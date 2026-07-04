@@ -9,10 +9,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import {
-  Search, CheckCircle2, XCircle, Zap, PlayCircle,
-  Sparkles, KeyRound, ExternalLink,
-} from "lucide-react";
+import { Search, CheckCircle2, XCircle, Zap, PlayCircle, KeyRound, ExternalLink } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { connectors, type ConnectorData } from "@/components/integrations/connectorData";
 
 /**

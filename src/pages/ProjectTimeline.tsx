@@ -1,10 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Users, Clock, Zap, CheckCircle2, AlertTriangle,
-  Rocket, Code2, Shield, ChevronDown, ChevronUp, ArrowLeft,
-  Sparkles, Target, Bot, DollarSign, Calendar
-} from "lucide-react";
+import { Users, Clock, Zap, CheckCircle2, AlertTriangle, Rocket, Code2, Shield, ChevronDown, ChevronUp, ArrowLeft, Target, Bot, DollarSign, Calendar } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import APICredentialEditor from "@/components/timeline/APICredentialEditor";

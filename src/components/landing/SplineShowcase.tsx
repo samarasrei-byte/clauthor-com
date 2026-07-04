@@ -3,7 +3,8 @@ import { SplineScene } from "@/components/ui/splite";
 import { Card } from "@/components/ui/card";
 import { Spotlight } from "@/components/ui/spotlight";
 import { useTranslation } from "react-i18next";
-import { Sparkles, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 

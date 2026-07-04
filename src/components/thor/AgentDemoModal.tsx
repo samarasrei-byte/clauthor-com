@@ -4,7 +4,8 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
+import { X, CheckCircle2, ArrowRight } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 
 export type DemoType = "sdr" | "support" | "hr" | "content" | "data" | "generic";
 

@@ -2,12 +2,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import {
-  Building2, ShoppingCart, Code, Briefcase, HeartHandshake,
-  GraduationCap, Factory, Rocket, ArrowRight, ArrowLeft,
-  Sparkles, Users, Target, Shield, X, Zap, Bot,
-  CheckCircle2,
-} from "lucide-react";
+import { Building2, ShoppingCart, Code, Briefcase, HeartHandshake, GraduationCap, Factory, Rocket, ArrowRight, ArrowLeft, Users, Target, Shield, X, Zap, Bot, CheckCircle2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useNavigate } from "react-router-dom";
 
 interface OnboardingWizardProps {

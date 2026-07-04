@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Target, Headphones, Users, PenTool, BarChart3, Sparkles,
-  Bot, ArrowRight, CheckCircle2, Rocket, X
-} from "lucide-react";
+import { Target, Headphones, Users, PenTool, BarChart3, Bot, ArrowRight, CheckCircle2, Rocket, X } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";

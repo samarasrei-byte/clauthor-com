@@ -1,14 +1,5 @@
-import {
-  Users, Building2, Briefcase, BarChart3, Star, FileText,
-  ShoppingCart, Shield, Wrench, Megaphone, Target, Palette,
-  Video, Globe, ClipboardList, GraduationCap, Bot, Zap,
-  CheckCircle2, TrendingUp, Coins, Network, Lightbulb, ThumbsUp,
-  Crosshair, PenTool, Rocket, Store, Calendar, Award, Handshake,
-  Search, UserPlus, Repeat, Hash, Gavel, ShieldCheck, Scale,
-  Package, Factory, Receipt, Cog, ClipboardCheck, Truck,
-  MessageSquare, Phone, Sparkles, Code, Briefcase as BriefcaseIcon,
-  HeartHandshake, DollarSign
-} from "lucide-react";
+import { Users, Building2, Briefcase, BarChart3, Star, FileText, ShoppingCart, Shield, Wrench, Megaphone, Target, Palette, Video, Globe, ClipboardList, GraduationCap, Bot, Zap, CheckCircle2, TrendingUp, Coins, Network, Lightbulb, ThumbsUp, Crosshair, PenTool, Rocket, Store, Calendar, Award, Handshake, Search, UserPlus, Repeat, Hash, Gavel, ShieldCheck, Scale, Package, Factory, Receipt, Cog, ClipboardCheck, Truck, MessageSquare, Phone, Code, Briefcase as BriefcaseIcon, HeartHandshake, DollarSign } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import type { LucideIcon } from "lucide-react";
 
 export interface DepartmentAgent {

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ShoppingCart, Headphones, DollarSign, Megaphone, ArrowRight, Bot, Sparkles } from "lucide-react";
+import { ShoppingCart, Headphones, DollarSign, Megaphone, ArrowRight, Bot } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
 import thorPhoto from "@/assets/kaelis-ai.webp";

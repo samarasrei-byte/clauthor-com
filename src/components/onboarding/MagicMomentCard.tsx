@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Users, FileText, BarChart3, ArrowRight, X, Clock } from "lucide-react";
+import { Users, FileText, BarChart3, ArrowRight, X, Clock } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { supabase } from "@/integrations/supabase/client";

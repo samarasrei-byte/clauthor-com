@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, Settings, Zap, CheckCircle2, Sparkles } from "lucide-react";
+import { Bot, Settings, Zap, CheckCircle2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 
 interface DashboardWelcomeProps {
   userName?: string;

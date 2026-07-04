@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Rocket, Network, Target, Mic, Store, Sparkles } from "lucide-react";
+import { Rocket, Network, Target, Mic, Store } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 
 const features: Record<string, { title: string; icon: typeof Rocket; desc: string; color: string }> = {
   "mission-control": {

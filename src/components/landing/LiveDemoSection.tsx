@@ -5,7 +5,8 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Play, Terminal, CheckCircle2, Building2, Users, Mail, Sparkles } from "lucide-react";
+import { ArrowRight, Play, Terminal, CheckCircle2, Building2, Users, Mail } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Link } from "react-router-dom";
 
 type DemoPhase = "idle" | "running" | "done";

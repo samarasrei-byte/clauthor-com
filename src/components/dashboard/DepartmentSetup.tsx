@@ -5,12 +5,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import {
-  CheckCircle, Shield, Loader2, ArrowRight, Sparkles,
-  MessageSquare, Mail, Globe, Target, FileSpreadsheet,
-  Linkedin, Phone, BarChart3, X, ChevronDown, ChevronUp,
-  Zap, AlertTriangle
-} from "lucide-react";
+import { CheckCircle, Shield, Loader2, ArrowRight, MessageSquare, Mail, Globe, Target, FileSpreadsheet, Linkedin, Phone, BarChart3, X, ChevronDown, ChevronUp, Zap, AlertTriangle } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { useQuery } from "@tanstack/react-query";

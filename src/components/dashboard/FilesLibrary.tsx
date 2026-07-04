@@ -1,11 +1,8 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Upload, Search, FileVideo, FileAudio, FileImage, FileText,
-  Palette, Sparkles, Layers, File as FileIcon, Trash2, Copy, FolderOpen,
-  HardDrive, Filter, Grid3x3, List, Download, ArrowUpRight, Plus, Cloud,
-} from "lucide-react";
+import { Upload, Search, FileVideo, FileAudio, FileImage, FileText, Palette, Layers, File as FileIcon, Trash2, Copy, FolderOpen, HardDrive, Filter, Grid3x3, List, Download, ArrowUpRight, Plus, Cloud } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";

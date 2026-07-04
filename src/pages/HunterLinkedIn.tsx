@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Linkedin, CheckCircle2, ArrowRight, Loader2, LogOut, Shield, Zap, Lock, Sparkles } from "lucide-react";
+import { Linkedin, CheckCircle2, ArrowRight, Loader2, LogOut, Shield, Zap, Lock } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { toast } from "sonner";
 import HunterStepper from "@/components/hunter/HunterStepper";
 

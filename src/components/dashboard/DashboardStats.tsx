@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Bot, Zap, CheckCircle, TrendingUp, Coins, Clock, Target, DollarSign, Sparkles } from "lucide-react";
+import { Bot, Zap, CheckCircle, TrendingUp, Coins, Clock, Target, DollarSign } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useCredits } from "@/hooks/useCredits";
 import { useTokenUsage } from "@/hooks/useCredits";
 import { Progress } from "@/components/ui/progress";

@@ -4,11 +4,8 @@ import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import {
-  Rocket, Eye, CheckCircle, XCircle, Brain, Sparkles, Clock,
-  AlertTriangle, Activity, Zap, Target, ChevronRight, Wand2,
-  ThumbsUp, ThumbsDown, MessageSquare, Bot
-} from "lucide-react";
+import { Rocket, Eye, CheckCircle, XCircle, Brain, Clock, AlertTriangle, Activity, Zap, Target, ChevronRight, Wand2, ThumbsUp, ThumbsDown, MessageSquare, Bot } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

@@ -8,10 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import {
-  Phone, Upload, FileAudio, Loader2, CheckCircle2, Mic,
-  Clock, Brain, Sparkles, Plus, Save
-} from "lucide-react";
+import { Phone, Upload, FileAudio, Loader2, CheckCircle2, Mic, Clock, Brain, Plus, Save } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import HelpTooltip from "@/components/HelpTooltip";

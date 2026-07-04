@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, MessageSquare, Users, Target, ChevronRight, Zap } from "lucide-react";
+import { MessageSquare, Users, Target, ChevronRight, Zap } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useTranslation } from "react-i18next";
 
 interface QuickWin {

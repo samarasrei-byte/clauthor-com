@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { TrendingUp, TrendingDown, DollarSign, Clock, Users, Sparkles, ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
+import { TrendingUp, TrendingDown, DollarSign, Clock, Users, ArrowUpRight, ArrowDownRight, Minus } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import { useQuery } from "@tanstack/react-query";

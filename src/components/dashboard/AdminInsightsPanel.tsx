@@ -4,12 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import {
-  Brain, TrendingDown, TrendingUp, AlertTriangle, Zap,
-  Users, Bot, DollarSign, Target, Sparkles, Eye,
-  ArrowRight, Shield, Activity, Loader2, RefreshCcw,
-  Flame, Snowflake, Clock, BarChart3, Lightbulb
-} from "lucide-react";
+import { Brain, TrendingDown, TrendingUp, AlertTriangle, Zap, Users, Bot, DollarSign, Target, Eye, ArrowRight, Shield, Activity, Loader2, RefreshCcw, Flame, Snowflake, Clock, BarChart3, Lightbulb } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { supabase } from "@/integrations/supabase/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";

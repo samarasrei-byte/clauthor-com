@@ -1,10 +1,7 @@
 import { useState, useMemo, lazy, Suspense } from "react";
 import { motion } from "framer-motion";
-import {
-  Building2, Users, Bot, Shield, Plug, BookOpen,
-  ChevronRight, Sparkles, Crown, Plus, Loader2,
-  BarChart3, Briefcase, Globe, FileText, Package
-} from "lucide-react";
+import { Building2, Users, Bot, Shield, Plug, BookOpen, ChevronRight, Crown, Plus, Loader2, BarChart3, Briefcase, Globe, FileText, Package } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";

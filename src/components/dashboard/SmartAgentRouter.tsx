@@ -1,9 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Send, Sparkles, Bot, ArrowRight, Zap, Brain,
-  CheckCircle2, Users, GitBranch, Rocket
-} from "lucide-react";
+import { Send, Bot, ArrowRight, Zap, Brain, CheckCircle2, Users, GitBranch, Rocket } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";

@@ -6,10 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
-import {
-  ArrowLeft, Check, Copy, Plug, Terminal, Zap, Shield,
-  Workflow, Boxes, BookOpen, Sparkles,
-} from "lucide-react";
+import { ArrowLeft, Check, Copy, Plug, Terminal, Zap, Shield, Workflow, Boxes, BookOpen } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 
 /**
  * /mcp — Setup do CLAUTHOR MCP Server

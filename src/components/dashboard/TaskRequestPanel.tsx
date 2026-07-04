@@ -1,11 +1,8 @@
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Sparkles, MessageSquare, Compass, Target, Send, ChevronRight,
-  Zap, Bot, ArrowRight, Lightbulb, Building2, TrendingUp, Users,
-  Headphones, Megaphone, DollarSign, ShoppingCart, FileText
-} from "lucide-react";
+import { MessageSquare, Compass, Target, Send, ChevronRight, Zap, Bot, ArrowRight, Lightbulb, Building2, TrendingUp, Users, Headphones, Megaphone, DollarSign, ShoppingCart, FileText } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";

@@ -3,11 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { 
-  Bot, Sparkles, Zap, MessageSquare, Activity, 
-  Eye, Settings2, Play, Pause, MoreHorizontal,
-  TrendingUp, Clock, Users2, Loader2
-} from "lucide-react";
+import { Bot, Zap, MessageSquare, Activity, Eye, Settings2, Play, Pause, MoreHorizontal, TrendingUp, Clock, Users2, Loader2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";

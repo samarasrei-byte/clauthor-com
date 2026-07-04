@@ -6,10 +6,8 @@ import {
   CommandInput, CommandItem, CommandList,
 } from "@/components/ui/command";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import {
-  Terminal, Bot, LayoutDashboard, Library, CreditCard, Users,
-  Sparkles, ArrowRight, Rocket, Plus, Settings, MessageSquare,
-} from "lucide-react";
+import { Terminal, Bot, LayoutDashboard, Library, CreditCard, Users, ArrowRight, Rocket, Plus, Settings, MessageSquare } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useTranslation } from "react-i18next";
 
 const agentQuickList = [

@@ -6,11 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Progress } from "@/components/ui/progress";
-import {
-  Building2, ArrowRight, ArrowLeft, Sparkles, CheckCircle,
-  MessageSquare, Package, Mic, Shield, Loader2,
-  Globe, Wand2, FileText, ClipboardPaste, Zap, Brain
-} from "lucide-react";
+import { Building2, ArrowRight, ArrowLeft, CheckCircle, MessageSquare, Package, Mic, Shield, Loader2, Globe, Wand2, FileText, ClipboardPaste, Zap, Brain } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";

@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle, Circle, ChevronRight, Shield, Database, Link2, Sparkles, Bot } from "lucide-react";
+import { CheckCircle, Circle, ChevronRight, Shield, Database, Link2, Bot } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";

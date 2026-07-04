@@ -1,44 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Scale,
-  Brain,
-  ShieldCheck,
-  GitBranch,
-  Clock4,
-  PenLine,
-  Target,
-  Wallet,
-  MessageCircle,
-  Sparkles,
-  ArrowRight,
-  CheckCircle2,
-  Send,
-  Loader2,
-  X,
-  Workflow,
-  Lock,
-  Gauge,
-  ScrollText,
-  Briefcase,
-  HeartHandshake,
-  Search,
-  RefreshCcw,
-  FileSignature,
-  ShieldAlert,
-  BadgeCheck,
-  Zap,
-  TrendingUp,
-  Coins,
-  Timer,
-  AlertTriangle,
-  Flame,
-  Users,
-  XCircle,
-  Trophy,
-  Calculator,
-} from "lucide-react";
+import { Scale, Brain, ShieldCheck, GitBranch, Clock4, PenLine, Target, Wallet, MessageCircle, ArrowRight, CheckCircle2, Send, Loader2, X, Workflow, Lock, Gauge, ScrollText, Briefcase, HeartHandshake, Search, RefreshCcw, FileSignature, ShieldAlert, BadgeCheck, Zap, TrendingUp, Coins, Timer, AlertTriangle, Flame, Users, XCircle, Trophy, Calculator } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

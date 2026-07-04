@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { PartyPopper, Rocket, CheckCircle2, Sparkles } from "lucide-react";
+import { PartyPopper, Rocket, CheckCircle2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import FlowProgressBar from "./FlowProgressBar";
 import { useTranslation } from "react-i18next";
 

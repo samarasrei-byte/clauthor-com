@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bot, User, Zap, CheckCircle2, ArrowRight, Sparkles, Minimize2, Maximize2, X } from "lucide-react";
+import { Bot, User, Zap, CheckCircle2, ArrowRight, Minimize2, Maximize2, X } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Link } from "react-router-dom";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useTranslation } from "react-i18next";

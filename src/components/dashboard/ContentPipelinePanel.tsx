@@ -7,10 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Instagram, Youtube, Sparkles, Calendar, CheckCircle2,
-  Clock, Zap, FileText, Bot, Loader2, RefreshCw
-} from "lucide-react";
+import { Instagram, Youtube, Calendar, CheckCircle2, Clock, Zap, FileText, Bot, Loader2, RefreshCw } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
 import HelpTooltip from "@/components/HelpTooltip";

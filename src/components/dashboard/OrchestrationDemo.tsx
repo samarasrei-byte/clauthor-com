@@ -1,10 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  GitBranch, Bot, Zap, CheckCircle, ArrowRight, Play,
-  RotateCcw, Sparkles, Target, Clock, ArrowRightLeft,
-  Mail, CheckSquare, BarChart3, Calendar, Loader2
-} from "lucide-react";
+import { GitBranch, Bot, Zap, CheckCircle, ArrowRight, Play, RotateCcw, Target, Clock, ArrowRightLeft, Mail, CheckSquare, BarChart3, Calendar, Loader2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";

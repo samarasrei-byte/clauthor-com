@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Bot, MessageSquare, Sparkles, ShoppingCart } from "lucide-react";
+import { Bot, MessageSquare, ShoppingCart } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";

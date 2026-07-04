@@ -3,11 +3,8 @@ import { SEO } from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Bot, Users, Layers3, ArrowRight, CheckCircle2, Zap, Sparkles,
-  ShoppingCart, Building2, Target, Clock, DollarSign, Shield,
-  Workflow, Star, HelpCircle, ChevronRight
-} from "lucide-react";
+import { Bot, Users, Layers3, ArrowRight, CheckCircle2, Zap, ShoppingCart, Building2, Target, Clock, DollarSign, Shield, Workflow, Star, HelpCircle, ChevronRight } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useTranslation } from "react-i18next";
 import { formatPrice, getRegion } from "@/lib/pricing";
 

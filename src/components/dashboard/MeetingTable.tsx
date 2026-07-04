@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Volume2, Mic, MicOff, HelpCircle, X, MousePointerClick, AtSign, MessageSquare, Sparkles } from "lucide-react";
+import { Volume2, Mic, MicOff, HelpCircle, X, MousePointerClick, AtSign, MessageSquare } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 
 interface TableAgent {
   id: string;

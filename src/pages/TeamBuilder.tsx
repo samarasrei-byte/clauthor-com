@@ -4,12 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  Bot, X, Plus, Minus, Search, ShoppingCart, ArrowRight,
-  Layers3, CheckCircle2, Sparkles, Trash2, ChevronDown, Filter,
-  Zap, Target, BookOpen, AlertTriangle, BarChart3, Lightbulb,
-  Database, FileOutput, HelpCircle, ChevronRight
-} from "lucide-react";
+import { Bot, X, Plus, Minus, Search, ShoppingCart, ArrowRight, Layers3, CheckCircle2, Trash2, ChevronDown, Filter, Zap, Target, BookOpen, AlertTriangle, BarChart3, Lightbulb, Database, FileOutput, HelpCircle, ChevronRight } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";

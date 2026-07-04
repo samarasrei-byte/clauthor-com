@@ -4,12 +4,8 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  Users, Package, Wrench, Building2, ArrowRight, Check,
-  Phone, MessageSquare, Briefcase, BarChart3, Star, FileText,
-  ShoppingCart, Shield, Sparkles, Plus, Flame, ChevronLeft,
-  Megaphone, Target, Palette, Video, Globe, ClipboardList, Truck, GraduationCap, Bot
-} from "lucide-react";
+import { Users, Package, Wrench, Building2, ArrowRight, Check, Phone, MessageSquare, Briefcase, BarChart3, Star, FileText, ShoppingCart, Shield, Plus, Flame, ChevronLeft, Megaphone, Target, Palette, Video, Globe, ClipboardList, Truck, GraduationCap, Bot } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "./SquadConsultant";
 import DepartmentMiniChat from "./DepartmentMiniChat";
