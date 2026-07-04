@@ -119,8 +119,11 @@ const DashboardOverview = ({
                   onSubmitTask={onSubmitTask}
                   onSelectAgent={onSelectAgentBySlug}
                 />
+                <p className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground/70 px-1">
+                  225+ agentes · 20 squads · 20 depts · 99.9% uptime
+                </p>
 
-                <PlatformStatsBanner variant="minimal" />
+
 
                 <ExecutionHealthBanner onGoToWarRoom={() => onSetActiveSection("warroom")} />
 
