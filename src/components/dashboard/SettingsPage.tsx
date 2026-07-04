@@ -60,21 +60,12 @@ const SettingsPage = ({ billingContent, defaultTab = "agents" }: SettingsPagePro
           <AgentSettings />
         </TabsContent>
 
-        <TabsContent value="credentials">
-          <CredentialsHub />
-        </TabsContent>
-
-        <TabsContent value="integrations">
-          <Suspense fallback={<SectionLoader />}>
-            <Integrations />
-          </Suspense>
-        </TabsContent>
-
         <TabsContent value="knowledge">
           <Suspense fallback={<SectionLoader />}>
             <KnowledgeBase />
           </Suspense>
         </TabsContent>
+
 
         <TabsContent value="profile">
           <UserProfileEditor />
