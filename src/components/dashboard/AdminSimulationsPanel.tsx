@@ -47,6 +47,27 @@ const AdminSimulationsPanel = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [cachedAt, setCachedAt] = useState<string | null>(null);
+  const [applyingIdx, setApplyingIdx] = useState<number | null>(null);
+  const [appliedIdx, setAppliedIdx] = useState<Set<number>>(new Set());
+
+  const applyRecommendation = async (idx: number, rec: NonNullable<Analysis["recommendations"]>[number]) => {
+    if (!drillSlug) return;
+    setApplyingIdx(idx);
+    try {
+      const { data, error } = await supabase.functions.invoke("apply-recommendation", {
+        body: { agentSlug: drillSlug, recommendation: rec },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast.success(`Recomendação aplicada · v${data.version}`);
+      setAppliedIdx((s) => new Set(s).add(idx));
+    } catch (e) {
+      console.error(e);
+      toast.error("Falha ao aplicar recomendação.");
+    } finally {
+      setApplyingIdx(null);
+    }
+  };
 
   const runAnalysis = async (force = false) => {
     if (!drillSlug || !drillRows || drillRows.length < 2) return;
