@@ -320,6 +320,7 @@ const SocialConnections = () => {
       if (error) throw error;
     },
     onSuccess: () => {
+      setStatus("meta", "idle");
       toast.success("Meta desconectado");
       qc.invalidateQueries({ queryKey: ["meta-status"] });
     },
