@@ -177,7 +177,7 @@ const SimulationDialog = ({ open, onOpenChange, agentSlug, agentName, onHire }: 
                 Nova simulação
               </Button>
               {onHire && (
-                <Button onClick={onHire} className="flex-1">
+                <Button onClick={handleHire} className="flex-1">
                   Contratar agora <TrendingUp className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
               )}
