@@ -420,20 +420,49 @@ const SocialConnections = () => {
                     </div>
                   </div>
 
-                  {p.isConnected ? (
-                    <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/10">
-                      <CheckCircle2 className="w-3 h-3 mr-1" /> Conectado
-                    </Badge>
-                  ) : p.status === "pending_credentials" ? (
-                    <Badge variant="outline" className="text-amber-600 border-amber-500/30">
-                      <AlertTriangle className="w-3 h-3 mr-1" /> Aguardando setup
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline">
-                      <XCircle className="w-3 h-3 mr-1" /> Desconectado
-                    </Badge>
-                  )}
+                  {(() => {
+                    const ui = uiStatus[p.key];
+                    if (ui?.status === "connecting" && !p.isConnected) {
+                      return (
+                        <Badge variant="outline" className="text-primary border-primary/30">
+                          <Loader2 className="w-3 h-3 mr-1 animate-spin" /> Conectando…
+                        </Badge>
+                      );
+                    }
+                    if (ui?.status === "error" && !p.isConnected) {
+                      return (
+                        <Badge variant="outline" className="text-destructive border-destructive/40">
+                          <AlertTriangle className="w-3 h-3 mr-1" /> Erro
+                        </Badge>
+                      );
+                    }
+                    if (p.isConnected) {
+                      return (
+                        <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/10">
+                          <CheckCircle2 className="w-3 h-3 mr-1" /> Conectado
+                        </Badge>
+                      );
+                    }
+                    if (p.status === "pending_credentials") {
+                      return (
+                        <Badge variant="outline" className="text-amber-600 border-amber-500/30">
+                          <AlertTriangle className="w-3 h-3 mr-1" /> Aguardando setup
+                        </Badge>
+                      );
+                    }
+                    return (
+                      <Badge variant="outline">
+                        <XCircle className="w-3 h-3 mr-1" /> Desconectado
+                      </Badge>
+                    );
+                  })()}
                 </div>
+
+                {uiStatus[p.key]?.status === "error" && uiStatus[p.key]?.message && (
+                  <div className="rounded-md border border-destructive/30 bg-destructive/5 p-2.5 text-xs text-destructive break-words">
+                    <span className="font-semibold">Mensagem do provedor:</span> {uiStatus[p.key]?.message}
+                  </div>
+                )}
 
                 {/* Permissions */}
                 <div className="space-y-2">
