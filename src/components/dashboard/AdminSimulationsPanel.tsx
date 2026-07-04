@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, TrendingUp, PlayCircle, Target, Eye, Sparkles, AlertTriangle, Lightbulb } from "lucide-react";
+import { Loader2, TrendingUp, PlayCircle, Target, Eye, Sparkles, AlertTriangle, Lightbulb, Check, Wand2 } from "lucide-react";
 import { toast } from "sonner";
 
 type Period = "7d" | "30d" | "90d" | "all";
@@ -47,6 +47,27 @@ const AdminSimulationsPanel = () => {
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
   const [cachedAt, setCachedAt] = useState<string | null>(null);
+  const [applyingIdx, setApplyingIdx] = useState<number | null>(null);
+  const [appliedIdx, setAppliedIdx] = useState<Set<number>>(new Set());
+
+  const applyRecommendation = async (idx: number, rec: NonNullable<Analysis["recommendations"]>[number]) => {
+    if (!drillSlug) return;
+    setApplyingIdx(idx);
+    try {
+      const { data, error } = await supabase.functions.invoke("apply-recommendation", {
+        body: { agentSlug: drillSlug, recommendation: rec },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast.success(`Recomendação aplicada · v${data.version}`);
+      setAppliedIdx((s) => new Set(s).add(idx));
+    } catch (e) {
+      console.error(e);
+      toast.error("Falha ao aplicar recomendação.");
+    } finally {
+      setApplyingIdx(null);
+    }
+  };
 
   const runAnalysis = async (force = false) => {
     if (!drillSlug || !drillRows || drillRows.length < 2) return;
@@ -347,11 +368,29 @@ const AdminSimulationsPanel = () => {
                   <ul className="space-y-1.5 text-sm">
                     {analysis.recommendations.map((r, i) => (
                       <li key={i} className="rounded-lg bg-background/60 p-2">
-                        <div className="flex items-center gap-2 mb-0.5">
-                          <span className="font-semibold">{r.title}</span>
-                          <Badge variant="outline" className="text-[10px] capitalize">{r.impact}</Badge>
+                        <div className="flex items-center justify-between gap-2 mb-0.5">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <span className="font-semibold truncate">{r.title}</span>
+                            <Badge variant="outline" className="text-[10px] capitalize shrink-0">{r.impact}</Badge>
+                          </div>
+                          <Button
+                            size="sm"
+                            variant={appliedIdx.has(i) ? "outline" : "default"}
+                            className="h-7 gap-1 shrink-0"
+                            disabled={applyingIdx !== null || appliedIdx.has(i)}
+                            onClick={() => applyRecommendation(i, r)}
+                          >
+                            {applyingIdx === i ? (
+                              <><Loader2 className="h-3 w-3 animate-spin" /> Aplicando…</>
+                            ) : appliedIdx.has(i) ? (
+                              <><Check className="h-3 w-3" /> Aplicada</>
+                            ) : (
+                              <><Wand2 className="h-3 w-3" /> Aplicar</>
+                            )}
+                          </Button>
                         </div>
                         <p className="text-xs text-muted-foreground">{r.action}</p>
+
                       </li>
                     ))}
                   </ul>

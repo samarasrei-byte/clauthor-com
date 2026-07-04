@@ -510,6 +510,42 @@ export type Database = {
         }
         Relationships: []
       }
+      agent_prompt_versions: {
+        Row: {
+          agent_slug: string
+          created_at: string
+          created_by: string | null
+          id: string
+          instructions: string | null
+          reason: string | null
+          source: string
+          system_prompt: string
+          version: number
+        }
+        Insert: {
+          agent_slug: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          instructions?: string | null
+          reason?: string | null
+          source?: string
+          system_prompt: string
+          version: number
+        }
+        Update: {
+          agent_slug?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          instructions?: string | null
+          reason?: string | null
+          source?: string
+          system_prompt?: string
+          version?: number
+        }
+        Relationships: []
+      }
       agent_reports: {
         Row: {
           agent_id: string | null
