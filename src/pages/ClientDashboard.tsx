@@ -41,6 +41,7 @@ import { agentIcons } from "@/data/libraryAgentData";
 import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
 import SectionLoader from "@/components/ui/section-loader";
 import PlatformStatsBanner from "@/components/PlatformStatsBanner";
+import AmbientThorCard from "@/components/dashboard/AmbientThorCard";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
@@ -611,7 +612,12 @@ const ClientDashboard = () => {
                 <PlatformStatsBanner />
 
                 {activeSection === "overview" && (
-                  <DashboardOverview
+                  <>
+                    <AmbientThorCard
+                      onOpenOmnix={() => setActiveSection("omnix")}
+                      onOpenLibrary={() => setActiveSection("library")}
+                    />
+                    <DashboardOverview
                     loadingAgents={loadingAgents}
                     boardCount={boardCount}
                     agents={agents}
@@ -635,6 +641,7 @@ const ClientDashboard = () => {
                     onSubmitTask={handleSubmitTask}
                     onSelectAgentBySlug={handleSelectAgentBySlug}
                   />
+                  </>
                 )}
 
                 <DashboardSectionRenderer
