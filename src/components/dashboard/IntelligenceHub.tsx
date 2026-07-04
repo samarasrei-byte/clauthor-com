@@ -32,16 +32,7 @@ const IntelligenceHub = ({
 
   return (
     <div className="space-y-4">
-      <div>
-        <h2 className="font-display text-xl font-bold">
-          {t("dashboard.intelligence_hub", { defaultValue: "Inteligência" })}
-        </h2>
-        <p className="text-sm text-muted-foreground mt-1">
-          {t("dashboard.intelligence_hub_subtitle", {
-            defaultValue: "Relatórios, War Room ao vivo e visão preditiva em um único lugar.",
-          })}
-        </p>
-      </div>
+
 
       <Tabs value={tab} onValueChange={setTab}>
         <TabsList className="bg-muted/30 p-1">
