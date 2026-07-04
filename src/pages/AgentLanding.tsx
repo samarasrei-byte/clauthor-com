@@ -90,6 +90,7 @@ const AgentLanding = () => {
   const { slug } = useParams<{ slug: string }>();
   const { isAdmin } = useAuth();
   const navigate = useNavigate();
+  const [simOpen, setSimOpen] = useState(false);
   const agent = getAgentBySlug(slug || "");
 
   if (!agent) {
