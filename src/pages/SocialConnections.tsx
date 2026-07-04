@@ -90,8 +90,8 @@ const PROVIDERS: ProviderDef[] = [
     brand: "text-[#E4405F]",
     Icon: MetaLogo,
     permissions: ["Publicar em Página FB", "Publicar no Instagram Business", "Ler insights"],
-    status: "pending_credentials",
-    helpText: "Requer META_APP_ID/SECRET + app review na Meta (2-6 semanas). O cliente precisa de Página FB + Instagram Business Account vinculado.",
+    status: "ready",
+    helpText: "Conecte sua conta Meta pessoal. O app listará automaticamente as Páginas do Facebook e contas Instagram Business vinculadas.",
   },
 ];
 
@@ -123,21 +123,37 @@ const SocialConnections = () => {
     refetchOnWindowFocus: false,
   });
 
-  // Trata callback OAuth LinkedIn (query params ?code=&state=)
+  const { data: metaStatus } = useQuery<{ connected: boolean; connection: any }>({
+    queryKey: ["meta-status"],
+    queryFn: async () => {
+      const { data, error } = await supabase.functions.invoke("meta-oauth", { body: { action: "status" } });
+      if (error) throw error;
+      return data as { connected: boolean; connection: any };
+    },
+    enabled: !!user,
+    refetchOnWindowFocus: false,
+  });
+
+  // Trata callback OAuth (LinkedIn e Meta) via query params ?code=&state=
   useEffect(() => {
     const url = new URL(window.location.href);
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
     if (!code || !state || !user) return;
+    const isMeta = state.startsWith(`${user.id}:`) && (sessionStorage.getItem("oauth_provider") === "meta");
+    const provider = isMeta ? "meta-oauth" : "hunter-linkedin-oauth";
+    const label = isMeta ? "Meta" : "LinkedIn";
+    const invalidateKey = isMeta ? "meta-status" : "linkedin-metrics";
     (async () => {
       try {
         const redirect_uri = window.location.origin + "/settings/social";
-        const { error } = await supabase.functions.invoke("hunter-linkedin-oauth", {
+        const { error } = await supabase.functions.invoke(provider, {
           body: { action: "callback", code, redirect_uri },
         });
         if (error) throw error;
-        toast.success("LinkedIn conectado com sucesso!");
-        qc.invalidateQueries({ queryKey: ["linkedin-metrics"] });
+        toast.success(`${label} conectado com sucesso!`);
+        qc.invalidateQueries({ queryKey: [invalidateKey] });
+        sessionStorage.removeItem("oauth_provider");
         window.history.replaceState({}, "", "/settings/social");
       } catch (e) {
         toast.error("Falha ao concluir conexão: " + ((e as Error).message || "erro desconhecido"));
@@ -165,6 +181,31 @@ const SocialConnections = () => {
     onSuccess: () => {
       toast.success("LinkedIn desconectado");
       qc.invalidateQueries({ queryKey: ["linkedin-metrics"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
+  const connectMeta = useMutation({
+    mutationFn: async () => {
+      const redirect_uri = window.location.origin + "/settings/social";
+      sessionStorage.setItem("oauth_provider", "meta");
+      const { data, error } = await supabase.functions.invoke("meta-oauth", {
+        body: { action: "authorize", redirect_uri },
+      });
+      if (error) throw error;
+      window.location.href = (data as { url: string }).url;
+    },
+    onError: (e: Error) => toast.error(e.message || "Falha ao iniciar OAuth Meta"),
+  });
+
+  const disconnectMeta = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.functions.invoke("meta-oauth", { body: { action: "disconnect" } });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Meta desconectado");
+      qc.invalidateQueries({ queryKey: ["meta-status"] });
     },
     onError: (e: Error) => toast.error(e.message),
   });
@@ -206,15 +247,23 @@ const SocialConnections = () => {
   };
 
   const isLinkedInConnected = !!linkedin?.connected && !!linkedin?.token_valid;
+  const isMetaConnected = !!metaStatus?.connected;
 
   const providerStatus = useMemo(() => {
     return PROVIDERS.map((p) => {
       if (p.key === "linkedin") {
         return { ...p, isConnected: isLinkedInConnected, subtitle: linkedin?.profile?.name || "" };
       }
+      if (p.key === "meta") {
+        const c = metaStatus?.connection;
+        const parts: string[] = [];
+        if (c?.pages?.length) parts.push(`${c.pages.length} página${c.pages.length > 1 ? "s" : ""}`);
+        if (c?.instagram_accounts?.length) parts.push(`${c.instagram_accounts.length} IG`);
+        return { ...p, isConnected: isMetaConnected, subtitle: c?.profile_name ? `${c.profile_name}${parts.length ? " • " + parts.join(" · ") : ""}` : "" };
+      }
       return { ...p, isConnected: false, subtitle: "" };
     });
-  }, [isLinkedInConnected, linkedin?.profile?.name]);
+  }, [isLinkedInConnected, isMetaConnected, linkedin?.profile?.name, metaStatus?.connection]);
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
@@ -299,6 +348,21 @@ const SocialConnections = () => {
                   ) : p.key === "linkedin" ? (
                     <Button size="sm" onClick={() => connectLinkedIn.mutate()} disabled={connectLinkedIn.isPending}>
                       {connectLinkedIn.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <ExternalLink className="w-3.5 h-3.5 mr-1.5" />}
+                      Conectar
+                    </Button>
+                  ) : p.key === "meta" && p.isConnected ? (
+                    <>
+                      <Button size="sm" variant="outline" onClick={() => testConnection(p.key)} disabled={testingProvider === p.key}>
+                        {testingProvider === p.key ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Activity className="w-3.5 h-3.5 mr-1.5" />}
+                        Testar
+                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => disconnectMeta.mutate()} disabled={disconnectMeta.isPending}>
+                        Desconectar
+                      </Button>
+                    </>
+                  ) : p.key === "meta" ? (
+                    <Button size="sm" onClick={() => connectMeta.mutate()} disabled={connectMeta.isPending}>
+                      {connectMeta.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <ExternalLink className="w-3.5 h-3.5 mr-1.5" />}
                       Conectar
                     </Button>
                   ) : (

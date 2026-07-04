@@ -2334,6 +2334,57 @@ export type Database = {
         }
         Relationships: []
       }
+      meta_connections: {
+        Row: {
+          access_token: string
+          connected_at: string
+          created_at: string
+          expires_at: string | null
+          granted_scopes: string[] | null
+          id: string
+          instagram_accounts: Json | null
+          meta_user_id: string | null
+          pages: Json | null
+          profile_avatar_url: string | null
+          profile_name: string | null
+          token_type: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token: string
+          connected_at?: string
+          created_at?: string
+          expires_at?: string | null
+          granted_scopes?: string[] | null
+          id?: string
+          instagram_accounts?: Json | null
+          meta_user_id?: string | null
+          pages?: Json | null
+          profile_avatar_url?: string | null
+          profile_name?: string | null
+          token_type?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string
+          connected_at?: string
+          created_at?: string
+          expires_at?: string | null
+          granted_scopes?: string[] | null
+          id?: string
+          instagram_accounts?: Json | null
+          meta_user_id?: string | null
+          pages?: Json | null
+          profile_avatar_url?: string | null
+          profile_name?: string | null
+          token_type?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       notifications: {
         Row: {
           created_at: string
