@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Plus, Search } from "lucide-react";
+import { Plus, Search, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
