@@ -316,19 +316,19 @@ const SocialConnections = () => {
                 </div>
 
                 {/* Permissions */}
-                <div className="space-y-1.5">
-                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Permissões</div>
-                  <ul className="space-y-1">
+                <div className="space-y-2">
+                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Permissões</div>
+                  <ul className="space-y-1.5">
                     {p.permissions.map((perm) => (
-                      <li key={perm} className="text-xs text-muted-foreground flex items-start gap-1.5">
-                        <span className="text-primary mt-0.5">•</span>
+                      <li key={perm} className="text-sm text-muted-foreground flex items-start gap-2">
+                        <span className="text-primary mt-1">•</span>
                         <span>{perm}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <p className="text-xs text-muted-foreground italic">{p.helpText}</p>
+                <p className="text-sm text-muted-foreground italic leading-relaxed">{p.helpText}</p>
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-2 pt-1">
