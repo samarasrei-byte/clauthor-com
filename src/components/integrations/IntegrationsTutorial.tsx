@@ -29,23 +29,24 @@ const STEPS = [
 ];
 
 const IntegrationsTutorial = () => {
-  const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(true);
   const [step, setStep] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (!localStorage.getItem(STORAGE_KEY)) setVisible(true);
+    // Session-scoped dismissal so tutorial reappears next time user opens Integrações
+    if (sessionStorage.getItem(STORAGE_KEY)) setVisible(false);
   }, []);
 
   const dismiss = () => {
-    localStorage.setItem(STORAGE_KEY, "true");
+    sessionStorage.setItem(STORAGE_KEY, "true");
     setVisible(false);
   };
 
   if (!visible) {
     return (
       <button
-        onClick={() => { localStorage.removeItem(STORAGE_KEY); setStep(0); setVisible(true); }}
+        onClick={() => { sessionStorage.removeItem(STORAGE_KEY); setStep(0); setVisible(true); }}
         className="text-xs text-primary/70 hover:text-primary transition-colors inline-flex items-center gap-1.5"
       >
         <Lightbulb className="h-3.5 w-3.5" />
