@@ -325,22 +325,20 @@ const ClientDashboard = () => {
     // ─── Inteligência: hub unificado (Relatórios + War Room + Preditivo + Neural + Replay + DNA + Benchmarks) ───
     { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3, group: intelligenceGroup },
 
-    // ─── Ferramentas Avançadas: hub unificado (Inbox + Squads + Tarefas + Arquivos + Aprovações + Composer) ───
+    // ─── Ferramentas Avançadas: THOR + Workspace (Empresa + Inbox + Squads + Tarefas + Arquivos + Aprovações + Composer) ───
     { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: advancedGroup },
-    { id: "workspace", label: "Workspace", icon: Layers3, group: advancedGroup },
-    { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: advancedGroup },
+    { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: advancedGroup },
 
-    // ─── Sistema: operações e ajustes (Integrações movido para Configurações) ───
-    { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Operações" }), icon: Radar, badge: pendingTaskCount || undefined, group: systemGroup },
-    { id: "settings", label: t("dashboard.settings"), icon: Settings, group: systemGroup },
+    // ─── Sistema: hub unificado (Operações + Configurações) ───
+    { id: "system", label: t("dashboard.nav_system", { defaultValue: "Sistema" }), icon: Settings, group: systemGroup },
   ];
 
 
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "chat", "agent-chat-active",
-    "intelligence-hub", "omnix", "workspace", "empresa",
-    "operations-center", "settings",
+    "intelligence-hub", "omnix", "workspace",
+    "system",
   ]);
   const sidebarItems: SidebarItem[] = isAdmin
     ? allSidebarItems
