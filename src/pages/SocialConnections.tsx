@@ -331,17 +331,18 @@ const SocialConnections = () => {
             transition={{ delay: i * 0.05 }}
           >
             <Card className="h-full border-border/60 hover:border-primary/40 transition-colors">
-              <CardContent className="p-6 lg:p-7 space-y-5">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
-                      <p.Icon className={`w-6 h-6 ${p.brand}`} />
+              <CardContent className="p-5 sm:p-6 lg:p-7 space-y-5">
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-muted/50 flex items-center justify-center shrink-0">
+                      <p.Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${p.brand}`} />
                     </div>
-                    <div>
-                      <div className="font-semibold text-base">{p.name}</div>
-                      {p.subtitle && <div className="text-xs text-muted-foreground">{p.subtitle}</div>}
+                    <div className="min-w-0">
+                      <div className="font-semibold text-base truncate">{p.name}</div>
+                      {p.subtitle && <div className="text-xs text-muted-foreground truncate">{p.subtitle}</div>}
                     </div>
                   </div>
+
                   {p.isConnected ? (
                     <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/10">
                       <CheckCircle2 className="w-3 h-3 mr-1" /> Conectado
