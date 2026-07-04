@@ -247,15 +247,23 @@ const SocialConnections = () => {
   };
 
   const isLinkedInConnected = !!linkedin?.connected && !!linkedin?.token_valid;
+  const isMetaConnected = !!metaStatus?.connected;
 
   const providerStatus = useMemo(() => {
     return PROVIDERS.map((p) => {
       if (p.key === "linkedin") {
         return { ...p, isConnected: isLinkedInConnected, subtitle: linkedin?.profile?.name || "" };
       }
+      if (p.key === "meta") {
+        const c = metaStatus?.connection;
+        const parts: string[] = [];
+        if (c?.pages?.length) parts.push(`${c.pages.length} página${c.pages.length > 1 ? "s" : ""}`);
+        if (c?.instagram_accounts?.length) parts.push(`${c.instagram_accounts.length} IG`);
+        return { ...p, isConnected: isMetaConnected, subtitle: c?.profile_name ? `${c.profile_name}${parts.length ? " • " + parts.join(" · ") : ""}` : "" };
+      }
       return { ...p, isConnected: false, subtitle: "" };
     });
-  }, [isLinkedInConnected, linkedin?.profile?.name]);
+  }, [isLinkedInConnected, isMetaConnected, linkedin?.profile?.name, metaStatus?.connection]);
 
   return (
     <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
