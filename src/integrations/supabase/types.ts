@@ -2898,6 +2898,36 @@ export type Database = {
         }
         Relationships: []
       }
+      simulation_insights: {
+        Row: {
+          agent_slug: string
+          analysis: Json
+          created_at: string
+          id: string
+          period: string
+          sample_size: number
+          updated_at: string
+        }
+        Insert: {
+          agent_slug: string
+          analysis: Json
+          created_at?: string
+          id?: string
+          period: string
+          sample_size?: number
+          updated_at?: string
+        }
+        Update: {
+          agent_slug?: string
+          analysis?: Json
+          created_at?: string
+          id?: string
+          period?: string
+          sample_size?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       simulations: {
         Row: {
           agent_name: string | null

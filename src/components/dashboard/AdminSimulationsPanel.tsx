@@ -1,7 +1,7 @@
 /**
  * AdminSimulationsPanel — Funil simulação → contratação por agente + drill-down.
  */
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -46,6 +46,53 @@ const AdminSimulationsPanel = () => {
   const [drillSlug, setDrillSlug] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [cachedAt, setCachedAt] = useState<string | null>(null);
+
+  const runAnalysis = async (force = false) => {
+    if (!drillSlug || !drillRows || drillRows.length < 2) return;
+    setAnalyzing(true);
+    if (force) setAnalysis(null);
+
+    // Try cache first
+    if (!force) {
+      const { data: cached } = await supabase
+        .from("simulation_insights")
+        .select("analysis, updated_at")
+        .eq("agent_slug", drillSlug)
+        .eq("period", period)
+        .maybeSingle();
+      if (cached) {
+        setAnalysis(cached.analysis as Analysis);
+        setCachedAt(cached.updated_at);
+        setAnalyzing(false);
+        return;
+      }
+    }
+
+    try {
+      const { data, error } = await supabase.functions.invoke("analyze-objections", {
+        body: { agentSlug: drillSlug, contexts: drillRows.map((r) => r.context) },
+      });
+      if (error) throw error;
+      setAnalysis(data);
+      setCachedAt(new Date().toISOString());
+      await supabase.from("simulation_insights").upsert(
+        {
+          agent_slug: drillSlug,
+          period,
+          analysis: data,
+          sample_size: drillRows.length,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "agent_slug,period" },
+      );
+    } catch (e) {
+      console.error(e);
+      toast.error("Análise falhou. Tente novamente.");
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   const sinceIso = (() => {
     const d = PERIOD_DAYS[period];
@@ -100,6 +147,31 @@ const AdminSimulationsPanel = () => {
       return data as Simulation[];
     },
   });
+
+  // Auto-load cache when drill opens
+  useEffect(() => {
+    if (!drillSlug) {
+      setAnalysis(null);
+      setCachedAt(null);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("simulation_insights")
+        .select("analysis, updated_at")
+        .eq("agent_slug", drillSlug)
+        .eq("period", period)
+        .maybeSingle();
+      if (data) {
+        setAnalysis(data.analysis as Analysis);
+        setCachedAt(data.updated_at);
+      } else {
+        setAnalysis(null);
+        setCachedAt(null);
+      }
+    })();
+  }, [drillSlug, period]);
+
 
   const totals = data?.reduce(
     (acc, r) => ({ total: acc.total + r.total, hired: acc.hired + r.hired }),
@@ -212,25 +284,12 @@ const AdminSimulationsPanel = () => {
                   variant="outline"
                   className="gap-1.5 border-primary/30 text-primary"
                   disabled={analyzing}
-                  onClick={async () => {
-                    setAnalyzing(true);
-                    setAnalysis(null);
-                    try {
-                      const { data, error } = await supabase.functions.invoke("analyze-objections", {
-                        body: { agentSlug: drillSlug, contexts: drillRows.map((r) => r.context) },
-                      });
-                      if (error) throw error;
-                      setAnalysis(data);
-                    } catch (e) {
-                      console.error(e);
-                      toast.error("Análise falhou. Tente novamente.");
-                    } finally {
-                      setAnalyzing(false);
-                    }
-                  }}
+                  onClick={() => runAnalysis(!!analysis)}
                 >
                   {analyzing ? (
                     <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Analisando…</>
+                  ) : analysis ? (
+                    <><Sparkles className="h-3.5 w-3.5" /> Refazer análise</>
                   ) : (
                     <><Sparkles className="h-3.5 w-3.5" /> Analisar objeções com IA</>
                   )}
@@ -241,6 +300,11 @@ const AdminSimulationsPanel = () => {
 
           {analysis && (
             <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-3 mb-2">
+              {cachedAt && (
+                <p className="text-[10px] text-muted-foreground -mt-1">
+                  Análise em cache · atualizada {new Date(cachedAt).toLocaleString("pt-BR")}
+                </p>
+              )}
               {analysis.patterns && analysis.patterns.length > 0 && (
                 <div>
                   <p className="text-xs font-semibold uppercase text-muted-foreground mb-1.5 flex items-center gap-1.5">
