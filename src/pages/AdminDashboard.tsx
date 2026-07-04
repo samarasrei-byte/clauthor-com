@@ -302,13 +302,16 @@ const AdminDashboard = () => {
               {activeTab === "openclaw" && <OpenClawStatusPanel />}
 
               {activeTab === "overview" && (
-                <AdminCommandCenter
-                  usersCount={usersCount} activeAgents={activeAgents} totalRevenue={totalRevenue}
-                  pendingCount={pendingAgents.length} totalTokensUsed={totalTokensUsed} totalExecutions={totalExecutions}
-                  successRate={successRate} waitingCount={waitingCount} allAgents={allAgents} allCredits={allCredits}
-                  allProfiles={allProfiles} executionLogs={executionLogs} revenueData={revenueData}
-                  planDistribution={planDistribution} onTabChange={setActiveTab}
-                />
+                <div className="space-y-6">
+                  <AdminCommandCenter
+                    usersCount={usersCount} activeAgents={activeAgents} totalRevenue={totalRevenue}
+                    pendingCount={pendingAgents.length} totalTokensUsed={totalTokensUsed} totalExecutions={totalExecutions}
+                    successRate={successRate} waitingCount={waitingCount} allAgents={allAgents} allCredits={allCredits}
+                    allProfiles={allProfiles} executionLogs={executionLogs} revenueData={revenueData}
+                    planDistribution={planDistribution} onTabChange={setActiveTab}
+                  />
+                  <LiveActivityFeed />
+                </div>
               )}
 
               {activeTab === "payments" && <PaymentsPanel totalRevenue={totalRevenue} subscriptionCount={allSubscriptions.length} />}
