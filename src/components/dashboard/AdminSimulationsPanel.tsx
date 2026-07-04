@@ -193,11 +193,100 @@ const AdminSimulationsPanel = () => {
         </CardContent>
       </Card>
 
-      <Dialog open={!!drillSlug} onOpenChange={(v) => !v && setDrillSlug(null)}>
-        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+      <Dialog
+        open={!!drillSlug}
+        onOpenChange={(v) => {
+          if (!v) {
+            setDrillSlug(null);
+            setAnalysis(null);
+          }
+        }}
+      >
+        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Simulações não convertidas · {drillSlug}</DialogTitle>
+            <DialogTitle className="flex items-center justify-between gap-2">
+              <span>Simulações não convertidas · {drillSlug}</span>
+              {drillRows && drillRows.length >= 2 && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className="gap-1.5 border-primary/30 text-primary"
+                  disabled={analyzing}
+                  onClick={async () => {
+                    setAnalyzing(true);
+                    setAnalysis(null);
+                    try {
+                      const { data, error } = await supabase.functions.invoke("analyze-objections", {
+                        body: { agentSlug: drillSlug, contexts: drillRows.map((r) => r.context) },
+                      });
+                      if (error) throw error;
+                      setAnalysis(data);
+                    } catch (e) {
+                      console.error(e);
+                      toast.error("Análise falhou. Tente novamente.");
+                    } finally {
+                      setAnalyzing(false);
+                    }
+                  }}
+                >
+                  {analyzing ? (
+                    <><Loader2 className="h-3.5 w-3.5 animate-spin" /> Analisando…</>
+                  ) : (
+                    <><Sparkles className="h-3.5 w-3.5" /> Analisar objeções com IA</>
+                  )}
+                </Button>
+              )}
+            </DialogTitle>
           </DialogHeader>
+
+          {analysis && (
+            <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-3 mb-2">
+              {analysis.patterns && analysis.patterns.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground mb-1.5 flex items-center gap-1.5">
+                    <Sparkles className="h-3 w-3" /> Padrões
+                  </p>
+                  <ul className="space-y-1 text-sm">
+                    {analysis.patterns.map((p, i) => (
+                      <li key={i} className="flex items-start gap-2">
+                        <Badge variant="outline" className="text-[10px]">{p.count}</Badge>
+                        <span>{p.label}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {analysis.objections && analysis.objections.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground mb-1.5 flex items-center gap-1.5">
+                    <AlertTriangle className="h-3 w-3" /> Objeções
+                  </p>
+                  <ul className="space-y-1 text-sm list-disc list-inside">
+                    {analysis.objections.map((o, i) => <li key={i}>{o}</li>)}
+                  </ul>
+                </div>
+              )}
+              {analysis.recommendations && analysis.recommendations.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground mb-1.5 flex items-center gap-1.5">
+                    <Lightbulb className="h-3 w-3" /> Recomendações
+                  </p>
+                  <ul className="space-y-1.5 text-sm">
+                    {analysis.recommendations.map((r, i) => (
+                      <li key={i} className="rounded-lg bg-background/60 p-2">
+                        <div className="flex items-center gap-2 mb-0.5">
+                          <span className="font-semibold">{r.title}</span>
+                          <Badge variant="outline" className="text-[10px] capitalize">{r.impact}</Badge>
+                        </div>
+                        <p className="text-xs text-muted-foreground">{r.action}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+
           {drillLoading ? (
             <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
           ) : !drillRows || drillRows.length === 0 ? (
