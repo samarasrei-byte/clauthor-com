@@ -641,6 +641,7 @@ const ClientDashboard = () => {
                     onSubmitTask={handleSubmitTask}
                     onSelectAgentBySlug={handleSelectAgentBySlug}
                   />
+                  </>
                 )}
 
                 <DashboardSectionRenderer
