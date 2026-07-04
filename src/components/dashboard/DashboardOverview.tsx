@@ -120,7 +120,7 @@ const DashboardOverview = ({
                   onSelectAgent={onSelectAgentBySlug}
                 />
 
-                <PlatformStatsBanner variant="compact" />
+                <PlatformStatsBanner variant="minimal" />
 
                 <ExecutionHealthBanner onGoToWarRoom={() => onSetActiveSection("warroom")} />
 
