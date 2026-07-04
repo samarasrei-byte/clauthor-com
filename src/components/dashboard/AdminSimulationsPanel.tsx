@@ -148,6 +148,31 @@ const AdminSimulationsPanel = () => {
     },
   });
 
+  // Auto-load cache when drill opens
+  useEffect(() => {
+    if (!drillSlug) {
+      setAnalysis(null);
+      setCachedAt(null);
+      return;
+    }
+    (async () => {
+      const { data } = await supabase
+        .from("simulation_insights")
+        .select("analysis, updated_at")
+        .eq("agent_slug", drillSlug)
+        .eq("period", period)
+        .maybeSingle();
+      if (data) {
+        setAnalysis(data.analysis as Analysis);
+        setCachedAt(data.updated_at);
+      } else {
+        setAnalysis(null);
+        setCachedAt(null);
+      }
+    })();
+  }, [drillSlug, period]);
+
+
   const totals = data?.reduce(
     (acc, r) => ({ total: acc.total + r.total, hired: acc.hired + r.hired }),
     { total: 0, hired: 0 },
