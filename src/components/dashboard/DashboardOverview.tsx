@@ -119,8 +119,15 @@ const DashboardOverview = ({
                   onSubmitTask={onSubmitTask}
                   onSelectAgent={onSelectAgentBySlug}
                 />
-
-
+                <div className="flex items-center justify-center gap-4 text-[10px] font-mono uppercase tracking-[0.15em] text-muted-foreground/50 py-1">
+                  <span>225+ agentes</span>
+                  <span className="text-muted-foreground/20">·</span>
+                  <span>20 squads</span>
+                  <span className="text-muted-foreground/20">·</span>
+                  <span>20 depts</span>
+                  <span className="text-muted-foreground/20">·</span>
+                  <span>99.9% uptime</span>
+                </div>
 
                 <ExecutionHealthBanner onGoToWarRoom={() => onSetActiveSection("warroom")} />
 
