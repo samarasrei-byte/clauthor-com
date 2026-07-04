@@ -148,6 +148,8 @@ const App = () => (
                   <Route path="/auth" element={<Auth />} />
                   <Route path="/marketplace" element={<Library />} />
                   <Route path="/library" element={<Library />} />
+                  <Route path="/outcomes" element={<OutcomePicker />} />
+                  <Route path="/quero" element={<OutcomePicker />} />
                   <Route path="/pricing" element={<Pricing />} />
                   <Route path="/how-it-works" element={<HowItWorks />} />
                   <Route path="/community" element={<Community />} />
