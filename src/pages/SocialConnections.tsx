@@ -266,6 +266,7 @@ const SocialConnections = () => {
   }, [isLinkedInConnected, isMetaConnected, linkedin?.profile?.name, metaStatus?.connection]);
 
   return (
+    <div className="h-full overflow-y-auto">
     <div className="container mx-auto max-w-7xl px-6 lg:px-10 py-10 lg:py-12 space-y-10">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
@@ -475,6 +476,7 @@ const SocialConnections = () => {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </div>
     </div>
   );
 };
