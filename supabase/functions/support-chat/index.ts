@@ -209,13 +209,14 @@ serve(async (req) => {
     const recentMessages = messages.slice(isThor ? -8 : -10);
 
     const aiStep = tracker.step("ai_call");
+    // Perf: Thor usa flash-lite (menor TTFT); Support mantém flash-preview
     const response = await fetchAI({
-      model: "google/gemini-3-flash-preview",
+      model: isThor ? "google/gemini-2.5-flash-lite" : "google/gemini-3-flash-preview",
       messages: [
         { role: "system", content: systemPrompt },
         ...recentMessages.map((m: any) => ({ role: m.role, content: m.content })),
       ],
-      max_tokens: isThor ? 520 : 700,
+      max_tokens: isThor ? 380 : 700,
       temperature: isThor ? 0.3 : 0.6,
       stream: true,
     });
