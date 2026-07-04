@@ -30,6 +30,7 @@ const IntelligenceHub = lazy(() => import("./IntelligenceHub"));
 const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const FilesLibrary = lazy(() => import("./FilesLibrary"));
 const BenchmarksPanel = lazy(() => import("./BenchmarksPanel"));
+const WorkspaceHub = lazy(() => import("./WorkspaceHub"));
 
 interface Props {
   activeSection: string;
@@ -59,7 +60,9 @@ const DashboardSectionRenderer = ({
       {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
 
       {(activeSection === "insights" || activeSection === "intelligence-hub" ||
-        activeSection === "war-room-live" || activeSection === "predictive") && (
+        activeSection === "war-room-live" || activeSection === "predictive" ||
+        activeSection === "neural-network" || activeSection === "agent-replay" ||
+        activeSection === "agent-dna" || activeSection === "benchmarks") && (
         <Suspense fallback={<SectionLoader />}>
           <IntelligenceHub
             chartData={realChartData}
@@ -70,11 +73,32 @@ const DashboardSectionRenderer = ({
             onNavigate={onNavigate}
             defaultTab={
               activeSection === "war-room-live" ? "war-room" :
-              activeSection === "predictive" ? "predictive" : "reports"
+              activeSection === "predictive" ? "predictive" :
+              activeSection === "neural-network" ? "neural-network" :
+              activeSection === "agent-replay" ? "agent-replay" :
+              activeSection === "agent-dna" ? "agent-dna" :
+              activeSection === "benchmarks" ? "benchmarks" : "reports"
             }
           />
         </Suspense>
       )}
+
+      {(activeSection === "workspace" || activeSection === "inbox" ||
+        activeSection === "squads" || activeSection === "kanban" ||
+        activeSection === "files" || activeSection === "approvals" ||
+        activeSection === "mission-composer") && (
+        <Suspense fallback={<SectionLoader />}>
+          <WorkspaceHub
+            defaultTab={
+              activeSection === "workspace" ? "inbox" :
+              (activeSection as any)
+            }
+            onNavigate={onNavigate}
+            onSelectAgent={onSelectAgent}
+          />
+        </Suspense>
+      )}
+
 
       {activeSection === "settings" && (
         <Suspense fallback={<SectionLoader />}>
@@ -84,9 +108,6 @@ const DashboardSectionRenderer = ({
 
       {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
 
-      {activeSection === "squads" && (
-        <Suspense fallback={<SectionLoader />}><SquadManager onNavigate={onNavigate} /></Suspense>
-      )}
 
       {activeSection === "agents" && (
         <Suspense fallback={<SectionLoader />}>
@@ -115,27 +136,16 @@ const DashboardSectionRenderer = ({
         </Suspense>
       )}
 
-      {activeSection === "kanban" && <Suspense fallback={<SectionLoader />}><KanbanBoard /></Suspense>}
       {activeSection === "content-pipeline" && <Suspense fallback={<SectionLoader />}><ContentPipelinePanel /></Suspense>}
       {activeSection === "deliverables" && <Suspense fallback={<SectionLoader />}><DeliverablesHub onNavigate={onNavigate} /></Suspense>}
       {activeSection === "call-transcriber" && <Suspense fallback={<SectionLoader />}><SalesCallTranscriber /></Suspense>}
       {activeSection === "operations-center" && <Suspense fallback={<SectionLoader />}><OperationsCenter onNavigate={onNavigate} /></Suspense>}
-      {activeSection === "inbox" && <Suspense fallback={<SectionLoader />}><UnifiedInbox onOpenChat={onSelectAgent} /></Suspense>}
-
-      {/* Innovation modules */}
-      {activeSection === "agent-replay" && <Suspense fallback={<SectionLoader />}><AgentReplay /></Suspense>}
-      {activeSection === "agent-dna" && <Suspense fallback={<SectionLoader />}><AgentDNA /></Suspense>}
-      {activeSection === "mission-composer" && <Suspense fallback={<SectionLoader />}><MissionComposer /></Suspense>}
 
       {/* Legacy routes kept accessible via internal navigation */}
       {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
       {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
       {activeSection === "bulk-deploy" && <Suspense fallback={<SectionLoader />}><BulkAgentProvisioner /></Suspense>}
-      {activeSection === "neural-network" && <Suspense fallback={<SectionLoader />}><AgentNeuralNetwork /></Suspense>}
       {activeSection === "scrum" && <Suspense fallback={<SectionLoader />}><ScrumBoard /></Suspense>}
-      {activeSection === "approvals" && <Suspense fallback={<SectionLoader />}><ApprovalsCenter /></Suspense>}
-      {activeSection === "files" && <Suspense fallback={<SectionLoader />}><FilesLibrary /></Suspense>}
-      {activeSection === "benchmarks" && <Suspense fallback={<SectionLoader />}><BenchmarksPanel /></Suspense>}
 
       {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
         <ComingSoonSection feature={activeSection} />
