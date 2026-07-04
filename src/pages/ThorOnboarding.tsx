@@ -353,7 +353,8 @@ const ThorOnboarding = () => {
   const thorSays = useCallback(async (content: string, extra?: Partial<ChatMessage>) => {
     setIsTyping(true);
     scrollToBottom();
-    await new Promise(r => setTimeout(r, 800 + Math.random() * 600));
+    // Perf: reduzido de 800-1400ms para 250-450ms para agilizar percepção de resposta
+    await new Promise(r => setTimeout(r, 250 + Math.random() * 200));
     setIsTyping(false);
     addMessage({ role: "thor", content, ...extra });
   }, [addMessage, scrollToBottom]);
@@ -416,6 +417,75 @@ const ThorOnboarding = () => {
 
     await thorSays(
       `Perfeito. Já analisei seu site. ✅\n\nIdentifiquei que a **${analysis.company}** atua no setor de ${analysis.industry}${analysis.city ? ` em ${analysis.city}` : ""}.\n\n**Serviços principais:**\n${analysis.services.map(s => `• ${s}`).join("\n")}\n\nVejo que muitos clientes provavelmente perguntam sobre:\n${analysis.faqs.map(f => `• ${f}`).join("\n")}`
+    );
+
+    setStep("pain");
+    await thorSays(
+      "Agora me conta uma coisa.\n\nQual desses desafios acontece mais no seu negócio?",
+      { type: "options", options: PAIN_OPTIONS }
+    );
+  };
+
+  // ── Upload de documento (PDF/DOC/TXT) ────────────
+  const handleUploadDocument = async (file: File) => {
+    if (file.size > 10 * 1024 * 1024) {
+      await thorSays("Esse arquivo é grande demais (>10MB). Tenta um PDF menor ou envie o site.");
+      return;
+    }
+
+    addMessage({ role: "user", content: `📎 ${file.name}` });
+    setStep("analyzing");
+
+    for (let i = 0; i < ANALYSIS_STEPS.length; i++) {
+      setAnalysisStep(i);
+      setAnalysisProgress(((i + 1) / ANALYSIS_STEPS.length) * 100);
+      await new Promise(r => setTimeout(r, 400));
+    }
+
+    // Converte para base64
+    const data_base64 = await new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result as string;
+        resolve(result.split(",")[1] || "");
+      };
+      reader.onerror = () => reject(reader.error);
+      reader.readAsDataURL(file);
+    });
+
+    let analysis: SiteAnalysis;
+    try {
+      const { data, error } = await supabase.functions.invoke("document-parser", {
+        body: { filename: file.name, mime: file.type || "application/octet-stream", data_base64 },
+      });
+      if (error) throw error;
+      const d = data?.data;
+      if (d?.companyName) {
+        analysis = {
+          company: d.companyName,
+          industry: d.industry || "serviços",
+          services: d.products ? d.products.split(/[,;\n]/).map((s: string) => s.trim()).filter(Boolean).slice(0, 5) : ["serviços gerais"],
+          faqs: d.commonQuestions ? d.commonQuestions.split(/[,;\n]/).map((s: string) => s.trim()).filter(Boolean).slice(0, 5) : ["preços", "horários", "localização"],
+          city: d.contactInfo || undefined,
+        };
+      } else {
+        throw new Error("no data");
+      }
+    } catch {
+      const base = file.name.replace(/\.[^.]+$/, "");
+      analysis = {
+        company: base.charAt(0).toUpperCase() + base.slice(1),
+        industry: "serviços",
+        services: ["serviços especializados", "consultoria", "atendimento"],
+        faqs: ["preços", "horários de atendimento", "agendamento"],
+      };
+    }
+
+    setSiteData(analysis);
+    setStep("analysis_done");
+
+    await thorSays(
+      `Perfeito. Já processei seu documento. ✅\n\nIdentifiquei que a **${analysis.company}** atua no setor de ${analysis.industry}.\n\n**Serviços principais:**\n${analysis.services.map(s => `• ${s}`).join("\n")}\n\nProváveis dúvidas dos clientes:\n${analysis.faqs.map(f => `• ${f}`).join("\n")}`
     );
 
     setStep("pain");
@@ -670,25 +740,40 @@ const ThorOnboarding = () => {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex gap-2 max-w-lg mx-auto"
+            className="flex flex-col gap-2 max-w-lg mx-auto"
           >
-            <div className="relative flex-1">
-              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                value={url}
-                onChange={e => setUrl(e.target.value)}
-                placeholder="Digite o site da sua empresa"
-                className="pl-10 h-12 rounded-xl bg-card/60 border-border/40 text-sm"
-                onKeyDown={e => e.key === "Enter" && handleAnalyze()}
-              />
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  value={url}
+                  onChange={e => setUrl(e.target.value)}
+                  placeholder="Digite o site da sua empresa"
+                  className="pl-10 h-12 rounded-xl bg-card/60 border-border/40 text-sm"
+                  onKeyDown={e => e.key === "Enter" && handleAnalyze()}
+                />
+              </div>
+              <Button
+                onClick={handleAnalyze}
+                disabled={!url.trim()}
+                className="h-12 px-6 rounded-xl font-bold"
+              >
+                Analisar <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
-            <Button
-              onClick={handleAnalyze}
-              disabled={!url.trim()}
-              className="h-12 px-6 rounded-xl font-bold"
-            >
-              Analisar <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-2 justify-center">
+              <span className="text-[11px] text-muted-foreground">ou</span>
+              <label className="text-[11px] text-primary hover:text-primary/80 cursor-pointer flex items-center gap-1 font-medium">
+                <Upload className="h-3 w-3" />
+                Enviar apresentação (PDF, DOC, TXT)
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+                  className="hidden"
+                  onChange={e => e.target.files?.[0] && handleUploadDocument(e.target.files[0])}
+                />
+              </label>
+            </div>
           </motion.div>
         )}
 
