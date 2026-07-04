@@ -104,6 +104,15 @@ interface LinkedInMetrics {
   recent_posts?: Array<{ id: string; content: string; link_url?: string; status: string; created_at: string; linkedin_urn: string }>;
 }
 
+type UiStatus = "idle" | "connecting" | "connected" | "error";
+interface OAuthLog {
+  ts: number;
+  level: "info" | "success" | "error" | "warn";
+  provider?: string;
+  event: string;
+  detail?: Record<string, unknown>;
+}
+
 const SocialConnections = () => {
   const { user } = useAuth();
   const qc = useQueryClient();
@@ -111,6 +120,24 @@ const SocialConnections = () => {
   const [publishOpen, setPublishOpen] = useState(false);
   const [postContent, setPostContent] = useState("");
   const [postLink, setPostLink] = useState("");
+  const [oauthLogs, setOauthLogs] = useState<OAuthLog[]>([]);
+  const [debugOpen, setDebugOpen] = useState(true);
+  const [uiStatus, setUiStatus] = useState<Record<ProviderKey, { status: UiStatus; message?: string }>>({
+    linkedin: { status: "idle" },
+    meta: { status: "idle" },
+    tiktok: { status: "idle" },
+    x: { status: "idle" },
+    youtube: { status: "idle" },
+  });
+
+  const pushLog = (entry: Omit<OAuthLog, "ts">) => {
+    setOauthLogs((prev) => [{ ts: Date.now(), ...entry }, ...prev].slice(0, 50));
+    // Also echo to console for devtools
+    // eslint-disable-next-line no-console
+    console.log(`[OAuth:${entry.provider ?? "-"}] ${entry.event}`, entry.detail ?? "");
+  };
+  const setStatus = (p: ProviderKey, status: UiStatus, message?: string) =>
+    setUiStatus((s) => ({ ...s, [p]: { status, message } }));
 
   const { data: linkedin, isLoading: liLoading } = useQuery<LinkedInMetrics>({
     queryKey: ["linkedin-metrics"],
