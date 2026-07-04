@@ -88,6 +88,7 @@ const SimulationDialog = ({ open, onOpenChange, agentSlug, agentName, onHire }: 
   const reset = () => {
     setContext("");
     setProjection(null);
+    setSimulationId(null);
   };
 
   return (
