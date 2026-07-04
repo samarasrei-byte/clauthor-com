@@ -56,7 +56,7 @@ export default function ReferralsPanel() {
   }, [user?.id, tenantId]);
 
   const link = referral
-    ? `${window.location.origin}/?ref=${referral.code}`
+    ? `https://www.clauthor.com/?ref=${referral.code}`
     : "";
 
   const copy = async () => {
