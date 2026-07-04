@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
 import TokenUpgradeDialog from "@/components/dashboard/TokenUpgradeDialog";
 import AdminCommandCenter from "@/components/dashboard/AdminCommandCenter";
+import { LiveActivityFeed } from "@/components/dashboard/LiveActivityFeed";
 import AdminUserManager from "@/components/dashboard/AdminUserManager";
 import NotificationPanel from "@/components/dashboard/NotificationPanel";
 import PaymentsPanel from "@/components/dashboard/PaymentsPanel";
