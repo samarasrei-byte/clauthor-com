@@ -3384,6 +3384,45 @@ export type Database = {
         }
         Relationships: []
       }
+      user_activity_stream: {
+        Row: {
+          created_at: string
+          description: string | null
+          entity_id: string | null
+          entity_type: string | null
+          event_type: string
+          id: string
+          metadata: Json
+          tenant_id: string | null
+          title: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          event_type: string
+          id?: string
+          metadata?: Json
+          tenant_id?: string | null
+          title?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          entity_id?: string | null
+          entity_type?: string | null
+          event_type?: string
+          id?: string
+          metadata?: Json
+          tenant_id?: string | null
+          title?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_agents: {
         Row: {
           activated_at: string
