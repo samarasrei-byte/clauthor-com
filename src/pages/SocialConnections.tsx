@@ -140,7 +140,9 @@ const SocialConnections = () => {
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
     if (!code || !state || !user) return;
-    const isMeta = state.startsWith(`${user.id}:`) && (sessionStorage.getItem("oauth_provider") === "meta");
+
+    const storedProvider = sessionStorage.getItem("oauth_provider");
+    const isMeta = state.startsWith(`meta:${user.id}:`) || (!state.startsWith("linkedin:") && storedProvider === "meta");
     const provider = isMeta ? "meta-oauth" : "hunter-linkedin-oauth";
     const label = isMeta ? "Meta" : "LinkedIn";
     const invalidateKey = isMeta ? "meta-status" : "linkedin-metrics";
@@ -164,6 +166,7 @@ const SocialConnections = () => {
   const connectLinkedIn = useMutation({
     mutationFn: async () => {
       const redirect_uri = window.location.origin + "/settings/social";
+      sessionStorage.setItem("oauth_provider", "linkedin");
       const { data, error } = await supabase.functions.invoke("hunter-linkedin-oauth", {
         body: { action: "authorize", redirect_uri },
       });

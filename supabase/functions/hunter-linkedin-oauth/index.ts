@@ -34,7 +34,7 @@ Deno.serve(async (req) => {
     if (action === "authorize") {
       const redirect_uri = body.redirect_uri as string;
       if (!redirect_uri) return errorResponse("redirect_uri obrigatório", 400);
-      const state = `${user.id}:${crypto.randomUUID()}`;
+      const state = `linkedin:${user.id}:${crypto.randomUUID()}`;
       const scope = "openid profile email w_member_social";
       const url = new URL("https://www.linkedin.com/oauth/v2/authorization");
       url.searchParams.set("response_type", "code");
