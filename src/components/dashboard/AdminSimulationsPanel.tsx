@@ -1,12 +1,18 @@
 /**
- * AdminSimulationsPanel — Funil simulação → contratação por agente.
+ * AdminSimulationsPanel — Funil simulação → contratação por agente + drill-down.
  */
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, TrendingUp, PlayCircle, Target } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Loader2, TrendingUp, PlayCircle, Target, Eye } from "lucide-react";
+
+type Period = "7d" | "30d" | "90d" | "all";
 
 interface Row {
   agent_slug: string;
@@ -16,29 +22,73 @@ interface Row {
   rate: number;
 }
 
+interface Simulation {
+  id: string;
+  agent_slug: string;
+  agent_name: string | null;
+  context: string;
+  projection: any;
+  converted_to_hire: boolean;
+  created_at: string;
+}
+
+const PERIOD_DAYS: Record<Period, number | null> = { "7d": 7, "30d": 30, "90d": 90, all: null };
+
 const AdminSimulationsPanel = () => {
+  const [period, setPeriod] = useState<Period>("30d");
+  const [drillSlug, setDrillSlug] = useState<string | null>(null);
+
+  const sinceIso = (() => {
+    const d = PERIOD_DAYS[period];
+    if (!d) return null;
+    return new Date(Date.now() - d * 86400_000).toISOString();
+  })();
+
   const { data, isLoading } = useQuery({
-    queryKey: ["admin-simulations-funnel"],
+    queryKey: ["admin-simulations-funnel", period],
     queryFn: async (): Promise<Row[]> => {
-      const { data, error } = await supabase
+      let q = supabase
         .from("simulations")
         .select("agent_slug, agent_name, converted_to_hire")
         .order("created_at", { ascending: false })
-        .limit(2000);
+        .limit(5000);
+      if (sinceIso) q = q.gte("created_at", sinceIso);
+      const { data, error } = await q;
       if (error) throw error;
       const map = new Map<string, Row>();
       for (const r of data ?? []) {
-        const key = r.agent_slug;
-        const cur = map.get(key) ?? { agent_slug: key, agent_name: r.agent_name, total: 0, hired: 0, rate: 0 };
+        const cur = map.get(r.agent_slug) ?? {
+          agent_slug: r.agent_slug,
+          agent_name: r.agent_name,
+          total: 0,
+          hired: 0,
+          rate: 0,
+        };
         cur.total += 1;
         if (r.converted_to_hire) cur.hired += 1;
-        map.set(key, cur);
+        map.set(r.agent_slug, cur);
       }
-      const rows = Array.from(map.values()).map((r) => ({
-        ...r,
-        rate: r.total > 0 ? (r.hired / r.total) * 100 : 0,
-      }));
-      return rows.sort((a, b) => b.total - a.total);
+      return Array.from(map.values())
+        .map((r) => ({ ...r, rate: r.total > 0 ? (r.hired / r.total) * 100 : 0 }))
+        .sort((a, b) => b.total - a.total);
+    },
+  });
+
+  const { data: drillRows, isLoading: drillLoading } = useQuery({
+    queryKey: ["admin-simulations-drill", drillSlug, period],
+    enabled: !!drillSlug,
+    queryFn: async (): Promise<Simulation[]> => {
+      let q = supabase
+        .from("simulations")
+        .select("id, agent_slug, agent_name, context, projection, converted_to_hire, created_at")
+        .eq("agent_slug", drillSlug!)
+        .eq("converted_to_hire", false)
+        .order("created_at", { ascending: false })
+        .limit(50);
+      if (sinceIso) q = q.gte("created_at", sinceIso);
+      const { data, error } = await q;
+      if (error) throw error;
+      return data as Simulation[];
     },
   });
 
@@ -50,16 +100,26 @@ const AdminSimulationsPanel = () => {
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="font-display text-lg font-semibold">Funil de Simulações</h2>
+        <Tabs value={period} onValueChange={(v) => setPeriod(v as Period)}>
+          <TabsList className="h-8">
+            <TabsTrigger value="7d" className="text-xs">7d</TabsTrigger>
+            <TabsTrigger value="30d" className="text-xs">30d</TabsTrigger>
+            <TabsTrigger value="90d" className="text-xs">90d</TabsTrigger>
+            <TabsTrigger value="all" className="text-xs">Tudo</TabsTrigger>
+          </TabsList>
+        </Tabs>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-xs text-muted-foreground flex items-center gap-1.5">
-              <PlayCircle className="h-3.5 w-3.5" /> Simulações totais
+              <PlayCircle className="h-3.5 w-3.5" /> Simulações
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{totals?.total ?? 0}</p>
-          </CardContent>
+          <CardContent><p className="text-2xl font-bold">{totals?.total ?? 0}</p></CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
@@ -67,9 +127,7 @@ const AdminSimulationsPanel = () => {
               <Target className="h-3.5 w-3.5" /> Convertidas
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold text-primary">{totals?.hired ?? 0}</p>
-          </CardContent>
+          <CardContent><p className="text-2xl font-bold text-primary">{totals?.hired ?? 0}</p></CardContent>
         </Card>
         <Card>
           <CardHeader className="pb-2">
@@ -77,31 +135,26 @@ const AdminSimulationsPanel = () => {
               <TrendingUp className="h-3.5 w-3.5" /> Taxa
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">{overallRate.toFixed(1)}%</p>
-          </CardContent>
+          <CardContent><p className="text-2xl font-bold">{overallRate.toFixed(1)}%</p></CardContent>
         </Card>
       </div>
 
       <Card>
-        <CardHeader>
-          <CardTitle className="text-sm">Funil por agente</CardTitle>
-        </CardHeader>
+        <CardHeader><CardTitle className="text-sm">Por agente</CardTitle></CardHeader>
         <CardContent>
           {isLoading ? (
-            <div className="flex justify-center py-8">
-              <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
-            </div>
+            <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
           ) : !data || data.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-6 text-center">Nenhuma simulação ainda.</p>
+            <p className="text-sm text-muted-foreground py-6 text-center">Nenhuma simulação no período.</p>
           ) : (
             <Table>
               <TableHeader>
                 <TableRow>
                   <TableHead>Agente</TableHead>
-                  <TableHead className="text-right">Simulações</TableHead>
-                  <TableHead className="text-right">Contratações</TableHead>
+                  <TableHead className="text-right">Sim.</TableHead>
+                  <TableHead className="text-right">Contr.</TableHead>
                   <TableHead className="text-right">Taxa</TableHead>
+                  <TableHead className="text-right">Objeções</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -114,9 +167,14 @@ const AdminSimulationsPanel = () => {
                     <TableCell className="text-right">{r.total}</TableCell>
                     <TableCell className="text-right">{r.hired}</TableCell>
                     <TableCell className="text-right">
-                      <Badge variant={r.rate >= 20 ? "default" : "outline"}>
-                        {r.rate.toFixed(1)}%
-                      </Badge>
+                      <Badge variant={r.rate >= 20 ? "default" : "outline"}>{r.rate.toFixed(1)}%</Badge>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      {r.total - r.hired > 0 && (
+                        <Button size="sm" variant="ghost" className="h-7 gap-1" onClick={() => setDrillSlug(r.agent_slug)}>
+                          <Eye className="h-3 w-3" /> {r.total - r.hired}
+                        </Button>
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -125,6 +183,40 @@ const AdminSimulationsPanel = () => {
           )}
         </CardContent>
       </Card>
+
+      <Dialog open={!!drillSlug} onOpenChange={(v) => !v && setDrillSlug(null)}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Simulações não convertidas · {drillSlug}</DialogTitle>
+          </DialogHeader>
+          {drillLoading ? (
+            <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
+          ) : !drillRows || drillRows.length === 0 ? (
+            <p className="text-sm text-muted-foreground py-6 text-center">Sem registros.</p>
+          ) : (
+            <div className="space-y-2">
+              {drillRows.map((s) => (
+                <div key={s.id} className="rounded-lg border border-border/40 p-3 text-sm">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] font-mono text-muted-foreground">
+                      {new Date(s.created_at).toLocaleString("pt-BR")}
+                    </span>
+                    {s.projection?.confidence && (
+                      <Badge variant="outline" className="text-[10px]">Conf.: {s.projection.confidence}</Badge>
+                    )}
+                  </div>
+                  <p className="text-foreground/90 whitespace-pre-wrap">{s.context}</p>
+                  {s.projection?.headline && (
+                    <p className="text-xs text-muted-foreground mt-2 border-t border-border/30 pt-2">
+                      Projeção: {s.projection.headline}
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
