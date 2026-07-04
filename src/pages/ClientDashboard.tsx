@@ -612,7 +612,12 @@ const ClientDashboard = () => {
                 <PlatformStatsBanner />
 
                 {activeSection === "overview" && (
-                  <DashboardOverview
+                  <>
+                    <AmbientThorCard
+                      onOpenOmnix={() => setActiveSection("omnix")}
+                      onOpenLibrary={() => setActiveSection("library")}
+                    />
+                    <DashboardOverview
                     loadingAgents={loadingAgents}
                     boardCount={boardCount}
                     agents={agents}
