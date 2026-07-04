@@ -353,7 +353,8 @@ const ThorOnboarding = () => {
   const thorSays = useCallback(async (content: string, extra?: Partial<ChatMessage>) => {
     setIsTyping(true);
     scrollToBottom();
-    await new Promise(r => setTimeout(r, 800 + Math.random() * 600));
+    // Perf: reduzido de 800-1400ms para 250-450ms para agilizar percepção de resposta
+    await new Promise(r => setTimeout(r, 250 + Math.random() * 200));
     setIsTyping(false);
     addMessage({ role: "thor", content, ...extra });
   }, [addMessage, scrollToBottom]);
