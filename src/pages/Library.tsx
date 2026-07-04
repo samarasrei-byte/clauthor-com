@@ -15,7 +15,6 @@ import ROICalculator from "@/components/library/ROICalculator";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
 import AgentLivePreview from "@/components/library/AgentLivePreview";
 import SmartAgentFinder from "@/components/library/SmartAgentFinder";
-import PlatformStatsBanner from "@/components/PlatformStatsBanner";
 import CheckoutSummaryDialog, { type CheckoutSummaryData } from "@/components/dashboard/CheckoutSummaryDialog";
 import { getPriceDisplay, getPrice, getRegion, formatPrice } from "@/lib/pricing";
 import { supabase } from "@/integrations/supabase/client";
@@ -188,7 +187,6 @@ const LibraryPage = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-10">
       <SEO title="Agent Library — 200+ AI Employees | Clauthor" description="Browse Clauthor's library of autonomous AI agents for sales, marketing, legal, finance, support and more." path="/library" />
 
-      <PlatformStatsBanner />
 
 
       {/* ============ HERO ============ */}

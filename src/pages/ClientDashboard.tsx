@@ -40,7 +40,6 @@ import { TIER_COLORS as tierColors } from "@/lib/tier-colors";
 import { agentIcons } from "@/data/libraryAgentData";
 import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
 import SectionLoader from "@/components/ui/section-loader";
-import PlatformStatsBanner from "@/components/PlatformStatsBanner";
 import AmbientThorCard from "@/components/dashboard/AmbientThorCard";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
@@ -609,7 +608,6 @@ const ClientDashboard = () => {
                 <DashboardHeader locale={locale} remainingCredits={remainingCredits} credits={credits} />
                 <MobileNavSheet sidebarItems={sidebarItems} activeSection={activeSection} breadcrumbLabel={breadcrumbLabel} onNavigate={handleSidebarNav} />
 
-                <PlatformStatsBanner />
 
                 {activeSection === "overview" && (
                   <>
