@@ -307,21 +307,22 @@ const SocialConnections = () => {
 
   return (
     <div className="h-full overflow-y-auto">
-    <div className="container mx-auto max-w-7xl px-6 lg:px-10 py-10 lg:py-12 space-y-10">
+    <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-6 sm:py-10 lg:py-12 space-y-8 sm:space-y-10">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-primary" />
+        <div className="flex items-center gap-2 flex-wrap">
+          <ShieldCheck className="w-5 h-5 text-primary shrink-0" />
           <Badge variant="outline" className="text-xs">OAuth por usuário</Badge>
         </div>
-        <h1 className="text-4xl lg:text-5xl font-semibold tracking-tight">Conexões Sociais</h1>
-        <p className="text-base text-muted-foreground max-w-3xl leading-relaxed">
+        <h1 className="text-2xl sm:text-3xl lg:text-5xl font-semibold tracking-tight">Conexões Sociais</h1>
+        <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
           Cada cliente conecta sua própria conta. Os tokens ficam isolados por usuário e criptografados no cofre — a CLAUTHOR nunca compartilha credenciais entre workspaces.
         </p>
       </motion.div>
 
       {/* Provider cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+
         {providerStatus.map((p, i) => (
           <motion.div
             key={p.key}
