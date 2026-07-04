@@ -1,18 +1,16 @@
 import { useState, lazy, Suspense } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Settings, User, Users, CreditCard, MessageSquare, Bot, Link2, Database, Plug } from "lucide-react";
+import { Settings, User, Users, CreditCard, MessageSquare, Bot, Database } from "lucide-react";
 import HelpTooltip from "@/components/HelpTooltip";
 import AgentSettings from "./AgentSettings";
 import UserProfileEditor from "./UserProfileEditor";
 import TeamMembers from "./TeamMembers";
 import SupportChat from "@/components/SupportChat";
 import { CouponRedeemer } from "./CouponRedeemer";
-import CredentialsHub from "./CredentialsHub";
 import OutcomePricingRules from "./OutcomePricingRules";
 import { useTranslation } from "react-i18next";
 
 const KnowledgeBase = lazy(() => import("@/pages/KnowledgeBase"));
-const Integrations = lazy(() => import("@/pages/Integrations"));
 import SectionLoader from "@/components/ui/section-loader";
 
 interface SettingsPageProps {
