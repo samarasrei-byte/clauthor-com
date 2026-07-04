@@ -123,21 +123,37 @@ const SocialConnections = () => {
     refetchOnWindowFocus: false,
   });
 
-  // Trata callback OAuth LinkedIn (query params ?code=&state=)
+  const { data: metaStatus } = useQuery<{ connected: boolean; connection: any }>({
+    queryKey: ["meta-status"],
+    queryFn: async () => {
+      const { data, error } = await supabase.functions.invoke("meta-oauth", { body: { action: "status" } });
+      if (error) throw error;
+      return data as { connected: boolean; connection: any };
+    },
+    enabled: !!user,
+    refetchOnWindowFocus: false,
+  });
+
+  // Trata callback OAuth (LinkedIn e Meta) via query params ?code=&state=
   useEffect(() => {
     const url = new URL(window.location.href);
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
     if (!code || !state || !user) return;
+    const isMeta = state.startsWith(`${user.id}:`) && (sessionStorage.getItem("oauth_provider") === "meta");
+    const provider = isMeta ? "meta-oauth" : "hunter-linkedin-oauth";
+    const label = isMeta ? "Meta" : "LinkedIn";
+    const invalidateKey = isMeta ? "meta-status" : "linkedin-metrics";
     (async () => {
       try {
         const redirect_uri = window.location.origin + "/settings/social";
-        const { error } = await supabase.functions.invoke("hunter-linkedin-oauth", {
+        const { error } = await supabase.functions.invoke(provider, {
           body: { action: "callback", code, redirect_uri },
         });
         if (error) throw error;
-        toast.success("LinkedIn conectado com sucesso!");
-        qc.invalidateQueries({ queryKey: ["linkedin-metrics"] });
+        toast.success(`${label} conectado com sucesso!`);
+        qc.invalidateQueries({ queryKey: [invalidateKey] });
+        sessionStorage.removeItem("oauth_provider");
         window.history.replaceState({}, "", "/settings/social");
       } catch (e) {
         toast.error("Falha ao concluir conexão: " + ((e as Error).message || "erro desconhecido"));
