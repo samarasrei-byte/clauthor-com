@@ -185,6 +185,31 @@ const SocialConnections = () => {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const connectMeta = useMutation({
+    mutationFn: async () => {
+      const redirect_uri = window.location.origin + "/settings/social";
+      sessionStorage.setItem("oauth_provider", "meta");
+      const { data, error } = await supabase.functions.invoke("meta-oauth", {
+        body: { action: "authorize", redirect_uri },
+      });
+      if (error) throw error;
+      window.location.href = (data as { url: string }).url;
+    },
+    onError: (e: Error) => toast.error(e.message || "Falha ao iniciar OAuth Meta"),
+  });
+
+  const disconnectMeta = useMutation({
+    mutationFn: async () => {
+      const { error } = await supabase.functions.invoke("meta-oauth", { body: { action: "disconnect" } });
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      toast.success("Meta desconectado");
+      qc.invalidateQueries({ queryKey: ["meta-status"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   const publishPost = useMutation({
     mutationFn: async () => {
       const { data, error } = await supabase.functions.invoke("linkedin-publish", {
