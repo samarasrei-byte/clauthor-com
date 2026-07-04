@@ -48,7 +48,7 @@ Deno.serve(async (req) => {
     if (action === "authorize") {
       const redirect_uri = String(body.redirect_uri || "");
       if (!redirect_uri) return errorResponse("redirect_uri obrigatório", 400);
-      const state = `${user.id}:${crypto.randomUUID()}`;
+      const state = `meta:${user.id}:${crypto.randomUUID()}`;
       const url = new URL("https://www.facebook.com/v19.0/dialog/oauth");
       url.searchParams.set("client_id", APP_ID);
       url.searchParams.set("redirect_uri", redirect_uri);
