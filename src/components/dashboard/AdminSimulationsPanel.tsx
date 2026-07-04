@@ -10,7 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, TrendingUp, PlayCircle, Target, Eye } from "lucide-react";
+import { Loader2, TrendingUp, PlayCircle, Target, Eye, Sparkles, AlertTriangle, Lightbulb } from "lucide-react";
+import { toast } from "sonner";
 
 type Period = "7d" | "30d" | "90d" | "all";
 
