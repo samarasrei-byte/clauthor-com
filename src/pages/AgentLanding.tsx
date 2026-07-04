@@ -133,11 +133,10 @@ const AgentLanding = () => {
                   </Button>
                 </Link>
               )}
-              <Link to="/library">
-                <Button size="lg" variant="outline" className="rounded-xl px-8 h-14 text-lg border-border hover:border-primary/20">
-                  Ver todos os agentes
-                </Button>
-              </Link>
+              <Button size="lg" variant="outline" className="rounded-xl px-8 h-14 text-lg border-border hover:border-primary/20" onClick={() => setSimOpen(true)}>
+                <PlayCircle className="mr-2 h-5 w-5" />
+                Simular 30 dias
+              </Button>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl mx-auto">
               {agent.heroStats.map((stat, i) => (
