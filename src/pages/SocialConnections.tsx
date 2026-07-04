@@ -255,17 +255,29 @@ const SocialConnections = () => {
     if (!popup) toast.error("Popup bloqueado. Habilite popups para este site.");
   };
 
+  const extractState = (u: string): string | null => {
+    try { return new URL(u).searchParams.get("state"); } catch { return null; }
+  };
+
   const connectLinkedIn = useMutation({
     mutationFn: async () => {
       const redirect_uri = window.location.origin + "/settings/social";
       sessionStorage.setItem("oauth_provider", "linkedin");
+      setStatus("linkedin", "connecting");
+      pushLog({ level: "info", provider: "linkedin", event: "authorize:request", detail: { redirect_uri } });
       const { data, error } = await supabase.functions.invoke("hunter-linkedin-oauth", {
         body: { action: "authorize", redirect_uri },
       });
       if (error) throw error;
-      openOAuthPopup((data as { url: string }).url);
+      const authUrl = (data as { url: string }).url;
+      pushLog({ level: "info", provider: "linkedin", event: "authorize:url_received", detail: { state: extractState(authUrl), redirect_uri, auth_url: authUrl } });
+      openOAuthPopup(authUrl);
     },
-    onError: (e: Error) => toast.error(e.message || "Falha ao iniciar OAuth"),
+    onError: (e: Error) => {
+      setStatus("linkedin", "error", e.message);
+      pushLog({ level: "error", provider: "linkedin", event: "authorize:failed", detail: { message: e.message } });
+      toast.error(e.message || "Falha ao iniciar OAuth");
+    },
   });
 
   const disconnectLinkedIn = useMutation({
@@ -274,6 +286,7 @@ const SocialConnections = () => {
       if (error) throw error;
     },
     onSuccess: () => {
+      setStatus("linkedin", "idle");
       toast.success("LinkedIn desconectado");
       qc.invalidateQueries({ queryKey: ["linkedin-metrics"] });
     },
@@ -284,13 +297,21 @@ const SocialConnections = () => {
     mutationFn: async () => {
       const redirect_uri = window.location.origin + "/settings/social";
       sessionStorage.setItem("oauth_provider", "meta");
+      setStatus("meta", "connecting");
+      pushLog({ level: "info", provider: "meta", event: "authorize:request", detail: { redirect_uri } });
       const { data, error } = await supabase.functions.invoke("meta-oauth", {
         body: { action: "authorize", redirect_uri },
       });
       if (error) throw error;
-      openOAuthPopup((data as { url: string }).url);
+      const authUrl = (data as { url: string }).url;
+      pushLog({ level: "info", provider: "meta", event: "authorize:url_received", detail: { state: extractState(authUrl), redirect_uri, auth_url: authUrl } });
+      openOAuthPopup(authUrl);
     },
-    onError: (e: Error) => toast.error(e.message || "Falha ao iniciar OAuth Meta"),
+    onError: (e: Error) => {
+      setStatus("meta", "error", e.message);
+      pushLog({ level: "error", provider: "meta", event: "authorize:failed", detail: { message: e.message } });
+      toast.error(e.message || "Falha ao iniciar OAuth Meta");
+    },
   });
 
   const disconnectMeta = useMutation({
