@@ -17,7 +17,7 @@ export const Sparkles = forwardRef<SVGSVGElement, SparklesProps>(
     {
       size = 24,
       color = "currentColor",
-      strokeWidth = 1.5,
+      strokeWidth = 1.25,
       absoluteStrokeWidth,
       ...props
     },
@@ -29,18 +29,14 @@ export const Sparkles = forwardRef<SVGSVGElement, SparklesProps>(
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      fill="none"
-      stroke={color}
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      fill={color}
+      stroke="none"
       aria-hidden="true"
       {...props}
     >
-      {/* main 4-point star */}
-      <path d="M14 4 L15.6 10.4 L22 12 L15.6 13.6 L14 20 L12.4 13.6 L6 12 L12.4 10.4 Z" />
-      {/* small accent dot / spark */}
-      <path d="M5.5 5 L6 7 L8 7.5 L6 8 L5.5 10 L5 8 L3 7.5 L5 7 Z" />
+      {/* Apple-style: single hairline 4-point spark + tiny accent */}
+      <path d="M13.5 3c.28 0 .52.19.6.46l1.05 3.9a3 3 0 0 0 2.1 2.1l3.9 1.05a.62.62 0 0 1 0 1.2l-3.9 1.05a3 3 0 0 0-2.1 2.1l-1.05 3.9a.62.62 0 0 1-1.2 0l-1.05-3.9a3 3 0 0 0-2.1-2.1l-3.9-1.05a.62.62 0 0 1 0-1.2l3.9-1.05a3 3 0 0 0 2.1-2.1l1.05-3.9A.62.62 0 0 1 13.5 3Z" />
+      <circle cx="5" cy="5.5" r="0.9" />
     </svg>
   ),
 );
