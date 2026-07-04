@@ -136,27 +136,16 @@ const DashboardSectionRenderer = ({
         </Suspense>
       )}
 
-      {activeSection === "kanban" && <Suspense fallback={<SectionLoader />}><KanbanBoard /></Suspense>}
       {activeSection === "content-pipeline" && <Suspense fallback={<SectionLoader />}><ContentPipelinePanel /></Suspense>}
       {activeSection === "deliverables" && <Suspense fallback={<SectionLoader />}><DeliverablesHub onNavigate={onNavigate} /></Suspense>}
       {activeSection === "call-transcriber" && <Suspense fallback={<SectionLoader />}><SalesCallTranscriber /></Suspense>}
       {activeSection === "operations-center" && <Suspense fallback={<SectionLoader />}><OperationsCenter onNavigate={onNavigate} /></Suspense>}
-      {activeSection === "inbox" && <Suspense fallback={<SectionLoader />}><UnifiedInbox onOpenChat={onSelectAgent} /></Suspense>}
-
-      {/* Innovation modules */}
-      {activeSection === "agent-replay" && <Suspense fallback={<SectionLoader />}><AgentReplay /></Suspense>}
-      {activeSection === "agent-dna" && <Suspense fallback={<SectionLoader />}><AgentDNA /></Suspense>}
-      {activeSection === "mission-composer" && <Suspense fallback={<SectionLoader />}><MissionComposer /></Suspense>}
 
       {/* Legacy routes kept accessible via internal navigation */}
       {activeSection === "war-room" && <Suspense fallback={<SectionLoader />}><HolographicMeetingRoom /></Suspense>}
       {activeSection === "live-timeline" && <Suspense fallback={<SectionLoader />}><AgentLiveTimeline /></Suspense>}
       {activeSection === "bulk-deploy" && <Suspense fallback={<SectionLoader />}><BulkAgentProvisioner /></Suspense>}
-      {activeSection === "neural-network" && <Suspense fallback={<SectionLoader />}><AgentNeuralNetwork /></Suspense>}
       {activeSection === "scrum" && <Suspense fallback={<SectionLoader />}><ScrumBoard /></Suspense>}
-      {activeSection === "approvals" && <Suspense fallback={<SectionLoader />}><ApprovalsCenter /></Suspense>}
-      {activeSection === "files" && <Suspense fallback={<SectionLoader />}><FilesLibrary /></Suspense>}
-      {activeSection === "benchmarks" && <Suspense fallback={<SectionLoader />}><BenchmarksPanel /></Suspense>}
 
       {["agent-memory", "autonomous-goals", "voice-first", "marketplace-p2p"].includes(activeSection) && (
         <ComingSoonSection feature={activeSection} />
