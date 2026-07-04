@@ -46,6 +46,53 @@ const AdminSimulationsPanel = () => {
   const [drillSlug, setDrillSlug] = useState<string | null>(null);
   const [analyzing, setAnalyzing] = useState(false);
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [cachedAt, setCachedAt] = useState<string | null>(null);
+
+  const runAnalysis = async (force = false) => {
+    if (!drillSlug || !drillRows || drillRows.length < 2) return;
+    setAnalyzing(true);
+    if (force) setAnalysis(null);
+
+    // Try cache first
+    if (!force) {
+      const { data: cached } = await supabase
+        .from("simulation_insights")
+        .select("analysis, updated_at")
+        .eq("agent_slug", drillSlug)
+        .eq("period", period)
+        .maybeSingle();
+      if (cached) {
+        setAnalysis(cached.analysis as Analysis);
+        setCachedAt(cached.updated_at);
+        setAnalyzing(false);
+        return;
+      }
+    }
+
+    try {
+      const { data, error } = await supabase.functions.invoke("analyze-objections", {
+        body: { agentSlug: drillSlug, contexts: drillRows.map((r) => r.context) },
+      });
+      if (error) throw error;
+      setAnalysis(data);
+      setCachedAt(new Date().toISOString());
+      await supabase.from("simulation_insights").upsert(
+        {
+          agent_slug: drillSlug,
+          period,
+          analysis: data,
+          sample_size: drillRows.length,
+          updated_at: new Date().toISOString(),
+        },
+        { onConflict: "agent_slug,period" },
+      );
+    } catch (e) {
+      console.error(e);
+      toast.error("Análise falhou. Tente novamente.");
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   const sinceIso = (() => {
     const d = PERIOD_DAYS[period];
