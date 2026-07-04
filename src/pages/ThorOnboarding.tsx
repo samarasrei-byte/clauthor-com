@@ -671,25 +671,40 @@ const ThorOnboarding = () => {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex gap-2 max-w-lg mx-auto"
+            className="flex flex-col gap-2 max-w-lg mx-auto"
           >
-            <div className="relative flex-1">
-              <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                value={url}
-                onChange={e => setUrl(e.target.value)}
-                placeholder="Digite o site da sua empresa"
-                className="pl-10 h-12 rounded-xl bg-card/60 border-border/40 text-sm"
-                onKeyDown={e => e.key === "Enter" && handleAnalyze()}
-              />
+            <div className="flex gap-2">
+              <div className="relative flex-1">
+                <Globe className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  value={url}
+                  onChange={e => setUrl(e.target.value)}
+                  placeholder="Digite o site da sua empresa"
+                  className="pl-10 h-12 rounded-xl bg-card/60 border-border/40 text-sm"
+                  onKeyDown={e => e.key === "Enter" && handleAnalyze()}
+                />
+              </div>
+              <Button
+                onClick={handleAnalyze}
+                disabled={!url.trim()}
+                className="h-12 px-6 rounded-xl font-bold"
+              >
+                Analisar <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
             </div>
-            <Button
-              onClick={handleAnalyze}
-              disabled={!url.trim()}
-              className="h-12 px-6 rounded-xl font-bold"
-            >
-              Analisar <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-2 justify-center">
+              <span className="text-[11px] text-muted-foreground">ou</span>
+              <label className="text-[11px] text-primary hover:text-primary/80 cursor-pointer flex items-center gap-1 font-medium">
+                <Upload className="h-3 w-3" />
+                Enviar apresentação (PDF, DOC, TXT)
+                <input
+                  type="file"
+                  accept=".pdf,.doc,.docx,.txt,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain"
+                  className="hidden"
+                  onChange={e => e.target.files?.[0] && handleUploadDocument(e.target.files[0])}
+                />
+              </label>
+            </div>
           </motion.div>
         )}
 
