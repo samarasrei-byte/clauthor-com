@@ -289,14 +289,14 @@ const SocialConnections = () => {
             transition={{ delay: i * 0.05 }}
           >
             <Card className="h-full border-border/60 hover:border-primary/40 transition-colors">
-              <CardContent className="p-5 space-y-4">
+              <CardContent className="p-6 lg:p-7 space-y-5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center">
-                      <p.Icon className={`w-5 h-5 ${p.brand}`} />
+                    <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
+                      <p.Icon className={`w-6 h-6 ${p.brand}`} />
                     </div>
                     <div>
-                      <div className="font-medium">{p.name}</div>
+                      <div className="font-semibold text-base">{p.name}</div>
                       {p.subtitle && <div className="text-xs text-muted-foreground">{p.subtitle}</div>}
                     </div>
                   </div>
