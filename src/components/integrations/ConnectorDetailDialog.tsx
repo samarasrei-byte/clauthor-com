@@ -61,17 +61,15 @@ const ConnectorDetailDialog = ({ connector, open, onOpenChange, connectedKeys, o
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xl p-0 gap-0 bg-card border-border/40 overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-4 pb-2">
+        <div className="flex items-center px-5 pt-4 pb-2">
           <button
             onClick={() => onOpenChange(false)}
             className="text-xs text-muted-foreground hover:text-foreground flex items-center gap-1 transition-colors"
           >
             <ArrowLeft className="h-3.5 w-3.5" /> Voltar
           </button>
-          <DialogClose className="text-muted-foreground hover:text-foreground">
-            <X className="h-4 w-4" />
-          </DialogClose>
         </div>
+
 
         {/* Connector info */}
         <div className="px-6 pb-4 pt-2">
