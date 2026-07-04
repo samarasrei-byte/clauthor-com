@@ -322,22 +322,13 @@ const ClientDashboard = () => {
     ...departmentSidebarItems,
     ...soloAgentItems,
 
-    // ─── Inteligência: hub unificado (Relatórios + War Room + Preditivo) ───
+    // ─── Inteligência: hub unificado (Relatórios + War Room + Preditivo + Neural + Replay + DNA + Benchmarks) ───
     { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3, group: intelligenceGroup },
-    { id: "neural-network", label: "Rede Neural", icon: Orbit, badge: "PRO", group: intelligenceGroup },
-    { id: "agent-replay", label: "Agent Replay", icon: Rewind, badge: "NOVO", group: intelligenceGroup },
-    { id: "agent-dna", label: "Agent DNA", icon: Dna, badge: "NOVO", group: intelligenceGroup },
-    { id: "benchmarks", label: "Benchmarks", icon: TrendingUp, badge: "NOVO", group: intelligenceGroup },
 
-    // ─── Ferramentas Avançadas: produtividade e orquestração ───
+    // ─── Ferramentas Avançadas: hub unificado (Inbox + Squads + Tarefas + Arquivos + Aprovações + Composer) ───
     { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: advancedGroup },
-    { id: "inbox", label: "Inbox", icon: Inbox, badge: "NOVO", group: advancedGroup },
-    { id: "squads", label: "Squads", icon: Layers3, group: advancedGroup },
+    { id: "workspace", label: "Workspace", icon: Layers3, group: advancedGroup },
     { id: "empresa", label: t("dashboard.company", { defaultValue: "Empresa" }), icon: Building2, group: advancedGroup },
-    { id: "kanban", label: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }), icon: KanbanSquare, group: advancedGroup },
-    { id: "files", label: "Arquivos", icon: FolderOpen, group: advancedGroup },
-    { id: "approvals", label: "Aprovações", icon: CheckSquare, group: advancedGroup },
-    { id: "mission-composer", label: "Composer", icon: Workflow, badge: "PRO", group: advancedGroup },
 
     // ─── Sistema: operações e ajustes (Integrações movido para Configurações) ───
     { id: "operations-center", label: t("dashboard.operations_center", { defaultValue: "Operações" }), icon: Radar, badge: pendingTaskCount || undefined, group: systemGroup },
