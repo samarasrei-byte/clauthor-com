@@ -300,6 +300,11 @@ const AdminSimulationsPanel = () => {
 
           {analysis && (
             <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-3 mb-2">
+              {cachedAt && (
+                <p className="text-[10px] text-muted-foreground -mt-1">
+                  Análise em cache · atualizada {new Date(cachedAt).toLocaleString("pt-BR")}
+                </p>
+              )}
               {analysis.patterns && analysis.patterns.length > 0 && (
                 <div>
                   <p className="text-xs font-semibold uppercase text-muted-foreground mb-1.5 flex items-center gap-1.5">
