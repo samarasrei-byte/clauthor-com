@@ -477,6 +477,7 @@ const SocialConnections = () => {
         </DialogContent>
       </Dialog>
     </div>
+    </div>
   );
 };
 
