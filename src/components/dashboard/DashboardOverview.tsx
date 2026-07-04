@@ -20,6 +20,7 @@ const FeedbackTrendsPanel = lazy(() => import("./FeedbackTrendsPanel"));
 const ThorDailyBriefing = lazy(() => import("./ThorDailyBriefing"));
 const QuickWins = lazy(() => import("./QuickWins"));
 const TaskRequestPanel = lazy(() => import("./TaskRequestPanel"));
+const PlatformStatsBanner = lazy(() => import("@/components/PlatformStatsBanner"));
 const PendingActionsPanel = lazy(() => import("./PendingActionsPanel").then(m => ({ default: m.PendingActionsPanel })));
 const ClientCommandCenter = lazy(() => import("./ClientCommandCenter"));
 const DashboardSkeleton = lazy(() => import("./DashboardSkeleton"));
@@ -113,6 +114,14 @@ const DashboardOverview = ({
             {/* Advanced panels - only when user has agents */}
             {agents.length > 0 && (
               <>
+                <TaskRequestPanel
+                  contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
+                  onSubmitTask={onSubmitTask}
+                  onSelectAgent={onSelectAgentBySlug}
+                />
+
+                <PlatformStatsBanner variant="compact" />
+
                 <ExecutionHealthBanner onGoToWarRoom={() => onSetActiveSection("warroom")} />
 
                 <CompanyBoardAlert onSetup={onTeach} />
@@ -132,11 +141,6 @@ const DashboardOverview = ({
                   onNavigate={onNavigate}
                 />
 
-                <TaskRequestPanel
-                  contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
-                  onSubmitTask={onSubmitTask}
-                  onSelectAgent={onSelectAgentBySlug}
-                />
 
                 <ROIDashboard
                   agents={agents}
