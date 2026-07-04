@@ -161,30 +161,51 @@ const SocialConnections = () => {
     refetchOnWindowFocus: false,
   });
 
-  // Trata callback OAuth (LinkedIn e Meta) via query params ?code=&state=
-  // Se estiver em popup, processa e avisa a janela pai; caso contrário, processa inline.
+  // Trata callback OAuth (LinkedIn e Meta) via query params ?code=&state=&error=
   useEffect(() => {
     const url = new URL(window.location.href);
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
-    if (!code || !state || !user) return;
+    const errParam = url.searchParams.get("error");
+    const errDesc = url.searchParams.get("error_description") || url.searchParams.get("error_reason");
+    if (!user) return;
+    if (!code && !errParam) return;
 
     const isPopup = !!window.opener && window.opener !== window;
     const storedProvider = sessionStorage.getItem("oauth_provider");
-    const isMeta = state.startsWith(`meta:${user.id}:`) || (!state.startsWith("linkedin:") && storedProvider === "meta");
-    const provider = isMeta ? "meta-oauth" : "hunter-linkedin-oauth";
+    const isMeta = (state?.startsWith(`meta:${user.id}:`) ?? false) || (!state?.startsWith("linkedin:") && storedProvider === "meta");
+    const providerName = isMeta ? "meta" : "linkedin";
+    const fn = isMeta ? "meta-oauth" : "hunter-linkedin-oauth";
     const label = isMeta ? "Meta" : "LinkedIn";
     const invalidateKey = isMeta ? "meta-status" : "linkedin-metrics";
+    const redirect_uri = window.location.origin + "/settings/social";
+
+    pushLog({ level: "info", provider: providerName, event: "callback:received", detail: { state, hasCode: !!code, error: errParam, error_description: errDesc, redirect_uri } });
+
+    // Provider retornou erro antes de emitir code
+    if (errParam) {
+      const msg = `${errParam}${errDesc ? ": " + errDesc : ""}`;
+      pushLog({ level: "error", provider: providerName, event: "callback:provider_error", detail: { error: errParam, error_description: errDesc } });
+      if (isPopup) {
+        window.opener.postMessage({ type: "oauth:error", provider: providerName, message: msg }, window.location.origin);
+        window.close();
+        return;
+      }
+      toast.error(`${label}: ${msg}`);
+      window.history.replaceState({}, "", "/settings/social");
+      return;
+    }
+
     (async () => {
       try {
-        const redirect_uri = window.location.origin + "/settings/social";
-        const { error } = await supabase.functions.invoke(provider, {
+        const { error } = await supabase.functions.invoke(fn, {
           body: { action: "callback", code, redirect_uri },
         });
         if (error) throw error;
         sessionStorage.removeItem("oauth_provider");
+        pushLog({ level: "success", provider: providerName, event: "callback:exchanged", detail: { redirect_uri } });
         if (isPopup) {
-          window.opener.postMessage({ type: "oauth:success", provider: isMeta ? "meta" : "linkedin", label, invalidateKey }, window.location.origin);
+          window.opener.postMessage({ type: "oauth:success", provider: providerName, label, invalidateKey }, window.location.origin);
           window.close();
           return;
         }
@@ -193,8 +214,9 @@ const SocialConnections = () => {
         window.history.replaceState({}, "", "/settings/social");
       } catch (e) {
         const msg = (e as Error).message || "erro desconhecido";
+        pushLog({ level: "error", provider: providerName, event: "callback:exchange_failed", detail: { message: msg } });
         if (isPopup) {
-          window.opener.postMessage({ type: "oauth:error", message: msg }, window.location.origin);
+          window.opener.postMessage({ type: "oauth:error", provider: providerName, message: msg }, window.location.origin);
           window.close();
           return;
         }
@@ -207,11 +229,17 @@ const SocialConnections = () => {
   useEffect(() => {
     const onMsg = (ev: MessageEvent) => {
       if (ev.origin !== window.location.origin) return;
-      const d = ev.data as { type?: string; label?: string; invalidateKey?: string; message?: string };
+      const d = ev.data as { type?: string; provider?: string; label?: string; invalidateKey?: string; message?: string };
       if (d?.type === "oauth:success") {
+        pushLog({ level: "success", provider: d.provider, event: "popup:success" });
+        if (d.provider === "meta") setStatus("meta", "connected");
+        if (d.provider === "linkedin") setStatus("linkedin", "connected");
         toast.success(`${d.label} conectado com sucesso!`);
         if (d.invalidateKey) qc.invalidateQueries({ queryKey: [d.invalidateKey] });
       } else if (d?.type === "oauth:error") {
+        pushLog({ level: "error", provider: d.provider, event: "popup:error", detail: { message: d.message } });
+        if (d.provider === "meta") setStatus("meta", "error", d.message);
+        if (d.provider === "linkedin") setStatus("linkedin", "error", d.message);
         toast.error("Falha ao concluir conexão: " + (d.message ?? ""));
       }
     };
