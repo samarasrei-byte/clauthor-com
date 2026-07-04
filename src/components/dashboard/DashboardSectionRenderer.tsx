@@ -59,7 +59,9 @@ const DashboardSectionRenderer = ({
       {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
 
       {(activeSection === "insights" || activeSection === "intelligence-hub" ||
-        activeSection === "war-room-live" || activeSection === "predictive") && (
+        activeSection === "war-room-live" || activeSection === "predictive" ||
+        activeSection === "neural-network" || activeSection === "agent-replay" ||
+        activeSection === "agent-dna" || activeSection === "benchmarks") && (
         <Suspense fallback={<SectionLoader />}>
           <IntelligenceHub
             chartData={realChartData}
@@ -70,11 +72,32 @@ const DashboardSectionRenderer = ({
             onNavigate={onNavigate}
             defaultTab={
               activeSection === "war-room-live" ? "war-room" :
-              activeSection === "predictive" ? "predictive" : "reports"
+              activeSection === "predictive" ? "predictive" :
+              activeSection === "neural-network" ? "neural-network" :
+              activeSection === "agent-replay" ? "agent-replay" :
+              activeSection === "agent-dna" ? "agent-dna" :
+              activeSection === "benchmarks" ? "benchmarks" : "reports"
             }
           />
         </Suspense>
       )}
+
+      {(activeSection === "workspace" || activeSection === "inbox" ||
+        activeSection === "squads" || activeSection === "kanban" ||
+        activeSection === "files" || activeSection === "approvals" ||
+        activeSection === "mission-composer") && (
+        <Suspense fallback={<SectionLoader />}>
+          <WorkspaceHub
+            defaultTab={
+              activeSection === "workspace" ? "inbox" :
+              (activeSection as any)
+            }
+            onNavigate={onNavigate}
+            onSelectAgent={onSelectAgent}
+          />
+        </Suspense>
+      )}
+
 
       {activeSection === "settings" && (
         <Suspense fallback={<SectionLoader />}>
