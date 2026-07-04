@@ -266,21 +266,21 @@ const SocialConnections = () => {
   }, [isLinkedInConnected, isMetaConnected, linkedin?.profile?.name, metaStatus?.connection]);
 
   return (
-    <div className="container mx-auto max-w-6xl px-4 py-8 space-y-8">
+    <div className="container mx-auto max-w-7xl px-6 lg:px-10 py-10 lg:py-12 space-y-10">
       {/* Header */}
-      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
+      <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
         <div className="flex items-center gap-2">
           <ShieldCheck className="w-5 h-5 text-primary" />
           <Badge variant="outline" className="text-xs">OAuth por usuário</Badge>
         </div>
-        <h1 className="text-3xl font-semibold tracking-tight">Conexões Sociais</h1>
-        <p className="text-muted-foreground max-w-2xl">
+        <h1 className="text-4xl lg:text-5xl font-semibold tracking-tight">Conexões Sociais</h1>
+        <p className="text-base text-muted-foreground max-w-3xl leading-relaxed">
           Cada cliente conecta sua própria conta. Os tokens ficam isolados por usuário e criptografados no cofre — a CLAUTHOR nunca compartilha credenciais entre workspaces.
         </p>
       </motion.div>
 
       {/* Provider cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {providerStatus.map((p, i) => (
           <motion.div
             key={p.key}
@@ -289,14 +289,14 @@ const SocialConnections = () => {
             transition={{ delay: i * 0.05 }}
           >
             <Card className="h-full border-border/60 hover:border-primary/40 transition-colors">
-              <CardContent className="p-5 space-y-4">
+              <CardContent className="p-6 lg:p-7 space-y-5">
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-muted/50 flex items-center justify-center">
-                      <p.Icon className={`w-5 h-5 ${p.brand}`} />
+                    <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
+                      <p.Icon className={`w-6 h-6 ${p.brand}`} />
                     </div>
                     <div>
-                      <div className="font-medium">{p.name}</div>
+                      <div className="font-semibold text-base">{p.name}</div>
                       {p.subtitle && <div className="text-xs text-muted-foreground">{p.subtitle}</div>}
                     </div>
                   </div>
@@ -316,19 +316,19 @@ const SocialConnections = () => {
                 </div>
 
                 {/* Permissions */}
-                <div className="space-y-1.5">
-                  <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">Permissões</div>
-                  <ul className="space-y-1">
+                <div className="space-y-2">
+                  <div className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Permissões</div>
+                  <ul className="space-y-1.5">
                     {p.permissions.map((perm) => (
-                      <li key={perm} className="text-xs text-muted-foreground flex items-start gap-1.5">
-                        <span className="text-primary mt-0.5">•</span>
+                      <li key={perm} className="text-sm text-muted-foreground flex items-start gap-2">
+                        <span className="text-primary mt-1">•</span>
                         <span>{perm}</span>
                       </li>
                     ))}
                   </ul>
                 </div>
 
-                <p className="text-xs text-muted-foreground italic">{p.helpText}</p>
+                <p className="text-sm text-muted-foreground italic leading-relaxed">{p.helpText}</p>
 
                 {/* Actions */}
                 <div className="flex flex-wrap gap-2 pt-1">
