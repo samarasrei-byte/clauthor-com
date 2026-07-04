@@ -112,6 +112,11 @@ const IntegrationsPage = () => {
         </p>
       </motion.div>
 
+      {/* Interactive tutorial */}
+      <IntegrationsTutorial />
+
+
+
       {/* Search & Filters */}
       <motion.div
         initial={{ opacity: 0, y: 8 }}
