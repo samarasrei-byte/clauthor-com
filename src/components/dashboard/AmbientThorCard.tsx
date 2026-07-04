@@ -5,7 +5,8 @@
  */
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Activity, ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
+import { Activity, ArrowRight, CheckCircle2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";

@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, Plus, Bot, Trash2, Sparkles, ChevronRight, Search, Layers3, X } from "lucide-react";
+import { Users, Plus, Bot, Trash2, ChevronRight, Search, Layers3, X } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";

@@ -1,16 +1,5 @@
-import {
-  MessageSquare, FileText, DollarSign,
-  Calendar, Star, ShoppingCart,
-  Code, Brain, Shield, Mic, Bot, Eye, Workflow,
-  Phone, Search, Users, Briefcase, BarChart3,
-  Layers, Cpu, Sparkles, Globe, Rocket,
-  Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap,
-  HeartHandshake, Crown, Play, TrendingUp, Award,
-  Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays,
-  Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat,
-  Gavel, ShieldCheck, Scale, BookOpen, Package, Factory, Receipt, Cog, ClipboardCheck, ScanLine,
-  HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck
-} from "lucide-react";
+import { MessageSquare, FileText, DollarSign, Calendar, Star, ShoppingCart, Code, Brain, Shield, Mic, Bot, Eye, Workflow, Phone, Search, Users, Briefcase, BarChart3, Layers, Cpu, Globe, Rocket, Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap, HeartHandshake, Crown, Play, TrendingUp, Award, Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays, Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat, Gavel, ShieldCheck, Scale, BookOpen, Package, Factory, Receipt, Cog, ClipboardCheck, ScanLine, HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import type { PriceTier } from "@/lib/pricing";
 import { ALL_AGENT_SLUGS } from "./workforceArchitecture";
 import {

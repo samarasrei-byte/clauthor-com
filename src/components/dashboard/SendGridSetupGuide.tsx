@@ -6,10 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import {
-  Mail, ExternalLink, CheckCircle, Circle, Loader2, Shield,
-  ArrowRight, ArrowLeft, AlertTriangle, Sparkles
-} from "lucide-react";
+import { Mail, ExternalLink, CheckCircle, Circle, Loader2, Shield, ArrowRight, ArrowLeft, AlertTriangle } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { toast } from "sonner";
 import { TermTooltip, TutorialBanner } from "./SetupGlossary";
 

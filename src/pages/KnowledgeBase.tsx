@@ -4,10 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  BookOpen, Plus, Search, Trash2, Edit3, Save, X, FileText,
-  FolderOpen, Bot, Filter, Upload, Database, Sparkles, AlertCircle
-} from "lucide-react";
+import { BookOpen, Plus, Search, Trash2, Edit3, Save, X, FileText, FolderOpen, Bot, Filter, Upload, Database, AlertCircle } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

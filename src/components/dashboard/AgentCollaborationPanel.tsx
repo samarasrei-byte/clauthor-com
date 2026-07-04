@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Bot, GitBranch, CheckCircle2, Clock, Zap, ArrowRight,
-  Sparkles, Users, Brain, Target, AlertCircle
-} from "lucide-react";
+import { Bot, GitBranch, CheckCircle2, Clock, Zap, ArrowRight, Users, Brain, Target, AlertCircle } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 

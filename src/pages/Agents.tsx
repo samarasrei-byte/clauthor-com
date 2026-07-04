@@ -4,9 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Bot, Plus, Activity, Zap, Settings, Sparkles, Play, Pause, Trash2, MessageSquare, ArrowRight
-} from "lucide-react";
+import { Bot, Plus, Activity, Zap, Settings, Play, Pause, Trash2, MessageSquare, ArrowRight } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import HelpTooltip from "@/components/HelpTooltip";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";

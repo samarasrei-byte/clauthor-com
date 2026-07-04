@@ -1,7 +1,8 @@
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Bot, Users, Sparkles, CheckCircle2, Zap, AlertTriangle, ShieldCheck } from "lucide-react";
+import { Bot, Users, CheckCircle2, Zap, AlertTriangle, ShieldCheck } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { formatPrice } from "@/lib/pricing";
 import { useState } from "react";
 import { motion } from "framer-motion";

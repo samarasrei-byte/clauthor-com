@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, MessageSquare, Settings, Bot, ArrowRight, X, Sparkles, Building2 } from "lucide-react";
+import { CheckCircle2, MessageSquare, Settings, Bot, ArrowRight, X, Building2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { useTranslation } from "react-i18next";

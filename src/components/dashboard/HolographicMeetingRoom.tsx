@@ -4,12 +4,8 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
-import {
-  Bot, Sparkles, Play, RotateCcw, Mic, MicOff,
-  Send, Lightbulb, Target, ListChecks,
-  Loader2, Zap, Brain, Users, Workflow, BarChart3,
-  Palette, ChevronRight, Volume2, MessageSquare,
-} from "lucide-react";
+import { Bot, Play, RotateCcw, Mic, MicOff, Send, Lightbulb, Target, ListChecks, Loader2, Zap, Brain, Users, Workflow, BarChart3, Palette, ChevronRight, Volume2, MessageSquare } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";

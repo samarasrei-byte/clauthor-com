@@ -1,10 +1,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
-import {
-  Brain, Network, TrendingUp, Mic, Workflow, Lightbulb,
-  BarChart3, Users, Copy, Code2, Sparkles, ChevronRight,
-  Zap, Lock, Rocket, Timer, ArrowRight, X
-} from "lucide-react";
+import { Brain, Network, TrendingUp, Mic, Workflow, Lightbulb, BarChart3, Users, Copy, Code2, ChevronRight, Zap, Lock, Rocket, Timer, ArrowRight, X } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import type { LucideIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 

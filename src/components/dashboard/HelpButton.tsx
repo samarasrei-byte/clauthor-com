@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { HelpCircle, X, BookOpen, MessageCircle, Sparkles } from "lucide-react";
+import { HelpCircle, X, BookOpen, MessageCircle } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Link } from "react-router-dom";
 
 /**

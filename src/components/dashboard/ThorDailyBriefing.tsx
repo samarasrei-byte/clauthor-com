@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Play, X, ChevronRight, AlertTriangle, TrendingUp, Bot, Zap, Volume2 } from "lucide-react";
+import { Play, X, ChevronRight, AlertTriangle, TrendingUp, Bot, Zap, Volume2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";

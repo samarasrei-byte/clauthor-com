@@ -3,11 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { 
-  Zap, Phone, Mail, Globe, Database, Webhook, 
-  Check, Plus, Loader2, Shield, Activity, Link2,
-  Sparkles, Radio, Settings2
-} from "lucide-react";
+import { Zap, Phone, Mail, Globe, Database, Webhook, Check, Plus, Loader2, Shield, Activity, Link2, Radio, Settings2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/components/ui/dialog";

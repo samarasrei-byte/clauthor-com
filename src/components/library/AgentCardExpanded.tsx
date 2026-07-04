@@ -1,11 +1,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ChevronDown, Zap, Eye, Star, TrendingUp, Loader2, 
-  CheckCircle, XCircle, Lightbulb, BookOpen, Layers, 
-  HelpCircle, Play, ArrowRight, Sparkles, Shield,
-  BarChart3, Clock, Cpu, Target, type LucideIcon
-} from "lucide-react";
+import { ChevronDown, Zap, Eye, Star, TrendingUp, Loader2, CheckCircle, XCircle, Lightbulb, BookOpen, Layers, HelpCircle, Play, ArrowRight, Shield, BarChart3, Clock, Cpu, Target, type LucideIcon } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router-dom";

@@ -1,25 +1,6 @@
 import { motion } from "framer-motion";
-import {
-  ArrowRight,
-  Zap,
-  TrendingDown,
-  Globe2,
-  Users,
-  Target,
-  Rocket,
-  Sparkles,
-  ShieldCheck,
-  LineChart,
-  Check,
-  X,
-  Languages,
-  DollarSign,
-  TrendingUp,
-  PieChart,
-  Calendar,
-  HelpCircle,
-  Play,
-} from "lucide-react";
+import { ArrowRight, Zap, TrendingDown, Globe2, Users, Target, Rocket, ShieldCheck, LineChart, Check, X, Languages, DollarSign, TrendingUp, PieChart, Calendar, HelpCircle, Play } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useState } from "react";
 import PresentationMode from "@/components/investor/PresentationMode";
 import { Button } from "@/components/ui/button";

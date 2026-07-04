@@ -1,25 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Send,
-  Loader2,
-  ShieldCheck,
-  Scale,
-  Clock,
-  PenLine,
-  Brain,
-  DollarSign,
-  Sparkles,
-  AlertTriangle,
-  CheckCircle2,
-  ChevronDown,
-  Workflow,
-  Lock,
-  ShieldAlert,
-  Settings2,
-  X,
-  ArrowRight,
-} from "lucide-react";
+import { Send, Loader2, ShieldCheck, Scale, Clock, PenLine, Brain, DollarSign, AlertTriangle, CheckCircle2, ChevronDown, Workflow, Lock, ShieldAlert, Settings2, X, ArrowRight } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

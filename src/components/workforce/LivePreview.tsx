@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
-import { Activity, Boxes, DollarSign, Network, Sparkles, Zap } from "lucide-react";
+import { Activity, Boxes, DollarSign, Network, Zap } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Badge } from "@/components/ui/badge";
 import type { BuilderState } from "@/lib/workforce/types";
 import { AUTONOMY_META, SCALE_META } from "@/lib/workforce/types";

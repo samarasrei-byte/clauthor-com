@@ -1,10 +1,8 @@
 import { useMemo, useReducer, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ArrowLeft, ArrowRight, Sparkles, Search, Plus, X, Target, Users, Building2, Globe,
-  Wrench, Plug, BookOpen, Radio, Brain, Shield, Wand2, Rocket, Save, Check, Loader2, ChevronDown
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, Search, Plus, X, Target, Users, Building2, Globe, Wrench, Plug, BookOpen, Radio, Brain, Shield, Wand2, Rocket, Save, Check, Loader2, ChevronDown } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

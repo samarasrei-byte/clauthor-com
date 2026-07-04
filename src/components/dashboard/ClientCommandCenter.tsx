@@ -1,12 +1,8 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
-import { 
-  Bot, Brain, Link as LinkIcon, Sparkles, 
-  Send, Activity, Database, CheckCircle2,
-  Terminal, Cpu, ArrowRight, ShieldCheck,
-  Zap, Workflow, MessageSquare, LineChart, Users, ChevronRight
-} from "lucide-react";
+import { Bot, Brain, Link as LinkIcon, Send, Activity, Database, CheckCircle2, Terminal, Cpu, ArrowRight, ShieldCheck, Zap, Workflow, MessageSquare, LineChart, Users, ChevronRight } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";

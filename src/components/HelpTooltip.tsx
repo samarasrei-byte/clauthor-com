@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import { HelpCircle, X, Sparkles } from "lucide-react";
+import { HelpCircle, X } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { AnimatePresence, motion } from "framer-motion";
 
 interface HelpTooltipProps {

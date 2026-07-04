@@ -1,9 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Workflow, Plus, Play, Trash2, Bot, 
-  Zap, GripVertical, CheckCircle2, X, Sparkles, AlertCircle, Clock
-} from "lucide-react";
+import { Workflow, Plus, Play, Trash2, Bot, Zap, GripVertical, CheckCircle2, X, AlertCircle, Clock } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

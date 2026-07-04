@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Send, Loader2, ArrowRight, Zap, Star, Bot, X, Plus, Wand2 } from "lucide-react";
+import { Send, Loader2, ArrowRight, Zap, Star, Bot, X, Plus, Wand2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { supabase } from "@/integrations/supabase/client";

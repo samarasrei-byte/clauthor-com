@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
-import { MessageSquare, Layers, Sparkles, Megaphone, LayoutGrid } from "lucide-react";
+import { MessageSquare, Layers, Megaphone, LayoutGrid } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useTranslation } from "react-i18next";
 
 type CommunityCategory = "duvidas" | "templates" | "showcase" | "anuncios" | "geral";

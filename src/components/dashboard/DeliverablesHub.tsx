@@ -7,10 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  FileText, CheckCircle2, Clock, AlertCircle, Bot, BarChart3,
-  Filter, Download, Eye, ChevronRight, Sparkles, Activity
-} from "lucide-react";
+import { FileText, CheckCircle2, Clock, AlertCircle, Bot, BarChart3, Filter, Download, Eye, ChevronRight, Activity } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import HelpTooltip from "@/components/HelpTooltip";

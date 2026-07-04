@@ -5,20 +5,8 @@
  */
 
 import { WORKFORCE, ALL_AGENT_SLUGS, SLUG_TO_WORKFORCE_DEPT } from "./workforceArchitecture";
-import {
-  Bot, Zap, MessageSquare, FileText, DollarSign, Calendar, Star,
-  ShoppingCart, Code, Brain, Shield, Mic, Eye, Workflow, Phone,
-  Search, Users, Briefcase, BarChart3, Layers, Cpu, Sparkles, Globe,
-  Rocket, Megaphone, Target, Palette, Video, ClipboardList, Truck,
-  GraduationCap, HeartHandshake, Crown, Play, TrendingUp, Award,
-  Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays,
-  Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat,
-  Gavel, ShieldCheck, Scale, BookOpen, Package, Factory, Receipt,
-  Cog, ClipboardCheck, ScanLine, HardDrive, ContactRound, Lightbulb,
-  CircleDollarSign, UserCheck, BarChart, Wrench, Settings, AlertTriangle,
-  Monitor, Headphones, BookOpenCheck, PieChart, Laptop, Network,
-  Gauge, ArrowUpDown, Timer, CheckCircle, Flag, Clipboard, type LucideIcon,
-} from "lucide-react";
+import { Bot, Zap, MessageSquare, FileText, DollarSign, Calendar, Star, ShoppingCart, Code, Brain, Shield, Mic, Eye, Workflow, Phone, Search, Users, Briefcase, BarChart3, Layers, Cpu, Globe, Rocket, Megaphone, Target, Palette, Video, ClipboardList, Truck, GraduationCap, HeartHandshake, Crown, Play, TrendingUp, Award, Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays, Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat, Gavel, ShieldCheck, Scale, BookOpen, Package, Factory, Receipt, Cog, ClipboardCheck, ScanLine, HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck, BarChart, Wrench, Settings, AlertTriangle, Monitor, Headphones, BookOpenCheck, PieChart, Laptop, Network, Gauge, ArrowUpDown, Timer, CheckCircle, Flag, Clipboard, type LucideIcon } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import type { PriceTier } from "@/lib/pricing";
 
 // ─── Dept → default icon mapping ───

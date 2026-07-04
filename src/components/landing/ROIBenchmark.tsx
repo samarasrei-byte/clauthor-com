@@ -1,6 +1,7 @@
 import { useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { DollarSign, Users, TrendingDown, Sparkles, ArrowRight } from "lucide-react";
+import { DollarSign, Users, TrendingDown, ArrowRight } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Slider } from "@/components/ui/slider";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";

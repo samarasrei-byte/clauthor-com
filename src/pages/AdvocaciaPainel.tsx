@@ -4,38 +4,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  Scale,
-  FileText,
-  ShieldAlert,
-  Handshake,
-  ClipboardCheck,
-  Settings as SettingsIcon,
-  LogOut,
-  Sparkles,
-  TrendingUp,
-  Clock,
-  CheckCircle2,
-  ArrowRight,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-  Briefcase,
-  Inbox,
-  X,
-  Circle,
-  Lightbulb,
-  Users,
-  LifeBuoy,
-  MessageSquare,
-  Plug,
-  CreditCard,
-  Plus,
-  Send,
-  Mail,
-  Loader2,
-  Workflow,
-} from "lucide-react";
+import { Scale, FileText, ShieldAlert, Handshake, ClipboardCheck, Settings as SettingsIcon, LogOut, TrendingUp, Clock, CheckCircle2, ArrowRight, ChevronRight, ChevronsLeft, ChevronsRight, Briefcase, Inbox, X, Circle, Lightbulb, Users, LifeBuoy, MessageSquare, Plug, CreditCard, Plus, Send, Mail, Loader2, Workflow } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

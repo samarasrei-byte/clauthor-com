@@ -1,14 +1,5 @@
-import {
-  Phone, Workflow, Search, Code, MessageSquare, BarChart3, Briefcase,
-  Layers, Cpu, Sparkles, Shield, Users, Star, Eye, FileText, ShoppingCart,
-  Megaphone, Target, Palette, Video, Globe, ClipboardList, Truck, GraduationCap,
-  Crown, Rocket, HeartHandshake, Play, Mic, TrendingUp, DollarSign, Calendar,
-  Award, Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays,
-  Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat,
-  Gavel, ShieldCheck, Scale, Package, Factory, Receipt, Cog, ClipboardCheck,
-  HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck,
-  type LucideIcon
-} from "lucide-react";
+import { Phone, Workflow, Search, Code, MessageSquare, BarChart3, Briefcase, Layers, Cpu, Shield, Users, Star, Eye, FileText, ShoppingCart, Megaphone, Target, Palette, Video, Globe, ClipboardList, Truck, GraduationCap, Crown, Rocket, HeartHandshake, Play, Mic, TrendingUp, DollarSign, Calendar, Award, Newspaper, PenTool, Compass, Gem, Radio, ThumbsUp, CalendarDays, Linkedin, Instagram, Mail, Database, Handshake, Crosshair, Wheat, Gavel, ShieldCheck, Scale, Package, Factory, Receipt, Cog, ClipboardCheck, HardDrive, ContactRound, Lightbulb, CircleDollarSign, UserCheck, type LucideIcon } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 
 export interface AgentLandingData {
   slug: string;

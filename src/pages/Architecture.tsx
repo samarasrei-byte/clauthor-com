@@ -1,20 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
 import { SEO } from "@/components/SEO";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Brain, Cpu, Zap, Layers, Terminal,
-  Eye, Database, Workflow, Bot, Server,
-  Network, ArrowRight, ChevronDown, Code2, CheckCircle2,
-  Play, Pause, MessageSquare, Sparkles, Clock, BookOpen,
-  Search, Globe, Shield, BarChart3, Users, Lightbulb,
-  MousePointerClick, Activity, Radio, Bell, Image, Kanban,
-  Target, LineChart, Settings, Smartphone,
-  TrendingUp, ChevronRight, Rocket, DollarSign,
-  Hash, Link2, Mic, Send, AlertTriangle,
-  FileText, Calendar, Package, Briefcase, Phone,
-  Download, TrendingDown, ArrowUpRight,
-  Palette, Star, ExternalLink
-} from "lucide-react";
+import { Brain, Cpu, Zap, Layers, Terminal, Eye, Database, Workflow, Bot, Server, Network, ArrowRight, ChevronDown, Code2, CheckCircle2, Play, Pause, MessageSquare, Clock, BookOpen, Search, Globe, Shield, BarChart3, Users, Lightbulb, MousePointerClick, Activity, Radio, Bell, Image, Kanban, Target, LineChart, Settings, Smartphone, TrendingUp, ChevronRight, Rocket, DollarSign, Hash, Link2, Mic, Send, AlertTriangle, FileText, Calendar, Package, Briefcase, Phone, Download, TrendingDown, ArrowUpRight, Palette, Star, ExternalLink } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";

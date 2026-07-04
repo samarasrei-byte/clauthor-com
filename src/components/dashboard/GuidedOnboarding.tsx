@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Brain, ShoppingBag, Zap, ArrowRight, CheckCircle2, Sparkles, X } from "lucide-react";
+import { Brain, ShoppingBag, Zap, ArrowRight, CheckCircle2, X } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";

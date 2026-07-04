@@ -7,11 +7,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import {
-  Bot, Target, FileText, Zap, Globe, Database,
-  Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Sparkles,
-  Rocket, Wand2, FolderPlus, FolderOpen, MessageSquareText
-} from "lucide-react";
+import { Bot, Target, FileText, Zap, Globe, Database, Shield, Clock, Plug, ChevronRight, CheckCircle, ArrowRight, Loader2, Rocket, Wand2, FolderPlus, FolderOpen, MessageSquareText } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";

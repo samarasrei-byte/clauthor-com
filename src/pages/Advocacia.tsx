@@ -1,24 +1,8 @@
 import { useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import {
-  Scale,
-  MessageSquare,
-  ClipboardCheck,
-  ShieldAlert,
-  Handshake,
-  RefreshCw,
-  FileText,
-  CheckCircle2,
-  ArrowRight,
-  Clock,
-  TrendingUp,
-  Users,
-  Sparkles,
-  Lock,
-  Zap,
-  Briefcase,
-} from "lucide-react";
+import { Scale, MessageSquare, ClipboardCheck, ShieldAlert, Handshake, RefreshCw, FileText, CheckCircle2, ArrowRight, Clock, TrendingUp, Users, Lock, Zap, Briefcase } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";

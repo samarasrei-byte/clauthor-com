@@ -1,10 +1,7 @@
 import { useState, useCallback, useRef, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  MessageSquare, X, Send, Loader2, Bot, User, Minimize2,
-  Mic, MicOff, Shield, Activity, Zap, Brain, AlertTriangle,
-  CheckCircle2, RefreshCw, Sparkles, Radio, Eye, Cpu
-} from "lucide-react";
+import { MessageSquare, X, Send, Loader2, Bot, User, Minimize2, Mic, MicOff, Shield, Activity, Zap, Brain, AlertTriangle, CheckCircle2, RefreshCw, Radio, Eye, Cpu } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";

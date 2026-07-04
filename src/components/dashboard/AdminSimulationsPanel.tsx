@@ -10,7 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Loader2, TrendingUp, PlayCircle, Target, Eye, Sparkles, AlertTriangle, Lightbulb, Check, Wand2 } from "lucide-react";
+import { Loader2, TrendingUp, PlayCircle, Target, Eye, AlertTriangle, Lightbulb, Check, Wand2 } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 

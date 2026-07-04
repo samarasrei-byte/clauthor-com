@@ -1,20 +1,7 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import {
-  Building2,
-  ShieldCheck,
-  Globe2,
-  Users,
-  Cpu,
-  Lock,
-  GitBranch,
-  HeadphonesIcon,
-  FileCheck,
-  Workflow,
-  ArrowRight,
-  Check,
-  Sparkles,
-} from "lucide-react";
+import { Building2, ShieldCheck, Globe2, Users, Cpu, Lock, GitBranch, HeadphonesIcon, FileCheck, Workflow, ArrowRight, Check } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import SEO from "@/components/SEO";
 

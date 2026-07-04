@@ -7,11 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useCredits } from "@/hooks/useCredits";
 import { useAuth } from "@/hooks/useAuth";
-import {
-  Coins, Zap, Crown, Rocket, ArrowRight, CheckCircle,
-  ExternalLink, Sparkles, Package,
-  Globe, FlaskConical
-} from "lucide-react";
+import { Coins, Zap, Crown, Rocket, ArrowRight, CheckCircle, ExternalLink, Package, Globe, FlaskConical } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 

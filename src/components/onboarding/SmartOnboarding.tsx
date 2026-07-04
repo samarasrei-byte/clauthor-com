@@ -1,13 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  Bot, Sparkles, ArrowRight, X, CheckCircle2, ChevronRight, ChevronLeft,
-  Building2, ShoppingCart, Code, Briefcase, HeartHandshake,
-  GraduationCap, Factory, Rocket, Target, Zap, Shield,
-  Users, MessageSquare, BarChart3, Headphones, PenTool,
-  Receipt, Globe, DollarSign, Megaphone, LineChart, Cpu,
-  HelpCircle, Plus,
-} from "lucide-react";
+import { Bot, ArrowRight, X, CheckCircle2, ChevronRight, ChevronLeft, Building2, ShoppingCart, Code, Briefcase, HeartHandshake, GraduationCap, Factory, Rocket, Target, Zap, Shield, Users, MessageSquare, BarChart3, Headphones, PenTool, Receipt, Globe, DollarSign, Megaphone, LineChart, Cpu, HelpCircle, Plus } from "lucide-react";
+import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
