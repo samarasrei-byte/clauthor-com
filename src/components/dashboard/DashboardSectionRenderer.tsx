@@ -31,6 +31,7 @@ const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const FilesLibrary = lazy(() => import("./FilesLibrary"));
 const BenchmarksPanel = lazy(() => import("./BenchmarksPanel"));
 const WorkspaceHub = lazy(() => import("./WorkspaceHub"));
+const SystemHub = lazy(() => import("./SystemHub"));
 
 interface Props {
   activeSection: string;
@@ -83,31 +84,38 @@ const DashboardSectionRenderer = ({
         </Suspense>
       )}
 
-      {(activeSection === "workspace" || activeSection === "inbox" ||
-        activeSection === "squads" || activeSection === "kanban" ||
-        activeSection === "files" || activeSection === "approvals" ||
-        activeSection === "mission-composer") && (
+      {(activeSection === "workspace" || activeSection === "empresa" ||
+        activeSection === "inbox" || activeSection === "squads" ||
+        activeSection === "kanban" || activeSection === "files" ||
+        activeSection === "approvals" || activeSection === "mission-composer") && (
         <Suspense fallback={<SectionLoader />}>
           <WorkspaceHub
             defaultTab={
-              activeSection === "workspace" ? "inbox" :
+              activeSection === "workspace" ? "empresa" :
               (activeSection as any)
             }
+            agents={agents}
+            nameToSlug={nameToSlug}
             onNavigate={onNavigate}
             onSelectAgent={onSelectAgent}
+            onSetupCompany={onSetupCompany}
           />
         </Suspense>
       )}
 
-
-      {activeSection === "settings" && (
+      {(activeSection === "system" || activeSection === "settings" || activeSection === "operations-center") && (
         <Suspense fallback={<SectionLoader />}>
-          <SettingsPage billingContent={billingContent} />
+          <SystemHub
+            defaultTab={
+              activeSection === "settings" ? "settings" : "operations"
+            }
+            billingContent={billingContent}
+            onNavigate={onNavigate}
+          />
         </Suspense>
       )}
 
       {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
-
 
       {activeSection === "agents" && (
         <Suspense fallback={<SectionLoader />}>
@@ -124,17 +132,6 @@ const DashboardSectionRenderer = ({
         </Suspense>
       )}
 
-      {activeSection === "empresa" && (
-        <Suspense fallback={<SectionLoader />}>
-          <CompanyHub
-            agents={agents}
-            nameToSlug={nameToSlug}
-            onNavigate={onNavigate}
-            onOpenAgent={onSelectAgent}
-            onSetupCompany={onSetupCompany}
-          />
-        </Suspense>
-      )}
 
       {activeSection === "content-pipeline" && <Suspense fallback={<SectionLoader />}><ContentPipelinePanel /></Suspense>}
       {activeSection === "deliverables" && <Suspense fallback={<SectionLoader />}><DeliverablesHub onNavigate={onNavigate} /></Suspense>}
