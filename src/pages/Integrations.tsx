@@ -14,6 +14,7 @@ import WhatsAppSetupGuide from "@/components/dashboard/WhatsAppSetupGuide";
 import SendGridSetupGuide from "@/components/dashboard/SendGridSetupGuide";
 import LinkedInSetupGuide from "@/components/dashboard/LinkedInSetupGuide";
 import MetaAdsSetupGuide from "@/components/dashboard/MetaAdsSetupGuide";
+import IntegrationsTutorial from "@/components/integrations/IntegrationsTutorial";
 
 const SORT_OPTIONS = [
   { value: "popular", label: "Mais populares" },
