@@ -1,6 +1,5 @@
 import { motion } from "framer-motion";
 import { SEO } from "@/components/SEO";
-import PlatformStatsBanner from "@/components/PlatformStatsBanner";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -66,7 +65,6 @@ const Pricing = () => {
     <div className="min-h-screen pt-24 pb-16 px-4 relative">
       <SEO title="Pricing — AI Workforce Plans | Clauthor" description="Hire entire AI departments from R$345/mo. Transparent pricing, no per-seat fees, pay only for outcomes." path="/pricing" />
       <div className="max-w-6xl mx-auto relative mb-8">
-        <PlatformStatsBanner />
       </div>
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
