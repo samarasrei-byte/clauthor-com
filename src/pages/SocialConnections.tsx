@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { CheckCircle2, XCircle, Loader2, ExternalLink, Send, Activity, ShieldCheck, AlertTriangle } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, ExternalLink, Send, Activity, ShieldCheck, AlertTriangle, Bug, Copy, Trash2 } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Linkedin, Youtube } from "lucide-react";
 
@@ -104,6 +104,15 @@ interface LinkedInMetrics {
   recent_posts?: Array<{ id: string; content: string; link_url?: string; status: string; created_at: string; linkedin_urn: string }>;
 }
 
+type UiStatus = "idle" | "connecting" | "connected" | "error";
+interface OAuthLog {
+  ts: number;
+  level: "info" | "success" | "error" | "warn";
+  provider?: string;
+  event: string;
+  detail?: Record<string, unknown>;
+}
+
 const SocialConnections = () => {
   const { user } = useAuth();
   const qc = useQueryClient();
@@ -111,6 +120,24 @@ const SocialConnections = () => {
   const [publishOpen, setPublishOpen] = useState(false);
   const [postContent, setPostContent] = useState("");
   const [postLink, setPostLink] = useState("");
+  const [oauthLogs, setOauthLogs] = useState<OAuthLog[]>([]);
+  const [debugOpen, setDebugOpen] = useState(true);
+  const [uiStatus, setUiStatus] = useState<Record<ProviderKey, { status: UiStatus; message?: string }>>({
+    linkedin: { status: "idle" },
+    meta: { status: "idle" },
+    tiktok: { status: "idle" },
+    x: { status: "idle" },
+    youtube: { status: "idle" },
+  });
+
+  const pushLog = (entry: Omit<OAuthLog, "ts">) => {
+    setOauthLogs((prev) => [{ ts: Date.now(), ...entry }, ...prev].slice(0, 50));
+    // Also echo to console for devtools
+    // eslint-disable-next-line no-console
+    console.log(`[OAuth:${entry.provider ?? "-"}] ${entry.event}`, entry.detail ?? "");
+  };
+  const setStatus = (p: ProviderKey, status: UiStatus, message?: string) =>
+    setUiStatus((s) => ({ ...s, [p]: { status, message } }));
 
   const { data: linkedin, isLoading: liLoading } = useQuery<LinkedInMetrics>({
     queryKey: ["linkedin-metrics"],
@@ -134,30 +161,51 @@ const SocialConnections = () => {
     refetchOnWindowFocus: false,
   });
 
-  // Trata callback OAuth (LinkedIn e Meta) via query params ?code=&state=
-  // Se estiver em popup, processa e avisa a janela pai; caso contrário, processa inline.
+  // Trata callback OAuth (LinkedIn e Meta) via query params ?code=&state=&error=
   useEffect(() => {
     const url = new URL(window.location.href);
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
-    if (!code || !state || !user) return;
+    const errParam = url.searchParams.get("error");
+    const errDesc = url.searchParams.get("error_description") || url.searchParams.get("error_reason");
+    if (!user) return;
+    if (!code && !errParam) return;
 
     const isPopup = !!window.opener && window.opener !== window;
     const storedProvider = sessionStorage.getItem("oauth_provider");
-    const isMeta = state.startsWith(`meta:${user.id}:`) || (!state.startsWith("linkedin:") && storedProvider === "meta");
-    const provider = isMeta ? "meta-oauth" : "hunter-linkedin-oauth";
+    const isMeta = (state?.startsWith(`meta:${user.id}:`) ?? false) || (!state?.startsWith("linkedin:") && storedProvider === "meta");
+    const providerName = isMeta ? "meta" : "linkedin";
+    const fn = isMeta ? "meta-oauth" : "hunter-linkedin-oauth";
     const label = isMeta ? "Meta" : "LinkedIn";
     const invalidateKey = isMeta ? "meta-status" : "linkedin-metrics";
+    const redirect_uri = window.location.origin + "/settings/social";
+
+    pushLog({ level: "info", provider: providerName, event: "callback:received", detail: { state, hasCode: !!code, error: errParam, error_description: errDesc, redirect_uri } });
+
+    // Provider retornou erro antes de emitir code
+    if (errParam) {
+      const msg = `${errParam}${errDesc ? ": " + errDesc : ""}`;
+      pushLog({ level: "error", provider: providerName, event: "callback:provider_error", detail: { error: errParam, error_description: errDesc } });
+      if (isPopup) {
+        window.opener.postMessage({ type: "oauth:error", provider: providerName, message: msg }, window.location.origin);
+        window.close();
+        return;
+      }
+      toast.error(`${label}: ${msg}`);
+      window.history.replaceState({}, "", "/settings/social");
+      return;
+    }
+
     (async () => {
       try {
-        const redirect_uri = window.location.origin + "/settings/social";
-        const { error } = await supabase.functions.invoke(provider, {
+        const { error } = await supabase.functions.invoke(fn, {
           body: { action: "callback", code, redirect_uri },
         });
         if (error) throw error;
         sessionStorage.removeItem("oauth_provider");
+        pushLog({ level: "success", provider: providerName, event: "callback:exchanged", detail: { redirect_uri } });
         if (isPopup) {
-          window.opener.postMessage({ type: "oauth:success", provider: isMeta ? "meta" : "linkedin", label, invalidateKey }, window.location.origin);
+          window.opener.postMessage({ type: "oauth:success", provider: providerName, label, invalidateKey }, window.location.origin);
           window.close();
           return;
         }
@@ -166,8 +214,9 @@ const SocialConnections = () => {
         window.history.replaceState({}, "", "/settings/social");
       } catch (e) {
         const msg = (e as Error).message || "erro desconhecido";
+        pushLog({ level: "error", provider: providerName, event: "callback:exchange_failed", detail: { message: msg } });
         if (isPopup) {
-          window.opener.postMessage({ type: "oauth:error", message: msg }, window.location.origin);
+          window.opener.postMessage({ type: "oauth:error", provider: providerName, message: msg }, window.location.origin);
           window.close();
           return;
         }
@@ -180,11 +229,17 @@ const SocialConnections = () => {
   useEffect(() => {
     const onMsg = (ev: MessageEvent) => {
       if (ev.origin !== window.location.origin) return;
-      const d = ev.data as { type?: string; label?: string; invalidateKey?: string; message?: string };
+      const d = ev.data as { type?: string; provider?: string; label?: string; invalidateKey?: string; message?: string };
       if (d?.type === "oauth:success") {
+        pushLog({ level: "success", provider: d.provider, event: "popup:success" });
+        if (d.provider === "meta") setStatus("meta", "connected");
+        if (d.provider === "linkedin") setStatus("linkedin", "connected");
         toast.success(`${d.label} conectado com sucesso!`);
         if (d.invalidateKey) qc.invalidateQueries({ queryKey: [d.invalidateKey] });
       } else if (d?.type === "oauth:error") {
+        pushLog({ level: "error", provider: d.provider, event: "popup:error", detail: { message: d.message } });
+        if (d.provider === "meta") setStatus("meta", "error", d.message);
+        if (d.provider === "linkedin") setStatus("linkedin", "error", d.message);
         toast.error("Falha ao concluir conexão: " + (d.message ?? ""));
       }
     };
@@ -200,17 +255,29 @@ const SocialConnections = () => {
     if (!popup) toast.error("Popup bloqueado. Habilite popups para este site.");
   };
 
+  const extractState = (u: string): string | null => {
+    try { return new URL(u).searchParams.get("state"); } catch { return null; }
+  };
+
   const connectLinkedIn = useMutation({
     mutationFn: async () => {
       const redirect_uri = window.location.origin + "/settings/social";
       sessionStorage.setItem("oauth_provider", "linkedin");
+      setStatus("linkedin", "connecting");
+      pushLog({ level: "info", provider: "linkedin", event: "authorize:request", detail: { redirect_uri } });
       const { data, error } = await supabase.functions.invoke("hunter-linkedin-oauth", {
         body: { action: "authorize", redirect_uri },
       });
       if (error) throw error;
-      openOAuthPopup((data as { url: string }).url);
+      const authUrl = (data as { url: string }).url;
+      pushLog({ level: "info", provider: "linkedin", event: "authorize:url_received", detail: { state: extractState(authUrl), redirect_uri, auth_url: authUrl } });
+      openOAuthPopup(authUrl);
     },
-    onError: (e: Error) => toast.error(e.message || "Falha ao iniciar OAuth"),
+    onError: (e: Error) => {
+      setStatus("linkedin", "error", e.message);
+      pushLog({ level: "error", provider: "linkedin", event: "authorize:failed", detail: { message: e.message } });
+      toast.error(e.message || "Falha ao iniciar OAuth");
+    },
   });
 
   const disconnectLinkedIn = useMutation({
@@ -219,6 +286,7 @@ const SocialConnections = () => {
       if (error) throw error;
     },
     onSuccess: () => {
+      setStatus("linkedin", "idle");
       toast.success("LinkedIn desconectado");
       qc.invalidateQueries({ queryKey: ["linkedin-metrics"] });
     },
@@ -229,13 +297,21 @@ const SocialConnections = () => {
     mutationFn: async () => {
       const redirect_uri = window.location.origin + "/settings/social";
       sessionStorage.setItem("oauth_provider", "meta");
+      setStatus("meta", "connecting");
+      pushLog({ level: "info", provider: "meta", event: "authorize:request", detail: { redirect_uri } });
       const { data, error } = await supabase.functions.invoke("meta-oauth", {
         body: { action: "authorize", redirect_uri },
       });
       if (error) throw error;
-      openOAuthPopup((data as { url: string }).url);
+      const authUrl = (data as { url: string }).url;
+      pushLog({ level: "info", provider: "meta", event: "authorize:url_received", detail: { state: extractState(authUrl), redirect_uri, auth_url: authUrl } });
+      openOAuthPopup(authUrl);
     },
-    onError: (e: Error) => toast.error(e.message || "Falha ao iniciar OAuth Meta"),
+    onError: (e: Error) => {
+      setStatus("meta", "error", e.message);
+      pushLog({ level: "error", provider: "meta", event: "authorize:failed", detail: { message: e.message } });
+      toast.error(e.message || "Falha ao iniciar OAuth Meta");
+    },
   });
 
   const disconnectMeta = useMutation({
@@ -244,6 +320,7 @@ const SocialConnections = () => {
       if (error) throw error;
     },
     onSuccess: () => {
+      setStatus("meta", "idle");
       toast.success("Meta desconectado");
       qc.invalidateQueries({ queryKey: ["meta-status"] });
     },
@@ -343,20 +420,49 @@ const SocialConnections = () => {
                     </div>
                   </div>
 
-                  {p.isConnected ? (
-                    <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/10">
-                      <CheckCircle2 className="w-3 h-3 mr-1" /> Conectado
-                    </Badge>
-                  ) : p.status === "pending_credentials" ? (
-                    <Badge variant="outline" className="text-amber-600 border-amber-500/30">
-                      <AlertTriangle className="w-3 h-3 mr-1" /> Aguardando setup
-                    </Badge>
-                  ) : (
-                    <Badge variant="outline">
-                      <XCircle className="w-3 h-3 mr-1" /> Desconectado
-                    </Badge>
-                  )}
+                  {(() => {
+                    const ui = uiStatus[p.key];
+                    if (ui?.status === "connecting" && !p.isConnected) {
+                      return (
+                        <Badge variant="outline" className="text-primary border-primary/30">
+                          <Loader2 className="w-3 h-3 mr-1 animate-spin" /> Conectando…
+                        </Badge>
+                      );
+                    }
+                    if (ui?.status === "error" && !p.isConnected) {
+                      return (
+                        <Badge variant="outline" className="text-destructive border-destructive/40">
+                          <AlertTriangle className="w-3 h-3 mr-1" /> Erro
+                        </Badge>
+                      );
+                    }
+                    if (p.isConnected) {
+                      return (
+                        <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/10">
+                          <CheckCircle2 className="w-3 h-3 mr-1" /> Conectado
+                        </Badge>
+                      );
+                    }
+                    if (p.status === "pending_credentials") {
+                      return (
+                        <Badge variant="outline" className="text-amber-600 border-amber-500/30">
+                          <AlertTriangle className="w-3 h-3 mr-1" /> Aguardando setup
+                        </Badge>
+                      );
+                    }
+                    return (
+                      <Badge variant="outline">
+                        <XCircle className="w-3 h-3 mr-1" /> Desconectado
+                      </Badge>
+                    );
+                  })()}
                 </div>
+
+                {uiStatus[p.key]?.status === "error" && uiStatus[p.key]?.message && (
+                  <div className="rounded-md border border-destructive/30 bg-destructive/5 p-2.5 text-xs text-destructive break-words">
+                    <span className="font-semibold">Mensagem do provedor:</span> {uiStatus[p.key]?.message}
+                  </div>
+                )}
 
                 {/* Permissions */}
                 <div className="space-y-2">
@@ -425,6 +531,80 @@ const SocialConnections = () => {
           </motion.div>
         ))}
       </div>
+
+      {/* OAuth Debug Panel */}
+      <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+        <Card className="border-border/60">
+          <CardContent className="p-4 sm:p-5 space-y-3">
+            <div className="flex items-center justify-between gap-2 flex-wrap">
+              <div className="flex items-center gap-2">
+                <Bug className="w-4 h-4 text-primary" />
+                <h2 className="text-sm font-semibold">Debug OAuth</h2>
+                <Badge variant="outline" className="text-[10px]">{oauthLogs.length} evento{oauthLogs.length !== 1 ? "s" : ""}</Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    navigator.clipboard.writeText(JSON.stringify(oauthLogs, null, 2));
+                    toast.success("Logs copiados");
+                  }}
+                  disabled={oauthLogs.length === 0}
+                >
+                  <Copy className="w-3.5 h-3.5 mr-1.5" /> Copiar
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => setOauthLogs([])} disabled={oauthLogs.length === 0}>
+                  <Trash2 className="w-3.5 h-3.5 mr-1.5" /> Limpar
+                </Button>
+                <Button size="sm" variant="ghost" onClick={() => setDebugOpen((v) => !v)}>
+                  {debugOpen ? "Ocultar" : "Mostrar"}
+                </Button>
+              </div>
+            </div>
+            {debugOpen && (
+              <div className="max-h-80 overflow-y-auto rounded-md border border-border/60 bg-muted/20 divide-y divide-border/40 text-xs font-mono">
+                {oauthLogs.length === 0 ? (
+                  <div className="p-4 text-muted-foreground text-center">
+                    Nenhum evento ainda. Clique em <b>Conectar</b> em um provedor para começar a rastrear state, callback URL e mensagens do provedor.
+                  </div>
+                ) : (
+                  oauthLogs.map((l, idx) => (
+                    <div key={idx} className="p-2.5 space-y-1">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span
+                          className={
+                            l.level === "error"
+                              ? "text-destructive font-semibold"
+                              : l.level === "success"
+                              ? "text-emerald-600 font-semibold"
+                              : l.level === "warn"
+                              ? "text-amber-600 font-semibold"
+                              : "text-primary font-semibold"
+                          }
+                        >
+                          [{l.level.toUpperCase()}]
+                        </span>
+                        {l.provider && <Badge variant="outline" className="text-[10px] h-4 px-1">{l.provider}</Badge>}
+                        <span className="text-foreground">{l.event}</span>
+                        <span className="text-muted-foreground ml-auto">
+                          {new Date(l.ts).toLocaleTimeString("pt-BR")}
+                        </span>
+                      </div>
+                      {l.detail && (
+                        <pre className="whitespace-pre-wrap break-all text-[11px] text-muted-foreground bg-background/60 rounded p-2 border border-border/40">
+{JSON.stringify(l.detail, null, 2)}
+                        </pre>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+
 
       {/* LinkedIn metrics section */}
       {isLinkedInConnected && (
