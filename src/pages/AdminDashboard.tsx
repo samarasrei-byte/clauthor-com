@@ -326,6 +326,7 @@ const AdminDashboard = () => {
               {activeTab === "subscriptions" && <AdminSubscriptionsTable allSubscriptions={allSubscriptions} locale={locale} />}
               {activeTab === "signup-metrics" && <AdminSignupMetrics allProfiles={allProfiles} locale={locale} />}
               {activeTab === "ai-costs" && <AdminCostsDashboard />}
+              {activeTab === "simulations" && <AdminSimulationsPanel />}
             </motion.div>
           </AnimatePresence>
         </div>
