@@ -90,8 +90,8 @@ const PROVIDERS: ProviderDef[] = [
     brand: "text-[#E4405F]",
     Icon: MetaLogo,
     permissions: ["Publicar em Página FB", "Publicar no Instagram Business", "Ler insights"],
-    status: "pending_credentials",
-    helpText: "Requer META_APP_ID/SECRET + app review na Meta (2-6 semanas). O cliente precisa de Página FB + Instagram Business Account vinculado.",
+    status: "ready",
+    helpText: "Conecte sua conta Meta pessoal. O app listará automaticamente as Páginas do Facebook e contas Instagram Business vinculadas.",
   },
 ];
 
