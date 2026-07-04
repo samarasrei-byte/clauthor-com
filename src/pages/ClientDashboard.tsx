@@ -309,8 +309,10 @@ const ClientDashboard = () => {
 
   // Itens completos (vistos por admin). Cliente vê apenas o subset estável.
   const allSidebarItems: SidebarItem[] = [
-    // ─── Principal: navegação do dia-a-dia ───
+    // ─── Principal: features centrais (Command Center → THOR → Workspace → Agentes) ───
     { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
+    { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: mainGroup },
+    { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: mainGroup },
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
     { id: "chat", label: "Chat", icon: MessageSquare, group: mainGroup },
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}`, group: mainGroup }] : []),
@@ -319,10 +321,6 @@ const ClientDashboard = () => {
 
     // ─── Inteligência: hub unificado (Relatórios + War Room + Preditivo + Neural + Replay + DNA + Benchmarks) ───
     { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3, group: intelligenceGroup },
-
-    // ─── Ferramentas Avançadas: THOR + Workspace (Empresa + Inbox + Squads + Tarefas + Arquivos + Aprovações + Composer) ───
-    { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: advancedGroup },
-    { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: advancedGroup },
 
     // ─── Sistema: Integrações em destaque + hub unificado ───
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
