@@ -35,6 +35,7 @@ const SimulationDialog = ({ open, onOpenChange, agentSlug, agentName, onHire }: 
   const [context, setContext] = useState("");
   const [running, setRunning] = useState(false);
   const [projection, setProjection] = useState<Projection | null>(null);
+  const [simulationId, setSimulationId] = useState<string | null>(null);
 
   const handleRun = async () => {
     if (!context.trim() || context.trim().length < 20) {
@@ -49,6 +50,23 @@ const SimulationDialog = ({ open, onOpenChange, agentSlug, agentName, onHire }: 
       });
       if (error) throw error;
       setProjection(data);
+
+      // Persist simulation (best-effort; ignore if user is anonymous)
+      const { data: auth } = await supabase.auth.getUser();
+      if (auth.user) {
+        const { data: row } = await supabase
+          .from("simulations")
+          .insert({
+            user_id: auth.user.id,
+            agent_slug: agentSlug,
+            agent_name: agentName,
+            context: context.trim(),
+            projection: data,
+          })
+          .select("id")
+          .single();
+        if (row) setSimulationId(row.id);
+      }
     } catch (err) {
       toast.error("Simulação falhou. Tente novamente.");
       console.error(err);
@@ -57,9 +75,20 @@ const SimulationDialog = ({ open, onOpenChange, agentSlug, agentName, onHire }: 
     }
   };
 
+  const handleHire = async () => {
+    if (simulationId) {
+      await supabase
+        .from("simulations")
+        .update({ converted_to_hire: true })
+        .eq("id", simulationId);
+    }
+    onHire?.();
+  };
+
   const reset = () => {
     setContext("");
     setProjection(null);
+    setSimulationId(null);
   };
 
   return (
@@ -148,7 +177,7 @@ const SimulationDialog = ({ open, onOpenChange, agentSlug, agentName, onHire }: 
                 Nova simulação
               </Button>
               {onHire && (
-                <Button onClick={onHire} className="flex-1">
+                <Button onClick={handleHire} className="flex-1">
                   Contratar agora <TrendingUp className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
               )}
