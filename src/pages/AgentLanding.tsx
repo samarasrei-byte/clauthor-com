@@ -352,6 +352,13 @@ const AgentLanding = () => {
           </motion.div>
         </div>
       </section>
+      <SimulationDialog
+        open={simOpen}
+        onOpenChange={setSimOpen}
+        agentSlug={slug || ""}
+        agentName={agent.solutionTitle}
+        onHire={() => navigate(isAdmin ? `/app/agente/${slug}` : "/auth")}
+      />
     </div>
   );
 };
