@@ -20,6 +20,7 @@ const FeedbackTrendsPanel = lazy(() => import("./FeedbackTrendsPanel"));
 const ThorDailyBriefing = lazy(() => import("./ThorDailyBriefing"));
 const QuickWins = lazy(() => import("./QuickWins"));
 const TaskRequestPanel = lazy(() => import("./TaskRequestPanel"));
+const PlatformStatsBanner = lazy(() => import("@/components/PlatformStatsBanner"));
 const PendingActionsPanel = lazy(() => import("./PendingActionsPanel").then(m => ({ default: m.PendingActionsPanel })));
 const ClientCommandCenter = lazy(() => import("./ClientCommandCenter"));
 const DashboardSkeleton = lazy(() => import("./DashboardSkeleton"));
