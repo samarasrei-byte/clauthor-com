@@ -108,9 +108,6 @@ const DashboardSectionRenderer = ({
 
       {activeSection === "library" && <Suspense fallback={<SectionLoader />}><Library /></Suspense>}
 
-      {activeSection === "squads" && (
-        <Suspense fallback={<SectionLoader />}><SquadManager onNavigate={onNavigate} /></Suspense>
-      )}
 
       {activeSection === "agents" && (
         <Suspense fallback={<SectionLoader />}>
