@@ -453,12 +453,13 @@ const SocialConnections = () => {
               <CardContent className="p-0 divide-y divide-border/60">
                 {linkedin.recent_posts.map((post) => (
                   <div key={post.id} className="p-4 space-y-1">
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
                       <Badge variant={post.status === "published" ? "default" : "destructive"} className="text-xs">
                         {post.status}
                       </Badge>
                       <span className="text-xs text-muted-foreground">{new Date(post.created_at).toLocaleString("pt-BR")}</span>
                     </div>
+
                     <p className="text-sm line-clamp-2">{post.content}</p>
                     {post.status === "published" && (
                       <a
