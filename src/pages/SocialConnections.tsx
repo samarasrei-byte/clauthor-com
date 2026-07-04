@@ -135,12 +135,14 @@ const SocialConnections = () => {
   });
 
   // Trata callback OAuth (LinkedIn e Meta) via query params ?code=&state=
+  // Se estiver em popup, processa e avisa a janela pai; caso contrário, processa inline.
   useEffect(() => {
     const url = new URL(window.location.href);
     const code = url.searchParams.get("code");
     const state = url.searchParams.get("state");
     if (!code || !state || !user) return;
 
+    const isPopup = !!window.opener && window.opener !== window;
     const storedProvider = sessionStorage.getItem("oauth_provider");
     const isMeta = state.startsWith(`meta:${user.id}:`) || (!state.startsWith("linkedin:") && storedProvider === "meta");
     const provider = isMeta ? "meta-oauth" : "hunter-linkedin-oauth";
@@ -153,15 +155,50 @@ const SocialConnections = () => {
           body: { action: "callback", code, redirect_uri },
         });
         if (error) throw error;
+        sessionStorage.removeItem("oauth_provider");
+        if (isPopup) {
+          window.opener.postMessage({ type: "oauth:success", provider: isMeta ? "meta" : "linkedin", label, invalidateKey }, window.location.origin);
+          window.close();
+          return;
+        }
         toast.success(`${label} conectado com sucesso!`);
         qc.invalidateQueries({ queryKey: [invalidateKey] });
-        sessionStorage.removeItem("oauth_provider");
         window.history.replaceState({}, "", "/settings/social");
       } catch (e) {
-        toast.error("Falha ao concluir conexão: " + ((e as Error).message || "erro desconhecido"));
+        const msg = (e as Error).message || "erro desconhecido";
+        if (isPopup) {
+          window.opener.postMessage({ type: "oauth:error", message: msg }, window.location.origin);
+          window.close();
+          return;
+        }
+        toast.error("Falha ao concluir conexão: " + msg);
       }
     })();
   }, [user, qc]);
+
+  // Escuta mensagens do popup OAuth
+  useEffect(() => {
+    const onMsg = (ev: MessageEvent) => {
+      if (ev.origin !== window.location.origin) return;
+      const d = ev.data as { type?: string; label?: string; invalidateKey?: string; message?: string };
+      if (d?.type === "oauth:success") {
+        toast.success(`${d.label} conectado com sucesso!`);
+        if (d.invalidateKey) qc.invalidateQueries({ queryKey: [d.invalidateKey] });
+      } else if (d?.type === "oauth:error") {
+        toast.error("Falha ao concluir conexão: " + (d.message ?? ""));
+      }
+    };
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
+  }, [qc]);
+
+  const openOAuthPopup = (url: string) => {
+    const w = 600, h = 720;
+    const y = window.top!.outerHeight / 2 + window.top!.screenY - h / 2;
+    const x = window.top!.outerWidth / 2 + window.top!.screenX - w / 2;
+    const popup = window.open(url, "oauth_popup", `width=${w},height=${h},left=${x},top=${y},resizable=yes,scrollbars=yes`);
+    if (!popup) toast.error("Popup bloqueado. Habilite popups para este site.");
+  };
 
   const connectLinkedIn = useMutation({
     mutationFn: async () => {
@@ -171,7 +208,7 @@ const SocialConnections = () => {
         body: { action: "authorize", redirect_uri },
       });
       if (error) throw error;
-      window.location.href = (data as { url: string }).url;
+      openOAuthPopup((data as { url: string }).url);
     },
     onError: (e: Error) => toast.error(e.message || "Falha ao iniciar OAuth"),
   });
@@ -196,7 +233,7 @@ const SocialConnections = () => {
         body: { action: "authorize", redirect_uri },
       });
       if (error) throw error;
-      window.location.href = (data as { url: string }).url;
+      openOAuthPopup((data as { url: string }).url);
     },
     onError: (e: Error) => toast.error(e.message || "Falha ao iniciar OAuth Meta"),
   });
