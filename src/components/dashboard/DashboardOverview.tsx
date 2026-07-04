@@ -140,6 +140,9 @@ const DashboardOverview = ({
                   onDismiss={() => {}}
                 />
 
+                <LiveActivityFeed />
+
+
                 <QuickWins
                   activeAgents={activeAgents}
                   totalExecutions={totalExecutions}
