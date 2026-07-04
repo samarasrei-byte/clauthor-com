@@ -8,9 +8,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Loader2, TrendingUp, PlayCircle, Target, Eye, Sparkles, AlertTriangle, Lightbulb, Check, Wand2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
 type Period = "7d" | "30d" | "90d" | "all";
@@ -295,7 +296,7 @@ const AdminSimulationsPanel = () => {
         </CardContent>
       </Card>
 
-      <Dialog
+      <Sheet
         open={!!drillSlug}
         onOpenChange={(v) => {
           if (!v) {
@@ -304,15 +305,16 @@ const AdminSimulationsPanel = () => {
           }
         }}
       >
-        <DialogContent className="max-w-3xl max-h-[85vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="flex items-center justify-between gap-2">
-              <span>Simulações não convertidas · {drillSlug}</span>
+        <SheetContent side="right" className="w-full sm:max-w-2xl overflow-y-auto p-0">
+          <SheetHeader className="sticky top-0 z-10 bg-background/95 backdrop-blur border-b border-border/40 px-6 py-4">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-primary/70">Drill-down · Não convertidas</p>
+            <SheetTitle className="flex items-center justify-between gap-3 mt-1">
+              <span className="font-mono text-sm truncate">{drillSlug}</span>
               {drillRows && drillRows.length >= 2 && (
                 <Button
                   size="sm"
                   variant="outline"
-                  className="gap-1.5 border-primary/30 text-primary"
+                  className="gap-1.5 border-primary/30 text-primary shrink-0"
                   disabled={analyzing}
                   onClick={() => runAnalysis(!!analysis)}
                 >
@@ -321,112 +323,133 @@ const AdminSimulationsPanel = () => {
                   ) : analysis ? (
                     <><Sparkles className="h-3.5 w-3.5" /> Refazer análise</>
                   ) : (
-                    <><Sparkles className="h-3.5 w-3.5" /> Analisar objeções com IA</>
+                    <><Sparkles className="h-3.5 w-3.5" /> Analisar objeções</>
                   )}
                 </Button>
               )}
-            </DialogTitle>
-          </DialogHeader>
+            </SheetTitle>
+          </SheetHeader>
 
-          {analysis && (
-            <div className="rounded-xl border border-primary/30 bg-primary/5 p-4 space-y-3 mb-2">
-              {cachedAt && (
-                <p className="text-[10px] text-muted-foreground -mt-1">
-                  Análise em cache · atualizada {new Date(cachedAt).toLocaleString("pt-BR")}
-                </p>
-              )}
-              {analysis.patterns && analysis.patterns.length > 0 && (
-                <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground mb-1.5 flex items-center gap-1.5">
-                    <Sparkles className="h-3 w-3" /> Padrões
+          <div className="px-6 py-5 space-y-5">
+            {analysis && (
+              <div className="rounded-xl border border-primary/20 bg-gradient-to-br from-primary/[0.03] to-transparent p-4 space-y-4">
+                {cachedAt && (
+                  <p className="text-[10px] text-muted-foreground -mt-1">
+                    Cache · {new Date(cachedAt).toLocaleString("pt-BR")}
                   </p>
-                  <ul className="space-y-1 text-sm">
-                    {analysis.patterns.map((p, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <Badge variant="outline" className="text-[10px]">{p.count}</Badge>
-                        <span>{p.label}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-              {analysis.objections && analysis.objections.length > 0 && (
-                <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground mb-1.5 flex items-center gap-1.5">
-                    <AlertTriangle className="h-3 w-3" /> Objeções
-                  </p>
-                  <ul className="space-y-1 text-sm list-disc list-inside">
-                    {analysis.objections.map((o, i) => <li key={i}>{o}</li>)}
-                  </ul>
-                </div>
-              )}
-              {analysis.recommendations && analysis.recommendations.length > 0 && (
-                <div>
-                  <p className="text-xs font-semibold uppercase text-muted-foreground mb-1.5 flex items-center gap-1.5">
-                    <Lightbulb className="h-3 w-3" /> Recomendações
-                  </p>
-                  <ul className="space-y-1.5 text-sm">
-                    {analysis.recommendations.map((r, i) => (
-                      <li key={i} className="rounded-lg bg-background/60 p-2">
-                        <div className="flex items-center justify-between gap-2 mb-0.5">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <span className="font-semibold truncate">{r.title}</span>
-                            <Badge variant="outline" className="text-[10px] capitalize shrink-0">{r.impact}</Badge>
-                          </div>
-                          <Button
-                            size="sm"
-                            variant={appliedIdx.has(i) ? "outline" : "default"}
-                            className="h-7 gap-1 shrink-0"
-                            disabled={applyingIdx !== null || appliedIdx.has(i)}
-                            onClick={() => applyRecommendation(i, r)}
-                          >
-                            {applyingIdx === i ? (
-                              <><Loader2 className="h-3 w-3 animate-spin" /> Aplicando…</>
-                            ) : appliedIdx.has(i) ? (
-                              <><Check className="h-3 w-3" /> Aplicada</>
-                            ) : (
-                              <><Wand2 className="h-3 w-3" /> Aplicar</>
-                            )}
-                          </Button>
-                        </div>
-                        <p className="text-xs text-muted-foreground">{r.action}</p>
-
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
-          )}
-
-          {drillLoading ? (
-            <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
-          ) : !drillRows || drillRows.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-6 text-center">Sem registros.</p>
-          ) : (
-            <div className="space-y-2">
-              {drillRows.map((s) => (
-                <div key={s.id} className="rounded-lg border border-border/40 p-3 text-sm">
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] font-mono text-muted-foreground">
-                      {new Date(s.created_at).toLocaleString("pt-BR")}
-                    </span>
-                    {s.projection?.confidence && (
-                      <Badge variant="outline" className="text-[10px]">Conf.: {s.projection.confidence}</Badge>
-                    )}
-                  </div>
-                  <p className="text-foreground/90 whitespace-pre-wrap">{s.context}</p>
-                  {s.projection?.headline && (
-                    <p className="text-xs text-muted-foreground mt-2 border-t border-border/30 pt-2">
-                      Projeção: {s.projection.headline}
+                )}
+                {analysis.patterns && analysis.patterns.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2 flex items-center gap-1.5">
+                      <Sparkles className="h-3 w-3" /> Padrões
                     </p>
-                  )}
+                    <ul className="space-y-1 text-sm">
+                      {analysis.patterns.map((p, i) => (
+                        <li key={i} className="flex items-start gap-2">
+                          <Badge variant="outline" className="text-[10px]">{p.count}</Badge>
+                          <span>{p.label}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+                {analysis.objections && analysis.objections.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2 flex items-center gap-1.5">
+                      <AlertTriangle className="h-3 w-3" /> Objeções
+                    </p>
+                    <ul className="space-y-1 text-sm list-disc list-inside marker:text-muted-foreground/50">
+                      {analysis.objections.map((o, i) => <li key={i}>{o}</li>)}
+                    </ul>
+                  </div>
+                )}
+                {analysis.recommendations && analysis.recommendations.length > 0 && (
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2 flex items-center gap-1.5">
+                      <Lightbulb className="h-3 w-3" /> Recomendações
+                    </p>
+                    <ul className="space-y-2 text-sm">
+                      <AnimatePresence initial={true}>
+                        {analysis.recommendations.map((r, i) => {
+                          const impact = (r.impact || "").toLowerCase();
+                          const borderColor =
+                            impact === "alto" ? "border-l-primary"
+                            : impact === "médio" || impact === "medio" ? "border-l-amber-500"
+                            : "border-l-muted-foreground/30";
+                          return (
+                            <motion.li
+                              key={i}
+                              initial={{ opacity: 0, y: 8 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: i * 0.06, duration: 0.25 }}
+                              className={`rounded-r-lg border-l-2 ${borderColor} bg-background/70 pl-3 pr-2 py-2.5`}
+                            >
+                              <div className="flex items-center justify-between gap-2 mb-1">
+                                <div className="flex items-center gap-2 min-w-0">
+                                  <span className="font-semibold truncate">{r.title}</span>
+                                  <Badge variant="outline" className="text-[9px] capitalize shrink-0 uppercase tracking-wider">{r.impact}</Badge>
+                                </div>
+                                <Button
+                                  size="sm"
+                                  variant={appliedIdx.has(i) ? "outline" : "default"}
+                                  className="h-7 gap-1 shrink-0"
+                                  disabled={applyingIdx !== null || appliedIdx.has(i)}
+                                  onClick={() => applyRecommendation(i, r)}
+                                >
+                                  {applyingIdx === i ? (
+                                    <><Loader2 className="h-3 w-3 animate-spin" /> Aplicando…</>
+                                  ) : appliedIdx.has(i) ? (
+                                    <><Check className="h-3 w-3" /> Aplicada</>
+                                  ) : (
+                                    <><Wand2 className="h-3 w-3" /> Aplicar</>
+                                  )}
+                                </Button>
+                              </div>
+                              <p className="text-xs text-muted-foreground leading-relaxed">{r.action}</p>
+                            </motion.li>
+                          );
+                        })}
+                      </AnimatePresence>
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+
+            <div>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">
+                Registros
+              </p>
+              {drillLoading ? (
+                <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
+              ) : !drillRows || drillRows.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-6 text-center">Sem registros.</p>
+              ) : (
+                <div className="space-y-2">
+                  {drillRows.map((s) => (
+                    <div key={s.id} className="rounded-lg border border-border/40 p-3 text-sm">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <span className="text-[10px] font-mono text-muted-foreground">
+                          {new Date(s.created_at).toLocaleString("pt-BR")}
+                        </span>
+                        {s.projection?.confidence && (
+                          <Badge variant="outline" className="text-[10px]">Conf.: {s.projection.confidence}</Badge>
+                        )}
+                      </div>
+                      <p className="text-foreground/90 whitespace-pre-wrap">{s.context}</p>
+                      {s.projection?.headline && (
+                        <p className="text-xs text-muted-foreground mt-2 border-t border-border/30 pt-2">
+                          Projeção: {s.projection.headline}
+                        </p>
+                      )}
+                    </div>
+                  ))}
                 </div>
-              ))}
+              )}
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
