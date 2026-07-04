@@ -350,6 +350,21 @@ const SocialConnections = () => {
                       {connectLinkedIn.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <ExternalLink className="w-3.5 h-3.5 mr-1.5" />}
                       Conectar
                     </Button>
+                  ) : p.key === "meta" && p.isConnected ? (
+                    <>
+                      <Button size="sm" variant="outline" onClick={() => testConnection(p.key)} disabled={testingProvider === p.key}>
+                        {testingProvider === p.key ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Activity className="w-3.5 h-3.5 mr-1.5" />}
+                        Testar
+                      </Button>
+                      <Button size="sm" variant="ghost" onClick={() => disconnectMeta.mutate()} disabled={disconnectMeta.isPending}>
+                        Desconectar
+                      </Button>
+                    </>
+                  ) : p.key === "meta" ? (
+                    <Button size="sm" onClick={() => connectMeta.mutate()} disabled={connectMeta.isPending}>
+                      {connectMeta.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <ExternalLink className="w-3.5 h-3.5 mr-1.5" />}
+                      Conectar
+                    </Button>
                   ) : (
                     <>
                       <Button size="sm" disabled>
