@@ -307,21 +307,22 @@ const SocialConnections = () => {
 
   return (
     <div className="h-full overflow-y-auto">
-    <div className="container mx-auto max-w-7xl px-6 lg:px-10 py-10 lg:py-12 space-y-10">
+    <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-6 sm:py-10 lg:py-12 space-y-8 sm:space-y-10">
       {/* Header */}
       <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
-        <div className="flex items-center gap-2">
-          <ShieldCheck className="w-5 h-5 text-primary" />
+        <div className="flex items-center gap-2 flex-wrap">
+          <ShieldCheck className="w-5 h-5 text-primary shrink-0" />
           <Badge variant="outline" className="text-xs">OAuth por usuário</Badge>
         </div>
-        <h1 className="text-4xl lg:text-5xl font-semibold tracking-tight">Conexões Sociais</h1>
-        <p className="text-base text-muted-foreground max-w-3xl leading-relaxed">
+        <h1 className="text-2xl sm:text-3xl lg:text-5xl font-semibold tracking-tight">Conexões Sociais</h1>
+        <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
           Cada cliente conecta sua própria conta. Os tokens ficam isolados por usuário e criptografados no cofre — a CLAUTHOR nunca compartilha credenciais entre workspaces.
         </p>
       </motion.div>
 
       {/* Provider cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6">
+
         {providerStatus.map((p, i) => (
           <motion.div
             key={p.key}
@@ -330,17 +331,18 @@ const SocialConnections = () => {
             transition={{ delay: i * 0.05 }}
           >
             <Card className="h-full border-border/60 hover:border-primary/40 transition-colors">
-              <CardContent className="p-6 lg:p-7 space-y-5">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-xl bg-muted/50 flex items-center justify-center">
-                      <p.Icon className={`w-6 h-6 ${p.brand}`} />
+              <CardContent className="p-5 sm:p-6 lg:p-7 space-y-5">
+                <div className="flex items-start justify-between gap-3 flex-wrap">
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-muted/50 flex items-center justify-center shrink-0">
+                      <p.Icon className={`w-5 h-5 sm:w-6 sm:h-6 ${p.brand}`} />
                     </div>
-                    <div>
-                      <div className="font-semibold text-base">{p.name}</div>
-                      {p.subtitle && <div className="text-xs text-muted-foreground">{p.subtitle}</div>}
+                    <div className="min-w-0">
+                      <div className="font-semibold text-base truncate">{p.name}</div>
+                      {p.subtitle && <div className="text-xs text-muted-foreground truncate">{p.subtitle}</div>}
                     </div>
                   </div>
+
                   {p.isConnected ? (
                     <Badge className="bg-emerald-500/10 text-emerald-600 border-emerald-500/20 hover:bg-emerald-500/10">
                       <CheckCircle2 className="w-3 h-3 mr-1" /> Conectado
@@ -431,7 +433,7 @@ const SocialConnections = () => {
             <Sparkles className="w-4 h-4 text-primary" />
             <h2 className="text-lg font-semibold">Métricas LinkedIn — últimos 30 dias</h2>
           </div>
-          <div className="grid grid-cols-3 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <Card><CardContent className="p-4">
               <div className="text-2xl font-semibold">{linkedin?.metrics?.total_published ?? 0}</div>
               <div className="text-xs text-muted-foreground mt-1">Publicados no total</div>
@@ -451,12 +453,13 @@ const SocialConnections = () => {
               <CardContent className="p-0 divide-y divide-border/60">
                 {linkedin.recent_posts.map((post) => (
                   <div key={post.id} className="p-4 space-y-1">
-                    <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center justify-between gap-2 flex-wrap">
                       <Badge variant={post.status === "published" ? "default" : "destructive"} className="text-xs">
                         {post.status}
                       </Badge>
                       <span className="text-xs text-muted-foreground">{new Date(post.created_at).toLocaleString("pt-BR")}</span>
                     </div>
+
                     <p className="text-sm line-clamp-2">{post.content}</p>
                     {post.status === "published" && (
                       <a
