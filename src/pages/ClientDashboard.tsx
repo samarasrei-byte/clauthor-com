@@ -324,7 +324,8 @@ const ClientDashboard = () => {
     { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: advancedGroup },
     { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: advancedGroup },
 
-    // ─── Sistema: hub unificado (Operações + Configurações) ───
+    // ─── Sistema: Integrações em destaque + hub unificado ───
+    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
     { id: "system", label: t("dashboard.nav_system", { defaultValue: "Sistema" }), icon: Settings, group: systemGroup },
   ];
 
@@ -333,7 +334,7 @@ const ClientDashboard = () => {
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "chat", "agent-chat-active",
     "intelligence-hub", "omnix", "workspace",
-    "system",
+    "integrations", "system",
   ]);
   const sidebarItems: SidebarItem[] = isAdmin
     ? allSidebarItems
