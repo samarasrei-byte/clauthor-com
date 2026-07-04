@@ -14,8 +14,14 @@ const QuickActions = () => {
       transition={{ delay: 0.1 }}
       className="flex items-center gap-2"
     >
-      <Link to="/create-agent">
+      <Link to="/outcomes">
         <Button size="sm" className="glow gap-1.5 font-medium">
+          <Target className="h-3.5 w-3.5" />
+          {t("dashboard.outcomes", { defaultValue: "Resultado" })}
+        </Button>
+      </Link>
+      <Link to="/create-agent">
+        <Button size="sm" variant="outline" className="gap-1.5 border-white/10">
           <Plus className="h-3.5 w-3.5" />
           {t("dashboard.new_agent", { defaultValue: "Novo Agente" })}
         </Button>
