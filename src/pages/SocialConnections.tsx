@@ -544,6 +544,10 @@ const SocialConnections = () => {
                         {testingProvider === p.key ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Activity className="w-3.5 h-3.5 mr-1.5" />}
                         Testar
                       </Button>
+                      <Button size="sm" onClick={() => metaTestPublish.mutate()} disabled={metaTestPublish.isPending}>
+                        {metaTestPublish.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <FlaskConical className="w-3.5 h-3.5 mr-1.5" />}
+                        Testar postagem
+                      </Button>
                       <Button size="sm" variant="ghost" onClick={() => disconnectMeta.mutate()} disabled={disconnectMeta.isPending}>
                         Desconectar
                       </Button>
