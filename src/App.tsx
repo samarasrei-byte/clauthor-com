@@ -177,6 +177,7 @@ const App = () => (
                   <Route path="/mcp" element={<MCPServer />} />
                   <Route path="/settings/connections" element={<SettingsConnections />} />
                   <Route path="/settings/social" element={<SocialConnections />} />
+                  <Route path="/art-director" element={<ArtDirector />} />
 
 
                   <Route path="/knowledge-base" element={<KnowledgeBase />} />
