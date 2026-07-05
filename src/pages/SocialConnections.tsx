@@ -341,6 +341,31 @@ const SocialConnections = () => {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const metaTestPublish = useMutation({
+    mutationFn: async () => {
+      pushLog({ level: "info", provider: "meta", event: "test_publish:request" });
+      const { data, error } = await supabase.functions.invoke("meta-test-publish", { body: {} });
+      if (error) throw error;
+      return data as NonNullable<typeof metaTestResult>;
+    },
+    onSuccess: (data) => {
+      setMetaTestResult(data);
+      pushLog({
+        level: data.ok ? "success" : "error",
+        provider: "meta",
+        event: `test_publish:${data.stage ?? (data.ok ? "ok" : "failed")}`,
+        detail: data as unknown as Record<string, unknown>,
+      });
+      if (data.ok) toast.success("Rascunho criado no Facebook", { description: data.page?.name });
+      else toast.warning("Falha no teste de postagem", { description: data.detail });
+    },
+    onError: (e: Error) => {
+      setMetaTestResult({ ok: false, stage: "invoke_error", detail: e.message });
+      pushLog({ level: "error", provider: "meta", event: "test_publish:invoke_error", detail: { message: e.message } });
+      toast.error("Erro ao testar postagem: " + e.message);
+    },
+  });
+
   const publishPost = useMutation({
     mutationFn: async () => {
       const { data, error } = await supabase.functions.invoke("linkedin-publish", {
