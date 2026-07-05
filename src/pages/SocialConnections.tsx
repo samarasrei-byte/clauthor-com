@@ -575,6 +575,92 @@ const SocialConnections = () => {
         ))}
       </div>
 
+      {/* Meta test-publish result panel */}
+      {metaTestResult && (
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+          <Card className={metaTestResult.ok ? "border-emerald-500/40" : "border-destructive/40"}>
+            <CardContent className="p-4 sm:p-5 space-y-3">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <FlaskConical className={`w-4 h-4 ${metaTestResult.ok ? "text-emerald-600" : "text-destructive"}`} />
+                  <h2 className="text-sm font-semibold">Resultado do teste de postagem (Meta)</h2>
+                  <Badge
+                    variant="outline"
+                    className={metaTestResult.ok ? "text-emerald-600 border-emerald-500/40" : "text-destructive border-destructive/40"}
+                  >
+                    {metaTestResult.ok ? "OK" : "Falhou"}
+                  </Badge>
+                  {metaTestResult.stage && (
+                    <Badge variant="outline" className="text-[10px]">{metaTestResult.stage}</Badge>
+                  )}
+                  {typeof metaTestResult.latency_ms === "number" && (
+                    <span className="text-xs text-muted-foreground">{metaTestResult.latency_ms}ms</span>
+                  )}
+                </div>
+                <Button size="sm" variant="ghost" onClick={() => setMetaTestResult(null)}>Fechar</Button>
+              </div>
+
+              {metaTestResult.detail && (
+                <p className="text-sm text-foreground/90">{metaTestResult.detail}</p>
+              )}
+              {metaTestResult.hint && (
+                <p className="text-xs text-amber-600">💡 {metaTestResult.hint}</p>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                {metaTestResult.page && (
+                  <div className="rounded-md border border-border/60 p-2.5 bg-muted/20">
+                    <div className="text-muted-foreground">Página</div>
+                    <div className="font-medium truncate">{metaTestResult.page.name}</div>
+                    <div className="text-muted-foreground font-mono text-[10px] truncate">{metaTestResult.page.id}</div>
+                  </div>
+                )}
+                {metaTestResult.post_id && (
+                  <div className="rounded-md border border-border/60 p-2.5 bg-muted/20">
+                    <div className="text-muted-foreground">Post ID</div>
+                    <div className="font-mono truncate">{metaTestResult.post_id}</div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {metaTestResult.draft_url && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={metaTestResult.draft_url} target="_blank" rel="noreferrer">
+                      <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Abrir rascunho
+                    </a>
+                  </Button>
+                )}
+                {metaTestResult.publishing_tools_url && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={metaTestResult.publishing_tools_url} target="_blank" rel="noreferrer">
+                      <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Publishing Tools
+                    </a>
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    navigator.clipboard.writeText(JSON.stringify(metaTestResult, null, 2));
+                    toast.success("Detalhes copiados");
+                  }}
+                >
+                  <Copy className="w-3.5 h-3.5 mr-1.5" /> Copiar detalhes
+                </Button>
+              </div>
+
+              <details className="text-xs">
+                <summary className="cursor-pointer text-muted-foreground hover:text-foreground">Ver payload completo</summary>
+                <pre className="mt-2 whitespace-pre-wrap break-all text-[11px] text-muted-foreground bg-background/60 rounded p-2 border border-border/40 font-mono">
+{JSON.stringify(metaTestResult, null, 2)}
+                </pre>
+              </details>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
+
       {/* OAuth Debug Panel */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
         <Card className="border-border/60">
