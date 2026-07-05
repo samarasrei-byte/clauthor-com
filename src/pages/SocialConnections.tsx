@@ -122,6 +122,20 @@ const SocialConnections = () => {
   const [postLink, setPostLink] = useState("");
   const [oauthLogs, setOauthLogs] = useState<OAuthLog[]>([]);
   const [debugOpen, setDebugOpen] = useState(true);
+  const [metaTestResult, setMetaTestResult] = useState<null | {
+    ok: boolean;
+    stage?: string;
+    detail?: string;
+    latency_ms?: number;
+    http_status?: number;
+    page?: { id: string; name: string };
+    post_id?: string;
+    draft_url?: string;
+    publishing_tools_url?: string;
+    request?: Record<string, unknown>;
+    error?: Record<string, unknown>;
+    hint?: string;
+  }>(null);
   const [uiStatus, setUiStatus] = useState<Record<ProviderKey, { status: UiStatus; message?: string }>>({
     linkedin: { status: "idle" },
     meta: { status: "idle" },
