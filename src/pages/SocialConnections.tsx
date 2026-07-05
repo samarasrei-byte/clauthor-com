@@ -10,7 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { toast } from "sonner";
-import { CheckCircle2, XCircle, Loader2, ExternalLink, Send, Activity, ShieldCheck, AlertTriangle, Bug, Copy, Trash2 } from "lucide-react";
+import { CheckCircle2, XCircle, Loader2, ExternalLink, Send, Activity, ShieldCheck, AlertTriangle, Bug, Copy, Trash2, FlaskConical } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Linkedin, Youtube } from "lucide-react";
 
@@ -122,6 +122,20 @@ const SocialConnections = () => {
   const [postLink, setPostLink] = useState("");
   const [oauthLogs, setOauthLogs] = useState<OAuthLog[]>([]);
   const [debugOpen, setDebugOpen] = useState(true);
+  const [metaTestResult, setMetaTestResult] = useState<null | {
+    ok: boolean;
+    stage?: string;
+    detail?: string;
+    latency_ms?: number;
+    http_status?: number;
+    page?: { id: string; name: string };
+    post_id?: string;
+    draft_url?: string;
+    publishing_tools_url?: string;
+    request?: Record<string, unknown>;
+    error?: Record<string, unknown>;
+    hint?: string;
+  }>(null);
   const [uiStatus, setUiStatus] = useState<Record<ProviderKey, { status: UiStatus; message?: string }>>({
     linkedin: { status: "idle" },
     meta: { status: "idle" },
@@ -327,6 +341,31 @@ const SocialConnections = () => {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const metaTestPublish = useMutation({
+    mutationFn: async () => {
+      pushLog({ level: "info", provider: "meta", event: "test_publish:request" });
+      const { data, error } = await supabase.functions.invoke("meta-test-publish", { body: {} });
+      if (error) throw error;
+      return data as NonNullable<typeof metaTestResult>;
+    },
+    onSuccess: (data) => {
+      setMetaTestResult(data);
+      pushLog({
+        level: data.ok ? "success" : "error",
+        provider: "meta",
+        event: `test_publish:${data.stage ?? (data.ok ? "ok" : "failed")}`,
+        detail: data as unknown as Record<string, unknown>,
+      });
+      if (data.ok) toast.success("Rascunho criado no Facebook", { description: data.page?.name });
+      else toast.warning("Falha no teste de postagem", { description: data.detail });
+    },
+    onError: (e: Error) => {
+      setMetaTestResult({ ok: false, stage: "invoke_error", detail: e.message });
+      pushLog({ level: "error", provider: "meta", event: "test_publish:invoke_error", detail: { message: e.message } });
+      toast.error("Erro ao testar postagem: " + e.message);
+    },
+  });
+
   const publishPost = useMutation({
     mutationFn: async () => {
       const { data, error } = await supabase.functions.invoke("linkedin-publish", {
@@ -505,6 +544,10 @@ const SocialConnections = () => {
                         {testingProvider === p.key ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Activity className="w-3.5 h-3.5 mr-1.5" />}
                         Testar
                       </Button>
+                      <Button size="sm" onClick={() => metaTestPublish.mutate()} disabled={metaTestPublish.isPending}>
+                        {metaTestPublish.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <FlaskConical className="w-3.5 h-3.5 mr-1.5" />}
+                        Testar postagem
+                      </Button>
                       <Button size="sm" variant="ghost" onClick={() => disconnectMeta.mutate()} disabled={disconnectMeta.isPending}>
                         Desconectar
                       </Button>
@@ -531,6 +574,92 @@ const SocialConnections = () => {
           </motion.div>
         ))}
       </div>
+
+      {/* Meta test-publish result panel */}
+      {metaTestResult && (
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
+          <Card className={metaTestResult.ok ? "border-emerald-500/40" : "border-destructive/40"}>
+            <CardContent className="p-4 sm:p-5 space-y-3">
+              <div className="flex items-center justify-between gap-2 flex-wrap">
+                <div className="flex items-center gap-2">
+                  <FlaskConical className={`w-4 h-4 ${metaTestResult.ok ? "text-emerald-600" : "text-destructive"}`} />
+                  <h2 className="text-sm font-semibold">Resultado do teste de postagem (Meta)</h2>
+                  <Badge
+                    variant="outline"
+                    className={metaTestResult.ok ? "text-emerald-600 border-emerald-500/40" : "text-destructive border-destructive/40"}
+                  >
+                    {metaTestResult.ok ? "OK" : "Falhou"}
+                  </Badge>
+                  {metaTestResult.stage && (
+                    <Badge variant="outline" className="text-[10px]">{metaTestResult.stage}</Badge>
+                  )}
+                  {typeof metaTestResult.latency_ms === "number" && (
+                    <span className="text-xs text-muted-foreground">{metaTestResult.latency_ms}ms</span>
+                  )}
+                </div>
+                <Button size="sm" variant="ghost" onClick={() => setMetaTestResult(null)}>Fechar</Button>
+              </div>
+
+              {metaTestResult.detail && (
+                <p className="text-sm text-foreground/90">{metaTestResult.detail}</p>
+              )}
+              {metaTestResult.hint && (
+                <p className="text-xs text-amber-600">💡 {metaTestResult.hint}</p>
+              )}
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                {metaTestResult.page && (
+                  <div className="rounded-md border border-border/60 p-2.5 bg-muted/20">
+                    <div className="text-muted-foreground">Página</div>
+                    <div className="font-medium truncate">{metaTestResult.page.name}</div>
+                    <div className="text-muted-foreground font-mono text-[10px] truncate">{metaTestResult.page.id}</div>
+                  </div>
+                )}
+                {metaTestResult.post_id && (
+                  <div className="rounded-md border border-border/60 p-2.5 bg-muted/20">
+                    <div className="text-muted-foreground">Post ID</div>
+                    <div className="font-mono truncate">{metaTestResult.post_id}</div>
+                  </div>
+                )}
+              </div>
+
+              <div className="flex flex-wrap gap-2">
+                {metaTestResult.draft_url && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={metaTestResult.draft_url} target="_blank" rel="noreferrer">
+                      <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Abrir rascunho
+                    </a>
+                  </Button>
+                )}
+                {metaTestResult.publishing_tools_url && (
+                  <Button size="sm" variant="outline" asChild>
+                    <a href={metaTestResult.publishing_tools_url} target="_blank" rel="noreferrer">
+                      <ExternalLink className="w-3.5 h-3.5 mr-1.5" /> Publishing Tools
+                    </a>
+                  </Button>
+                )}
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => {
+                    navigator.clipboard.writeText(JSON.stringify(metaTestResult, null, 2));
+                    toast.success("Detalhes copiados");
+                  }}
+                >
+                  <Copy className="w-3.5 h-3.5 mr-1.5" /> Copiar detalhes
+                </Button>
+              </div>
+
+              <details className="text-xs">
+                <summary className="cursor-pointer text-muted-foreground hover:text-foreground">Ver payload completo</summary>
+                <pre className="mt-2 whitespace-pre-wrap break-all text-[11px] text-muted-foreground bg-background/60 rounded p-2 border border-border/40 font-mono">
+{JSON.stringify(metaTestResult, null, 2)}
+                </pre>
+              </details>
+            </CardContent>
+          </Card>
+        </motion.div>
+      )}
 
       {/* OAuth Debug Panel */}
       <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
