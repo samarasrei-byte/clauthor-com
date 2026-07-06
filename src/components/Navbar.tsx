@@ -226,6 +226,7 @@ const Navbar = () => {
                 { href: "/marketplace", label: t("navbar.marketplace_label") },
                 { href: "/departamentos", label: t("navbar.ai_teams_label") },
                 { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }) },
+                { href: "/art-director", label: "Art Director" },
                 { href: "/enterprise", label: "Enterprise" },
                 { href: "/pricing", label: t("nav.pricing") },
                 { href: "/how-it-works", label: t("nav.how_it_works") },
