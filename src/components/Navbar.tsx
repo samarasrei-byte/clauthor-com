@@ -101,6 +101,7 @@ const Navbar = () => {
                       { href: "/marketplace", label: t("navbar.marketplace_label"), desc: "225 agentes individuais para contratar avulso" },
                       { href: "/departamentos", label: t("navbar.ai_teams_label"), desc: "20 departamentos completos com 225 agentes" },
                       { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }), desc: t("navbar.team_builder_desc", { defaultValue: "Pick agents and see costs in real time" }) },
+                      { href: "/art-director", label: "Art Director", desc: "Diretor de conteúdo + agente artista para gerar imagens" },
                       { href: "/enterprise", label: "Enterprise", desc: "Squads dedicadas, SSO, SLA 99.9% e suporte white-glove" },
                     ].map((item) => (
                       <Link
