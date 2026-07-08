@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { corsHeaders } from "../_shared/cors.ts";
+import { resolveDepartmentPromptForAgent } from "../_shared/department-prompts.ts";
 
 /**
  * simulate-agent
@@ -36,7 +37,14 @@ Retorne SOMENTE JSON válido (sem markdown, sem \`\`\`) com:
 
 Seja conservador nos números. Use "média" ou "baixa" quando o contexto for vago.`;
 
-    const userMsg = `Agente: ${agentName} (slug: ${agentSlug})\n\nContexto do negócio:\n${context}`;
+    // Bias the projection with the canonical department persona so ROI numbers
+    // reflect the real scope/tools of the agent, not a generic ROI analyst.
+    const dept = resolveDepartmentPromptForAgent(agentSlug);
+    const departmentContext = dept
+      ? `\n\n## PERSONA DO AGENTE SIMULADO (${dept.department.toUpperCase()} · ${dept.name}):\n${dept.system}\n`
+      : "";
+
+    const userMsg = `Agente: ${agentName} (slug: ${agentSlug})${departmentContext}\n\nContexto do negócio:\n${context}`;
 
     const aiResp = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",

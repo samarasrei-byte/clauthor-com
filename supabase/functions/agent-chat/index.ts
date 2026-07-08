@@ -8,6 +8,8 @@ import { enforcePolicy, validateTenant, type PolicyContext } from "../_shared/po
 import { autonomousExecute } from "../_shared/tool-executor.ts";
 import { executeIntegration, getDecryptedCredentials, type IntegrationResponse } from "../_shared/integration-router.ts";
 import { getLegalPrompt } from "../_shared/legal-prompts.ts";
+import { resolveDepartmentPromptForAgent } from "../_shared/department-prompts.ts";
+import { incrementAgentUsage, resolvePriceTier, type AgentUsageResult } from "../_shared/metered-billing.ts";
 
 // ── AES-256-GCM decryption for credential bridge ──
 const ALGO = "AES-GCM";
@@ -1505,6 +1507,60 @@ Instructions: ${agent.instructions}`;
         agentName = `Squad Jurídica · ${agentSlug}`;
       }
     }
+
+    // ─── DEPARTMENT PERSONA: prepend the canonical department system prompt ───
+    // when the incoming agentSlug matches (directly or via alias) one of the 24
+    // Clauthor department prompts. This gives every agent-chat call a stable,
+    // production-grade persona without touching the per-agent `instructions`.
+    const departmentPrompt = resolveDepartmentPromptForAgent(agentSlug);
+    if (departmentPrompt && !legalPrompt) {
+      agentPrompt = `## PERSONA E ESCOPO DE DEPARTAMENTO (${departmentPrompt.department.toUpperCase()} · ${departmentPrompt.name})
+${departmentPrompt.system}
+
+Formato de saída obrigatório: ${departmentPrompt.outputFormat}
+
+## CONFIGURAÇÃO DO AGENTE (sobreposta pelo tenant)
+${agentPrompt}`;
+    }
+
+    // ─── METERED BILLING: increment monthly usage and enforce hard cap ───
+    // Runs BEFORE the AI call so we never spend model credits when the tenant
+    // has blown past the 120% hard cap. Any RPC failure returns null and we
+    // fail-open (do not block the user on an infra issue).
+    let usageResult: AgentUsageResult | null = null;
+    if (tenantId && agentSlug) {
+      // Look up the catalog tier for this slug (basic/pro/advanced/premium),
+      // then map to the pricing tier used by agent_tier_quotas.
+      let catalogTier: string | null = null;
+      try {
+        const { data: catalogRow } = await adminClient
+          .from("agents_catalog")
+          .select("tier")
+          .eq("slug", agentSlug)
+          .maybeSingle();
+        catalogTier = catalogRow?.tier ?? null;
+      } catch (e) {
+        console.warn("[metered-billing] catalog lookup failed:", e);
+      }
+      const priceTier = resolvePriceTier(agentSlug, catalogTier);
+      usageResult = await incrementAgentUsage(adminClient, {
+        tenantId,
+        agentSlug,
+        tier: priceTier,
+        actions: 1,
+      });
+      if (usageResult?.status === "hard_cap") {
+        return new Response(
+          JSON.stringify({
+            error: "quota_hard_cap_reached",
+            message: `Limite de ${Math.round(usageResult.usage_pct)}% da cota mensal atingido para o agente. Contate o administrador para liberar mais ações ou aguarde o próximo ciclo.`,
+            usage: usageResult,
+          }),
+          { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+    }
+
 
     // Build policy context for tool enforcement
     const policyContext: PolicyContext = {
