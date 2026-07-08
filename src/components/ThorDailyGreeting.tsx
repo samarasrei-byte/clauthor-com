@@ -66,6 +66,36 @@ export default function ThorDailyGreeting() {
     },
   });
 
+  // Compute level once for logging + UI
+  const usageLevel: "ok" | "low" | "critical" = isAdmin
+    ? "ok"
+    : usagePercentage >= 90
+      ? "critical"
+      : usagePercentage >= 70
+        ? "low"
+        : "ok";
+
+  // Fire-and-forget analytics event
+  const logEvent = async (
+    eventType: "impression" | "cta_click" | "dismiss",
+    metadata: Record<string, unknown> = {},
+  ) => {
+    if (!user) return;
+    try {
+      await supabase.from("thor_greeting_events").insert([{
+        user_id: user.id,
+        event_type: eventType,
+        usage_percentage: Number.isFinite(usagePercentage) ? Math.round(usagePercentage) : null,
+        remaining_credits: isAdmin ? null : remainingCredits,
+        level: usageLevel,
+        is_admin: !!isAdmin,
+        metadata: metadata as never,
+      }]);
+    } catch {
+      /* analytics is non-blocking */
+    }
+  };
+
   // Trigger once per day per user
   useEffect(() => {
     if (!user || isLoading) return;
@@ -75,8 +105,12 @@ export default function ThorDailyGreeting() {
     const lastSeen = localStorage.getItem(key);
     if (lastSeen === todayKey()) return;
 
-    const t = setTimeout(() => setOpen(true), 1200);
+    const t = setTimeout(() => {
+      setOpen(true);
+      logEvent("impression");
+    }, 1200);
     return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isLoading]);
 
   // Compose Thor's message dynamically from the user's real balance
@@ -102,7 +136,7 @@ export default function ThorDailyGreeting() {
     return () => clearInterval(id);
   }, [open, message]);
 
-  const handleClose = () => {
+  const handleClose = (reason: "dismiss" | "cta_click" = "dismiss") => {
     if (user) {
       try {
         localStorage.setItem(`${STORAGE_KEY}-${user.id}`, todayKey());
@@ -110,19 +144,14 @@ export default function ThorDailyGreeting() {
         /* ignore */
       }
     }
+    void logEvent(reason);
     setOpen(false);
   };
 
-  const level: "ok" | "low" | "critical" = isAdmin
-    ? "ok"
-    : usagePercentage >= 90
-      ? "critical"
-      : usagePercentage >= 70
-        ? "low"
-        : "ok";
+  const level = usageLevel;
 
   return (
-    <Dialog open={open} onOpenChange={(o) => (o ? setOpen(true) : handleClose())}>
+    <Dialog open={open} onOpenChange={(o) => (o ? setOpen(true) : handleClose("dismiss"))}>
       <DialogContent className="max-w-lg p-0 overflow-hidden border-primary/20 bg-gradient-to-br from-background via-background to-primary/5 backdrop-blur-xl">
         {/* Lightning glow background */}
         <div className="pointer-events-none absolute inset-0 -z-10">
@@ -132,7 +161,7 @@ export default function ThorDailyGreeting() {
 
         {/* Close button */}
         <button
-          onClick={handleClose}
+          onClick={() => handleClose("dismiss")}
           aria-label="Fechar"
           className="absolute top-3 right-3 z-10 p-1.5 rounded-md hover:bg-muted/40 text-muted-foreground transition-colors"
         >
@@ -312,7 +341,7 @@ export default function ThorDailyGreeting() {
                   <Button
                     className="flex-1 gap-1.5 shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
                     onClick={() => {
-                      handleClose();
+                      handleClose("cta_click");
                       navigate("/pricing");
                     }}
                   >
@@ -323,7 +352,7 @@ export default function ThorDailyGreeting() {
                 <Button
                   variant="outline"
                   className={isAdmin ? "flex-1 gap-1.5" : "sm:w-auto gap-1.5"}
-                  onClick={handleClose}
+                  onClick={() => handleClose("dismiss")}
                 >
                   <Sparkles className="h-3.5 w-3.5" />
                   {isAdmin ? "Continuar" : "Depois"}
