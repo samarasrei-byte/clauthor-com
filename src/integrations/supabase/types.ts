@@ -711,6 +711,36 @@ export type Database = {
         }
         Relationships: []
       }
+      agent_tier_quotas: {
+        Row: {
+          created_at: string
+          id: string
+          monthly_quota: number
+          overage_price_per_1k_brl: number
+          overage_price_per_1k_usd: number
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          monthly_quota: number
+          overage_price_per_1k_brl?: number
+          overage_price_per_1k_usd?: number
+          tier: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          monthly_quota?: number
+          overage_price_per_1k_brl?: number
+          overage_price_per_1k_usd?: number
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       agent_tools: {
         Row: {
           agent_id: string
@@ -758,6 +788,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      agent_usage_monthly: {
+        Row: {
+          actions_count: number
+          agent_slug: string
+          created_at: string
+          id: string
+          last_action_at: string | null
+          overage_actions: number
+          overage_charge_usd: number
+          period_start: string
+          quota: number
+          tenant_id: string
+          tier: string
+          updated_at: string
+        }
+        Insert: {
+          actions_count?: number
+          agent_slug: string
+          created_at?: string
+          id?: string
+          last_action_at?: string | null
+          overage_actions?: number
+          overage_charge_usd?: number
+          period_start: string
+          quota: number
+          tenant_id: string
+          tier: string
+          updated_at?: string
+        }
+        Update: {
+          actions_count?: number
+          agent_slug?: string
+          created_at?: string
+          id?: string
+          last_action_at?: string | null
+          overage_actions?: number
+          overage_charge_usd?: number
+          period_start?: string
+          quota?: number
+          tenant_id?: string
+          tier?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       agents: {
         Row: {
@@ -3767,6 +3842,15 @@ export type Database = {
       increment_agent_executions: {
         Args: { p_agent_id: string }
         Returns: undefined
+      }
+      increment_agent_usage: {
+        Args: {
+          _actions?: number
+          _agent_slug: string
+          _tenant_id: string
+          _tier: string
+        }
+        Returns: Json
       }
       is_tenant_admin: {
         Args: { _tenant_id: string; _user_id: string }
