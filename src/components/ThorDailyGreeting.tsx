@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Zap,
   Coins,
@@ -13,6 +13,9 @@ import {
   TrendingUp,
   Flame,
   CalendarClock,
+  ArrowUpRight,
+  ArrowDownRight,
+  Minus,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -25,6 +28,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 
 const STORAGE_KEY = "clauthor-thor-daily-greeting";
+const DISMISS_COUNTER_KEY = "clauthor-thor-dismiss-streak";
+const LAST_IMPRESSION_KEY = "clauthor-thor-last-impression";
+const SMART_SKIP_THRESHOLD = 3; // consecutive dismisses
+const SMART_SKIP_INTERVAL_MS = 3 * 24 * 60 * 60 * 1000; // then show every 3 days
 
 function todayKey(): string {
   const d = new Date();
@@ -49,25 +56,48 @@ function dayStamp(d: Date): string {
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
+type Delta = { pct: number; direction: "up" | "down" | "flat" } | null;
+
+function computeDelta(current: number, previous: number): Delta {
+  if (!previous && !current) return null;
+  if (!previous) return { pct: 100, direction: "up" };
+  const diff = current - previous;
+  if (diff === 0) return { pct: 0, direction: "flat" };
+  const pct = Math.round((diff / previous) * 100);
+  return { pct: Math.abs(pct), direction: diff > 0 ? "up" : "down" };
+}
+
 export default function ThorDailyGreeting() {
   const { user, isAdmin } = useAuth();
   const { credits, remainingCredits, usagePercentage, isLoading } = useCredits();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  // Yesterday range for activity summary
+  // Yesterday + day-before-yesterday for delta comparison
   const yesterdayRange = useMemo(() => {
     const now = new Date();
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
-    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    return { startIso: start.toISOString(), endIso: end.toISOString() };
+    const yStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    const yEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dbyStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2);
+    const dbyEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    return {
+      startIso: yStart.toISOString(),
+      endIso: yEnd.toISOString(),
+      prevStartIso: dbyStart.toISOString(),
+      prevEndIso: dbyEnd.toISOString(),
+    };
   }, []);
 
   const { data: yesterdaySummary } = useQuery({
     queryKey: ["thor-yesterday-summary", user?.id, yesterdayRange.startIso],
     enabled: !!user?.id && open,
     queryFn: async () => {
-      const [{ data: logs }, { data: tokens }] = await Promise.all([
+      const [
+        { data: logs },
+        { data: tokens },
+        { data: prevLogs },
+        { data: prevTokens },
+      ] = await Promise.all([
         supabase
           .from("execution_logs")
           .select("status")
@@ -80,12 +110,26 @@ export default function ThorDailyGreeting() {
           .eq("user_id", user!.id)
           .gte("created_at", yesterdayRange.startIso)
           .lt("created_at", yesterdayRange.endIso),
+        supabase
+          .from("execution_logs")
+          .select("status")
+          .eq("user_id", user!.id)
+          .gte("created_at", yesterdayRange.prevStartIso)
+          .lt("created_at", yesterdayRange.prevEndIso),
+        supabase
+          .from("token_usage")
+          .select("tokens_used")
+          .eq("user_id", user!.id)
+          .gte("created_at", yesterdayRange.prevStartIso)
+          .lt("created_at", yesterdayRange.prevEndIso),
       ]);
       const total = logs?.length ?? 0;
       const success = logs?.filter((l) => l.status === "success").length ?? 0;
       const errors = total - success;
       const tokensUsed = (tokens ?? []).reduce((s, t) => s + (t.tokens_used || 0), 0);
-      return { total, success, errors, tokensUsed };
+      const prevTotal = prevLogs?.length ?? 0;
+      const prevTokensUsed = (prevTokens ?? []).reduce((s, t) => s + (t.tokens_used || 0), 0);
+      return { total, success, errors, tokensUsed, prevTotal, prevTokensUsed };
     },
   });
 
@@ -169,7 +213,7 @@ export default function ThorDailyGreeting() {
     }
   };
 
-  // Show once per day
+  // Show once per day (with smart-skip after repeated dismisses)
   useEffect(() => {
     if (!user || isLoading) return;
     if (typeof window === "undefined") return;
@@ -178,9 +222,36 @@ export default function ThorDailyGreeting() {
     const lastSeen = localStorage.getItem(key);
     if (lastSeen === todayKey()) return;
 
+    // Smart skip: if user dismissed N times in a row without clicking CTA,
+    // throttle to once every 3 days. Critical usage always shows.
+    try {
+      const dismissStreak = Number(
+        localStorage.getItem(`${DISMISS_COUNTER_KEY}-${user.id}`) || "0",
+      );
+      const lastImpressionRaw = localStorage.getItem(`${LAST_IMPRESSION_KEY}-${user.id}`);
+      const lastImpression = lastImpressionRaw ? Number(lastImpressionRaw) : 0;
+      const isCritical = !isAdmin && usagePercentage >= 90;
+
+      if (
+        !isCritical &&
+        dismissStreak >= SMART_SKIP_THRESHOLD &&
+        lastImpression > 0 &&
+        Date.now() - lastImpression < SMART_SKIP_INTERVAL_MS
+      ) {
+        return;
+      }
+    } catch {
+      /* ignore */
+    }
+
     const t = setTimeout(() => {
       setOpen(true);
       logEvent("impression");
+      try {
+        localStorage.setItem(`${LAST_IMPRESSION_KEY}-${user.id}`, String(Date.now()));
+      } catch {
+        /* ignore */
+      }
     }, 1200);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -190,6 +261,13 @@ export default function ThorDailyGreeting() {
     if (user) {
       try {
         localStorage.setItem(`${STORAGE_KEY}-${user.id}`, todayKey());
+        const counterKey = `${DISMISS_COUNTER_KEY}-${user.id}`;
+        if (reason === "cta_click") {
+          localStorage.setItem(counterKey, "0");
+        } else {
+          const cur = Number(localStorage.getItem(counterKey) || "0");
+          localStorage.setItem(counterKey, String(cur + 1));
+        }
       } catch {
         /* ignore */
       }
@@ -401,33 +479,43 @@ export default function ThorDailyGreeting() {
                 Nenhuma execução registrada — comece o dia com um agente.
               </p>
             ) : (
-              <div className="grid grid-cols-4 gap-2">
-                <MiniStat
-                  icon={<Zap className="h-3 w-3" />}
-                  label="Ações"
-                  value={yesterdaySummary.total}
-                />
-                <MiniStat
-                  icon={<CheckCircle2 className="h-3 w-3" />}
-                  label="Sucesso"
-                  value={yesterdaySummary.success}
-                  tone="emerald"
-                />
-                <MiniStat
-                  icon={<AlertTriangle className="h-3 w-3" />}
-                  label="Falhas"
-                  value={yesterdaySummary.errors}
-                  tone={yesterdaySummary.errors > 0 ? "destructive" : "muted"}
-                />
-                <MiniStat
-                  icon={<Coins className="h-3 w-3" />}
-                  label="Tokens"
-                  value={fmt(yesterdaySummary.tokensUsed)}
-                  tone="primary"
-                />
+              <div className="space-y-2">
+                <div className="grid grid-cols-4 gap-2">
+                  <MiniStat
+                    icon={<Zap className="h-3 w-3" />}
+                    label="Ações"
+                    value={yesterdaySummary.total}
+                    delta={computeDelta(yesterdaySummary.total, yesterdaySummary.prevTotal)}
+                  />
+                  <MiniStat
+                    icon={<CheckCircle2 className="h-3 w-3" />}
+                    label="Sucesso"
+                    value={yesterdaySummary.success}
+                    tone="emerald"
+                  />
+                  <MiniStat
+                    icon={<AlertTriangle className="h-3 w-3" />}
+                    label="Falhas"
+                    value={yesterdaySummary.errors}
+                    tone={yesterdaySummary.errors > 0 ? "destructive" : "muted"}
+                  />
+                  <MiniStat
+                    icon={<Coins className="h-3 w-3" />}
+                    label="Tokens"
+                    value={fmt(yesterdaySummary.tokensUsed)}
+                    tone="primary"
+                    delta={computeDelta(yesterdaySummary.tokensUsed, yesterdaySummary.prevTokensUsed)}
+                  />
+                </div>
+                {(yesterdaySummary.prevTotal > 0 || yesterdaySummary.prevTokensUsed > 0) && (
+                  <p className="text-[10px] text-muted-foreground/70 text-right">
+                    vs. anteontem
+                  </p>
+                )}
               </div>
             )}
           </motion.div>
+
 
           {/* CTA */}
           <motion.div
@@ -468,11 +556,13 @@ function MiniStat({
   label,
   value,
   tone = "muted",
+  delta,
 }: {
   icon: React.ReactNode;
   label: string;
   value: number | string;
   tone?: "muted" | "emerald" | "destructive" | "primary";
+  delta?: Delta;
 }) {
   const toneMap = {
     muted: "border-border/30 bg-card/40 text-foreground",
@@ -481,13 +571,34 @@ function MiniStat({
     primary: "border-primary/20 bg-primary/5 text-primary",
   } as const;
 
+  const DeltaIcon =
+    delta?.direction === "up"
+      ? ArrowUpRight
+      : delta?.direction === "down"
+        ? ArrowDownRight
+        : Minus;
+  const deltaColor =
+    delta?.direction === "up"
+      ? "text-emerald-500"
+      : delta?.direction === "down"
+        ? "text-destructive"
+        : "text-muted-foreground";
+
   return (
     <div className={`rounded-lg border p-2 ${toneMap[tone]}`}>
       <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider opacity-80">
         {icon}
         {label}
       </div>
-      <p className="font-display font-bold text-sm mt-0.5 text-foreground">{value}</p>
+      <div className="flex items-baseline gap-1.5 mt-0.5">
+        <p className="font-display font-bold text-sm text-foreground">{value}</p>
+        {delta && (
+          <span className={`inline-flex items-center gap-0.5 text-[9px] font-mono ${deltaColor}`}>
+            <DeltaIcon className="h-2.5 w-2.5" />
+            {delta.direction === "flat" ? "—" : `${delta.pct}%`}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
