@@ -6,13 +6,15 @@ import { useAuth } from "@/hooks/useAuth";
 import { LanguageSelector } from "@/components/LanguageSelector";
 import ThemeToggle from "@/components/ThemeToggle";
 import FloatingDock, { FloatingDockProvider } from "./FloatingDock";
-
-
+import { lazy, Suspense } from "react";
 
 import { useTokenMonitor } from "@/hooks/useTokenMonitor";
 import TokenUpgradeDialog from "./TokenUpgradeDialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
+
+const PlatformUpdatesDialog = lazy(() => import("@/components/PlatformUpdatesDialog"));
+const ThorDailyGreeting = lazy(() => import("@/components/ThorDailyGreeting"));
 
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
