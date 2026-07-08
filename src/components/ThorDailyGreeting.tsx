@@ -268,7 +268,7 @@ export default function ThorDailyGreeting() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-1.5"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Badge
                 variant="outline"
                 className="text-[10px] font-mono uppercase tracking-widest gap-1 border-border/60"
@@ -276,6 +276,15 @@ export default function ThorDailyGreeting() {
                 <Sparkles className="h-3 w-3 text-primary" />
                 Briefing diário
               </Badge>
+              {insights && insights.streak >= 2 && (
+                <Badge
+                  variant="outline"
+                  className="text-[10px] font-mono uppercase tracking-widest gap-1 border-orange-500/30 bg-orange-500/10 text-orange-500"
+                >
+                  <Flame className="h-3 w-3" />
+                  {insights.streak} dias
+                </Badge>
+              )}
               <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground ml-auto">
                 <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${levelMeta.dot}`} />
                 {new Date().toLocaleDateString("pt-BR", {
