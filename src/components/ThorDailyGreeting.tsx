@@ -572,6 +572,15 @@ export default function ThorDailyGreeting() {
               {isAdmin ? "Ver operações" : "Continuar"}
             </Button>
           </motion.div>
+
+          {/* Snooze */}
+          <button
+            onClick={handleSnooze}
+            className="w-full text-[10px] text-muted-foreground/70 hover:text-muted-foreground transition-colors flex items-center justify-center gap-1.5 -mt-1"
+          >
+            <BellOff className="h-3 w-3" />
+            Silenciar por 7 dias
+          </button>
         </div>
       </DialogContent>
     </Dialog>
