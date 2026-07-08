@@ -10,6 +10,7 @@ const SocialProofToasts = lazy(() => import("./SocialProofToasts"));
 const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
 const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
+const PlatformUpdatesDialog = lazy(() => import("./PlatformUpdatesDialog"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
