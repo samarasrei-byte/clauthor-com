@@ -228,13 +228,14 @@ export default function ThorDailyGreeting() {
             chip: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
           };
 
+  const greeting = greetingByHour();
   const headline = isAdmin
-    ? `Bom dia, ${firstName}.`
+    ? `${greeting}, ${firstName}.`
     : usageLevel === "critical"
       ? `${firstName}, seu cofre está no limite.`
       : usageLevel === "low"
         ? `${firstName}, hora de reabastecer.`
-        : `Bom dia, ${firstName}.`;
+        : `${greeting}, ${firstName}.`;
 
   const subtitle = isAdmin
     ? "Você tem acesso ilimitado — a forja segue acesa."
