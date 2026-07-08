@@ -28,6 +28,10 @@ import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 
 const STORAGE_KEY = "clauthor-thor-daily-greeting";
+const DISMISS_COUNTER_KEY = "clauthor-thor-dismiss-streak";
+const LAST_IMPRESSION_KEY = "clauthor-thor-last-impression";
+const SMART_SKIP_THRESHOLD = 3; // consecutive dismisses
+const SMART_SKIP_INTERVAL_MS = 3 * 24 * 60 * 60 * 1000; // then show every 3 days
 
 function todayKey(): string {
   const d = new Date();
