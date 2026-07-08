@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Coins, Plus, X, Sparkles } from "lucide-react";
+import { Zap, Coins, Plus, X, Sparkles, Activity, CheckCircle2, AlertTriangle, Clock } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { useAuth } from "@/hooks/useAuth";
 import { useCredits } from "@/hooks/useCredits";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
 import thorAvatar from "@/assets/thor-hologram.png";
 
@@ -29,6 +31,40 @@ export default function ThorDailyGreeting() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [typedText, setTypedText] = useState("");
+
+  // Yesterday's activity summary (executions + tokens consumed)
+  const yesterdayRange = useMemo(() => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return { startIso: start.toISOString(), endIso: end.toISOString() };
+  }, []);
+
+  const { data: yesterdaySummary } = useQuery({
+    queryKey: ["thor-yesterday-summary", user?.id, yesterdayRange.startIso],
+    enabled: !!user?.id && open,
+    queryFn: async () => {
+      const [{ data: logs }, { data: tokens }] = await Promise.all([
+        supabase
+          .from("execution_logs")
+          .select("status")
+          .eq("user_id", user!.id)
+          .gte("created_at", yesterdayRange.startIso)
+          .lt("created_at", yesterdayRange.endIso),
+        supabase
+          .from("token_usage")
+          .select("tokens_used")
+          .eq("user_id", user!.id)
+          .gte("created_at", yesterdayRange.startIso)
+          .lt("created_at", yesterdayRange.endIso),
+      ]);
+      const total = logs?.length ?? 0;
+      const success = logs?.filter((l) => l.status === "success").length ?? 0;
+      const errors = total - success;
+      const tokensUsed = (tokens ?? []).reduce((s, t) => s + (t.tokens_used || 0), 0);
+      return { total, success, errors, tokensUsed };
+    },
+  });
 
   // Trigger once per day per user
   useEffect(() => {
@@ -201,6 +237,63 @@ export default function ThorDailyGreeting() {
                       <span>Limite: {fmt(credits.total_credits)}</span>
                     </div>
                   </>
+                )}
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* Yesterday activity summary */}
+          <AnimatePresence>
+            {typedText.length >= message.length && yesterdaySummary && (
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="mt-3 rounded-xl border border-border/30 bg-background/30 p-3"
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <Activity className="h-3.5 w-3.5 text-primary" />
+                  <p className="text-[11px] font-semibold">Resumo de ontem</p>
+                  <span className="text-[10px] text-muted-foreground ml-auto">
+                    {new Date(yesterdayRange.startIso).toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "short" })}
+                  </span>
+                </div>
+                {yesterdaySummary.total === 0 && yesterdaySummary.tokensUsed === 0 ? (
+                  <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
+                    <Clock className="h-3 w-3" />
+                    Nenhuma execução registrada — que tal colocar seus agentes para trabalhar hoje?
+                  </p>
+                ) : (
+                  <div className="grid grid-cols-4 gap-2">
+                    <div className="rounded-lg bg-card/40 border border-border/20 p-2">
+                      <div className="flex items-center gap-1 text-[9px] text-muted-foreground uppercase tracking-wider">
+                        <Zap className="h-2.5 w-2.5" />
+                        Ações
+                      </div>
+                      <p className="font-display font-bold text-sm mt-0.5">{yesterdaySummary.total}</p>
+                    </div>
+                    <div className="rounded-lg bg-emerald-500/5 border border-emerald-500/20 p-2">
+                      <div className="flex items-center gap-1 text-[9px] text-emerald-500 uppercase tracking-wider">
+                        <CheckCircle2 className="h-2.5 w-2.5" />
+                        Sucesso
+                      </div>
+                      <p className="font-display font-bold text-sm mt-0.5">{yesterdaySummary.success}</p>
+                    </div>
+                    <div className="rounded-lg bg-destructive/5 border border-destructive/20 p-2">
+                      <div className="flex items-center gap-1 text-[9px] text-destructive uppercase tracking-wider">
+                        <AlertTriangle className="h-2.5 w-2.5" />
+                        Falhas
+                      </div>
+                      <p className="font-display font-bold text-sm mt-0.5">{yesterdaySummary.errors}</p>
+                    </div>
+                    <div className="rounded-lg bg-primary/5 border border-primary/20 p-2">
+                      <div className="flex items-center gap-1 text-[9px] text-primary uppercase tracking-wider">
+                        <Coins className="h-2.5 w-2.5" />
+                        Tokens
+                      </div>
+                      <p className="font-display font-bold text-sm mt-0.5">{fmt(yesterdaySummary.tokensUsed)}</p>
+                    </div>
+                  </div>
                 )}
               </motion.div>
             )}
