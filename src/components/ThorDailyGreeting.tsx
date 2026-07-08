@@ -151,7 +151,7 @@ export default function ThorDailyGreeting() {
   const level = usageLevel;
 
   return (
-    <Dialog open={open} onOpenChange={(o) => (o ? setOpen(true) : handleClose())}>
+    <Dialog open={open} onOpenChange={(o) => (o ? setOpen(true) : handleClose("dismiss"))}>
       <DialogContent className="max-w-lg p-0 overflow-hidden border-primary/20 bg-gradient-to-br from-background via-background to-primary/5 backdrop-blur-xl">
         {/* Lightning glow background */}
         <div className="pointer-events-none absolute inset-0 -z-10">
