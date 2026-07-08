@@ -25,7 +25,7 @@ const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardG
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
-import FirstAccessOnboarding from "@/components/onboarding/FirstAccessOnboarding";
+// FirstAccessOnboarding aposentado — substituído pelo GuidedOnboarding no AppLayout
 import MagicMomentCard from "@/components/onboarding/MagicMomentCard";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
@@ -512,14 +512,7 @@ const ClientDashboard = () => {
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
 
-      <FirstAccessOnboarding
-        isOpen={showFirstAccess}
-        onClose={() => {
-          setShowFirstAccess(false);
-          localStorage.setItem("clauthor_first_access_done", "true");
-        }}
-        userName={user?.user_metadata?.full_name?.split(" ")[0]}
-      />
+      {/* Legacy FirstAccessOnboarding removido: substituído pelo GuidedOnboarding global no AppLayout */}
 
       <div className="flex h-full">
         <div className="hidden lg:block relative z-10">
