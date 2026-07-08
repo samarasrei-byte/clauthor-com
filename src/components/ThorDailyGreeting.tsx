@@ -62,19 +62,31 @@ export default function ThorDailyGreeting() {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  // Yesterday range for activity summary
+  // Yesterday + day-before-yesterday for delta comparison
   const yesterdayRange = useMemo(() => {
     const now = new Date();
-    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
-    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    return { startIso: start.toISOString(), endIso: end.toISOString() };
+    const yStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    const yEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const dbyStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 2);
+    const dbyEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    return {
+      startIso: yStart.toISOString(),
+      endIso: yEnd.toISOString(),
+      prevStartIso: dbyStart.toISOString(),
+      prevEndIso: dbyEnd.toISOString(),
+    };
   }, []);
 
   const { data: yesterdaySummary } = useQuery({
     queryKey: ["thor-yesterday-summary", user?.id, yesterdayRange.startIso],
     enabled: !!user?.id && open,
     queryFn: async () => {
-      const [{ data: logs }, { data: tokens }] = await Promise.all([
+      const [
+        { data: logs },
+        { data: tokens },
+        { data: prevLogs },
+        { data: prevTokens },
+      ] = await Promise.all([
         supabase
           .from("execution_logs")
           .select("status")
@@ -87,12 +99,26 @@ export default function ThorDailyGreeting() {
           .eq("user_id", user!.id)
           .gte("created_at", yesterdayRange.startIso)
           .lt("created_at", yesterdayRange.endIso),
+        supabase
+          .from("execution_logs")
+          .select("status")
+          .eq("user_id", user!.id)
+          .gte("created_at", yesterdayRange.prevStartIso)
+          .lt("created_at", yesterdayRange.prevEndIso),
+        supabase
+          .from("token_usage")
+          .select("tokens_used")
+          .eq("user_id", user!.id)
+          .gte("created_at", yesterdayRange.prevStartIso)
+          .lt("created_at", yesterdayRange.prevEndIso),
       ]);
       const total = logs?.length ?? 0;
       const success = logs?.filter((l) => l.status === "success").length ?? 0;
       const errors = total - success;
       const tokensUsed = (tokens ?? []).reduce((s, t) => s + (t.tokens_used || 0), 0);
-      return { total, success, errors, tokensUsed };
+      const prevTotal = prevLogs?.length ?? 0;
+      const prevTokensUsed = (prevTokens ?? []).reduce((s, t) => s + (t.tokens_used || 0), 0);
+      return { total, success, errors, tokensUsed, prevTotal, prevTokensUsed };
     },
   });
 
