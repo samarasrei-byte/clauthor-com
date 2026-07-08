@@ -89,7 +89,7 @@ export default function ThorDailyGreeting() {
         remaining_credits: isAdmin ? null : remainingCredits,
         level: usageLevel,
         is_admin: !!isAdmin,
-        metadata,
+        metadata: metadata as never,
       }]);
     } catch {
       /* analytics is non-blocking */
