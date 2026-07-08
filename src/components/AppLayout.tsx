@@ -40,7 +40,13 @@ const AppLayout = () => {
         onClose={() => setTestDriveAgent(null)}
       />
 
+      {/* Platform updates + token info popup (once per version, authenticated users) */}
+      <Suspense fallback={null}>
+        <PlatformUpdatesDialog />
+      </Suspense>
+
       {/* Thor greeter removido a pedido — estava sobrepondo o chat Ana - Atendimento */}
+
 
 
     </div>
