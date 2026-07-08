@@ -11,6 +11,7 @@ const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
 const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
 const PlatformUpdatesDialog = lazy(() => import("./PlatformUpdatesDialog"));
+const ThorDailyGreeting = lazy(() => import("./ThorDailyGreeting"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
@@ -43,6 +44,11 @@ const AppLayout = () => {
       {/* Platform updates + token info popup (once per version, authenticated users) */}
       <Suspense fallback={null}>
         <PlatformUpdatesDialog />
+      </Suspense>
+
+      {/* Thor daily greeting with token balance and top-up nudge */}
+      <Suspense fallback={null}>
+        <ThorDailyGreeting />
       </Suspense>
 
       {/* Thor greeter removido a pedido — estava sobrepondo o chat Ana - Atendimento */}
