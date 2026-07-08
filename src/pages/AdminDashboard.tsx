@@ -312,6 +312,14 @@ const AdminDashboard = () => {
                     allProfiles={allProfiles} executionLogs={executionLogs} revenueData={revenueData}
                     planDistribution={planDistribution} onTabChange={setActiveTab}
                   />
+                  <TokenAlertsTable
+                    mode="admin"
+                    credits={allCredits}
+                    tokenUsage={tokenUsage}
+                    profiles={allProfiles}
+                    warnAt={80}
+                    criticalAt={95}
+                  />
                   <LiveActivityFeed />
                 </div>
               )}
