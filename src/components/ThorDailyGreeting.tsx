@@ -342,6 +342,27 @@ export default function ThorDailyGreeting() {
               </>
             )}
 
+            {!isAdmin && forecastDays !== null && (
+              <div
+                className={`mt-3 pt-3 border-t border-border/40 flex items-center gap-2 text-[11px] ${
+                  forecastDays <= 3
+                    ? "text-destructive"
+                    : forecastDays <= 7
+                      ? "text-amber-500"
+                      : "text-muted-foreground"
+                }`}
+              >
+                <CalendarClock className="h-3.5 w-3.5 shrink-0" />
+                <span>
+                  No ritmo atual (~{fmt(Math.round(insights!.avgDaily))} tokens/dia), seus tokens duram{" "}
+                  <span className="font-semibold">
+                    {forecastDays === 0 ? "menos de 1 dia" : `~${forecastDays} ${forecastDays === 1 ? "dia" : "dias"}`}
+                  </span>
+                  .
+                </span>
+              </div>
+            )}
+
             {isAdmin && (
               <p className="text-[11px] text-muted-foreground">
                 Acesso ilimitado — nenhum limite de consumo aplicado à sua conta.
