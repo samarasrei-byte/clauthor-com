@@ -5,6 +5,7 @@ import { checkRateLimit, rateLimitResponse } from "../_shared/security.ts";
 import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resilience.ts";
 import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, type AgentContract } from "../_shared/agent-contract.ts";
 import { validateLimits } from "../_shared/policy-engine.ts";
+import { incrementAgentUsage, resolvePriceTier } from "../_shared/metered-billing.ts";
 
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
@@ -234,7 +235,33 @@ MEETING RULES:
 - ALWAYS respond in Brazilian Portuguese (pt-BR)
 ${companyContext}`;
 
+      // ─── METERED BILLING (per agent, per squad turn) ───
+      // Uses the agents table `tier` (basic/pro/advanced/premium) mapped to the
+      // pricing tier. If the tenant is at the 120% hard cap for this agent, we
+      // skip the AI call for that agent and record a placeholder result — the
+      // rest of the squad continues to answer.
+      const meteredTier = resolvePriceTier(null, agent.tier || "basic");
+      const usage = await incrementAgentUsage(adminClient, {
+        tenantId,
+        agentSlug: `agent:${agent.id}`,
+        tier: meteredTier,
+        actions: 1,
+      });
+      if (usage?.status === "hard_cap") {
+        results.push({
+          agentId: agent.id,
+          agentName: agent.name,
+          tier: agent.tier,
+          area: agentArea,
+          content: `⛔ Cota mensal atingida (${Math.round(usage.usage_pct)}%). Aguarde o próximo ciclo ou faça upgrade do plano.`,
+          speakingOrder: results.length,
+          quotaBlocked: true,
+        });
+        continue;
+      }
+
       try {
+
         const aiResponse = await withRetry(
           async () => {
             const res = await fetchAI({
