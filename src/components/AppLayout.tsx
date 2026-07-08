@@ -11,6 +11,7 @@ const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
 const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
 const PlatformUpdatesDialog = lazy(() => import("./PlatformUpdatesDialog"));
+const ThorDailyGreeting = lazy(() => import("./ThorDailyGreeting"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
