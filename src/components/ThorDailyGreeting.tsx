@@ -161,7 +161,7 @@ export default function ThorDailyGreeting() {
 
         {/* Close button */}
         <button
-          onClick={handleClose}
+          onClick={() => handleClose("dismiss")}
           aria-label="Fechar"
           className="absolute top-3 right-3 z-10 p-1.5 rounded-md hover:bg-muted/40 text-muted-foreground transition-colors"
         >
