@@ -340,8 +340,6 @@ const LibraryPage = () => {
                           onPreview={() => setPreviewAgent({ name: agent.name, desc: agent.responsibilities[0] || "" })}
                           onNavigate={() => navigate(`/agente/${agent.slug}`)}
                           tierColor={tierColors[tier] || ""}
-                          onTrial={() => handleStartTrial(agent.slug, agent.name)}
-                          trialAvailable={trialEligible && !trialLoading && !isAdmin}
                         />
                       );
                     })}
