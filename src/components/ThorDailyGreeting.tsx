@@ -468,33 +468,43 @@ export default function ThorDailyGreeting() {
                 Nenhuma execução registrada — comece o dia com um agente.
               </p>
             ) : (
-              <div className="grid grid-cols-4 gap-2">
-                <MiniStat
-                  icon={<Zap className="h-3 w-3" />}
-                  label="Ações"
-                  value={yesterdaySummary.total}
-                />
-                <MiniStat
-                  icon={<CheckCircle2 className="h-3 w-3" />}
-                  label="Sucesso"
-                  value={yesterdaySummary.success}
-                  tone="emerald"
-                />
-                <MiniStat
-                  icon={<AlertTriangle className="h-3 w-3" />}
-                  label="Falhas"
-                  value={yesterdaySummary.errors}
-                  tone={yesterdaySummary.errors > 0 ? "destructive" : "muted"}
-                />
-                <MiniStat
-                  icon={<Coins className="h-3 w-3" />}
-                  label="Tokens"
-                  value={fmt(yesterdaySummary.tokensUsed)}
-                  tone="primary"
-                />
+              <div className="space-y-2">
+                <div className="grid grid-cols-4 gap-2">
+                  <MiniStat
+                    icon={<Zap className="h-3 w-3" />}
+                    label="Ações"
+                    value={yesterdaySummary.total}
+                    delta={computeDelta(yesterdaySummary.total, yesterdaySummary.prevTotal)}
+                  />
+                  <MiniStat
+                    icon={<CheckCircle2 className="h-3 w-3" />}
+                    label="Sucesso"
+                    value={yesterdaySummary.success}
+                    tone="emerald"
+                  />
+                  <MiniStat
+                    icon={<AlertTriangle className="h-3 w-3" />}
+                    label="Falhas"
+                    value={yesterdaySummary.errors}
+                    tone={yesterdaySummary.errors > 0 ? "destructive" : "muted"}
+                  />
+                  <MiniStat
+                    icon={<Coins className="h-3 w-3" />}
+                    label="Tokens"
+                    value={fmt(yesterdaySummary.tokensUsed)}
+                    tone="primary"
+                    delta={computeDelta(yesterdaySummary.tokensUsed, yesterdaySummary.prevTokensUsed)}
+                  />
+                </div>
+                {(yesterdaySummary.prevTotal > 0 || yesterdaySummary.prevTokensUsed > 0) && (
+                  <p className="text-[10px] text-muted-foreground/70 text-right">
+                    vs. anteontem
+                  </p>
+                )}
               </div>
             )}
           </motion.div>
+
 
           {/* CTA */}
           <motion.div
