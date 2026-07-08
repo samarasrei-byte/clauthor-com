@@ -16,6 +16,7 @@ import {
   ArrowUpRight,
   ArrowDownRight,
   Minus,
+  BellOff,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -30,8 +31,10 @@ import { useNavigate } from "react-router-dom";
 const STORAGE_KEY = "clauthor-thor-daily-greeting";
 const DISMISS_COUNTER_KEY = "clauthor-thor-dismiss-streak";
 const LAST_IMPRESSION_KEY = "clauthor-thor-last-impression";
+const SNOOZE_UNTIL_KEY = "clauthor-thor-snooze-until";
 const SMART_SKIP_THRESHOLD = 3; // consecutive dismisses
 const SMART_SKIP_INTERVAL_MS = 3 * 24 * 60 * 60 * 1000; // then show every 3 days
+const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 function todayKey(): string {
   const d = new Date();
@@ -225,12 +228,20 @@ export default function ThorDailyGreeting() {
     // Smart skip: if user dismissed N times in a row without clicking CTA,
     // throttle to once every 3 days. Critical usage always shows.
     try {
+      const isCritical = !isAdmin && usagePercentage >= 90;
+
+      // Snooze: user explicitly silenced for 7 days. Critical usage bypasses it.
+      const snoozeUntilRaw = localStorage.getItem(`${SNOOZE_UNTIL_KEY}-${user.id}`);
+      const snoozeUntil = snoozeUntilRaw ? Number(snoozeUntilRaw) : 0;
+      if (!isCritical && snoozeUntil > Date.now()) {
+        return;
+      }
+
       const dismissStreak = Number(
         localStorage.getItem(`${DISMISS_COUNTER_KEY}-${user.id}`) || "0",
       );
       const lastImpressionRaw = localStorage.getItem(`${LAST_IMPRESSION_KEY}-${user.id}`);
       const lastImpression = lastImpressionRaw ? Number(lastImpressionRaw) : 0;
-      const isCritical = !isAdmin && usagePercentage >= 90;
 
       if (
         !isCritical &&
@@ -273,6 +284,22 @@ export default function ThorDailyGreeting() {
       }
     }
     void logEvent(reason);
+    setOpen(false);
+  };
+
+  const handleSnooze = () => {
+    if (user) {
+      try {
+        localStorage.setItem(
+          `${SNOOZE_UNTIL_KEY}-${user.id}`,
+          String(Date.now() + SNOOZE_MS),
+        );
+        localStorage.setItem(`${STORAGE_KEY}-${user.id}`, todayKey());
+      } catch {
+        /* ignore */
+      }
+    }
+    void logEvent("dismiss", { reason: "snooze_7d" });
     setOpen(false);
   };
 
@@ -545,6 +572,15 @@ export default function ThorDailyGreeting() {
               {isAdmin ? "Ver operações" : "Continuar"}
             </Button>
           </motion.div>
+
+          {/* Snooze */}
+          <button
+            onClick={handleSnooze}
+            className="w-full text-[10px] text-muted-foreground/70 hover:text-muted-foreground transition-colors flex items-center justify-center gap-1.5 -mt-1"
+          >
+            <BellOff className="h-3 w-3" />
+            Silenciar por 7 dias
+          </button>
         </div>
       </DialogContent>
     </Dialog>
