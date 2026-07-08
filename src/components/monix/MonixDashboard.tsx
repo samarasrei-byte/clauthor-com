@@ -172,6 +172,15 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
         </div>
       </div>
 
+      {/* Token consumption breakdown (per AI engine) */}
+      <TokenAlertsTable
+        mode="user"
+        credits={credits ? [{ user_id: credits.user_id, total_credits: credits.total_credits, used_credits: credits.used_credits, plan_type: credits.plan_type }] : []}
+        tokenUsage={tokenUsage}
+        warnAt={80}
+        criticalAt={95}
+      />
+
       {/* Alerts */}
       {(errorLogs > 0 || usagePercentage > 80) && (
         <div className="bg-destructive/5 border border-destructive/10 rounded-xl p-4">
