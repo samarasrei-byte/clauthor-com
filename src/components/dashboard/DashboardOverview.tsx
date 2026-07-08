@@ -7,6 +7,7 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 import SectionLoader from "@/components/ui/section-loader";
 import GuidedOnboarding from "./GuidedOnboarding";
 import DashboardWelcome from "@/components/DashboardWelcome";
+import NextStepsCard from "@/components/dashboard/NextStepsCard";
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
@@ -68,6 +69,7 @@ const DashboardOverview = ({
       <ErrorBoundary>
         <Suspense fallback={<SectionLoader />}>
           <div className="space-y-5">
+            <NextStepsCard />
             <DashboardWelcome
               hasAgents={agents.length > 0}
               hasIntegration={false}
