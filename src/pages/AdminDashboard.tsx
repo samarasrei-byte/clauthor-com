@@ -35,6 +35,7 @@ import AdminSubscriptionsTable from "@/components/dashboard/AdminSubscriptionsTa
 import AdminSignupMetrics from "@/components/dashboard/AdminSignupMetrics";
 import AdminCostsDashboard from "@/components/dashboard/AdminCostsDashboard";
 import AdminSimulationsPanel from "@/components/dashboard/AdminSimulationsPanel";
+import TokenAlertsTable from "@/components/dashboard/TokenAlertsTable";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
