@@ -31,8 +31,6 @@ import { WORKFORCE } from "@/data/workforceArchitecture";
 import { CLAUTHOR_ORG_CHART, CLAUTHOR_AGENT_COUNT } from "@/data/clauthorOrgChart";
 import { Skeleton } from "@/components/ui/skeleton";
 import AgentCardExpanded from "@/components/library/AgentCardExpanded";
-import { useTrialAgent } from "@/hooks/useTrialAgent";
-import { useQuery } from "@tanstack/react-query";
 
 // Department colors
 const DEPT_COLORS: Record<string, { gradient: string; border: string; text: string; bg: string }> = {
@@ -66,25 +64,6 @@ const LibraryPage = () => {
   const lang = i18n.language?.split("-")[0] || "pt";
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
-  const { startTrial, loading: trialLoading } = useTrialAgent();
-
-  // One-shot trial eligibility check (cached). true = user has never used trial.
-  const { data: trialEligible = false } = useQuery({
-    queryKey: ["trial-eligibility", user?.id],
-    queryFn: async () => {
-      if (!user) return false;
-      const { data } = await supabase
-        .from("subscriptions")
-        .select("id")
-        .eq("user_id", user.id)
-        .like("stripe_subscription_id", "TRIAL-%")
-        .limit(1)
-        .maybeSingle();
-      return !data;
-    },
-    enabled: !!user,
-    staleTime: 60_000,
-  });
 
   // Total agent count
   const totalAgents = useMemo(() => WORKFORCE.reduce((sum, dept) => 
@@ -158,21 +137,6 @@ const LibraryPage = () => {
     });
   }, [user, navigate, lang, isAdmin]);
 
-  const handleStartTrial = useCallback(async (slug: string, agentName: string) => {
-    if (!user) {
-      navigate("/auth", {
-        state: {
-          signup: true,
-          hireIntent: { type: "agent" as const, label: agentName, slugs: [slug] },
-        },
-      });
-      return;
-    }
-    const result = await startTrial(slug, agentName);
-    if (result) {
-      navigate(`/app/agente/${slug}`);
-    }
-  }, [user, navigate, startTrial]);
 
   const handleApproveCheckout = useCallback((subscriptionId: string) => {
     if (!checkoutData) return;
