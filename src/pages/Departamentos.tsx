@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { SEO } from "@/components/SEO";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -51,6 +51,23 @@ const Departamentos = () => {
   const [activeFilter, setActiveFilter] = useState("all");
   const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
   const categories = getCategoryLabels(t);
+  const [searchParams] = useSearchParams();
+
+  // Pre-select category from onboarding (?dept=marketing)
+  useEffect(() => {
+    const dept = searchParams.get("dept");
+    if (!dept) return;
+    const deptToCategory: Record<string, string> = {
+      marketing: "criativo",
+      vendas: "vendas",
+      suporte: "corp",
+      financeiro: "corp",
+      juridico: "corp",
+    };
+    const cat = deptToCategory[dept];
+    if (cat) setActiveFilter(cat);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const region = getRegion(lang);
 

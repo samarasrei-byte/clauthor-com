@@ -4,7 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
   ArrowRight, Search, Users, Bot, Eye,
@@ -64,6 +65,26 @@ const LibraryPage = () => {
   const lang = i18n.language?.split("-")[0] || "pt";
   const { user, isAdmin } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Pre-select department from onboarding query param (?area=vendas)
+  useEffect(() => {
+    const area = searchParams.get("area");
+    if (!area) return;
+    const areaToDept: Record<string, string> = {
+      vendas: "sales",
+      marketing: "marketing",
+      suporte: "customer_success",
+      financeiro: "finance",
+      juridico: "legal",
+      operacoes: "operations",
+    };
+    const deptId = areaToDept[area];
+    if (deptId && WORKFORCE.some((d) => d.id === deptId)) {
+      setActiveDept(deptId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Total agent count
   const totalAgents = useMemo(() => WORKFORCE.reduce((sum, dept) => 
