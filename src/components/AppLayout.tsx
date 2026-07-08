@@ -46,6 +46,11 @@ const AppLayout = () => {
         <PlatformUpdatesDialog />
       </Suspense>
 
+      {/* Thor daily greeting with token balance and top-up nudge */}
+      <Suspense fallback={null}>
+        <ThorDailyGreeting />
+      </Suspense>
+
       {/* Thor greeter removido a pedido — estava sobrepondo o chat Ana - Atendimento */}
 
 
