@@ -89,6 +89,57 @@ export default function ThorDailyGreeting() {
     },
   });
 
+  // 7-day streak + token forecast
+  const insightsRange = useMemo(() => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
+    return { startIso: start.toISOString() };
+  }, []);
+
+  const { data: insights } = useQuery({
+    queryKey: ["thor-insights", user?.id, insightsRange.startIso],
+    enabled: !!user?.id && open,
+    queryFn: async () => {
+      const [{ data: events }, { data: tokens7d }] = await Promise.all([
+        supabase
+          .from("thor_greeting_events")
+          .select("created_at,event_type")
+          .eq("user_id", user!.id)
+          .eq("event_type", "impression")
+          .gte("created_at", insightsRange.startIso)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("token_usage")
+          .select("tokens_used,created_at")
+          .eq("user_id", user!.id)
+          .gte("created_at", new Date(Date.now() - 7 * 864e5).toISOString()),
+      ]);
+
+      // Streak: consecutive days ending today or yesterday
+      const daySet = new Set<string>();
+      (events ?? []).forEach((e) => daySet.add(dayStamp(new Date(e.created_at))));
+      let streak = 0;
+      const cursor = new Date();
+      // Allow streak to start today OR yesterday (user hasn't opened today yet)
+      if (!daySet.has(dayStamp(cursor))) cursor.setDate(cursor.getDate() - 1);
+      while (daySet.has(dayStamp(cursor))) {
+        streak++;
+        cursor.setDate(cursor.getDate() - 1);
+      }
+
+      // Forecast: avg tokens/day over last 7 days
+      const totalTokens7d = (tokens7d ?? []).reduce((s, t) => s + (t.tokens_used || 0), 0);
+      const avgDaily = totalTokens7d / 7;
+      return { streak, avgDaily, totalTokens7d };
+    },
+  });
+
+  const forecastDays: number | null = useMemo(() => {
+    if (isAdmin || !insights || insights.avgDaily <= 0 || remainingCredits <= 0) return null;
+    return Math.floor(remainingCredits / insights.avgDaily);
+  }, [insights, remainingCredits, isAdmin]);
+
+
   const usageLevel: "ok" | "low" | "critical" = isAdmin
     ? "ok"
     : usagePercentage >= 90
