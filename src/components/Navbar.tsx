@@ -67,7 +67,7 @@ const Navbar = () => {
       <div className="max-w-[1120px] mx-auto px-5 sm:px-6">
         <div className="flex items-center justify-between h-12">
           {/* Logo - pure text, Apple style */}
-          <Link to="/" className="flex items-center group">
+          <Link to="/" aria-label="ClAuthor — Página inicial" className="flex items-center group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-md">
             <ClauthorLogo size="md" />
           </Link>
 
@@ -77,14 +77,17 @@ const Navbar = () => {
             <div ref={solutionsRef} className="relative">
               <button
                 onClick={() => setSolutionsOpen(!solutionsOpen)}
-                className={`px-3 py-1 rounded-md text-[13px] transition-colors flex items-center gap-1 ${
+                aria-haspopup="menu"
+                aria-expanded={solutionsOpen}
+                aria-controls="nav-solutions-menu"
+                className={`px-3 py-1 rounded-md text-[13px] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
                   solutionsOpen
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {t("navbar.solutions")}
-                <ChevronDown className={`h-3 w-3 transition-transform ${solutionsOpen ? "rotate-180" : ""}`} />
+                <ChevronDown aria-hidden="true" className={`h-3 w-3 transition-transform ${solutionsOpen ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence>
                 {solutionsOpen && (
@@ -93,6 +96,8 @@ const Navbar = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.98 }}
                     transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                    id="nav-solutions-menu"
+                    role="menu"
                     className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[260px] rounded-xl bg-popover border border-border/50 shadow-lg shadow-black/[0.08] dark:shadow-black/[0.3] p-1 z-50"
                   >
                     {[
@@ -184,10 +189,13 @@ const Navbar = () => {
 
           {/* Mobile toggle */}
           <button
-            className="md:hidden text-foreground p-1.5"
+            className="md:hidden text-foreground p-1.5 min-h-11 min-w-11 inline-flex items-center justify-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-md"
             onClick={() => setMobileOpen(!mobileOpen)}
+            aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-nav-menu"
           >
-            {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            {mobileOpen ? <X aria-hidden="true" className="h-5 w-5" /> : <Menu aria-hidden="true" className="h-5 w-5" />}
           </button>
         </div>
       </div>
@@ -197,10 +205,11 @@ const Navbar = () => {
         {mobileOpen && (
           <motion.div
             key="mobile-menu"
+            id="mobile-nav-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border/30 bg-background/95 backdrop-blur-2xl overflow-hidden"
+            className="md:hidden border-t border-border/30 bg-background/95 backdrop-blur-2xl overflow-hidden max-h-[calc(100dvh-3rem)] overflow-y-auto"
           >
             <div className="px-5 py-5 space-y-0.5">
               {[
