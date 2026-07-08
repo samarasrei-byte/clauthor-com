@@ -2,11 +2,15 @@ import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { ArrowLeft, ExternalLink, Shield, CheckCircle, Loader2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Shield, CheckCircle, Loader2, Zap } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import type { ConnectorData } from "./connectorData";
+
+// Meta OAuth is shared by Facebook Pages, Meta Ads and Instagram (all covered by the same
+// long-lived Meta access token). We surface a one-click OAuth button on those cards.
+const META_OAUTH_KEYS = new Set(["meta_ads", "instagram", "meta_business", "facebook"]);
 
 interface Props {
   connector: ConnectorData | null;
@@ -19,8 +23,44 @@ interface Props {
 const ConnectorDetailDialog = ({ connector, open, onOpenChange, connectedKeys, onSaved }: Props) => {
   const [values, setValues] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
+  const [metaConnecting, setMetaConnecting] = useState(false);
 
   if (!connector) return null;
+
+  const isMetaOAuth = META_OAUTH_KEYS.has(connector.integrationKey);
+
+  const handleMetaOAuth = async () => {
+    // Pre-open popup synchronously to survive popup blockers.
+    let popup: Window | null = null;
+    try {
+      popup = window.open("about:blank", "meta_oauth_popup", "width=600,height=720,resizable=yes,scrollbars=yes");
+    } catch { /* ignore */ }
+
+    setMetaConnecting(true);
+    try {
+      const redirect_uri = window.location.origin + "/settings/social";
+      sessionStorage.setItem("oauth_provider", "meta");
+      const { data, error } = await supabase.functions.invoke("meta-oauth", {
+        body: { action: "authorize", redirect_uri },
+      });
+      if (error) throw error;
+      const authUrl = (data as { url: string }).url;
+      if (popup && !popup.closed) {
+        try { popup.location.href = authUrl; } catch { window.location.href = authUrl; }
+      } else {
+        // Popup blocked — fall back to a redirect in this tab.
+        window.location.href = authUrl;
+      }
+      toast.success("Autorize a Meta na janela aberta. Você será redirecionado para /settings/social ao concluir.");
+      onOpenChange(false);
+    } catch (e: unknown) {
+      try { popup?.close(); } catch { /* ignore */ }
+      const msg = e instanceof Error ? e.message : "Falha ao iniciar OAuth Meta";
+      toast.error(msg + " — verifique se META_APP_ID e META_APP_SECRET estão configurados.");
+    } finally {
+      setMetaConnecting(false);
+    }
+  };
 
   const allRequiredConnected = connector.fields
     .filter(f => f.required)
