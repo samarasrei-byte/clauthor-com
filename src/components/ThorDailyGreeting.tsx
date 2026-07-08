@@ -228,12 +228,20 @@ export default function ThorDailyGreeting() {
     // Smart skip: if user dismissed N times in a row without clicking CTA,
     // throttle to once every 3 days. Critical usage always shows.
     try {
+      const isCritical = !isAdmin && usagePercentage >= 90;
+
+      // Snooze: user explicitly silenced for 7 days. Critical usage bypasses it.
+      const snoozeUntilRaw = localStorage.getItem(`${SNOOZE_UNTIL_KEY}-${user.id}`);
+      const snoozeUntil = snoozeUntilRaw ? Number(snoozeUntilRaw) : 0;
+      if (!isCritical && snoozeUntil > Date.now()) {
+        return;
+      }
+
       const dismissStreak = Number(
         localStorage.getItem(`${DISMISS_COUNTER_KEY}-${user.id}`) || "0",
       );
       const lastImpressionRaw = localStorage.getItem(`${LAST_IMPRESSION_KEY}-${user.id}`);
       const lastImpression = lastImpressionRaw ? Number(lastImpressionRaw) : 0;
-      const isCritical = !isAdmin && usagePercentage >= 90;
 
       if (
         !isCritical &&
