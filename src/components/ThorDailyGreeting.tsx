@@ -342,9 +342,43 @@ export default function ThorDailyGreeting() {
         ? `${firstName}, hora de reabastecer.`
         : `${greeting}, ${firstName}.`;
 
+  // Personalization from onboarding answers
+  const { data: onboardingProfile } = useQuery({
+    queryKey: ["thor-onboarding-context", user?.id],
+    enabled: !!user?.id,
+    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("onboarding_answers")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      return (data?.onboarding_answers ?? null) as null | {
+        path?: "team" | "department" | "agent";
+        department?: string;
+        agentArea?: string;
+        teamGoal?: string;
+      };
+    },
+  });
+
+  const onboardingHint = (() => {
+    if (!onboardingProfile?.path) return null;
+    if (onboardingProfile.path === "department" && onboardingProfile.department) {
+      return `Seu departamento de ${onboardingProfile.department} está pronto para ganhar velocidade.`;
+    }
+    if (onboardingProfile.path === "team" && onboardingProfile.teamGoal) {
+      return `Seu time está focado em ${onboardingProfile.teamGoal.toLowerCase()} — vamos avançar.`;
+    }
+    if (onboardingProfile.path === "agent" && onboardingProfile.agentArea) {
+      return `Seu agente de ${onboardingProfile.agentArea} está a postos.`;
+    }
+    return null;
+  })();
+
   const subtitle = isAdmin
     ? "Você tem acesso ilimitado — a forja segue acesa."
-    : `${fmt(remainingCredits)} tokens disponíveis no seu cofre.`;
+    : onboardingHint ?? `${fmt(remainingCredits)} tokens disponíveis no seu cofre.`;
 
   return (
     <Dialog open={open} onOpenChange={(o) => (o ? setOpen(true) : handleClose("dismiss"))}>
