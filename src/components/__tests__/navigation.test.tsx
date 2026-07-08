@@ -16,9 +16,11 @@ vi.mock("@/hooks/useAuth", () => ({
 const renderWithProviders = (ui: React.ReactElement) =>
   render(
     <HelmetProvider>
-      <I18nextProvider i18n={i18n}>
-        <MemoryRouter>{ui}</MemoryRouter>
-      </I18nextProvider>
+      <ThemeProvider>
+        <I18nextProvider i18n={i18n}>
+          <MemoryRouter>{ui}</MemoryRouter>
+        </I18nextProvider>
+      </ThemeProvider>
     </HelmetProvider>
   );
 
