@@ -202,7 +202,7 @@ export default function ThorDailyGreeting() {
     }
   };
 
-  // Show once per day
+  // Show once per day (with smart-skip after repeated dismisses)
   useEffect(() => {
     if (!user || isLoading) return;
     if (typeof window === "undefined") return;
@@ -211,9 +211,36 @@ export default function ThorDailyGreeting() {
     const lastSeen = localStorage.getItem(key);
     if (lastSeen === todayKey()) return;
 
+    // Smart skip: if user dismissed N times in a row without clicking CTA,
+    // throttle to once every 3 days. Critical usage always shows.
+    try {
+      const dismissStreak = Number(
+        localStorage.getItem(`${DISMISS_COUNTER_KEY}-${user.id}`) || "0",
+      );
+      const lastImpressionRaw = localStorage.getItem(`${LAST_IMPRESSION_KEY}-${user.id}`);
+      const lastImpression = lastImpressionRaw ? Number(lastImpressionRaw) : 0;
+      const isCritical = !isAdmin && usagePercentage >= 90;
+
+      if (
+        !isCritical &&
+        dismissStreak >= SMART_SKIP_THRESHOLD &&
+        lastImpression > 0 &&
+        Date.now() - lastImpression < SMART_SKIP_INTERVAL_MS
+      ) {
+        return;
+      }
+    } catch {
+      /* ignore */
+    }
+
     const t = setTimeout(() => {
       setOpen(true);
       logEvent("impression");
+      try {
+        localStorage.setItem(`${LAST_IMPRESSION_KEY}-${user.id}`, String(Date.now()));
+      } catch {
+        /* ignore */
+      }
     }, 1200);
     return () => clearTimeout(t);
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -223,6 +250,13 @@ export default function ThorDailyGreeting() {
     if (user) {
       try {
         localStorage.setItem(`${STORAGE_KEY}-${user.id}`, todayKey());
+        const counterKey = `${DISMISS_COUNTER_KEY}-${user.id}`;
+        if (reason === "cta_click") {
+          localStorage.setItem(counterKey, "0");
+        } else {
+          const cur = Number(localStorage.getItem(counterKey) || "0");
+          localStorage.setItem(counterKey, String(cur + 1));
+        }
       } catch {
         /* ignore */
       }
