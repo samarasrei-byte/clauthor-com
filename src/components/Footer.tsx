@@ -28,12 +28,14 @@ const Footer = () => {
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">{t("home.footer_product")}</p>
               <Link to="/library" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_agents")}</Link>
               <Link to="/departamentos" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_departments")}</Link>
+              <Link to="/art-director" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">Art Director</Link>
               <Link to="/pricing" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("nav.pricing")}</Link>
               <Link to="/how-it-works" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("nav.how_it_works")}</Link>
             </div>
             <div className="space-y-2.5">
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground/50 font-bold">{t("home.footer_community_label")}</p>
               <Link to="/community" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_community_link")}</Link>
+              <Link to="/api-docs" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">API Docs</Link>
               <Link to="/pitch" className="block font-mono text-xs text-muted-foreground hover:text-foreground transition-colors">{t("home.footer_pitch")}</Link>
             </div>
             <div className="space-y-2.5">
