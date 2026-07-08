@@ -99,7 +99,6 @@ const Navbar = () => {
                       { href: "/marketplace", label: t("navbar.marketplace_label"), desc: "225 agentes individuais para contratar avulso" },
                       { href: "/departamentos", label: t("navbar.ai_teams_label"), desc: "20 departamentos completos com 225 agentes" },
                       { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }), desc: t("navbar.team_builder_desc", { defaultValue: "Pick agents and see costs in real time" }) },
-                      { href: "/art-director", label: "Art Director", desc: "Diretor de conteúdo + agente artista para gerar imagens" },
                       { href: "/enterprise", label: "Enterprise", desc: "Squads dedicadas, SSO, SLA 99.9% e suporte white-glove" },
                     ].map((item) => (
                       <Link
@@ -110,22 +109,6 @@ const Navbar = () => {
                       >
                         <span className="text-[13px] font-medium text-foreground">{item.label}</span>
                         <span className="text-[11px] text-muted-foreground leading-snug">{item.desc}</span>
-                      </Link>
-                    ))}
-                    <div className="border-t border-border/40 my-1" />
-                    {[
-                      { href: "/how-it-works", label: t("nav.how_it_works") },
-                      { href: "/pricing", label: t("nav.pricing") },
-                      { href: "/community", label: t("navbar.community", { defaultValue: "Community" }) },
-                      { href: "/api-docs", label: t("navbar.api_docs", { defaultValue: "API Docs" }) },
-                    ].map((item) => (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        onClick={() => setSolutionsOpen(false)}
-                        className="block px-3 py-2 rounded-lg text-[12px] text-muted-foreground hover:text-foreground hover:bg-accent/60 transition-colors"
-                      >
-                        {item.label}
                       </Link>
                     ))}
                   </motion.div>
