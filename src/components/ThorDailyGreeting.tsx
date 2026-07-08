@@ -136,7 +136,7 @@ export default function ThorDailyGreeting() {
     return () => clearInterval(id);
   }, [open, message]);
 
-  const handleClose = () => {
+  const handleClose = (reason: "dismiss" | "cta_click" = "dismiss") => {
     if (user) {
       try {
         localStorage.setItem(`${STORAGE_KEY}-${user.id}`, todayKey());
@@ -144,16 +144,11 @@ export default function ThorDailyGreeting() {
         /* ignore */
       }
     }
+    void logEvent(reason);
     setOpen(false);
   };
 
-  const level: "ok" | "low" | "critical" = isAdmin
-    ? "ok"
-    : usagePercentage >= 90
-      ? "critical"
-      : usagePercentage >= 70
-        ? "low"
-        : "ok";
+  const level = usageLevel;
 
   return (
     <Dialog open={open} onOpenChange={(o) => (o ? setOpen(true) : handleClose())}>
