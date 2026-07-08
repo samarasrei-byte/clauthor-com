@@ -25,7 +25,7 @@ const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardG
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
-import FirstAccessOnboarding from "@/components/onboarding/FirstAccessOnboarding";
+// FirstAccessOnboarding aposentado — substituído pelo GuidedOnboarding no AppLayout
 import MagicMomentCard from "@/components/onboarding/MagicMomentCard";
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
@@ -65,7 +65,7 @@ const ClientDashboard = () => {
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
   const [showQuickStart, setShowQuickStart] = useState(false);
-  const [showFirstAccess, setShowFirstAccess] = useState(false);
+  
   const [showMagicMoment, setShowMagicMoment] = useState(false);
   const [magicMomentAgent, setMagicMomentAgent] = useState<string | undefined>(undefined);
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
@@ -166,16 +166,7 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
-  // First-access onboarding modal (when user has no agents yet)
-  useEffect(() => {
-    if (!user || loadingAgents) return;
-    if (hasPendingCheckout) return; // não abrir sobre o checkout
-    if (localStorage.getItem("clauthor_first_access_done")) return;
-    if (agents.length === 0) {
-      const timer = setTimeout(() => setShowFirstAccess(true), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [user, agents, loadingAgents, hasPendingCheckout]);
+  // First-access modal legacy removido — GuidedOnboarding cuida disso globalmente.
 
 
   const { data: templates = [] } = useQuery({
@@ -512,14 +503,7 @@ const ClientDashboard = () => {
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
 
-      <FirstAccessOnboarding
-        isOpen={showFirstAccess}
-        onClose={() => {
-          setShowFirstAccess(false);
-          localStorage.setItem("clauthor_first_access_done", "true");
-        }}
-        userName={user?.user_metadata?.full_name?.split(" ")[0]}
-      />
+      {/* Legacy FirstAccessOnboarding removido: substituído pelo GuidedOnboarding global no AppLayout */}
 
       <div className="flex h-full">
         <div className="hidden lg:block relative z-10">
