@@ -82,7 +82,7 @@ export default function ThorDailyGreeting() {
   ) => {
     if (!user) return;
     try {
-      await supabase.from("thor_greeting_events").insert({
+      await supabase.from("thor_greeting_events").insert([{
         user_id: user.id,
         event_type: eventType,
         usage_percentage: Number.isFinite(usagePercentage) ? Math.round(usagePercentage) : null,
@@ -90,7 +90,7 @@ export default function ThorDailyGreeting() {
         level: usageLevel,
         is_admin: !!isAdmin,
         metadata,
-      });
+      }]);
     } catch {
       /* analytics is non-blocking */
     }
