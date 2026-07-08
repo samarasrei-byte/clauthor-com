@@ -3403,6 +3403,42 @@ export type Database = {
         }
         Relationships: []
       }
+      thor_greeting_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          is_admin: boolean
+          level: string | null
+          metadata: Json
+          remaining_credits: number | null
+          usage_percentage: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          is_admin?: boolean
+          level?: string | null
+          metadata?: Json
+          remaining_credits?: number | null
+          usage_percentage?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          is_admin?: boolean
+          level?: string | null
+          metadata?: Json
+          remaining_credits?: number | null
+          usage_percentage?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       token_usage: {
         Row: {
           action_type: string
