@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, CartesianGrid, Tooltip } from "recharts";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
+import TokenAlertsTable from "@/components/dashboard/TokenAlertsTable";
 import type { MonixMessage } from "@/hooks/useMonix";
 import { useTranslation } from "react-i18next";
 
