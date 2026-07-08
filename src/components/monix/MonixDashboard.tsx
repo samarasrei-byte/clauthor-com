@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, CartesianGrid, Tooltip } from "recharts";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
+import TokenAlertsTable from "@/components/dashboard/TokenAlertsTable";
 import type { MonixMessage } from "@/hooks/useMonix";
 import { useTranslation } from "react-i18next";
 
@@ -170,6 +171,15 @@ const MonixDashboard = ({ messages }: MonixDashboardProps) => {
           ))}
         </div>
       </div>
+
+      {/* Token consumption breakdown (per AI engine) */}
+      <TokenAlertsTable
+        mode="user"
+        credits={credits ? [{ user_id: credits.user_id, total_credits: credits.total_credits, used_credits: credits.used_credits, plan_type: credits.plan_type }] : []}
+        tokenUsage={tokenUsage}
+        warnAt={80}
+        criticalAt={95}
+      />
 
       {/* Alerts */}
       {(errorLogs > 0 || usagePercentage > 80) && (

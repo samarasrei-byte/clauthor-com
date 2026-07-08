@@ -35,6 +35,7 @@ import AdminSubscriptionsTable from "@/components/dashboard/AdminSubscriptionsTa
 import AdminSignupMetrics from "@/components/dashboard/AdminSignupMetrics";
 import AdminCostsDashboard from "@/components/dashboard/AdminCostsDashboard";
 import AdminSimulationsPanel from "@/components/dashboard/AdminSimulationsPanel";
+import TokenAlertsTable from "@/components/dashboard/TokenAlertsTable";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -310,6 +311,14 @@ const AdminDashboard = () => {
                     successRate={successRate} waitingCount={waitingCount} allAgents={allAgents} allCredits={allCredits}
                     allProfiles={allProfiles} executionLogs={executionLogs} revenueData={revenueData}
                     planDistribution={planDistribution} onTabChange={setActiveTab}
+                  />
+                  <TokenAlertsTable
+                    mode="admin"
+                    credits={allCredits}
+                    tokenUsage={tokenUsage}
+                    profiles={allProfiles}
+                    warnAt={80}
+                    criticalAt={95}
                   />
                   <LiveActivityFeed />
                 </div>
