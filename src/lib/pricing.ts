@@ -52,7 +52,7 @@ export const regionalPricing: Record<string, RegionalPricing> = {
     plans: { starter: 997, growth: 1997 },
     tokenPacks: { pack5m: 297, pack15m: 697, pack50m: 1497, pack100m: 2797 },
     comparison: { avgSalary: 4500, avgSalaryYear3: 272160, agentStarting: 297, agentYear3: 10692 },
-    departments: { tecnologia: 2497, comercial: 1697, marketing: 1497, financeiro: 1697, criacao: 997, suporte: 597, rh: 997 },
+    departments: { tecnologia: 1500, comercial: 1000, marketing: 750, financeiro: 1000, criacao: 750, suporte: 400, rh: 750 },
     departmentClt: cltCosts,
   },
   "pt-pt": {
@@ -68,7 +68,7 @@ export const regionalPricing: Record<string, RegionalPricing> = {
     plans: { starter: 197, growth: 397 },
     tokenPacks: { pack5m: 59, pack15m: 139, pack50m: 299, pack100m: 549 },
     comparison: { avgSalary: 5500, avgSalaryYear3: 330000, agentStarting: 59, agentYear3: 2124 },
-    departments: { tecnologia: 497, comercial: 347, marketing: 297, financeiro: 347, criacao: 197, suporte: 127, rh: 197 },
+    departments: { tecnologia: 299, comercial: 199, marketing: 149, financeiro: 199, criacao: 149, suporte: 79, rh: 149 },
     departmentClt: cltCosts,
   },
   es: {
@@ -76,7 +76,7 @@ export const regionalPricing: Record<string, RegionalPricing> = {
     plans: { starter: 197, growth: 397 },
     tokenPacks: { pack5m: 59, pack15m: 139, pack50m: 299, pack100m: 549 },
     comparison: { avgSalary: 2000, avgSalaryYear3: 120000, agentStarting: 59, agentYear3: 2124 },
-    departments: { tecnologia: 497, comercial: 347, marketing: 297, financeiro: 347, criacao: 197, suporte: 127, rh: 197 },
+    departments: { tecnologia: 299, comercial: 199, marketing: 149, financeiro: 199, criacao: 149, suporte: 79, rh: 149 },
     departmentClt: cltCosts,
   },
   fr: {
