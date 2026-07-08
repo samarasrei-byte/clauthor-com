@@ -32,6 +32,40 @@ export default function ThorDailyGreeting() {
   const [open, setOpen] = useState(false);
   const [typedText, setTypedText] = useState("");
 
+  // Yesterday's activity summary (executions + tokens consumed)
+  const yesterdayRange = useMemo(() => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
+    const end = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    return { startIso: start.toISOString(), endIso: end.toISOString() };
+  }, []);
+
+  const { data: yesterdaySummary } = useQuery({
+    queryKey: ["thor-yesterday-summary", user?.id, yesterdayRange.startIso],
+    enabled: !!user?.id && open,
+    queryFn: async () => {
+      const [{ data: logs }, { data: tokens }] = await Promise.all([
+        supabase
+          .from("execution_logs")
+          .select("status")
+          .eq("user_id", user!.id)
+          .gte("created_at", yesterdayRange.startIso)
+          .lt("created_at", yesterdayRange.endIso),
+        supabase
+          .from("token_usage")
+          .select("tokens_used")
+          .eq("user_id", user!.id)
+          .gte("created_at", yesterdayRange.startIso)
+          .lt("created_at", yesterdayRange.endIso),
+      ]);
+      const total = logs?.length ?? 0;
+      const success = logs?.filter((l) => l.status === "success").length ?? 0;
+      const errors = total - success;
+      const tokensUsed = (tokens ?? []).reduce((s, t) => s + (t.tokens_used || 0), 0);
+      return { total, success, errors, tokensUsed };
+    },
+  });
+
   // Trigger once per day per user
   useEffect(() => {
     if (!user || isLoading) return;
