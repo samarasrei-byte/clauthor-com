@@ -66,6 +66,36 @@ export default function ThorDailyGreeting() {
     },
   });
 
+  // Compute level once for logging + UI
+  const usageLevel: "ok" | "low" | "critical" = isAdmin
+    ? "ok"
+    : usagePercentage >= 90
+      ? "critical"
+      : usagePercentage >= 70
+        ? "low"
+        : "ok";
+
+  // Fire-and-forget analytics event
+  const logEvent = async (
+    eventType: "impression" | "cta_click" | "dismiss",
+    metadata: Record<string, unknown> = {},
+  ) => {
+    if (!user) return;
+    try {
+      await supabase.from("thor_greeting_events").insert({
+        user_id: user.id,
+        event_type: eventType,
+        usage_percentage: Number.isFinite(usagePercentage) ? Math.round(usagePercentage) : null,
+        remaining_credits: isAdmin ? null : remainingCredits,
+        level: usageLevel,
+        is_admin: !!isAdmin,
+        metadata,
+      });
+    } catch {
+      /* analytics is non-blocking */
+    }
+  };
+
   // Trigger once per day per user
   useEffect(() => {
     if (!user || isLoading) return;
@@ -75,8 +105,12 @@ export default function ThorDailyGreeting() {
     const lastSeen = localStorage.getItem(key);
     if (lastSeen === todayKey()) return;
 
-    const t = setTimeout(() => setOpen(true), 1200);
+    const t = setTimeout(() => {
+      setOpen(true);
+      logEvent("impression");
+    }, 1200);
     return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isLoading]);
 
   // Compose Thor's message dynamically from the user's real balance
