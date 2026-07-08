@@ -53,9 +53,7 @@ const Navbar = () => {
           { label: t("nav.dashboard"), href: "/dashboard" },
           { label: t("nav.my_agents"), href: "/agents" },
         ]
-      : [
-          { label: t("nav.pricing"), href: "/pricing" },
-        ]),
+      : []),
   ];
 
   return (
