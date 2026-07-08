@@ -154,6 +154,46 @@ const ConnectorDetailDialog = ({ connector, open, onOpenChange, connectedKeys, o
           </p>
         </div>
 
+        {/* Meta OAuth quick-connect (Meta Ads / Instagram / Facebook) */}
+        {isMetaOAuth && (
+          <div className="px-6 pb-4">
+            <div className="rounded-xl border border-primary/25 bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-4 flex items-start gap-3">
+              <div className="w-9 h-9 rounded-lg bg-primary/15 border border-primary/25 flex items-center justify-center shrink-0">
+                <Zap className="h-4 w-4 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0 space-y-2">
+                <div>
+                  <h4 className="font-display font-semibold text-sm">Conexão rápida via OAuth Meta</h4>
+                  <p className="text-xs text-muted-foreground mt-0.5">
+                    Autentique com sua conta Meta e importaremos automaticamente Páginas do Facebook, contas Instagram Business e Ad Accounts vinculadas. Você não precisa colar tokens manualmente.
+                  </p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Button
+                    size="sm"
+                    onClick={handleMetaOAuth}
+                    disabled={metaConnecting}
+                    className="gap-1.5"
+                  >
+                    {metaConnecting ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    )}
+                    Conectar com Meta
+                  </Button>
+                  <a
+                    href="/settings/social"
+                    className="text-[11px] text-muted-foreground hover:text-primary underline underline-offset-2"
+                  >
+                    Gerenciar em /settings/social
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Developer */}
         {connector.developer && (
           <div className="px-6 pb-4">
