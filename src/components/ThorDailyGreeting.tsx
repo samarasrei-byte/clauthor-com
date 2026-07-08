@@ -341,7 +341,7 @@ export default function ThorDailyGreeting() {
                   <Button
                     className="flex-1 gap-1.5 shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
                     onClick={() => {
-                      handleClose();
+                      handleClose("cta_click");
                       navigate("/pricing");
                     }}
                   >
@@ -352,7 +352,7 @@ export default function ThorDailyGreeting() {
                 <Button
                   variant="outline"
                   className={isAdmin ? "flex-1 gap-1.5" : "sm:w-auto gap-1.5"}
-                  onClick={handleClose}
+                  onClick={() => handleClose("dismiss")}
                 >
                   <Sparkles className="h-3.5 w-3.5" />
                   {isAdmin ? "Continuar" : "Depois"}
