@@ -321,6 +321,7 @@ const AdminDashboard = () => {
                     warnAt={80}
                     criticalAt={95}
                   />
+                  <ThorGreetingMetricsCard />
                   <LiveActivityFeed />
                 </div>
               )}
