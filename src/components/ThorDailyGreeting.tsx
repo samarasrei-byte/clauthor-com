@@ -56,6 +56,17 @@ function dayStamp(d: Date): string {
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
+type Delta = { pct: number; direction: "up" | "down" | "flat" } | null;
+
+function computeDelta(current: number, previous: number): Delta {
+  if (!previous && !current) return null;
+  if (!previous) return { pct: 100, direction: "up" };
+  const diff = current - previous;
+  if (diff === 0) return { pct: 0, direction: "flat" };
+  const pct = Math.round((diff / previous) * 100);
+  return { pct: Math.abs(pct), direction: diff > 0 ? "up" : "down" };
+}
+
 export default function ThorDailyGreeting() {
   const { user, isAdmin } = useAuth();
   const { credits, remainingCredits, usagePercentage, isLoading } = useCredits();
