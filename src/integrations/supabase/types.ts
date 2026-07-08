@@ -2872,6 +2872,8 @@ export type Database = {
           email: string | null
           full_name: string | null
           id: string
+          onboarded_at: string | null
+          onboarding_answers: Json | null
           onboarding_completed: boolean
           tour_completed: boolean
           updated_at: string
@@ -2884,6 +2886,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          onboarded_at?: string | null
+          onboarding_answers?: Json | null
           onboarding_completed?: boolean
           tour_completed?: boolean
           updated_at?: string
@@ -2896,6 +2900,8 @@ export type Database = {
           email?: string | null
           full_name?: string | null
           id?: string
+          onboarded_at?: string | null
+          onboarding_answers?: Json | null
           onboarding_completed?: boolean
           tour_completed?: boolean
           updated_at?: string
