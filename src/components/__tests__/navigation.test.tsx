@@ -4,6 +4,7 @@ import { MemoryRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import { I18nextProvider } from "react-i18next";
 import i18n from "@/i18n";
+import { ThemeProvider } from "@/hooks/useTheme";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
