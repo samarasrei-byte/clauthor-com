@@ -10,6 +10,7 @@ const SocialProofToasts = lazy(() => import("./SocialProofToasts"));
 const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
 const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
+const PlatformUpdatesDialog = lazy(() => import("./PlatformUpdatesDialog"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
@@ -39,7 +40,13 @@ const AppLayout = () => {
         onClose={() => setTestDriveAgent(null)}
       />
 
+      {/* Platform updates + token info popup (once per version, authenticated users) */}
+      <Suspense fallback={null}>
+        <PlatformUpdatesDialog />
+      </Suspense>
+
       {/* Thor greeter removido a pedido — estava sobrepondo o chat Ana - Atendimento */}
+
 
 
     </div>
