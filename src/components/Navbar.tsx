@@ -77,14 +77,17 @@ const Navbar = () => {
             <div ref={solutionsRef} className="relative">
               <button
                 onClick={() => setSolutionsOpen(!solutionsOpen)}
-                className={`px-3 py-1 rounded-md text-[13px] transition-colors flex items-center gap-1 ${
+                aria-haspopup="menu"
+                aria-expanded={solutionsOpen}
+                aria-controls="nav-solutions-menu"
+                className={`px-3 py-1 rounded-md text-[13px] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
                   solutionsOpen
                     ? "text-foreground"
                     : "text-muted-foreground hover:text-foreground"
                 }`}
               >
                 {t("navbar.solutions")}
-                <ChevronDown className={`h-3 w-3 transition-transform ${solutionsOpen ? "rotate-180" : ""}`} />
+                <ChevronDown aria-hidden="true" className={`h-3 w-3 transition-transform ${solutionsOpen ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence>
                 {solutionsOpen && (
