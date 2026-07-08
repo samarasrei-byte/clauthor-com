@@ -96,6 +96,8 @@ const Navbar = () => {
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: 6, scale: 0.98 }}
                     transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                    id="nav-solutions-menu"
+                    role="menu"
                     className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[260px] rounded-xl bg-popover border border-border/50 shadow-lg shadow-black/[0.08] dark:shadow-black/[0.3] p-1 z-50"
                   >
                     {[
