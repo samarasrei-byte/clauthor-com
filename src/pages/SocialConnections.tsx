@@ -329,7 +329,7 @@ const SocialConnections = () => {
   });
 
   const connectMeta = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (preOpened?: Window | null) => {
       const redirect_uri = window.location.origin + "/settings/social";
       sessionStorage.setItem("oauth_provider", "meta");
       setStatus("meta", "connecting");
@@ -337,15 +337,18 @@ const SocialConnections = () => {
       const { data, error } = await supabase.functions.invoke("meta-oauth", {
         body: { action: "authorize", redirect_uri },
       });
-      if (error) throw error;
+      if (error) {
+        try { preOpened?.close(); } catch { /* ignore */ }
+        throw error;
+      }
       const authUrl = (data as { url: string }).url;
       pushLog({ level: "info", provider: "meta", event: "authorize:url_received", detail: { state: extractState(authUrl), redirect_uri, auth_url: authUrl } });
-      openOAuthPopup(authUrl);
+      openOAuthPopup(authUrl, preOpened);
     },
     onError: (e: Error) => {
       setStatus("meta", "error", e.message);
       pushLog({ level: "error", provider: "meta", event: "authorize:failed", detail: { message: e.message } });
-      toast.error(e.message || "Falha ao iniciar OAuth Meta");
+      toast.error(e.message || "Falha ao iniciar OAuth Meta. Verifique se as credenciais META_APP_ID e META_APP_SECRET estão configuradas.");
     },
   });
 
@@ -574,7 +577,7 @@ const SocialConnections = () => {
                       </Button>
                     </>
                   ) : p.key === "meta" ? (
-                    <Button size="sm" onClick={() => connectMeta.mutate()} disabled={connectMeta.isPending}>
+                    <Button size="sm" onClick={() => connectMeta.mutate(preOpenPopup())} disabled={connectMeta.isPending}>
                       {connectMeta.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <ExternalLink className="w-3.5 h-3.5 mr-1.5" />}
                       Conectar
                     </Button>
