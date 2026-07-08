@@ -60,6 +60,21 @@ export function useGuidedOnboarding() {
         onboarding_completed: true,
       })
       .eq("user_id", user.id);
+
+    // Analytics: log completion event (best-effort, non-blocking failure)
+    try {
+      await supabase.from("user_activity_stream").insert({
+        user_id: user.id,
+        event_type: payload ? "onboarding_completed" : "onboarding_skipped",
+        title: payload ? `Onboarding: ${payload.path}` : "Onboarding pulado",
+        entity_type: "onboarding",
+        metadata: (payload ?? {}) as any,
+      });
+    } catch (e) {
+      // silent — analytics não deve bloquear UX
+      console.warn("[onboarding] failed to log analytics event", e);
+    }
+
     setAnswers(payload);
     setIsOpen(false);
   }, [user]);
