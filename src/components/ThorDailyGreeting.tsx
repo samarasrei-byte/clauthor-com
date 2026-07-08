@@ -11,6 +11,8 @@ import {
   AlertTriangle,
   Clock,
   TrendingUp,
+  Flame,
+  CalendarClock,
 } from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -29,11 +31,22 @@ function todayKey(): string {
   return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
+function greetingByHour(): string {
+  const h = new Date().getHours();
+  if (h < 12) return "Bom dia";
+  if (h < 18) return "Boa tarde";
+  return "Boa noite";
+}
+
 function fmt(n: number): string {
   if (!Number.isFinite(n)) return "∞";
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}k`;
   return n.toLocaleString("pt-BR");
+}
+
+function dayStamp(d: Date): string {
+  return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
 }
 
 export default function ThorDailyGreeting() {
@@ -75,6 +88,57 @@ export default function ThorDailyGreeting() {
       return { total, success, errors, tokensUsed };
     },
   });
+
+  // 7-day streak + token forecast
+  const insightsRange = useMemo(() => {
+    const now = new Date();
+    const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 30);
+    return { startIso: start.toISOString() };
+  }, []);
+
+  const { data: insights } = useQuery({
+    queryKey: ["thor-insights", user?.id, insightsRange.startIso],
+    enabled: !!user?.id && open,
+    queryFn: async () => {
+      const [{ data: events }, { data: tokens7d }] = await Promise.all([
+        supabase
+          .from("thor_greeting_events")
+          .select("created_at,event_type")
+          .eq("user_id", user!.id)
+          .eq("event_type", "impression")
+          .gte("created_at", insightsRange.startIso)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("token_usage")
+          .select("tokens_used,created_at")
+          .eq("user_id", user!.id)
+          .gte("created_at", new Date(Date.now() - 7 * 864e5).toISOString()),
+      ]);
+
+      // Streak: consecutive days ending today or yesterday
+      const daySet = new Set<string>();
+      (events ?? []).forEach((e) => daySet.add(dayStamp(new Date(e.created_at))));
+      let streak = 0;
+      const cursor = new Date();
+      // Allow streak to start today OR yesterday (user hasn't opened today yet)
+      if (!daySet.has(dayStamp(cursor))) cursor.setDate(cursor.getDate() - 1);
+      while (daySet.has(dayStamp(cursor))) {
+        streak++;
+        cursor.setDate(cursor.getDate() - 1);
+      }
+
+      // Forecast: avg tokens/day over last 7 days
+      const totalTokens7d = (tokens7d ?? []).reduce((s, t) => s + (t.tokens_used || 0), 0);
+      const avgDaily = totalTokens7d / 7;
+      return { streak, avgDaily, totalTokens7d };
+    },
+  });
+
+  const forecastDays: number | null = useMemo(() => {
+    if (isAdmin || !insights || insights.avgDaily <= 0 || remainingCredits <= 0) return null;
+    return Math.floor(remainingCredits / insights.avgDaily);
+  }, [insights, remainingCredits, isAdmin]);
+
 
   const usageLevel: "ok" | "low" | "critical" = isAdmin
     ? "ok"
@@ -164,13 +228,14 @@ export default function ThorDailyGreeting() {
             chip: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
           };
 
+  const greeting = greetingByHour();
   const headline = isAdmin
-    ? `Bom dia, ${firstName}.`
+    ? `${greeting}, ${firstName}.`
     : usageLevel === "critical"
       ? `${firstName}, seu cofre está no limite.`
       : usageLevel === "low"
         ? `${firstName}, hora de reabastecer.`
-        : `Bom dia, ${firstName}.`;
+        : `${greeting}, ${firstName}.`;
 
   const subtitle = isAdmin
     ? "Você tem acesso ilimitado — a forja segue acesa."
@@ -203,7 +268,7 @@ export default function ThorDailyGreeting() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-1.5"
           >
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <Badge
                 variant="outline"
                 className="text-[10px] font-mono uppercase tracking-widest gap-1 border-border/60"
@@ -211,6 +276,15 @@ export default function ThorDailyGreeting() {
                 <Sparkles className="h-3 w-3 text-primary" />
                 Briefing diário
               </Badge>
+              {insights && insights.streak >= 2 && (
+                <Badge
+                  variant="outline"
+                  className="text-[10px] font-mono uppercase tracking-widest gap-1 border-orange-500/30 bg-orange-500/10 text-orange-500"
+                >
+                  <Flame className="h-3 w-3" />
+                  {insights.streak} dias
+                </Badge>
+              )}
               <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground ml-auto">
                 <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${levelMeta.dot}`} />
                 {new Date().toLocaleDateString("pt-BR", {
@@ -266,6 +340,27 @@ export default function ThorDailyGreeting() {
                   <span>Limite: {fmt(totalCredits)}</span>
                 </div>
               </>
+            )}
+
+            {!isAdmin && forecastDays !== null && (
+              <div
+                className={`mt-3 pt-3 border-t border-border/40 flex items-center gap-2 text-[11px] ${
+                  forecastDays <= 3
+                    ? "text-destructive"
+                    : forecastDays <= 7
+                      ? "text-amber-500"
+                      : "text-muted-foreground"
+                }`}
+              >
+                <CalendarClock className="h-3.5 w-3.5 shrink-0" />
+                <span>
+                  No ritmo atual (~{fmt(Math.round(insights!.avgDaily))} tokens/dia), seus tokens duram{" "}
+                  <span className="font-semibold">
+                    {forecastDays === 0 ? "menos de 1 dia" : `~${forecastDays} ${forecastDays === 1 ? "dia" : "dias"}`}
+                  </span>
+                  .
+                </span>
+              </div>
             )}
 
             {isAdmin && (
