@@ -655,3 +655,54 @@ export function buildSystemPrompt(slug: DepartmentSlug, extraContext = ""): stri
 }
 
 export const ALL_DEPARTMENT_SLUGS = Object.keys(DEPARTMENT_PROMPTS) as DepartmentSlug[];
+
+/**
+ * Alias map: catalog/library agent slugs → canonical department slug.
+ * Only slugs that differ from their department prompt need an entry here.
+ */
+const AGENT_SLUG_ALIASES: Record<string, DepartmentSlug> = {
+  // Tech
+  coding: "autonomous_coding",
+  autonomous_coding_agent: "autonomous_coding",
+  computer: "computer_use",
+  security: "cyber_security",
+  // Sales
+  sales: "sales_ai",
+  sdr_outbound: "sales_ai",
+  sdr_inbound: "sales_ai",
+  sdr_social: "sales_channel",
+  sdr_linkedin: "sales_channel",
+  sdr_instagram: "sales_channel",
+  sdr_whatsapp: "sales_channel",
+  hunter_linkedin: "sales_channel",
+  hunter: "sales_channel",
+  // Marketing
+  content: "content_engine",
+  content_producer: "content_engine",
+  creative_writer: "content_engine",
+  copywriting: "content_engine",
+  paid_traffic: "marketing_automation",
+  seo: "seo_growth",
+  // Support
+  omnichannel: "support_channel",
+  concierge: "support_channel",
+  rag: "rag_enterprise",
+  // Finance
+  revenue: "revenue_operations",
+  scheduler: "project_management",
+  // Corporate
+  research: "orchestrator",
+};
+
+/**
+ * Resolve the department prompt for an arbitrary agent slug, trying direct match
+ * then the alias map. Returns null if no match.
+ */
+export function resolveDepartmentPromptForAgent(agentSlug?: string | null): DepartmentPrompt | null {
+  if (!agentSlug) return null;
+  const direct = getDepartmentPrompt(agentSlug);
+  if (direct) return direct;
+  const aliased = AGENT_SLUG_ALIASES[agentSlug];
+  return aliased ? DEPARTMENT_PROMPTS[aliased] : null;
+}
+
