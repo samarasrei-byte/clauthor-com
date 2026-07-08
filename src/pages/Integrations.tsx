@@ -215,10 +215,26 @@ const IntegrationsPage = () => {
 
               {/* Content */}
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <h3 className="font-display font-semibold text-sm">{connector.name}</h3>
                   {popularityLabel && (
                     <span className="text-[10px] text-muted-foreground/60">{popularityLabel}</span>
+                  )}
+                  {connector.apiStatus === "live" && (
+                    <span className="flex items-center gap-1 text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                      API ativa
+                    </span>
+                  )}
+                  {connector.apiStatus === "beta" && (
+                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20">
+                      Beta
+                    </span>
+                  )}
+                  {connector.apiStatus === "soon" && (
+                    <span className="text-[9px] font-medium px-1.5 py-0.5 rounded-full bg-muted/40 text-muted-foreground border border-border/40">
+                      Em breve
+                    </span>
                   )}
                   {connected && (
                     <span className="flex items-center gap-0.5 text-[9px] text-emerald-500 font-medium ml-auto">
@@ -228,7 +244,7 @@ const IntegrationsPage = () => {
                   )}
                 </div>
                 <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{connector.shortDesc}</p>
-                {connector.status !== "soon" && !connected && (
+                {connector.apiStatus === "live" && !connected && (
                   <p className="text-[10px] text-primary/60 mt-0.5">Conecte suas credenciais para habilitar automações reais</p>
                 )}
               </div>
