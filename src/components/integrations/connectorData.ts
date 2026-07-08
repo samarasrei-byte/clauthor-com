@@ -14,6 +14,8 @@ export interface CredentialField {
   required?: boolean;
 }
 
+export type ApiStatus = "live" | "beta" | "soon";
+
 export interface ConnectorData {
   icon: LucideIcon;
   iconUrl?: string;
@@ -22,6 +24,8 @@ export interface ConnectorData {
   longDesc: string;
   category: string;
   status: "available" | "soon";
+  /** Estado real do backend/API: live = handler pronto e testado; beta = parcial; soon = ainda não implementado. */
+  apiStatus: ApiStatus;
   integrationKey: string;
   popularity?: number;
   developer?: string;
