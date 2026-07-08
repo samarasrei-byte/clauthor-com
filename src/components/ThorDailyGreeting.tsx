@@ -1,6 +1,17 @@
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Zap, Coins, Plus, X, Sparkles, Activity, CheckCircle2, AlertTriangle, Clock } from "lucide-react";
+import {
+  Zap,
+  Coins,
+  Plus,
+  X,
+  Sparkles,
+  Activity,
+  CheckCircle2,
+  AlertTriangle,
+  Clock,
+  TrendingUp,
+} from "lucide-react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -10,7 +21,6 @@ import { useCredits } from "@/hooks/useCredits";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "react-router-dom";
-import thorAvatar from "@/assets/thor-hologram.png";
 
 const STORAGE_KEY = "clauthor-thor-daily-greeting";
 
@@ -20,6 +30,7 @@ function todayKey(): string {
 }
 
 function fmt(n: number): string {
+  if (!Number.isFinite(n)) return "∞";
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M`;
   if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}k`;
   return n.toLocaleString("pt-BR");
@@ -30,9 +41,8 @@ export default function ThorDailyGreeting() {
   const { credits, remainingCredits, usagePercentage, isLoading } = useCredits();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [typedText, setTypedText] = useState("");
 
-  // Yesterday's activity summary (executions + tokens consumed)
+  // Yesterday range for activity summary
   const yesterdayRange = useMemo(() => {
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth(), now.getDate() - 1);
@@ -66,7 +76,6 @@ export default function ThorDailyGreeting() {
     },
   });
 
-  // Compute level once for logging + UI
   const usageLevel: "ok" | "low" | "critical" = isAdmin
     ? "ok"
     : usagePercentage >= 90
@@ -75,7 +84,7 @@ export default function ThorDailyGreeting() {
         ? "low"
         : "ok";
 
-  // Fire-and-forget analytics event
+  // Analytics (non-blocking)
   const logEvent = async (
     eventType: "impression" | "cta_click" | "dismiss",
     metadata: Record<string, unknown> = {},
@@ -92,11 +101,11 @@ export default function ThorDailyGreeting() {
         metadata: metadata as never,
       }]);
     } catch {
-      /* analytics is non-blocking */
+      /* ignore */
     }
   };
 
-  // Trigger once per day per user
+  // Show once per day
   useEffect(() => {
     if (!user || isLoading) return;
     if (typeof window === "undefined") return;
@@ -113,29 +122,6 @@ export default function ThorDailyGreeting() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isLoading]);
 
-  // Compose Thor's message dynamically from the user's real balance
-  const displayCredits = isAdmin ? Infinity : remainingCredits;
-  const firstName = user?.user_metadata?.full_name?.split(" ")[0] || "guerreiro";
-
-  const message = isAdmin
-    ? `Salve, ${firstName}! Como comandante desta plataforma, seus créditos são ilimitados ⚡. Aproveite o dia — os agentes estão prontos para batalhar ao seu comando.`
-    : `Salve, ${firstName}! Aqui é o Thor ⚡. Notei que você tem cerca de ${fmt(displayCredits)} tokens no cofre. Se quiser manter a forja acesa sem interrupções, adicione mais tokens hoje mesmo — assim seus agentes seguem forjando resultados sem pausas.`;
-
-  // Typewriter effect
-  useEffect(() => {
-    if (!open) {
-      setTypedText("");
-      return;
-    }
-    let i = 0;
-    const id = setInterval(() => {
-      i++;
-      setTypedText(message.slice(0, i));
-      if (i >= message.length) clearInterval(id);
-    }, 18);
-    return () => clearInterval(id);
-  }, [open, message]);
-
   const handleClose = (reason: "dismiss" | "cta_click" = "dismiss") => {
     if (user) {
       try {
@@ -148,220 +134,265 @@ export default function ThorDailyGreeting() {
     setOpen(false);
   };
 
-  const level = usageLevel;
+  const firstName = user?.user_metadata?.full_name?.split(" ")[0] || "guerreiro";
+  const totalCredits = credits?.total_credits ?? 0;
+  const usedCredits = credits?.used_credits ?? 0;
+
+  // Level meta
+  const levelMeta =
+    usageLevel === "critical"
+      ? {
+          label: "Crítico",
+          dot: "bg-destructive",
+          ring: "ring-destructive/40",
+          text: "text-destructive",
+          chip: "bg-destructive/10 text-destructive border-destructive/20",
+        }
+      : usageLevel === "low"
+        ? {
+            label: "Atenção",
+            dot: "bg-amber-400",
+            ring: "ring-amber-400/40",
+            text: "text-amber-400",
+            chip: "bg-amber-500/10 text-amber-500 border-amber-500/20",
+          }
+        : {
+            label: "Saudável",
+            dot: "bg-emerald-400",
+            ring: "ring-emerald-400/40",
+            text: "text-emerald-400",
+            chip: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
+          };
+
+  const headline = isAdmin
+    ? `Bom dia, ${firstName}.`
+    : usageLevel === "critical"
+      ? `${firstName}, seu cofre está no limite.`
+      : usageLevel === "low"
+        ? `${firstName}, hora de reabastecer.`
+        : `Bom dia, ${firstName}.`;
+
+  const subtitle = isAdmin
+    ? "Você tem acesso ilimitado — a forja segue acesa."
+    : `${fmt(remainingCredits)} tokens disponíveis no seu cofre.`;
 
   return (
     <Dialog open={open} onOpenChange={(o) => (o ? setOpen(true) : handleClose("dismiss"))}>
-      <DialogContent className="max-w-lg p-0 overflow-hidden border-primary/20 bg-gradient-to-br from-background via-background to-primary/5 backdrop-blur-xl">
-        {/* Lightning glow background */}
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-72 h-72 bg-primary/20 rounded-full blur-[100px] animate-pulse" />
-          <div className="absolute bottom-0 right-0 w-40 h-40 bg-cyan-500/10 rounded-full blur-[60px]" />
+      <DialogContent
+        className="max-w-md p-0 overflow-hidden border-border/60 bg-card/95 backdrop-blur-2xl shadow-2xl rounded-2xl"
+      >
+        {/* Ambient gradient */}
+        <div className="pointer-events-none absolute inset-0 -z-10 opacity-70">
+          <div className="absolute -top-32 -right-24 w-72 h-72 rounded-full bg-primary/20 blur-3xl" />
+          <div className="absolute -bottom-24 -left-16 w-64 h-64 rounded-full bg-primary/10 blur-3xl" />
         </div>
 
-        {/* Close button */}
+        {/* Close */}
         <button
           onClick={() => handleClose("dismiss")}
           aria-label="Fechar"
-          className="absolute top-3 right-3 z-10 p-1.5 rounded-md hover:bg-muted/40 text-muted-foreground transition-colors"
+          className="absolute top-3 right-3 z-10 p-1.5 rounded-md hover:bg-muted/60 text-muted-foreground transition-colors"
         >
           <X className="h-4 w-4" />
         </button>
 
-        <div className="p-6 pt-8">
-          {/* Thor header */}
-          <div className="flex items-start gap-4 mb-5">
-            <motion.div
-              initial={{ scale: 0.6, opacity: 0, rotate: -12 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{ type: "spring", stiffness: 180, damping: 14 }}
-              className="relative shrink-0"
-            >
-              {/* Halo */}
-              <div className="absolute inset-0 rounded-full bg-primary/30 blur-xl animate-pulse" />
-              <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/40 shadow-[0_0_24px_hsl(var(--primary)/0.4)]">
-                <img src={thorAvatar} alt="Thor" className="w-full h-full object-cover" />
+        <div className="p-6 space-y-5">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="space-y-1.5"
+          >
+            <div className="flex items-center gap-2">
+              <Badge
+                variant="outline"
+                className="text-[10px] font-mono uppercase tracking-widest gap-1 border-border/60"
+              >
+                <Sparkles className="h-3 w-3 text-primary" />
+                Briefing diário
+              </Badge>
+              <div className="flex items-center gap-1.5 text-[10px] text-muted-foreground ml-auto">
+                <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${levelMeta.dot}`} />
+                {new Date().toLocaleDateString("pt-BR", {
+                  weekday: "long",
+                  day: "2-digit",
+                  month: "short",
+                })}
               </div>
-              {/* Online pulse */}
-              <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full bg-emerald-400 border-2 border-background flex items-center justify-center">
-                <Zap className="h-2 w-2 text-background" fill="currentColor" />
-              </div>
-            </motion.div>
-
-            <div className="flex-1 min-w-0 pt-1">
-              <div className="flex items-center gap-2 mb-0.5">
-                <h2 className="font-display font-bold text-lg">Thor</h2>
-                <Badge className="bg-primary/15 text-primary border-0 text-[9px] font-mono px-1.5 py-0">
-                  ORQUESTRADOR
-                </Badge>
-              </div>
-              <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Online agora • Recado do dia
-              </p>
             </div>
-          </div>
+            <h2 className="font-display font-bold text-2xl tracking-tight leading-tight">
+              {headline}
+            </h2>
+            <p className="text-sm text-muted-foreground">{subtitle}</p>
+          </motion.div>
 
-          {/* Speech bubble */}
+          {/* Token card */}
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="relative rounded-2xl rounded-tl-sm border border-primary/20 bg-card/60 p-4 backdrop-blur-sm"
+            transition={{ delay: 0.05 }}
+            className="relative rounded-xl border border-border/50 bg-gradient-to-br from-background/60 to-background/20 p-4 overflow-hidden"
           >
-            <p className="text-sm leading-relaxed text-foreground/90 min-h-[80px]">
-              {typedText}
-              {typedText.length < message.length && (
-                <span className="inline-block w-1 h-4 bg-primary ml-0.5 animate-pulse align-middle" />
-              )}
-            </p>
-          </motion.div>
-
-          {/* Token stats card */}
-          <AnimatePresence>
-            {typedText.length >= message.length && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="mt-4 rounded-xl border border-border/40 bg-background/40 p-4"
-              >
-                <div className="flex items-center justify-between mb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                      <Coins className="h-4 w-4 text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground/70">
-                        Seu cofre de tokens
-                      </p>
-                      <p className="font-display font-bold text-xl">
-                        {isAdmin ? "∞" : fmt(remainingCredits)}
-                      </p>
-                    </div>
-                  </div>
-                  {!isAdmin && (
-                    <Badge
-                      className={
-                        level === "critical"
-                          ? "bg-destructive/15 text-destructive border-0"
-                          : level === "low"
-                            ? "bg-amber-500/15 text-amber-500 border-0"
-                            : "bg-emerald-500/15 text-emerald-500 border-0"
-                      }
-                    >
-                      {level === "critical" ? "🔴 Baixo" : level === "low" ? "🟡 Atenção" : "🟢 OK"}
-                    </Badge>
-                  )}
+            <div className="flex items-start justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className={`w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center ring-1 ${levelMeta.ring}`}>
+                  <Coins className="h-4 w-4 text-primary" />
                 </div>
+                <div>
+                  <p className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                    Cofre de tokens
+                  </p>
+                  <p className="font-display font-bold text-2xl leading-none mt-0.5">
+                    {isAdmin ? "∞" : fmt(remainingCredits)}
+                  </p>
+                </div>
+              </div>
+              <Badge variant="outline" className={`text-[10px] ${levelMeta.chip}`}>
+                {levelMeta.label}
+              </Badge>
+            </div>
 
-                {!isAdmin && credits && (
-                  <>
-                    <div className="flex items-center justify-between text-[10px] text-muted-foreground mb-1">
-                      <span>Consumido neste ciclo</span>
-                      <span className="font-mono">{usagePercentage}%</span>
-                    </div>
-                    <Progress value={Math.min(100, usagePercentage)} className="h-1.5" />
-                    <div className="flex items-center justify-between text-[10px] text-muted-foreground/70 mt-1.5">
-                      <span>{fmt(credits.used_credits)} usados</span>
-                      <span>Limite: {fmt(credits.total_credits)}</span>
-                    </div>
-                  </>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {/* Yesterday activity summary */}
-          <AnimatePresence>
-            {typedText.length >= message.length && yesterdaySummary && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="mt-3 rounded-xl border border-border/30 bg-background/30 p-3"
-              >
-                <div className="flex items-center gap-2 mb-2">
-                  <Activity className="h-3.5 w-3.5 text-primary" />
-                  <p className="text-[11px] font-semibold">Resumo de ontem</p>
-                  <span className="text-[10px] text-muted-foreground ml-auto">
-                    {new Date(yesterdayRange.startIso).toLocaleDateString("pt-BR", { weekday: "short", day: "2-digit", month: "short" })}
+            {!isAdmin && credits && totalCredits > 0 && (
+              <>
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground mb-1.5">
+                  <span>Consumido neste ciclo</span>
+                  <span className={`font-mono font-semibold ${levelMeta.text}`}>
+                    {Math.round(usagePercentage)}%
                   </span>
                 </div>
-                {yesterdaySummary.total === 0 && yesterdaySummary.tokensUsed === 0 ? (
-                  <p className="text-[11px] text-muted-foreground flex items-center gap-1.5">
-                    <Clock className="h-3 w-3" />
-                    Nenhuma execução registrada — que tal colocar seus agentes para trabalhar hoje?
-                  </p>
-                ) : (
-                  <div className="grid grid-cols-4 gap-2">
-                    <div className="rounded-lg bg-card/40 border border-border/20 p-2">
-                      <div className="flex items-center gap-1 text-[9px] text-muted-foreground uppercase tracking-wider">
-                        <Zap className="h-2.5 w-2.5" />
-                        Ações
-                      </div>
-                      <p className="font-display font-bold text-sm mt-0.5">{yesterdaySummary.total}</p>
-                    </div>
-                    <div className="rounded-lg bg-emerald-500/5 border border-emerald-500/20 p-2">
-                      <div className="flex items-center gap-1 text-[9px] text-emerald-500 uppercase tracking-wider">
-                        <CheckCircle2 className="h-2.5 w-2.5" />
-                        Sucesso
-                      </div>
-                      <p className="font-display font-bold text-sm mt-0.5">{yesterdaySummary.success}</p>
-                    </div>
-                    <div className="rounded-lg bg-destructive/5 border border-destructive/20 p-2">
-                      <div className="flex items-center gap-1 text-[9px] text-destructive uppercase tracking-wider">
-                        <AlertTriangle className="h-2.5 w-2.5" />
-                        Falhas
-                      </div>
-                      <p className="font-display font-bold text-sm mt-0.5">{yesterdaySummary.errors}</p>
-                    </div>
-                    <div className="rounded-lg bg-primary/5 border border-primary/20 p-2">
-                      <div className="flex items-center gap-1 text-[9px] text-primary uppercase tracking-wider">
-                        <Coins className="h-2.5 w-2.5" />
-                        Tokens
-                      </div>
-                      <p className="font-display font-bold text-sm mt-0.5">{fmt(yesterdaySummary.tokensUsed)}</p>
-                    </div>
-                  </div>
-                )}
-              </motion.div>
+                <Progress value={Math.min(100, usagePercentage)} className="h-1.5" />
+                <div className="flex items-center justify-between text-[10px] text-muted-foreground/70 mt-2">
+                  <span>{fmt(usedCredits)} usados</span>
+                  <span>Limite: {fmt(totalCredits)}</span>
+                </div>
+              </>
             )}
-          </AnimatePresence>
 
-          {/* Actions */}
-          <AnimatePresence>
-            {typedText.length >= message.length && (
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 }}
-                className="mt-5 flex flex-col sm:flex-row gap-2"
-              >
-                {!isAdmin && (
-                  <Button
-                    className="flex-1 gap-1.5 shadow-[0_0_20px_hsl(var(--primary)/0.3)]"
-                    onClick={() => {
-                      handleClose("cta_click");
-                      navigate("/pricing");
-                    }}
-                  >
-                    <Plus className="h-4 w-4" />
-                    Adicionar mais tokens
-                  </Button>
-                )}
-                <Button
-                  variant="outline"
-                  className={isAdmin ? "flex-1 gap-1.5" : "sm:w-auto gap-1.5"}
-                  onClick={() => handleClose("dismiss")}
-                >
-                  <Sparkles className="h-3.5 w-3.5" />
-                  {isAdmin ? "Continuar" : "Depois"}
-                </Button>
-              </motion.div>
+            {isAdmin && (
+              <p className="text-[11px] text-muted-foreground">
+                Acesso ilimitado — nenhum limite de consumo aplicado à sua conta.
+              </p>
             )}
-          </AnimatePresence>
+          </motion.div>
+
+          {/* Yesterday summary */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="rounded-xl border border-border/40 bg-background/30 p-3"
+          >
+            <div className="flex items-center gap-2 mb-2.5">
+              <Activity className="h-3.5 w-3.5 text-primary" />
+              <p className="text-[11px] font-semibold">Resumo de ontem</p>
+              <span className="text-[10px] text-muted-foreground ml-auto capitalize">
+                {new Date(yesterdayRange.startIso).toLocaleDateString("pt-BR", {
+                  weekday: "short",
+                  day: "2-digit",
+                  month: "short",
+                })}
+              </span>
+            </div>
+
+            {!yesterdaySummary ? (
+              <div className="grid grid-cols-4 gap-2">
+                {[0, 1, 2, 3].map((i) => (
+                  <div key={i} className="h-14 rounded-lg bg-muted/30 animate-pulse" />
+                ))}
+              </div>
+            ) : yesterdaySummary.total === 0 && yesterdaySummary.tokensUsed === 0 ? (
+              <p className="text-[11px] text-muted-foreground flex items-center gap-1.5 py-1">
+                <Clock className="h-3 w-3" />
+                Nenhuma execução registrada — comece o dia com um agente.
+              </p>
+            ) : (
+              <div className="grid grid-cols-4 gap-2">
+                <MiniStat
+                  icon={<Zap className="h-3 w-3" />}
+                  label="Ações"
+                  value={yesterdaySummary.total}
+                />
+                <MiniStat
+                  icon={<CheckCircle2 className="h-3 w-3" />}
+                  label="Sucesso"
+                  value={yesterdaySummary.success}
+                  tone="emerald"
+                />
+                <MiniStat
+                  icon={<AlertTriangle className="h-3 w-3" />}
+                  label="Falhas"
+                  value={yesterdaySummary.errors}
+                  tone={yesterdaySummary.errors > 0 ? "destructive" : "muted"}
+                />
+                <MiniStat
+                  icon={<Coins className="h-3 w-3" />}
+                  label="Tokens"
+                  value={fmt(yesterdaySummary.tokensUsed)}
+                  tone="primary"
+                />
+              </div>
+            )}
+          </motion.div>
+
+          {/* CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="flex flex-col sm:flex-row gap-2"
+          >
+            {!isAdmin && (
+              <Button
+                className="flex-1 gap-1.5"
+                onClick={() => {
+                  handleClose("cta_click");
+                  navigate("/pricing");
+                }}
+              >
+                <Plus className="h-4 w-4" />
+                Adicionar tokens
+              </Button>
+            )}
+            <Button
+              variant={isAdmin ? "default" : "outline"}
+              className={isAdmin ? "flex-1 gap-1.5" : "sm:w-auto gap-1.5"}
+              onClick={() => handleClose("dismiss")}
+            >
+              <TrendingUp className="h-3.5 w-3.5" />
+              {isAdmin ? "Ver operações" : "Continuar"}
+            </Button>
+          </motion.div>
         </div>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function MiniStat({
+  icon,
+  label,
+  value,
+  tone = "muted",
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: number | string;
+  tone?: "muted" | "emerald" | "destructive" | "primary";
+}) {
+  const toneMap = {
+    muted: "border-border/30 bg-card/40 text-foreground",
+    emerald: "border-emerald-500/20 bg-emerald-500/5 text-emerald-500",
+    destructive: "border-destructive/20 bg-destructive/5 text-destructive",
+    primary: "border-primary/20 bg-primary/5 text-primary",
+  } as const;
+
+  return (
+    <div className={`rounded-lg border p-2 ${toneMap[tone]}`}>
+      <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider opacity-80">
+        {icon}
+        {label}
+      </div>
+      <p className="font-display font-bold text-sm mt-0.5 text-foreground">{value}</p>
+    </div>
   );
 }
