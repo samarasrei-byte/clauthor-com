@@ -287,6 +287,22 @@ export default function ThorDailyGreeting() {
     setOpen(false);
   };
 
+  const handleSnooze = () => {
+    if (user) {
+      try {
+        localStorage.setItem(
+          `${SNOOZE_UNTIL_KEY}-${user.id}`,
+          String(Date.now() + SNOOZE_MS),
+        );
+        localStorage.setItem(`${STORAGE_KEY}-${user.id}`, todayKey());
+      } catch {
+        /* ignore */
+      }
+    }
+    void logEvent("dismiss", { reason: "snooze_7d" });
+    setOpen(false);
+  };
+
   const firstName = user?.user_metadata?.full_name?.split(" ")[0] || "guerreiro";
   const totalCredits = credits?.total_credits ?? 0;
   const usedCredits = credits?.used_credits ?? 0;
