@@ -8,6 +8,8 @@ import { enforcePolicy, validateTenant, type PolicyContext } from "../_shared/po
 import { autonomousExecute } from "../_shared/tool-executor.ts";
 import { executeIntegration, getDecryptedCredentials, type IntegrationResponse } from "../_shared/integration-router.ts";
 import { getLegalPrompt } from "../_shared/legal-prompts.ts";
+import { resolveDepartmentPromptForAgent } from "../_shared/department-prompts.ts";
+import { incrementAgentUsage, resolvePriceTier, type AgentUsageResult } from "../_shared/metered-billing.ts";
 
 // ── AES-256-GCM decryption for credential bridge ──
 const ALGO = "AES-GCM";
