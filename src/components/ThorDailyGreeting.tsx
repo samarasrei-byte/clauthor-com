@@ -31,8 +31,10 @@ import { useNavigate } from "react-router-dom";
 const STORAGE_KEY = "clauthor-thor-daily-greeting";
 const DISMISS_COUNTER_KEY = "clauthor-thor-dismiss-streak";
 const LAST_IMPRESSION_KEY = "clauthor-thor-last-impression";
+const SNOOZE_UNTIL_KEY = "clauthor-thor-snooze-until";
 const SMART_SKIP_THRESHOLD = 3; // consecutive dismisses
 const SMART_SKIP_INTERVAL_MS = 3 * 24 * 60 * 60 * 1000; // then show every 3 days
+const SNOOZE_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 function todayKey(): string {
   const d = new Date();
