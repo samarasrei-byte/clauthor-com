@@ -556,11 +556,13 @@ function MiniStat({
   label,
   value,
   tone = "muted",
+  delta,
 }: {
   icon: React.ReactNode;
   label: string;
   value: number | string;
   tone?: "muted" | "emerald" | "destructive" | "primary";
+  delta?: Delta;
 }) {
   const toneMap = {
     muted: "border-border/30 bg-card/40 text-foreground",
@@ -569,13 +571,34 @@ function MiniStat({
     primary: "border-primary/20 bg-primary/5 text-primary",
   } as const;
 
+  const DeltaIcon =
+    delta?.direction === "up"
+      ? ArrowUpRight
+      : delta?.direction === "down"
+        ? ArrowDownRight
+        : Minus;
+  const deltaColor =
+    delta?.direction === "up"
+      ? "text-emerald-500"
+      : delta?.direction === "down"
+        ? "text-destructive"
+        : "text-muted-foreground";
+
   return (
     <div className={`rounded-lg border p-2 ${toneMap[tone]}`}>
       <div className="flex items-center gap-1 text-[9px] uppercase tracking-wider opacity-80">
         {icon}
         {label}
       </div>
-      <p className="font-display font-bold text-sm mt-0.5 text-foreground">{value}</p>
+      <div className="flex items-baseline gap-1.5 mt-0.5">
+        <p className="font-display font-bold text-sm text-foreground">{value}</p>
+        {delta && (
+          <span className={`inline-flex items-center gap-0.5 text-[9px] font-mono ${deltaColor}`}>
+            <DeltaIcon className="h-2.5 w-2.5" />
+            {delta.direction === "flat" ? "—" : `${delta.pct}%`}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
