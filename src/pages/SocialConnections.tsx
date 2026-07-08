@@ -261,12 +261,33 @@ const SocialConnections = () => {
     return () => window.removeEventListener("message", onMsg);
   }, [qc]);
 
-  const openOAuthPopup = (url: string) => {
+  // Safe popup opener: works inside preview iframes (window.top can be cross-origin)
+  // and mitigates popup blockers by opening a placeholder synchronously on click,
+  // then navigating it once the OAuth URL is ready.
+  const openOAuthPopup = (url: string, preOpened?: Window | null) => {
     const w = 600, h = 720;
-    const y = window.top!.outerHeight / 2 + window.top!.screenY - h / 2;
-    const x = window.top!.outerWidth / 2 + window.top!.screenX - w / 2;
+    let x = 100, y = 100;
+    try {
+      const sw = window.screen?.width ?? window.innerWidth;
+      const sh = window.screen?.height ?? window.innerHeight;
+      x = Math.max(0, (sw - w) / 2);
+      y = Math.max(0, (sh - h) / 2);
+    } catch { /* ignore cross-origin errors */ }
+    if (preOpened && !preOpened.closed) {
+      try { preOpened.location.href = url; return; } catch { /* fallthrough */ }
+    }
     const popup = window.open(url, "oauth_popup", `width=${w},height=${h},left=${x},top=${y},resizable=yes,scrollbars=yes`);
-    if (!popup) toast.error("Popup bloqueado. Habilite popups para este site.");
+    if (!popup) {
+      toast.error("Popup bloqueado. Habilite popups para este site ou tente novamente.");
+      // Fallback: navigate current tab
+      window.location.href = url;
+    }
+  };
+
+  const preOpenPopup = (): Window | null => {
+    try {
+      return window.open("about:blank", "oauth_popup", "width=600,height=720,resizable=yes,scrollbars=yes");
+    } catch { return null; }
   };
 
   const extractState = (u: string): string | null => {
@@ -308,7 +329,7 @@ const SocialConnections = () => {
   });
 
   const connectMeta = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (preOpened?: Window | null) => {
       const redirect_uri = window.location.origin + "/settings/social";
       sessionStorage.setItem("oauth_provider", "meta");
       setStatus("meta", "connecting");
@@ -316,15 +337,18 @@ const SocialConnections = () => {
       const { data, error } = await supabase.functions.invoke("meta-oauth", {
         body: { action: "authorize", redirect_uri },
       });
-      if (error) throw error;
+      if (error) {
+        try { preOpened?.close(); } catch { /* ignore */ }
+        throw error;
+      }
       const authUrl = (data as { url: string }).url;
       pushLog({ level: "info", provider: "meta", event: "authorize:url_received", detail: { state: extractState(authUrl), redirect_uri, auth_url: authUrl } });
-      openOAuthPopup(authUrl);
+      openOAuthPopup(authUrl, preOpened);
     },
     onError: (e: Error) => {
       setStatus("meta", "error", e.message);
       pushLog({ level: "error", provider: "meta", event: "authorize:failed", detail: { message: e.message } });
-      toast.error(e.message || "Falha ao iniciar OAuth Meta");
+      toast.error(e.message || "Falha ao iniciar OAuth Meta. Verifique se as credenciais META_APP_ID e META_APP_SECRET estão configuradas.");
     },
   });
 
@@ -553,7 +577,7 @@ const SocialConnections = () => {
                       </Button>
                     </>
                   ) : p.key === "meta" ? (
-                    <Button size="sm" onClick={() => connectMeta.mutate()} disabled={connectMeta.isPending}>
+                    <Button size="sm" onClick={() => connectMeta.mutate(preOpenPopup())} disabled={connectMeta.isPending}>
                       {connectMeta.isPending ? <Loader2 className="w-3.5 h-3.5 animate-spin mr-1.5" /> : <ExternalLink className="w-3.5 h-3.5 mr-1.5" />}
                       Conectar
                     </Button>
