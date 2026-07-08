@@ -205,10 +205,11 @@ const Navbar = () => {
         {mobileOpen && (
           <motion.div
             key="mobile-menu"
+            id="mobile-nav-menu"
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-t border-border/30 bg-background/95 backdrop-blur-2xl overflow-hidden"
+            className="md:hidden border-t border-border/30 bg-background/95 backdrop-blur-2xl overflow-hidden max-h-[calc(100dvh-3rem)] overflow-y-auto"
           >
             <div className="px-5 py-5 space-y-0.5">
               {[
