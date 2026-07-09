@@ -17,7 +17,7 @@ const RevolutionaryOnboardingGate = lazy(() => import("./onboarding/Revolutionar
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
 const AppLayout = () => {
-  const [wizardOpen, setWizardOpen] = useState(false);
+  // wizardOpen removido — OnboardingWizard legado aposentado.
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
   const location = useLocation();
   const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname);
