@@ -458,44 +458,10 @@ const ClientDashboard = () => {
         </div>
       )}
 
-      {showSmartOnboarding && (
-        <QuickOnboardingWizard
-          isOpen={showSmartOnboarding}
-          onComplete={(agentSlug) => {
-            setShowSmartOnboarding(false);
-            queryClient.invalidateQueries({ queryKey: ["profile-onboarding"] });
-            let agentName: string | undefined;
-            if (agentSlug) {
-              const agent = agents.find(a => nameToSlug[a.name] === agentSlug);
-              if (agent) {
-                agentName = agent.name;
-                setPreviousSection(activeSection);
-                setSelectedAgent({ id: agent.id, name: agent.name });
-                setActiveSection("chat");
-              } else {
-                setActiveSection("library");
-              }
-            }
-            // Magic Moment — show first-value card right after onboarding
-            setMagicMomentAgent(agentName);
-            setTimeout(() => setShowMagicMoment(true), 400);
-          }}
-        />
-      )}
-
-      <MagicMomentCard
-        isOpen={showMagicMoment}
-        onClose={() => setShowMagicMoment(false)}
-        agentName={magicMomentAgent}
-        onGoToApprovals={() => {
-          setShowMagicMoment(false);
-          setActiveSection("approvals");
-        }}
-      />
+      {/* QuickOnboardingWizard + MagicMomentCard + FirstAccessOnboarding removidos.
+          Onboarding do primeiro contato: RevolutionaryOnboardingGate global (AppLayout). */}
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
-
-      {/* Legacy FirstAccessOnboarding removido: substituído pelo GuidedOnboarding global no AppLayout */}
 
       <div className="flex h-full">
         <div className="hidden lg:block relative z-10">
