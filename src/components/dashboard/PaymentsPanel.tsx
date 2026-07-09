@@ -131,6 +131,73 @@ const PaymentsPanel = ({ totalRevenue, subscriptionCount }: PaymentsPanelProps) 
         ))}
       </div>
 
+      {/* Recent transactions */}
+      <Card>
+        <CardHeader className="pb-3">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-sm flex items-center gap-2">
+              <Receipt className="h-4 w-4 text-primary" /> Transações recentes
+            </CardTitle>
+            <Badge variant="outline" className="text-[10px]">últimas 20</Badge>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {isLoading ? (
+            <div className="py-10 text-center text-xs text-muted-foreground">Carregando…</div>
+          ) : history.length === 0 ? (
+            <div className="flex flex-col items-center justify-center py-14 px-6 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center mb-4">
+                <Inbox className="h-6 w-6 text-primary/60" />
+              </div>
+              <h3 className="text-sm font-semibold mb-1">Nenhuma transação registrada</h3>
+              <p className="text-xs text-muted-foreground max-w-sm mb-4">
+                Quando um cliente finalizar um pagamento via PayPal ou resgatar um plano pago, o histórico aparecerá aqui em tempo real.
+              </p>
+              <div className="flex gap-2">
+                <Button size="sm" variant="outline" className="text-xs gap-1.5">
+                  <ExternalLink className="h-3 w-3" /> Ver docs de checkout
+                </Button>
+              </div>
+            </div>
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Item</TableHead>
+                  <TableHead>Tipo</TableHead>
+                  <TableHead className="text-right">Valor</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead className="text-right">Data</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {history.map((p: any) => (
+                  <TableRow key={p.id}>
+                    <TableCell className="font-medium text-xs">{p.item_name}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{p.type}</TableCell>
+                    <TableCell className="text-right text-xs font-mono">
+                      {(p.amount_cents / 100).toLocaleString("pt-BR", { style: "currency", currency: p.currency || "BRL" })}
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        variant={p.status === "completed" ? "default" : p.status === "failed" ? "destructive" : "outline"}
+                        className="text-[10px]"
+                      >
+                        {p.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-right text-[10px] text-muted-foreground">
+                      {new Date(p.created_at).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" })}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </CardContent>
+      </Card>
+
+
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }} className="flex items-center justify-center gap-4 py-3 text-[10px] text-muted-foreground/50">
         <span className="flex items-center gap-1"><Shield className="h-3 w-3" /> PCI-DSS Compliant</span>
         <span>•</span>
