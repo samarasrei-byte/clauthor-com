@@ -283,6 +283,23 @@ const LibraryPage = () => {
             );
           })}
         </div>
+
+        {/* Curadoria toggle: âncoras (40) vs. long-tail completa (200+) */}
+        <div className="flex items-center justify-center gap-2 pt-1">
+          <span className="text-[11px] text-muted-foreground/60">
+            {showAllAgents || searchQuery
+              ? `Mostrando todos os ${totalAgents} agentes`
+              : `Mostrando ${ANCHOR_AGENT_SLUGS.length} agentes-âncora curados`}
+          </span>
+          {!searchQuery && (
+            <button
+              onClick={() => setShowAllAgents((v) => !v)}
+              className="text-[11px] text-primary/80 hover:text-primary underline underline-offset-2 transition-colors"
+            >
+              {showAllAgents ? "Ver só os âncoras" : "Ver todos os agentes"}
+            </button>
+          )}
+        </div>
       </section>
 
       {/* ============ DEPARTMENTS → SQUADS → AGENTS ============ */}
