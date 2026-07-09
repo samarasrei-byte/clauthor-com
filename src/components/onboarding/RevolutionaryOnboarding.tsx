@@ -1,10 +1,27 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Sparkles, Globe, ClipboardPaste, ArrowRight, ArrowLeft,
+  Globe, ClipboardPaste, ArrowRight, ArrowLeft,
   Loader2, CheckCircle2, Bot, Users, Building2, Zap, ShieldCheck, X,
   Radio, Cpu, Waves,
 } from "lucide-react";
+
+/** Núcleo Apple-like: dois círculos concêntricos monocromáticos, sem estrela. */
+function CoreDot({ className = "", size = 14 }: { className?: string; size?: number }) {
+  return (
+    <span
+      className={cn("relative inline-flex items-center justify-center", className)}
+      style={{ width: size, height: size }}
+      aria-hidden
+    >
+      <span
+        className="absolute inset-0 rounded-full"
+        style={{ background: "radial-gradient(circle at 50% 45%, rgba(255,255,255,0.95), rgba(255,255,255,0.15) 55%, transparent 70%)" }}
+      />
+      <span className="relative rounded-full bg-white" style={{ width: size * 0.35, height: size * 0.35 }} />
+    </span>
+  );
+}
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
