@@ -690,7 +690,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         onClick={runAnalysis}
                         className="bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-500 text-white hover:opacity-90 rounded-full gap-2 h-11 px-6 shadow-[0_0_40px_rgba(225,29,72,0.4)]"
                       >
-                        Fundir com a rede <Sparkles className="w-4 h-4" />
+                        Fundir com a rede <ArrowRight className="w-4 h-4" />
                       </Button>
                     </div>
                   </motion.div>
