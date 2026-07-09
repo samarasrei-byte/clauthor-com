@@ -2,8 +2,8 @@ import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useEffect, useState } from "react";
-import NeuralBackdrop from "./NeuralBackdrop";
+import { useEffect, useState, lazy, Suspense } from "react";
+const NeuralBackdrop = lazy(() => import("./NeuralBackdrop"));
 
 /**
  * HeroTerminal — landing hero redesigned as a split-screen with a live agent
@@ -43,13 +43,32 @@ const useSequentialReveal = (steps: number, delay = 700) => {
 const HeroTerminal = () => {
   const visible = useSequentialReveal(SCRIPT.length, 850);
 
+  // Só monta o backdrop pesado (SVG mesh + 3 blurs) depois do LCP.
+  const [backdropReady, setBackdropReady] = useState(false);
+  useEffect(() => {
+    const w = window as any;
+    if (typeof w.requestIdleCallback === "function") {
+      const id = w.requestIdleCallback(() => setBackdropReady(true), { timeout: 1500 });
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const t = setTimeout(() => setBackdropReady(true), 600);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <section
       className="relative px-5 sm:px-6 pt-10 pb-16 sm:pt-14 sm:pb-24 overflow-hidden"
       aria-label="Hero"
     >
-      {/* Onboarding neural backdrop (aurora + mesh) */}
-      <NeuralBackdrop intensity={0.55} />
+      {/* Base sólida para não haver flash preto/branco durante o LCP */}
+      <div className="absolute inset-0 -z-10 bg-[#04040a]" aria-hidden />
+      {/* Neural backdrop hidratado após idle */}
+      {backdropReady && (
+        <Suspense fallback={null}>
+          <NeuralBackdrop intensity={0.55} />
+        </Suspense>
+      )}
+
 
 
       <div className="relative z-10 max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">

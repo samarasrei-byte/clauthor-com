@@ -17,24 +17,31 @@ const RevolutionaryOnboardingGate = lazy(() => import("./onboarding/Revolutionar
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
 const AppLayout = () => {
-  // wizardOpen removido — OnboardingWizard legado aposentado.
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
   const location = useLocation();
   const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname);
   const isHomePage = location.pathname === "/";
 
-  // Cinematic intro disabled for now
-  const showIntro = false;
+  // Adiar hidratação de add-ons não-críticos (dialogs, greeter, gate) até o
+  // browser sinalizar idle — libera o LCP da rota atual primeiro.
+  const [addonsReady, setAddonsReady] = useState(false);
+  useEffect(() => {
+    const w = window as any;
+    if (typeof w.requestIdleCallback === "function") {
+      const id = w.requestIdleCallback(() => setAddonsReady(true), { timeout: 2500 });
+      return () => w.cancelIdleCallback?.(id);
+    }
+    const t = setTimeout(() => setAddonsReady(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background overflow-x-hidden">
-      {/* Cinematic intro overlay */}
-      {/* Intro desativada temporariamente */}
       <Navbar />
       <main className="pt-16">
         <Outlet />
       </main>
-      
-      {/* OnboardingWizard legado removido. */}
+
       <AgentLivePreview
         agentName={testDriveAgent?.name || ""}
         agentDesc="Converse com este agente antes de contratar"
@@ -42,25 +49,24 @@ const AppLayout = () => {
         onClose={() => setTestDriveAgent(null)}
       />
 
-      {/* Platform updates + token info popup (once per version, authenticated users) */}
-      <Suspense fallback={null}>
-        <PlatformUpdatesDialog />
-      </Suspense>
+      {addonsReady && (
+        <>
+          {/* Platform updates + token info popup (uma vez por versão, autenticados) */}
+          <Suspense fallback={null}>
+            <PlatformUpdatesDialog />
+          </Suspense>
 
-      {/* Revolutionary first-interaction experience */}
-      <Suspense fallback={null}>
-        <RevolutionaryOnboardingGate />
-      </Suspense>
+          {/* Revolutionary first-interaction experience */}
+          <Suspense fallback={null}>
+            <RevolutionaryOnboardingGate />
+          </Suspense>
 
-      {/* Thor daily greeting with token balance and top-up nudge */}
-      <Suspense fallback={null}>
-        <ThorDailyGreeting />
-      </Suspense>
-
-      {/* Thor greeter removido a pedido — estava sobrepondo o chat Ana - Atendimento */}
-
-
-
+          {/* Thor daily greeting com saldo de tokens e top-up nudge */}
+          <Suspense fallback={null}>
+            <ThorDailyGreeting />
+          </Suspense>
+        </>
+      )}
     </div>
   );
 };
