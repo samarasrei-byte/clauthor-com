@@ -763,16 +763,6 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         "bg-gradient-to-br", needMeta.gradient
                       )}
                     >
-                      {/* animated border sheen */}
-                      <motion.div
-                        aria-hidden
-                        className="absolute inset-0 opacity-30 pointer-events-none"
-                        style={{
-                          background: `linear-gradient(120deg, transparent 30%, ${needMeta.color}55 50%, transparent 70%)`,
-                        }}
-                        animate={{ x: ["-30%", "130%"] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
-                      />
                       <div className="relative p-6 md:p-8 space-y-5 bg-black/50">
                         <div className="flex items-start gap-4">
                           <motion.div
