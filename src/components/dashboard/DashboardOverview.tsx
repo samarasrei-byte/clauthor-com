@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SectionLoader from "@/components/ui/section-loader";
-import GuidedOnboarding from "./GuidedOnboarding";
+// GuidedOnboarding legado removido — RevolutionaryOnboardingGate global cobre esse fluxo.
 import DashboardWelcome from "@/components/DashboardWelcome";
 import NextStepsCard from "@/components/dashboard/NextStepsCard";
 
@@ -75,15 +75,7 @@ const DashboardOverview = ({
               hasIntegration={false}
               hasExecution={recentLogs.length > 0}
             />
-            <GuidedOnboarding
-              hasCompanyData={boardCount > 0}
-              hasAgents={agents.length > 0}
-              hasSentCommand={recentLogs.length > 0}
-              onTeach={onTeach}
-              onHire={onHire}
-              onCommand={onCommand}
-              onDismiss={() => {}}
-            />
+            {/* GuidedOnboarding legado removido. */}
 
             {/* Hero action card for new users */}
             {agents.length === 0 && (
