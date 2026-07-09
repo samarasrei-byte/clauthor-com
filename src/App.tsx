@@ -9,6 +9,7 @@ import AppLayout from "@/components/AppLayout";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { lazy, Suspense } from "react";
+import OnboardingPreview from "@/pages/OnboardingPreview";
 
 // Retry wrapper for stale chunk errors after deploys
 function lazyRetry(factory: () => Promise<any>) {
@@ -125,6 +126,7 @@ const App = () => (
                 <Route path="/investidores" element={<InvestorPitch />} />
                 <Route path="/investors" element={<InvestorPitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />
+                <Route path="/__onb-preview" element={<OnboardingPreview />} />
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/apresentacaoadv" element={<ApresentacaoAdv />} />
                 <Route path="/apresentacao-adv" element={<ApresentacaoAdv />} />
