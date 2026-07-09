@@ -24,7 +24,9 @@ export function getPlanLimits(planType: string): PlanLimits {
  * 1 anchor + 19 recent messages.
  */
 export function applyHistoryWindow<T>(messages: T[], maxMessages: number): T[] {
+  if (maxMessages <= 0) return [];
   if (messages.length <= maxMessages) return messages;
+  if (maxMessages === 1) return [messages[0]];
   const firstMessage = messages[0];
   const recentMessages = messages.slice(-(maxMessages - 1));
   return [firstMessage, ...recentMessages];
