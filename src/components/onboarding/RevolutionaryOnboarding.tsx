@@ -355,11 +355,23 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
                       <Input
                         ref={firstInputRef}
-                        placeholder="https://suaempresa.com"
+                        placeholder="suaempresa.com.br"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === "Enter" && canAnalyze) setStep("describe"); }}
+                        inputMode="url"
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
                         className="h-14 bg-white/5 border-white/15 text-white placeholder:text-white/30 text-base rounded-xl"
                       />
+                      <p className="text-[11px] text-white/40">
+                        {url.trim().length === 0
+                          ? "Pode colar com ou sem www — eu ajusto pra você."
+                          : isValidUrl
+                            ? `✓ Vou analisar ${normalizedUrl}`
+                            : "Hmm, esse endereço não parece completo. Ex: minhaempresa.com.br"}
+                      </p>
                     </motion.div>
                   )}
                   {method === "text" && (
