@@ -5,6 +5,7 @@ import { checkRateLimit, rateLimitResponse, securityHeaders } from "../_shared/s
 import { createExecutionTracker } from "../_shared/resilience.ts";
 import { buildAgentContract, getTierSLA, getAreaLimits, type AgentContract } from "../_shared/agent-contract.ts";
 import { validateLimits } from "../_shared/policy-engine.ts";
+import { streamAIChat, validateMessages } from "../_shared/streamChat.ts";
 
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
