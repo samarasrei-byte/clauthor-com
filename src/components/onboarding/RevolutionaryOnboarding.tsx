@@ -396,7 +396,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
 
   async function submitClaim() {
     if (!claim.email || !claim.whatsapp) {
-      toast.error("Preencha email e WhatsApp para garantir sua vaga.");
+      toast.error("Preencha email e WhatsApp para acessar seu dashboard.");
       return;
     }
     setLoading(true);
