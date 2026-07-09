@@ -339,6 +339,7 @@ const AdminDashboard = () => {
               {activeTab === "signup-metrics" && <AdminSignupMetrics allProfiles={allProfiles} locale={locale} />}
               {activeTab === "ai-costs" && <AdminCostsDashboard />}
               {activeTab === "simulations" && <AdminSimulationsPanel />}
+              {activeTab === "margin" && <AdminMarginAnalysis />}
             </motion.div>
           </AnimatePresence>
         </div>
