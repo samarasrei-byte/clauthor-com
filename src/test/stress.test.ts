@@ -24,7 +24,7 @@ describe("Page Imports (lazy load stress)", () => {
     { name: "AdminDashboard", path: "../pages/AdminDashboard" },
     { name: "AgentLanding", path: "../pages/AgentLanding" },
     { name: "Departamentos", path: "../pages/Departamentos" },
-    { name: "MonixCommandCenter", path: "../pages/MonixCommandCenter" },
+    
     { name: "OmnixCommandCenter", path: "../pages/OmnixCommandCenter" },
     { name: "NotFound", path: "../pages/NotFound" },
   ];
@@ -64,10 +64,6 @@ describe("Core Hook Exports", () => {
     expect(mod.useNotifications).toBeDefined();
   });
 
-  it("useMonix exports correctly", async () => {
-    const mod = await import("../hooks/useMonix");
-    expect(mod.useMonix).toBeDefined();
-  });
 
   it("useOmnix exports correctly", async () => {
     const mod = await import("../hooks/useOmnix");

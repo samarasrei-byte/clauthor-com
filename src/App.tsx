@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/hooks/useAuth";
 import { ThemeProvider } from "@/hooks/useTheme";
 import AppLayout from "@/components/AppLayout";
@@ -53,7 +53,7 @@ const Departamentos = lazyRetry(() => import("./pages/Departamentos"));
 const Pitch = lazyRetry(() => import("./pages/Pitch"));
 const Terms = lazyRetry(() => import("./pages/Terms"));
 const Privacy = lazyRetry(() => import("./pages/Privacy"));
-const MonixCommandCenter = lazyRetry(() => import("./pages/MonixCommandCenter"));
+
 const OmnixCommandCenter = lazyRetry(() => import("./pages/OmnixCommandCenter"));
 const KnowledgeBase = lazyRetry(() => import("./pages/KnowledgeBase"));
 const ResetPassword = lazyRetry(() => import("./pages/ResetPassword"));
@@ -183,7 +183,7 @@ const App = () => (
 
 
                   <Route path="/knowledge-base" element={<KnowledgeBase />} />
-                  <Route path="/monix" element={<MonixCommandCenter />} />
+                  <Route path="/monix" element={<Navigate to="/omnix" replace />} />
                   <Route path="/omnix" element={<OmnixCommandCenter />} />
                   <Route path="/control-tower" element={<ControlTower />} />
                   <Route path="/neural-network" element={<AgentNeuralNetwork />} />

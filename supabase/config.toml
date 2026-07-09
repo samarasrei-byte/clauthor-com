@@ -39,8 +39,6 @@ verify_jwt = false
 [functions.openclaw-webhook]
 verify_jwt = false
 
-[functions.monix-chat]
-verify_jwt = false
 
 [functions.credential-manager]
 verify_jwt = false
