@@ -279,6 +279,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
   const [result, setResult] = useState<Classification | null>(null);
   const [loading, setLoading] = useState(false);
   const [claim, setClaim] = useState({ email: user?.email ?? "", whatsapp: "", company: "" });
+  const [showAllAgents, setShowAllAgents] = useState(false);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   const firstName = (user?.user_metadata?.full_name ?? "").split(" ")[0] || "";
@@ -785,7 +786,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                   >
                     <div className="relative bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
                       {/* Header */}
-                      <div className="px-6 md:px-10 pt-8 md:pt-10 pb-6 md:pb-8 border-b border-white/5">
+                      <div className="px-5 md:px-10 pt-6 md:pt-10 pb-5 md:pb-8 border-b border-white/5">
                         <motion.span
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -804,7 +805,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.12 }}
-                          className="font-display text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.05] bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent"
+                          className="font-display text-3xl md:text-5xl font-extrabold tracking-tight leading-[1.05] bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent"
                         >
                           {result.recommendation_name}
                         </motion.h2>
@@ -818,9 +819,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         </motion.p>
                       </div>
 
-                      <div className="p-6 md:p-10 space-y-8 md:space-y-10">
+                      <div className="p-5 md:p-10 space-y-6 md:space-y-10">
                         {/* Contexto */}
-                        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+                        <div className="grid md:grid-cols-2 gap-6 md:gap-12">
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
@@ -844,9 +845,20 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         {/* Agentes */}
                         {result.agents?.length > 0 && (
                           <div className="space-y-4">
-                            <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Seu squad</h4>
-                            <div className="flex flex-wrap gap-2.5">
-                              {result.agents.slice(0, 8).map((a, i) => {
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Seu squad</h4>
+                              {result.agents.length > 6 && (
+                                <button
+                                  type="button"
+                                  onClick={() => setShowAllAgents((v) => !v)}
+                                  className="text-[10px] font-mono uppercase tracking-widest text-white/50 hover:text-white transition-colors"
+                                >
+                                  {showAllAgents ? "Ver menos" : `Ver todos · ${result.agents.length}`}
+                                </button>
+                              )}
+                            </div>
+                            <div className="flex flex-wrap gap-2 md:gap-2.5">
+                              {(showAllAgents ? result.agents : result.agents.slice(0, 6)).map((a, i) => {
                                 const palette = [
                                   { bg: "bg-violet-500/10", border: "border-violet-500/30", dot: "bg-violet-400" },
                                   { bg: "bg-rose-500/10",   border: "border-rose-500/30",   dot: "bg-rose-400" },
@@ -857,19 +869,20 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                                     key={a}
                                     initial={{ opacity: 0, y: 8, scale: 0.95 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    transition={{ delay: 0.35 + i * 0.06 }}
+                                    transition={{ delay: Math.min(0.35 + i * 0.04, 0.7) }}
                                     className={cn(
-                                      "flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border",
+                                      "flex items-center gap-2 px-3 py-1.5 rounded-xl border",
                                       palette.bg, palette.border
                                     )}
                                   >
                                     <span className={cn("w-1.5 h-1.5 rounded-full", palette.dot)} />
-                                    <span className="text-xs font-semibold text-white/90">{a}</span>
+                                    <span className="text-[11px] md:text-xs font-semibold text-white/90">{a}</span>
                                   </motion.div>
                                 );
                               })}
                             </div>
                           </div>
+
                         )}
 
                         {/* Outcome band with animated glow */}
