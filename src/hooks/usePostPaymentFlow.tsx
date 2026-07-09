@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { startCustomerSetup } from "@/lib/customer-setup";
 
 export function usePostPaymentFlow() {
+  const navigate = useNavigate();
   const [postPaymentContext, setPostPaymentContext] = useState<{
     agentName: string;
     isDepartment: boolean;
@@ -26,15 +29,28 @@ export function usePostPaymentFlow() {
     setShowCompanyOnboarding(true);
   };
 
+  const routeToCustomerSetup = () => {
+    if (!postPaymentContext) return;
+    const { isDepartment, departmentId, agentName } = postPaymentContext;
+    if (isDepartment && departmentId) {
+      startCustomerSetup(navigate, "department", departmentId, agentName);
+    } else {
+      startCustomerSetup(navigate, "agent", agentName, agentName);
+    }
+  };
+
   const onCompanyOnboardingDone = (hasDept: boolean, deptId?: string) => {
     setShowCompanyOnboarding(false);
     if (hasDept && deptId) {
       setShowDeptSetup(true);
+    } else {
+      routeToCustomerSetup();
     }
   };
 
   const onDeptSetupDone = () => {
     setShowDeptSetup(false);
+    routeToCustomerSetup();
   };
 
   const clearPostPayment = () => setPostPaymentContext(null);
