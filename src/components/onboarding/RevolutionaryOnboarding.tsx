@@ -481,8 +481,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
         </div>
 
         {/* Layout: narrative rail (desktop) + main stage */}
-        <div className="relative z-10 h-full w-full flex items-center justify-center px-4 md:px-10 pt-16 pb-8">
-          <div className="w-full max-w-6xl grid md:grid-cols-[280px_1fr] gap-6 md:gap-10 items-center">
+        <div className="relative z-10 h-full w-full overflow-y-auto overflow-x-hidden flex justify-center px-4 md:px-10 pt-20 pb-16">
+          <div className="w-full max-w-6xl grid md:grid-cols-[280px_1fr] gap-6 md:gap-10 items-start my-auto">
+
             {/* Narrative rail */}
             <aside className="hidden md:block">
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-5 space-y-3.5 max-h-[70vh] overflow-hidden relative">
