@@ -28,7 +28,7 @@ const REQUIRED_LEGAL_SLUGS = [
 ];
 
 const AdminAdvocaciaVertical = () => {
-  const { isAdmin } = useAuth();
+  const { verified } = useAdminGuard("/admin");
   const [search, setSearch] = useState("");
 
   const { data: tenants = [], isLoading } = useQuery({
@@ -66,16 +66,16 @@ const AdminAdvocaciaVertical = () => {
         subscriptionsCount: (subs || []).filter((s: any) => s.user_id === p.user_id).length,
       }));
     },
-    enabled: isAdmin,
+    enabled: verified === true,
     staleTime: 60_000,
   });
 
-  if (!isAdmin) {
+  if (verified !== true) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Card className="p-6">
-          <p className="text-sm text-muted-foreground">Acesso restrito a administradores.</p>
-        </Card>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" /> Verificando permissões…
+        </div>
       </div>
     );
   }
