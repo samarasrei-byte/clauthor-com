@@ -786,7 +786,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                   >
                     <div className="relative bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
                       {/* Header */}
-                      <div className="px-6 md:px-10 pt-8 md:pt-10 pb-6 md:pb-8 border-b border-white/5">
+                      <div className="px-5 md:px-10 pt-6 md:pt-10 pb-5 md:pb-8 border-b border-white/5">
                         <motion.span
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
