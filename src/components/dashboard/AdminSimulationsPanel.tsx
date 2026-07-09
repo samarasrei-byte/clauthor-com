@@ -258,7 +258,16 @@ const AdminSimulationsPanel = () => {
           {isLoading ? (
             <div className="flex justify-center py-8"><Loader2 className="h-5 w-5 animate-spin text-muted-foreground" /></div>
           ) : !data || data.length === 0 ? (
-            <p className="text-sm text-muted-foreground py-6 text-center">Nenhuma simulação no período.</p>
+            <div className="flex flex-col items-center justify-center py-14 px-6 text-center">
+              <div className="w-14 h-14 rounded-2xl bg-primary/5 border border-primary/10 flex items-center justify-center mb-4">
+                <PlayCircle className="h-6 w-6 text-primary/60" />
+              </div>
+              <h3 className="text-sm font-semibold mb-1">Nenhuma simulação no período</h3>
+              <p className="text-xs text-muted-foreground max-w-sm">
+                Simulações aparecem aqui quando um lead testa um agente antes de contratar. Ajuste o período acima ou aguarde novas execuções.
+              </p>
+            </div>
+
           ) : (
             <Table>
               <TableHeader>
