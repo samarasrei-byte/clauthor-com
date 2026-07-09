@@ -25,7 +25,7 @@ import { toast } from "sonner";
 import {
   agentKeys, agentSlugs, agentIcons, agentTiers,
   agentPriceTiers, agentTags, agentIntegrations, agentSocialProof,
-  agentCapabilities, tierColors
+  agentCapabilities, tierColors, ANCHOR_AGENT_SLUGS,
 } from "@/data/libraryAgentData";
 import { getAgentName, getDefaultIcon } from "@/data/agentLibraryBridge";
 import { WORKFORCE } from "@/data/workforceArchitecture";
@@ -58,6 +58,7 @@ const DEFAULT_DEPT_COLOR = { gradient: "from-primary/20 to-primary/5", border: "
 const LibraryPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDept, setActiveDept] = useState<string | null>(null);
+  const [showAllAgents, setShowAllAgents] = useState(false);
   const [previewAgent, setPreviewAgent] = useState<{ name: string; desc: string } | null>(null);
   const [hiringSlug, setHiringSlug] = useState<string | null>(null);
   const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
