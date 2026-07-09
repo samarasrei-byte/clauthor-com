@@ -75,15 +75,7 @@ const DashboardOverview = ({
               hasIntegration={false}
               hasExecution={recentLogs.length > 0}
             />
-            <GuidedOnboarding
-              hasCompanyData={boardCount > 0}
-              hasAgents={agents.length > 0}
-              hasSentCommand={recentLogs.length > 0}
-              onTeach={onTeach}
-              onHire={onHire}
-              onCommand={onCommand}
-              onDismiss={() => {}}
-            />
+            {/* GuidedOnboarding legado removido. */}
 
             {/* Hero action card for new users */}
             {agents.length === 0 && (
