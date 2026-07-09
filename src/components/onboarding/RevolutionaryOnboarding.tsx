@@ -492,7 +492,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                       </h1>
                       <p className="text-base md:text-lg text-white/70 max-w-xl mx-auto leading-relaxed">
                         <Typewriter
-                          text="Em 60 segundos vou ler seu negócio, encontrar a dor real e montar a solução perfeita — um agente, um squad ou um departamento inteiro."
+                          text="Em 60 segundos vou ler seu negócio, encontrar a dor real e montar a solução perfeita. Um agente, um squad ou um departamento inteiro."
                           speed={14}
                         />
                       </p>
