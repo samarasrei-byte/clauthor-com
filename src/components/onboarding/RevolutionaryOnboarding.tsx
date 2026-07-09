@@ -413,7 +413,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       setStep("done");
       setTimeout(() => { onComplete(); navigate("/dashboard"); }, 2600);
     } catch (e: any) {
-      toast.error("Não consegui salvar sua vaga.", { description: e?.message });
+      toast.error("Não consegui liberar seu acesso.", { description: e?.message });
     } finally {
       setLoading(false);
     }
