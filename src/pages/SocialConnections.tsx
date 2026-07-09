@@ -13,6 +13,7 @@ import { toast } from "sonner";
 import { CheckCircle2, XCircle, Loader2, ExternalLink, Send, Activity, ShieldCheck, AlertTriangle, Bug, Copy, Trash2, FlaskConical } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Linkedin, Youtube } from "lucide-react";
+import { logger } from "@/lib/logger";
 
 /**
  * /settings/social — Conexões Sociais (per-user OAuth)
@@ -148,7 +149,7 @@ const SocialConnections = () => {
     setOauthLogs((prev) => [{ ts: Date.now(), ...entry }, ...prev].slice(0, 50));
     // Also echo to console for devtools
     // eslint-disable-next-line no-console
-    console.log(`[OAuth:${entry.provider ?? "-"}] ${entry.event}`, entry.detail ?? "");
+    logger.info(`[OAuth:${entry.provider ?? "-"}] ${entry.event}`, entry.detail ?? "");
   };
   const setStatus = (p: ProviderKey, status: UiStatus, message?: string) =>
     setUiStatus((s) => ({ ...s, [p]: { status, message } }));
