@@ -421,7 +421,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
         <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-rose-500 via-violet-500 to-cyan-500 flex items-center justify-center shadow-[0_0_16px_rgba(167,139,250,0.6)]">
-              <Sparkles className="w-3.5 h-3.5" />
+              <CoreDot size={12} />
             </div>
             <div className="leading-tight">
               <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/50">CLAUTHOR · NEURAL LINK</p>
