@@ -65,8 +65,7 @@ const ClientDashboard = () => {
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
   const [showQuickStart, setShowQuickStart] = useState(false);
   
-  const [showMagicMoment, setShowMagicMoment] = useState(false);
-  const [magicMomentAgent, setMagicMomentAgent] = useState<string | undefined>(undefined);
+  // MagicMoment removido — parte do fluxo legado.
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
     if (!user) return false;
     return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
