@@ -139,11 +139,29 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     if (user?.email) setClaim((c) => ({ ...c, email: user.email ?? c.email }));
   }, [user?.email]);
 
+  // Aceita "site.com", "www.site.com.br", "https://site.com/pagina" — normaliza depois.
+  const normalizedUrl = useMemo(() => {
+    const raw = url.trim();
+    if (!raw) return "";
+    return /^https?:\/\//i.test(raw) ? raw : `https://${raw.replace(/^\/+/, "")}`;
+  }, [url]);
+
+  const isValidUrl = useMemo(() => {
+    if (!normalizedUrl) return false;
+    try {
+      const u = new URL(normalizedUrl);
+      // precisa ter um domínio com ponto (ex: algo.com, algo.com.br)
+      return /^[^\s.]+\.[^\s.]+/.test(u.hostname);
+    } catch {
+      return false;
+    }
+  }, [normalizedUrl]);
+
   const canAnalyze = useMemo(() => {
-    if (method === "url") return /^https?:\/\/.+\..+/.test(url);
+    if (method === "url") return isValidUrl;
     if (method === "text") return text.trim().length > 40;
     return false;
-  }, [method, url, text]);
+  }, [method, isValidUrl, text]);
 
   async function runAnalysis() {
     setLoading(true);
