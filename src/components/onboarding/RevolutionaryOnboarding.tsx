@@ -160,7 +160,7 @@ function ThorOrb({ size = 96, pulsing = true }: { size?: number; pulsing?: boole
           animate={pulsing ? { scale: [1, 1.12, 1], opacity: [0.75, 1, 0.75] } : {}}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <Sparkles style={{ width: size * 0.34, height: size * 0.34 }} className="text-white" strokeWidth={1.4} />
+          <CoreDot size={size * 0.42} />
         </motion.div>
       </div>
       {pulsing && (
