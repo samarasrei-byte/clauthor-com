@@ -819,9 +819,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         </motion.p>
                       </div>
 
-                      <div className="p-6 md:p-10 space-y-8 md:space-y-10">
+                      <div className="p-5 md:p-10 space-y-6 md:space-y-10">
                         {/* Contexto */}
-                        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
+                        <div className="grid md:grid-cols-2 gap-6 md:gap-12">
                           <motion.div
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
