@@ -279,6 +279,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
   const [result, setResult] = useState<Classification | null>(null);
   const [loading, setLoading] = useState(false);
   const [claim, setClaim] = useState({ email: user?.email ?? "", whatsapp: "", company: "" });
+  const [showAllAgents, setShowAllAgents] = useState(false);
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   const firstName = (user?.user_metadata?.full_name ?? "").split(" ")[0] || "";
