@@ -70,7 +70,7 @@ const HomePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   
-  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
+  // showSmartOnboarding removido
 
   const cyclingRoles = useMemo(() => [
     "Funcionários de IA",
