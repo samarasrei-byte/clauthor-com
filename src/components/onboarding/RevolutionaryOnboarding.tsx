@@ -316,6 +316,34 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     return Math.min(1, i / (STEP_ORDER.length - 1));
   }, [step]);
 
+  function buildFallback(): Classification {
+    const raw = `${description} ${text} ${normalizedUrl}`.toLowerCase();
+    const has = (...ks: string[]) => ks.some((k) => raw.includes(k));
+    let need_type: Classification["need_type"] = "agent";
+    let name = "Agente Especialista";
+    let agents = ["Especialista de Conteúdo"];
+    if (has("marketing", "leads", "vendas", "prospec", "outbound", "linkedin")) {
+      need_type = "squad";
+      name = "Squad de Growth & Vendas";
+      agents = ["Hunter LinkedIn", "SDR IA", "Copy Outbound", "Analista de Funil"];
+    }
+    if (has("operac", "processo", "financeiro", "juridic", "advocacia", "rh", "atendimento", "suporte")) {
+      need_type = "department";
+      name = "Departamento Operacional";
+      agents = ["Ops Lead", "Analista Financeiro", "Compliance", "Atendimento N1", "Automação"];
+    }
+    return {
+      business_summary: normalizedUrl ? `Negócio em ${new URL(normalizedUrl).hostname}` : "Negócio descrito pelo usuário",
+      detected_pain: description || "Escalar operação sem contratar mais gente",
+      need_type,
+      recommendation_name: name,
+      recommendation_pitch: "Recomendação baseada nos sinais que você compartilhou. Podemos refinar depois no painel.",
+      agents,
+      expected_outcome: "Primeiros resultados mensuráveis em 30 dias.",
+      confidence: 0.55,
+    };
+  }
+
   async function runAnalysis() {
     setLoading(true);
     setStep("analyzing");
@@ -329,14 +357,20 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
-      // ensure the analyze animation has time to breathe
       setTimeout(() => {
         setResult(data as Classification);
         setStep("reveal");
       }, 800);
     } catch (e: any) {
-      toast.error("Não consegui analisar agora. Tente novamente.", { description: e?.message });
-      setStep("describe");
+      // Fallback local — nunca deixa o usuário travado
+      console.warn("[onboarding] classify failed, using fallback", e);
+      toast.message("Análise offline — usando recomendação inicial", {
+        description: "Você pode refinar no painel depois.",
+      });
+      setTimeout(() => {
+        setResult(buildFallback());
+        setStep("reveal");
+      }, 600);
     } finally {
       setLoading(false);
     }
