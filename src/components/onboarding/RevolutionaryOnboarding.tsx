@@ -420,7 +420,11 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
   }
 
   async function handleSkip() {
-    await markOnboarded();
+    // Só marca como concluído se o usuário já passou pela descrição da dor.
+    const idx = STEP_ORDER.indexOf(step);
+    if (idx >= STEP_ORDER.indexOf("describe")) {
+      await markOnboarded();
+    }
     onSkip();
   }
 
