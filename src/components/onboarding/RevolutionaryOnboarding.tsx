@@ -979,7 +979,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         className="bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-500 text-white hover:opacity-90 rounded-full gap-2 h-12 px-6 shadow-[0_0_40px_rgba(225,29,72,0.4)]"
                       >
                         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
-                        Fixar vaga
+                        Entrar no dashboard
                       </Button>
                     </div>
                   </motion.div>
