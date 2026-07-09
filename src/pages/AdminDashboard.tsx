@@ -37,6 +37,7 @@ import AdminCostsDashboard from "@/components/dashboard/AdminCostsDashboard";
 import AdminSimulationsPanel from "@/components/dashboard/AdminSimulationsPanel";
 import TokenAlertsTable from "@/components/dashboard/TokenAlertsTable";
 import ThorGreetingMetricsCard from "@/components/dashboard/ThorGreetingMetricsCard";
+import AdminMarginAnalysis from "@/components/dashboard/AdminMarginAnalysis";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
