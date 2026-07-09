@@ -600,7 +600,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             isValidUrl ? "text-emerald-300/80" : "text-white/40"
                           )}>
                             {url.trim().length === 0
-                              ? "> pode colar com ou sem www — eu normalizo o endereço"
+                              ? "> pode colar com ou sem www. Eu normalizo o endereço."
                               : isValidUrl
                                 ? `> alvo confirmado: ${normalizedUrl}`
                                 : "> endereço incompleto. ex: minhaempresa.com.br"}
