@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "./Navbar";
-import OnboardingWizard from "./onboarding/OnboardingWizard";
+// OnboardingWizard legado removido.
 import AgentLivePreview from "./library/AgentLivePreview";
 import { supabase } from "@/integrations/supabase/client";
 const ThorGreeter = lazy(() => import("./ThorGreeter"));
@@ -17,7 +17,7 @@ const RevolutionaryOnboardingGate = lazy(() => import("./onboarding/Revolutionar
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
 const AppLayout = () => {
-  const [wizardOpen, setWizardOpen] = useState(false);
+  // wizardOpen removido — OnboardingWizard legado aposentado.
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
   const location = useLocation();
   const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname);
@@ -34,7 +34,7 @@ const AppLayout = () => {
         <Outlet />
       </main>
       
-      <OnboardingWizard isOpen={wizardOpen} onClose={() => setWizardOpen(false)} />
+      {/* OnboardingWizard legado removido. */}
       <AgentLivePreview
         agentName={testDriveAgent?.name || ""}
         agentDesc="Converse com este agente antes de contratar"

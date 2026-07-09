@@ -19,14 +19,13 @@ import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import DashboardSectionRenderer from "@/components/dashboard/DashboardSectionRenderer";
 import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
-import QuickOnboardingWizard from "@/components/onboarding/QuickOnboardingWizard";
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
-// FirstAccessOnboarding aposentado — substituído pelo GuidedOnboarding no AppLayout
-import MagicMomentCard from "@/components/onboarding/MagicMomentCard";
+// Onboarding legado (Quick/FirstAccess/MagicMoment) removido — substituído pelo
+// RevolutionaryOnboardingGate global montado em AppLayout.
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
 import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
@@ -56,7 +55,7 @@ const ClientDashboard = () => {
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
   const [omnixMounted, setOmnixMounted] = useState(false);
-  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
+  // showSmartOnboarding removido — Revolutionary gate global cuida do primeiro contato.
   const [showBoardGate, setShowBoardGate] = useState(false);
   const [showLiveGuide, setShowLiveGuide] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -66,8 +65,7 @@ const ClientDashboard = () => {
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
   const [showQuickStart, setShowQuickStart] = useState(false);
   
-  const [showMagicMoment, setShowMagicMoment] = useState(false);
-  const [magicMomentAgent, setMagicMomentAgent] = useState<string | undefined>(undefined);
+  // MagicMoment removido — parte do fluxo legado.
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
     if (!user) return false;
     return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
@@ -138,15 +136,8 @@ const ClientDashboard = () => {
     return !!localStorage.getItem("hireIntent") || !!checkoutSummary;
   }, [checkoutSummary]);
 
-  useEffect(() => {
-    if (!user || profileOnboarding === undefined) return;
-    if (profileOnboarding) return;
-    if (hasPendingCheckout) return; // não abrir SmartOnboarding sobre o checkout
-    const thorHandledOnboarding = !!localStorage.getItem(`clauthor_concierge_seen_${user.id}`);
-    if (!thorHandledOnboarding) {
-      setShowSmartOnboarding(true);
-    }
-  }, [user, profileOnboarding, hasPendingCheckout]);
+  // Onboarding do primeiro contato agora é 100% delegado ao RevolutionaryOnboardingGate
+  // (montado em AppLayout via useGuidedOnboarding). Nada a fazer aqui.
 
   const { credits, remainingCredits, usagePercentage } = useCredits();
   usePaypalCapture();
@@ -466,44 +457,10 @@ const ClientDashboard = () => {
         </div>
       )}
 
-      {showSmartOnboarding && (
-        <QuickOnboardingWizard
-          isOpen={showSmartOnboarding}
-          onComplete={(agentSlug) => {
-            setShowSmartOnboarding(false);
-            queryClient.invalidateQueries({ queryKey: ["profile-onboarding"] });
-            let agentName: string | undefined;
-            if (agentSlug) {
-              const agent = agents.find(a => nameToSlug[a.name] === agentSlug);
-              if (agent) {
-                agentName = agent.name;
-                setPreviousSection(activeSection);
-                setSelectedAgent({ id: agent.id, name: agent.name });
-                setActiveSection("chat");
-              } else {
-                setActiveSection("library");
-              }
-            }
-            // Magic Moment — show first-value card right after onboarding
-            setMagicMomentAgent(agentName);
-            setTimeout(() => setShowMagicMoment(true), 400);
-          }}
-        />
-      )}
-
-      <MagicMomentCard
-        isOpen={showMagicMoment}
-        onClose={() => setShowMagicMoment(false)}
-        agentName={magicMomentAgent}
-        onGoToApprovals={() => {
-          setShowMagicMoment(false);
-          setActiveSection("approvals");
-        }}
-      />
+      {/* QuickOnboardingWizard + MagicMomentCard + FirstAccessOnboarding removidos.
+          Onboarding do primeiro contato: RevolutionaryOnboardingGate global (AppLayout). */}
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
-
-      {/* Legacy FirstAccessOnboarding removido: substituído pelo GuidedOnboarding global no AppLayout */}
 
       <div className="flex h-full">
         <div className="hidden lg:block relative z-10">

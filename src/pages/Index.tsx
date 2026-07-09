@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { lazy, Suspense, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const SmartOnboarding = lazy(() => import("@/components/onboarding/SmartOnboarding"));
+// SmartOnboarding removido — RevolutionaryOnboardingGate cobre o primeiro contato.
 const LiveDemoSection = lazy(() => import("@/components/landing/LiveDemoSection"));
 const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
@@ -70,7 +70,7 @@ const HomePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   
-  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
+  // showSmartOnboarding removido
 
   const cyclingRoles = useMemo(() => [
     "Funcionários de IA",
@@ -517,9 +517,7 @@ const HomePage = () => {
 
       {/* ═══════════ FOOTER ═══════════ */}
       <Footer />
-      <Suspense fallback={null}>
-        <SmartOnboarding isOpen={showSmartOnboarding} onClose={() => setShowSmartOnboarding(false)} />
-      </Suspense>
+      {/* SmartOnboarding removido — Revolutionary gate global cobre esse fluxo. */}
     </div>
   );
 };
