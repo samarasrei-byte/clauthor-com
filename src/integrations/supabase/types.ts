@@ -1664,6 +1664,65 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_onboarding: {
+        Row: {
+          answers: Json
+          completed_at: string | null
+          created_at: string
+          current_step: string
+          id: string
+          started_at: string
+          status: string
+          steps_completed: Json
+          subject_name: string | null
+          subject_ref: string
+          subject_type: string
+          tenant_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          answers?: Json
+          completed_at?: string | null
+          created_at?: string
+          current_step?: string
+          id?: string
+          started_at?: string
+          status?: string
+          steps_completed?: Json
+          subject_name?: string | null
+          subject_ref: string
+          subject_type: string
+          tenant_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          answers?: Json
+          completed_at?: string | null
+          created_at?: string
+          current_step?: string
+          id?: string
+          started_at?: string
+          status?: string
+          steps_completed?: Json
+          subject_name?: string | null
+          subject_ref?: string
+          subject_type?: string
+          tenant_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_onboarding_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       department_suggestions: {
         Row: {
           created_at: string
