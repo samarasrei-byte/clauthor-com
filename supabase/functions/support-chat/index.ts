@@ -1,12 +1,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
-import { fetchAI } from "../_shared/ai-gateway.ts";
-import { checkRateLimit, securityHeaders, rateLimitResponse } from "../_shared/security.ts";
+import { checkRateLimit, rateLimitResponse } from "../_shared/security.ts";
 import { createExecutionTracker } from "../_shared/resilience.ts";
 import { buildAgentContract, getTierSLA, getAreaLimits, type AgentContract } from "../_shared/agent-contract.ts";
 import { validateLimits } from "../_shared/policy-engine.ts";
+import { streamAIChat, validateMessages } from "../_shared/streamChat.ts";
 
-import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
+import { corsHeaders } from "../_shared/cors.ts";
 
 const OPERATIONAL_SECURITY = `
 ## PROTOCOLO DE SEGURANÇA OPERACIONAL (CAMADA SUPREMA)
@@ -128,21 +128,8 @@ serve(async (req) => {
 
     const { messages, context } = await req.json();
 
-    if (!messages || !Array.isArray(messages) || messages.length === 0) {
-      return new Response(
-        JSON.stringify({ error: "Messages are required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    for (const msg of messages) {
-      if (!msg.content || typeof msg.content !== "string" || msg.content.length > 2000) {
-        return new Response(
-          JSON.stringify({ error: "Invalid message format" }),
-          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-        );
-      }
-    }
+    const invalid = validateMessages(messages, { maxLength: 2000 });
+    if (invalid) return invalid;
 
     // === OPTIONAL AUTH + CREDIT VALIDATION ===
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
