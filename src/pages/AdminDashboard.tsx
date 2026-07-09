@@ -37,6 +37,7 @@ import AdminCostsDashboard from "@/components/dashboard/AdminCostsDashboard";
 import AdminSimulationsPanel from "@/components/dashboard/AdminSimulationsPanel";
 import TokenAlertsTable from "@/components/dashboard/TokenAlertsTable";
 import ThorGreetingMetricsCard from "@/components/dashboard/ThorGreetingMetricsCard";
+import AdminMarginAnalysis from "@/components/dashboard/AdminMarginAnalysis";
 
 const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState("overview");
@@ -192,6 +193,7 @@ const AdminDashboard = () => {
     { id: "signup-metrics", label: "Signups", icon: Users, badge: undefined, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "ai-costs", label: "Custos IA", icon: Cpu, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "simulations", label: "Simulações", icon: PlayCircle, group: t("dashboard.analysis", { defaultValue: "Análise" }) },
+    { id: "margin", label: "Margem por Depto", icon: TrendingUp, badge: "NEW", group: t("dashboard.analysis", { defaultValue: "Análise" }) },
     { id: "waitlist", label: "Waitlist", icon: ListOrdered, badge: waitingCount || undefined, group: t("dashboard.system", { defaultValue: "Sistema" }) },
     { id: "vertical-advocacia", label: "Vertical: Advocacia", icon: Scale, group: "Verticais" },
   ];
@@ -337,6 +339,7 @@ const AdminDashboard = () => {
               {activeTab === "signup-metrics" && <AdminSignupMetrics allProfiles={allProfiles} locale={locale} />}
               {activeTab === "ai-costs" && <AdminCostsDashboard />}
               {activeTab === "simulations" && <AdminSimulationsPanel />}
+              {activeTab === "margin" && <AdminMarginAnalysis />}
             </motion.div>
           </AnimatePresence>
         </div>
