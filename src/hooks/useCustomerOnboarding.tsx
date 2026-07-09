@@ -152,12 +152,13 @@ export function useCustomerOnboarding({ subjectType, subjectRef, subjectName }: 
           status: "completed",
           completed_at: new Date().toISOString(),
           steps_completed: nextCompleted,
-          answers: nextAnswers,
+          answers: nextAnswers as never,
         })
         .eq("id", row.id)
         .select("*")
         .single();
       if (!error && data) setRow(data as unknown as CustomerOnboardingRow);
+
 
       // best-effort activity log
       try {
