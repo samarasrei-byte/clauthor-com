@@ -10,9 +10,7 @@ const SocialProofToasts = lazy(() => import("./SocialProofToasts"));
 const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
 const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
-const PlatformUpdatesDialog = lazy(() => import("./PlatformUpdatesDialog"));
-const ThorDailyGreeting = lazy(() => import("./ThorDailyGreeting"));
-const RevolutionaryOnboardingGate = lazy(() => import("./onboarding/RevolutionaryOnboardingGate"));
+const AssistantHierarchy = lazy(() => import("./AssistantHierarchy"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
@@ -50,22 +48,10 @@ const AppLayout = () => {
       />
 
       {addonsReady && (
-        <>
-          {/* Platform updates + token info popup (uma vez por versão, autenticados) */}
-          <Suspense fallback={null}>
-            <PlatformUpdatesDialog />
-          </Suspense>
-
-          {/* Revolutionary first-interaction experience */}
-          <Suspense fallback={null}>
-            <RevolutionaryOnboardingGate />
-          </Suspense>
-
-          {/* Thor daily greeting com saldo de tokens e top-up nudge */}
-          <Suspense fallback={null}>
-            <ThorDailyGreeting />
-          </Suspense>
-        </>
+        <Suspense fallback={null}>
+          {/* Hierarquia única: 1º contato = só Thor (onboarding). Depois = greeting + updates. */}
+          <AssistantHierarchy />
+        </Suspense>
       )}
     </div>
   );
