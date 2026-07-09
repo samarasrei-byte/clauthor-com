@@ -281,32 +281,41 @@ const ClientDashboard = () => {
   }, [agents, nameToSlug, t]);
 
   const chatSidebarItem: SidebarItem | null = selectedAgent ? {
-    id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.nav_main", { defaultValue: "Principal" }),
+    id: "chat", label: selectedAgent.name, icon: MessageSquare, group: t("dashboard.zone_work", { defaultValue: "Meu trabalho" }),
   } : null;
 
-  const mainGroup = t("dashboard.nav_main", { defaultValue: "Principal" });
-  const intelligenceGroup = t("dashboard.nav_intelligence", { defaultValue: "Inteligência" });
-  const advancedGroup = t("dashboard.nav_advanced", { defaultValue: "Ferramentas Avançadas" });
-  const systemGroup = t("dashboard.nav_system", { defaultValue: "Sistema" });
+  // ─── 4 zonas: Meu trabalho / Meu time / IA & Voz / Configuração ───
+  const zoneWork    = t("dashboard.zone_work",    { defaultValue: "Meu trabalho" });
+  const zoneTeam    = t("dashboard.zone_team",    { defaultValue: "Meu time" });
+  const zoneAI      = t("dashboard.zone_ai",      { defaultValue: "IA & Voz" });
+  const zoneConfig  = t("dashboard.zone_config",  { defaultValue: "Configuração" });
+  // (compat) grupo dos departamentos gerados dinamicamente acima
+  const teamGroup   = zoneTeam;
+
+  // Reetiqueta os itens de departamento/solo para caírem na zona "Meu time"
+  const rebrandedDeptItems = departmentSidebarItems.map(it => ({ ...it, group: teamGroup }));
+  const rebrandedSoloItems = soloAgentItems.map(it => ({ ...it, group: teamGroup }));
 
   // Itens completos (vistos por admin). Cliente vê apenas o subset estável.
   const allSidebarItems: SidebarItem[] = [
-    // ─── Principal: features centrais (Command Center → THOR → Workspace → Agentes) ───
-    { id: "overview", label: t("dashboard.command_center"), icon: LayoutDashboard, group: mainGroup },
-    { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: mainGroup },
-    { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: mainGroup },
-    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: mainGroup },
-    { id: "chat", label: "Chat", icon: MessageSquare, group: mainGroup },
-    ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}`, group: mainGroup }] : []),
-    ...departmentSidebarItems,
-    ...soloAgentItems,
+    // ─── Meu trabalho: o que eu faço no dia a dia ───
+    { id: "overview",  label: t("dashboard.command_center"), icon: LayoutDashboard, group: zoneWork },
+    { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: zoneWork },
+    { id: "chat",      label: "Chat", icon: MessageSquare, group: zoneWork },
+    ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}`, group: zoneWork }] : []),
+    { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3, group: zoneWork },
 
-    // ─── Inteligência: hub unificado (Relatórios + War Room + Preditivo + Neural + Replay + DNA + Benchmarks) ───
-    { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3, group: intelligenceGroup },
+    // ─── Meu time: agentes e departamentos ───
+    { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: zoneTeam },
+    ...rebrandedDeptItems,
+    ...rebrandedSoloItems,
 
-    // ─── Sistema: Integrações em destaque + hub unificado ───
-    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: systemGroup },
-    { id: "system", label: t("dashboard.nav_system", { defaultValue: "Sistema" }), icon: Settings, group: systemGroup },
+    // ─── IA & Voz: assistente global ───
+    { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: zoneAI },
+
+    // ─── Configuração ───
+    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: zoneConfig },
+    { id: "system", label: t("dashboard.nav_system", { defaultValue: "Sistema" }), icon: Settings, group: zoneConfig },
   ];
 
 
