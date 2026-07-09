@@ -102,7 +102,16 @@ const AmbientThorCard = ({ onOpenOmnix, onOpenLibrary }: Props) => {
             {loading
               ? "Sincronizando sua operação..."
               : hasActivity
-                ? `Última hora: ${actions.length} ação${actions.length > 1 ? "ões" : ""} registrada${actions.length > 1 ? "s" : ""} pelos seus agentes.`
+                ? (() => {
+                    // Rótulo honesto: se a ação mais recente é > 1h, não diga "última hora".
+                    const newest = actions[0]?.created_at ? new Date(actions[0].created_at) : null;
+                    const ageMs = newest ? Date.now() - newest.getTime() : Infinity;
+                    const withinHour = ageMs <= 60 * 60 * 1000;
+                    const prefix = withinHour
+                      ? "Última hora"
+                      : `Últimas ações · ${formatDistanceToNow(newest as Date, { addSuffix: false, locale: ptBR })} atrás`;
+                    return `${prefix}: ${actions.length} ação${actions.length > 1 ? "ões" : ""} registrada${actions.length > 1 ? "s" : ""} pelos seus agentes.`;
+                  })()
                 : "Nenhuma ação ainda. Ative seu primeiro agente e Thor começa a rodar."}
           </p>
 
