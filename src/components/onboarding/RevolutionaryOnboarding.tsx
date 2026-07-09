@@ -805,7 +805,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
                           transition={{ delay: 0.12 }}
-                          className="font-display text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.05] bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent"
+                          className="font-display text-3xl md:text-5xl font-extrabold tracking-tight leading-[1.05] bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent"
                         >
                           {result.recommendation_name}
                         </motion.h2>
