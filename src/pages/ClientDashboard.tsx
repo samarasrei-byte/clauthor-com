@@ -137,15 +137,8 @@ const ClientDashboard = () => {
     return !!localStorage.getItem("hireIntent") || !!checkoutSummary;
   }, [checkoutSummary]);
 
-  useEffect(() => {
-    if (!user || profileOnboarding === undefined) return;
-    if (profileOnboarding) return;
-    if (hasPendingCheckout) return; // não abrir SmartOnboarding sobre o checkout
-    const thorHandledOnboarding = !!localStorage.getItem(`clauthor_concierge_seen_${user.id}`);
-    if (!thorHandledOnboarding) {
-      setShowSmartOnboarding(true);
-    }
-  }, [user, profileOnboarding, hasPendingCheckout]);
+  // Onboarding do primeiro contato agora é 100% delegado ao RevolutionaryOnboardingGate
+  // (montado em AppLayout via useGuidedOnboarding). Nada a fazer aqui.
 
   const { credits, remainingCredits, usagePercentage } = useCredits();
   usePaypalCapture();
