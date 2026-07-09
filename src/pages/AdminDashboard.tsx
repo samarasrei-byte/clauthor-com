@@ -38,8 +38,11 @@ import AdminSimulationsPanel from "@/components/dashboard/AdminSimulationsPanel"
 import TokenAlertsTable from "@/components/dashboard/TokenAlertsTable";
 import ThorGreetingMetricsCard from "@/components/dashboard/ThorGreetingMetricsCard";
 import AdminMarginAnalysis from "@/components/dashboard/AdminMarginAnalysis";
+import { useAdminGuard } from "@/hooks/useAdminGuard";
+import { Loader2 } from "lucide-react";
 
 const AdminDashboard = () => {
+  const { verified } = useAdminGuard();
   const [activeTab, setActiveTab] = useState("overview");
   const navigate = useNavigate();
   const handleTabChange = (id: string) => {
