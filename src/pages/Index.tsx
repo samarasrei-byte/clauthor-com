@@ -137,73 +137,9 @@ const HomePage = () => {
     <div className="relative overflow-x-hidden">
 
       {/* ═══════════ HERO ═══════════ */}
-      <section ref={heroRef} className="relative min-h-[70svh] sm:min-h-[75vh] flex items-center px-5 sm:px-6 pt-24 pb-16 sm:pt-32 sm:pb-20" aria-label="Hero">
-        <div className="relative z-10 max-w-[1120px] mx-auto w-full">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            {/* LEFT - Text */}
-            <div className="flex-1 min-w-0 text-center lg:text-left">
-              {/* Headline */}
-              <motion.div
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-                className="mb-5"
-              >
-                <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.5rem] font-semibold leading-[1.05] tracking-[-0.04em]">
-                  <span className="text-foreground">{typedText}</span>
-                  <span className="inline-block w-[2px] h-[0.7em] bg-foreground/30 ml-1 align-middle" style={{ animation: "blink-cursor 0.8s step-end infinite" }} />
-                </h1>
-              </motion.div>
-
-              {/* Subtitle */}
-              <motion.div
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.3 }}
-              >
-                <p className="text-[16px] sm:text-[17px] text-muted-foreground max-w-md mx-auto lg:mx-0 leading-[1.6] mb-8 font-light">
-                  {t("home.subtitle")}
-                  <span className="text-foreground font-normal"> {t("home.subtitle_highlight")}</span>
-                </p>
-
-                {/* CTAs - minimal Apple style */}
-                <div className="flex flex-col sm:flex-row items-center gap-3">
-                  <Link to="/waitlist" className="block w-full sm:w-auto">
-                    <Button size="lg" className="w-full sm:w-auto h-11 px-7 text-[13px] font-medium rounded-full gap-2">
-                      {t("home.cta_waitlist", { defaultValue: "Get Started" })}
-                      <ArrowRight className="h-3.5 w-3.5" />
-                    </Button>
-                  </Link>
-                  <Link to="/library" className="block">
-                    <Button variant="ghost" size="lg" className="h-11 px-5 text-[13px] font-medium text-primary gap-1">
-                      {t("home.cta_explore_agents")}
-                      <ChevronRight className="h-3.5 w-3.5" />
-                    </Button>
-                  </Link>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* RIGHT - Live Demo */}
-            <div className="w-full max-w-[400px] lg:w-[400px] shrink-0 mx-auto lg:mx-0">
-              <Suspense fallback={
-                <div className="rounded-2xl border border-border/50 bg-card overflow-hidden">
-                  <div className="px-4 py-3 border-b border-border/50 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-muted animate-pulse" />
-                    <div className="space-y-1.5">
-                      <div className="w-28 h-3 rounded bg-muted animate-pulse" />
-                      <div className="w-16 h-2 rounded bg-muted animate-pulse" />
-                    </div>
-                  </div>
-                  <div className="h-[300px]" />
-                </div>
-              }>
-                <LiveDemoAgent />
-              </Suspense>
-            </div>
-          </div>
-        </div>
-      </section>
+      <div ref={heroRef}>
+        <HeroTerminal />
+      </div>
 
       {/* ═══════════ LIVE DEMO ═══════════ */}
       <Suspense fallback={null}>
