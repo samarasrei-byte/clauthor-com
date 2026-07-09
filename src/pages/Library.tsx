@@ -25,7 +25,7 @@ import { toast } from "sonner";
 import {
   agentKeys, agentSlugs, agentIcons, agentTiers,
   agentPriceTiers, agentTags, agentIntegrations, agentSocialProof,
-  agentCapabilities, tierColors
+  agentCapabilities, tierColors, ANCHOR_AGENT_SLUGS,
 } from "@/data/libraryAgentData";
 import { getAgentName, getDefaultIcon } from "@/data/agentLibraryBridge";
 import { WORKFORCE } from "@/data/workforceArchitecture";
@@ -58,6 +58,7 @@ const DEFAULT_DEPT_COLOR = { gradient: "from-primary/20 to-primary/5", border: "
 const LibraryPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeDept, setActiveDept] = useState<string | null>(null);
+  const [showAllAgents, setShowAllAgents] = useState(false);
   const [previewAgent, setPreviewAgent] = useState<{ name: string; desc: string } | null>(null);
   const [hiringSlug, setHiringSlug] = useState<string | null>(null);
   const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
@@ -91,12 +92,27 @@ const LibraryPage = () => {
     sum + dept.squads.reduce((s, sq) => s + sq.agents.length, 0), 0
   ), []);
 
+  // Curadoria: em modo âncora (padrão) só aparecem os 40 agentes ANCHOR_AGENT_SLUGS.
+  // Uma busca ativa OU o toggle "Ver todos" liberam a long-tail.
+  const anchorSet = useMemo(() => new Set(ANCHOR_AGENT_SLUGS), []);
+  const curated = useMemo(() => {
+    const showAll = showAllAgents || searchQuery.trim().length > 0;
+    if (showAll) return WORKFORCE;
+    return WORKFORCE.map(dept => ({
+      ...dept,
+      squads: dept.squads.map(sq => ({
+        ...sq,
+        agents: sq.agents.filter(a => anchorSet.has(a.slug)),
+      })).filter(sq => sq.agents.length > 0),
+    })).filter(dept => dept.squads.length > 0);
+  }, [showAllAgents, searchQuery, anchorSet]);
+
   // Filter departments and agents by search
   const filteredWorkforce = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return WORKFORCE;
+    if (!q) return curated;
 
-    return WORKFORCE.map(dept => ({
+    return curated.map(dept => ({
       ...dept,
       squads: dept.squads.map(sq => ({
         ...sq,
@@ -108,7 +124,7 @@ const LibraryPage = () => {
         )
       })).filter(sq => sq.agents.length > 0)
     })).filter(dept => dept.squads.length > 0);
-  }, [searchQuery]);
+  }, [searchQuery, curated]);
 
   // Count visible agents
   const visibleAgentCount = useMemo(() => filteredWorkforce.reduce((sum, dept) => 
@@ -266,6 +282,23 @@ const LibraryPage = () => {
               </button>
             );
           })}
+        </div>
+
+        {/* Curadoria toggle: âncoras (40) vs. long-tail completa (200+) */}
+        <div className="flex items-center justify-center gap-2 pt-1">
+          <span className="text-[11px] text-muted-foreground/60">
+            {showAllAgents || searchQuery
+              ? `Mostrando todos os ${totalAgents} agentes`
+              : `Mostrando ${ANCHOR_AGENT_SLUGS.length} agentes-âncora curados`}
+          </span>
+          {!searchQuery && (
+            <button
+              onClick={() => setShowAllAgents((v) => !v)}
+              className="text-[11px] text-primary/80 hover:text-primary underline underline-offset-2 transition-colors"
+            >
+              {showAllAgents ? "Ver só os âncoras" : "Ver todos os agentes"}
+            </button>
+          )}
         </div>
       </section>
 

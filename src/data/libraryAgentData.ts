@@ -13,6 +13,35 @@ export const agentKeys = ALL_AGENT_SLUGS as readonly string[];
 
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo", "hunter_linkedin"] as const;
 
+/**
+ * 40 agentes-âncora — a curadoria pública da library.
+ *
+ * Critério: cobertura equilibrada de departamentos + social proof real + capabilities
+ * completas. Os demais slugs continuam existindo no workforce (200+) mas ficam
+ * fora da vitrine principal para evitar sobrecarga de decisão. Um toggle
+ * "Ver todos os agentes" no /library expõe a long-tail sob demanda.
+ */
+export const ANCHOR_AGENT_SLUGS: readonly string[] = [
+  // Executive & AI Core (4)
+  "ceo", "orchestrator", "voice_ai", "coding",
+  // Sales / Growth (8)
+  "sales", "hunter", "sdr_linkedin", "sdr_whatsapp", "pre_qualifier",
+  "revenue", "paid_traffic", "seo_growth",
+  // Marketing / Content (7)
+  "copywriting", "branding", "creative_design", "video_production",
+  "marketing_automation", "influencer", "whatsapp_commerce",
+  // Customer Success (4)
+  "omnichannel", "customer_success", "support_lead", "reputation",
+  // Finance (4)
+  "ai_cfo", "digital_accountant", "tax_compliance", "credit_recovery",
+  // Legal & Compliance (4)
+  "contract_analyst", "compliance_officer", "litigation", "lex_guardian",
+  // Operations (4)
+  "logistics", "inventory", "procurement", "project_management",
+  // Product / Data (5)
+  "data_analytics", "data_engineer", "ux_researcher", "crm_manager", "research",
+];
+
 // Auto-generate slugs for all 200 agents
 export const agentSlugs: Record<string, string> = Object.fromEntries(
   agentKeys.map(k => [k, k])
