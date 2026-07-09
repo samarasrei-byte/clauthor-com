@@ -128,11 +128,12 @@ export function useCustomerOnboarding({ subjectType, subjectRef, subjectName }: 
         .update({
           current_step: step,
           steps_completed: nextCompleted,
-          answers: nextAnswers,
+          answers: nextAnswers as never,
         })
         .eq("id", row.id)
         .select("*")
         .single();
+
       if (!error && data) setRow(data as unknown as CustomerOnboardingRow);
       setSaving(false);
     },
