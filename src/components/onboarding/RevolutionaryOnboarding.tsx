@@ -139,11 +139,29 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     if (user?.email) setClaim((c) => ({ ...c, email: user.email ?? c.email }));
   }, [user?.email]);
 
+  // Aceita "site.com", "www.site.com.br", "https://site.com/pagina" — normaliza depois.
+  const normalizedUrl = useMemo(() => {
+    const raw = url.trim();
+    if (!raw) return "";
+    return /^https?:\/\//i.test(raw) ? raw : `https://${raw.replace(/^\/+/, "")}`;
+  }, [url]);
+
+  const isValidUrl = useMemo(() => {
+    if (!normalizedUrl) return false;
+    try {
+      const u = new URL(normalizedUrl);
+      // precisa ter um domínio com ponto (ex: algo.com, algo.com.br)
+      return /^[^\s.]+\.[^\s.]+/.test(u.hostname);
+    } catch {
+      return false;
+    }
+  }, [normalizedUrl]);
+
   const canAnalyze = useMemo(() => {
-    if (method === "url") return /^https?:\/\/.+\..+/.test(url);
+    if (method === "url") return isValidUrl;
     if (method === "text") return text.trim().length > 40;
     return false;
-  }, [method, url, text]);
+  }, [method, isValidUrl, text]);
 
   async function runAnalysis() {
     setLoading(true);
@@ -151,7 +169,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     try {
       const { data, error } = await supabase.functions.invoke("onboarding-classify", {
         body: {
-          url: method === "url" ? url : undefined,
+          url: method === "url" ? normalizedUrl : undefined,
           text: method === "text" ? text : undefined,
           description,
         },
@@ -337,11 +355,23 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                     <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
                       <Input
                         ref={firstInputRef}
-                        placeholder="https://suaempresa.com"
+                        placeholder="suaempresa.com.br"
                         value={url}
                         onChange={(e) => setUrl(e.target.value)}
+                        onKeyDown={(e) => { if (e.key === "Enter" && canAnalyze) setStep("describe"); }}
+                        inputMode="url"
+                        autoCapitalize="none"
+                        autoCorrect="off"
+                        spellCheck={false}
                         className="h-14 bg-white/5 border-white/15 text-white placeholder:text-white/30 text-base rounded-xl"
                       />
+                      <p className="text-[11px] text-white/40">
+                        {url.trim().length === 0
+                          ? "Pode colar com ou sem www — eu ajusto pra você."
+                          : isValidUrl
+                            ? `✓ Vou analisar ${normalizedUrl}`
+                            : "Hmm, esse endereço não parece completo. Ex: minhaempresa.com.br"}
+                      </p>
                     </motion.div>
                   )}
                   {method === "text" && (
