@@ -28,6 +28,18 @@ vi.mock("@/integrations/supabase/client", () => {
 vi.mock("@/lib/referral", () => ({ getStoredReferral: () => null }));
 
 import { AuthProvider, useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+
+const mockSupabase = supabase as unknown as {
+  auth: {
+    onAuthStateChange: ReturnType<typeof vi.fn>;
+    getSession: ReturnType<typeof vi.fn>;
+    signInWithPassword: ReturnType<typeof vi.fn>;
+    signUp: ReturnType<typeof vi.fn>;
+    signOut: ReturnType<typeof vi.fn>;
+  };
+  from: ReturnType<typeof vi.fn>;
+};
 
 const wrapper = ({ children }: { children: ReactNode }) => (
   <AuthProvider>{children}</AuthProvider>
@@ -35,9 +47,11 @@ const wrapper = ({ children }: { children: ReactNode }) => (
 
 describe("useAuth", () => {
   beforeEach(() => {
-    listeners.length = 0;
     vi.clearAllMocks();
     mockSupabase.auth.getSession.mockResolvedValue({ data: { session: null } });
+    mockSupabase.auth.onAuthStateChange.mockReturnValue({
+      data: { subscription: { unsubscribe: vi.fn() } },
+    });
   });
 
   it("throws when used outside AuthProvider", () => {
