@@ -9,7 +9,6 @@ import AppLayout from "@/components/AppLayout";
 import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { lazy, Suspense } from "react";
-import OnboardingPreview from "@/pages/OnboardingPreview";
 
 // Retry wrapper for stale chunk errors after deploys
 function lazyRetry(factory: () => Promise<any>) {
