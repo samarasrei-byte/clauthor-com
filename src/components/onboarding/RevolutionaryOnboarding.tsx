@@ -716,7 +716,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         { icon: Cpu,   s: "Mapeando modelo de negócio" },
                         { icon: Radio, s: "Detectando a dor real" },
                         { icon: Users, s: "Cruzando com 20 departamentos" },
-                        { icon: Sparkles, s: "Montando recomendação perfeita" },
+                        { icon: Zap, s: "Montando recomendação perfeita" },
                       ].map(({ icon: I, s }, i) => (
                         <motion.div
                           key={s}
