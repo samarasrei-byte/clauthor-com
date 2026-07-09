@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { fetchAI } from "../_shared/ai-gateway.ts";
+import { streamAIChat } from "../_shared/streamChat.ts";
 import { checkRateLimit, rateLimitResponse, detectPromptInjection, scanToolArguments, securityHeaders } from "../_shared/security.ts";
 import { validateAndEnforcePolicy } from "../_shared/policy-engine.ts";
 import { autonomousExecute } from "../_shared/tool-executor.ts";
@@ -585,24 +586,16 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
       }
     }
 
-    // Resposta direta por streaming (rápida para conversa natural)
-    const response = await fetchAI({
+    // Resposta direta por streaming (rápida para conversa natural) — via shared helper
+    const stream = await streamAIChat({
       model: chatModel,
       messages: aiMessages,
-      stream: true,
       temperature: 0.25,
       max_tokens: 1200,
-    }, {
-      complexity: "auto",
+      extraHeaders: { complexity: "auto" },
     });
 
-    if (!response.ok) {
-      if (response.status === 429) return new Response(JSON.stringify({ error: "Rate limit exceeded" }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      if (response.status === 402) return new Response(JSON.stringify({ error: "Payment required" }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      const t = await response.text();
-      console.error("AI error:", response.status, t);
-      return new Response(JSON.stringify({ error: "AI gateway error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });
-    }
+    if (!stream.ok) return stream.response;
 
     // Estimate tokens conservatively (avoid over-charging)
     const inputTokens = (messages || []).reduce((sum: number, m: any) => {
@@ -624,7 +617,7 @@ Quando houver pedido claro de ação na plataforma, use tools com segurança e s
       }).then(() => {});
     }
 
-    return new Response(response.body, { headers: { ...corsHeaders, "Content-Type": "text/event-stream" } });
+    return stream.response;
   } catch (e) {
     console.error("omnix-chat error:", e);
     return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "Unknown error" }), { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } });

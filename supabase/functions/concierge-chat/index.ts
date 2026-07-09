@@ -5,6 +5,7 @@ import { checkRateLimit, rateLimitResponse, securityHeaders } from "../_shared/s
 import { createExecutionTracker } from "../_shared/resilience.ts";
 import { buildAgentContract, getTierSLA, getAreaLimits, type AgentContract } from "../_shared/agent-contract.ts";
 import { validateLimits } from "../_shared/policy-engine.ts";
+import { streamAIChat, validateMessages } from "../_shared/streamChat.ts";
 
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
@@ -344,28 +345,17 @@ Quando o usuário fornecer dados de acesso (senhas, tokens, API keys, telefones,
       }
     }
 
-    // Normal streaming response (no credential intent)
-    const response = await fetchAI({
+    // Normal streaming response (no credential intent) — via shared helper
+    const stream = await streamAIChat({
       model: "google/gemini-2.5-flash-lite",
       messages: apiMessages,
-      stream: true,
       max_tokens: 300,
       temperature: 0.6,
     });
 
-    if (!response.ok) {
-      aiStep.fail(`HTTP ${response.status}`);
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Muitas requisições." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Créditos esgotados." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      throw new Error("AI Gateway failed");
+    if (!stream.ok) {
+      aiStep.fail(`gateway_error`);
+      return stream.response;
     }
     aiStep.done();
 
@@ -391,9 +381,7 @@ Quando o usuário fornecer dados de acesso (senhas, tokens, API keys, telefones,
       ]);
     } catch {}
 
-    return new Response(response.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
-    });
+    return stream.response;
   } catch (error) {
     console.error("Concierge error:", error);
     return new Response(JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), {
