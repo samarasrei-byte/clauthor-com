@@ -440,7 +440,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     { key: "describe", lines: ["Sinal capturado. Agora, o que mais dói?"] },
     { key: "analyzing",lines: ["Cruzando 20 departamentos × 225 agentes…"] },
     { key: "reveal",   lines: [result ? `Match localizado com ${Math.round((result.confidence ?? 0.8) * 100)}% de confiança.` : ""] },
-    { key: "claim",    lines: ["Última etapa: fixar sua vaga na rede."] },
+    { key: "claim",    lines: ["Última etapa: liberar seu acesso ao dashboard."] },
   ];
   const currentIdx = STEP_ORDER.indexOf(step);
 
