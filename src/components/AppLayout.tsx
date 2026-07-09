@@ -47,9 +47,9 @@ const AppLayout = () => {
         <PlatformUpdatesDialog />
       </Suspense>
 
-      {/* Guided onboarding wizard for first access */}
+      {/* Revolutionary first-interaction experience */}
       <Suspense fallback={null}>
-        <GuidedOnboardingWizard />
+        <RevolutionaryOnboardingGate />
       </Suspense>
 
       {/* Thor daily greeting with token balance and top-up nudge */}
