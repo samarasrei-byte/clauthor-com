@@ -84,33 +84,27 @@ function NeuralBackdrop({ intensity }: { intensity: number }) {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className="absolute inset-0 bg-[#04040a]" />
-      {/* aurora */}
-      <motion.div
+      {/* aurora estática, sem luzes viajando */}
+      <div
         className="absolute -top-1/3 -left-1/4 w-[75vw] h-[75vw] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, #e11d48 0%, transparent 60%)", opacity: 0.25 + intensity * 0.25 }}
-        animate={{ x: [0, 60, -20, 0], y: [0, 40, -30, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        style={{ background: "radial-gradient(circle, #e11d48 0%, transparent 60%)", opacity: 0.18 + intensity * 0.12 }}
       />
-      <motion.div
+      <div
         className="absolute -bottom-1/3 -right-1/4 w-[75vw] h-[75vw] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 60%)", opacity: 0.25 + intensity * 0.25 }}
-        animate={{ x: [0, -50, 30, 0], y: [0, -40, 20, 0] }}
-        transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
+        style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 60%)", opacity: 0.16 + intensity * 0.12 }}
       />
-      <motion.div
+      <div
         className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[55vw] h-[55vw] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, #22d3ee 0%, transparent 60%)", opacity: 0.12 + intensity * 0.25 }}
-        animate={{ scale: [1, 1.2, 0.9, 1] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        style={{ background: "radial-gradient(circle, #22d3ee 0%, transparent 60%)", opacity: 0.10 + intensity * 0.10 }}
       />
 
-      {/* SVG neural mesh */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.35]" preserveAspectRatio="none" viewBox="0 0 100 100">
+      {/* SVG neural mesh (estático) */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.28]" preserveAspectRatio="none" viewBox="0 0 100 100">
         <defs>
           <linearGradient id="line" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#e11d48" stopOpacity="0.7" />
-            <stop offset="50%" stopColor="#a78bfa" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.7" />
+            <stop offset="0%" stopColor="#e11d48" stopOpacity="0.55" />
+            <stop offset="50%" stopColor="#a78bfa" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.55" />
           </linearGradient>
         </defs>
         {nodes.map((a, i) =>
@@ -119,49 +113,30 @@ function NeuralBackdrop({ intensity }: { intensity: number }) {
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist > 22) return null;
             return (
-              <motion.line
+              <line
                 key={`${a.id}-${b.id}`}
                 x1={a.x} y1={a.y} x2={b.x} y2={b.y}
                 stroke="url(#line)"
                 strokeWidth={0.08}
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 0.4 + intensity * 0.5 }}
-                transition={{ duration: 2, delay: (a.id % 10) * 0.15 }}
+                opacity={0.35 + intensity * 0.35}
               />
             );
           })
         )}
         {nodes.map((n) => (
-          <motion.circle
-            key={n.id}
-            cx={n.x} cy={n.y} r={0.22}
-            fill="#fff"
-            animate={{ opacity: [0.2, 0.9, 0.2] }}
-            transition={{ duration: 3 + (n.id % 4), repeat: Infinity, delay: n.id * 0.08 }}
-          />
+          <circle key={n.id} cx={n.x} cy={n.y} r={0.22} fill="#fff" opacity={0.5} />
         ))}
       </svg>
 
-      {/* Grid */}
+      {/* Grid sutil */}
       <div
-        className="absolute inset-0 opacity-[0.05]"
+        className="absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
             "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
           backgroundSize: "64px 64px",
           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
         }}
-      />
-
-      {/* Scanline */}
-      <motion.div
-        className="absolute inset-x-0 h-24 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent, rgba(167,139,250,0.08) 40%, rgba(34,211,238,0.12) 50%, rgba(225,29,72,0.08) 60%, transparent)",
-        }}
-        animate={{ y: ["-10%", "110%"] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
       />
 
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/70" />
