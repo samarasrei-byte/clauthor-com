@@ -543,10 +543,8 @@ const ClientDashboard = () => {
 
                 {activeSection === "overview" && (
                   <>
-                    <AmbientThorCard
-                      onOpenOmnix={() => setActiveSection("omnix")}
-                      onOpenLibrary={() => setActiveSection("library")}
-                    />
+                    {/* AmbientThorCard removido: HeroBriefing dentro de DashboardOverview
+                        agora consolida greeting + status + CTA numa única voz. */}
                     <DashboardOverview
                     loadingAgents={loadingAgents}
                     boardCount={boardCount}
