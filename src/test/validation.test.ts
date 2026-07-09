@@ -56,8 +56,7 @@ describe("validateMessages", () => {
   });
 
   it("rejeita content não-string", () => {
-    // @ts-expect-error - proposital
-    expect(validateMessages([{ role: "user", content: 42 }]).ok).toBe(false);
+    expect(validateMessages([{ role: "user", content: 42 as unknown as string }]).ok).toBe(false);
   });
 
   it("rejeita role inválido (proteção anti-injection)", () => {
