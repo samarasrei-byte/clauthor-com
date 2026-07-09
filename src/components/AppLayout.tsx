@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import Navbar from "./Navbar";
-import OnboardingWizard from "./onboarding/OnboardingWizard";
+// OnboardingWizard legado removido.
 import AgentLivePreview from "./library/AgentLivePreview";
 import { supabase } from "@/integrations/supabase/client";
 const ThorGreeter = lazy(() => import("./ThorGreeter"));
