@@ -44,7 +44,7 @@ const HeroTerminal = () => {
 
   return (
     <section
-      className="relative flex items-center px-5 sm:px-6 pt-24 pb-16 sm:pt-28 sm:pb-20 min-h-[calc(100svh-4rem)]"
+      className="relative px-5 sm:px-6 pt-10 pb-16 sm:pt-14 sm:pb-24"
       aria-label="Hero"
     >
       {/* soft radial red glow */}
