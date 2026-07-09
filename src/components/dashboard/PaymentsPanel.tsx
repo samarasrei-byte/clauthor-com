@@ -1,12 +1,15 @@
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import {
   CreditCard, Wallet, Globe, QrCode,
   ArrowUpRight, Shield, CheckCircle2, Clock,
-  Banknote, Coins, Lock, ExternalLink, Settings, Smartphone
+  Banknote, Coins, Lock, ExternalLink, Settings, Smartphone, Inbox, Receipt
 } from "lucide-react";
 
 interface PaymentsPanelProps {
@@ -15,6 +18,19 @@ interface PaymentsPanelProps {
 }
 
 const PaymentsPanel = ({ totalRevenue, subscriptionCount }: PaymentsPanelProps) => {
+  const { data: history = [], isLoading } = useQuery({
+    queryKey: ["admin-payments-panel-history"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("payment_history")
+        .select("id, item_name, type, amount_cents, currency, status, created_at")
+        .order("created_at", { ascending: false })
+        .limit(20);
+      if (error) throw error;
+      return data ?? [];
+    },
+  });
+
   const gateways = [
     {
       name: "PayPal",
