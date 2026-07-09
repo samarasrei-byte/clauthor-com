@@ -34,7 +34,7 @@ const AppLayout = () => {
         <Outlet />
       </main>
       
-      <OnboardingWizard isOpen={wizardOpen} onClose={() => setWizardOpen(false)} />
+      {/* OnboardingWizard legado removido. */}
       <AgentLivePreview
         agentName={testDriveAgent?.name || ""}
         agentDesc="Converse com este agente antes de contratar"
