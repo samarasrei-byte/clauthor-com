@@ -32,7 +32,7 @@ const GUIDE_STEPS: GuideStep[] = [
   {
     section: "library",
     title: "Biblioteca de Agentes",
-    message: "Esta é a Biblioteca - seu marketplace com 200+ agentes de IA em 37 squads e 15 departamentos. Navegue, compare e contrate os que combinam com suas necessidades.",
+    message: "Esta é a Biblioteca - seu marketplace com 200+ agentes de IA em 37 squads e 20 departamentos. Navegue, compare e contrate os que combinam com suas necessidades.",
   },
   {
     section: "war-room",

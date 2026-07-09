@@ -226,7 +226,7 @@ const t = {
     demoAgentName: "Investor Relations Agent",
     demoConversation: [
       { role: "investor" as const, text: "Why should I invest in CLAUTHOR now?" },
-      { role: "agent" as const, text: "Because you get in before scale. Two options: $100K for 10% or $200K for 20% \u2014 $1M valuation based on a real product. 200 autonomous AI agents, 53 squads, 15 departments \u2014 all operational." },
+      { role: "agent" as const, text: "Because you get in before scale. Two options: $100K for 10% or $200K for 20% \u2014 $1M valuation based on a real product. 200 autonomous AI agents, 53 squads, 20 departments \u2014 all operational." },
       { role: "investor" as const, text: "How do you monetize?" },
       { role: "agent" as const, text: "B2B SaaS by subscription. Average ticket $197/mo per squad. Event-driven = 96%+ gross margin. With 1,000 clients, that's $2.4M/yr in MRR." },
       { role: "investor" as const, text: "What's the expected return?" },
@@ -486,7 +486,7 @@ const t = {
     demoAgentName: "Agente de Rela\u00E7\u00F5es com Investidores",
     demoConversation: [
       { role: "investor" as const, text: "Por que eu deveria investir na CLAUTHOR agora?" },
-      { role: "agent" as const, text: "Porque voc\u00EA entra antes da escala. Duas op\u00E7\u00F5es: R$ 100K por 10% ou R$ 200K por 20% \u2014 valuation de R$ 1M baseado em produto real. 200 agentes de IA aut\u00F4nomos, 53 squads, 15 departamentos \u2014 tudo operacional." },
+      { role: "agent" as const, text: "Porque voc\u00EA entra antes da escala. Duas op\u00E7\u00F5es: R$ 100K por 10% ou R$ 200K por 20% \u2014 valuation de R$ 1M baseado em produto real. 200 agentes de IA aut\u00F4nomos, 53 squads, 20 departamentos \u2014 tudo operacional." },
       { role: "investor" as const, text: "Como monetizam?" },
       { role: "agent" as const, text: "SaaS B2B por assinatura. Ticket m\u00E9dio R$ 997/m\u00EAs por squad. Event-driven = margem bruta de 96%+. Com 1.000 clientes, s\u00E3o R$ 12M/ano em MRR." },
       { role: "investor" as const, text: "Qual o retorno esperado?" },
