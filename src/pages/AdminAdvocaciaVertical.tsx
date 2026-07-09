@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useAdminGuard } from "@/hooks/useAdminGuard";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
-import { Scale, Search, ArrowLeft, ExternalLink, Users, Activity } from "lucide-react";
+import { Scale, Search, ArrowLeft, ExternalLink, Users, Activity, Loader2 } from "lucide-react";
 
 /**
  * AdminAdvocaciaVertical — Painel admin para a vertical jurídica.
