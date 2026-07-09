@@ -11,43 +11,7 @@ import { getLegalPrompt } from "../_shared/legal-prompts.ts";
 import { resolveDepartmentPromptForAgent } from "../_shared/department-prompts.ts";
 import { incrementAgentUsage, resolvePriceTier, type AgentUsageResult } from "../_shared/metered-billing.ts";
 
-// ── AES-256-GCM decryption for credential bridge ──
-const ALGO = "AES-GCM";
-const IV_LENGTH = 12;
-const ENC_PREFIX = "senc:v1:";
-
-async function getEncryptionKey(): Promise<CryptoKey> {
-  const secret = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-  const encoder = new TextEncoder();
-  const keyMaterial = await crypto.subtle.importKey("raw", encoder.encode(secret), "PBKDF2", false, ["deriveKey"]);
-  return crypto.subtle.deriveKey(
-    { name: "PBKDF2", salt: encoder.encode("clauthor-server-credential-salt-v1"), iterations: 100_000, hash: "SHA-256" },
-    keyMaterial,
-    { name: ALGO, length: 256 },
-    false,
-    ["decrypt"]
-  );
-}
-
-function base64ToArrayBuffer(base64: string): ArrayBuffer {
-  const binary = atob(base64);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return bytes.buffer;
-}
-
-async function decryptValueForExecution(encrypted: string): Promise<string> {
-  if (!encrypted.startsWith(ENC_PREFIX)) return encrypted;
-  const payload = encrypted.slice(ENC_PREFIX.length);
-  const [ivB64, cipherB64] = payload.split(":");
-  const key = await getEncryptionKey();
-  const plaintext = await crypto.subtle.decrypt(
-    { name: ALGO, iv: new Uint8Array(base64ToArrayBuffer(ivB64)) },
-    key,
-    base64ToArrayBuffer(cipherB64)
-  );
-  return new TextDecoder().decode(plaintext);
-}
+import { decryptValueForExecution } from "./crypto.ts";
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
 // ── Episodic memory (long-term) helpers ───────────────────────────────────
