@@ -738,105 +738,154 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                 {step === "reveal" && result && (
                   <motion.div
                     key="reveal"
-                    initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                    initial={{ opacity: 0, y: 24, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -20 }}
-                    className="space-y-6"
+                    transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    className="w-full max-w-4xl mx-auto"
                   >
-                    <div className="space-y-2">
-                      <div className="flex items-center gap-2">
-                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                        <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-emerald-300">
+                    <div className="relative bg-white/[0.03] backdrop-blur-2xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+                      {/* Header */}
+                      <div className="px-6 md:px-10 pt-8 md:pt-10 pb-6 md:pb-8 border-b border-white/5">
+                        <motion.span
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.05 }}
+                          className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[10px] font-bold uppercase tracking-widest mb-4"
+                          style={{
+                            background: `${needMeta.color}12`,
+                            borderColor: `${needMeta.color}33`,
+                            color: needMeta.color,
+                          }}
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                           Match · {Math.round((result.confidence ?? 0.85) * 100)}% de confiança
-                        </p>
+                        </motion.span>
+                        <motion.h2
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.12 }}
+                          className="font-display text-4xl md:text-5xl font-extrabold tracking-tight leading-[1.05] bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent"
+                        >
+                          {result.recommendation_name}
+                        </motion.h2>
+                        <motion.p
+                          initial={{ opacity: 0, y: 8 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.18 }}
+                          className="mt-3 text-sm md:text-base text-white/60 leading-relaxed max-w-2xl"
+                        >
+                          {result.recommendation_pitch}
+                        </motion.p>
                       </div>
-                      <h2 className="font-display text-3xl md:text-4xl font-bold leading-tight">
-                        Você precisa de{" "}
-                        <span style={{ color: needMeta.color }}>{needMeta.label.toLowerCase()}</span>.
-                      </h2>
-                    </div>
 
-                    <motion.div
-                      layout
-                      className={cn(
-                        "relative rounded-3xl border border-white/15 backdrop-blur-2xl overflow-hidden",
-                        "bg-gradient-to-br", needMeta.gradient
-                      )}
-                    >
-                      <div className="relative p-6 md:p-8 space-y-5 bg-black/50">
-                        <div className="flex items-start gap-4">
+                      <div className="p-6 md:p-10 space-y-8 md:space-y-10">
+                        {/* Contexto */}
+                        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
                           <motion.div
-                            initial={{ scale: 0, rotate: -20 }}
-                            animate={{ scale: 1, rotate: 0 }}
-                            transition={{ type: "spring", damping: 12 }}
-                            className="w-14 h-14 rounded-2xl flex items-center justify-center border border-white/20 shrink-0"
-                            style={{ background: `${needMeta.color}22`, boxShadow: `0 0 30px ${needMeta.color}55` }}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.24 }}
+                            className="space-y-2"
                           >
-                            <NeedIcon className="w-7 h-7" style={{ color: needMeta.color }} />
+                            <h4 className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest">Seu negócio</h4>
+                            <p className="text-white/75 leading-relaxed text-sm">{result.business_summary}</p>
                           </motion.div>
-                          <div className="flex-1">
-                            <p className="text-[10px] font-mono uppercase tracking-widest text-white/50">Recomendação</p>
-                            <h3 className="font-display text-2xl font-bold">{result.recommendation_name}</h3>
-                            <p className="text-sm text-white/70 mt-1 leading-relaxed">{result.recommendation_pitch}</p>
-                          </div>
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="space-y-2"
+                          >
+                            <h4 className="text-[10px] font-mono text-rose-400 uppercase tracking-widest">Dor detectada</h4>
+                            <p className="text-white/75 leading-relaxed text-sm">{result.detected_pain}</p>
+                          </motion.div>
                         </div>
 
-                        <div className="grid md:grid-cols-2 gap-3">
-                          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mb-1">Seu negócio</p>
-                            <p className="text-sm text-white/90 leading-relaxed">{result.business_summary}</p>
-                          </div>
-                          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mb-1">Dor detectada</p>
-                            <p className="text-sm text-white/90 leading-relaxed">{result.detected_pain}</p>
-                          </div>
-                        </div>
-
+                        {/* Agentes */}
                         {result.agents?.length > 0 && (
-                          <div>
-                            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mb-2">Agentes ativados</p>
-                            <div className="flex flex-wrap gap-1.5">
-                              {result.agents.slice(0, 8).map((a, i) => (
-                                <motion.span
-                                  key={a}
-                                  initial={{ opacity: 0, y: 6 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: 0.4 + i * 0.08 }}
-                                  className="text-xs px-2.5 py-1 rounded-full bg-white/10 border border-white/15 backdrop-blur"
-                                >
-                                  <span className="inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle" style={{ background: needMeta.color }} />
-                                  {a}
-                                </motion.span>
-                              ))}
+                          <div className="space-y-4">
+                            <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Agentes ativados</h4>
+                            <div className="flex flex-wrap gap-2.5">
+                              {result.agents.slice(0, 8).map((a, i) => {
+                                const palette = [
+                                  { bg: "bg-violet-500/10", border: "border-violet-500/30", dot: "bg-violet-400" },
+                                  { bg: "bg-rose-500/10",   border: "border-rose-500/30",   dot: "bg-rose-400" },
+                                  { bg: "bg-cyan-500/10",   border: "border-cyan-500/30",   dot: "bg-cyan-400" },
+                                ][i % 3];
+                                return (
+                                  <motion.div
+                                    key={a}
+                                    initial={{ opacity: 0, y: 8, scale: 0.95 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    transition={{ delay: 0.35 + i * 0.06 }}
+                                    className={cn(
+                                      "flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border",
+                                      palette.bg, palette.border
+                                    )}
+                                  >
+                                    <span className={cn("w-1.5 h-1.5 rounded-full", palette.dot)} />
+                                    <span className="text-xs font-semibold text-white/90">{a}</span>
+                                  </motion.div>
+                                );
+                              })}
                             </div>
                           </div>
                         )}
 
+                        {/* Outcome band with animated glow */}
                         {result.expected_outcome && (
-                          <div className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-400/20">
-                            <Zap className="w-5 h-5 text-emerald-300 shrink-0" />
-                            <p className="text-sm leading-relaxed">
-                              <span className="text-white/60">Em 30 dias: </span>{result.expected_outcome}
-                            </p>
-                          </div>
+                          <motion.div
+                            initial={{ opacity: 0, y: 12 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.55 }}
+                            className="relative group"
+                          >
+                            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 blur opacity-60 group-hover:opacity-100 transition duration-700" />
+                            <div className="relative bg-[#0A0A0A] border border-emerald-500/30 rounded-2xl p-5 md:p-6 flex items-center justify-between gap-4">
+                              <div className="min-w-0">
+                                <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest mb-1">Outcome projetado</p>
+                                <p className="text-base md:text-lg font-bold text-white leading-snug">{result.expected_outcome}</p>
+                              </div>
+                              <div className="text-right shrink-0">
+                                <span className="block text-2xl md:text-3xl font-black text-emerald-400 tracking-tighter leading-none">
+                                  {Math.round((result.confidence ?? 0.85) * 100)}%
+                                </span>
+                                <p className="text-[10px] text-white/40 uppercase tracking-widest mt-1">Confiança</p>
+                              </div>
+                            </div>
+                          </motion.div>
                         )}
-                      </div>
-                    </motion.div>
 
-                    <div className="flex items-center justify-between pt-2">
-                      <Button variant="ghost" onClick={() => setStep("describe")} className="text-white/60 hover:text-white hover:bg-white/5">
-                        <ArrowLeft className="w-4 h-4 mr-1.5" /> Refinar sinal
-                      </Button>
-                      <Button
-                        size="lg"
-                        onClick={() => setStep("claim")}
-                        className="bg-white text-black hover:bg-white/90 rounded-full gap-2 h-12 px-6 shadow-[0_0_50px_rgba(225,29,72,0.4)]"
-                      >
-                        Fixar minha vaga <ArrowRight className="w-4 h-4" />
-                      </Button>
+                        {/* CTA */}
+                        <motion.div
+                          initial={{ opacity: 0, y: 12 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.7 }}
+                          className="pt-2 space-y-4"
+                        >
+                          <button
+                            onClick={() => setStep("claim")}
+                            className="w-full group relative flex items-center justify-center gap-3 bg-white text-black font-extrabold text-base md:text-lg py-4 md:py-5 rounded-2xl transition-all hover:bg-cyan-300 hover:scale-[1.01] active:scale-[0.99] shadow-[0_20px_50px_-15px_rgba(255,255,255,0.25)] cursor-pointer"
+                          >
+                            Fixar minha vaga e entrar no dashboard
+                            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
+                          </button>
+                          <div className="flex items-center justify-between text-[11px] text-white/30 font-mono tracking-widest uppercase">
+                            <button
+                              onClick={() => setStep("describe")}
+                              className="inline-flex items-center gap-1.5 hover:text-white/70 transition-colors"
+                            >
+                              <ArrowLeft className="w-3.5 h-3.5" /> Refinar sinal
+                            </button>
+                            <span>Próximo passo · acesso imediato</span>
+                          </div>
+                        </motion.div>
+                      </div>
                     </div>
                   </motion.div>
                 )}
+
 
                 {/* CLAIM */}
                 {step === "claim" && (
