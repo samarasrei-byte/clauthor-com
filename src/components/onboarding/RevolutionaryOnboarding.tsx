@@ -883,7 +883,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 blur opacity-60 group-hover:opacity-100 transition duration-700" />
                             <div className="relative bg-[#0A0A0A] border border-emerald-500/30 rounded-2xl p-5 md:p-6 flex items-center justify-between gap-4">
                               <div className="min-w-0">
-                                <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest mb-1">Outcome projetado</p>
+                                <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest mb-1">Resultado esperado em 30 dias</p>
                                 <p className="text-base md:text-lg font-bold text-white leading-snug">{result.expected_outcome}</p>
                               </div>
                               <div className="text-right shrink-0">
