@@ -49,7 +49,7 @@ const TIMELINE_STEPS: TimelineStep[] = [
     details: [
       "✅ 200 agentes especializados catalogados",
       "✅ 37 squads inteligentes configurados",
-      "✅ 15 departamentos estruturados",
+      "✅ 20 departamentos estruturados",
       "✅ Sistema Agent-to-Agent (A2A) com delegação recursiva",
       "✅ Memória persistente por agente e por squad",
     ],

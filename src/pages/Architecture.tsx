@@ -578,7 +578,7 @@ const Architecture = () => {
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary-glow to-primary">operada por agentes de IA</span>
           </motion.h1>
           <motion.p variants={fadeUp} custom={2} className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed mb-4">
-            {totalAgents} agentes em 15 departamentos. Orquestração inteligente. Execução autônoma. Tudo em um só lugar.
+            {totalAgents} agentes em 20 departamentos. Orquestração inteligente. Execução autônoma. Tudo em um só lugar.
           </motion.p>
           <motion.p variants={fadeUp} custom={3} className="text-sm text-muted-foreground/50 max-w-xl mx-auto mb-10">
             Clique em cada seção para explorar os detalhes técnicos da arquitetura.
@@ -1106,7 +1106,7 @@ const Architecture = () => {
             Uma empresa inteira.<br /><span className="text-primary">Operada por IA.</span>
           </motion.h2>
           <motion.p variants={fadeUp} className="text-muted-foreground text-sm leading-relaxed mb-10">
-            {totalAgents} agentes. 15 departamentos. 37 squads. Orquestração inteligente. Tudo rodando 24/7 com {totalSavingsPercent}% de economia vs contratação tradicional.
+            {totalAgents} agentes. 20 departamentos. 37 squads. Orquestração inteligente. Tudo rodando 24/7 com {totalSavingsPercent}% de economia vs contratação tradicional.
           </motion.p>
           <motion.div variants={fadeUp} className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <div className="flex items-center gap-3 px-5 py-3.5 rounded-xl border border-primary/20 bg-primary/[0.03]">

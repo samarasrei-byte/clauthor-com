@@ -447,12 +447,12 @@
     "footer_legal": "Legal",
     "footer_terms_label": "Términos de Uso",
     "footer_privacy_label": "Privacidad",
-    "footer_desc": "Fuerza laboral de IA que orquesta 200 agentes autónomos en 15 departamentos corporativos.",
+    "footer_desc": "Fuerza laboral de IA que orquesta 200 agentes autónomos en 20 departamentos corporativos.",
     "details_arrow": "Detalles →",
     "actions_label": "acciones",
     "view_all_80": "Ver todos los 83 agentes",
     "seo_title": "CLAUTHOR - Empleados de IA para tu Empresa",
-    "seo_description": "Plataforma de agentes autónomos de IA que reemplazan departamentos enteros. 200 agentes, 15 departamentos, 24/7.",
+    "seo_description": "Plataforma de agentes autónomos de IA que reemplazan departamentos enteros. 200 agentes, 20 departamentos, 24/7.",
     "final_cta_desc": "Arma tu equipo de agentes en 5 minutos. Sin código, sin tarjeta de crédito. Empieza ahora y ve resultados el primer día."
   },
   "pricing_page": {
@@ -654,7 +654,7 @@
   "navbar": {
     "solutions": "Soluciones", "marketplace_label": "Marketplace",
     "marketplace_desc": "200 agentes individuales para contratar", "ai_teams_label": "Equipos de IA",
-    "ai_teams_desc": "15 departamentos completos con 83 agentes", "new_badge": "NUEVO"
+    "ai_teams_desc": "20 departamentos completos con 83 agentes", "new_badge": "NUEVO"
   },
   "community": {
     "badge": "Comunidad CLAUTHOR", "title": "Foro de", "title_hl": "IA y Automatización",
