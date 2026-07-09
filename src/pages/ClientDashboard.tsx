@@ -19,14 +19,13 @@ import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import DashboardSectionRenderer from "@/components/dashboard/DashboardSectionRenderer";
 import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
-import QuickOnboardingWizard from "@/components/onboarding/QuickOnboardingWizard";
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
 const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardGate"));
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
-// FirstAccessOnboarding aposentado — substituído pelo GuidedOnboarding no AppLayout
-import MagicMomentCard from "@/components/onboarding/MagicMomentCard";
+// Onboarding legado (Quick/FirstAccess/MagicMoment) removido — substituído pelo
+// RevolutionaryOnboardingGate global montado em AppLayout.
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
 import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
