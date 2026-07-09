@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { lazy, Suspense, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const SmartOnboarding = lazy(() => import("@/components/onboarding/SmartOnboarding"));
+// SmartOnboarding removido — RevolutionaryOnboardingGate cobre o primeiro contato.
 const LiveDemoSection = lazy(() => import("@/components/landing/LiveDemoSection"));
 const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
