@@ -196,8 +196,7 @@ serve(async (req) => {
     const recentMessages = messages.slice(isThor ? -8 : -10);
 
     const aiStep = tracker.step("ai_call");
-    // Perf: Thor usa flash-lite (menor TTFT); Support mantém flash-preview
-    const response = await fetchAI({
+    const { ok, response } = await streamAIChat({
       model: isThor ? "google/gemini-2.5-flash-lite" : "google/gemini-3-flash-preview",
       messages: [
         { role: "system", content: systemPrompt },
@@ -205,15 +204,11 @@ serve(async (req) => {
       ],
       max_tokens: isThor ? 380 : 700,
       temperature: isThor ? 0.3 : 0.6,
-      stream: true,
     });
 
-    if (!response.ok) {
+    if (!ok) {
       aiStep.fail(`HTTP ${response.status}`);
-      return new Response(
-        JSON.stringify({ error: "AI service unavailable" }),
-        { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
+      return response;
     }
     aiStep.done();
 
@@ -231,15 +226,7 @@ serve(async (req) => {
       } catch {}
     }
 
-    return new Response(response.body, {
-      headers: {
-        ...corsHeaders,
-        ...securityHeaders,
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        Connection: "keep-alive",
-      },
-    });
+    return response;
   } catch (error) {
     console.error("Support chat error:", error);
     return new Response(
