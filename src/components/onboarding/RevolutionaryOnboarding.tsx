@@ -937,9 +937,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                   >
                     <div className="space-y-2">
                       <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-white/50">Última etapa · 03 / 03</p>
-                      <h2 className="font-display text-3xl md:text-4xl font-bold">Fixar sua vaga na rede.</h2>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold">Seja bem-vindo à sua rede.</h2>
                       <p className="text-white/60 max-w-md">
-                        Vou reservar {result?.recommendation_name ? <span className="text-white">“{result.recommendation_name}”</span> : "sua solução"} e liberar acesso imediato ao dashboard.
+                        Vou ativar {result?.recommendation_name ? <span className="text-white">“{result.recommendation_name}”</span> : "seu departamento"} e liberar acesso imediato ao seu dashboard.
                       </p>
                     </div>
 
