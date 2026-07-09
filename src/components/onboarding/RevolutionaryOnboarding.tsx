@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Sparkles, Globe, ClipboardPaste, FileText, ArrowRight, ArrowLeft,
+  Sparkles, Globe, ClipboardPaste, ArrowRight, ArrowLeft,
   Loader2, CheckCircle2, Bot, Users, Building2, Zap, ShieldCheck, X,
+  Radio, Cpu, Waves,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -33,90 +34,247 @@ interface Props {
 }
 
 const NEED_META = {
-  agent: { icon: Bot, label: "Agente Individual", color: "#a78bfa", gradient: "from-violet-500/30 to-fuchsia-500/10" },
-  squad: { icon: Users, label: "Squad Coordenado", color: "#e11d48", gradient: "from-rose-500/30 to-orange-500/10" },
-  department: { icon: Building2, label: "Departamento Completo", color: "#22d3ee", gradient: "from-cyan-500/30 to-blue-500/10" },
+  agent:      { icon: Bot,        label: "Agente Individual",     color: "#a78bfa", gradient: "from-violet-500/30 to-fuchsia-500/10" },
+  squad:      { icon: Users,      label: "Squad Coordenado",      color: "#f43f5e", gradient: "from-rose-500/30 to-orange-500/10" },
+  department: { icon: Building2,  label: "Departamento Completo", color: "#22d3ee", gradient: "from-cyan-500/30 to-blue-500/10" },
 } as const;
 
-/** Holographic aurora background with drifting particles. */
-function HolographicBackdrop() {
+const STEP_ORDER: Step[] = ["welcome", "input", "describe", "analyzing", "reveal", "claim", "done"];
+const STEP_LABELS: Record<Step, string> = {
+  welcome:   "Contato",
+  input:     "Sinal",
+  describe:  "Dor",
+  analyzing: "Fusão",
+  reveal:    "Match",
+  claim:     "Vaga",
+  done:      "Online",
+};
+
+/* ─────────────────────────── Neural constellation ─────────────────────────── */
+
+function NeuralBackdrop({ intensity }: { intensity: number }) {
+  // intensity 0..1 grows as user progresses
+  const nodes = useMemo(
+    () =>
+      Array.from({ length: 42 }).map((_, i) => ({
+        id: i,
+        x: (i * 71) % 100,
+        y: (i * 43) % 100,
+        d: 3 + (i % 5),
+      })),
+    []
+  );
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
-      {/* Deep base */}
-      <div className="absolute inset-0 bg-[#05050a]" />
-      {/* Aurora blobs */}
+      <div className="absolute inset-0 bg-[#04040a]" />
+      {/* aurora */}
       <motion.div
-        className="absolute -top-1/4 -left-1/4 w-[70vw] h-[70vw] rounded-full blur-3xl opacity-40"
-        style={{ background: "radial-gradient(circle, #e11d48 0%, transparent 60%)" }}
+        className="absolute -top-1/3 -left-1/4 w-[75vw] h-[75vw] rounded-full blur-3xl"
+        style={{ background: "radial-gradient(circle, #e11d48 0%, transparent 60%)", opacity: 0.25 + intensity * 0.25 }}
         animate={{ x: [0, 60, -20, 0], y: [0, 40, -30, 0] }}
         transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute -bottom-1/4 -right-1/4 w-[70vw] h-[70vw] rounded-full blur-3xl opacity-40"
-        style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 60%)" }}
+        className="absolute -bottom-1/3 -right-1/4 w-[75vw] h-[75vw] rounded-full blur-3xl"
+        style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 60%)", opacity: 0.25 + intensity * 0.25 }}
         animate={{ x: [0, -50, 30, 0], y: [0, -40, 20, 0] }}
         transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[50vw] h-[50vw] rounded-full blur-3xl opacity-25"
-        style={{ background: "radial-gradient(circle, #22d3ee 0%, transparent 60%)" }}
+        className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[55vw] h-[55vw] rounded-full blur-3xl"
+        style={{ background: "radial-gradient(circle, #22d3ee 0%, transparent 60%)", opacity: 0.12 + intensity * 0.25 }}
         animate={{ scale: [1, 1.2, 0.9, 1] }}
         transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
-      {/* Grid overlay */}
+
+      {/* SVG neural mesh */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.35]" preserveAspectRatio="none" viewBox="0 0 100 100">
+        <defs>
+          <linearGradient id="line" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#e11d48" stopOpacity="0.7" />
+            <stop offset="50%" stopColor="#a78bfa" stopOpacity="0.6" />
+            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.7" />
+          </linearGradient>
+        </defs>
+        {nodes.map((a, i) =>
+          nodes.slice(i + 1, i + 4).map((b) => {
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist > 22) return null;
+            return (
+              <motion.line
+                key={`${a.id}-${b.id}`}
+                x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+                stroke="url(#line)"
+                strokeWidth={0.08}
+                initial={{ pathLength: 0, opacity: 0 }}
+                animate={{ pathLength: 1, opacity: 0.4 + intensity * 0.5 }}
+                transition={{ duration: 2, delay: (a.id % 10) * 0.15 }}
+              />
+            );
+          })
+        )}
+        {nodes.map((n) => (
+          <motion.circle
+            key={n.id}
+            cx={n.x} cy={n.y} r={0.22}
+            fill="#fff"
+            animate={{ opacity: [0.2, 0.9, 0.2] }}
+            transition={{ duration: 3 + (n.id % 4), repeat: Infinity, delay: n.id * 0.08 }}
+          />
+        ))}
+      </svg>
+
+      {/* Grid */}
       <div
-        className="absolute inset-0 opacity-[0.07]"
+        className="absolute inset-0 opacity-[0.05]"
         style={{
           backgroundImage:
             "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-          backgroundSize: "60px 60px",
+          backgroundSize: "64px 64px",
           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
         }}
       />
-      {/* Particles */}
-      {Array.from({ length: 40 }).map((_, i) => (
-        <motion.span
-          key={i}
-          className="absolute w-1 h-1 rounded-full bg-white/60"
-          style={{ left: `${(i * 37) % 100}%`, top: `${(i * 53) % 100}%` }}
-          animate={{ opacity: [0.1, 0.9, 0.1], y: [0, -30, 0] }}
-          transition={{ duration: 4 + (i % 6), repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
-        />
-      ))}
-      {/* Vignette */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60" />
+
+      {/* Scanline */}
+      <motion.div
+        className="absolute inset-x-0 h-24 pointer-events-none"
+        style={{
+          background:
+            "linear-gradient(to bottom, transparent, rgba(167,139,250,0.08) 40%, rgba(34,211,238,0.12) 50%, rgba(225,29,72,0.08) 60%, transparent)",
+        }}
+        animate={{ y: ["-10%", "110%"] }}
+        transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
+      />
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/70" />
     </div>
   );
 }
 
-/** Pulsing holographic orb representing Thor. */
-function ThorOrb({ pulsing = true }: { pulsing?: boolean }) {
+/* ─────────────────────────── Orb ─────────────────────────── */
+
+function ThorOrb({ size = 96, pulsing = true }: { size?: number; pulsing?: boolean }) {
   return (
-    <div className="relative w-24 h-24 mx-auto">
+    <div className="relative mx-auto" style={{ width: size, height: size }}>
       <motion.div
         className="absolute inset-0 rounded-full"
         style={{ background: "conic-gradient(from 0deg, #e11d48, #a78bfa, #22d3ee, #e11d48)" }}
         animate={pulsing ? { rotate: 360 } : {}}
         transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
       />
-      <div className="absolute inset-[3px] rounded-full bg-[#05050a] flex items-center justify-center">
+      <div className="absolute inset-[3px] rounded-full bg-[#04040a] flex items-center justify-center backdrop-blur-xl">
         <motion.div
-          animate={pulsing ? { scale: [1, 1.15, 1], opacity: [0.7, 1, 0.7] } : {}}
+          animate={pulsing ? { scale: [1, 1.12, 1], opacity: [0.75, 1, 0.75] } : {}}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <Sparkles className="w-8 h-8 text-white" strokeWidth={1.4} />
+          <Sparkles style={{ width: size * 0.34, height: size * 0.34 }} className="text-white" strokeWidth={1.4} />
         </motion.div>
       </div>
       {pulsing && (
-        <motion.div
-          className="absolute inset-0 rounded-full border border-white/20"
-          animate={{ scale: [1, 1.6], opacity: [0.6, 0] }}
-          transition={{ duration: 2.2, repeat: Infinity, ease: "easeOut" }}
-        />
+        <>
+          <motion.div
+            className="absolute inset-0 rounded-full border border-white/20"
+            animate={{ scale: [1, 1.7], opacity: [0.6, 0] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut" }}
+          />
+          <motion.div
+            className="absolute inset-0 rounded-full border border-white/10"
+            animate={{ scale: [1, 2.1], opacity: [0.4, 0] }}
+            transition={{ duration: 2.4, repeat: Infinity, ease: "easeOut", delay: 0.6 }}
+          />
+        </>
       )}
     </div>
   );
 }
+
+/* ─────────────────────────── Typewriter ─────────────────────────── */
+
+function Typewriter({ text, speed = 18, onDone }: { text: string; speed?: number; onDone?: () => void }) {
+  const [i, setI] = useState(0);
+  useEffect(() => {
+    setI(0);
+  }, [text]);
+  useEffect(() => {
+    if (i >= text.length) { onDone?.(); return; }
+    const t = setTimeout(() => setI((p) => p + 1), speed);
+    return () => clearTimeout(t);
+  }, [i, text, speed, onDone]);
+  return (
+    <span>
+      {text.slice(0, i)}
+      {i < text.length && <span className="inline-block w-[2px] h-[1em] align-middle bg-white/70 ml-0.5 animate-pulse" />}
+    </span>
+  );
+}
+
+/* ─────────────────────────── Step rail ─────────────────────────── */
+
+function StepRail({ current }: { current: Step }) {
+  const currentIdx = STEP_ORDER.indexOf(current);
+  const visible: Step[] = ["welcome", "input", "describe", "analyzing", "reveal", "claim"];
+  return (
+    <div className="flex items-center gap-2">
+      {visible.map((s, i) => {
+        const idx = STEP_ORDER.indexOf(s);
+        const state = idx < currentIdx ? "done" : idx === currentIdx ? "active" : "pending";
+        return (
+          <div key={s} className="flex items-center gap-2">
+            <div className="flex flex-col items-center gap-1.5">
+              <motion.div
+                animate={
+                  state === "active"
+                    ? { boxShadow: ["0 0 0 rgba(167,139,250,0)", "0 0 22px rgba(167,139,250,0.7)", "0 0 0 rgba(167,139,250,0)"] }
+                    : {}
+                }
+                transition={{ duration: 1.8, repeat: Infinity }}
+                className={cn(
+                  "w-2.5 h-2.5 rounded-full border transition-colors",
+                  state === "done" && "bg-cyan-300 border-cyan-200",
+                  state === "active" && "bg-violet-400 border-violet-200",
+                  state === "pending" && "bg-white/5 border-white/20"
+                )}
+              />
+              <span className={cn(
+                "text-[9px] uppercase tracking-widest font-mono",
+                state === "pending" ? "text-white/25" : "text-white/70"
+              )}>{STEP_LABELS[s]}</span>
+            </div>
+            {i < visible.length - 1 && (
+              <div className={cn(
+                "w-8 h-px transition-colors -mt-4",
+                idx < currentIdx ? "bg-cyan-300/60" : "bg-white/10"
+              )} />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* ─────────────────────────── Narrative rail (Thor messages) ─────────────────────────── */
+
+function ThorLine({ children, delay = 0, typing = false }: { children: React.ReactNode; delay?: number; typing?: boolean }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, delay }}
+      className="flex items-start gap-2.5"
+    >
+      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-rose-500 via-violet-500 to-cyan-500 flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_18px_rgba(167,139,250,0.5)]">
+        <Sparkles className="w-3 h-3 text-white" strokeWidth={2} />
+      </div>
+      <div className="text-[13px] text-white/75 leading-relaxed font-mono">
+        {typing && typeof children === "string" ? <Typewriter text={children} /> : children}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ─────────────────────────── Component ─────────────────────────── */
 
 export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: Props) {
   const { user } = useAuth();
@@ -131,15 +289,16 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
   const [claim, setClaim] = useState({ email: user?.email ?? "", whatsapp: "", company: "" });
   const firstInputRef = useRef<HTMLInputElement>(null);
 
+  const firstName = (user?.user_metadata?.full_name ?? "").split(" ")[0] || "";
+
   useEffect(() => {
-    if (isOpen && step === "input") setTimeout(() => firstInputRef.current?.focus(), 300);
+    if (isOpen && step === "input") setTimeout(() => firstInputRef.current?.focus(), 350);
   }, [isOpen, step]);
 
   useEffect(() => {
     if (user?.email) setClaim((c) => ({ ...c, email: user.email ?? c.email }));
   }, [user?.email]);
 
-  // Aceita "site.com", "www.site.com.br", "https://site.com/pagina" — normaliza depois.
   const normalizedUrl = useMemo(() => {
     const raw = url.trim();
     if (!raw) return "";
@@ -150,11 +309,8 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     if (!normalizedUrl) return false;
     try {
       const u = new URL(normalizedUrl);
-      // precisa ter um domínio com ponto (ex: algo.com, algo.com.br)
       return /^[^\s.]+\.[^\s.]+/.test(u.hostname);
-    } catch {
-      return false;
-    }
+    } catch { return false; }
   }, [normalizedUrl]);
 
   const canAnalyze = useMemo(() => {
@@ -162,6 +318,11 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     if (method === "text") return text.trim().length > 40;
     return false;
   }, [method, isValidUrl, text]);
+
+  const intensity = useMemo(() => {
+    const i = STEP_ORDER.indexOf(step);
+    return Math.min(1, i / (STEP_ORDER.length - 1));
+  }, [step]);
 
   async function runAnalysis() {
     setLoading(true);
@@ -176,8 +337,11 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
-      setResult(data as Classification);
-      setStep("reveal");
+      // ensure the analyze animation has time to breathe
+      setTimeout(() => {
+        setResult(data as Classification);
+        setStep("reveal");
+      }, 800);
     } catch (e: any) {
       toast.error("Não consegui analisar agora. Tente novamente.", { description: e?.message });
       setStep("describe");
@@ -221,10 +385,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       if (error && !String(error.message).includes("duplicate")) throw error;
       await markOnboarded();
       setStep("done");
-      setTimeout(() => {
-        onComplete();
-        navigate("/dashboard");
-      }, 2400);
+      setTimeout(() => { onComplete(); navigate("/dashboard"); }, 2600);
     } catch (e: any) {
       toast.error("Não consegui salvar sua vaga.", { description: e?.message });
     } finally {
@@ -242,6 +403,17 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
   const NeedIcon = result ? NEED_META[result.need_type].icon : Bot;
   const needMeta = result ? NEED_META[result.need_type] : NEED_META.agent;
 
+  /* Narrative log — accumulates on the left */
+  const narrative: { key: Step; lines: (string | React.ReactNode)[] }[] = [
+    { key: "welcome",  lines: [`Estabelecendo canal seguro${firstName ? ` com ${firstName}` : ""}…`, "225 agentes online. Aguardando seu sinal."] },
+    { key: "input",    lines: [method === "url" ? "Canal aberto. Aponte para o domínio." : method === "text" ? "Canal aberto. Descreva o negócio em texto." : "Escolha o vetor de entrada."] },
+    { key: "describe", lines: ["Sinal capturado. Agora, o que mais dói?"] },
+    { key: "analyzing",lines: ["Cruzando 20 departamentos × 225 agentes…"] },
+    { key: "reveal",   lines: [result ? `Match localizado com ${Math.round((result.confidence ?? 0.8) * 100)}% de confiança.` : ""] },
+    { key: "claim",    lines: ["Última etapa: fixar sua vaga na rede."] },
+  ];
+  const currentIdx = STEP_ORDER.indexOf(step);
+
   return (
     <AnimatePresence>
       <motion.div
@@ -251,401 +423,524 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
         exit={{ opacity: 0 }}
         className="fixed inset-0 z-[100] text-white"
       >
-        <HolographicBackdrop />
+        <NeuralBackdrop intensity={intensity} />
 
-        {/* Skip */}
-        <button
-          onClick={handleSkip}
-          className="absolute top-5 right-5 z-10 flex items-center gap-1.5 text-xs text-white/50 hover:text-white/90 transition"
-        >
-          Pular por enquanto <X className="w-3.5 h-3.5" />
-        </button>
+        {/* Top HUD bar */}
+        <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between px-6 py-4">
+          <div className="flex items-center gap-3">
+            <div className="w-7 h-7 rounded-full bg-gradient-to-br from-rose-500 via-violet-500 to-cyan-500 flex items-center justify-center shadow-[0_0_16px_rgba(167,139,250,0.6)]">
+              <Sparkles className="w-3.5 h-3.5" />
+            </div>
+            <div className="leading-tight">
+              <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/50">CLAUTHOR · NEURAL LINK</p>
+              <p className="text-xs font-mono text-white/70 flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                thor.core :: online
+              </p>
+            </div>
+          </div>
+          <div className="hidden md:block">
+            <StepRail current={step} />
+          </div>
+          <button
+            onClick={handleSkip}
+            className="flex items-center gap-1.5 text-xs text-white/50 hover:text-white/90 transition font-mono"
+          >
+            pular <X className="w-3.5 h-3.5" />
+          </button>
+        </div>
 
-        <div className="relative z-10 h-full w-full flex items-center justify-center px-6">
-          <div className="w-full max-w-2xl">
-            <AnimatePresence mode="wait">
-              {/* WELCOME */}
-              {step === "welcome" && (
-                <motion.div
-                  key="welcome"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="text-center space-y-8"
-                >
-                  <ThorOrb />
-                  <div className="space-y-3">
-                    <p className="text-xs uppercase tracking-[0.35em] text-white/50">
-                      CLAUTHOR · Primeira interação
-                    </p>
-                    <h1 className="font-display text-4xl md:text-6xl font-bold leading-tight">
-                      Oi, eu sou o <span className="bg-gradient-to-r from-rose-400 via-violet-300 to-cyan-300 bg-clip-text text-transparent">Thor</span>.
-                    </h1>
-                    <p className="text-lg md:text-xl text-white/70 max-w-lg mx-auto leading-relaxed">
-                      Em 60 segundos eu vou entender seu negócio, sua dor real e montar a solução perfeita — um agente, um squad ou um departamento inteiro.
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-center gap-3">
-                    <Button
-                      size="lg"
-                      onClick={() => setStep("input")}
-                      className="h-14 px-8 text-base bg-white text-black hover:bg-white/90 rounded-full gap-2 shadow-[0_0_60px_rgba(225,29,72,0.35)]"
-                    >
-                      Começar a jornada <ArrowRight className="w-4 h-4" />
-                    </Button>
-                    <p className="text-xs text-white/40">Sem cartão · Sem compromisso</p>
-                  </div>
-                </motion.div>
-              )}
+        {/* Layout: narrative rail (desktop) + main stage */}
+        <div className="relative z-10 h-full w-full flex items-center justify-center px-4 md:px-10 pt-16 pb-8">
+          <div className="w-full max-w-6xl grid md:grid-cols-[280px_1fr] gap-6 md:gap-10 items-center">
+            {/* Narrative rail */}
+            <aside className="hidden md:block">
+              <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-5 space-y-3.5 max-h-[70vh] overflow-hidden relative">
+                <div className="flex items-center justify-between">
+                  <p className="text-[10px] font-mono uppercase tracking-[0.25em] text-white/50">Transmissão</p>
+                  <Radio className="w-3 h-3 text-emerald-400 animate-pulse" />
+                </div>
+                <div className="space-y-3">
+                  {narrative.slice(0, currentIdx + 1).map((n, ni) =>
+                    n.lines.filter(Boolean).map((line, li) => (
+                      <ThorLine
+                        key={`${n.key}-${li}`}
+                        delay={ni === currentIdx ? li * 0.4 : 0}
+                        typing={ni === currentIdx && li === n.lines.filter(Boolean).length - 1}
+                      >
+                        {line}
+                      </ThorLine>
+                    ))
+                  )}
+                </div>
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#04040a] to-transparent" />
+              </div>
+            </aside>
 
-              {/* INPUT METHOD */}
-              {step === "input" && (
-                <motion.div
-                  key="input"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="space-y-8"
-                >
-                  <div className="text-center space-y-2">
-                    <p className="text-xs uppercase tracking-[0.3em] text-white/50">Passo 1 de 3</p>
-                    <h2 className="font-display text-3xl md:text-4xl font-bold">
-                      Como quer me apresentar sua empresa?
-                    </h2>
-                    <p className="text-white/60">Escolha o caminho mais rápido pra você.</p>
-                  </div>
-
-                  <div className="grid md:grid-cols-2 gap-3">
-                    {[
-                      { key: "url" as const, icon: Globe, title: "Cole a URL do site", desc: "Eu leio tudo automaticamente", time: "~15s" },
-                      { key: "text" as const, icon: ClipboardPaste, title: "Cole um texto sobre", desc: "Descrição, pitch ou proposta", time: "~30s" },
-                    ].map((m) => {
-                      const active = method === m.key;
-                      return (
-                        <button
-                          key={m.key}
-                          onClick={() => setMethod(m.key)}
-                          className={cn(
-                            "group relative text-left p-5 rounded-2xl border transition-all backdrop-blur-xl",
-                            active
-                              ? "border-white/40 bg-white/10 shadow-[0_0_40px_rgba(167,139,250,0.25)]"
-                              : "border-white/10 bg-white/[0.03] hover:border-white/25 hover:bg-white/[0.06]"
-                          )}
-                        >
-                          <div className="flex items-start gap-4">
-                            <div className={cn(
-                              "w-11 h-11 rounded-xl flex items-center justify-center border transition",
-                              active ? "border-white/40 bg-white/15" : "border-white/10 bg-white/5"
-                            )}>
-                              <m.icon className="w-5 h-5" />
-                            </div>
-                            <div className="flex-1">
-                              <p className="font-semibold">{m.title}</p>
-                              <p className="text-sm text-white/60">{m.desc}</p>
-                              <p className="text-[10px] text-white/40 mt-2 uppercase tracking-widest">{m.time}</p>
-                            </div>
-                            {active && <CheckCircle2 className="w-5 h-5 text-white" />}
-                          </div>
-                        </button>
-                      );
-                    })}
-                  </div>
-
-                  {method === "url" && (
-                    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-2">
-                      <Input
-                        ref={firstInputRef}
-                        placeholder="suaempresa.com.br"
-                        value={url}
-                        onChange={(e) => setUrl(e.target.value)}
-                        onKeyDown={(e) => { if (e.key === "Enter" && canAnalyze) setStep("describe"); }}
-                        inputMode="url"
-                        autoCapitalize="none"
-                        autoCorrect="off"
-                        spellCheck={false}
-                        className="h-14 bg-white/5 border-white/15 text-white placeholder:text-white/30 text-base rounded-xl"
-                      />
-                      <p className="text-[11px] text-white/40">
-                        {url.trim().length === 0
-                          ? "Pode colar com ou sem www — eu ajusto pra você."
-                          : isValidUrl
-                            ? `✓ Vou analisar ${normalizedUrl}`
-                            : "Hmm, esse endereço não parece completo. Ex: minhaempresa.com.br"}
+            {/* Stage */}
+            <div className="w-full max-w-2xl mx-auto">
+              <AnimatePresence mode="wait">
+                {/* WELCOME */}
+                {step === "welcome" && (
+                  <motion.div
+                    key="welcome"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="text-center space-y-8"
+                  >
+                    <ThorOrb size={112} />
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-white/50">
+                        Sessão · 001 · Primeira sincronização
                       </p>
-                    </motion.div>
-                  )}
-                  {method === "text" && (
-                    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-                      <Textarea
-                        placeholder="Ex: Somos uma clínica de estética em SP com 3 unidades. Vendemos harmonização e pele. Nossa dor é agendamento e follow-up de leads..."
-                        value={text}
-                        onChange={(e) => setText(e.target.value)}
-                        rows={5}
-                        className="bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl resize-none"
-                      />
-                      <p className="text-[11px] text-white/40 mt-1.5">{text.length} caracteres · mínimo 40</p>
-                    </motion.div>
-                  )}
+                      <h1 className="font-display text-4xl md:text-6xl font-bold leading-[1.05]">
+                        Oi{firstName ? `, ${firstName}` : ""}. Eu sou o{" "}
+                        <span className="bg-gradient-to-r from-rose-400 via-violet-300 to-cyan-300 bg-clip-text text-transparent">Thor</span>.
+                      </h1>
+                      <p className="text-base md:text-lg text-white/70 max-w-xl mx-auto leading-relaxed">
+                        <Typewriter
+                          text="Em 60 segundos vou ler seu negócio, encontrar a dor real e montar a solução perfeita — um agente, um squad ou um departamento inteiro."
+                          speed={14}
+                        />
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center gap-3">
+                      <Button
+                        size="lg"
+                        onClick={() => setStep("input")}
+                        className="h-14 px-8 text-base bg-white text-black hover:bg-white/90 rounded-full gap-2 shadow-[0_0_60px_rgba(225,29,72,0.4)]"
+                      >
+                        Iniciar sincronização <ArrowRight className="w-4 h-4" />
+                      </Button>
+                      <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">
+                        neural handshake · sem cartão
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
 
-                  <div className="flex items-center justify-between pt-2">
-                    <Button variant="ghost" onClick={() => setStep("welcome")} className="text-white/60 hover:text-white hover:bg-white/5">
-                      <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
-                    </Button>
-                    <Button
-                      onClick={() => setStep("describe")}
-                      disabled={!canAnalyze}
-                      className="bg-white text-black hover:bg-white/90 rounded-full gap-2 h-11 px-6 disabled:opacity-30"
-                    >
-                      Continuar <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </motion.div>
-              )}
+                {/* INPUT */}
+                {step === "input" && (
+                  <motion.div
+                    key="input"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="space-y-7"
+                  >
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-white/50">Vetor de entrada · 01 / 03</p>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold">
+                        Me mostra sua empresa.
+                      </h2>
+                      <p className="text-white/60">Escolha o caminho mais rápido. Eu leio, decifro e conecto os pontos.</p>
+                    </div>
 
-              {/* DESCRIBE PAIN */}
-              {step === "describe" && (
-                <motion.div
-                  key="describe"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="space-y-6"
-                >
-                  <div className="text-center space-y-2">
-                    <p className="text-xs uppercase tracking-[0.3em] text-white/50">Passo 2 de 3</p>
-                    <h2 className="font-display text-3xl md:text-4xl font-bold">Qual é a sua maior dor hoje?</h2>
-                    <p className="text-white/60">Em uma frase, o que mais te tira o sono. Opcional, mas ajuda muito.</p>
-                  </div>
-
-                  <Textarea
-                    autoFocus
-                    placeholder="Ex: Perco leads porque ninguém responde no WhatsApp em menos de 1h..."
-                    value={description}
-                    onChange={(e) => setDescription(e.target.value)}
-                    rows={4}
-                    className="bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl resize-none"
-                  />
-
-                  <div className="flex items-center justify-between pt-2">
-                    <Button variant="ghost" onClick={() => setStep("input")} className="text-white/60 hover:text-white hover:bg-white/5">
-                      <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
-                    </Button>
-                    <Button
-                      onClick={runAnalysis}
-                      className="bg-gradient-to-r from-rose-500 to-violet-500 text-white hover:opacity-90 rounded-full gap-2 h-11 px-6"
-                    >
-                      Analisar meu negócio <Sparkles className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* ANALYZING */}
-              {step === "analyzing" && (
-                <motion.div
-                  key="analyzing"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center space-y-6"
-                >
-                  <ThorOrb />
-                  <div className="space-y-3">
-                    <h2 className="font-display text-2xl md:text-3xl font-bold">
-                      Analisando sua realidade…
-                    </h2>
-                    <div className="max-w-md mx-auto space-y-2 text-sm text-white/60">
+                    <div className="grid md:grid-cols-2 gap-3">
                       {[
-                        "Mapeando seu modelo de negócio",
-                        "Identificando a dor real",
-                        "Cruzando com 225 agentes disponíveis",
-                        "Montando a recomendação perfeita",
-                      ].map((s, i) => (
+                        { key: "url" as const, icon: Globe, title: "Domínio do site", desc: "Vou fazer scan da sua presença", time: "~15s" },
+                        { key: "text" as const, icon: ClipboardPaste, title: "Colar um texto", desc: "Pitch, descrição ou proposta", time: "~30s" },
+                      ].map((m) => {
+                        const active = method === m.key;
+                        return (
+                          <button
+                            key={m.key}
+                            onClick={() => setMethod(m.key)}
+                            className={cn(
+                              "group relative text-left p-5 rounded-2xl border transition-all backdrop-blur-xl overflow-hidden",
+                              active
+                                ? "border-white/40 bg-white/10 shadow-[0_0_50px_rgba(167,139,250,0.3)]"
+                                : "border-white/10 bg-white/[0.03] hover:border-white/25 hover:bg-white/[0.06]"
+                            )}
+                          >
+                            {active && (
+                              <motion.div
+                                className="absolute inset-0 pointer-events-none"
+                                initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                                style={{ background: "radial-gradient(400px circle at var(--x,50%) var(--y,50%), rgba(167,139,250,0.15), transparent 40%)" }}
+                              />
+                            )}
+                            <div className="flex items-start gap-4 relative">
+                              <div className={cn(
+                                "w-11 h-11 rounded-xl flex items-center justify-center border transition",
+                                active ? "border-white/40 bg-white/15" : "border-white/10 bg-white/5"
+                              )}>
+                                <m.icon className="w-5 h-5" />
+                              </div>
+                              <div className="flex-1">
+                                <p className="font-semibold">{m.title}</p>
+                                <p className="text-sm text-white/60">{m.desc}</p>
+                                <p className="text-[9px] font-mono text-white/40 mt-2 uppercase tracking-widest">{m.time}</p>
+                              </div>
+                              {active && <CheckCircle2 className="w-5 h-5 text-white" />}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <AnimatePresence mode="wait">
+                      {method === "url" && (
+                        <motion.div key="u" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="space-y-2">
+                          <div className="relative">
+                            <Input
+                              ref={firstInputRef}
+                              placeholder="suaempresa.com.br"
+                              value={url}
+                              onChange={(e) => setUrl(e.target.value)}
+                              onKeyDown={(e) => { if (e.key === "Enter" && canAnalyze) setStep("describe"); }}
+                              inputMode="url"
+                              autoCapitalize="none"
+                              autoCorrect="off"
+                              spellCheck={false}
+                              className="h-14 pl-12 bg-white/5 border-white/15 text-white placeholder:text-white/30 text-base rounded-xl focus-visible:ring-violet-400/40"
+                            />
+                            <Globe className="w-4 h-4 text-white/40 absolute left-4 top-1/2 -translate-y-1/2" />
+                            {isValidUrl && (
+                              <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} className="absolute right-4 top-1/2 -translate-y-1/2">
+                                <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                              </motion.div>
+                            )}
+                          </div>
+                          <p className={cn(
+                            "text-[11px] font-mono",
+                            isValidUrl ? "text-emerald-300/80" : "text-white/40"
+                          )}>
+                            {url.trim().length === 0
+                              ? "> pode colar com ou sem www — eu normalizo o endereço"
+                              : isValidUrl
+                                ? `> alvo confirmado: ${normalizedUrl}`
+                                : "> endereço incompleto. ex: minhaempresa.com.br"}
+                          </p>
+                        </motion.div>
+                      )}
+                      {method === "text" && (
+                        <motion.div key="t" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+                          <Textarea
+                            placeholder="Ex: Somos uma clínica de estética em SP com 3 unidades. Vendemos harmonização e pele. Nossa dor é agendamento e follow-up de leads..."
+                            value={text}
+                            onChange={(e) => setText(e.target.value)}
+                            rows={5}
+                            className="bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl resize-none focus-visible:ring-violet-400/40"
+                          />
+                          <p className="text-[11px] font-mono text-white/40 mt-1.5">
+                            {"> "}{text.length} caracteres · mínimo 40
+                          </p>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+
+                    <div className="flex items-center justify-between pt-2">
+                      <Button variant="ghost" onClick={() => setStep("welcome")} className="text-white/60 hover:text-white hover:bg-white/5">
+                        <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
+                      </Button>
+                      <Button
+                        onClick={() => setStep("describe")}
+                        disabled={!canAnalyze}
+                        className="bg-white text-black hover:bg-white/90 rounded-full gap-2 h-11 px-6 disabled:opacity-30"
+                      >
+                        Continuar <ArrowRight className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* DESCRIBE */}
+                {step === "describe" && (
+                  <motion.div
+                    key="describe"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="space-y-6"
+                  >
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-white/50">Frequência da dor · 02 / 03</p>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold">Qual dor está tirando seu sono?</h2>
+                      <p className="text-white/60">Uma frase basta. Eu sintonizo o resto.</p>
+                    </div>
+
+                    <div className="relative">
+                      <Textarea
+                        autoFocus
+                        placeholder="Ex: Perco leads porque ninguém responde no WhatsApp em menos de 1h..."
+                        value={description}
+                        onChange={(e) => setDescription(e.target.value)}
+                        rows={4}
+                        className="bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl resize-none pl-4 pr-12 focus-visible:ring-violet-400/40"
+                      />
+                      <Waves className="w-4 h-4 text-white/30 absolute right-4 top-4" />
+                    </div>
+
+                    <div className="flex flex-wrap gap-2">
+                      {[
+                        "Perco leads no WhatsApp",
+                        "Meu time comercial trava",
+                        "Não consigo escalar conteúdo",
+                        "Cobrança e financeiro atrasam",
+                      ].map((s) => (
+                        <button
+                          key={s}
+                          onClick={() => setDescription(s)}
+                          className="text-xs px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/10 hover:border-white/25 transition text-white/70"
+                        >
+                          {s}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2">
+                      <Button variant="ghost" onClick={() => setStep("input")} className="text-white/60 hover:text-white hover:bg-white/5">
+                        <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
+                      </Button>
+                      <Button
+                        onClick={runAnalysis}
+                        className="bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-500 text-white hover:opacity-90 rounded-full gap-2 h-11 px-6 shadow-[0_0_40px_rgba(225,29,72,0.4)]"
+                      >
+                        Fundir com a rede <Sparkles className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* ANALYZING */}
+                {step === "analyzing" && (
+                  <motion.div
+                    key="analyzing"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-center space-y-8"
+                  >
+                    <ThorOrb size={120} />
+                    <div className="space-y-3">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-white/50">Neural fusion em progresso</p>
+                      <h2 className="font-display text-2xl md:text-3xl font-bold">Sintonizando 225 agentes…</h2>
+                    </div>
+                    <div className="max-w-md mx-auto space-y-2.5 text-left">
+                      {[
+                        { icon: Globe, s: "Escaneando sua presença digital" },
+                        { icon: Cpu,   s: "Mapeando modelo de negócio" },
+                        { icon: Radio, s: "Detectando a dor real" },
+                        { icon: Users, s: "Cruzando com 20 departamentos" },
+                        { icon: Sparkles, s: "Montando recomendação perfeita" },
+                      ].map(({ icon: I, s }, i) => (
                         <motion.div
                           key={s}
-                          initial={{ opacity: 0, x: -8 }}
+                          initial={{ opacity: 0, x: -12 }}
                           animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: i * 0.6 }}
-                          className="flex items-center gap-2 justify-center"
+                          transition={{ delay: i * 0.45 }}
+                          className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] font-mono text-[13px] text-white/75"
                         >
-                          <Loader2 className="w-3.5 h-3.5 animate-spin text-white/60" />
-                          {s}
+                          <I className="w-3.5 h-3.5 text-violet-300" />
+                          <span className="flex-1">{s}</span>
+                          <Loader2 className="w-3.5 h-3.5 animate-spin text-cyan-300" />
                         </motion.div>
                       ))}
                     </div>
-                  </div>
-                </motion.div>
-              )}
+                  </motion.div>
+                )}
 
-              {/* REVEAL */}
-              {step === "reveal" && result && (
-                <motion.div
-                  key="reveal"
-                  initial={{ opacity: 0, y: 20, scale: 0.98 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="space-y-6"
-                >
-                  <div className="text-center space-y-2">
-                    <p className="text-xs uppercase tracking-[0.3em] text-white/50">Match encontrado</p>
-                    <h2 className="font-display text-3xl md:text-4xl font-bold">
-                      Você precisa de <span style={{ color: needMeta.color }}>{needMeta.label.toLowerCase()}</span>.
-                    </h2>
-                  </div>
-
+                {/* REVEAL */}
+                {step === "reveal" && result && (
                   <motion.div
-                    layout
-                    className={cn(
-                      "relative rounded-3xl border border-white/15 backdrop-blur-2xl overflow-hidden",
-                      "bg-gradient-to-br", needMeta.gradient
-                    )}
+                    key="reveal"
+                    initial={{ opacity: 0, y: 20, scale: 0.98 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="space-y-6"
                   >
-                    <div className="p-6 md:p-8 space-y-5 bg-black/40">
-                      <div className="flex items-start gap-4">
-                        <div
-                          className="w-14 h-14 rounded-2xl flex items-center justify-center border border-white/20"
-                          style={{ background: `${needMeta.color}22` }}
-                        >
-                          <NeedIcon className="w-7 h-7" style={{ color: needMeta.color }} />
-                        </div>
-                        <div className="flex-1">
-                          <p className="text-[11px] uppercase tracking-widest text-white/50">Recomendação</p>
-                          <h3 className="font-display text-2xl font-bold">{result.recommendation_name}</h3>
-                          <p className="text-sm text-white/70 mt-1">{result.recommendation_pitch}</p>
-                        </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-emerald-300">
+                          Match · {Math.round((result.confidence ?? 0.85) * 100)}% de confiança
+                        </p>
                       </div>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold leading-tight">
+                        Você precisa de{" "}
+                        <span style={{ color: needMeta.color }}>{needMeta.label.toLowerCase()}</span>.
+                      </h2>
+                    </div>
 
-                      <div className="grid md:grid-cols-2 gap-3 pt-2">
-                        <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                          <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Seu negócio</p>
-                          <p className="text-sm text-white/90">{result.business_summary}</p>
-                        </div>
-                        <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                          <p className="text-[10px] uppercase tracking-widest text-white/40 mb-1">Dor detectada</p>
-                          <p className="text-sm text-white/90">{result.detected_pain}</p>
-                        </div>
-                      </div>
-
-                      {result.agents?.length > 0 && (
-                        <div>
-                          <p className="text-[10px] uppercase tracking-widest text-white/40 mb-2">Agentes envolvidos</p>
-                          <div className="flex flex-wrap gap-1.5">
-                            {result.agents.slice(0, 8).map((a) => (
-                              <span key={a} className="text-xs px-2.5 py-1 rounded-full bg-white/10 border border-white/15">
-                                {a}
-                              </span>
-                            ))}
+                    <motion.div
+                      layout
+                      className={cn(
+                        "relative rounded-3xl border border-white/15 backdrop-blur-2xl overflow-hidden",
+                        "bg-gradient-to-br", needMeta.gradient
+                      )}
+                    >
+                      {/* animated border sheen */}
+                      <motion.div
+                        aria-hidden
+                        className="absolute inset-0 opacity-30 pointer-events-none"
+                        style={{
+                          background: `linear-gradient(120deg, transparent 30%, ${needMeta.color}55 50%, transparent 70%)`,
+                        }}
+                        animate={{ x: ["-30%", "130%"] }}
+                        transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
+                      />
+                      <div className="relative p-6 md:p-8 space-y-5 bg-black/50">
+                        <div className="flex items-start gap-4">
+                          <motion.div
+                            initial={{ scale: 0, rotate: -20 }}
+                            animate={{ scale: 1, rotate: 0 }}
+                            transition={{ type: "spring", damping: 12 }}
+                            className="w-14 h-14 rounded-2xl flex items-center justify-center border border-white/20 shrink-0"
+                            style={{ background: `${needMeta.color}22`, boxShadow: `0 0 30px ${needMeta.color}55` }}
+                          >
+                            <NeedIcon className="w-7 h-7" style={{ color: needMeta.color }} />
+                          </motion.div>
+                          <div className="flex-1">
+                            <p className="text-[10px] font-mono uppercase tracking-widest text-white/50">Recomendação</p>
+                            <h3 className="font-display text-2xl font-bold">{result.recommendation_name}</h3>
+                            <p className="text-sm text-white/70 mt-1 leading-relaxed">{result.recommendation_pitch}</p>
                           </div>
                         </div>
-                      )}
 
-                      {result.expected_outcome && (
-                        <div className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-400/20">
-                          <Zap className="w-5 h-5 text-emerald-300 shrink-0" />
-                          <p className="text-sm"><span className="text-white/60">Em 30 dias: </span>{result.expected_outcome}</p>
+                        <div className="grid md:grid-cols-2 gap-3">
+                          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mb-1">Seu negócio</p>
+                            <p className="text-sm text-white/90 leading-relaxed">{result.business_summary}</p>
+                          </div>
+                          <div className="p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mb-1">Dor detectada</p>
+                            <p className="text-sm text-white/90 leading-relaxed">{result.detected_pain}</p>
+                          </div>
                         </div>
-                      )}
+
+                        {result.agents?.length > 0 && (
+                          <div>
+                            <p className="text-[10px] font-mono uppercase tracking-widest text-white/40 mb-2">Agentes ativados</p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {result.agents.slice(0, 8).map((a, i) => (
+                                <motion.span
+                                  key={a}
+                                  initial={{ opacity: 0, y: 6 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: 0.4 + i * 0.08 }}
+                                  className="text-xs px-2.5 py-1 rounded-full bg-white/10 border border-white/15 backdrop-blur"
+                                >
+                                  <span className="inline-block w-1.5 h-1.5 rounded-full mr-1.5 align-middle" style={{ background: needMeta.color }} />
+                                  {a}
+                                </motion.span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {result.expected_outcome && (
+                          <div className="flex items-center gap-3 p-4 rounded-2xl bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-400/20">
+                            <Zap className="w-5 h-5 text-emerald-300 shrink-0" />
+                            <p className="text-sm leading-relaxed">
+                              <span className="text-white/60">Em 30 dias: </span>{result.expected_outcome}
+                            </p>
+                          </div>
+                        )}
+                      </div>
+                    </motion.div>
+
+                    <div className="flex items-center justify-between pt-2">
+                      <Button variant="ghost" onClick={() => setStep("describe")} className="text-white/60 hover:text-white hover:bg-white/5">
+                        <ArrowLeft className="w-4 h-4 mr-1.5" /> Refinar sinal
+                      </Button>
+                      <Button
+                        size="lg"
+                        onClick={() => setStep("claim")}
+                        className="bg-white text-black hover:bg-white/90 rounded-full gap-2 h-12 px-6 shadow-[0_0_50px_rgba(225,29,72,0.4)]"
+                      >
+                        Fixar minha vaga <ArrowRight className="w-4 h-4" />
+                      </Button>
                     </div>
                   </motion.div>
+                )}
 
-                  <div className="flex items-center justify-between pt-2">
-                    <Button variant="ghost" onClick={() => setStep("describe")} className="text-white/60 hover:text-white hover:bg-white/5">
-                      <ArrowLeft className="w-4 h-4 mr-1.5" /> Refinar
-                    </Button>
-                    <Button
-                      size="lg"
-                      onClick={() => setStep("claim")}
-                      className="bg-white text-black hover:bg-white/90 rounded-full gap-2 h-12 px-6 shadow-[0_0_50px_rgba(225,29,72,0.35)]"
-                    >
-                      Garantir minha vaga <ArrowRight className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* CLAIM */}
-              {step === "claim" && (
-                <motion.div
-                  key="claim"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="space-y-6"
-                >
-                  <div className="text-center space-y-2">
-                    <p className="text-xs uppercase tracking-[0.3em] text-white/50">Passo 3 de 3</p>
-                    <h2 className="font-display text-3xl md:text-4xl font-bold">Garanta sua vaga prioritária</h2>
-                    <p className="text-white/60 max-w-md mx-auto">
-                      Vou reservar {result?.recommendation_name ? <span className="text-white">“{result.recommendation_name}”</span> : "sua solução"} pra você e liberar acesso imediato ao dashboard.
-                    </p>
-                  </div>
-
-                  <div className="space-y-3 max-w-md mx-auto">
-                    <Input
-                      type="email"
-                      placeholder="Email"
-                      value={claim.email}
-                      onChange={(e) => setClaim({ ...claim, email: e.target.value })}
-                      className="h-12 bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl"
-                    />
-                    <Input
-                      placeholder="WhatsApp com DDD"
-                      value={claim.whatsapp}
-                      onChange={(e) => setClaim({ ...claim, whatsapp: e.target.value })}
-                      className="h-12 bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl"
-                    />
-                    <Input
-                      placeholder="Empresa (opcional)"
-                      value={claim.company}
-                      onChange={(e) => setClaim({ ...claim, company: e.target.value })}
-                      className="h-12 bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl"
-                    />
-                    <div className="flex items-center gap-2 text-xs text-white/50 pt-1">
-                      <ShieldCheck className="w-3.5 h-3.5" /> Seus dados são criptografados. Nunca compartilhamos.
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-between max-w-md mx-auto pt-2">
-                    <Button variant="ghost" onClick={() => setStep("reveal")} className="text-white/60 hover:text-white hover:bg-white/5">
-                      <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
-                    </Button>
-                    <Button
-                      onClick={submitClaim}
-                      disabled={loading}
-                      size="lg"
-                      className="bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-500 text-white hover:opacity-90 rounded-full gap-2 h-12 px-6"
-                    >
-                      {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-                      Garantir minha vaga
-                    </Button>
-                  </div>
-                </motion.div>
-              )}
-
-              {/* DONE */}
-              {step === "done" && (
-                <motion.div
-                  key="done"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="text-center space-y-6"
-                >
+                {/* CLAIM */}
+                {step === "claim" && (
                   <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: "spring", damping: 12 }}
-                    className="mx-auto w-20 h-20 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center shadow-[0_0_80px_rgba(52,211,153,0.4)]"
+                    key="claim"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="space-y-6"
                   >
-                    <CheckCircle2 className="w-10 h-10 text-black" />
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-white/50">Última etapa · 03 / 03</p>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold">Fixar sua vaga na rede.</h2>
+                      <p className="text-white/60 max-w-md">
+                        Vou reservar {result?.recommendation_name ? <span className="text-white">“{result.recommendation_name}”</span> : "sua solução"} e liberar acesso imediato ao dashboard.
+                      </p>
+                    </div>
+
+                    <div className="space-y-3 max-w-md">
+                      <Input
+                        type="email"
+                        placeholder="Email"
+                        value={claim.email}
+                        onChange={(e) => setClaim({ ...claim, email: e.target.value })}
+                        className="h-12 bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl focus-visible:ring-violet-400/40"
+                      />
+                      <Input
+                        placeholder="WhatsApp com DDD"
+                        value={claim.whatsapp}
+                        onChange={(e) => setClaim({ ...claim, whatsapp: e.target.value })}
+                        className="h-12 bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl focus-visible:ring-violet-400/40"
+                      />
+                      <Input
+                        placeholder="Empresa (opcional)"
+                        value={claim.company}
+                        onChange={(e) => setClaim({ ...claim, company: e.target.value })}
+                        className="h-12 bg-white/5 border-white/15 text-white placeholder:text-white/30 rounded-xl focus-visible:ring-violet-400/40"
+                      />
+                      <div className="flex items-center gap-2 text-xs text-white/50 pt-1 font-mono">
+                        <ShieldCheck className="w-3.5 h-3.5" /> criptografado end-to-end · nunca compartilhamos
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between max-w-md pt-2">
+                      <Button variant="ghost" onClick={() => setStep("reveal")} className="text-white/60 hover:text-white hover:bg-white/5">
+                        <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
+                      </Button>
+                      <Button
+                        onClick={submitClaim}
+                        disabled={loading}
+                        size="lg"
+                        className="bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-500 text-white hover:opacity-90 rounded-full gap-2 h-12 px-6 shadow-[0_0_40px_rgba(225,29,72,0.4)]"
+                      >
+                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                        Fixar vaga
+                      </Button>
+                    </div>
                   </motion.div>
-                  <div className="space-y-2">
-                    <h2 className="font-display text-3xl md:text-4xl font-bold">Vaga garantida.</h2>
-                    <p className="text-white/70">Levando você pro dashboard…</p>
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+                )}
+
+                {/* DONE */}
+                {step === "done" && (
+                  <motion.div
+                    key="done"
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="text-center space-y-6"
+                  >
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", damping: 12 }}
+                      className="mx-auto w-24 h-24 rounded-full bg-gradient-to-br from-emerald-400 to-cyan-400 flex items-center justify-center shadow-[0_0_100px_rgba(52,211,153,0.5)]"
+                    >
+                      <CheckCircle2 className="w-12 h-12 text-black" />
+                    </motion.div>
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-emerald-300">Neural link estabelecido</p>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold">Vaga fixada.</h2>
+                      <p className="text-white/70 font-mono text-sm">Redirecionando para o dashboard…</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </motion.div>
