@@ -517,9 +517,7 @@ const HomePage = () => {
 
       {/* ═══════════ FOOTER ═══════════ */}
       <Footer />
-      <Suspense fallback={null}>
-        <SmartOnboarding isOpen={showSmartOnboarding} onClose={() => setShowSmartOnboarding(false)} />
-      </Suspense>
+      {/* SmartOnboarding removido — Revolutionary gate global cobre esse fluxo. */}
     </div>
   );
 };
