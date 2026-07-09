@@ -52,7 +52,7 @@ export const regionalPricing: Record<string, RegionalPricing> = {
     plans: { starter: 997, growth: 1997 },
     tokenPacks: { pack5m: 297, pack15m: 697, pack50m: 1497, pack100m: 2797 },
     comparison: { avgSalary: 4500, avgSalaryYear3: 272160, agentStarting: 297, agentYear3: 10692 },
-    departments: { tecnologia: 1500, comercial: 1000, marketing: 750, financeiro: 1000, criacao: 750, suporte: 500, rh: 750 },
+    departments: { tecnologia: 2997, comercial: 2497, marketing: 1997, financeiro: 2497, criacao: 1997, suporte: 1497, rh: 1997 },
     departmentClt: cltCosts,
   },
   "pt-pt": {
