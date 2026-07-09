@@ -844,7 +844,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         {/* Agentes */}
                         {result.agents?.length > 0 && (
                           <div className="space-y-4">
-                            <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Agentes ativados</h4>
+                            <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Seu squad</h4>
                             <div className="flex flex-wrap gap-2.5">
                               {result.agents.slice(0, 8).map((a, i) => {
                                 const palette = [
