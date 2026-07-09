@@ -12,7 +12,7 @@ const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
 const PlatformUpdatesDialog = lazy(() => import("./PlatformUpdatesDialog"));
 const ThorDailyGreeting = lazy(() => import("./ThorDailyGreeting"));
-const GuidedOnboardingWizard = lazy(() => import("./onboarding/GuidedOnboarding"));
+const RevolutionaryOnboardingGate = lazy(() => import("./onboarding/RevolutionaryOnboardingGate"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
@@ -47,9 +47,9 @@ const AppLayout = () => {
         <PlatformUpdatesDialog />
       </Suspense>
 
-      {/* Guided onboarding wizard for first access */}
+      {/* Revolutionary first-interaction experience */}
       <Suspense fallback={null}>
-        <GuidedOnboardingWizard />
+        <RevolutionaryOnboardingGate />
       </Suspense>
 
       {/* Thor daily greeting with token balance and top-up nudge */}
