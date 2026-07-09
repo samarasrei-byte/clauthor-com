@@ -55,7 +55,7 @@ const ClientDashboard = () => {
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
   const [omnixMounted, setOmnixMounted] = useState(false);
-  const [showSmartOnboarding, setShowSmartOnboarding] = useState(false);
+  // showSmartOnboarding removido — Revolutionary gate global cuida do primeiro contato.
   const [showBoardGate, setShowBoardGate] = useState(false);
   const [showLiveGuide, setShowLiveGuide] = useState(() => {
     if (typeof window === "undefined") return false;
