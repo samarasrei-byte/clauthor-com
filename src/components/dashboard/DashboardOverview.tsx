@@ -69,42 +69,29 @@ const DashboardOverview = ({
       <ErrorBoundary>
         <Suspense fallback={<SectionLoader />}>
           <div className="space-y-5">
-            <NextStepsCard />
-            <DashboardWelcome
-              hasAgents={agents.length > 0}
-              hasIntegration={false}
-              hasExecution={recentLogs.length > 0}
+            {/* PRIMEIRA DOBRA — uma voz, um CTA. */}
+            <HeroBriefing
+              agentsCount={agents.length}
+              activeAgents={activeAgents}
+              totalExecutions={totalExecutions}
+              remainingCredits={remainingCredits}
+              recentLogs={recentLogs}
+              onOpenLibrary={() => onSetActiveSection("library")}
+              onOpenWarRoom={() => onSetActiveSection("warroom")}
+              onFocusTaskInput={() => {
+                const el = document.getElementById("task-request-input");
+                if (el) {
+                  el.scrollIntoView({ behavior: "smooth", block: "center" });
+                  (el as HTMLElement).focus?.();
+                } else {
+                  onSetActiveSection("omnix");
+                }
+              }}
             />
-            {/* GuidedOnboarding legado removido. */}
 
-            {/* Hero action card for new users */}
-            {agents.length === 0 && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.98 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.15 }}
-                className="rounded-2xl border border-primary/20 bg-gradient-to-br from-primary/10 via-background to-accent/5 p-8 text-center space-y-3"
-              >
-                <div className="w-14 h-14 mx-auto rounded-2xl bg-primary/15 border border-primary/20 flex items-center justify-center">
-                  <Rocket className="h-7 w-7 text-primary" />
-                </div>
-                <h2 className="font-display text-xl sm:text-2xl font-bold">{t("dashboard.hero_title", { defaultValue: "Seu time de IA começa aqui" })}</h2>
-                <p className="text-sm text-muted-foreground max-w-md mx-auto leading-relaxed">
-                  {t("dashboard.hero_desc", { defaultValue: "Contrate agentes especializados que trabalham 24/7. SDR, Copywriter, Analista e muito mais - prontos em minutos." })}
-                </p>
-                <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-                  <Button size="lg" className="glow gap-2 px-6" onClick={() => onSetActiveSection("library")}>
-                    <Bot className="h-4 w-4" />
-                    {t("dashboard.hero_cta", { defaultValue: "Contratar Agentes" })}
-                    <ArrowRight className="h-4 w-4" />
-                  </Button>
-                  <Button size="lg" variant="outline" className="gap-2 border-border/30" onClick={() => onSetActiveSection("omnix")}>
-                    <Brain className="h-4 w-4" />
-                    {t("dashboard.hero_cta2", { defaultValue: "Falar com Thor" })}
-                  </Button>
-                </div>
-              </motion.div>
-            )}
+            {/* Guia de configuração da conta (progressive disclosure) */}
+            <NextStepsCard />
+
 
             {/* Advanced panels - only when user has agents */}
             {agents.length > 0 && (
