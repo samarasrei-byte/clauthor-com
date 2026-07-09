@@ -12,7 +12,7 @@ const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
 const PlatformUpdatesDialog = lazy(() => import("./PlatformUpdatesDialog"));
 const ThorDailyGreeting = lazy(() => import("./ThorDailyGreeting"));
-const GuidedOnboardingWizard = lazy(() => import("./onboarding/GuidedOnboarding"));
+const RevolutionaryOnboarding = lazy(() => import("./onboarding/RevolutionaryOnboarding"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 
