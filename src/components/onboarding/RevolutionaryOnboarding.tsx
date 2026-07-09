@@ -169,7 +169,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     try {
       const { data, error } = await supabase.functions.invoke("onboarding-classify", {
         body: {
-          url: method === "url" ? url : undefined,
+          url: method === "url" ? normalizedUrl : undefined,
           text: method === "text" ? text : undefined,
           description,
         },
