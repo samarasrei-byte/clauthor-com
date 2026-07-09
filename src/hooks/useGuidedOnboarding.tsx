@@ -52,16 +52,14 @@ export function useGuidedOnboarding() {
     const payload: OnboardingAnswers | null = partial
       ? { ...partial, completedAt: new Date().toISOString() }
       : null;
-    await supabase
-      .from("profiles")
-      .update({
-        onboarding_answers: payload as any,
-        onboarded_at: new Date().toISOString(),
-        onboarding_completed: true,
-      })
-      .eq("user_id", user.id);
+    // Only persist "completed" when we have real answers. Skip stays reopenable.
+    const update: Record<string, unknown> = { onboarding_answers: payload as any };
+    if (payload) {
+      update.onboarded_at = new Date().toISOString();
+      update.onboarding_completed = true;
+    }
+    await supabase.from("profiles").update(update).eq("user_id", user.id);
 
-    // Analytics: log completion event (best-effort, non-blocking failure)
     try {
       await supabase.from("user_activity_stream").insert({
         user_id: user.id,
@@ -71,7 +69,6 @@ export function useGuidedOnboarding() {
         metadata: (payload ?? {}) as any,
       });
     } catch (e) {
-      // silent — analytics não deve bloquear UX
       console.warn("[onboarding] failed to log analytics event", e);
     }
 
@@ -80,8 +77,20 @@ export function useGuidedOnboarding() {
   }, [user]);
 
   const skip = useCallback(async () => {
-    await save(null);
-  }, [save]);
+    // Skip = fechar sem marcar como concluído. Volta a aparecer na próxima sessão.
+    if (user) {
+      try {
+        await supabase.from("user_activity_stream").insert({
+          user_id: user.id,
+          event_type: "onboarding_skipped",
+          title: "Onboarding pulado",
+          entity_type: "onboarding",
+          metadata: {} as any,
+        });
+      } catch {}
+    }
+    setIsOpen(false);
+  }, [user]);
 
   return { isOpen, setIsOpen, answers, loading, save, skip };
 }
