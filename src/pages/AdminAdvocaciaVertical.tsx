@@ -2,13 +2,13 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/hooks/useAuth";
+import { useAdminGuard } from "@/hooks/useAdminGuard";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Input } from "@/components/ui/input";
-import { Scale, Search, ArrowLeft, ExternalLink, Users, Activity } from "lucide-react";
+import { Scale, Search, ArrowLeft, ExternalLink, Users, Activity, Loader2 } from "lucide-react";
 
 /**
  * AdminAdvocaciaVertical — Painel admin para a vertical jurídica.
@@ -28,7 +28,7 @@ const REQUIRED_LEGAL_SLUGS = [
 ];
 
 const AdminAdvocaciaVertical = () => {
-  const { isAdmin } = useAuth();
+  const { verified } = useAdminGuard("/admin");
   const [search, setSearch] = useState("");
 
   const { data: tenants = [], isLoading } = useQuery({
@@ -66,16 +66,16 @@ const AdminAdvocaciaVertical = () => {
         subscriptionsCount: (subs || []).filter((s: any) => s.user_id === p.user_id).length,
       }));
     },
-    enabled: isAdmin,
+    enabled: verified === true,
     staleTime: 60_000,
   });
 
-  if (!isAdmin) {
+  if (verified !== true) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Card className="p-6">
-          <p className="text-sm text-muted-foreground">Acesso restrito a administradores.</p>
-        </Card>
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" /> Verificando permissões…
+        </div>
       </div>
     );
   }

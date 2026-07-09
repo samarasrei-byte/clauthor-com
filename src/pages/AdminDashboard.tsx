@@ -38,8 +38,11 @@ import AdminSimulationsPanel from "@/components/dashboard/AdminSimulationsPanel"
 import TokenAlertsTable from "@/components/dashboard/TokenAlertsTable";
 import ThorGreetingMetricsCard from "@/components/dashboard/ThorGreetingMetricsCard";
 import AdminMarginAnalysis from "@/components/dashboard/AdminMarginAnalysis";
+import { useAdminGuard } from "@/hooks/useAdminGuard";
+import { Loader2 } from "lucide-react";
 
 const AdminDashboard = () => {
+  const { verified } = useAdminGuard();
   const [activeTab, setActiveTab] = useState("overview");
   const navigate = useNavigate();
   const handleTabChange = (id: string) => {
@@ -199,6 +202,16 @@ const AdminDashboard = () => {
   ];
 
   const breadcrumbLabel = sidebarItems.find(i => i.id === activeTab)?.label || activeTab;
+
+  if (verified !== true) {
+    return (
+      <div className="flex-1 min-h-[60vh] flex items-center justify-center">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" /> Verificando permissões…
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full">
