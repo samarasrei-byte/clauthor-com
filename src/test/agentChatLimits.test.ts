@@ -23,7 +23,9 @@ function getPlanLimits(planType: string): PlanLimits {
 }
 
 function applyHistoryWindow<T>(messages: T[], max: number): T[] {
+  if (max <= 0) return [];
   if (messages.length <= max) return messages;
+  if (max === 1) return [messages[0]];
   const first = messages[0];
   return [first, ...messages.slice(-(max - 1))];
 }
