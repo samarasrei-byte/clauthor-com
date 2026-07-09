@@ -845,9 +845,20 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         {/* Agentes */}
                         {result.agents?.length > 0 && (
                           <div className="space-y-4">
-                            <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Seu squad</h4>
-                            <div className="flex flex-wrap gap-2.5">
-                              {result.agents.slice(0, 8).map((a, i) => {
+                            <div className="flex items-center justify-between">
+                              <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Seu squad</h4>
+                              {result.agents.length > 6 && (
+                                <button
+                                  type="button"
+                                  onClick={() => setShowAllAgents((v) => !v)}
+                                  className="text-[10px] font-mono uppercase tracking-widest text-white/50 hover:text-white transition-colors"
+                                >
+                                  {showAllAgents ? "Ver menos" : `Ver todos · ${result.agents.length}`}
+                                </button>
+                              )}
+                            </div>
+                            <div className="flex flex-wrap gap-2 md:gap-2.5">
+                              {(showAllAgents ? result.agents : result.agents.slice(0, 6)).map((a, i) => {
                                 const palette = [
                                   { bg: "bg-violet-500/10", border: "border-violet-500/30", dot: "bg-violet-400" },
                                   { bg: "bg-rose-500/10",   border: "border-rose-500/30",   dot: "bg-rose-400" },
@@ -858,19 +869,20 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                                     key={a}
                                     initial={{ opacity: 0, y: 8, scale: 0.95 }}
                                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    transition={{ delay: 0.35 + i * 0.06 }}
+                                    transition={{ delay: Math.min(0.35 + i * 0.04, 0.7) }}
                                     className={cn(
-                                      "flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl border",
+                                      "flex items-center gap-2 px-3 py-1.5 rounded-xl border",
                                       palette.bg, palette.border
                                     )}
                                   >
                                     <span className={cn("w-1.5 h-1.5 rounded-full", palette.dot)} />
-                                    <span className="text-xs font-semibold text-white/90">{a}</span>
+                                    <span className="text-[11px] md:text-xs font-semibold text-white/90">{a}</span>
                                   </motion.div>
                                 );
                               })}
                             </div>
                           </div>
+
                         )}
 
                         {/* Outcome band with animated glow */}
