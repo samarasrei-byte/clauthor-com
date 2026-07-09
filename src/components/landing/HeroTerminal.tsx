@@ -45,18 +45,12 @@ const HeroTerminal = () => {
 
   return (
     <section
-      className="relative px-5 sm:px-6 pt-10 pb-16 sm:pt-14 sm:pb-24"
+      className="relative px-5 sm:px-6 pt-10 pb-16 sm:pt-14 sm:pb-24 overflow-hidden"
       aria-label="Hero"
     >
-      {/* soft radial red glow */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-40"
-        style={{
-          background:
-            "radial-gradient(600px circle at 85% 40%, hsl(var(--primary) / 0.10), transparent 60%)",
-        }}
-      />
+      {/* Onboarding neural backdrop (aurora + mesh) */}
+      <NeuralBackdrop intensity={0.55} />
+
 
       <div className="relative z-10 max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
         {/* LEFT — Message */}
