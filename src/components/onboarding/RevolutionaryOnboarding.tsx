@@ -1,10 +1,27 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Sparkles, Globe, ClipboardPaste, ArrowRight, ArrowLeft,
+  Globe, ClipboardPaste, ArrowRight, ArrowLeft,
   Loader2, CheckCircle2, Bot, Users, Building2, Zap, ShieldCheck, X,
   Radio, Cpu, Waves,
 } from "lucide-react";
+
+/** Núcleo Apple-like: dois círculos concêntricos monocromáticos, sem estrela. */
+function CoreDot({ className = "", size = 14 }: { className?: string; size?: number }) {
+  return (
+    <span
+      className={cn("relative inline-flex items-center justify-center", className)}
+      style={{ width: size, height: size }}
+      aria-hidden
+    >
+      <span
+        className="absolute inset-0 rounded-full"
+        style={{ background: "radial-gradient(circle at 50% 45%, rgba(255,255,255,0.95), rgba(255,255,255,0.15) 55%, transparent 70%)" }}
+      />
+      <span className="relative rounded-full bg-white" style={{ width: size * 0.35, height: size * 0.35 }} />
+    </span>
+  );
+}
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -67,33 +84,27 @@ function NeuralBackdrop({ intensity }: { intensity: number }) {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none">
       <div className="absolute inset-0 bg-[#04040a]" />
-      {/* aurora */}
-      <motion.div
+      {/* aurora estática, sem luzes viajando */}
+      <div
         className="absolute -top-1/3 -left-1/4 w-[75vw] h-[75vw] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, #e11d48 0%, transparent 60%)", opacity: 0.25 + intensity * 0.25 }}
-        animate={{ x: [0, 60, -20, 0], y: [0, 40, -30, 0] }}
-        transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+        style={{ background: "radial-gradient(circle, #e11d48 0%, transparent 60%)", opacity: 0.18 + intensity * 0.12 }}
       />
-      <motion.div
+      <div
         className="absolute -bottom-1/3 -right-1/4 w-[75vw] h-[75vw] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 60%)", opacity: 0.25 + intensity * 0.25 }}
-        animate={{ x: [0, -50, 30, 0], y: [0, -40, 20, 0] }}
-        transition={{ duration: 26, repeat: Infinity, ease: "easeInOut" }}
+        style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 60%)", opacity: 0.16 + intensity * 0.12 }}
       />
-      <motion.div
+      <div
         className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[55vw] h-[55vw] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, #22d3ee 0%, transparent 60%)", opacity: 0.12 + intensity * 0.25 }}
-        animate={{ scale: [1, 1.2, 0.9, 1] }}
-        transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+        style={{ background: "radial-gradient(circle, #22d3ee 0%, transparent 60%)", opacity: 0.10 + intensity * 0.10 }}
       />
 
-      {/* SVG neural mesh */}
-      <svg className="absolute inset-0 w-full h-full opacity-[0.35]" preserveAspectRatio="none" viewBox="0 0 100 100">
+      {/* SVG neural mesh (estático) */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.28]" preserveAspectRatio="none" viewBox="0 0 100 100">
         <defs>
           <linearGradient id="line" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#e11d48" stopOpacity="0.7" />
-            <stop offset="50%" stopColor="#a78bfa" stopOpacity="0.6" />
-            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.7" />
+            <stop offset="0%" stopColor="#e11d48" stopOpacity="0.55" />
+            <stop offset="50%" stopColor="#a78bfa" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.55" />
           </linearGradient>
         </defs>
         {nodes.map((a, i) =>
@@ -102,49 +113,30 @@ function NeuralBackdrop({ intensity }: { intensity: number }) {
             const dist = Math.sqrt(dx * dx + dy * dy);
             if (dist > 22) return null;
             return (
-              <motion.line
+              <line
                 key={`${a.id}-${b.id}`}
                 x1={a.x} y1={a.y} x2={b.x} y2={b.y}
                 stroke="url(#line)"
                 strokeWidth={0.08}
-                initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 0.4 + intensity * 0.5 }}
-                transition={{ duration: 2, delay: (a.id % 10) * 0.15 }}
+                opacity={0.35 + intensity * 0.35}
               />
             );
           })
         )}
         {nodes.map((n) => (
-          <motion.circle
-            key={n.id}
-            cx={n.x} cy={n.y} r={0.22}
-            fill="#fff"
-            animate={{ opacity: [0.2, 0.9, 0.2] }}
-            transition={{ duration: 3 + (n.id % 4), repeat: Infinity, delay: n.id * 0.08 }}
-          />
+          <circle key={n.id} cx={n.x} cy={n.y} r={0.22} fill="#fff" opacity={0.5} />
         ))}
       </svg>
 
-      {/* Grid */}
+      {/* Grid sutil */}
       <div
-        className="absolute inset-0 opacity-[0.05]"
+        className="absolute inset-0 opacity-[0.04]"
         style={{
           backgroundImage:
             "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
           backgroundSize: "64px 64px",
           maskImage: "radial-gradient(ellipse at center, black 40%, transparent 80%)",
         }}
-      />
-
-      {/* Scanline */}
-      <motion.div
-        className="absolute inset-x-0 h-24 pointer-events-none"
-        style={{
-          background:
-            "linear-gradient(to bottom, transparent, rgba(167,139,250,0.08) 40%, rgba(34,211,238,0.12) 50%, rgba(225,29,72,0.08) 60%, transparent)",
-        }}
-        animate={{ y: ["-10%", "110%"] }}
-        transition={{ duration: 9, repeat: Infinity, ease: "linear" }}
       />
 
       <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/70" />
@@ -168,7 +160,7 @@ function ThorOrb({ size = 96, pulsing = true }: { size?: number; pulsing?: boole
           animate={pulsing ? { scale: [1, 1.12, 1], opacity: [0.75, 1, 0.75] } : {}}
           transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
         >
-          <Sparkles style={{ width: size * 0.34, height: size * 0.34 }} className="text-white" strokeWidth={1.4} />
+          <CoreDot size={size * 0.42} />
         </motion.div>
       </div>
       {pulsing && (
@@ -265,7 +257,7 @@ function ThorLine({ children, delay = 0, typing = false }: { children: React.Rea
       className="flex items-start gap-2.5"
     >
       <div className="w-6 h-6 rounded-full bg-gradient-to-br from-rose-500 via-violet-500 to-cyan-500 flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_18px_rgba(167,139,250,0.5)]">
-        <Sparkles className="w-3 h-3 text-white" strokeWidth={2} />
+        <CoreDot size={10} />
       </div>
       <div className="text-[13px] text-white/75 leading-relaxed font-mono">
         {typing && typeof children === "string" ? <Typewriter text={children} /> : children}
@@ -429,7 +421,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
         <div className="absolute top-0 inset-x-0 z-20 flex items-center justify-between px-6 py-4">
           <div className="flex items-center gap-3">
             <div className="w-7 h-7 rounded-full bg-gradient-to-br from-rose-500 via-violet-500 to-cyan-500 flex items-center justify-center shadow-[0_0_16px_rgba(167,139,250,0.6)]">
-              <Sparkles className="w-3.5 h-3.5" />
+              <CoreDot size={12} />
             </div>
             <div className="leading-tight">
               <p className="text-[10px] font-mono uppercase tracking-[0.3em] text-white/50">CLAUTHOR · NEURAL LINK</p>
@@ -500,7 +492,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                       </h1>
                       <p className="text-base md:text-lg text-white/70 max-w-xl mx-auto leading-relaxed">
                         <Typewriter
-                          text="Em 60 segundos vou ler seu negócio, encontrar a dor real e montar a solução perfeita — um agente, um squad ou um departamento inteiro."
+                          text="Em 60 segundos vou ler seu negócio, encontrar a dor real e montar a solução perfeita. Um agente, um squad ou um departamento inteiro."
                           speed={14}
                         />
                       </p>
@@ -608,7 +600,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             isValidUrl ? "text-emerald-300/80" : "text-white/40"
                           )}>
                             {url.trim().length === 0
-                              ? "> pode colar com ou sem www — eu normalizo o endereço"
+                              ? "> pode colar com ou sem www. Eu normalizo o endereço."
                               : isValidUrl
                                 ? `> alvo confirmado: ${normalizedUrl}`
                                 : "> endereço incompleto. ex: minhaempresa.com.br"}
@@ -698,7 +690,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         onClick={runAnalysis}
                         className="bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-500 text-white hover:opacity-90 rounded-full gap-2 h-11 px-6 shadow-[0_0_40px_rgba(225,29,72,0.4)]"
                       >
-                        Fundir com a rede <Sparkles className="w-4 h-4" />
+                        Fundir com a rede <ArrowRight className="w-4 h-4" />
                       </Button>
                     </div>
                   </motion.div>
@@ -724,7 +716,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         { icon: Cpu,   s: "Mapeando modelo de negócio" },
                         { icon: Radio, s: "Detectando a dor real" },
                         { icon: Users, s: "Cruzando com 20 departamentos" },
-                        { icon: Sparkles, s: "Montando recomendação perfeita" },
+                        { icon: Zap, s: "Montando recomendação perfeita" },
                       ].map(({ icon: I, s }, i) => (
                         <motion.div
                           key={s}
@@ -771,16 +763,6 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         "bg-gradient-to-br", needMeta.gradient
                       )}
                     >
-                      {/* animated border sheen */}
-                      <motion.div
-                        aria-hidden
-                        className="absolute inset-0 opacity-30 pointer-events-none"
-                        style={{
-                          background: `linear-gradient(120deg, transparent 30%, ${needMeta.color}55 50%, transparent 70%)`,
-                        }}
-                        animate={{ x: ["-30%", "130%"] }}
-                        transition={{ duration: 3.5, repeat: Infinity, ease: "linear" }}
-                      />
                       <div className="relative p-6 md:p-8 space-y-5 bg-black/50">
                         <div className="flex items-start gap-4">
                           <motion.div
@@ -908,7 +890,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         size="lg"
                         className="bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-500 text-white hover:opacity-90 rounded-full gap-2 h-12 px-6 shadow-[0_0_40px_rgba(225,29,72,0.4)]"
                       >
-                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
+                        {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
                         Fixar vaga
                       </Button>
                     </div>
