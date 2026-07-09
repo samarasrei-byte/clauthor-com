@@ -92,12 +92,27 @@ const LibraryPage = () => {
     sum + dept.squads.reduce((s, sq) => s + sq.agents.length, 0), 0
   ), []);
 
+  // Curadoria: em modo âncora (padrão) só aparecem os 40 agentes ANCHOR_AGENT_SLUGS.
+  // Uma busca ativa OU o toggle "Ver todos" liberam a long-tail.
+  const anchorSet = useMemo(() => new Set(ANCHOR_AGENT_SLUGS), []);
+  const curated = useMemo(() => {
+    const showAll = showAllAgents || searchQuery.trim().length > 0;
+    if (showAll) return WORKFORCE;
+    return WORKFORCE.map(dept => ({
+      ...dept,
+      squads: dept.squads.map(sq => ({
+        ...sq,
+        agents: sq.agents.filter(a => anchorSet.has(a.slug)),
+      })).filter(sq => sq.agents.length > 0),
+    })).filter(dept => dept.squads.length > 0);
+  }, [showAllAgents, searchQuery, anchorSet]);
+
   // Filter departments and agents by search
   const filteredWorkforce = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
-    if (!q) return WORKFORCE;
+    if (!q) return curated;
 
-    return WORKFORCE.map(dept => ({
+    return curated.map(dept => ({
       ...dept,
       squads: dept.squads.map(sq => ({
         ...sq,
@@ -109,7 +124,7 @@ const LibraryPage = () => {
         )
       })).filter(sq => sq.agents.length > 0)
     })).filter(dept => dept.squads.length > 0);
-  }, [searchQuery]);
+  }, [searchQuery, curated]);
 
   // Count visible agents
   const visibleAgentCount = useMemo(() => filteredWorkforce.reduce((sum, dept) => 
