@@ -907,7 +907,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             onClick={() => setStep("claim")}
                             className="w-full group relative flex items-center justify-center gap-3 bg-white text-black font-extrabold text-base md:text-lg py-4 md:py-5 rounded-2xl transition-all hover:bg-cyan-300 hover:scale-[1.01] active:scale-[0.99] shadow-[0_20px_50px_-15px_rgba(255,255,255,0.25)] cursor-pointer"
                           >
-                            Fixar minha vaga e entrar no dashboard
+                            Seja bem-vindo · Entrar no dashboard
                             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
                           </button>
                           <div className="flex items-center justify-between text-[11px] text-white/30 font-mono tracking-widest uppercase">
@@ -915,9 +915,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                               onClick={() => setStep("describe")}
                               className="inline-flex items-center gap-1.5 hover:text-white/70 transition-colors"
                             >
-                              <ArrowLeft className="w-3.5 h-3.5" /> Refinar sinal
+                              <ArrowLeft className="w-3.5 h-3.5" /> Refinar contexto
                             </button>
-                            <span>Próximo passo · acesso imediato</span>
+                            <span>Seu departamento te espera</span>
                           </div>
                         </motion.div>
                       </div>
