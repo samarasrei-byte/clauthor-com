@@ -203,6 +203,16 @@ const AdminDashboard = () => {
 
   const breadcrumbLabel = sidebarItems.find(i => i.id === activeTab)?.label || activeTab;
 
+  if (verified !== true) {
+    return (
+      <div className="flex-1 min-h-[60vh] flex items-center justify-center">
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <Loader2 className="h-4 w-4 animate-spin" /> Verificando permissões…
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-full">
       <div className="hidden lg:block">
