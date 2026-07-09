@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { ArrowRight, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
+import NeuralBackdrop from "./NeuralBackdrop";
 
 /**
  * HeroTerminal — landing hero redesigned as a split-screen with a live agent
