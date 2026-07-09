@@ -257,7 +257,7 @@ function ThorLine({ children, delay = 0, typing = false }: { children: React.Rea
       className="flex items-start gap-2.5"
     >
       <div className="w-6 h-6 rounded-full bg-gradient-to-br from-rose-500 via-violet-500 to-cyan-500 flex items-center justify-center shrink-0 mt-0.5 shadow-[0_0_18px_rgba(167,139,250,0.5)]">
-        <Sparkles className="w-3 h-3 text-white" strokeWidth={2} />
+        <CoreDot size={10} />
       </div>
       <div className="text-[13px] text-white/75 leading-relaxed font-mono">
         {typing && typeof children === "string" ? <Typewriter text={children} /> : children}
