@@ -125,6 +125,7 @@ const App = () => (
                 <Route path="/investidores" element={<InvestorPitch />} />
                 <Route path="/investors" element={<InvestorPitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />
+                <Route path="/__onb-preview" element={<OnboardingPreview />} />
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/apresentacaoadv" element={<ApresentacaoAdv />} />
                 <Route path="/apresentacao-adv" element={<ApresentacaoAdv />} />
