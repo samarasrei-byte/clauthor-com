@@ -396,7 +396,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
 
   async function submitClaim() {
     if (!claim.email || !claim.whatsapp) {
-      toast.error("Preencha email e WhatsApp para garantir sua vaga.");
+      toast.error("Preencha email e WhatsApp para acessar seu dashboard.");
       return;
     }
     setLoading(true);
@@ -413,7 +413,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       setStep("done");
       setTimeout(() => { onComplete(); navigate("/dashboard"); }, 2600);
     } catch (e: any) {
-      toast.error("Não consegui salvar sua vaga.", { description: e?.message });
+      toast.error("Não consegui liberar seu acesso.", { description: e?.message });
     } finally {
       setLoading(false);
     }
@@ -440,7 +440,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     { key: "describe", lines: ["Sinal capturado. Agora, o que mais dói?"] },
     { key: "analyzing",lines: ["Cruzando 20 departamentos × 225 agentes…"] },
     { key: "reveal",   lines: [result ? `Match localizado com ${Math.round((result.confidence ?? 0.8) * 100)}% de confiança.` : ""] },
-    { key: "claim",    lines: ["Última etapa: fixar sua vaga na rede."] },
+    { key: "claim",    lines: ["Última etapa: liberar seu acesso ao dashboard."] },
   ];
   const currentIdx = STEP_ORDER.indexOf(step);
 
@@ -481,8 +481,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
         </div>
 
         {/* Layout: narrative rail (desktop) + main stage */}
-        <div className="relative z-10 h-full w-full flex items-center justify-center px-4 md:px-10 pt-16 pb-8">
-          <div className="w-full max-w-6xl grid md:grid-cols-[280px_1fr] gap-6 md:gap-10 items-center">
+        <div className="relative z-10 h-full w-full overflow-y-auto overflow-x-hidden flex justify-center px-4 md:px-10 pt-20 pb-16">
+          <div className="w-full max-w-6xl grid md:grid-cols-[280px_1fr] gap-6 md:gap-10 items-start my-auto">
+
             {/* Narrative rail */}
             <aside className="hidden md:block">
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl p-5 space-y-3.5 max-h-[70vh] overflow-hidden relative">
@@ -843,7 +844,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         {/* Agentes */}
                         {result.agents?.length > 0 && (
                           <div className="space-y-4">
-                            <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Agentes ativados</h4>
+                            <h4 className="text-[10px] font-mono text-white/40 uppercase tracking-widest">Seu squad</h4>
                             <div className="flex flex-wrap gap-2.5">
                               {result.agents.slice(0, 8).map((a, i) => {
                                 const palette = [
@@ -882,7 +883,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             <div className="absolute -inset-1 bg-gradient-to-r from-emerald-500/25 to-cyan-500/25 blur opacity-60 group-hover:opacity-100 transition duration-700" />
                             <div className="relative bg-[#0A0A0A] border border-emerald-500/30 rounded-2xl p-5 md:p-6 flex items-center justify-between gap-4">
                               <div className="min-w-0">
-                                <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest mb-1">Outcome projetado</p>
+                                <p className="text-[10px] font-mono text-emerald-400 uppercase tracking-widest mb-1">Resultado esperado em 30 dias</p>
                                 <p className="text-base md:text-lg font-bold text-white leading-snug">{result.expected_outcome}</p>
                               </div>
                               <div className="text-right shrink-0">
@@ -906,7 +907,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                             onClick={() => setStep("claim")}
                             className="w-full group relative flex items-center justify-center gap-3 bg-white text-black font-extrabold text-base md:text-lg py-4 md:py-5 rounded-2xl transition-all hover:bg-cyan-300 hover:scale-[1.01] active:scale-[0.99] shadow-[0_20px_50px_-15px_rgba(255,255,255,0.25)] cursor-pointer"
                           >
-                            Fixar minha vaga e entrar no dashboard
+                            Seja bem-vindo · Entrar no dashboard
                             <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" strokeWidth={2.5} />
                           </button>
                           <div className="flex items-center justify-between text-[11px] text-white/30 font-mono tracking-widest uppercase">
@@ -914,9 +915,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                               onClick={() => setStep("describe")}
                               className="inline-flex items-center gap-1.5 hover:text-white/70 transition-colors"
                             >
-                              <ArrowLeft className="w-3.5 h-3.5" /> Refinar sinal
+                              <ArrowLeft className="w-3.5 h-3.5" /> Refinar contexto
                             </button>
-                            <span>Próximo passo · acesso imediato</span>
+                            <span>Seu departamento te espera</span>
                           </div>
                         </motion.div>
                       </div>
@@ -936,9 +937,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                   >
                     <div className="space-y-2">
                       <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-white/50">Última etapa · 03 / 03</p>
-                      <h2 className="font-display text-3xl md:text-4xl font-bold">Fixar sua vaga na rede.</h2>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold">Seja bem-vindo à sua rede.</h2>
                       <p className="text-white/60 max-w-md">
-                        Vou reservar {result?.recommendation_name ? <span className="text-white">“{result.recommendation_name}”</span> : "sua solução"} e liberar acesso imediato ao dashboard.
+                        Vou ativar {result?.recommendation_name ? <span className="text-white">“{result.recommendation_name}”</span> : "seu departamento"} e liberar acesso imediato ao seu dashboard.
                       </p>
                     </div>
 
@@ -978,7 +979,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         className="bg-gradient-to-r from-rose-500 via-fuchsia-500 to-violet-500 text-white hover:opacity-90 rounded-full gap-2 h-12 px-6 shadow-[0_0_40px_rgba(225,29,72,0.4)]"
                       >
                         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ArrowRight className="w-4 h-4" />}
-                        Fixar vaga
+                        Entrar no dashboard
                       </Button>
                     </div>
                   </motion.div>
