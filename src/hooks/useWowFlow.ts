@@ -60,6 +60,9 @@ export function useWowFlow() {
 
   const timingsRef = useRef<Timings>({ signupAt: Date.now() });
   const abortRef = useRef<AbortController | null>(null);
+  const runIdRef = useRef<string | null>(null);
+
+
 
   const start = useCallback(() => {
     trackKpi("wow_started", { source: "instant_wow" });
@@ -104,9 +107,11 @@ export function useWowFlow() {
             ...(token ? { Authorization: `Bearer ${token}` } : {}),
           },
           body: JSON.stringify({
+            tenantId: tenantId ?? undefined,
             company: opts.company,
             pain: opts.pain,
             painCategory: opts.painCategory,
+            agentSlug: option.agentSlug,
             systemPrompt: option.systemPrompt,
             userPrompt: option.userPromptTemplate(opts.company, opts.pain),
           }),
@@ -114,6 +119,8 @@ export function useWowFlow() {
         });
 
         if (!resp.ok || !resp.body) throw new Error(`gateway_${resp.status}`);
+        runIdRef.current = resp.headers.get("x-run-id") || resp.headers.get("X-Run-Id") || null;
+
 
         const reader = resp.body.getReader();
         const decoder = new TextDecoder();
