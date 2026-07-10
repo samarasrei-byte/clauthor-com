@@ -23,18 +23,26 @@ export type KpiEventName =
   | "department_hire_click"
   | "onboarding_department_picked"
   | "diagnosis_recap_activate"
-  | "diagnosis_recap_talk_thor";
+  | "diagnosis_recap_talk_thor"
+  | "thor_guide_section_play"
+  | "thor_guide_section_replay"
+  | "thor_guide_mute_toggle";
 
 export interface KpiEventPayload {
   department_id?: string;
   department_name?: string;
-  source?: "landing" | "onboarding" | "dashboard" | "live_demo" | "departamentos_page" | "diagnosis_recap";
+  source?: "landing" | "onboarding" | "dashboard" | "live_demo" | "departamentos_page" | "diagnosis_recap" | "thor_guide";
   price_monthly?: number;
   duration_ms?: number;
   pain?: string;
   has_briefing?: boolean;
   has_site_summary?: boolean;
+  section?: string;
+  is_first_visit?: boolean;
+  muted?: boolean;
+  persisted?: boolean;
 }
+
 
 declare global {
   interface Window {

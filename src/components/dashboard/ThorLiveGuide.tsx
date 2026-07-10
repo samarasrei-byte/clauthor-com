@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import { DEFAULT_VOICE_ID as THOR_VOICE_ID } from "@/components/thor/ThorVoice";
+import { trackKpi } from "@/lib/kpiTracker";
+
+const MUTE_STORAGE_KEY = "thor_guide_muted";
+
 
 // ─── Section guide data (pre-written, no AI needed) ───
 interface GuideStep {
@@ -347,7 +351,14 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return window.localStorage.getItem(MUTE_STORAGE_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
   const [showAskThor, setShowAskThor] = useState(false);
   const [currentMessage, setCurrentMessage] = useState("");
   const [displayedText, setDisplayedText] = useState("");
@@ -357,6 +368,15 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
   const typingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isMutedRef = useRef(isMuted);
   useEffect(() => { isMutedRef.current = isMuted; }, [isMuted]);
+
+  // Persist mute preference across sessions ("sempre mudo")
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(MUTE_STORAGE_KEY, isMuted ? "1" : "0");
+    } catch { /* ignore quota / privacy mode */ }
+  }, [isMuted]);
+
 
   const { speak, stop: stopTTS, isSpeaking } = useElevenLabsTTS();
 
@@ -418,9 +438,17 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
     setCurrentMessage(message);
     playMessage(message);
 
+    trackKpi("thor_guide_section_play", {
+      source: "thor_guide",
+      section: activeSection,
+      is_first_visit: isFirstVisit,
+      muted: isMutedRef.current,
+    });
+
     if (isFirstVisit) {
       setVisitedSections(prev => new Set(prev).add(activeSection));
     }
+
   }, [activeSection, isPaused, hasGreeted, playMessage, visitedSections]);
 
   // When user mutes mid-speech, stop the audio immediately
@@ -509,7 +537,17 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             {visitedSections.size}/{GUIDE_STEPS.length}
           </span>
           <button
-            onClick={() => setIsMuted(!isMuted)}
+            onClick={() => {
+              const next = !isMuted;
+              setIsMuted(next);
+              trackKpi("thor_guide_mute_toggle", {
+                source: "thor_guide",
+                section: activeSection,
+                muted: next,
+                persisted: true,
+              });
+            }}
+
             aria-label="Som"
             className="w-6 h-6 rounded-md flex items-center justify-center text-muted-foreground/70 hover:text-foreground hover:bg-muted/30 transition-colors"
           >
@@ -536,7 +574,16 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         {/* Message — clickable to replay explanation with voice */}
         <button
           type="button"
-          onClick={() => currentMessage && playMessage(currentMessage)}
+          onClick={() => {
+            if (!currentMessage) return;
+            playMessage(currentMessage);
+            trackKpi("thor_guide_section_replay", {
+              source: "thor_guide",
+              section: activeSection,
+              muted: isMutedRef.current,
+            });
+          }}
+
           className="w-full text-left px-3.5 py-3 hover:bg-muted/10 transition-colors group/msg"
           title="Clique para ouvir novamente"
         >
