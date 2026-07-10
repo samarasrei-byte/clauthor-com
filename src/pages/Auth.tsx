@@ -168,7 +168,7 @@ const AuthPage = () => {
               ? "Seus agentes de advocacia estão esperando por você."
               : isLogin
               ? t("auth.login_subtitle")
-              : t("auth.register_subtitle_enhanced", { defaultValue: "Crie sua conta gratuita e tenha acesso imediato a 200 agentes de IA." })}
+              : t("auth.register_subtitle_enhanced", { defaultValue: "Cadastro grátis · Diagnóstico em 60s · Contratação a partir de $99/mês quando quiser ativar um departamento." })}
           </p>
         </div>
 
