@@ -174,14 +174,14 @@ export default function AdminUserManager({ allProfiles, allCredits }: AdminUserM
               </div>
             )}
             <Button variant="outline" size="sm" onClick={resetCredits} disabled={saving} className="w-full text-xs">
-              Reset used credits to 0
+              Zerar créditos utilizados
             </Button>
           </div>
           <DialogFooter>
-            <Button variant="ghost" onClick={() => setEditingUser(null)}>Cancel</Button>
+            <Button variant="ghost" onClick={() => setEditingUser(null)}>Cancelar</Button>
             <Button onClick={handleSave} disabled={saving} className="gap-2">
               {saving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
-              Save
+              Salvar
             </Button>
           </DialogFooter>
         </DialogContent>
