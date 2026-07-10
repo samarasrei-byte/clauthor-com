@@ -429,20 +429,34 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                   transition={{ duration: 0.3 }}
                   className="space-y-5"
                 >
-                  {/* Savings hero */}
+                  {/* Price hero — mostra o preço mensal real do departamento */}
                   <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
                     <p className="text-[10px] font-bold tracking-[0.2em] text-red-500 uppercase">
-                      Você economiza cerca de
+                      Departamento pré-ativado
                     </p>
                     <p className="font-display text-4xl md:text-5xl font-semibold tracking-tight text-white mt-2">
-                      {BRL(rec.monthlySavings)}
-                      <span className="text-base font-normal text-white/40 ml-1.5">/mês</span>
+                      {deptMonthlyLabel ?? "Sob consulta"}
+                      {deptMonthlyLabel && (
+                        <span className="text-base font-normal text-white/40 ml-1.5">/mês</span>
+                      )}
                     </p>
                     <p className="text-[12px] text-white/50 mt-3 leading-relaxed">
-                      vs contratar um time CLT equivalente. Primeira ação em{" "}
-                      <span className="text-white font-medium">{rec.timeToValue}</span>.
+                      {savingsVsClt ? (
+                        <>
+                          Economia de{" "}
+                          <span className="text-white font-medium">{BRL(savingsVsClt)}</span>{" "}
+                          vs time CLT equivalente. Primeira ação em{" "}
+                          <span className="text-white font-medium">{rec.timeToValue}</span>.
+                        </>
+                      ) : (
+                        <>
+                          Time montado sob medida pelo Thor. Primeira ação em{" "}
+                          <span className="text-white font-medium">{rec.timeToValue}</span>.
+                        </>
+                      )}
                     </p>
                   </div>
+
 
                   {/* What it does */}
                   <div>
