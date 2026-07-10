@@ -7,6 +7,10 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
 import { DEFAULT_VOICE_ID as THOR_VOICE_ID } from "@/components/thor/ThorVoice";
+import { trackKpi } from "@/lib/kpiTracker";
+
+const MUTE_STORAGE_KEY = "thor_guide_muted";
+
 
 // ─── Section guide data (pre-written, no AI needed) ───
 interface GuideStep {
