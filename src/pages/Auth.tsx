@@ -26,7 +26,6 @@ export interface HireIntent {
 }
 
 const AuthPage = () => {
-  const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
@@ -44,6 +43,10 @@ const AuthPage = () => {
   const searchParams = new URLSearchParams(location.search);
   const redirectParam = searchParams.get("redirect");
   const verticalParam = searchParams.get("vertical");
+  const modeParam = searchParams.get("mode"); // "signup" | "login"
+
+  // Default para signup quando vem de "Create your account" (?mode=signup) ou via state.signup.
+  const [isLogin, setIsLogin] = useState(() => !(modeParam === "signup" || state?.signup));
 
   const from = redirectParam || state?.from?.pathname || "/dashboard";
   const hireIntent = state?.hireIntent || null;
@@ -56,10 +59,10 @@ const AuthPage = () => {
     (typeof document !== "undefined" && document.referrer.includes("/advocacia"));
 
   useEffect(() => {
-    if (state?.signup) {
+    if (state?.signup || modeParam === "signup") {
       setIsLogin(false);
     }
-  }, [state?.signup]);
+  }, [state?.signup, modeParam]);
 
   // Block 2.1 — page title based on context
   useEffect(() => {
