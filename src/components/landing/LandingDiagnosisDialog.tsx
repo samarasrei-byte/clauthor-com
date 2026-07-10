@@ -161,9 +161,9 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
         className="max-w-[580px] w-[calc(100vw-2rem)] p-0 gap-0 overflow-hidden border-white/5 bg-[#0D0D0D] rounded-[28px] md:rounded-[32px] shadow-2xl [&>button]:hidden max-h-[92dvh] flex flex-col"
         aria-describedby={undefined}
       >
-        <div className="p-6 sm:p-8 md:p-12 flex flex-col min-h-0 flex-1">
+        <div className="p-5 sm:p-7 md:p-9 flex flex-col min-h-0 flex-1">
           {/* Progress Header — hairline */}
-          <div className="flex items-center justify-between mb-6 sm:mb-10">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div className="flex gap-1.5 flex-1">
               {STEPS.map((s, i) => (
                 <div
@@ -185,11 +185,11 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
           </div>
 
           {/* Title block */}
-          <div className="space-y-2 mb-6 sm:mb-10">
-            <p className="text-[11px] font-bold tracking-[0.2em] text-red-500 uppercase">
+          <div className="space-y-1.5 mb-4 sm:mb-6">
+            <p className="text-[10px] font-bold tracking-[0.2em] text-red-500 uppercase">
               Passo {stepIndex + 1} de {STEPS.length}
             </p>
-            <DialogTitle className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-white tracking-tight leading-[1.1]">
+            <DialogTitle className="font-display text-xl sm:text-2xl md:text-[26px] font-semibold text-white tracking-tight leading-[1.15]">
               {step === "company" && "Me conta sobre sua empresa."}
               {step === "pain" && "O que você quer resolver primeiro?"}
               {step === "delivery" && "Como você prefere começar?"}
@@ -199,7 +199,7 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                 </>
               )}
             </DialogTitle>
-            <DialogDescription className="text-white/40 text-sm sm:text-base md:text-lg font-normal leading-relaxed pt-1">
+            <DialogDescription className="text-white/40 text-[13px] sm:text-sm font-normal leading-relaxed pt-0.5">
               {step === "company" && "Vamos analisar seu site e entender seu contexto — leva 30 segundos."}
               {step === "pain" && "Sem julgamento. Depois refinamos com Thor se precisar."}
               {step === "delivery" && "Você pode mudar depois. Nada é definitivo aqui."}
