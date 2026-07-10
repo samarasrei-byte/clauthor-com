@@ -10,8 +10,10 @@
  * Sem efeitos colaterais: puramente apresentacional, recebe callbacks.
  */
 import { motion } from "framer-motion";
-import { ArrowRight, Building2, Sparkles, ShieldCheck } from "lucide-react";
+import { ArrowRight, Building2, Sparkles, ShieldCheck, Target } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { loadDiagnosis, PAIN_TO_RECOMMENDATION } from "@/lib/diagnosis-routing";
 
 interface DashboardEmptyStateProps {
   userName?: string;
@@ -25,6 +27,9 @@ const DashboardEmptyState = ({
   onExploreLibrary,
 }: DashboardEmptyStateProps) => {
   const firstName = userName?.split(" ")[0];
+  const navigate = useNavigate();
+  const diagnosis = loadDiagnosis();
+  const rec = diagnosis ? PAIN_TO_RECOMMENDATION[diagnosis.pain] : null;
 
   return (
     <motion.section
