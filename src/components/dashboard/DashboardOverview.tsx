@@ -8,7 +8,7 @@ import SectionLoader from "@/components/ui/section-loader";
 // GuidedOnboarding legado removido — RevolutionaryOnboardingGate global cobre esse fluxo.
 import HeroBriefing from "@/components/dashboard/HeroBriefing";
 import NextStepsCard from "@/components/dashboard/NextStepsCard";
-import FirstTimeTour from "@/components/dashboard/FirstTimeTour";
+// FirstTimeTour removido — ThorLiveGuide já cobre onboarding em 5 passos.
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
@@ -66,7 +66,6 @@ const DashboardOverview = ({
 
   return (
     <>
-      <FirstTimeTour />
 
       {loadingAgents && (
         <Suspense fallback={<SectionLoader />}><DashboardSkeleton /></Suspense>

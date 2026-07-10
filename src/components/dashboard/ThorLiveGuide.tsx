@@ -13,66 +13,33 @@ interface GuideStep {
   message: string;
 }
 
+// Onboarding enxuto: 5 passos essenciais. As outras seções permanecem
+// acessíveis pelo sidebar, mas não interrompem o tour inicial.
 const GUIDE_STEPS: GuideStep[] = [
   {
     section: "overview",
     title: "Command Center",
-    message: "Bem-vindo! Este é o seu Command Center - o hub central onde você monitora tudo. Desempenho dos agentes, tarefas pendentes e ações rápidas, tudo em um só lugar.",
+    message: "Bem-vindo! Este é o seu Command Center — o hub central onde você monitora tudo: desempenho dos agentes, tarefas pendentes e ações rápidas.",
   },
   {
     section: "omnix",
     title: "Thor IA",
-    message: "Aqui é onde eu moro! Pode falar comigo a qualquer momento - delegue tarefas, faça perguntas estratégicas ou me deixe orquestrar toda a sua equipe de IA. Sou seu co-piloto.",
+    message: "Aqui é onde eu moro. Delegue tarefas, faça perguntas estratégicas ou me deixe orquestrar toda a sua equipe de IA. Sou seu co-piloto.",
   },
   {
     section: "agents",
     title: "Seus Agentes",
-    message: "Aqui você encontra todos os agentes de IA trabalhando para você. Cada um é especializado em uma área diferente - de prospecção de vendas a criação de conteúdo. Pense neles como seus funcionários digitais.",
+    message: "Aqui estão todos os agentes trabalhando para você. Cada um é especialista em uma área — pense neles como seus funcionários digitais.",
   },
   {
     section: "library",
-    title: "Biblioteca de Agentes",
-    message: "Esta é a Biblioteca — seu marketplace de agentes de IA organizados por squads e departamentos. Navegue, compare e contrate os que combinam com suas necessidades.",
-  },
-  {
-    section: "war-room",
-    title: "Sala de Reunião",
-    message: "Esta é a Sala de Reunião. Aqui você conversa diretamente com seus agentes de IA e delega tarefas em um ambiente colaborativo. Como uma sala de diretoria virtual.",
-  },
-  {
-    section: "live-timeline",
-    title: "Timeline",
-    message: "Esta é a Timeline. Mostra tudo que seus agentes estão fazendo em tempo real - cada tarefa, cada execução, cada resultado. Transparência total nas suas operações de IA.",
-  },
-  {
-    section: "mission-control",
-    title: "Controle de Missão",
-    message: "Este é o Controle de Missão. Observe todos os agentes trabalhando, valide outputs e treine o Thor para entender suas preferências. Seu centro de comando de operações de IA.",
+    title: "Biblioteca",
+    message: "Seu marketplace de agentes e departamentos. Navegue, compare e contrate os que resolvem suas dores em 1 clique.",
   },
   {
     section: "integrations",
     title: "Integrações",
-    message: "Seção de Integrações. Conecte ferramentas externas como WhatsApp, e-mail, CRM e mais para expandir o poder dos seus agentes de IA.",
-  },
-  {
-    section: "insights",
-    title: "Insights",
-    message: "Insights traz análises profundas do desempenho da sua equipe de IA - taxas de sucesso, tendências de execução, uso de tokens e métricas de qualidade.",
-  },
-  {
-    section: "control-tower",
-    title: "Torre de Controle",
-    message: "A Torre de Controle centraliza o comando de toda sua frota de agentes - credenciais, feedback de execução e métricas globais em um dashboard poderoso.",
-  },
-  {
-    section: "settings",
-    title: "Configurações",
-    message: "Aqui você gerencia perfil, faturamento, membros da equipe e conexões da plataforma. Tudo para manter seu workspace configurado perfeitamente.",
-  },
-  {
-    section: "equipe",
-    title: "Equipe",
-    message: "A seção Equipe permite gerenciar conversas dos squads e coordenar múltiplos agentes trabalhando juntos em tarefas complexas.",
+    message: "Conecte WhatsApp, e-mail, CRM e mais. Cada integração multiplica o poder dos seus agentes.",
   },
 ];
 
@@ -148,7 +115,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
 
         {/* Core bloom halo */}
         <motion.circle
-          cx={CENTER} cy={CENTER}
+          cx={CENTER} cy={CENTER} r={8}
           fill="hsl(var(--primary))"
           filter="url(#neural-bloom-lg)"
           animate={{
@@ -305,7 +272,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
 
         {/* Core nucleus */}
         <motion.circle
-          cx={CENTER} cy={CENTER}
+          cx={CENTER} cy={CENTER} r={3}
           fill="hsl(var(--primary))"
           animate={{
             r: isSpeaking ? [4, 8, 3, 7, 4] : isListening ? [3, 5, 3] : [2, 3, 2],
