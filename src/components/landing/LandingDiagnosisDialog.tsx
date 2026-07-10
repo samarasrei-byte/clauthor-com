@@ -158,12 +158,12 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
-        className="max-w-[580px] p-0 gap-0 overflow-hidden border-white/5 bg-[#0D0D0D] rounded-[32px] shadow-2xl [&>button]:hidden"
+        className="max-w-[580px] w-[calc(100vw-2rem)] p-0 gap-0 overflow-hidden border-white/5 bg-[#0D0D0D] rounded-[28px] md:rounded-[32px] shadow-2xl [&>button]:hidden max-h-[92dvh] flex flex-col"
         aria-describedby={undefined}
       >
-        <div className="p-8 md:p-12">
+        <div className="p-6 sm:p-8 md:p-12 flex flex-col min-h-0 flex-1">
           {/* Progress Header — hairline */}
-          <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center justify-between mb-6 sm:mb-10">
             <div className="flex gap-1.5 flex-1">
               {STEPS.map((s, i) => (
                 <div
@@ -185,11 +185,11 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
           </div>
 
           {/* Title block */}
-          <div className="space-y-2 mb-10">
+          <div className="space-y-2 mb-6 sm:mb-10">
             <p className="text-[11px] font-bold tracking-[0.2em] text-red-500 uppercase">
               Passo {stepIndex + 1} de {STEPS.length}
             </p>
-            <DialogTitle className="font-display text-3xl md:text-4xl font-semibold text-white tracking-tight leading-[1.1]">
+            <DialogTitle className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-white tracking-tight leading-[1.1]">
               {step === "company" && "Me conta sobre sua empresa."}
               {step === "pain" && "O que você quer resolver primeiro?"}
               {step === "delivery" && "Como você prefere começar?"}
@@ -199,7 +199,7 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                 </>
               )}
             </DialogTitle>
-            <DialogDescription className="text-white/40 text-base md:text-lg font-normal leading-relaxed pt-1">
+            <DialogDescription className="text-white/40 text-sm sm:text-base md:text-lg font-normal leading-relaxed pt-1">
               {step === "company" && "Vamos analisar seu site e entender seu contexto — leva 30 segundos."}
               {step === "pain" && "Sem julgamento. Depois refinamos com Thor se precisar."}
               {step === "delivery" && "Você pode mudar depois. Nada é definitivo aqui."}
@@ -208,7 +208,8 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
           </div>
 
           {/* Content */}
-          <div className="max-h-[52vh] overflow-y-auto -mx-1 px-1">
+          <div className="flex-1 min-h-0 overflow-y-auto -mx-1 px-1">
+
             <AnimatePresence mode="wait">
               {/* STEP 1 — COMPANY */}
               {step === "company" && (
@@ -435,10 +436,10 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between mt-10">
+          <div className="flex items-center justify-between gap-3 mt-6 sm:mt-10 shrink-0">
             <button
               onClick={goBack}
-              className="text-[14px] font-medium text-white/40 hover:text-white transition-colors px-2 py-1"
+              className="text-[14px] font-medium text-white/40 hover:text-white transition-colors px-2 py-1 shrink-0"
             >
               {step === "company" ? "Fechar" : "Voltar"}
             </button>
@@ -446,22 +447,23 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
             {step === "result" ? (
               <button
                 onClick={goToRecommendation}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-8 py-3.5 rounded-full text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95"
+                className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-full text-[14px] sm:text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95 min-w-0"
               >
-                {rec?.ctaLabel}
-                <ArrowRight className="w-4 h-4" strokeWidth={2} />
+                <span className="truncate">{rec?.ctaLabel}</span>
+                <ArrowRight className="w-4 h-4 shrink-0" strokeWidth={2} />
               </button>
             ) : (
               <button
                 onClick={goNext}
                 disabled={!canAdvance}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-full text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95 disabled:active:scale-100"
+                className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-full text-[14px] sm:text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95 disabled:active:scale-100 min-w-0"
               >
-                {primaryLabel}
-                <ArrowRight className="w-4 h-4" strokeWidth={2} />
+                <span className="truncate">{primaryLabel}</span>
+                <ArrowRight className="w-4 h-4 shrink-0" strokeWidth={2} />
               </button>
             )}
           </div>
+
         </div>
       </DialogContent>
     </Dialog>
