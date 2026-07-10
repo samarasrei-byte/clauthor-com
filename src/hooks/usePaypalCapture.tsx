@@ -148,11 +148,11 @@ export function usePaypalCapture() {
             try {
               const { data: profile } = await supabase
                 .from("profiles")
-                .select("full_name, email, company, onboarding_answers")
+                .select("full_name, email, company_name, onboarding_answers")
                 .eq("user_id", user.id)
                 .maybeSingle();
 
-              const answers = (profile?.onboarding_answers as any) || {};
+              const answers = ((profile as any)?.onboarding_answers as any) || {};
               await supabase.from("contracted_departments").insert({
                 user_id: user.id,
                 department_id: subIntent.department_id || "comercial",
@@ -164,9 +164,9 @@ export function usePaypalCapture() {
                 subscription_id: subIntent.subscription_id,
                 pain_point: answers.pain || answers.detected_pain || null,
                 company_snapshot: {
-                  name: profile?.company || null,
-                  contact_name: profile?.full_name || null,
-                  email: profile?.email || null,
+                  name: (profile as any)?.company_name || null,
+                  contact_name: (profile as any)?.full_name || null,
+                  email: (profile as any)?.email || null,
                 },
                 onboarding_snapshot: answers,
                 status: "active",
