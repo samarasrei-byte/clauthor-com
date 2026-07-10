@@ -10,8 +10,10 @@
  * Sem efeitos colaterais: puramente apresentacional, recebe callbacks.
  */
 import { motion } from "framer-motion";
-import { ArrowRight, Building2, Sparkles, ShieldCheck } from "lucide-react";
+import { ArrowRight, Building2, Sparkles, ShieldCheck, Target } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { loadDiagnosis, PAIN_TO_RECOMMENDATION } from "@/lib/diagnosis-routing";
 
 interface DashboardEmptyStateProps {
   userName?: string;
@@ -25,6 +27,9 @@ const DashboardEmptyState = ({
   onExploreLibrary,
 }: DashboardEmptyStateProps) => {
   const firstName = userName?.split(" ")[0];
+  const navigate = useNavigate();
+  const diagnosis = loadDiagnosis();
+  const rec = diagnosis ? PAIN_TO_RECOMMENDATION[diagnosis.pain] : null;
 
   return (
     <motion.section
@@ -61,6 +66,34 @@ const DashboardEmptyState = ({
         Você ainda não contratou nenhum departamento. Escolha um dos 20
         departamentos prontos e monte seu squad em minutos.
       </motion.p>
+
+      {rec && (
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.32 }}
+          className="mt-6 max-w-lg w-full rounded-2xl border border-primary/40 bg-primary/5 p-4 text-left"
+        >
+          <div className="flex items-start gap-3">
+            <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center flex-shrink-0">
+              <Target className="h-4 w-4" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[11px] font-medium text-primary uppercase tracking-wide">Baseado no diagnóstico que você fez</p>
+              <p className="text-sm font-semibold mt-0.5">Recomendação: {rec.departmentLabel}</p>
+              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{rec.tagline}</p>
+              <Button
+                size="sm"
+                className="mt-3 gap-1.5"
+                onClick={() => navigate(rec.route)}
+              >
+                {rec.ctaLabel}
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </div>
+        </motion.div>
+      )}
 
       <motion.div
         initial={{ opacity: 0, y: 8 }}
