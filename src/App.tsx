@@ -10,6 +10,7 @@ import DashboardLayout from "@/components/dashboard/DashboardLayout";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import { lazy, Suspense } from "react";
 import CustomerSetup from "@/pages/CustomerSetup";
+import FeatureGate from "@/components/FeatureGate";
 
 // Retry wrapper for stale chunk errors after deploys
 function lazyRetry(factory: () => Promise<any>) {
@@ -162,10 +163,11 @@ const App = () => (
                   <Route path="/privacidade" element={<Privacy />} />
                   <Route path="/reset-password" element={<ResetPassword />} />
                   <Route path="/api-docs" element={<ApiDocs />} />
-                  <Route path="/team-builder" element={<TeamBuilder />} />
+                  <Route path="/team-builder" element={<FeatureGate flag="team_builder" fallback="/"><TeamBuilder /></FeatureGate>} />
                   <Route path="/enterprise" element={<Enterprise />} />
-                  <Route path="/architecture" element={<Architecture />} />
-                  <Route path="/timeline" element={<ProjectTimeline />} />
+                  <Route path="/architecture" element={<FeatureGate flag="architecture" fallback="/"><Architecture /></FeatureGate>} />
+                  <Route path="/timeline" element={<FeatureGate flag="timeline" fallback="/"><ProjectTimeline /></FeatureGate>} />
+                  
                   
                 </Route>
 
@@ -176,25 +178,25 @@ const App = () => (
                   <Route path="/create-agent" element={<CreateWorkforce />} />
                   <Route path="/create-agent/classic" element={<CreateAgent />} />
                   <Route path="/integrations" element={<Integrations />} />
-                  <Route path="/mcp" element={<MCPServer />} />
+                  <Route path="/mcp" element={<FeatureGate flag="mcp"><MCPServer /></FeatureGate>} />
                   <Route path="/settings/connections" element={<SettingsConnections />} />
                   <Route path="/settings/social" element={<SocialConnections />} />
-                  <Route path="/art-director" element={<ArtDirector />} />
+                  <Route path="/art-director" element={<FeatureGate flag="art_director"><ArtDirector /></FeatureGate>} />
 
 
                   <Route path="/knowledge-base" element={<KnowledgeBase />} />
                   <Route path="/monix" element={<Navigate to="/dashboard?tab=omnix" replace />} />
                   <Route path="/omnix" element={<Navigate to="/dashboard?tab=omnix" replace />} />
                   <Route path="/control-tower" element={<Navigate to="/dashboard?tab=operations-center" replace />} />
-                  <Route path="/neural-network" element={<AgentNeuralNetwork />} />
-                  <Route path="/scrum" element={<ScrumBoard />} />
-                  <Route path="/hunter" element={<HunterDashboard />} />
-                  <Route path="/hunter-linkedin" element={<HunterLinkedIn />} />
-                  <Route path="/hunter-icp" element={<HunterICP />} />
-                  <Route path="/hunter-mensagem" element={<HunterMensagem />} />
-                  <Route path="/hunter-ativar" element={<HunterAtivar />} />
-                  <Route path="/hunter-lead/:id" element={<HunterLeadDetail />} />
-                  <Route path="/hunter-inbox" element={<HunterInbox />} />
+                  <Route path="/neural-network" element={<FeatureGate flag="neural"><AgentNeuralNetwork /></FeatureGate>} />
+                  <Route path="/scrum" element={<FeatureGate flag="scrum"><ScrumBoard /></FeatureGate>} />
+                  <Route path="/hunter" element={<FeatureGate flag="hunter"><HunterDashboard /></FeatureGate>} />
+                  <Route path="/hunter-linkedin" element={<FeatureGate flag="hunter"><HunterLinkedIn /></FeatureGate>} />
+                  <Route path="/hunter-icp" element={<FeatureGate flag="hunter"><HunterICP /></FeatureGate>} />
+                  <Route path="/hunter-mensagem" element={<FeatureGate flag="hunter"><HunterMensagem /></FeatureGate>} />
+                  <Route path="/hunter-ativar" element={<FeatureGate flag="hunter"><HunterAtivar /></FeatureGate>} />
+                  <Route path="/hunter-lead/:id" element={<FeatureGate flag="hunter"><HunterLeadDetail /></FeatureGate>} />
+                  <Route path="/hunter-inbox" element={<FeatureGate flag="hunter"><HunterInbox /></FeatureGate>} />
                   <Route path="/app/agente/:slug" element={<AgentWorkspace />} />
                   <Route path="/settings/api-keys" element={<ApiKeysSettings />} />
                 </Route>
