@@ -30,8 +30,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { FLAGSHIP_DEPARTMENTS, type DepartmentPackage } from "@/data/departmentPackages";
 
-type Step = "welcome" | "input" | "describe" | "analyzing" | "reveal" | "claim" | "done";
+type Step = "welcome" | "department" | "input" | "describe" | "analyzing" | "reveal" | "claim" | "done";
 
 interface Classification {
   business_summary: string;
@@ -56,15 +57,16 @@ const NEED_META = {
   department: { icon: Building2,  label: "Departamento Completo", color: "#22d3ee", gradient: "from-cyan-500/30 to-blue-500/10" },
 } as const;
 
-const STEP_ORDER: Step[] = ["welcome", "input", "describe", "analyzing", "reveal", "claim", "done"];
+const STEP_ORDER: Step[] = ["welcome", "department", "input", "describe", "analyzing", "reveal", "claim", "done"];
 const STEP_LABELS: Record<Step, string> = {
-  welcome:   "Contato",
-  input:     "Sinal",
-  describe:  "Dor",
-  analyzing: "Fusão",
-  reveal:    "Match",
-  claim:     "Vaga",
-  done:      "Online",
+  welcome:    "Contato",
+  department: "Depto",
+  input:      "Sinal",
+  describe:   "Dor",
+  analyzing:  "Fusão",
+  reveal:     "Match",
+  claim:      "Vaga",
+  done:       "Online",
 };
 
 /* ─────────────────────────── Neural constellation ─────────────────────────── */
@@ -205,7 +207,7 @@ function Typewriter({ text, speed = 18, onDone }: { text: string; speed?: number
 
 function StepRail({ current }: { current: Step }) {
   const currentIdx = STEP_ORDER.indexOf(current);
-  const visible: Step[] = ["welcome", "input", "describe", "analyzing", "reveal", "claim"];
+  const visible: Step[] = ["welcome", "department", "input", "describe", "analyzing", "reveal", "claim"];
   return (
     <div className="flex items-center gap-2">
       {visible.map((s, i) => {
@@ -344,6 +346,28 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       confidence: 0.55,
     };
   }
+
+  /**
+   * Fast path: usuário escolheu um departamento flagship no início do onboarding.
+   * Pré-monta o `result` (sem chamar edge function) e pula direto para "reveal".
+   */
+  function pickDepartment(dept: DepartmentPackage) {
+    const uniqueAgents = Array.from(new Set(dept.timelineDemo.map((e) => e.agentName)));
+    setDescription(dept.painPoint);
+    setResult({
+      business_summary: `Empresa que precisa ativar um ${dept.name.toLowerCase()} pronto para operar.`,
+      detected_pain: dept.painPoint,
+      need_type: "department",
+      recommendation_name: dept.name,
+      recommendation_pitch: `${dept.outcome}. ${dept.outcomeGuarantee ?? ""}`.trim(),
+      agents: uniqueAgents,
+      expected_outcome: dept.outcome,
+      confidence: 0.92,
+    });
+    setStep("reveal");
+  }
+
+
 
   async function runAnalysis() {
     setLoading(true);
@@ -540,7 +564,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                     <div className="flex flex-col items-center gap-3">
                       <Button
                         size="lg"
-                        onClick={() => setStep("input")}
+                        onClick={() => setStep("department")}
                         className="h-14 px-8 text-base bg-white text-black hover:bg-white/90 rounded-full gap-2 shadow-[0_0_60px_rgba(225,29,72,0.4)]"
                       >
                         Iniciar sincronização <ArrowRight className="w-4 h-4" />
@@ -548,6 +572,68 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                       <p className="text-[10px] font-mono uppercase tracking-widest text-white/40">
                         neural handshake · sem cartão
                       </p>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* DEPARTMENT — escolha do departamento pronto (Bloco 5) */}
+                {step === "department" && (
+                  <motion.div
+                    key="department"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="space-y-7"
+                  >
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-white/50">Departamento pronto · 00 / 03</p>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold">
+                        Qual departamento sua empresa precisa contratar?
+                      </h2>
+                      <p className="text-white/60 max-w-xl">
+                        Escolha o departamento pronto que resolve sua dor agora. Cada um vem com agentes, timeline transparente e outcome garantido.
+                      </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-3">
+                      {FLAGSHIP_DEPARTMENTS.map((dept) => {
+                        const Icon = dept.icon;
+                        const agentCount = new Set(dept.timelineDemo.map((e) => e.agentName)).size;
+                        return (
+                          <button
+                            key={dept.id}
+                            onClick={() => pickDepartment(dept)}
+                            className="group relative text-left p-5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl overflow-hidden hover:border-white/30 hover:bg-white/[0.06] transition-all"
+                          >
+                            <div className="w-11 h-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center mb-4 group-hover:bg-white/10 transition">
+                              <Icon className="w-5 h-5 text-white/85" />
+                            </div>
+                            <p className="font-semibold text-white leading-tight">{dept.name}</p>
+                            <p className="text-xs text-white/55 mt-1.5 leading-relaxed">{dept.painPoint}</p>
+                            <div className="mt-4 pt-3 border-t border-white/5 space-y-1.5">
+                              <p className="text-[10px] font-mono text-emerald-300/80 uppercase tracking-widest">
+                                {dept.outcome}
+                              </p>
+                              <p className="text-[10px] font-mono text-white/40 uppercase tracking-widest">
+                                {agentCount} agentes · 60s para ver funcionando
+                              </p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2">
+                      <Button variant="ghost" onClick={() => setStep("welcome")} className="text-white/60 hover:text-white hover:bg-white/5">
+                        <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setStep("input")}
+                        className="text-white/60 hover:text-white hover:bg-white/5 rounded-full gap-2 h-11 px-5"
+                      >
+                        Não sei ainda — deixe o Thor descobrir <ArrowRight className="w-4 h-4" />
+                      </Button>
                     </div>
                   </motion.div>
                 )}
@@ -664,7 +750,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                     </AnimatePresence>
 
                     <div className="flex items-center justify-between pt-2">
-                      <Button variant="ghost" onClick={() => setStep("welcome")} className="text-white/60 hover:text-white hover:bg-white/5">
+                      <Button variant="ghost" onClick={() => setStep("department")} className="text-white/60 hover:text-white hover:bg-white/5">
                         <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
                       </Button>
                       <Button
