@@ -178,6 +178,8 @@ const App = () => (
                 {/* Dashboard pages with minimal header + sidebar only */}
                 <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                   <Route path="/dashboard" element={<ClientDashboard />} />
+                  <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
+
                   <Route path="/agents" element={<Agents />} />
                   <Route path="/create-agent" element={<CreateWorkforce />} />
                   <Route path="/create-agent/classic" element={<CreateAgent />} />
