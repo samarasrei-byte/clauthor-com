@@ -22,6 +22,10 @@ export default defineConfig(({ mode }) => ({
   optimizeDeps: {
     include: ["@tanstack/react-query"],
   },
+  esbuild: {
+    // Item 5: remove console.log/debugger em produção
+    drop: mode === "production" ? ["console", "debugger"] : [],
+  },
   build: {
     rollupOptions: {
       output: {
