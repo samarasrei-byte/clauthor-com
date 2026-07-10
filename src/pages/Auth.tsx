@@ -1,10 +1,10 @@
 import { motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart, Shield, Zap, Users, Scale, CheckCircle2 } from "lucide-react";
+import { Bot, ArrowRight, Eye, EyeOff, Loader2, ShoppingCart, Shield, Zap, Users, Scale, CheckCircle2, TrendingDown, Lock } from "lucide-react";
 import HelpTooltip from "@/components/HelpTooltip";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
@@ -13,6 +13,8 @@ import { lovable } from "@/integrations/lovable/index";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { loadDiagnosis, PAIN_TO_RECOMMENDATION, PAIN_TO_DEPT_ID } from "@/lib/diagnosis-routing";
+import { getRegion, formatPrice } from "@/lib/pricing";
 
 export interface HireIntent {
   type: "agent" | "department" | "squad";
@@ -44,12 +46,39 @@ const AuthPage = () => {
   const redirectParam = searchParams.get("redirect");
   const verticalParam = searchParams.get("vertical");
   const modeParam = searchParams.get("mode"); // "signup" | "login"
+  const signupParam = searchParams.get("signup"); // "1" (from quiz CTA)
+  const wantsSignup = modeParam === "signup" || signupParam === "1" || !!state?.signup;
 
-  // Default para signup quando vem de "Create your account" (?mode=signup) ou via state.signup.
-  const [isLogin, setIsLogin] = useState(() => !(modeParam === "signup" || state?.signup));
+  // Default para signup quando vem de "Create your account" (?mode=signup), ?signup=1 (quiz) ou via state.signup.
+  const [isLogin, setIsLogin] = useState(() => !wantsSignup);
 
   const from = redirectParam || state?.from?.pathname || "/dashboard";
   const hireIntent = state?.hireIntent || null;
+
+  // Se o visitante veio do quiz da landing, mostramos um card persistente com
+  // o departamento pré-selecionado — mesmo antes do hireIntent existir.
+  const quizPreselection = useMemo(() => {
+    const diag = loadDiagnosis();
+    if (!diag) return null;
+    const rec = PAIN_TO_RECOMMENDATION[diag.pain];
+    const deptId = PAIN_TO_DEPT_ID[diag.pain];
+    if (!rec) return null;
+    const region = getRegion("pt");
+    const monthly = deptId ? (region.departments as Record<string, number>)[deptId] ?? null : null;
+    const savings = rec.monthlySavings;
+    const percent = monthly && savings ? Math.min(99, Math.round((savings / (savings + monthly)) * 100)) : null;
+    return {
+      label: rec.departmentLabel,
+      tagline: rec.tagline,
+      monthly,
+      monthlyLabel: monthly ? formatPrice(monthly, "pt") : null,
+      savings,
+      savingsLabel: savings ? formatPrice(savings, "pt") : null,
+      percent,
+      timeToValue: rec.timeToValue,
+      company: diag.company,
+    };
+  }, []);
 
   // Block 2.1 + 2.2 — detect advocacia context (URL param, redirect target, or referrer)
   const isAdvocaciaContext =
@@ -59,10 +88,10 @@ const AuthPage = () => {
     (typeof document !== "undefined" && document.referrer.includes("/advocacia"));
 
   useEffect(() => {
-    if (state?.signup || modeParam === "signup") {
+    if (wantsSignup) {
       setIsLogin(false);
     }
-  }, [state?.signup, modeParam]);
+  }, [wantsSignup]);
 
   // Block 2.1 — page title based on context
   useEffect(() => {
@@ -178,7 +207,70 @@ const AuthPage = () => {
           </p>
         </div>
 
-        {/* Show hire intent banner */}
+        {/* Quiz preselection — persistente acima do card de cadastro. */}
+        {!hireIntent && quizPreselection && !isAdvocaciaContext && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className="mb-4 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/[0.08] via-primary/[0.03] to-transparent p-4 sm:p-5 relative overflow-hidden"
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-primary/15 blur-3xl"
+            />
+            <div className="relative z-10 space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
+                </span>
+                <p className="text-[10px] font-bold tracking-[0.18em] text-primary uppercase">
+                  Seu departamento — precisa ser ativado
+                </p>
+              </div>
+
+              <div className="flex items-baseline justify-between gap-3">
+                <p className="font-display text-xl font-semibold leading-tight truncate">
+                  {quizPreselection.label}
+                </p>
+                {quizPreselection.monthlyLabel && (
+                  <p className="text-right shrink-0">
+                    <span className="font-display text-lg font-bold text-primary">
+                      {quizPreselection.monthlyLabel}
+                    </span>
+                    <span className="text-[10px] text-muted-foreground ml-0.5">/mês</span>
+                  </p>
+                )}
+              </div>
+
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                {quizPreselection.tagline}
+              </p>
+
+              {quizPreselection.percent && quizPreselection.savingsLabel && (
+                <div className="flex items-center gap-2 rounded-lg bg-primary/8 border border-primary/15 px-3 py-2">
+                  <TrendingDown className="h-3.5 w-3.5 text-primary shrink-0" />
+                  <p className="text-[11px] leading-tight">
+                    <span className="font-bold text-primary">Você economiza {quizPreselection.percent}%</span>{" "}
+                    <span className="text-muted-foreground">
+                      ({quizPreselection.savingsLabel}/mês vs CLT equivalente)
+                    </span>
+                  </p>
+                </div>
+              )}
+
+              <div className="flex items-center gap-2 pt-1">
+                <Lock className="h-3 w-3 text-muted-foreground/60 shrink-0" />
+                <p className="text-[11px] text-muted-foreground leading-tight">
+                  <span className="text-foreground font-medium">Crie sua conta</span> para conhecer o time. O pagamento acontece dentro do painel — só depois que você decidir ativar.
+                </p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Legacy hire intent banner (fluxo direto via CTA de plano). */}
         {hireIntent && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -197,6 +289,7 @@ const AuthPage = () => {
             </Badge>
           </motion.div>
         )}
+
 
         <div className="glass-card rounded-2xl p-6 sm:p-8">
           {/* Google OAuth - primary action */}

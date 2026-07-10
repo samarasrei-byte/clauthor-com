@@ -11,7 +11,6 @@
  */
 import { motion } from "framer-motion";
 import { ArrowRight, Building2, Sparkles, ShieldCheck, Target } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { loadDiagnosis, PAIN_TO_RECOMMENDATION } from "@/lib/diagnosis-routing";
 
@@ -19,15 +18,17 @@ interface DashboardEmptyStateProps {
   userName?: string;
   onHireFirstDepartment: () => void;
   onExploreLibrary: () => void;
+  /** Ativa o departamento pré-recomendado pelo diagnóstico, sem navegar pra /departamentos. */
+  onActivateRecommended?: () => void;
 }
 
 const DashboardEmptyState = ({
   userName,
   onHireFirstDepartment,
   onExploreLibrary,
+  onActivateRecommended,
 }: DashboardEmptyStateProps) => {
   const firstName = userName?.split(" ")[0];
-  const navigate = useNavigate();
   const diagnosis = loadDiagnosis();
   const rec = diagnosis ? PAIN_TO_RECOMMENDATION[diagnosis.pain] : null;
 
@@ -95,7 +96,7 @@ const DashboardEmptyState = ({
               <Button
                 size="sm"
                 className="mt-3 gap-1.5"
-                onClick={() => navigate(rec.route)}
+                onClick={() => (onActivateRecommended ? onActivateRecommended() : onHireFirstDepartment())}
               >
                 {rec.ctaLabel}
                 <ArrowRight className="h-3.5 w-3.5" />
