@@ -576,6 +576,68 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                   </motion.div>
                 )}
 
+                {/* DEPARTMENT — escolha do departamento pronto (Bloco 5) */}
+                {step === "department" && (
+                  <motion.div
+                    key="department"
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    className="space-y-7"
+                  >
+                    <div className="space-y-2">
+                      <p className="text-[10px] font-mono uppercase tracking-[0.35em] text-white/50">Departamento pronto · 00 / 03</p>
+                      <h2 className="font-display text-3xl md:text-4xl font-bold">
+                        Qual departamento sua empresa precisa contratar?
+                      </h2>
+                      <p className="text-white/60 max-w-xl">
+                        Escolha o departamento pronto que resolve sua dor agora. Cada um vem com agentes, timeline transparente e outcome garantido.
+                      </p>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-3">
+                      {FLAGSHIP_DEPARTMENTS.map((dept) => {
+                        const Icon = dept.icon;
+                        const agentCount = new Set(dept.timelineDemo.map((e) => e.agentName)).size;
+                        return (
+                          <button
+                            key={dept.id}
+                            onClick={() => pickDepartment(dept)}
+                            className="group relative text-left p-5 rounded-2xl border border-white/10 bg-white/[0.03] backdrop-blur-xl overflow-hidden hover:border-white/30 hover:bg-white/[0.06] transition-all"
+                          >
+                            <div className="w-11 h-11 rounded-xl border border-white/10 bg-white/5 flex items-center justify-center mb-4 group-hover:bg-white/10 transition">
+                              <Icon className="w-5 h-5 text-white/85" />
+                            </div>
+                            <p className="font-semibold text-white leading-tight">{dept.name}</p>
+                            <p className="text-xs text-white/55 mt-1.5 leading-relaxed">{dept.painPoint}</p>
+                            <div className="mt-4 pt-3 border-t border-white/5 space-y-1.5">
+                              <p className="text-[10px] font-mono text-emerald-300/80 uppercase tracking-widest">
+                                {dept.outcome}
+                              </p>
+                              <p className="text-[10px] font-mono text-white/40 uppercase tracking-widest">
+                                {agentCount} agentes · 60s para ver funcionando
+                              </p>
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2">
+                      <Button variant="ghost" onClick={() => setStep("welcome")} className="text-white/60 hover:text-white hover:bg-white/5">
+                        <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        onClick={() => setStep("input")}
+                        className="text-white/60 hover:text-white hover:bg-white/5 rounded-full gap-2 h-11 px-5"
+                      >
+                        Não sei ainda — deixe o Thor descobrir <ArrowRight className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </motion.div>
+                )}
+
                 {/* INPUT */}
                 {step === "input" && (
                   <motion.div
