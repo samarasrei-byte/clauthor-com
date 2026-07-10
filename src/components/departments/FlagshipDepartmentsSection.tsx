@@ -18,6 +18,7 @@ import {
   FLAGSHIP_DEPARTMENTS,
   type DepartmentPackage,
 } from "@/data/departmentPackages";
+import { trackKpi } from "@/lib/kpiTracker";
 
 const DepartmentLiveDemo = lazy(() => import("./DepartmentLiveDemo"));
 
@@ -25,9 +26,26 @@ const FlagshipDepartmentsSection = () => {
   const navigate = useNavigate();
   const [demoDept, setDemoDept] = useState<DepartmentPackage | null>(null);
 
-  const handleHire = (dept: DepartmentPackage) => {
+  const handleSeeDemo = (dept: DepartmentPackage) => {
+    trackKpi("department_demo_click", {
+      department_id: dept.id,
+      department_name: dept.name,
+      price_monthly: dept.priceMonthly,
+      source: "landing",
+    });
+    setDemoDept(dept);
+  };
+
+  const handleHire = (dept: DepartmentPackage, source: "landing" | "live_demo" = "landing") => {
+    trackKpi("department_hire_click", {
+      department_id: dept.id,
+      department_name: dept.name,
+      price_monthly: dept.priceMonthly,
+      source,
+    });
     setDemoDept(null);
-    navigate(`/departamentos?dept=${dept.id}`);
+    // `auto=1` triggers the existing checkout flow on the /departamentos page.
+    navigate(`/departamentos?dept=${dept.id}&auto=1`);
   };
 
   return (
@@ -62,8 +80,8 @@ const FlagshipDepartmentsSection = () => {
             <DepartmentCard
               key={dept.id}
               department={dept}
-              onSeeLiveDemo={setDemoDept}
-              onHire={handleHire}
+              onSeeLiveDemo={handleSeeDemo}
+              onHire={(d) => handleHire(d, "landing")}
             />
           ))}
         </div>
@@ -87,7 +105,7 @@ const FlagshipDepartmentsSection = () => {
             department={demoDept}
             open={!!demoDept}
             onOpenChange={(o) => !o && setDemoDept(null)}
-            onHire={handleHire}
+            onHire={(d) => handleHire(d, "live_demo")}
           />
         </Suspense>
       )}

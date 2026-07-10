@@ -33,6 +33,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { DepartmentPackage } from "@/data/departmentPackages";
 import { DEPT_COLOR_TOKENS } from "@/data/departmentPackages";
+import { trackKpi } from "@/lib/kpiTracker";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 
 interface DepartmentLiveDemoProps {
@@ -52,10 +53,39 @@ const DepartmentLiveDemo = ({
   const [paused, setPaused] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const startedAtRef = useRef<number | null>(null);
+  const completedFiredRef = useRef(false);
 
   const events = department?.timelineDemo ?? [];
   const progression = department?.outcomeMetric.progression ?? [];
   const isComplete = currentIndex >= events.length - 1 && events.length > 0;
+
+  // Fire `department_demo_completed` exactly once per open+dept.
+  useEffect(() => {
+    if (!department) {
+      completedFiredRef.current = false;
+      startedAtRef.current = null;
+      return;
+    }
+    if (open && startedAtRef.current === null) {
+      startedAtRef.current = Date.now();
+      completedFiredRef.current = false;
+    }
+    if (isComplete && !completedFiredRef.current && startedAtRef.current !== null) {
+      completedFiredRef.current = true;
+      trackKpi("department_demo_completed", {
+        department_id: department.id,
+        department_name: department.name,
+        price_monthly: department.priceMonthly,
+        duration_ms: Date.now() - startedAtRef.current,
+        source: "live_demo",
+      });
+    }
+    if (!open) {
+      startedAtRef.current = null;
+    }
+  }, [open, isComplete, department]);
+
 
   const clearTimer = useCallback(() => {
     if (timeoutRef.current) {
@@ -285,10 +315,7 @@ const DepartmentLiveDemo = ({
         <div className="flex flex-col gap-3 border-t bg-background/60 p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-2 text-xs text-muted-foreground">
             <ShieldCheck className={cn("mt-0.5 h-4 w-4 shrink-0", tokens.text)} />
-            <span>
-              {department.outcomeGuarantee ??
-                "Outcome mensurável, monitorado semana a semana."}
-            </span>
+            <span>Outcome mensurável, monitorado semana a semana.</span>
           </div>
           <Button
             size="lg"

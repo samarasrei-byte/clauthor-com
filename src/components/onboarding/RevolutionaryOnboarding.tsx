@@ -31,6 +31,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { FLAGSHIP_DEPARTMENTS, type DepartmentPackage } from "@/data/departmentPackages";
+import { trackKpi } from "@/lib/kpiTracker";
 
 type Step = "welcome" | "department" | "input" | "describe" | "analyzing" | "reveal" | "claim" | "done";
 
@@ -359,10 +360,16 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       detected_pain: dept.painPoint,
       need_type: "department",
       recommendation_name: dept.name,
-      recommendation_pitch: `${dept.outcome}. ${dept.outcomeGuarantee ?? ""}`.trim(),
+      recommendation_pitch: dept.outcome,
       agents: uniqueAgents,
       expected_outcome: dept.outcome,
       confidence: 0.92,
+    });
+    trackKpi("onboarding_department_picked", {
+      department_id: dept.id,
+      department_name: dept.name,
+      price_monthly: dept.priceMonthly,
+      source: "onboarding",
     });
     setStep("reveal");
   }
