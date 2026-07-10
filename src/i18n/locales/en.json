@@ -403,7 +403,7 @@
     "subtitle_highlight": "You just watch the results.",
     "cta_start": "Get Started",
     "cta_demo": "Watch Demo",
-    "trust_encrypted": "Encrypted data",
+    "trust_encrypted": "100% encrypted data",
     "trust_compliant": "GDPR Compliant",
     "trust_ai": "Cutting-edge AI",
     "stats_subtitle": "Results that speak for themselves",
@@ -489,10 +489,10 @@
     "cta_build_team": "Build your AI Team",
     "cta_explore_agents": "Explore Agents",
     "cta_waitlist": "JOIN THE WAITLIST",
-    "trust_e2e": "End-to-end encrypted",
+    "trust_e2e": "END-TO-END ENCRYPTED",
     "trust_soc2": "SOC 2 compliant",
-    "trust_setup": "Setup 5min",
-    "stats_active_agents": "Active Agents",
+    "trust_setup": "SETUP 5MIN",
+    "stats_active_agents": "ACTIVE AGENTS",
     "stats_companies_served": "Companies Served",
     "stats_hours_saved": "Hours Saved",
     "stats_avg_efficiency": "Avg Efficiency",
@@ -541,7 +541,6 @@
     "case3_metric_label": "contracts/day",
     "trust_section_title": "Security & Trust",
     "trust_section_desc": "Your operation protected with enterprise-level infrastructure. End-to-end encryption, dedicated support and total flexibility.",
-    "trust_encrypted": "100% encrypted data",
     "trust_cancel": "Cancel anytime",
     "trust_support": "Human + AI support 24/7",
     "section_team": "Who We Are",
@@ -579,13 +578,10 @@
     "details_arrow": "Details →",
     "actions_label": "actions",
     "view_all_80": "View all 200 agents",
-    "seo_title": "CLAUTHOR - AI Employees for your Business",
-    "seo_description": "Autonomous AI agent platform that replaces entire departments. 200 agents, 20 departments, 24/7.",
+    "seo_title": "CLAUTHOR — Hire an entire AI department",
+    "seo_description": "20 departments. Customizable squads. 200+ orchestrated AI specialists. Hire a whole department and assemble your squad in minutes.",
     "help_tooltip": "Welcome to CLAUTHOR! Explore AI agents by department, hire individually or build a complete team.",
-    "trust_e2e": "END-TO-END ENCRYPTED",
     "trust_enterprise": "ENTERPRISE-GRADE",
-    "trust_setup": "SETUP 5MIN",
-    "stats_active_agents": "ACTIVE AGENTS",
     "stats_departments": "DEPARTMENTS",
     "stats_tools": "BUILT-IN TOOLS",
     "stats_uptime": "PLATFORM UPTIME",
@@ -974,8 +970,19 @@
     "ask_anything": "Ask anything about your agents...",
     "preparing": "Preparing your experience...",
     "getting_to_know": "The concierge is getting to know your agents",
-    "mon": "Mon", "tue": "Tue", "wed": "Wed", "thu": "Thu", "fri": "Fri", "sat": "Sat", "sun": "Sun",
-    "jan": "Jan", "feb": "Feb", "mar": "Mar", "apr": "Apr", "may": "May", "jun": "Jun",
+    "mon": "Mon",
+    "tue": "Tue",
+    "wed": "Wed",
+    "thu": "Thu",
+    "fri": "Fri",
+    "sat": "Sat",
+    "sun": "Sun",
+    "jan": "Jan",
+    "feb": "Feb",
+    "mar": "Mar",
+    "apr": "Apr",
+    "may": "May",
+    "jun": "Jun",
     "agent_health": "Agent Health",
     "agent_health_help": "Shows real-time status of your agents: success rate, errors, and average latency. Click an agent for details.",
     "executions_label": "Executions",
@@ -1056,9 +1063,10 @@
     "enterprise": "Enterprise"
   },
   "payment": {
-    "pay_crypto": "Pay with Crypto",
-    "pay_card": "Pay with Card",
-    "crypto_desc": "Bitcoin, Ethereum, USDC and more"
+    "confirmed": "Payment Confirmed!",
+    "dept_activated": "{{name}} activated with {{count}} agents",
+    "agent_ready": "{{name}} is ready to work",
+    "redirecting": "Redirecting to THOR for guided setup..."
   },
   "squads": {
     "badge": "AI Teams",
@@ -1295,20 +1303,11 @@
     "system_active": "System active",
     "tier_advanced": "Advanced"
   },
-  "payment": {
-    "confirmed": "Payment Confirmed!",
-    "dept_activated": "{{name}} activated with {{count}} agents",
-    "agent_ready": "{{name}} is ready to work",
-    "redirecting": "Redirecting to THOR for guided setup..."
-  },
   "omnix": {
-    "agents": "Agents",
-    "executions": "Executions",
-    "success": "Success",
-    "time": "Time",
-    "credits": "Credits",
-    "tasks": "Tasks",
-    "exec_7days": "Executions - 7 days"
+    "standby": "STANDBY",
+    "listening": "LISTENING",
+    "speaking": "SPEAKING",
+    "processing": "PROCESSING"
   },
   "integrations": {
     "back": "Back to Integrations",
@@ -1899,12 +1898,6 @@
     "step_command_sub": "Give the first mission",
     "step_command_desc": "Use the Command Center to assign tasks to agents. They execute, report, and learn from each interaction.",
     "step_command_cta": "Open Command Center"
-  },
-  "omnix": {
-    "standby": "STANDBY",
-    "listening": "LISTENING",
-    "speaking": "SPEAKING",
-    "processing": "PROCESSING"
   },
   "setup_checklist": {
     "title": "Agent Setup",

@@ -248,97 +248,78 @@
       "people_analytics_desc": "Analisa indicadores de RH: turnover, clima organizacional, engajamento e performance. Gera dashboards e recomendações estratégicas.",
       "people_analytics_highlight": "📊 People Analytics IA",
       "people_analytics_replaces": "1 analista de people analytics",
-
       "tax_content_title": "Agente de Conteúdo Tributário - Educação Fiscal com IA",
       "tax_content_desc": "Produz conteúdo especializado em tributação, contabilidade e compliance fiscal. Artigos, posts e materiais educativos sobre impostos e obrigações fiscais.",
       "tax_content_highlight": "📋 Conteúdo Fiscal Especializado",
       "tax_content_replaces": "1 especialista tributário + 1 redator",
-
       "copywriting_title": "Copywriting Agent - Redator de Alta Conversão",
       "copywriting_desc": "Cria copy persuasiva para landing pages, emails, anúncios e funis de vendas. Headlines magnéticas, CTAs irresistíveis e textos que convertem.",
       "copywriting_highlight": "✍️ Copy que Converte",
       "copywriting_replaces": "1 copywriter sênior",
-
       "positioning_title": "Agente de Posicionamento - Estratégia de Mercado com IA",
       "positioning_desc": "Analisa mercado, concorrência e público-alvo para definir posicionamento estratégico. Cria propostas de valor únicas e mensagens diferenciadas.",
       "positioning_highlight": "🧭 Posicionamento Estratégico",
       "positioning_replaces": "1 consultor de posicionamento",
-
       "branding_title": "Branding Agent - Identidade de Marca com IA",
       "branding_desc": "Desenvolve identidade de marca completa: brand voice, storytelling, diretrizes visuais e tom de comunicação. Consistência em todos os pontos de contato.",
       "branding_highlight": "💎 Branding Completo",
       "branding_replaces": "1 brand strategist + 1 designer",
-
       "public_relations_title": "Agente de Relações Públicas - Assessoria de Imprensa IA",
       "public_relations_desc": "Cria press releases, gerencia relacionamento com mídia, monitora menções e coordena estratégias de comunicação externa.",
       "public_relations_highlight": "📰 Assessoria 24/7",
       "public_relations_replaces": "1 assessor de imprensa + 1 analista",
-
       "social_proof_title": "Agente de Prova Social - Depoimentos e Cases com IA",
       "social_proof_desc": "Coleta, organiza e amplifica provas sociais: depoimentos, reviews, cases de sucesso e UGC. Maximiza credibilidade e conversão.",
       "social_proof_highlight": "⭐ Prova Social Automatizada",
       "social_proof_replaces": "1 analista de marketing",
-
       "events_speaker_title": "Agente de Eventos e Palestras - Produção e Gestão IA",
       "events_speaker_desc": "Organiza eventos, palestras e webinars. Desde roteirização até gestão de inscritos, follow-up e análise pós-evento.",
       "events_speaker_highlight": "🎤 Eventos + Palestras End-to-End",
       "events_speaker_replaces": "1 produtor de eventos + 1 coordenador",
-
       "sdr_social_title": "SDR Social - Prospecção via Redes Sociais",
       "sdr_social_desc": "Prospecta leads qualificados via DMs em redes sociais. Social selling com personalização e seguimento automático.",
       "sdr_social_highlight": "💬 Social Selling Autônomo",
       "sdr_social_replaces": "1 SDR social media",
-
       "sdr_linkedin_title": "SDR LinkedIn - Prospecção B2B de Elite",
       "sdr_linkedin_desc": "Prospecção avançada via LinkedIn: InMail personalizado, conexões estratégicas e nurturing B2B com Sales Navigator.",
       "sdr_linkedin_highlight": "💼 LinkedIn B2B Premium",
       "sdr_linkedin_replaces": "1 SDR LinkedIn sênior",
-
       "sdr_instagram_title": "SDR Instagram - Vendas via Instagram",
       "sdr_instagram_desc": "Prospecta e qualifica leads via Instagram DMs, stories e comentários. Converte seguidores em oportunidades de vendas.",
       "sdr_instagram_highlight": "📸 Instagram Sales",
       "sdr_instagram_replaces": "1 SDR Instagram",
-
       "sdr_whatsapp_title": "SDR WhatsApp - Prospecção via WhatsApp",
       "sdr_whatsapp_desc": "Prospecta, qualifica e agenda reuniões via WhatsApp. Mensagens personalizadas com follow-up automático.",
       "sdr_whatsapp_highlight": "📲 WhatsApp Prospecção",
       "sdr_whatsapp_replaces": "1 SDR WhatsApp",
-
       "sdr_outbound_title": "SDR Outbound - Prospecção Ativa de Alta Performance",
       "sdr_outbound_desc": "Prospecção outbound completa: cold email, cold call e multi-touch sequences. Cadências automatizadas com IA preditiva.",
       "sdr_outbound_highlight": "📧 Outbound Autônomo",
       "sdr_outbound_replaces": "2 SDRs outbound",
-
       "sdr_inbound_title": "SDR Inbound - Qualificação de Leads Automática",
       "sdr_inbound_desc": "Qualifica leads inbound em tempo real, aplica scoring e agenda reuniões automaticamente. Resposta em segundos.",
       "sdr_inbound_highlight": "📥 Inbound Instantâneo",
       "sdr_inbound_replaces": "1 SDR inbound",
-
       "sdr_database_title": "SDR Base de Dados - Mineração de Leads",
       "sdr_database_desc": "Enriquece, segmenta e ativa bases de dados frias. Encontra oportunidades ocultas e reativa leads dormentes.",
       "sdr_database_highlight": "🗄️ Data Mining + Ativação",
       "sdr_database_replaces": "1 analista de dados comerciais",
-
       "sdr_events_title": "SDR Eventos - Prospecção em Feiras e Eventos",
       "sdr_events_desc": "Prospecta antes, durante e após eventos. Pré-agendamentos, follow-up pós-feira e nurturing de contatos.",
       "sdr_events_highlight": "🎪 Networking Automatizado",
       "sdr_events_replaces": "1 SDR de eventos",
-
       "sdr_partnerships_title": "SDR Parcerias Estratégicas - Canal de Vendas Indireto",
       "sdr_partnerships_desc": "Identifica, aborda e nutre potenciais parceiros comerciais. Co-marketing, canais de revenda e alianças estratégicas.",
       "sdr_partnerships_highlight": "🤝 Partnership Development",
       "sdr_partnerships_replaces": "1 gerente de parcerias",
-
       "pre_qualifier_title": "Agente Pré-Qualificador - Filtro Inteligente de Leads",
       "pre_qualifier_desc": "Aplica metodologias BANT/MEDDIC para qualificar leads antes da reunião. Elimina prospects sem fit e otimiza o tempo dos closers.",
       "pre_qualifier_highlight": "🎯 BANT + MEDDIC Automático",
       "pre_qualifier_replaces": "1 SDR qualificador",
-
       "hunter_title": "Agente Hunter - Caçador de Novos Negócios",
       "hunter_desc": "Prospecção agressiva de novas contas. Identificação de ICP, abordagem personalizada e abertura de pipeline em escala.",
       "hunter_highlight": "🎯 New Business Machine",
       "hunter_replaces": "2 hunters comerciais",
-
       "farmer_title": "Agente Farmer - Expansão e Retenção de Contas",
       "farmer_desc": "Expande receita dentro da base existente: upsell, cross-sell e renovações. Monitora health score e prevê churn.",
       "farmer_highlight": "📈 Expansão de Receita",
@@ -422,7 +403,7 @@
     "subtitle_highlight": "Você só acompanha os resultados.",
     "cta_start": "Começar Agora",
     "cta_demo": "Ver Demonstração",
-    "trust_encrypted": "Dados criptografados",
+    "trust_encrypted": "Dados 100% criptografados",
     "trust_compliant": "LGPD Compliant",
     "trust_ai": "IA de última geração",
     "stats_subtitle": "Resultados que falam por si",
@@ -508,10 +489,10 @@
     "cta_build_team": "Monte seu Time de IA",
     "cta_explore_agents": "Explorar Agentes",
     "cta_waitlist": "GARANTIR MINHA VAGA",
-    "trust_e2e": "End-to-end encrypted",
+    "trust_e2e": "END-TO-END ENCRYPTED",
     "trust_soc2": "SOC 2 compliant",
-    "trust_setup": "Setup 5min",
-    "stats_active_agents": "Agentes Ativos",
+    "trust_setup": "SETUP 5MIN",
+    "stats_active_agents": "AGENTES ATIVOS",
     "stats_companies_served": "Empresas Atendidas",
     "stats_hours_saved": "Horas Economizadas",
     "stats_avg_efficiency": "Eficiência Média",
@@ -560,7 +541,6 @@
     "case3_metric_label": "contratos/dia",
     "trust_section_title": "Segurança & Confiança",
     "trust_section_desc": "Sua operação protegida com infraestrutura de nível enterprise. Criptografia de ponta a ponta, suporte dedicado e total flexibilidade.",
-    "trust_encrypted": "Dados 100% criptografados",
     "trust_cancel": "Cancele a qualquer momento",
     "trust_support": "Suporte humano + IA 24/7",
     "section_team": "Quem Somos",
@@ -598,13 +578,10 @@
     "details_arrow": "Detalhes →",
     "actions_label": "ações",
     "view_all_80": "Ver todos os 200 agentes",
-    "seo_title": "CLAUTHOR - Funcionários de IA para sua Empresa",
-    "seo_description": "Plataforma de agentes autônomos de IA que substituem departamentos inteiros. 200 agentes, 20 departamentos, 24/7.",
+    "seo_title": "CLAUTHOR — Contrate um departamento inteiro de IA",
+    "seo_description": "20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados. Contrate um departamento inteiro e monte seu squad em minutos.",
     "help_tooltip": "Bem-vindo à CLAUTHOR! Explore agentes de IA por departamento, contrate individualmente ou monte um time completo.",
-    "trust_e2e": "END-TO-END ENCRYPTED",
     "trust_enterprise": "ENTERPRISE-GRADE",
-    "trust_setup": "SETUP 5MIN",
-    "stats_active_agents": "AGENTES ATIVOS",
     "stats_departments": "DEPARTAMENTOS",
     "stats_tools": "FERRAMENTAS",
     "stats_uptime": "UPTIME DA PLATAFORMA",
@@ -987,8 +964,19 @@
     "ask_anything": "Pergunte qualquer coisa sobre seus agentes...",
     "preparing": "Preparando sua experiência...",
     "getting_to_know": "O concierge está conhecendo seus agentes",
-    "mon": "Seg", "tue": "Ter", "wed": "Qua", "thu": "Qui", "fri": "Sex", "sat": "Sáb", "sun": "Dom",
-    "jan": "Jan", "feb": "Fev", "mar": "Mar", "apr": "Abr", "may": "Mai", "jun": "Jun",
+    "mon": "Seg",
+    "tue": "Ter",
+    "wed": "Qua",
+    "thu": "Qui",
+    "fri": "Sex",
+    "sat": "Sáb",
+    "sun": "Dom",
+    "jan": "Jan",
+    "feb": "Fev",
+    "mar": "Mar",
+    "apr": "Abr",
+    "may": "Mai",
+    "jun": "Jun",
     "agent_health": "Saúde dos Agentes",
     "agent_health_help": "Mostra o status em tempo real dos seus agentes: taxa de sucesso, erros e latência média.",
     "executions_label": "Execuções",
@@ -1069,9 +1057,10 @@
     "enterprise": "Enterprise"
   },
   "payment": {
-    "pay_crypto": "Pagar com Crypto",
-    "pay_card": "Pagar com Cartão",
-    "crypto_desc": "Bitcoin, Ethereum, USDC e mais"
+    "confirmed": "Pagamento Confirmado!",
+    "dept_activated": "{{name}} ativado com {{count}} agentes",
+    "agent_ready": "{{name}} está pronto para trabalhar",
+    "redirecting": "Redirecionando para o THOR para configuração guiada..."
   },
   "squads": {
     "badge": "Times de IA",
@@ -1308,20 +1297,11 @@
     "system_active": "Sistema ativo",
     "tier_advanced": "Avançado"
   },
-  "payment": {
-    "confirmed": "Pagamento Confirmado!",
-    "dept_activated": "{{name}} ativado com {{count}} agentes",
-    "agent_ready": "{{name}} está pronto para trabalhar",
-    "redirecting": "Redirecionando para o THOR para configuração guiada..."
-  },
   "omnix": {
-    "agents": "Agentes",
-    "executions": "Execuções",
-    "success": "Sucesso",
-    "time": "Tempo",
-    "credits": "Créditos",
-    "tasks": "Tarefas",
-    "exec_7days": "Execuções - 7 dias"
+    "standby": "EM ESPERA",
+    "listening": "OUVINDO",
+    "speaking": "FALANDO",
+    "processing": "PROCESSANDO"
   },
   "integrations": {
     "back": "Voltar para Integrações",
@@ -1912,12 +1892,6 @@
     "step_command_sub": "Dê a primeira missão",
     "step_command_desc": "Use o Command Center para dar tarefas aos agentes. Eles executam, reportam e aprendem com cada interação.",
     "step_command_cta": "Abrir Command Center"
-  },
-  "omnix": {
-    "standby": "EM ESPERA",
-    "listening": "OUVINDO",
-    "speaking": "FALANDO",
-    "processing": "PROCESSANDO"
   },
   "setup_checklist": {
     "title": "Setup dos Agentes",
