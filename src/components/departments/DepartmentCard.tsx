@@ -123,12 +123,6 @@ const DepartmentCard = ({
             <div className={cn("mt-1 font-semibold", tokens.text, isCompact ? "text-base" : "text-lg")}>
               {department.outcome}
             </div>
-            {department.outcomeGuarantee && (
-              <div className="mt-1.5 flex items-start gap-1.5 text-xs text-muted-foreground">
-                <ShieldCheck className="mt-0.5 h-3 w-3 shrink-0" />
-                <span>{department.outcomeGuarantee}</span>
-              </div>
-            )}
           </div>
 
           {/* Agentes */}
