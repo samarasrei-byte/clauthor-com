@@ -30,8 +30,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { FLAGSHIP_DEPARTMENTS, type DepartmentPackage } from "@/data/departmentPackages";
 
-type Step = "welcome" | "input" | "describe" | "analyzing" | "reveal" | "claim" | "done";
+type Step = "welcome" | "department" | "input" | "describe" | "analyzing" | "reveal" | "claim" | "done";
 
 interface Classification {
   business_summary: string;
