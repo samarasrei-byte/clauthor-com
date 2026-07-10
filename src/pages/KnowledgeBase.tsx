@@ -387,7 +387,7 @@ const KnowledgeBase = () => {
                               </p>
                             </div>
                             <div className="flex gap-1 shrink-0">
-                              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => startEdit(doc)}>
+                              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => startEdit(doc)} aria-label="Editar documento">
                                 <Edit3 className="h-3.5 w-3.5" />
                               </Button>
                               <Button
@@ -395,6 +395,7 @@ const KnowledgeBase = () => {
                                 size="icon"
                                 className="h-7 w-7 text-destructive hover:text-destructive"
                                 onClick={() => deleteMutation.mutate(doc.id)}
+                                aria-label="Excluir documento"
                               >
                                 <Trash2 className="h-3.5 w-3.5" />
                               </Button>
