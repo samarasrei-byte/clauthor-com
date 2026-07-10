@@ -53,6 +53,31 @@ const AuthPage = () => {
   const from = redirectParam || state?.from?.pathname || "/dashboard";
   const hireIntent = state?.hireIntent || null;
 
+  // Se o visitante veio do quiz da landing, mostramos um card persistente com
+  // o departamento pré-selecionado — mesmo antes do hireIntent existir.
+  const quizPreselection = useMemo(() => {
+    const diag = loadDiagnosis();
+    if (!diag) return null;
+    const rec = PAIN_TO_RECOMMENDATION[diag.pain];
+    const deptId = PAIN_TO_DEPT_ID[diag.pain];
+    if (!rec) return null;
+    const region = getRegion("pt");
+    const monthly = deptId ? (region.departments as Record<string, number>)[deptId] ?? null : null;
+    const savings = rec.monthlySavings;
+    const percent = monthly && savings ? Math.min(99, Math.round((savings / (savings + monthly)) * 100)) : null;
+    return {
+      label: rec.departmentLabel,
+      tagline: rec.tagline,
+      monthly,
+      monthlyLabel: monthly ? formatPrice(monthly, "pt") : null,
+      savings,
+      savingsLabel: savings ? formatPrice(savings, "pt") : null,
+      percent,
+      timeToValue: rec.timeToValue,
+      company: diag.company,
+    };
+  }, []);
+
   // Block 2.1 + 2.2 — detect advocacia context (URL param, redirect target, or referrer)
   const isAdvocaciaContext =
     verticalParam === "advocacia" ||
