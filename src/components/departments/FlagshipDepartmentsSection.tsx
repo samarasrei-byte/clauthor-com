@@ -67,10 +67,10 @@ const FlagshipDepartmentsSection = () => {
           <h2 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-3">
             Contrate um departamento inteiro,
             <br className="hidden sm:block" />
-            <span className="text-muted-foreground">não 225 agentes soltos.</span>
+            <span className="text-muted-foreground">monte seu squad em minutos.</span>
           </h2>
           <p className="text-[15px] text-muted-foreground max-w-xl mx-auto">
-            Cada departamento resolve uma dor específica com outcome mensurável.
+            20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados.
             Veja funcionando em 60 segundos antes de contratar.
           </p>
         </motion.div>

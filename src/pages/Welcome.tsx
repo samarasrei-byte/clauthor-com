@@ -41,8 +41,8 @@ export default function Welcome() {
   return (
     <>
       <Helmet>
-        <title>Bem-vindo à Clauthor — Diagnóstico em 60s</title>
-        <meta name="description" content="Descubra em menos de 1 minuto qual agente, squad ou departamento de IA resolve sua maior dor operacional." />
+        <title>Bem-vindo à Clauthor — Monte seu squad em 60s</title>
+        <meta name="description" content="20 departamentos, squads customizáveis e +200 especialistas de IA orquestrados. Descubra em 60 segundos qual departamento resolve sua maior dor operacional." />
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       <RevolutionaryOnboarding isOpen onSkip={handleSkip} onComplete={handleComplete} />
