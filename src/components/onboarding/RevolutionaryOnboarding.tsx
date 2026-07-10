@@ -841,7 +841,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                     <ThorOrb size={120} />
                     <div className="space-y-3">
                       <p className="text-[10px] font-mono uppercase tracking-[0.4em] text-white/50">Neural fusion em progresso</p>
-                      <h2 className="font-display text-2xl md:text-3xl font-bold">Sintonizando 225 agentes…</h2>
+                      <h2 className="font-display text-2xl md:text-3xl font-bold">Sintonizando +200 especialistas…</h2>
                     </div>
                     <div className="max-w-md mx-auto space-y-2.5 text-left">
                       {[

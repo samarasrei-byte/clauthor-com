@@ -81,7 +81,7 @@ const CHAT_SCRIPT: SimMessage[] = [
   { id: 6, sender: "SDR Outbound", emoji: "🎯", content: "Sequência de 5 toques configurada. LinkedIn + Email + WhatsApp. Disparando para os 847 leads em ondas de 100/dia." },
   { id: 7, sender: "Designer IA", emoji: "🎨", content: "Criativos prontos: 8 banners responsivos + 4 stories + 2 vídeos curtos. Tudo no brand guide do cliente." },
   { id: 8, sender: "CFO Agent", emoji: "💰", content: "Estimativa de custo da campanha: R$ 12.400. ROI projetado: 340%. Budget aprovado automaticamente (baixo risco)." },
-  { id: 9, sender: "Thor", emoji: "⚡", content: "Squad TechNova: campanha no ar em 47 minutos. Isso é o poder de 225 agentes autônomos trabalhando juntos. 🚀", isOrchestrator: true },
+  { id: 9, sender: "Thor", emoji: "⚡", content: "Squad TechNova: campanha no ar em 47 minutos. Isso é o poder de +200 especialistas de IA trabalhando juntos. 🚀", isOrchestrator: true },
   { id: 10, sender: "Sistema", emoji: "✅", content: "Missão concluída · 847 leads engajados · 12 criativos publicados · ROI projetado: 340%", isSystem: true },
   { id: 11, sender: "CS Agent", emoji: "🎧", content: "Monitorando feedback dos leads em tempo real. 23 respostas positivas nos primeiros 15 minutos. Encaminhando para Closer Pro." },
   { id: 12, sender: "Closer Pro", emoji: "🤝", content: "Recebi 23 leads quentes. Iniciando cadência de fechamento personalizada. Meta: 8 conversões hoje." },
@@ -517,25 +517,25 @@ const Waitlist = () => {
 
             {/* Headline */}
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold leading-[0.95] mb-6">
-              <span className="text-foreground">Um orquestrador</span>
+              <span className="text-foreground">20 departamentos.</span>
               <br />
-              <span className="text-foreground/70">que coordena</span>
+              <span className="text-foreground/70">Squads customizáveis.</span>
               <br />
               <span className="text-primary" style={{ textShadow: '0 0 40px hsl(var(--primary)/0.35)' }}>
-                225 agentes IA.
+                +200 especialistas de IA.
               </span>
             </h1>
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
-              Squads inteligentes que rodam marketing, vendas, financeiro e operações no automático.
-              Você delega uma missão, o Thor executa. <span className="text-foreground font-medium">Custo por agente muito abaixo de um profissional CLT equivalente</span> — economia real varia por empresa.
+              Contrate um departamento inteiro, monte seu squad em minutos e escale sem contratar humanos.
+              <span className="text-foreground font-medium"> Custo por especialista muito abaixo de um profissional CLT equivalente</span> — economia real varia por empresa.
             </p>
 
             {/* Bullets — separação limpa */}
             <ul className="space-y-3 mb-10 max-w-lg">
               {[
-                { label: "225 agentes autônomos prontos para operar" },
-                { label: "Squads sob demanda em qualquer vertical" },
+                { label: "20 departamentos prontos para operar" },
+                { label: "Squads customizáveis com +200 especialistas de IA" },
                 { label: "Orquestração em tempo real, 24/7" },
                 { label: "Setup 1:1 gratuito para membros da waitlist" },
               ].map((b) => (
@@ -729,8 +729,8 @@ const Waitlist = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-10">
             {[
-              { value: "225", label: "Agentes IA" },
               { value: "20", label: "Departamentos" },
+              { value: "+200", label: "Especialistas IA" },
               { value: "14+", label: "Idiomas" },
               { value: "24/7", label: "Operação" },
             ].map((s) => (
