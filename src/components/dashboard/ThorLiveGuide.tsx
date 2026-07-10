@@ -115,7 +115,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
 
         {/* Core bloom halo */}
         <motion.circle
-          cx={CENTER} cy={CENTER}
+          cx={CENTER} cy={CENTER} r={8}
           fill="hsl(var(--primary))"
           filter="url(#neural-bloom-lg)"
           animate={{
