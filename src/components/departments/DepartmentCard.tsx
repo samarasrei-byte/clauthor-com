@@ -53,43 +53,34 @@ const DepartmentCard = ({
     >
       <Card
         className={cn(
-          "group relative flex h-full flex-col overflow-hidden border-2 transition-all duration-300",
-          "bg-gradient-to-br",
-          tokens.gradient,
-          tokens.border,
-          "hover:shadow-lg hover:-translate-y-0.5"
+          "group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-500",
+          // Glass base — unified across all departments
+          "border border-white/[0.08] bg-white/[0.02] backdrop-blur-xl",
+          "shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset,0_20px_40px_-20px_rgba(0,0,0,0.6)]",
+          "hover:border-white/[0.14] hover:bg-white/[0.035] hover:-translate-y-0.5",
         )}
       >
-        {/* Halo decorativo */}
+        {/* Subtle top highlight — mimics glass reflection */}
         <div
           aria-hidden
-          className={cn(
-            "pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full opacity-40 blur-3xl transition-opacity duration-500 group-hover:opacity-60",
-            tokens.bg
-          )}
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
+        />
+        {/* Soft ambient glow on hover — monochrome */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-white/[0.04] opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
         />
 
         <CardHeader className={cn("relative z-10 space-y-3", isCompact && "pb-3")}>
           <div className="flex items-start justify-between gap-3">
-            <div
-              className={cn(
-                "flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border",
-                tokens.bg,
-                tokens.border
-              )}
-            >
-              <Icon className={cn("h-6 w-6", tokens.text)} strokeWidth={2} />
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.03]">
+              <Icon className="h-5 w-5 text-white/80" strokeWidth={1.5} />
             </div>
 
             {department.flagship && (
               <Badge
                 variant="outline"
-                className={cn(
-                  "gap-1 font-medium",
-                  tokens.text,
-                  tokens.border,
-                  tokens.bg
-                )}
+                className="gap-1 font-medium border-white/[0.1] bg-white/[0.03] text-white/60 rounded-full"
               >
                 <Sparkles className="h-3 w-3" />
                 Flagship
@@ -97,37 +88,30 @@ const DepartmentCard = ({
             )}
           </div>
 
-          <div className="space-y-1">
-            <h3 className={cn("font-semibold leading-tight tracking-tight", isCompact ? "text-lg" : "text-xl")}>
+          <div className="space-y-1.5">
+            <h3 className={cn("font-semibold leading-tight tracking-tight text-white", isCompact ? "text-lg" : "text-xl")}>
               {department.name}
             </h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-[13px] text-white/45 leading-relaxed">
               {department.painPoint}
             </p>
           </div>
         </CardHeader>
 
         <CardContent className="relative z-10 flex flex-1 flex-col gap-4">
-          {/* Outcome badge — oculto quando o departamento não promete um outcome específico */}
+          {/* Outcome — glass panel */}
           {department.outcome && (
-            <div
-              className={cn(
-                "rounded-lg border p-3",
-                tokens.border,
-                tokens.bg
-              )}
-            >
-              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-                <ArrowRight className={cn("h-3.5 w-3.5", tokens.text)} />
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5 backdrop-blur-sm">
+              <div className="flex items-center gap-1.5 text-[10.5px] font-medium text-white/40 uppercase tracking-wider">
+                <ArrowRight className="h-3 w-3" />
                 Outcome garantido
               </div>
-              <div className={cn("mt-1 font-semibold", tokens.text, isCompact ? "text-base" : "text-lg")}>
+              <div className={cn("mt-1.5 font-semibold text-white/95", isCompact ? "text-[14px]" : "text-[15px]")}>
                 {department.outcome}
               </div>
             </div>
           )}
 
-          {/* Agentes */}
           <AgentAvatarStrip
             agentSlugs={department.agentSlugs}
             color={department.color}
@@ -135,13 +119,13 @@ const DepartmentCard = ({
           />
         </CardContent>
 
-        <CardFooter className="relative z-10 flex flex-col items-stretch gap-3 border-t bg-background/40 pt-4 backdrop-blur-sm">
+        <CardFooter className="relative z-10 flex flex-col items-stretch gap-3 border-t border-white/[0.06] bg-white/[0.015] pt-4">
           <div className="flex items-baseline justify-between">
             <div>
-              <div className={cn("font-bold tracking-tight", isCompact ? "text-xl" : "text-2xl")}>
+              <div className={cn("font-bold tracking-tight text-white", isCompact ? "text-xl" : "text-2xl")}>
                 {formatBRL(department.priceMonthly)}
               </div>
-              <div className="text-xs text-muted-foreground">
+              <div className="text-[11px] text-white/40">
                 {department.outcome ? "por mês, com outcome incluso" : "por mês"}
               </div>
             </div>
@@ -151,7 +135,7 @@ const DepartmentCard = ({
             <Button
               variant="outline"
               size={isCompact ? "sm" : "default"}
-              className="flex-1 gap-2"
+              className="flex-1 gap-2 border-white/[0.08] bg-white/[0.02] text-white/80 hover:bg-white/[0.05] hover:text-white hover:border-white/[0.14]"
               onClick={() => onSeeLiveDemo(department)}
               aria-label={`Ver ${department.name} funcionando por 60 segundos`}
             >
@@ -160,7 +144,7 @@ const DepartmentCard = ({
             </Button>
             <Button
               size={isCompact ? "sm" : "default"}
-              className={cn("flex-1 gap-2")}
+              className="flex-1 gap-2 bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-900/20 border-0"
               onClick={() => onHire(department)}
               aria-label={`Contratar ${department.name}`}
             >
@@ -173,5 +157,6 @@ const DepartmentCard = ({
     </motion.div>
   );
 };
+
 
 export default DepartmentCard;
