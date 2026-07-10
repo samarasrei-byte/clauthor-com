@@ -3,13 +3,28 @@ import { SEO } from "@/components/SEO";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Check, Zap, Shield, Clock, Bot, ArrowRight, Coins, TrendingUp, Users, XCircle, CheckCircle2, DollarSign } from "lucide-react";
+import {
+  Check, Zap, Shield, Clock, Bot, ArrowRight, Coins, TrendingUp, Users,
+  XCircle, CheckCircle2, DollarSign, Building2, Activity, Sparkles as SparklesIcon,
+  Wrench,
+} from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import SquadPlans from "@/components/pricing/SquadPlans";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getRegion, formatPrice } from "@/lib/pricing";
+import { departments } from "@/data/departmentData";
+
+/**
+ * Pricing page — departament-first pricing model.
+ *
+ * Hierarchy (canonical, see mem://design/messaging-pitch):
+ *   1. Departamento = unidade primária de preço
+ *   2. Squad customizado = experiência de montagem (secundária)
+ *   3. Token top-ups + Enterprise = terciário
+ */
+const FLAGSHIP_IDS = ["comercial", "prospeccao", "marketing", "suporte", "financeiro", "tecnologia"] as const;
 
 const Pricing = () => {
   const [showTokens, setShowTokens] = useState(false);
@@ -18,29 +33,9 @@ const Pricing = () => {
   const region = getRegion(lang);
   const fp = (amount: number) => formatPrice(amount, lang);
 
-  const plans = [
-    {
-      name: t("pricing_page.starter_name"), description: t("pricing_page.starter_desc"),
-      price: fp(region.plans.starter), tokens: t("pricing_page.starter_tokens"),
-      popular: false, equivalent: t("pricing_page.starter_equivalent"),
-      cltCost: t("pricing_page.starter_cost"), savings: t("pricing_page.starter_savings"),
-      features: [t("pricing_page.starter_f1"), t("pricing_page.starter_f2"), t("pricing_page.starter_f3"), t("pricing_page.starter_f4"), t("pricing_page.starter_f5"), t("pricing_page.starter_f6")],
-    },
-    {
-      name: t("pricing_page.pro_name"), description: t("pricing_page.pro_desc"),
-      price: fp(region.plans.growth), tokens: t("pricing_page.pro_tokens"),
-      popular: true, equivalent: t("pricing_page.pro_equivalent"),
-      cltCost: t("pricing_page.pro_cost"), savings: t("pricing_page.pro_savings"),
-      features: [t("pricing_page.pro_f1"), t("pricing_page.pro_f2"), t("pricing_page.pro_f3"), t("pricing_page.pro_f4"), t("pricing_page.pro_f5"), t("pricing_page.pro_f6"), t("pricing_page.pro_f7")],
-    },
-    {
-      name: t("pricing_page.ent_name"), description: t("pricing_page.ent_desc"),
-      price: t("pricing_page.ent_price"), tokens: t("pricing_page.ent_tokens"),
-      popular: false, equivalent: t("pricing_page.ent_equivalent"),
-      cltCost: t("pricing_page.ent_cost"), savings: t("pricing_page.ent_savings"),
-      features: [t("pricing_page.ent_f1"), t("pricing_page.ent_f2"), t("pricing_page.ent_f3"), t("pricing_page.ent_f4"), t("pricing_page.ent_f5"), t("pricing_page.ent_f6"), t("pricing_page.ent_f7"), t("pricing_page.ent_f8")],
-    },
-  ];
+  const flagshipDepartments = FLAGSHIP_IDS
+    .map((id) => departments.find((d) => d.id === id))
+    .filter((d): d is (typeof departments)[number] => Boolean(d));
 
   const tokenPacks = [
     { amount: t("pricing_page.token_pack1"), price: fp(region.tokenPacks.pack5m), discount: null },
@@ -60,89 +55,186 @@ const Pricing = () => {
     { label: t("pricing_page.clt_row8"), clt: fp(region.comparison.avgSalaryYear3) + "+", apex: fp(region.comparison.agentYear3) },
   ];
 
-  const isOnRequest = (price: string) => price === t("pricing_page.on_request") || price === "Sob consulta" || price === "On request";
-
   return (
     <div className="min-h-dvh pt-24 pb-16 px-4 relative">
-      <SEO title="Pricing — AI Workforce Plans | Clauthor" description="Hire entire AI departments from R$345/mo. Transparent pricing, no per-seat fees, pay only for outcomes." path="/pricing" />
-      <div className="max-w-6xl mx-auto relative mb-8">
-      </div>
+      <SEO
+        title="Preços — Contrate um departamento inteiro de IA | Clauthor"
+        description="20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados. Preço fixo por departamento, sem taxa por assento."
+        path="/pricing"
+      />
+
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 opacity-[0.02]" style={{ backgroundImage: `radial-gradient(circle, hsl(266 100% 50%) 1px, transparent 1px)`, backgroundSize: "32px 32px" }} />
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-gradient-to-b from-primary/[0.03] to-transparent rounded-full blur-[100px]" />
       </div>
 
       <div className="max-w-6xl mx-auto relative">
+        {/* ═════════════ HERO ═════════════ */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-16">
           <Badge variant="outline" className="mb-6 border-primary/15 text-primary/80 px-4 py-2">
             <Sparkles className="h-4 w-4 mr-2" />
-            {t("pricing_page.badge")}
+            Preços por departamento
           </Badge>
-          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6">
-            {t("pricing_page.title")} <span className="gradient-text">{t("pricing_page.title_hl")}</span>
+          <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
+            Contrate um <span className="gradient-text">departamento inteiro</span>.
+            <br />
+            <span className="text-foreground/70 text-3xl sm:text-4xl lg:text-5xl">Monte seu squad em minutos.</span>
           </h1>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-2">{t("pricing_page.subtitle")}</p>
+          <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-3">
+            20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados.
+            Preço fixo por departamento — sem taxa por assento, sem surpresa.
+          </p>
           <p className="text-sm text-foreground/70 font-medium">
-            {t("pricing_page.tip")} <span className="text-primary font-bold">{t("pricing_page.tip_hl")}</span> {t("pricing_page.tip_rest")}
+            Cada departamento inclui um <span className="text-primary font-bold">squad de especialistas</span>, tokens mensais e execuções auditáveis.
           </p>
         </motion.div>
 
-        <div className="grid md:grid-cols-3 gap-6 mb-16">
-          {plans.map((plan, i) => (
-            <motion.div key={plan.name} initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }} className={`glass-card rounded-2xl p-8 relative overflow-hidden ${plan.popular ? "gradient-border" : ""}`}>
-              {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge className="bg-primary text-primary-foreground px-4">{t("pricing_page.most_popular")}</Badge>
-                </div>
-              )}
-              <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-[80px] opacity-0 hover:opacity-100 transition-opacity" />
-              <div className="text-center mb-6">
-                <h2 className="font-display font-bold text-2xl mb-2">{plan.name}</h2>
-                <p className="text-muted-foreground text-sm mb-4">{plan.description}</p>
-                <div className="flex items-baseline justify-center gap-1">
-                  <span className="font-display text-4xl font-bold gradient-text">{plan.price}</span>
-                  {!isOnRequest(plan.price) && <span className="text-muted-foreground">{t("pricing_page.per_month")}</span>}
-                </div>
-                <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-primary/5 border border-primary/10">
-                  <Coins className="h-3.5 w-3.5 text-primary/70" />
-                  <span className="text-xs font-medium text-primary/80">{plan.tokens} {t("pricing_page.tokens_month")}</span>
-                </div>
-              </div>
-              <div className="mb-6 p-3 rounded-xl bg-cyan-500/5 border border-cyan-500/10">
-                <div className="flex items-center gap-2 mb-1">
-                  <Users className="h-3.5 w-3.5 text-cyan-400" />
-                  <span className="text-xs font-bold text-cyan-400">{t("pricing_page.replaces")} {plan.equivalent}</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] text-muted-foreground">{t("pricing_page.equivalent_cost")}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs text-muted-foreground line-through">{plan.cltCost}</span>
-                    <span className="text-[10px] font-bold text-primary px-1.5 py-0.5 rounded bg-primary/10">-{plan.savings}</span>
-                  </div>
-                </div>
-              </div>
-              <ul className="space-y-3 mb-8">
-                {plan.features.map((feature) => (
-                  <li key={feature} className="flex items-center gap-3 text-sm">
-                    <Check className="h-4 w-4 text-primary/70 flex-shrink-0" />
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link to="/auth" state={{ hireIntent: { type: "agent", label: plan.name, slugs: [] } }}>
-                <Button className={`w-full rounded-xl h-12 font-semibold ${plan.popular ? "glow" : ""}`} variant={plan.popular ? "default" : "outline"}>
-                  {isOnRequest(plan.price) ? t("pricing_page.contact_sales") : t("pricing_page.start_now")}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
-            </motion.div>
-          ))}
+        {/* ═════════════ DEPARTAMENTOS PRONTOS (unidade primária) ═════════════ */}
+        <div className="mb-6 flex items-baseline justify-between flex-wrap gap-3">
+          <div>
+            <h2 className="font-display text-2xl sm:text-3xl font-bold">Departamentos Prontos</h2>
+            <p className="text-sm text-muted-foreground mt-1">
+              Especialistas de IA já orquestrados. Ative em 60 segundos.
+            </p>
+          </div>
+          <Link to="/departamentos" className="text-sm text-primary hover:underline inline-flex items-center gap-1">
+            Ver todos os 20 departamentos <ArrowRight className="h-3.5 w-3.5" />
+          </Link>
         </div>
 
-        {/* Squad Plans */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {flagshipDepartments.map((dept, i) => {
+            const DeptIcon = dept.icon;
+            const deptName = t(`squads.dept_${dept.id}`, { defaultValue: dept.id });
+            const deptDesc = t(`squads.dept_${dept.id}_desc`, { defaultValue: "" });
+            return (
+              <motion.div
+                key={dept.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className={`glass-card rounded-2xl p-7 relative overflow-hidden transition-all hover:border-primary/40 ${
+                  dept.popular ? "gradient-border" : ""
+                }`}
+              >
+                {dept.popular && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <Badge className="bg-primary text-primary-foreground px-3 text-[10px] uppercase tracking-wider">
+                      Mais contratado
+                    </Badge>
+                  </div>
+                )}
+
+                {/* Header */}
+                <div className="flex items-start gap-3 mb-5">
+                  <div className="w-11 h-11 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center shrink-0">
+                    <DeptIcon className="h-5 w-5 text-primary" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="font-display font-bold text-lg leading-tight">{deptName}</h3>
+                    <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{deptDesc}</p>
+                  </div>
+                </div>
+
+                {/* Price */}
+                <div className="mb-5">
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="font-display text-4xl font-bold gradient-text">{fp(dept.clauthorCost)}</span>
+                    <span className="text-muted-foreground text-sm">/mês</span>
+                  </div>
+                  <div className="flex items-center gap-2 mt-1.5">
+                    <span className="text-xs text-muted-foreground line-through">
+                      Equipe CLT: {fp(dept.cltCost)}/mês
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-400 px-1.5 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/20">
+                      -{Math.round((1 - dept.clauthorCost / dept.cltCost) * 100)}%
+                    </span>
+                  </div>
+                </div>
+
+                {/* What's inside */}
+                <div className="space-y-2.5 mb-6 py-4 border-y border-border/50">
+                  <div className="flex items-center gap-2.5 text-sm">
+                    <Users className="h-4 w-4 text-primary/70 shrink-0" />
+                    <span>
+                      <span className="font-semibold text-foreground">{dept.headcount} especialistas</span>
+                      <span className="text-muted-foreground"> de IA no squad</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-sm">
+                    <Activity className="h-4 w-4 text-primary/70 shrink-0" />
+                    <span>
+                      <span className="font-semibold text-foreground">{dept.actions}</span>
+                      <span className="text-muted-foreground"> execuções auditáveis/mês</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-sm">
+                    <Coins className="h-4 w-4 text-primary/70 shrink-0" />
+                    <span>
+                      <span className="font-semibold text-foreground">{dept.tokens}</span>
+                      <span className="text-muted-foreground"> tokens/mês incluídos</span>
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-sm">
+                    <Clock className="h-4 w-4 text-primary/70 shrink-0" />
+                    <span className="text-muted-foreground">Operação 24/7 · 14+ idiomas</span>
+                  </div>
+                </div>
+
+                <Link
+                  to="/auth"
+                  state={{ hireIntent: { type: "department", label: deptName, slugs: dept.agents.map((a) => a.key) } }}
+                >
+                  <Button
+                    className={`w-full rounded-xl h-12 font-semibold gap-2 ${dept.popular ? "glow" : ""}`}
+                    variant={dept.popular ? "default" : "outline"}
+                  >
+                    Contratar departamento
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </Link>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* ═════════════ CTA: monte seu squad (secundário) ═════════════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="glass-card rounded-2xl p-8 md:p-10 mb-16 relative overflow-hidden"
+        >
+          <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-[80px]" />
+          <div className="relative z-10 grid md:grid-cols-[1fr_auto] gap-6 items-center">
+            <div>
+              <div className="inline-flex items-center gap-2 mb-3 text-xs font-mono uppercase tracking-[0.2em] text-primary/70">
+                <Wrench className="h-3.5 w-3.5" />
+                Ou personalize
+              </div>
+              <h3 className="font-display text-2xl sm:text-3xl font-bold mb-2">
+                Nenhum departamento pronto encaixa? Monte seu squad.
+              </h3>
+              <p className="text-muted-foreground text-sm max-w-xl">
+                Combine especialistas de IA de qualquer departamento. Escolha 3, 5 ou 10 agentes
+                e receba descontos progressivos de até 35%.
+              </p>
+            </div>
+            <div className="flex gap-3 shrink-0">
+              <Link to="/team-builder">
+                <Button className="glow rounded-xl h-12 px-6 font-semibold gap-2">
+                  Montar meu squad <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* ═════════════ SQUAD PACKS + BUILDER (mantido, agora secundário) ═════════════ */}
         <SquadPlans />
 
-        {/* CLT vs CLAUTHOR Comparison */}
+        {/* ═════════════ CLT vs CLAUTHOR ═════════════ */}
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-8 md:p-12 mb-16 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
           <div className="relative z-10">
@@ -160,7 +252,7 @@ const Pricing = () => {
             </div>
             <div className="space-y-0">
               <div className="grid grid-cols-3 gap-4 pb-4 border-b border-border mb-2">
-                <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground"></div>
+                <div className="text-xs font-bold uppercase tracking-wider text-muted-foreground" />
                 <div className="text-center">
                   <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground flex items-center justify-center gap-1">
                     <XCircle className="h-3 w-3" />
@@ -188,10 +280,10 @@ const Pricing = () => {
                 <br />
                 {t("pricing_page.comparison_footer3")} <span className="text-cyan-400 font-bold">{fp(region.comparison.agentStarting)}/{t("pricing_page.per_month").replace("/", "")}</span>.
               </p>
-              <Link to="/auth" state={{ hireIntent: { type: "agent", label: "Plano CLAUTHOR", slugs: [] } }}>
+              <Link to="/departamentos">
                 <Button className="glow rounded-xl px-8 h-12 font-semibold">
                   <Zap className="h-4 w-4 mr-2" />
-                  {t("pricing_page.save_now")}
+                  Ver os 20 departamentos
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -199,15 +291,47 @@ const Pricing = () => {
           </div>
         </motion.div>
 
-        {/* Token Upgrade */}
-        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-8 md:p-12 mb-16">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-8">
+        {/* ═════════════ ENTERPRISE ═════════════ */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="glass-card rounded-2xl p-8 md:p-12 mb-16 relative overflow-hidden border-primary/20"
+        >
+          <div className="absolute top-0 right-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
+          <div className="relative z-10 grid md:grid-cols-[1fr_auto] gap-6 items-center">
             <div>
-              <h2 className="font-display text-2xl font-bold mb-2 flex items-center gap-3">
-                <TrendingUp className="h-6 w-6 text-primary/70" />
-                {t("pricing_page.token_upgrade")}
+              <div className="inline-flex items-center gap-2 mb-3 text-xs font-mono uppercase tracking-[0.2em] text-primary/70">
+                <Building2 className="h-3.5 w-3.5" />
+                Enterprise
+              </div>
+              <h3 className="font-display text-2xl sm:text-3xl font-bold mb-2">
+                Múltiplos departamentos, SSO, SLA 99.9% e modelo privado.
+              </h3>
+              <p className="text-muted-foreground text-sm max-w-xl">
+                Squad dedicado, fine-tuning com seus dados, integração com seu ERP/CRM,
+                audit trail criptográfico e suporte white-glove. Preço sob consulta.
+              </p>
+            </div>
+            <Link to="/enterprise">
+              <Button variant="outline" className="rounded-xl h-12 px-6 font-semibold gap-2 border-primary/30">
+                Falar com vendas <ArrowRight className="h-4 w-4" />
+              </Button>
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* ═════════════ TOKEN TOP-UP (terciário) ═════════════ */}
+        <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-8 md:p-12 mb-16">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-4">
+            <div>
+              <h2 className="font-display text-xl sm:text-2xl font-bold mb-1 flex items-center gap-3">
+                <TrendingUp className="h-5 w-5 text-primary/70" />
+                Top-up de tokens
               </h2>
-              <p className="text-muted-foreground text-sm">{t("pricing_page.token_desc")}</p>
+              <p className="text-muted-foreground text-sm">
+                Passou do incluído no departamento? Compre tokens avulsos, sem alterar seu plano.
+              </p>
             </div>
             <Button variant="outline" onClick={() => setShowTokens(!showTokens)} className="rounded-xl border-border hover:border-primary/20">
               <Coins className="h-4 w-4 mr-2" />
@@ -215,7 +339,7 @@ const Pricing = () => {
             </Button>
           </div>
           {showTokens && (
-            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
               {tokenPacks.map((pack, i) => (
                 <motion.div key={i} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} className="glass-card rounded-xl p-6 text-center glass-hover relative">
                   {pack.discount && (
@@ -233,15 +357,15 @@ const Pricing = () => {
           )}
         </motion.div>
 
-        {/* All plans include */}
+        {/* ═════════════ TODOS OS DEPARTAMENTOS INCLUEM ═════════════ */}
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-8 md:p-12">
-          <h2 className="font-display text-2xl font-bold text-center mb-8">{t("pricing_page.all_plans_include")}</h2>
+          <h2 className="font-display text-2xl font-bold text-center mb-8">Todos os departamentos incluem</h2>
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {[
-              { icon: Bot, title: t("pricing_page.plan_feature_agents"), desc: t("pricing_page.plan_feature_agents_desc") },
-              { icon: Shield, title: t("pricing_page.plan_feature_security"), desc: t("pricing_page.plan_feature_security_desc") },
-              { icon: Zap, title: t("pricing_page.plan_feature_execution"), desc: t("pricing_page.plan_feature_execution_desc") },
-              { icon: Clock, title: t("pricing_page.plan_feature_uptime"), desc: t("pricing_page.plan_feature_uptime_desc") },
+              { icon: Bot, title: "Squad de especialistas", desc: "Agentes de IA já orquestrados entre si" },
+              { icon: Shield, title: "Auditoria & RLS", desc: "Trilha criptográfica de cada ação executada" },
+              { icon: Zap, title: "Execuções ilimitadas*", desc: "*Dentro do envelope de tokens do departamento" },
+              { icon: Clock, title: "99.9% uptime", desc: "Operação 24/7 em 14+ idiomas" },
             ].map((item) => (
               <div key={item.title} className="text-center group">
                 <div className="w-12 h-12 rounded-xl bg-primary/5 flex items-center justify-center mx-auto mb-4 group-hover:bg-primary/10 transition-colors">
