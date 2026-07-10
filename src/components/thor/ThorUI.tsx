@@ -124,7 +124,8 @@ export const NeuralCore = memo(({ isSpeaking, size = 240, lite = false }: { isSp
         </defs>
 
         <motion.circle cx={center} cy={center} r={r + 20} fill="url(#plasma-glow)"
-          animate={isSpeaking ? { r: [r + 20, r + 30, r + 20], opacity: [0.5, 0.9, 0.5] } : { r: r + 20, opacity: [0.3, 0.5, 0.3] }}
+          initial={{ opacity: 0.3 }}
+          animate={{ opacity: isSpeaking ? [0.5, 0.9, 0.5] : [0.3, 0.5, 0.3] }}
           transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
         />
 
