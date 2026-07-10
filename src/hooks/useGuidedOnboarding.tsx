@@ -53,7 +53,7 @@ export function useGuidedOnboarding() {
       ? { ...partial, completedAt: new Date().toISOString() }
       : null;
     // Only persist "completed" when we have real answers. Skip stays reopenable.
-    const update: Record<string, unknown> = { onboarding_answers: payload as any };
+    const update: { onboarding_answers: any; onboarded_at?: string; onboarding_completed?: boolean } = { onboarding_answers: payload as any };
     if (payload) {
       update.onboarded_at = new Date().toISOString();
       update.onboarding_completed = true;
