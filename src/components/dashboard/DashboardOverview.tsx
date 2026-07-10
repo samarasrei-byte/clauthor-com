@@ -1,6 +1,6 @@
-import { lazy, Suspense } from "react";
-import { motion } from "framer-motion";
-import { Bot, Brain, ArrowRight, Rocket } from "lucide-react";
+import { lazy, Suspense, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Bot, Brain, ArrowRight, Rocket, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import ErrorBoundary from "@/components/ErrorBoundary";
@@ -8,6 +8,7 @@ import SectionLoader from "@/components/ui/section-loader";
 // GuidedOnboarding legado removido — RevolutionaryOnboardingGate global cobre esse fluxo.
 import HeroBriefing from "@/components/dashboard/HeroBriefing";
 import NextStepsCard from "@/components/dashboard/NextStepsCard";
+import FirstTimeTour from "@/components/dashboard/FirstTimeTour";
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
@@ -60,9 +61,13 @@ const DashboardOverview = ({
   onNavigate, onSetActiveSection, onTeach, onHire, onCommand, onSubmitTask, onSelectAgentBySlug,
 }: Props) => {
   const { t } = useTranslation();
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
 
   return (
     <>
+      <FirstTimeTour />
+
       {loadingAgents && (
         <Suspense fallback={<SectionLoader />}><DashboardSkeleton /></Suspense>
       )}
@@ -126,44 +131,68 @@ const DashboardOverview = ({
 
                 <LiveActivityFeed />
 
+                {/* Progressive disclosure — reduces first-render noise */}
+                <div className="pt-2">
+                  <button
+                    onClick={() => setShowAdvanced(v => !v)}
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-dashed border-border/60 hover:border-primary/40 hover:bg-primary/[0.02] text-xs font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground transition-all"
+                    aria-expanded={showAdvanced}
+                  >
+                    {showAdvanced ? (
+                      <>
+                        <ChevronUp className="h-3.5 w-3.5" />
+                        Ocultar painéis avançados
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="h-3.5 w-3.5" />
+                        Ver painéis avançados (ROI, integrações, indicações)
+                      </>
+                    )}
+                  </button>
+                </div>
 
-                <QuickWins
-                  activeAgents={activeAgents}
-                  totalExecutions={totalExecutions}
-                  recentLogs={recentLogs}
-                  hasCompanyData={boardCount > 0}
-                  remainingCredits={remainingCredits}
-                  onNavigate={onNavigate}
-                />
-
-
-                <ROIDashboard
-                  agents={agents}
-                  totalExecutions={totalExecutions}
-                  totalTokensUsed={totalTokensUsed}
-                  estimatedSavings={estimatedSavings}
-                />
-
-                <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
-
-                <MyIntegrationsPanel onNavigate={onSetActiveSection} />
-
-                <ReferralsPanel />
-
-                <TrustCenterPanel />
-
-                <FeedbackTrendsPanel />
-
-
-                <MarketplaceReviews compact />
-
-                <PendingActionsPanel />
-                <ClientCommandCenter
-                  activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                  usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                  remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                  recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={onNavigate}
-                />
+                <AnimatePresence initial={false}>
+                  {showAdvanced && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="space-y-5 pt-2">
+                        <QuickWins
+                          activeAgents={activeAgents}
+                          totalExecutions={totalExecutions}
+                          recentLogs={recentLogs}
+                          hasCompanyData={boardCount > 0}
+                          remainingCredits={remainingCredits}
+                          onNavigate={onNavigate}
+                        />
+                        <ROIDashboard
+                          agents={agents}
+                          totalExecutions={totalExecutions}
+                          totalTokensUsed={totalTokensUsed}
+                          estimatedSavings={estimatedSavings}
+                        />
+                        <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
+                        <MyIntegrationsPanel onNavigate={onSetActiveSection} />
+                        <ReferralsPanel />
+                        <TrustCenterPanel />
+                        <FeedbackTrendsPanel />
+                        <MarketplaceReviews compact />
+                        <PendingActionsPanel />
+                        <ClientCommandCenter
+                          activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                          usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                          remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                          recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={onNavigate}
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </>
             )}
           </div>
