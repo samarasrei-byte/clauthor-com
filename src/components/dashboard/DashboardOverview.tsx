@@ -1,6 +1,6 @@
-import { lazy, Suspense } from "react";
-import { motion } from "framer-motion";
-import { Bot, Brain, ArrowRight, Rocket } from "lucide-react";
+import { lazy, Suspense, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Bot, Brain, ArrowRight, Rocket, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import ErrorBoundary from "@/components/ErrorBoundary";
@@ -8,6 +8,7 @@ import SectionLoader from "@/components/ui/section-loader";
 // GuidedOnboarding legado removido — RevolutionaryOnboardingGate global cobre esse fluxo.
 import HeroBriefing from "@/components/dashboard/HeroBriefing";
 import NextStepsCard from "@/components/dashboard/NextStepsCard";
+import FirstTimeTour from "@/components/dashboard/FirstTimeTour";
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
