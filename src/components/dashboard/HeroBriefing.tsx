@@ -52,6 +52,24 @@ const HeroBriefing = ({
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // Puxa a dor identificada no onboarding para personalizar o estado vazio.
+  const { data: onboardingCtx } = useQuery({
+    queryKey: ["hero-onboarding-ctx", user?.id],
+    enabled: !!user && agentsCount === 0,
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("onboarding_answers")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      const ans = (data?.onboarding_answers ?? null) as
+        | { pain?: string; recommendation?: string; path?: string }
+        | null;
+      return ans;
+    },
+  });
+
   const firstName = useMemo(() => {
     const full = user?.user_metadata?.full_name?.trim();
     if (full) return full.split(" ")[0];
