@@ -97,7 +97,7 @@ const Pricing = () => {
               )}
               <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-[80px] opacity-0 hover:opacity-100 transition-opacity" />
               <div className="text-center mb-6">
-                <h3 className="font-display font-bold text-2xl mb-2">{plan.name}</h3>
+                <h2 className="font-display font-bold text-2xl mb-2">{plan.name}</h2>
                 <p className="text-muted-foreground text-sm mb-4">{plan.description}</p>
                 <div className="flex items-baseline justify-center gap-1">
                   <span className="font-display text-4xl font-bold gradient-text">{plan.price}</span>

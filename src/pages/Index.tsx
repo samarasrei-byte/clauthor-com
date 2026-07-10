@@ -31,7 +31,7 @@ import thorPhoto from "@/assets/kaelis-ai.webp";
    TYPEWRITER HOOK
    ═══════════════════════════════════════════════════════ */
 const useCyclingTypewriter = (words: string[], speed = 50, pauseDuration = 2500, initialDelay = 600) => {
-  const [displayed, setDisplayed] = useState("");
+  const [displayed, setDisplayed] = useState(words[0] ?? "");
   const [wordIndex, setWordIndex] = useState(0);
   const [phase, setPhase] = useState<"waiting" | "typing" | "pausing" | "deleting">("waiting");
   const [firstCycleDone, setFirstCycleDone] = useState(false);
@@ -232,7 +232,7 @@ const HomePage = () => {
               >
                 <span className="text-[28px] font-light text-muted-foreground/40 leading-none mt-0.5 shrink-0">{item.step}</span>
                 <div>
-                  <h4 className="font-medium text-[15px] mb-1">{item.title}</h4>
+                  <h3 className="font-medium text-[15px] mb-1">{item.title}</h3>
                   <p className="text-[14px] text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>

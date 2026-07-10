@@ -144,7 +144,7 @@ const HowItWorks = () => {
                 <opt.icon className={`h-7 w-7 ${opt.iconColor}`} />
               </div>
 
-              <h3 className="font-display font-bold text-xl mb-1">{opt.title}</h3>
+              <h2 className="font-display font-bold text-xl mb-1">{opt.title}</h2>
               <p className="text-sm text-muted-foreground mb-4">{opt.subtitle}</p>
 
               <div className="rounded-xl bg-background/50 border border-border/10 p-3 mb-4">
