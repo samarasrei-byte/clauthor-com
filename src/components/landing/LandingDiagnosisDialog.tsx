@@ -22,9 +22,11 @@ import type { LucideIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
 import {
   PAIN_TO_RECOMMENDATION,
   saveDiagnosis,
+  saveThorBriefing,
   type DeliveryMode,
   type PainId,
 } from "@/lib/diagnosis-routing";
