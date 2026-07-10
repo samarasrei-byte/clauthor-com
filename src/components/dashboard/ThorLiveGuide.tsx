@@ -351,7 +351,14 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return window.localStorage.getItem(MUTE_STORAGE_KEY) === "1";
+    } catch {
+      return false;
+    }
+  });
   const [showAskThor, setShowAskThor] = useState(false);
   const [currentMessage, setCurrentMessage] = useState("");
   const [displayedText, setDisplayedText] = useState("");
@@ -361,6 +368,15 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
   const typingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isMutedRef = useRef(isMuted);
   useEffect(() => { isMutedRef.current = isMuted; }, [isMuted]);
+
+  // Persist mute preference across sessions ("sempre mudo")
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      window.localStorage.setItem(MUTE_STORAGE_KEY, isMuted ? "1" : "0");
+    } catch { /* ignore quota / privacy mode */ }
+  }, [isMuted]);
+
 
   const { speak, stop: stopTTS, isSpeaking } = useElevenLabsTTS();
 
