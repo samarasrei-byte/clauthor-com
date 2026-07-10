@@ -37,7 +37,7 @@ const fadeUp = {
 
 const solutions = [
   { icon: Zap, title: "Eficiência Incomparável", desc: "Agentes de IA executam tarefas complexas 24/7 com precisão e velocidade superiores, eliminando gargalos." },
-  { icon: TrendingDown, title: "Redução Drástica de Custos", desc: "Economia média de 88% em comparação com equipes humanas, sem encargos trabalhistas ou burocracia." },
+  { icon: TrendingDown, title: "Estrutura de Custo Radicalmente Menor", desc: "Custo por agente muito abaixo de um equivalente CLT — sem encargos trabalhistas, férias ou 13º. Economia real varia por empresa e depende do escopo replicado." },
   { icon: Globe2, title: "Escalabilidade Ilimitada", desc: "Lide com picos de demanda e expanda globalmente sem fricção. Squads de IA que se adaptam instantaneamente." },
 ];
 
@@ -284,7 +284,7 @@ const InvestorPitch = () => {
             { v: "225", l: "Agentes IA" },
             { v: "20", l: "Departamentos" },
             { v: "14+", l: "Idiomas" },
-            { v: "88%", l: "Redução de Custo" },
+            { v: "24/7", l: "Operação" },
           ].map((kpi) => (
             <div key={kpi.l} className="bg-background/70 px-6 py-6 text-center">
               <div className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-br from-primary to-foreground bg-clip-text text-transparent">{kpi.v}</div>

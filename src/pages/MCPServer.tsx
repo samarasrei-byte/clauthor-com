@@ -118,7 +118,7 @@ export default function MCPServer() {
   );
 
   useEffect(() => {
-    document.title = "MCP Server — CLAUTHOR | Conecte 206 agentes ao Claude Code, Cursor e Claude Desktop";
+    document.title = "MCP Server — CLAUTHOR | 206 agentes no Claude & Cursor";
     const meta = document.querySelector('meta[name="description"]') ?? document.head.appendChild(Object.assign(document.createElement("meta"), { name: "description" }));
     meta.setAttribute("content", "Setup do CLAUTHOR MCP Server: expõe 206 agentes WORKFORCE como tools nativas para Claude Code, Claude Desktop, Cursor e qualquer cliente MCP.");
   }, []);

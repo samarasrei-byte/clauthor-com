@@ -1,0 +1,22 @@
+# CLAUTHOR
+
+> AI workforce platform with 225 autonomous agents across 20 corporate departments. Deploy complete AI teams for Sales, Marketing, Legal, Finance, HR, Support, Engineering and more — no code, no hiring.
+
+CLAUTHOR orchestrates specialized AI agents grouped into ready-to-deploy departments. Each department replaces a full human team with agents that operate 24/7 across 14+ languages, integrated via a hierarchical execution pipeline and a Model Context Protocol (MCP) server for external clients like Claude Desktop and Cursor.
+
+## Pages
+
+- [Home](/): Overview of the CLAUTHOR AI workforce platform and how departments operate.
+- [Departments](/departamentos): Catalog of 20 pre-built AI departments with agents, use cases and monthly pricing in BRL.
+- [Marketplace](/marketplace): Individual AI agents available for hire outside a full department subscription.
+- [Pricing](/pricing): Starter plans and outcome-based billing model.
+- [How it works](/how-it-works): End-to-end flow from onboarding to autonomous execution.
+- [Library](/library): Deep-dive pages for each individual agent, with capabilities and integrations.
+- [Community](/community): User-shared workflows, agent recipes and case discussions.
+- [Enterprise](/enterprise): Enterprise-tier features, SLAs and custom department composition.
+- [Outcomes](/outcomes): Outcome-based pricing model — pay per measurable business result.
+
+## Optional
+
+- [Terms of Service](/termos)
+- [Privacy Policy](/privacidade)

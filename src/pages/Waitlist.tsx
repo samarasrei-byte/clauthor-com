@@ -528,7 +528,7 @@ const Waitlist = () => {
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
               Squads inteligentes que rodam marketing, vendas, financeiro e operações no automático.
-              Você delega uma missão, o Thor executa. <span className="text-foreground font-medium">Economia de 88% vs. contratação tradicional.</span>
+              Você delega uma missão, o Thor executa. <span className="text-foreground font-medium">Custo por agente muito abaixo de um profissional CLT equivalente</span> — economia real varia por empresa.
             </p>
 
             {/* Bullets — separação limpa */}
@@ -731,7 +731,7 @@ const Waitlist = () => {
             {[
               { value: "225", label: "Agentes IA" },
               { value: "20", label: "Departamentos" },
-              { value: "88%", label: "Economia" },
+              { value: "14+", label: "Idiomas" },
               { value: "24/7", label: "Operação" },
             ].map((s) => (
               <div key={s.label} className="text-center">
