@@ -97,6 +97,10 @@ const DashboardOverview = ({
             {/* Advanced panels - only when user has agents */}
             {agents.length > 0 && (
               <>
+                <ContractedDepartments
+                  onExplore={() => onSetActiveSection("library")}
+                />
+
                 <TaskRequestPanel
                   contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
                   onSubmitTask={onSubmitTask}
