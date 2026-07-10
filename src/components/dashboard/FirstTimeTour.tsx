@@ -30,22 +30,28 @@ const FirstTimeTour = () => {
   useEffect(() => {
     try {
       if (localStorage.getItem(STORAGE_KEY)) return;
+      // Do not compete with the existing Thor guided tour or other onboarding tours.
+      // If the user has ever engaged with Thor's guide, skip ours entirely.
+      if (localStorage.getItem("thor:guide:v1") || localStorage.getItem("clauthor:onboarding:completed")) {
+        localStorage.setItem(STORAGE_KEY, "auto-skipped");
+        return;
+      }
     } catch { return; }
 
-    // Wait until no other dialog/modal is on screen — don't bombard the user.
     let cancelled = false;
     const check = () => {
       if (cancelled) return;
-      const hasOtherDialog = !!document.querySelector(
-        '[role="dialog"]:not([data-first-time-tour]), [data-radix-portal] [role="dialog"]'
+      // Suppress while any other dialog OR the Thor live guide is on screen.
+      const hasOther = !!document.querySelector(
+        '[role="dialog"]:not([data-first-time-tour]), [data-thor-live-guide], [data-radix-portal] [role="dialog"]'
       );
-      if (!hasOtherDialog) {
+      if (!hasOther) {
         setOpen(true);
       } else {
-        setTimeout(check, 1200);
+        setTimeout(check, 1500);
       }
     };
-    const t = setTimeout(check, 1500);
+    const t = setTimeout(check, 2000);
     return () => { cancelled = true; clearTimeout(t); };
   }, []);
 
