@@ -107,6 +107,17 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
   const rec = pain ? PAIN_TO_RECOMMENDATION[pain] : null;
   const stepIndex = STEPS.indexOf(step);
 
+  // Preço mensal real do departamento pré-ativado (pt-BR).
+  const deptId = pain ? PAIN_TO_DEPT_ID[pain] : null;
+  const region = getRegion("pt");
+  const deptMonthly = deptId
+    ? (region.departments as Record<string, number>)[deptId]
+    : null;
+  const deptMonthlyLabel = deptMonthly ? formatPrice(deptMonthly, "pt") : null;
+  const savingsVsClt =
+    deptMonthly && rec?.monthlySavings ? rec.monthlySavings : null;
+
+
   const persist = () => {
     if (!pain) return;
     saveDiagnosis({
