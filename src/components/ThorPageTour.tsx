@@ -334,7 +334,7 @@ const ThorPageTour = ({ steps, storageKey, onComplete }: ThorPageTourProps) => {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 30 }}
         transition={{ type: "spring", damping: 22, stiffness: 260 }}
-        className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-[85] pointer-events-auto"
+        className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[85] pointer-events-auto"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="relative w-[480px] max-w-[94vw]">
