@@ -60,9 +60,10 @@ export const regionalPricing: Record<string, RegionalPricing> = {
   },
   "pt-pt": {
     currency: "EUR", symbol: "€", locale: "pt-PT",
-    plans: { starter: 179, growth: 349 },
+    // Starter alinhado ao tier "high" (≡ agente canônico). Growth ≈ 2,67× starter.
+    plans: { starter: 269, growth: 719 },
     tokenPacks: { pack5m: 49, pack15m: 119, pack50m: 279, pack100m: 499 },
-    comparison: { avgSalary: 2200, avgSalaryYear3: 132000, agentStarting: 49, agentYear3: 1764 },
+    comparison: { avgSalary: 2200, avgSalaryYear3: 132000, agentStarting: 269, agentYear3: 9684 },
     departments: { tecnologia: 449, comercial: 299, marketing: 269, financeiro: 299, criacao: 179, suporte: 109, rh: 179 },
     departmentClt: cltCosts,
   },
