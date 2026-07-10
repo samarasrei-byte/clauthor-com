@@ -673,7 +673,7 @@ const ClientDashboard = () => {
       {/* ThorLiveGuide is rendered globally by FloatingDock (bottom-center zone). */}
 
 
-      {!hasPendingCheckout && (
+      {!hasPendingCheckout && !showEmptyState && (
         <Suspense fallback={null}>
           <QuickStartWizard
             isOpen={showQuickStart}
@@ -686,7 +686,7 @@ const ClientDashboard = () => {
       )}
 
       <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
-      {!hasPendingCheckout && <DashboardTour />}
+      {!hasPendingCheckout && !showEmptyState && <DashboardTour />}
     </>
   );
 };
