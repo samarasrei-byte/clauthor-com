@@ -1,18 +1,19 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
+import { InstantWow } from "@/components/onboarding/InstantWow";
 import RevolutionaryOnboarding from "@/components/onboarding/RevolutionaryOnboarding";
 
 /**
  * Rota dedicada de onboarding — ativada logo após o signup em /auth.
- * Renderiza o RevolutionaryOnboarding em modo full-screen sem AppLayout.
- * Se o usuário pular, marca a sessão como "skipped" e o banner no dashboard
- * permite retomar.
+ * Fase 1: InstantWow (momento uau em <90s — primeiro entregável real).
+ * Fase 2 (opcional): RevolutionaryOnboarding para quem quer explorar mais.
  */
 export default function Welcome() {
   const navigate = useNavigate();
   const { user, isLoading } = useAuth();
+  const [phase, setPhase] = useState<"wow" | "explore">("wow");
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -28,24 +29,38 @@ export default function Welcome() {
     );
   }
 
-  const handleSkip = () => {
+  const handleWowDone = () => {
+    try { sessionStorage.removeItem("onboarding-skipped-session"); } catch { /* ignore */ }
+    navigate("/dashboard", { replace: true });
+  };
+
+  const handleWowSkip = () => {
+    // Skip do wow → oferece o onboarding explorer clássico.
+    setPhase("explore");
+  };
+
+  const handleExploreSkip = () => {
     try { sessionStorage.setItem("onboarding-skipped-session", "1"); } catch { /* ignore */ }
     navigate("/dashboard", { replace: true });
   };
 
-  const handleComplete = () => {
+  const handleExploreComplete = () => {
     try { sessionStorage.removeItem("onboarding-skipped-session"); } catch { /* ignore */ }
-    // RevolutionaryOnboarding já navega para /dashboard no final da tela "done".
+    // RevolutionaryOnboarding já navega para /dashboard.
   };
 
   return (
     <>
       <Helmet>
-        <title>Bem-vindo à Clauthor — Monte seu squad em 60s</title>
-        <meta name="description" content="20 departamentos, squads customizáveis e +200 especialistas de IA orquestrados. Descubra em 60 segundos qual departamento resolve sua maior dor operacional." />
+        <title>Bem-vindo à Clauthor — Primeiro entregável em 90 segundos</title>
+        <meta name="description" content="20 departamentos, squads customizáveis e +200 especialistas de IA orquestrados. Veja seu primeiro entregável real em menos de 90 segundos." />
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
-      <RevolutionaryOnboarding isOpen onSkip={handleSkip} onComplete={handleComplete} />
+      {phase === "wow" ? (
+        <InstantWow onDone={handleWowDone} onSkip={handleWowSkip} />
+      ) : (
+        <RevolutionaryOnboarding isOpen onSkip={handleExploreSkip} onComplete={handleExploreComplete} />
+      )}
     </>
   );
 }
