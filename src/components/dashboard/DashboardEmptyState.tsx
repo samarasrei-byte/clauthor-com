@@ -72,16 +72,26 @@ const DashboardEmptyState = ({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.32 }}
-          className="mt-6 max-w-lg w-full rounded-2xl border border-primary/40 bg-primary/5 p-4 text-left"
+          className="mt-6 max-w-lg w-full rounded-2xl border border-primary/40 bg-primary/5 p-5 text-left relative overflow-hidden"
         >
-          <div className="flex items-start gap-3">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-primary/10 blur-3xl"
+          />
+          <div className="flex items-start gap-3 relative z-10">
             <div className="h-9 w-9 rounded-lg bg-primary/15 text-primary flex items-center justify-center flex-shrink-0">
               <Target className="h-4 w-4" />
             </div>
-            <div className="min-w-0">
-              <p className="text-[11px] font-medium text-primary uppercase tracking-wide">Baseado no diagnóstico que você fez</p>
-              <p className="text-sm font-semibold mt-0.5">Recomendação: {rec.departmentLabel}</p>
-              <p className="text-xs text-muted-foreground mt-1 leading-relaxed">{rec.tagline}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-[10px] font-bold tracking-[0.15em] text-primary uppercase">
+                Thor pré-ativou seu departamento
+              </p>
+              <p className="text-base font-semibold mt-1">{rec.departmentLabel}</p>
+              <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
+                Baseado no que você contou no diagnóstico
+                {diagnosis?.company ? <> — adaptado para <span className="text-foreground font-medium">{diagnosis.company}</span></> : null}.
+                Confirme para ativar.
+              </p>
               <Button
                 size="sm"
                 className="mt-3 gap-1.5"
@@ -94,6 +104,7 @@ const DashboardEmptyState = ({
           </div>
         </motion.div>
       )}
+
 
       <motion.div
         initial={{ opacity: 0, y: 8 }}
