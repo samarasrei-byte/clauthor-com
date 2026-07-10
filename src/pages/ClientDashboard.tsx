@@ -408,14 +408,14 @@ const ClientDashboard = () => {
     localStorage.setItem("clauthor_live_guide_dismissed", "true");
   }, []);
   useEffect(() => {
-    if (showLiveGuide && !hasPendingCheckout) {
+    if (showLiveGuide && !hasPendingCheckout && !showEmptyState) {
       registerThor({ activeSection, onNavigate: handleSidebarNav, onDismiss: dismissLiveGuide });
     } else {
       registerThor(null);
     }
     return () => registerThor(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showLiveGuide, hasPendingCheckout, activeSection]);
+  }, [showLiveGuide, hasPendingCheckout, activeSection, showEmptyState]);
 
   const handleBack = () => {
     setActiveSection(previousSection || "overview");
