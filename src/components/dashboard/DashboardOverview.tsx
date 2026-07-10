@@ -61,6 +61,8 @@ const DashboardOverview = ({
   onNavigate, onSetActiveSection, onTeach, onHire, onCommand, onSubmitTask, onSelectAgentBySlug,
 }: Props) => {
   const { t } = useTranslation();
+  const [showAdvanced, setShowAdvanced] = useState(false);
+
 
   return (
     <>
