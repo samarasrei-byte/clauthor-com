@@ -65,6 +65,7 @@ const ControlTower = lazyRetry(() => import("./pages/ControlTower"));
 const Architecture = lazyRetry(() => import("./pages/Architecture"));
 const ProjectTimeline = lazyRetry(() => import("./pages/ProjectTimeline"));
 const ThorOnboarding = lazyRetry(() => import("./pages/ThorOnboarding"));
+const Welcome = lazyRetry(() => import("./pages/Welcome"));
 const OutcomePicker = lazyRetry(() => import("./pages/OutcomePicker"));
 const AgentNeuralNetwork = lazyRetry(() => import("./pages/AgentNeuralNetwork"));
 const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
@@ -127,6 +128,7 @@ const App = () => (
                 <Route path="/investidores" element={<InvestorPitch />} />
                 <Route path="/investors" element={<InvestorPitch />} />
                 <Route path="/onboarding" element={<ThorOnboarding />} />
+                <Route path="/welcome" element={<ProtectedRoute><Welcome /></ProtectedRoute>} />
                 <Route path="/setup/:type/:ref" element={<ProtectedRoute><CustomerSetup /></ProtectedRoute>} />
                 <Route path="/advocacia" element={<Advocacia />} />
                 <Route path="/apresentacaoadv" element={<ApresentacaoAdv />} />

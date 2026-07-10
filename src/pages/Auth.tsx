@@ -120,7 +120,10 @@ const AuthPage = () => {
           if (hireIntent) {
             localStorage.setItem("hireIntent", JSON.stringify(hireIntent));
           }
-          navigate(from, { replace: true });
+          // Novo usuário: sempre passa pelo diagnóstico em /welcome antes do dashboard,
+          // exceto quando há um redirect explícito para outro fluxo (ex.: /advocacia).
+          const signupDestination = redirectParam || state?.from?.pathname || "/welcome";
+          navigate(signupDestination, { replace: true });
         }
       }
     } catch {

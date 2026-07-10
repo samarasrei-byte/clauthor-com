@@ -1,6 +1,5 @@
 import { lazy, Suspense, useEffect, useState } from "react";
 import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
-import RevolutionaryOnboarding from "./onboarding/RevolutionaryOnboarding";
 
 const PlatformUpdatesDialog = lazy(() => import("./PlatformUpdatesDialog"));
 const ThorDailyGreeting = lazy(() => import("./ThorDailyGreeting"));
@@ -12,13 +11,16 @@ const UPDATES_STORAGE_KEY = `clauthor-updates-seen-${CURRENT_UPDATES_VERSION}`;
 /**
  * Hierarquia de assistentes — só UM canal fala com o usuário por vez.
  *
- * 1º contato (onboarding pendente) → APENAS Thor via RevolutionaryOnboarding.
- * Retornante COM update novo         → APENAS PlatformUpdatesDialog.
- * Retornante SEM update novo         → ThorDailyGreeting.
- * Enquanto carrega o perfil          → silêncio (nada pisca).
+ * O primeiro contato (onboarding pendente) agora vive na rota dedicada
+ * `/welcome`, para onde o signup redireciona. Aqui cuidamos apenas de:
+ *
+ * - Retornante COM update novo   → PlatformUpdatesDialog.
+ * - Retornante SEM update novo   → ThorDailyGreeting.
+ * - Enquanto carrega o perfil    → silêncio (nada pisca).
+ * - Sem onboarding concluído     → silêncio (banner cuida da retomada).
  */
 export default function AssistantHierarchy() {
-  const { isOpen, skip, save, loading, answers } = useGuidedOnboarding();
+  const { loading, answers } = useGuidedOnboarding();
   const [hasUnseenUpdate, setHasUnseenUpdate] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -32,18 +34,10 @@ export default function AssistantHierarchy() {
 
   if (loading || hasUnseenUpdate === null) return null;
 
-  const firstContact = isOpen || !answers;
-  if (firstContact) {
-    return (
-      <RevolutionaryOnboarding
-        isOpen={isOpen}
-        onSkip={() => skip()}
-        onComplete={() => save({ path: "agent" })}
-      />
-    );
-  }
+  // Primeiro contato sem respostas: não abre modal aqui — /welcome + banner
+  // conduzem a jornada.
+  if (!answers) return null;
 
-  // Retornante: nunca abrir dois modais ao mesmo tempo.
   if (hasUnseenUpdate) {
     return (
       <Suspense fallback={null}>
@@ -57,3 +51,4 @@ export default function AssistantHierarchy() {
     </Suspense>
   );
 }
+

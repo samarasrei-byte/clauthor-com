@@ -36,6 +36,7 @@ import { agentIcons } from "@/data/libraryAgentData";
 import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog";
 import SectionLoader from "@/components/ui/section-loader";
 import AmbientThorCard from "@/components/dashboard/AmbientThorCard";
+import OnboardingResumeBanner from "@/components/OnboardingResumeBanner";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
@@ -483,6 +484,8 @@ const ClientDashboard = () => {
           Onboarding do primeiro contato: RevolutionaryOnboardingGate global (AppLayout). */}
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
+
+      <OnboardingResumeBanner />
 
       <div className="flex h-full">
         <div className="hidden lg:block relative z-10">

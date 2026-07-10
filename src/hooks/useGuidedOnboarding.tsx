@@ -39,8 +39,10 @@ export function useGuidedOnboarding() {
         setAnswers(data.onboarding_answers as unknown as OnboardingAnswers);
       }
       if (!data?.onboarded_at) {
-        // small delay so it doesn't collide with page load
-        setTimeout(() => !cancelled && setIsOpen(true), 900);
+        // Auto-abertura desativada: /welcome é a rota dedicada e o
+        // OnboardingResumeBanner cobre retomadas. Mantemos `isOpen=false`
+        // para não colidir com o dashboard nem com o Thor greeter.
+        setIsOpen(false);
       }
       setLoading(false);
     })();
