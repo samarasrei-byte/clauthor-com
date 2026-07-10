@@ -23,7 +23,7 @@ const pillars = [
     icon: Cpu,
     title: "Workforce Dedicada",
     desc: "Squads de IA exclusivas treinadas no seu domínio, com memória corporativa e governança proprietária.",
-    bullets: ["Até 225 agentes especializados", "Fine-tuning com seus dados", "Modelos privados (Claude/GPT/Gemini)"],
+    bullets: ["+200 especialistas de IA dedicados", "Fine-tuning com seus dados", "Modelos privados (Claude/GPT/Gemini)"],
   },
   {
     icon: Workflow,
