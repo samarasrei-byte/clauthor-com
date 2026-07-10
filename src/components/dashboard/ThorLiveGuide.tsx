@@ -5,6 +5,8 @@ import { Brain, ChevronRight, Pause, Play, X, MessageSquare, Volume2, VolumeX } 
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
+import { DEFAULT_VOICE_ID as THOR_VOICE_ID } from "@/components/thor/ThorVoice";
 
 // ─── Section guide data (pre-written, no AI needed) ───
 interface GuideStep {
@@ -13,35 +15,63 @@ interface GuideStep {
   message: string;
 }
 
-// Onboarding enxuto: 5 passos essenciais. As outras seções permanecem
-// acessíveis pelo sidebar, mas não interrompem o tour inicial.
+// Cobertura de todas as seções principais do painel. Cada clique no menu
+// lateral dispara a explicação correspondente com voz do Thor.
 const GUIDE_STEPS: GuideStep[] = [
   {
     section: "overview",
     title: "Command Center",
-    message: "Bem-vindo! Este é o seu Command Center — o hub central onde você monitora tudo: desempenho dos agentes, tarefas pendentes e ações rápidas.",
+    message: "Este é o seu Command Center — o hub central onde você monitora tudo: desempenho dos agentes, tarefas pendentes e ações rápidas do seu time de IA.",
   },
   {
-    section: "omnix",
-    title: "Thor IA",
-    message: "Aqui é onde eu moro. Delegue tarefas, faça perguntas estratégicas ou me deixe orquestrar toda a sua equipe de IA. Sou seu co-piloto.",
+    section: "workspace",
+    title: "Workspace",
+    message: "Aqui é o seu Workspace — o espaço onde você sobe seus conteúdos, materiais de referência e gera roteiros e briefings para os agentes trabalharem em cima.",
+  },
+  {
+    section: "intelligence-hub",
+    title: "Inteligência",
+    message: "No Intelligence Hub você vê os insights consolidados: métricas, tendências e recomendações que os agentes geram a partir da sua operação.",
   },
   {
     section: "agents",
-    title: "Seus Agentes",
-    message: "Aqui estão todos os agentes trabalhando para você. Cada um é especialista em uma área — pense neles como seus funcionários digitais.",
+    title: "Meus Agentes",
+    message: "Aqui estão todos os agentes trabalhando para você. Cada um é especialista em uma função — pense neles como funcionários digitais que nunca dormem.",
+  },
+  {
+    section: "neural-network",
+    title: "Rede Neural",
+    message: "Esta é a Rede Neural do CLAUTHOR. Aqui você visualiza os departamentos ativos, como os agentes se comunicam entre si e como as decisões fluem pela sua operação.",
+  },
+  {
+    section: "omnix",
+    title: "Thor",
+    message: "Aqui é onde eu moro. Delegue tarefas, faça perguntas estratégicas ou me deixe orquestrar toda a sua equipe de IA. Sou seu co-piloto direto.",
+  },
+  {
+    section: "chat",
+    title: "Chat do Agente",
+    message: "Este é o chat direto com o agente selecionado. Converse, peça entregas, revise materiais — tudo em linguagem natural.",
   },
   {
     section: "library",
     title: "Biblioteca",
-    message: "Seu marketplace de agentes e departamentos. Navegue, compare e contrate os que resolvem suas dores em 1 clique.",
+    message: "Seu marketplace de agentes e departamentos. Navegue, compare e contrate os que resolvem suas dores em um clique.",
   },
   {
     section: "integrations",
     title: "Integrações",
-    message: "Conecte WhatsApp, e-mail, CRM e mais. Cada integração multiplica o poder dos seus agentes.",
+    message: "Conecte WhatsApp, e-mail, CRM e mais. Cada integração multiplica o poder dos seus agentes ligando eles às ferramentas que você já usa.",
+  },
+  {
+    section: "system",
+    title: "Sistema",
+    message: "Nas configurações de sistema você ajusta preferências da conta, idioma, notificações e permissões do seu workspace.",
   },
 ];
+
+// Explicação genérica para departamentos (dept-*) sem duplicar entrada por depto.
+const DEPT_MESSAGE = "Este é um departamento do seu time. Aqui você vê os agentes que compõem o squad, o que eles entregam e como você pode ativar ou pausar cada um.";
 
 // ─── Neural Radial Waveform Visualizer ───
 type WaveMode = "speaking" | "listening" | "idle";
