@@ -697,8 +697,9 @@ const ClientDashboard = () => {
                 {activeSection === "overview" && showEmptyState && (
                   <DashboardEmptyState
                     userName={user?.user_metadata?.full_name || user?.email || undefined}
-                    onHireFirstDepartment={() => navigate("/departamentos")}
+                    onHireFirstDepartment={openRecapFromDashboard}
                     onExploreLibrary={() => setActiveSection("agents")}
+                    onActivateRecommended={openRecapFromDashboard}
                   />
                 )}
 
