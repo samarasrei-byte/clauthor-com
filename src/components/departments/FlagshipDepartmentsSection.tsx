@@ -80,8 +80,8 @@ const FlagshipDepartmentsSection = () => {
             <DepartmentCard
               key={dept.id}
               department={dept}
-              onSeeLiveDemo={setDemoDept}
-              onHire={handleHire}
+              onSeeLiveDemo={handleSeeDemo}
+              onHire={(d) => handleHire(d, "landing")}
             />
           ))}
         </div>
@@ -105,7 +105,7 @@ const FlagshipDepartmentsSection = () => {
             department={demoDept}
             open={!!demoDept}
             onOpenChange={(o) => !o && setDemoDept(null)}
-            onHire={handleHire}
+            onHire={(d) => handleHire(d, "live_demo")}
           />
         </Suspense>
       )}
