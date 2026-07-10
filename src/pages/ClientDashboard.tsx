@@ -162,6 +162,20 @@ const ClientDashboard = () => {
     window.location.reload();
   }, [user]);
 
+  /** Reabre o modal de diagnóstico (ex.: usuário clicou em "Ativar" no empty state). */
+  const openRecapFromDashboard = useCallback(() => {
+    const diag = loadDiagnosis();
+    if (!diag) {
+      // Sem diagnóstico → manda para Thor no painel, sem navegar pra /departamentos.
+      setActiveSection("omnix");
+      setOmnixMounted(true);
+      return;
+    }
+    const { briefing, siteSummary } = loadThorBriefing();
+    setDiagnosisRecapData({ diagnosis: diag, briefing, siteSummary });
+    setShowDiagnosisRecap(true);
+  }, []);
+
 
   useEffect(() => {
     if (activeSection === "omnix" && !omnixMounted) setOmnixMounted(true);
