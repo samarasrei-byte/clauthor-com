@@ -13,8 +13,8 @@ import TokenUpgradeDialog from "./TokenUpgradeDialog";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 
-const PlatformUpdatesDialog = lazy(() => import("@/components/PlatformUpdatesDialog"));
-const ThorDailyGreeting = lazy(() => import("@/components/ThorDailyGreeting"));
+// Single-channel: AssistantHierarchy decides which (if any) modal to show.
+const AssistantHierarchy = lazy(() => import("@/components/AssistantHierarchy"));
 
 const DashboardLayout = () => {
   const { isAdmin, signOut } = useAuth();
