@@ -53,8 +53,14 @@ const Navbar = () => {
           { label: t("nav.dashboard"), href: "/dashboard" },
           { label: t("nav.my_agents"), href: "/agents" },
         ]
-      : []),
+      : [
+          // Links diretos para reduzir atrito de descoberta (auditoria UX).
+          { label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }), href: "/departamentos" },
+          { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
+          { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
+        ]),
   ];
+
 
   return (
     <motion.nav
