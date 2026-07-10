@@ -284,7 +284,7 @@ const InvestorPitch = () => {
             { v: "225", l: "Agentes IA" },
             { v: "20", l: "Departamentos" },
             { v: "14+", l: "Idiomas" },
-            { v: "88%", l: "Redução de Custo" },
+            { v: "24/7", l: "Operação" },
           ].map((kpi) => (
             <div key={kpi.l} className="bg-background/70 px-6 py-6 text-center">
               <div className="text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-br from-primary to-foreground bg-clip-text text-transparent">{kpi.v}</div>
