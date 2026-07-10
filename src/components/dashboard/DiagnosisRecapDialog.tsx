@@ -15,6 +15,7 @@ import {
   type DiagnosisAnswers,
 } from "@/lib/diagnosis-routing";
 import type { HireIntent } from "@/pages/Auth";
+import { trackKpi } from "@/lib/kpiTracker";
 
 interface Props {
   open: boolean;
