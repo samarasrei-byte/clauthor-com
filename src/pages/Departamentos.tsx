@@ -276,7 +276,10 @@ const Departamentos = () => {
             const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.clauthorCost;
             const deptClt = (region.departmentClt as Record<string, number>)[dept.id] || dept.cltCost;
             const savings = deptClt - deptPrice;
-            const savingsPercent = deptClt > 0 ? Math.round((savings / deptClt) * 100) : 0;
+            const rawPercent = deptClt > 0 ? Math.round((savings / deptClt) * 100) : 0;
+            // Cap at 95% — "-100%" is not credible (implies zero cost)
+            const savingsPercent = Math.min(rawPercent, 95);
+            const savingsMultiplier = deptPrice > 0 ? Math.round(deptClt / deptPrice) : 0;
             return (
               <motion.div
                 key={dept.id}
@@ -363,7 +366,7 @@ const Departamentos = () => {
                     <div>
                      <p className="text-[10px] text-muted-foreground">{t("departments_page.vs_clt")}</p>
                       <p className="text-sm font-bold text-emerald-400">
-                        -{savingsPercent}% {t("departments_page.savings")}
+                        {savingsMultiplier >= 3 ? `${savingsMultiplier}x` : `-${savingsPercent}%`} {t("departments_page.savings")}
                       </p>
                     </div>
                     <div className="text-right">
