@@ -564,7 +564,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                     <div className="flex flex-col items-center gap-3">
                       <Button
                         size="lg"
-                        onClick={() => setStep("input")}
+                        onClick={() => setStep("department")}
                         className="h-14 px-8 text-base bg-white text-black hover:bg-white/90 rounded-full gap-2 shadow-[0_0_60px_rgba(225,29,72,0.4)]"
                       >
                         Iniciar sincronização <ArrowRight className="w-4 h-4" />
