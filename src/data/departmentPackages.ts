@@ -84,7 +84,7 @@ const COMERCIAL: DepartmentPackage = {
   icon: Briefcase,
   color: "sales",
   painPoint: "Sua equipe não bate meta e o pipeline vive vazio.",
-  outcome: "+30 leads qualificados por mês",
+  outcome: "",
   agentSlugs: ["hunter_linkedin", "sdr_linkedin", "sdr_whatsapp", "lead_qualifier", "revenue_ops"],
   outcomeMetric: {
     label: "Leads qualificados",
