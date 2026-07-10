@@ -99,6 +99,10 @@ if (i18n.language && i18n.language !== "en") {
 i18n.on("languageChanged", (lng) => {
   document.documentElement.lang = lng;
   document.documentElement.dir = lng === "ar" ? "rtl" : "ltr";
+  // Re-inject canonical vars com a currency/label do novo locale.
+  if (i18n.options.interpolation) {
+    i18n.options.interpolation.defaultVariables = canonicalInterpolationContext(lng);
+  }
   loadLocale(lng);
 });
 
