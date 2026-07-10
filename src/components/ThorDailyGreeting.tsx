@@ -386,6 +386,7 @@ export default function ThorDailyGreeting() {
       <DialogContent
         className="max-w-md p-0 overflow-hidden border-border/60 bg-card/95 backdrop-blur-2xl shadow-2xl rounded-2xl"
       >
+        <VisuallyHidden><DialogTitle>Boas-vindas do Thor</DialogTitle><DialogDescription>Resumo diário e ações sugeridas.</DialogDescription></VisuallyHidden>
         {/* Ambient gradient */}
         <div className="pointer-events-none absolute inset-0 -z-10 opacity-70">
           <div className="absolute -top-32 -right-24 w-72 h-72 rounded-full bg-primary/20 blur-3xl" />

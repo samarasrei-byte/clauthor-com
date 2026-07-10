@@ -43,6 +43,7 @@ const CheckoutSummaryDialog = ({ data, onApprove, onCancel }: Props) => {
   return (
     <Dialog open={!!data} onOpenChange={(open) => !open && onCancel()}>
       <DialogContent className="sm:max-w-lg bg-background border-border/20 p-0 overflow-hidden">
+        <VisuallyHidden><DialogTitle>Resumo do checkout</DialogTitle><DialogDescription>Confirme os detalhes antes de contratar.</DialogDescription></VisuallyHidden>
         {/* Hero header */}
         <div className="relative px-6 pt-8 pb-6 bg-gradient-to-b from-primary/8 to-transparent">
           <div className="absolute inset-0 pointer-events-none">

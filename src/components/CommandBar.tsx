@@ -147,7 +147,8 @@ const CommandBar = ({ onOpenTestDrive }: CommandBarProps) => {
       <AnimatePresence>
         {open && (
           <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="overflow-hidden p-0 border-0 bg-transparent shadow-none max-w-[560px] [&>button]:hidden">
+            <DialogContent className="overflow-hidden p-0 border-0 bg-transparent shadow-none max-w-[560px] [&>
+        <VisuallyHidden><DialogTitle>Barra de comandos</DialogTitle><DialogDescription>Busque e execute ações rápidas.</DialogDescription></VisuallyHidden>button]:hidden">
               <motion.div
                 initial={{ opacity: 0, y: 12, scale: 0.96 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
