@@ -108,8 +108,7 @@ const DashboardLayout = () => {
         <FloatingDock />
 
         <Suspense fallback={null}>
-          <PlatformUpdatesDialog />
-          <ThorDailyGreeting />
+          <AssistantHierarchy />
         </Suspense>
       </div>
     </FloatingDockProvider>
