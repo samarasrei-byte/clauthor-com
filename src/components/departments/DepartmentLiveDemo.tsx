@@ -33,6 +33,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { DepartmentPackage } from "@/data/departmentPackages";
 import { DEPT_COLOR_TOKENS } from "@/data/departmentPackages";
+import { trackKpi } from "@/lib/kpiTracker";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 
 interface DepartmentLiveDemoProps {
