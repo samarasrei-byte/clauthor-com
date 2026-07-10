@@ -85,7 +85,6 @@ const COMERCIAL: DepartmentPackage = {
   color: "sales",
   painPoint: "Sua equipe não bate meta e o pipeline vive vazio.",
   outcome: "+30 leads qualificados por mês",
-  outcomeGuarantee: "Garantia de 30 dias ou reembolso integral",
   agentSlugs: ["hunter_linkedin", "sdr_linkedin", "sdr_whatsapp", "lead_qualifier", "revenue_ops"],
   outcomeMetric: {
     label: "Leads qualificados",
@@ -122,7 +121,6 @@ const ATENDIMENTO: DepartmentPackage = {
   color: "customer_success",
   painPoint: "Cliente espera horas por resposta e você perde vendas por demora.",
   outcome: "SLA de resposta < 5 minutos, 24/7",
-  outcomeGuarantee: "Se ultrapassar SLA em qualquer canal, o mês é gratuito",
   agentSlugs: ["support_channel", "support_lead", "voice_ai", "customer_advocacy", "nps_analyst"],
   outcomeMetric: {
     label: "Tempo médio de resposta",
@@ -160,7 +158,6 @@ const MARKETING: DepartmentPackage = {
   color: "marketing",
   painPoint: "Você queima verba em ads sem saber o que está trazendo retorno.",
   outcome: "ROAS medido e otimizado semana a semana",
-  outcomeGuarantee: "Relatório semanal auditável ou reembolso integral",
   agentSlugs: ["ad_copywriter", "brand_strategist", "traffic_manager", "meta_ads_agent", "content_performance"],
   outcomeMetric: {
     label: "ROAS acumulado",
