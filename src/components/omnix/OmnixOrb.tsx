@@ -253,6 +253,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
         <motion.circle
           cx={center}
           cy={center}
+          r={coreR}
           fill="url(#orb-core-grad)"
           animate={{
             r: isSpeaking
