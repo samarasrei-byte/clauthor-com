@@ -29,12 +29,30 @@ const FirstTimeTour = () => {
 
   useEffect(() => {
     try {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        // small delay to let dashboard paint
-        const t = setTimeout(() => setOpen(true), 800);
-        return () => clearTimeout(t);
+      if (localStorage.getItem(STORAGE_KEY)) return;
+      // Do not compete with the existing Thor guided tour or other onboarding tours.
+      // If the user has ever engaged with Thor's guide, skip ours entirely.
+      if (localStorage.getItem("thor:guide:v1") || localStorage.getItem("clauthor:onboarding:completed")) {
+        localStorage.setItem(STORAGE_KEY, "auto-skipped");
+        return;
       }
-    } catch { /* ignore */ }
+    } catch { return; }
+
+    let cancelled = false;
+    const check = () => {
+      if (cancelled) return;
+      // Suppress while any other dialog OR the Thor live guide is on screen.
+      const hasOther = !!document.querySelector(
+        '[role="dialog"]:not([data-first-time-tour]), [data-thor-live-guide], [data-radix-portal] [role="dialog"]'
+      );
+      if (!hasOther) {
+        setOpen(true);
+      } else {
+        setTimeout(check, 1500);
+      }
+    };
+    const t = setTimeout(check, 2000);
+    return () => { cancelled = true; clearTimeout(t); };
   }, []);
 
   const dismiss = () => {
@@ -57,7 +75,11 @@ const FirstTimeTour = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-background/60 backdrop-blur-sm p-4"
+          role="dialog"
+          data-first-time-tour
+          aria-modal="true"
+          aria-label="Tour de boas-vindas"
+          className="fixed inset-0 z-[200] flex items-end sm:items-center justify-center bg-background/60 backdrop-blur-sm p-4"
           onClick={dismiss}
         >
           <motion.div
