@@ -324,7 +324,7 @@ const ClientDashboard = () => {
     ...rebrandedSoloItems,
 
     // ─── IA & Voz: assistente global ───
-    { id: "omnix", label: "THOR", icon: Brain, badge: "PRO", group: zoneAI },
+    { id: "omnix", label: "THOR", icon: Brain, group: zoneAI },
 
     // ─── Configuração ───
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: zoneConfig },

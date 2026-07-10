@@ -44,15 +44,17 @@ const SIDEBAR_GROUPS: SidebarGroup[] = [
       { to: "/advocacia/painel/configuracoes", label: "Configurações", icon: SettingsIcon },
     ],
   },
-  {
-    label: "Em breve",
-    items: [
-      { to: "/advocacia/painel", label: "Clientes (CRM)", icon: Users, soon: true },
-      { to: "/advocacia/painel", label: "Agenda", icon: Clock, soon: true },
-      { to: "/advocacia/painel", label: "Produção jurídica", icon: ClipboardCheck, soon: true },
-      { to: "/advocacia/painel", label: "Compliance LGPD/PLD", icon: ShieldAlert, soon: true },
-    ],
-  },
+  // Grupo "Em breve" ocultado da navegação principal (Fase 1 — corte de PRO fantasma).
+  // Descomentar quando cada item tiver rota funcional real.
+  // {
+  //   label: "Em breve",
+  //   items: [
+  //     { to: "/advocacia/painel", label: "Clientes (CRM)", icon: Users, soon: true },
+  //     { to: "/advocacia/painel", label: "Agenda", icon: Clock, soon: true },
+  //     { to: "/advocacia/painel", label: "Produção jurídica", icon: ClipboardCheck, soon: true },
+  //     { to: "/advocacia/painel", label: "Compliance LGPD/PLD", icon: ShieldAlert, soon: true },
+  //   ],
+  // },
 ];
 
 // Flat list kept for legacy refs
