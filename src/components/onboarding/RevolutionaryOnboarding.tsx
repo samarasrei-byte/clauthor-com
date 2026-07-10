@@ -291,6 +291,14 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     if (isOpen && step === "input") setTimeout(() => firstInputRef.current?.focus(), 350);
   }, [isOpen, step]);
 
+  // Auto-start: assim que o painel abre, roda a animação de boas-vindas e
+  // avança para a escolha de departamento em ~2.4s — sem clique manual.
+  useEffect(() => {
+    if (!isOpen || step !== "welcome") return;
+    const t = setTimeout(() => setStep("department"), 2400);
+    return () => clearTimeout(t);
+  }, [isOpen, step]);
+
   useEffect(() => {
     if (user?.email) setClaim((c) => ({ ...c, email: user.email ?? c.email }));
   }, [user?.email]);
