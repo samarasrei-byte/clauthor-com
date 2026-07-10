@@ -228,8 +228,8 @@ const Departamentos = () => {
           {/* Hero Stats */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
             {[
-              { icon: Bot, value: String(totalAgents), label: t("departments_page.stat_agents") },
-              { icon: Building2, value: String(departments.length), label: t("departments_page.stat_departments") },
+              { icon: Bot, value: "+200", label: t("departments_page.stat_agents") },
+              { icon: Building2, value: "20", label: t("departments_page.stat_departments") },
               { icon: Zap, value: "24/7", label: t("departments_page.stat_operation") },
             ].map((stat) => (
               <div key={stat.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/30 border border-border text-sm">
