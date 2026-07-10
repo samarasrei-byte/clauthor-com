@@ -105,10 +105,8 @@ const Pricing = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
           {flagshipDepartments.map((dept, i) => {
             const DeptIcon = dept.icon;
-            const nameKey = `pricing_page.dept_${dept.id}` as const;
-            const descKey = `pricing_page.dept_${dept.id}_desc` as const;
-            const deptName = t(nameKey, { defaultValue: t(`dashboard.dept_${dept.id}`, { defaultValue: dept.id }) });
-            const deptDesc = t(descKey, { defaultValue: t(`dashboard.dept_${dept.id}_desc`, { defaultValue: "" }) });
+            const deptName = t(`squads.dept_${dept.id}`, { defaultValue: dept.id });
+            const deptDesc = t(`squads.dept_${dept.id}_desc`, { defaultValue: "" });
             return (
               <motion.div
                 key={dept.id}
