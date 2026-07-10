@@ -53,10 +53,39 @@ const DepartmentLiveDemo = ({
   const [paused, setPaused] = useState(false);
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const scrollRef = useRef<HTMLDivElement | null>(null);
+  const startedAtRef = useRef<number | null>(null);
+  const completedFiredRef = useRef(false);
 
   const events = department?.timelineDemo ?? [];
   const progression = department?.outcomeMetric.progression ?? [];
   const isComplete = currentIndex >= events.length - 1 && events.length > 0;
+
+  // Fire `department_demo_completed` exactly once per open+dept.
+  useEffect(() => {
+    if (!department) {
+      completedFiredRef.current = false;
+      startedAtRef.current = null;
+      return;
+    }
+    if (open && startedAtRef.current === null) {
+      startedAtRef.current = Date.now();
+      completedFiredRef.current = false;
+    }
+    if (isComplete && !completedFiredRef.current && startedAtRef.current !== null) {
+      completedFiredRef.current = true;
+      trackKpi("department_demo_completed", {
+        department_id: department.id,
+        department_name: department.name,
+        price_monthly: department.priceMonthly,
+        duration_ms: Date.now() - startedAtRef.current,
+        source: "live_demo",
+      });
+    }
+    if (!open) {
+      startedAtRef.current = null;
+    }
+  }, [open, isComplete, department]);
+
 
   const clearTimer = useCallback(() => {
     if (timeoutRef.current) {
