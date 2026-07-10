@@ -197,6 +197,7 @@ const Departamentos = () => {
   return (
     <div className="min-h-screen pt-20 pb-16 px-4 relative">
       <SEO title="AI Departments — Pre-built Squads | Clauthor" description="Explore 20 ready-made AI departments: Sales, Marketing, Legal, Finance, HR, Support and more. Deploy in minutes." path="/departamentos" />
+      <DepartmentsJsonLd />
       <div className="max-w-7xl mx-auto relative mb-6">
       </div>
       {/* Background effects */}
