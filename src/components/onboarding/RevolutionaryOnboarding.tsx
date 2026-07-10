@@ -57,15 +57,16 @@ const NEED_META = {
   department: { icon: Building2,  label: "Departamento Completo", color: "#22d3ee", gradient: "from-cyan-500/30 to-blue-500/10" },
 } as const;
 
-const STEP_ORDER: Step[] = ["welcome", "input", "describe", "analyzing", "reveal", "claim", "done"];
+const STEP_ORDER: Step[] = ["welcome", "department", "input", "describe", "analyzing", "reveal", "claim", "done"];
 const STEP_LABELS: Record<Step, string> = {
-  welcome:   "Contato",
-  input:     "Sinal",
-  describe:  "Dor",
-  analyzing: "Fusão",
-  reveal:    "Match",
-  claim:     "Vaga",
-  done:      "Online",
+  welcome:    "Contato",
+  department: "Depto",
+  input:      "Sinal",
+  describe:   "Dor",
+  analyzing:  "Fusão",
+  reveal:     "Match",
+  claim:      "Vaga",
+  done:       "Online",
 };
 
 /* ─────────────────────────── Neural constellation ─────────────────────────── */
