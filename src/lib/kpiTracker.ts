@@ -30,12 +30,20 @@ export type KpiEventName =
   | "replay_opened"
   | "replay_step_expanded"
   | "replay_completed_view"
-  | "replay_action";
+  | "replay_action"
+  | "wow_started"
+  | "wow_form_submitted"
+  | "wow_output_ready"
+  | "wow_output_failed"
+  | "first_wow_approved"
+  | "wow_regenerated"
+  | "wow_skipped"
+  | "time_to_first_value";
 
 export interface KpiEventPayload {
   department_id?: string;
   department_name?: string;
-  source?: "landing" | "onboarding" | "dashboard" | "live_demo" | "departamentos_page" | "diagnosis_recap" | "thor_guide" | "replay" | "approvals" | "activity" | "task";
+  source?: "landing" | "onboarding" | "dashboard" | "live_demo" | "departamentos_page" | "diagnosis_recap" | "thor_guide" | "replay" | "approvals" | "activity" | "task" | "instant_wow";
   price_monthly?: number;
   duration_ms?: number;
   pain?: string;
@@ -49,6 +57,15 @@ export interface KpiEventPayload {
   step_type?: string;
   steps_count?: number;
   action?: "approve" | "reject" | "open" | "close";
+  pain_category?: string;
+  agent_slug?: string;
+  company?: string;
+  used_fallback?: boolean;
+  ttfv_ms?: number;
+  ttfv_signup_to_form_ms?: number;
+  ttfv_form_to_output_ms?: number;
+  ttfv_output_to_approve_ms?: number;
+  output_chars?: number;
 }
 
 
