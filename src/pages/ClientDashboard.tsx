@@ -8,7 +8,7 @@ import { LayoutDashboard, Bot, BarChart3, CreditCard, Settings, Brain, MessageSq
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 
 import ErrorBoundary from "@/components/ErrorBoundary";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -132,15 +132,30 @@ const ClientDashboard = () => {
   } = usePostPaymentFlow();
 
   // Check onboarding_completed from profile
-  const { data: profileOnboarding } = useQuery({
+  const { data: profileOnboarding, isLoading: loadingProfileOnboarding } = useQuery({
     queryKey: ["profile-onboarding", user?.id],
     queryFn: async () => {
-      const { data } = await supabase.from("profiles").select("onboarding_completed").eq("user_id", user!.id).maybeSingle();
-      return data?.onboarding_completed ?? false;
+      const { data } = await supabase.from("profiles").select("onboarding_completed, onboarded_at").eq("user_id", user!.id).maybeSingle();
+      return { completed: !!data?.onboarding_completed || !!data?.onboarded_at };
     },
     enabled: !!user,
     staleTime: Infinity,
   });
+
+  // ── Onboarding gate: se o usuário nunca completou o diagnóstico (site + dor),
+  // manda pra /welcome antes de mostrar o painel. Respeita skip da sessão e
+  // fluxo de checkout pendente pra não interromper pagamento.
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!user || loadingProfileOnboarding) return;
+    if (profileOnboarding?.completed) return;
+    const skipped = typeof window !== "undefined" && sessionStorage.getItem("onboarding-skipped-session") === "1";
+    if (skipped) return;
+    const pendingCheckout = typeof window !== "undefined" && !!localStorage.getItem("hireIntent");
+    if (pendingCheckout) return;
+    navigate("/welcome", { replace: true });
+  }, [user, loadingProfileOnboarding, profileOnboarding, navigate]);
+
 
   // ── Checkout-pending guard: bloqueia TODOS os onboardings/tours/cards
   //    enquanto o usuário ainda não pagou (hireIntent presente OU dialog aberto). ──
