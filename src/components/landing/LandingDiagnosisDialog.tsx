@@ -161,9 +161,9 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
         className="max-w-[580px] w-[calc(100vw-2rem)] p-0 gap-0 overflow-hidden border-white/5 bg-[#0D0D0D] rounded-[28px] md:rounded-[32px] shadow-2xl [&>button]:hidden max-h-[92dvh] flex flex-col"
         aria-describedby={undefined}
       >
-        <div className="p-6 sm:p-8 md:p-12 flex flex-col min-h-0 flex-1">
+        <div className="p-5 sm:p-7 md:p-9 flex flex-col min-h-0 flex-1">
           {/* Progress Header — hairline */}
-          <div className="flex items-center justify-between mb-6 sm:mb-10">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
             <div className="flex gap-1.5 flex-1">
               {STEPS.map((s, i) => (
                 <div
@@ -185,11 +185,11 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
           </div>
 
           {/* Title block */}
-          <div className="space-y-2 mb-6 sm:mb-10">
-            <p className="text-[11px] font-bold tracking-[0.2em] text-red-500 uppercase">
+          <div className="space-y-1.5 mb-4 sm:mb-6">
+            <p className="text-[10px] font-bold tracking-[0.2em] text-red-500 uppercase">
               Passo {stepIndex + 1} de {STEPS.length}
             </p>
-            <DialogTitle className="font-display text-2xl sm:text-3xl md:text-4xl font-semibold text-white tracking-tight leading-[1.1]">
+            <DialogTitle className="font-display text-xl sm:text-2xl md:text-[26px] font-semibold text-white tracking-tight leading-[1.15]">
               {step === "company" && "Me conta sobre sua empresa."}
               {step === "pain" && "O que você quer resolver primeiro?"}
               {step === "delivery" && "Como você prefere começar?"}
@@ -199,7 +199,7 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                 </>
               )}
             </DialogTitle>
-            <DialogDescription className="text-white/40 text-sm sm:text-base md:text-lg font-normal leading-relaxed pt-1">
+            <DialogDescription className="text-white/40 text-[13px] sm:text-sm font-normal leading-relaxed pt-0.5">
               {step === "company" && "Vamos analisar seu site e entender seu contexto — leva 30 segundos."}
               {step === "pain" && "Sem julgamento. Depois refinamos com Thor se precisar."}
               {step === "delivery" && "Você pode mudar depois. Nada é definitivo aqui."}
@@ -219,10 +219,10 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.25 }}
-                  className="space-y-7"
+                  className="space-y-4"
                 >
                   <div className="group">
-                    <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-3 group-focus-within:text-white/60 transition-colors">
+                    <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-2 group-focus-within:text-white/60 transition-colors">
                       <Building2 className="w-4 h-4" strokeWidth={1.5} />
                       Nome da empresa
                     </label>
@@ -231,13 +231,13 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                       value={company}
                       onChange={(e) => setCompany(e.target.value)}
                       placeholder="Ex: Silva & Associados Advogados"
-                      className="w-full bg-white/[0.03] border-white/10 rounded-xl px-5 py-4 h-auto text-white placeholder:text-white/20 focus-visible:ring-1 focus-visible:ring-red-500/50 focus-visible:ring-offset-0 focus:border-red-500/50 transition-all hover:bg-white/[0.05]"
+                      className="w-full bg-white/[0.03] border-white/10 rounded-xl px-4 py-3 h-auto text-white placeholder:text-white/20 focus-visible:ring-1 focus-visible:ring-red-500/50 focus-visible:ring-offset-0 focus:border-red-500/50 transition-all hover:bg-white/[0.05]"
                       maxLength={120}
                     />
                   </div>
 
                   <div className="group">
-                    <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-3 group-focus-within:text-white/60 transition-colors">
+                    <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-2 group-focus-within:text-white/60 transition-colors">
                       <Globe className="w-4 h-4" strokeWidth={1.5} />
                       Site (opcional — vamos analisar para você)
                     </label>
@@ -245,13 +245,13 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                       value={website}
                       onChange={(e) => setWebsite(e.target.value)}
                       placeholder="silvaeassociados.com.br"
-                      className="w-full bg-white/[0.03] border-white/10 rounded-xl px-5 py-4 h-auto text-white placeholder:text-white/20 focus-visible:ring-1 focus-visible:ring-red-500/50 focus-visible:ring-offset-0 focus:border-red-500/50 transition-all hover:bg-white/[0.05]"
+                      className="w-full bg-white/[0.03] border-white/10 rounded-xl px-4 py-3 h-auto text-white placeholder:text-white/20 focus-visible:ring-1 focus-visible:ring-red-500/50 focus-visible:ring-offset-0 focus:border-red-500/50 transition-all hover:bg-white/[0.05]"
                       maxLength={200}
                     />
                   </div>
 
                   <div className="group">
-                    <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-3 group-focus-within:text-white/60 transition-colors">
+                    <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-2 group-focus-within:text-white/60 transition-colors">
                       <PenLine className="w-4 h-4" strokeWidth={1.5} />
                       Me conta em uma frase (opcional)
                     </label>
@@ -260,7 +260,7 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                         value={freeText}
                         onChange={(e) => setFreeText(e.target.value)}
                         placeholder="Ex: Escritório de família em SP focado em direito trabalhista, quero captar mais clientes."
-                        className="w-full bg-white/[0.03] border-white/10 rounded-xl px-5 py-4 min-h-[96px] text-white placeholder:text-white/20 focus-visible:ring-1 focus-visible:ring-red-500/50 focus-visible:ring-offset-0 focus:border-red-500/50 transition-all hover:bg-white/[0.05] resize-none"
+                        className="w-full bg-white/[0.03] border-white/10 rounded-xl px-5 py-4 min-h-[72px] text-white placeholder:text-white/20 focus-visible:ring-1 focus-visible:ring-red-500/50 focus-visible:ring-offset-0 focus:border-red-500/50 transition-all hover:bg-white/[0.05] resize-none"
                         maxLength={280}
                       />
                       <span className="absolute bottom-3 right-4 text-[10px] text-white/20 font-medium tabular-nums uppercase tracking-wider">
@@ -436,7 +436,7 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between gap-3 mt-6 sm:mt-10 shrink-0">
+          <div className="flex items-center justify-between gap-3 mt-4 sm:mt-6 shrink-0">
             <button
               onClick={goBack}
               className="text-[14px] font-medium text-white/40 hover:text-white transition-colors px-2 py-1 shrink-0"
