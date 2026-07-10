@@ -376,6 +376,17 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
 
 
 
+  async function finishOnboarding(classification: Classification) {
+    setResult(classification);
+    try {
+      await markOnboarded();
+    } catch (e) {
+      console.warn("[onboarding] markOnboarded failed", e);
+    }
+    setStep("done");
+    setTimeout(() => { onComplete(); navigate("/dashboard"); }, 1800);
+  }
+
   async function runAnalysis() {
     setLoading(true);
     setStep("analyzing");
@@ -389,24 +400,19 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
-      setTimeout(() => {
-        setResult(data as Classification);
-        setStep("reveal");
-      }, 800);
+      setTimeout(() => { finishOnboarding(data as Classification); }, 1200);
     } catch (e: any) {
       // Fallback local — nunca deixa o usuário travado
       console.warn("[onboarding] classify failed, using fallback", e);
       toast.message("Análise offline — usando recomendação inicial", {
         description: "Você pode refinar no painel depois.",
       });
-      setTimeout(() => {
-        setResult(buildFallback());
-        setStep("reveal");
-      }, 600);
+      setTimeout(() => { finishOnboarding(buildFallback()); }, 900);
     } finally {
       setLoading(false);
     }
   }
+
 
   async function markOnboarded() {
     if (!user) return;
