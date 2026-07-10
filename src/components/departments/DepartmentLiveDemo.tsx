@@ -285,10 +285,7 @@ const DepartmentLiveDemo = ({
         <div className="flex flex-col gap-3 border-t bg-background/60 p-6 backdrop-blur-sm sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-2 text-xs text-muted-foreground">
             <ShieldCheck className={cn("mt-0.5 h-4 w-4 shrink-0", tokens.text)} />
-            <span>
-              {department.outcomeGuarantee ??
-                "Outcome mensurável, monitorado semana a semana."}
-            </span>
+            <span>Outcome mensurável, monitorado semana a semana.</span>
           </div>
           <Button
             size="lg"
