@@ -126,11 +126,9 @@ const HeroTerminal = () => {
               Empresas que escalam com Clauthor
             </p>
             <div className="flex flex-wrap items-center gap-6 text-muted-foreground/50 text-xs font-mono">
-              <span>225+ agentes</span>
+              <span>Força de trabalho digital</span>
               <span className="opacity-40">·</span>
-              <span>20 squads</span>
-              <span className="opacity-40">·</span>
-              <span>20 departamentos</span>
+              <span>Squads especializados</span>
               <span className="opacity-40">·</span>
               <span>99.9% uptime</span>
             </div>
