@@ -131,44 +131,68 @@ const DashboardOverview = ({
 
                 <LiveActivityFeed />
 
+                {/* Progressive disclosure — reduces first-render noise */}
+                <div className="pt-2">
+                  <button
+                    onClick={() => setShowAdvanced(v => !v)}
+                    className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-dashed border-border/60 hover:border-primary/40 hover:bg-primary/[0.02] text-xs font-mono uppercase tracking-widest text-muted-foreground hover:text-foreground transition-all"
+                    aria-expanded={showAdvanced}
+                  >
+                    {showAdvanced ? (
+                      <>
+                        <ChevronUp className="h-3.5 w-3.5" />
+                        Ocultar painéis avançados
+                      </>
+                    ) : (
+                      <>
+                        <ChevronDown className="h-3.5 w-3.5" />
+                        Ver painéis avançados (ROI, integrações, indicações)
+                      </>
+                    )}
+                  </button>
+                </div>
 
-                <QuickWins
-                  activeAgents={activeAgents}
-                  totalExecutions={totalExecutions}
-                  recentLogs={recentLogs}
-                  hasCompanyData={boardCount > 0}
-                  remainingCredits={remainingCredits}
-                  onNavigate={onNavigate}
-                />
-
-
-                <ROIDashboard
-                  agents={agents}
-                  totalExecutions={totalExecutions}
-                  totalTokensUsed={totalTokensUsed}
-                  estimatedSavings={estimatedSavings}
-                />
-
-                <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
-
-                <MyIntegrationsPanel onNavigate={onSetActiveSection} />
-
-                <ReferralsPanel />
-
-                <TrustCenterPanel />
-
-                <FeedbackTrendsPanel />
-
-
-                <MarketplaceReviews compact />
-
-                <PendingActionsPanel />
-                <ClientCommandCenter
-                  activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
-                  usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
-                  remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
-                  recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={onNavigate}
-                />
+                <AnimatePresence initial={false}>
+                  {showAdvanced && (
+                    <motion.div
+                      initial={{ opacity: 0, height: 0 }}
+                      animate={{ opacity: 1, height: "auto" }}
+                      exit={{ opacity: 0, height: 0 }}
+                      transition={{ duration: 0.25 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="space-y-5 pt-2">
+                        <QuickWins
+                          activeAgents={activeAgents}
+                          totalExecutions={totalExecutions}
+                          recentLogs={recentLogs}
+                          hasCompanyData={boardCount > 0}
+                          remainingCredits={remainingCredits}
+                          onNavigate={onNavigate}
+                        />
+                        <ROIDashboard
+                          agents={agents}
+                          totalExecutions={totalExecutions}
+                          totalTokensUsed={totalTokensUsed}
+                          estimatedSavings={estimatedSavings}
+                        />
+                        <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
+                        <MyIntegrationsPanel onNavigate={onSetActiveSection} />
+                        <ReferralsPanel />
+                        <TrustCenterPanel />
+                        <FeedbackTrendsPanel />
+                        <MarketplaceReviews compact />
+                        <PendingActionsPanel />
+                        <ClientCommandCenter
+                          activeAgents={activeAgents} totalExecutions={totalExecutions} totalTokensUsed={totalTokensUsed}
+                          usagePercentage={usagePercentage} estimatedSavings={estimatedSavings} credits={credits}
+                          remainingCredits={remainingCredits} agents={agents} subscriptions={subscriptions}
+                          recentLogs={recentLogs} tokenUsage={tokenUsage} onNavigate={onNavigate}
+                        />
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </>
             )}
           </div>
