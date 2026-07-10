@@ -183,8 +183,8 @@ const App = () => (
 
 
                   <Route path="/knowledge-base" element={<KnowledgeBase />} />
-                  <Route path="/monix" element={<Navigate to="/omnix" replace />} />
-                  <Route path="/omnix" element={<OmnixCommandCenter />} />
+                  <Route path="/monix" element={<Navigate to="/dashboard?tab=omnix" replace />} />
+                  <Route path="/omnix" element={<Navigate to="/dashboard?tab=omnix" replace />} />
                   <Route path="/control-tower" element={<ControlTower />} />
                   <Route path="/neural-network" element={<AgentNeuralNetwork />} />
                   <Route path="/scrum" element={<ScrumBoard />} />
