@@ -71,14 +71,33 @@ const DiagnosisRecapDialog = ({
     } catch {
       /* noop */
     }
+    trackKpi("diagnosis_recap_activate", {
+      department_id: deptId,
+      department_name: rec.departmentLabel,
+      source: "diagnosis_recap",
+      price_monthly: price,
+      pain: diagnosis.pain,
+      has_briefing: !!briefing,
+      has_site_summary: !!siteSummary,
+    });
     markDiagnosisRecapSeen();
     onActivateDepartment();
   };
 
   const handleTalkToThor = () => {
+    trackKpi("diagnosis_recap_talk_thor", {
+      department_id: deptId ?? undefined,
+      department_name: rec.departmentLabel,
+      source: "diagnosis_recap",
+      price_monthly: canActivate ? price : undefined,
+      pain: diagnosis.pain,
+      has_briefing: !!briefing,
+      has_site_summary: !!siteSummary,
+    });
     markDiagnosisRecapSeen();
     onClose();
   };
+
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleTalkToThor()}>
