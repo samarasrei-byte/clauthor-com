@@ -187,6 +187,32 @@ const ClientDashboard = () => {
     enabled: !!user,
   });
 
+  // ── Contracted departments (drives empty-state gate) ──
+  const { data: contractedCount = 0, isLoading: loadingContracted } = useQuery({
+    queryKey: ["contracted-departments-count", user?.id],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("contracted_departments")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user!.id)
+        .eq("status", "active");
+      return count || 0;
+    },
+    enabled: !!user,
+    staleTime: 30_000,
+  });
+
+  // Empty-state gate: novo usuário sem departamentos → tela single-focus.
+  // Não aplica para admin (que vê catálogo completo virtual) nem durante
+  // checkout pendente (o dialog toma conta) nem se onboarding legado ainda
+  // não terminou.
+  const showEmptyState =
+    !isAdmin &&
+    !hasPendingCheckout &&
+    !loadingContracted &&
+    contractedCount === 0 &&
+    activeSection === "overview";
+
   // First-access modal legacy removido — GuidedOnboarding cuida disso globalmente.
 
 
