@@ -277,7 +277,7 @@ export function usePaypalCapture() {
             .single();
 
           if (currentCredits) {
-            const updatePayload: Record<string, any> = {
+            const updatePayload: { total_credits: number; plan_type?: string } = {
               total_credits: currentCredits.total_credits + tokensToAdd,
             };
             if (order.type === "plan") {
