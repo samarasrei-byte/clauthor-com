@@ -436,10 +436,10 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between mt-10">
+          <div className="flex items-center justify-between gap-3 mt-6 sm:mt-10 shrink-0">
             <button
               onClick={goBack}
-              className="text-[14px] font-medium text-white/40 hover:text-white transition-colors px-2 py-1"
+              className="text-[14px] font-medium text-white/40 hover:text-white transition-colors px-2 py-1 shrink-0"
             >
               {step === "company" ? "Fechar" : "Voltar"}
             </button>
@@ -447,22 +447,23 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
             {step === "result" ? (
               <button
                 onClick={goToRecommendation}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-8 py-3.5 rounded-full text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95"
+                className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-full text-[14px] sm:text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95 min-w-0"
               >
-                {rec?.ctaLabel}
-                <ArrowRight className="w-4 h-4" strokeWidth={2} />
+                <span className="truncate">{rec?.ctaLabel}</span>
+                <ArrowRight className="w-4 h-4 shrink-0" strokeWidth={2} />
               </button>
             ) : (
               <button
                 onClick={goNext}
                 disabled={!canAdvance}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-full text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95 disabled:active:scale-100"
+                className="flex items-center justify-center gap-2 bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white px-6 sm:px-8 py-3 sm:py-3.5 rounded-full text-[14px] sm:text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95 disabled:active:scale-100 min-w-0"
               >
-                {primaryLabel}
-                <ArrowRight className="w-4 h-4" strokeWidth={2} />
+                <span className="truncate">{primaryLabel}</span>
+                <ArrowRight className="w-4 h-4 shrink-0" strokeWidth={2} />
               </button>
             )}
           </div>
+
         </div>
       </DialogContent>
     </Dialog>
