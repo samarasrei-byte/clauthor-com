@@ -58,7 +58,7 @@ const NEED_META = {
   department: { icon: Building2,  label: "Departamento Completo", color: "#22d3ee", gradient: "from-cyan-500/30 to-blue-500/10" },
 } as const;
 
-const STEP_ORDER: Step[] = ["welcome", "department", "input", "describe", "analyzing", "reveal", "claim", "done"];
+const STEP_ORDER: Step[] = ["welcome", "department", "input", "describe", "analyzing", "done"];
 const STEP_LABELS: Record<Step, string> = {
   welcome:    "Contato",
   department: "Depto",
@@ -208,7 +208,7 @@ function Typewriter({ text, speed = 18, onDone }: { text: string; speed?: number
 
 function StepRail({ current }: { current: Step }) {
   const currentIdx = STEP_ORDER.indexOf(current);
-  const visible: Step[] = ["welcome", "department", "input", "describe", "analyzing", "reveal", "claim"];
+  const visible: Step[] = ["welcome", "department", "input", "describe", "analyzing"];
   return (
     <div className="flex items-center gap-2">
       {visible.map((s, i) => {
@@ -291,6 +291,14 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
     if (isOpen && step === "input") setTimeout(() => firstInputRef.current?.focus(), 350);
   }, [isOpen, step]);
 
+  // Auto-start: assim que o painel abre, roda a animação de boas-vindas e
+  // avança para a escolha de departamento em ~2.4s — sem clique manual.
+  useEffect(() => {
+    if (!isOpen || step !== "welcome") return;
+    const t = setTimeout(() => setStep("department"), 2400);
+    return () => clearTimeout(t);
+  }, [isOpen, step]);
+
   useEffect(() => {
     if (user?.email) setClaim((c) => ({ ...c, email: user.email ?? c.email }));
   }, [user?.email]);
@@ -355,7 +363,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
   function pickDepartment(dept: DepartmentPackage) {
     const uniqueAgents = Array.from(new Set(dept.timelineDemo.map((e) => e.agentName)));
     setDescription(dept.painPoint);
-    setResult({
+    const classification: Classification = {
       business_summary: `Empresa que precisa ativar um ${dept.name.toLowerCase()} pronto para operar.`,
       detected_pain: dept.painPoint,
       need_type: "department",
@@ -364,17 +372,31 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       agents: uniqueAgents,
       expected_outcome: dept.outcome,
       confidence: 0.92,
-    });
+    };
+    setResult(classification);
     trackKpi("onboarding_department_picked", {
       department_id: dept.id,
       department_name: dept.name,
       price_monthly: dept.priceMonthly,
       source: "onboarding",
     });
-    setStep("reveal");
+    // Vai direto para Fusão e finaliza — sem etapa de Match/Vaga.
+    setStep("analyzing");
+    setTimeout(() => { finishOnboarding(classification); }, 1400);
   }
 
 
+
+  async function finishOnboarding(classification: Classification) {
+    setResult(classification);
+    try {
+      await markOnboarded();
+    } catch (e) {
+      console.warn("[onboarding] markOnboarded failed", e);
+    }
+    setStep("done");
+    setTimeout(() => { onComplete(); navigate("/dashboard"); }, 1800);
+  }
 
   async function runAnalysis() {
     setLoading(true);
@@ -389,24 +411,19 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       });
       if (error) throw error;
       if ((data as any)?.error) throw new Error((data as any).error);
-      setTimeout(() => {
-        setResult(data as Classification);
-        setStep("reveal");
-      }, 800);
+      setTimeout(() => { finishOnboarding(data as Classification); }, 1200);
     } catch (e: any) {
       // Fallback local — nunca deixa o usuário travado
       console.warn("[onboarding] classify failed, using fallback", e);
       toast.message("Análise offline — usando recomendação inicial", {
         description: "Você pode refinar no painel depois.",
       });
-      setTimeout(() => {
-        setResult(buildFallback());
-        setStep("reveal");
-      }, 600);
+      setTimeout(() => { finishOnboarding(buildFallback()); }, 900);
     } finally {
       setLoading(false);
     }
   }
+
 
   async function markOnboarded() {
     if (!user) return;
@@ -807,7 +824,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                       ].map((s) => (
                         <button
                           key={s}
-                          onClick={() => setDescription(s)}
+                          onClick={() => { setDescription(s); setTimeout(() => runAnalysis(), 120); }}
                           className="text-xs px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/10 hover:border-white/25 transition text-white/70"
                         >
                           {s}
