@@ -93,7 +93,7 @@ const HeroBriefing = ({
       key: "review",
       label: "Ver últimas operações",
       helper: `${recentLogs.length} execuç${recentLogs.length > 1 ? "ões" : "ão"} nas últimas 24h — revise e aprove.`,
-      onClick: () => (onOpenWarRoom ? onOpenWarRoom() : navigate("/control-tower")),
+      onClick: () => (onOpenWarRoom ? onOpenWarRoom() : navigate("/dashboard?tab=operations-center")),
     };
   }, [agentsCount, isLive, recentLogs.length, onFocusTaskInput, onOpenWarRoom, onOpenLibrary, navigate]);
 
