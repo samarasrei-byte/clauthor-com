@@ -26,6 +26,7 @@ const PendingActionsPanel = lazy(() => import("./PendingActionsPanel").then(m =>
 const ClientCommandCenter = lazy(() => import("./ClientCommandCenter"));
 const DashboardSkeleton = lazy(() => import("./DashboardSkeleton"));
 const LiveActivityFeed = lazy(() => import("./LiveActivityFeed").then(m => ({ default: m.LiveActivityFeed })));
+const ContractedDepartments = lazy(() => import("./ContractedDepartments"));
 
 interface Props {
   loadingAgents: boolean;
