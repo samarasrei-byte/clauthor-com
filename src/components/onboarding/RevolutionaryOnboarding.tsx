@@ -207,7 +207,7 @@ function Typewriter({ text, speed = 18, onDone }: { text: string; speed?: number
 
 function StepRail({ current }: { current: Step }) {
   const currentIdx = STEP_ORDER.indexOf(current);
-  const visible: Step[] = ["welcome", "input", "describe", "analyzing", "reveal", "claim"];
+  const visible: Step[] = ["welcome", "department", "input", "describe", "analyzing", "reveal", "claim"];
   return (
     <div className="flex items-center gap-2">
       {visible.map((s, i) => {
