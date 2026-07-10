@@ -46,9 +46,11 @@ const AuthPage = () => {
   const redirectParam = searchParams.get("redirect");
   const verticalParam = searchParams.get("vertical");
   const modeParam = searchParams.get("mode"); // "signup" | "login"
+  const signupParam = searchParams.get("signup"); // "1" (from quiz CTA)
+  const wantsSignup = modeParam === "signup" || signupParam === "1" || !!state?.signup;
 
-  // Default para signup quando vem de "Create your account" (?mode=signup) ou via state.signup.
-  const [isLogin, setIsLogin] = useState(() => !(modeParam === "signup" || state?.signup));
+  // Default para signup quando vem de "Create your account" (?mode=signup), ?signup=1 (quiz) ou via state.signup.
+  const [isLogin, setIsLogin] = useState(() => !wantsSignup);
 
   const from = redirectParam || state?.from?.pathname || "/dashboard";
   const hireIntent = state?.hireIntent || null;
