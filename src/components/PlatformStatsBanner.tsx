@@ -8,9 +8,9 @@ export interface PlatformStatsBannerProps {
 }
 
 const STATS = [
-  { value: "225+", label: "Agentes Ativos", icon: Bot },
-  { value: "20", label: "Smart Squads", icon: Users },
   { value: "20", label: "Departamentos", icon: Building2 },
+  { value: "Custom", label: "Squads", icon: Users },
+  { value: "+200", label: "Especialistas IA", icon: Bot },
   { value: "99.9%", label: "Uptime", icon: Activity },
 ] as const;
 

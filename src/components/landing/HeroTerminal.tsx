@@ -85,17 +85,18 @@ const HeroTerminal = () => {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary/70 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
             </span>
-            Agentes v2.0 já disponíveis
+            20 departamentos · +200 especialistas de IA
           </div>
 
           <h1 className="text-[2.5rem] sm:text-5xl md:text-6xl lg:text-[4.25rem] font-semibold tracking-[-0.03em] leading-[1.05] text-foreground">
-            Contrate sua equipe de{" "}
-            <span className="text-primary">IA especializada</span>
+            Contrate um{" "}
+            <span className="text-primary">departamento inteiro</span>
+            {" "}de IA.
           </h1>
 
           <p className="text-[17px] sm:text-lg text-muted-foreground max-w-xl leading-relaxed">
-            Delegue vendas, suporte e operações para funcionários digitais
-            autônomos. Mais produtividade, zero overhead.
+            20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados.
+            Monte seu squad em minutos e escale sem contratar humanos.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-3 pt-1">
@@ -104,17 +105,17 @@ const HeroTerminal = () => {
                 size="lg"
                 className="w-full sm:w-auto h-12 px-7 text-sm font-semibold rounded-xl gap-2 shadow-[0_0_24px_-6px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_28px_-4px_hsl(var(--primary)/0.7)] transition-shadow"
               >
-                Criar conta grátis
+                Contratar um departamento
                 <ArrowRight className="h-4 w-4" />
               </Button>
             </Link>
-            <Link to="/library" className="block w-full sm:w-auto">
+            <Link to="/departamentos" className="block w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="lg"
                 className="w-full sm:w-auto h-12 px-7 text-sm font-semibold rounded-xl gap-1 bg-white/[0.03] border-white/10 hover:bg-white/[0.06]"
               >
-                Ver agente ao vivo
+                Ver os 20 departamentos
                 <ChevronRight className="h-4 w-4" />
               </Button>
             </Link>
@@ -123,12 +124,12 @@ const HeroTerminal = () => {
           {/* Trust row */}
           <div className="pt-6 border-t border-white/[0.06]">
             <p className="text-[11px] text-muted-foreground/70 mb-3 uppercase tracking-[0.18em] font-semibold">
-              Empresas que escalam com Clauthor
+              Departamentos prontos. Squads sob medida.
             </p>
             <div className="flex flex-wrap items-center gap-6 text-muted-foreground/50 text-xs font-mono">
-              <span>Força de trabalho digital</span>
+              <span>20 departamentos</span>
               <span className="opacity-40">·</span>
-              <span>Squads especializados</span>
+              <span>+200 especialistas</span>
               <span className="opacity-40">·</span>
               <span>99.9% uptime</span>
             </div>

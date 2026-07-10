@@ -1,8 +1,8 @@
 # CLAUTHOR
 
-> AI workforce platform with 225 autonomous agents across 20 corporate departments. Deploy complete AI teams for Sales, Marketing, Legal, Finance, HR, Support, Engineering and more — no code, no hiring.
+> Hire an entire AI department in minutes. 20 departments, customizable squads and 200+ orchestrated AI specialists for Sales, Marketing, Legal, Finance, HR, Support, Engineering and more — no code, no hiring.
 
-CLAUTHOR orchestrates specialized AI agents grouped into ready-to-deploy departments. Each department replaces a full human team with agents that operate 24/7 across 14+ languages, integrated via a hierarchical execution pipeline and a Model Context Protocol (MCP) server for external clients like Claude Desktop and Cursor.
+CLAUTHOR sells ready-to-deploy AI departments. Inside each department, customers assemble their squad — a team of AI specialists tailored to the outcome they want. Departments operate 24/7 across 14+ languages, orchestrated via a hierarchical execution pipeline and a Model Context Protocol (MCP) server for external clients like Claude Desktop and Cursor.
 
 ## Pages
 
