@@ -528,7 +528,7 @@ const Waitlist = () => {
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
               Squads inteligentes que rodam marketing, vendas, financeiro e operações no automático.
-              Você delega uma missão, o Thor executa. <span className="text-foreground font-medium">Economia de 88% vs. contratação tradicional.</span>
+              Você delega uma missão, o Thor executa. <span className="text-foreground font-medium">Custo por agente muito abaixo de um profissional CLT equivalente</span> — economia real varia por empresa.
             </p>
 
             {/* Bullets — separação limpa */}
