@@ -365,6 +365,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       confidence: 0.92,
     });
     setStep("reveal");
+  }
+
+
 
   async function runAnalysis() {
     setLoading(true);
