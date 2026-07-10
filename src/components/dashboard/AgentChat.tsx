@@ -477,7 +477,7 @@ const AgentChat = ({ agentId, agentName = "Assistente IA" }: AgentChatProps) => 
             )}
           </Button>
           {messages.length > 0 && (
-            <Button variant="ghost" size="icon" onClick={clearMessages} className="h-8 w-8">
+            <Button variant="ghost" size="icon" onClick={clearMessages} className="h-8 w-8" aria-label="Limpar conversa">
               <Trash2 className="h-3.5 w-3.5 text-muted-foreground" />
             </Button>
           )}
