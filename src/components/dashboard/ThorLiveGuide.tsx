@@ -537,7 +537,17 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
             {visitedSections.size}/{GUIDE_STEPS.length}
           </span>
           <button
-            onClick={() => setIsMuted(!isMuted)}
+            onClick={() => {
+              const next = !isMuted;
+              setIsMuted(next);
+              trackKpi("thor_guide_mute_toggle", {
+                source: "thor_guide",
+                section: activeSection,
+                muted: next,
+                persisted: true,
+              });
+            }}
+
             aria-label="Som"
             className="w-6 h-6 rounded-md flex items-center justify-center text-muted-foreground/70 hover:text-foreground hover:bg-muted/30 transition-colors"
           >
