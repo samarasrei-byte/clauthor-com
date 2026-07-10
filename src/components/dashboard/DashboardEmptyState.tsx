@@ -96,7 +96,7 @@ const DashboardEmptyState = ({
               <Button
                 size="sm"
                 className="mt-3 gap-1.5"
-                onClick={() => navigate(rec.route)}
+                onClick={() => (onActivateRecommended ? onActivateRecommended() : onHireFirstDepartment())}
               >
                 {rec.ctaLabel}
                 <ArrowRight className="h-3.5 w-3.5" />
