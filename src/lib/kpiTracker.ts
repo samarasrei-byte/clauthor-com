@@ -26,12 +26,16 @@ export type KpiEventName =
   | "diagnosis_recap_talk_thor"
   | "thor_guide_section_play"
   | "thor_guide_section_replay"
-  | "thor_guide_mute_toggle";
+  | "thor_guide_mute_toggle"
+  | "replay_opened"
+  | "replay_step_expanded"
+  | "replay_completed_view"
+  | "replay_action";
 
 export interface KpiEventPayload {
   department_id?: string;
   department_name?: string;
-  source?: "landing" | "onboarding" | "dashboard" | "live_demo" | "departamentos_page" | "diagnosis_recap" | "thor_guide";
+  source?: "landing" | "onboarding" | "dashboard" | "live_demo" | "departamentos_page" | "diagnosis_recap" | "thor_guide" | "replay" | "approvals" | "activity" | "task";
   price_monthly?: number;
   duration_ms?: number;
   pain?: string;
@@ -41,7 +45,12 @@ export interface KpiEventPayload {
   is_first_visit?: boolean;
   muted?: boolean;
   persisted?: boolean;
+  run_id?: string;
+  step_type?: string;
+  steps_count?: number;
+  action?: "approve" | "reject" | "open" | "close";
 }
+
 
 
 declare global {

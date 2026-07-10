@@ -1862,6 +1862,71 @@ export type Database = {
           },
         ]
       }
+      execution_steps: {
+        Row: {
+          agent_slug: string | null
+          content: Json
+          cost_credits: number | null
+          created_at: string
+          duration_ms: number | null
+          id: string
+          run_id: string
+          sources: Json | null
+          step_index: number
+          step_type: string
+          tenant_id: string
+          title: string
+          tokens_in: number | null
+          tokens_out: number | null
+          tool_name: string | null
+          user_id: string | null
+        }
+        Insert: {
+          agent_slug?: string | null
+          content?: Json
+          cost_credits?: number | null
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          run_id: string
+          sources?: Json | null
+          step_index: number
+          step_type: string
+          tenant_id: string
+          title: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          tool_name?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          agent_slug?: string | null
+          content?: Json
+          cost_credits?: number | null
+          created_at?: string
+          duration_ms?: number | null
+          id?: string
+          run_id?: string
+          sources?: Json | null
+          step_index?: number
+          step_type?: string
+          tenant_id?: string
+          title?: string
+          tokens_in?: number | null
+          tokens_out?: number | null
+          tool_name?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "execution_steps_run_id_fkey"
+            columns: ["run_id"]
+            isOneToOne: false
+            referencedRelation: "mcp_executions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       files: {
         Row: {
           bucket_path: string
@@ -2482,13 +2547,17 @@ export type Database = {
           created_at: string
           id: string
           message: string
+          parent_task_id: string | null
           results: Json | null
           routing: Json | null
+          run_type: string
           security_blocked: boolean
           security_level: string | null
           security_output: string | null
           selected_agents: Json
           status: string
+          summary: string | null
+          tenant_id: string | null
           total_ms: number
           triggered_agents: Json
           updated_at: string
@@ -2502,13 +2571,17 @@ export type Database = {
           created_at?: string
           id?: string
           message: string
+          parent_task_id?: string | null
           results?: Json | null
           routing?: Json | null
+          run_type?: string
           security_blocked?: boolean
           security_level?: string | null
           security_output?: string | null
           selected_agents?: Json
           status?: string
+          summary?: string | null
+          tenant_id?: string | null
           total_ms?: number
           triggered_agents?: Json
           updated_at?: string
@@ -2522,19 +2595,31 @@ export type Database = {
           created_at?: string
           id?: string
           message?: string
+          parent_task_id?: string | null
           results?: Json | null
           routing?: Json | null
+          run_type?: string
           security_blocked?: boolean
           security_level?: string | null
           security_output?: string | null
           selected_agents?: Json
           status?: string
+          summary?: string | null
+          tenant_id?: string | null
           total_ms?: number
           triggered_agents?: Json
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "mcp_executions_parent_task_id_fkey"
+            columns: ["parent_task_id"]
+            isOneToOne: false
+            referencedRelation: "agent_tasks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       meta_connections: {
         Row: {

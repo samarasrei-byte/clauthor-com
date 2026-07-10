@@ -32,6 +32,8 @@ function lazyRetry(factory: () => Promise<any>) {
 // Lazy load all pages for faster initial load
 const Index = lazyRetry(() => import("./pages/Index"));
 const ClientDashboard = lazyRetry(() => import("./pages/ClientDashboard"));
+const ExecutionReplay = lazyRetry(() => import("./pages/ExecutionReplay"));
+
 const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
 const Agents = lazyRetry(() => import("./pages/Agents"));
 const Library = lazyRetry(() => import("./pages/Library"));
@@ -176,6 +178,8 @@ const App = () => (
                 {/* Dashboard pages with minimal header + sidebar only */}
                 <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                   <Route path="/dashboard" element={<ClientDashboard />} />
+                  <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
+
                   <Route path="/agents" element={<Agents />} />
                   <Route path="/create-agent" element={<CreateWorkforce />} />
                   <Route path="/create-agent/classic" element={<CreateAgent />} />
