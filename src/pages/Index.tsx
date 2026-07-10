@@ -12,6 +12,9 @@ const InnovationRoadmap = lazy(() => import("@/components/landing/InnovationRoad
 const ROIBenchmark = lazy(() => import("@/components/landing/ROIBenchmark"));
 const CompetitiveMoat = lazy(() => import("@/components/landing/CompetitiveMoat"));
 import HeroTerminal from "@/components/landing/HeroTerminal";
+import LandingDiagnosisDialog from "@/components/landing/LandingDiagnosisDialog";
+import { useLandingDiagnosis } from "@/hooks/useLandingDiagnosis";
+import { Sparkles as SparklesIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, ShieldCheck,
@@ -136,13 +139,27 @@ const HomePage = () => {
     }]));
   }, []);
 
+  const diagnosis = useLandingDiagnosis();
+
   return (
     <div className="relative overflow-x-hidden">
+
+      <LandingDiagnosisDialog open={diagnosis.isOpen} onOpenChange={(v) => (v ? diagnosis.open() : diagnosis.close())} />
 
       {/* ═══════════ HERO ═══════════ */}
       <div ref={heroRef}>
         <HeroTerminal />
       </div>
+
+      {/* ═══════════ CTA FLUTUANTE — DIAGNÓSTICO 30s ═══════════ */}
+      <button
+        onClick={diagnosis.open}
+        className="fixed bottom-5 right-5 z-40 group inline-flex items-center gap-2 rounded-full border border-primary/40 bg-background/90 backdrop-blur-xl px-4 py-2.5 text-[13px] font-medium shadow-lg shadow-primary/10 hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all"
+        aria-label="Descobrir meu departamento em 30 segundos"
+      >
+        <SparklesIcon className="h-3.5 w-3.5 text-primary group-hover:text-primary-foreground" />
+        Descobrir meu departamento em 30s
+      </button>
 
       {/* ═══════════ LIVE DEMO ═══════════ */}
       <Suspense fallback={null}>
