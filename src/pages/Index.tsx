@@ -31,7 +31,7 @@ import thorPhoto from "@/assets/kaelis-ai.webp";
    TYPEWRITER HOOK
    ═══════════════════════════════════════════════════════ */
 const useCyclingTypewriter = (words: string[], speed = 50, pauseDuration = 2500, initialDelay = 600) => {
-  const [displayed, setDisplayed] = useState("");
+  const [displayed, setDisplayed] = useState(words[0] ?? "");
   const [wordIndex, setWordIndex] = useState(0);
   const [phase, setPhase] = useState<"waiting" | "typing" | "pausing" | "deleting">("waiting");
   const [firstCycleDone, setFirstCycleDone] = useState(false);
