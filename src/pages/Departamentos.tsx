@@ -276,7 +276,10 @@ const Departamentos = () => {
             const deptPrice = (region.departments as Record<string, number>)[dept.id] || dept.clauthorCost;
             const deptClt = (region.departmentClt as Record<string, number>)[dept.id] || dept.cltCost;
             const savings = deptClt - deptPrice;
-            const savingsPercent = deptClt > 0 ? Math.round((savings / deptClt) * 100) : 0;
+            const rawPercent = deptClt > 0 ? Math.round((savings / deptClt) * 100) : 0;
+            // Cap at 95% — "-100%" is not credible (implies zero cost)
+            const savingsPercent = Math.min(rawPercent, 95);
+            const savingsMultiplier = deptPrice > 0 ? Math.round(deptClt / deptPrice) : 0;
             return (
               <motion.div
                 key={dept.id}
