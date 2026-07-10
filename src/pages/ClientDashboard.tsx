@@ -139,7 +139,8 @@ const ClientDashboard = () => {
       return { completed: !!data?.onboarding_completed || !!data?.onboarded_at };
     },
     enabled: !!user,
-    staleTime: Infinity,
+    staleTime: 30_000,
+    refetchOnMount: "always",
   });
 
   // ── Onboarding gate: se o usuário nunca completou o diagnóstico (site + dor),
