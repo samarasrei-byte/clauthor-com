@@ -253,10 +253,11 @@ const HomePage = () => {
             </p>
           </div>
 
-          {/* Highlight metric */}
+          {/* Highlight metric — honest, factual */}
           <div className="text-center mb-12">
-            <p className="text-5xl sm:text-6xl font-semibold tracking-tight mb-2">+88%</p>
-            <p className="text-[15px] text-muted-foreground">{t("home.diff_savings")}</p>
+            <p className="text-5xl sm:text-6xl font-semibold tracking-tight mb-2">225 <span className="text-muted-foreground">/</span> 20</p>
+            <p className="text-[15px] text-muted-foreground">Agentes autônomos operando em 20 departamentos corporativos</p>
+            <p className="text-[12px] text-muted-foreground/70 mt-2">Comparativo de custo vs. equipe humana é uma projeção baseada em salários médios de mercado — resultados reais variam por empresa.</p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-border/50 rounded-2xl border border-border/50 overflow-hidden">
