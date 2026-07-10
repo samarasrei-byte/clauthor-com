@@ -14,7 +14,7 @@ const CompetitiveMoat = lazy(() => import("@/components/landing/CompetitiveMoat"
 import HeroTerminal from "@/components/landing/HeroTerminal";
 import LandingDiagnosisDialog from "@/components/landing/LandingDiagnosisDialog";
 import { useLandingDiagnosis } from "@/hooks/useLandingDiagnosis";
-import { Sparkles as SparklesIcon } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   ArrowRight, ShieldCheck,
