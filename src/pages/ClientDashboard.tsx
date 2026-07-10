@@ -599,7 +599,15 @@ const ClientDashboard = () => {
                 <MobileNavSheet sidebarItems={sidebarItems} activeSection={activeSection} breadcrumbLabel={breadcrumbLabel} onNavigate={handleSidebarNav} />
 
 
-                {activeSection === "overview" && (
+                {activeSection === "overview" && showEmptyState && (
+                  <DashboardEmptyState
+                    userName={user?.user_metadata?.full_name || user?.email || undefined}
+                    onHireFirstDepartment={() => navigate("/departamentos")}
+                    onExploreLibrary={() => setActiveSection("agents")}
+                  />
+                )}
+
+                {activeSection === "overview" && !showEmptyState && (
                   <>
                     {/* AmbientThorCard removido: HeroBriefing dentro de DashboardOverview
                         agora consolida greeting + status + CTA numa única voz. */}
