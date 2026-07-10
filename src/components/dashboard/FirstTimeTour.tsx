@@ -29,12 +29,24 @@ const FirstTimeTour = () => {
 
   useEffect(() => {
     try {
-      if (!localStorage.getItem(STORAGE_KEY)) {
-        // small delay to let dashboard paint
-        const t = setTimeout(() => setOpen(true), 800);
-        return () => clearTimeout(t);
+      if (localStorage.getItem(STORAGE_KEY)) return;
+    } catch { return; }
+
+    // Wait until no other dialog/modal is on screen — don't bombard the user.
+    let cancelled = false;
+    const check = () => {
+      if (cancelled) return;
+      const hasOtherDialog = !!document.querySelector(
+        '[role="dialog"]:not([data-first-time-tour]), [data-radix-portal] [role="dialog"]'
+      );
+      if (!hasOtherDialog) {
+        setOpen(true);
+      } else {
+        setTimeout(check, 1200);
       }
-    } catch { /* ignore */ }
+    };
+    const t = setTimeout(check, 1500);
+    return () => { cancelled = true; clearTimeout(t); };
   }, []);
 
   const dismiss = () => {
