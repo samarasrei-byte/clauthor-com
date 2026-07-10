@@ -74,6 +74,9 @@ i18n
     load: "languageOnly",
     interpolation: {
       escapeValue: false,
+      // Canonical numbers ({{agentPrice}}, {{cltPrice}}, {{workforceSize}}, ...)
+      // available globalmente em toda t(). Atualizado on languageChanged.
+      defaultVariables: canonicalInterpolationContext("pt"),
     },
     detection: {
       order: ["localStorage", "navigator", "htmlTag"],
