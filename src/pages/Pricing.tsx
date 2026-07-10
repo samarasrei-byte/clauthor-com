@@ -63,7 +63,7 @@ const Pricing = () => {
   const isOnRequest = (price: string) => price === t("pricing_page.on_request") || price === "Sob consulta" || price === "On request";
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4 relative">
+    <div className="min-h-dvh pt-24 pb-16 px-4 relative">
       <SEO title="Pricing — AI Workforce Plans | Clauthor" description="Hire entire AI departments from R$345/mo. Transparent pricing, no per-seat fees, pay only for outcomes." path="/pricing" />
       <div className="max-w-6xl mx-auto relative mb-8">
       </div>

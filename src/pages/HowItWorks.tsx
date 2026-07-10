@@ -98,7 +98,7 @@ const HowItWorks = () => {
   ];
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4 relative">
+    <div className="min-h-dvh pt-24 pb-16 px-4 relative">
       <SEO title="How It Works — Clauthor AI Workforce" description="See how Clauthor turns business goals into autonomous AI agents that execute, learn and report — without code." path="/how-it-works" />
       {/* BG */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">

@@ -126,7 +126,7 @@ export default function AdvocaciaExecucoes() {
   }, [execs]);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       {/* Header */}
       <header className="sticky top-0 z-20 border-b border-border/40 bg-background/80 backdrop-blur-xl">
         <div className="max-w-6xl mx-auto px-6 py-3 flex items-center justify-between">

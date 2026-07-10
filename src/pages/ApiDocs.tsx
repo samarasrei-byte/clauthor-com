@@ -355,7 +355,7 @@ const EndpointCard = ({ ep }: { ep: Endpoint }) => {
 
 const ApiDocs = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <SEO title="API Reference — Clauthor Developer Docs" description="REST API documentation for Clauthor: authenticate, create agents, run executions, manage credits and outcomes." path="/api-docs" />
       <div className="max-w-4xl mx-auto px-4 py-16 space-y-12">
         {/* Header */}

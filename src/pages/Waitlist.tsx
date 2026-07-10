@@ -138,7 +138,7 @@ const CountdownDigit = ({ value, label }: { value: string; label: string }) => (
 
 // ── Success Screen ──
 const SuccessView = ({ position }: { position: number | null }) => (
-  <div className="min-h-screen flex items-center justify-center px-4 relative overflow-hidden bg-background">
+  <div className="min-h-dvh flex items-center justify-center px-4 relative overflow-hidden bg-background">
     <ParticleField />
     <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="relative z-10 text-center max-w-lg">
       <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
@@ -448,7 +448,7 @@ const Waitlist = () => {
 
   return (
     <div
-      className="min-h-screen relative overflow-hidden bg-background waitlist-noir"
+      className="min-h-dvh relative overflow-hidden bg-background waitlist-noir"
       style={{ fontFamily: "'Manrope', system-ui, sans-serif" }}
     >
       {/* Scoped Noir & Ember typography: Sora display + Manrope body */}

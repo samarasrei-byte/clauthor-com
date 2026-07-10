@@ -183,7 +183,7 @@ export default function ApiKeysSettings() {
   const revokedKeys = keys.filter(k => !k.is_active);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <div className="max-w-5xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-start justify-between mb-12 gap-6 flex-wrap">

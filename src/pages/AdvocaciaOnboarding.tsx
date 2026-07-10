@@ -71,7 +71,7 @@ export default function AdvocaciaOnboarding() {
   const progress = (steps.filter(s => s.done).length / steps.length) * 100;
 
   if (loading) {
-    return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
+    return <div className="min-h-dvh bg-background flex items-center justify-center"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>;
   }
 
   const StatusBadge = ({ s }: { s: Status }) => {
@@ -81,7 +81,7 @@ export default function AdvocaciaOnboarding() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-dvh bg-background text-foreground">
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/40">
         <div className="max-w-4xl mx-auto px-6 h-16 flex items-center justify-between">
           <Link to="/dashboard" className="flex items-center gap-2"><ClauthorLogo size="md" /></Link>
