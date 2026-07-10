@@ -172,7 +172,7 @@ const AdvocaciaPainelLayout = () => {
 
   return (
     <TooltipProvider delayDuration={200}>
-      <div className="min-h-screen flex bg-background text-foreground">
+      <div className="min-h-dvh flex bg-background text-foreground">
         {/* ─── Sidebar ─── */}
         <aside
           className={`hidden md:flex flex-col ${sidebarWidth} border-r border-border bg-card/30 transition-[width] duration-200`}

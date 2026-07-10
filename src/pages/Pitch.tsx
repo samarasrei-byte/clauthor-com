@@ -182,11 +182,11 @@ const Pitch = () => {
   const handleTalk = useCallback(() => { window.open(waLink, "_blank"); }, [waLink]);
 
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden selection:bg-primary/30">
+    <div className="min-h-dvh bg-background text-foreground overflow-x-hidden selection:bg-primary/30">
       <LangToggle lang={lang} setLang={setLang} />
 
       {/* HERO */}
-      <div ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <div ref={heroRef} className="relative min-h-dvh flex items-center justify-center overflow-hidden">
         <motion.div className="absolute inset-0 z-0" style={{ y: bgY }}>
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-20%,hsl(var(--primary)/0.12),transparent_70%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_80%_80%,hsl(var(--accent-violet)/0.08),transparent_70%)]" />

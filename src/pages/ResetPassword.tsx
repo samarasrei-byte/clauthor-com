@@ -56,7 +56,7 @@ const ResetPassword = () => {
 
   if (!isRecovery) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="min-h-dvh flex items-center justify-center px-4">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center space-y-4">
           <Bot className="h-12 w-12 text-primary mx-auto" />
           <h1 className="font-display text-2xl font-bold">{t("auth.invalid_link", { defaultValue: "Link inválido" })}</h1>
@@ -69,7 +69,7 @@ const ResetPassword = () => {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="min-h-dvh flex items-center justify-center px-4">
         <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center space-y-4">
           <CheckCircle className="h-16 w-16 text-emerald-400 mx-auto" />
           <h1 className="font-display text-2xl font-bold">{t("auth.password_updated", { defaultValue: "Senha atualizada!" })}</h1>
@@ -80,7 +80,7 @@ const ResetPassword = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 -mt-16 relative">
+    <div className="min-h-dvh flex items-center justify-center px-4 -mt-16 relative">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/10 blur-[150px] rounded-full" />
       </div>

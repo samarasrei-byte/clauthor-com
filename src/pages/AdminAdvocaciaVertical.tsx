@@ -72,7 +72,7 @@ const AdminAdvocaciaVertical = () => {
 
   if (verified !== true) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
           <Loader2 className="h-4 w-4 animate-spin" /> Verificando permissões…
         </div>
@@ -87,7 +87,7 @@ const AdminAdvocaciaVertical = () => {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <header className="border-b border-border bg-card/40 backdrop-blur-sm">
         <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">

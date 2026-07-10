@@ -103,7 +103,7 @@ const reasons = [
 const InvestorPitch = () => {
   const [presenting, setPresenting] = useState(false);
   return (
-    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
+    <div className="min-h-dvh bg-background text-foreground overflow-x-hidden">
       <SEO
         title="Clauthor Invest in the Autonomous AI Workforce"
         description="Pre-seed R$200K for 10%. Roadmap to 100K users and R$15M MRR in 24 months across 12+ countries and 14+ languages."
@@ -138,7 +138,7 @@ const InvestorPitch = () => {
       </header>
 
       {/* Hero, split layout: title left, cinematic image right */}
-      <section className="relative min-h-screen flex items-center px-6 pt-28 pb-20 overflow-hidden">
+      <section className="relative min-h-dvh flex items-center px-6 pt-28 pb-20 overflow-hidden">
         {/* Atmospheric background */}
         <div className="absolute inset-0 -z-10 overflow-hidden">
           <motion.div

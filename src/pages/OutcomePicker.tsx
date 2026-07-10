@@ -85,7 +85,7 @@ const OutcomePicker = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5 flex items-center justify-center px-4 py-12">
+    <div className="min-h-dvh bg-gradient-to-b from-background via-background to-primary/5 flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-3xl">
         <motion.div
           initial={{ opacity: 0, y: 12 }}

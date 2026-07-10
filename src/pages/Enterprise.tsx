@@ -58,7 +58,7 @@ const Enterprise = () => {
         description="Dedicated AI squads, white-glove support, SSO, SCIM, VPC peering and signed audit trails. Built for Fortune 500 and large enterprises."
       />
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         {/* Hero */}
         <section className="relative pt-32 pb-24 px-6 overflow-hidden">
           <div className="absolute inset-0 -z-10">

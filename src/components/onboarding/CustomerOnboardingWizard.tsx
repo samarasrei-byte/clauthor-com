@@ -75,14 +75,14 @@ export default function CustomerOnboardingWizard({ subjectType, subjectRef, subj
 
   if (loading || !row) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#050505] text-white/60">
+      <div className="min-h-dvh flex items-center justify-center bg-[#050505] text-white/60">
         <Loader2 className="w-6 h-6 animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#050505] text-white flex flex-col">
+    <div className="min-h-dvh bg-[#050505] text-white flex flex-col">
       {/* HUD */}
       <header className="sticky top-0 z-40 border-b border-white/5 bg-black/50 backdrop-blur-md">
         <div className="max-w-5xl mx-auto px-6 h-16 flex items-center justify-between">

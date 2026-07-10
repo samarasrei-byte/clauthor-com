@@ -183,7 +183,7 @@ export default function ApiKeysSettings() {
   const revokedKeys = keys.filter(k => !k.is_active);
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       <div className="max-w-5xl mx-auto px-6 py-12">
         {/* Header */}
         <div className="flex items-start justify-between mb-12 gap-6 flex-wrap">
@@ -428,7 +428,7 @@ function KeyRow({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={onRotate} className="h-8 w-8">
+                <Button variant="ghost" size="icon" onClick={onRotate} className="h-8 w-8" aria-label="Rotacionar chave">
                   <RotateCw className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
@@ -436,7 +436,7 @@ function KeyRow({
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={onRevoke} className="h-8 w-8 text-muted-foreground hover:text-destructive">
+                <Button variant="ghost" size="icon" onClick={onRevoke} className="h-8 w-8 text-muted-foreground hover:text-destructive" aria-label="Revogar chave">
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>

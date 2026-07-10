@@ -316,7 +316,7 @@ const ProjectTimeline = () => {
   const progressPct = Math.round((completedSteps / totalSteps) * 100);
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-dvh bg-background text-foreground">
       {/* Hero section */}
       <div className="relative overflow-hidden">
         {/* Ambient background */}

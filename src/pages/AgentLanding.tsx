@@ -24,7 +24,7 @@ const findWorkforceAgent = (slug: string): { agent: AgentRole; deptName: string;
 };
 
 const AgentFallback = ({ data }: { data: { agent: AgentRole; deptName: string; squadName: string } }) => (
-  <div className="min-h-screen">
+  <div className="min-h-dvh">
     <section className="relative pt-32 pb-20 px-4 overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-gradient-to-b from-primary/[0.06] to-transparent rounded-full blur-[120px]" />
@@ -102,7 +102,7 @@ const AgentLanding = () => {
   const Icon = agent.icon;
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-dvh">
       {/* HERO */}
       <section className="relative pt-32 pb-20 px-4 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">

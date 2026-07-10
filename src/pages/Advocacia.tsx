@@ -295,7 +295,7 @@ export default function Advocacia() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-dvh bg-background text-foreground">
       {/* HEADER */}
       <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/40">
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">

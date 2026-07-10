@@ -273,7 +273,7 @@ const TeamBuilder = () => {
   }, []);
 
   return (
-    <div className="min-h-screen pt-24 pb-16 px-4 relative">
+    <div className="min-h-dvh pt-24 pb-16 px-4 relative">
       <div className="max-w-7xl mx-auto relative">
         {/* Header */}
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-10">

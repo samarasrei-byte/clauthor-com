@@ -37,7 +37,7 @@ const DashboardLayout = () => {
 
   return (
     <FloatingDockProvider>
-      <div className="h-screen flex flex-col bg-background overflow-hidden">
+      <div className="h-dvh flex flex-col bg-background overflow-hidden">
         {/* Token upgrade banner */}
         <AnimatePresence>
           {showUpgradePrompt && bannerCfg && (
