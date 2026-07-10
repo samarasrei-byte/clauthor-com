@@ -68,18 +68,19 @@ export const regionalPricing: Record<string, RegionalPricing> = {
   },
   en: {
     currency: "USD", symbol: "$", locale: "en-US",
-    plans: { starter: 197, growth: 397 },
+    // Starter/comparison alinhados ao canonical (USD): agent $297, CLT $5,500.
+    plans: { starter: 297, growth: 797 },
     tokenPacks: { pack5m: 59, pack15m: 139, pack50m: 299, pack100m: 549 },
-    comparison: { avgSalary: 5500, avgSalaryYear3: 330000, agentStarting: 59, agentYear3: 2124 },
-    departments: { tecnologia: 299, comercial: 199, marketing: 149, financeiro: 199, criacao: 149, suporte: 99, rh: 149 },
+    comparison: { avgSalary: 5500, avgSalaryYear3: 198000, agentStarting: 297, agentYear3: 10692 },
+    departments: { tecnologia: 597, comercial: 497, marketing: 397, financeiro: 497, criacao: 397, suporte: 297, rh: 397 },
     departmentClt: cltCosts,
   },
   es: {
     currency: "USD", symbol: "$", locale: "es-MX",
-    plans: { starter: 197, growth: 397 },
+    plans: { starter: 297, growth: 797 },
     tokenPacks: { pack5m: 59, pack15m: 139, pack50m: 299, pack100m: 549 },
-    comparison: { avgSalary: 2000, avgSalaryYear3: 120000, agentStarting: 59, agentYear3: 2124 },
-    departments: { tecnologia: 299, comercial: 199, marketing: 149, financeiro: 199, criacao: 149, suporte: 99, rh: 149 },
+    comparison: { avgSalary: 5500, avgSalaryYear3: 198000, agentStarting: 297, agentYear3: 10692 },
+    departments: { tecnologia: 597, comercial: 497, marketing: 397, financeiro: 497, criacao: 397, suporte: 297, rh: 397 },
     departmentClt: cltCosts,
   },
   fr: {
