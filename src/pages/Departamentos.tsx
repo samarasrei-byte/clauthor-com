@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { SEO } from "@/components/SEO";
+import DepartmentsJsonLd from "@/components/DepartmentsJsonLd";
 import { motion } from "framer-motion";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
