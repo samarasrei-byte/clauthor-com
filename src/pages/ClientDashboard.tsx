@@ -37,6 +37,7 @@ import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog"
 import SectionLoader from "@/components/ui/section-loader";
 import AmbientThorCard from "@/components/dashboard/AmbientThorCard";
 import OnboardingResumeBanner from "@/components/OnboardingResumeBanner";
+import DashboardEmptyState from "@/components/dashboard/DashboardEmptyState";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
@@ -185,6 +186,32 @@ const ClientDashboard = () => {
     },
     enabled: !!user,
   });
+
+  // ── Contracted departments (drives empty-state gate) ──
+  const { data: contractedCount = 0, isLoading: loadingContracted } = useQuery({
+    queryKey: ["contracted-departments-count", user?.id],
+    queryFn: async () => {
+      const { count } = await supabase
+        .from("contracted_departments")
+        .select("*", { count: "exact", head: true })
+        .eq("user_id", user!.id)
+        .eq("status", "active");
+      return count || 0;
+    },
+    enabled: !!user,
+    staleTime: 30_000,
+  });
+
+  // Empty-state gate: novo usuário sem departamentos → tela single-focus.
+  // Não aplica para admin (que vê catálogo completo virtual) nem durante
+  // checkout pendente (o dialog toma conta) nem se onboarding legado ainda
+  // não terminou.
+  const showEmptyState =
+    !isAdmin &&
+    !hasPendingCheckout &&
+    !loadingContracted &&
+    contractedCount === 0 &&
+    activeSection === "overview";
 
   // First-access modal legacy removido — GuidedOnboarding cuida disso globalmente.
 
@@ -381,14 +408,14 @@ const ClientDashboard = () => {
     localStorage.setItem("clauthor_live_guide_dismissed", "true");
   }, []);
   useEffect(() => {
-    if (showLiveGuide && !hasPendingCheckout) {
+    if (showLiveGuide && !hasPendingCheckout && !showEmptyState) {
       registerThor({ activeSection, onNavigate: handleSidebarNav, onDismiss: dismissLiveGuide });
     } else {
       registerThor(null);
     }
     return () => registerThor(null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showLiveGuide, hasPendingCheckout, activeSection]);
+  }, [showLiveGuide, hasPendingCheckout, activeSection, showEmptyState]);
 
   const handleBack = () => {
     setActiveSection(previousSection || "overview");
@@ -572,7 +599,15 @@ const ClientDashboard = () => {
                 <MobileNavSheet sidebarItems={sidebarItems} activeSection={activeSection} breadcrumbLabel={breadcrumbLabel} onNavigate={handleSidebarNav} />
 
 
-                {activeSection === "overview" && (
+                {activeSection === "overview" && showEmptyState && (
+                  <DashboardEmptyState
+                    userName={user?.user_metadata?.full_name || user?.email || undefined}
+                    onHireFirstDepartment={() => navigate("/departamentos")}
+                    onExploreLibrary={() => setActiveSection("agents")}
+                  />
+                )}
+
+                {activeSection === "overview" && !showEmptyState && (
                   <>
                     {/* AmbientThorCard removido: HeroBriefing dentro de DashboardOverview
                         agora consolida greeting + status + CTA numa única voz. */}
@@ -638,7 +673,7 @@ const ClientDashboard = () => {
       {/* ThorLiveGuide is rendered globally by FloatingDock (bottom-center zone). */}
 
 
-      {!hasPendingCheckout && (
+      {!hasPendingCheckout && !showEmptyState && (
         <Suspense fallback={null}>
           <QuickStartWizard
             isOpen={showQuickStart}
@@ -651,7 +686,7 @@ const ClientDashboard = () => {
       )}
 
       <MobileBottomNav activeSection={activeSection} onNavigate={handleSidebarNav} agentCount={agents.length || undefined} />
-      {!hasPendingCheckout && <DashboardTour />}
+      {!hasPendingCheckout && !showEmptyState && <DashboardTour />}
     </>
   );
 };

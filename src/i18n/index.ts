@@ -1,6 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import { canonicalInterpolationContext } from "@/lib/canonical-copy";
 
 // Only load PT (default) synchronously - others loaded on demand
 import pt from "./locales/pt.json";
@@ -73,6 +74,9 @@ i18n
     load: "languageOnly",
     interpolation: {
       escapeValue: false,
+      // Canonical numbers ({{agentPrice}}, {{cltPrice}}, {{workforceSize}}, ...)
+      // available globalmente em toda t(). Atualizado on languageChanged.
+      defaultVariables: canonicalInterpolationContext("pt"),
     },
     detection: {
       order: ["localStorage", "navigator", "htmlTag"],
@@ -95,6 +99,10 @@ if (i18n.language && i18n.language !== "en") {
 i18n.on("languageChanged", (lng) => {
   document.documentElement.lang = lng;
   document.documentElement.dir = lng === "ar" ? "rtl" : "ltr";
+  // Re-inject canonical vars com a currency/label do novo locale.
+  if (i18n.options.interpolation) {
+    i18n.options.interpolation.defaultVariables = canonicalInterpolationContext(lng);
+  }
   loadLocale(lng);
 });
 
