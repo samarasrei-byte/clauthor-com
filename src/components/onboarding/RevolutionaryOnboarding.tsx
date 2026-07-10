@@ -688,7 +688,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                     </AnimatePresence>
 
                     <div className="flex items-center justify-between pt-2">
-                      <Button variant="ghost" onClick={() => setStep("welcome")} className="text-white/60 hover:text-white hover:bg-white/5">
+                      <Button variant="ghost" onClick={() => setStep("department")} className="text-white/60 hover:text-white hover:bg-white/5">
                         <ArrowLeft className="w-4 h-4 mr-1.5" /> Voltar
                       </Button>
                       <Button
