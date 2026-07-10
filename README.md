@@ -50,6 +50,14 @@ npm run dev
 - Click on "New codespace" to launch a new Codespace environment.
 - Edit files directly within the Codespace and commit and push your changes once you're done.
 
+## Documentação interna
+
+Auditorias e análises de produto vivem em [`docs/audits/`](./docs/audits):
+
+- [IA Jurídica](./docs/audits/AUDITORIA_IA_JURIDICA.md)
+- [Lançamento Rede Neural](./docs/audits/AUDITORIA_LANCAMENTO_REDE_NEURAL.md)
+- [Preços Marketplace](./docs/audits/AUDITORIA_PRECOS_MARKETPLACE.md)
+
 ## What technologies are used for this project?
 
 This project is built with:
