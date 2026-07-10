@@ -366,7 +366,7 @@ const Departamentos = () => {
                     <div>
                      <p className="text-[10px] text-muted-foreground">{t("departments_page.vs_clt")}</p>
                       <p className="text-sm font-bold text-emerald-400">
-                        -{savingsPercent}% {t("departments_page.savings")}
+                        {savingsMultiplier >= 3 ? `${savingsMultiplier}x` : `-${savingsPercent}%`} {t("departments_page.savings")}
                       </p>
                     </div>
                     <div className="text-right">
