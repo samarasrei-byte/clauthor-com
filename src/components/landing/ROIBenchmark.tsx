@@ -6,17 +6,19 @@ import { Slider } from "@/components/ui/slider";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import { CANONICAL, currencyForLocale } from "@/lib/canonical-copy";
 
 const ROIBenchmark = () => {
   const { t, i18n } = useTranslation();
   const [employees, setEmployees] = useState(5);
 
   const locale = i18n.language === "pt" ? "pt-BR" : (i18n.language || "en");
-  const currency = i18n.language === "pt" ? "BRL" : "USD";
-  const avgSalary = currency === "BRL" ? 8500 : 5500;
-  // Anchor premium: ~5% do custo CLT. Posiciona o agente como "funcionário sênior digital",
-  // não como estagiário — mantém credibilidade e sustenta o ROI de 18-19x.
-  const agentCost = currency === "BRL" ? 1497 : 297;
+  const currency = currencyForLocale(i18n.language || "en");
+  const avgSalary = CANONICAL.clt.monthly[currency];
+  // Preço unitário do agente (canonical). Preserva a narrativa de "funcionário
+  // sênior digital, ~5% do custo CLT" — ancora ROI ~19x sem parecer estagiário.
+  const agentCost = CANONICAL.agent.monthly[currency];
+
 
   const data = useMemo(() => {
     const cltMonthly = employees * avgSalary;
