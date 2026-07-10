@@ -355,7 +355,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
   function pickDepartment(dept: DepartmentPackage) {
     const uniqueAgents = Array.from(new Set(dept.timelineDemo.map((e) => e.agentName)));
     setDescription(dept.painPoint);
-    setResult({
+    const classification: Classification = {
       business_summary: `Empresa que precisa ativar um ${dept.name.toLowerCase()} pronto para operar.`,
       detected_pain: dept.painPoint,
       need_type: "department",
@@ -364,14 +364,17 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       agents: uniqueAgents,
       expected_outcome: dept.outcome,
       confidence: 0.92,
-    });
+    };
+    setResult(classification);
     trackKpi("onboarding_department_picked", {
       department_id: dept.id,
       department_name: dept.name,
       price_monthly: dept.priceMonthly,
       source: "onboarding",
     });
-    setStep("reveal");
+    // Vai direto para Fusão e finaliza — sem etapa de Match/Vaga.
+    setStep("analyzing");
+    setTimeout(() => { finishOnboarding(classification); }, 1400);
   }
 
 
