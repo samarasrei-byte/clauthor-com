@@ -143,6 +143,39 @@ export function usePaypalCapture() {
             current_period_end: periodEnd.toISOString(),
           });
 
+          // 4b. Persist contracted department (snapshot user context so agents/dashboard can use)
+          if (subIntent.is_department) {
+            try {
+              const { data: profile } = await supabase
+                .from("profiles")
+                .select("full_name, email, company_name, onboarding_answers")
+                .eq("user_id", user.id)
+                .maybeSingle();
+
+              const answers = ((profile as any)?.onboarding_answers as any) || {};
+              await supabase.from("contracted_departments").insert({
+                user_id: user.id,
+                department_id: subIntent.department_id || "comercial",
+                department_name: subIntent.agent_name,
+                monthly_price_cents: priceInCents,
+                currency: subIntent.currency || "BRL",
+                agent_count: provisionedAgents.length,
+                agent_ids: provisionedAgents,
+                subscription_id: subIntent.subscription_id,
+                pain_point: answers.pain || answers.detected_pain || null,
+                company_snapshot: {
+                  name: (profile as any)?.company_name || null,
+                  contact_name: (profile as any)?.full_name || null,
+                  email: (profile as any)?.email || null,
+                },
+                onboarding_snapshot: answers,
+                status: "active",
+              });
+            } catch (e) {
+              console.warn("[contracted_departments] insert failed", e);
+            }
+          }
+
           // 5. Log to payment_history
           await supabase.from("payment_history").insert({
             user_id: user.id,
@@ -157,6 +190,7 @@ export function usePaypalCapture() {
             status: "completed",
             paypal_order_id: subIntent.subscription_id,
           });
+
 
           // 6. Register agents with OpenClaw (non-blocking)
           try {

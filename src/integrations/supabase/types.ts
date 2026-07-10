@@ -1519,6 +1519,74 @@ export type Database = {
         }
         Relationships: []
       }
+      contracted_departments: {
+        Row: {
+          agent_count: number
+          agent_ids: string[]
+          company_snapshot: Json
+          created_at: string
+          currency: string
+          department_icon: string | null
+          department_id: string
+          department_name: string
+          id: string
+          monthly_price_cents: number
+          onboarding_snapshot: Json
+          pain_point: string | null
+          status: string
+          subscription_id: string | null
+          tenant_id: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          agent_count?: number
+          agent_ids?: string[]
+          company_snapshot?: Json
+          created_at?: string
+          currency?: string
+          department_icon?: string | null
+          department_id: string
+          department_name: string
+          id?: string
+          monthly_price_cents?: number
+          onboarding_snapshot?: Json
+          pain_point?: string | null
+          status?: string
+          subscription_id?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          agent_count?: number
+          agent_ids?: string[]
+          company_snapshot?: Json
+          created_at?: string
+          currency?: string
+          department_icon?: string | null
+          department_id?: string
+          department_name?: string
+          id?: string
+          monthly_price_cents?: number
+          onboarding_snapshot?: Json
+          pain_point?: string | null
+          status?: string
+          subscription_id?: string | null
+          tenant_id?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "contracted_departments_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       coupon_redemptions: {
         Row: {
           coupon_id: string

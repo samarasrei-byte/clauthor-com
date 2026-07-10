@@ -26,6 +26,7 @@ const PendingActionsPanel = lazy(() => import("./PendingActionsPanel").then(m =>
 const ClientCommandCenter = lazy(() => import("./ClientCommandCenter"));
 const DashboardSkeleton = lazy(() => import("./DashboardSkeleton"));
 const LiveActivityFeed = lazy(() => import("./LiveActivityFeed").then(m => ({ default: m.LiveActivityFeed })));
+const ContractedDepartments = lazy(() => import("./ContractedDepartments"));
 
 interface Props {
   loadingAgents: boolean;
@@ -96,6 +97,10 @@ const DashboardOverview = ({
             {/* Advanced panels - only when user has agents */}
             {agents.length > 0 && (
               <>
+                <ContractedDepartments
+                  onExplore={() => onSetActiveSection("library")}
+                />
+
                 <TaskRequestPanel
                   contractedAgentSlugs={agents.map(a => nameToSlug[a.name]).filter(Boolean)}
                   onSubmitTask={onSubmitTask}
