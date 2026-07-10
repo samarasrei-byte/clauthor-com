@@ -222,14 +222,14 @@ const Departamentos = () => {
             <span className="gradient-text">{t("departments_page.title2")}</span>
           </h1>
           <p className="text-muted-foreground text-base max-w-xl mx-auto mb-4">
-            {t("departments_page.subtitle", { deptCount: departments.length, agentCount: totalAgents })} <span className="text-primary font-bold">{t("departments_page.subtitle_highlight")}</span>.
+            {t("departments_page.subtitle", { deptCount: 20, agentCount: "+200" })} <span className="text-primary font-bold">{t("departments_page.subtitle_highlight")}</span>.
           </p>
 
           {/* Hero Stats */}
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
             {[
-              { icon: Bot, value: String(totalAgents), label: t("departments_page.stat_agents") },
-              { icon: Building2, value: String(departments.length), label: t("departments_page.stat_departments") },
+              { icon: Bot, value: "+200", label: t("departments_page.stat_agents") },
+              { icon: Building2, value: "20", label: t("departments_page.stat_departments") },
               { icon: Zap, value: "24/7", label: t("departments_page.stat_operation") },
             ].map((stat) => (
               <div key={stat.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/30 border border-border text-sm">
@@ -496,7 +496,7 @@ const Departamentos = () => {
             {t("departments_page.full_cta_title")}
           </h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-4">
-            {t("departments_page.full_cta_subtitle", { deptCount: departments.length, agentCount: totalAgents })}
+            {t("departments_page.full_cta_subtitle", { deptCount: 20, agentCount: "+200" })}
           </p>
           <div className="flex items-center justify-center gap-6 mb-6">
             <div>

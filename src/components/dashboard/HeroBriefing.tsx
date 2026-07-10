@@ -13,9 +13,11 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Bot, Zap, Coins, Activity, Sparkles } from "lucide-react";
+import { ArrowRight, Bot, Zap, Coins, Activity, Sparkles, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
@@ -50,6 +52,24 @@ const HeroBriefing = ({
   const { user } = useAuth();
   const navigate = useNavigate();
 
+  // Puxa a dor identificada no onboarding para personalizar o estado vazio.
+  const { data: onboardingCtx } = useQuery({
+    queryKey: ["hero-onboarding-ctx", user?.id],
+    enabled: !!user && agentsCount === 0,
+    staleTime: 5 * 60_000,
+    queryFn: async () => {
+      const { data } = await supabase
+        .from("profiles")
+        .select("onboarding_answers")
+        .eq("user_id", user!.id)
+        .maybeSingle();
+      const ans = (data?.onboarding_answers ?? null) as
+        | { pain?: string; recommendation?: string; path?: string }
+        | null;
+      return ans;
+    },
+  });
+
   const firstName = useMemo(() => {
     const full = user?.user_metadata?.full_name?.trim();
     if (full) return full.split(" ")[0];
@@ -71,13 +91,18 @@ const HeroBriefing = ({
   const hoursSince = newestDate ? (Date.now() - newestDate.getTime()) / 36e5 : Infinity;
   const isLive = hoursSince <= 24;
 
+  const pain = onboardingCtx?.pain?.trim();
+  const recommendation = onboardingCtx?.recommendation?.trim();
+
   // Next Best Action — depende do estado real da conta.
   const nba: NBA = useMemo(() => {
     if (agentsCount === 0) {
       return {
         key: "hire",
-        label: "Contratar seu primeiro agente",
-        helper: "Escolha um squad em 2 minutos. Começa a rodar hoje.",
+        label: recommendation ? `Ativar ${recommendation}` : "Contratar seu primeiro departamento",
+        helper: recommendation
+          ? "Recomendado com base no diagnóstico. Começa a rodar hoje."
+          : "Escolha um departamento em 2 minutos. Começa a rodar hoje.",
         onClick: () => (onOpenLibrary ? onOpenLibrary() : navigate("/library")),
       };
     }
@@ -95,16 +120,19 @@ const HeroBriefing = ({
       helper: `${recentLogs.length} execuç${recentLogs.length > 1 ? "ões" : "ão"} nas últimas 24h — revise e aprove.`,
       onClick: () => (onOpenWarRoom ? onOpenWarRoom() : navigate("/dashboard?tab=operations-center")),
     };
-  }, [agentsCount, isLive, recentLogs.length, onFocusTaskInput, onOpenWarRoom, onOpenLibrary, navigate]);
+  }, [agentsCount, isLive, recentLogs.length, onFocusTaskInput, onOpenWarRoom, onOpenLibrary, navigate, recommendation]);
 
   // Uma linha de contexto humana, sem "LIVE" mentiroso.
   const statusLine = useMemo(() => {
-    if (agentsCount === 0) return "Sua conta está pronta — falta só escolher quem trabalha por você.";
+    if (agentsCount === 0) {
+      if (pain) return `Você nos disse: "${pain.slice(0, 140)}${pain.length > 140 ? "…" : ""}". Ative um departamento para resolver.`;
+      return "Sua conta está pronta — falta só escolher quem trabalha por você.";
+    }
     if (!newestDate) return `${activeAgents}/${agentsCount} agentes ativos. Ainda sem execuções — bora começar.`;
     const rel = formatDistanceToNow(newestDate, { addSuffix: true, locale: ptBR });
     const verb = isLive ? "rodando" : "em pausa";
     return `${activeAgents}/${agentsCount} agentes ${verb} · última ação ${rel}.`;
-  }, [agentsCount, activeAgents, newestDate, isLive]);
+  }, [agentsCount, activeAgents, newestDate, isLive, pain]);
 
   return (
     <motion.section
