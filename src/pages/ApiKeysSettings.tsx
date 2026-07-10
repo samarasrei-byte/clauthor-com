@@ -428,7 +428,7 @@ function KeyRow({
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={onRotate} className="h-8 w-8">
+                <Button variant="ghost" size="icon" onClick={onRotate} className="h-8 w-8" aria-label="Rotacionar chave">
                   <RotateCw className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
@@ -436,7 +436,7 @@ function KeyRow({
             </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="ghost" size="icon" onClick={onRevoke} className="h-8 w-8 text-muted-foreground hover:text-destructive">
+                <Button variant="ghost" size="icon" onClick={onRevoke} className="h-8 w-8 text-muted-foreground hover:text-destructive" aria-label="Revogar chave">
                   <Trash2 className="w-4 h-4" />
                 </Button>
               </TooltipTrigger>
