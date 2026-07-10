@@ -7,22 +7,22 @@ import { CANONICAL } from "@/lib/canonical-copy";
  * Se estes valores divergirem, landing/ROIBenchmark/planos ficam desalinhados.
  */
 describe("pricing — canonical anchor", () => {
-  it("pt (BRL) starter = CANONICAL.agent.monthly", () => {
+  it("pt (BRL) starter = CANONICAL.agent.monthly.BRL", () => {
     const r = getRegion("pt");
-    expect(r.plans.starter).toBe(CANONICAL.agent.monthly);
-    expect(r.comparison.agentStarting).toBe(CANONICAL.agent.monthly);
-    expect(r.comparison.avgSalary).toBe(CANONICAL.clt.monthly);
+    expect(r.plans.starter).toBe(CANONICAL.agent.monthly.BRL);
+    expect(r.comparison.agentStarting).toBe(CANONICAL.agent.monthly.BRL);
+    expect(r.comparison.avgSalary).toBe(CANONICAL.clt.monthly.BRL);
   });
 
-  it("en (USD) starter = CANONICAL.agent.monthlyUSD", () => {
+  it("en (USD) starter = CANONICAL.agent.monthly.USD", () => {
     const r = getRegion("en");
-    expect(r.plans.starter).toBe(CANONICAL.agent.monthlyUSD);
-    expect(r.comparison.agentStarting).toBe(CANONICAL.agent.monthlyUSD);
-    expect(r.comparison.avgSalary).toBe(CANONICAL.clt.monthlyUSD);
+    expect(r.plans.starter).toBe(CANONICAL.agent.monthly.USD);
+    expect(r.comparison.agentStarting).toBe(CANONICAL.agent.monthly.USD);
+    expect(r.comparison.avgSalary).toBe(CANONICAL.clt.monthly.USD);
   });
 
   it("es (USD) espelha en", () => {
-    expect(getRegion("es").plans.starter).toBe(CANONICAL.agent.monthlyUSD);
+    expect(getRegion("es").plans.starter).toBe(CANONICAL.agent.monthly.USD);
   });
 
   it("todos os locales: agentStarting == plans.starter (anchor premium)", () => {
