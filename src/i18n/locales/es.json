@@ -604,7 +604,7 @@
     "starter_desc": "Para empezar a automatizar",
     "starter_tokens": "2,000,000",
     "starter_equivalent": "1 empleado sénior",
-    "starter_cost": "$5,500+",
+    "starter_cost": "{{cltPrice}}+",
     "starter_savings": "94%",
     "starter_f1": "1 Agente activo",
     "starter_f2": "5,000,000 tokens/mes incluidos",
