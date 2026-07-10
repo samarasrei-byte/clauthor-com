@@ -438,9 +438,17 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
     setCurrentMessage(message);
     playMessage(message);
 
+    trackKpi("thor_guide_section_play", {
+      source: "thor_guide",
+      section: activeSection,
+      is_first_visit: isFirstVisit,
+      muted: isMutedRef.current,
+    });
+
     if (isFirstVisit) {
       setVisitedSections(prev => new Set(prev).add(activeSection));
     }
+
   }, [activeSection, isPaused, hasGreeted, playMessage, visitedSections]);
 
   // When user mutes mid-speech, stop the audio immediately
