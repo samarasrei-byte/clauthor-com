@@ -18,6 +18,7 @@ import {
   X,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import type { LucideIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -35,7 +36,7 @@ interface Props {
 
 const PAINS: {
   id: PainId;
-  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  icon: LucideIcon;
   title: string;
   desc: string;
 }[] = [
@@ -49,7 +50,7 @@ const PAINS: {
 
 const DELIVERY: {
   id: DeliveryMode;
-  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  icon: LucideIcon;
   title: string;
   desc: string;
   badge: string;
