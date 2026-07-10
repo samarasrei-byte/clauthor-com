@@ -279,7 +279,10 @@ const Departamentos = () => {
             const rawPercent = deptClt > 0 ? Math.round((savings / deptClt) * 100) : 0;
             // Cap at 95% — "-100%" is not credible (implies zero cost)
             const savingsPercent = Math.min(rawPercent, 95);
-            const savingsMultiplier = deptPrice > 0 ? Math.round(deptClt / deptPrice) : 0;
+            const rawMultiplier = deptPrice > 0 ? deptClt / deptPrice : 0;
+            // Cap displayed multiplier — "241x" reads as hype. Real CLT ratio is real,
+            // but keep it in credible SaaS range and prefer "%" for smaller diffs.
+            const savingsMultiplier = rawMultiplier >= 20 ? 20 : Math.floor(rawMultiplier);
             return (
               <motion.div
                 key={dept.id}
@@ -366,7 +369,7 @@ const Departamentos = () => {
                     <div>
                      <p className="text-[10px] text-muted-foreground">{t("departments_page.vs_clt")}</p>
                       <p className="text-sm font-bold text-emerald-400">
-                        {savingsMultiplier >= 3 ? `${savingsMultiplier}x` : `-${savingsPercent}%`} {t("departments_page.savings")}
+                        {savingsMultiplier >= 20 ? `20x+` : savingsMultiplier >= 3 ? `${savingsMultiplier}x` : `-${savingsPercent}%`} {t("departments_page.savings")}
                       </p>
                     </div>
                     <div className="text-right">
