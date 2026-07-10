@@ -598,6 +598,17 @@ const ClientDashboard = () => {
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
 
+      {diagnosisRecapData?.diagnosis && (
+        <DiagnosisRecapDialog
+          open={showDiagnosisRecap}
+          diagnosis={diagnosisRecapData.diagnosis}
+          briefing={diagnosisRecapData.briefing}
+          siteSummary={diagnosisRecapData.siteSummary}
+          onClose={handleRecapClose}
+          onActivateDepartment={handleRecapActivate}
+        />
+      )}
+
       <OnboardingResumeBanner />
 
       <div className="flex h-full">
