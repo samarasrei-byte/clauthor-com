@@ -91,13 +91,18 @@ const HeroBriefing = ({
   const hoursSince = newestDate ? (Date.now() - newestDate.getTime()) / 36e5 : Infinity;
   const isLive = hoursSince <= 24;
 
+  const pain = onboardingCtx?.pain?.trim();
+  const recommendation = onboardingCtx?.recommendation?.trim();
+
   // Next Best Action — depende do estado real da conta.
   const nba: NBA = useMemo(() => {
     if (agentsCount === 0) {
       return {
         key: "hire",
-        label: "Contratar seu primeiro agente",
-        helper: "Escolha um squad em 2 minutos. Começa a rodar hoje.",
+        label: recommendation ? `Ativar ${recommendation}` : "Contratar seu primeiro departamento",
+        helper: recommendation
+          ? "Recomendado com base no diagnóstico. Começa a rodar hoje."
+          : "Escolha um departamento em 2 minutos. Começa a rodar hoje.",
         onClick: () => (onOpenLibrary ? onOpenLibrary() : navigate("/library")),
       };
     }
@@ -115,16 +120,19 @@ const HeroBriefing = ({
       helper: `${recentLogs.length} execuç${recentLogs.length > 1 ? "ões" : "ão"} nas últimas 24h — revise e aprove.`,
       onClick: () => (onOpenWarRoom ? onOpenWarRoom() : navigate("/dashboard?tab=operations-center")),
     };
-  }, [agentsCount, isLive, recentLogs.length, onFocusTaskInput, onOpenWarRoom, onOpenLibrary, navigate]);
+  }, [agentsCount, isLive, recentLogs.length, onFocusTaskInput, onOpenWarRoom, onOpenLibrary, navigate, recommendation]);
 
   // Uma linha de contexto humana, sem "LIVE" mentiroso.
   const statusLine = useMemo(() => {
-    if (agentsCount === 0) return "Sua conta está pronta — falta só escolher quem trabalha por você.";
+    if (agentsCount === 0) {
+      if (pain) return `Você nos disse: "${pain.slice(0, 140)}${pain.length > 140 ? "…" : ""}". Ative um departamento para resolver.`;
+      return "Sua conta está pronta — falta só escolher quem trabalha por você.";
+    }
     if (!newestDate) return `${activeAgents}/${agentsCount} agentes ativos. Ainda sem execuções — bora começar.`;
     const rel = formatDistanceToNow(newestDate, { addSuffix: true, locale: ptBR });
     const verb = isLive ? "rodando" : "em pausa";
     return `${activeAgents}/${agentsCount} agentes ${verb} · última ação ${rel}.`;
-  }, [agentsCount, activeAgents, newestDate, isLive]);
+  }, [agentsCount, activeAgents, newestDate, isLive, pain]);
 
   return (
     <motion.section
