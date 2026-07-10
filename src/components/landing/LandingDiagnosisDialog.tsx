@@ -331,7 +331,7 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                             active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
                           )}
                         >
-                          <Icon className="h-5 w-5" strokeWidth={1.75} />
+                          <Icon className="h-5 w-5" />
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2">
