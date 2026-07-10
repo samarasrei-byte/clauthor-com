@@ -234,19 +234,22 @@ const LibraryPage = () => {
         hiringSlug={hiringSlug}
       />
 
-      {/* ============ SEARCH & DEPARTMENT NAV ============ */}
+      {/* ============ FILTER (list below) & DEPARTMENT NAV ============ */}
+      {/* Nota UX: a busca inteligente acima (SmartAgentFinder) recomenda agentes por objetivo.
+          Este campo apenas FILTRA a lista de departamentos/agentes visível abaixo. */}
       <section className="space-y-4">
-        <div className="relative w-full max-w-xl mx-auto">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className="relative w-full max-w-md mx-auto">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/70" />
           <Input
-            placeholder="Buscar agentes, squads ou departamentos..."
+            placeholder="Filtrar lista abaixo por nome..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-11 glass border-border h-12 rounded-2xl text-sm"
+            className="pl-9 h-9 rounded-lg text-xs bg-muted/20 border-border/40"
+            aria-label="Filtrar lista de agentes"
           />
           {searchQuery && (
-            <span className="absolute right-4 top-1/2 -translate-y-1/2 text-xs text-muted-foreground">
-              {visibleAgentCount} resultados
+            <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] text-muted-foreground">
+              {visibleAgentCount}
             </span>
           )}
         </div>
