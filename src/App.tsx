@@ -32,6 +32,8 @@ function lazyRetry(factory: () => Promise<any>) {
 // Lazy load all pages for faster initial load
 const Index = lazyRetry(() => import("./pages/Index"));
 const ClientDashboard = lazyRetry(() => import("./pages/ClientDashboard"));
+const ExecutionReplay = lazyRetry(() => import("./pages/ExecutionReplay"));
+
 const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
 const Agents = lazyRetry(() => import("./pages/Agents"));
 const Library = lazyRetry(() => import("./pages/Library"));
