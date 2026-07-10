@@ -45,8 +45,6 @@ export interface DepartmentPackage {
   painPoint: string;
   /** Outcome prometido, formato "métrica + prazo". */
   outcome: string;
-  /** Texto curto da garantia associada ao outcome (opcional). */
-  outcomeGuarantee?: string;
   /** Slugs de agentes envolvidos (subset de ALL_AGENT_SLUGS). */
   agentSlugs: readonly string[];
   /** Roteiro de 6-8 eventos plausíveis para o LiveDemo. */
