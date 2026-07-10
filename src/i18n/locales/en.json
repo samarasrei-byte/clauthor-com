@@ -511,7 +511,7 @@
     "diff_setup": "Setup in 5 minutes",
     "diff_setup_desc": "No code, no DevOps. Pick your team, configure, and your agents are already running.",
     "diff_savings": "+88% Savings",
-    "diff_savings_desc": "Each agent costs less than an intern and works 24/7, no vacations, no turnover.",
+    "diff_savings_desc": "Each agent costs a fraction of a senior employee and works 24/7, no vacations, no turnover.",
     "diff_orchestration": "Smart Orchestration",
     "diff_orchestration_desc": "Agents work in coordinated squads. One resolves, another validates, another scales.",
     "diff_multilang": "Native Multi-language",
