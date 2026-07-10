@@ -355,11 +355,16 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
   const [visitedSections, setVisitedSections] = useState<Set<string>>(new Set(["overview"]));
   const [hasGreeted, setHasGreeted] = useState(false);
   const typingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMutedRef = useRef(isMuted);
+  useEffect(() => { isMutedRef.current = isMuted; }, [isMuted]);
 
-  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro da ClauThor. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral - eu explico cada seção enquanto você explora.";
+  const { speak, stop: stopTTS, isSpeaking } = useElevenLabsTTS();
 
-  // Typewriter effect
-  const typeText = useCallback((text: string) => {
+  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro do CLAUTHOR. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral — eu explico cada seção enquanto você explora.";
+
+  // Typewriter + voice combined
+  const playMessage = useCallback((text: string) => {
+    if (typingRef.current) clearTimeout(typingRef.current);
     setIsTyping(true);
     setDisplayedText("");
     let i = 0;
@@ -373,52 +378,64 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
       }
     };
     type();
-  }, []);
+    // Fire TTS in parallel unless muted
+    if (!isMutedRef.current) {
+      stopTTS();
+      speak(text, THOR_VOICE_ID).catch(() => { /* silent */ });
+    }
+  }, [speak, stopTTS]);
 
   // Initial greeting
   useEffect(() => {
     if (!hasGreeted) {
       setHasGreeted(true);
       setCurrentMessage(WELCOME_MESSAGE);
-      typeText(WELCOME_MESSAGE);
+      // slight delay so mount animations settle before speaking
+      const t = setTimeout(() => playMessage(WELCOME_MESSAGE), 400);
+      return () => clearTimeout(t);
     }
-  }, [hasGreeted, typeText]);
+  }, [hasGreeted, playMessage]);
 
-  // React to section changes
+  // React to section changes — fires the explanation for the section the user clicked
   useEffect(() => {
     if (isPaused || !hasGreeted) return;
 
     const step = GUIDE_STEPS.find(s => s.section === activeSection);
-    if (!step) return;
+    const isDept = activeSection.startsWith("dept-");
+    if (!step && !isDept) return;
 
-    // Don't repeat the overview message right after greeting
+    // Don't re-fire overview right after the welcome greeting
     if (activeSection === "overview" && !visitedSections.has("overview_revisit")) {
       setVisitedSections(prev => new Set(prev).add("overview_revisit"));
       return;
     }
 
-    // Clear any ongoing typing
-    if (typingRef.current) clearTimeout(typingRef.current);
-
+    const title = step?.title ?? "Departamento";
+    const base = step?.message ?? DEPT_MESSAGE;
     const isFirstVisit = !visitedSections.has(activeSection);
-    const message = isFirstVisit
-      ? step.message
-      : `Você voltou para ${step.title}. ${step.message.split(".")[0]}.`;
+    const message = isFirstVisit ? base : `Você voltou para ${title}. ${base.split(".")[0]}.`;
 
     setCurrentMessage(message);
-    typeText(message);
+    playMessage(message);
 
     if (isFirstVisit) {
       setVisitedSections(prev => new Set(prev).add(activeSection));
     }
-  }, [activeSection, isPaused, hasGreeted, typeText, visitedSections]);
+  }, [activeSection, isPaused, hasGreeted, playMessage, visitedSections]);
+
+  // When user mutes mid-speech, stop the audio immediately
+  useEffect(() => {
+    if (isMuted) stopTTS();
+  }, [isMuted, stopTTS]);
 
   // Cleanup
   useEffect(() => {
     return () => {
       if (typingRef.current) clearTimeout(typingRef.current);
+      stopTTS();
     };
-  }, []);
+  }, [stopTTS]);
+
 
   // Find current and next step
   const currentStepIndex = GUIDE_STEPS.findIndex(s => s.section === activeSection);
