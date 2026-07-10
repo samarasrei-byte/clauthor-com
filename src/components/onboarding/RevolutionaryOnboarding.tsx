@@ -31,6 +31,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { FLAGSHIP_DEPARTMENTS, type DepartmentPackage } from "@/data/departmentPackages";
+import { trackKpi } from "@/lib/kpiTracker";
 
 type Step = "welcome" | "department" | "input" | "describe" | "analyzing" | "reveal" | "claim" | "done";
 
