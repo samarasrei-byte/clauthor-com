@@ -38,7 +38,8 @@ import SectionLoader from "@/components/ui/section-loader";
 import AmbientThorCard from "@/components/dashboard/AmbientThorCard";
 import OnboardingResumeBanner from "@/components/OnboardingResumeBanner";
 import DashboardEmptyState from "@/components/dashboard/DashboardEmptyState";
-import { loadDiagnosis, loadThorBriefing } from "@/lib/diagnosis-routing";
+import { loadDiagnosis, loadThorBriefing, hasSeenDiagnosisRecap, markDiagnosisRecapSeen } from "@/lib/diagnosis-routing";
+import DiagnosisRecapDialog from "@/components/dashboard/DiagnosisRecapDialog";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
