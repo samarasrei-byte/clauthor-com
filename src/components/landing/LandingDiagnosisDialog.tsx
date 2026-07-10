@@ -117,17 +117,44 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
     });
   };
 
+  // Kick off Firecrawl + Thor briefing as early as we can (right after the
+  // "company" step), so by the time the user finishes the quiz the briefing
+  // is already sitting in localStorage waiting for the panel.
+  const kickBriefing = () => {
+    const site = website.trim();
+    const comp = company.trim();
+    if (!site && !comp && !freeText.trim()) return;
+    supabase.functions
+      .invoke("diagnosis-scrape", {
+        body: {
+          website: site || undefined,
+          company: comp || undefined,
+          pain: pain ?? undefined,
+          freeText: freeText.trim() || undefined,
+          departmentLabel: rec?.departmentLabel,
+        },
+      })
+      .then(({ data }) => {
+        if (data?.briefing) {
+          saveThorBriefing(data.briefing, data.siteSummary);
+        }
+      })
+      .catch((err) => {
+        // fire-and-forget — panel has a fallback greeting
+        console.warn("diagnosis-scrape failed", err);
+      });
+  };
+
   const goToRecommendation = () => {
     if (!rec) return;
     persist();
-    let route = rec.route;
-    if (delivery === "squad" || pain === "other") {
-      const goal = freeText.trim() || company.trim();
-      route = goal ? `/outcomes?goal=${encodeURIComponent(goal)}` : "/outcomes";
-    }
+    kickBriefing();
+    // Fluxo unificado: sai do quiz DIRETO pra criação de conta e painel.
+    // Sem passar por /departamentos, /advocacia ou /outcomes — pagamento
+    // acontece dentro do painel quando ela decidir ativar o time.
     onOpenChange(false);
     reset();
-    navigate(route);
+    navigate("/auth?signup=1&redirect=/dashboard");
   };
 
   const canAdvance =
@@ -137,7 +164,7 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
       : true;
 
   const goNext = () => {
-    if (step === "company") setStep("pain");
+    if (step === "company") { kickBriefing(); setStep("pain"); }
     else if (step === "pain") setStep("delivery");
     else if (step === "delivery") setStep("result");
   };
