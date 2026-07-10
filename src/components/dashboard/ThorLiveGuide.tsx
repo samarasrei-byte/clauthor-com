@@ -272,7 +272,7 @@ const NeuralWaveform = ({ mode }: { mode: WaveMode }) => {
 
         {/* Core nucleus */}
         <motion.circle
-          cx={CENTER} cy={CENTER}
+          cx={CENTER} cy={CENTER} r={3}
           fill="hsl(var(--primary))"
           animate={{
             r: isSpeaking ? [4, 8, 3, 7, 4] : isListening ? [3, 5, 3] : [2, 3, 2],
