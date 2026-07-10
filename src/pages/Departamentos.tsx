@@ -496,7 +496,7 @@ const Departamentos = () => {
             {t("departments_page.full_cta_title")}
           </h2>
           <p className="text-sm text-muted-foreground max-w-lg mx-auto mb-4">
-            {t("departments_page.full_cta_subtitle", { deptCount: departments.length, agentCount: totalAgents })}
+            {t("departments_page.full_cta_subtitle", { deptCount: 20, agentCount: "+200" })}
           </p>
           <div className="flex items-center justify-center gap-6 mb-6">
             <div>
