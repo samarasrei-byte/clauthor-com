@@ -340,10 +340,10 @@ const AgentReplay = () => {
         <Card className="lg:col-span-2 p-5 bg-card/50 backdrop-blur border-border/30 space-y-4">
           {/* Transport controls */}
           <div className="flex items-center gap-3">
-            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => { setCurrentStep(0); setIsPlaying(false); }}>
+            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => { setCurrentStep(0); setIsPlaying(false); }} aria-label="Voltar ao início">
               <SkipBack className="h-4 w-4" />
             </Button>
-            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => setCurrentStep(Math.max(0, currentStep - 1))}>
+            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => setCurrentStep(Math.max(0, currentStep - 1))} aria-label="Passo anterior">
               <Rewind className="h-4 w-4" />
             </Button>
             <Button 
@@ -353,10 +353,11 @@ const AgentReplay = () => {
                 if (currentStep >= replaySteps.length - 1) setCurrentStep(0);
                 setIsPlaying(!isPlaying);
               }}
+              aria-label={isPlaying ? "Pausar replay" : "Reproduzir replay"}
             >
               {isPlaying ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </Button>
-            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => setCurrentStep(Math.min(replaySteps.length - 1, currentStep + 1))}>
+            <Button size="icon" variant="ghost" className="h-8 w-8" onClick={() => setCurrentStep(Math.min(replaySteps.length - 1, currentStep + 1))} aria-label="Próximo passo">
               <FastForward className="h-4 w-4" />
             </Button>
             <div className="flex-1 px-2">
