@@ -160,7 +160,7 @@ const OrchestrationDemo = () => {
               </Button>
             )}
             {completedCount > 0 && !isRunning && (
-              <Button variant="ghost" size="icon" onClick={resetDemo}>
+              <Button variant="ghost" size="icon" onClick={resetDemo} aria-label="Reiniciar demonstração">
                 <RotateCcw className="h-4 w-4" />
               </Button>
             )}
