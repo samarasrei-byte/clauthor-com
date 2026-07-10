@@ -187,11 +187,19 @@ const DepartmentLiveDemo = ({
               <Icon className={cn("h-6 w-6", tokens.text)} />
             </div>
             <div className="flex-1 text-left">
-              <DialogTitle className="text-lg font-semibold">
-                {department.name} — ao vivo
-              </DialogTitle>
+              <div className="flex items-center gap-2">
+                <DialogTitle className="text-lg font-semibold">
+                  {department.name} — ao vivo
+                </DialogTitle>
+                <span
+                  className="rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400"
+                  title="Cenário simulado, não dados de cliente real"
+                >
+                  Simulação
+                </span>
+              </div>
               <DialogDescription className="text-xs">
-                Simulação de um dia real de trabalho do departamento.
+                Cenário ilustrativo de um dia de trabalho — dados de exemplo, não de cliente real.
               </DialogDescription>
             </div>
           </div>
