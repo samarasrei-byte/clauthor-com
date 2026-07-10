@@ -5,6 +5,8 @@ import { Brain, ChevronRight, Pause, Play, X, MessageSquare, Volume2, VolumeX } 
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useElevenLabsTTS } from "@/hooks/useElevenLabsTTS";
+import { DEFAULT_VOICE_ID as THOR_VOICE_ID } from "@/components/thor/ThorVoice";
 
 // ─── Section guide data (pre-written, no AI needed) ───
 interface GuideStep {
@@ -13,35 +15,63 @@ interface GuideStep {
   message: string;
 }
 
-// Onboarding enxuto: 5 passos essenciais. As outras seções permanecem
-// acessíveis pelo sidebar, mas não interrompem o tour inicial.
+// Cobertura de todas as seções principais do painel. Cada clique no menu
+// lateral dispara a explicação correspondente com voz do Thor.
 const GUIDE_STEPS: GuideStep[] = [
   {
     section: "overview",
     title: "Command Center",
-    message: "Bem-vindo! Este é o seu Command Center — o hub central onde você monitora tudo: desempenho dos agentes, tarefas pendentes e ações rápidas.",
+    message: "Este é o seu Command Center — o hub central onde você monitora tudo: desempenho dos agentes, tarefas pendentes e ações rápidas do seu time de IA.",
   },
   {
-    section: "omnix",
-    title: "Thor IA",
-    message: "Aqui é onde eu moro. Delegue tarefas, faça perguntas estratégicas ou me deixe orquestrar toda a sua equipe de IA. Sou seu co-piloto.",
+    section: "workspace",
+    title: "Workspace",
+    message: "Aqui é o seu Workspace — o espaço onde você sobe seus conteúdos, materiais de referência e gera roteiros e briefings para os agentes trabalharem em cima.",
+  },
+  {
+    section: "intelligence-hub",
+    title: "Inteligência",
+    message: "No Intelligence Hub você vê os insights consolidados: métricas, tendências e recomendações que os agentes geram a partir da sua operação.",
   },
   {
     section: "agents",
-    title: "Seus Agentes",
-    message: "Aqui estão todos os agentes trabalhando para você. Cada um é especialista em uma área — pense neles como seus funcionários digitais.",
+    title: "Meus Agentes",
+    message: "Aqui estão todos os agentes trabalhando para você. Cada um é especialista em uma função — pense neles como funcionários digitais que nunca dormem.",
+  },
+  {
+    section: "neural-network",
+    title: "Rede Neural",
+    message: "Esta é a Rede Neural do CLAUTHOR. Aqui você visualiza os departamentos ativos, como os agentes se comunicam entre si e como as decisões fluem pela sua operação.",
+  },
+  {
+    section: "omnix",
+    title: "Thor",
+    message: "Aqui é onde eu moro. Delegue tarefas, faça perguntas estratégicas ou me deixe orquestrar toda a sua equipe de IA. Sou seu co-piloto direto.",
+  },
+  {
+    section: "chat",
+    title: "Chat do Agente",
+    message: "Este é o chat direto com o agente selecionado. Converse, peça entregas, revise materiais — tudo em linguagem natural.",
   },
   {
     section: "library",
     title: "Biblioteca",
-    message: "Seu marketplace de agentes e departamentos. Navegue, compare e contrate os que resolvem suas dores em 1 clique.",
+    message: "Seu marketplace de agentes e departamentos. Navegue, compare e contrate os que resolvem suas dores em um clique.",
   },
   {
     section: "integrations",
     title: "Integrações",
-    message: "Conecte WhatsApp, e-mail, CRM e mais. Cada integração multiplica o poder dos seus agentes.",
+    message: "Conecte WhatsApp, e-mail, CRM e mais. Cada integração multiplica o poder dos seus agentes ligando eles às ferramentas que você já usa.",
+  },
+  {
+    section: "system",
+    title: "Sistema",
+    message: "Nas configurações de sistema você ajusta preferências da conta, idioma, notificações e permissões do seu workspace.",
   },
 ];
+
+// Explicação genérica para departamentos (dept-*) sem duplicar entrada por depto.
+const DEPT_MESSAGE = "Este é um departamento do seu time. Aqui você vê os agentes que compõem o squad, o que eles entregam e como você pode ativar ou pausar cada um.";
 
 // ─── Neural Radial Waveform Visualizer ───
 type WaveMode = "speaking" | "listening" | "idle";
@@ -325,11 +355,16 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
   const [visitedSections, setVisitedSections] = useState<Set<string>>(new Set(["overview"]));
   const [hasGreeted, setHasGreeted] = useState(false);
   const typingRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isMutedRef = useRef(isMuted);
+  useEffect(() => { isMutedRef.current = isMuted; }, [isMuted]);
 
-  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro da ClauThor. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral - eu explico cada seção enquanto você explora.";
+  const { speak, stop: stopTTS, isSpeaking } = useElevenLabsTTS();
 
-  // Typewriter effect
-  const typeText = useCallback((text: string) => {
+  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro do CLAUTHOR. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral — eu explico cada seção enquanto você explora.";
+
+  // Typewriter + voice combined
+  const playMessage = useCallback((text: string) => {
+    if (typingRef.current) clearTimeout(typingRef.current);
     setIsTyping(true);
     setDisplayedText("");
     let i = 0;
@@ -343,52 +378,64 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
       }
     };
     type();
-  }, []);
+    // Fire TTS in parallel unless muted
+    if (!isMutedRef.current) {
+      stopTTS();
+      speak(text, THOR_VOICE_ID).catch(() => { /* silent */ });
+    }
+  }, [speak, stopTTS]);
 
   // Initial greeting
   useEffect(() => {
     if (!hasGreeted) {
       setHasGreeted(true);
       setCurrentMessage(WELCOME_MESSAGE);
-      typeText(WELCOME_MESSAGE);
+      // slight delay so mount animations settle before speaking
+      const t = setTimeout(() => playMessage(WELCOME_MESSAGE), 400);
+      return () => clearTimeout(t);
     }
-  }, [hasGreeted, typeText]);
+  }, [hasGreeted, playMessage]);
 
-  // React to section changes
+  // React to section changes — fires the explanation for the section the user clicked
   useEffect(() => {
     if (isPaused || !hasGreeted) return;
 
     const step = GUIDE_STEPS.find(s => s.section === activeSection);
-    if (!step) return;
+    const isDept = activeSection.startsWith("dept-");
+    if (!step && !isDept) return;
 
-    // Don't repeat the overview message right after greeting
+    // Don't re-fire overview right after the welcome greeting
     if (activeSection === "overview" && !visitedSections.has("overview_revisit")) {
       setVisitedSections(prev => new Set(prev).add("overview_revisit"));
       return;
     }
 
-    // Clear any ongoing typing
-    if (typingRef.current) clearTimeout(typingRef.current);
-
+    const title = step?.title ?? "Departamento";
+    const base = step?.message ?? DEPT_MESSAGE;
     const isFirstVisit = !visitedSections.has(activeSection);
-    const message = isFirstVisit
-      ? step.message
-      : `Você voltou para ${step.title}. ${step.message.split(".")[0]}.`;
+    const message = isFirstVisit ? base : `Você voltou para ${title}. ${base.split(".")[0]}.`;
 
     setCurrentMessage(message);
-    typeText(message);
+    playMessage(message);
 
     if (isFirstVisit) {
       setVisitedSections(prev => new Set(prev).add(activeSection));
     }
-  }, [activeSection, isPaused, hasGreeted, typeText, visitedSections]);
+  }, [activeSection, isPaused, hasGreeted, playMessage, visitedSections]);
+
+  // When user mutes mid-speech, stop the audio immediately
+  useEffect(() => {
+    if (isMuted) stopTTS();
+  }, [isMuted, stopTTS]);
 
   // Cleanup
   useEffect(() => {
     return () => {
       if (typingRef.current) clearTimeout(typingRef.current);
+      stopTTS();
     };
-  }, []);
+  }, [stopTTS]);
+
 
   // Find current and next step
   const currentStepIndex = GUIDE_STEPS.findIndex(s => s.section === activeSection);
@@ -486,13 +533,25 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
           />
         </div>
 
-        {/* Message — denser, no extra card chrome */}
-        <div className="px-3.5 py-3">
+        {/* Message — clickable to replay explanation with voice */}
+        <button
+          type="button"
+          onClick={() => currentMessage && playMessage(currentMessage)}
+          className="w-full text-left px-3.5 py-3 hover:bg-muted/10 transition-colors group/msg"
+          title="Clique para ouvir novamente"
+        >
           <p className="text-[12.5px] leading-relaxed text-foreground/90">
             {displayedText}
             {isTyping && <span className="inline-block w-[2px] h-[12px] bg-primary ml-0.5 animate-pulse align-text-bottom" />}
           </p>
-        </div>
+          {!isTyping && currentMessage && (
+            <span className="mt-1.5 inline-flex items-center gap-1 text-[9.5px] text-muted-foreground/50 group-hover/msg:text-primary/70 transition-colors">
+              <Volume2 className="h-2.5 w-2.5" />
+              {isSpeaking ? "Falando…" : "Clique para ouvir de novo"}
+            </span>
+          )}
+        </button>
+
 
         {/* Action row — compact icon-led buttons */}
         <div className="px-2.5 pb-2.5 flex items-center gap-1">
