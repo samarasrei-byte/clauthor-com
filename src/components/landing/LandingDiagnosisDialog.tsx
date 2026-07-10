@@ -15,9 +15,10 @@ import {
   PenLine,
   Building2,
   Globe,
+  X,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import type { LucideIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
@@ -35,21 +36,21 @@ interface Props {
 
 const PAINS: {
   id: PainId;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   title: string;
   desc: string;
 }[] = [
-  { id: "leads",   icon: TrendingUp,   title: "Captar mais clientes",         desc: "Leads qualificados chegando sem esforço." },
-  { id: "ops",     icon: Wrench,       title: "Automatizar operação",         desc: "Cobrança, follow-up, relatórios manuais." },
-  { id: "content", icon: PenLine,      title: "Produzir conteúdo",            desc: "Posts e artigos com voz de marca." },
-  { id: "support", icon: MessageCircle,title: "Escalar atendimento",          desc: "WhatsApp, e-mail e chat sem parar." },
-  { id: "legal",   icon: Scale,        title: "Automatizar escritório jurídico", desc: "Captação, triagem e contratos." },
-  { id: "other",   icon: Users,        title: "Outra coisa",                  desc: "Vou descrever com minhas palavras." },
+  { id: "leads",   icon: TrendingUp,   title: "Captar mais clientes",             desc: "Leads qualificados sem esforço." },
+  { id: "ops",     icon: Wrench,       title: "Automatizar operação",             desc: "Cobrança, follow-up, relatórios." },
+  { id: "content", icon: PenLine,      title: "Produzir conteúdo",                desc: "Posts e artigos com voz de marca." },
+  { id: "support", icon: MessageCircle,title: "Escalar atendimento",              desc: "WhatsApp, e-mail e chat 24/7." },
+  { id: "legal",   icon: Scale,        title: "Automatizar escritório jurídico",  desc: "Captação, triagem e contratos." },
+  { id: "other",   icon: Users,        title: "Outra coisa",                      desc: "Vou descrever com minhas palavras." },
 ];
 
 const DELIVERY: {
   id: DeliveryMode;
-  icon: React.ComponentType<{ className?: string }>;
+  icon: LucideIcon;
   title: string;
   desc: string;
   badge: string;
@@ -128,7 +129,7 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
   };
 
   const canAdvance =
-    step === "company" ? true // opcional — pode pular
+    step === "company" ? true
       : step === "pain" ? !!pain
       : step === "delivery" ? !!delivery
       : true;
@@ -146,122 +147,139 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
     else handleClose(false);
   };
 
+  const hasCompanyContent = !!(company || website || freeText);
+  const primaryLabel =
+    step === "result"
+      ? rec?.ctaLabel ?? "Continuar"
+      : step === "company"
+        ? (hasCompanyContent ? "Continuar" : "Pular etapa")
+        : "Continuar";
+
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
-        className="max-w-2xl p-0 gap-0 overflow-hidden border-border/40 bg-background/95 backdrop-blur-xl"
+        className="max-w-[580px] p-0 gap-0 overflow-hidden border-white/5 bg-[#0D0D0D] rounded-[32px] shadow-2xl [&>button]:hidden"
         aria-describedby={undefined}
       >
-        {/* Header ultra-minimal — sem estrela, sem gradiente saturado */}
-        <div className="relative px-7 pt-7 pb-5">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2 text-[11px] font-medium tracking-widest text-muted-foreground uppercase">
-              <span className="inline-block h-1 w-1 rounded-full bg-primary" />
-              Passo {stepIndex + 1} de {STEPS.length}
-            </div>
-            <div className="flex gap-1">
+        <div className="p-8 md:p-12">
+          {/* Progress Header — hairline */}
+          <div className="flex items-center justify-between mb-10">
+            <div className="flex gap-1.5 flex-1">
               {STEPS.map((s, i) => (
                 <div
                   key={s}
                   className={cn(
-                    "h-[3px] rounded-full transition-all duration-500",
-                    i < stepIndex ? "w-6 bg-primary" : i === stepIndex ? "w-10 bg-primary" : "w-6 bg-border/60",
+                    "h-0.5 flex-1 rounded-full transition-all duration-500",
+                    i <= stepIndex ? "bg-red-500" : "bg-white/10",
                   )}
                 />
               ))}
             </div>
+            <button
+              onClick={() => handleClose(false)}
+              className="ml-6 text-white/30 hover:text-white transition-colors"
+              aria-label="Fechar"
+            >
+              <X className="w-5 h-5" strokeWidth={1.5} />
+            </button>
           </div>
 
-          <DialogTitle className="font-display text-[26px] md:text-[32px] leading-[1.1] font-semibold tracking-tight">
-            {step === "company" && "Me conta sobre sua empresa."}
-            {step === "pain" && "O que você quer resolver primeiro?"}
-            {step === "delivery" && "Como você prefere começar?"}
-            {step === "result" && rec && (
-              <>
-                Seu time ideal é{" "}
-                <span className="text-primary">{rec.departmentLabel}</span>.
-              </>
-            )}
-          </DialogTitle>
-          <DialogDescription className="text-[13px] text-muted-foreground mt-2 leading-relaxed">
-            {step === "company" && "Vamos analisar seu site e entender seu contexto — leva 30 segundos."}
-            {step === "pain" && "Sem julgamento. Depois refinamos com Thor se precisar."}
-            {step === "delivery" && "Você pode mudar depois. Nada é definitivo aqui."}
-            {step === "result" && "Baseado no que você contou, esse é o time que resolve."}
-          </DialogDescription>
-        </div>
+          {/* Title block */}
+          <div className="space-y-2 mb-10">
+            <p className="text-[11px] font-bold tracking-[0.2em] text-red-500 uppercase">
+              Passo {stepIndex + 1} de {STEPS.length}
+            </p>
+            <DialogTitle className="font-display text-3xl md:text-4xl font-semibold text-white tracking-tight leading-[1.1]">
+              {step === "company" && "Me conta sobre sua empresa."}
+              {step === "pain" && "O que você quer resolver primeiro?"}
+              {step === "delivery" && "Como você prefere começar?"}
+              {step === "result" && rec && (
+                <>
+                  Seu time ideal é <span className="text-red-500">{rec.departmentLabel}</span>.
+                </>
+              )}
+            </DialogTitle>
+            <DialogDescription className="text-white/40 text-base md:text-lg font-normal leading-relaxed pt-1">
+              {step === "company" && "Vamos analisar seu site e entender seu contexto — leva 30 segundos."}
+              {step === "pain" && "Sem julgamento. Depois refinamos com Thor se precisar."}
+              {step === "delivery" && "Você pode mudar depois. Nada é definitivo aqui."}
+              {step === "result" && "Baseado no que você contou, esse é o time que resolve."}
+            </DialogDescription>
+          </div>
 
-        <div className="px-7 pb-2 max-h-[58vh] overflow-y-auto">
-          <AnimatePresence mode="wait">
-            {/* STEP 1 — COMPANY */}
-            {step === "company" && (
-              <motion.div
-                key="company"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
-                className="space-y-4 pb-2"
-              >
-                <div>
-                  <label className="flex items-center gap-2 text-[12px] font-medium text-foreground/90 mb-2">
-                    <Building2 className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
-                    Nome da empresa
-                  </label>
-                  <Input
-                    autoFocus
-                    value={company}
-                    onChange={(e) => setCompany(e.target.value)}
-                    placeholder="Ex: Silva & Associados Advogados"
-                    className="h-11 bg-background/60 border-border/60"
-                    maxLength={120}
-                  />
-                </div>
+          {/* Content */}
+          <div className="max-h-[52vh] overflow-y-auto -mx-1 px-1">
+            <AnimatePresence mode="wait">
+              {/* STEP 1 — COMPANY */}
+              {step === "company" && (
+                <motion.div
+                  key="company"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-7"
+                >
+                  <div className="group">
+                    <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-3 group-focus-within:text-white/60 transition-colors">
+                      <Building2 className="w-4 h-4" strokeWidth={1.5} />
+                      Nome da empresa
+                    </label>
+                    <Input
+                      autoFocus
+                      value={company}
+                      onChange={(e) => setCompany(e.target.value)}
+                      placeholder="Ex: Silva & Associados Advogados"
+                      className="w-full bg-white/[0.03] border-white/10 rounded-xl px-5 py-4 h-auto text-white placeholder:text-white/20 focus-visible:ring-1 focus-visible:ring-red-500/50 focus-visible:ring-offset-0 focus:border-red-500/50 transition-all hover:bg-white/[0.05]"
+                      maxLength={120}
+                    />
+                  </div>
 
-                <div>
-                  <label className="flex items-center gap-2 text-[12px] font-medium text-foreground/90 mb-2">
-                    <Globe className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
-                    Site (opcional — vamos analisar para você)
-                  </label>
-                  <Input
-                    value={website}
-                    onChange={(e) => setWebsite(e.target.value)}
-                    placeholder="silvaeassociados.com.br"
-                    className="h-11 bg-background/60 border-border/60"
-                    maxLength={200}
-                  />
-                </div>
+                  <div className="group">
+                    <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-3 group-focus-within:text-white/60 transition-colors">
+                      <Globe className="w-4 h-4" strokeWidth={1.5} />
+                      Site (opcional — vamos analisar para você)
+                    </label>
+                    <Input
+                      value={website}
+                      onChange={(e) => setWebsite(e.target.value)}
+                      placeholder="silvaeassociados.com.br"
+                      className="w-full bg-white/[0.03] border-white/10 rounded-xl px-5 py-4 h-auto text-white placeholder:text-white/20 focus-visible:ring-1 focus-visible:ring-red-500/50 focus-visible:ring-offset-0 focus:border-red-500/50 transition-all hover:bg-white/[0.05]"
+                      maxLength={200}
+                    />
+                  </div>
 
-                <div>
-                  <label className="flex items-center gap-2 text-[12px] font-medium text-foreground/90 mb-2">
-                    <PenLine className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
-                    Me conta em uma frase (opcional)
-                  </label>
-                  <Textarea
-                    value={freeText}
-                    onChange={(e) => setFreeText(e.target.value)}
-                    placeholder="Ex: Escritório de família em SP focado em direito trabalhista, quero captar mais clientes."
-                    className="min-h-[72px] resize-none bg-background/60 border-border/60"
-                    maxLength={280}
-                  />
-                  <p className="text-[11px] text-muted-foreground/70 mt-1.5 text-right">
-                    {freeText.length}/280
-                  </p>
-                </div>
-              </motion.div>
-            )}
+                  <div className="group">
+                    <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-3 group-focus-within:text-white/60 transition-colors">
+                      <PenLine className="w-4 h-4" strokeWidth={1.5} />
+                      Me conta em uma frase (opcional)
+                    </label>
+                    <div className="relative">
+                      <Textarea
+                        value={freeText}
+                        onChange={(e) => setFreeText(e.target.value)}
+                        placeholder="Ex: Escritório de família em SP focado em direito trabalhista, quero captar mais clientes."
+                        className="w-full bg-white/[0.03] border-white/10 rounded-xl px-5 py-4 min-h-[96px] text-white placeholder:text-white/20 focus-visible:ring-1 focus-visible:ring-red-500/50 focus-visible:ring-offset-0 focus:border-red-500/50 transition-all hover:bg-white/[0.05] resize-none"
+                        maxLength={280}
+                      />
+                      <span className="absolute bottom-3 right-4 text-[10px] text-white/20 font-medium tabular-nums uppercase tracking-wider">
+                        {freeText.length} / 280
+                      </span>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
 
-            {/* STEP 2 — PAIN */}
-            {step === "pain" && (
-              <motion.div
-                key="pain"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
-                className="pb-2"
-              >
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+              {/* STEP 2 — PAIN */}
+              {step === "pain" && (
+                <motion.div
+                  key="pain"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25 }}
+                  className="grid grid-cols-1 md:grid-cols-2 gap-2.5"
+                >
                   {PAINS.map((p) => {
                     const Icon = p.icon;
                     const active = pain === p.id;
@@ -270,11 +288,10 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                         key={p.id}
                         onClick={() => setPain(p.id)}
                         className={cn(
-                          "group text-left rounded-xl border p-3.5 transition-all duration-200",
-                          "hover:-translate-y-[1px]",
+                          "group text-left rounded-xl border p-4 transition-all duration-200",
                           active
-                            ? "border-primary/70 bg-primary/[0.06] shadow-[0_0_0_1px_hsl(var(--primary)/0.4),0_8px_28px_-12px_hsl(var(--primary)/0.45)]"
-                            : "border-border/50 hover:border-primary/40 hover:bg-primary/[0.02]",
+                            ? "border-red-500/50 bg-red-500/[0.06]"
+                            : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05] hover:border-white/20",
                         )}
                       >
                         <div className="flex items-start gap-3">
@@ -282,166 +299,169 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                             className={cn(
                               "h-9 w-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors",
                               active
-                                ? "bg-primary text-primary-foreground"
-                                : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary",
+                                ? "bg-red-500/15 text-red-500"
+                                : "bg-white/[0.04] text-white/50 group-hover:text-white/70",
                             )}
                           >
-                            <Icon className="h-4 w-4" />
+                            <Icon className="h-4 w-4" strokeWidth={1.5} />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-[13.5px] font-semibold leading-tight">{p.title}</p>
-                            <p className="text-[11.5px] text-muted-foreground mt-1 leading-snug">{p.desc}</p>
+                            <p className={cn(
+                              "text-[13.5px] font-semibold leading-tight transition-colors",
+                              active ? "text-white" : "text-white/85",
+                            )}>{p.title}</p>
+                            <p className="text-[11.5px] text-white/40 mt-1 leading-snug">{p.desc}</p>
                           </div>
                         </div>
                       </button>
                     );
                   })}
-                </div>
-              </motion.div>
-            )}
+                </motion.div>
+              )}
 
-            {/* STEP 3 — DELIVERY MODE */}
-            {step === "delivery" && (
-              <motion.div
-                key="delivery"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -8 }}
-                transition={{ duration: 0.25 }}
-                className="pb-2 space-y-2.5"
-              >
-                {DELIVERY.map((d) => {
-                  const Icon = d.icon;
-                  const active = delivery === d.id;
-                  return (
-                    <button
-                      key={d.id}
-                      onClick={() => setDelivery(d.id)}
-                      className={cn(
-                        "w-full text-left rounded-xl border p-4 transition-all duration-200",
-                        active
-                          ? "border-primary/70 bg-primary/[0.06] shadow-[0_0_0_1px_hsl(var(--primary)/0.4),0_8px_28px_-12px_hsl(var(--primary)/0.45)]"
-                          : "border-border/50 hover:border-primary/40",
-                      )}
-                    >
-                      <div className="flex items-start gap-4">
-                        <div
-                          className={cn(
-                            "h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0",
-                            active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
-                          )}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="text-sm font-semibold">{d.title}</p>
-                            <span
-                              className={cn(
-                                "text-[10px] font-medium px-1.5 py-0.5 rounded-full border tracking-wide",
-                                active
-                                  ? "border-primary/40 text-primary bg-primary/10"
-                                  : "border-border/60 text-muted-foreground",
-                              )}
-                            >
-                              {d.badge}
-                            </span>
-                          </div>
-                          <p className="text-[12px] text-muted-foreground mt-1 leading-relaxed">{d.desc}</p>
-                        </div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </motion.div>
-            )}
-
-            {/* STEP 4 — RESULT */}
-            {step === "result" && rec && (
-              <motion.div
-                key="result"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="pb-2 space-y-4"
-              >
-                {/* Savings hero */}
-                <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/[0.08] via-primary/[0.03] to-transparent p-5">
-                  <p className="text-[11px] font-medium tracking-widest text-primary uppercase">
-                    Você economiza cerca de
-                  </p>
-                  <p className="font-display text-4xl md:text-5xl font-semibold tracking-tight mt-1">
-                    {BRL(rec.monthlySavings)}
-                    <span className="text-base font-normal text-muted-foreground ml-1.5">/mês</span>
-                  </p>
-                  <p className="text-[12px] text-muted-foreground mt-2 leading-relaxed">
-                    vs contratar um time CLT equivalente. Primeira ação executada em{" "}
-                    <span className="text-foreground font-medium">{rec.timeToValue}</span>.
-                  </p>
-                </div>
-
-                {/* What it does */}
-                <div>
-                  <p className="text-[11px] font-medium tracking-widest text-muted-foreground uppercase mb-2.5">
-                    O que esse time vai fazer por você
-                  </p>
-                  <ul className="space-y-1.5">
-                    {rec.does.map((line, i) => (
-                      <motion.li
-                        key={i}
-                        initial={{ opacity: 0, x: -6 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.1 + i * 0.06 }}
-                        className="flex items-start gap-2.5 text-[13px] leading-relaxed"
+              {/* STEP 3 — DELIVERY */}
+              {step === "delivery" && (
+                <motion.div
+                  key="delivery"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.25 }}
+                  className="space-y-3"
+                >
+                  {DELIVERY.map((d) => {
+                    const Icon = d.icon;
+                    const active = delivery === d.id;
+                    return (
+                      <button
+                        key={d.id}
+                        onClick={() => setDelivery(d.id)}
+                        className={cn(
+                          "w-full text-left rounded-xl border p-5 transition-all duration-200",
+                          active
+                            ? "border-red-500/50 bg-red-500/[0.06]"
+                            : "border-white/10 bg-white/[0.03] hover:bg-white/[0.05] hover:border-white/20",
+                        )}
                       >
-                        <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
-                        <span className="text-foreground/85">{line}</span>
-                      </motion.li>
-                    ))}
-                  </ul>
-                </div>
+                        <div className="flex items-start gap-4">
+                          <div
+                            className={cn(
+                              "h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0",
+                              active
+                                ? "bg-red-500/15 text-red-500"
+                                : "bg-white/[0.04] text-white/50",
+                            )}
+                          >
+                            <Icon className="h-5 w-5" strokeWidth={1.5} />
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2">
+                              <p className="text-sm font-semibold text-white">{d.title}</p>
+                              <span
+                                className={cn(
+                                  "text-[10px] font-medium px-2 py-0.5 rounded-full border tracking-wide uppercase",
+                                  active
+                                    ? "border-red-500/40 text-red-500 bg-red-500/10"
+                                    : "border-white/15 text-white/50",
+                                )}
+                              >
+                                {d.badge}
+                              </span>
+                            </div>
+                            <p className="text-[12px] text-white/45 mt-1.5 leading-relaxed">{d.desc}</p>
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </motion.div>
+              )}
 
-                {(company || website) && (
-                  <div className="rounded-lg border border-border/40 bg-muted/30 px-3.5 py-2.5 text-[11.5px] text-muted-foreground leading-relaxed">
-                    Thor vai analisar {website ? <span className="text-foreground font-medium">{website}</span> : "seu site"}
-                    {company ? <> e adaptar tudo para <span className="text-foreground font-medium">{company}</span></> : null}{" "}
-                    antes de ativar.
+              {/* STEP 4 — RESULT */}
+              {step === "result" && rec && (
+                <motion.div
+                  key="result"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="space-y-5"
+                >
+                  {/* Savings hero */}
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-6">
+                    <p className="text-[10px] font-bold tracking-[0.2em] text-red-500 uppercase">
+                      Você economiza cerca de
+                    </p>
+                    <p className="font-display text-4xl md:text-5xl font-semibold tracking-tight text-white mt-2">
+                      {BRL(rec.monthlySavings)}
+                      <span className="text-base font-normal text-white/40 ml-1.5">/mês</span>
+                    </p>
+                    <p className="text-[12px] text-white/50 mt-3 leading-relaxed">
+                      vs contratar um time CLT equivalente. Primeira ação em{" "}
+                      <span className="text-white font-medium">{rec.timeToValue}</span>.
+                    </p>
                   </div>
-                )}
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
 
-        {/* Footer */}
-        <div className="border-t border-border/40 px-7 py-4 flex items-center justify-between gap-3 bg-muted/20">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={goBack}
-            className="text-muted-foreground text-[12px] h-9"
-          >
-            {step === "company" ? (
-              "Fechar"
+                  {/* What it does */}
+                  <div>
+                    <p className="text-[10px] font-bold tracking-[0.2em] text-white/40 uppercase mb-3">
+                      O que esse time vai fazer por você
+                    </p>
+                    <ul className="space-y-2">
+                      {rec.does.map((line, i) => (
+                        <motion.li
+                          key={i}
+                          initial={{ opacity: 0, x: -6 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 + i * 0.06 }}
+                          className="flex items-start gap-2.5 text-[13px] leading-relaxed"
+                        >
+                          <CheckCircle2 className="h-4 w-4 text-red-500 flex-shrink-0 mt-0.5" strokeWidth={2} />
+                          <span className="text-white/80">{line}</span>
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {(company || website) && (
+                    <div className="rounded-xl border border-white/10 bg-white/[0.02] px-4 py-3 text-[11.5px] text-white/50 leading-relaxed">
+                      Thor vai analisar {website ? <span className="text-white font-medium">{website}</span> : "seu site"}
+                      {company ? <> e adaptar tudo para <span className="text-white font-medium">{company}</span></> : null}{" "}
+                      antes de ativar.
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Footer */}
+          <div className="flex items-center justify-between mt-10">
+            <button
+              onClick={goBack}
+              className="text-[14px] font-medium text-white/40 hover:text-white transition-colors px-2 py-1"
+            >
+              {step === "company" ? "Fechar" : "Voltar"}
+            </button>
+
+            {step === "result" ? (
+              <button
+                onClick={goToRecommendation}
+                className="flex items-center gap-2 bg-red-600 hover:bg-red-500 text-white px-8 py-3.5 rounded-full text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95"
+              >
+                {rec?.ctaLabel}
+                <ArrowRight className="w-4 h-4" strokeWidth={2} />
+              </button>
             ) : (
-              <>
-                <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
-                Voltar
-              </>
+              <button
+                onClick={goNext}
+                disabled={!canAdvance}
+                className="flex items-center gap-2 bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed text-white px-8 py-3.5 rounded-full text-[15px] font-semibold transition-all shadow-lg shadow-red-900/20 active:scale-95 disabled:active:scale-100"
+              >
+                {primaryLabel}
+                <ArrowRight className="w-4 h-4" strokeWidth={2} />
+              </button>
             )}
-          </Button>
-
-          {step === "result" ? (
-            <Button onClick={goToRecommendation} size="sm" className="h-9 font-medium">
-              {rec?.ctaLabel}
-              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-            </Button>
-          ) : (
-            <Button onClick={goNext} disabled={!canAdvance} size="sm" className="h-9 font-medium">
-              {step === "company" && (company || website || freeText) ? "Continuar" : step === "company" ? "Pular etapa" : "Continuar"}
-              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-            </Button>
-          )}
+          </div>
         </div>
       </DialogContent>
     </Dialog>
