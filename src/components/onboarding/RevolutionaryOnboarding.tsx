@@ -824,7 +824,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                       ].map((s) => (
                         <button
                           key={s}
-                          onClick={() => setDescription(s)}
+                          onClick={() => { setDescription(s); setTimeout(() => runAnalysis(), 120); }}
                           className="text-xs px-3 py-1.5 rounded-full border border-white/10 bg-white/[0.04] hover:bg-white/10 hover:border-white/25 transition text-white/70"
                         >
                           {s}
