@@ -8,6 +8,7 @@ import { LayoutDashboard, Bot, BarChart3, CreditCard, Settings, Brain, MessageSq
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
+import { useSearchParams } from "react-router-dom";
 
 import ErrorBoundary from "@/components/ErrorBoundary";
 import DashboardSidebar from "@/components/dashboard/DashboardSidebar";
@@ -97,6 +98,17 @@ const ClientDashboard = () => {
   useEffect(() => {
     if (activeSection === "omnix" && !omnixMounted) setOmnixMounted(true);
   }, [activeSection, omnixMounted]);
+
+  // Deep-link via ?tab=xxx (permite /dashboard?tab=omnix vindo do redirect /omnix)
+  const [searchParamsDeep] = useSearchParams();
+  useEffect(() => {
+    const tab = searchParamsDeep.get("tab");
+    if (tab && tab !== activeSection) {
+      setActiveSection(tab);
+      if (tab === "omnix") setOmnixMounted(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParamsDeep]);
 
   // ── Queries ──
   const { data: boardCount = 0 } = useQuery({
