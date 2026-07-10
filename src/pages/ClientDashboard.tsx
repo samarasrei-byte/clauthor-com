@@ -37,6 +37,7 @@ import CheckoutSummaryDialog from "@/components/dashboard/CheckoutSummaryDialog"
 import SectionLoader from "@/components/ui/section-loader";
 import AmbientThorCard from "@/components/dashboard/AmbientThorCard";
 import OnboardingResumeBanner from "@/components/OnboardingResumeBanner";
+import DashboardEmptyState from "@/components/dashboard/DashboardEmptyState";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
