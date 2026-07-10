@@ -219,7 +219,7 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.25 }}
-                  className="space-y-7"
+                  className="space-y-4"
                 >
                   <div className="group">
                     <label className="flex items-center gap-2 text-[13px] font-medium text-white/40 mb-3 group-focus-within:text-white/60 transition-colors">
