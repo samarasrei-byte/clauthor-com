@@ -533,13 +533,25 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
           />
         </div>
 
-        {/* Message — denser, no extra card chrome */}
-        <div className="px-3.5 py-3">
+        {/* Message — clickable to replay explanation with voice */}
+        <button
+          type="button"
+          onClick={() => currentMessage && playMessage(currentMessage)}
+          className="w-full text-left px-3.5 py-3 hover:bg-muted/10 transition-colors group/msg"
+          title="Clique para ouvir novamente"
+        >
           <p className="text-[12.5px] leading-relaxed text-foreground/90">
             {displayedText}
             {isTyping && <span className="inline-block w-[2px] h-[12px] bg-primary ml-0.5 animate-pulse align-text-bottom" />}
           </p>
-        </div>
+          {!isTyping && currentMessage && (
+            <span className="mt-1.5 inline-flex items-center gap-1 text-[9.5px] text-muted-foreground/50 group-hover/msg:text-primary/70 transition-colors">
+              <Volume2 className="h-2.5 w-2.5" />
+              {isSpeaking ? "Falando…" : "Clique para ouvir de novo"}
+            </span>
+          )}
+        </button>
+
 
         {/* Action row — compact icon-led buttons */}
         <div className="px-2.5 pb-2.5 flex items-center gap-1">
