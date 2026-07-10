@@ -14,7 +14,9 @@ const ROIBenchmark = () => {
   const locale = i18n.language === "pt" ? "pt-BR" : (i18n.language || "en");
   const currency = i18n.language === "pt" ? "BRL" : "USD";
   const avgSalary = currency === "BRL" ? 8500 : 5500;
-  const agentCost = currency === "BRL" ? 697 : 139;
+  // Anchor premium: ~5% do custo CLT. Posiciona o agente como "funcionário sênior digital",
+  // não como estagiário — mantém credibilidade e sustenta o ROI de 18-19x.
+  const agentCost = currency === "BRL" ? 1497 : 297;
 
   const data = useMemo(() => {
     const cltMonthly = employees * avgSalary;
