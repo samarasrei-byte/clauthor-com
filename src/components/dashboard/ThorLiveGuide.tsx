@@ -574,7 +574,16 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         {/* Message — clickable to replay explanation with voice */}
         <button
           type="button"
-          onClick={() => currentMessage && playMessage(currentMessage)}
+          onClick={() => {
+            if (!currentMessage) return;
+            playMessage(currentMessage);
+            trackKpi("thor_guide_section_replay", {
+              source: "thor_guide",
+              section: activeSection,
+              muted: isMutedRef.current,
+            });
+          }}
+
           className="w-full text-left px-3.5 py-3 hover:bg-muted/10 transition-colors group/msg"
           title="Clique para ouvir novamente"
         >
