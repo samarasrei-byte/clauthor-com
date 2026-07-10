@@ -148,6 +148,12 @@ const HomePage = () => {
         <LiveDemoSection />
       </Suspense>
 
+      {/* ═══════════ DEPARTAMENTOS PRONTOS ═══════════ */}
+      <Suspense fallback={null}>
+        <FlagshipDepartmentsSection />
+      </Suspense>
+
+
       {/* ═══════════ STATS ═══════════ */}
       <section className="py-16 sm:py-20 px-5" aria-label="Platform capabilities">
         <div className="max-w-[1120px] mx-auto">
