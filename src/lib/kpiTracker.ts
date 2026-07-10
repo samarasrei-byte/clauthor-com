@@ -21,14 +21,19 @@ export type KpiEventName =
   | "department_demo_click"
   | "department_demo_completed"
   | "department_hire_click"
-  | "onboarding_department_picked";
+  | "onboarding_department_picked"
+  | "diagnosis_recap_activate"
+  | "diagnosis_recap_talk_thor";
 
 export interface KpiEventPayload {
-  department_id: string;
+  department_id?: string;
   department_name?: string;
-  source?: "landing" | "onboarding" | "dashboard" | "live_demo" | "departamentos_page";
+  source?: "landing" | "onboarding" | "dashboard" | "live_demo" | "departamentos_page" | "diagnosis_recap";
   price_monthly?: number;
   duration_ms?: number;
+  pain?: string;
+  has_briefing?: boolean;
+  has_site_summary?: boolean;
 }
 
 declare global {

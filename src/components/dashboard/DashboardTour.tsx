@@ -13,11 +13,10 @@ interface TourStep {
   position: "right" | "bottom";
 }
 
+// Tour reduzido a 2 tooltips leves — recap + checkout já cobrem o onboarding pago.
 const TOUR_STEPS: TourStep[] = [
-  { target: "nav-overview", title: "Overview", description: "Este é seu painel principal. Aqui você vê o resumo de tudo: agentes, métricas e ações rápidas.", position: "right" },
-  { target: "nav-agents", title: "Meus Agentes", description: "Aqui ficam seus agentes ativos. Gerencie, configure e acompanhe o desempenho de cada um.", position: "right" },
-  { target: "nav-chat", title: "Chat", description: "Aqui você conversa diretamente com seus agentes e dá comandos em tempo real.", position: "right" },
-  { target: "nav-reports", title: "Relatórios", description: "Acompanhe insights, métricas de execução e ROI dos seus agentes.", position: "right" },
+  { target: "nav-overview", title: "Seu painel", description: "Aqui você vê seus agentes, métricas e ações rápidas em um só lugar.", position: "right" },
+  { target: "nav-chat", title: "Fale com o Thor", description: "Converse com o Thor a qualquer momento para ajustar o time ou pedir uma nova execução.", position: "right" },
 ];
 
 export function DashboardTour() {
