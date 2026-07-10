@@ -85,8 +85,8 @@ const FlagshipDepartmentsSection = () => {
         <Suspense fallback={null}>
           <DepartmentLiveDemo
             department={demoDept}
-            isOpen={!!demoDept}
-            onClose={() => setDemoDept(null)}
+            open={!!demoDept}
+            onOpenChange={(o) => !o && setDemoDept(null)}
             onHire={handleHire}
           />
         </Suspense>
