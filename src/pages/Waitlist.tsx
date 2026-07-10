@@ -731,7 +731,7 @@ const Waitlist = () => {
             {[
               { value: "225", label: "Agentes IA" },
               { value: "20", label: "Departamentos" },
-              { value: "88%", label: "Economia" },
+              { value: "14+", label: "Idiomas" },
               { value: "24/7", label: "Operação" },
             ].map((s) => (
               <div key={s.label} className="text-center">
