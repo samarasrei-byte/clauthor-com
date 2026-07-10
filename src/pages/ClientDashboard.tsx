@@ -38,6 +38,7 @@ import SectionLoader from "@/components/ui/section-loader";
 import AmbientThorCard from "@/components/dashboard/AmbientThorCard";
 import OnboardingResumeBanner from "@/components/OnboardingResumeBanner";
 import DashboardEmptyState from "@/components/dashboard/DashboardEmptyState";
+import { loadDiagnosis, loadThorBriefing } from "@/lib/diagnosis-routing";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
@@ -93,7 +94,21 @@ const ClientDashboard = () => {
     localStorage.setItem(key, "true");
     setActiveSection("omnix");
     setOmnixMounted(true);
-    setWelcomeMessage(`Sou um novo usuário na plataforma. Me dê boas-vindas, se apresente como Thor (o CEO e orquestrador de todos os agentes) e me guie: explique os 3 passos (Ensinar, Contratar e Comandar) de forma simples e pergunte como posso te ajudar.`);
+
+    // Se a pessoa veio do quiz da landing, o Thor continua a mesma linha de
+    // conversa usando o briefing já gerado por Firecrawl + Lovable AI.
+    const diag = loadDiagnosis();
+    const { briefing } = loadThorBriefing();
+    if (briefing) {
+      setWelcomeMessage(briefing);
+    } else if (diag) {
+      const company = diag.company ? ` da ${diag.company}` : "";
+      setWelcomeMessage(
+        `Sou um novo usuário${company} e acabei de terminar o diagnóstico na landing. Me dê boas-vindas como Thor, confirme o departamento pré-ativado com base na dor "${diag.pain}"${diag.website ? ` (site: ${diag.website})` : ""} e me guie no próximo passo dentro do painel. Explique que o pagamento acontece aqui mesmo quando eu decidir ativar o time.`,
+      );
+    } else {
+      setWelcomeMessage(`Sou um novo usuário na plataforma. Me dê boas-vindas, se apresente como Thor (o CEO e orquestrador de todos os agentes) e me guie: explique os 3 passos (Ensinar, Contratar e Comandar) de forma simples e pergunte como posso te ajudar.`);
+    }
   }, [user]);
 
 
@@ -155,6 +170,10 @@ const ClientDashboard = () => {
     if (skipped) return;
     const pendingCheckout = typeof window !== "undefined" && !!localStorage.getItem("hireIntent");
     if (pendingCheckout) return;
+    // Se a pessoa veio do quiz da landing, o diagnóstico JÁ conta como onboarding.
+    // Não mandamos ela pra /welcome — Thor continua a conversa direto aqui.
+    const hasDiagnosis = typeof window !== "undefined" && !!localStorage.getItem("clauthor:diagnosis");
+    if (hasDiagnosis) return;
     navigate("/welcome", { replace: true });
   }, [user, loadingProfileOnboarding, profileOnboarding, navigate]);
 

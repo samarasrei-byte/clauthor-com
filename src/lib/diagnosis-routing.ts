@@ -118,6 +118,8 @@ export const PAIN_TO_RECOMMENDATION: Record<PainId, Recommendation> = {
 
 const STORAGE_KEY = "clauthor:diagnosis";
 const SEEN_KEY = "clauthor:diagnosis:seen";
+const BRIEFING_KEY = "clauthor:thor_briefing";
+const SITE_SUMMARY_KEY = "clauthor:site_summary";
 
 export function saveDiagnosis(answers: DiagnosisAnswers) {
   try {
@@ -152,3 +154,33 @@ export function markDiagnosisSeen() {
     /* noop */
   }
 }
+
+export function saveThorBriefing(briefing: string, siteSummary?: string | null) {
+  try {
+    if (briefing) localStorage.setItem(BRIEFING_KEY, briefing);
+    if (siteSummary) localStorage.setItem(SITE_SUMMARY_KEY, siteSummary);
+  } catch {
+    /* noop */
+  }
+}
+
+export function loadThorBriefing(): { briefing: string | null; siteSummary: string | null } {
+  try {
+    return {
+      briefing: localStorage.getItem(BRIEFING_KEY),
+      siteSummary: localStorage.getItem(SITE_SUMMARY_KEY),
+    };
+  } catch {
+    return { briefing: null, siteSummary: null };
+  }
+}
+
+export function clearThorBriefing() {
+  try {
+    localStorage.removeItem(BRIEFING_KEY);
+    localStorage.removeItem(SITE_SUMMARY_KEY);
+  } catch {
+    /* noop */
+  }
+}
+
