@@ -5,7 +5,8 @@ import {
   Command, CommandEmpty, CommandGroup,
   CommandInput, CommandItem, CommandList,
 } from "@/components/ui/command";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Terminal, Bot, LayoutDashboard, Library, CreditCard, Users, ArrowRight, Rocket, Plus, Settings, MessageSquare } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { useTranslation } from "react-i18next";
