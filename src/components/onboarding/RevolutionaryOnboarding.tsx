@@ -467,10 +467,10 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
 
   /* Narrative log — accumulates on the left */
   const narrative: { key: Step; lines: (string | React.ReactNode)[] }[] = [
-    { key: "welcome",  lines: [`Estabelecendo canal seguro${firstName ? ` com ${firstName}` : ""}…`, "225 agentes online. Aguardando seu sinal."] },
+    { key: "welcome",  lines: [`Estabelecendo canal seguro${firstName ? ` com ${firstName}` : ""}…`, "+200 especialistas online. Aguardando seu sinal."] },
     { key: "input",    lines: [method === "url" ? "Canal aberto. Aponte para o domínio." : method === "text" ? "Canal aberto. Descreva o negócio em texto." : "Escolha o vetor de entrada."] },
     { key: "describe", lines: ["Sinal capturado. Agora, o que mais dói?"] },
-    { key: "analyzing",lines: ["Cruzando 20 departamentos × 225 agentes…"] },
+    { key: "analyzing",lines: ["Cruzando 20 departamentos × +200 especialistas de IA…"] },
     { key: "reveal",   lines: [result ? `Match localizado com ${Math.round((result.confidence ?? 0.8) * 100)}% de confiança.` : ""] },
     { key: "claim",    lines: ["Última etapa: liberar seu acesso ao dashboard."] },
   ];
