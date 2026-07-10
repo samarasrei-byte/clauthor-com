@@ -38,7 +38,8 @@ import SectionLoader from "@/components/ui/section-loader";
 import AmbientThorCard from "@/components/dashboard/AmbientThorCard";
 import OnboardingResumeBanner from "@/components/OnboardingResumeBanner";
 import DashboardEmptyState from "@/components/dashboard/DashboardEmptyState";
-import { loadDiagnosis, loadThorBriefing } from "@/lib/diagnosis-routing";
+import { loadDiagnosis, loadThorBriefing, hasSeenDiagnosisRecap, markDiagnosisRecapSeen } from "@/lib/diagnosis-routing";
+import DiagnosisRecapDialog from "@/components/dashboard/DiagnosisRecapDialog";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
@@ -68,6 +69,12 @@ const ClientDashboard = () => {
   const [welcomeMessage, setWelcomeMessage] = useState<string | null>(null);
   const [showCompanyOnboarding, setShowCompanyOnboarding] = useState(false);
   const [showQuickStart, setShowQuickStart] = useState(false);
+  const [showDiagnosisRecap, setShowDiagnosisRecap] = useState(false);
+  const [diagnosisRecapData, setDiagnosisRecapData] = useState<{
+    diagnosis: ReturnType<typeof loadDiagnosis>;
+    briefing: string | null;
+    siteSummary: string | null;
+  } | null>(null);
   
   // MagicMoment removido — parte do fluxo legado.
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
@@ -91,14 +98,24 @@ const ClientDashboard = () => {
     const hireIntent = localStorage.getItem("hireIntent");
     if (hireIntent) return;
 
+    // Se a pessoa veio do quiz da landing, o Thor continua a mesma linha de
+    // conversa usando o briefing já gerado por Firecrawl + Lovable AI.
+    const diag = loadDiagnosis();
+    const { briefing, siteSummary } = loadThorBriefing();
+
+    // ── Recap gate: primeira visita pós-quiz mostra o modal de diagnóstico
+    // com CTA "Ativar time e ir pro pagamento". Só marca concierge_seen e
+    // abre o Thor DEPOIS que a pessoa fechar o modal (ou ativar o time).
+    if (diag && !hasSeenDiagnosisRecap()) {
+      setDiagnosisRecapData({ diagnosis: diag, briefing, siteSummary });
+      setShowDiagnosisRecap(true);
+      return;
+    }
+
     localStorage.setItem(key, "true");
     setActiveSection("omnix");
     setOmnixMounted(true);
 
-    // Se a pessoa veio do quiz da landing, o Thor continua a mesma linha de
-    // conversa usando o briefing já gerado por Firecrawl + Lovable AI.
-    const diag = loadDiagnosis();
-    const { briefing } = loadThorBriefing();
     if (briefing) {
       setWelcomeMessage(briefing);
     } else if (diag) {
@@ -109,6 +126,40 @@ const ClientDashboard = () => {
     } else {
       setWelcomeMessage(`Sou um novo usuário na plataforma. Me dê boas-vindas, se apresente como Thor (o CEO e orquestrador de todos os agentes) e me guie: explique os 3 passos (Ensinar, Contratar e Comandar) de forma simples e pergunte como posso te ajudar.`);
     }
+  }, [user]);
+
+  // Handlers do DiagnosisRecapDialog
+  const handleRecapClose = useCallback(() => {
+    if (!user) return;
+    setShowDiagnosisRecap(false);
+    markDiagnosisRecapSeen();
+    const key = `clauthor_concierge_seen_${user.id}`;
+    localStorage.setItem(key, "true");
+    // Abre o Thor com o briefing na sequência.
+    const diag = diagnosisRecapData?.diagnosis ?? loadDiagnosis();
+    const briefing = diagnosisRecapData?.briefing ?? loadThorBriefing().briefing;
+    setActiveSection("omnix");
+    setOmnixMounted(true);
+    if (briefing) {
+      setWelcomeMessage(briefing);
+    } else if (diag) {
+      const company = diag.company ? ` da ${diag.company}` : "";
+      setWelcomeMessage(
+        `Sou um novo usuário${company} e acabei de fechar o meu diagnóstico. Me dê boas-vindas como Thor e me guie no próximo passo.`,
+      );
+    }
+  }, [user, diagnosisRecapData]);
+
+  const handleRecapActivate = useCallback(() => {
+    // hireIntent já foi setado pelo dialog. Fecha modal — useHireIntentFlow abre o CheckoutSummaryDialog.
+    if (!user) return;
+    setShowDiagnosisRecap(false);
+    markDiagnosisRecapSeen();
+    const key = `clauthor_concierge_seen_${user.id}`;
+    localStorage.setItem(key, "true");
+    // Força o hook a re-processar o hireIntent recém-inserido.
+    // Como useHireIntentFlow escuta [user, lang], não re-dispara sozinho. Recarregamos.
+    window.location.reload();
   }, [user]);
 
 
@@ -546,6 +597,17 @@ const ClientDashboard = () => {
           Onboarding do primeiro contato: RevolutionaryOnboardingGate global (AppLayout). */}
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
+
+      {diagnosisRecapData?.diagnosis && (
+        <DiagnosisRecapDialog
+          open={showDiagnosisRecap}
+          diagnosis={diagnosisRecapData.diagnosis}
+          briefing={diagnosisRecapData.briefing}
+          siteSummary={diagnosisRecapData.siteSummary}
+          onClose={handleRecapClose}
+          onActivateDepartment={handleRecapActivate}
+        />
+      )}
 
       <OnboardingResumeBanner />
 

@@ -120,6 +120,33 @@ const STORAGE_KEY = "clauthor:diagnosis";
 const SEEN_KEY = "clauthor:diagnosis:seen";
 const BRIEFING_KEY = "clauthor:thor_briefing";
 const SITE_SUMMARY_KEY = "clauthor:site_summary";
+const RECAP_SEEN_KEY = "clauthor:diagnosis:recap_seen";
+
+/** Map pain → default departmentId used for pre-activation & pricing. */
+export const PAIN_TO_DEPT_ID: Record<PainId, string | null> = {
+  leads: "comercial",
+  ops: "tecnologia",
+  content: "marketing",
+  support: "suporte",
+  legal: null,
+  other: null,
+};
+
+export function hasSeenDiagnosisRecap(): boolean {
+  try {
+    return localStorage.getItem(RECAP_SEEN_KEY) === "1";
+  } catch {
+    return true;
+  }
+}
+
+export function markDiagnosisRecapSeen() {
+  try {
+    localStorage.setItem(RECAP_SEEN_KEY, "1");
+  } catch {
+    /* noop */
+  }
+}
 
 export function saveDiagnosis(answers: DiagnosisAnswers) {
   try {
