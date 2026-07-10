@@ -170,6 +170,10 @@ const ClientDashboard = () => {
     if (skipped) return;
     const pendingCheckout = typeof window !== "undefined" && !!localStorage.getItem("hireIntent");
     if (pendingCheckout) return;
+    // Se a pessoa veio do quiz da landing, o diagnóstico JÁ conta como onboarding.
+    // Não mandamos ela pra /welcome — Thor continua a conversa direto aqui.
+    const hasDiagnosis = typeof window !== "undefined" && !!localStorage.getItem("clauthor:diagnosis");
+    if (hasDiagnosis) return;
     navigate("/welcome", { replace: true });
   }, [user, loadingProfileOnboarding, profileOnboarding, navigate]);
 
