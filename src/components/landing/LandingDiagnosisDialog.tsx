@@ -158,10 +158,10 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
   return (
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent
-        className="max-w-[580px] p-0 gap-0 overflow-hidden border-white/5 bg-[#0D0D0D] rounded-[32px] shadow-2xl [&>button]:hidden"
+        className="max-w-[580px] w-[calc(100vw-2rem)] p-0 gap-0 overflow-hidden border-white/5 bg-[#0D0D0D] rounded-[28px] md:rounded-[32px] shadow-2xl [&>button]:hidden max-h-[92dvh] flex flex-col"
         aria-describedby={undefined}
       >
-        <div className="p-8 md:p-12">
+        <div className="p-6 sm:p-8 md:p-12 flex flex-col min-h-0 flex-1">
           {/* Progress Header — hairline */}
           <div className="flex items-center justify-between mb-10">
             <div className="flex gap-1.5 flex-1">
