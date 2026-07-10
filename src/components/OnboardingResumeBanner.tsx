@@ -12,7 +12,7 @@ const DISMISS_KEY = "onboarding-banner-dismissed";
  * o diagnóstico em /welcome. Some após concluído ou dispensado nesta sessão.
  */
 export default function OnboardingResumeBanner() {
-  const { user, loading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const [needsOnboarding, setNeedsOnboarding] = useState<boolean>(false);
   const [dismissed, setDismissed] = useState<boolean>(false);
 

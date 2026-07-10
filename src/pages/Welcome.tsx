@@ -12,15 +12,15 @@ import RevolutionaryOnboarding from "@/components/onboarding/RevolutionaryOnboar
  */
 export default function Welcome() {
   const navigate = useNavigate();
-  const { user, loading } = useAuth();
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (!isLoading && !user) {
       navigate("/auth", { replace: true });
     }
-  }, [loading, user, navigate]);
+  }, [isLoading, user, navigate]);
 
-  if (loading || !user) {
+  if (isLoading || !user) {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-[#04040a]">
         <div className="w-8 h-8 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
