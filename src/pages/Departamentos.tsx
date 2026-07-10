@@ -54,18 +54,30 @@ const Departamentos = () => {
   const [searchParams] = useSearchParams();
 
   // Pre-select category from onboarding (?dept=marketing)
+  // With `&auto=1` (from landing "Contratar"), auto-fires the checkout.
   useEffect(() => {
     const dept = searchParams.get("dept");
     if (!dept) return;
     const deptToCategory: Record<string, string> = {
       marketing: "criativo",
       vendas: "vendas",
+      comercial: "vendas",
       suporte: "corp",
+      atendimento: "corp",
       financeiro: "corp",
       juridico: "corp",
+      rh: "corp",
     };
     const cat = deptToCategory[dept];
     if (cat) setActiveFilter(cat);
+
+    if (searchParams.get("auto") === "1") {
+      const target = departments.find((d) => d.id === dept);
+      if (target) {
+        // Defer to next tick so `user`/region are resolved.
+        setTimeout(() => handleHireDepartment(target), 0);
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
