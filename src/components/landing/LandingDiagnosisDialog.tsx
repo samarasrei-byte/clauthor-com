@@ -3,23 +3,28 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import {
   ArrowRight,
-  Building2,
+  ArrowLeft,
   CheckCircle2,
   MessageCircle,
   Scale,
-  Sparkles as SparklesIcon,
   TrendingUp,
   Users,
   Wrench,
+  Layers,
+  Blocks,
+  PenLine,
+  Building2,
+  Globe,
 } from "lucide-react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import {
   PAIN_TO_RECOMMENDATION,
   saveDiagnosis,
-  type CompanySize,
+  type DeliveryMode,
   type PainId,
 } from "@/lib/diagnosis-routing";
 
@@ -34,38 +39,59 @@ const PAINS: {
   title: string;
   desc: string;
 }[] = [
-  { id: "leads",   icon: TrendingUp,   title: "Não capto clientes suficientes", desc: "Preciso de mais leads qualificados chegando." },
-  { id: "ops",     icon: Wrench,       title: "Time gasta tempo com tarefas repetitivas", desc: "Cobrança, follow-up, relatórios manuais." },
-  { id: "content", icon: SparklesIcon, title: "Preciso produzir conteúdo em escala", desc: "Posts, artigos, roteiros com voz de marca." },
-  { id: "support", icon: MessageCircle,title: "Atendimento ao cliente é gargalo", desc: "WhatsApp, e-mail e chat sem parar." },
-  { id: "legal",   icon: Scale,        title: "Quero automatizar meu escritório de advocacia", desc: "Captação, qualificação e contratos jurídicos." },
-  { id: "other",   icon: Users,        title: "Outro / múltiplas dores", desc: "Deixa o Thor recomendar o time certo." },
+  { id: "leads",   icon: TrendingUp,   title: "Captar mais clientes",         desc: "Leads qualificados chegando sem esforço." },
+  { id: "ops",     icon: Wrench,       title: "Automatizar operação",         desc: "Cobrança, follow-up, relatórios manuais." },
+  { id: "content", icon: PenLine,      title: "Produzir conteúdo",            desc: "Posts e artigos com voz de marca." },
+  { id: "support", icon: MessageCircle,title: "Escalar atendimento",          desc: "WhatsApp, e-mail e chat sem parar." },
+  { id: "legal",   icon: Scale,        title: "Automatizar escritório jurídico", desc: "Captação, triagem e contratos." },
+  { id: "other",   icon: Users,        title: "Outra coisa",                  desc: "Vou descrever com minhas palavras." },
 ];
 
-const NICHES = ["Advocacia", "Saúde", "E-commerce", "SaaS", "Educação", "Imobiliário", "Serviços", "Outro"];
-
-const SIZES: { id: CompanySize; label: string; desc: string }[] = [
-  { id: "solo",  label: "Solo",           desc: "Só eu por enquanto" },
-  { id: "small", label: "2 a 10 pessoas", desc: "Time enxuto" },
-  { id: "mid",   label: "10+ pessoas",    desc: "Operação estruturada" },
+const DELIVERY: {
+  id: DeliveryMode;
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  desc: string;
+  badge: string;
+}[] = [
+  {
+    id: "department",
+    icon: Layers,
+    title: "Departamento pronto",
+    desc: "Time inteiro pré-montado. Ativa e começa a operar hoje.",
+    badge: "Mais rápido",
+  },
+  {
+    id: "squad",
+    icon: Blocks,
+    title: "Montar squad customizado",
+    desc: "Você escolhe cada agente. Thor te guia na composição.",
+    badge: "Mais controle",
+  },
 ];
 
-type Step = "pain" | "niche" | "size" | "result";
+type Step = "company" | "pain" | "delivery" | "result";
+const STEPS: Step[] = ["company", "pain", "delivery", "result"];
+
+const BRL = (n: number) =>
+  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
 
 export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
   const navigate = useNavigate();
-  const [step, setStep] = useState<Step>("pain");
+  const [step, setStep] = useState<Step>("company");
+  const [company, setCompany] = useState("");
+  const [website, setWebsite] = useState("");
   const [pain, setPain] = useState<PainId | null>(null);
   const [freeText, setFreeText] = useState("");
-  const [niche, setNiche] = useState<string | null>(null);
-  const [size, setSize] = useState<CompanySize | null>(null);
+  const [delivery, setDelivery] = useState<DeliveryMode | null>(null);
 
   const reset = () => {
-    setStep("pain");
+    setStep("company");
+    setCompany("");
+    setWebsite("");
     setPain(null);
     setFreeText("");
-    setNiche(null);
-    setSize(null);
+    setDelivery(null);
   };
 
   const handleClose = (nextOpen: boolean) => {
@@ -74,14 +100,16 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
   };
 
   const rec = pain ? PAIN_TO_RECOMMENDATION[pain] : null;
+  const stepIndex = STEPS.indexOf(step);
 
   const persist = () => {
     if (!pain) return;
     saveDiagnosis({
       pain,
       freeText: freeText.trim() || undefined,
-      niche: niche ?? undefined,
-      size: size ?? undefined,
+      company: company.trim() || undefined,
+      website: website.trim() || undefined,
+      delivery: delivery ?? undefined,
       createdAt: new Date().toISOString(),
     });
   };
@@ -90,58 +118,150 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
     if (!rec) return;
     persist();
     let route = rec.route;
-    if (pain === "other" && freeText.trim()) {
-      route = `/outcomes?goal=${encodeURIComponent(freeText.trim())}`;
+    if (delivery === "squad" || pain === "other") {
+      const goal = freeText.trim() || company.trim();
+      route = goal ? `/outcomes?goal=${encodeURIComponent(goal)}` : "/outcomes";
     }
     onOpenChange(false);
     reset();
     navigate(route);
   };
 
-  const goToThor = () => {
-    persist();
-    onOpenChange(false);
-    reset();
-    const goal = freeText.trim();
-    navigate(goal ? `/outcomes?goal=${encodeURIComponent(goal)}` : "/outcomes");
+  const canAdvance =
+    step === "company" ? true // opcional — pode pular
+      : step === "pain" ? !!pain
+      : step === "delivery" ? !!delivery
+      : true;
+
+  const goNext = () => {
+    if (step === "company") setStep("pain");
+    else if (step === "pain") setStep("delivery");
+    else if (step === "delivery") setStep("result");
   };
 
-  const stepIndex = { pain: 0, niche: 1, size: 2, result: 3 }[step];
+  const goBack = () => {
+    if (step === "pain") setStep("company");
+    else if (step === "delivery") setStep("pain");
+    else if (step === "result") setStep("delivery");
+    else handleClose(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent className="max-w-2xl p-0 gap-0 overflow-hidden">
-        <div className="p-6 md:p-8 border-b border-border/40 bg-gradient-to-b from-primary/5 to-transparent">
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary mb-3">
-            <SparklesIcon className="h-3 w-3" />
-            Diagnóstico rápido · 30s
+      <DialogContent
+        className="max-w-2xl p-0 gap-0 overflow-hidden border-border/40 bg-background/95 backdrop-blur-xl"
+        aria-describedby={undefined}
+      >
+        {/* Header ultra-minimal — sem estrela, sem gradiente saturado */}
+        <div className="relative px-7 pt-7 pb-5">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2 text-[11px] font-medium tracking-widest text-muted-foreground uppercase">
+              <span className="inline-block h-1 w-1 rounded-full bg-primary" />
+              Passo {stepIndex + 1} de {STEPS.length}
+            </div>
+            <div className="flex gap-1">
+              {STEPS.map((s, i) => (
+                <div
+                  key={s}
+                  className={cn(
+                    "h-[3px] rounded-full transition-all duration-500",
+                    i < stepIndex ? "w-6 bg-primary" : i === stepIndex ? "w-10 bg-primary" : "w-6 bg-border/60",
+                  )}
+                />
+              ))}
+            </div>
           </div>
-          <DialogTitle className="text-2xl md:text-3xl font-display font-semibold tracking-tight">
-            {step === "result" ? "Encontramos seu departamento" : "Qual é a sua maior dor hoje?"}
+
+          <DialogTitle className="font-display text-[26px] md:text-[32px] leading-[1.1] font-semibold tracking-tight">
+            {step === "company" && "Me conta sobre sua empresa."}
+            {step === "pain" && "O que você quer resolver primeiro?"}
+            {step === "delivery" && "Como você prefere começar?"}
+            {step === "result" && rec && (
+              <>
+                Seu time ideal é{" "}
+                <span className="text-primary">{rec.departmentLabel}</span>.
+              </>
+            )}
           </DialogTitle>
-          <DialogDescription className="text-sm text-muted-foreground mt-1.5">
-            {step === "result"
-              ? "Baseado no que você me contou, esse é o time ideal."
-              : "Responda 3 perguntas curtas — sem cadastro."}
+          <DialogDescription className="text-[13px] text-muted-foreground mt-2 leading-relaxed">
+            {step === "company" && "Vamos analisar seu site e entender seu contexto — leva 30 segundos."}
+            {step === "pain" && "Sem julgamento. Depois refinamos com Thor se precisar."}
+            {step === "delivery" && "Você pode mudar depois. Nada é definitivo aqui."}
+            {step === "result" && "Baseado no que você contou, esse é o time que resolve."}
           </DialogDescription>
-          <div className="mt-4 flex gap-1.5">
-            {[0, 1, 2, 3].map((i) => (
-              <div
-                key={i}
-                className={cn(
-                  "h-1 flex-1 rounded-full transition-colors",
-                  i <= stepIndex ? "bg-primary" : "bg-border/60",
-                )}
-              />
-            ))}
-          </div>
         </div>
 
-        <div className="p-6 md:p-8 max-h-[60vh] overflow-y-auto">
+        <div className="px-7 pb-2 max-h-[58vh] overflow-y-auto">
           <AnimatePresence mode="wait">
+            {/* STEP 1 — COMPANY */}
+            {step === "company" && (
+              <motion.div
+                key="company"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+                className="space-y-4 pb-2"
+              >
+                <div>
+                  <label className="flex items-center gap-2 text-[12px] font-medium text-foreground/90 mb-2">
+                    <Building2 className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
+                    Nome da empresa
+                  </label>
+                  <Input
+                    autoFocus
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder="Ex: Silva & Associados Advogados"
+                    className="h-11 bg-background/60 border-border/60"
+                    maxLength={120}
+                  />
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-2 text-[12px] font-medium text-foreground/90 mb-2">
+                    <Globe className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
+                    Site (opcional — vamos analisar para você)
+                  </label>
+                  <Input
+                    value={website}
+                    onChange={(e) => setWebsite(e.target.value)}
+                    placeholder="silvaeassociados.com.br"
+                    className="h-11 bg-background/60 border-border/60"
+                    maxLength={200}
+                  />
+                </div>
+
+                <div>
+                  <label className="flex items-center gap-2 text-[12px] font-medium text-foreground/90 mb-2">
+                    <PenLine className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.75} />
+                    Me conta em uma frase (opcional)
+                  </label>
+                  <Textarea
+                    value={freeText}
+                    onChange={(e) => setFreeText(e.target.value)}
+                    placeholder="Ex: Escritório de família em SP focado em direito trabalhista, quero captar mais clientes."
+                    className="min-h-[72px] resize-none bg-background/60 border-border/60"
+                    maxLength={280}
+                  />
+                  <p className="text-[11px] text-muted-foreground/70 mt-1.5 text-right">
+                    {freeText.length}/280
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
+            {/* STEP 2 — PAIN */}
             {step === "pain" && (
-              <motion.div key="pain" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+              <motion.div
+                key="pain"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+                className="pb-2"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                   {PAINS.map((p) => {
                     const Icon = p.icon;
                     const active = pain === p.id;
@@ -150,154 +270,177 @@ export default function LandingDiagnosisDialog({ open, onOpenChange }: Props) {
                         key={p.id}
                         onClick={() => setPain(p.id)}
                         className={cn(
-                          "text-left rounded-xl border p-3.5 transition-all",
+                          "group text-left rounded-xl border p-3.5 transition-all duration-200",
+                          "hover:-translate-y-[1px]",
                           active
-                            ? "border-primary/60 bg-primary/5 ring-1 ring-primary/40"
-                            : "border-border/50 hover:border-primary/40 hover:bg-primary/[0.03]",
+                            ? "border-primary/70 bg-primary/[0.06] shadow-[0_0_0_1px_hsl(var(--primary)/0.4),0_8px_28px_-12px_hsl(var(--primary)/0.45)]"
+                            : "border-border/50 hover:border-primary/40 hover:bg-primary/[0.02]",
                         )}
                       >
                         <div className="flex items-start gap-3">
-                          <div className={cn(
-                            "h-9 w-9 rounded-lg flex items-center justify-center flex-shrink-0",
-                            active ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground",
-                          )}>
+                          <div
+                            className={cn(
+                              "h-9 w-9 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors",
+                              active
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-muted-foreground group-hover:bg-primary/10 group-hover:text-primary",
+                            )}
+                          >
                             <Icon className="h-4 w-4" />
                           </div>
                           <div className="min-w-0">
-                            <p className="text-sm font-semibold leading-tight">{p.title}</p>
-                            <p className="text-xs text-muted-foreground mt-1 leading-snug">{p.desc}</p>
+                            <p className="text-[13.5px] font-semibold leading-tight">{p.title}</p>
+                            <p className="text-[11.5px] text-muted-foreground mt-1 leading-snug">{p.desc}</p>
                           </div>
                         </div>
                       </button>
                     );
                   })}
                 </div>
-                {pain === "other" && (
-                  <div className="mt-4">
-                    <label className="text-xs text-muted-foreground mb-1.5 block">Descreva com suas palavras (opcional)</label>
-                    <Input
-                      value={freeText}
-                      onChange={(e) => setFreeText(e.target.value)}
-                      placeholder="Ex: quero fechar 30% mais contratos por mês na minha clínica."
-                      maxLength={240}
-                    />
-                  </div>
-                )}
               </motion.div>
             )}
 
-            {step === "niche" && (
-              <motion.div key="niche" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
-                <p className="text-sm text-muted-foreground mb-4">Qual seu setor ou nicho?</p>
-                <div className="flex flex-wrap gap-2">
-                  {NICHES.map((n) => (
+            {/* STEP 3 — DELIVERY MODE */}
+            {step === "delivery" && (
+              <motion.div
+                key="delivery"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.25 }}
+                className="pb-2 space-y-2.5"
+              >
+                {DELIVERY.map((d) => {
+                  const Icon = d.icon;
+                  const active = delivery === d.id;
+                  return (
                     <button
-                      key={n}
-                      onClick={() => setNiche(n)}
+                      key={d.id}
+                      onClick={() => setDelivery(d.id)}
                       className={cn(
-                        "px-3.5 py-2 rounded-full text-sm border transition-all",
-                        niche === n
-                          ? "bg-primary text-primary-foreground border-primary"
-                          : "border-border/60 hover:border-primary/50 hover:bg-primary/5",
-                      )}
-                    >
-                      {n}
-                    </button>
-                  ))}
-                </div>
-              </motion.div>
-            )}
-
-            {step === "size" && (
-              <motion.div key="size" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}>
-                <p className="text-sm text-muted-foreground mb-4">Qual o tamanho da operação hoje?</p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
-                  {SIZES.map((s) => (
-                    <button
-                      key={s.id}
-                      onClick={() => setSize(s.id)}
-                      className={cn(
-                        "text-left rounded-xl border p-4 transition-all",
-                        size === s.id
-                          ? "border-primary/60 bg-primary/5 ring-1 ring-primary/40"
+                        "w-full text-left rounded-xl border p-4 transition-all duration-200",
+                        active
+                          ? "border-primary/70 bg-primary/[0.06] shadow-[0_0_0_1px_hsl(var(--primary)/0.4),0_8px_28px_-12px_hsl(var(--primary)/0.45)]"
                           : "border-border/50 hover:border-primary/40",
                       )}
                     >
-                      <Building2 className={cn("h-4 w-4 mb-2", size === s.id ? "text-primary" : "text-muted-foreground")} />
-                      <p className="text-sm font-semibold">{s.label}</p>
-                      <p className="text-xs text-muted-foreground mt-0.5">{s.desc}</p>
+                      <div className="flex items-start gap-4">
+                        <div
+                          className={cn(
+                            "h-11 w-11 rounded-xl flex items-center justify-center flex-shrink-0",
+                            active ? "bg-primary text-primary-foreground" : "bg-muted text-muted-foreground",
+                          )}
+                        >
+                          <Icon className="h-5 w-5" strokeWidth={1.75} />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="text-sm font-semibold">{d.title}</p>
+                            <span
+                              className={cn(
+                                "text-[10px] font-medium px-1.5 py-0.5 rounded-full border tracking-wide",
+                                active
+                                  ? "border-primary/40 text-primary bg-primary/10"
+                                  : "border-border/60 text-muted-foreground",
+                              )}
+                            >
+                              {d.badge}
+                            </span>
+                          </div>
+                          <p className="text-[12px] text-muted-foreground mt-1 leading-relaxed">{d.desc}</p>
+                        </div>
+                      </div>
                     </button>
-                  ))}
-                </div>
+                  );
+                })}
               </motion.div>
             )}
 
+            {/* STEP 4 — RESULT */}
             {step === "result" && rec && (
-              <motion.div key="result" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
-                <div className="rounded-2xl border border-primary/40 bg-primary/5 p-5">
-                  <div className="flex items-start gap-3">
-                    <div className="h-11 w-11 rounded-xl bg-primary/15 text-primary flex items-center justify-center flex-shrink-0">
-                      <CheckCircle2 className="h-5 w-5" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-xs font-medium text-primary uppercase tracking-wide">Recomendação Thor</p>
-                      <h3 className="font-display text-lg md:text-xl font-semibold mt-0.5">{rec.departmentLabel}</h3>
-                      <p className="text-sm text-muted-foreground mt-1.5 leading-relaxed">{rec.tagline}</p>
-                      {(niche || size) && (
-                        <p className="text-xs text-muted-foreground/80 mt-3">
-                          Ajustado para {niche ?? "seu setor"}
-                          {size ? ` · operação ${SIZES.find((s) => s.id === size)?.label.toLowerCase()}` : ""}.
-                        </p>
-                      )}
-                    </div>
-                  </div>
+              <motion.div
+                key="result"
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+                className="pb-2 space-y-4"
+              >
+                {/* Savings hero */}
+                <div className="rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/[0.08] via-primary/[0.03] to-transparent p-5">
+                  <p className="text-[11px] font-medium tracking-widest text-primary uppercase">
+                    Você economiza cerca de
+                  </p>
+                  <p className="font-display text-4xl md:text-5xl font-semibold tracking-tight mt-1">
+                    {BRL(rec.monthlySavings)}
+                    <span className="text-base font-normal text-muted-foreground ml-1.5">/mês</span>
+                  </p>
+                  <p className="text-[12px] text-muted-foreground mt-2 leading-relaxed">
+                    vs contratar um time CLT equivalente. Primeira ação executada em{" "}
+                    <span className="text-foreground font-medium">{rec.timeToValue}</span>.
+                  </p>
                 </div>
 
-                <div className="mt-4 space-y-2">
-                  <p className="text-xs text-muted-foreground px-1">Salvamos suas respostas — quando você entrar, Thor já vai saber o contexto.</p>
+                {/* What it does */}
+                <div>
+                  <p className="text-[11px] font-medium tracking-widest text-muted-foreground uppercase mb-2.5">
+                    O que esse time vai fazer por você
+                  </p>
+                  <ul className="space-y-1.5">
+                    {rec.does.map((line, i) => (
+                      <motion.li
+                        key={i}
+                        initial={{ opacity: 0, x: -6 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.1 + i * 0.06 }}
+                        className="flex items-start gap-2.5 text-[13px] leading-relaxed"
+                      >
+                        <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-foreground/85">{line}</span>
+                      </motion.li>
+                    ))}
+                  </ul>
                 </div>
+
+                {(company || website) && (
+                  <div className="rounded-lg border border-border/40 bg-muted/30 px-3.5 py-2.5 text-[11.5px] text-muted-foreground leading-relaxed">
+                    Thor vai analisar {website ? <span className="text-foreground font-medium">{website}</span> : "seu site"}
+                    {company ? <> e adaptar tudo para <span className="text-foreground font-medium">{company}</span></> : null}{" "}
+                    antes de ativar.
+                  </div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        <div className="border-t border-border/40 p-4 md:px-8 md:py-4 flex items-center justify-between gap-3 bg-background/60">
+        {/* Footer */}
+        <div className="border-t border-border/40 px-7 py-4 flex items-center justify-between gap-3 bg-muted/20">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={goBack}
+            className="text-muted-foreground text-[12px] h-9"
+          >
+            {step === "company" ? (
+              "Fechar"
+            ) : (
+              <>
+                <ArrowLeft className="mr-1.5 h-3.5 w-3.5" />
+                Voltar
+              </>
+            )}
+          </Button>
+
           {step === "result" ? (
-            <>
-              <Button variant="ghost" size="sm" onClick={goToThor} className="text-muted-foreground">
-                Falar com Thor
-              </Button>
-              <Button onClick={goToRecommendation} className="glow">
-                {rec?.ctaLabel}
-                <ArrowRight className="ml-1.5 h-4 w-4" />
-              </Button>
-            </>
+            <Button onClick={goToRecommendation} size="sm" className="h-9 font-medium">
+              {rec?.ctaLabel}
+              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+            </Button>
           ) : (
-            <>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  if (step === "niche") setStep("pain");
-                  else if (step === "size") setStep("niche");
-                  else handleClose(false);
-                }}
-                className="text-muted-foreground"
-              >
-                {step === "pain" ? "Fechar" : "Voltar"}
-              </Button>
-              <Button
-                onClick={() => {
-                  if (step === "pain") setStep(pain ? "niche" : "pain");
-                  else if (step === "niche") setStep("size");
-                  else if (step === "size") setStep("result");
-                }}
-                disabled={step === "pain" ? !pain : step === "niche" ? !niche : !size}
-              >
-                Continuar
-                <ArrowRight className="ml-1.5 h-4 w-4" />
-              </Button>
-            </>
+            <Button onClick={goNext} disabled={!canAdvance} size="sm" className="h-9 font-medium">
+              {step === "company" && (company || website || freeText) ? "Continuar" : step === "company" ? "Pular etapa" : "Continuar"}
+              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+            </Button>
           )}
         </div>
       </DialogContent>

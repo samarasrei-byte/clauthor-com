@@ -1,9 +1,9 @@
 import { forwardRef, type SVGProps } from "react";
 
 /**
- * Minimalist Sparkles icon.
- * Substitui `lucide-react`'s Sparkles em todo o site:
- * 4-point star fino + um dot menor, traço leve (currentColor).
+ * Minimalist mark used site-wide where a "sparkle/AI" hint is needed.
+ * Redesigned: no star. A hairline diamond with a small orbit dot.
+ * Feels Apple/Linear — quiet, geometric, modern.
  */
 export interface SparklesProps extends Omit<SVGProps<SVGSVGElement>, "ref"> {
   size?: number | string;
@@ -17,8 +17,8 @@ export const Sparkles = forwardRef<SVGSVGElement, SparklesProps>(
     {
       size = 24,
       color = "currentColor",
-      strokeWidth = 1.25,
-      absoluteStrokeWidth,
+      strokeWidth = 1.5,
+      absoluteStrokeWidth: _absoluteStrokeWidth,
       ...props
     },
     ref,
@@ -29,14 +29,18 @@ export const Sparkles = forwardRef<SVGSVGElement, SparklesProps>(
       width={size}
       height={size}
       viewBox="0 0 24 24"
-      fill={color}
-      stroke="none"
+      fill="none"
+      stroke={color}
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
       aria-hidden="true"
       {...props}
     >
-      {/* Apple-style: single hairline 4-point spark + tiny accent */}
-      <path d="M13.5 3c.28 0 .52.19.6.46l1.05 3.9a3 3 0 0 0 2.1 2.1l3.9 1.05a.62.62 0 0 1 0 1.2l-3.9 1.05a3 3 0 0 0-2.1 2.1l-1.05 3.9a.62.62 0 0 1-1.2 0l-1.05-3.9a3 3 0 0 0-2.1-2.1l-3.9-1.05a.62.62 0 0 1 0-1.2l3.9-1.05a3 3 0 0 0 2.1-2.1l1.05-3.9A.62.62 0 0 1 13.5 3Z" />
-      <circle cx="5" cy="5.5" r="0.9" />
+      {/* Hairline diamond (rotated square) — geometric, no star */}
+      <path d="M13 4 L20 12 L13 20 L6 12 Z" />
+      {/* Small orbit dot — subtle accent */}
+      <circle cx="19.5" cy="4.5" r="1" fill={color} stroke="none" />
     </svg>
   ),
 );
