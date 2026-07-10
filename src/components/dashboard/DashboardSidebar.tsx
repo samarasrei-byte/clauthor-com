@@ -198,7 +198,7 @@ const DashboardSidebar = ({ items, activeItem, onItemChange }: DashboardSidebarP
                 <ChevronDown className={cn("h-3.5 w-3.5 text-primary/50 transition-transform duration-200", collapsedSections.has(item.group!) && "-rotate-90")} />
                 <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-primary/60">{item.group}</span>
                 <div className="flex-1" />
-                <span className="text-[7px] font-medium text-primary/30 bg-primary/5 px-1.5 py-0.5 rounded-full">PRO</span>
+                
               </button>
             ) : (
               <span className="text-[9px] font-bold uppercase tracking-[0.15em] text-muted-foreground/50">{item.group}</span>
