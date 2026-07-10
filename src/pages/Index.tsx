@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 // SmartOnboarding removido — RevolutionaryOnboardingGate cobre o primeiro contato.
 const LiveDemoSection = lazy(() => import("@/components/landing/LiveDemoSection"));
+const FlagshipDepartmentsSection = lazy(() => import("@/components/departments/FlagshipDepartmentsSection"));
 const SmartAgentFinder = lazy(() => import("@/components/library/SmartAgentFinder"));
 const LiveDemoAgent = lazy(() => import("@/components/landing/LiveDemoAgent"));
 const InnovationRoadmap = lazy(() => import("@/components/landing/InnovationRoadmap"));
@@ -146,6 +147,12 @@ const HomePage = () => {
       <Suspense fallback={null}>
         <LiveDemoSection />
       </Suspense>
+
+      {/* ═══════════ DEPARTAMENTOS PRONTOS ═══════════ */}
+      <Suspense fallback={null}>
+        <FlagshipDepartmentsSection />
+      </Suspense>
+
 
       {/* ═══════════ STATS ═══════════ */}
       <section className="py-16 sm:py-20 px-5" aria-label="Platform capabilities">
