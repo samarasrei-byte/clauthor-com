@@ -511,7 +511,7 @@
     "diff_setup": "Setup em 5 minutos",
     "diff_setup_desc": "Sem código, sem DevOps. Escolha seu time, configure e seus agentes já estão operando.",
     "diff_savings": "Economia de +88%",
-    "diff_savings_desc": "Cada agente custa menos que um estagiário e trabalha 24/7, sem férias, sem turnover.",
+    "diff_savings_desc": "Cada agente custa uma fração de um funcionário sênior e trabalha 24/7, sem férias, sem turnover.",
     "diff_orchestration": "Orquestração inteligente",
     "diff_orchestration_desc": "Agentes trabalham em squads coordenados. Um resolve, outro valida, outro escala.",
     "diff_multilang": "Multi-idioma nativo",
