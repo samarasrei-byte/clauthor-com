@@ -66,6 +66,8 @@ const DashboardOverview = ({
 
   return (
     <>
+      <FirstTimeTour />
+
       {loadingAgents && (
         <Suspense fallback={<SectionLoader />}><DashboardSkeleton /></Suspense>
       )}
