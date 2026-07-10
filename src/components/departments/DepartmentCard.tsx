@@ -108,22 +108,24 @@ const DepartmentCard = ({
         </CardHeader>
 
         <CardContent className="relative z-10 flex flex-1 flex-col gap-4">
-          {/* Outcome badge */}
-          <div
-            className={cn(
-              "rounded-lg border p-3",
-              tokens.border,
-              tokens.bg
-            )}
-          >
-            <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
-              <ArrowRight className={cn("h-3.5 w-3.5", tokens.text)} />
-              Outcome garantido
+          {/* Outcome badge — oculto quando o departamento não promete um outcome específico */}
+          {department.outcome && (
+            <div
+              className={cn(
+                "rounded-lg border p-3",
+                tokens.border,
+                tokens.bg
+              )}
+            >
+              <div className="flex items-center gap-2 text-xs font-medium text-muted-foreground">
+                <ArrowRight className={cn("h-3.5 w-3.5", tokens.text)} />
+                Outcome garantido
+              </div>
+              <div className={cn("mt-1 font-semibold", tokens.text, isCompact ? "text-base" : "text-lg")}>
+                {department.outcome}
+              </div>
             </div>
-            <div className={cn("mt-1 font-semibold", tokens.text, isCompact ? "text-base" : "text-lg")}>
-              {department.outcome}
-            </div>
-          </div>
+          )}
 
           {/* Agentes */}
           <AgentAvatarStrip
@@ -140,7 +142,7 @@ const DepartmentCard = ({
                 {formatBRL(department.priceMonthly)}
               </div>
               <div className="text-xs text-muted-foreground">
-                por mês, com outcome incluso
+                {department.outcome ? "por mês, com outcome incluso" : "por mês"}
               </div>
             </div>
           </div>
