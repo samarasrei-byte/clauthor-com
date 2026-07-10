@@ -49,9 +49,12 @@ const cltCosts = { tecnologia: 72000, comercial: 52000, marketing: 44000, financ
 export const regionalPricing: Record<string, RegionalPricing> = {
   pt: {
     currency: "BRL", symbol: "R$", locale: "pt-BR",
-    plans: { starter: 997, growth: 1997 },
+    // Starter alinhado ao canonical (src/lib/canonical-copy.ts). Growth = ~3x.
+    plans: { starter: 1497, growth: 3997 },
     tokenPacks: { pack5m: 297, pack15m: 697, pack50m: 1497, pack100m: 2797 },
-    comparison: { avgSalary: 4500, avgSalaryYear3: 272160, agentStarting: 297, agentYear3: 10692 },
+    // comparison.avgSalary alinhado ao CLT canônico (R$ 8.500) — evita divergência
+    // entre ROIBenchmark, landing e pricing.
+    comparison: { avgSalary: 8500, avgSalaryYear3: 306000, agentStarting: 1497, agentYear3: 53892 },
     departments: { tecnologia: 2997, comercial: 2497, marketing: 1997, financeiro: 2497, criacao: 1997, suporte: 1497, rh: 1997 },
     departmentClt: cltCosts,
   },
@@ -65,18 +68,19 @@ export const regionalPricing: Record<string, RegionalPricing> = {
   },
   en: {
     currency: "USD", symbol: "$", locale: "en-US",
-    plans: { starter: 197, growth: 397 },
+    // Starter/comparison alinhados ao canonical (USD): agent $297, CLT $5,500.
+    plans: { starter: 297, growth: 797 },
     tokenPacks: { pack5m: 59, pack15m: 139, pack50m: 299, pack100m: 549 },
-    comparison: { avgSalary: 5500, avgSalaryYear3: 330000, agentStarting: 59, agentYear3: 2124 },
-    departments: { tecnologia: 299, comercial: 199, marketing: 149, financeiro: 199, criacao: 149, suporte: 99, rh: 149 },
+    comparison: { avgSalary: 5500, avgSalaryYear3: 198000, agentStarting: 297, agentYear3: 10692 },
+    departments: { tecnologia: 597, comercial: 497, marketing: 397, financeiro: 497, criacao: 397, suporte: 297, rh: 397 },
     departmentClt: cltCosts,
   },
   es: {
     currency: "USD", symbol: "$", locale: "es-MX",
-    plans: { starter: 197, growth: 397 },
+    plans: { starter: 297, growth: 797 },
     tokenPacks: { pack5m: 59, pack15m: 139, pack50m: 299, pack100m: 549 },
-    comparison: { avgSalary: 2000, avgSalaryYear3: 120000, agentStarting: 59, agentYear3: 2124 },
-    departments: { tecnologia: 299, comercial: 199, marketing: 149, financeiro: 199, criacao: 149, suporte: 99, rh: 149 },
+    comparison: { avgSalary: 5500, avgSalaryYear3: 198000, agentStarting: 297, agentYear3: 10692 },
+    departments: { tecnologia: 597, comercial: 497, marketing: 397, financeiro: 497, criacao: 397, suporte: 297, rh: 397 },
     departmentClt: cltCosts,
   },
   fr: {
