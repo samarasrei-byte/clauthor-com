@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Rocket, Brain, Bot, Zap, ArrowRight, CheckCircle2, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 
@@ -56,6 +57,7 @@ const QuickStartWizard = ({ isOpen, onClose, onTeach, onHire, onCommand }: Quick
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-lg p-0 gap-0 overflow-hidden border-primary/20">
+        <VisuallyHidden><DialogTitle>Guia rápido</DialogTitle><DialogDescription>Comece rápido com poucos passos.</DialogDescription></VisuallyHidden>
         {/* Header */}
         <div className="relative px-6 pt-6 pb-4">
           <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent" />

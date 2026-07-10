@@ -1,4 +1,5 @@
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -100,6 +101,7 @@ const ConnectorDetailDialog = ({ connector, open, onOpenChange, connectedKeys, o
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xl p-0 gap-0 bg-card border-border/40 overflow-hidden">
+        <VisuallyHidden><DialogTitle>Detalhes do conector</DialogTitle><DialogDescription>Informações e configuração da integração.</DialogDescription></VisuallyHidden>
         {/* Header */}
         <div className="flex items-center px-5 pt-4 pb-2">
           <button

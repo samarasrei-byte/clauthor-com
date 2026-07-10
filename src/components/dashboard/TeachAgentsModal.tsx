@@ -2,7 +2,8 @@ import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Globe, FileUp, Link2, CheckCircle2, Loader2, Brain, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -163,6 +164,7 @@ const TeachAgentsModal = ({ open, onClose, onNavigateKnowledge }: TeachAgentsMod
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent className="sm:max-w-xl bg-background border-border/20 p-0 overflow-hidden">
+        <VisuallyHidden><DialogTitle>Ensinar seus agentes</DialogTitle><DialogDescription>Configure conhecimento e materiais para seus agentes.</DialogDescription></VisuallyHidden>
         {/* Header */}
         <div className="relative px-6 pt-8 pb-5 bg-gradient-to-b from-primary/8 to-transparent">
           <div className="absolute inset-0 pointer-events-none">
