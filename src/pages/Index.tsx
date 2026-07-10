@@ -154,10 +154,14 @@ const HomePage = () => {
       {/* ═══════════ CTA FLUTUANTE — DIAGNÓSTICO 30s ═══════════ */}
       <button
         onClick={diagnosis.open}
-        className="fixed bottom-5 right-5 z-40 group inline-flex items-center gap-2 rounded-full border border-primary/40 bg-background/90 backdrop-blur-xl px-4 py-2.5 text-[13px] font-medium shadow-lg shadow-primary/10 hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all"
+        className="fixed bottom-5 right-5 z-40 group inline-flex items-center gap-2.5 rounded-full border border-primary/40 bg-background/90 backdrop-blur-xl px-4 py-2.5 text-[13px] font-medium shadow-lg shadow-primary/10 hover:border-primary hover:bg-primary hover:text-primary-foreground transition-all"
         aria-label="Descobrir meu departamento em 30 segundos"
       >
-        <SparklesIcon className="h-3.5 w-3.5 text-primary group-hover:text-primary-foreground" />
+        {/* Pulso animado — estilo Apple / futurista */}
+        <span className="relative flex h-2.5 w-2.5 items-center justify-center">
+          <span className="absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75 animate-ping" />
+          <span className="absolute inline-flex h-1.5 w-1.5 rounded-full bg-primary group-hover:bg-primary-foreground" />
+        </span>
         Descobrir meu departamento em 30s
       </button>
 
