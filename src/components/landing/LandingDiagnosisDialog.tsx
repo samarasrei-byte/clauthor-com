@@ -25,11 +25,13 @@ import { cn } from "@/lib/utils";
 import { supabase } from "@/integrations/supabase/client";
 import {
   PAIN_TO_RECOMMENDATION,
+  PAIN_TO_DEPT_ID,
   saveDiagnosis,
   saveThorBriefing,
   type DeliveryMode,
   type PainId,
 } from "@/lib/diagnosis-routing";
+import { getRegion, formatPrice } from "@/lib/pricing";
 
 interface Props {
   open: boolean;
