@@ -1,0 +1,317 @@
+/**
+ * Departamentos Prontos — packages pré-configurados vendidos como solução.
+ *
+ * Cada package amarra:
+ * - Uma dor específica de PME BR
+ * - Um outcome mensurável (com garantia opcional)
+ * - Um conjunto de agentes existentes no WORKFORCE
+ * - Um roteiro de demonstração de ~60s (timeline plausível em pt-BR)
+ * - Um preço mensal em BRL
+ *
+ * IMPORTANTE: todos os `agentSlugs` DEVEM existir em `ALL_AGENT_SLUGS`.
+ * Este arquivo é puramente frontend — não há tabela nem edge function envolvida.
+ */
+import type { LucideIcon } from "lucide-react";
+import {
+  Briefcase, HeartHandshake, Megaphone,
+  Scale, Landmark, Users,
+} from "lucide-react";
+
+/** Cores derivadas da paleta departamental já usada em `Library.tsx`. */
+export type DeptColorKey = "sales" | "customer_success" | "marketing" | "legal" | "finance" | "talent";
+
+export interface DepartmentTimelineEvent {
+  /** Hora fictícia exibida (ex.: "09:47"). */
+  time: string;
+  /** Slug do agente responsável (deve existir no WORKFORCE). */
+  agentSlug: string;
+  /** Nome curto do agente exibido no card do evento. */
+  agentName: string;
+  /** Ação executada em pt-BR, curta e concreta. */
+  action: string;
+  /** Resultado observável ao final da ação (números, nomes, mensagens). */
+  outcome: string;
+  /** Delay em ms antes do próximo evento aparecer na simulação. */
+  delayMs: number;
+}
+
+export interface DepartmentPackage {
+  id: string;
+  name: string;
+  /** Ícone visual do departamento. */
+  icon: LucideIcon;
+  color: DeptColorKey;
+  /** Dor do cliente em 1 frase curta. */
+  painPoint: string;
+  /** Outcome prometido, formato "métrica + prazo". */
+  outcome: string;
+  /** Texto curto da garantia associada ao outcome (opcional). */
+  outcomeGuarantee?: string;
+  /** Slugs de agentes envolvidos (subset de ALL_AGENT_SLUGS). */
+  agentSlugs: readonly string[];
+  /** Roteiro de 6-8 eventos plausíveis para o LiveDemo. */
+  timelineDemo: readonly DepartmentTimelineEvent[];
+  /** Contador que sobe durante a demo (ex.: "Leads qualificados"). */
+  outcomeMetric: {
+    label: string;
+    /** Valores exibidos após cada evento (mesmo comprimento de `timelineDemo`). */
+    progression: readonly number[];
+    /** Sufixo opcional para o número (ex.: "%", "min"). */
+    suffix?: string;
+  };
+  /** Preço mensal em BRL (centavos ficam para Fase 3). */
+  priceMonthly: number;
+  /** Flag de destaque na landing/onboarding. */
+  flagship: boolean;
+}
+
+/**
+ * Currency helper — BRL formatado como "R$ 1.997".
+ * Colocado aqui para não vazar dependência de i18n na data layer.
+ */
+export const formatBRL = (value: number): string =>
+  new Intl.NumberFormat("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    maximumFractionDigits: 0,
+  }).format(value);
+
+/* ============================================================
+ * FLAGSHIP PACKAGES (aparecem na landing e no onboarding)
+ * ============================================================ */
+
+const COMERCIAL: DepartmentPackage = {
+  id: "comercial",
+  name: "Departamento Comercial",
+  icon: Briefcase,
+  color: "sales",
+  painPoint: "Sua equipe não bate meta e o pipeline vive vazio.",
+  outcome: "+30 leads qualificados por mês",
+  outcomeGuarantee: "Garantia de 30 dias ou reembolso integral",
+  agentSlugs: ["hunter_linkedin", "sdr_linkedin", "sdr_whatsapp", "lead_qualifier", "revenue_ops"],
+  outcomeMetric: {
+    label: "Leads qualificados",
+    progression: [0, 3, 7, 12, 18, 22, 27, 31],
+  },
+  timelineDemo: [
+    { time: "09:12", agentSlug: "hunter_linkedin", agentName: "Hunter LinkedIn",
+      action: "Buscou perfis compatíveis com ICP (CMOs em SaaS B2B, 20-100 funcionários, São Paulo)",
+      outcome: "47 leads encontrados", delayMs: 3500 },
+    { time: "09:34", agentSlug: "lead_qualifier", agentName: "Lead Qualifier",
+      action: "Avaliou fit de cada perfil contra critérios do ICP",
+      outcome: "24 leads aprovados · 23 descartados", delayMs: 4000 },
+    { time: "10:02", agentSlug: "sdr_linkedin", agentName: "SDR LinkedIn",
+      action: "Enviou convite personalizado para Marina Alves (CMO · TechNova)",
+      outcome: "Convite aceito em 18 min", delayMs: 4500 },
+    { time: "11:47", agentSlug: "sdr_whatsapp", agentName: "SDR WhatsApp",
+      action: "Iniciou conversa com Rafael Costa (Head of Growth · Delta Labs)",
+      outcome: "Resposta positiva: quer agendar reunião", delayMs: 4500 },
+    { time: "14:20", agentSlug: "sdr_linkedin", agentName: "SDR LinkedIn",
+      action: "Rodou sequência de InMail para 22 leads restantes",
+      outcome: "8 respostas positivas · 6 pedidos de material", delayMs: 5000 },
+    { time: "16:03", agentSlug: "revenue_ops", agentName: "Revenue Ops",
+      action: "Consolidou pipeline do dia no CRM e agendou follow-ups",
+      outcome: "31 leads no pipeline · 4 reuniões marcadas", delayMs: 5000 },
+  ],
+  priceMonthly: 1997,
+  flagship: true,
+};
+
+const ATENDIMENTO: DepartmentPackage = {
+  id: "atendimento",
+  name: "Departamento de Atendimento",
+  icon: HeartHandshake,
+  color: "customer_success",
+  painPoint: "Cliente espera horas por resposta e você perde vendas por demora.",
+  outcome: "SLA de resposta < 5 minutos, 24/7",
+  outcomeGuarantee: "Se ultrapassar SLA em qualquer canal, o mês é gratuito",
+  agentSlugs: ["support_channel", "support_lead", "voice_ai", "customer_advocacy", "nps_analyst"],
+  outcomeMetric: {
+    label: "Tempo médio de resposta",
+    progression: [180, 42, 18, 8, 5, 4, 3, 3],
+    suffix: "min",
+  },
+  timelineDemo: [
+    { time: "08:03", agentSlug: "support_channel", agentName: "Support Channel",
+      action: "Recebeu 12 mensagens em WhatsApp durante a madrugada",
+      outcome: "Todas respondidas em < 2 min · 3 escaladas", delayMs: 3500 },
+    { time: "09:15", agentSlug: "voice_ai", agentName: "Voice AI",
+      action: "Atendeu ligação da cliente Camila Souza sobre status de pedido",
+      outcome: "Resolvido sem transferência · call de 2m14s", delayMs: 4500 },
+    { time: "10:41", agentSlug: "support_lead", agentName: "Support Lead",
+      action: "Recebeu escalação de bug crítico do cliente TechNova",
+      outcome: "Ticket priorizado · time de dev acionado", delayMs: 4500 },
+    { time: "12:22", agentSlug: "support_channel", agentName: "Support Channel",
+      action: "Respondeu 34 dúvidas simultâneas via chat do site",
+      outcome: "SLA médio: 47 segundos", delayMs: 4500 },
+    { time: "15:08", agentSlug: "customer_advocacy", agentName: "Customer Advocacy",
+      action: "Identificou 6 clientes elegíveis para programa de indicação",
+      outcome: "Convites enviados · 2 já aceitaram", delayMs: 4500 },
+    { time: "18:44", agentSlug: "nps_analyst", agentName: "NPS Analyst",
+      action: "Consolidou NPS do dia e gerou relatório de temas recorrentes",
+      outcome: "NPS 74 · principal elogio: velocidade", delayMs: 5000 },
+  ],
+  priceMonthly: 1497,
+  flagship: true,
+};
+
+const MARKETING: DepartmentPackage = {
+  id: "marketing",
+  name: "Departamento de Marketing",
+  icon: Megaphone,
+  color: "marketing",
+  painPoint: "Você queima verba em ads sem saber o que está trazendo retorno.",
+  outcome: "ROAS medido e otimizado semana a semana",
+  outcomeGuarantee: "Relatório semanal auditável ou reembolso integral",
+  agentSlugs: ["ad_copywriter", "brand_strategist", "traffic_manager", "meta_ads_agent", "content_performance"],
+  outcomeMetric: {
+    label: "ROAS acumulado",
+    progression: [0.8, 1.4, 2.1, 2.8, 3.4, 3.9, 4.2, 4.5],
+    suffix: "x",
+  },
+  timelineDemo: [
+    { time: "08:30", agentSlug: "brand_strategist", agentName: "Brand Strategist",
+      action: "Analisou performance da semana anterior e definiu 3 ângulos de teste",
+      outcome: "Hipóteses: dor de tempo · prova social · urgência", delayMs: 4000 },
+    { time: "09:45", agentSlug: "ad_copywriter", agentName: "Ad Copywriter",
+      action: "Escreveu 9 variações de copy (3 por ângulo) para Meta e Google",
+      outcome: "9 copies aprovados · 27 headlines geradas", delayMs: 4500 },
+    { time: "11:12", agentSlug: "meta_ads_agent", agentName: "Meta Ads Agent",
+      action: "Publicou campanhas no Facebook e Instagram com budget escalonado",
+      outcome: "9 anúncios ativos · R$ 300/dia distribuídos", delayMs: 4500 },
+    { time: "14:33", agentSlug: "traffic_manager", agentName: "Traffic Manager",
+      action: "Pausou 3 criativos abaixo de CTR alvo e realocou budget",
+      outcome: "CPC caiu 22% em 3h", delayMs: 4500 },
+    { time: "17:20", agentSlug: "content_performance", agentName: "Content Performance",
+      action: "Cruzou dados de anúncios × landing × conversões no CRM",
+      outcome: "Ângulo 'prova social' converte 2.4× melhor", delayMs: 5000 },
+    { time: "19:00", agentSlug: "brand_strategist", agentName: "Brand Strategist",
+      action: "Gerou relatório executivo com recomendação de escala",
+      outcome: "Sugestão: 3× no ângulo vencedor amanhã", delayMs: 5000 },
+  ],
+  priceMonthly: 2497,
+  flagship: true,
+};
+
+/* ============================================================
+ * SECUNDÁRIOS (aparecem em "explorar mais")
+ * ============================================================ */
+
+const JURIDICO: DepartmentPackage = {
+  id: "juridico",
+  name: "Departamento Jurídico",
+  icon: Scale,
+  color: "legal",
+  painPoint: "Contratos travados, compliance vulnerável, resposta jurídica lenta.",
+  outcome: "Contratos revisados em < 2h, compliance monitorado 24/7",
+  agentSlugs: ["contract_analyst", "compliance_officer"],
+  outcomeMetric: {
+    label: "Contratos revisados",
+    progression: [0, 2, 5, 8, 12, 15, 18, 21],
+  },
+  timelineDemo: [
+    { time: "09:00", agentSlug: "contract_analyst", agentName: "Contract Analyst",
+      action: "Revisou contrato de prestação de serviços do fornecedor X",
+      outcome: "3 cláusulas de risco identificadas", delayMs: 4000 },
+    { time: "10:30", agentSlug: "compliance_officer", agentName: "Compliance Officer",
+      action: "Escaneou operação contra checklist LGPD e regulatório",
+      outcome: "1 gap crítico · plano de correção emitido", delayMs: 5000 },
+    { time: "14:15", agentSlug: "contract_analyst", agentName: "Contract Analyst",
+      action: "Comparou minuta com precedentes internos e sugeriu ajustes",
+      outcome: "Minuta aprovada · pronta para assinatura", delayMs: 5000 },
+  ],
+  priceMonthly: 2997,
+  flagship: false,
+};
+
+const FINANCEIRO: DepartmentPackage = {
+  id: "financeiro",
+  name: "Departamento Financeiro",
+  icon: Landmark,
+  color: "finance",
+  painPoint: "DRE atrasada, fluxo de caixa no chute, decisões financeiras às cegas.",
+  outcome: "Fechamento mensal em D+3 e dashboard financeiro diário",
+  agentSlugs: ["ai_cfo", "digital_accountant"],
+  outcomeMetric: {
+    label: "Dias para fechamento",
+    progression: [21, 14, 10, 7, 5, 4, 3, 3],
+    suffix: "d",
+  },
+  timelineDemo: [
+    { time: "08:15", agentSlug: "digital_accountant", agentName: "Digital Accountant",
+      action: "Conciliou 320 lançamentos bancários do dia anterior",
+      outcome: "312 conciliados automaticamente · 8 para revisão", delayMs: 4000 },
+    { time: "11:00", agentSlug: "ai_cfo", agentName: "AI CFO",
+      action: "Rodou análise de fluxo de caixa projetado para os próximos 90d",
+      outcome: "Alerta: gap de R$ 120k previsto em 45d", delayMs: 5000 },
+    { time: "16:30", agentSlug: "ai_cfo", agentName: "AI CFO",
+      action: "Gerou recomendação de ajuste de recebíveis e prazos",
+      outcome: "3 ações concretas para eliminar o gap", delayMs: 5000 },
+  ],
+  priceMonthly: 1997,
+  flagship: false,
+};
+
+const RH: DepartmentPackage = {
+  id: "rh",
+  name: "Departamento de Pessoas",
+  icon: Users,
+  color: "talent",
+  painPoint: "Contratações demoram meses e turnover consome operação.",
+  outcome: "Time-to-hire < 21 dias, engajamento medido semanalmente",
+  agentSlugs: ["recruiter_agent", "onboarding_specialist", "people_analytics", "employee_engagement_agent"],
+  outcomeMetric: {
+    label: "Candidatos qualificados",
+    progression: [0, 4, 9, 15, 22, 28, 33, 38],
+  },
+  timelineDemo: [
+    { time: "09:20", agentSlug: "recruiter_agent", agentName: "Recruiter Agent",
+      action: "Buscou candidatos para vaga de Analista de Dados Sênior",
+      outcome: "38 perfis relevantes · 12 shortlist", delayMs: 4000 },
+    { time: "13:00", agentSlug: "onboarding_specialist", agentName: "Onboarding Specialist",
+      action: "Preparou plano de 30-60-90 para novo desenvolvedor entrando na semana",
+      outcome: "Trilha pronta · gestor notificado", delayMs: 5000 },
+    { time: "16:45", agentSlug: "employee_engagement_agent", agentName: "Engagement Agent",
+      action: "Rodou pulse survey semanal com o time",
+      outcome: "Engajamento 78% · alerta em 1 squad", delayMs: 5000 },
+  ],
+  priceMonthly: 1497,
+  flagship: false,
+};
+
+/* ============================================================
+ * PUBLIC API
+ * ============================================================ */
+
+export const DEPARTMENT_PACKAGES: readonly DepartmentPackage[] = [
+  COMERCIAL,
+  ATENDIMENTO,
+  MARKETING,
+  JURIDICO,
+  FINANCEIRO,
+  RH,
+] as const;
+
+export const FLAGSHIP_DEPARTMENTS: readonly DepartmentPackage[] =
+  DEPARTMENT_PACKAGES.filter((d) => d.flagship);
+
+export const SECONDARY_DEPARTMENTS: readonly DepartmentPackage[] =
+  DEPARTMENT_PACKAGES.filter((d) => !d.flagship);
+
+export const getDepartmentById = (id: string): DepartmentPackage | undefined =>
+  DEPARTMENT_PACKAGES.find((d) => d.id === id);
+
+/**
+ * Tokens de cor departamentais — espelha o esquema já em uso em `Library.tsx`.
+ * Mantido aqui para que componentes de departamento não precisem duplicar o mapa.
+ */
+export const DEPT_COLOR_TOKENS: Record<DeptColorKey, {
+  gradient: string; border: string; text: string; bg: string;
+}> = {
+  sales:            { gradient: "from-blue-500/20 to-blue-500/5",       border: "border-blue-500/30",     text: "text-blue-400",     bg: "bg-blue-500/10" },
+  customer_success: { gradient: "from-amber-500/20 to-amber-500/5",     border: "border-amber-500/30",    text: "text-amber-400",    bg: "bg-amber-500/10" },
+  marketing:        { gradient: "from-rose-500/20 to-rose-500/5",       border: "border-rose-500/30",     text: "text-rose-400",     bg: "bg-rose-500/10" },
+  legal:            { gradient: "from-slate-500/20 to-slate-500/5",     border: "border-slate-500/30",    text: "text-slate-400",    bg: "bg-slate-500/10" },
+  finance:          { gradient: "from-cyan-500/20 to-cyan-500/5",       border: "border-cyan-500/30",     text: "text-cyan-400",     bg: "bg-cyan-500/10" },
+  talent:           { gradient: "from-emerald-500/20 to-emerald-500/5", border: "border-emerald-500/30",  text: "text-emerald-400",  bg: "bg-emerald-500/10" },
+};
