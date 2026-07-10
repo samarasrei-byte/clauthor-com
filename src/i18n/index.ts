@@ -1,6 +1,7 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 import LanguageDetector from "i18next-browser-languagedetector";
+import { canonicalInterpolationContext } from "@/lib/canonical-copy";
 
 // Only load PT (default) synchronously - others loaded on demand
 import pt from "./locales/pt.json";
