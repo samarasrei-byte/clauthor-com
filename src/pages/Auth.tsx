@@ -88,10 +88,10 @@ const AuthPage = () => {
     (typeof document !== "undefined" && document.referrer.includes("/advocacia"));
 
   useEffect(() => {
-    if (state?.signup || modeParam === "signup") {
+    if (wantsSignup) {
       setIsLogin(false);
     }
-  }, [state?.signup, modeParam]);
+  }, [wantsSignup]);
 
   // Block 2.1 — page title based on context
   useEffect(() => {
