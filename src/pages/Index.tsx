@@ -232,7 +232,7 @@ const HomePage = () => {
               >
                 <span className="text-[28px] font-light text-muted-foreground/40 leading-none mt-0.5 shrink-0">{item.step}</span>
                 <div>
-                  <h4 className="font-medium text-[15px] mb-1">{item.title}</h4>
+                  <h3 className="font-medium text-[15px] mb-1">{item.title}</h3>
                   <p className="text-[14px] text-muted-foreground leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
