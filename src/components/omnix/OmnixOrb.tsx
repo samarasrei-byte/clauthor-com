@@ -275,6 +275,7 @@ const OmnixOrb = ({ state, name, className, immersive }: OmnixOrbProps) => {
         <motion.circle
           cx={center}
           cy={center}
+          r={coreR * 0.15}
           fill="hsl(var(--primary))"
           filter="url(#orb-bloom)"
           animate={{
