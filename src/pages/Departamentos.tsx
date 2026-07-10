@@ -222,7 +222,7 @@ const Departamentos = () => {
             <span className="gradient-text">{t("departments_page.title2")}</span>
           </h1>
           <p className="text-muted-foreground text-base max-w-xl mx-auto mb-4">
-            {t("departments_page.subtitle", { deptCount: departments.length, agentCount: totalAgents })} <span className="text-primary font-bold">{t("departments_page.subtitle_highlight")}</span>.
+            {t("departments_page.subtitle", { deptCount: 20, agentCount: "+200" })} <span className="text-primary font-bold">{t("departments_page.subtitle_highlight")}</span>.
           </p>
 
           {/* Hero Stats */}
