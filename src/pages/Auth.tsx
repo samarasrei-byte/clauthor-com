@@ -123,9 +123,15 @@ const AuthPage = () => {
           if (hireIntent) {
             localStorage.setItem("hireIntent", JSON.stringify(hireIntent));
           }
-          // Novo usuário: sempre passa pelo diagnóstico em /welcome antes do dashboard,
-          // exceto quando há um redirect explícito para outro fluxo (ex.: /advocacia).
-          const signupDestination = redirectParam || state?.from?.pathname || "/welcome";
+          // Fluxo unificado: se o visitante já fez o diagnóstico na landing,
+          // Thor continua a mesma linha de raciocínio direto no painel — sem passar
+          // por /welcome (que é um onboarding duplicado). Só cai em /welcome quem
+          // se cadastrou sem passar pelo quiz.
+          const hasDiagnosis = (() => {
+            try { return !!localStorage.getItem("clauthor:diagnosis"); } catch { return false; }
+          })();
+          const fallback = hasDiagnosis ? "/dashboard" : "/welcome";
+          const signupDestination = redirectParam || state?.from?.pathname || fallback;
           navigate(signupDestination, { replace: true });
         }
       }
