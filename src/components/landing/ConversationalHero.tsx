@@ -178,10 +178,11 @@ const ConversationalHero = () => {
 
   return (
     <section
-      className="relative min-h-[92vh] flex items-center justify-center px-5 py-24 sm:py-32 overflow-hidden"
+      className="relative flex items-center justify-center px-5 pt-20 pb-16 sm:pt-24 sm:pb-20 overflow-hidden"
       aria-label="Hero"
     >
-      <NeuralBackdrop intensity={0.7} />
+      <NeuralBackdrop intensity={1} />
+
 
       <div className="relative z-10 w-full max-w-3xl mx-auto text-center">
         {/* Eyebrow */}
