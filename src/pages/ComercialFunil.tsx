@@ -99,46 +99,45 @@ function NewDealDialog({ defaultStage }: { defaultStage: DealStage }) {
 }
 
 function DealCard({ deal }: { deal: Deal }) {
-  const { updateDeal, deleteDeal } = useDeals();
-  const onDragStart = (e: React.DragEvent) => {
+  const { deleteDeal } = useDeals();
+  const onDragStart = (e: React.DragEvent<HTMLDivElement>) => {
     e.dataTransfer.setData("deal/id", deal.id);
     e.dataTransfer.effectAllowed = "move";
   };
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
+    <div
       draggable
       onDragStart={onDragStart}
       className="group rounded-lg border border-border bg-card p-3 cursor-grab active:cursor-grabbing hover:border-primary/40 transition-colors"
     >
-      <div className="flex items-start justify-between gap-2">
-        <p className="text-sm font-medium leading-tight line-clamp-2">{deal.title}</p>
-        <button
-          onClick={() => deleteDeal.mutate(deal.id)}
-          className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
-          aria-label="Remover deal"
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-        </button>
-      </div>
-      {deal.contact_company && (
-        <p className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
-          <Building2 className="h-3 w-3" /> {deal.contact_company}
-        </p>
-      )}
-      {deal.contact_email && (
-        <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
-          <Mail className="h-3 w-3" /> {deal.contact_email}
-        </p>
-      )}
-      {deal.value_brl > 0 && (
-        <p className="mt-2 flex items-center gap-1 text-xs font-semibold text-primary">
-          <DollarSign className="h-3 w-3" /> {BRL(Number(deal.value_brl))}
-        </p>
-      )}
-    </motion.div>
+      <motion.div layout initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}>
+        <div className="flex items-start justify-between gap-2">
+          <p className="text-sm font-medium leading-tight line-clamp-2">{deal.title}</p>
+          <button
+            onClick={() => deleteDeal.mutate(deal.id)}
+            className="opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive"
+            aria-label="Remover deal"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
+          </button>
+        </div>
+        {deal.contact_company && (
+          <p className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
+            <Building2 className="h-3 w-3" /> {deal.contact_company}
+          </p>
+        )}
+        {deal.contact_email && (
+          <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
+            <Mail className="h-3 w-3" /> {deal.contact_email}
+          </p>
+        )}
+        {deal.value_brl > 0 && (
+          <p className="mt-2 flex items-center gap-1 text-xs font-semibold text-primary">
+            <DollarSign className="h-3 w-3" /> {BRL(Number(deal.value_brl))}
+          </p>
+        )}
+      </motion.div>
+    </div>
   );
 }
 
