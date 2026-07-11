@@ -32,7 +32,9 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
     },
     ref,
   ) => {
-    const heightCls = size === "lg" ? "h-14" : "h-12";
+    const heightCls = size === "lg" ? "h-14" : size === "sm" ? "h-9" : "h-12";
+    const paddingCls = size === "sm" ? "px-4" : "px-7";
+    const textCls = size === "sm" ? "text-[13px]" : "text-[15px]";
 
     return (
       <button
