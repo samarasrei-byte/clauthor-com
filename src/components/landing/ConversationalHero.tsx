@@ -327,16 +327,11 @@ const ConversationalHero = () => {
                   transition={{ duration: 0.5 }}
                   className="flex flex-col items-center gap-1.5 text-left mx-auto max-w-lg"
                 >
-                  <div className="flex items-center gap-2 text-[11px] text-white/35 uppercase tracking-[0.15em]">
-                    <span className="h-1 w-1 rounded-full bg-primary animate-pulse" />
-                    Exemplo ao vivo
-                  </div>
-                  <p className="text-[13px] text-white/50 italic">
-                    "{GHOST_DEMOS[ghostIdx].q}"
+                  <p className="text-[13px] text-white/40">
+                    <span className="text-white/30">Ex.</span> "{GHOST_DEMOS[ghostIdx].q}"
                   </p>
-                  <p className="text-[13px] text-white/80">
-                    → <span className="text-primary">{GHOST_DEMOS[ghostIdx].dept}</span>{" "}
-                    <span className="text-white/60">{GHOST_DEMOS[ghostIdx].a.replace(/^[^—]+—\s*/, "")}</span>
+                  <p className="text-[13px] text-white/70">
+                    → {GHOST_DEMOS[ghostIdx].dept} · {GHOST_DEMOS[ghostIdx].a.replace(/^[^—]+—\s*/, "")}
                   </p>
                 </motion.div>
               </AnimatePresence>
