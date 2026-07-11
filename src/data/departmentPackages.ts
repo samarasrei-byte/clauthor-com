@@ -212,7 +212,11 @@ const JURIDICO: DepartmentPackage = {
   color: "legal",
   painPoint: "Contratos travados, compliance vulnerável, resposta jurídica lenta.",
   outcome: "Contratos revisados em < 2h, compliance monitorado 24/7",
-  agentSlugs: ["contract_analyst", "compliance_officer"],
+  agentSlugs: [
+    "contract_analyst", "contract_negotiator", "compliance_officer", "lgpd_agent",
+    "labor_law_agent", "tax_compliance", "regulatory_monitor", "legal_researcher",
+    "esg_compliance",
+  ],
   outcomeMetric: {
     label: "Contratos revisados",
     progression: [0, 2, 5, 8, 12, 15, 18, 21],
