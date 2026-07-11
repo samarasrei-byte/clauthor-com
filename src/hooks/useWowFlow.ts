@@ -253,10 +253,13 @@ export function useWowFlow() {
       source: "instant_wow",
 
       ttfv_ms: ttfvMs,
+      ttfv_ms: ttfvMs,
+      variant: currentWowVariant(),
       ttfv_signup_to_form_ms: (t.formSubmittedAt ?? t.signupAt) - t.signupAt,
       ttfv_form_to_output_ms: (t.outputReadyAt ?? t.signupAt) - (t.formSubmittedAt ?? t.signupAt),
       ttfv_output_to_approve_ms: t.approvedAt - (t.outputReadyAt ?? t.approvedAt),
     });
+
 
     clearDraft();
     setState("approved");
@@ -264,8 +267,9 @@ export function useWowFlow() {
   }, [user, state, painCategory, output, company, pain, tenantId, usedFallback]);
 
   const skip = useCallback(() => {
-    trackKpi("wow_skipped", { source: "instant_wow" });
+    trackKpi("wow_skipped", { source: "instant_wow", variant: currentWowVariant() });
     clearDraft();
+
   }, []);
 
   return {
