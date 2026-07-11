@@ -49,6 +49,22 @@ serve(async (req) => {
     const classification = classifyAction(action);
     console.log(`[Autonomy] Action: ${action} | Risk: ${classification.riskLevel} | Approval: ${classification.requiresApproval}`);
 
+    // Start tracer (best-effort — never blocks execution)
+    const tracer = await startRun(supabase, {
+      tenantId: tenant_id,
+      userId,
+      runType: "agent_execute",
+      agents: agent_name ? [agent_name] : [],
+      message: `${action}${details ? ` — ${details}` : ""}`.slice(0, 400),
+    }).catch(() => null);
+
+    await tracer?.step("decision", {
+      title: `Ação classificada: ${classification.riskLevel}`,
+      content: { action, risk_level: classification.riskLevel, requires_approval: classification.requiresApproval, reason: classification.reason },
+      agent_slug: agent_name ?? null,
+    });
+
+
     // 2. Check daily limits
     const today = new Date();
     today.setHours(0, 0, 0, 0);
