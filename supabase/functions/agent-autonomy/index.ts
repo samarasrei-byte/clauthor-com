@@ -86,6 +86,8 @@ serve(async (req) => {
         message: `O agente ${agent_name || "AI"} atingiu o limite de ${limit} ações ${classification.riskLevel}/dia.`,
         metadata: { agent_id, action, risk_level: classification.riskLevel, limit },
       });
+      await tracer?.step("error", { title: "Limite diário atingido", content: { limit, todayCount } });
+      await tracer?.finish({ status: "cancelled", summary: "daily_limit_reached" });
 
       return new Response(JSON.stringify({
         executed: false,
@@ -95,9 +97,8 @@ serve(async (req) => {
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
-      await tracer?.step("error", { title: "Limite diário atingido", content: { limit, todayCount } });
-      await tracer?.finish({ status: "cancelled", summary: "daily_limit_reached" });
     }
+
 
 
     // 3. If requires approval → queue it
