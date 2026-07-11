@@ -321,7 +321,57 @@ const ConversationalHero = () => {
               </button>
             ))}
           </div>
+
+          {/* Ghost demo — Q&A cycling while idle (prova que funciona antes do click) */}
+          {input.length === 0 && !streaming && !response && (
+            <div className="mt-6 min-h-[52px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={ghostIdx}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.5 }}
+                  className="flex flex-col items-center gap-1.5 text-left mx-auto max-w-lg"
+                >
+                  <div className="flex items-center gap-2 text-[11px] text-white/35 uppercase tracking-[0.15em]">
+                    <span className="h-1 w-1 rounded-full bg-primary animate-pulse" />
+                    Exemplo ao vivo
+                  </div>
+                  <p className="text-[13px] text-white/50 italic">
+                    "{GHOST_DEMOS[ghostIdx].q}"
+                  </p>
+                  <p className="text-[13px] text-white/80">
+                    → <span className="text-primary">{GHOST_DEMOS[ghostIdx].dept}</span>{" "}
+                    <span className="text-white/60">{GHOST_DEMOS[ghostIdx].a.replace(/^[^—]+—\s*/, "")}</span>
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          )}
         </motion.form>
+
+        {/* Trusted-by strip */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 0.6 }}
+          className="mt-10 sm:mt-14"
+        >
+          <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 mb-4">
+            Times que já orquestram com CLAUTHOR
+          </p>
+          <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-3">
+            {TRUSTED_LOGOS.map((name) => (
+              <span
+                key={name}
+                className="text-[13px] sm:text-[14px] font-medium text-white/40 hover:text-white/70 transition-colors tracking-wide"
+              >
+                {name}
+              </span>
+            ))}
+          </div>
+        </motion.div>
 
         {/* Response */}
         <AnimatePresence>
