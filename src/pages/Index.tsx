@@ -16,8 +16,9 @@ import LandingDiagnosisDialog from "@/components/landing/LandingDiagnosisDialog"
 import { useLandingDiagnosis } from "@/hooks/useLandingDiagnosis";
 
 import { Button } from "@/components/ui/button";
+import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
 import {
-  ArrowRight, ShieldCheck,
+  ArrowRight, ShieldCheck, Sparkles,
   Code, UsersRound,
   Headphones, PenTool, ShoppingCart, Megaphone, LineChart,
   Receipt, Globe, Briefcase, DollarSign, MessageSquare,
