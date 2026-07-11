@@ -235,8 +235,6 @@ const ConversationalHero = () => {
               "focus-within:border-white/25",
             )}
           >
-            {/* Top hairline */}
-            <div aria-hidden className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
             {/* Placeholder rotativo (só quando vazio e sem stream) */}
             {input.length === 0 && !streaming && (
