@@ -124,7 +124,7 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
                 </span>
               )}
               <span
-                className="font-display font-semibold text-[15px] tracking-[0.01em] whitespace-nowrap text-[hsl(var(--primary))]"
+                className={cn("font-display font-semibold tracking-[0.01em] whitespace-nowrap text-[hsl(var(--primary))]", textCls)}
                 style={{
                   textShadow:
                     "0 0 6px hsl(var(--primary) / 0.9), 0 0 16px hsl(var(--primary) / 0.65), 0 0 36px hsl(var(--primary) / 0.4)",
