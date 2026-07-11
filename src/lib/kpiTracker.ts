@@ -16,6 +16,7 @@
  *  - `onboarding_department_picked` — user picked a department in onboarding
  */
 import logger from "@/lib/logger";
+import { supabase } from "@/integrations/supabase/client";
 
 export type KpiEventName =
   | "department_demo_click"
@@ -38,7 +39,12 @@ export type KpiEventName =
   | "first_wow_approved"
   | "wow_regenerated"
   | "wow_skipped"
+  | "wow_variant_assigned"
+  | "wow_voice_started"
+  | "wow_voice_transcribed"
+  | "wow_voice_failed"
   | "time_to_first_value";
+
 
 export interface KpiEventPayload {
   department_id?: string;
