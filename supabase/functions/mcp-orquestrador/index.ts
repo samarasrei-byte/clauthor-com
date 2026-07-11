@@ -196,7 +196,39 @@ serve(async (req) => {
   const overallStart = Date.now();
   const isApprovedResume = !!approved_execution_id;
 
+  // Initialize tracer (best-effort)
+  const authHeader = req.headers.get("Authorization") ?? "";
+  let tracer: Awaited<ReturnType<typeof startRun>> | null = null;
+  try {
+    if (userId && authHeader) {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_ANON_KEY")!,
+        { global: { headers: { Authorization: authHeader } } },
+      );
+      const { data: tm } = await supabase
+        .from("tenant_members")
+        .select("tenant_id")
+        .eq("user_id", userId)
+        .limit(1)
+        .maybeSingle();
+      const tenantId = tm?.tenant_id ?? userId;
+      tracer = await startRun(supabase, {
+        tenantId,
+        userId,
+        runType: "mcp",
+        agents: [],
+        message,
+      });
+    }
+  } catch (_) { /* tracer is best-effort */ }
+
   // 1. Roteamento Inteligente (Router Agent)
+  await tracer?.step("thought", {
+    title: "Roteamento MCP",
+    content: { message_preview: message.slice(0, 300) },
+  });
+
   const routerResp = await callLovableAI(LOVABLE_API_KEY, {
     model: ROUTER_MODEL,
     messages: [
@@ -210,9 +242,18 @@ serve(async (req) => {
 
   const routerData = await routerResp.json();
   const toolCall = routerData?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
-  if (!toolCall) return jsonResp({ error: "Falha no roteamento" }, 500);
+  if (!toolCall) {
+    await tracer?.step("error", { title: "Falha no roteamento", content: {} });
+    await tracer?.finish({ status: "failed", summary: "router_failed" });
+    return jsonResp({ error: "Falha no roteamento" }, 500);
+  }
 
   const decision = JSON.parse(toolCall);
+  await tracer?.step("decision", {
+    title: `Router selecionou ${decision.agentes?.length ?? 0} agentes`,
+    content: { agentes: decision.agentes, analise: decision.analise, contexto_extra: decision.contexto_extra },
+  });
+
   const agentes = ["AGENTE_SEGURANCA", ...decision.agentes.filter((a: string) => a !== "AGENTE_SEGURANCA")];
 
   // 2. Segurança Primeiro (Garantia de conformidade)
