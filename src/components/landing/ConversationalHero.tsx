@@ -339,27 +339,15 @@ const ConversationalHero = () => {
           )}
         </motion.form>
 
-        {/* Trusted-by strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
+        {/* Prova social minimal — só tipografia */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+          className="mt-16 text-[12px] text-white/35 tracking-wide"
         >
-          <div className="flex -space-x-2">
-            {[0, 1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="h-7 w-7 rounded-full border-2 border-black/80 bg-gradient-to-br from-primary/60 to-purple-500/60"
-                style={{ zIndex: 5 - i }}
-              />
-            ))}
-          </div>
-          <p className="text-[13px] sm:text-[14px] text-white/60">
-            <span className="font-semibold text-white">+200 empresas</span>{" "}
-            <span className="text-white/50">já orquestram departamentos com CLAUTHOR</span>
-          </p>
-        </motion.div>
+          <span className="text-white/70">+200 empresas</span> orquestram departamentos com CLAUTHOR
+        </motion.p>
 
         {/* Response */}
         <AnimatePresence>
