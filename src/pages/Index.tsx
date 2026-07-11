@@ -453,12 +453,14 @@ const HomePage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Link to="/waitlist">
-                <Button size="lg" className="h-11 px-8 gap-2 text-[13px] font-medium rounded-full">
+                <PremiumCTAButton
+                  size="md"
+                  icon={<Sparkles className="h-[13px] w-[13px] text-white" strokeWidth={2.25} />}
+                >
                   {t("home.cta_waitlist", { defaultValue: "Get Started" })}
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Button>
+                </PremiumCTAButton>
               </Link>
               <Link to="/pricing">
                 <Button variant="ghost" className="h-11 px-6 text-[13px] font-medium text-primary gap-1">
