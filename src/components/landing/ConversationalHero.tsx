@@ -198,17 +198,18 @@ const ConversationalHero = () => {
           Thor · seu orquestrador de IA está online
         </motion.div>
 
-        {/* Headline */}
+        {/* Headline — peso variável, sem gradient (nível Linear/Vercel) */}
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.05 }}
-          className="text-4xl sm:text-6xl lg:text-7xl font-semibold tracking-[-0.03em] leading-[1.05] text-white"
+          className="text-4xl sm:text-6xl lg:text-7xl tracking-[-0.035em] leading-[1.02] text-white"
         >
-          Contrate um{" "}
-          <span className="animate-gradient-shift">departamento</span>
+          <span className="font-light text-white/70">Contrate um </span>
+          <span className="font-bold text-white">departamento</span>
           <br className="hidden sm:block" />
-          <span className="text-white/90"> inteiro de IA.</span>
+          <span className="font-light text-white/70"> inteiro de </span>
+          <span className="font-bold text-white">IA.</span>
         </motion.h1>
 
         {/* Sub */}
