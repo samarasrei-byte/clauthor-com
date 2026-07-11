@@ -320,11 +320,8 @@ const Departamentos = () => {
                     </div>
                   </div>
 
-                  <div className="mt-4 flex items-end gap-2">
-                    <span className="font-display font-bold text-2xl text-foreground">
-                      {formatPrice(deptPrice, lang)}
-                    </span>
-                    <span className="text-sm text-muted-foreground mb-0.5">{t("departments_page.month")}</span>
+                  <div className="mt-4 flex items-center gap-2 flex-wrap">
+                    <PricePill price={formatPrice(deptPrice, lang)} period={t("departments_page.month")} size="md" />
                     <Badge className="bg-emerald-500/15 text-emerald-400 border-emerald-500/20 text-[10px] font-bold ml-auto">
                       -{dept.discount}% {t("departments_page.pack_discount")}
                     </Badge>
