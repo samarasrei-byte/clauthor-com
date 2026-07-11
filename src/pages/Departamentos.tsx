@@ -377,23 +377,57 @@ const Departamentos = () => {
                     </div>
                   </div>
 
-                  <button 
+                  <button
                     onClick={() => handleHireDepartment(dept)}
                     disabled={hiringDeptId === dept.id}
-                    className="group relative w-full h-14 rounded-2xl font-display font-bold text-base uppercase tracking-widest overflow-hidden transition-all duration-500 hover:scale-[1.04] active:scale-[0.96] cursor-pointer disabled:opacity-60 disabled:pointer-events-none"
+                    aria-label={`Contratar ${t(`squads.dept_${dept.id}`)} por ${formatPrice(deptPrice, lang)} ${t("departments_page.month")}`}
+                    className="group relative w-full h-14 rounded-2xl overflow-hidden cursor-pointer transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] active:translate-y-0 active:scale-[0.985] disabled:opacity-60 disabled:pointer-events-none disabled:hover:translate-y-0"
                   >
-                    <div className="absolute inset-0 bg-gradient-to-r from-primary via-primary-glow to-primary bg-[length:200%_100%] animate-gradient-shift rounded-2xl" />
-                    <div className="absolute -inset-1 bg-gradient-to-r from-primary/60 via-primary-glow/60 to-primary/60 rounded-2xl blur-xl opacity-50 group-hover:opacity-100 transition-opacity duration-500" />
-                    <div className="absolute inset-0 bg-white/[0.06] opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-2xl" />
-                    <div className="absolute inset-0 rounded-2xl border border-white/[0.15] group-hover:border-white/[0.3] transition-colors duration-500" />
-                    <span className="relative z-10 flex items-center justify-center gap-3 text-primary-foreground font-bold text-[14px] drop-shadow-[0_0_12px_hsl(var(--primary)/0.5)]">
+                    {/* Layer 1 — deep obsidian glass base */}
+                    <div className="absolute inset-0 rounded-2xl bg-[linear-gradient(180deg,hsl(var(--primary)/0.95)_0%,hsl(var(--primary)/0.75)_50%,hsl(var(--primary)/0.9)_100%)]" />
+                    {/* Layer 2 — inner top highlight (Apple pill shine) */}
+                    <div className="absolute inset-x-3 top-0 h-[45%] rounded-t-2xl bg-gradient-to-b from-white/25 via-white/[0.06] to-transparent pointer-events-none" />
+                    {/* Layer 3 — bottom inner glow */}
+                    <div className="absolute inset-x-2 bottom-0 h-[35%] rounded-b-2xl bg-gradient-to-t from-white/10 to-transparent pointer-events-none" />
+                    {/* Layer 4 — chromatic hairline border */}
+                    <div className="absolute inset-0 rounded-2xl border border-white/25 [box-shadow:inset_0_1px_0_0_rgba(255,255,255,0.35),inset_0_-1px_0_0_rgba(0,0,0,0.25)] pointer-events-none" />
+                    {/* Layer 5 — ambient outer glow, appears on hover */}
+                    <div className="absolute -inset-[3px] rounded-[18px] bg-[radial-gradient(120%_120%_at_50%_0%,hsl(var(--primary)/0.55),transparent_70%)] blur-xl opacity-40 group-hover:opacity-90 transition-opacity duration-700 pointer-events-none -z-10" />
+                    {/* Layer 6 — liquid shine sweep on hover */}
+                    <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+                      <div className="absolute top-0 -left-1/2 h-full w-1/2 bg-gradient-to-r from-transparent via-white/40 to-transparent skew-x-[-20deg] translate-x-0 group-hover:translate-x-[350%] transition-transform duration-[1100ms] ease-out" />
+                    </div>
+
+                    {/* Content */}
+                    <span className="relative z-10 flex items-center justify-center gap-3 px-5 text-primary-foreground">
                       {hiringDeptId === dept.id ? (
-                        <><Loader2 className="h-5 w-5 animate-spin" /> {t("departments_page.processing")}</>
+                        <>
+                          <Loader2 className="h-[18px] w-[18px] animate-spin" strokeWidth={2.25} />
+                          <span className="font-display font-semibold text-[15px] tracking-tight">
+                            {t("departments_page.processing")}
+                          </span>
+                        </>
                       ) : (
-                        <><Flame className="h-5 w-5 animate-pulse" /> {formatPrice(deptPrice, lang)}/{t("departments_page.month")} <ArrowRight className="h-5 w-5 group-hover:translate-x-2 transition-transform duration-300" /></>
+                        <>
+                          <span className="flex h-6 w-6 items-center justify-center rounded-full bg-white/15 backdrop-blur-sm ring-1 ring-white/30 shadow-[0_0_12px_rgba(255,255,255,0.35)] transition-transform duration-500 group-hover:rotate-[8deg] group-hover:scale-110">
+                            <Flame className="h-[13px] w-[13px] text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.9)]" strokeWidth={2.25} />
+                          </span>
+                          <span className="font-display font-semibold text-[15px] tracking-[-0.01em] tabular-nums text-white drop-shadow-[0_1px_0_rgba(0,0,0,0.25)]">
+                            {formatPrice(deptPrice, lang)}
+                            <span className="mx-1 text-white/50 font-normal">·</span>
+                            <span className="text-[11px] font-medium uppercase tracking-[0.14em] text-white/80 align-middle">
+                              {t("departments_page.month")}
+                            </span>
+                          </span>
+                          <ArrowRight
+                            className="h-[16px] w-[16px] text-white transition-all duration-500 ease-out group-hover:translate-x-1.5 group-hover:scale-110"
+                            strokeWidth={2.25}
+                          />
+                        </>
                       )}
                     </span>
                   </button>
+
                 </div>
               </motion.div>
             );

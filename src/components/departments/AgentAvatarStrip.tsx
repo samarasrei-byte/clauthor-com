@@ -12,6 +12,12 @@ import { cn } from "@/lib/utils";
 import { WORKFORCE } from "@/data/workforceArchitecture";
 import type { DeptColorKey } from "@/data/departmentPackages";
 import { DEPT_COLOR_TOKENS } from "@/data/departmentPackages";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface AgentAvatarStripProps {
   agentSlugs: readonly string[];
@@ -70,45 +76,66 @@ const AgentAvatarStrip = ({
   const overflow = agents.length - visible.length;
 
   return (
-    <div className={cn("flex items-center", className)}>
-      <div className="flex -space-x-2">
-        {visible.map((agent, idx) => (
-          <motion.div
-            key={agent.slug}
-            initial={{ opacity: 0, scale: 0.6, x: -6 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            transition={{ duration: 0.25, delay: idx * 0.05 }}
-            className={cn(
-              "relative flex h-9 w-9 items-center justify-center rounded-full border-2 border-background text-[10px] font-semibold tracking-wide",
-              tokens.bg,
-              tokens.text,
-              tokens.border
-            )}
-            title={agent.name}
-            aria-label={agent.name}
-          >
-            {agent.initials}
-          </motion.div>
-        ))}
+    <TooltipProvider delayDuration={120} skipDelayDuration={0}>
+      <div className={cn("flex items-center", className)}>
+        <div className="flex -space-x-2">
+          {visible.map((agent, idx) => (
+            <Tooltip key={agent.slug}>
+              <TooltipTrigger asChild>
+                <motion.button
+                  type="button"
+                  initial={{ opacity: 0, scale: 0.6, x: -6 }}
+                  animate={{ opacity: 1, scale: 1, x: 0 }}
+                  whileHover={{ scale: 1.12, y: -2, zIndex: 10 }}
+                  transition={{ duration: 0.25, delay: idx * 0.05 }}
+                  className={cn(
+                    "relative flex h-9 w-9 items-center justify-center rounded-full border-2 border-background text-[10px] font-semibold tracking-wide outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+                    tokens.bg,
+                    tokens.text,
+                    tokens.border,
+                  )}
+                  aria-label={agent.name}
+                >
+                  {agent.initials}
+                </motion.button>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="px-2.5 py-1.5">
+                <div className="text-[12px] font-medium leading-tight">{agent.name}</div>
+                <div className="text-[10px] text-muted-foreground font-mono">{agent.slug}</div>
+              </TooltipContent>
+            </Tooltip>
+          ))}
 
-        {overflow > 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.6 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.25, delay: visible.length * 0.05 }}
-            className="relative flex h-9 w-9 items-center justify-center rounded-full border-2 border-background bg-muted text-[10px] font-semibold text-muted-foreground"
-            aria-label={`Mais ${overflow} agentes`}
-            title={`+${overflow} agentes`}
-          >
-            +{overflow}
-          </motion.div>
-        )}
+          {overflow > 0 && (
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <motion.button
+                  type="button"
+                  initial={{ opacity: 0, scale: 0.6 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  whileHover={{ scale: 1.12, y: -2, zIndex: 10 }}
+                  transition={{ duration: 0.25, delay: visible.length * 0.05 }}
+                  className="relative flex h-9 w-9 items-center justify-center rounded-full border-2 border-background bg-muted text-[10px] font-semibold text-muted-foreground outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+                  aria-label={`Mais ${overflow} agentes`}
+                >
+                  +{overflow}
+                </motion.button>
+              </TooltipTrigger>
+              <TooltipContent side="top" className="px-2.5 py-1.5 max-w-[220px]">
+                <div className="text-[11px] font-medium mb-1">+{overflow} agentes neste squad</div>
+                <div className="text-[10px] text-muted-foreground leading-snug">
+                  {agents.slice(maxVisible).map((a) => a.name).join(" · ")}
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          )}
+        </div>
+
+        <span className="ml-3 text-xs text-muted-foreground">
+          {agents.length} agentes trabalhando
+        </span>
       </div>
-
-      <span className="ml-3 text-xs text-muted-foreground">
-        {agents.length} agentes trabalhando
-      </span>
-    </div>
+    </TooltipProvider>
   );
 };
 
