@@ -185,40 +185,28 @@ const ConversationalHero = () => {
 
 
       <div className="relative z-10 w-full max-w-3xl mx-auto text-center">
-        {/* Eyebrow */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
+        {/* Eyebrow minimal — sem pulse vermelho, só tipografia */}
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[12px] text-white/70 backdrop-blur-md mb-8"
+          className="text-[11px] uppercase tracking-[0.28em] text-white/40 mb-10"
         >
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 animate-ping" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-          </span>
-          Thor · seu orquestrador de IA está online
-        </motion.div>
+          Meet Thor · AI Orchestrator
+        </motion.p>
 
-        {/* Headline — peso variável, sem gradient (nível Linear/Vercel) */}
+        {/* Headline — clean Apple/Tesla, tipografia pura */}
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.05 }}
-          className="text-4xl sm:text-6xl lg:text-7xl tracking-[-0.035em] leading-[1.02] text-white"
+          className="text-5xl sm:text-7xl lg:text-[88px] tracking-[-0.04em] leading-[1.02] text-white font-semibold"
         >
-          <span className="font-light text-white/70">Contrate um </span>
-          <span
-            className="font-bold text-white inline-block"
-            style={{
-              textShadow: "0 0 40px hsl(var(--primary) / 0.5), 0 0 80px hsl(var(--primary) / 0.25)",
-              animation: "headline-glow 4s ease-in-out infinite",
-            }}
-          >
-            departamento
-          </span>
-          <br className="hidden sm:block" />
-          <span className="font-light text-white/70"> inteiro de </span>
-          <span className="font-bold text-white">IA.</span>
+          Contrate um
+          <br />
+          departamento
+          <br />
+          <span className="text-white/40">inteiro de IA.</span>
         </motion.h1>
 
         {/* Sub */}
