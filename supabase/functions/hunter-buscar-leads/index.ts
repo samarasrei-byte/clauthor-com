@@ -122,6 +122,18 @@ Deno.serve(async (req) => {
 
     // Real PhantomBuster Search call
     try {
+      await tracer?.step("tool_call", {
+        title: "PhantomBuster: launch search",
+        tool_name: "phantombuster_launch",
+        content: {
+          agent_id: searchAgentId,
+          searches: `${campaign.cargo_alvo} ${campaign.setor_alvo}`.trim(),
+          location: campaign.localizacao_alvo,
+          numberOfResultsPerSearch: campaign.limite_diario || 20,
+        },
+      });
+
+      const t0 = Date.now();
       const pbResponse = await fetch("https://api.phantombuster.com/api/v2/agents/launch", {
         method: "POST",
         headers: {
@@ -155,7 +167,15 @@ Deno.serve(async (req) => {
         mensagem: `PhantomBuster Search disparado (limite ${campaign.limite_diario}). Leads chegam por webhook.`,
       });
 
-      return jsonResponse({ success: true, message: "Busca iniciada no PhantomBuster" });
+      await tracer?.step("tool_result", {
+        title: "PhantomBuster disparado",
+        tool_name: "phantombuster_launch",
+        duration_ms: Date.now() - t0,
+        content: { status: pbResponse.status },
+      });
+      await tracer?.finish({ status: "completed", summary: "Busca iniciada no PhantomBuster" });
+
+      return jsonResponse({ success: true, message: "Busca iniciada no PhantomBuster", run_id: tracer?.runId });
     } catch (e) {
       await supabase.from("hunter_logs").insert({
         campaign_id,
@@ -163,9 +183,12 @@ Deno.serve(async (req) => {
         tipo: "erro",
         mensagem: `Erro PhantomBuster: ${(e as Error).message}`,
       });
+      await tracer?.step("error", { title: "PhantomBuster falhou", content: { error: (e as Error).message } });
+      await tracer?.finish({ status: "failed", summary: (e as Error).message });
       return errorResponse((e as Error).message, 500);
     }
   } catch (e) {
     return errorResponse((e as Error).message || "Erro interno", 500);
   }
 });
+
