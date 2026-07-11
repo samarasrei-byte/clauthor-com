@@ -224,6 +224,7 @@ const Navbar = () => {
                 { href: "/departamentos", label: t("navbar.ai_teams_label") },
                 { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }) },
                 { href: "/enterprise", label: "Enterprise" },
+                { href: "/developers", label: "Developers" },
               ].map((item) => (
                 <Link
                   key={item.href}
