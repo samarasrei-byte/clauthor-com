@@ -1848,6 +1848,39 @@ export type Database = {
         }
         Relationships: []
       }
+      demo_runs: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          id: string
+          ip_hash: string | null
+          line_count: number
+          outcome: string
+          status: string
+          transcript: string
+        }
+        Insert: {
+          created_at?: string
+          duration_ms?: number
+          id?: string
+          ip_hash?: string | null
+          line_count?: number
+          outcome: string
+          status?: string
+          transcript: string
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          id?: string
+          ip_hash?: string | null
+          line_count?: number
+          outcome?: string
+          status?: string
+          transcript?: string
+        }
+        Relationships: []
+      }
       department_suggestions: {
         Row: {
           created_at: string
