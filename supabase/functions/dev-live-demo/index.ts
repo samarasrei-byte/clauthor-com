@@ -24,10 +24,54 @@ Constraints:
 - 3 to 5 different agents working in parallel.
 - End with exactly one DONE line.`;
 
+// In-memory sliding-window rate limiter (per isolate). Best-effort — Deno Deploy
+// isolates are ephemeral, so limits are per-region-instance. Good enough to stop
+// casual abuse of the public demo endpoint without a Redis dependency.
+const RATE_WINDOW_MS = 60_000;
+const RATE_MAX = 10; // 10 runs / minute / IP
+const ipHits = new Map<string, number[]>();
+
+function rateLimit(ip: string): { ok: boolean; retryAfter: number } {
+  const now = Date.now();
+  const arr = (ipHits.get(ip) ?? []).filter((t) => now - t < RATE_WINDOW_MS);
+  if (arr.length >= RATE_MAX) {
+    return { ok: false, retryAfter: Math.ceil((RATE_WINDOW_MS - (now - arr[0])) / 1000) };
+  }
+  arr.push(now);
+  ipHits.set(ip, arr);
+  // Opportunistic GC
+  if (ipHits.size > 5000) {
+    for (const [k, v] of ipHits) {
+      if (v.length === 0 || now - v[v.length - 1] > RATE_WINDOW_MS) ipHits.delete(k);
+    }
+  }
+  return { ok: true, retryAfter: 0 };
+}
+
 Deno.serve(async (req) => {
   const pre = handleCors(req);
   if (pre) return pre;
   if (req.method !== "POST") return errorResponse("Method not allowed", 405);
+
+  const ip =
+    req.headers.get("cf-connecting-ip") ??
+    req.headers.get("x-real-ip") ??
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown";
+  const rl = rateLimit(ip);
+  if (!rl.ok) {
+    return new Response(
+      JSON.stringify({ error: "rate_limited", retry_after: rl.retryAfter }),
+      {
+        status: 429,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Retry-After": String(rl.retryAfter),
+        },
+      },
+    );
+  }
 
   let outcome = "";
   try {
