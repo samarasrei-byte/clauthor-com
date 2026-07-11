@@ -6,6 +6,7 @@ import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resi
 import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, type AgentContract } from "../_shared/agent-contract.ts";
 import { validateLimits } from "../_shared/policy-engine.ts";
 import { incrementAgentUsage, resolvePriceTier } from "../_shared/metered-billing.ts";
+import { startRun } from "../_shared/execution-tracer.ts";
 
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
