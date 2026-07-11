@@ -46,7 +46,7 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
           "hover:-translate-y-[2px] active:translate-y-0 active:scale-[0.985]",
           "disabled:opacity-60 disabled:pointer-events-none disabled:hover:translate-y-0",
           heightCls,
-          "px-7",
+          paddingCls,
           className,
         )}
         {...rest}
