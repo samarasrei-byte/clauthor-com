@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, PlayCircle, ShieldCheck, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
