@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import SquadPlans from "@/components/pricing/SquadPlans";
+import PricePill from "@/components/pricing/PricePill";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
