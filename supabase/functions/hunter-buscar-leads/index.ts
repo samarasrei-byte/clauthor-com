@@ -49,12 +49,42 @@ Deno.serve(async (req) => {
     const searchAgentId = cfg?.phantombuster_search_agent_id || Deno.env.get("PHANTOMBUSTER_SEARCH_AGENT_ID");
     const cookie = session?.linkedin_cookie;
 
+    // Resolve tenant for tracer
+    const { data: tm } = await supabase
+      .from("tenant_members")
+      .select("tenant_id")
+      .eq("user_id", user.id)
+      .limit(1)
+      .maybeSingle();
+    const tenantId = tm?.tenant_id ?? user.id;
+
+    const tracer = await startRun(supabase, {
+      tenantId,
+      userId: user.id,
+      runType: "hunter",
+      agents: ["hunter-buscar-leads"],
+      message: `Campanha "${campaign.nome}" (limite ${campaign.limite_diario}/dia)`,
+    }).catch(() => null);
+
+    await tracer?.step("thought", {
+      title: `Iniciando busca de leads`,
+      content: {
+        campaign_id,
+        cargo_alvo: campaign.cargo_alvo,
+        setor_alvo: campaign.setor_alvo,
+        localizacao_alvo: campaign.localizacao_alvo,
+        limite_diario: campaign.limite_diario,
+      },
+      agent_slug: "hunter",
+    });
+
     await supabase.from("hunter_logs").insert({
       campaign_id,
       user_id: user.id,
       tipo: "info",
       mensagem: `Execução iniciada para "${campaign.nome}" (limite: ${campaign.limite_diario}/dia)`,
     });
+
 
     // Guard: PhantomBuster and LinkedIn cookie are required for real prospecting.
     // Previously this branch silently inserted fake demo leads — now we fail loudly.
