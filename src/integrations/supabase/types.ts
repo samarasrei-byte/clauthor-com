@@ -1791,6 +1791,63 @@ export type Database = {
           },
         ]
       }
+      deals: {
+        Row: {
+          contact_company: string | null
+          contact_email: string | null
+          contact_name: string | null
+          created_at: string
+          expected_close_date: string | null
+          id: string
+          lead_id: string | null
+          notes: string | null
+          owner_id: string
+          position: number
+          source: string | null
+          stage: string
+          tenant_id: string
+          title: string
+          updated_at: string
+          value_brl: number
+        }
+        Insert: {
+          contact_company?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          created_at?: string
+          expected_close_date?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          owner_id: string
+          position?: number
+          source?: string | null
+          stage?: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+          value_brl?: number
+        }
+        Update: {
+          contact_company?: string | null
+          contact_email?: string | null
+          contact_name?: string | null
+          created_at?: string
+          expected_close_date?: string | null
+          id?: string
+          lead_id?: string | null
+          notes?: string | null
+          owner_id?: string
+          position?: number
+          source?: string | null
+          stage?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+          value_brl?: number
+        }
+        Relationships: []
+      }
       department_suggestions: {
         Row: {
           created_at: string

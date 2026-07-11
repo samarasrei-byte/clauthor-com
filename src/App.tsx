@@ -97,6 +97,7 @@ const AdminAdvocaciaVertical = lazyRetry(() => import("./pages/AdminAdvocaciaVer
 const ApiKeysSettings = lazyRetry(() => import("./pages/ApiKeysSettings"));
 const ApresentacaoAdv = lazyRetry(() => import("./pages/ApresentacaoAdv"));
 const InvestorPitch = lazyRetry(() => import("./pages/InvestorPitch"));
+const ComercialFunil = lazyRetry(() => import("./pages/ComercialFunil"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -207,6 +208,7 @@ const App = () => (
                   <Route path="/hunter-inbox" element={<FeatureGate flag="hunter"><HunterInbox /></FeatureGate>} />
                   <Route path="/app/agente/:slug" element={<AgentWorkspace />} />
                   <Route path="/settings/api-keys" element={<ApiKeysSettings />} />
+                  <Route path="/comercial/funil" element={<ComercialFunil />} />
                 </Route>
 
                 {/* Admin */}
