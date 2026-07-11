@@ -185,40 +185,28 @@ const ConversationalHero = () => {
 
 
       <div className="relative z-10 w-full max-w-3xl mx-auto text-center">
-        {/* Eyebrow */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
+        {/* Eyebrow minimal — sem pulse vermelho, só tipografia */}
+        <motion.p
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-3.5 py-1.5 text-[12px] text-white/70 backdrop-blur-md mb-8"
+          className="text-[11px] uppercase tracking-[0.28em] text-white/40 mb-10"
         >
-          <span className="relative flex h-1.5 w-1.5">
-            <span className="absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 animate-ping" />
-            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-primary" />
-          </span>
-          Thor · seu orquestrador de IA está online
-        </motion.div>
+          Meet Thor · AI Orchestrator
+        </motion.p>
 
-        {/* Headline — peso variável, sem gradient (nível Linear/Vercel) */}
+        {/* Headline — clean Apple/Tesla, tipografia pura */}
         <motion.h1
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.05 }}
-          className="text-4xl sm:text-6xl lg:text-7xl tracking-[-0.035em] leading-[1.02] text-white"
+          className="text-5xl sm:text-7xl lg:text-[88px] tracking-[-0.04em] leading-[1.02] text-white font-semibold"
         >
-          <span className="font-light text-white/70">Contrate um </span>
-          <span
-            className="font-bold text-white inline-block"
-            style={{
-              textShadow: "0 0 40px hsl(var(--primary) / 0.5), 0 0 80px hsl(var(--primary) / 0.25)",
-              animation: "headline-glow 4s ease-in-out infinite",
-            }}
-          >
-            departamento
-          </span>
-          <br className="hidden sm:block" />
-          <span className="font-light text-white/70"> inteiro de </span>
-          <span className="font-bold text-white">IA.</span>
+          Contrate um
+          <br />
+          departamento
+          <br />
+          <span className="text-white/40">inteiro de IA.</span>
         </motion.h1>
 
         {/* Sub */}
@@ -241,15 +229,12 @@ const ConversationalHero = () => {
         >
           <div
             className={cn(
-              "group relative rounded-3xl overflow-hidden",
-              "border border-white/[0.1] bg-white/[0.03] backdrop-blur-2xl",
-              "shadow-[0_1px_0_0_rgba(255,255,255,0.06)_inset,0_20px_60px_-20px_rgba(0,0,0,0.6)]",
-              "transition-all duration-500",
-              "focus-within:border-primary/40 focus-within:shadow-[0_1px_0_0_rgba(255,255,255,0.08)_inset,0_0_60px_-10px_hsl(var(--primary)/0.4)]",
+              "group relative rounded-2xl overflow-hidden",
+              "border border-white/10 bg-white/[0.02]",
+              "transition-colors duration-300",
+              "focus-within:border-white/25",
             )}
           >
-            {/* Top hairline */}
-            <div aria-hidden className="pointer-events-none absolute inset-x-6 top-0 h-px bg-gradient-to-r from-transparent via-white/25 to-transparent" />
 
             {/* Placeholder rotativo (só quando vazio e sem stream) */}
             {input.length === 0 && !streaming && (
@@ -291,12 +276,11 @@ const ConversationalHero = () => {
                 disabled={streaming || input.trim().length === 0}
                 aria-label="Enviar para o Thor"
                 className={cn(
-                  "ml-auto flex items-center gap-2 rounded-full h-10 px-4",
-                  "bg-primary text-primary-foreground text-[13px] font-medium",
-                  "shadow-[0_0_28px_hsl(var(--primary)/0.55)]",
-                  "transition-all duration-300",
-                  "hover:shadow-[0_0_40px_hsl(var(--primary)/0.75)] hover:scale-[1.02]",
-                  "disabled:opacity-70 disabled:pointer-events-none disabled:shadow-[0_0_20px_hsl(var(--primary)/0.4)]",
+                  "ml-auto flex items-center gap-2 rounded-full h-9 px-4",
+                  "bg-white text-black text-[13px] font-medium",
+                  "transition-all duration-200",
+                  "hover:bg-white/90",
+                  "disabled:bg-white/10 disabled:text-white/40 disabled:pointer-events-none",
                 )}
               >
                 {streaming ? (
@@ -343,16 +327,11 @@ const ConversationalHero = () => {
                   transition={{ duration: 0.5 }}
                   className="flex flex-col items-center gap-1.5 text-left mx-auto max-w-lg"
                 >
-                  <div className="flex items-center gap-2 text-[11px] text-white/35 uppercase tracking-[0.15em]">
-                    <span className="h-1 w-1 rounded-full bg-primary animate-pulse" />
-                    Exemplo ao vivo
-                  </div>
-                  <p className="text-[13px] text-white/50 italic">
-                    "{GHOST_DEMOS[ghostIdx].q}"
+                  <p className="text-[13px] text-white/40">
+                    <span className="text-white/30">Ex.</span> "{GHOST_DEMOS[ghostIdx].q}"
                   </p>
-                  <p className="text-[13px] text-white/80">
-                    → <span className="text-primary">{GHOST_DEMOS[ghostIdx].dept}</span>{" "}
-                    <span className="text-white/60">{GHOST_DEMOS[ghostIdx].a.replace(/^[^—]+—\s*/, "")}</span>
+                  <p className="text-[13px] text-white/70">
+                    → {GHOST_DEMOS[ghostIdx].dept} · {GHOST_DEMOS[ghostIdx].a.replace(/^[^—]+—\s*/, "")}
                   </p>
                 </motion.div>
               </AnimatePresence>
@@ -360,27 +339,15 @@ const ConversationalHero = () => {
           )}
         </motion.form>
 
-        {/* Trusted-by strip */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
+        {/* Prova social minimal — só tipografia */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
+          className="mt-16 text-[12px] text-white/35 tracking-wide"
         >
-          <div className="flex -space-x-2">
-            {[0, 1, 2, 3, 4].map((i) => (
-              <div
-                key={i}
-                className="h-7 w-7 rounded-full border-2 border-black/80 bg-gradient-to-br from-primary/60 to-purple-500/60"
-                style={{ zIndex: 5 - i }}
-              />
-            ))}
-          </div>
-          <p className="text-[13px] sm:text-[14px] text-white/60">
-            <span className="font-semibold text-white">+200 empresas</span>{" "}
-            <span className="text-white/50">já orquestram departamentos com CLAUTHOR</span>
-          </p>
-        </motion.div>
+          <span className="text-white/70">+200 empresas</span> orquestram departamentos com CLAUTHOR
+        </motion.p>
 
         {/* Response */}
         <AnimatePresence>

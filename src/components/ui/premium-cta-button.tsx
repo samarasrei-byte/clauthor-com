@@ -10,12 +10,15 @@ export interface PremiumCTAButtonProps
   loading?: boolean;
   loadingLabel?: string;
   size?: "sm" | "md" | "lg";
+  /** "solid" (branco, Apple) | "outline" (borda, Tesla) */
+  variant?: "solid" | "outline";
 }
 
 /**
- * PremiumCTAButton — Black glass + red neon.
- * Vidro obsidiano com hairline cromada, halo vermelho ambient,
- * texto neon vermelho e sweep de luz no hover. Estilo Apple/Vision Pro.
+ * PremiumCTAButton — Apple/Tesla/Notion clean.
+ * Sem glow, sem gradient, sem sweep. Pura hierarquia tipográfica.
+ * solid: fundo branco puro + texto preto (CTA primário).
+ * outline: hairline branca + texto branco (CTA secundário premium).
  */
 export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonProps>(
   (
@@ -26,122 +29,61 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
       loading = false,
       loadingLabel = "Processing…",
       size = "lg",
+      variant = "solid",
       className,
       disabled,
       ...rest
     },
     ref,
   ) => {
-    const heightCls = size === "lg" ? "h-14" : size === "sm" ? "h-9" : "h-12";
-    const paddingCls = size === "sm" ? "px-4" : "px-7";
-    const textCls = size === "sm" ? "text-[13px]" : "text-[15px]";
+    const heightCls = size === "lg" ? "h-12" : size === "sm" ? "h-9" : "h-11";
+    const paddingCls = size === "sm" ? "px-4" : size === "lg" ? "px-7" : "px-6";
+    const textCls = size === "sm" ? "text-[13px]" : "text-[14px]";
+
+    const variantCls =
+      variant === "solid"
+        ? "bg-white text-black hover:bg-white/90"
+        : "bg-transparent text-white border border-white/25 hover:border-white/60 hover:bg-white/[0.04]";
 
     return (
       <button
         ref={ref}
         disabled={disabled || loading}
         className={cn(
-          "group relative rounded-2xl overflow-visible cursor-pointer isolate",
-          "transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
-          "hover:-translate-y-[2px] active:translate-y-0 active:scale-[0.985]",
-          "disabled:opacity-60 disabled:pointer-events-none disabled:hover:translate-y-0",
+          "group relative rounded-full inline-flex items-center justify-center gap-2 whitespace-nowrap",
+          "font-medium tracking-tight",
+          "transition-colors duration-200 ease-out",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-offset-2 focus-visible:ring-offset-black",
+          "disabled:opacity-40 disabled:pointer-events-none",
           heightCls,
           paddingCls,
+          textCls,
+          variantCls,
           className,
         )}
         {...rest}
       >
-        {/* Ambient red halo (fora do botão, dá o "flutuando com neon") */}
-        <div
-          aria-hidden
-          className="absolute -inset-[6px] rounded-[20px] bg-[radial-gradient(120%_120%_at_50%_50%,hsl(var(--primary)/0.65),transparent_70%)] blur-2xl opacity-50 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none -z-10"
-        />
-
-        {/* Base — obsidian glass */}
-        <div
-          aria-hidden
-          className="absolute inset-0 rounded-2xl bg-[linear-gradient(180deg,rgba(20,10,12,0.92)_0%,rgba(6,4,6,0.98)_50%,rgba(28,12,14,0.94)_100%)] backdrop-blur-xl"
-        />
-
-        {/* Inner red glow — vermelho vazando por baixo do vidro */}
-        <div
-          aria-hidden
-          className="absolute inset-0 rounded-2xl bg-[radial-gradient(80%_120%_at_50%_120%,hsl(var(--primary)/0.55),transparent_60%)] opacity-80 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-        />
-
-        {/* Top inner shine (glass reflection) */}
-        <div
-          aria-hidden
-          className="absolute inset-x-3 top-0 h-[45%] rounded-t-2xl bg-gradient-to-b from-white/[0.18] via-white/[0.04] to-transparent pointer-events-none"
-        />
-
-        {/* Chromatic hairline — vermelha sutil */}
-        <div
-          aria-hidden
-          className="absolute inset-0 rounded-2xl border border-white/[0.08] [box-shadow:inset_0_1px_0_0_rgba(255,255,255,0.15),inset_0_-1px_0_0_hsl(var(--primary)/0.35),inset_0_0_0_1px_hsl(var(--primary)/0.15)] pointer-events-none"
-        />
-
-        {/* Liquid sweep (hover) */}
-        <div aria-hidden className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
-          <div className="absolute top-0 -left-1/2 h-full w-1/2 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] translate-x-0 group-hover:translate-x-[350%] transition-transform duration-[1100ms] ease-out" />
-        </div>
-
-        {/* Content — texto neon vermelho */}
-        <span className="relative z-10 flex items-center justify-center gap-3">
-          {loading ? (
-            <>
-              <Loader2
-                className="h-[18px] w-[18px] animate-spin text-[hsl(var(--primary))]"
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" strokeWidth={2} />
+            <span>{loadingLabel}</span>
+          </>
+        ) : (
+          <>
+            {icon && (
+              <span className="inline-flex items-center justify-center [&_svg]:h-3.5 [&_svg]:w-3.5">
+                {icon}
+              </span>
+            )}
+            <span>{children}</span>
+            {showArrow && (
+              <ArrowRight
+                className="h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-0.5"
                 strokeWidth={2.25}
-                style={{ filter: "drop-shadow(0 0 8px hsl(var(--primary) / 0.9))" }}
               />
-              <span
-                className={cn("font-display font-semibold tracking-tight text-[hsl(var(--primary))]", textCls)}
-                style={{
-                  textShadow:
-                    "0 0 8px hsl(var(--primary) / 0.9), 0 0 20px hsl(var(--primary) / 0.6), 0 0 40px hsl(var(--primary) / 0.35)",
-                }}
-              >
-                {loadingLabel}
-              </span>
-            </>
-          ) : (
-            <>
-              {icon && (
-                <span
-                  className="flex h-6 w-6 items-center justify-center rounded-full bg-black/40 backdrop-blur-sm ring-1 ring-[hsl(var(--primary)/0.5)] transition-transform duration-500 group-hover:rotate-[8deg] group-hover:scale-110"
-                  style={{
-                    boxShadow:
-                      "0 0 12px hsl(var(--primary) / 0.6), inset 0 0 8px hsl(var(--primary) / 0.3)",
-                  }}
-                >
-                  <span
-                    className="text-[hsl(var(--primary))]"
-                    style={{ filter: "drop-shadow(0 0 6px hsl(var(--primary) / 0.9))" }}
-                  >
-                    {icon}
-                  </span>
-                </span>
-              )}
-              <span
-                className={cn("font-display font-semibold tracking-[0.01em] whitespace-nowrap text-[hsl(var(--primary))]", textCls)}
-                style={{
-                  textShadow:
-                    "0 0 6px hsl(var(--primary) / 0.9), 0 0 16px hsl(var(--primary) / 0.65), 0 0 36px hsl(var(--primary) / 0.4)",
-                }}
-              >
-                {children}
-              </span>
-              {showArrow && (
-                <ArrowRight
-                  className="h-[16px] w-[16px] text-[hsl(var(--primary))] transition-all duration-500 ease-out group-hover:translate-x-1.5 group-hover:scale-110"
-                  strokeWidth={2.5}
-                  style={{ filter: "drop-shadow(0 0 6px hsl(var(--primary) / 0.9))" }}
-                />
-              )}
-            </>
-          )}
-        </span>
+            )}
+          </>
+        )}
       </button>
     );
   },
