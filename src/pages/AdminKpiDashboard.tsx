@@ -70,6 +70,25 @@ export default function AdminKpiDashboard() {
     },
   });
 
+  const { data: variantStats } = useQuery({
+    enabled: verified,
+    queryKey: ["wow-variant-significance", range],
+    queryFn: async () => {
+      const { data, error } = await supabase.rpc("get_wow_variant_significance", { _since: since });
+      if (error) throw error;
+      return (data ?? []) as Array<{
+        variant: string;
+        assigned: number;
+        approved: number;
+        conversion_rate: number;
+        chi_square: number;
+        p_lt_0_05: boolean;
+        winner: string;
+      }>;
+    },
+  });
+
+
   if (!verified) {
     return (
       <div className="min-h-dvh flex items-center justify-center bg-background">
