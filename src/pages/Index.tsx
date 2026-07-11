@@ -16,8 +16,9 @@ import LandingDiagnosisDialog from "@/components/landing/LandingDiagnosisDialog"
 import { useLandingDiagnosis } from "@/hooks/useLandingDiagnosis";
 
 import { Button } from "@/components/ui/button";
+import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
 import {
-  ArrowRight, ShieldCheck,
+  ArrowRight, ShieldCheck, Sparkles,
   Code, UsersRound,
   Headphones, PenTool, ShoppingCart, Megaphone, LineChart,
   Receipt, Globe, Briefcase, DollarSign, MessageSquare,
@@ -452,12 +453,14 @@ const HomePage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
               <Link to="/waitlist">
-                <Button size="lg" className="h-11 px-8 gap-2 text-[13px] font-medium rounded-full">
+                <PremiumCTAButton
+                  size="md"
+                  icon={<Sparkles className="h-[13px] w-[13px] text-white" strokeWidth={2.25} />}
+                >
                   {t("home.cta_waitlist", { defaultValue: "Get Started" })}
-                  <ArrowRight className="h-3.5 w-3.5" />
-                </Button>
+                </PremiumCTAButton>
               </Link>
               <Link to="/pricing">
                 <Button variant="ghost" className="h-11 px-6 text-[13px] font-medium text-primary gap-1">
@@ -541,11 +544,14 @@ const HomePage = () => {
             <p className="text-[16px] text-muted-foreground max-w-md mx-auto mb-8 leading-relaxed">
               {t("home.final_cta_desc_v2", { defaultValue: "Os primeiros a entrar ganham acesso antecipado e desconto exclusivo de lançamento." })}
             </p>
-            <Link to="/waitlist">
-              <Button size="lg" className="h-12 px-10 gap-2 text-[14px] font-medium rounded-full">
+            <Link to="/waitlist" className="inline-block">
+              <PremiumCTAButton
+                size="lg"
+                icon={<Sparkles className="h-[13px] w-[13px] text-white" strokeWidth={2.25} />}
+                className="px-10"
+              >
                 {t("home.cta_waitlist", { defaultValue: "Get Started" })}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+              </PremiumCTAButton>
             </Link>
           </motion.div>
         </div>
