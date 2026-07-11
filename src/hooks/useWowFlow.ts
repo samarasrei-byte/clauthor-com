@@ -176,12 +176,14 @@ export function useWowFlow() {
       const formMs = timingsRef.current.outputReadyAt - (timingsRef.current.formSubmittedAt ?? timingsRef.current.outputReadyAt);
       trackKpi("wow_output_ready", {
         source: "instant_wow",
+        variant: currentWowVariant(),
         pain_category: opts.painCategory,
         agent_slug: option.agentSlug,
         used_fallback: !didStream || accumulated.trim().length < 40,
         ttfv_form_to_output_ms: formMs,
         output_chars: accumulated.length,
       });
+
 
       saveDraft({
         company: opts.company,
@@ -239,6 +241,7 @@ export function useWowFlow() {
     const ttfvMs = t.approvedAt - t.signupAt;
     trackKpi("first_wow_approved", {
       source: "instant_wow",
+      variant: currentWowVariant(),
       pain_category: painCategory,
       agent_slug: option.agentSlug,
       used_fallback: usedFallback,
@@ -248,6 +251,7 @@ export function useWowFlow() {
     });
     trackKpi("time_to_first_value", {
       source: "instant_wow",
+
       ttfv_ms: ttfvMs,
       ttfv_signup_to_form_ms: (t.formSubmittedAt ?? t.signupAt) - t.signupAt,
       ttfv_form_to_output_ms: (t.outputReadyAt ?? t.signupAt) - (t.formSubmittedAt ?? t.signupAt),
