@@ -251,14 +251,13 @@ export function useWowFlow() {
     });
     trackKpi("time_to_first_value", {
       source: "instant_wow",
-
-      ttfv_ms: ttfvMs,
       ttfv_ms: ttfvMs,
       variant: currentWowVariant(),
       ttfv_signup_to_form_ms: (t.formSubmittedAt ?? t.signupAt) - t.signupAt,
       ttfv_form_to_output_ms: (t.outputReadyAt ?? t.signupAt) - (t.formSubmittedAt ?? t.signupAt),
       ttfv_output_to_approve_ms: t.approvedAt - (t.outputReadyAt ?? t.approvedAt),
     });
+
 
 
     clearDraft();
