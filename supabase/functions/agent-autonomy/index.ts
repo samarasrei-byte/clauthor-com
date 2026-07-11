@@ -141,16 +141,24 @@ serve(async (req) => {
       });
 
       console.log(`[Autonomy] ⏳ Action queued for approval: ${pendingAction.id}`);
+      await tracer?.step("delegation", {
+        title: "Aprovação humana solicitada",
+        content: { pending_action_id: pendingAction.id, action, risk_level: classification.riskLevel },
+      });
+      await tracer?.finish({ status: "completed", summary: "approval_required" });
+
       return new Response(JSON.stringify({
         executed: false,
         reason: "approval_required",
         pending_action_id: pendingAction.id,
         risk_level: classification.riskLevel,
         message: formatted.title,
+        run_id: tracer?.runId,
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
 
     // 4. Auto-execute + log
     await supabase.from("execution_logs").insert({
