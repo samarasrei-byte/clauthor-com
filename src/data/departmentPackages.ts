@@ -233,7 +233,7 @@ const JURIDICO: DepartmentPackage = {
       outcome: "Minuta aprovada · pronta para assinatura", delayMs: 5000 },
   ],
   priceMonthly: 2997,
-  flagship: false,
+  flagship: true,
 };
 
 const FINANCEIRO: DepartmentPackage = {
