@@ -12,6 +12,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, PlayCircle, ShieldCheck, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -142,15 +143,14 @@ const DepartmentCard = ({
               <PlayCircle className="h-4 w-4" />
               Ver funcionando (60s)
             </Button>
-            <Button
-              size={isCompact ? "sm" : "default"}
-              className="flex-1 gap-2 bg-red-600 hover:bg-red-500 text-white shadow-lg shadow-red-900/20 border-0"
+            <PremiumCTAButton
+              size="sm"
               onClick={() => onHire(department)}
               aria-label={`Contratar ${department.name}`}
+              className="flex-1"
             >
               Contratar
-              <ArrowRight className="h-4 w-4" />
-            </Button>
+            </PremiumCTAButton>
           </div>
         </CardFooter>
       </Card>

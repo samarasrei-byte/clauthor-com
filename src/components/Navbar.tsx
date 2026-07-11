@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
@@ -186,9 +187,9 @@ const Navbar = () => {
                   </Button>
                 </Link>
                 <Link to="/auth" state={{ signup: true }}>
-                  <Button size="sm" className="h-8 text-[13px] rounded-full font-medium px-4">
+                  <PremiumCTAButton size="sm" showArrow={false}>
                     {t("auth.create_account")}
-                  </Button>
+                  </PremiumCTAButton>
                 </Link>
               </>
             )}
@@ -284,9 +285,9 @@ const Navbar = () => {
                       </Button>
                     </Link>
                     <Link to="/auth" state={{ signup: true }} onClick={() => setMobileOpen(false)}>
-                      <Button className="w-full h-10 text-[14px] rounded-full">
+                      <PremiumCTAButton size="sm" showArrow={false} className="w-full">
                         {t("auth.create_account")}
-                      </Button>
+                      </PremiumCTAButton>
                     </Link>
                   </>
                 )}

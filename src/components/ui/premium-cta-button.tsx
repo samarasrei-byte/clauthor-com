@@ -9,7 +9,7 @@ export interface PremiumCTAButtonProps
   showArrow?: boolean;
   loading?: boolean;
   loadingLabel?: string;
-  size?: "md" | "lg";
+  size?: "sm" | "md" | "lg";
 }
 
 /**
@@ -32,7 +32,9 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
     },
     ref,
   ) => {
-    const heightCls = size === "lg" ? "h-14" : "h-12";
+    const heightCls = size === "lg" ? "h-14" : size === "sm" ? "h-9" : "h-12";
+    const paddingCls = size === "sm" ? "px-4" : "px-7";
+    const textCls = size === "sm" ? "text-[13px]" : "text-[15px]";
 
     return (
       <button
@@ -44,7 +46,7 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
           "hover:-translate-y-[2px] active:translate-y-0 active:scale-[0.985]",
           "disabled:opacity-60 disabled:pointer-events-none disabled:hover:translate-y-0",
           heightCls,
-          "px-7",
+          paddingCls,
           className,
         )}
         {...rest}
@@ -94,7 +96,7 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
                 style={{ filter: "drop-shadow(0 0 8px hsl(var(--primary) / 0.9))" }}
               />
               <span
-                className="font-display font-semibold text-[15px] tracking-tight text-[hsl(var(--primary))]"
+                className={cn("font-display font-semibold tracking-tight text-[hsl(var(--primary))]", textCls)}
                 style={{
                   textShadow:
                     "0 0 8px hsl(var(--primary) / 0.9), 0 0 20px hsl(var(--primary) / 0.6), 0 0 40px hsl(var(--primary) / 0.35)",
@@ -122,7 +124,7 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
                 </span>
               )}
               <span
-                className="font-display font-semibold text-[15px] tracking-[0.01em] whitespace-nowrap text-[hsl(var(--primary))]"
+                className={cn("font-display font-semibold tracking-[0.01em] whitespace-nowrap text-[hsl(var(--primary))]", textCls)}
                 style={{
                   textShadow:
                     "0 0 6px hsl(var(--primary) / 0.9), 0 0 16px hsl(var(--primary) / 0.65), 0 0 36px hsl(var(--primary) / 0.4)",
