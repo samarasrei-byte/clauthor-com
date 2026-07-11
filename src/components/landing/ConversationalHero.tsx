@@ -207,7 +207,15 @@ const ConversationalHero = () => {
           className="text-4xl sm:text-6xl lg:text-7xl tracking-[-0.035em] leading-[1.02] text-white"
         >
           <span className="font-light text-white/70">Contrate um </span>
-          <span className="font-bold text-white">departamento</span>
+          <span
+            className="font-bold text-white inline-block"
+            style={{
+              textShadow: "0 0 40px hsl(var(--primary) / 0.5), 0 0 80px hsl(var(--primary) / 0.25)",
+              animation: "headline-glow 4s ease-in-out infinite",
+            }}
+          >
+            departamento
+          </span>
           <br className="hidden sm:block" />
           <span className="font-light text-white/70"> inteiro de </span>
           <span className="font-bold text-white">IA.</span>
