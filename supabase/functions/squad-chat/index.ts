@@ -322,10 +322,22 @@ ${companyContext}`;
           tokensUsed,
           speakingOrder: results.length,
         });
+        await tracer.step("final_output", {
+          title: `${agent.name} respondeu`,
+          agent_slug: `agent:${agent.id}`,
+          content: { area: agentArea, preview: String(content).slice(0, 400) },
+          tokens_in: 0,
+          tokens_out: tokensUsed,
+        });
       } catch (err: any) {
         try {
           alertFailure(adminClient, user.id, agent.id, "squad_chat", err?.message || "unknown");
         } catch {}
+        await tracer.step("error", {
+          title: `Falha em ${agent.name}`,
+          agent_slug: `agent:${agent.id}`,
+          content: { message: err?.message ?? "unknown" },
+        });
         results.push({
           agentId: agent.id,
           agentName: agent.name,
