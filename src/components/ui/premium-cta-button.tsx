@@ -96,7 +96,7 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
                 style={{ filter: "drop-shadow(0 0 8px hsl(var(--primary) / 0.9))" }}
               />
               <span
-                className="font-display font-semibold text-[15px] tracking-tight text-[hsl(var(--primary))]"
+                className="font-display font-semibold " + textCls + " tracking-tight text-[hsl(var(--primary))]"
                 style={{
                   textShadow:
                     "0 0 8px hsl(var(--primary) / 0.9), 0 0 20px hsl(var(--primary) / 0.6), 0 0 40px hsl(var(--primary) / 0.35)",
