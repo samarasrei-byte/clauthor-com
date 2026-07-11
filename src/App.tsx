@@ -41,6 +41,7 @@ const Agents = lazyRetry(() => import("./pages/Agents"));
 const Library = lazyRetry(() => import("./pages/Library"));
 const Pricing = lazyRetry(() => import("./pages/Pricing"));
 const HowItWorks = lazyRetry(() => import("./pages/HowItWorks"));
+const Developers = lazyRetry(() => import("./pages/Developers"));
 const Waitlist = lazyRetry(() => import("./pages/Waitlist"));
 const Community = lazyRetry(() => import("./pages/Community"));
 const CreateAgent = lazyRetry(() => import("./pages/CreateAgent"));
@@ -163,6 +164,8 @@ const App = () => (
                   <Route path="/quero" element={<OutcomePicker />} />
                   <Route path="/pricing" element={<Pricing />} />
                   <Route path="/how-it-works" element={<HowItWorks />} />
+                  <Route path="/developers" element={<Developers />} />
+                  <Route path="/dev" element={<Developers />} />
                   <Route path="/community" element={<Community />} />
                   <Route path="/departamentos" element={<Departamentos />} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />
