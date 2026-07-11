@@ -553,4 +553,54 @@ export const deptDetails: Record<string, DeptDetail> = {
       { q: "Monitora KPIs de qualidade?", a: "Dashboard em tempo real com OEE, taxa de defeito, CSAT interno e alertas de desvio." },
     ],
   },
+  dados: {
+    icon: BarChart3,
+    agents: ["Analista de BI", "Cientista de Dados", "Engenheiro de ML", "Analista de Dados", "Forecasting", "Data Governance / LGPD", "Designer de Dashboards"],
+    replaces: ["1 Analista BI", "1 Cientista de Dados", "1 ML Engineer", "1 Analista Dados", "1 Forecasting", "1 Data Governance", "1 Designer Dashboards"],
+    faq: [
+      { q: "Constrói dashboards?", a: "Sim. Integra com BigQuery, Metabase, Power BI, Looker e Tableau para dashboards com atualização em tempo real." },
+      { q: "Faz previsão de demanda?", a: "Modelos de forecasting com séries temporais, sazonalidade e cenários — vendas, estoque, caixa e headcount." },
+      { q: "E compliance de dados?", a: "Data catalog, linhagem, mascaramento LGPD e auditoria automática de acessos sensíveis." },
+    ],
+  },
+  produto: {
+    icon: Lightbulb,
+    agents: ["Product Manager", "Product Designer (UI/UX)", "UX Writer", "User Researcher", "Product Analytics", "Product Ops", "Discovery Lead"],
+    replaces: ["1 PM", "1 Product Designer", "1 UX Writer", "1 Researcher", "1 Product Analytics", "1 Product Ops", "1 Discovery"],
+    faq: [
+      { q: "Gerencia roadmap?", a: "Sim. Prioriza por RICE/ICE, integra com Linear/Jira, gera specs e comunica trade-offs para stakeholders." },
+      { q: "Faz descoberta de produto?", a: "Entrevistas com clientes, análise de comportamento, testes de conceito e validação com protótipos." },
+      { q: "Mede sucesso?", a: "Métricas north-star, funis de ativação, retenção coorte e dashboards de saúde do produto." },
+    ],
+  },
+  inovacao: {
+    icon: Rocket,
+    agents: ["Líder de Inovação", "Pesquisador P&D", "Trend Scanner", "Analista de Patentes/IP", "Corporate Venture / M&A", "Prototipador Rápido"],
+    replaces: ["1 Innovation Lead", "1 P&D", "1 Foresight", "1 IP Analyst", "1 CVC", "1 Prototipador"],
+    faq: [
+      { q: "Mapeia tendências?", a: "Sim. Radar de tecnologias emergentes, análise de startups, benchmarks internacionais e sinais fracos." },
+      { q: "Prototipa ideias?", a: "MVPs no-code, mockups navegáveis e testes de mercado em dias — não meses." },
+      { q: "Gerencia portfólio de inovação?", a: "Horizon 1/2/3, stage-gate, gestão de patentes e pipeline de corporate venture." },
+    ],
+  },
+  sustentabilidade: {
+    icon: Award,
+    agents: ["Líder ESG", "Analista de Emissões", "Relatórios ESG (GRI/SASB)", "Impacto Social", "Fornecedores Sustentáveis", "Compliance ESG"],
+    replaces: ["1 ESG Lead", "1 Analista Carbono", "1 ESG Reporter", "1 Social Impact", "1 Sustainability Sourcing", "1 ESG Compliance"],
+    faq: [
+      { q: "Faz inventário de emissões?", a: "Sim. Escopo 1, 2 e 3 com metodologia GHG Protocol, evidências e certificação." },
+      { q: "Gera relatórios ESG?", a: "Relatórios GRI, SASB, TCFD e CDP com dados auditáveis e comparativos setoriais." },
+      { q: "Avalia fornecedores?", a: "Due diligence ESG, código de conduta, cascading e monitoramento contínuo da cadeia." },
+    ],
+  },
+  parcerias: {
+    icon: Handshake,
+    agents: ["Head de Parcerias", "Gestor de Canais", "Alliance Manager", "Gestor de Afiliados", "Co-Marketing", "Developer Relations"],
+    replaces: ["1 Partnerships Lead", "1 Channel Manager", "1 Alliance Manager", "1 Affiliate Manager", "1 Co-Marketing", "1 DevRel"],
+    faq: [
+      { q: "Recruta parceiros?", a: "Sim. ICP de parceiros, prospecção, negociação de acordos e onboarding com playbook estruturado." },
+      { q: "Gerencia rede de revendas?", a: "Portal de parceiros, comissionamento automático, treinamentos e MDF (marketing development funds)." },
+      { q: "Ativa DevRel?", a: "Documentação, SDKs, sample apps, eventos técnicos e community building para desenvolvedores." },
+    ],
+  },
 };
