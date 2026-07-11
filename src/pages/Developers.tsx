@@ -410,6 +410,23 @@ export default function Developers() {
           </div>
         </section>
 
+
+        {/* LIVE DEMO — real streaming */}
+        <section className="border-b border-white/[0.05]">
+          <div className="max-w-[1240px] mx-auto px-6 py-16">
+            <div className="max-w-2xl mb-8">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-primary mb-3">// live · sem cadastro</div>
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+                Rode um outcome agora. Stream real.
+              </h2>
+              <p className="text-foreground/60 font-mono text-sm leading-relaxed">
+                Descreva qualquer resultado de negócio. O orquestrador decompõe em agentes e transmite a execução token-a-token via SSE. Sem mock, sem screenshot.
+              </p>
+            </div>
+            <LiveDemoRunner />
+          </div>
+        </section>
+
         {/* QUICKSTART */}
         <section id="quickstart" className="border-b border-white/[0.05]">
           <div className="max-w-[1240px] mx-auto px-6 py-20">
