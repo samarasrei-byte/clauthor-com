@@ -178,10 +178,11 @@ const ConversationalHero = () => {
 
   return (
     <section
-      className="relative min-h-[92vh] flex items-center justify-center px-5 py-24 sm:py-32 overflow-hidden"
+      className="relative flex items-center justify-center px-5 pt-20 pb-16 sm:pt-24 sm:pb-20 overflow-hidden"
       aria-label="Hero"
     >
-      <NeuralBackdrop intensity={0.7} />
+      <NeuralBackdrop intensity={1} />
+
 
       <div className="relative z-10 w-full max-w-3xl mx-auto text-center">
         {/* Eyebrow */}
@@ -284,10 +285,10 @@ const ConversationalHero = () => {
                 className={cn(
                   "ml-auto flex items-center gap-2 rounded-full h-10 px-4",
                   "bg-primary text-primary-foreground text-[13px] font-medium",
-                  "shadow-[0_0_20px_hsl(var(--primary)/0.3)]",
+                  "shadow-[0_0_28px_hsl(var(--primary)/0.55)]",
                   "transition-all duration-300",
-                  "hover:shadow-[0_0_32px_hsl(var(--primary)/0.5)] hover:scale-[1.02]",
-                  "disabled:opacity-40 disabled:pointer-events-none",
+                  "hover:shadow-[0_0_40px_hsl(var(--primary)/0.75)] hover:scale-[1.02]",
+                  "disabled:opacity-70 disabled:pointer-events-none disabled:shadow-[0_0_20px_hsl(var(--primary)/0.4)]",
                 )}
               >
                 {streaming ? (
@@ -353,24 +354,24 @@ const ConversationalHero = () => {
 
         {/* Trusted-by strip */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-10 sm:mt-14"
+          className="mt-10 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6"
         >
-          <p className="text-[10px] uppercase tracking-[0.25em] text-white/30 mb-4">
-            Times que já orquestram com CLAUTHOR
-          </p>
-          <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-3">
-            {TRUSTED_LOGOS.map((name) => (
-              <span
-                key={name}
-                className="text-[13px] sm:text-[14px] font-medium text-white/40 hover:text-white/70 transition-colors tracking-wide"
-              >
-                {name}
-              </span>
+          <div className="flex -space-x-2">
+            {[0, 1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="h-7 w-7 rounded-full border-2 border-black/80 bg-gradient-to-br from-primary/60 to-purple-500/60"
+                style={{ zIndex: 5 - i }}
+              />
             ))}
           </div>
+          <p className="text-[13px] sm:text-[14px] text-white/60">
+            <span className="font-semibold text-white">+200 empresas</span>{" "}
+            <span className="text-white/50">já orquestram departamentos com CLAUTHOR</span>
+          </p>
         </motion.div>
 
         {/* Response */}
