@@ -206,7 +206,7 @@ for event in run:
     if event.type == "agent.output":
         print(f"[{event.agent}] {event.delta}", end="", flush=True)
     elif event.type == "run.done":
-        print(f"\\n◆ {event.tokens} tokens · ${event.cost_usd}")`,
+        print(f"\\n◆ {event.tokens} tokens · \${event.cost_usd}")`,
   },
   {
     id: "mcp",
