@@ -186,13 +186,22 @@ serve(async (req) => {
     }
 
     console.log(`[Autonomy] ✅ Auto-executed: ${action} (${classification.riskLevel})`);
+    await tracer?.step("final_output", {
+      title: `Auto-executado: ${action}`,
+      content: { risk_level: classification.riskLevel, notified: classification.notifyOwner },
+      agent_slug: agent_name ?? null,
+    });
+    await tracer?.finish({ status: "completed", summary: `auto_executed:${action}` });
+
     return new Response(JSON.stringify({
       executed: true,
       risk_level: classification.riskLevel,
       notified: classification.notifyOwner,
+      run_id: tracer?.runId,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+
   } catch (err) {
     console.error("[Autonomy] Error:", err);
     return new Response(JSON.stringify({ error: String(err) }), {
