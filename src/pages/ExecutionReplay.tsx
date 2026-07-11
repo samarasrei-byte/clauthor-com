@@ -55,6 +55,9 @@ const ExecutionReplay = () => {
         {run && !isLoading && (
           <div className="space-y-5">
             <ReplayHeader run={run} totals={totals} />
+            {run.status !== "running" && steps.length > 0 && (
+              <ExplainRunCard runId={run.id} />
+            )}
             <ReplayTimeline steps={steps} isLive={run.status === "running"} runId={run.id} />
           </div>
         )}
