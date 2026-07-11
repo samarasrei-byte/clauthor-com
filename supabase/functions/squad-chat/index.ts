@@ -185,7 +185,22 @@ Respond ONLY with a JSON array of the EXACT names of the chosen agents. Example:
 
     const agentStep = tracker.step("agent_execution");
 
-    // Execute agents SEQUENTIALLY
+    // Start replayable run
+    const tracer = await startRun(adminClient, {
+      tenantId,
+      userId: user.id,
+      runType: "agent_execute",
+      agents: respondingAgents.map((a) => a.name),
+      message: String(message).slice(0, 500),
+    });
+    await tracer.step("thought", {
+      title: `Squad chamado: ${respondingAgents.length} agente(s) responderão`,
+      content: {
+        total_agents: allAgents.length,
+        responding: respondingAgents.map((a) => ({ id: a.id, name: a.name, tier: a.tier })),
+        mentioned: mentionedAgent ?? null,
+      },
+    });
     const results: any[] = [];
     for (const agent of respondingAgents) {
       const agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
