@@ -889,6 +889,133 @@ export const WORKFORCE: WorkforceDepartment[] = [
       },
     ],
   },
+
+  // ═══════════════════════════════════════════
+  // 17. DADOS & BI
+  // ═══════════════════════════════════════════
+  {
+    id: "dados",
+    name: "Dados & BI",
+    color: "text-indigo-400",
+    squads: [
+      {
+        id: "data_intelligence_squad",
+        name: "Data Intelligence Squad",
+        mission: "Transformar dados brutos em decisões acionáveis em tempo real",
+        agents: [
+          { slug: "bi_analyst", name: "Analista de BI", responsibilities: ["Construção de dashboards", "KPIs executivos", "Distribuição de relatórios"], triggers: ["report_requested", "metric_change", "scheduled_refresh"] },
+          { slug: "data_scientist", name: "Cientista de Dados", responsibilities: ["Modelagem estatística", "Experimentação A/B", "Insights preditivos"], triggers: ["hypothesis_created", "experiment_started", "model_review"] },
+          { slug: "ml_engineer", name: "Engenheiro de ML", responsibilities: ["Deploy de modelos", "Pipelines de features", "Monitoramento de drift"], triggers: ["model_ready", "drift_detected", "retraining_scheduled"] },
+          { slug: "data_analyst", name: "Analista de Dados", responsibilities: ["Análises ad-hoc", "SQL exploratório", "Segmentações"], triggers: ["question_asked", "ad_hoc_requested"] },
+          { slug: "forecasting", name: "Forecasting Agent", responsibilities: ["Séries temporais", "Previsão de demanda/caixa", "Cenários"], triggers: ["monthly_forecast", "budget_cycle", "anomaly_detected"] },
+          { slug: "data_governance", name: "Data Governance / LGPD", responsibilities: ["Catálogo de dados", "Linhagem", "Mascaramento LGPD", "Auditoria de acesso"], triggers: ["schema_change", "access_review", "audit_scheduled"] },
+          { slug: "dashboard_designer", name: "Designer de Dashboards", responsibilities: ["UX de dashboards", "Storytelling visual", "Templates executivos"], triggers: ["dashboard_requested", "review_cycle"] },
+        ],
+        outcomes: ["Time-to-insight <1h", "Decisões data-driven +80%", "LGPD compliance 100%"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 18. PRODUTO & UX
+  // ═══════════════════════════════════════════
+  {
+    id: "produto",
+    name: "Produto & UX",
+    color: "text-violet-400",
+    squads: [
+      {
+        id: "product_squad",
+        name: "Product Discovery & Delivery Squad",
+        mission: "Descobrir, priorizar e entregar produto com foco em outcomes",
+        agents: [
+          { slug: "product_manager", name: "Product Manager", responsibilities: ["Roadmap", "Priorização RICE/ICE", "Specs e stakeholders"], triggers: ["roadmap_review", "feature_request", "quarterly_planning"] },
+          { slug: "product_designer", name: "Product Designer (UI/UX)", responsibilities: ["Wireframes", "Protótipos Figma", "Design system"], triggers: ["design_requested", "usability_issue"] },
+          { slug: "ux_writer", name: "UX Writer", responsibilities: ["Microcopy", "Tom de voz do produto", "Onboarding text"], triggers: ["copy_review", "flow_created"] },
+          { slug: "user_researcher", name: "User Researcher", responsibilities: ["Entrevistas com clientes", "Testes de usabilidade", "Personas & JTBD"], triggers: ["discovery_kickoff", "hypothesis_created"] },
+          { slug: "product_analytics", name: "Product Analytics", responsibilities: ["Funnels", "Retenção coorte", "North-star metrics"], triggers: ["release_launched", "weekly_review"] },
+          { slug: "product_ops", name: "Product Ops", responsibilities: ["Processos", "Ferramentas", "Rituais e cadência"], triggers: ["process_gap", "quarterly_ops_review"] },
+          { slug: "discovery_lead", name: "Discovery Lead", responsibilities: ["Continuous discovery", "Opportunity mapping", "Validação de hipóteses"], triggers: ["discovery_started", "assumption_flagged"] },
+        ],
+        outcomes: ["Ciclo de discovery -50%", "Activation rate +30%", "Retention coorte D30 +25%"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 19. INOVAÇÃO & P&D
+  // ═══════════════════════════════════════════
+  {
+    id: "inovacao",
+    name: "Inovação & P&D",
+    color: "text-fuchsia-400",
+    squads: [
+      {
+        id: "innovation_squad",
+        name: "Innovation & R&D Squad",
+        mission: "Antecipar tendências e transformar sinais fracos em vantagem competitiva",
+        agents: [
+          { slug: "innovation_lead", name: "Líder de Inovação", responsibilities: ["Estratégia de inovação", "Portfólio Horizon 1/2/3", "Stage-gate"], triggers: ["strategy_review", "portfolio_check"] },
+          { slug: "rd_researcher", name: "Pesquisador P&D", responsibilities: ["Pesquisa aplicada", "Papers e whitepapers", "Experimentação técnica"], triggers: ["research_requested", "hypothesis_created"] },
+          { slug: "trend_scanner", name: "Trend Scanner / Foresight", responsibilities: ["Radar de tendências", "Sinais fracos", "Benchmarks internacionais"], triggers: ["scheduled_scan", "industry_event"] },
+          { slug: "patent_analyst", name: "Analista de Patentes/IP", responsibilities: ["Busca de patentes", "Proteção de IP", "Freedom-to-operate"], triggers: ["invention_disclosed", "ip_review"] },
+          { slug: "corporate_venture", name: "Corporate Venture / M&A", responsibilities: ["Scouting de startups", "Análise de investimentos", "Deal flow"], triggers: ["scouting_cycle", "deal_identified"] },
+          { slug: "prototyper", name: "Prototipador Rápido", responsibilities: ["MVPs no-code", "Mockups navegáveis", "Testes de mercado"], triggers: ["prototype_requested", "hypothesis_to_test"] },
+        ],
+        outcomes: ["Time-to-prototype <7 dias", "Pipeline de inovação ativo", "IP protection 100%"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 20. SUSTENTABILIDADE & ESG
+  // ═══════════════════════════════════════════
+  {
+    id: "sustentabilidade",
+    name: "Sustentabilidade & ESG",
+    color: "text-green-400",
+    squads: [
+      {
+        id: "esg_squad",
+        name: "ESG Squad",
+        mission: "Operacionalizar ESG com dados auditáveis e cascading na cadeia",
+        agents: [
+          { slug: "esg_lead", name: "Líder ESG", responsibilities: ["Estratégia ESG", "Materialidade", "Comitê ESG"], triggers: ["strategy_review", "materiality_cycle"] },
+          { slug: "carbon_analyst", name: "Analista de Emissões", responsibilities: ["Inventário GHG Escopo 1/2/3", "Metas SBTi", "Ofsets"], triggers: ["ghg_cycle", "emission_alert"] },
+          { slug: "esg_reporting", name: "Relatórios ESG (GRI/SASB)", responsibilities: ["Relatórios GRI/SASB/TCFD/CDP", "Evidências auditáveis", "Comparativos setoriais"], triggers: ["report_cycle", "regulator_request"] },
+          { slug: "social_impact", name: "Impacto Social", responsibilities: ["Programas sociais", "Métricas de impacto", "Engajamento comunidade"], triggers: ["program_launch", "impact_review"] },
+          { slug: "sustainability_supplier", name: "Fornecedores Sustentáveis", responsibilities: ["Due diligence ESG", "Código de conduta", "Cascading da cadeia"], triggers: ["supplier_onboarding", "esg_audit"] },
+          { slug: "esg_compliance", name: "Compliance ESG", responsibilities: ["Regulação ESG (CVM/EU/CSRD)", "Auditorias", "Riscos climáticos"], triggers: ["regulatory_update", "audit_scheduled"] },
+        ],
+        outcomes: ["Reporte ESG auditável", "Emissões mensuradas 100%", "Cadeia ESG-compliant"],
+      },
+    ],
+  },
+
+  // ═══════════════════════════════════════════
+  // 21. PARCERIAS & ALIANÇAS
+  // ═══════════════════════════════════════════
+  {
+    id: "parcerias",
+    name: "Parcerias & Alianças",
+    color: "text-orange-400",
+    squads: [
+      {
+        id: "partnerships_squad",
+        name: "Partnerships & Alliances Squad",
+        mission: "Escalar via canais, alianças estratégicas e ecossistema de desenvolvedores",
+        agents: [
+          { slug: "partnership_lead", name: "Head de Parcerias", responsibilities: ["Estratégia de parcerias", "ICP de parceiros", "Negociação"], triggers: ["strategy_review", "deal_identified"] },
+          { slug: "channel_manager", name: "Gestor de Canais / Revendas", responsibilities: ["Portal de parceiros", "Comissionamento", "MDF"], triggers: ["partner_onboarded", "commission_cycle"] },
+          { slug: "alliance_manager", name: "Alliance Manager", responsibilities: ["Alianças com Big Tech", "Co-selling estratégico", "Marketplace listings"], triggers: ["alliance_kickoff", "qbr_scheduled"] },
+          { slug: "affiliate_lead", name: "Gestor de Afiliados & Indicações", responsibilities: ["Programa de afiliados", "Tracking de indicações", "Payout"], triggers: ["affiliate_signup", "payout_cycle"] },
+          { slug: "co_marketing", name: "Co-Marketing / Co-Selling", responsibilities: ["Campanhas conjuntas", "Webinars", "Cases compartilhados"], triggers: ["campaign_planning", "co_marketing_ask"] },
+          { slug: "developer_relations", name: "Developer Relations (DevRel)", responsibilities: ["Documentação", "SDKs & sample apps", "Community & eventos técnicos"], triggers: ["release_launched", "community_engagement"] },
+        ],
+        outcomes: ["Revenue via parcerias +30%", "Rede de canais ativa", "Comunidade DevRel engajada"],
+      },
+    ],
+  },
 ];
 
 // ─── Computed totals ───
