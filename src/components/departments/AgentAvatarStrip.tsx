@@ -12,6 +12,12 @@ import { cn } from "@/lib/utils";
 import { WORKFORCE } from "@/data/workforceArchitecture";
 import type { DeptColorKey } from "@/data/departmentPackages";
 import { DEPT_COLOR_TOKENS } from "@/data/departmentPackages";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface AgentAvatarStripProps {
   agentSlugs: readonly string[];
