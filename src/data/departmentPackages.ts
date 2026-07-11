@@ -166,7 +166,12 @@ const MARKETING: DepartmentPackage = {
   color: "marketing",
   painPoint: "Você queima verba em ads sem saber o que está trazendo retorno.",
   outcome: "ROAS medido e otimizado semana a semana",
-  agentSlugs: ["ad_copywriter", "brand_strategist", "traffic_manager", "meta_ads_agent", "content_performance"],
+  agentSlugs: [
+    "brand_strategist", "brand_voice_writer", "ad_copywriter", "content_strategist",
+    "content_seo_writer", "seo_strategist", "technical_seo", "social_media_agent",
+    "video_script_agent", "meta_ads_agent", "google_ads_agent", "traffic_manager",
+    "content_performance", "influencer_mgr",
+  ],
   outcomeMetric: {
     label: "ROAS acumulado",
     progression: [0.8, 1.4, 2.1, 2.8, 3.4, 3.9, 4.2, 4.5],
