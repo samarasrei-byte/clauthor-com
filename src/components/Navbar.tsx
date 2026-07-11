@@ -2,6 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, LogOut, ShieldCheck, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
 import { useState, useRef, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useTranslation } from "react-i18next";
