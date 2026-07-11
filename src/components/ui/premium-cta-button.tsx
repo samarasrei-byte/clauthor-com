@@ -9,7 +9,7 @@ export interface PremiumCTAButtonProps
   showArrow?: boolean;
   loading?: boolean;
   loadingLabel?: string;
-  size?: "md" | "lg";
+  size?: "sm" | "md" | "lg";
 }
 
 /**
