@@ -13,6 +13,14 @@ import { WOW_FALLBACKS } from "@/data/wowTemplates";
 import { trackKpi } from "@/lib/kpiTracker";
 import logger from "@/lib/logger";
 
+function currentWowVariant(): "form" | "voice" | undefined {
+  try {
+    const v = localStorage.getItem("wow-variant-v1");
+    return v === "form" || v === "voice" ? v : undefined;
+  } catch { return undefined; }
+}
+
+
 type WowState = "idle" | "generating" | "ready" | "approved" | "error";
 
 interface Timings {
