@@ -229,11 +229,10 @@ const ConversationalHero = () => {
         >
           <div
             className={cn(
-              "group relative rounded-3xl overflow-hidden",
-              "border border-white/[0.1] bg-white/[0.03] backdrop-blur-2xl",
-              "shadow-[0_1px_0_0_rgba(255,255,255,0.06)_inset,0_20px_60px_-20px_rgba(0,0,0,0.6)]",
-              "transition-all duration-500",
-              "focus-within:border-primary/40 focus-within:shadow-[0_1px_0_0_rgba(255,255,255,0.08)_inset,0_0_60px_-10px_hsl(var(--primary)/0.4)]",
+              "group relative rounded-2xl overflow-hidden",
+              "border border-white/10 bg-white/[0.02]",
+              "transition-colors duration-300",
+              "focus-within:border-white/25",
             )}
           >
             {/* Top hairline */}
