@@ -164,6 +164,8 @@ const App = () => (
                   <Route path="/quero" element={<OutcomePicker />} />
                   <Route path="/pricing" element={<Pricing />} />
                   <Route path="/how-it-works" element={<HowItWorks />} />
+                  <Route path="/developers" element={<Developers />} />
+                  <Route path="/dev" element={<Developers />} />
                   <Route path="/community" element={<Community />} />
                   <Route path="/departamentos" element={<Departamentos />} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />
