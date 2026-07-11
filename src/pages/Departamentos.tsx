@@ -380,7 +380,7 @@ const Departamentos = () => {
                   <button
                     onClick={() => handleHireDepartment(dept)}
                     disabled={hiringDeptId === dept.id}
-                    aria-label={`Contratar ${dept.name} por ${formatPrice(deptPrice, lang)} ${t("departments_page.month")}`}
+                    aria-label={`Contratar ${t(`squads.dept_${dept.id}`)} por ${formatPrice(deptPrice, lang)} ${t("departments_page.month")}`}
                     className="group relative w-full h-14 rounded-2xl overflow-hidden cursor-pointer transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-[2px] active:translate-y-0 active:scale-[0.985] disabled:opacity-60 disabled:pointer-events-none disabled:hover:translate-y-0"
                   >
                     {/* Layer 1 — deep obsidian glass base */}
