@@ -76,6 +76,7 @@ export interface KpiEventPayload {
   variant?: "form" | "voice";
   duration_recorded_ms?: number;
   chars?: number;
+  cached?: boolean;
 }
 
 
