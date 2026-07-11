@@ -181,8 +181,9 @@ export function useWowFlow() {
       });
       setState("ready");
     },
-    [],
+    [tenantId],
   );
+
 
   const regenerate = useCallback(async () => {
     if (!company || !pain) return;
@@ -211,7 +212,9 @@ export function useWowFlow() {
             agent_slug: option.agentSlug,
             source: "instant_wow",
             used_fallback: usedFallback,
+            mcp_run_id: runIdRef.current,
           },
+
           created_by: user.id,
           approved_by: user.id,
           approved_at: new Date().toISOString(),
