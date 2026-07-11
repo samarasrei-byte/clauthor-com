@@ -47,7 +47,7 @@ export const departments: Department[] = [
       { key: "security", icon: Shield, role: "CISO / Eng. Segurança", tokens: "3M" },
       { key: "data_engineer", icon: Building2, role: "Engenheiro de Dados", tokens: "2M" },
     ],
-    headcount: 5, cltCost: 100000, clauthorCost: 5497, discount: 30,
+    headcount: 5, cltCost: 100000, clauthorCost: 1650, discount: 30,
   },
   {
     id: "comercial", icon: Briefcase, color: "text-primary",
@@ -62,7 +62,7 @@ export const departments: Department[] = [
       { key: "voice_ai", icon: Phone, role: "Operador de Telefonia", tokens: "2M" },
       { key: "crm_manager", icon: Star, role: "Gestor de CRM", tokens: "1.5M" },
     ],
-    headcount: 5, cltCost: 56000, clauthorCost: 4497, discount: 25,
+    headcount: 5, cltCost: 56000, clauthorCost: 1547, discount: 25,
   },
   {
     id: "marketing", icon: Megaphone, color: "text-primary",
@@ -78,7 +78,7 @@ export const departments: Department[] = [
       { key: "media_buyer", icon: Target, role: "Media Buyer", tokens: "1.5M" },
       { key: "community_mgr", icon: Users, role: "Community Manager", tokens: "1M" },
     ],
-    headcount: 6, cltCost: 54000, clauthorCost: 3997, discount: 25,
+    headcount: 6, cltCost: 54000, clauthorCost: 1447, discount: 25,
   },
   {
     id: "financeiro", icon: BarChart3, color: "text-primary",
@@ -95,7 +95,7 @@ export const departments: Department[] = [
       { key: "tax_compliance", icon: Shield, role: "Analista Fiscal", tokens: "1.5M" },
       { key: "credit_recovery", icon: Star, role: "Regularizador de Crédito", tokens: "1M" },
     ],
-    headcount: 7, cltCost: 66000, clauthorCost: 4497, discount: 25,
+    headcount: 7, cltCost: 66000, clauthorCost: 1497, discount: 25,
   },
   {
     id: "criacao", icon: Palette, color: "text-primary",
@@ -161,7 +161,7 @@ export const departments: Department[] = [
       { key: "hunter", icon: Crosshair, role: "Hunter de Negócios", tokens: "1M" },
       { key: "farmer", icon: Repeat, role: "Farmer / Expansão", tokens: "1M" },
     ],
-    headcount: 12, cltCost: 96000, clauthorCost: 6997, discount: 35,
+    headcount: 12, cltCost: 96000, clauthorCost: 1697, discount: 35,
   },
   {
     id: "comunicacao", icon: PenTool, color: "text-primary",
@@ -177,7 +177,7 @@ export const departments: Department[] = [
       { key: "social_proof", icon: ThumbsUp, role: "Gestor de Prova Social", tokens: "1M" },
       { key: "events_speaker", icon: Calendar, role: "Produtor de Eventos", tokens: "1M" },
     ],
-    headcount: 6, cltCost: 48000, clauthorCost: 3997, discount: 30,
+    headcount: 6, cltCost: 48000, clauthorCost: 1397, discount: 30,
   },
   {
     id: "operacoes", icon: Rocket, color: "text-primary",
@@ -194,7 +194,7 @@ export const departments: Department[] = [
       { key: "proposal_gen", icon: FileText, role: "Gerador de Propostas", tokens: "1M" },
       { key: "research", icon: Search, role: "Pesquisador / Analista", tokens: "2M" },
     ],
-    headcount: 7, cltCost: 84000, clauthorCost: 5497, discount: 30,
+    headcount: 7, cltCost: 84000, clauthorCost: 1650, discount: 30,
   },
   {
     id: "ecommerce_growth", icon: Store, color: "text-primary",
@@ -211,7 +211,7 @@ export const departments: Department[] = [
       { key: "reputation", icon: Award, role: "Gestor de Reputação", tokens: "1.5M" },
       { key: "ecommerce", icon: ShoppingCart, role: "E-commerce Operations", tokens: "2M" },
     ],
-    headcount: 7, cltCost: 63000, clauthorCost: 4497, discount: 25,
+    headcount: 7, cltCost: 63000, clauthorCost: 1497, discount: 25,
   },
   {
     id: "juridico", icon: Gavel, color: "text-primary",
@@ -226,7 +226,7 @@ export const departments: Department[] = [
       { key: "litigation", icon: Gavel, role: "Advogado Contencioso", tokens: "2M" },
       { key: "legal", icon: FileText, role: "Analista Jurídico Geral", tokens: "2M" },
     ],
-    headcount: 5, cltCost: 75000, clauthorCost: 4997, discount: 30,
+    headcount: 5, cltCost: 75000, clauthorCost: 1597, discount: 30,
   },
   {
     id: "compras", icon: Package, color: "text-primary",

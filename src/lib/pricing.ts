@@ -55,7 +55,7 @@ export const regionalPricing: Record<string, RegionalPricing> = {
     // comparison.avgSalary alinhado ao CLT canônico (R$ 8.500) — evita divergência
     // entre ROIBenchmark, landing e pricing.
     comparison: { avgSalary: 8500, avgSalaryYear3: 306000, agentStarting: 1497, agentYear3: 53892 },
-    departments: { tecnologia: 2997, comercial: 2497, marketing: 1997, financeiro: 2497, criacao: 1997, suporte: 1497, rh: 1997 },
+    departments: { tecnologia: 1650, comercial: 1547, marketing: 1447, financeiro: 1497, criacao: 1297, suporte: 1297, rh: 1297 },
     departmentClt: cltCosts,
   },
   "pt-pt": {

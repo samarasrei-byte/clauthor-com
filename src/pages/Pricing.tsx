@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import SquadPlans from "@/components/pricing/SquadPlans";
+import PricePill from "@/components/pricing/PricePill";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
@@ -139,11 +140,8 @@ const Pricing = () => {
 
                 {/* Price */}
                 <div className="mb-5">
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="font-display text-4xl font-bold gradient-text">{fp(dept.clauthorCost)}</span>
-                    <span className="text-muted-foreground text-sm">/mês</span>
-                  </div>
-                  <div className="flex items-center gap-2 mt-1.5">
+                  <PricePill price={fp(dept.clauthorCost)} period="/mês" size="lg" />
+                  <div className="flex items-center gap-2 mt-2">
                     <span className="text-xs text-muted-foreground line-through">
                       Equipe CLT: {fp(dept.cltCost)}/mês
                     </span>
