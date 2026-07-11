@@ -160,17 +160,28 @@ export function InstantWow({ onDone, onSkip }: InstantWowProps) {
 
                 <div className="space-y-2">
                   <label className="text-xs uppercase tracking-wider text-muted-foreground">
-                    Descreva a dor em 1-2 frases
+                    {variant === "voice" ? "Fale ou escreva sua dor" : "Descreva a dor em 1-2 frases"}
                   </label>
+                  {variant === "voice" && (
+                    <WowVoiceCapture
+                      onTranscript={(text) => setPain((prev) => (prev ? `${prev}\n${text}` : text).slice(0, 500))}
+                      disabled={flow.state === "generating"}
+                    />
+                  )}
                   <Textarea
                     value={pain}
                     onChange={(e) => setPain(e.target.value.slice(0, 500))}
-                    placeholder="Ex: Nossos SDRs mandam cold emails que ninguém responde. Preciso de um template que funcione pra CFOs de mid-market."
+                    placeholder={
+                      variant === "voice"
+                        ? "Ou digite aqui. Se preferir, grave sua dor no botão acima."
+                        : "Ex: Nossos SDRs mandam cold emails que ninguém responde. Preciso de um template que funcione pra CFOs de mid-market."
+                    }
                     maxLength={500}
                     rows={3}
                   />
                   <div className="text-xs text-muted-foreground text-right">{pain.length}/500</div>
                 </div>
+
 
                 <Button
                   className="w-full h-11 text-base"
