@@ -3,7 +3,7 @@
  * Fluxo: captura (2 campos + categoria) → geração streaming → aprovar/regerar.
  * Fallback determinístico se a Edge Function falhar/timeout.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Check, Copy, RefreshCw, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,23 @@ import { PAIN_OPTIONS, type PainCategory, getPainOption } from "@/lib/wow-router
 import { useWowFlow } from "@/hooks/useWowFlow";
 import { WowPreview } from "./WowPreview";
 import { WowConfetti } from "./WowConfetti";
+import { WowVoiceCapture } from "./WowVoiceCapture";
+import { trackKpi } from "@/lib/kpiTracker";
+
+const VARIANT_KEY = "wow-variant-v1";
+type Variant = "form" | "voice";
+function resolveVariant(): Variant {
+  try {
+    const stored = localStorage.getItem(VARIANT_KEY) as Variant | null;
+    if (stored === "form" || stored === "voice") return stored;
+    const next: Variant = Math.random() < 0.5 ? "form" : "voice";
+    localStorage.setItem(VARIANT_KEY, next);
+    return next;
+  } catch {
+    return "form";
+  }
+}
+
 
 interface InstantWowProps {
   onDone: () => void;
@@ -29,8 +46,14 @@ export function InstantWow({ onDone, onSkip }: InstantWowProps) {
   const [company, setCompany] = useState(flow.company);
   const [pain, setPain] = useState(flow.pain);
   const [painCategory, setPainCategory] = useState<PainCategory>(flow.painCategory);
+  const variant = useMemo<Variant>(() => resolveVariant(), []);
 
-  useEffect(() => { flow.start(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+  useEffect(() => {
+    flow.start();
+    trackKpi("wow_variant_assigned", { source: "instant_wow", variant });
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, []);
+
   useEffect(() => {
     if (flow.state === "generating" || flow.state === "ready") setStep("output");
   }, [flow.state]);
@@ -137,17 +160,28 @@ export function InstantWow({ onDone, onSkip }: InstantWowProps) {
 
                 <div className="space-y-2">
                   <label className="text-xs uppercase tracking-wider text-muted-foreground">
-                    Descreva a dor em 1-2 frases
+                    {variant === "voice" ? "Fale ou escreva sua dor" : "Descreva a dor em 1-2 frases"}
                   </label>
+                  {variant === "voice" && (
+                    <WowVoiceCapture
+                      onTranscript={(text) => setPain((prev) => (prev ? `${prev}\n${text}` : text).slice(0, 500))}
+                      disabled={flow.state === "generating"}
+                    />
+                  )}
                   <Textarea
                     value={pain}
                     onChange={(e) => setPain(e.target.value.slice(0, 500))}
-                    placeholder="Ex: Nossos SDRs mandam cold emails que ninguém responde. Preciso de um template que funcione pra CFOs de mid-market."
+                    placeholder={
+                      variant === "voice"
+                        ? "Ou digite aqui. Se preferir, grave sua dor no botão acima."
+                        : "Ex: Nossos SDRs mandam cold emails que ninguém responde. Preciso de um template que funcione pra CFOs de mid-market."
+                    }
                     maxLength={500}
                     rows={3}
                   />
                   <div className="text-xs text-muted-foreground text-right">{pain.length}/500</div>
                 </div>
+
 
                 <Button
                   className="w-full h-11 text-base"

@@ -2437,6 +2437,41 @@ export type Database = {
           },
         ]
       }
+      kpi_events: {
+        Row: {
+          created_at: string
+          event: string
+          id: string
+          payload: Json
+          tenant_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event: string
+          id?: string
+          payload?: Json
+          tenant_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event?: string
+          id?: string
+          payload?: Json
+          tenant_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kpi_events_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       linkedin_posts: {
         Row: {
           content: string
@@ -4084,7 +4119,37 @@ export type Database = {
           sample_size: number
         }[]
       }
+      get_ttfv_daily: {
+        Args: { _since?: string }
+        Returns: {
+          day: string
+          p50_ms: number
+          p90_ms: number
+          sample_size: number
+        }[]
+      }
+      get_ttfv_percentiles: {
+        Args: { _since?: string }
+        Returns: {
+          avg_ms: number
+          max_ms: number
+          min_ms: number
+          p50_ms: number
+          p75_ms: number
+          p90_ms: number
+          p95_ms: number
+          sample_size: number
+        }[]
+      }
       get_user_tenant_id: { Args: { _user_id: string }; Returns: string }
+      get_wow_funnel: {
+        Args: { _since?: string }
+        Returns: {
+          events: number
+          step: string
+          unique_users: number
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

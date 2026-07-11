@@ -35,6 +35,8 @@ const ClientDashboard = lazyRetry(() => import("./pages/ClientDashboard"));
 const ExecutionReplay = lazyRetry(() => import("./pages/ExecutionReplay"));
 
 const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
+const AdminKpiDashboard = lazyRetry(() => import("./pages/AdminKpiDashboard"));
+
 const Agents = lazyRetry(() => import("./pages/Agents"));
 const Library = lazyRetry(() => import("./pages/Library"));
 const Pricing = lazyRetry(() => import("./pages/Pricing"));
@@ -211,6 +213,8 @@ const App = () => (
                 <Route element={<ProtectedRoute requireAdmin><DashboardLayout /></ProtectedRoute>}>
                   <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="/admin/verticals/advocacia" element={<AdminAdvocaciaVertical />} />
+                  <Route path="/admin/kpis" element={<AdminKpiDashboard />} />
+
                 </Route>
 
                 <Route path="*" element={<NotFound />} />
