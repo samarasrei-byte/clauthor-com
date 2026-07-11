@@ -285,10 +285,10 @@ const ConversationalHero = () => {
                 className={cn(
                   "ml-auto flex items-center gap-2 rounded-full h-10 px-4",
                   "bg-primary text-primary-foreground text-[13px] font-medium",
-                  "shadow-[0_0_20px_hsl(var(--primary)/0.3)]",
+                  "shadow-[0_0_28px_hsl(var(--primary)/0.55)]",
                   "transition-all duration-300",
-                  "hover:shadow-[0_0_32px_hsl(var(--primary)/0.5)] hover:scale-[1.02]",
-                  "disabled:opacity-40 disabled:pointer-events-none",
+                  "hover:shadow-[0_0_40px_hsl(var(--primary)/0.75)] hover:scale-[1.02]",
+                  "disabled:opacity-70 disabled:pointer-events-none disabled:shadow-[0_0_20px_hsl(var(--primary)/0.4)]",
                 )}
               >
                 {streaming ? (
