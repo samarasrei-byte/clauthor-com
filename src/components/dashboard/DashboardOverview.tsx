@@ -28,6 +28,8 @@ const ClientCommandCenter = lazy(() => import("./ClientCommandCenter"));
 const DashboardSkeleton = lazy(() => import("./DashboardSkeleton"));
 const LiveActivityFeed = lazy(() => import("./LiveActivityFeed").then(m => ({ default: m.LiveActivityFeed })));
 const ContractedDepartments = lazy(() => import("./ContractedDepartments"));
+const FirstDeliveryCard = lazy(() => import("./FirstDeliveryCard"));
+
 
 interface Props {
   loadingAgents: boolean;
@@ -94,8 +96,12 @@ const DashboardOverview = ({
               }}
             />
 
+            {/* Momento "uau" pós-signup — destaca o primeiro entregável aprovado (7 dias). */}
+            <FirstDeliveryCard onOpenApprovals={() => onSetActiveSection("approvals")} />
+
             {/* Guia de configuração da conta (progressive disclosure) */}
             <NextStepsCard />
+
 
 
             {/* Advanced panels - only when user has agents */}
