@@ -4150,6 +4150,18 @@ export type Database = {
           unique_users: number
         }[]
       }
+      get_wow_variant_significance: {
+        Args: { _since?: string }
+        Returns: {
+          approved: number
+          assigned: number
+          chi_square: number
+          conversion_rate: number
+          p_lt_0_05: boolean
+          variant: string
+          winner: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
