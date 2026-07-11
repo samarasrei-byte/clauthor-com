@@ -72,7 +72,11 @@ export interface KpiEventPayload {
   ttfv_form_to_output_ms?: number;
   ttfv_output_to_approve_ms?: number;
   output_chars?: number;
+  variant?: "form" | "voice";
+  duration_recorded_ms?: number;
+  chars?: number;
 }
+
 
 
 
@@ -84,6 +88,46 @@ declare global {
 
 const RING_BUFFER_KEY = "kpi_events";
 const RING_BUFFER_MAX = 100;
+
+// Server-side persistence: buffer events and flush in batches.
+// Only events named in PERSIST_SET are sent to the backend to keep noise low.
+const PERSIST_SET = new Set<KpiEventName>([
+  "wow_started",
+  "wow_form_submitted",
+  "wow_output_ready",
+  "wow_output_failed",
+  "first_wow_approved",
+  "wow_regenerated",
+  "wow_skipped",
+  "wow_variant_assigned",
+  "wow_voice_started",
+  "wow_voice_transcribed",
+  "wow_voice_failed",
+  "time_to_first_value",
+]);
+
+interface PendingEvent { event: string; payload: Record<string, unknown> }
+const pendingQueue: PendingEvent[] = [];
+let flushTimer: ReturnType<typeof setTimeout> | null = null;
+
+async function flushQueue() {
+  flushTimer = null;
+  if (pendingQueue.length === 0) return;
+  const batch = pendingQueue.splice(0, pendingQueue.length);
+  try {
+    const { data: sessionData } = await supabase.auth.getSession();
+    if (!sessionData.session) return; // No auth: skip persistence (still tracked client-side).
+    await supabase.functions.invoke("log-kpi", { body: { events: batch } });
+  } catch (err) {
+    logger.warn("[kpi] server flush failed:", err);
+  }
+}
+
+function schedulePersist(event: KpiEventName, payload: KpiEventPayload) {
+  if (!PERSIST_SET.has(event)) return;
+  pendingQueue.push({ event, payload: payload as Record<string, unknown> });
+  if (!flushTimer) flushTimer = setTimeout(flushQueue, 1500);
+}
 
 /** Fire-and-forget: never throws, never blocks the UI. */
 export function trackKpi(event: KpiEventName, payload: KpiEventPayload): void {
@@ -113,11 +157,15 @@ export function trackKpi(event: KpiEventName, payload: KpiEventPayload): void {
 
     // 3. Dev logger
     logger.info("[kpi]", event, payload);
+
+    // 4. Server-side persistence (auth users only, batched).
+    schedulePersist(event, payload);
   } catch (err) {
     // Tracking must never break UX.
     logger.error("[kpi] tracking failed", err);
   }
 }
+
 
 /** Read the ring buffer — useful for smoke tests and internal dashboards. */
 export function readKpiBuffer(): Array<Record<string, unknown>> {
