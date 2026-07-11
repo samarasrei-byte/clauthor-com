@@ -24,12 +24,12 @@ const NeuralBackdrop = ({ intensity = 0.6, className = "" }: Props) => {
     <div className={`absolute inset-0 overflow-hidden pointer-events-none ${className}`} aria-hidden>
       <div className="absolute inset-0 bg-[#04040a]" />
       <div
-        className="absolute -top-1/3 -left-1/4 w-[75vw] h-[75vw] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, #e11d48 0%, transparent 60%)", opacity: 0.18 + intensity * 0.12 }}
+        className="absolute top-[5%] left-[5%] w-[65vw] h-[65vw] rounded-full blur-3xl"
+        style={{ background: "radial-gradient(circle, #e11d48 0%, transparent 65%)", opacity: 0.32 + intensity * 0.18 }}
       />
       <div
-        className="absolute -bottom-1/3 -right-1/4 w-[75vw] h-[75vw] rounded-full blur-3xl"
-        style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 60%)", opacity: 0.16 + intensity * 0.12 }}
+        className="absolute bottom-[5%] right-[5%] w-[65vw] h-[65vw] rounded-full blur-3xl"
+        style={{ background: "radial-gradient(circle, #a78bfa 0%, transparent 65%)", opacity: 0.28 + intensity * 0.15 }}
       />
       <div
         className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[55vw] h-[55vw] rounded-full blur-3xl"
