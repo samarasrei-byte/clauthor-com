@@ -73,8 +73,9 @@ export function useWowFlow() {
 
 
   const start = useCallback(() => {
-    trackKpi("wow_started", { source: "instant_wow" });
+    trackKpi("wow_started", { source: "instant_wow", variant: currentWowVariant() });
   }, []);
+
 
   const generate = useCallback(
     async (opts: { company: string; pain: string; painCategory: PainCategory }) => {
@@ -89,10 +90,12 @@ export function useWowFlow() {
       timingsRef.current.formSubmittedAt = Date.now();
       trackKpi("wow_form_submitted", {
         source: "instant_wow",
+        variant: currentWowVariant(),
         pain_category: opts.painCategory,
         company: opts.company.slice(0, 60),
         ttfv_signup_to_form_ms: Date.now() - timingsRef.current.signupAt,
       });
+
 
       const option = getPainOption(opts.painCategory);
       const controller = new AbortController();
