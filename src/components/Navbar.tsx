@@ -58,6 +58,7 @@ const Navbar = () => {
           { label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }), href: "/departamentos" },
           { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
           { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
+          { label: "Developers", href: "/developers" },
         ]),
   ];
 
