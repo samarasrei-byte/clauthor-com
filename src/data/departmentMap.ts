@@ -27,6 +27,11 @@ const DEPARTMENTS: Record<string, DepartmentInfo> = {
   compras:          { id: "compras",           label: "Compras & Procurement",    color: "text-lime-400" },
   logistica:        { id: "logistica",         label: "Logística & Supply Chain", color: "text-sky-400" },
   qualidade:        { id: "qualidade",         label: "Qualidade & Processos",    color: "text-yellow-400" },
+  dados:            { id: "dados",             label: "Dados & BI",               color: "text-indigo-400" },
+  produto:          { id: "produto",           label: "Produto & UX",             color: "text-violet-400" },
+  inovacao:         { id: "inovacao",          label: "Inovação & P&D",           color: "text-fuchsia-400" },
+  sustentabilidade: { id: "sustentabilidade",  label: "Sustentabilidade & ESG",   color: "text-green-400" },
+  parcerias:        { id: "parcerias",         label: "Parcerias & Alianças",     color: "text-orange-400" },
   // Workforce architecture departments
   growth:           { id: "growth",            label: "Growth",                   color: "text-emerald-400" },
   product:          { id: "product",           label: "Product",                  color: "text-violet-400" },
