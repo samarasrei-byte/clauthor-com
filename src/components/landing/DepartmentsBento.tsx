@@ -82,16 +82,23 @@ const DepartmentsBento = () => {
           })}
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {visible.map((d) => (
-            <DepartmentCard
+        {/* Grid asymmetric — 1st card = hero (2 cols), 2nd = tall (2 rows), resto normal */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 auto-rows-fr">
+          {visible.map((d, i) => (
+            <div
               key={d.id}
-              department={d}
-              variant="compact"
-              onHire={handleHire}
-              onSeeLiveDemo={handleDemo}
-            />
+              className={cn(
+                i === 0 && "lg:col-span-2",
+                i === 1 && "lg:row-span-1",
+              )}
+            >
+              <DepartmentCard
+                department={d}
+                variant="compact"
+                onHire={handleHire}
+                onSeeLiveDemo={handleDemo}
+              />
+            </div>
           ))}
         </div>
       </div>
