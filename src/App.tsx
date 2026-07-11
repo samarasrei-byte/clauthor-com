@@ -41,6 +41,7 @@ const Agents = lazyRetry(() => import("./pages/Agents"));
 const Library = lazyRetry(() => import("./pages/Library"));
 const Pricing = lazyRetry(() => import("./pages/Pricing"));
 const HowItWorks = lazyRetry(() => import("./pages/HowItWorks"));
+const Developers = lazyRetry(() => import("./pages/Developers"));
 const Waitlist = lazyRetry(() => import("./pages/Waitlist"));
 const Community = lazyRetry(() => import("./pages/Community"));
 const CreateAgent = lazyRetry(() => import("./pages/CreateAgent"));
