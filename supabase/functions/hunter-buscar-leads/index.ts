@@ -1,7 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { handleCors, jsonResponse, errorResponse } from "../_shared/cors.ts";
+import { startRun } from "../_shared/execution-tracer.ts";
 
-// Hunter v2 - Reads PhantomBuster credentials from environment (not user config).
+// Hunter v2 - Instrumented with execution-tracer for replayable runs.
+
 // Body: { campaign_id: string }
 Deno.serve(async (req) => {
   const cors = handleCors(req);
