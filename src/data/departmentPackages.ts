@@ -295,7 +295,7 @@ const RH: DepartmentPackage = {
       outcome: "Engajamento 78% · alerta em 1 squad", delayMs: 5000 },
   ],
   priceMonthly: 1497,
-  flagship: false,
+  flagship: true,
 };
 
 /* ============================================================
