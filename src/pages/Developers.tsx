@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { Copy, Check, Terminal, Zap, GitBranch, Cpu, Activity, ArrowRight, Layers, Network, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import LiveDemoRunner from "@/components/developers/LiveDemoRunner";
 
 /**
  * /developers — página técnica para power users (Claude Code, Cursor, Codex).
@@ -406,6 +407,23 @@ export default function Developers() {
               <span className="text-[11px] font-mono uppercase tracking-widest text-foreground/50">status · production</span>
             </div>
             <LiveMetrics />
+          </div>
+        </section>
+
+
+        {/* LIVE DEMO — real streaming */}
+        <section className="border-b border-white/[0.05]">
+          <div className="max-w-[1240px] mx-auto px-6 py-16">
+            <div className="max-w-2xl mb-8">
+              <div className="text-[11px] font-mono uppercase tracking-widest text-primary mb-3">// live · sem cadastro</div>
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-3">
+                Rode um outcome agora. Stream real.
+              </h2>
+              <p className="text-foreground/60 font-mono text-sm leading-relaxed">
+                Descreva qualquer resultado de negócio. O orquestrador decompõe em agentes e transmite a execução token-a-token via SSE. Sem mock, sem screenshot.
+              </p>
+            </div>
+            <LiveDemoRunner />
           </div>
         </section>
 
