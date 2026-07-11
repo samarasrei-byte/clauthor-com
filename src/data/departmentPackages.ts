@@ -85,7 +85,11 @@ const COMERCIAL: DepartmentPackage = {
   color: "sales",
   painPoint: "Sua equipe não bate meta e o pipeline vive vazio.",
   outcome: "",
-  agentSlugs: ["hunter_linkedin", "sdr_linkedin", "sdr_whatsapp", "lead_qualifier", "revenue_ops"],
+  agentSlugs: [
+    "hunter_linkedin", "sdr_outbound", "sdr_linkedin", "sdr_email_agent",
+    "sdr_whatsapp", "sdr_inbound", "lead_qualifier", "lead_scorer",
+    "smb_closer", "deal_desk", "sales_forecaster", "revenue_ops",
+  ],
   outcomeMetric: {
     label: "Leads qualificados",
     progression: [0, 3, 7, 12, 18, 22, 27, 31],
