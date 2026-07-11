@@ -85,7 +85,11 @@ const COMERCIAL: DepartmentPackage = {
   color: "sales",
   painPoint: "Sua equipe não bate meta e o pipeline vive vazio.",
   outcome: "",
-  agentSlugs: ["hunter_linkedin", "sdr_linkedin", "sdr_whatsapp", "lead_qualifier", "revenue_ops"],
+  agentSlugs: [
+    "hunter_linkedin", "sdr_outbound", "sdr_linkedin", "sdr_email_agent",
+    "sdr_whatsapp", "sdr_inbound", "lead_qualifier", "lead_scorer",
+    "smb_closer", "deal_desk", "sales_forecaster", "revenue_ops",
+  ],
   outcomeMetric: {
     label: "Leads qualificados",
     progression: [0, 3, 7, 12, 18, 22, 27, 31],
@@ -121,7 +125,11 @@ const ATENDIMENTO: DepartmentPackage = {
   color: "customer_success",
   painPoint: "Cliente espera horas por resposta e você perde vendas por demora.",
   outcome: "SLA de resposta < 5 minutos, 24/7",
-  agentSlugs: ["support_channel", "support_lead", "voice_ai", "customer_advocacy", "nps_analyst"],
+  agentSlugs: [
+    "support_channel", "support_lead", "email_support", "helpdesk_agent",
+    "voice_ai", "integration_support", "help_center_writer",
+    "nps_analyst", "customer_advocacy", "retention_analyst", "onboarding_specialist",
+  ],
   outcomeMetric: {
     label: "Tempo médio de resposta",
     progression: [180, 42, 18, 8, 5, 4, 3, 3],
@@ -158,7 +166,12 @@ const MARKETING: DepartmentPackage = {
   color: "marketing",
   painPoint: "Você queima verba em ads sem saber o que está trazendo retorno.",
   outcome: "ROAS medido e otimizado semana a semana",
-  agentSlugs: ["ad_copywriter", "brand_strategist", "traffic_manager", "meta_ads_agent", "content_performance"],
+  agentSlugs: [
+    "brand_strategist", "brand_voice_writer", "ad_copywriter", "content_strategist",
+    "content_seo_writer", "seo_strategist", "technical_seo", "social_media_agent",
+    "video_script_agent", "meta_ads_agent", "google_ads_agent", "traffic_manager",
+    "content_performance", "influencer_mgr",
+  ],
   outcomeMetric: {
     label: "ROAS acumulado",
     progression: [0.8, 1.4, 2.1, 2.8, 3.4, 3.9, 4.2, 4.5],
@@ -199,7 +212,11 @@ const JURIDICO: DepartmentPackage = {
   color: "legal",
   painPoint: "Contratos travados, compliance vulnerável, resposta jurídica lenta.",
   outcome: "Contratos revisados em < 2h, compliance monitorado 24/7",
-  agentSlugs: ["contract_analyst", "compliance_officer"],
+  agentSlugs: [
+    "contract_analyst", "contract_negotiator", "compliance_officer", "lgpd_agent",
+    "labor_law_agent", "tax_compliance", "regulatory_monitor", "legal_researcher",
+    "esg_compliance",
+  ],
   outcomeMetric: {
     label: "Contratos revisados",
     progression: [0, 2, 5, 8, 12, 15, 18, 21],
@@ -216,7 +233,7 @@ const JURIDICO: DepartmentPackage = {
       outcome: "Minuta aprovada · pronta para assinatura", delayMs: 5000 },
   ],
   priceMonthly: 2997,
-  flagship: false,
+  flagship: true,
 };
 
 const FINANCEIRO: DepartmentPackage = {
@@ -226,7 +243,11 @@ const FINANCEIRO: DepartmentPackage = {
   color: "finance",
   painPoint: "DRE atrasada, fluxo de caixa no chute, decisões financeiras às cegas.",
   outcome: "Fechamento mensal em D+3 e dashboard financeiro diário",
-  agentSlugs: ["ai_cfo", "digital_accountant"],
+  agentSlugs: [
+    "ai_cfo", "digital_accountant", "accounts_payable", "accounts_receivable",
+    "budget_analyst", "budget_allocator", "financial_forecaster",
+    "pricing_analyst", "pricing_strategist", "billing_agent",
+  ],
   outcomeMetric: {
     label: "Dias para fechamento",
     progression: [21, 14, 10, 7, 5, 4, 3, 3],
@@ -244,7 +265,7 @@ const FINANCEIRO: DepartmentPackage = {
       outcome: "3 ações concretas para eliminar o gap", delayMs: 5000 },
   ],
   priceMonthly: 1997,
-  flagship: false,
+  flagship: true,
 };
 
 const RH: DepartmentPackage = {
@@ -254,7 +275,10 @@ const RH: DepartmentPackage = {
   color: "talent",
   painPoint: "Contratações demoram meses e turnover consome operação.",
   outcome: "Time-to-hire < 21 dias, engajamento medido semanalmente",
-  agentSlugs: ["recruiter_agent", "onboarding_specialist", "people_analytics", "employee_engagement_agent"],
+  agentSlugs: [
+    "recruiter_agent", "reseller_recruiter", "onboarding_specialist", "onboarding_optimizer",
+    "people_analytics", "employee_engagement_agent", "employer_brand_agent",
+  ],
   outcomeMetric: {
     label: "Candidatos qualificados",
     progression: [0, 4, 9, 15, 22, 28, 33, 38],
@@ -271,7 +295,7 @@ const RH: DepartmentPackage = {
       outcome: "Engajamento 78% · alerta em 1 squad", delayMs: 5000 },
   ],
   priceMonthly: 1497,
-  flagship: false,
+  flagship: true,
 };
 
 /* ============================================================
