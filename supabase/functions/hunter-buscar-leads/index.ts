@@ -103,16 +103,21 @@ Deno.serve(async (req) => {
         mensagem: message,
       });
 
+      await tracer?.step("error", { title: "Configuração incompleta", content: { missing } });
+      await tracer?.finish({ status: "failed", summary: "configuration_incomplete" });
+
       return jsonResponse(
         {
           success: false,
           error: "configuration_incomplete",
           message,
           missing,
+          run_id: tracer?.runId,
         },
         422,
       );
     }
+
 
 
     // Real PhantomBuster Search call
