@@ -95,7 +95,10 @@ serve(async (req) => {
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
+      await tracer?.step("error", { title: "Limite diário atingido", content: { limit, todayCount } });
+      await tracer?.finish({ status: "cancelled", summary: "daily_limit_reached" });
     }
+
 
     // 3. If requires approval → queue it
     if (classification.requiresApproval) {
