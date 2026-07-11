@@ -117,3 +117,9 @@ verify_jwt = true
 
 [functions.art-director]
 verify_jwt = true
+
+[functions.explain-run]
+verify_jwt = true
+
+[functions.check-ttfv-alert]
+verify_jwt = false
