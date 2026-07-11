@@ -284,8 +284,87 @@ export default function AdminKpiDashboard() {
                   Base do funil: usuários únicos que iniciaram o InstantWow.
                 </p>
               </div>
+
+              {/* A/B: form vs voice with chi-square significance */}
+              {variantStats && variantStats.length > 0 && (
+                <div className="rounded-xl border border-border bg-card p-4 md:p-5">
+                  <div className="flex items-center justify-between gap-2 mb-4 flex-wrap">
+                    <div className="flex items-center gap-2">
+                      <TrendingDown className="h-4 w-4 text-primary rotate-180" />
+                      <h2 className="text-sm font-semibold uppercase tracking-wider">A/B Form vs Voz</h2>
+                    </div>
+                    <div className="flex items-center gap-2 text-[11px]">
+                      {(() => {
+                        const total = variantStats.reduce((s, v) => s + Number(v.assigned || 0), 0);
+                        const sig = variantStats[0]?.p_lt_0_05;
+                        const winner = variantStats[0]?.winner;
+                        const chi = variantStats[0]?.chi_square ?? 0;
+                        if (total < 100) {
+                          return (
+                            <span className="px-2 py-1 rounded-full border border-border bg-muted/30 font-mono">
+                              coletando amostras: {total}/100
+                            </span>
+                          );
+                        }
+                        if (sig && winner !== "inconclusive") {
+                          return (
+                            <span className="px-2 py-1 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-mono">
+                              ✓ significante · vencedor: <strong className="uppercase">{winner}</strong> · χ²={chi}
+                            </span>
+                          );
+                        }
+                        return (
+                          <span className="px-2 py-1 rounded-full border border-border bg-muted/30 font-mono">
+                            sem diferença significante · χ²={chi} · p ≥ 0.05
+                          </span>
+                        );
+                      })()}
+                    </div>
+                  </div>
+                  <div className="grid md:grid-cols-2 gap-3">
+                    {variantStats.map((v) => {
+                      const isWinner =
+                        v.p_lt_0_05 &&
+                        v.winner === v.variant &&
+                        v.winner !== "inconclusive";
+                      return (
+                        <div
+                          key={v.variant}
+                          className={`rounded-lg border p-3 ${
+                            isWinner
+                              ? "border-emerald-500/50 bg-emerald-500/5"
+                              : "border-border/60 bg-muted/20"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs uppercase tracking-wider font-semibold">
+                              {v.variant === "voice" ? "🎙️ Voz" : "📝 Formulário"}
+                            </span>
+                            {isWinner && (
+                              <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-mono uppercase">
+                                Vencedor
+                              </span>
+                            )}
+                          </div>
+                          <div className="text-2xl font-mono font-semibold">
+                            {(Number(v.conversion_rate) * 100).toFixed(1)}%
+                          </div>
+                          <div className="text-[11px] text-muted-foreground mt-1 font-mono">
+                            {v.approved} aprovaram / {v.assigned} atribuídos
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <p className="text-[11px] text-muted-foreground mt-4 flex items-center gap-1">
+                    <Activity className="h-3 w-3" />
+                    Teste chi-square com correção de Yates (df=1, p&lt;0.05 quando χ² &gt; 3.841). Amostra mínima recomendada: 100 usuários atribuídos.
+                  </p>
+                </div>
+              )}
             </>
           )}
+
         </div>
       </div>
     </>
