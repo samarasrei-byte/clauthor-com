@@ -123,3 +123,7 @@ verify_jwt = true
 
 [functions.check-ttfv-alert]
 verify_jwt = false
+
+[functions.dev-live-demo]
+verify_jwt = false
+
