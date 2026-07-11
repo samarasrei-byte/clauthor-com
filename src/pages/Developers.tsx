@@ -5,6 +5,7 @@ import { Helmet } from "react-helmet-async";
 import { Copy, Check, Terminal, Zap, GitBranch, Cpu, Activity, ArrowRight, Layers, Network, Lock } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import LiveDemoRunner from "@/components/developers/LiveDemoRunner";
 
 /**
  * /developers — página técnica para power users (Claude Code, Cursor, Codex).
