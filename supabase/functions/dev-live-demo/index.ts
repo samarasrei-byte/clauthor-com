@@ -106,6 +106,42 @@ Deno.serve(async (req) => {
     return errorResponse(`gateway ${upstream.status}: ${t.slice(0, 200)}`, 502);
   }
 
+  // Prepare persistence: hash IP, buffer transcript, insert on stream end.
+  const startedAt = Date.now();
+  const runId = crypto.randomUUID();
+  const ipHash = await sha256Hex(`${ip}|${Deno.env.get("SUPABASE_URL") ?? "salt"}`);
+  let transcript = "";
+  let lineCount = 0;
+  let finalStatus: "completed" | "failed" | "aborted" = "completed";
+
+  const persist = async () => {
+    try {
+      const supabaseUrl = Deno.env.get("SUPABASE_URL");
+      const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+      if (!supabaseUrl || !serviceKey) return;
+      await fetch(`${supabaseUrl}/rest/v1/demo_runs`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          apikey: serviceKey,
+          Authorization: `Bearer ${serviceKey}`,
+          Prefer: "return=minimal",
+        },
+        body: JSON.stringify({
+          id: runId,
+          ip_hash: ipHash,
+          outcome,
+          transcript: transcript.slice(0, 20_000),
+          line_count: lineCount,
+          duration_ms: Date.now() - startedAt,
+          status: finalStatus,
+        }),
+      });
+    } catch (_) {
+      /* best-effort */
+    }
+  };
+
   // Re-stream as SSE lines to the client. We forward raw text deltas; the
   // client splits by \n and colors each line by its prefix.
   const stream = new ReadableStream({
@@ -119,6 +155,9 @@ Deno.serve(async (req) => {
         controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n\n`));
 
       try {
+        // Announce the runId to the client so it can build a replay URL.
+        send({ type: "run", id: runId });
+
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
@@ -130,25 +169,39 @@ Deno.serve(async (req) => {
             if (!trimmed.startsWith("data:")) continue;
             const payload = trimmed.slice(5).trim();
             if (payload === "[DONE]") {
-              send({ type: "done" });
+              send({ type: "done", id: runId });
               controller.close();
+              await persist();
               return;
             }
             try {
               const json = JSON.parse(payload);
               const delta: string | undefined = json?.choices?.[0]?.delta?.content;
-              if (delta) send({ type: "delta", text: delta });
+              if (delta) {
+                transcript += delta;
+                lineCount += (delta.match(/\n/g) ?? []).length;
+                send({ type: "delta", text: delta });
+              }
             } catch {
               /* ignore keepalives */
             }
           }
         }
-        send({ type: "done" });
+        send({ type: "done", id: runId });
       } catch (err) {
+        finalStatus = "failed";
         send({ type: "error", message: (err as Error).message });
       } finally {
-        controller.close();
+        try {
+          controller.close();
+        } catch (_) {
+          /* already closed */
+        }
+        await persist();
       }
+    },
+    cancel() {
+      finalStatus = "aborted";
     },
   });
 
@@ -161,3 +214,11 @@ Deno.serve(async (req) => {
     },
   });
 });
+
+async function sha256Hex(input: string): Promise<string> {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(input));
+  return Array.from(new Uint8Array(buf))
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+}
+
