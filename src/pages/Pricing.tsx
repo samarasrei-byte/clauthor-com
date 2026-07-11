@@ -139,11 +139,8 @@ const Pricing = () => {
 
                 {/* Price */}
                 <div className="mb-5">
-                  <div className="flex items-baseline gap-1.5">
-                    <span className="font-display text-4xl font-bold gradient-text">{fp(dept.clauthorCost)}</span>
-                    <span className="text-muted-foreground text-sm">/mês</span>
-                  </div>
-                  <div className="flex items-center gap-2 mt-1.5">
+                  <PricePill price={fp(dept.clauthorCost)} period="/mês" size="lg" />
+                  <div className="flex items-center gap-2 mt-2">
                     <span className="text-xs text-muted-foreground line-through">
                       Equipe CLT: {fp(dept.cltCost)}/mês
                     </span>
