@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronRight, Flame } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
 import { useEffect, useState, lazy, Suspense } from "react";
 const NeuralBackdrop = lazy(() => import("./NeuralBackdrop"));
 
