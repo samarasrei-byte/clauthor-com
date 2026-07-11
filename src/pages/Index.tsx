@@ -544,11 +544,14 @@ const HomePage = () => {
             <p className="text-[16px] text-muted-foreground max-w-md mx-auto mb-8 leading-relaxed">
               {t("home.final_cta_desc_v2", { defaultValue: "Os primeiros a entrar ganham acesso antecipado e desconto exclusivo de lançamento." })}
             </p>
-            <Link to="/waitlist">
-              <Button size="lg" className="h-12 px-10 gap-2 text-[14px] font-medium rounded-full">
+            <Link to="/waitlist" className="inline-block">
+              <PremiumCTAButton
+                size="lg"
+                icon={<Sparkles className="h-[13px] w-[13px] text-white" strokeWidth={2.25} />}
+                className="px-10"
+              >
                 {t("home.cta_waitlist", { defaultValue: "Get Started" })}
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+              </PremiumCTAButton>
             </Link>
           </motion.div>
         </div>
