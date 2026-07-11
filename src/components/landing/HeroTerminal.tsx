@@ -101,19 +101,19 @@ const HeroTerminal = () => {
 
           <div className="flex flex-col sm:flex-row gap-3 pt-1">
             <Link to="/auth" className="block w-full sm:w-auto">
-              <Button
+              <PremiumCTAButton
                 size="lg"
-                className="w-full sm:w-auto h-12 px-7 text-sm font-semibold rounded-xl gap-2 shadow-[0_0_24px_-6px_hsl(var(--primary)/0.5)] hover:shadow-[0_0_28px_-4px_hsl(var(--primary)/0.7)] transition-shadow"
+                icon={<Flame className="h-[13px] w-[13px] text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.9)]" strokeWidth={2.25} />}
+                className="w-full sm:w-auto px-7"
               >
                 Contratar um departamento
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+              </PremiumCTAButton>
             </Link>
             <Link to="/departamentos" className="block w-full sm:w-auto">
               <Button
                 variant="outline"
                 size="lg"
-                className="w-full sm:w-auto h-12 px-7 text-sm font-semibold rounded-xl gap-1 bg-white/[0.03] border-white/10 hover:bg-white/[0.06]"
+                className="w-full sm:w-auto h-14 px-7 text-sm font-semibold rounded-2xl gap-1 bg-white/[0.03] border-white/10 hover:bg-white/[0.06]"
               >
                 Ver os 20 departamentos
                 <ChevronRight className="h-4 w-4" />
