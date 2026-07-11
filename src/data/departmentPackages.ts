@@ -275,7 +275,10 @@ const RH: DepartmentPackage = {
   color: "talent",
   painPoint: "Contratações demoram meses e turnover consome operação.",
   outcome: "Time-to-hire < 21 dias, engajamento medido semanalmente",
-  agentSlugs: ["recruiter_agent", "onboarding_specialist", "people_analytics", "employee_engagement_agent"],
+  agentSlugs: [
+    "recruiter_agent", "reseller_recruiter", "onboarding_specialist", "onboarding_optimizer",
+    "people_analytics", "employee_engagement_agent", "employer_brand_agent",
+  ],
   outcomeMetric: {
     label: "Candidatos qualificados",
     progression: [0, 4, 9, 15, 22, 28, 33, 38],
