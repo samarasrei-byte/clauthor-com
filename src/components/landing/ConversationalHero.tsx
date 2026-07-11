@@ -39,6 +39,27 @@ const SUGGESTIONS: Array<{ label: string; prompt: string }> = [
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL as string;
 const SUPABASE_KEY = (import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? import.meta.env.VITE_SUPABASE_ANON_KEY) as string;
 
+// Ghost demo — Q&A que roda em loop no input até o usuário digitar
+const GHOST_DEMOS: Array<{ q: string; a: string; dept: string }> = [
+  {
+    q: "Preciso bater a meta de vendas do trimestre.",
+    a: "Recomendo o departamento Comercial — SDR + Closer + RevOps orquestrados.",
+    dept: "Comercial",
+  },
+  {
+    q: "Meus contratos travam semanas no jurídico.",
+    a: "Departamento Jurídico revisa contratos em minutos, com compliance embutido.",
+    dept: "Jurídico",
+  },
+  {
+    q: "Gasto muito em ads sem saber o ROAS real.",
+    a: "Departamento Marketing conecta ads, CRM e finance para ROAS em tempo real.",
+    dept: "Marketing",
+  },
+];
+
+const TRUSTED_LOGOS = ["Ironberg", "Zenklub", "Kovi", "Cargill", "Loft", "Nubank"];
+
 const ConversationalHero = () => {
   const navigate = useNavigate();
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -49,6 +70,7 @@ const ConversationalHero = () => {
   const [streaming, setStreaming] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [placeholderIdx, setPlaceholderIdx] = useState(0);
+  const [ghostIdx, setGhostIdx] = useState(0);
 
   // Rotate placeholder every 3s while input is empty
   useEffect(() => {
@@ -56,6 +78,13 @@ const ConversationalHero = () => {
     const t = setInterval(() => setPlaceholderIdx((i) => (i + 1) % PLACEHOLDERS.length), 3000);
     return () => clearInterval(t);
   }, [input]);
+
+  // Ghost demo cycles every 5s while idle
+  useEffect(() => {
+    if (input.length > 0 || streaming || response) return;
+    const t = setInterval(() => setGhostIdx((i) => (i + 1) % GHOST_DEMOS.length), 5000);
+    return () => clearInterval(t);
+  }, [input, streaming, response]);
 
   // Parse recommended department id from the streamed text (DEPT:<id>)
   const recommended = useMemo(() => {
