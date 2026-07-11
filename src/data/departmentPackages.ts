@@ -243,7 +243,11 @@ const FINANCEIRO: DepartmentPackage = {
   color: "finance",
   painPoint: "DRE atrasada, fluxo de caixa no chute, decisões financeiras às cegas.",
   outcome: "Fechamento mensal em D+3 e dashboard financeiro diário",
-  agentSlugs: ["ai_cfo", "digital_accountant"],
+  agentSlugs: [
+    "ai_cfo", "digital_accountant", "accounts_payable", "accounts_receivable",
+    "budget_analyst", "budget_allocator", "financial_forecaster",
+    "pricing_analyst", "pricing_strategist", "billing_agent",
+  ],
   outcomeMetric: {
     label: "Dias para fechamento",
     progression: [21, 14, 10, 7, 5, 4, 3, 3],
