@@ -46,8 +46,14 @@ export function InstantWow({ onDone, onSkip }: InstantWowProps) {
   const [company, setCompany] = useState(flow.company);
   const [pain, setPain] = useState(flow.pain);
   const [painCategory, setPainCategory] = useState<PainCategory>(flow.painCategory);
+  const variant = useMemo<Variant>(() => resolveVariant(), []);
 
-  useEffect(() => { flow.start(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
+  useEffect(() => {
+    flow.start();
+    trackKpi("wow_variant_assigned", { source: "instant_wow", variant });
+    /* eslint-disable-next-line react-hooks/exhaustive-deps */
+  }, []);
+
   useEffect(() => {
     if (flow.state === "generating" || flow.state === "ready") setStep("output");
   }, [flow.state]);
