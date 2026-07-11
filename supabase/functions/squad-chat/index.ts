@@ -371,7 +371,15 @@ ${companyContext}`;
     const summary = tracker.summary();
     console.log(`[squad-chat] ${summary.totalMs}ms, ${results.length}/${allAgents.length} spoke`);
 
-    return new Response(JSON.stringify({ 
+    await tracer.finish({
+      status: "completed",
+      summary: `${results.length}/${allAgents.length} agentes responderam`,
+      total_ms: summary.totalMs,
+      results: { count: results.length },
+    });
+
+    return new Response(JSON.stringify({
+      run_id: tracer.runId,
       responses: results,
       totalAgents: allAgents.length,
       respondingCount: results.length,
