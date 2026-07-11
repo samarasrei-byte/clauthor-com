@@ -3,7 +3,7 @@
  * Fluxo: captura (2 campos + categoria) → geração streaming → aprovar/regerar.
  * Fallback determinístico se a Edge Function falhar/timeout.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Check, Copy, RefreshCw, Sparkles, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,23 @@ import { PAIN_OPTIONS, type PainCategory, getPainOption } from "@/lib/wow-router
 import { useWowFlow } from "@/hooks/useWowFlow";
 import { WowPreview } from "./WowPreview";
 import { WowConfetti } from "./WowConfetti";
+import { WowVoiceCapture } from "./WowVoiceCapture";
+import { trackKpi } from "@/lib/kpiTracker";
+
+const VARIANT_KEY = "wow-variant-v1";
+type Variant = "form" | "voice";
+function resolveVariant(): Variant {
+  try {
+    const stored = localStorage.getItem(VARIANT_KEY) as Variant | null;
+    if (stored === "form" || stored === "voice") return stored;
+    const next: Variant = Math.random() < 0.5 ? "form" : "voice";
+    localStorage.setItem(VARIANT_KEY, next);
+    return next;
+  } catch {
+    return "form";
+  }
+}
+
 
 interface InstantWowProps {
   onDone: () => void;
