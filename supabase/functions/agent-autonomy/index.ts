@@ -1,8 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { classifyAction, formatActionForApproval, DAILY_ACTION_LIMITS } from "../_shared/autonomy-engine.ts";
+import { startRun } from "../_shared/execution-tracer.ts";
 
 import { corsHeaders, handleCors, jsonResponse, errorResponse } from "../_shared/cors.ts";
+
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
