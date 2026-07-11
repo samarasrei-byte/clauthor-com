@@ -4,6 +4,8 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { startRun } from "../_shared/execution-tracer.ts";
+
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -194,7 +196,39 @@ serve(async (req) => {
   const overallStart = Date.now();
   const isApprovedResume = !!approved_execution_id;
 
+  // Initialize tracer (best-effort)
+  const authHeader = req.headers.get("Authorization") ?? "";
+  let tracer: Awaited<ReturnType<typeof startRun>> | null = null;
+  try {
+    if (userId && authHeader) {
+      const supabase = createClient(
+        Deno.env.get("SUPABASE_URL")!,
+        Deno.env.get("SUPABASE_ANON_KEY")!,
+        { global: { headers: { Authorization: authHeader } } },
+      );
+      const { data: tm } = await supabase
+        .from("tenant_members")
+        .select("tenant_id")
+        .eq("user_id", userId)
+        .limit(1)
+        .maybeSingle();
+      const tenantId = tm?.tenant_id ?? userId;
+      tracer = await startRun(supabase, {
+        tenantId,
+        userId,
+        runType: "mcp",
+        agents: [],
+        message,
+      });
+    }
+  } catch (_) { /* tracer is best-effort */ }
+
   // 1. Roteamento Inteligente (Router Agent)
+  await tracer?.step("thought", {
+    title: "Roteamento MCP",
+    content: { message_preview: message.slice(0, 300) },
+  });
+
   const routerResp = await callLovableAI(LOVABLE_API_KEY, {
     model: ROUTER_MODEL,
     messages: [
@@ -208,9 +242,18 @@ serve(async (req) => {
 
   const routerData = await routerResp.json();
   const toolCall = routerData?.choices?.[0]?.message?.tool_calls?.[0]?.function?.arguments;
-  if (!toolCall) return jsonResp({ error: "Falha no roteamento" }, 500);
+  if (!toolCall) {
+    await tracer?.step("error", { title: "Falha no roteamento", content: {} });
+    await tracer?.finish({ status: "failed", summary: "router_failed" });
+    return jsonResp({ error: "Falha no roteamento" }, 500);
+  }
 
   const decision = JSON.parse(toolCall);
+  await tracer?.step("decision", {
+    title: `Router selecionou ${decision.agentes?.length ?? 0} agentes`,
+    content: { agentes: decision.agentes, analise: decision.analise, contexto_extra: decision.contexto_extra },
+  });
+
   const agentes = ["AGENTE_SEGURANCA", ...decision.agentes.filter((a: string) => a !== "AGENTE_SEGURANCA")];
 
   // 2. Segurança Primeiro (Garantia de conformidade)
@@ -225,8 +268,17 @@ serve(async (req) => {
   const securityLevel = detectSecurityLevel(securityResult.output);
   const results = [securityResult];
 
+  await tracer?.step("tool_result", {
+    title: `Segurança: ${securityLevel}`,
+    agent_slug: "AGENTE_SEGURANCA",
+    duration_ms: securityResult.ms,
+    content: { security_level: securityLevel, output_preview: (securityResult.output || "").slice(0, 500) },
+  });
+
   // Human-in-the-loop if critical
   if (securityLevel === "CRÍTICO" && !isApprovedResume) {
+    await tracer?.step("delegation", { title: "Bloqueio de segurança — aprovação humana", content: { security_level: securityLevel } });
+    await tracer?.finish({ status: "completed", summary: "security_blocked" });
     return jsonResp({
       response: "🔒 BLOQUEIO DE SEGURANÇA: Esta solicitação apresenta riscos éticos ou de conformidade e requer aprovação humana.",
       raw: {
@@ -235,20 +287,42 @@ serve(async (req) => {
         security_blocked: true,
         security_level: securityLevel,
         requires_approval: true,
-        totalMs: Date.now() - overallStart
+        totalMs: Date.now() - overallStart,
+        run_id: tracer?.runId,
       }
     });
   }
 
   // 3. Execução Paralela dos Especialistas
   const otherAgents = agentes.filter(a => a !== "AGENTE_SEGURANCA");
+  await tracer?.step("delegation", {
+    title: `Delegando para ${otherAgents.length} especialistas`,
+    content: { agents: otherAgents },
+  });
+
   const parallel = await Promise.all(
     otherAgents.map(a => runSubagent(LOVABLE_API_KEY, a, decision.tarefa_por_agente[a] || message, history, message))
   );
   results.push(...parallel);
 
+  for (const r of parallel) {
+    await tracer?.step("tool_result", {
+      title: r.agent,
+      agent_slug: r.agent,
+      duration_ms: r.ms,
+      content: { output_preview: (r.output || "").slice(0, 800), error: (r as any).error },
+    });
+  }
+
   // 4. Formatação Final (Parecer do Orquestrador)
   const finalResponse = formatFinalResponse(decision.analise, results);
+  const totalMs = Date.now() - overallStart;
+
+  await tracer?.step("final_output", {
+    title: "Parecer do Orquestrador",
+    content: { length: finalResponse.length, security_level: securityLevel },
+  });
+  await tracer?.finish({ status: "completed", summary: `MCP: ${otherAgents.length + 1} agentes`, total_ms: totalMs });
 
   return jsonResp({
     response: finalResponse,
@@ -257,10 +331,12 @@ serve(async (req) => {
       results,
       security_blocked: false,
       security_level: securityLevel,
-      totalMs: Date.now() - overallStart
+      totalMs,
+      run_id: tracer?.runId,
     }
   });
 });
+
 
 function formatFinalResponse(analise: string, results: any[]): string {
   const parts = [

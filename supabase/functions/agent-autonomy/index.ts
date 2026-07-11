@@ -1,8 +1,10 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { classifyAction, formatActionForApproval, DAILY_ACTION_LIMITS } from "../_shared/autonomy-engine.ts";
+import { startRun } from "../_shared/execution-tracer.ts";
 
 import { corsHeaders, handleCors, jsonResponse, errorResponse } from "../_shared/cors.ts";
+
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -47,6 +49,22 @@ serve(async (req) => {
     const classification = classifyAction(action);
     console.log(`[Autonomy] Action: ${action} | Risk: ${classification.riskLevel} | Approval: ${classification.requiresApproval}`);
 
+    // Start tracer (best-effort — never blocks execution)
+    const tracer = await startRun(supabase, {
+      tenantId: tenant_id,
+      userId,
+      runType: "agent_execute",
+      agents: agent_name ? [agent_name] : [],
+      message: `${action}${details ? ` — ${details}` : ""}`.slice(0, 400),
+    }).catch(() => null);
+
+    await tracer?.step("decision", {
+      title: `Ação classificada: ${classification.riskLevel}`,
+      content: { action, risk_level: classification.riskLevel, requires_approval: classification.requiresApproval, reason: classification.reason },
+      agent_slug: agent_name ?? null,
+    });
+
+
     // 2. Check daily limits
     const today = new Date();
     today.setHours(0, 0, 0, 0);
@@ -68,6 +86,8 @@ serve(async (req) => {
         message: `O agente ${agent_name || "AI"} atingiu o limite de ${limit} ações ${classification.riskLevel}/dia.`,
         metadata: { agent_id, action, risk_level: classification.riskLevel, limit },
       });
+      await tracer?.step("error", { title: "Limite diário atingido", content: { limit, todayCount } });
+      await tracer?.finish({ status: "cancelled", summary: "daily_limit_reached" });
 
       return new Response(JSON.stringify({
         executed: false,
@@ -78,6 +98,8 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+
 
     // 3. If requires approval → queue it
     if (classification.requiresApproval) {
@@ -119,16 +141,24 @@ serve(async (req) => {
       });
 
       console.log(`[Autonomy] ⏳ Action queued for approval: ${pendingAction.id}`);
+      await tracer?.step("delegation", {
+        title: "Aprovação humana solicitada",
+        content: { pending_action_id: pendingAction.id, action, risk_level: classification.riskLevel },
+      });
+      await tracer?.finish({ status: "completed", summary: "approval_required" });
+
       return new Response(JSON.stringify({
         executed: false,
         reason: "approval_required",
         pending_action_id: pendingAction.id,
         risk_level: classification.riskLevel,
         message: formatted.title,
+        run_id: tracer?.runId,
       }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
 
     // 4. Auto-execute + log
     await supabase.from("execution_logs").insert({
@@ -156,13 +186,22 @@ serve(async (req) => {
     }
 
     console.log(`[Autonomy] ✅ Auto-executed: ${action} (${classification.riskLevel})`);
+    await tracer?.step("final_output", {
+      title: `Auto-executado: ${action}`,
+      content: { risk_level: classification.riskLevel, notified: classification.notifyOwner },
+      agent_slug: agent_name ?? null,
+    });
+    await tracer?.finish({ status: "completed", summary: `auto_executed:${action}` });
+
     return new Response(JSON.stringify({
       executed: true,
       risk_level: classification.riskLevel,
       notified: classification.notifyOwner,
+      run_id: tracer?.runId,
     }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
+
   } catch (err) {
     console.error("[Autonomy] Error:", err);
     return new Response(JSON.stringify({ error: String(err) }), {

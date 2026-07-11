@@ -1,7 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.1";
 import { handleCors, jsonResponse, errorResponse } from "../_shared/cors.ts";
+import { startRun } from "../_shared/execution-tracer.ts";
 
-// Hunter v2 - Reads PhantomBuster credentials from environment (not user config).
+// Hunter v2 - Instrumented with execution-tracer for replayable runs.
+
 // Body: { campaign_id: string }
 Deno.serve(async (req) => {
   const cors = handleCors(req);
@@ -47,12 +49,42 @@ Deno.serve(async (req) => {
     const searchAgentId = cfg?.phantombuster_search_agent_id || Deno.env.get("PHANTOMBUSTER_SEARCH_AGENT_ID");
     const cookie = session?.linkedin_cookie;
 
+    // Resolve tenant for tracer
+    const { data: tm } = await supabase
+      .from("tenant_members")
+      .select("tenant_id")
+      .eq("user_id", user.id)
+      .limit(1)
+      .maybeSingle();
+    const tenantId = tm?.tenant_id ?? user.id;
+
+    const tracer = await startRun(supabase, {
+      tenantId,
+      userId: user.id,
+      runType: "hunter",
+      agents: ["hunter-buscar-leads"],
+      message: `Campanha "${campaign.nome}" (limite ${campaign.limite_diario}/dia)`,
+    }).catch(() => null);
+
+    await tracer?.step("thought", {
+      title: `Iniciando busca de leads`,
+      content: {
+        campaign_id,
+        cargo_alvo: campaign.cargo_alvo,
+        setor_alvo: campaign.setor_alvo,
+        localizacao_alvo: campaign.localizacao_alvo,
+        limite_diario: campaign.limite_diario,
+      },
+      agent_slug: "hunter",
+    });
+
     await supabase.from("hunter_logs").insert({
       campaign_id,
       user_id: user.id,
       tipo: "info",
       mensagem: `Execução iniciada para "${campaign.nome}" (limite: ${campaign.limite_diario}/dia)`,
     });
+
 
     // Guard: PhantomBuster and LinkedIn cookie are required for real prospecting.
     // Previously this branch silently inserted fake demo leads — now we fail loudly.
@@ -71,20 +103,37 @@ Deno.serve(async (req) => {
         mensagem: message,
       });
 
+      await tracer?.step("error", { title: "Configuração incompleta", content: { missing } });
+      await tracer?.finish({ status: "failed", summary: "configuration_incomplete" });
+
       return jsonResponse(
         {
           success: false,
           error: "configuration_incomplete",
           message,
           missing,
+          run_id: tracer?.runId,
         },
         422,
       );
     }
 
 
+
     // Real PhantomBuster Search call
     try {
+      await tracer?.step("tool_call", {
+        title: "PhantomBuster: launch search",
+        tool_name: "phantombuster_launch",
+        content: {
+          agent_id: searchAgentId,
+          searches: `${campaign.cargo_alvo} ${campaign.setor_alvo}`.trim(),
+          location: campaign.localizacao_alvo,
+          numberOfResultsPerSearch: campaign.limite_diario || 20,
+        },
+      });
+
+      const t0 = Date.now();
       const pbResponse = await fetch("https://api.phantombuster.com/api/v2/agents/launch", {
         method: "POST",
         headers: {
@@ -118,7 +167,15 @@ Deno.serve(async (req) => {
         mensagem: `PhantomBuster Search disparado (limite ${campaign.limite_diario}). Leads chegam por webhook.`,
       });
 
-      return jsonResponse({ success: true, message: "Busca iniciada no PhantomBuster" });
+      await tracer?.step("tool_result", {
+        title: "PhantomBuster disparado",
+        tool_name: "phantombuster_launch",
+        duration_ms: Date.now() - t0,
+        content: { status: pbResponse.status },
+      });
+      await tracer?.finish({ status: "completed", summary: "Busca iniciada no PhantomBuster" });
+
+      return jsonResponse({ success: true, message: "Busca iniciada no PhantomBuster", run_id: tracer?.runId });
     } catch (e) {
       await supabase.from("hunter_logs").insert({
         campaign_id,
@@ -126,9 +183,12 @@ Deno.serve(async (req) => {
         tipo: "erro",
         mensagem: `Erro PhantomBuster: ${(e as Error).message}`,
       });
+      await tracer?.step("error", { title: "PhantomBuster falhou", content: { error: (e as Error).message } });
+      await tracer?.finish({ status: "failed", summary: (e as Error).message });
       return errorResponse((e as Error).message, 500);
     }
   } catch (e) {
     return errorResponse((e as Error).message || "Erro interno", 500);
   }
 });
+

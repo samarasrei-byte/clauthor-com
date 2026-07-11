@@ -38,6 +38,8 @@ import AdminCostsDashboard from "@/components/dashboard/AdminCostsDashboard";
 import AdminSimulationsPanel from "@/components/dashboard/AdminSimulationsPanel";
 import TokenAlertsTable from "@/components/dashboard/TokenAlertsTable";
 import ThorGreetingMetricsCard from "@/components/dashboard/ThorGreetingMetricsCard";
+import WowKpiCard from "@/components/dashboard/WowKpiCard";
+
 import AdminMarginAnalysis from "@/components/dashboard/AdminMarginAnalysis";
 import { useAdminGuard } from "@/hooks/useAdminGuard";
 import { Loader2 } from "lucide-react";
@@ -337,8 +339,10 @@ const AdminDashboard = () => {
                     warnAt={80}
                     criticalAt={95}
                   />
+                  <WowKpiCard />
                   <ThorGreetingMetricsCard />
                   <LiveActivityFeed />
+
                 </div>
               )}
 
