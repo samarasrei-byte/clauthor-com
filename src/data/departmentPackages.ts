@@ -265,7 +265,7 @@ const FINANCEIRO: DepartmentPackage = {
       outcome: "3 ações concretas para eliminar o gap", delayMs: 5000 },
   ],
   priceMonthly: 1997,
-  flagship: false,
+  flagship: true,
 };
 
 const RH: DepartmentPackage = {
