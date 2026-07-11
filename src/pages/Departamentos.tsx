@@ -16,6 +16,7 @@ import {
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
+import PricePill from "@/components/pricing/PricePill";
 import { supabase } from "@/integrations/supabase/client";
 import { createPayPalPlan, handleInlineApproval } from "@/lib/paypal-helpers";
 import { useAuth } from "@/hooks/useAuth";
