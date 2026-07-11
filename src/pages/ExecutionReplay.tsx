@@ -7,6 +7,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useExecutionRun } from "@/hooks/useExecutionRun";
 import { ReplayHeader } from "@/components/replay/ReplayHeader";
 import { ReplayTimeline } from "@/components/replay/ReplayTimeline";
+import { ExplainRunCard } from "@/components/replay/ExplainRunCard";
 import { trackKpi } from "@/lib/kpiTracker";
 
 const ExecutionReplay = () => {
@@ -54,6 +55,9 @@ const ExecutionReplay = () => {
         {run && !isLoading && (
           <div className="space-y-5">
             <ReplayHeader run={run} totals={totals} />
+            {run.status !== "running" && steps.length > 0 && (
+              <ExplainRunCard runId={run.id} />
+            )}
             <ReplayTimeline steps={steps} isLive={run.status === "running"} runId={run.id} />
           </div>
         )}

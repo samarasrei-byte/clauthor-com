@@ -32,6 +32,7 @@ export type KpiEventName =
   | "replay_step_expanded"
   | "replay_completed_view"
   | "replay_action"
+  | "replay_explained"
   | "wow_started"
   | "wow_form_submitted"
   | "wow_output_ready"

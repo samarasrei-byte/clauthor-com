@@ -6,6 +6,7 @@ import { withRetry, alertFailure, createExecutionTracker } from "../_shared/resi
 import { buildAgentContract, inferAgentArea, getAreaLimits, getTierSLA, type AgentContract } from "../_shared/agent-contract.ts";
 import { validateLimits } from "../_shared/policy-engine.ts";
 import { incrementAgentUsage, resolvePriceTier } from "../_shared/metered-billing.ts";
+import { startRun } from "../_shared/execution-tracer.ts";
 
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
 
@@ -184,7 +185,22 @@ Respond ONLY with a JSON array of the EXACT names of the chosen agents. Example:
 
     const agentStep = tracker.step("agent_execution");
 
-    // Execute agents SEQUENTIALLY
+    // Start replayable run
+    const tracer = await startRun(adminClient, {
+      tenantId,
+      userId: user.id,
+      runType: "agent_execute",
+      agents: respondingAgents.map((a) => a.name),
+      message: String(message).slice(0, 500),
+    });
+    await tracer.step("thought", {
+      title: `Squad chamado: ${respondingAgents.length} agente(s) responderão`,
+      content: {
+        total_agents: allAgents.length,
+        responding: respondingAgents.map((a) => ({ id: a.id, name: a.name, tier: a.tier })),
+        mentioned: mentionedAgent ?? null,
+      },
+    });
     const results: any[] = [];
     for (const agent of respondingAgents) {
       const agentArea = inferAgentArea(agent.name, agent.objective, agent.instructions);
@@ -306,10 +322,22 @@ ${companyContext}`;
           tokensUsed,
           speakingOrder: results.length,
         });
+        await tracer.step("final_output", {
+          title: `${agent.name} respondeu`,
+          agent_slug: `agent:${agent.id}`,
+          content: { area: agentArea, preview: String(content).slice(0, 400) },
+          tokens_in: 0,
+          tokens_out: tokensUsed,
+        });
       } catch (err: any) {
         try {
           alertFailure(adminClient, user.id, agent.id, "squad_chat", err?.message || "unknown");
         } catch {}
+        await tracer.step("error", {
+          title: `Falha em ${agent.name}`,
+          agent_slug: `agent:${agent.id}`,
+          content: { message: err?.message ?? "unknown" },
+        });
         results.push({
           agentId: agent.id,
           agentName: agent.name,
@@ -343,7 +371,15 @@ ${companyContext}`;
     const summary = tracker.summary();
     console.log(`[squad-chat] ${summary.totalMs}ms, ${results.length}/${allAgents.length} spoke`);
 
-    return new Response(JSON.stringify({ 
+    await tracer.finish({
+      status: "completed",
+      summary: `${results.length}/${allAgents.length} agentes responderam`,
+      total_ms: summary.totalMs,
+      results: { count: results.length },
+    });
+
+    return new Response(JSON.stringify({
+      run_id: tracer.runId,
       responses: results,
       totalAgents: allAgents.length,
       respondingCount: results.length,
