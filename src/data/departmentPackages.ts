@@ -125,7 +125,11 @@ const ATENDIMENTO: DepartmentPackage = {
   color: "customer_success",
   painPoint: "Cliente espera horas por resposta e você perde vendas por demora.",
   outcome: "SLA de resposta < 5 minutos, 24/7",
-  agentSlugs: ["support_channel", "support_lead", "voice_ai", "customer_advocacy", "nps_analyst"],
+  agentSlugs: [
+    "support_channel", "support_lead", "email_support", "helpdesk_agent",
+    "voice_ai", "integration_support", "help_center_writer",
+    "nps_analyst", "customer_advocacy", "retention_analyst", "onboarding_specialist",
+  ],
   outcomeMetric: {
     label: "Tempo médio de resposta",
     progression: [180, 42, 18, 8, 5, 4, 3, 3],
