@@ -190,6 +190,7 @@ const App = () => (
                   <Route path="/social-simulator" element={<SocialSimulator />} />
                   <Route path="/experience" element={<Experience />} />
                   <Route path="/mesa-redonda" element={<Experience />} />
+                  <Route path="/thor" element={<ThorConcierge />} />
                   
                   
                 </Route>
