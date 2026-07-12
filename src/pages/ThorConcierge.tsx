@@ -270,15 +270,7 @@ export default function ThorConcierge() {
           )}
 
           {step === "finalizing" && (
-            <div className="flex flex-col items-center gap-6 py-12 text-center">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              <div className="space-y-1">
-                <p className="text-lg font-medium">Montando sua Mesa Redonda...</p>
-                <p className="text-sm text-muted-foreground">
-                  Sincronizando agentes com o contexto de {company?.empresa}.
-                </p>
-              </div>
-            </div>
+            <FinalizingState empresa={company?.empresa} />
           )}
         </div>
       </section>
@@ -336,5 +328,53 @@ function SubmitButton({ onClick, loading, label }: SubmitButtonProps) {
         </>
       )}
     </Button>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+
+const FINALIZING_STEPS = [
+  "Analisando sua dor com o classificador semântico...",
+  "Selecionando o departamento certo...",
+  "Recrutando agentes especialistas...",
+  "Sincronizando contexto do seu negócio...",
+  "Montando sua Mesa Redonda...",
+] as const;
+
+function FinalizingState({ empresa }: { empresa?: string }) {
+  const [idx, setIdx] = useState(0);
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIdx((i) => Math.min(i + 1, FINALIZING_STEPS.length - 1));
+    }, 1400);
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <div className="flex flex-col items-center gap-6 py-12 text-center">
+      <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="space-y-2 min-h-[3.5rem]">
+        <p
+          key={idx}
+          className="text-lg font-medium animate-in fade-in slide-in-from-bottom-2 duration-300"
+        >
+          {FINALIZING_STEPS[idx]}
+        </p>
+        {empresa && (
+          <p className="text-sm text-muted-foreground">
+            Contexto: {empresa}
+          </p>
+        )}
+      </div>
+      <div className="flex gap-1.5">
+        {FINALIZING_STEPS.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1 w-6 rounded-full transition-colors duration-300 ${
+              i <= idx ? "bg-primary" : "bg-border/60"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
   );
 }
