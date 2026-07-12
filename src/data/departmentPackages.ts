@@ -84,7 +84,7 @@ const COMERCIAL: DepartmentPackage = {
   icon: Briefcase,
   color: "sales",
   painPoint: "Sua equipe não bate meta e o pipeline vive vazio.",
-  outcome: "",
+  outcome: "Pipeline preenchido em < 30 dias, meta batida no trimestre",
   agentSlugs: [
     "hunter_linkedin", "sdr_outbound", "sdr_linkedin", "sdr_email_agent",
     "sdr_whatsapp", "sdr_inbound", "lead_qualifier", "lead_scorer",
