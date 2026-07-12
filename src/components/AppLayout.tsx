@@ -37,8 +37,8 @@ const AppLayout = () => {
 
   return (
     <div className="min-h-dvh bg-background overflow-x-hidden">
-      <Navbar />
-      <main className="pt-16">
+      {showNavbar && <Navbar />}
+      <main className={showNavbar ? "pt-16" : ""}>
         <Outlet />
       </main>
 
