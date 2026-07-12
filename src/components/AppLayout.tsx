@@ -19,6 +19,7 @@ const AppLayout = () => {
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
   const location = useLocation();
   const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname);
+  const showNavbar = !NAVBAR_HIDDEN_ROUTES.includes(location.pathname);
   const isHomePage = location.pathname === "/";
 
   // Adiar hidratação de add-ons não-críticos (dialogs, greeter, gate) até o
