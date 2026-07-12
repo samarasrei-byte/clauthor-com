@@ -138,6 +138,22 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ═══════════ CHATBOT DE VENDAS ═══════════ */}
+      <section className="py-12 sm:py-20 px-5" aria-label="Fale com um consultor Clauthor">
+        <div className="max-w-3xl mx-auto text-center mb-8">
+          <h2 className="text-2xl sm:text-4xl font-semibold tracking-[-0.02em] text-foreground">
+            Não sabe por onde começar?{" "}
+            <span className="animate-gradient-shift">Diga sua dor.</span>
+          </h2>
+          <p className="mt-3 text-[15px] text-muted-foreground max-w-xl mx-auto">
+            Um consultor Clauthor identifica o problema e monta a solução em segundos.
+          </p>
+        </div>
+        <Suspense fallback={<div className="h-[440px]" />}>
+          <SalesChatbot />
+        </Suspense>
+      </section>
+
       {/* ═══════════ STATS COMPACTO ═══════════ */}
       <section
         className="py-12 sm:py-16 px-5 border-y border-border/40"
