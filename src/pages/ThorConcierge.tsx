@@ -128,6 +128,7 @@ export default function ThorConcierge() {
       const [{ leads }, _] = await Promise.all([
         invoke<{ leads: Lead[] }>("sample_leads", {
           icp,
+          dor,
           industry: company?.industry,
           empresa: company?.empresa,
         }),
