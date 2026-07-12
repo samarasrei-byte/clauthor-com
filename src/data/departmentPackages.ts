@@ -130,7 +130,7 @@ const COMERCIAL: DepartmentPackage = {
       action: "Consolidou pipeline do dia no CRM e agendou follow-ups",
       outcome: "31 leads no pipeline · 4 reuniões marcadas", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1878.0,
   flagship: true,
 };
 
@@ -171,7 +171,7 @@ const ATENDIMENTO: DepartmentPackage = {
       action: "Consolidou NPS do dia e gerou relatório de temas recorrentes",
       outcome: "NPS 74 · principal elogio: velocidade", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1547.0,
   flagship: true,
 };
 
@@ -213,7 +213,7 @@ const MARKETING: DepartmentPackage = {
       action: "Gerou relatório executivo com recomendação de escala",
       outcome: "Sugestão: 3× no ângulo vencedor amanhã", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1797.0,
   flagship: true,
 };
 
@@ -257,7 +257,7 @@ const JURIDICO: DepartmentPackage = {
       action: "Consolidou relatório de compliance semanal para o board",
       outcome: "Score 92/100 · 1 gap prioritário aberto", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1597.0,
   flagship: true,
 };
 
@@ -298,7 +298,7 @@ const FINANCEIRO: DepartmentPackage = {
       action: "Consolidou DRE gerencial do mês e recomendações executivas",
       outcome: "3 ações concretas · fechamento em D+3", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1697.0,
   flagship: true,
 };
 
@@ -337,7 +337,7 @@ const RH: DepartmentPackage = {
       action: "Cruzou engajamento × performance × turnover por squad",
       outcome: "Risco de churn identificado em 2 pessoas-chave", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1477.3,
   flagship: true,
 };
 
