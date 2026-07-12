@@ -114,6 +114,8 @@ const DepartmentCard = ({
             </div>
           )}
 
+          <AgentsWorkingScene agentSlugs={department.agentSlugs} />
+
           <AgentAvatarStrip
             agentSlugs={department.agentSlugs}
             color={department.color}
