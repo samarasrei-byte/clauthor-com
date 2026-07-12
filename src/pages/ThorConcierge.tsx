@@ -56,10 +56,10 @@ export default function ThorConcierge() {
   const inputRef = useRef<HTMLInputElement | HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
-    trackKpi("thor_guide_section_play" as never, {
+    trackKpi("thor_guide_section_play", {
       source: "landing",
       section: "thor_concierge_started",
-    } as never);
+    });
   }, []);
 
   useEffect(() => {
@@ -89,11 +89,11 @@ export default function ThorConcierge() {
       const isUrl = /\./.test(value) && !value.includes(" ");
       const scan = await invoke<CompanyData>("scan_company", isUrl ? { url: value } : { text: value });
       setCompany(scan);
-      trackKpi("thor_guide_section_play" as never, {
+      trackKpi("thor_guide_section_play", {
         source: "landing",
         section: "thor_turn_company_done",
         has_site_summary: Boolean(scan.description),
-      } as never);
+      });
       setStep("dor");
     } catch (err) {
       console.error(err);
@@ -109,11 +109,11 @@ export default function ThorConcierge() {
       toast.error("Descreva a dor em poucas palavras.");
       return;
     }
-    trackKpi("thor_guide_section_play" as never, {
+    trackKpi("thor_guide_section_play", {
       source: "landing",
       section: "thor_turn_pain_done",
       pain: dor.slice(0, 120),
-    } as never);
+    });
     setStep("icp");
   };
 
@@ -144,11 +144,11 @@ export default function ThorConcierge() {
         leads,
       });
 
-      trackKpi("first_wow_approved" as never, {
+      trackKpi("first_wow_approved", {
         source: "landing",
         section: "thor_concierge_completed",
         department_id: dept_id,
-      } as never);
+      });
 
       navigate(`/experience?ctx=${encodeURIComponent(ctx_id)}`);
     } catch (err) {
