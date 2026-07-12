@@ -24,6 +24,7 @@ import { CLAUTHOR_ORG_CHART, CLAUTHOR_AGENT_COUNT } from "@/data/clauthorOrgChar
 import { trackKpi } from "@/lib/kpiTracker";
 
 const CaseStudySection = lazy(() => import("@/components/landing/CaseStudySection"));
+const SalesChatbot = lazy(() => import("@/components/landing/SalesChatbot"));
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -135,6 +136,22 @@ const HomePage = () => {
             Sem cadastro. Sem cartão. Mesa Redonda com seus dados em ~90 segundos.
           </p>
         </div>
+      </section>
+
+      {/* ═══════════ CHATBOT DE VENDAS ═══════════ */}
+      <section className="py-12 sm:py-20 px-5" aria-label="Fale com um consultor Clauthor">
+        <div className="max-w-3xl mx-auto text-center mb-8">
+          <h2 className="text-2xl sm:text-4xl font-semibold tracking-[-0.02em] text-foreground">
+            Não sabe por onde começar?{" "}
+            <span className="animate-gradient-shift">Diga sua dor.</span>
+          </h2>
+          <p className="mt-3 text-[15px] text-muted-foreground max-w-xl mx-auto">
+            Um consultor Clauthor identifica o problema e monta a solução em segundos.
+          </p>
+        </div>
+        <Suspense fallback={<div className="h-[440px]" />}>
+          <SalesChatbot />
+        </Suspense>
       </section>
 
       {/* ═══════════ STATS COMPACTO ═══════════ */}
