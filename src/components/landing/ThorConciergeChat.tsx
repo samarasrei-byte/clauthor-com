@@ -1,345 +1,384 @@
 /**
- * ThorConciergeChat — chat conversacional embeddable (estilo ChatGPT).
+ * ThorConciergeChat — chat LLM real (streaming) para o hero da home e /thor.
  *
- * Usado como hero da landing e na rota /thor.
- * O visitante nunca sai da página até clicar no CTA final.
+ * Substitui o funil scripted anterior. Conversa livre, estilo ChatGPT, com o
+ * Thor agindo como consultor. Ao detectar a linha `RECOMENDACAO: <dept>` no
+ * final da resposta, mostra um CTA para o departamento recomendado.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/integrations/supabase/client";
-import { trackKpi } from "@/lib/kpiTracker";
+import ReactMarkdown from "react-markdown";
+import { ArrowRight, Loader2, Send, Sparkles } from "lucide-react";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { ArrowRight, Loader2, Send } from "lucide-react";
-import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { trackKpi } from "@/lib/kpiTracker";
+import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 
-type TurnKey = "empresa" | "dor" | "icp" | "done";
+/* -------------------------------------------------------------------------- */
+/*  Tipos                                                                     */
+/* -------------------------------------------------------------------------- */
 
-interface CompanyData {
-  empresa: string;
-  industry: string;
-  description?: string;
-}
-
-interface Lead {
-  name: string;
-  role: string;
-  signal: string;
-}
+type Role = "user" | "assistant";
+type KpiSource = "landing" | "thor_guide" | "departamentos_page";
 
 interface ChatMessage {
   id: string;
-  role: "thor" | "user";
-  content: React.ReactNode;
+  role: Role;
+  content: string;
+  /** Departamento recomendado extraído da resposta (se houver). */
+  deptId?: string;
 }
+
+interface ThorConciergeChatProps {
+  source?: KpiSource;
+  minHeight?: string;
+  className?: string;
+}
+
+/* -------------------------------------------------------------------------- */
+/*  Helpers                                                                   */
+/* -------------------------------------------------------------------------- */
 
 const uid = () =>
   typeof crypto !== "undefined" && "randomUUID" in crypto
     ? crypto.randomUUID()
     : `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
-const INTRO_MESSAGE: ChatMessage = {
-  id: "intro",
-  role: "thor",
-  content: (
-    <>
-      <p className="font-medium text-foreground">
-        Qual a sua dor hoje?
-      </p>
-      <p className="mt-1 text-muted-foreground">
-        Vamos montar um departamento sob medida pra você. Me diga o site ou o nome
-        da sua empresa aqui embaixo — deixa eu analisar seu caso.
-      </p>
-    </>
-  ),
-};
+const CHAT_ENDPOINT = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/home-thor-chat`;
+const PUBLISHABLE_KEY =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-type KpiSource = "landing" | "thor_guide" | "departamentos_page";
+const VALID_DEPTS = new Set(["comercial", "atendimento", "marketing", "juridico", "financeiro", "rh"]);
 
-interface Props {
-  className?: string;
-  /** Altura mínima do feed. Padrão: `min-h-[360px]`. */
-  minHeight?: string;
-  source?: KpiSource;
+/** Extrai "RECOMENDACAO: <dept>" da resposta e devolve o texto limpo + deptId. */
+function splitRecommendation(text: string): { visible: string; deptId?: string } {
+  const match = text.match(/RECOMENDACAO\s*:\s*([a-zA-Z_]+)\s*$/im);
+  if (!match) return { visible: text };
+  const dept = match[1].toLowerCase().trim();
+  const visible = text.replace(match[0], "").trimEnd();
+  if (!VALID_DEPTS.has(dept)) return { visible };
+  return { visible, deptId: dept };
 }
 
+const INTRO: ChatMessage = {
+  id: "intro",
+  role: "assistant",
+  content:
+    "Sou o Thor, consultor da Clauthor. Me conta rapidamente: qual dor da sua operação está travando o crescimento hoje?",
+};
+
+const SUGGESTIONS = [
+  "Meu time comercial não bate meta",
+  "Atendimento está sobrecarregado",
+  "Preciso escalar marketing",
+  "Quero automatizar jurídico",
+];
+
+/* -------------------------------------------------------------------------- */
+/*  Componente                                                                */
+/* -------------------------------------------------------------------------- */
+
 export default function ThorConciergeChat({
-  className,
-  minHeight = "min-h-[360px]",
   source = "landing",
-}: Props) {
+  minHeight = "min-h-[420px]",
+  className,
+}: ThorConciergeChatProps) {
   const navigate = useNavigate();
-  const sessionIdRef = useRef<string>(uid());
-
-  const [turn, setTurn] = useState<TurnKey>("empresa");
-  const [messages, setMessages] = useState<ChatMessage[]>([INTRO_MESSAGE]);
+  const [messages, setMessages] = useState<ChatMessage[]>([INTRO]);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [company, setCompany] = useState<CompanyData | null>(null);
-  const [dor, setDor] = useState("");
+  const [isStreaming, setIsStreaming] = useState(false);
+  const abortRef = useRef<AbortController | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const feedRef = useRef<HTMLDivElement | null>(null);
-
+  // Auto-scroll para a última mensagem enquanto streama.
   useEffect(() => {
-    trackKpi("thor_guide_section_play", {
-      source,
-      section: "thor_concierge_started",
-    });
-  }, [source]);
+    const el = scrollRef.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages]);
 
+  // Foco inicial e após stream terminar.
   useEffect(() => {
-    feedRef.current?.scrollTo({ top: feedRef.current.scrollHeight, behavior: "smooth" });
-  }, [messages, loading]);
+    if (!isStreaming) textareaRef.current?.focus();
+  }, [isStreaming]);
 
-  const invoke = useCallback(
-    async <T,>(action: string, payload: Record<string, unknown>): Promise<T> => {
-      const { data, error } = await supabase.functions.invoke("thor-concierge", {
-        body: { action, ...payload },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      return data as T;
-    },
-    [],
+  // Cancela stream ao desmontar.
+  useEffect(() => () => abortRef.current?.abort(), []);
+
+  const recommendedDept = useMemo(() => {
+    for (let i = messages.length - 1; i >= 0; i--) {
+      if (messages[i].deptId) return messages[i].deptId;
+    }
+    return undefined;
+  }, [messages]);
+
+  const recommendedPkg = useMemo(
+    () => (recommendedDept ? DEPARTMENT_PACKAGES.find((d) => d.id === recommendedDept) : undefined),
+    [recommendedDept],
   );
 
-  const push = (msg: Omit<ChatMessage, "id">) =>
-    setMessages((prev) => [...prev, { ...msg, id: uid() }]);
+  const sendMessage = useCallback(
+    async (text: string) => {
+      const clean = text.trim();
+      if (!clean || isStreaming) return;
 
-  const placeholder = useMemo(() => {
-    switch (turn) {
-      case "empresa":
-        return "seusite.com.br  ·  ou  ·  nome da empresa";
-      case "dor":
-        return "Ex.: meu comercial responde lead em 3 dias e converte 4%.";
-      case "icp":
-        return "Ex.: Diretor de SaaS B2B, 20-100 pessoas, ciclo longo.";
-      default:
-        return "";
-    }
-  }, [turn]);
+      const userMsg: ChatMessage = { id: uid(), role: "user", content: clean };
+      const assistantId = uid();
+      const assistantMsg: ChatMessage = { id: assistantId, role: "assistant", content: "" };
 
-  const submit = async () => {
-    const value = input.trim();
-    if (!value || loading || turn === "done") return;
+      // Snapshot antes do setState para enviar ao servidor.
+      const history = [...messages, userMsg].map((m) => ({ role: m.role, content: m.content }));
 
-    push({ role: "user", content: <span>{value}</span> });
-    setInput("");
+      setMessages((prev) => [...prev, userMsg, assistantMsg]);
+      setInput("");
+      setIsStreaming(true);
+      trackKpi("thor_guide_section_play", { source, section: "chat_message_sent" });
 
-    if (turn === "empresa") {
-      if (value.length < 2) return toast.error("Me diga o site ou o nome.");
-      setLoading(true);
+      const controller = new AbortController();
+      abortRef.current = controller;
+
       try {
-        const isUrl = /\./.test(value) && !value.includes(" ");
-        const scan = await invoke<CompanyData>(
-          "scan_company",
-          isUrl ? { url: value } : { text: value },
-        );
-        setCompany(scan);
-        push({
-          role: "thor",
-          content: (
-            <>
-              <p>
-                Prazer, <span className="text-foreground font-medium">{scan.empresa}</span>.
-                {scan.industry ? ` Segmento: ${scan.industry}.` : ""}
-              </p>
-              <p className="mt-1 text-muted-foreground">
-                <span className="text-foreground">Qual a dor que mais te tira o sono?</span>{" "}
-                Vendas, atendimento, marketing, financeiro — em uma frase.
-              </p>
-            </>
-          ),
-        });
-        trackKpi("thor_guide_section_play", {
-          source,
-          section: "thor_turn_company_done",
-          has_site_summary: Boolean(scan.description),
-        });
-        setTurn("dor");
-      } catch {
-        setCompany({ empresa: value, industry: "Outro" });
-        push({
-          role: "thor",
-          content: (
-            <p>
-              Anotado, <span className="text-foreground font-medium">{value}</span>. E qual dor mais te tira o sono hoje?
-            </p>
-          ),
-        });
-        setTurn("dor");
-      } finally {
-        setLoading(false);
-      }
-      return;
-    }
-
-    if (turn === "dor") {
-      if (value.length < 4) return toast.error("Descreva a dor em poucas palavras.");
-      setDor(value);
-      trackKpi("thor_guide_section_play", {
-        source,
-        section: "thor_turn_pain_done",
-        pain: value.slice(0, 120),
-      });
-      push({
-        role: "thor",
-        content: (
-          <p>
-            Entendi. Última pergunta —{" "}
-            <span className="text-foreground">quem é seu cliente ideal?</span> Setor, porte, cargo do decisor.
-          </p>
-        ),
-      });
-      setTurn("icp");
-      return;
-    }
-
-    if (turn === "icp") {
-      if (value.length < 4) return toast.error("Me diga quem é o cliente ideal.");
-      setLoading(true);
-      push({
-        role: "thor",
-        content: (
-          <span className="inline-flex items-center gap-2 text-muted-foreground">
-            <Loader2 className="w-3.5 h-3.5 animate-spin" /> Analisando seu caso…
-          </span>
-        ),
-      });
-      try {
-        const { leads } = await invoke<{ leads: Lead[] }>("sample_leads", {
-          icp: value,
-          dor,
-          industry: company?.industry,
-          empresa: company?.empresa,
-        });
-        const { ctx_id, dept_id } = await invoke<{ ctx_id: string; dept_id: string }>(
-          "finalize",
-          {
-            session_id: sessionIdRef.current,
-            empresa: company?.empresa,
-            industry: company?.industry,
-            dor,
-            icp: value,
-            leads,
+        const res = await fetch(CHAT_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${PUBLISHABLE_KEY}`,
           },
+          body: JSON.stringify({ messages: history }),
+          signal: controller.signal,
+        });
+
+        if (!res.ok || !res.body) {
+          if (res.status === 429) {
+            toast.error("Muitas mensagens em pouco tempo. Aguarde alguns segundos.");
+          } else if (res.status === 402) {
+            toast.error("Créditos esgotados. Fale com o time.");
+          } else {
+            toast.error("Não consegui responder agora. Tenta de novo em instantes.");
+          }
+          setMessages((prev) => prev.filter((m) => m.id !== assistantId));
+          return;
+        }
+
+        const reader = res.body.getReader();
+        const decoder = new TextDecoder();
+        let buffer = "";
+        let full = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          buffer += decoder.decode(value, { stream: true });
+
+          // Parse SSE lines
+          const lines = buffer.split("\n");
+          buffer = lines.pop() ?? "";
+
+          for (const line of lines) {
+            const trimmed = line.trim();
+            if (!trimmed.startsWith("data:")) continue;
+            const data = trimmed.slice(5).trim();
+            if (!data || data === "[DONE]") continue;
+
+            try {
+              const json = JSON.parse(data);
+              const delta = json?.choices?.[0]?.delta?.content;
+              if (typeof delta === "string" && delta.length > 0) {
+                full += delta;
+                const { visible, deptId } = splitRecommendation(full);
+                setMessages((prev) =>
+                  prev.map((m) =>
+                    m.id === assistantId ? { ...m, content: visible, deptId } : m,
+                  ),
+                );
+              }
+            } catch {
+              /* chunk parcial — ignora */
+            }
+          }
+        }
+
+        // Finaliza extração
+        const { visible, deptId } = splitRecommendation(full);
+        setMessages((prev) =>
+          prev.map((m) => (m.id === assistantId ? { ...m, content: visible || full, deptId } : m)),
         );
-        trackKpi("first_wow_approved", {
-          source,
-          section: "thor_concierge_completed",
-          department_id: dept_id,
-        });
-        push({
-          role: "thor",
-          content: (
-            <div className="space-y-3">
-              <p>
-                Pronto. Recomendo o departamento{" "}
-                <span className="text-foreground font-medium capitalize">
-                  {dept_id.replace(/-/g, " ")}
-                </span>{" "}
-                com agentes já configurados pra sua operação.
-              </p>
-              <Button
-                size="sm"
-                className="gap-2"
-                onClick={() => navigate(`/experience?ctx=${encodeURIComponent(ctx_id)}`)}
-              >
-                Ver mesa redonda <ArrowRight className="w-3.5 h-3.5" />
-              </Button>
-            </div>
-          ),
-        });
-        setTurn("done");
-      } catch (err) {
-        console.error(err);
-        push({
-          role: "thor",
-          content: <span className="text-destructive">Não consegui finalizar agora. Tente de novo.</span>,
-        });
+        if (deptId) {
+          trackKpi("thor_guide_section_play", { source, section: `chat_recommended_${deptId}` });
+        }
+      } catch (err: any) {
+        if (err?.name !== "AbortError") {
+          console.error("[ThorConciergeChat] stream error", err);
+          toast.error("Falha na conexão. Tenta de novo.");
+          setMessages((prev) => prev.filter((m) => m.id !== assistantId));
+        }
       } finally {
-        setLoading(false);
+        setIsStreaming(false);
+        abortRef.current = null;
       }
-      return;
-    }
-  };
+    },
+    [isStreaming, messages, source],
+  );
+
+  const handleSubmit = useCallback(
+    (e?: React.FormEvent) => {
+      e?.preventDefault();
+      sendMessage(input);
+    },
+    [input, sendMessage],
+  );
+
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+      if (e.key === "Enter" && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage(input);
+      }
+    },
+    [input, sendMessage],
+  );
+
+  const goToRecommended = useCallback(() => {
+    if (!recommendedDept) return;
+    trackKpi("thor_guide_section_play", { source, section: `chat_cta_${recommendedDept}` });
+    navigate(`/departamentos/${recommendedDept}`);
+  }, [navigate, recommendedDept, source]);
 
   return (
     <div
       className={cn(
-        "w-full rounded-3xl border border-border/60 bg-card/60 backdrop-blur-sm shadow-[0_20px_80px_-40px_hsl(var(--primary)/0.4)] overflow-hidden flex flex-col",
+        "relative w-full rounded-3xl border border-border/60 bg-card/40 backdrop-blur-xl overflow-hidden",
+        "shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)]",
         className,
       )}
     >
-      <div className="flex items-center justify-between px-5 py-3 border-b border-border/40">
-        <div className="flex items-center gap-2 text-sm">
-          <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
-          <span className="font-medium">Thor</span>
-          <span className="text-muted-foreground">· concierge de IA</span>
+      {/* Header */}
+      <div className="flex items-center gap-3 px-5 py-4 border-b border-border/60 bg-background/40">
+        <div className="relative flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background">
+          <Sparkles className="h-4 w-4" strokeWidth={2} />
+          <span
+            className={cn(
+              "absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-card",
+              isStreaming ? "bg-primary animate-pulse" : "bg-emerald-500",
+            )}
+          />
         </div>
-        <span className="text-[11px] text-muted-foreground">
-          {turn === "done" ? "análise concluída" : "em conversa"}
-        </span>
+        <div className="min-w-0 flex-1">
+          <p className="text-sm font-semibold text-foreground leading-tight">Thor · consultor Clauthor</p>
+          <p className="text-[11px] text-muted-foreground">
+            {isStreaming ? "digitando..." : "online · resposta em segundos"}
+          </p>
+        </div>
       </div>
 
-      <div
-        ref={feedRef}
-        className={cn("flex-1 overflow-y-auto px-5 py-6 space-y-5", minHeight, "max-h-[520px]")}
-      >
+      {/* Messages */}
+      <div ref={scrollRef} className={cn("overflow-y-auto px-5 py-6 space-y-5", minHeight, "max-h-[520px]")}>
         {messages.map((m) => (
           <div
             key={m.id}
-            className={cn(
-              "flex animate-in fade-in slide-in-from-bottom-2 duration-300",
-              m.role === "user" ? "justify-end" : "justify-start",
-            )}
+            className={cn("flex gap-3", m.role === "user" ? "flex-row-reverse" : "flex-row")}
           >
             <div
-              className={
+              className={cn(
+                "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold",
                 m.role === "user"
-                  ? "max-w-[85%] rounded-2xl rounded-br-md bg-primary text-primary-foreground px-4 py-2.5 text-sm leading-relaxed text-left"
-                  : "max-w-[92%] text-[15px] leading-relaxed text-muted-foreground text-left"
-              }
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-foreground text-background",
+              )}
             >
-              {m.content}
+              {m.role === "user" ? "V" : "T"}
+            </div>
+            <div
+              className={cn(
+                "max-w-[85%] rounded-2xl px-4 py-2.5 text-[14.5px] leading-relaxed",
+                m.role === "user"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-background/70 text-foreground border border-border/50",
+              )}
+            >
+              {m.role === "assistant" ? (
+                <div className="prose prose-sm prose-neutral dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1.5">
+                  <ReactMarkdown>{m.content || (isStreaming ? "…" : "")}</ReactMarkdown>
+                </div>
+              ) : (
+                <p className="whitespace-pre-wrap">{m.content}</p>
+              )}
             </div>
           </div>
         ))}
+
+        {/* Recommendation CTA */}
+        {recommendedPkg && !isStreaming && (
+          <div className="mt-2 ml-10 rounded-2xl border border-primary/30 bg-primary/[0.04] p-4">
+            <p className="text-[11px] uppercase tracking-[0.14em] text-primary font-semibold mb-1">
+              Recomendação do Thor
+            </p>
+            <p className="text-base font-semibold text-foreground mb-1">
+              Departamento {recommendedPkg.name}
+            </p>
+            <p className="text-sm text-muted-foreground mb-3">{recommendedPkg.painPoint}</p>
+            <div className="flex items-center justify-between gap-3">
+              <div className="text-sm">
+                <span className="text-foreground font-bold">{formatBRL(recommendedPkg.priceMonthly)}</span>
+                <span className="text-muted-foreground">/mês · {recommendedPkg.agentSlugs.length} agentes</span>
+              </div>
+              <Button size="sm" onClick={goToRecommended} className="gap-1.5">
+                Ver departamento
+                <ArrowRight className="h-3.5 w-3.5" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
 
-      <div className="px-4 pb-4 pt-2 border-t border-border/40 bg-background/40">
-        <div className="relative rounded-2xl border border-border bg-background focus-within:border-primary/60 transition-colors">
+      {/* Suggestions (só antes da primeira msg do usuário) */}
+      {messages.length === 1 && (
+        <div className="px-5 pb-2 flex flex-wrap gap-2">
+          {SUGGESTIONS.map((s) => (
+            <button
+              key={s}
+              onClick={() => sendMessage(s)}
+              disabled={isStreaming}
+              className="text-xs px-3 py-1.5 rounded-full border border-border/60 bg-background/60 text-muted-foreground hover:text-foreground hover:border-foreground/40 transition-colors disabled:opacity-50"
+            >
+              {s}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* Composer */}
+      <form onSubmit={handleSubmit} className="border-t border-border/60 bg-background/40 p-3">
+        <div className="flex items-end gap-2">
           <Textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                submit();
-              }
-            }}
-            placeholder={turn === "done" ? "Conversa encerrada." : placeholder}
+            onKeyDown={handleKeyDown}
+            placeholder="Descreva sua dor ou faça uma pergunta ao Thor..."
             rows={1}
-            disabled={loading || turn === "done"}
-            className="min-h-[52px] max-h-40 resize-none border-0 bg-transparent px-4 py-3.5 pr-14 text-base focus-visible:ring-0 focus-visible:ring-offset-0"
+            maxLength={2000}
+            disabled={isStreaming}
+            className="min-h-[44px] max-h-32 resize-none bg-background/60 border-border/60 focus-visible:ring-1 focus-visible:ring-primary/40"
           />
           <Button
+            type="submit"
             size="icon"
-            onClick={submit}
-            disabled={loading || turn === "done" || !input.trim()}
-            className="absolute right-2 bottom-2 h-9 w-9 rounded-xl"
+            disabled={isStreaming || !input.trim()}
+            className="h-11 w-11 shrink-0"
             aria-label="Enviar"
           >
-            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+            {isStreaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
           </Button>
         </div>
-        <p className="mt-2 text-[11px] text-muted-foreground/60 text-center">
-          Enter envia · Shift+Enter quebra linha
+        <p className="mt-2 px-1 text-[10.5px] text-muted-foreground/70">
+          O Thor pode cometer erros. Confirme informações importantes antes de decidir.
         </p>
-      </div>
+      </form>
     </div>
   );
 }
