@@ -9,7 +9,7 @@
  * a lógica de contratação. Consumidores passam `onSeeLiveDemo` e `onHire`.
  */
 import { motion } from "framer-motion";
-import { ArrowRight, Eye, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Eye, ShieldCheck, Diamond } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -86,7 +86,7 @@ const DepartmentCard = ({
                 variant="outline"
                 className="gap-1 font-medium border-white/[0.1] bg-white/[0.03] text-white/60 rounded-full"
               >
-                <Sparkles className="h-3 w-3" />
+                <Diamond className="h-3 w-3" />
                 Flagship
               </Badge>
             )}

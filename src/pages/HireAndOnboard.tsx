@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, CheckCircle2, Loader2, Sparkles } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Loader2, Diamond } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -72,7 +72,7 @@ export default function HireAndOnboard() {
         {/* Confirmation */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/10 bg-white/[0.03] text-xs text-white/60">
-            <Sparkles className="w-3 h-3" /> Você está contratando
+            <Diamond className="w-3 h-3" /> Você está contratando
           </div>
           <div className="mt-4 flex items-center gap-4">
             <div className="w-14 h-14 rounded-xl border border-white/10 bg-white/[0.03] flex items-center justify-center">

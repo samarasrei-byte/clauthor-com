@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Loader2, RefreshCw } from "lucide-react";
+import { Diamond, Loader2, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
@@ -44,7 +44,7 @@ export const ExplainRunCard = ({ runId }: ExplainRunCardProps) => {
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="flex items-center gap-2">
           <div className="rounded-lg bg-primary/10 p-1.5">
-            <Sparkles className="h-4 w-4 text-primary" />
+            <Diamond className="h-4 w-4 text-primary" />
           </div>
           <div>
             <h3 className="text-sm font-semibold text-foreground">Explique este run</h3>
@@ -71,7 +71,7 @@ export const ExplainRunCard = ({ runId }: ExplainRunCardProps) => {
           size="sm"
           className="gap-1.5"
         >
-          <Sparkles className="h-3.5 w-3.5" />
+          <Diamond className="h-3.5 w-3.5" />
           Gerar narrativa
         </Button>
       )}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Sparkles, X, ArrowRight } from "lucide-react";
+import { Diamond, X, ArrowRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
@@ -44,7 +44,7 @@ export default function OnboardingResumeBanner() {
   return (
     <div className="relative z-30 border-b border-primary/20 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent">
       <div className="max-w-7xl mx-auto px-4 py-2.5 flex items-center gap-3">
-        <Sparkles className="h-4 w-4 text-primary shrink-0" />
+        <Diamond className="h-4 w-4 text-primary shrink-0" />
         <p className="text-sm text-foreground flex-1 min-w-0">
           <span className="font-medium">Complete seu diagnóstico</span>
           <span className="text-muted-foreground hidden sm:inline"> — 60s para descobrir o agente ideal para sua dor.</span>

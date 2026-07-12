@@ -5,7 +5,7 @@
  */
 import { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, Check, Copy, RefreshCw, Sparkles, X } from "lucide-react";
+import { ArrowRight, Check, Copy, RefreshCw, Diamond, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -111,7 +111,7 @@ export function InstantWow({ onDone, onSkip }: InstantWowProps) {
             >
               <div className="text-center space-y-3">
                 <div className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-xs text-primary">
-                  <Sparkles className="h-3.5 w-3.5" /> Momento uau em 60 segundos
+                  <Diamond className="h-3.5 w-3.5" /> Momento uau em 60 segundos
                 </div>
                 <h1 className="text-3xl md:text-4xl font-semibold tracking-tight">
                   Diga sua maior dor.<br />

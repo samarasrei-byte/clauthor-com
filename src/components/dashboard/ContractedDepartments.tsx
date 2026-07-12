@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Building2, Users, Sparkles, ArrowRight, Target, Briefcase } from "lucide-react";
+import { Building2, Users, Diamond, ArrowRight, Target, Briefcase } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
@@ -133,7 +133,7 @@ const ContractedDepartments = ({ onSelectAgent, onExplore }: Props) => {
                   )}
                   {contact && (
                     <span className="flex items-center gap-1 truncate">
-                      <Sparkles className="h-3 w-3 shrink-0" /> {contact}
+                      <Diamond className="h-3 w-3 shrink-0" /> {contact}
                     </span>
                   )}
                 </div>
