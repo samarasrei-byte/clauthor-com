@@ -14,17 +14,17 @@
  */
 import { lazy, Suspense, useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Globe2, Building2, Languages } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
 import Footer from "@/components/Footer";
-import { CLAUTHOR_ORG_CHART, CLAUTHOR_AGENT_COUNT } from "@/data/clauthorOrgChart";
+import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
+import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { trackKpi } from "@/lib/kpiTracker";
 
 const CaseStudySection = lazy(() => import("@/components/landing/CaseStudySection"));
-const SalesChatbot = lazy(() => import("@/components/landing/SalesChatbot"));
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -66,106 +66,119 @@ const HomePage = () => {
 
   const totalSquads = CLAUTHOR_ORG_CHART.reduce((s, d) => s + d.squads.length, 0);
 
-  const goToThor = (source: string) => {
-    trackKpi("thor_guide_section_play", { source: "landing", section: `cta_${source}` });
+  const goToThor = (section: string) => {
+    trackKpi("thor_guide_section_play", { source: "landing", section: `cta_${section}` });
     navigate("/thor");
   };
 
   return (
     <div className="relative overflow-x-hidden">
-      {/* ═══════════ HERO ÚNICO — CTA para /thor ═══════════ */}
+      {/* ═══════════ HERO — chat concierge inline ═══════════ */}
       <section
-        className="relative min-h-[85vh] flex items-center justify-center px-5 py-24"
-        aria-label="Hero"
+        className="relative px-5 pt-16 pb-20 sm:pt-24 sm:pb-24"
+        aria-label="Diagnóstico com o Thor"
       >
-        <div className="max-w-3xl mx-auto text-center space-y-8">
+        <div className="max-w-3xl mx-auto text-center space-y-6 mb-10">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border/60 bg-card/40 backdrop-blur-sm text-xs text-muted-foreground"
           >
-            <Sparkles className="w-3 h-3 text-primary" />
-            <span>20 departamentos · +200 especialistas de IA</span>
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            <span>35.827 empresas · 20 departamentos · +200 especialistas de IA</span>
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.03em] text-foreground leading-[1.05]"
+            className="text-4xl sm:text-6xl font-semibold tracking-[-0.03em] text-foreground leading-[1.05]"
           >
-            Um departamento inteiro trabalhando pra você{" "}
-            <span className="animate-gradient-shift">hoje à noite.</span>
+            Qual a sua dor hoje?{" "}
+            <span className="animate-gradient-shift">Deixa o Thor analisar.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-lg sm:text-xl text-muted-foreground max-w-xl mx-auto"
+            className="text-lg text-muted-foreground max-w-xl mx-auto"
           >
-            Converse com o Thor. Ele monta seu squad e mostra a Mesa Redonda com
-            o contexto real do seu negócio — antes de você pagar.
+            Conta pro Thor o que trava seu negócio. Ele monta um departamento inteiro
+            de agentes de IA sob medida — sem sair desta página.
           </motion.p>
-
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2"
-          >
-            <PremiumCTAButton
-              size="lg"
-              icon={<Sparkles className="h-3.5 w-3.5 text-white" strokeWidth={2.5} />}
-              onClick={() => goToThor("hero")}
-              className="px-10"
-            >
-              Conversar com Thor
-            </PremiumCTAButton>
-            <Link
-              to="/departamentos"
-              className="text-[14px] rounded-full px-5 py-3 border border-border text-foreground/80 hover:text-foreground hover:border-foreground/40 transition-all inline-flex items-center gap-1.5"
-            >
-              Ver departamentos
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
-          </motion.div>
-
-          <p className="text-xs text-muted-foreground/70 pt-4">
-            Sem cadastro. Sem cartão. Mesa Redonda com seus dados em ~90 segundos.
-          </p>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.25 }}
+          className="max-w-3xl mx-auto"
+        >
+          <ThorConciergeChat source="landing" minHeight="min-h-[380px]" />
+        </motion.div>
+
+        <p className="mt-6 text-xs text-muted-foreground/70 text-center">
+          Sem cadastro. Sem cartão. Análise personalizada em ~90 segundos.
+        </p>
       </section>
 
-      {/* ═══════════ CHATBOT DE VENDAS ═══════════ */}
-      <section className="py-12 sm:py-20 px-5" aria-label="Fale com um consultor Clauthor">
-        <div className="max-w-3xl mx-auto text-center mb-8">
-          <h2 className="text-2xl sm:text-4xl font-semibold tracking-[-0.02em] text-foreground">
-            Não sabe por onde começar?{" "}
-            <span className="animate-gradient-shift">Diga sua dor.</span>
-          </h2>
-          <p className="mt-3 text-[15px] text-muted-foreground max-w-xl mx-auto">
-            Um consultor Clauthor identifica o problema e monta a solução em segundos.
-          </p>
-        </div>
-        <Suspense fallback={<div className="h-[440px]" />}>
-          <SalesChatbot />
-        </Suspense>
-      </section>
-
-      {/* ═══════════ STATS COMPACTO ═══════════ */}
+      {/* ═══════════ FAIXA DE PROVA GLOBAL ═══════════ */}
       <section
-        className="py-12 sm:py-16 px-5 border-y border-border/40"
-        aria-label="Escala da plataforma"
+        className="py-14 sm:py-16 px-5 border-y border-border/40 bg-card/30"
+        aria-label="Alcance global"
       >
+        <div className="max-w-5xl mx-auto">
+          <p className="text-center text-[11px] uppercase tracking-[0.2em] text-muted-foreground/70 mb-8">
+            Confiança global
+          </p>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-4">
+            {[
+              {
+                icon: Building2,
+                value: "35.827",
+                label: "empresas atendidas",
+                sub: "Brasil, LATAM, EUA e Europa",
+              },
+              {
+                icon: Globe2,
+                value: "24/7",
+                label: "operação em 5 continentes",
+                sub: "Uptime de 99.9%",
+              },
+              {
+                icon: Languages,
+                value: "14",
+                label: "idiomas nativos",
+                sub: "Português, inglês, espanhol, francês, alemão…",
+              },
+            ].map(({ icon: Icon, value, label, sub }) => (
+              <div
+                key={label}
+                className="flex flex-col items-center text-center gap-2 p-5 rounded-2xl border border-border/40 bg-background/40"
+              >
+                <Icon className="w-5 h-5 text-primary" strokeWidth={1.5} />
+                <p className="text-3xl font-semibold text-foreground tracking-tight">
+                  {value}
+                </p>
+                <p className="text-[13px] font-medium text-foreground">{label}</p>
+                <p className="text-[11px] text-muted-foreground">{sub}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ STATS SECUNDÁRIO ═══════════ */}
+      <section className="py-10 sm:py-14 px-5" aria-label="Escala da plataforma">
         <div className="max-w-[1120px] mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-12">
             {[
               { value: "+200", label: "Especialistas de IA" },
               { value: String(totalSquads), label: "Squads orquestrados" },
               { value: String(CLAUTHOR_ORG_CHART.length), label: "Departamentos" },
-              { value: "99.9%", label: "Uptime" },
+              { value: "R$1.700", label: "A partir de /mês" },
             ].map((s) => (
               <div key={s.label} className="text-center">
                 <p className="text-3xl sm:text-4xl font-semibold text-foreground tracking-tight mb-1">
@@ -196,17 +209,20 @@ const HomePage = () => {
             <span className="animate-gradient-shift">começa em 90 segundos.</span>
           </motion.h2>
           <p className="mt-4 text-[15px] sm:text-[17px] text-muted-foreground max-w-lg mx-auto">
-            Sem contratação, sem CLT, sem headcount. Só resultado.
+            Sem contratação, sem CLT, sem headcount. Só resultado — a partir de
+            R$ 1.700/mês por departamento.
           </p>
-          <div className="mt-8 flex items-center justify-center">
-            <PremiumCTAButton
-              size="lg"
-              icon={<Sparkles className="h-3.5 w-3.5 text-white" strokeWidth={2.5} />}
-              onClick={() => goToThor("final")}
-              className="px-10"
-            >
+          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+            <PremiumCTAButton size="lg" onClick={() => goToThor("final")} className="px-10">
               Conversar com Thor
             </PremiumCTAButton>
+            <Link
+              to="/departamentos"
+              className="text-[14px] rounded-full px-5 py-3 border border-border text-foreground/80 hover:text-foreground hover:border-foreground/40 transition-all inline-flex items-center gap-1.5"
+            >
+              Ver departamentos
+              <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
           </div>
         </div>
       </section>
