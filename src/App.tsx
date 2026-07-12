@@ -186,8 +186,6 @@ const App = () => (
                   <Route path="/enterprise" element={<Enterprise />} />
                   <Route path="/architecture" element={<FeatureGate flag="architecture" fallback="/"><Architecture /></FeatureGate>} />
                   <Route path="/timeline" element={<FeatureGate flag="timeline" fallback="/"><ProjectTimeline /></FeatureGate>} />
-                  <Route path="/simulador-social" element={<SocialSimulator />} />
-                  <Route path="/social-simulator" element={<SocialSimulator />} />
                   <Route path="/experience" element={<Experience />} />
                   <Route path="/mesa-redonda" element={<Experience />} />
                   <Route path="/thor" element={<ThorConcierge />} />
