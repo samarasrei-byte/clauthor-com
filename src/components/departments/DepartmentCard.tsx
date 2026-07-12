@@ -9,7 +9,8 @@
  * a lógica de contratação. Consumidores passam `onSeeLiveDemo` e `onHire`.
  */
 import { motion } from "framer-motion";
-import { ArrowRight, PlayCircle, ShieldCheck, Sparkles } from "lucide-react";
+import { ArrowRight, Eye, ShieldCheck, Sparkles } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
