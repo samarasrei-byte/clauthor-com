@@ -369,6 +369,7 @@ const ExperiencePage = () => {
     setCurrentIdx(-1);
     setPlayed(new Set());
     setPlaying(true);
+    setDirectives([]);
   }, [deptId]);
 
   // Loop de reprodução
