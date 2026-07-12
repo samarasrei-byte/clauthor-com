@@ -94,9 +94,8 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="text-4xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.03em] text-foreground leading-[1.05]"
           >
-            Contrate um{" "}
-            <span className="animate-gradient-shift">departamento inteiro</span>{" "}
-            em 90 segundos.
+            Um departamento inteiro trabalhando pra você{" "}
+            <span className="animate-gradient-shift">hoje à noite.</span>
           </motion.h1>
 
           <motion.p
