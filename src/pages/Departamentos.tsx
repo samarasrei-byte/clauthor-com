@@ -250,7 +250,7 @@ const Departamentos = () => {
           transition={{ delay: 0.15 }}
           className="max-w-3xl mx-auto mb-10"
         >
-          <ThorConciergeChat source="departamentos_hero" minHeight="min-h-[380px]" />
+          <ThorConciergeChat source="departamentos_page" minHeight="min-h-[380px]" />
         </motion.div>
 
         {/* Category Filters */}
