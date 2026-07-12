@@ -415,13 +415,14 @@ const ExperiencePage = () => {
 
   const total = dept.timelineDemo.length;
 
-  // Reset ao trocar de departamento
+  // Reset ao trocar de departamento (preserva diretivas quando vindo de ctx)
   useEffect(() => {
     setCurrentIdx(-1);
     setPlayed(new Set());
     setPlaying(true);
-    setDirectives([]);
-  }, [deptId]);
+    if (!ctxId) setDirectives([]);
+  }, [deptId, ctxId]);
+
 
   // Loop de reprodução
   useEffect(() => {
