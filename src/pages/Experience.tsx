@@ -358,13 +358,57 @@ const RoundTable = ({
 
 const ExperiencePage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const ctxId = searchParams.get("ctx");
   const [deptId, setDeptId] = useState<string>(DEPARTMENT_PACKAGES[0].id);
   const [currentIdx, setCurrentIdx] = useState<number>(-1);
   const [played, setPlayed] = useState<Set<number>>(new Set());
   const [playing, setPlaying] = useState<boolean>(true);
   const [directives, setDirectives] = useState<Directive[]>([]);
   const [directiveDraft, setDirectiveDraft] = useState<string>("");
+  const [ctxCompany, setCtxCompany] = useState<string | null>(null);
+  const [ctxPain, setCtxPain] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Hidratação via ?ctx=<id> — vem do Thor Concierge
+  useEffect(() => {
+    if (!ctxId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("thor-concierge", {
+          body: { action: "get_context", ctx_id: ctxId },
+        });
+        if (error || cancelled) return;
+        const ctx = (data as { context?: Record<string, unknown> })?.context;
+        if (!ctx) return;
+        if (typeof ctx.dept_id === "string" && DEPARTMENT_PACKAGES.some((d) => d.id === ctx.dept_id)) {
+          setDeptId(ctx.dept_id);
+        }
+        if (typeof ctx.empresa === "string") setCtxCompany(ctx.empresa);
+        if (typeof ctx.dor === "string") setCtxPain(ctx.dor);
+        const leads = (ctx.context as { leads?: Array<{ name: string; role: string; signal: string }> })?.leads;
+        if (Array.isArray(leads) && leads.length > 0) {
+          const now = new Date();
+          const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+          setDirectives(
+            leads.slice(0, 3).map((l, i) => ({
+              id: `ctx-lead-${i}`,
+              text: `${l.name} · ${l.role} — ${l.signal}`,
+              time,
+              afterIdx: -1,
+            })),
+          );
+        }
+      } catch (err) {
+        console.warn("[experience] ctx hydrate failed", err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [ctxId]);
+
 
   const dept: DepartmentPackage =
     DEPARTMENT_PACKAGES.find((d) => d.id === deptId) ?? DEPARTMENT_PACKAGES[0];
