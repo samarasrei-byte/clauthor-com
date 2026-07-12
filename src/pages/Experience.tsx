@@ -401,6 +401,12 @@ const ExperiencePage = () => {
             })),
           );
         }
+        trackKpi("thor_guide_section_play", {
+          source: "landing",
+          section: "experience_ctx_hydrated",
+          department_id: typeof ctx.dept_id === "string" ? ctx.dept_id : undefined,
+          company: typeof ctx.empresa === "string" ? ctx.empresa : undefined,
+        });
       } catch (err) {
         console.warn("[experience] ctx hydrate failed", err);
       }
