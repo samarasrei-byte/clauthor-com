@@ -9,8 +9,8 @@ interface ChatMessage {
   content: string;
 }
 
-const OPENING = "Qual é a sua dor?";
-const PLACEHOLDER = "Ex: meu time de vendas não bate meta, gasto muito com suporte, não consigo escalar marketing...";
+const OPENING = "Qual é a sua dor? Ou me diga: quer entender o que a Clauthor faz.";
+const PLACEHOLDER = "Ex: não bato meta de vendas · suporte me consome · quero entender a Clauthor...";
 
 const SalesChatbot = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
