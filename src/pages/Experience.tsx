@@ -355,6 +355,8 @@ const ExperiencePage = () => {
   const [currentIdx, setCurrentIdx] = useState<number>(-1);
   const [played, setPlayed] = useState<Set<number>>(new Set());
   const [playing, setPlaying] = useState<boolean>(true);
+  const [directives, setDirectives] = useState<Directive[]>([]);
+  const [directiveDraft, setDirectiveDraft] = useState<string>("");
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const dept: DepartmentPackage =
