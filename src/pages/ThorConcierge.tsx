@@ -8,7 +8,7 @@ export default function ThorConcierge() {
   return (
     <main className="min-h-dvh bg-background text-foreground flex items-center justify-center px-4 py-10">
       <div className="w-full max-w-3xl">
-        <ThorConciergeChat source="thor_page" minHeight="min-h-[520px]" />
+        <ThorConciergeChat source="thor_guide" minHeight="min-h-[520px]" />
       </div>
     </main>
   );

@@ -55,17 +55,19 @@ const INTRO_MESSAGE: ChatMessage = {
   ),
 };
 
+type KpiSource = "landing" | "thor_guide";
+
 interface Props {
   className?: string;
   /** Altura mínima do feed. Padrão: `min-h-[360px]`. */
   minHeight?: string;
-  source?: string;
+  source?: KpiSource;
 }
 
 export default function ThorConciergeChat({
   className,
   minHeight = "min-h-[360px]",
-  source = "landing_hero",
+  source = "landing",
 }: Props) {
   const navigate = useNavigate();
   const sessionIdRef = useRef<string>(uid());
