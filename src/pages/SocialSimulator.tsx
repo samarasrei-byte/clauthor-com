@@ -200,18 +200,18 @@ const CarouselSim = ({ slides }: { slides: CarouselSlide[] }) => {
 
         {/* Dots */}
         <div className="absolute top-3 right-3 rounded-full bg-black/50 px-2 py-0.5 text-[10px] text-foreground/90 backdrop-blur">
-          {idx + 1}/{CAROUSEL_SLIDES.length}
+          {idx + 1}/{slides.length}
         </div>
 
         <button
-          onClick={() => setIdx((i) => (i - 1 + CAROUSEL_SLIDES.length) % CAROUSEL_SLIDES.length)}
+          onClick={() => setIdx((i) => (i - 1 + slides.length) % slides.length)}
           className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/40 backdrop-blur flex items-center justify-center hover:bg-black/60"
           aria-label="anterior"
         >
           <ChevronLeft className="h-4 w-4 text-foreground" />
         </button>
         <button
-          onClick={() => setIdx((i) => (i + 1) % CAROUSEL_SLIDES.length)}
+          onClick={() => setIdx((i) => (i + 1) % slides.length)}
           className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/40 backdrop-blur flex items-center justify-center hover:bg-black/60"
           aria-label="próximo"
         >
@@ -238,7 +238,7 @@ const CarouselSim = ({ slides }: { slides: CarouselSlide[] }) => {
       </div>
 
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
-        {CAROUSEL_SLIDES.map((_, i) => (
+        {slides.map((_, i) => (
           <motion.span
             key={i}
             animate={{ scale: i === idx ? 1.2 : 1, opacity: i === idx ? 1 : 0.4 }}
