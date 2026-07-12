@@ -23,6 +23,7 @@ import {
 import type { DepartmentPackage } from "@/data/departmentPackages";
 import { DEPT_COLOR_TOKENS, formatBRL } from "@/data/departmentPackages";
 import AgentAvatarStrip from "./AgentAvatarStrip";
+import AgentsWorkingScene from "./AgentsWorkingScene";
 
 interface DepartmentCardProps {
   department: DepartmentPackage;
@@ -112,6 +113,8 @@ const DepartmentCard = ({
               </div>
             </div>
           )}
+
+          <AgentsWorkingScene agentSlugs={department.agentSlugs} />
 
           <AgentAvatarStrip
             agentSlugs={department.agentSlugs}
