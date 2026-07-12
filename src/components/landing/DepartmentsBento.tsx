@@ -60,17 +60,23 @@ const DepartmentsBento = () => {
           </p>
           <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
             <button
-              onClick={() => navigate("/simulador-social")}
+              onClick={() => navigate("/experience")}
               className="inline-flex items-center gap-2 rounded-full bg-destructive px-5 py-2.5 text-[13px] font-medium text-destructive-foreground shadow-[0_0_24px_hsl(var(--destructive)/0.35)] transition hover:brightness-110"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-destructive-foreground animate-pulse" />
-              Ver squad ao vivo — Simulador Social
+              Ver mesa redonda ao vivo
+            </button>
+            <button
+              onClick={() => navigate("/simulador-social")}
+              className="rounded-full border border-border bg-card/40 px-5 py-2.5 text-[13px] text-muted-foreground transition hover:text-foreground hover:border-foreground/30"
+            >
+              Simulador de redes sociais
             </button>
             <button
               onClick={() => navigate("/departamentos")}
               className="rounded-full border border-border bg-card/40 px-5 py-2.5 text-[13px] text-muted-foreground transition hover:text-foreground hover:border-foreground/30"
             >
-              Ver todos os departamentos
+              Todos os departamentos
             </button>
           </div>
         </motion.div>
