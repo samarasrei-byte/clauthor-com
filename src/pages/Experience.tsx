@@ -549,9 +549,62 @@ const ExperiencePage = () => {
               </h2>
               <span className="text-[10px] text-muted-foreground/70">tempo real</span>
             </div>
-            <div className="space-y-2.5 max-h-[560px] overflow-y-auto pr-1">
+
+            {/* Injetor de diretiva ao vivo */}
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleInjectDirective();
+              }}
+              className="mb-3 flex items-center gap-2 rounded-2xl border border-white/[0.08] bg-white/[0.02] px-3 py-2 focus-within:border-[hsl(var(--destructive))/0.5] transition"
+            >
+              <Zap className="h-3.5 w-3.5 text-[hsl(var(--destructive))] shrink-0" />
+              <input
+                value={directiveDraft}
+                onChange={(e) => setDirectiveDraft(e.target.value)}
+                placeholder="Injetar diretiva ao squad…"
+                aria-label="Injetar diretiva no squad"
+                className="flex-1 bg-transparent text-[12.5px] text-foreground placeholder:text-muted-foreground/60 outline-none"
+                maxLength={140}
+              />
+              <button
+                type="submit"
+                disabled={!directiveDraft.trim()}
+                aria-label="Enviar diretiva"
+                className="h-6 w-6 rounded-full bg-[hsl(var(--destructive))/0.15] border border-[hsl(var(--destructive))/0.4] flex items-center justify-center text-[hsl(var(--destructive))] hover:bg-[hsl(var(--destructive))/0.25] disabled:opacity-40 disabled:cursor-not-allowed transition"
+              >
+                <Send className="h-3 w-3" />
+              </button>
+            </form>
+
+            <div className="space-y-2.5 max-h-[520px] overflow-y-auto pr-1">
               <AnimatePresence initial={false}>
-                {feedEntries.length === 0 ? (
+                {directives.slice().reverse().map((d) => (
+                  <motion.div
+                    key={d.id}
+                    layout
+                    initial={{ opacity: 0, x: 12 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.35 }}
+                    className="rounded-2xl border border-[hsl(var(--destructive))/0.5] bg-[hsl(var(--destructive))/0.08] p-3.5"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2">
+                        <div className="h-7 w-7 rounded-full bg-[hsl(var(--destructive))/0.2] border border-[hsl(var(--destructive))/0.5] flex items-center justify-center">
+                          <Zap className="h-3 w-3 text-[hsl(var(--destructive))]" />
+                        </div>
+                        <span className="text-[11px] font-semibold uppercase tracking-wider text-[hsl(var(--destructive))]">
+                          Diretiva
+                        </span>
+                      </div>
+                      <span className="text-[10px] tabular-nums text-muted-foreground tracking-wider">{d.time}</span>
+                    </div>
+                    <p className="mt-2 text-[12.5px] leading-snug text-foreground">{d.text}</p>
+                    <p className="mt-1.5 text-[11px] text-muted-foreground">→ Squad recalibrando prioridades</p>
+                  </motion.div>
+                ))}
+                {feedEntries.length === 0 && directives.length === 0 ? (
                   <motion.p
                     key="empty"
                     initial={{ opacity: 0 }}
