@@ -299,7 +299,7 @@ async function finalize(payload: FinalizePayload): Promise<Response> {
   if (!payload.session_id) return errorResponse("session_id é obrigatório");
   if (!payload.dor || !payload.icp) return errorResponse("dor e icp são obrigatórios");
 
-  const dept_id = payload.dept_id || recommendDepartment(payload.dor, payload.industry);
+  const dept_id = payload.dept_id || (await recommendDepartment(payload.dor, payload.industry, payload.empresa));
 
   const { data, error } = await adminClient
     .from("thor_concierge_sessions")
