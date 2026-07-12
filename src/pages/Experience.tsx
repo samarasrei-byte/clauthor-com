@@ -17,9 +17,11 @@ import { ArrowLeft, Play, Pause, RotateCcw, Sparkles, Send, Zap } from "lucide-r
 import { cn } from "@/lib/utils";
 import {
   DEPARTMENT_PACKAGES,
+  DEPT_COLOR_TOKENS,
   formatBRL,
   type DepartmentPackage,
   type DepartmentTimelineEvent,
+  type DeptColorKey,
 } from "@/data/departmentPackages";
 
 /* -------------------------------------------------------------------------- */
