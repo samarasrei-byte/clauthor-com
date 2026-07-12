@@ -1,11 +1,11 @@
 /**
- * Home — modelo de alta conversão (v2 direction).
+ * Home — Apple-inspired minimal & premium.
  *
- * Estrutura:
- *  1. Hero centrado — pill + headline + CTAs + faixa de 4 números
- *  2. Grid de departamentos — "Escolha seu departamento" (dor → outcome → preço)
- *  3. Mockup do painel — dá gostinho da experiência
- *  4. Case study + CTA final
+ * Princípios:
+ *  - Tipografia enorme, hierarquia rígida, muito respiro
+ *  - Paleta reduzida: preto absoluto, off-white, cinza técnico, vermelho como único acento
+ *  - Anima\u00e7\u00f5es discretas, sem gradientes coloridos, sem \u00edcones decorativos ruidosos
+ *  - Chat LLM real como abertura (Thor consultor)
  */
 import { lazy, Suspense, useEffect } from "react";
 import { motion } from "framer-motion";
@@ -14,6 +14,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Footer from "@/components/Footer";
+import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { trackKpi } from "@/lib/kpiTracker";
@@ -30,6 +31,51 @@ const DEPT_ICONS: Record<string, React.ElementType> = {
 };
 
 const FEATURED_DEPT_IDS = ["comercial", "atendimento", "marketing", "juridico", "financeiro", "rh"] as const;
+
+const CEO_TESTIMONIALS = [
+  {
+    quote:
+      "Substituí um time de seis SDRs por um departamento comercial da Clauthor. Em 45 dias o pipeline triplicou e o custo caiu 78%.",
+    name: "Rafael Mendes",
+    role: "CEO · Ironberg Distribuidora",
+    metric: "3,1× pipeline",
+  },
+  {
+    quote:
+      "O departamento jurídico revisa 400 contratos por mês. Meu escritório voltou a ter margem para atender casos estratégicos.",
+    name: "Camila Prado",
+    role: "Sócia-fundadora · Prado & Associados",
+    metric: "-62% tempo",
+  },
+  {
+    quote:
+      "Marketing autônomo. Postagens, campanhas, análise. Meu head de marketing hoje só valida — não executa mais nada.",
+    name: "Diego Alcântara",
+    role: "CMO · Nuvia SaaS",
+    metric: "+412% output",
+  },
+  {
+    quote:
+      "Atendimento em 14 idiomas, 24/7. Meu NPS subiu 34 pontos em 3 meses e demiti a operadora terceirizada.",
+    name: "Larissa Ono",
+    role: "COO · Global Trade Hub",
+    metric: "NPS +34",
+  },
+  {
+    quote:
+      "Financeiro rodando conciliação e cobrança sem CLT. Enxuguei o back-office e ganhei previsibilidade de caixa.",
+    name: "Bruno Salgado",
+    role: "CFO · Vertex Construtora",
+    metric: "-47% custo",
+  },
+  {
+    quote:
+      "Contratei o departamento de RH da Clauthor no mesmo dia que perdi minha analista sênior. Nem senti a saída.",
+    name: "Patrícia Kimura",
+    role: "CEO · Osmose Digital",
+    metric: "0 gap",
+  },
+];
 
 const HomePage = () => {
   const { t } = useTranslation();
@@ -69,8 +115,8 @@ const HomePage = () => {
 
   const totalSquads = CLAUTHOR_ORG_CHART.reduce((s, d) => s + d.squads.length, 0);
 
-  const startFlow = (source: string) => {
-    trackKpi("thor_guide_section_play", { source: "landing", section: `cta_${source}` });
+  const startFlow = (section: string) => {
+    trackKpi("thor_guide_section_play", { source: "landing", section });
     navigate("/departamentos");
   };
 
@@ -79,139 +125,142 @@ const HomePage = () => {
     .filter((d): d is NonNullable<typeof d> => Boolean(d));
 
   return (
-    <div className="relative overflow-x-hidden">
+    <div className="relative overflow-x-hidden bg-background text-foreground">
       {/* ═══════════ HERO ═══════════ */}
-      <section className="max-w-7xl mx-auto px-6 pt-20 pb-14 sm:pt-24 sm:pb-16" aria-label="Hero">
+      <section
+        className="relative max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28"
+        aria-label="Hero"
+      >
         <div className="flex flex-col items-center text-center">
           <motion.div
-            initial={{ opacity: 0, y: 6 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-xs font-medium text-muted-foreground mb-8"
+            transition={{ duration: 0.5 }}
+            className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground mb-10"
           >
-            <span className="flex h-2 w-2 rounded-full bg-primary animate-pulse" />
-            35.827 empresas · operação em 14 idiomas nativos
+            <span className="h-px w-6 bg-border" />
+            35.827 empresas · 14 idiomas · operação 24/7
+            <span className="h-px w-6 bg-border" />
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.05 }}
-            className="text-5xl md:text-7xl font-bold tracking-tight text-foreground mb-6 max-w-4xl leading-[1.02]"
+            transition={{ duration: 0.6, delay: 0.05 }}
+            className="text-[44px] sm:text-6xl md:text-7xl lg:text-[88px] font-semibold tracking-[-0.035em] leading-[0.98] max-w-5xl mb-8"
           >
-            Monte seu departamento de{" "}
-            <span className="text-primary">agentes de IA</span> agora.
+            Sua operação
+            <br />
+            <span className="text-muted-foreground">rodando sozinha.</span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.12 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-10"
+            transition={{ duration: 0.6, delay: 0.15 }}
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-14 leading-relaxed"
           >
-            Substitua processos manuais por especialistas digitais. Implementação
-            imediata, escala infinita e custo fixo a partir de{" "}
-            <span className="text-foreground font-semibold">R$ 1.700/mês</span>.
+            Departamentos de agentes de IA prontos para operar. Sem contratação, sem CLT,
+            sem headcount — a partir de{" "}
+            <span className="text-foreground font-medium">R$ 1.700/mês</span>.
           </motion.p>
 
+          {/* Chat LLM real como CTA principal */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.18 }}
-            className="flex flex-col sm:flex-row gap-3 mb-16"
+            transition={{ duration: 0.6, delay: 0.22 }}
+            className="w-full max-w-2xl"
           >
-            <button
-              onClick={() => startFlow("hero_primary")}
-              className="px-8 py-4 bg-foreground text-background font-bold rounded-xl hover:opacity-90 transition-all shadow-lg inline-flex items-center gap-2"
-            >
-              Começar agora
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <button
-              onClick={() => {
-                trackKpi("thor_guide_section_play", { source: "landing", section: "cta_thor" });
-                navigate("/thor");
-              }}
-              className="px-8 py-4 bg-card text-foreground font-semibold rounded-xl border border-border hover:bg-muted transition-colors inline-flex items-center gap-2"
-            >
-              Falar com Thor
-              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            </button>
+            <ThorConciergeChat source="landing" minHeight="min-h-[360px]" />
           </motion.div>
 
-          {/* Numbers divider */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.25 }}
-            className="w-full grid grid-cols-2 md:grid-cols-4 gap-8 py-8 border-y border-border"
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="mt-10 flex flex-col sm:flex-row items-center gap-4"
           >
-            {[
-              { value: "35.827", label: "empresas ativas" },
-              { value: "+200", label: "especialistas prontos" },
-              { value: "R$ 1.700", label: "custo fixo mensal" },
-              { value: "14", label: "idiomas nativos" },
-            ].map((stat) => (
-              <div key={stat.label} className="text-center md:text-left">
-                <div className="text-3xl md:text-4xl font-bold text-foreground tracking-tight">
-                  {stat.value}
-                </div>
-                <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
-              </div>
-            ))}
+            <button
+              onClick={() => startFlow("hero_primary")}
+              className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-opacity"
+            >
+              Ver todos os departamentos
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </button>
+            <Link
+              to="/pricing"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Ver preços →
+            </Link>
           </motion.div>
         </div>
       </section>
 
-      {/* ═══════════ ESCOLHA SEU DEPARTAMENTO ═══════════ */}
-      <section className="max-w-7xl mx-auto px-6 py-16 sm:py-20" aria-label="Departamentos">
-        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-10">
-          <div>
-            <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-2">
-              Escolha seu departamento
-            </h2>
-            <p className="text-muted-foreground">
-              Selecione a dor que você quer resolver hoje.
-            </p>
-          </div>
-          <Link
-            to="/departamentos"
-            className="text-primary text-sm font-medium hover:underline inline-flex items-center gap-1 self-start sm:self-auto"
-          >
-            Ver todos os departamentos <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
+      {/* ═══════════ NUMBERS ═══════════ */}
+      <section className="border-y border-border/60" aria-label="Escala">
+        <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
+          {[
+            { value: "35.827", label: "Empresas ativas" },
+            { value: "+200", label: "Especialistas" },
+            { value: "R$ 1.700", label: "Custo mensal" },
+            { value: "14", label: "Idiomas nativos" },
+          ].map((s) => (
+            <div key={s.label} className="text-center md:text-left">
+              <div className="text-4xl md:text-5xl font-semibold tracking-tight text-foreground">
+                {s.value}
+              </div>
+              <div className="mt-1.5 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                {s.label}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ═══════════ DEPARTAMENTOS ═══════════ */}
+      <section className="max-w-6xl mx-auto px-6 py-24 sm:py-32" aria-label="Departamentos">
+        <div className="mb-16 max-w-3xl">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
+            Departamentos
+          </p>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
+            Escolha o que quer{" "}
+            <span className="text-muted-foreground">parar de fazer.</span>
+          </h2>
+          <p className="text-lg text-muted-foreground max-w-xl">
+            Cada departamento chega pronto para operar. Você escolhe a dor, a Clauthor entrega o time.
+          </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border/60 rounded-3xl overflow-hidden border border-border/60">
           {featured.map((dept) => {
             const Icon = DEPT_ICONS[dept.id] ?? Briefcase;
             return (
               <button
                 key={dept.id}
                 onClick={() => {
-                  trackKpi("thor_guide_section_play", {
-                    source: "landing",
-                    section: `dept_card_${dept.id}`,
-                  });
+                  trackKpi("thor_guide_section_play", { source: "landing", section: `dept_${dept.id}` });
                   navigate(`/departamentos/${dept.id}`);
                 }}
-                className="group text-left p-7 rounded-2xl bg-card/60 border border-border hover:border-primary/50 hover:bg-card transition-all cursor-pointer flex flex-col"
+                className="group text-left p-8 bg-background hover:bg-card transition-colors flex flex-col min-h-[280px]"
               >
-                <div className="w-11 h-11 rounded-lg bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/15 transition-colors">
-                  <Icon className="w-5 h-5 text-primary" strokeWidth={1.75} />
-                </div>
-                <h3 className="text-xl font-bold text-foreground mb-2">{dept.name}</h3>
-                <p className="text-sm text-muted-foreground mb-6 flex-1">
+                <Icon className="h-6 w-6 text-foreground mb-8" strokeWidth={1.5} />
+                <h3 className="text-xl font-semibold text-foreground mb-2 tracking-tight">
+                  {dept.name}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-6">
                   {dept.painPoint}
                 </p>
-                <div className="flex items-center justify-between pt-4 border-t border-border/60">
-                  <div className="text-xs text-muted-foreground">
-                    <span className="text-foreground font-semibold">{dept.agentSlugs.length}</span> agentes
-                  </div>
-                  <div className="text-xs">
-                    <span className="text-foreground font-semibold">{formatBRL(dept.priceMonthly)}</span>
-                    <span className="text-muted-foreground">/mês</span>
-                  </div>
+                <div className="flex items-center justify-between pt-5 border-t border-border/50">
+                  <span className="text-xs text-muted-foreground">
+                    {dept.agentSlugs.length} agentes · 24/7
+                  </span>
+                  <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors inline-flex items-center gap-1">
+                    {formatBRL(dept.priceMonthly)}
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                  </span>
                 </div>
               </button>
             );
@@ -219,223 +268,193 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ═══════════ MOCKUP DO PAINEL ═══════════ */}
-      <section className="max-w-6xl mx-auto px-6 pt-10" aria-label="Prévia do painel">
-        <div className="text-center mb-10 max-w-2xl mx-auto">
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-3">
-            Assim que ativa, o painel <span className="text-primary">roda pra você.</span>
+      {/* ═══════════ PAINEL PREVIEW ═══════════ */}
+      <section className="max-w-6xl mx-auto px-6 py-24 sm:py-32" aria-label="Painel">
+        <div className="text-center mb-16 max-w-2xl mx-auto">
+          <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
+            Painel
+          </p>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
+            Você comanda.
+            <br />
+            <span className="text-muted-foreground">A IA executa.</span>
           </h2>
-          <p className="text-muted-foreground">
-            Você acompanha cada agente executando em tempo real, aprova o que sair
-            e vê os resultados chegando no dashboard.
+          <p className="text-lg text-muted-foreground">
+            Aprove, ajuste ou apenas observe. Cada agente reporta em tempo real.
           </p>
         </div>
 
-        <div className="relative rounded-t-3xl border-t border-x border-border bg-card p-4 shadow-2xl">
-          <div className="flex items-center gap-2 mb-4 px-2">
-            <div className="w-3 h-3 rounded-full bg-muted" />
-            <div className="w-3 h-3 rounded-full bg-muted" />
-            <div className="w-3 h-3 rounded-full bg-muted" />
-            <div className="ml-auto text-[10px] font-mono uppercase tracking-widest text-muted-foreground/70">
-              clauthor / painel · live
-            </div>
+        <div className="relative rounded-t-3xl border-t border-x border-border bg-card overflow-hidden">
+          <div className="flex items-center gap-1.5 px-5 py-3 border-b border-border/60">
+            <span className="h-2.5 w-2.5 rounded-full bg-muted" />
+            <span className="h-2.5 w-2.5 rounded-full bg-muted" />
+            <span className="h-2.5 w-2.5 rounded-full bg-muted" />
+            <span className="ml-auto text-[10px] font-mono uppercase tracking-[0.14em] text-muted-foreground/70">
+              clauthor · live
+            </span>
           </div>
-          <div className="grid grid-cols-12 gap-4 h-80 overflow-hidden">
-            {/* Sidebar mock */}
-            <div className="col-span-3 border-r border-border p-3 space-y-3">
-              <div className="h-3 w-3/4 bg-muted rounded" />
-              <div className="space-y-2 pt-2">
-                <div className="h-8 w-full rounded-lg bg-primary/10 border border-primary/20 flex items-center px-3">
-                  <div className="h-2 w-16 bg-primary/40 rounded" />
+          <div className="grid grid-cols-12 gap-4 h-[380px] p-5 overflow-hidden">
+            <div className="col-span-3 space-y-2 border-r border-border/50 pr-4">
+              <div className="h-3 w-2/3 bg-muted rounded-full" />
+              <div className="pt-3 space-y-1.5">
+                <div className="h-8 rounded-lg bg-foreground/[0.04] border border-foreground/10 flex items-center px-3">
+                  <div className="h-2 w-16 bg-foreground/40 rounded-full" />
                 </div>
-                <div className="h-8 w-full rounded-lg bg-muted/40" />
-                <div className="h-8 w-full rounded-lg bg-muted/40" />
-                <div className="h-8 w-full rounded-lg bg-muted/40" />
-                <div className="h-8 w-full rounded-lg bg-muted/40" />
+                {[0, 1, 2, 3].map((i) => (
+                  <div key={i} className="h-8 rounded-lg bg-muted/30 flex items-center px-3">
+                    <div className="h-2 w-14 bg-muted-foreground/30 rounded-full" />
+                  </div>
+                ))}
               </div>
             </div>
-            {/* Main mock */}
-            <div className="col-span-9 p-4 space-y-4">
-              <div className="flex justify-between items-center">
+            <div className="col-span-9 space-y-4">
+              <div className="flex items-start justify-between">
                 <div className="space-y-2">
-                  <div className="h-5 w-56 bg-muted rounded" />
-                  <div className="h-3 w-40 bg-muted/50 rounded" />
+                  <div className="h-5 w-64 bg-muted rounded-full" />
+                  <div className="h-3 w-40 bg-muted/50 rounded-full" />
                 </div>
-                <div className="h-9 w-28 bg-primary rounded-lg" />
+                <div className="h-9 w-28 bg-foreground rounded-full" />
               </div>
               <div className="grid grid-cols-3 gap-3">
                 {[0, 1, 2].map((i) => (
-                  <div key={i} className="h-24 bg-background rounded-xl border border-border p-3 space-y-2">
-                    <div className="h-2 w-16 bg-muted/60 rounded" />
-                    <div className="h-6 w-20 bg-foreground/80 rounded" />
-                    <div className="h-2 w-full bg-muted/30 rounded" />
+                  <div
+                    key={i}
+                    className="p-4 rounded-xl bg-background border border-border/60 space-y-2"
+                  >
+                    <div className="h-2 w-16 bg-muted-foreground/40 rounded-full" />
+                    <div className="h-7 w-20 bg-foreground/80 rounded-md" />
+                    <div className="h-2 w-full bg-muted/40 rounded-full" />
                   </div>
                 ))}
               </div>
-              <div className="h-32 bg-background rounded-xl border border-border p-4 space-y-2">
+              <div className="p-4 rounded-xl bg-background border border-border/60 space-y-2.5">
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  <div className="h-6 w-6 rounded-full bg-primary/15 flex items-center justify-center">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
                   </div>
-                  <div className="h-3 w-40 bg-muted/60 rounded" />
+                  <div className="h-3 w-48 bg-muted-foreground/40 rounded-full" />
                 </div>
-                <div className="h-2 w-full bg-muted/30 rounded" />
-                <div className="h-2 w-5/6 bg-muted/30 rounded" />
-                <div className="h-2 w-2/3 bg-muted/30 rounded" />
+                <div className="h-2 w-full bg-muted/40 rounded-full" />
+                <div className="h-2 w-5/6 bg-muted/40 rounded-full" />
+                <div className="h-2 w-2/3 bg-muted/40 rounded-full" />
               </div>
             </div>
           </div>
-          {/* Fade Overlay */}
-          <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background via-background/80 to-transparent pointer-events-none" />
         </div>
       </section>
 
-      {/* ═══════════ PROVA SOCIAL — CEOs ═══════════ */}
-      <section className="max-w-7xl mx-auto px-6 py-20 sm:py-24" aria-label="Depoimentos de CEOs">
-        <div className="text-center mb-12 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-xs font-medium text-muted-foreground mb-5">
-            <span className="flex h-2 w-2 rounded-full bg-primary" />
-            +35.000 CEOs já operam com Clauthor
+      {/* ═══════════ TESTIMONIALS ═══════════ */}
+      <section className="border-y border-border/60" aria-label="Depoimentos">
+        <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
+          <div className="mb-16 max-w-3xl">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
+              Depoimentos
+            </p>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
+              CEOs que deixaram
+              <br />
+              <span className="text-muted-foreground">de operar no braço.</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-xl">
+              +35.000 fundadores e diretores em 14 países já opera com Clauthor.
+            </p>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-3">
-            O que dizem os CEOs que <span className="text-primary">deixaram a operação</span>
-          </h2>
-          <p className="text-muted-foreground">
-            Fundadores, CEOs e diretores em 14 países usam departamentos de IA da Clauthor para escalar sem contratar.
-          </p>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {[
-            {
-              quote: "Substituí um time de 6 SDRs por um departamento comercial da Clauthor. Em 45 dias, o pipeline triplicou e o custo caiu 78%.",
-              name: "Rafael Mendes",
-              role: "CEO · Ironberg Distribuidora",
-              metric: "3,1× pipeline",
-            },
-            {
-              quote: "O departamento jurídico revisa 400 contratos por mês. Meu escritório voltou a ter margem para atender casos estratégicos.",
-              name: "Camila Prado",
-              role: "Sócia-fundadora · Prado & Associados",
-              metric: "-62% tempo",
-            },
-            {
-              quote: "Marketing autônomo. Postagens, campanhas, análise. Meu head de marketing hoje só valida — não executa mais nada.",
-              name: "Diego Alcântara",
-              role: "CMO · Nuvia SaaS",
-              metric: "+412% output",
-            },
-            {
-              quote: "Atendimento em 14 idiomas, 24/7. Meu NPS subiu 34 pontos em 3 meses e demiti a operadora terceirizada.",
-              name: "Larissa Ono",
-              role: "COO · Global Trade Hub",
-              metric: "NPS +34",
-            },
-            {
-              quote: "Financeiro rodando conciliação e cobrança sem CLT. Enxuguei o back-office e ganhei previsibilidade de caixa.",
-              name: "Bruno Salgado",
-              role: "CFO · Vertex Construtora",
-              metric: "-47% custo",
-            },
-            {
-              quote: "Contratei o departamento de RH da Clauthor no mesmo dia que perdi minha analista sênior. Nem senti a saída.",
-              name: "Patrícia Kimura",
-              role: "CEO · Osmose Digital",
-              metric: "0 gap",
-            },
-          ].map((t) => (
-            <div
-              key={t.name}
-              className="group p-6 rounded-2xl bg-card/60 border border-border hover:border-primary/40 transition-colors flex flex-col"
-            >
-              <div className="flex items-center gap-1 mb-4 text-primary">
-                {"★★★★★".split("").map((s, i) => (
-                  <span key={i} className="text-sm">{s}</span>
-                ))}
-                <span className="ml-auto text-[11px] font-semibold text-primary/80 uppercase tracking-wider">
-                  {t.metric}
-                </span>
-              </div>
-              <p className="text-[15px] text-foreground/90 leading-relaxed mb-6 flex-1">
-                "{t.quote}"
-              </p>
-              <div className="flex items-center gap-3 pt-4 border-t border-border/60">
-                <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm">
-                  {t.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {CEO_TESTIMONIALS.map((c) => (
+              <figure
+                key={c.name}
+                className="group p-7 rounded-2xl bg-card border border-border/60 hover:border-foreground/25 transition-colors flex flex-col"
+              >
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex gap-0.5 text-foreground">
+                    {"★★★★★".split("").map((s, i) => (
+                      <span key={i} className="text-[13px]">
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                  <span className="text-[10px] font-semibold text-primary uppercase tracking-[0.14em]">
+                    {c.metric}
+                  </span>
                 </div>
-                <div className="min-w-0">
-                  <p className="text-sm font-semibold text-foreground truncate">{t.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">{t.role}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-muted-foreground">
-          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> 35.827 empresas ativas</span>
-          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> 14 idiomas nativos</span>
-          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> 4,9/5 avaliação média</span>
-          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> Operação 24/7</span>
+                <blockquote className="text-[15px] leading-relaxed text-foreground/90 flex-1 mb-6">
+                  "{c.quote}"
+                </blockquote>
+                <figcaption className="flex items-center gap-3 pt-5 border-t border-border/50">
+                  <div className="h-9 w-9 rounded-full bg-foreground/[0.06] flex items-center justify-center text-[11px] font-semibold text-foreground">
+                    {c.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+                  </div>
+                  <div className="min-w-0">
+                    <div className="text-sm font-semibold text-foreground truncate">
+                      {c.name}
+                    </div>
+                    <div className="text-xs text-muted-foreground truncate">{c.role}</div>
+                  </div>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ═══════════ STATS SECUNDÁRIO ═══════════ */}
-      <section className="py-14 px-6 border-y border-border" aria-label="Escala da plataforma">
-
-        <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
+      {/* ═══════════ SCALE ═══════════ */}
+      <section className="max-w-6xl mx-auto px-6 py-24" aria-label="Escala">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-6 text-center md:text-left">
           {[
             { value: String(totalSquads), label: "Squads orquestrados" },
             { value: String(CLAUTHOR_ORG_CHART.length), label: "Departamentos" },
             { value: "99.9%", label: "Uptime" },
             { value: "24/7", label: "Operação global" },
           ].map((s) => (
-            <div key={s.label} className="text-center">
-              <p className="text-2xl sm:text-3xl font-bold text-foreground tracking-tight mb-1">
+            <div key={s.label}>
+              <p className="text-4xl md:text-5xl font-semibold tracking-tight text-foreground mb-2">
                 {s.value}
               </p>
-              <p className="text-[12px] text-muted-foreground">{s.label}</p>
+              <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                {s.label}
+              </p>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ═══════════ PROVA SOCIAL ═══════════ */}
-      <Suspense fallback={<div className="h-40" />}>
+      {/* Case study section (dados reais quando existirem) */}
+      <Suspense fallback={<div className="h-24" />}>
         <CaseStudySection />
       </Suspense>
 
       {/* ═══════════ CTA FINAL ═══════════ */}
-      <section className="py-24 px-6" aria-label="Chamada final">
-        <div className="max-w-2xl mx-auto text-center">
-          <motion.h2
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-3xl sm:text-5xl font-bold tracking-tight text-foreground"
+      <section className="max-w-4xl mx-auto px-6 py-32 sm:py-40 text-center" aria-label="CTA">
+        <motion.h2
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+          className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.035em] leading-[0.98] text-foreground mb-8"
+        >
+          Seu departamento
+          <br />
+          <span className="text-primary">começa em 90 segundos.</span>
+        </motion.h2>
+        <p className="text-lg text-muted-foreground max-w-lg mx-auto mb-12">
+          Escolha a dor. A Clauthor entrega o time. Você comanda de casa.
+        </p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+          <button
+            onClick={() => startFlow("final")}
+            className="group inline-flex items-center gap-2 px-9 py-4 rounded-full bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-opacity"
           >
-            Seu próximo departamento{" "}
-            <span className="text-primary">começa em 90 segundos.</span>
-          </motion.h2>
-          <p className="mt-4 text-[15px] sm:text-[17px] text-muted-foreground max-w-lg mx-auto">
-            Sem contratação, sem CLT, sem headcount. A partir de R$ 1.700/mês por
-            departamento.
-          </p>
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <button
-              onClick={() => startFlow("final")}
-              className="px-10 py-4 bg-foreground text-background font-bold rounded-xl hover:opacity-90 transition-all shadow-lg inline-flex items-center gap-2"
-            >
-              Escolher meu departamento
-              <ArrowRight className="w-4 h-4" />
-            </button>
-            <Link
-              to="/thor"
-              className="px-6 py-3 rounded-xl border border-border text-foreground/80 hover:text-foreground hover:border-foreground/40 transition-all inline-flex items-center gap-1.5 text-sm"
-            >
-              Falar com Thor primeiro
-            </Link>
-          </div>
+            Escolher meu departamento
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+          </button>
+          <Link
+            to="/thor"
+            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Falar com o Thor primeiro →
+          </Link>
         </div>
       </section>
 
