@@ -226,29 +226,36 @@ interface SampleLeadsPayload {
   industry?: string;
   dept_id?: string;
   empresa?: string;
+  dor?: string;
 }
 
 /**
- * Gera 2-3 leads plausíveis (nomes + cargos + empresas fictícias) que
- * casem com o ICP declarado. Feito via LLM em JSON puro — se falhar,
- * cai num template determinístico para não deixar o feed vazio.
+ * Gera 3 leads plausíveis (nomes + cargos + empresas fictícias) que
+ * casem com o ICP declarado. O campo `signal` DEVE referenciar a dor
+ * concreta do usuário — é o que faz o feed parecer real.
  */
-async function sampleLeads({ icp, industry, dept_id, empresa }: SampleLeadsPayload): Promise<Response> {
+async function sampleLeads({ icp, industry, dept_id, empresa, dor }: SampleLeadsPayload): Promise<Response> {
   if (!icp || icp.trim().length < 3) return errorResponse("icp é obrigatório");
 
   const system = `Você gera exemplos de LEADS plausíveis (fictícios mas realistas) para uma demonstração.
 Retorne SOMENTE um JSON válido no formato exato:
 {
   "leads": [
-    { "name": "Nome Sobrenome", "role": "Cargo · Empresa Ficctícia", "signal": "Motivo curto pelo qual bate com o ICP (max 12 palavras)" }
+    { "name": "Nome Sobrenome", "role": "Cargo · Empresa Fictícia", "signal": "Frase curta (max 16 palavras) que cite explicitamente a DOR do cliente e por que esse lead a sente também" }
   ]
 }
-Regras: exatamente 3 leads, nomes brasileiros, empresas verossímeis com sufixos como "Labs", "Digital", "Solutions" ou nomes de fantasia, cargos coerentes com o ICP. NÃO use empresas reais famosas.`;
+Regras:
+- Exatamente 3 leads.
+- Nomes brasileiros verossímeis, empresas fictícias com sufixos como "Labs", "Digital", "Solutions", "Pay", "Tech".
+- Cargos coerentes com o ICP.
+- NÃO use empresas reais famosas.
+- O campo "signal" NUNCA pode ser genérico — precisa referenciar a dor específica (ex.: "Também viu NPS cair 14 pts em 3 meses e busca um squad de CX").`;
 
   const user = `ICP do cliente: "${icp}"
+Dor do cliente (obrigatório referenciar): "${dor ?? "não informada"}"
 Setor do cliente: "${industry ?? "Outro"}"
 Departamento a demonstrar: "${dept_id ?? "comercial"}"
-Empresa do cliente (contexto): "${empresa ?? ""}"`;
+Empresa do cliente (contexto, NÃO usar como lead): "${empresa ?? ""}"`;
 
   const parsed = await callAiJson(system, user);
   const leads = Array.isArray((parsed as any)?.leads) ? (parsed as any).leads.slice(0, 3) : null;
@@ -257,16 +264,20 @@ Empresa do cliente (contexto): "${empresa ?? ""}"`;
     return jsonResponse({ leads, source: "ai" });
   }
 
-  // Fallback determinístico.
+  // Fallback determinístico — signal reutiliza a dor real quando disponível.
+  const painFrag = dor && dor.trim().length > 0
+    ? `Mesma dor: "${dor.trim().slice(0, 80)}${dor.length > 80 ? "…" : ""}"`
+    : "Perfil bate com o ICP declarado";
   return jsonResponse({
     leads: [
-      { name: "Marina Alves", role: "Head of Growth · Trilha Digital", signal: "Perfil bate 92% com o ICP declarado" },
-      { name: "Rafael Costa",  role: "Diretor Comercial · Delta Labs",  signal: "Empresa cresceu 40% em 12 meses no seu segmento" },
-      { name: "Camila Souza",  role: "Founder · Verso Solutions",       signal: "Publicou sobre a dor exata que você mencionou" },
+      { name: "Marina Alves", role: "Head of Growth · Trilha Digital", signal: painFrag },
+      { name: "Rafael Costa",  role: "Diretor Comercial · Delta Labs",  signal: `${painFrag} — empresa cresceu 40% em 12 meses` },
+      { name: "Camila Souza",  role: "Founder · Verso Solutions",       signal: `${painFrag} — publicou sobre o tema esta semana` },
     ],
     source: "fallback",
   });
 }
+
 
 interface FinalizePayload {
   session_id?: string;
