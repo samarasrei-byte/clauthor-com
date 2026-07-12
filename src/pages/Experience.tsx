@@ -28,6 +28,14 @@ import {
 
 type ChatEntry = DepartmentTimelineEvent & { idx: number };
 
+/** Diretiva injetada ao vivo pelo usuário — aparece no feed como comando. */
+interface Directive {
+  id: string;
+  text: string;
+  time: string;
+  afterIdx: number;
+}
+
 /* -------------------------------------------------------------------------- */
 /*  Utilities                                                                 */
 /* -------------------------------------------------------------------------- */
