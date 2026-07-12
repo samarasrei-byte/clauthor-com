@@ -536,7 +536,7 @@ const ExperiencePage = () => {
           <h1 className="text-4xl sm:text-6xl font-semibold font-display tracking-[-0.02em] text-foreground">
             {ctxCompany ? (
               <>
-                O squad de <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">{ctxCompany}</span>
+                O squad para <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">{ctxCompany}</span>
               </>
             ) : (
               <>
