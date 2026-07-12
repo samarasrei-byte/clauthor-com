@@ -99,6 +99,9 @@ const ApiKeysSettings = lazyRetry(() => import("./pages/ApiKeysSettings"));
 const ApresentacaoAdv = lazyRetry(() => import("./pages/ApresentacaoAdv"));
 const InvestorPitch = lazyRetry(() => import("./pages/InvestorPitch"));
 const ComercialFunil = lazyRetry(() => import("./pages/ComercialFunil"));
+const DepartmentDetail = lazyRetry(() => import("./pages/DepartmentDetail"));
+const HireAndOnboard = lazyRetry(() => import("./pages/HireAndOnboard"));
+const DepartmentActivated = lazyRetry(() => import("./pages/DepartmentActivated"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -168,6 +171,9 @@ const App = () => (
                   <Route path="/dev" element={<Developers />} />
                   <Route path="/community" element={<Community />} />
                   <Route path="/departamentos" element={<Departamentos />} />
+                  <Route path="/departamentos/:slug" element={<DepartmentDetail />} />
+                  <Route path="/contratar/:slug" element={<ProtectedRoute><HireAndOnboard /></ProtectedRoute>} />
+                  <Route path="/departamento-ativo/:slug" element={<ProtectedRoute><DepartmentActivated /></ProtectedRoute>} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />
                   <Route path="/termos" element={<Terms />} />
                   <Route path="/privacidade" element={<Privacy />} />
