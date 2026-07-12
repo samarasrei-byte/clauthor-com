@@ -699,7 +699,16 @@ const ExperiencePage = () => {
         {/* CTA final */}
         <div className="mt-14 flex flex-col sm:flex-row items-center justify-center gap-3">
           <button
-            onClick={() => navigate(`/departamentos#${dept.id}`)}
+            onClick={() => {
+              trackKpi("department_hire_click", {
+                source: "live_demo",
+                department_id: dept.id,
+                department_name: dept.name,
+                price_monthly: dept.priceMonthly,
+                company: ctxCompany ?? undefined,
+              });
+              navigate(`/departamentos#${dept.id}`);
+            }}
             className="inline-flex items-center gap-2 rounded-full bg-destructive px-6 py-3 text-[13px] font-medium text-destructive-foreground shadow-[0_0_40px_hsl(var(--destructive)/0.35)] transition hover:brightness-110"
           >
             <Sparkles className="h-3.5 w-3.5" />
