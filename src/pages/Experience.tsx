@@ -405,6 +405,19 @@ const ExperiencePage = () => {
     setCurrentIdx(-1);
     setPlayed(new Set());
     setPlaying(true);
+    setDirectives([]);
+  };
+
+  const handleInjectDirective = () => {
+    const text = directiveDraft.trim();
+    if (!text) return;
+    const now = new Date();
+    const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+    setDirectives((prev) => [
+      ...prev,
+      { id: `${Date.now()}`, text, time, afterIdx: currentIdx },
+    ]);
+    setDirectiveDraft("");
   };
 
   const feedEntries: ChatEntry[] = useMemo(
