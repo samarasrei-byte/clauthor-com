@@ -3746,6 +3746,54 @@ export type Database = {
         }
         Relationships: []
       }
+      thor_concierge_sessions: {
+        Row: {
+          completed_at: string | null
+          context: Json
+          created_at: string
+          dept_id: string | null
+          dor: string | null
+          empresa: string | null
+          empresa_url: string | null
+          icp: string | null
+          id: string
+          industry: string | null
+          session_id: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          context?: Json
+          created_at?: string
+          dept_id?: string | null
+          dor?: string | null
+          empresa?: string | null
+          empresa_url?: string | null
+          icp?: string | null
+          id?: string
+          industry?: string | null
+          session_id: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          context?: Json
+          created_at?: string
+          dept_id?: string | null
+          dor?: string | null
+          empresa?: string | null
+          empresa_url?: string | null
+          icp?: string | null
+          id?: string
+          industry?: string | null
+          session_id?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       thor_greeting_events: {
         Row: {
           created_at: string
