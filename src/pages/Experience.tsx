@@ -521,16 +521,30 @@ const ExperiencePage = () => {
       <main className="relative z-20 mx-auto max-w-7xl px-5 sm:px-8 pt-8 pb-16">
         {/* Título */}
         <div className="text-center mb-8">
+          {ctxCompany && (
+            <p className="mb-3 text-[11px] uppercase tracking-[0.24em] text-[hsl(var(--destructive))]">
+              Mesa redonda · {ctxCompany}
+            </p>
+          )}
           <h1 className="text-4xl sm:text-6xl font-semibold font-display tracking-[-0.02em] text-foreground">
-            Um departamento.{" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">
-              Múltiplos agentes.
-            </span>
+            {ctxCompany ? (
+              <>
+                O squad de <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">{ctxCompany}</span>
+              </>
+            ) : (
+              <>
+                Um departamento.{" "}
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">
+                  Múltiplos agentes.
+                </span>
+              </>
+            )}
           </h1>
           <p className="mt-3 text-[14px] sm:text-[16px] text-muted-foreground max-w-xl mx-auto">
-            {dept.painPoint} — {dept.outcome}.
+            {ctxPain ? `${ctxPain} — ${dept.outcome}.` : `${dept.painPoint} — ${dept.outcome}.`}
           </p>
         </div>
+
 
         {/* Seletor de departamento */}
         <div className="flex flex-wrap justify-center gap-2 mb-6">
