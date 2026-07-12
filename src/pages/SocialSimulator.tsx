@@ -137,16 +137,22 @@ const StatusBar = ({ label }: { label: string }) => (
 
 /* ---------- Carousel (Instagram/Facebook) ---------- */
 
-const CarouselSim = () => {
+type CarouselSlide = { title: string; subtitle: string; tag: string; accent: string };
+
+const CarouselSim = ({ slides }: { slides: CarouselSlide[] }) => {
   const [idx, setIdx] = useState(0);
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % CAROUSEL_SLIDES.length), 4200);
-    return () => clearInterval(t);
-  }, []);
+    setIdx(0);
+  }, [slides]);
 
-  const slide = CAROUSEL_SLIDES[idx];
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % slides.length), 4200);
+    return () => clearInterval(t);
+  }, [slides.length]);
+
+  const slide = slides[idx] ?? slides[0];
 
   return (
     <DeviceFrame>
