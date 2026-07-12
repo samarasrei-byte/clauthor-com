@@ -13,7 +13,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Play, Pause, RotateCcw, Sparkles } from "lucide-react";
+import { ArrowLeft, Play, Pause, RotateCcw, Sparkles, Send, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   DEPARTMENT_PACKAGES,
