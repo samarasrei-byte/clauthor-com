@@ -714,12 +714,8 @@ const ExperiencePage = () => {
             <Sparkles className="h-3.5 w-3.5" />
             Contratar {dept.name} · {formatBRL(dept.priceMonthly)}/mês
           </button>
-          <button
-            onClick={() => navigate("/simulador-social")}
-            className="rounded-full border border-white/[0.1] bg-white/[0.03] px-6 py-3 text-[13px] text-foreground/80 transition hover:text-foreground hover:border-white/25"
-          >
-            Ver squad nas redes sociais
-          </button>
+        </div>
+
         </div>
       </main>
     </div>
