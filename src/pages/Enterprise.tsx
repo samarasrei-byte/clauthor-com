@@ -206,7 +206,7 @@ const Enterprise = () => {
         <section className="py-24 px-6">
           <div className="max-w-6xl mx-auto grid md:grid-cols-4 gap-8 text-center">
             {[
-              { icon: Users, value: "225+", label: "Agentes especializados" },
+              { icon: Users, value: "+200", label: "Agentes especializados" },
               { icon: Globe2, value: "14+", label: "Idiomas nativos" },
               { icon: GitBranch, value: "99.9%", label: "SLA contratual" },
               { icon: FileCheck, value: "100%", label: "Auditoria criptográfica" },
