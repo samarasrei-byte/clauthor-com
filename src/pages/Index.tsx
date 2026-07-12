@@ -146,7 +146,7 @@ const HomePage = () => {
         <div className="max-w-[1120px] mx-auto">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-8 sm:gap-12">
             {[
-              { value: `${CLAUTHOR_AGENT_COUNT}+`, label: "Especialistas de IA" },
+              { value: "+200", label: "Especialistas de IA" },
               { value: String(totalSquads), label: "Squads orquestrados" },
               { value: String(CLAUTHOR_ORG_CHART.length), label: "Departamentos" },
               { value: "99.9%", label: "Uptime" },
