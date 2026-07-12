@@ -333,6 +333,7 @@ const RoundTable = ({
           y={positions[i]?.y ?? 0}
           active={i === activeAgentIdx}
           spoken={spokenSlugs.has(a.slug)}
+          colorKey={dept.color}
         />
       ))}
 
