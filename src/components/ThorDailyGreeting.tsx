@@ -414,7 +414,7 @@ export default function ThorDailyGreeting() {
                 variant="outline"
                 className="text-[10px] font-mono uppercase tracking-widest gap-1 border-border/60"
               >
-                <Sparkles className="h-3 w-3 text-primary" />
+                <span className="h-1.5 w-1.5 rounded-full bg-primary" />
                 Briefing diário
               </Badge>
               {insights && insights.streak >= 2 && (
