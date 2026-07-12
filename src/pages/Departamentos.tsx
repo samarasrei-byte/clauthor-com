@@ -242,8 +242,19 @@ const Departamentos = () => {
           </div>
         </motion.div>
 
+        {/* Inline Thor chat — user talks to Thor without leaving the page */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="max-w-3xl mx-auto mb-10"
+        >
+          <ThorConciergeChat source="departamentos_hero" minHeight="min-h-[380px]" />
+        </motion.div>
+
         {/* Category Filters */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8">
+
           {categories.map((cat) => (
             <button
               key={cat.id}
