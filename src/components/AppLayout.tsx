@@ -13,6 +13,7 @@ const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
 const AssistantHierarchy = lazy(() => import("./AssistantHierarchy"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
+const NAVBAR_HIDDEN_ROUTES = ["/thor"];
 
 const AppLayout = () => {
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
