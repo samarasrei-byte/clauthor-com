@@ -42,6 +42,7 @@ const DepartmentCard = ({
   variant = "flagship",
   className,
 }: DepartmentCardProps) => {
+  const navigate = useNavigate();
   const tokens = DEPT_COLOR_TOKENS[department.color];
   const Icon = department.icon;
   const isCompact = variant === "compact";
@@ -141,16 +142,22 @@ const DepartmentCard = ({
               variant="outline"
               size={isCompact ? "sm" : "default"}
               className="flex-1 gap-2 border-white/[0.08] bg-white/[0.02] text-white/80 hover:bg-white/[0.05] hover:text-white hover:border-white/[0.14]"
-              onClick={() => onSeeLiveDemo(department)}
-              aria-label={`Ver ${department.name} funcionando por 60 segundos`}
+              onClick={() => {
+                onSeeLiveDemo(department);
+                navigate(`/departamentos/${department.id}`);
+              }}
+              aria-label={`Ver detalhes do ${department.name}`}
             >
-              <PlayCircle className="h-4 w-4" />
-              Ver funcionando (60s)
+              <Eye className="h-4 w-4" />
+              Ver Departamento
             </Button>
             <PremiumCTAButton
               size="sm"
               variant="red"
-              onClick={() => onHire(department)}
+              onClick={() => {
+                onHire(department);
+                navigate(`/contratar/${department.id}`);
+              }}
               aria-label={`Contratar ${department.name}`}
               className="flex-1"
             >
