@@ -17,9 +17,11 @@ import { ArrowLeft, Play, Pause, RotateCcw, Sparkles, Send, Zap } from "lucide-r
 import { cn } from "@/lib/utils";
 import {
   DEPARTMENT_PACKAGES,
+  DEPT_COLOR_TOKENS,
   formatBRL,
   type DepartmentPackage,
   type DepartmentTimelineEvent,
+  type DeptColorKey,
 } from "@/data/departmentPackages";
 
 /* -------------------------------------------------------------------------- */
@@ -66,9 +68,11 @@ interface AgentNodeProps {
   y: number;
   active: boolean;
   spoken: boolean;
+  colorKey: DeptColorKey;
 }
 
-const AgentNode = ({ name, x, y, active, spoken }: AgentNodeProps) => {
+const AgentNode = ({ name, x, y, active, spoken, colorKey }: AgentNodeProps) => {
+  const tone = DEPT_COLOR_TOKENS[colorKey];
   return (
     <motion.div
       className="absolute z-20"
@@ -97,12 +101,13 @@ const AgentNode = ({ name, x, y, active, spoken }: AgentNodeProps) => {
           <div
             className={cn(
               "relative h-14 w-14 rounded-full flex items-center justify-center text-[13px] font-semibold font-display transition-colors",
-              "border backdrop-blur",
+              "border backdrop-blur bg-gradient-to-br",
+              tone.gradient,
               active
-                ? "bg-[hsl(var(--destructive))/0.14] border-[hsl(var(--destructive))] text-foreground shadow-[0_0_24px_hsl(var(--destructive)/0.5)]"
+                ? "border-[hsl(var(--destructive))] text-foreground shadow-[0_0_24px_hsl(var(--destructive)/0.5)]"
                 : spoken
-                  ? "bg-white/[0.06] border-white/20 text-foreground/90"
-                  : "bg-white/[0.03] border-white/[0.08] text-muted-foreground",
+                  ? cn(tone.border, tone.text)
+                  : "border-white/[0.08] text-muted-foreground",
             )}
           >
             {initialsFrom(name)}
@@ -328,6 +333,7 @@ const RoundTable = ({
           y={positions[i]?.y ?? 0}
           active={i === activeAgentIdx}
           spoken={spokenSlugs.has(a.slug)}
+          colorKey={dept.color}
         />
       ))}
 
