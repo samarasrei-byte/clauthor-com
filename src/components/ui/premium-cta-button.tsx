@@ -10,8 +10,8 @@ export interface PremiumCTAButtonProps
   loading?: boolean;
   loadingLabel?: string;
   size?: "sm" | "md" | "lg";
-  /** "solid" (branco, Apple) | "outline" (borda, Tesla) */
-  variant?: "solid" | "outline";
+  /** "solid" (branco, Apple) | "outline" (borda, Tesla) | "red" (destructive) */
+  variant?: "solid" | "outline" | "red";
 }
 
 /**
@@ -43,6 +43,8 @@ export const PremiumCTAButton = forwardRef<HTMLButtonElement, PremiumCTAButtonPr
     const variantCls =
       variant === "solid"
         ? "bg-white text-black hover:bg-white/90"
+        : variant === "red"
+        ? "bg-[hsl(var(--destructive))] text-[hsl(var(--destructive-foreground))] hover:bg-[hsl(var(--destructive))]/90 shadow-[0_8px_24px_-8px_hsl(var(--destructive)/0.6)]"
         : "bg-transparent text-white border border-white/25 hover:border-white/60 hover:bg-white/[0.04]";
 
     return (

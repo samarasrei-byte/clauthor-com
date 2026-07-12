@@ -148,6 +148,7 @@ const DepartmentCard = ({
             </Button>
             <PremiumCTAButton
               size="sm"
+              variant="red"
               onClick={() => onHire(department)}
               aria-label={`Contratar ${department.name}`}
               className="flex-1"
