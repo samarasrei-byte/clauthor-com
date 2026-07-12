@@ -325,14 +325,23 @@ const TwitterSim = () => {
 
 /* ---------- Reels / TikTok ---------- */
 
-const ReelSim = () => {
+type ReelItem = { caption: string; linkUrl?: string; source?: "linkedin" | "mock" };
+
+const ReelSim = ({ reels }: { reels: ReelItem[] }) => {
   const [idx, setIdx] = useState(0);
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % REEL_CAPTIONS.length), 4800);
+    setIdx(0);
+  }, [reels]);
+
+  useEffect(() => {
+    if (reels.length === 0) return;
+    const t = setInterval(() => setIdx((i) => (i + 1) % reels.length), 4800);
     return () => clearInterval(t);
-  }, []);
+  }, [reels.length]);
+
+  const current = reels[idx] ?? reels[0];
 
   return (
     <DeviceFrame>
@@ -364,7 +373,7 @@ const ReelSim = () => {
 
           {/* Progress bars */}
           <div className="absolute top-3 left-4 right-4 flex gap-1">
-            {REEL_CAPTIONS.map((_, i) => (
+            {reels.map((_, i) => (
               <div key={i} className="h-0.5 flex-1 rounded-full bg-white/20 overflow-hidden">
                 <motion.div
                   className="h-full bg-foreground"
@@ -374,6 +383,13 @@ const ReelSim = () => {
               </div>
             ))}
           </div>
+
+          {current?.source === "linkedin" && (
+            <div className="absolute top-6 right-4 z-10 inline-flex items-center gap-1.5 rounded-full border border-sky-400/40 bg-sky-500/15 px-2.5 py-1 text-[10px] font-medium text-sky-300 backdrop-blur">
+              <Linkedin className="h-3 w-3" />
+              Vídeo real · LinkedIn
+            </div>
+          )}
 
           {/* Right actions */}
           <div className="absolute right-3 bottom-28 flex flex-col items-center gap-5">
@@ -403,10 +419,22 @@ const ReelSim = () => {
                 Seguir
               </button>
             </div>
-            <p className="mt-2 text-[13px] text-foreground leading-snug">{REEL_CAPTIONS[idx]}</p>
-            <div className="mt-2 flex items-center gap-1.5 text-[11px] text-foreground/80">
-              <Music2 className="h-3 w-3" />
-              <span>som original · clauthor</span>
+            <p className="mt-2 text-[13px] text-foreground leading-snug">{current?.caption}</p>
+            <div className="mt-2 flex items-center gap-3 text-[11px] text-foreground/80">
+              <span className="inline-flex items-center gap-1.5">
+                <Music2 className="h-3 w-3" />
+                som original · clauthor
+              </span>
+              {current?.linkUrl && (
+                <a
+                  href={current.linkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sky-300 hover:text-sky-200"
+                >
+                  <ExternalLink className="h-3 w-3" /> abrir original
+                </a>
+              )}
             </div>
           </div>
         </div>
