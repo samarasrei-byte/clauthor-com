@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { CheckCircle2, ArrowRight, Upload, Link2, MessageCircle, X, Sparkles } from "lucide-react";
+import { CheckCircle2, ArrowRight, Upload, Link2, MessageCircle, X, Diamond } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { OnboardingAnswers } from "@/hooks/useGuidedOnboarding";
 
@@ -108,7 +108,7 @@ const NextStepsCard = () => {
       </button>
 
       <div className="flex items-center gap-2 mb-1">
-        <Sparkles className="h-4 w-4 text-primary" />
+        <Diamond className="h-4 w-4 text-primary" />
         <p className="text-[11px] font-mono uppercase tracking-wider text-primary">Próximos passos</p>
       </div>
       <h3 className="font-display text-lg font-bold leading-tight capitalize">

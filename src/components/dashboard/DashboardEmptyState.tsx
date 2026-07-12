@@ -10,7 +10,7 @@
  * Sem efeitos colaterais: puramente apresentacional, recebe callbacks.
  */
 import { motion } from "framer-motion";
-import { ArrowRight, Building2, Sparkles, ShieldCheck, Target } from "lucide-react";
+import { ArrowRight, Building2, Diamond, ShieldCheck, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { loadDiagnosis, PAIN_TO_RECOMMENDATION } from "@/lib/diagnosis-routing";
 
@@ -128,7 +128,7 @@ const DashboardEmptyState = ({
           className="gap-2"
           onClick={onExploreLibrary}
         >
-          <Sparkles className="h-4 w-4" />
+          <Diamond className="h-4 w-4" />
           Explorar biblioteca
         </Button>
       </motion.div>
@@ -144,7 +144,7 @@ const DashboardEmptyState = ({
           Cancele quando quiser
         </span>
         <span className="flex items-center gap-1.5">
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <Diamond className="h-3.5 w-3.5 text-primary" />
           +200 especialistas de IA
         </span>
         <span className="flex items-center gap-1.5">

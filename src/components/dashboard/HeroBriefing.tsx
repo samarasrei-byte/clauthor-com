@@ -13,7 +13,7 @@
 import { useMemo } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight, Bot, Zap, Coins, Activity, Sparkles, Target } from "lucide-react";
+import { ArrowRight, Bot, Zap, Coins, Activity, Diamond, Target } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
@@ -162,7 +162,7 @@ const HeroBriefing = ({
 
           <div className="flex flex-col sm:flex-row sm:items-center gap-3 pt-1">
             <Button size="lg" onClick={nba.onClick} className="gap-2 h-12 px-6 text-sm font-medium">
-              {nba.key === "hire" ? <Bot className="h-4 w-4" /> : nba.key === "run" ? <Sparkles className="h-4 w-4" /> : <Activity className="h-4 w-4" />}
+              {nba.key === "hire" ? <Bot className="h-4 w-4" /> : nba.key === "run" ? <Diamond className="h-4 w-4" /> : <Activity className="h-4 w-4" />}
               {nba.label}
               <ArrowRight className="h-4 w-4" />
             </Button>

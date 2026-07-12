@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, CheckCircle2, Sparkles, Zap, Target, Plug, Rocket, Loader2 } from "lucide-react";
+import { ArrowRight, ArrowLeft, CheckCircle2, Diamond, Zap, Target, Plug, Rocket, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -137,7 +137,7 @@ export default function CustomerOnboardingWizard({ subjectType, subjectRef, subj
                 className="space-y-6"
               >
                 <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-[10px] font-bold uppercase tracking-widest">
-                  <Sparkles className="w-3 h-3" /> Contratação confirmada
+                  <Diamond className="w-3 h-3" /> Contratação confirmada
                 </div>
                 <h1 className="font-display text-4xl md:text-5xl font-extrabold tracking-tight bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent leading-[1.05]">
                   {subjectName ?? "Sua solução"} está pronto para operar.

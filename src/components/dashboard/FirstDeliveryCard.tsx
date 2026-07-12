@@ -9,7 +9,7 @@ import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { Sparkles, ArrowRight, Rewind, X, CheckCircle2 } from "lucide-react";
+import { Diamond, ArrowRight, Rewind, X, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
@@ -101,7 +101,7 @@ export function FirstDeliveryCard({ onOpenApprovals }: Props) {
 
         <div className="flex items-start gap-4">
           <div className="shrink-0 h-10 w-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center">
-            <Sparkles className="h-5 w-5 text-primary" />
+            <Diamond className="h-5 w-5 text-primary" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 text-[10px] font-mono uppercase tracking-[0.15em] text-primary/80 mb-1">

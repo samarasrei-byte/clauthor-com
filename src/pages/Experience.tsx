@@ -14,7 +14,7 @@ import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
-import { ArrowLeft, Play, Pause, RotateCcw, Sparkles, Send, Zap } from "lucide-react";
+import { ArrowLeft, Play, Pause, RotateCcw, Diamond, Send, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { trackKpi } from "@/lib/kpiTracker";
 import {
@@ -713,7 +713,7 @@ const ExperiencePage = () => {
             }}
             className="inline-flex items-center gap-2 rounded-full bg-destructive px-6 py-3 text-[13px] font-medium text-destructive-foreground shadow-[0_0_40px_hsl(var(--destructive)/0.35)] transition hover:brightness-110"
           >
-            <Sparkles className="h-3.5 w-3.5" />
+            <Diamond className="h-3.5 w-3.5" />
             Contratar {dept.name} · {formatBRL(dept.priceMonthly)}/mês
           </button>
         </div>

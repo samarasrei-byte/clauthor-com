@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, CheckCircle2, Sparkles, TrendingDown, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, CheckCircle2, Diamond, TrendingDown, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -48,7 +48,7 @@ export default function DepartmentDetail() {
             </div>
             {dept.flagship && (
               <Badge variant="outline" className="gap-1 border-white/10 bg-white/[0.03] text-white/60 rounded-full">
-                <Sparkles className="w-3 h-3" /> Flagship
+                <Diamond className="w-3 h-3" /> Flagship
               </Badge>
             )}
           </div>

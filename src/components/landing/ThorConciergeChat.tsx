@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import { ArrowRight, Loader2, Send, Sparkles } from "lucide-react";
+import { ArrowRight, Loader2, Send, Diamond } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -259,7 +259,7 @@ export default function ThorConciergeChat({
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-4 border-b border-border/60 bg-background/40">
         <div className="relative flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background">
-          <Sparkles className="h-4 w-4" strokeWidth={2} />
+          <Diamond className="h-4 w-4" strokeWidth={2} />
           <span
             className={cn(
               "absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-card",

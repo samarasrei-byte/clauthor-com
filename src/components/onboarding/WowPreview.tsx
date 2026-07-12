@@ -4,7 +4,7 @@
  * chega). Fallback já vem "pronto", então cai instantâneo.
  */
 import { motion } from "framer-motion";
-import { Sparkles, Zap } from "lucide-react";
+import { Diamond, Zap } from "lucide-react";
 
 interface WowPreviewProps {
   agentLabel: string;
@@ -28,7 +28,7 @@ export function WowPreview({ agentLabel, outputLabel, output, isStreaming, compa
           <div className="h-2 w-2 rounded-full bg-green-500/70" />
         </div>
         <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          <Diamond className="h-3.5 w-3.5 text-primary" />
           <span>{agentLabel}</span>
           <span className="text-border">•</span>
           <span>{outputLabel}</span>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, Coins, ShieldCheck, TrendingUp, X, CheckCircle2, ArrowRight, Info } from "lucide-react";
+import { Diamond, Coins, ShieldCheck, TrendingUp, X, CheckCircle2, ArrowRight, Info } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -14,7 +14,7 @@ const CURRENT_VERSION = "2026.07.08";
 const STORAGE_KEY = `clauthor-updates-seen-${CURRENT_VERSION}`;
 
 interface UpdateItem {
-  icon: typeof Sparkles;
+  icon: typeof Diamond;
   title: string;
   description: string;
   tag?: string;
@@ -28,7 +28,7 @@ const UPDATES: UpdateItem[] = [
     tag: "Novidade",
   },
   {
-    icon: Sparkles,
+    icon: Diamond,
     title: "Painel de motores de IA",
     description: "Consumo por categoria de motor (Raciocínio Avançado, Núcleo Cognitivo, Análise Profunda) direto no Command Center.",
     tag: "Novidade",
@@ -104,7 +104,7 @@ export default function PlatformUpdatesDialog() {
           <div className="flex items-center justify-between gap-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary/30 to-primary/10 flex items-center justify-center border border-primary/20">
-                <Sparkles className="h-5 w-5 text-primary" />
+                <Diamond className="h-5 w-5 text-primary" />
               </div>
               <div>
                 <DialogTitle className="font-display text-lg">O que há de novo no Clauthor</DialogTitle>
