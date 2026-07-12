@@ -10,8 +10,8 @@ export interface PremiumCTAButtonProps
   loading?: boolean;
   loadingLabel?: string;
   size?: "sm" | "md" | "lg";
-  /** "solid" (branco, Apple) | "outline" (borda, Tesla) */
-  variant?: "solid" | "outline";
+  /** "solid" (branco, Apple) | "outline" (borda, Tesla) | "red" (destructive) */
+  variant?: "solid" | "outline" | "red";
 }
 
 /**
