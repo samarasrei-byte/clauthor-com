@@ -716,7 +716,6 @@ const ExperiencePage = () => {
           </button>
         </div>
 
-        </div>
       </main>
     </div>
   );
