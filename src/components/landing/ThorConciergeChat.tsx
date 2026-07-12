@@ -55,7 +55,7 @@ const INTRO_MESSAGE: ChatMessage = {
   ),
 };
 
-type KpiSource = "landing" | "thor_guide" | "departamentos_hero";
+type KpiSource = "landing" | "thor_guide" | "departamentos_page";
 
 interface Props {
   className?: string;
