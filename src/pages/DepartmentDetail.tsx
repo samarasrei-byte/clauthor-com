@@ -11,7 +11,8 @@ import { WORKFORCE_CATALOG } from "@/data/workforceCatalog";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
 import SEO from "@/components/SEO";
 
-const HUMAN_TEAM_COST = 18000;
+// Custo médio de uma equipe humana equivalente para um departamento (CLT + encargos + gestão)
+const HUMAN_TEAM_COST = 90000;
 
 export default function DepartmentDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -75,11 +76,40 @@ export default function DepartmentDetail() {
             <Users className="w-5 h-5 text-white/60" />
             <h2 className="text-2xl font-display font-semibold">Funcionalidades & Responsabilidades</h2>
           </div>
+          <p className="text-sm text-white/50 max-w-2xl">
+            Cada agente abaixo é um especialista treinado com processos, KPIs e integrações prontas. Todos trabalham 24/7 e reportam para você.
+          </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {agents.map((a) => (
-              <Card key={a.id} className="p-4 bg-white/[0.02] border-white/[0.08] rounded-xl">
-                <div className="text-sm font-semibold text-white">{a.role}</div>
-                <p className="text-xs text-white/50 mt-1 leading-relaxed">{a.tagline}</p>
+              <Card key={a.id} className="p-4 bg-white/[0.02] border-white/[0.08] rounded-xl space-y-3">
+                <div>
+                  <div className="text-sm font-semibold text-white">{a.role}</div>
+                  <p className="text-xs text-white/60 mt-1 leading-relaxed">{a.tagline}.</p>
+                </div>
+                {a.resultTags && a.resultTags.length > 0 && (
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Entrega</div>
+                    <div className="flex flex-wrap gap-1">
+                      {a.resultTags.slice(0, 4).map((tag) => (
+                        <span key={tag} className="text-[10px] px-2 py-0.5 rounded-full border border-white/10 bg-white/[0.03] text-white/70">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                {a.defaultKPIs && a.defaultKPIs.length > 0 && (
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-white/40 mb-1">KPIs monitorados</div>
+                    <div className="text-[11px] text-white/60">{a.defaultKPIs.join(" · ")}</div>
+                  </div>
+                )}
+                {a.suggestedIntegrations && a.suggestedIntegrations.length > 0 && (
+                  <div>
+                    <div className="text-[10px] uppercase tracking-wider text-white/40 mb-1">Integrações</div>
+                    <div className="text-[11px] text-white/60">{a.suggestedIntegrations.join(" · ")}</div>
+                  </div>
+                )}
               </Card>
             ))}
           </div>
