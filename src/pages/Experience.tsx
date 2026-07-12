@@ -12,7 +12,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 import { ArrowLeft, Play, Pause, RotateCcw, Sparkles, Send, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -357,26 +358,71 @@ const RoundTable = ({
 
 const ExperiencePage = () => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const ctxId = searchParams.get("ctx");
   const [deptId, setDeptId] = useState<string>(DEPARTMENT_PACKAGES[0].id);
   const [currentIdx, setCurrentIdx] = useState<number>(-1);
   const [played, setPlayed] = useState<Set<number>>(new Set());
   const [playing, setPlaying] = useState<boolean>(true);
   const [directives, setDirectives] = useState<Directive[]>([]);
   const [directiveDraft, setDirectiveDraft] = useState<string>("");
+  const [ctxCompany, setCtxCompany] = useState<string | null>(null);
+  const [ctxPain, setCtxPain] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Hidratação via ?ctx=<id> — vem do Thor Concierge
+  useEffect(() => {
+    if (!ctxId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke("thor-concierge", {
+          body: { action: "get_context", ctx_id: ctxId },
+        });
+        if (error || cancelled) return;
+        const ctx = (data as { context?: Record<string, unknown> })?.context;
+        if (!ctx) return;
+        if (typeof ctx.dept_id === "string" && DEPARTMENT_PACKAGES.some((d) => d.id === ctx.dept_id)) {
+          setDeptId(ctx.dept_id);
+        }
+        if (typeof ctx.empresa === "string") setCtxCompany(ctx.empresa);
+        if (typeof ctx.dor === "string") setCtxPain(ctx.dor);
+        const leads = (ctx.context as { leads?: Array<{ name: string; role: string; signal: string }> })?.leads;
+        if (Array.isArray(leads) && leads.length > 0) {
+          const now = new Date();
+          const time = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+          setDirectives(
+            leads.slice(0, 3).map((l, i) => ({
+              id: `ctx-lead-${i}`,
+              text: `${l.name} · ${l.role} — ${l.signal}`,
+              time,
+              afterIdx: -1,
+            })),
+          );
+        }
+      } catch (err) {
+        console.warn("[experience] ctx hydrate failed", err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [ctxId]);
+
 
   const dept: DepartmentPackage =
     DEPARTMENT_PACKAGES.find((d) => d.id === deptId) ?? DEPARTMENT_PACKAGES[0];
 
   const total = dept.timelineDemo.length;
 
-  // Reset ao trocar de departamento
+  // Reset ao trocar de departamento (preserva diretivas quando vindo de ctx)
   useEffect(() => {
     setCurrentIdx(-1);
     setPlayed(new Set());
     setPlaying(true);
-    setDirectives([]);
-  }, [deptId]);
+    if (!ctxId) setDirectives([]);
+  }, [deptId, ctxId]);
+
 
   // Loop de reprodução
   useEffect(() => {
@@ -475,16 +521,30 @@ const ExperiencePage = () => {
       <main className="relative z-20 mx-auto max-w-7xl px-5 sm:px-8 pt-8 pb-16">
         {/* Título */}
         <div className="text-center mb-8">
+          {ctxCompany && (
+            <p className="mb-3 text-[11px] uppercase tracking-[0.24em] text-[hsl(var(--destructive))]">
+              Mesa redonda · {ctxCompany}
+            </p>
+          )}
           <h1 className="text-4xl sm:text-6xl font-semibold font-display tracking-[-0.02em] text-foreground">
-            Um departamento.{" "}
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">
-              Múltiplos agentes.
-            </span>
+            {ctxCompany ? (
+              <>
+                O squad de <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">{ctxCompany}</span>
+              </>
+            ) : (
+              <>
+                Um departamento.{" "}
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">
+                  Múltiplos agentes.
+                </span>
+              </>
+            )}
           </h1>
           <p className="mt-3 text-[14px] sm:text-[16px] text-muted-foreground max-w-xl mx-auto">
-            {dept.painPoint} — {dept.outcome}.
+            {ctxPain ? `${ctxPain} — ${dept.outcome}.` : `${dept.painPoint} — ${dept.outcome}.`}
           </p>
         </div>
+
 
         {/* Seletor de departamento */}
         <div className="flex flex-wrap justify-center gap-2 mb-6">
