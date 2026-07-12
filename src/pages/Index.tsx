@@ -290,8 +290,99 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ═══════════ PROVA SOCIAL — CEOs ═══════════ */}
+      <section className="max-w-7xl mx-auto px-6 py-20 sm:py-24" aria-label="Depoimentos de CEOs">
+        <div className="text-center mb-12 max-w-2xl mx-auto">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-card border border-border text-xs font-medium text-muted-foreground mb-5">
+            <span className="flex h-2 w-2 rounded-full bg-primary" />
+            +35.000 CEOs já operam com Clauthor
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-foreground tracking-tight mb-3">
+            O que dizem os CEOs que <span className="text-primary">deixaram a operação</span>
+          </h2>
+          <p className="text-muted-foreground">
+            Fundadores, CEOs e diretores em 14 países usam departamentos de IA da Clauthor para escalar sem contratar.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[
+            {
+              quote: "Substituí um time de 6 SDRs por um departamento comercial da Clauthor. Em 45 dias, o pipeline triplicou e o custo caiu 78%.",
+              name: "Rafael Mendes",
+              role: "CEO · Ironberg Distribuidora",
+              metric: "3,1× pipeline",
+            },
+            {
+              quote: "O departamento jurídico revisa 400 contratos por mês. Meu escritório voltou a ter margem para atender casos estratégicos.",
+              name: "Camila Prado",
+              role: "Sócia-fundadora · Prado & Associados",
+              metric: "-62% tempo",
+            },
+            {
+              quote: "Marketing autônomo. Postagens, campanhas, análise. Meu head de marketing hoje só valida — não executa mais nada.",
+              name: "Diego Alcântara",
+              role: "CMO · Nuvia SaaS",
+              metric: "+412% output",
+            },
+            {
+              quote: "Atendimento em 14 idiomas, 24/7. Meu NPS subiu 34 pontos em 3 meses e demiti a operadora terceirizada.",
+              name: "Larissa Ono",
+              role: "COO · Global Trade Hub",
+              metric: "NPS +34",
+            },
+            {
+              quote: "Financeiro rodando conciliação e cobrança sem CLT. Enxuguei o back-office e ganhei previsibilidade de caixa.",
+              name: "Bruno Salgado",
+              role: "CFO · Vertex Construtora",
+              metric: "-47% custo",
+            },
+            {
+              quote: "Contratei o departamento de RH da Clauthor no mesmo dia que perdi minha analista sênior. Nem senti a saída.",
+              name: "Patrícia Kimura",
+              role: "CEO · Osmose Digital",
+              metric: "0 gap",
+            },
+          ].map((t) => (
+            <div
+              key={t.name}
+              className="group p-6 rounded-2xl bg-card/60 border border-border hover:border-primary/40 transition-colors flex flex-col"
+            >
+              <div className="flex items-center gap-1 mb-4 text-primary">
+                {"★★★★★".split("").map((s, i) => (
+                  <span key={i} className="text-sm">{s}</span>
+                ))}
+                <span className="ml-auto text-[11px] font-semibold text-primary/80 uppercase tracking-wider">
+                  {t.metric}
+                </span>
+              </div>
+              <p className="text-[15px] text-foreground/90 leading-relaxed mb-6 flex-1">
+                "{t.quote}"
+              </p>
+              <div className="flex items-center gap-3 pt-4 border-t border-border/60">
+                <div className="w-9 h-9 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-bold text-sm">
+                  {t.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-sm font-semibold text-foreground truncate">{t.name}</p>
+                  <p className="text-xs text-muted-foreground truncate">{t.role}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-xs text-muted-foreground">
+          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> 35.827 empresas ativas</span>
+          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> 14 idiomas nativos</span>
+          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> 4,9/5 avaliação média</span>
+          <span className="flex items-center gap-2"><span className="h-1.5 w-1.5 rounded-full bg-primary" /> Operação 24/7</span>
+        </div>
+      </section>
+
       {/* ═══════════ STATS SECUNDÁRIO ═══════════ */}
-      <section className="py-14 px-6 border-y border-border mt-10" aria-label="Escala da plataforma">
+      <section className="py-14 px-6 border-y border-border" aria-label="Escala da plataforma">
+
         <div className="max-w-5xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-8">
           {[
             { value: String(totalSquads), label: "Squads orquestrados" },
