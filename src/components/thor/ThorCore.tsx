@@ -117,6 +117,21 @@ export function useThorCore(): ThorCoreState & ThorCoreActions {
 
   useEffect(() => { messagesRef.current = messages; }, [messages]);
 
+  // Silence Thor imediatamente ao trocar de rota ou desmontar, evitando falas
+  // sobrepostas quando o usuário navega (Command Center → Workspace, etc.).
+  useEffect(() => {
+    return () => {
+      try { stopTTS(); } catch { /* noop */ }
+      try {
+        if (typeof window !== "undefined" && "speechSynthesis" in window) {
+          window.speechSynthesis.cancel();
+        }
+      } catch { /* noop */ }
+      abortControllerRef.current?.abort();
+    };
+  }, [location.pathname]);
+
+
   const { speak, stop: stopTTS, isSpeaking } = useElevenLabsTTS({
     onStart: () => {},
     onEnd: () => {},
