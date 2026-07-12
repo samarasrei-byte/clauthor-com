@@ -74,6 +74,7 @@ const Welcome = lazyRetry(() => import("./pages/Welcome"));
 const OutcomePicker = lazyRetry(() => import("./pages/OutcomePicker"));
 const AgentNeuralNetwork = lazyRetry(() => import("./pages/AgentNeuralNetwork"));
 const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
+const SocialSimulator = lazyRetry(() => import("./pages/SocialSimulator"));
 const HunterDashboard = lazyRetry(() => import("./pages/HunterDashboard"));
 const HunterLinkedIn = lazyRetry(() => import("./pages/HunterLinkedIn"));
 const HunterICP = lazyRetry(() => import("./pages/HunterICP"));
@@ -183,6 +184,8 @@ const App = () => (
                   <Route path="/enterprise" element={<Enterprise />} />
                   <Route path="/architecture" element={<FeatureGate flag="architecture" fallback="/"><Architecture /></FeatureGate>} />
                   <Route path="/timeline" element={<FeatureGate flag="timeline" fallback="/"><ProjectTimeline /></FeatureGate>} />
+                  <Route path="/simulador-social" element={<SocialSimulator />} />
+                  <Route path="/social-simulator" element={<SocialSimulator />} />
                   
                   
                 </Route>
