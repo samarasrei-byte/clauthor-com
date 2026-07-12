@@ -226,7 +226,10 @@ export default function ThorConcierge() {
                   className="min-h-32 text-base bg-card border-border focus-visible:ring-primary resize-none"
                   rows={4}
                 />
-                <div className="flex justify-end">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground/60">
+                    <kbd className="px-1.5 py-0.5 rounded border border-border/60 text-[10px] font-mono">⌘/Ctrl + Enter</kbd> para enviar
+                  </span>
                   <SubmitButton onClick={submitDor} loading={false} label="Continuar" />
                 </div>
               </div>
@@ -252,7 +255,10 @@ export default function ThorConcierge() {
                   rows={4}
                   disabled={loading}
                 />
-                <div className="flex justify-end">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground/60">
+                    <kbd className="px-1.5 py-0.5 rounded border border-border/60 text-[10px] font-mono">⌘/Ctrl + Enter</kbd> para enviar
+                  </span>
                   <SubmitButton
                     onClick={submitIcp}
                     loading={loading}
