@@ -682,8 +682,77 @@ const TABS: { id: SimTab; label: string; description: string }[] = [
 
 export default function SocialSimulator() {
   const [tab, setTab] = useState<SimTab>("carousel");
+  const [deptId, setDeptId] = useState<string>(DEPARTMENT_PACKAGES[0].id);
+  const [linkedinReels, setLinkedinReels] = useState<ReelItem[]>([]);
+
+  const dept: DepartmentPackage = useMemo(
+    () => DEPARTMENT_PACKAGES.find((d) => d.id === deptId) ?? DEPARTMENT_PACKAGES[0],
+    [deptId],
+  );
 
   const active = useMemo(() => TABS.find((t) => t.id === tab)!, [tab]);
+
+  // Slides derivados do departamento selecionado
+  const slides: CarouselSlide[] = useMemo(
+    () => [
+      {
+        title: dept.name,
+        subtitle: dept.outcome,
+        tag: "Case #01",
+        accent: "from-[hsl(var(--destructive))/0.35] to-transparent",
+      },
+      {
+        title: dept.painPoint,
+        subtitle: `Resolvido por ${dept.agentSlugs.length} agentes especialistas`,
+        tag: "A dor",
+        accent: "from-white/[0.12] to-transparent",
+      },
+      {
+        title: `${formatBRL(dept.priceMonthly)}/mês`,
+        subtitle: "Preço fechado. Sem CLT, sem headcount.",
+        tag: "Como funciona",
+        accent: "from-[hsl(var(--destructive))/0.25] to-transparent",
+      },
+    ],
+    [dept],
+  );
+
+  // Reels: tenta puxar vídeos reais publicados no LinkedIn; fallback para mock
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("linkedin_posts")
+        .select("content, link_url")
+        .eq("status", "published")
+        .not("link_url", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(3);
+
+      if (cancelled) return;
+
+      const real: ReelItem[] = (data ?? [])
+        .filter((r): r is { content: string; link_url: string } => Boolean(r.link_url))
+        .map((r) => ({
+          caption: (r.content ?? "").slice(0, 140) || "Post real publicado via Clauthor",
+          linkUrl: r.link_url,
+          source: "linkedin" as const,
+        }));
+      setLinkedinReels(real);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const reels: ReelItem[] = useMemo(() => {
+    if (linkedinReels.length > 0) return linkedinReels;
+    return [
+      { caption: `${dept.name}: ${dept.outcome}`, source: "mock" },
+      { caption: dept.painPoint, source: "mock" },
+      { caption: `Squad ativo em 4min por ${formatBRL(dept.priceMonthly)}/mês`, source: "mock" },
+    ];
+  }, [linkedinReels, dept]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -705,12 +774,34 @@ export default function SocialSimulator() {
             Seu squad de IA em cada canal
           </h1>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Veja o mesmo departamento publicando, conversando e convertendo em Instagram, WhatsApp, LinkedIn e mais — em tempo real.
+            Escolha um departamento e veja publicando, conversando e convertendo em Instagram, WhatsApp, LinkedIn e mais.
           </p>
         </div>
 
+        {/* Department selector */}
+        <div className="mt-8 flex flex-wrap justify-center gap-2">
+          {DEPARTMENT_PACKAGES.map((d) => {
+            const activeDept = d.id === deptId;
+            return (
+              <button
+                key={d.id}
+                onClick={() => setDeptId(d.id)}
+                className={cn(
+                  "rounded-full border px-3.5 py-1.5 text-[12px] transition",
+                  activeDept
+                    ? "border-[hsl(var(--destructive))] bg-[hsl(var(--destructive))/0.12] text-foreground"
+                    : "border-white/[0.08] bg-white/[0.02] text-muted-foreground hover:text-foreground hover:border-white/20",
+                )}
+              >
+                <span className="font-medium">{d.name.replace(/^Departamento( de| Jurídico| Comercial| Financeiro)?\s*/i, "").trim() || d.name}</span>
+                <span className="ml-2 text-[10px] opacity-60">{formatBRL(d.priceMonthly)}/mês</span>
+              </button>
+            );
+          })}
+        </div>
+
         {/* Tabs */}
-        <div className="mt-10 flex flex-wrap justify-center gap-2">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
           {TABS.map((t) => (
             <button
               key={t.id}
@@ -734,16 +825,16 @@ export default function SocialSimulator() {
             <div className="pointer-events-none absolute -inset-16 rounded-full bg-[hsl(var(--destructive))/0.08] blur-3xl" />
             <AnimatePresence mode="wait">
               <motion.div
-                key={tab}
+                key={`${tab}-${deptId}`}
                 initial={{ opacity: 0, y: 20, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.98 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="relative"
               >
-                {tab === "carousel" && <CarouselSim />}
+                {tab === "carousel" && <CarouselSim slides={slides} />}
                 {tab === "post" && <TwitterSim />}
-                {tab === "reel" && <ReelSim />}
+                {tab === "reel" && <ReelSim reels={reels} />}
                 {tab === "whatsapp" && <WhatsAppSim />}
                 {tab === "instagram-dm" && <InstagramDMSim />}
                 {tab === "linkedin-dm" && <LinkedInDMSim />}
@@ -753,7 +844,10 @@ export default function SocialSimulator() {
         </div>
 
         <p className="mt-10 text-center text-[12px] text-muted-foreground">
-          {active.label} · {active.description} — simulação orquestrada pelos agentes do departamento.
+          {active.label} · {active.description} — {dept.name} · {formatBRL(dept.priceMonthly)}/mês
+          {tab === "reel" && linkedinReels.length > 0 && (
+            <> · <span className="text-sky-300">{linkedinReels.length} vídeo(s) real(is) do LinkedIn</span></>
+          )}
         </p>
       </section>
     </div>
