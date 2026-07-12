@@ -24,6 +24,7 @@ import { CLAUTHOR_ORG_CHART, CLAUTHOR_AGENT_COUNT } from "@/data/clauthorOrgChar
 import { trackKpi } from "@/lib/kpiTracker";
 
 const CaseStudySection = lazy(() => import("@/components/landing/CaseStudySection"));
+const SalesChatbot = lazy(() => import("@/components/landing/SalesChatbot"));
 
 const HomePage = () => {
   const { t } = useTranslation();
