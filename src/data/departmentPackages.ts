@@ -67,12 +67,28 @@ export interface DepartmentPackage {
  * Currency helper — BRL formatado como "R$ 1.997".
  * Colocado aqui para não vazar dependência de i18n na data layer.
  */
-export const formatBRL = (value: number): string =>
-  new Intl.NumberFormat("pt-BR", {
+export const formatBRL = (value: number): string => {
+  const hasCents = Math.round(value * 100) % 100 !== 0;
+  return new Intl.NumberFormat("pt-BR", {
     style: "currency",
     currency: "BRL",
-    maximumFractionDigits: 0,
+    minimumFractionDigits: hasCents ? 2 : 0,
+    maximumFractionDigits: hasCents ? 2 : 0,
   }).format(value);
+};
+
+/**
+ * Preços por dificuldade do departamento — varia de R$ 1.477,30 (mais simples)
+ * a R$ 1.878,00 (mais complexo). Aplicado globalmente via `priceMonthly`.
+ */
+export const DEPARTMENT_PRICE_BY_ID: Record<string, number> = {
+  comercial:   1878.00, // alta complexidade (12 agentes, funil completo)
+  marketing:   1797.00, // alta (14 agentes, mídia paga + conteúdo)
+  financeiro:  1697.00, // média-alta (DRE, forecasting, pricing)
+  juridico:    1597.00, // média (contratos + compliance)
+  atendimento: 1547.00, // média (24/7, escala)
+  rh:          1477.30, // base (recrutamento + engagement)
+};
 
 /* ============================================================
  * FLAGSHIP PACKAGES (aparecem na landing e no onboarding)
@@ -114,7 +130,7 @@ const COMERCIAL: DepartmentPackage = {
       action: "Consolidou pipeline do dia no CRM e agendou follow-ups",
       outcome: "31 leads no pipeline · 4 reuniões marcadas", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1878.0,
   flagship: true,
 };
 
@@ -155,7 +171,7 @@ const ATENDIMENTO: DepartmentPackage = {
       action: "Consolidou NPS do dia e gerou relatório de temas recorrentes",
       outcome: "NPS 74 · principal elogio: velocidade", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1547.0,
   flagship: true,
 };
 
@@ -197,7 +213,7 @@ const MARKETING: DepartmentPackage = {
       action: "Gerou relatório executivo com recomendação de escala",
       outcome: "Sugestão: 3× no ângulo vencedor amanhã", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1797.0,
   flagship: true,
 };
 
@@ -241,7 +257,7 @@ const JURIDICO: DepartmentPackage = {
       action: "Consolidou relatório de compliance semanal para o board",
       outcome: "Score 92/100 · 1 gap prioritário aberto", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1597.0,
   flagship: true,
 };
 
@@ -282,7 +298,7 @@ const FINANCEIRO: DepartmentPackage = {
       action: "Consolidou DRE gerencial do mês e recomendações executivas",
       outcome: "3 ações concretas · fechamento em D+3", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1697.0,
   flagship: true,
 };
 
@@ -321,7 +337,7 @@ const RH: DepartmentPackage = {
       action: "Cruzou engajamento × performance × turnover por squad",
       outcome: "Risco de churn identificado em 2 pessoas-chave", delayMs: 5000 },
   ],
-  priceMonthly: 1800,
+  priceMonthly: 1477.3,
   flagship: true,
 };
 

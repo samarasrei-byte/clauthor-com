@@ -26,8 +26,11 @@ import {
   Linkedin,
   Instagram,
   Twitter,
+  ExternalLink,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { DEPARTMENT_PACKAGES, formatBRL, type DepartmentPackage } from "@/data/departmentPackages";
+import { supabase } from "@/integrations/supabase/client";
 
 /* ---------- Types ---------- */
 
@@ -134,16 +137,22 @@ const StatusBar = ({ label }: { label: string }) => (
 
 /* ---------- Carousel (Instagram/Facebook) ---------- */
 
-const CarouselSim = () => {
+type CarouselSlide = { title: string; subtitle: string; tag: string; accent: string };
+
+const CarouselSim = ({ slides }: { slides: CarouselSlide[] }) => {
   const [idx, setIdx] = useState(0);
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % CAROUSEL_SLIDES.length), 4200);
-    return () => clearInterval(t);
-  }, []);
+    setIdx(0);
+  }, [slides]);
 
-  const slide = CAROUSEL_SLIDES[idx];
+  useEffect(() => {
+    const t = setInterval(() => setIdx((i) => (i + 1) % slides.length), 4200);
+    return () => clearInterval(t);
+  }, [slides.length]);
+
+  const slide = slides[idx] ?? slides[0];
 
   return (
     <DeviceFrame>
@@ -191,18 +200,18 @@ const CarouselSim = () => {
 
         {/* Dots */}
         <div className="absolute top-3 right-3 rounded-full bg-black/50 px-2 py-0.5 text-[10px] text-foreground/90 backdrop-blur">
-          {idx + 1}/{CAROUSEL_SLIDES.length}
+          {idx + 1}/{slides.length}
         </div>
 
         <button
-          onClick={() => setIdx((i) => (i - 1 + CAROUSEL_SLIDES.length) % CAROUSEL_SLIDES.length)}
+          onClick={() => setIdx((i) => (i - 1 + slides.length) % slides.length)}
           className="absolute left-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/40 backdrop-blur flex items-center justify-center hover:bg-black/60"
           aria-label="anterior"
         >
           <ChevronLeft className="h-4 w-4 text-foreground" />
         </button>
         <button
-          onClick={() => setIdx((i) => (i + 1) % CAROUSEL_SLIDES.length)}
+          onClick={() => setIdx((i) => (i + 1) % slides.length)}
           className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-black/40 backdrop-blur flex items-center justify-center hover:bg-black/60"
           aria-label="próximo"
         >
@@ -229,7 +238,7 @@ const CarouselSim = () => {
       </div>
 
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-1.5">
-        {CAROUSEL_SLIDES.map((_, i) => (
+        {slides.map((_, i) => (
           <motion.span
             key={i}
             animate={{ scale: i === idx ? 1.2 : 1, opacity: i === idx ? 1 : 0.4 }}
@@ -316,14 +325,23 @@ const TwitterSim = () => {
 
 /* ---------- Reels / TikTok ---------- */
 
-const ReelSim = () => {
+type ReelItem = { caption: string; linkUrl?: string; source?: "linkedin" | "mock" };
+
+const ReelSim = ({ reels }: { reels: ReelItem[] }) => {
   const [idx, setIdx] = useState(0);
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
-    const t = setInterval(() => setIdx((i) => (i + 1) % REEL_CAPTIONS.length), 4800);
+    setIdx(0);
+  }, [reels]);
+
+  useEffect(() => {
+    if (reels.length === 0) return;
+    const t = setInterval(() => setIdx((i) => (i + 1) % reels.length), 4800);
     return () => clearInterval(t);
-  }, []);
+  }, [reels.length]);
+
+  const current = reels[idx] ?? reels[0];
 
   return (
     <DeviceFrame>
@@ -355,7 +373,7 @@ const ReelSim = () => {
 
           {/* Progress bars */}
           <div className="absolute top-3 left-4 right-4 flex gap-1">
-            {REEL_CAPTIONS.map((_, i) => (
+            {reels.map((_, i) => (
               <div key={i} className="h-0.5 flex-1 rounded-full bg-white/20 overflow-hidden">
                 <motion.div
                   className="h-full bg-foreground"
@@ -365,6 +383,13 @@ const ReelSim = () => {
               </div>
             ))}
           </div>
+
+          {current?.source === "linkedin" && (
+            <div className="absolute top-6 right-4 z-10 inline-flex items-center gap-1.5 rounded-full border border-sky-400/40 bg-sky-500/15 px-2.5 py-1 text-[10px] font-medium text-sky-300 backdrop-blur">
+              <Linkedin className="h-3 w-3" />
+              Vídeo real · LinkedIn
+            </div>
+          )}
 
           {/* Right actions */}
           <div className="absolute right-3 bottom-28 flex flex-col items-center gap-5">
@@ -394,10 +419,22 @@ const ReelSim = () => {
                 Seguir
               </button>
             </div>
-            <p className="mt-2 text-[13px] text-foreground leading-snug">{REEL_CAPTIONS[idx]}</p>
-            <div className="mt-2 flex items-center gap-1.5 text-[11px] text-foreground/80">
-              <Music2 className="h-3 w-3" />
-              <span>som original · clauthor</span>
+            <p className="mt-2 text-[13px] text-foreground leading-snug">{current?.caption}</p>
+            <div className="mt-2 flex items-center gap-3 text-[11px] text-foreground/80">
+              <span className="inline-flex items-center gap-1.5">
+                <Music2 className="h-3 w-3" />
+                som original · clauthor
+              </span>
+              {current?.linkUrl && (
+                <a
+                  href={current.linkUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-sky-300 hover:text-sky-200"
+                >
+                  <ExternalLink className="h-3 w-3" /> abrir original
+                </a>
+              )}
             </div>
           </div>
         </div>
@@ -645,8 +682,77 @@ const TABS: { id: SimTab; label: string; description: string }[] = [
 
 export default function SocialSimulator() {
   const [tab, setTab] = useState<SimTab>("carousel");
+  const [deptId, setDeptId] = useState<string>(DEPARTMENT_PACKAGES[0].id);
+  const [linkedinReels, setLinkedinReels] = useState<ReelItem[]>([]);
+
+  const dept: DepartmentPackage = useMemo(
+    () => DEPARTMENT_PACKAGES.find((d) => d.id === deptId) ?? DEPARTMENT_PACKAGES[0],
+    [deptId],
+  );
 
   const active = useMemo(() => TABS.find((t) => t.id === tab)!, [tab]);
+
+  // Slides derivados do departamento selecionado
+  const slides: CarouselSlide[] = useMemo(
+    () => [
+      {
+        title: dept.name,
+        subtitle: dept.outcome,
+        tag: "Case #01",
+        accent: "from-[hsl(var(--destructive))/0.35] to-transparent",
+      },
+      {
+        title: dept.painPoint,
+        subtitle: `Resolvido por ${dept.agentSlugs.length} agentes especialistas`,
+        tag: "A dor",
+        accent: "from-white/[0.12] to-transparent",
+      },
+      {
+        title: `${formatBRL(dept.priceMonthly)}/mês`,
+        subtitle: "Preço fechado. Sem CLT, sem headcount.",
+        tag: "Como funciona",
+        accent: "from-[hsl(var(--destructive))/0.25] to-transparent",
+      },
+    ],
+    [dept],
+  );
+
+  // Reels: tenta puxar vídeos reais publicados no LinkedIn; fallback para mock
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      const { data } = await supabase
+        .from("linkedin_posts")
+        .select("content, link_url")
+        .eq("status", "published")
+        .not("link_url", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(3);
+
+      if (cancelled) return;
+
+      const real: ReelItem[] = (data ?? [])
+        .filter((r): r is { content: string; link_url: string } => Boolean(r.link_url))
+        .map((r) => ({
+          caption: (r.content ?? "").slice(0, 140) || "Post real publicado via Clauthor",
+          linkUrl: r.link_url,
+          source: "linkedin" as const,
+        }));
+      setLinkedinReels(real);
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const reels: ReelItem[] = useMemo(() => {
+    if (linkedinReels.length > 0) return linkedinReels;
+    return [
+      { caption: `${dept.name}: ${dept.outcome}`, source: "mock" },
+      { caption: dept.painPoint, source: "mock" },
+      { caption: `Squad ativo em 4min por ${formatBRL(dept.priceMonthly)}/mês`, source: "mock" },
+    ];
+  }, [linkedinReels, dept]);
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -668,12 +774,34 @@ export default function SocialSimulator() {
             Seu squad de IA em cada canal
           </h1>
           <p className="mt-3 text-muted-foreground max-w-xl mx-auto">
-            Veja o mesmo departamento publicando, conversando e convertendo em Instagram, WhatsApp, LinkedIn e mais — em tempo real.
+            Escolha um departamento e veja publicando, conversando e convertendo em Instagram, WhatsApp, LinkedIn e mais.
           </p>
         </div>
 
+        {/* Department selector */}
+        <div className="mt-8 flex flex-wrap justify-center gap-2">
+          {DEPARTMENT_PACKAGES.map((d) => {
+            const activeDept = d.id === deptId;
+            return (
+              <button
+                key={d.id}
+                onClick={() => setDeptId(d.id)}
+                className={cn(
+                  "rounded-full border px-3.5 py-1.5 text-[12px] transition",
+                  activeDept
+                    ? "border-[hsl(var(--destructive))] bg-[hsl(var(--destructive))/0.12] text-foreground"
+                    : "border-white/[0.08] bg-white/[0.02] text-muted-foreground hover:text-foreground hover:border-white/20",
+                )}
+              >
+                <span className="font-medium">{d.name.replace(/^Departamento( de| Jurídico| Comercial| Financeiro)?\s*/i, "").trim() || d.name}</span>
+                <span className="ml-2 text-[10px] opacity-60">{formatBRL(d.priceMonthly)}/mês</span>
+              </button>
+            );
+          })}
+        </div>
+
         {/* Tabs */}
-        <div className="mt-10 flex flex-wrap justify-center gap-2">
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
           {TABS.map((t) => (
             <button
               key={t.id}
@@ -697,16 +825,16 @@ export default function SocialSimulator() {
             <div className="pointer-events-none absolute -inset-16 rounded-full bg-[hsl(var(--destructive))/0.08] blur-3xl" />
             <AnimatePresence mode="wait">
               <motion.div
-                key={tab}
+                key={`${tab}-${deptId}`}
                 initial={{ opacity: 0, y: 20, scale: 0.98 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.98 }}
                 transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
                 className="relative"
               >
-                {tab === "carousel" && <CarouselSim />}
+                {tab === "carousel" && <CarouselSim slides={slides} />}
                 {tab === "post" && <TwitterSim />}
-                {tab === "reel" && <ReelSim />}
+                {tab === "reel" && <ReelSim reels={reels} />}
                 {tab === "whatsapp" && <WhatsAppSim />}
                 {tab === "instagram-dm" && <InstagramDMSim />}
                 {tab === "linkedin-dm" && <LinkedInDMSim />}
@@ -716,7 +844,10 @@ export default function SocialSimulator() {
         </div>
 
         <p className="mt-10 text-center text-[12px] text-muted-foreground">
-          {active.label} · {active.description} — simulação orquestrada pelos agentes do departamento.
+          {active.label} · {active.description} — {dept.name} · {formatBRL(dept.priceMonthly)}/mês
+          {tab === "reel" && linkedinReels.length > 0 && (
+            <> · <span className="text-sky-300">{linkedinReels.length} vídeo(s) real(is) do LinkedIn</span></>
+          )}
         </p>
       </section>
     </div>
