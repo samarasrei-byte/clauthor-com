@@ -536,7 +536,7 @@ const ExperiencePage = () => {
           <h1 className="text-4xl sm:text-6xl font-semibold font-display tracking-[-0.02em] text-foreground">
             {ctxCompany ? (
               <>
-                O squad de <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">{ctxCompany}</span>
+                O squad para <span className="bg-clip-text text-transparent bg-gradient-to-r from-foreground via-[hsl(var(--destructive))] to-foreground">{ctxCompany}</span>
               </>
             ) : (
               <>
@@ -674,7 +674,9 @@ const ExperiencePage = () => {
                       <span className="text-[10px] tabular-nums text-muted-foreground tracking-wider">{d.time}</span>
                     </div>
                     <p className="mt-2 text-[12.5px] leading-snug text-foreground">{d.text}</p>
-                    <p className="mt-1.5 text-[11px] text-muted-foreground">→ Squad recalibrando prioridades</p>
+                    <p className="mt-1.5 text-[11px] text-muted-foreground">
+                      → {ctxPain ? `Match com sua dor: "${ctxPain.slice(0, 70)}${ctxPain.length > 70 ? "…" : ""}"` : "Squad recalibrando prioridades"}
+                    </p>
                   </motion.div>
                 ))}
                 {feedEntries.length === 0 && directives.length === 0 ? (

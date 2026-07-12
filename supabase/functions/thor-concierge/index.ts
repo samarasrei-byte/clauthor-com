@@ -39,36 +39,62 @@ const adminClient = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
  * em `src/data/departmentPackages.ts`. Chave é substring lowercase da dor
  * relatada pelo usuário.
  */
-const PAIN_TO_DEPT: Array<{ needle: RegExp; deptId: string }> = [
-  { needle: /(venda|comercial|pipeline|lead|prospec|sdr|meta|receita)/i, deptId: "comercial" },
-  { needle: /(atend|suporte|sac|cliente demora|resposta|sla|whatsapp lotado)/i, deptId: "atendimento" },
-  { needle: /(marketing|anún|ads|tráfeg|roas|conteúdo|instagram|linkedin post)/i, deptId: "marketing" },
-  { needle: /(contrato|jurídic|legal|lgpd|compliance|process|advog)/i, deptId: "juridico" },
-  { needle: /(financ|dre|caixa|cobran|pagament|contab|fatur)/i, deptId: "financeiro" },
-  { needle: /(rh|contrata|recruta|pessoas|turnover|engaj|onboarding)/i, deptId: "rh" },
+const VALID_DEPTS = ["comercial", "atendimento", "marketing", "juridico", "financeiro", "rh"] as const;
+type DeptId = (typeof VALID_DEPTS)[number];
+
+const PAIN_TO_DEPT: Array<{ needle: RegExp; deptId: DeptId }> = [
+  { needle: /(atend|suporte|sac|cliente\s+(demora|espera|reclam)|resposta|sla|whatsapp\s+lotado|nps|csat|ces|churn|retenção|retencao|satisfa|experi[eê]ncia\s+do\s+cliente|\bcx\b|cancelament|reclama|ticket)/i, deptId: "atendimento" },
+  { needle: /(vend|comercial|pipeline|\blead\b|prospec|\bsdr\b|meta\s+de\s+venda|receita|closing|fechament|ciclo\s+de\s+venda|conver[sç][ãa]o\s+de\s+lead)/i, deptId: "comercial" },
+  { needle: /(marketing|an[uú]nc|\bads\b|tr[aá]feg|\broas\b|\bcac\b|conte[uú]do|instagram|linkedin\s+post|\bseo\b|branding|awareness|funil\s+de\s+topo)/i, deptId: "marketing" },
+  { needle: /(contrato|jur[ií]dic|legal|lgpd|complian|process|advog|\bnda\b|termos|due\s+dilig)/i, deptId: "juridico" },
+  { needle: /(financ|\bdre\b|caixa|cobran|pagament|contab|fatur|invoice|boleto|inadimpl)/i, deptId: "financeiro" },
+  { needle: /(\brh\b|contrata|recruta|pessoas|turnover|engaj|onboarding\s+de\s+colab|clima|cultura|talent|headcount)/i, deptId: "rh" },
 ];
 
-const DEFAULT_DEPT_BY_INDUSTRY: Record<string, string> = {
+const DEFAULT_DEPT_BY_INDUSTRY: Record<string, DeptId> = {
   "Tecnologia / SaaS": "comercial",
-  "E-commerce": "marketing",
+  "E-commerce": "atendimento",
   "Saúde / Clínica": "atendimento",
   "Educação": "marketing",
   "Imobiliário": "comercial",
   "Jurídico": "juridico",
-  "Financeiro": "financeiro",
+  "Financeiro": "atendimento",
   "Alimentação": "atendimento",
   "Beleza / Estética": "atendimento",
-  "Varejo": "marketing",
+  "Varejo": "atendimento",
   "Indústria": "comercial",
 };
 
-/** Retorna o `dept_id` mais provável dado dor + industry (fallback). */
-function recommendDepartment(pain: string, industry?: string): string {
+function recommendDepartmentRegex(pain: string, industry?: string): DeptId {
   const found = PAIN_TO_DEPT.find(({ needle }) => needle.test(pain));
   if (found) return found.deptId;
   if (industry && DEFAULT_DEPT_BY_INDUSTRY[industry]) return DEFAULT_DEPT_BY_INDUSTRY[industry];
   return "comercial";
 }
+
+/**
+ * Classifica dor → departamento via LLM (primário) com fallback regex.
+ * Nunca lança — o funil não pode travar por causa de gateway offline.
+ */
+async function recommendDepartment(pain: string, industry?: string, empresa?: string): Promise<DeptId> {
+  const system = `Você classifica a dor de negócio de um cliente em UM ÚNICO departamento.
+Ids permitidos (retorne EXATAMENTE um):
+- "comercial" → vendas, prospecção, pipeline, SDR, closing, receita nova
+- "atendimento" → CX, NPS, CSAT, churn, retenção, satisfação, suporte, SLA, cancelamento
+- "marketing" → tráfego, ROAS, ads, conteúdo, SEO, branding, funil de topo
+- "juridico" → contratos, LGPD, compliance, processos, due diligence
+- "financeiro" → DRE, caixa, cobrança, contas a pagar/receber, inadimplência
+- "rh" → contratação, turnover, cultura, onboarding de colaborador
+Retorne SOMENTE JSON: {"dept_id": "<id>"}. Nada mais.`;
+  const user = `Dor: "${pain}"\nSetor: "${industry ?? "Outro"}"\nEmpresa: "${empresa ?? ""}"`;
+  const parsed = await callAiJson(system, user);
+  const raw = (parsed as { dept_id?: unknown })?.dept_id;
+  if (typeof raw === "string" && (VALID_DEPTS as readonly string[]).includes(raw)) {
+    return raw as DeptId;
+  }
+  return recommendDepartmentRegex(pain, industry);
+}
+
 
 /* -------------------------------------------------------------------------- */
 /*  Helpers                                                                   */
@@ -200,29 +226,36 @@ interface SampleLeadsPayload {
   industry?: string;
   dept_id?: string;
   empresa?: string;
+  dor?: string;
 }
 
 /**
- * Gera 2-3 leads plausíveis (nomes + cargos + empresas fictícias) que
- * casem com o ICP declarado. Feito via LLM em JSON puro — se falhar,
- * cai num template determinístico para não deixar o feed vazio.
+ * Gera 3 leads plausíveis (nomes + cargos + empresas fictícias) que
+ * casem com o ICP declarado. O campo `signal` DEVE referenciar a dor
+ * concreta do usuário — é o que faz o feed parecer real.
  */
-async function sampleLeads({ icp, industry, dept_id, empresa }: SampleLeadsPayload): Promise<Response> {
+async function sampleLeads({ icp, industry, dept_id, empresa, dor }: SampleLeadsPayload): Promise<Response> {
   if (!icp || icp.trim().length < 3) return errorResponse("icp é obrigatório");
 
   const system = `Você gera exemplos de LEADS plausíveis (fictícios mas realistas) para uma demonstração.
 Retorne SOMENTE um JSON válido no formato exato:
 {
   "leads": [
-    { "name": "Nome Sobrenome", "role": "Cargo · Empresa Ficctícia", "signal": "Motivo curto pelo qual bate com o ICP (max 12 palavras)" }
+    { "name": "Nome Sobrenome", "role": "Cargo · Empresa Fictícia", "signal": "Frase curta (max 16 palavras) que cite explicitamente a DOR do cliente e por que esse lead a sente também" }
   ]
 }
-Regras: exatamente 3 leads, nomes brasileiros, empresas verossímeis com sufixos como "Labs", "Digital", "Solutions" ou nomes de fantasia, cargos coerentes com o ICP. NÃO use empresas reais famosas.`;
+Regras:
+- Exatamente 3 leads.
+- Nomes brasileiros verossímeis, empresas fictícias com sufixos como "Labs", "Digital", "Solutions", "Pay", "Tech".
+- Cargos coerentes com o ICP.
+- NÃO use empresas reais famosas.
+- O campo "signal" NUNCA pode ser genérico — precisa referenciar a dor específica (ex.: "Também viu NPS cair 14 pts em 3 meses e busca um squad de CX").`;
 
   const user = `ICP do cliente: "${icp}"
+Dor do cliente (obrigatório referenciar): "${dor ?? "não informada"}"
 Setor do cliente: "${industry ?? "Outro"}"
 Departamento a demonstrar: "${dept_id ?? "comercial"}"
-Empresa do cliente (contexto): "${empresa ?? ""}"`;
+Empresa do cliente (contexto, NÃO usar como lead): "${empresa ?? ""}"`;
 
   const parsed = await callAiJson(system, user);
   const leads = Array.isArray((parsed as any)?.leads) ? (parsed as any).leads.slice(0, 3) : null;
@@ -231,16 +264,20 @@ Empresa do cliente (contexto): "${empresa ?? ""}"`;
     return jsonResponse({ leads, source: "ai" });
   }
 
-  // Fallback determinístico.
+  // Fallback determinístico — signal reutiliza a dor real quando disponível.
+  const painFrag = dor && dor.trim().length > 0
+    ? `Mesma dor: "${dor.trim().slice(0, 80)}${dor.length > 80 ? "…" : ""}"`
+    : "Perfil bate com o ICP declarado";
   return jsonResponse({
     leads: [
-      { name: "Marina Alves", role: "Head of Growth · Trilha Digital", signal: "Perfil bate 92% com o ICP declarado" },
-      { name: "Rafael Costa",  role: "Diretor Comercial · Delta Labs",  signal: "Empresa cresceu 40% em 12 meses no seu segmento" },
-      { name: "Camila Souza",  role: "Founder · Verso Solutions",       signal: "Publicou sobre a dor exata que você mencionou" },
+      { name: "Marina Alves", role: "Head of Growth · Trilha Digital", signal: painFrag },
+      { name: "Rafael Costa",  role: "Diretor Comercial · Delta Labs",  signal: `${painFrag} — empresa cresceu 40% em 12 meses` },
+      { name: "Camila Souza",  role: "Founder · Verso Solutions",       signal: `${painFrag} — publicou sobre o tema esta semana` },
     ],
     source: "fallback",
   });
 }
+
 
 interface FinalizePayload {
   session_id?: string;
@@ -262,7 +299,7 @@ async function finalize(payload: FinalizePayload): Promise<Response> {
   if (!payload.session_id) return errorResponse("session_id é obrigatório");
   if (!payload.dor || !payload.icp) return errorResponse("dor e icp são obrigatórios");
 
-  const dept_id = payload.dept_id || recommendDepartment(payload.dor, payload.industry);
+  const dept_id = payload.dept_id || (await recommendDepartment(payload.dor, payload.industry, payload.empresa));
 
   const { data, error } = await adminClient
     .from("thor_concierge_sessions")
