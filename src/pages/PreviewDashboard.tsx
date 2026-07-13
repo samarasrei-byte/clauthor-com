@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import ThorGuestTour from "@/components/preview/ThorGuestTour";
+import Typewriter from "@/components/preview/Typewriter";
 
 // ----- Mock data generators (deterministic per department) -----
 const AGENT_NAMES = [
