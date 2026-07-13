@@ -11,6 +11,7 @@ import { useTenantId } from "@/hooks/useTenantId";
 import { getPainOption, type PainCategory } from "@/lib/wow-router";
 import { WOW_FALLBACKS } from "@/data/wowTemplates";
 import { trackKpi } from "@/lib/kpiTracker";
+import { computeHeuristicConfidence } from "@/lib/confidence";
 import logger from "@/lib/logger";
 
 function currentWowVariant(): "form" | "voice" | undefined {
