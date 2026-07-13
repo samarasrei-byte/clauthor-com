@@ -954,6 +954,74 @@ export type Database = {
         }
         Relationships: []
       }
+      ambient_signals: {
+        Row: {
+          acted_at: string | null
+          body: string | null
+          created_at: string
+          created_by: string | null
+          cta_label: string | null
+          cta_route: string | null
+          dismissed_at: string | null
+          expires_at: string | null
+          id: string
+          kind: string
+          metadata: Json
+          severity: string
+          source: string
+          status: string
+          tenant_id: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          acted_at?: string | null
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          cta_label?: string | null
+          cta_route?: string | null
+          dismissed_at?: string | null
+          expires_at?: string | null
+          id?: string
+          kind: string
+          metadata?: Json
+          severity?: string
+          source?: string
+          status?: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          acted_at?: string | null
+          body?: string | null
+          created_at?: string
+          created_by?: string | null
+          cta_label?: string | null
+          cta_route?: string | null
+          dismissed_at?: string | null
+          expires_at?: string | null
+          id?: string
+          kind?: string
+          metadata?: Json
+          severity?: string
+          source?: string
+          status?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ambient_signals_tenant_id_fkey"
+            columns: ["tenant_id"]
+            isOneToOne: false
+            referencedRelation: "tenants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       api_keys: {
         Row: {
           created_at: string
