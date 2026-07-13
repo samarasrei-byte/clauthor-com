@@ -13,6 +13,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
+import HelpTooltip from "@/components/HelpTooltip";
 
 export default function HireAndOnboard() {
   const { slug } = useParams<{ slug: string }>();
