@@ -158,7 +158,7 @@ export default function ThorFirstTouchWelcome({ onGuideMe, openDelayMs = 900 }: 
                 </div>
                 <div className="flex flex-wrap gap-1.5">
                   {deptList.map((d) => (
-                    <Badge key={d.department_slug ?? d.department_name} className="text-xs bg-primary/15 text-primary border border-primary/30 hover:bg-primary/20">
+                    <Badge key={d.department_name} className="text-xs bg-primary/15 text-primary border border-primary/30 hover:bg-primary/20">
                       {d.department_name}
                     </Badge>
                   ))}
