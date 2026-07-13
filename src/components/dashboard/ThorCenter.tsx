@@ -73,12 +73,12 @@ export default function ThorCenter({ onNavigate }: Props) {
         supabase
           .from("approvals")
           .select("id", { count: "exact", head: true })
-          .eq("user_id", user!.id)
+          .eq("created_by", user!.id)
           .eq("status", "pending"),
         supabase
           .from("approvals")
           .select("id, title, created_at")
-          .eq("user_id", user!.id)
+          .eq("created_by", user!.id)
           .eq("status", "pending")
           .order("created_at", { ascending: false })
           .limit(5),
@@ -94,15 +94,16 @@ export default function ThorCenter({ onNavigate }: Props) {
     queryFn: async () => {
       const { data } = await supabase
         .from("ambient_signals")
-        .select("id, kind, title, severity, created_at")
-        .eq("user_id", user!.id)
+        .select("id, kind, title, severity, created_at, status")
+        .eq("created_by", user!.id)
         .in("severity", ["high", "critical"])
-        .is("resolved_at", null)
+        .neq("status", "resolved")
         .order("created_at", { ascending: false })
         .limit(5);
       return (data ?? []) as Array<{ id: string; kind: string; title: string; severity: string; created_at: string }>;
     },
   });
+
 
   const timeline = useMemo(() => {
     // Une histórico do Thor + alertas de token num único stream ordenado
