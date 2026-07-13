@@ -69,6 +69,7 @@ export default function ThorCenter({ onNavigate }: Props) {
     setPeriodState(p);
     try { localStorage.setItem(PERIOD_STORAGE_KEY, p); } catch { /* ignore */ }
   };
+  const [onlyStale, setOnlyStale] = useState(false);
 
   // Realtime: mantém timeline e atalhos vivos quando o Thor registra algo novo
   useEffect(() => {
@@ -187,6 +188,20 @@ export default function ThorCenter({ onNavigate }: Props) {
     qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
   };
 
+  const resolveSignalsBulk = async (ids: string[]) => {
+    if (ids.length === 0) return;
+    const { error } = await supabase
+      .from("ambient_signals")
+      .update({ status: "resolved" })
+      .in("id", ids);
+    if (error) {
+      toast.error("Não consegui resolver o grupo inteiro.");
+      return;
+    }
+    toast.success(`${ids.length} sinais resolvidos.`);
+    qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
+  };
+
   const resolveApproval = async (approvalId: string) => {
     if (!user?.id) return;
     const { error } = await supabase
@@ -224,17 +239,25 @@ export default function ThorCenter({ onNavigate }: Props) {
   }, [period, touchpoints, tokenAlerts, pendingApprovals.items, ambientSignals]);
 
   // Aprovações paradas (>=48h) vêm primeiro para o usuário destravar antes
+  const staleThreshold = 48 * 3600 * 1000;
+  const staleCount = useMemo(() => {
+    const now = Date.now();
+    return pendingApprovals.items.filter((a) => now - new Date(a.created_at).getTime() >= staleThreshold).length;
+  }, [pendingApprovals.items, staleThreshold]);
   const sortedApprovals = useMemo(() => {
     const now = Date.now();
-    return [...pendingApprovals.items].sort((a, b) => {
+    const base = onlyStale
+      ? pendingApprovals.items.filter((a) => now - new Date(a.created_at).getTime() >= staleThreshold)
+      : pendingApprovals.items;
+    return [...base].sort((a, b) => {
       const ageA = now - new Date(a.created_at).getTime();
       const ageB = now - new Date(b.created_at).getTime();
-      const staleA = ageA >= 48 * 3600 * 1000 ? 1 : 0;
-      const staleB = ageB >= 48 * 3600 * 1000 ? 1 : 0;
+      const staleA = ageA >= staleThreshold ? 1 : 0;
+      const staleB = ageB >= staleThreshold ? 1 : 0;
       if (staleA !== staleB) return staleB - staleA;
       return b.created_at.localeCompare(a.created_at);
     });
-  }, [pendingApprovals.items]);
+  }, [pendingApprovals.items, onlyStale, staleThreshold]);
 
   // Sinais críticos agrupados por kind para reduzir ruído visual
   const groupedSignals = useMemo(() => {
@@ -383,11 +406,25 @@ export default function ThorCenter({ onNavigate }: Props) {
         {/* Ações pendentes (1/3) */}
         <div className="space-y-4">
           <Card>
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-3 flex flex-row items-center justify-between gap-2 space-y-0">
               <CardTitle className="text-base flex items-center gap-2">
                 <Inbox className="h-4 w-4 text-primary" />
                 Precisam de você
               </CardTitle>
+              {staleCount > 0 && (
+                <button
+                  onClick={() => setOnlyStale((v) => !v)}
+                  className={cn(
+                    "text-[10px] uppercase tracking-widest px-2 py-1 rounded-md border transition-colors",
+                    onlyStale
+                      ? "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                      : "border-border/50 text-muted-foreground hover:bg-muted/40",
+                  )}
+                  title={onlyStale ? "Mostrar todas" : "Mostrar só as paradas (>48h)"}
+                >
+                  {onlyStale ? "todas" : `só paradas · ${staleCount}`}
+                </button>
+              )}
             </CardHeader>
             <CardContent className="space-y-2">
               {pendingApprovals.items.length === 0 && ambientSignals.length === 0 && (
@@ -443,6 +480,15 @@ export default function ThorCenter({ onNavigate }: Props) {
                     <Badge variant="outline" className="text-[9px] px-1 py-0 border-border/50 text-muted-foreground">
                       {signals.length}
                     </Badge>
+                    {signals.length > 1 && (
+                      <button
+                        onClick={() => void resolveSignalsBulk(signals.map((s) => s.id))}
+                        className="ml-auto text-[10px] text-muted-foreground hover:text-primary transition-colors"
+                        title={`Resolver os ${signals.length} sinais deste grupo`}
+                      >
+                        resolver todos
+                      </button>
+                    )}
                   </div>
                   {signals.map((s) => (
                     <div
