@@ -55,18 +55,28 @@ const Navbar = () => {
     navigate("/");
   };
 
-  const navLinks = [
-    { label: t("navbar.solutions"), dropdown: true },
-    ...(user
-      ? [
-          { label: t("nav.dashboard"), href: "/dashboard" },
-          { label: t("nav.my_agents"), href: "/agents" },
-        ]
-      : [
-          // Header enxuto: Soluções · Preços · Como funciona (departamentos vive dentro de Soluções).
-          { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
-          { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
-        ]),
+  // P1 · consolidação: menu principal enxuto e canônico.
+  //  Público:  Departamentos · Como funciona · Preços · Comunidade · Entrar
+  //  Logado:   Painel · Meus agentes  (o resto vive em "Mais")
+  //  "Mais":   Team Builder · Marketplace · Enterprise · Developers · API
+  const navLinks = user
+    ? [
+        { label: t("nav.dashboard"), href: "/dashboard" },
+        { label: t("nav.my_agents"), href: "/agents" },
+      ]
+    : [
+        { label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }), href: "/departamentos" },
+        { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
+        { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
+        { label: t("nav.community", { defaultValue: "Comunidade" }), href: "/community" },
+      ];
+
+  const moreLinks = [
+    { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Monte seu Squad" }), desc: "Escolha especialistas e veja o custo em tempo real" },
+    { href: "/marketplace", label: t("navbar.marketplace_label", { defaultValue: "Marketplace" }), desc: "Especialistas de IA individuais (avançado)" },
+    { href: "/enterprise", label: "Enterprise", desc: "Squads dedicadas, SSO, SLA 99.9% e suporte white-glove" },
+    { href: "/developers", label: "Developers", desc: "APIs, MCP Server e integrações" },
+    { href: "/api-docs", label: "API Docs", desc: "Documentação técnica completa" },
   ];
 
 
