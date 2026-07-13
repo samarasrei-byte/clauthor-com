@@ -1,15 +1,10 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
-import { AnimatePresence } from "framer-motion";
 import Navbar from "./Navbar";
-// OnboardingWizard legado removido.
+// P1 · Consolidação: SalesChatbot, SupportChat, SocialProofToasts e
+// ExitIntentCapture não são mais renderizados no layout — o Thor é o único
+// concierge visível. Os arquivos seguem existindo por 1 sprint como legado.
 import AgentLivePreview from "./library/AgentLivePreview";
-import { supabase } from "@/integrations/supabase/client";
-const ThorGreeter = lazy(() => import("./ThorGreeter"));
-const SocialProofToasts = lazy(() => import("./SocialProofToasts"));
-const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
-const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
-const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
 const AssistantHierarchy = lazy(() => import("./AssistantHierarchy"));
 const CartFab = lazy(() => import("./CartFab"));
 
