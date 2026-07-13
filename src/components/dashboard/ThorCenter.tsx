@@ -239,17 +239,25 @@ export default function ThorCenter({ onNavigate }: Props) {
   }, [period, touchpoints, tokenAlerts, pendingApprovals.items, ambientSignals]);
 
   // Aprovações paradas (>=48h) vêm primeiro para o usuário destravar antes
+  const staleThreshold = 48 * 3600 * 1000;
+  const staleCount = useMemo(() => {
+    const now = Date.now();
+    return pendingApprovals.items.filter((a) => now - new Date(a.created_at).getTime() >= staleThreshold).length;
+  }, [pendingApprovals.items, staleThreshold]);
   const sortedApprovals = useMemo(() => {
     const now = Date.now();
-    return [...pendingApprovals.items].sort((a, b) => {
+    const base = onlyStale
+      ? pendingApprovals.items.filter((a) => now - new Date(a.created_at).getTime() >= staleThreshold)
+      : pendingApprovals.items;
+    return [...base].sort((a, b) => {
       const ageA = now - new Date(a.created_at).getTime();
       const ageB = now - new Date(b.created_at).getTime();
-      const staleA = ageA >= 48 * 3600 * 1000 ? 1 : 0;
-      const staleB = ageB >= 48 * 3600 * 1000 ? 1 : 0;
+      const staleA = ageA >= staleThreshold ? 1 : 0;
+      const staleB = ageB >= staleThreshold ? 1 : 0;
       if (staleA !== staleB) return staleB - staleA;
       return b.created_at.localeCompare(a.created_at);
     });
-  }, [pendingApprovals.items]);
+  }, [pendingApprovals.items, onlyStale, staleThreshold]);
 
   // Sinais críticos agrupados por kind para reduzir ruído visual
   const groupedSignals = useMemo(() => {
