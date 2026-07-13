@@ -8,6 +8,7 @@ import SectionLoader from "@/components/ui/section-loader";
 // GuidedOnboarding legado removido · RevolutionaryOnboardingGate global cobre esse fluxo.
 import HeroBriefing from "@/components/dashboard/HeroBriefing";
 import NextStepsCard from "@/components/dashboard/NextStepsCard";
+import MonthlyROICard from "@/components/dashboard/MonthlyROICard";
 // FirstTimeTour removido · ThorLiveGuide já cobre onboarding em 5 passos.
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
@@ -76,7 +77,9 @@ const DashboardOverview = ({
       <ErrorBoundary>
         <Suspense fallback={<SectionLoader />}>
           <div className="space-y-5">
-            {/* PRIMEIRA DOBRA · uma voz, um CTA. */}
+            {/* PRIMEIRA DOBRA · P2 · ROI do mês em destaque · prova visível */}
+            <MonthlyROICard onCTA={() => onSetActiveSection("omnix")} />
+
             <HeroBriefing
               agentsCount={agents.length}
               activeAgents={activeAgents}
