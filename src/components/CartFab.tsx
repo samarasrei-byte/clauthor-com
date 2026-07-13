@@ -29,7 +29,11 @@ export default function CartFab() {
           exit={{ opacity: 0, y: 24 }}
           transition={{ duration: 0.2 }}
           onClick={() => navigate("/checkout")}
-          className="fixed bottom-5 right-5 z-40 group inline-flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-full border border-white/15 bg-black/80 backdrop-blur-md text-white shadow-2xl hover:border-white/30 transition-colors"
+          style={{
+            bottom: "calc(env(safe-area-inset-bottom, 0px) + 1.25rem)",
+            right: "calc(env(safe-area-inset-right, 0px) + 1.25rem)",
+          }}
+          className="fixed z-40 group inline-flex items-center gap-3 pl-4 pr-3 py-2.5 rounded-full border border-white/15 bg-black/80 backdrop-blur-md text-white shadow-2xl hover:border-white/30 transition-colors"
           aria-label={`Ver carrinho com ${items.length} ${items.length === 1 ? "departamento" : "departamentos"}`}
         >
           <span className="relative">
