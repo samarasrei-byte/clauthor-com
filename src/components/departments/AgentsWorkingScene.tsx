@@ -124,7 +124,7 @@ const AgentsWorkingScene = ({ agentSlugs, dialogue, className }: AgentsWorkingSc
       {/* Chat entre agentes */}
       <div className="relative p-3 space-y-2">
         {agents.map((agent, idx) => {
-          const line = DIALOGUE[(tick + idx) % DIALOGUE.length];
+          const line = lines[(tick + idx) % lines.length];
           const isLeft = agent.side === "left";
           return (
             <div
