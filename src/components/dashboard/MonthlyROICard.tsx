@@ -70,8 +70,8 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
     queryFn: async () => {
       const since = startOfMonthISO();
 
-      // Paralelo · logs de execução do mês + departamentos ativos (com agent_ids).
-      const [logsRes, deptsRes] = await Promise.all([
+      // Paralelo · logs de execução do mês + departamentos ativos + config de ROI do banco.
+      const [logsRes, deptsRes, roiRes] = await Promise.all([
         supabase
           .from("execution_logs")
           .select("agent_id, status")
@@ -83,10 +83,31 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
           .select("department_id, monthly_price_cents, agent_ids, status")
           .eq("user_id", user!.id)
           .eq("status", "active"),
+        supabase
+          .from("department_roi_config")
+          .select("department_id, minutes_saved_per_task, hourly_rate_brl")
+          .eq("is_active", true),
       ]);
 
       const logs = logsRes.data ?? [];
       const depts = deptsRes.data ?? [];
+      const roiRows = roiRes.data ?? [];
+
+      // Mapa de config vindo do banco. Se o banco estiver vazio (fallback total),
+      // caímos no TS legado via getDepartmentRoiConfig.
+      const dbRoiConfig = new Map<string, { minutesSavedPerTask: number; hourlyRateBRL: number }>();
+      for (const r of roiRows) {
+        dbRoiConfig.set(r.department_id, {
+          minutesSavedPerTask: r.minutes_saved_per_task,
+          hourlyRateBRL: Number(r.hourly_rate_brl),
+        });
+      }
+
+      const resolveConfig = (deptId: string) => {
+        if (dbRoiConfig.has(deptId)) return dbRoiConfig.get(deptId)!;
+        // Fallback pro TS legado se o banco não tem essa linha (departamento novo).
+        return getDepartmentRoiConfig(deptId);
+      };
 
       const monthlyDeptCostBRL = depts.reduce(
         (acc, d) => acc + (d.monthly_price_cents ?? 0) / 100,
@@ -114,9 +135,7 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
       let humanEquivalentBRL = 0;
       for (const [deptId, count] of tasksByDept) {
         const cfg =
-          deptId === "__default__"
-            ? DEFAULT_ROI_CONFIG
-            : getDepartmentRoiConfig(deptId);
+          deptId === "__default__" ? DEFAULT_ROI_CONFIG : resolveConfig(deptId);
         tasksDelivered += count;
         minutesSaved += count * cfg.minutesSavedPerTask;
         humanEquivalentBRL += (count * cfg.minutesSavedPerTask / 60) * cfg.hourlyRateBRL;
@@ -130,6 +149,7 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
       };
     },
   });
+
 
   const metrics = useMemo(() => {
     const tasks = data?.tasksDelivered ?? 0;

@@ -1881,6 +1881,39 @@ export type Database = {
         }
         Relationships: []
       }
+      department_roi_config: {
+        Row: {
+          created_at: string
+          department_id: string
+          hourly_rate_brl: number
+          id: string
+          is_active: boolean
+          minutes_saved_per_task: number
+          notes: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          department_id: string
+          hourly_rate_brl: number
+          id?: string
+          is_active?: boolean
+          minutes_saved_per_task: number
+          notes?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          department_id?: string
+          hourly_rate_brl?: number
+          id?: string
+          is_active?: boolean
+          minutes_saved_per_task?: number
+          notes?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       department_suggestions: {
         Row: {
           created_at: string

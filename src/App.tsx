@@ -36,6 +36,7 @@ const ExecutionReplay = lazyRetry(() => import("./pages/ExecutionReplay"));
 
 const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
 const AdminKpiDashboard = lazyRetry(() => import("./pages/AdminKpiDashboard"));
+const AdminRoiConfig = lazyRetry(() => import("./pages/AdminRoiConfig"));
 
 const Agents = lazyRetry(() => import("./pages/Agents"));
 const Library = lazyRetry(() => import("./pages/Library"));
@@ -240,6 +241,7 @@ const App = () => (
                   <Route path="/admin" element={<AdminDashboard />} />
                   <Route path="/admin/verticals/advocacia" element={<AdminAdvocaciaVertical />} />
                   <Route path="/admin/kpis" element={<AdminKpiDashboard />} />
+                  <Route path="/admin/roi-config" element={<AdminRoiConfig />} />
 
                 </Route>
 
