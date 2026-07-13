@@ -8,6 +8,7 @@ import SectionLoader from "@/components/ui/section-loader";
 // GuidedOnboarding legado removido · RevolutionaryOnboardingGate global cobre esse fluxo.
 import HeroBriefing from "@/components/dashboard/HeroBriefing";
 import NextStepsCard from "@/components/dashboard/NextStepsCard";
+import MonthlyROICard from "@/components/dashboard/MonthlyROICard";
 // FirstTimeTour removido · ThorLiveGuide já cobre onboarding em 5 passos.
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
