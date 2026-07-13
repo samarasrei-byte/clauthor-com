@@ -343,7 +343,7 @@ export default function ThorConciergeChat({
               key={s}
               onClick={() => sendMessage(s)}
               disabled={isStreaming}
-              className="text-xs px-3 py-1.5 rounded-full border border-border/60 bg-background/60 text-muted-foreground hover:text-foreground hover:border-foreground/40 transition-colors disabled:opacity-50"
+              className="text-xs px-3 py-1.5 rounded-full border border-border/60 bg-background/60 text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/[0.04] transition-colors disabled:opacity-50"
             >
               {s}
             </button>
