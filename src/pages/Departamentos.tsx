@@ -12,7 +12,7 @@ import type { HireIntent } from "./Auth";
 import {
   Building2, ArrowRight, Flame, Bot, Zap,
   CheckCircle2, TrendingUp, Network, Lightbulb, ThumbsUp, Send,
-  Loader2, Clock, Users, Shield, Rocket, X, Filter
+  Loader2, Clock, Users, Shield, Rocket, X, Filter, Plus, Check
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
@@ -28,6 +28,7 @@ import {
   departments, totalClauthorCost, totalCltCost, totalTokens,
   totalAgents, totalSavingsPercent
 } from "@/data/departmentData";
+import { useDeptSelection } from "@/stores/deptSelection";
 
 // Category definitions for filters
 const getCategoryLabels = (t: any) => [
@@ -55,6 +56,8 @@ const Departamentos = () => {
   const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
   const categories = getCategoryLabels(t);
   const [searchParams] = useSearchParams();
+  const cartItems = useDeptSelection((s) => s.items);
+  const cartToggle = useDeptSelection((s) => s.toggle);
 
   // Pre-select category from onboarding (?dept=marketing)
   // With `&auto=1` (from landing "Contratar"), auto-fires the checkout.
@@ -414,7 +417,35 @@ const Departamentos = () => {
                     )}
                   </button>
 
-
+                  {/* Add-to-cart secondary action — permite montar carrinho sem sair da listagem */}
+                  {(() => {
+                    const inCart = cartItems.some((c) => c.id === dept.id);
+                    return (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          cartToggle({
+                            id: dept.id,
+                            name: t(`squads.dept_${dept.id}`),
+                            priceMonthly: deptPrice,
+                            agentSlugs: dept.agents.map((a) => a.key),
+                          })
+                        }
+                        className={`w-full h-9 rounded-lg text-xs font-medium inline-flex items-center justify-center gap-1.5 transition-colors ${
+                          inCart
+                            ? "border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/15"
+                            : "border border-white/10 bg-white/[0.02] text-white/70 hover:bg-white/[0.05] hover:text-white"
+                        }`}
+                        aria-label={inCart ? "Remover do carrinho" : "Adicionar ao carrinho"}
+                      >
+                        {inCart ? (
+                          <><Check className="h-3.5 w-3.5" /> No carrinho</>
+                        ) : (
+                          <><Plus className="h-3.5 w-3.5" /> Adicionar ao carrinho</>
+                        )}
+                      </button>
+                    );
+                  })()}
                 </div>
               </motion.div>
             );
