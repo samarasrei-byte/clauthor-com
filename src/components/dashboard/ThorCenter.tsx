@@ -180,7 +180,7 @@ export default function ThorCenter({ onNavigate }: Props) {
     return merged.filter((e) => new Date(e.when).getTime() >= min).slice(0, 40);
   }, [touchpoints, tokenAlerts, period]);
 
-  const resolveSignal = async (signalId: string) => {
+  const resolveSignal = async (signalId: string, kind?: string) => {
     const { error } = await supabase
       .from("ambient_signals")
       .update({ status: "resolved" })
@@ -190,10 +190,11 @@ export default function ThorCenter({ onNavigate }: Props) {
       return;
     }
     toast.success("Marcado como resolvido.");
+    trackKpi("thor_center_signal_resolved", { source: "dashboard", signal_kind: kind });
     qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
   };
 
-  const resolveSignalsBulk = async (ids: string[]) => {
+  const resolveSignalsBulk = async (ids: string[], kind?: string) => {
     if (ids.length === 0) return;
     const { error } = await supabase
       .from("ambient_signals")
@@ -204,6 +205,7 @@ export default function ThorCenter({ onNavigate }: Props) {
       return;
     }
     toast.success(`${ids.length} sinais resolvidos.`);
+    trackKpi("thor_center_signal_bulk_resolved", { source: "dashboard", signal_kind: kind, count: ids.length });
     qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
   };
 
