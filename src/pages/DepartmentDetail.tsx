@@ -188,10 +188,16 @@ export default function DepartmentDetail() {
               {formatBRL(dept.priceMonthly)}<span className="text-sm text-white/40"> / mês</span>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => navigate("/departamentos")}>Ver outros</Button>
-            <PremiumCTAButton variant="red" onClick={() => navigate(`/contratar/${dept.id}`)}>
-              Contratar por {formatBRL(dept.priceMonthly)} <ArrowRight className="w-4 h-4 ml-2" />
+          <div className="flex flex-wrap gap-2 justify-end">
+            <Button variant="outline" onClick={handleAdd} className="gap-2">
+              {inCart ? (
+                <><Check className="w-4 h-4" /> No carrinho</>
+              ) : (
+                <><Plus className="w-4 h-4" /> Adicionar ao carrinho</>
+              )}
+            </Button>
+            <PremiumCTAButton variant="red" onClick={handleBuyNow}>
+              Ir para checkout <ArrowRight className="w-4 h-4 ml-2" />
             </PremiumCTAButton>
           </div>
         </div>
