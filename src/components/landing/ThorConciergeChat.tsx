@@ -467,7 +467,7 @@ export default function ThorConciergeChat({
       const token = sessionData.session?.access_token ?? PUBLISHABLE_KEY;
       await fetch(
         `${CHAT_ENDPOINT}?session_id=${encodeURIComponent(sessionIdRef.current)}`,
-        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } },
+        { method: "DELETE", headers: { Authorization: `Bearer ${token}`, apikey: PUBLISHABLE_KEY } },
       );
       setMemoryFacts({});
       setMessages([DEFAULT_INTRO]);
