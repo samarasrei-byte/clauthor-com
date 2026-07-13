@@ -44,6 +44,28 @@
 
     --radius: 0.625rem;
 
+    /* Surface elevation scale — near-monochrome, cold */
+    --surface-0: 0 0% 3%;
+    --surface-1: 0 0% 5%;
+    --surface-2: 0 0% 8%;
+    --surface-3: 0 0% 11%;
+    --hairline: 0 0% 100% / 0.06;
+
+    /* Primary scale — red used with scarcity (only for decisions) */
+    --primary-50:  0 85% 96%;
+    --primary-100: 0 85% 90%;
+    --primary-500: 0 85% 55%;
+    --primary-600: 0 85% 48%;
+    --primary-900: 0 85% 20%;
+
+    /* Motion tokens — cinematic, not bouncy */
+    --ease-expo-out: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-quart-out: cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --dur-fast: 180ms;
+    --dur-base: 320ms;
+    --dur-slow: 520ms;
+
     --sidebar-background: 0 0% 3%;
     --sidebar-foreground: 0 0% 60%;
     --sidebar-primary: 0 85% 55%;
