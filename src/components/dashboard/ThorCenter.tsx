@@ -480,6 +480,15 @@ export default function ThorCenter({ onNavigate }: Props) {
                     <Badge variant="outline" className="text-[9px] px-1 py-0 border-border/50 text-muted-foreground">
                       {signals.length}
                     </Badge>
+                    {signals.length > 1 && (
+                      <button
+                        onClick={() => void resolveSignalsBulk(signals.map((s) => s.id))}
+                        className="ml-auto text-[10px] text-muted-foreground hover:text-primary transition-colors"
+                        title={`Resolver os ${signals.length} sinais deste grupo`}
+                      >
+                        resolver todos
+                      </button>
+                    )}
                   </div>
                   {signals.map((s) => (
                     <div
