@@ -183,6 +183,7 @@ const App = () => (
                   <Route path="/departamentos/:slug" element={<DepartmentDetail />} />
                   <Route path="/contratar/:slug" element={<ProtectedRoute><HireAndOnboard /></ProtectedRoute>} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/preview-dashboard" element={<PreviewDashboard />} />
                   <Route path="/departamento-ativo/:slug" element={<ProtectedRoute><DepartmentActivated /></ProtectedRoute>} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />
                   <Route path="/termos" element={<Terms />} />

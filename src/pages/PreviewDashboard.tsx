@@ -56,7 +56,7 @@ function hashSeed(s: string) {
 export default function PreviewDashboard() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { user, loading: authLoading } = useAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const items = useDeptSelection((s) => s.items);
   const total = useDeptSelection((s) => s.total());
   const [tourOpen, setTourOpen] = useState(true);
