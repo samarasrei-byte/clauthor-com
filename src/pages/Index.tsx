@@ -184,7 +184,7 @@ const HomePage = () => {
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-14 leading-relaxed"
           >
             Departamentos de agentes de IA prontos para operar. Sem contratação, sem CLT,
-            sem headcount — a partir de{" "}
+            sem headcount. A partir de{" "}
             <span className="text-foreground font-medium">R$ 1.700/mês</span>.
           </motion.p>
 
