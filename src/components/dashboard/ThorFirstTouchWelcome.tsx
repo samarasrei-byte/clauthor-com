@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
+import { useThorTouchpoints } from "@/hooks/useThorTouchpoints";
 
 interface Props {
   onGuideMe?: () => void;
@@ -29,9 +30,8 @@ interface Props {
   openDelayMs?: number;
 }
 
-const STORAGE_KEY = "clauthor-thor-first-touch";
-
 function greetingByHour(): string {
+
   const h = new Date().getHours();
   if (h < 12) return "Bom dia";
   if (h < 18) return "Boa tarde";
