@@ -203,7 +203,7 @@ export default function ThorConciergeChat({
           `${CHAT_ENDPOINT}?session_id=${encodeURIComponent(sessionIdRef.current)}`,
           {
             method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}`, apikey: PUBLISHABLE_KEY },
           },
         );
         if (!res.ok) return;
@@ -264,6 +264,7 @@ export default function ThorConciergeChat({
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
+            apikey: PUBLISHABLE_KEY,
           },
           body: JSON.stringify({
             session_id: sessionIdRef.current,
@@ -305,6 +306,7 @@ export default function ThorConciergeChat({
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
+            apikey: PUBLISHABLE_KEY,
           },
           body: JSON.stringify({
             messages: history,
@@ -465,7 +467,7 @@ export default function ThorConciergeChat({
       const token = sessionData.session?.access_token ?? PUBLISHABLE_KEY;
       await fetch(
         `${CHAT_ENDPOINT}?session_id=${encodeURIComponent(sessionIdRef.current)}`,
-        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } },
+        { method: "DELETE", headers: { Authorization: `Bearer ${token}`, apikey: PUBLISHABLE_KEY } },
       );
       setMemoryFacts({});
       setMessages([DEFAULT_INTRO]);
