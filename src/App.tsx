@@ -106,6 +106,7 @@ const DepartmentDetail = lazyRetry(() => import("./pages/DepartmentDetail"));
 const HireAndOnboard = lazyRetry(() => import("./pages/HireAndOnboard"));
 const DepartmentActivated = lazyRetry(() => import("./pages/DepartmentActivated"));
 const Checkout = lazyRetry(() => import("./pages/Checkout"));
+const PreviewDashboard = lazyRetry(() => import("./pages/PreviewDashboard"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
