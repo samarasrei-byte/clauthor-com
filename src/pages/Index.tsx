@@ -351,6 +351,131 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ═══════════ COMO FUNCIONA (3 passos) ═══════════ */}
+      <section className="border-t border-border/60 bg-card/30" aria-label="Como funciona">
+        <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
+          <div className="mb-16 max-w-3xl">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
+              Como funciona
+            </p>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
+              Três passos.{" "}
+              <span className="text-muted-foreground">Zero fricção.</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-xl">
+              Do primeiro clique à operação rodando sozinha em menos de dois minutos.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                step: "01",
+                title: "Escolha o departamento",
+                copy: "Comercial, Marketing, Financeiro, Jurídico, RH ou Atendimento. Cada um chega com agentes especializados prontos.",
+              },
+              {
+                step: "02",
+                title: "Aprove o squad",
+                copy: "O Thor monta a equipe ideal para sua operação. Você revisa, ajusta e aprova em um clique.",
+              },
+              {
+                step: "03",
+                title: "Você comanda de casa",
+                copy: "Os agentes executam 24/7 em 14 idiomas. Você aprova entregas ou apenas acompanha o resultado.",
+              },
+            ].map((s, i) => (
+              <motion.div
+                key={s.step}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="relative p-8 rounded-2xl bg-background border border-border/60 hover:border-primary/30 hover:shadow-[0_25px_60px_-30px_hsl(var(--primary)/0.35)] transition-all"
+              >
+                <div className="text-[11px] font-mono font-semibold text-primary tracking-[0.18em] mb-6">
+                  {s.step}
+                </div>
+                <h3 className="text-xl font-semibold text-foreground tracking-tight mb-3">
+                  {s.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {s.copy}
+                </p>
+                {i < 2 && (
+                  <ArrowRight
+                    className="hidden md:block absolute top-1/2 -right-3 h-5 w-5 text-border/80 -translate-y-1/2"
+                    strokeWidth={1.5}
+                  />
+                )}
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ COMPARATIVO CLT vs CLAUTHOR ═══════════ */}
+      <section className="border-t border-border/60" aria-label="Comparativo">
+        <div className="max-w-5xl mx-auto px-6 py-24 sm:py-32">
+          <div className="mb-16 max-w-3xl">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
+              Comparativo
+            </p>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
+              O time tradicional{" "}
+              <span className="text-muted-foreground">vs. a Clauthor.</span>
+            </h2>
+          </div>
+
+          <div className="rounded-3xl border border-border/60 overflow-hidden bg-background">
+            {/* Header row */}
+            <div className="grid grid-cols-3 border-b border-border/60 bg-card/40">
+              <div className="p-5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground font-semibold">
+                Métrica
+              </div>
+              <div className="p-5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground font-semibold border-l border-border/60">
+                Departamento CLT
+              </div>
+              <div className="p-5 text-[11px] uppercase tracking-[0.14em] text-primary font-semibold border-l border-border/60 bg-primary/[0.03]">
+                Departamento Clauthor
+              </div>
+            </div>
+            {[
+              { label: "Custo mensal", clt: "R$ 90.000", cla: "R$ 1.700" },
+              { label: "Setup", clt: "3 a 6 meses", cla: "90 segundos" },
+              { label: "Cobertura", clt: "8h · 5 dias", cla: "24/7 · 365 dias" },
+              { label: "Idiomas", clt: "1 a 2", cla: "14 nativos" },
+              { label: "Escala", clt: "Contratar · demitir", cla: "Instantânea" },
+              { label: "Turnover", clt: "23% ao ano", cla: "Zero" },
+            ].map((row, i, arr) => (
+              <motion.div
+                key={row.label}
+                initial={{ opacity: 0, x: -8 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.35, delay: i * 0.04 }}
+                className={`grid grid-cols-3 ${i < arr.length - 1 ? "border-b border-border/40" : ""}`}
+              >
+                <div className="p-5 text-sm text-foreground font-medium">{row.label}</div>
+                <div className="p-5 text-sm text-muted-foreground border-l border-border/60 line-through decoration-muted-foreground/40">
+                  {row.clt}
+                </div>
+                <div className="p-5 text-sm font-semibold text-foreground border-l border-border/60 bg-primary/[0.03] inline-flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+                  {row.cla}
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <p className="mt-6 text-xs text-muted-foreground text-center">
+            Fontes: FGV (custo médio departamento com 6 pessoas + encargos), Great Place to Work (turnover médio Brasil).
+          </p>
+        </div>
+      </section>
+
+
+
       {/* ═══════════ PAINEL PREVIEW (dark) ═══════════ */}
       <section className="dark bg-black text-white" aria-label="Painel">
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
