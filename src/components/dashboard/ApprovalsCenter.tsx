@@ -19,6 +19,17 @@ import { useTenantId } from "@/hooks/useTenantId";
 import { cn } from "@/lib/utils";
 import ironbergSlide1 from "@/assets/approval-ironberg/ironberg-1.png.asset.json";
 import ironbergSlide2 from "@/assets/approval-ironberg/ironberg-2.png.asset.json";
+import ConfidenceBadge, { normalizeConfidence, derivedConfidence } from "./ConfidenceBadge";
+
+// Extrai o confidence score do content ou deriva de forma determinística (fallback demo).
+const getApprovalConfidence = (a: { id: string; content?: any; __demo?: boolean }): number | null => {
+  const raw = a.content?.confidence_score ?? a.content?.confidence;
+  const norm = normalizeConfidence(raw);
+  if (norm != null) return norm;
+  // Fallback determinístico apenas para demos ou quando o agente não reportou.
+  if (a.__demo) return derivedConfidence(a.id);
+  return null;
+};
 
 
 type Status = "pending" | "in_revision" | "approved" | "rejected";
@@ -433,7 +444,11 @@ const ApprovalsCenter = () => {
     const revisions = approvals.reduce((acc, a) => acc + Math.max(0, a.current_version - 1), 0);
     const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
     const today = approvals.filter((a) => new Date(a.created_at) >= startOfDay).length;
-    return { total, approved, pending, rate, avgHours, revisions, today };
+    // Confiança média sobre entregas com score conhecido.
+    const conf = approvals.map(getApprovalConfidence).filter((n): n is number => n != null);
+    const avgConfidence = conf.length ? Math.round(conf.reduce((a, b) => a + b, 0) / conf.length) : null;
+    const lowConfCount = conf.filter((n) => n < 70).length;
+    return { total, approved, pending, rate, avgHours, revisions, today, avgConfidence, lowConfCount };
   }, [approvals]);
 
   const filtered = approvals.filter((a) => a.status === tab);
@@ -474,7 +489,7 @@ const ApprovalsCenter = () => {
       </div>
 
       {/* ── Metrics ─────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         <MetricCard icon={CalendarDays} label="Hoje"         value={metrics.today}   accent="primary" />
         <MetricCard icon={ListChecks}   label="Geradas"      value={metrics.total} />
         <MetricCard icon={CheckCircle2} label="Aprovadas"    value={metrics.approved} accent="emerald" />
@@ -482,7 +497,14 @@ const ApprovalsCenter = () => {
         <MetricCard icon={TrendingUp}   label="Taxa aprov."  value={`${metrics.rate}%`} accent="primary" />
         <MetricCard icon={Sparkles}     label="Tempo médio"  value={`${metrics.avgHours}h`} />
         <MetricCard icon={RefreshCw}    label="Revisões"     value={metrics.revisions} accent="sky" />
+        <MetricCard
+          icon={ShieldCheck}
+          label={metrics.lowConfCount > 0 ? `Confiança · ${metrics.lowConfCount} baixa` : "Confiança média"}
+          value={metrics.avgConfidence != null ? `${metrics.avgConfidence}%` : "—"}
+          accent={metrics.avgConfidence == null ? undefined : metrics.avgConfidence >= 85 ? "emerald" : metrics.avgConfidence >= 70 ? "amber" : "sky"}
+        />
       </div>
+
 
 
 
@@ -1160,6 +1182,8 @@ const ApprovalCard = ({ approval, onOpen, onApprove, onRequestChanges, onReject,
               </Badge>
               <Badge variant="outline" className="text-[10px]">v{approval.current_version}</Badge>
               <Badge variant="secondary" className="text-[10px]">{DELIVERY_LABEL[approval.delivery_type]}</Badge>
+              <ConfidenceBadge score={getApprovalConfidence(approval)} compact />
+
             </div>
             <div className="text-sm font-medium truncate">{approval.title}</div>
             <div className="text-[11px] text-muted-foreground flex items-center gap-1.5">
