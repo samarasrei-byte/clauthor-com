@@ -489,7 +489,7 @@ const ApprovalsCenter = () => {
       </div>
 
       {/* ── Metrics ─────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-3">
         <MetricCard icon={CalendarDays} label="Hoje"         value={metrics.today}   accent="primary" />
         <MetricCard icon={ListChecks}   label="Geradas"      value={metrics.total} />
         <MetricCard icon={CheckCircle2} label="Aprovadas"    value={metrics.approved} accent="emerald" />
@@ -497,7 +497,14 @@ const ApprovalsCenter = () => {
         <MetricCard icon={TrendingUp}   label="Taxa aprov."  value={`${metrics.rate}%`} accent="primary" />
         <MetricCard icon={Sparkles}     label="Tempo médio"  value={`${metrics.avgHours}h`} />
         <MetricCard icon={RefreshCw}    label="Revisões"     value={metrics.revisions} accent="sky" />
+        <MetricCard
+          icon={ShieldCheck}
+          label={metrics.lowConfCount > 0 ? `Confiança · ${metrics.lowConfCount} baixa` : "Confiança média"}
+          value={metrics.avgConfidence != null ? `${metrics.avgConfidence}%` : "—"}
+          accent={metrics.avgConfidence == null ? undefined : metrics.avgConfidence >= 85 ? "emerald" : metrics.avgConfidence >= 70 ? "amber" : "sky"}
+        />
       </div>
+
 
 
 
