@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 
 import Footer from "@/components/Footer";
 import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
+import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { trackKpi } from "@/lib/kpiTracker";
@@ -220,22 +221,47 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ NUMBERS (dark contrast band) ═══════════ */}
-      <section className="dark bg-black text-white" aria-label="Escala">
-        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
+      <section className="dark relative bg-black text-white overflow-hidden" aria-label="Escala">
+        {/* Grain overlay */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.04] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+          }}
+        />
+        <div className="relative max-w-6xl mx-auto px-6 py-20 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
           {[
-            { value: "35.827", label: "Empresas ativas", accent: false },
-            { value: "+200", label: "Especialistas", accent: false },
-            { value: "R$ 1.700", label: "Custo mensal", accent: true },
-            { value: "14", label: "Idiomas nativos", accent: false },
+            { num: 35827, prefix: "", suffix: "", label: "Empresas ativas", accent: false, sub: null as string | null },
+            { num: 200, prefix: "+", suffix: "", label: "Especialistas de IA", accent: false, sub: null },
+            { num: 1700, prefix: "R$ ", suffix: "", label: "Custo mensal", accent: true, sub: "vs R$ 90.000 CLT" },
+            { num: 14, prefix: "", suffix: "", label: "Idiomas nativos", accent: false, sub: null },
           ].map((s) => (
-            <div key={s.label} className="text-center md:text-left">
-              <div className={`text-4xl md:text-5xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}>
-                {s.value}
-              </div>
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5 }}
+              className="text-center md:text-left"
+            >
+              <AnimatedCounter
+                value={s.num}
+                prefix={s.prefix}
+                suffix={s.suffix}
+                duration={2}
+                className={`block text-4xl md:text-5xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}
+              />
               <div className="mt-1.5 text-xs uppercase tracking-[0.14em] text-white/50">
                 {s.label}
               </div>
-            </div>
+              {s.sub && (
+                <div className="mt-1 text-[11px] text-white/40 line-through decoration-white/30">
+                  {s.sub}
+                </div>
+              )}
+            </motion.div>
           ))}
         </div>
       </section>
@@ -256,34 +282,69 @@ const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border/60 rounded-3xl overflow-hidden border border-border/60">
-          {featured.map((dept) => {
+          {featured.map((dept, idx) => {
             const Icon = DEPT_ICONS[dept.id] ?? Briefcase;
+            const isFeatured = idx === 0;
             return (
-              <button
+              <motion.button
                 key={dept.id}
                 onClick={() => {
                   trackKpi("thor_guide_section_play", { source: "landing", section: `dept_${dept.id}` });
                   navigate(`/departamentos/${dept.id}`);
                 }}
-                className="group text-left p-8 bg-background hover:bg-card transition-colors flex flex-col min-h-[280px]"
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                className={`group relative text-left p-8 transition-all flex flex-col min-h-[280px] ${
+                  isFeatured
+                    ? "bg-foreground text-background hover:shadow-[0_30px_80px_-20px_hsl(0_85%_55%/0.35)]"
+                    : "bg-background hover:bg-card hover:shadow-[0_20px_60px_-25px_hsl(0_0%_0%/0.25)]"
+                }`}
               >
-                <Icon className="h-6 w-6 text-foreground mb-8" strokeWidth={1.5} />
-                <h3 className="text-xl font-semibold text-foreground mb-2 tracking-tight">
+                {isFeatured && (
+                  <span className="absolute top-6 right-6 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                    ● Mais contratado
+                  </span>
+                )}
+                <Icon
+                  className={`h-6 w-6 mb-8 ${isFeatured ? "text-background" : "text-foreground"}`}
+                  strokeWidth={1.5}
+                />
+                <h3
+                  className={`text-xl font-semibold mb-2 tracking-tight ${
+                    isFeatured ? "text-background" : "text-foreground"
+                  }`}
+                >
                   {dept.name}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-6">
+                <p
+                  className={`text-sm leading-relaxed flex-1 mb-6 ${
+                    isFeatured ? "text-background/70" : "text-muted-foreground"
+                  }`}
+                >
                   {dept.painPoint}
                 </p>
-                <div className="flex items-center justify-between pt-5 border-t border-border/50">
-                  <span className="text-xs text-muted-foreground">
+                <div
+                  className={`flex items-center justify-between pt-5 border-t ${
+                    isFeatured ? "border-background/15" : "border-border/50"
+                  }`}
+                >
+                  <span
+                    className={`text-xs ${isFeatured ? "text-background/60" : "text-muted-foreground"}`}
+                  >
                     {dept.agentSlugs.length} agentes · 24/7
                   </span>
-                  <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors inline-flex items-center gap-1">
+                  <span
+                    className={`text-sm font-semibold inline-flex items-center gap-1 transition-colors ${
+                      isFeatured
+                        ? "text-background group-hover:text-primary"
+                        : "text-foreground group-hover:text-primary"
+                    }`}
+                  >
                     {formatBRL(dept.priceMonthly)}
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
-              </button>
+              </motion.button>
             );
           })}
         </div>
@@ -386,9 +447,11 @@ const HomePage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {CEO_TESTIMONIALS.map((c) => (
-              <figure
+              <motion.figure
                 key={c.name}
-                className="group p-7 rounded-2xl bg-card border border-border/60 hover:border-foreground/25 transition-colors flex flex-col"
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                className="group p-7 rounded-2xl bg-card border border-border/60 hover:border-foreground/25 hover:shadow-[0_25px_60px_-25px_hsl(0_0%_0%/0.25)] transition-all flex flex-col"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div className="inline-flex items-center gap-2">
@@ -415,7 +478,7 @@ const HomePage = () => {
                     <div className="text-xs text-muted-foreground truncate">{c.role}</div>
                   </div>
                 </figcaption>
-              </figure>
+              </motion.figure>
             ))}
           </div>
         </div>
