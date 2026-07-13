@@ -28,8 +28,8 @@ interface ChatMessage {
   id: string;
   role: Role;
   content: string;
-  /** Departamento recomendado extraído da resposta (se houver). */
-  deptId?: string;
+  /** Recomendação extraída da resposta (se houver). */
+  reco?: Recommendation;
 }
 
 interface ThorConciergeChatProps {
@@ -54,28 +54,48 @@ const PUBLISHABLE_KEY =
 
 const VALID_DEPTS = new Set(["comercial", "atendimento", "marketing", "juridico", "financeiro", "rh"]);
 
-/** Extrai "RECOMENDACAO: <dept>" da resposta e devolve o texto limpo + deptId. */
-function splitRecommendation(text: string): { visible: string; deptId?: string } {
-  const match = text.match(/RECOMENDACAO\s*:\s*([a-zA-Z_]+)\s*$/im);
+type RecoKind = "departamento" | "squad" | "agente";
+
+interface Recommendation {
+  kind: RecoKind;
+  deptId?: string;
+}
+
+/**
+ * Extrai "RECOMENDACAO: <tipo>[:<dept>]" da resposta.
+ * Formatos aceitos:
+ *   RECOMENDACAO: departamento:comercial
+ *   RECOMENDACAO: squad
+ *   RECOMENDACAO: agente
+ *   RECOMENDACAO: comercial          (legado — vira departamento)
+ */
+function splitRecommendation(text: string): { visible: string; reco?: Recommendation } {
+  const match = text.match(/RECOMENDACAO\s*:\s*([a-zA-Z_]+)(?:\s*:\s*([a-zA-Z_]+))?\s*$/im);
   if (!match) return { visible: text };
-  const dept = match[1].toLowerCase().trim();
   const visible = text.replace(match[0], "").trimEnd();
-  if (!VALID_DEPTS.has(dept)) return { visible };
-  return { visible, deptId: dept };
+  const a = match[1].toLowerCase().trim();
+  const b = match[2]?.toLowerCase().trim();
+
+  if (a === "departamento" && b && VALID_DEPTS.has(b)) return { visible, reco: { kind: "departamento", deptId: b } };
+  if (a === "squad") return { visible, reco: { kind: "squad" } };
+  if (a === "agente") return { visible, reco: { kind: "agente" } };
+  // legado: id direto de departamento
+  if (VALID_DEPTS.has(a)) return { visible, reco: { kind: "departamento", deptId: a } };
+  return { visible };
 }
 
 const INTRO: ChatMessage = {
   id: "intro",
   role: "assistant",
   content:
-    "Sou o Thor, consultor da Clauthor. Me conta rapidamente: qual dor da sua operação está travando o crescimento hoje?",
+    "Oi, sou o Thor. Antes de te mostrar preço, deixa eu entender seu cenário — qual sua maior dor hoje, e quantas pessoas tem na sua empresa?",
 };
 
 const SUGGESTIONS = [
-  "Meu time comercial não bate meta",
-  "Atendimento está sobrecarregado",
-  "Preciso escalar marketing",
+  "Empresa de 5 pessoas, preciso gerar leads",
+  "Média empresa, atendimento sobrecarregado",
   "Quero automatizar jurídico",
+  "Testar 1 agente antes de contratar time",
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -109,16 +129,19 @@ export default function ThorConciergeChat({
   // Cancela stream ao desmontar.
   useEffect(() => () => abortRef.current?.abort(), []);
 
-  const recommendedDept = useMemo(() => {
+  const recommendation = useMemo<Recommendation | undefined>(() => {
     for (let i = messages.length - 1; i >= 0; i--) {
-      if (messages[i].deptId) return messages[i].deptId;
+      if (messages[i].reco) return messages[i].reco;
     }
     return undefined;
   }, [messages]);
 
   const recommendedPkg = useMemo(
-    () => (recommendedDept ? DEPARTMENT_PACKAGES.find((d) => d.id === recommendedDept) : undefined),
-    [recommendedDept],
+    () =>
+      recommendation?.kind === "departamento" && recommendation.deptId
+        ? DEPARTMENT_PACKAGES.find((d) => d.id === recommendation.deptId)
+        : undefined,
+    [recommendation],
   );
 
   const sendMessage = useCallback(
@@ -189,10 +212,10 @@ export default function ThorConciergeChat({
               const delta = json?.choices?.[0]?.delta?.content;
               if (typeof delta === "string" && delta.length > 0) {
                 full += delta;
-                const { visible, deptId } = splitRecommendation(full);
+                const { visible, reco } = splitRecommendation(full);
                 setMessages((prev) =>
                   prev.map((m) =>
-                    m.id === assistantId ? { ...m, content: visible, deptId } : m,
+                    m.id === assistantId ? { ...m, content: visible, reco } : m,
                   ),
                 );
               }
@@ -203,12 +226,13 @@ export default function ThorConciergeChat({
         }
 
         // Finaliza extração
-        const { visible, deptId } = splitRecommendation(full);
+        const { visible, reco } = splitRecommendation(full);
         setMessages((prev) =>
-          prev.map((m) => (m.id === assistantId ? { ...m, content: visible || full, deptId } : m)),
+          prev.map((m) => (m.id === assistantId ? { ...m, content: visible || full, reco } : m)),
         );
-        if (deptId) {
-          trackKpi("thor_guide_section_play", { source, section: `chat_recommended_${deptId}` });
+        if (reco) {
+          const tag = reco.kind === "departamento" ? `departamento_${reco.deptId}` : reco.kind;
+          trackKpi("thor_guide_section_play", { source, section: `chat_recommended_${tag}` });
         }
       } catch (err: any) {
         if (err?.name !== "AbortError") {
@@ -243,10 +267,22 @@ export default function ThorConciergeChat({
   );
 
   const goToRecommended = useCallback(() => {
-    if (!recommendedDept) return;
-    trackKpi("thor_guide_section_play", { source, section: `chat_cta_${recommendedDept}` });
-    navigate(`/departamentos/${recommendedDept}`);
-  }, [navigate, recommendedDept, source]);
+    if (!recommendation) return;
+    if (recommendation.kind === "departamento" && recommendation.deptId) {
+      trackKpi("thor_guide_section_play", { source, section: `chat_cta_departamento_${recommendation.deptId}` });
+      navigate(`/departamentos/${recommendation.deptId}`);
+      return;
+    }
+    if (recommendation.kind === "squad") {
+      trackKpi("thor_guide_section_play", { source, section: "chat_cta_squad" });
+      navigate("/team-builder");
+      return;
+    }
+    if (recommendation.kind === "agente") {
+      trackKpi("thor_guide_section_play", { source, section: "chat_cta_agente" });
+      navigate("/marketplace");
+    }
+  }, [navigate, recommendation, source]);
 
   return (
     <div
@@ -268,7 +304,7 @@ export default function ThorConciergeChat({
           />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-foreground leading-tight">Thor · consultor Clauthor</p>
+          <p className="text-sm font-semibold text-foreground leading-tight">Thor · Clauthor</p>
           <p className="text-[11px] text-muted-foreground">
             {isStreaming ? "digitando..." : "online · resposta em segundos"}
           </p>
@@ -312,25 +348,55 @@ export default function ThorConciergeChat({
         ))}
 
         {/* Recommendation CTA */}
-        {recommendedPkg && !isStreaming && (
+        {recommendation && !isStreaming && (
           <div className="mt-2 ml-10 rounded-2xl border border-primary/30 bg-primary/[0.04] p-4">
             <p className="text-[11px] uppercase tracking-[0.14em] text-primary font-semibold mb-1">
               Recomendação do Thor
             </p>
-            <p className="text-base font-semibold text-foreground mb-1">
-              Departamento {recommendedPkg.name}
-            </p>
-            <p className="text-sm text-muted-foreground mb-3">{recommendedPkg.painPoint}</p>
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-sm">
-                <span className="text-foreground font-bold">{formatBRL(recommendedPkg.priceMonthly)}</span>
-                <span className="text-muted-foreground">/mês · {recommendedPkg.agentSlugs.length} agentes</span>
-              </div>
-              <Button size="sm" onClick={goToRecommended} className="gap-1.5">
-                Ver departamento
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </div>
+            {recommendation.kind === "departamento" && recommendedPkg ? (
+              <>
+                <p className="text-base font-semibold text-foreground mb-1">
+                  Departamento {recommendedPkg.name}
+                </p>
+                <p className="text-sm text-muted-foreground mb-3">{recommendedPkg.painPoint}</p>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="text-sm">
+                    <span className="text-foreground font-bold">{formatBRL(recommendedPkg.priceMonthly)}</span>
+                    <span className="text-muted-foreground">/mês · {recommendedPkg.agentSlugs.length} agentes</span>
+                  </div>
+                  <Button size="sm" onClick={goToRecommended} className="gap-1.5">
+                    Ver departamento
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </>
+            ) : recommendation.kind === "squad" ? (
+              <>
+                <p className="text-base font-semibold text-foreground mb-1">Monte seu Squad de IA</p>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Escolha 2 a 5 especialistas e veja o custo em tempo real. Ideal quando você precisa de um time enxuto.
+                </p>
+                <div className="flex justify-end">
+                  <Button size="sm" onClick={goToRecommended} className="gap-1.5">
+                    Montar meu Squad
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-base font-semibold text-foreground mb-1">Começar com 1 agente</p>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Teste um especialista antes de contratar um time inteiro. Perfeito para empresas pequenas ou provas de conceito.
+                </p>
+                <div className="flex justify-end">
+                  <Button size="sm" onClick={goToRecommended} className="gap-1.5">
+                    Ver marketplace
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
