@@ -254,6 +254,8 @@ export default function ThorCenter({ onNavigate }: Props) {
           icon={<Inbox className="h-4 w-4 text-primary" />}
           label="Aprovações pendentes"
           value={pendingApprovals.count}
+          periodValue={periodCounts.approvals}
+          periodLabel={PERIOD_LABEL[period]}
           hint={pendingApprovals.count === 0 ? "Nada te esperando ✨" : "Requer sua decisão"}
           onClick={() => onNavigate?.("approvals")}
         />
@@ -261,6 +263,8 @@ export default function ThorCenter({ onNavigate }: Props) {
           icon={<Bell className="h-4 w-4 text-amber-500" />}
           label="Alertas de tokens"
           value={tokenAlerts.length}
+          periodValue={periodCounts.tokenAlerts}
+          periodLabel={PERIOD_LABEL[period]}
           hint={tokenAlerts.length === 0 ? "Consumo saudável" : "Confira o histórico abaixo"}
           onClick={() => onNavigate?.("system")}
         />
@@ -268,10 +272,13 @@ export default function ThorCenter({ onNavigate }: Props) {
           icon={<Radar className="h-4 w-4 text-destructive" />}
           label="Sinais críticos"
           value={ambientSignals.length}
+          periodValue={periodCounts.ambient}
+          periodLabel={PERIOD_LABEL[period]}
           hint={ambientSignals.length === 0 ? "Nada urgente" : "Detectados pelo Thor"}
           onClick={() => onNavigate?.("overview")}
         />
       </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Timeline (2/3) */}
