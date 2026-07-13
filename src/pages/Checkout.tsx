@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
+import HelpTooltip from "@/components/HelpTooltip";
 
 export default function Checkout() {
   const navigate = useNavigate();
