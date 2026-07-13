@@ -69,6 +69,7 @@ export default function ThorCenter({ onNavigate }: Props) {
     setPeriodState(p);
     try { localStorage.setItem(PERIOD_STORAGE_KEY, p); } catch { /* ignore */ }
   };
+  const [onlyStale, setOnlyStale] = useState(false);
 
   // Realtime: mantém timeline e atalhos vivos quando o Thor registra algo novo
   useEffect(() => {
