@@ -203,7 +203,7 @@ export default function ThorConciergeChat({
           `${CHAT_ENDPOINT}?session_id=${encodeURIComponent(sessionIdRef.current)}`,
           {
             method: "GET",
-            headers: { Authorization: `Bearer ${token}` },
+            headers: { Authorization: `Bearer ${token}`, apikey: PUBLISHABLE_KEY },
           },
         );
         if (!res.ok) return;
