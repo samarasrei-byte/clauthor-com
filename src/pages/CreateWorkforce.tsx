@@ -25,6 +25,7 @@ import {
   WORKFORCE_CATALOG, WORKFORCE_CATALOG_COUNT, DEPARTMENTS,
   SUGGESTED_TOOLS, SUGGESTED_INTEGRATIONS, SUGGESTED_CHANNELS
 } from "@/data/workforceCatalog";
+import ThorConsultantPanel, { type ThorRecommendation } from "@/components/thor/ThorConsultantPanel";
 
 const STEPS = [
   { id: 1, label: "Objetivo de negócio", hint: "O que você quer alcançar" },
@@ -204,7 +205,33 @@ export default function CreateWorkforce() {
                 </h1>
                 <p className="text-muted-foreground mb-8">{STEPS[state.step].hint}</p>
 
-                {state.step === 0 && <StepObjective state={state} dispatch={dispatch} />}
+                {state.step === 0 && (
+                  <div className="space-y-6">
+                    <ThorConsultantPanel
+                      defaultObjective={state.objective}
+                      intendedScale={state.scale}
+                      onAccept={(rec: ThorRecommendation) => {
+                        dispatch({
+                          type: "PATCH",
+                          patch: {
+                            objective: state.objective || rec.name,
+                            name: rec.name || state.name,
+                            scale: rec.scale,
+                            selectedTemplates: rec.selectedTemplates,
+                            autonomy: rec.autonomy as any,
+                            tools: rec.tools,
+                            integrations: rec.integrations,
+                            channels: rec.channels,
+                            aiAssisted: true,
+                          },
+                        });
+                        setReachable(STEPS.length - 1);
+                        toast({ title: "Recomendação aplicada", description: "Revise cada etapa e ajuste o que quiser." });
+                      }}
+                    />
+                    <StepObjective state={state} dispatch={dispatch} />
+                  </div>
+                )}
                 {state.step === 1 && <StepScale state={state} dispatch={dispatch} />}
                 {state.step === 2 && <StepRoles state={state} dispatch={dispatch} />}
                 {state.step === 3 && <StepAutonomy state={state} dispatch={dispatch} />}

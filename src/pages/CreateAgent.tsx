@@ -15,6 +15,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import ThorConsultantPanel from "@/components/thor/ThorConsultantPanel";
 
 const sectorOptions = ["Atendimento", "Vendas", "Marketing", "Financeiro", "RH", "Jurídico", "TI", "Outro"];
 const toneOptions = ["Formal", "Amigável", "Técnico", "Casual", "Corporativo"];
@@ -258,6 +259,20 @@ const CreateAgentPage = () => {
             )}
           </CardContent>
         </Card>
+
+        {/* Thor consultor — analisa contexto antes de escolher caminho */}
+        <ThorConsultantPanel
+          intendedScale="agent"
+          onAccept={(rec) => {
+            if (rec.scale !== "agent") {
+              toast.info(`Thor sugere ${rec.scale === "squad" ? "uma squad" : rec.scale === "department" ? "um departamento" : "uma organização"} em vez de agente único. Redirecionando…`);
+              navigate("/create-workforce");
+              return;
+            }
+            setMode("express");
+            toast.success("Recomendação aplicada. Vamos ao modo Express.");
+          }}
+        />
 
         {/* Path selector */}
         <div className="grid sm:grid-cols-2 gap-4">
