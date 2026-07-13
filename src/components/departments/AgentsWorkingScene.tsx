@@ -50,7 +50,8 @@ interface AgentsWorkingSceneProps {
   className?: string;
 }
 
-const AgentsWorkingScene = ({ agentSlugs, className }: AgentsWorkingSceneProps) => {
+const AgentsWorkingScene = ({ agentSlugs, dialogue, className }: AgentsWorkingSceneProps) => {
+  const lines = dialogue && dialogue.length > 0 ? dialogue : DEFAULT_DIALOGUE;
   const agents = useMemo(
     () =>
       agentSlugs.slice(0, 3).map((slug, i) => {
