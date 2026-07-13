@@ -120,6 +120,15 @@ export default function ThorConsultantPanel({
         autonomy: bp.autonomy ?? "specialist",
         name: bp.name ?? "",
       });
+      // Register touchpoint for Thor Center history
+      void markSeen("consultant_recommendation", {
+        metadata: {
+          objective: trimmed.slice(0, 200),
+          scale: bp.scale,
+          departments: departments.map((d) => d.label),
+          templates_count: bp.selectedTemplates.length,
+        },
+      });
     } catch (e: any) {
       toast.error(e?.message || "Não consegui analisar agora. Tente novamente.");
     } finally {
