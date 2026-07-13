@@ -4,12 +4,20 @@
  * Card compacto e destacado no topo do dashboard, com 3 números do mês
  * corrente:
  *   1. Tarefas entregues  · execution_logs.status = 'success'
- *   2. Horas poupadas     · tarefas × MINUTES_SAVED_PER_TASK / 60
- *   3. Economia estimada  · horas × HOURLY_RATE_BRL − custo dos departamentos
+ *   2. Horas poupadas     · Σ (tarefas_do_depto × minutesSavedPerTask_do_depto) / 60
+ *   3. Economia estimada  · Σ (horas_do_depto × hourlyRateBRL_do_depto) − custo dos departamentos
+ *
+ * Fórmula por departamento (não mais constante global):
+ *   - Cada `contracted_departments.department_id` tem sua própria taxa via
+ *     `src/config/departmentRoi.ts`. Departamentos sem config caem no
+ *     DEFAULT_ROI_CONFIG.
+ *   - Executions são atribuídas ao departamento cujo `agent_ids` contém o
+ *     agent_id do log. Execuções órfãs (agente fora de qualquer depto)
+ *     também caem no default.
  *
  * Regras de honestidade:
  *   - Só usa dados reais (nada de mock).
- *   - Estimativas de "horas" e "R$" são conservadoras e explicadas no card.
+ *   - Estimativas são conservadoras e explicadas no card.
  *   - Se ainda não há tarefas no mês, mostra estado zerado com CTA — nunca
  *     inventa número.
  *
@@ -30,10 +38,10 @@ import {
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { cn } from "@/lib/utils";
-
-// ── Fórmula de ROI · assumptions conservadoras e auditáveis ──
-const MINUTES_SAVED_PER_TASK = 12;   // média conservadora por tarefa (12 min)
-const HOURLY_RATE_BRL = 80;          // custo hora média operacional analista BR
+import {
+  DEFAULT_ROI_CONFIG,
+  getDepartmentRoiConfig,
+} from "@/config/departmentRoi";
 
 function formatBRL(n: number) {
   return new Intl.NumberFormat("pt-BR", {
@@ -62,16 +70,17 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
     queryFn: async () => {
       const since = startOfMonthISO();
 
-      // Paralelo · logs de execução do mês + preço dos departamentos ativos.
+      // Paralelo · logs de execução do mês + departamentos ativos (com agent_ids).
       const [logsRes, deptsRes] = await Promise.all([
         supabase
           .from("execution_logs")
-          .select("status")
+          .select("agent_id, status")
           .eq("user_id", user!.id)
+          .eq("status", "success")
           .gte("created_at", since),
         supabase
           .from("contracted_departments")
-          .select("monthly_price_cents, status")
+          .select("department_id, monthly_price_cents, agent_ids, status")
           .eq("user_id", user!.id)
           .eq("status", "active"),
       ]);
@@ -79,21 +88,54 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
       const logs = logsRes.data ?? [];
       const depts = deptsRes.data ?? [];
 
-      const tasksDelivered = logs.filter((l) => l.status === "success").length;
       const monthlyDeptCostBRL = depts.reduce(
         (acc, d) => acc + (d.monthly_price_cents ?? 0) / 100,
         0,
       );
 
-      return { tasksDelivered, monthlyDeptCostBRL };
+      // Índice agent_id → department_id (primeiro depto que contém o agente vence).
+      const agentToDept = new Map<string, string>();
+      for (const d of depts) {
+        for (const aid of (d.agent_ids ?? []) as string[]) {
+          if (!agentToDept.has(aid)) agentToDept.set(aid, d.department_id);
+        }
+      }
+
+      // Agrega tarefas por depto (ou "__default__" pra órfãs).
+      const tasksByDept = new Map<string, number>();
+      for (const l of logs) {
+        const key = agentToDept.get(l.agent_id as string) ?? "__default__";
+        tasksByDept.set(key, (tasksByDept.get(key) ?? 0) + 1);
+      }
+
+      // Calcula minutos poupados e equivalente humano ponderado por depto.
+      let tasksDelivered = 0;
+      let minutesSaved = 0;
+      let humanEquivalentBRL = 0;
+      for (const [deptId, count] of tasksByDept) {
+        const cfg =
+          deptId === "__default__"
+            ? DEFAULT_ROI_CONFIG
+            : getDepartmentRoiConfig(deptId);
+        tasksDelivered += count;
+        minutesSaved += count * cfg.minutesSavedPerTask;
+        humanEquivalentBRL += (count * cfg.minutesSavedPerTask / 60) * cfg.hourlyRateBRL;
+      }
+
+      return {
+        tasksDelivered,
+        minutesSaved,
+        humanEquivalentBRL,
+        monthlyDeptCostBRL,
+      };
     },
   });
 
   const metrics = useMemo(() => {
     const tasks = data?.tasksDelivered ?? 0;
     const deptCost = data?.monthlyDeptCostBRL ?? 0;
-    const hoursSaved = Math.round((tasks * MINUTES_SAVED_PER_TASK) / 60);
-    const humanEquivalent = hoursSaved * HOURLY_RATE_BRL;
+    const hoursSaved = Math.round((data?.minutesSaved ?? 0) / 60);
+    const humanEquivalent = Math.round(data?.humanEquivalentBRL ?? 0);
     const savings = Math.max(0, humanEquivalent - deptCost);
     return { tasks, hoursSaved, savings, humanEquivalent, deptCost };
   }, [data]);
@@ -134,14 +176,14 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
                 <Info className="h-4 w-4" strokeWidth={1.5} />
               </button>
             </TooltipTrigger>
-            <TooltipContent className="max-w-[280px] text-xs leading-relaxed">
-              Horas poupadas = tarefas entregues × {MINUTES_SAVED_PER_TASK} min.
-              <br />
-              Economia = (horas × R$ {HOURLY_RATE_BRL}/h) − custo dos
-              departamentos ativos ({formatBRL(metrics.deptCost)}/mês).
+            <TooltipContent className="max-w-[300px] text-xs leading-relaxed">
+              Cada departamento tem sua própria taxa de tempo poupado por
+              tarefa e custo/hora do equivalente humano — a economia é somada
+              depto a depto e descontada do custo mensal ({formatBRL(metrics.deptCost)}/mês).
               <br />
               Estimativa conservadora, calculada só sobre execuções bem-sucedidas.
             </TooltipContent>
+
           </Tooltip>
         </TooltipProvider>
       </header>
