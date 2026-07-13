@@ -100,7 +100,7 @@ const COMERCIAL: DepartmentPackage = {
   icon: Briefcase,
   color: "sales",
   painPoint: "Sua equipe não bate meta e o pipeline vive vazio.",
-  outcome: "Pipeline preenchido em < 30 dias, meta batida no trimestre",
+  outcome: "Prospecção, qualificação e follow-up rodando 24/7 no seu funil",
   agentSlugs: [
     "hunter_linkedin", "sdr_outbound", "sdr_linkedin", "sdr_email_agent",
     "sdr_whatsapp", "sdr_inbound", "lead_qualifier", "lead_scorer",
@@ -140,7 +140,7 @@ const ATENDIMENTO: DepartmentPackage = {
   icon: HeartHandshake,
   color: "customer_success",
   painPoint: "Cliente espera horas por resposta e você perde vendas por demora.",
-  outcome: "SLA de resposta < 5 minutos, 24/7",
+  outcome: "Atendimento cobrindo WhatsApp, chat e e-mail 24/7 em minutos",
   agentSlugs: [
     "support_channel", "support_lead", "email_support", "helpdesk_agent",
     "voice_ai", "integration_support", "help_center_writer",
@@ -181,7 +181,7 @@ const MARKETING: DepartmentPackage = {
   icon: Megaphone,
   color: "marketing",
   painPoint: "Você queima verba em ads sem saber o que está trazendo retorno.",
-  outcome: "ROAS medido e otimizado semana a semana",
+  outcome: "Criação, tráfego pago e análise rodando em ciclo contínuo, com relatórios semanais",
   agentSlugs: [
     "brand_strategist", "brand_voice_writer", "ad_copywriter", "content_strategist",
     "content_seo_writer", "seo_strategist", "technical_seo", "social_media_agent",
@@ -227,7 +227,7 @@ const JURIDICO: DepartmentPackage = {
   icon: Scale,
   color: "legal",
   painPoint: "Contratos travados, compliance vulnerável, resposta jurídica lenta.",
-  outcome: "Contratos revisados em < 2h, compliance monitorado 24/7",
+  outcome: "Revisão contratual e monitoramento de compliance operando em tempo integral",
   agentSlugs: [
     "contract_analyst", "contract_negotiator", "compliance_officer", "lgpd_agent",
     "labor_law_agent", "tax_compliance", "regulatory_monitor", "legal_researcher",
@@ -267,7 +267,7 @@ const FINANCEIRO: DepartmentPackage = {
   icon: Landmark,
   color: "finance",
   painPoint: "DRE atrasada, fluxo de caixa no chute, decisões financeiras às cegas.",
-  outcome: "Fechamento mensal em D+3 e dashboard financeiro diário",
+  outcome: "Conciliação, contas a pagar/receber e forecasting operando diariamente",
   agentSlugs: [
     "ai_cfo", "digital_accountant", "accounts_payable", "accounts_receivable",
     "budget_analyst", "budget_allocator", "financial_forecaster",
@@ -308,7 +308,7 @@ const RH: DepartmentPackage = {
   icon: Users,
   color: "talent",
   painPoint: "Contratações demoram meses e turnover consome operação.",
-  outcome: "Time-to-hire < 21 dias, engajamento medido semanalmente",
+  outcome: "Recrutamento, onboarding e people analytics rodando de forma contínua",
   agentSlugs: [
     "recruiter_agent", "reseller_recruiter", "onboarding_specialist", "onboarding_optimizer",
     "people_analytics", "employee_engagement_agent", "employer_brand_agent",
@@ -337,7 +337,7 @@ const RH: DepartmentPackage = {
       action: "Cruzou engajamento × performance × turnover por squad",
       outcome: "Risco de churn identificado em 2 pessoas-chave", delayMs: 5000 },
   ],
-  priceMonthly: 1477.3,
+  priceMonthly: 1477,
   flagship: true,
 };
 
