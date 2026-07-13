@@ -304,7 +304,7 @@ export default function ThorConciergeChat({
           />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-foreground leading-tight">Thor · consultor Clauthor</p>
+          <p className="text-sm font-semibold text-foreground leading-tight">Thor · Clauthor</p>
           <p className="text-[11px] text-muted-foreground">
             {isStreaming ? "digitando..." : "online · resposta em segundos"}
           </p>
