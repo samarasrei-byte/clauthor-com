@@ -199,7 +199,7 @@ const Navbar = () => {
                   </Button>
                 </Link>
                 <Link to="/auth" state={{ signup: true }}>
-                  <PremiumCTAButton size="sm" showArrow={false}>
+                  <PremiumCTAButton variant="red" size="sm" showArrow={false}>
                     {t("auth.create_account")}
                   </PremiumCTAButton>
                 </Link>
@@ -297,7 +297,7 @@ const Navbar = () => {
                       </Button>
                     </Link>
                     <Link to="/auth" state={{ signup: true }} onClick={() => setMobileOpen(false)}>
-                      <PremiumCTAButton size="sm" showArrow={false} className="w-full">
+                      <PremiumCTAButton variant="red" size="sm" showArrow={false} className="w-full">
                         {t("auth.create_account")}
                       </PremiumCTAButton>
                     </Link>
