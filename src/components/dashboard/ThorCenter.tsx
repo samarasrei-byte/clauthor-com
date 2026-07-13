@@ -45,10 +45,20 @@ function relativeDate(iso: string): string {
   } catch { return ""; }
 }
 
+type Period = "24h" | "7d" | "30d" | "all";
+const PERIOD_MS: Record<Period, number | null> = {
+  "24h": 24 * 3600 * 1000,
+  "7d": 7 * 24 * 3600 * 1000,
+  "30d": 30 * 24 * 3600 * 1000,
+  all: null,
+};
+const PERIOD_LABEL: Record<Period, string> = { "24h": "24h", "7d": "7 dias", "30d": "30 dias", all: "Tudo" };
+
 export default function ThorCenter({ onNavigate }: Props) {
   const { user } = useAuth();
   const { touchpoints, isLoading } = useThorTouchpoints();
   const qc = useQueryClient();
+  const [period, setPeriod] = useState<Period>("30d");
 
   // Realtime: mantém timeline e atalhos vivos quando o Thor registra algo novo
   useEffect(() => {
