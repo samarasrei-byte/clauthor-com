@@ -245,22 +245,33 @@ export default function PreviewDashboard() {
             <ul className="space-y-3">
               {ACTIVITIES.map((act, idx) => {
                 const agent = allAgents[idx % allAgents.length];
+                const baseDelay = 400 + idx * 900;
                 return (
-                  <li key={idx} className="flex items-start gap-3 text-sm">
+                  <motion.li
+                    key={idx}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: baseDelay / 1000, duration: 0.35 }}
+                    className="flex items-start gap-3 text-sm"
+                  >
                     <div className="w-7 h-7 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center text-[11px] font-semibold text-primary shrink-0">
                       {agent?.name[0] ?? "A"}
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="text-foreground/90 leading-snug">
                         <span className="font-medium">{agent?.name ?? "Agente"}</span>{" "}
-                        <span className="text-muted-foreground">{act.verb}</span>{" "}
-                        <span className="font-medium">{act.target}</span>
+                        <Typewriter
+                          text={`${act.verb} ${act.target}`}
+                          speed={18}
+                          startDelay={baseDelay + 200}
+                          className="text-muted-foreground"
+                        />
                       </p>
                       <p className="text-[11px] text-muted-foreground mt-0.5 flex items-center gap-1">
                         <Clock className="w-3 h-3" /> {act.time}
                       </p>
                     </div>
-                  </li>
+                  </motion.li>
                 );
               })}
             </ul>
