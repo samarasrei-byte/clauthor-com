@@ -221,22 +221,47 @@ const HomePage = () => {
       </section>
 
       {/* ═══════════ NUMBERS (dark contrast band) ═══════════ */}
-      <section className="dark bg-black text-white" aria-label="Escala">
-        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
+      <section className="dark relative bg-black text-white overflow-hidden" aria-label="Escala">
+        {/* Grain overlay */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.04] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
+          }}
+        />
+        <div className="relative max-w-6xl mx-auto px-6 py-20 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
           {[
-            { value: "35.827", label: "Empresas ativas", accent: false },
-            { value: "+200", label: "Especialistas", accent: false },
-            { value: "R$ 1.700", label: "Custo mensal", accent: true },
-            { value: "14", label: "Idiomas nativos", accent: false },
+            { num: 35827, prefix: "", suffix: "", label: "Empresas ativas", accent: false, sub: null as string | null },
+            { num: 200, prefix: "+", suffix: "", label: "Especialistas de IA", accent: false, sub: null },
+            { num: 1700, prefix: "R$ ", suffix: "", label: "Custo mensal", accent: true, sub: "vs R$ 90.000 CLT" },
+            { num: 14, prefix: "", suffix: "", label: "Idiomas nativos", accent: false, sub: null },
           ].map((s) => (
-            <div key={s.label} className="text-center md:text-left">
-              <div className={`text-4xl md:text-5xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}>
-                {s.value}
-              </div>
+            <motion.div
+              key={s.label}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.5 }}
+              className="text-center md:text-left"
+            >
+              <AnimatedCounter
+                value={s.num}
+                prefix={s.prefix}
+                suffix={s.suffix}
+                duration={2}
+                className={`block text-4xl md:text-5xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}
+              />
               <div className="mt-1.5 text-xs uppercase tracking-[0.14em] text-white/50">
                 {s.label}
               </div>
-            </div>
+              {s.sub && (
+                <div className="mt-1 text-[11px] text-white/40 line-through decoration-white/30">
+                  {s.sub}
+                </div>
+              )}
+            </motion.div>
           ))}
         </div>
       </section>
