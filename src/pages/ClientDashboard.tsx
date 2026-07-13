@@ -465,7 +465,7 @@ const ClientDashboard = () => {
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "agent-chat-active",
-    "intelligence-hub", "omnix", "workspace",
+    "intelligence-hub", "omnix", "thor-center", "workspace",
     "integrations", "system",
   ]);
   const sidebarItems: SidebarItem[] = isAdmin
