@@ -167,7 +167,7 @@ export default function DepartmentDetail() {
                 <div className="mt-1 text-2xl font-semibold text-white">
                   {formatBRL(dept.priceMonthly)}
                 </div>
-                <div className="text-xs text-white/40">por mês, outcome incluso</div>
+                <div className="text-xs text-white/40">por mês, cobertura completa</div>
               </div>
               <div>
                 <div className="text-xs text-emerald-400/70 uppercase tracking-wider">Você economiza</div>
