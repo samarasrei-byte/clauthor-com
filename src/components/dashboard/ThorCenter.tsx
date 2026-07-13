@@ -7,14 +7,15 @@
  * Objetivo: o cliente nunca fica sem saber o que o Thor já falou com ele
  * e sempre encontra os próximos passos concretos num único lugar.
  */
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { motion } from "framer-motion";
 import {
   Brain, Bell, Sparkles, ArrowRight, CheckCircle2, AlertTriangle,
-  Coins, Radar, Inbox, ExternalLink, Clock,
+  Coins, Radar, Inbox, ExternalLink, Clock, Check,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -44,10 +45,20 @@ function relativeDate(iso: string): string {
   } catch { return ""; }
 }
 
+type Period = "24h" | "7d" | "30d" | "all";
+const PERIOD_MS: Record<Period, number | null> = {
+  "24h": 24 * 3600 * 1000,
+  "7d": 7 * 24 * 3600 * 1000,
+  "30d": 30 * 24 * 3600 * 1000,
+  all: null,
+};
+const PERIOD_LABEL: Record<Period, string> = { "24h": "24h", "7d": "7 dias", "30d": "30 dias", all: "Tudo" };
+
 export default function ThorCenter({ onNavigate }: Props) {
   const { user } = useAuth();
   const { touchpoints, isLoading } = useThorTouchpoints();
   const qc = useQueryClient();
+  const [period, setPeriod] = useState<Period>("30d");
 
   // Realtime: mantém timeline e atalhos vivos quando o Thor registra algo novo
   useEffect(() => {
@@ -146,8 +157,25 @@ export default function ThorCenter({ onNavigate }: Props) {
       kind: "notification" as const,
       message: n.message,
     }));
-    return [...fromTouchpoints, ...fromAlerts].sort((a, b) => b.when.localeCompare(a.when)).slice(0, 20);
-  }, [touchpoints, tokenAlerts]);
+    const merged = [...fromTouchpoints, ...fromAlerts].sort((a, b) => b.when.localeCompare(a.when));
+    const cutoff = PERIOD_MS[period];
+    if (cutoff == null) return merged.slice(0, 40);
+    const min = Date.now() - cutoff;
+    return merged.filter((e) => new Date(e.when).getTime() >= min).slice(0, 40);
+  }, [touchpoints, tokenAlerts, period]);
+
+  const resolveSignal = async (signalId: string) => {
+    const { error } = await supabase
+      .from("ambient_signals")
+      .update({ status: "resolved" })
+      .eq("id", signalId);
+    if (error) {
+      toast.error("Não consegui marcar como resolvido.");
+      return;
+    }
+    toast.success("Marcado como resolvido.");
+    qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
+  };
 
   return (
     <div className="space-y-6">
@@ -202,18 +230,36 @@ export default function ThorCenter({ onNavigate }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Timeline (2/3) */}
         <Card className="lg:col-span-2">
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-3 flex flex-row items-center justify-between gap-3 space-y-0">
             <CardTitle className="text-base flex items-center gap-2">
               <Clock className="h-4 w-4 text-primary" />
               Histórico de conversas com o Thor
             </CardTitle>
+            <div className="flex gap-1">
+              {(Object.keys(PERIOD_LABEL) as Period[]).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPeriod(p)}
+                  className={cn(
+                    "text-[11px] px-2 py-1 rounded-md border transition-colors",
+                    period === p
+                      ? "border-primary/50 bg-primary/10 text-primary"
+                      : "border-border/50 text-muted-foreground hover:bg-muted/40",
+                  )}
+                >
+                  {PERIOD_LABEL[p]}
+                </button>
+              ))}
+            </div>
           </CardHeader>
           <CardContent>
             {isLoading ? (
               <p className="text-sm text-muted-foreground">Carregando…</p>
             ) : timeline.length === 0 ? (
               <div className="text-center py-8 text-sm text-muted-foreground">
-                O Thor ainda não precisou te alertar. Bom sinal — sua operação está saudável.
+                {period === "all"
+                  ? "O Thor ainda não precisou te alertar. Bom sinal — sua operação está saudável."
+                  : `Nada registrado nas últimas ${PERIOD_LABEL[period].toLowerCase()}. Amplie o filtro se quiser ver mais.`}
               </div>
             ) : (
               <ScrollArea className="max-h-[440px] pr-2">
@@ -286,11 +332,20 @@ export default function ThorCenter({ onNavigate }: Props) {
                   )}
                 >
                   <div className="flex items-start gap-2">
-                    <AlertTriangle className={cn("h-4 w-4 mt-0.5", s.severity === "critical" ? "text-destructive" : "text-amber-500")} />
-                    <div className="min-w-0">
+                    <AlertTriangle className={cn("h-4 w-4 mt-0.5 shrink-0", s.severity === "critical" ? "text-destructive" : "text-amber-500")} />
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium">{s.title}</p>
                       <p className="text-[11px] text-muted-foreground">{relativeDate(s.created_at)}</p>
                     </div>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-7 w-7 shrink-0"
+                      title="Marcar como resolvido"
+                      onClick={() => resolveSignal(s.id)}
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                    </Button>
                   </div>
                 </div>
               ))}
