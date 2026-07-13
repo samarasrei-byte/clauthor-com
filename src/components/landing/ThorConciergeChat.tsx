@@ -306,6 +306,7 @@ export default function ThorConciergeChat({
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
+            apikey: PUBLISHABLE_KEY,
           },
           body: JSON.stringify({
             messages: history,
