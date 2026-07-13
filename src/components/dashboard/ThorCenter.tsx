@@ -7,7 +7,7 @@
  * Objetivo: o cliente nunca fica sem saber o que o Thor já falou com ele
  * e sempre encontra os próximos passos concretos num único lugar.
  */
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { motion } from "framer-motion";
