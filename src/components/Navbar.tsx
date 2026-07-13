@@ -234,13 +234,19 @@ const Navbar = () => {
             className="md:hidden border-t border-border/30 bg-background/95 backdrop-blur-2xl overflow-hidden max-h-[calc(100dvh-3rem)] overflow-y-auto"
           >
             <div className="px-5 py-5 space-y-0.5">
-              {[
-                { href: "/marketplace", label: t("navbar.marketplace_label") },
-                { href: "/departamentos", label: t("navbar.ai_teams_label") },
-                { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }) },
-                { href: "/enterprise", label: "Enterprise" },
-                
-              ].map((item) => (
+              {/* Principais */}
+              {(user
+                ? [
+                    { href: "/dashboard", label: t("nav.dashboard") },
+                    { href: "/agents", label: t("nav.my_agents") },
+                  ]
+                : [
+                    { href: "/departamentos", label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }) },
+                    { href: "/how-it-works", label: t("nav.how_it_works", { defaultValue: "Como funciona" }) },
+                    { href: "/pricing", label: t("nav.pricing", { defaultValue: "Preços" }) },
+                    { href: "/community", label: t("nav.community", { defaultValue: "Comunidade" }) },
+                  ]
+              ).map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
@@ -254,6 +260,25 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
+
+              {/* "Mais" · secundárias · só público */}
+              {!user && (
+                <div className="pt-3 mt-2 border-t border-border/30">
+                  <p className="px-3 pb-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70">
+                    {t("navbar.more", { defaultValue: "Mais" })}
+                  </p>
+                  {moreLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      to={item.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="block px-3 py-2 rounded-lg text-[13px] text-muted-foreground hover:text-foreground"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
+              )}
               {user && (
                 <>
                   <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] text-muted-foreground hover:text-foreground">
