@@ -444,7 +444,11 @@ const ApprovalsCenter = () => {
     const revisions = approvals.reduce((acc, a) => acc + Math.max(0, a.current_version - 1), 0);
     const startOfDay = new Date(); startOfDay.setHours(0, 0, 0, 0);
     const today = approvals.filter((a) => new Date(a.created_at) >= startOfDay).length;
-    return { total, approved, pending, rate, avgHours, revisions, today };
+    // Confiança média sobre entregas com score conhecido.
+    const conf = approvals.map(getApprovalConfidence).filter((n): n is number => n != null);
+    const avgConfidence = conf.length ? Math.round(conf.reduce((a, b) => a + b, 0) / conf.length) : null;
+    const lowConfCount = conf.filter((n) => n < 70).length;
+    return { total, approved, pending, rate, avgHours, revisions, today, avgConfidence, lowConfCount };
   }, [approvals]);
 
   const filtered = approvals.filter((a) => a.status === tab);
