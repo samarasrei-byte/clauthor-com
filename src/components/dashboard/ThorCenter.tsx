@@ -47,6 +47,24 @@ function relativeDate(iso: string): string {
 export default function ThorCenter({ onNavigate }: Props) {
   const { user } = useAuth();
   const { touchpoints, isLoading } = useThorTouchpoints();
+  const qc = useQueryClient();
+
+  // Realtime: mantém timeline e atalhos vivos quando o Thor registra algo novo
+  useEffect(() => {
+    if (!user?.id) return;
+    const channel = supabase
+      .channel(`thor-center-${user.id}`)
+      .on("postgres_changes", { event: "*", schema: "public", table: "thor_touchpoints", filter: `user_id=eq.${user.id}` },
+        () => qc.invalidateQueries({ queryKey: ["thor-touchpoints", user.id] }))
+      .on("postgres_changes", { event: "INSERT", schema: "public", table: "notifications", filter: `user_id=eq.${user.id}` },
+        () => qc.invalidateQueries({ queryKey: ["thor-center-token-alerts", user.id] }))
+      .on("postgres_changes", { event: "*", schema: "public", table: "approvals", filter: `created_by=eq.${user.id}` },
+        () => qc.invalidateQueries({ queryKey: ["thor-center-approvals", user.id] }))
+      .on("postgres_changes", { event: "*", schema: "public", table: "ambient_signals", filter: `created_by=eq.${user.id}` },
+        () => qc.invalidateQueries({ queryKey: ["thor-center-ambient", user.id] }))
+      .subscribe();
+    return () => { void supabase.removeChannel(channel); };
+  }, [user?.id, qc]);
 
   // Notificações de token (últimas 10)
   const { data: tokenAlerts = [] } = useQuery({
