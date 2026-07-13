@@ -593,7 +593,7 @@ export default function ThorConciergeChat({
                 key={s}
                 onClick={() => sendMessage(s)}
                 disabled={isStreaming}
-                className="px-4 py-1.5 rounded-full border border-border/60 text-xs font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors disabled:opacity-50"
+                className="px-4 py-1.5 rounded-full border border-border/60 text-xs font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground hover:border-border transition-all disabled:opacity-50"
               >
                 {s}
               </button>
@@ -601,33 +601,49 @@ export default function ThorConciergeChat({
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="relative flex items-center">
+        <form
+          onSubmit={handleSubmit}
+          className={cn(
+            "relative flex items-end gap-2 rounded-2xl border bg-background transition-all",
+            "border-border/60 focus-within:border-primary/50 focus-within:shadow-[0_0_0_4px_rgba(0,0,0,0.02)]",
+            "dark:focus-within:shadow-[0_0_0_4px_rgba(255,255,255,0.02)]",
+          )}
+        >
           <Textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Pergunte qualquer coisa ao Thor..."
+            placeholder="Descreva sua empresa, sua dor, ou pergunte como integrar uma ferramenta…"
             rows={1}
             maxLength={2000}
             disabled={isStreaming}
             style={chatBodyFont}
-            className="w-full min-h-[52px] max-h-32 resize-none bg-muted/30 border border-border/50 rounded-xl px-5 py-4 pr-14 text-[15px] leading-[1.4] shadow-none placeholder:text-muted-foreground/50 focus-visible:border-primary/40 focus-visible:ring-1 focus-visible:ring-primary/10 focus-visible:ring-offset-0"
+            className="flex-1 min-h-[60px] max-h-40 resize-none bg-transparent border-0 rounded-2xl pl-5 pr-2 py-4 text-[15px] leading-[1.5] shadow-none placeholder:text-muted-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
           <Button
             type="submit"
             size="icon"
             disabled={isStreaming || !input.trim()}
-            className="absolute right-2.5 top-1/2 -translate-y-1/2 h-9 w-9 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground/40 shadow-sm transition-colors"
-            aria-label="Enviar"
+            className="mb-2.5 mr-2.5 h-9 w-9 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground/40 shadow-sm transition-all shrink-0"
+            aria-label="Enviar mensagem"
           >
             {isStreaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowUp className="h-4 w-4" strokeWidth={2.5} />}
           </Button>
         </form>
 
-        <p className="mt-4 text-[10px] text-center text-muted-foreground/40 font-medium tracking-[0.18em] uppercase">
-          Thor · Clauthor AI
-        </p>
+        <div className="mt-2.5 flex items-center justify-between px-1 text-[11px] text-muted-foreground/50">
+          <span className="hidden sm:inline">
+            <kbd className="font-sans">Enter</kbd> para enviar ·{" "}
+            <kbd className="font-sans">Shift + Enter</kbd> quebra linha
+          </span>
+          <span className="sm:hidden">Toque no botão para enviar</span>
+          {input.length > 1600 && (
+            <span className={cn("tabular-nums", input.length > 1900 && "text-destructive")}>
+              {input.length} / 2000
+            </span>
+          )}
+        </div>
       </footer>
     </div>
   );
