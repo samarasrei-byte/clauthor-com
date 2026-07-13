@@ -33,8 +33,8 @@ const initialsOf = (name: string): string => {
   return (parts[0][0] + parts[1][0]).toUpperCase();
 };
 
-/** Falas curtas e alternadas simulando uma conversa entre agentes. */
-const DIALOGUE: readonly string[] = [
+/** Falas curtas e alternadas (fallback quando não há diálogo do depto). */
+const DEFAULT_DIALOGUE: readonly string[] = [
   "Achei 47 leads no ICP.",
   "Qualifiquei 24, mando pro CRM.",
   "Ok, disparo cadência agora.",
@@ -45,10 +45,13 @@ const DIALOGUE: readonly string[] = [
 
 interface AgentsWorkingSceneProps {
   agentSlugs: readonly string[];
+  /** Falas específicas do departamento (ex: derivadas de timelineDemo.outcome). */
+  dialogue?: readonly string[];
   className?: string;
 }
 
-const AgentsWorkingScene = ({ agentSlugs, className }: AgentsWorkingSceneProps) => {
+const AgentsWorkingScene = ({ agentSlugs, dialogue, className }: AgentsWorkingSceneProps) => {
+  const lines = dialogue && dialogue.length > 0 ? dialogue : DEFAULT_DIALOGUE;
   const agents = useMemo(
     () =>
       agentSlugs.slice(0, 3).map((slug, i) => {
@@ -121,7 +124,7 @@ const AgentsWorkingScene = ({ agentSlugs, className }: AgentsWorkingSceneProps) 
       {/* Chat entre agentes */}
       <div className="relative p-3 space-y-2">
         {agents.map((agent, idx) => {
-          const line = DIALOGUE[(tick + idx) % DIALOGUE.length];
+          const line = lines[(tick + idx) % lines.length];
           const isLeft = agent.side === "left";
           return (
             <div
