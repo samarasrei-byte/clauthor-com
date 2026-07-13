@@ -28,6 +28,7 @@ import {
   departments, totalClauthorCost, totalCltCost, totalTokens,
   totalAgents, totalSavingsPercent
 } from "@/data/departmentData";
+import { useDeptSelection } from "@/stores/deptSelection";
 
 // Category definitions for filters
 const getCategoryLabels = (t: any) => [
