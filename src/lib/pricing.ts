@@ -28,7 +28,7 @@ export interface RegionalPricing {
     financeiro: number;
     criacao: number;
     suporte: number;
-    /** Alias de `suporte` — mesmo departamento, ID canônico em edge functions e ThorConcierge. */
+    /** Alias de `suporte` · mesmo departamento, ID canônico em edge functions e ThorConcierge. */
     atendimento: number;
     rh: number;
   };
@@ -54,7 +54,7 @@ export const regionalPricing: Record<string, RegionalPricing> = {
     // Starter alinhado ao canonical (src/lib/canonical-copy.ts). Growth = ~3x.
     plans: { starter: 1497, growth: 3997 },
     tokenPacks: { pack5m: 297, pack15m: 697, pack50m: 1497, pack100m: 2797 },
-    // comparison.avgSalary alinhado ao CLT canônico (R$ 8.500) — evita divergência
+    // comparison.avgSalary alinhado ao CLT canônico (R$ 8.500) · evita divergência
     // entre ROIBenchmark, landing e pricing.
     comparison: { avgSalary: 8500, avgSalaryYear3: 306000, agentStarting: 1497, agentYear3: 53892 },
     departments: { tecnologia: 1650, comercial: 1878, marketing: 1797, financeiro: 1697, criacao: 1297, suporte: 1547, atendimento: 1547, rh: 1477 },

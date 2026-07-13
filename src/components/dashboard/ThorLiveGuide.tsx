@@ -25,12 +25,12 @@ const GUIDE_STEPS: GuideStep[] = [
   {
     section: "overview",
     title: "Command Center",
-    message: "Este é o seu Command Center — o hub central onde você monitora tudo: desempenho dos agentes, tarefas pendentes e ações rápidas do seu time de IA.",
+    message: "Este é o seu Command Center · o hub central onde você monitora tudo: desempenho dos agentes, tarefas pendentes e ações rápidas do seu time de IA.",
   },
   {
     section: "workspace",
     title: "Workspace",
-    message: "Aqui é o seu Workspace — o espaço onde você sobe seus conteúdos, materiais de referência e gera roteiros e briefings para os agentes trabalharem em cima.",
+    message: "Aqui é o seu Workspace · o espaço onde você sobe seus conteúdos, materiais de referência e gera roteiros e briefings para os agentes trabalharem em cima.",
   },
   {
     section: "intelligence-hub",
@@ -40,7 +40,7 @@ const GUIDE_STEPS: GuideStep[] = [
   {
     section: "agents",
     title: "Meus Agentes",
-    message: "Aqui estão todos os agentes trabalhando para você. Cada um é especialista em uma função — pense neles como funcionários digitais que nunca dormem.",
+    message: "Aqui estão todos os agentes trabalhando para você. Cada um é especialista em uma função · pense neles como funcionários digitais que nunca dormem.",
   },
   {
     section: "neural-network",
@@ -55,7 +55,7 @@ const GUIDE_STEPS: GuideStep[] = [
   {
     section: "chat",
     title: "Chat do Agente",
-    message: "Este é o chat direto com o agente selecionado. Converse, peça entregas, revise materiais — tudo em linguagem natural.",
+    message: "Este é o chat direto com o agente selecionado. Converse, peça entregas, revise materiais · tudo em linguagem natural.",
   },
   {
     section: "library",
@@ -380,7 +380,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
 
   const { speak, stop: stopTTS, isSpeaking } = useElevenLabsTTS();
 
-  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro do CLAUTHOR. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral — eu explico cada seção enquanto você explora.";
+  const WELCOME_MESSAGE = "Bem-vindo! Eu sou o Thor, seu co-piloto de IA dentro do CLAUTHOR. Vou te guiar pela plataforma para que você entenda tudo em poucos minutos. Navegue pelo menu lateral · eu explico cada seção enquanto você explora.";
 
   // Typewriter + voice combined
   const playMessage = useCallback((text: string) => {
@@ -416,7 +416,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
     }
   }, [hasGreeted, playMessage]);
 
-  // React to section changes — fires the explanation for the section the user clicked
+  // React to section changes · fires the explanation for the section the user clicked
   useEffect(() => {
     if (isPaused || !hasGreeted) return;
 
@@ -510,7 +510,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         transition={{ type: "spring", stiffness: 320, damping: 28 }}
         className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[340px] max-w-[calc(100vw-2rem)] rounded-2xl border border-border/20 bg-background/85 backdrop-blur-2xl shadow-[0_12px_40px_hsl(0_0%_0%/0.25)] overflow-hidden"
       >
-        {/* Header: slim — dot + label + inline waveform + controls */}
+        {/* Header: slim · dot + label + inline waveform + controls */}
         <div className="px-3.5 pt-3 pb-2 flex items-center gap-2.5">
           <span className="relative flex h-2 w-2 shrink-0">
             <span className="absolute inline-flex h-full w-full rounded-full bg-primary/60 opacity-75 animate-ping" />
@@ -571,7 +571,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
           />
         </div>
 
-        {/* Message — clickable to replay explanation with voice */}
+        {/* Message · clickable to replay explanation with voice */}
         <button
           type="button"
           onClick={() => {
@@ -600,7 +600,7 @@ const ThorLiveGuide = ({ activeSection, onNavigate, onDismiss }: ThorLiveGuidePr
         </button>
 
 
-        {/* Action row — compact icon-led buttons */}
+        {/* Action row · compact icon-led buttons */}
         <div className="px-2.5 pb-2.5 flex items-center gap-1">
           <Button
             size="sm"

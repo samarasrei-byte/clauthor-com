@@ -1,19 +1,19 @@
 /**
- * KPI Tracker — Fase 2 metrics for Departamentos Prontos funnel.
+ * KPI Tracker · Fase 2 metrics for Departamentos Prontos funnel.
  *
  * Emits events to:
- *  1. `window.dataLayer` (GTM/GA4 compatible — zero backend required)
+ *  1. `window.dataLayer` (GTM/GA4 compatible · zero backend required)
  *  2. `logger.info` in dev for immediate observability
  *  3. `sessionStorage` ring buffer (`kpi_events`, last 100) for debugging
  *
  * Zero cost, zero migration. Consumers can bolt on GA4/PostHog later by
- * subscribing to `window.dataLayer.push` — no code changes needed here.
+ * subscribing to `window.dataLayer.push` · no code changes needed here.
  *
  * The 4 Fase 2 KPIs:
- *  - `department_demo_click`        — user clicked "Ver funcionando (60s)"
- *  - `department_demo_completed`    — user watched the 60s demo to the end
- *  - `department_hire_click`        — user clicked "Contratar" (card or demo)
- *  - `onboarding_department_picked` — user picked a department in onboarding
+ *  - `department_demo_click`        · user clicked "Ver funcionando (60s)"
+ *  - `department_demo_completed`    · user watched the 60s demo to the end
+ *  - `department_hire_click`        · user clicked "Contratar" (card or demo)
+ *  - `onboarding_department_picked` · user picked a department in onboarding
  */
 import logger from "@/lib/logger";
 import { supabase } from "@/integrations/supabase/client";
@@ -153,7 +153,7 @@ export function trackKpi(event: KpiEventName, payload: KpiEventPayload): void {
         if (arr.length > RING_BUFFER_MAX) arr.splice(0, arr.length - RING_BUFFER_MAX);
         window.sessionStorage.setItem(RING_BUFFER_KEY, JSON.stringify(arr));
       } catch {
-        /* sessionStorage quota / privacy mode — ignore */
+        /* sessionStorage quota / privacy mode · ignore */
       }
     }
 
@@ -169,7 +169,7 @@ export function trackKpi(event: KpiEventName, payload: KpiEventPayload): void {
 }
 
 
-/** Read the ring buffer — useful for smoke tests and internal dashboards. */
+/** Read the ring buffer · useful for smoke tests and internal dashboards. */
 export function readKpiBuffer(): Array<Record<string, unknown>> {
   if (typeof window === "undefined") return [];
   try {

@@ -491,7 +491,7 @@ const Waitlist = () => {
       </header>
 
       {/* ══════════════════════════════════════════════════════════
-          SECTION 1 — HERO SPLIT SCREEN
+          SECTION 1 · HERO SPLIT SCREEN
           Left: Story · Right: Form (sticky on desktop)
       ══════════════════════════════════════════════════════════ */}
       <section ref={heroRef} className="relative z-10 pt-24 pb-16 lg:pt-32 lg:pb-24 px-4 sm:px-6">
@@ -502,7 +502,7 @@ const Waitlist = () => {
         </div>
 
         <div className="relative max-w-7xl mx-auto grid lg:grid-cols-[1.1fr_1fr] gap-10 lg:gap-16 items-start">
-          {/* ═══ LEFT — Narrative ═══ */}
+          {/* ═══ LEFT · Narrative ═══ */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -528,10 +528,10 @@ const Waitlist = () => {
 
             <p className="text-base sm:text-lg text-muted-foreground max-w-xl leading-relaxed mb-8">
               Contrate um departamento inteiro, monte seu squad em minutos e escale sem contratar humanos.
-              <span className="text-foreground font-medium"> Custo por especialista muito abaixo de um profissional CLT equivalente</span> — economia real varia por empresa.
+              <span className="text-foreground font-medium"> Custo por especialista muito abaixo de um profissional CLT equivalente</span> · economia real varia por empresa.
             </p>
 
-            {/* Bullets — separação limpa */}
+            {/* Bullets · separação limpa */}
             <ul className="space-y-3 mb-10 max-w-lg">
               {[
                 { label: "20 departamentos prontos para operar" },
@@ -566,7 +566,7 @@ const Waitlist = () => {
             </div>
           </motion.div>
 
-          {/* ═══ RIGHT — Form Card (sticky on desktop) ═══ */}
+          {/* ═══ RIGHT · Form Card (sticky on desktop) ═══ */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -677,7 +677,7 @@ const Waitlist = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          SECTION 2 — LIVE DEMO (isolated)
+          SECTION 2 · LIVE DEMO (isolated)
       ══════════════════════════════════════════════════════════ */}
       <section className="relative z-10 px-4 sm:px-6 py-20 noir-surface border-y border-primary/5">
         <div className="max-w-5xl mx-auto">
@@ -691,7 +691,7 @@ const Waitlist = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          SECTION 3 — BENEFÍCIOS (3 cards)
+          SECTION 3 · BENEFÍCIOS (3 cards)
       ══════════════════════════════════════════════════════════ */}
       <section className="relative z-10 px-4 sm:px-6 py-24">
         <div className="max-w-5xl mx-auto">
@@ -723,7 +723,7 @@ const Waitlist = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          SECTION 4 — STATS + COUNTRIES (compact strip)
+          SECTION 4 · STATS + COUNTRIES (compact strip)
       ══════════════════════════════════════════════════════════ */}
       <section className="relative z-10 py-16 noir-surface border-y border-primary/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6">
@@ -748,7 +748,7 @@ const Waitlist = () => {
       </section>
 
       {/* ══════════════════════════════════════════════════════════
-          SECTION 5 — FINAL CTA
+          SECTION 5 · FINAL CTA
       ══════════════════════════════════════════════════════════ */}
       <section className="relative z-10 px-4 sm:px-6 py-24">
         <div className="max-w-3xl mx-auto text-center">

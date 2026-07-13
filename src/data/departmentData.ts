@@ -428,7 +428,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     agents: ["Copywriter Sênior", "Criador de Conteúdo", "Designer de Peças", "Editor de Vídeo", "Gestão de Mídias Sociais", "Analista de Métricas Sociais", "Tráfego Pago", "Growth", "SEO", "Email Marketing", "Community Manager"],
     replaces: ["1 Copywriter", "1 Criador de Conteúdo", "1 Designer", "1 Editor de Vídeo", "1 Social Media", "1 Analista Social", "1 Media Buyer", "1 Growth", "1 SEO", "1 Email Marketing", "1 Community"],
     faq: [
-      { q: "Cria conteúdo original?", a: "Sim. Posts, reels, carrosséis, blogs, ebooks, roteiros de vídeo, emails — tudo com o tom de voz da sua marca." },
+      { q: "Cria conteúdo original?", a: "Sim. Posts, reels, carrosséis, blogs, ebooks, roteiros de vídeo, emails · tudo com o tom de voz da sua marca." },
       { q: "Faz tráfego pago?", a: "Meta Ads, Google Ads e TikTok Ads com otimização automática de ROAS, criativos gerados pelo designer e A/B testing contínuo." },
       { q: "Mede resultados?", a: "Analista de Métricas Sociais entrega dashboard diário com engajamento, alcance, CTR, CPL, ROAS e recomendações acionáveis." },
     ],
@@ -559,7 +559,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     replaces: ["1 Analista BI", "1 Cientista de Dados", "1 ML Engineer", "1 Analista Dados", "1 Forecasting", "1 Data Governance", "1 Designer Dashboards"],
     faq: [
       { q: "Constrói dashboards?", a: "Sim. Integra com BigQuery, Metabase, Power BI, Looker e Tableau para dashboards com atualização em tempo real." },
-      { q: "Faz previsão de demanda?", a: "Modelos de forecasting com séries temporais, sazonalidade e cenários — vendas, estoque, caixa e headcount." },
+      { q: "Faz previsão de demanda?", a: "Modelos de forecasting com séries temporais, sazonalidade e cenários · vendas, estoque, caixa e headcount." },
       { q: "E compliance de dados?", a: "Data catalog, linhagem, mascaramento LGPD e auditoria automática de acessos sensíveis." },
     ],
   },
@@ -579,7 +579,7 @@ export const deptDetails: Record<string, DeptDetail> = {
     replaces: ["1 Innovation Lead", "1 P&D", "1 Foresight", "1 IP Analyst", "1 CVC", "1 Prototipador"],
     faq: [
       { q: "Mapeia tendências?", a: "Sim. Radar de tecnologias emergentes, análise de startups, benchmarks internacionais e sinais fracos." },
-      { q: "Prototipa ideias?", a: "MVPs no-code, mockups navegáveis e testes de mercado em dias — não meses." },
+      { q: "Prototipa ideias?", a: "MVPs no-code, mockups navegáveis e testes de mercado em dias · não meses." },
       { q: "Gerencia portfólio de inovação?", a: "Horizon 1/2/3, stage-gate, gestão de patentes e pipeline de corporate venture." },
     ],
   },

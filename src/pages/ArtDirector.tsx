@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 /**
- * /art-director — Duo de agentes:
+ * /art-director · Duo de agentes:
  *   Diretor de Conteúdo (chat) refina o briefing e propõe prompt.
  *   Artista (image gen) transforma o prompt em imagem.
  */
@@ -265,7 +265,7 @@ const ArtDirector = () => {
                   <Textarea
                     value={manualPrompt}
                     onChange={(e) => setManualPrompt(e.target.value)}
-                    placeholder="O Diretor vai sugerir aqui — ou escreva livremente."
+                    placeholder="O Diretor vai sugerir aqui · ou escreva livremente."
                     rows={5}
                     className="font-mono text-xs"
                   />

@@ -68,7 +68,7 @@ export default function ReferralsPanel() {
     if (navigator.share) {
       try {
         await navigator.share({
-          title: "Clauthor — Time de IA 24/7",
+          title: "Clauthor · Time de IA 24/7",
           text: "Acabei de montar meu time de agentes de IA no Clauthor. Ganhe créditos no cadastro:",
           url: link,
         });

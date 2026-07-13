@@ -1,5 +1,5 @@
 /**
- * InstantWow — momento "uau" pós-signup em <90s.
+ * InstantWow · momento "uau" pós-signup em <90s.
  * Fluxo: captura (2 campos + categoria) → geração streaming → aprovar/regerar.
  * Fallback determinístico se a Edge Function falhar/timeout.
  */

@@ -1,5 +1,5 @@
 /**
- * CaseStudySection — depoimentos na landing.
+ * CaseStudySection · depoimentos na landing.
  *
  * Design: estética Apple/Notion. Sombras mínimas (apenas hairline border),
  * tipografia leve com tracking negativo, spacing generoso, hierarquia clara.
@@ -17,7 +17,7 @@ const CaseStudySection = () => {
       aria-label="Casos reais de clientes"
     >
       <div className="mx-auto max-w-[1200px]">
-        {/* Header — refinado, sem all-caps agressivo */}
+        {/* Header · refinado, sem all-caps agressivo */}
         <header className="mb-16 max-w-2xl">
           <div className="mb-4 text-[11px] font-medium tracking-[0.14em] text-muted-foreground/80">
             Casos de clientes
@@ -30,7 +30,7 @@ const CaseStudySection = () => {
           </p>
         </header>
 
-        {/* Grid — gap generoso, cards sem sombra pesada */}
+        {/* Grid · gap generoso, cards sem sombra pesada */}
         <div
           className={cn(
             "grid gap-4 sm:gap-5",
@@ -49,11 +49,11 @@ const CaseStudySection = () => {
                 "group relative flex flex-col rounded-3xl border border-border/50 bg-card/60 p-8 backdrop-blur-sm",
                 "transition-all duration-500 ease-out",
                 "hover:border-border hover:bg-card/80",
-                // Sombra mínima — só um hint em hover
+                // Sombra mínima · só um hint em hover
                 "shadow-[0_1px_2px_rgba(0,0,0,0.04)] hover:shadow-[0_8px_32px_-12px_rgba(0,0,0,0.08)]"
               )}
             >
-              {/* Placeholder badge — transparência sobre exemplos */}
+              {/* Placeholder badge · transparência sobre exemplos */}
               {cs.isPlaceholder && (
                 <div className="absolute right-5 top-5 rounded-full border border-border/60 bg-background/80 px-2.5 py-0.5 text-[10px] font-medium tracking-wide text-muted-foreground backdrop-blur-md">
                   Exemplo
@@ -80,7 +80,7 @@ const CaseStudySection = () => {
                 </div>
               </div>
 
-              {/* Headline metric — hero number com tracking apertado */}
+              {/* Headline metric · hero number com tracking apertado */}
               <div className="mb-8">
                 <div className="text-[56px] font-semibold leading-none tracking-[-0.04em] tabular-nums text-foreground">
                   {cs.headlineMetric.value}
@@ -90,7 +90,7 @@ const CaseStudySection = () => {
                 </div>
               </div>
 
-              {/* Métricas secundárias — divisor ultra-sutil */}
+              {/* Métricas secundárias · divisor ultra-sutil */}
               {cs.secondaryMetrics && cs.secondaryMetrics.length > 0 && (
                 <div className="mb-8 grid grid-cols-2 gap-6 border-t border-border/40 pt-6">
                   {cs.secondaryMetrics.slice(0, 2).map((m, i) => (
@@ -106,7 +106,7 @@ const CaseStudySection = () => {
                 </div>
               )}
 
-              {/* Quote — sem ícone barulhento, tipografia refinada */}
+              {/* Quote · sem ícone barulhento, tipografia refinada */}
               <blockquote className="mt-auto">
                 <p className="text-[15px] font-light leading-[1.6] tracking-[-0.01em] text-foreground/90">
                   “{cs.quote}”

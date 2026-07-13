@@ -1,4 +1,4 @@
-// Digital Workforce OS — core types
+// Digital Workforce OS · core types
 
 export type WorkforceScale = "agent" | "squad" | "department" | "org";
 
@@ -124,7 +124,7 @@ export function builderReducer(state: BuilderState, action: BuilderAction): Buil
 }
 
 export const AUTONOMY_META: Record<AutonomyLevel, { label: string; desc: string; approval: string; color: string }> = {
-  assistant: { label: "Assistente", desc: "Responde e sugere — sem agir sozinho", approval: "Aprovação humana sempre", color: "from-slate-500 to-slate-600" },
+  assistant: { label: "Assistente", desc: "Responde e sugere · sem agir sozinho", approval: "Aprovação humana sempre", color: "from-slate-500 to-slate-600" },
   operator: { label: "Operador", desc: "Executa tarefas simples já definidas", approval: "Aprova antes de ações externas", color: "from-cyan-500 to-blue-600" },
   specialist: { label: "Especialista", desc: "Domínio profundo, decide dentro do escopo", approval: "Apenas ações sensíveis", color: "from-violet-500 to-purple-600" },
   coordinator: { label: "Coordenador", desc: "Delega para outros agentes e supervisiona", approval: "Apenas mudanças estruturais", color: "from-amber-500 to-orange-600" },

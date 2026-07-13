@@ -16,7 +16,7 @@ const ROIBenchmark = () => {
   const currency = currencyForLocale(i18n.language || "en");
   const avgSalary = CANONICAL.clt.monthly[currency];
   // Preço unitário do agente (canonical). Preserva a narrativa de "funcionário
-  // sênior digital, ~5% do custo CLT" — ancora ROI ~19x sem parecer estagiário.
+  // sênior digital, ~5% do custo CLT" · ancora ROI ~19x sem parecer estagiário.
   const agentCost = CANONICAL.agent.monthly[currency];
 
 

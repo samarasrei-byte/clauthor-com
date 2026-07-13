@@ -231,7 +231,7 @@ export default function CustomerOnboardingWizard({ subjectType, subjectRef, subj
               >
                 <StepHeader index={3} title="Conexões necessárias" icon={<Plug className="w-5 h-5" />} />
                 <p className="text-white/60 text-sm">
-                  Vamos precisar destes acessos para operar. Você pode configurar depois em Integrações — aqui só marcamos o que você já tem em mãos.
+                  Vamos precisar destes acessos para operar. Você pode configurar depois em Integrações · aqui só marcamos o que você já tem em mãos.
                 </p>
                 <div className="space-y-2.5">
                   {CREDENTIAL_HINTS[subjectType].map((c) => {

@@ -8,7 +8,7 @@ interface PricePillProps {
 }
 
 /**
- * PricePill — Botão minimalista vermelho para exibir preço/mês.
+ * PricePill · Botão minimalista vermelho para exibir preço/mês.
  *
  * Design: monocromático, sem gradiente, foco em legibilidade e ancoragem
  * cromática (destructive = red brand). Substitui os antigos price displays

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 
 /**
- * LiveDemoRunner — hits the public `dev-live-demo` edge function and streams
+ * LiveDemoRunner · hits the public `dev-live-demo` edge function and streams
  * a real multi-agent orchestration narrative (via Lovable AI Gateway).
  * No auth. Rate limited by IP at the edge.
  */
@@ -189,7 +189,7 @@ export default function LiveDemoRunner() {
               type="text"
               value={outcome}
               onChange={(e) => setOutcome(e.target.value)}
-              placeholder='descreva um outcome — ex: "lançar campanha black friday em 5 canais"'
+              placeholder='descreva um outcome · ex: "lançar campanha black friday em 5 canais"'
               className="flex-1 bg-transparent outline-none font-mono text-sm text-foreground placeholder:text-foreground/30"
               maxLength={400}
               disabled={running}

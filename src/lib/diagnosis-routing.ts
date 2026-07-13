@@ -21,7 +21,7 @@ export interface Recommendation {
   tagline: string;
   route: string;
   ctaLabel: string;
-  /** Bullets do que o departamento faz — mostrado no passo final. */
+  /** Bullets do que o departamento faz · mostrado no passo final. */
   does: string[];
   /** Economia estimada (BRL/mês) vs custo CLT equivalente. */
   monthlySavings: number;
@@ -32,14 +32,14 @@ export interface Recommendation {
 export const PAIN_TO_RECOMMENDATION: Record<PainId, Recommendation> = {
   leads: {
     departmentLabel: "Vendas & Prospecção",
-    tagline: "Squad que capta, qualifica e agenda leads no LinkedIn e WhatsApp — 24/7.",
+    tagline: "Squad que capta, qualifica e agenda leads no LinkedIn e WhatsApp · 24/7.",
     route: "/departamentos#comercial",
     ctaLabel: "Ativar departamento de Vendas",
     does: [
       "Prospecta contas no LinkedIn com ICP customizado",
       "Envia sequência multicanal (InMail + e-mail + WhatsApp)",
       "Qualifica com BANT e agenda direto no seu Google Calendar",
-      "CRM sincronizado — cada lead com histórico completo",
+      "CRM sincronizado · cada lead com histórico completo",
     ],
     monthlySavings: 51500,
     timeToValue: "24h",
@@ -60,7 +60,7 @@ export const PAIN_TO_RECOMMENDATION: Record<PainId, Recommendation> = {
   },
   content: {
     departmentLabel: "Marketing & Conteúdo",
-    tagline: "Produz posts, artigos e roteiros com a voz da sua marca — em escala.",
+    tagline: "Produz posts, artigos e roteiros com a voz da sua marca · em escala.",
     route: "/departamentos#marketing",
     ctaLabel: "Ativar departamento de Marketing",
     does: [

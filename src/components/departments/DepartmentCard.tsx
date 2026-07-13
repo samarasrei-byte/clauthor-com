@@ -1,11 +1,11 @@
 /**
- * DepartmentCard — hero card de "Departamento Pronto".
+ * DepartmentCard · hero card de "Departamento Pronto".
  *
  * Exibe uma solução amarrada a uma dor + outcome mensurável + agentes envolvidos.
  * Dois CTAs: "Ver funcionando (60s)" (abre o LiveDemo, Bloco 3) e
  * "Contratar departamento" (dispara o fluxo de contratação existente).
  *
- * Este componente é puramente apresentacional — não faz fetch, não conhece
+ * Este componente é puramente apresentacional · não faz fetch, não conhece
  * a lógica de contratação. Consumidores passam `onSeeLiveDemo` e `onHire`.
  */
 import { motion } from "framer-motion";
@@ -58,18 +58,18 @@ const DepartmentCard = ({
       <Card
         className={cn(
           "group relative flex h-full flex-col overflow-hidden rounded-2xl transition-all duration-500",
-          // Glass base — unified across all departments
+          // Glass base · unified across all departments
           "border border-white/[0.08] bg-white/[0.02] backdrop-blur-xl",
           "shadow-[0_1px_0_0_rgba(255,255,255,0.04)_inset,0_20px_40px_-20px_rgba(0,0,0,0.6)]",
           "hover:border-white/[0.14] hover:bg-white/[0.035] hover:-translate-y-0.5",
         )}
       >
-        {/* Subtle top highlight — mimics glass reflection */}
+        {/* Subtle top highlight · mimics glass reflection */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent"
         />
-        {/* Soft ambient glow on hover — monochrome */}
+        {/* Soft ambient glow on hover · monochrome */}
         <div
           aria-hidden
           className="pointer-events-none absolute -top-24 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-white/[0.04] opacity-0 blur-3xl transition-opacity duration-700 group-hover:opacity-100"
@@ -103,7 +103,7 @@ const DepartmentCard = ({
         </CardHeader>
 
         <CardContent className="relative z-10 flex flex-1 flex-col gap-4">
-          {/* Outcome — glass panel */}
+          {/* Outcome · glass panel */}
           {department.outcome && (
             <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3.5 backdrop-blur-sm">
               <div className="flex items-center gap-1.5 text-[10.5px] font-medium text-white/40 uppercase tracking-wider">

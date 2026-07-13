@@ -1,5 +1,5 @@
 /**
- * DashboardEmptyState — "estado zero opinativo".
+ * DashboardEmptyState · "estado zero opinativo".
  *
  * Renderizado quando o usuário autenticado ainda NÃO contratou nenhum
  * departamento. Substitui o `DashboardOverview` denso por uma tela
@@ -90,7 +90,7 @@ const DashboardEmptyState = ({
               <p className="text-base font-semibold mt-1">{rec.departmentLabel}</p>
               <p className="text-xs text-muted-foreground mt-1.5 leading-relaxed">
                 Baseado no que você contou no diagnóstico
-                {diagnosis?.company ? <> — adaptado para <span className="text-foreground font-medium">{diagnosis.company}</span></> : null}.
+                {diagnosis?.company ? <> · adaptado para <span className="text-foreground font-medium">{diagnosis.company}</span></> : null}.
                 Confirme para ativar.
               </p>
               <Button

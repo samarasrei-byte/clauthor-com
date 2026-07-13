@@ -1,11 +1,11 @@
 /**
- * FlagshipDepartmentsSection — showcase de "Departamentos Prontos" na landing.
+ * FlagshipDepartmentsSection · showcase de "Departamentos Prontos" na landing.
  *
  * Renderiza os 3 flagship packages como DepartmentCard, gerencia o LiveDemo
  * (60s) em um Dialog e redireciona a intenção de contratação para
  * `/departamentos?dept=<id>` (a rota já possui todo o fluxo de checkout).
  *
- * Componente puramente frontend — não faz fetch, não altera schema, não
+ * Componente puramente frontend · não faz fetch, não altera schema, não
  * duplica lógica de billing.
  */
 import { useState, lazy, Suspense } from "react";

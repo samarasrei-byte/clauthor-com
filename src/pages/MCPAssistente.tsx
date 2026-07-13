@@ -250,7 +250,7 @@ export default function MCPAssistente() {
   }, [turns]);
 
   useEffect(() => {
-    document.title = "Assistente MCP — Painel Jurídico";
+    document.title = "Assistente MCP · Painel Jurídico";
   }, []);
 
   function toggleAgent(a: AgentName) {
@@ -842,7 +842,7 @@ function AssistantTurn({ turn }: { turn: Turn }) {
             </div>
             <div className="flex-1">
               <p className="text-sm font-semibold text-rose-700 dark:text-rose-300">
-                Operação bloqueada — aprovação humana necessária
+                Operação bloqueada · aprovação humana necessária
               </p>
               <p className="text-xs text-muted-foreground mt-1">
                 Nível de segurança classificado como{" "}

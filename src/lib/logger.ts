@@ -1,7 +1,7 @@
 /**
  * DEV-only structured logger.
  *
- * Use `logger.info` / `logger.debug` / `logger.warn` for developer signal —
+ * Use `logger.info` / `logger.debug` / `logger.warn` for developer signal ·
  * these are stripped in production builds (`import.meta.env.DEV === false`).
  *
  * Always use `logger.error` for real errors: it forwards to `console.error`
@@ -28,7 +28,7 @@ export const logger = {
   warn: (...args: LogArgs) => {
     if (isDev) console.warn("[warn]", ...args);
   },
-  /** Errors always log — production observability depends on this. */
+  /** Errors always log · production observability depends on this. */
   error: (...args: LogArgs) => {
     console.error("[error]", ...args);
   },

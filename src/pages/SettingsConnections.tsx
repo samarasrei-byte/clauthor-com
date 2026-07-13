@@ -14,7 +14,7 @@ import { Sparkles } from "@/components/icons/Sparkles";
 import { connectors, type ConnectorData } from "@/components/integrations/connectorData";
 
 /**
- * /settings/connections — Tela unificada de conexões
+ * /settings/connections · Tela unificada de conexões
  * - Cards visuais com logo
  * - Botão único "Conectar" (OAuth quando possível, API Key com tutorial quando não)
  * - Status verde / vermelho
@@ -22,7 +22,7 @@ import { connectors, type ConnectorData } from "@/components/integrations/connec
  * - Thor guia o usuário passo a passo
  */
 
-// Conectores que suportam OAuth (popup) — não pedem chave manual
+// Conectores que suportam OAuth (popup) · não pedem chave manual
 const OAUTH_CONNECTORS = new Set([
   "gmail", "google-drive", "google-sheets", "google-calendar",
   "outlook", "slack", "linkedin", "hubspot", "salesforce",
@@ -83,12 +83,12 @@ const SettingsConnections = () => {
 
   const handleConnect = async (c: ConnectorData) => {
     const isOAuth = OAUTH_CONNECTORS.has(c.integrationKey);
-    setThorMsg(`Vou te ajudar a conectar seu ${c.name}. ${isOAuth ? "Vai abrir uma janela pra você fazer login — clica em 'Autorizar' e volta pra cá." : "Você vai precisar da chave de API. Segue o vídeo abaixo (30s) que te mostra onde pegar."}`);
+    setThorMsg(`Vou te ajudar a conectar seu ${c.name}. ${isOAuth ? "Vai abrir uma janela pra você fazer login · clica em 'Autorizar' e volta pra cá." : "Você vai precisar da chave de API. Segue o vídeo abaixo (30s) que te mostra onde pegar."}`);
     setSelected(c);
   };
 
   const handleOAuthConnect = (c: ConnectorData) => {
-    // Placeholder — em produção chama edge function que retorna authorize URL
+    // Placeholder · em produção chama edge function que retorna authorize URL
     toast.info(`OAuth de ${c.name} em breve. Por enquanto use chave manual.`);
     window.open(`https://${c.integrationKey}.com`, "_blank", "width=600,height=700");
   };
@@ -114,7 +114,7 @@ const SettingsConnections = () => {
           </Badge>
         </div>
         <p className="text-muted-foreground text-sm max-w-2xl">
-          Conecte seus serviços em um clique. Nós cuidamos da parte técnica — você só faz login.
+          Conecte seus serviços em um clique. Nós cuidamos da parte técnica · você só faz login.
         </p>
       </motion.div>
 

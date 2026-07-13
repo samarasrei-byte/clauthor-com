@@ -1,5 +1,5 @@
 /**
- * CLAUTHOR ORG CHART — Estrutura oficial multi-agente
+ * CLAUTHOR ORG CHART · Estrutura oficial multi-agente
  *
  * Hierarquia recomendada (10 orquestradores + sub-especialidades):
  *   CEO Virtual → coordena os 9 departamentos
@@ -26,7 +26,7 @@ const agent = (name: string, resp: string[] = [], triggers: string[] = ["task_as
 
 export const CLAUTHOR_ORG_CHART: WorkforceDepartment[] = [
   // ════════════════════════════════════════════════════════
-  // 0. EXECUTIVO — CEO Virtual (Orquestrador)
+  // 0. EXECUTIVO · CEO Virtual (Orquestrador)
   // ════════════════════════════════════════════════════════
   {
     id: "executivo",

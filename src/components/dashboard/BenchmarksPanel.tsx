@@ -106,7 +106,7 @@ const BenchmarksPanel = () => {
   return (
     <div className="container mx-auto px-4 py-8 space-y-6 max-w-7xl">
       <SEO
-        title="Benchmarks Anônimos — Clauthor"
+        title="Benchmarks Anônimos · Clauthor"
         description="Compare a performance dos seus agentes IA com o mercado de forma anônima e segura."
       />
 
@@ -166,7 +166,7 @@ const BenchmarksPanel = () => {
                       </div>
                       <div className="flex items-baseline justify-between">
                         <span className="text-2xl font-bold tabular-nums">
-                          {my !== undefined ? formatValue(my, m.unit) : "—"}
+                          {my !== undefined ? formatValue(my, m.unit) : "·"}
                         </span>
                         <span className="text-lg text-muted-foreground tabular-nums">
                           {formatValue(row.p50, m.unit)}
@@ -202,7 +202,7 @@ const BenchmarksPanel = () => {
             <ShieldCheck className="h-4 w-4 text-primary" /> Como protegemos sua privacidade
           </h3>
           <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-            <li>Métricas agregadas — nenhum nome, e-mail ou conteúdo é compartilhado.</li>
+            <li>Métricas agregadas · nenhum nome, e-mail ou conteúdo é compartilhado.</li>
             <li>Mínimo de 5 empresas por agregação (k-anonymity).</li>
             <li>Você pode desativar a contribuição em Configurações &gt; Privacidade.</li>
           </ul>

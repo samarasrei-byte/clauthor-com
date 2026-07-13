@@ -16,7 +16,7 @@ import { Linkedin, Youtube } from "lucide-react";
 import { logger } from "@/lib/logger";
 
 /**
- * /settings/social — Conexões Sociais (per-user OAuth)
+ * /settings/social · Conexões Sociais (per-user OAuth)
  * Cada cliente conecta a PRÓPRIA conta social. Tokens ficam por user_id.
  */
 
@@ -457,7 +457,7 @@ const SocialConnections = () => {
         </div>
         <h1 className="text-2xl sm:text-3xl lg:text-5xl font-semibold tracking-tight">Conexões Sociais</h1>
         <p className="text-sm sm:text-base text-muted-foreground max-w-3xl leading-relaxed">
-          Cada cliente conecta sua própria conta. Os tokens ficam isolados por usuário e criptografados no cofre — a CLAUTHOR nunca compartilha credenciais entre workspaces.
+          Cada cliente conecta sua própria conta. Os tokens ficam isolados por usuário e criptografados no cofre · a CLAUTHOR nunca compartilha credenciais entre workspaces.
         </p>
       </motion.div>
 
@@ -765,7 +765,7 @@ const SocialConnections = () => {
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="space-y-4">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-primary" />
-            <h2 className="text-lg font-semibold">Métricas LinkedIn — últimos 30 dias</h2>
+            <h2 className="text-lg font-semibold">Métricas LinkedIn · últimos 30 dias</h2>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <Card><CardContent className="p-4">
@@ -825,7 +825,7 @@ const SocialConnections = () => {
           <DialogHeader>
             <DialogTitle>Publicar no LinkedIn</DialogTitle>
             <DialogDescription>
-              Como {linkedin?.profile?.name || "você"} — visibilidade pública.
+              Como {linkedin?.profile?.name || "você"} · visibilidade pública.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">

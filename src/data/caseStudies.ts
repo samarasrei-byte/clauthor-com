@@ -1,5 +1,5 @@
 /**
- * Case Studies — depoimentos REAIS de clientes pagantes.
+ * Case Studies · depoimentos REAIS de clientes pagantes.
  *
  * REGRA DE OURO: só entra aqui o que for verificável.
  * - Nome do cliente/empresa: nome real, com autorização por escrito.
@@ -24,7 +24,7 @@ export interface CaseStudy {
   logoUrl?: string;
   /** Departamento contratado (opcional, ex.: "Vendas Autônomas"). */
   departmentUsed?: string;
-  /** Métrica principal — número auditável + unidade curta. */
+  /** Métrica principal · número auditável + unidade curta. */
   headlineMetric: {
     /** Valor numérico ou string curta (ex.: "312", "3.2×", "-47%"). */
     value: string;
@@ -33,7 +33,7 @@ export interface CaseStudy {
   };
   /** Métricas secundárias (0-3). */
   secondaryMetrics?: readonly { value: string; label: string }[];
-  /** Frase textual do cliente. Mantenha original — não parafraseie. */
+  /** Frase textual do cliente. Mantenha original · não parafraseie. */
   quote: string;
   /** Nome + cargo de quem falou. */
   attribution: {
@@ -42,7 +42,7 @@ export interface CaseStudy {
   };
   /** Data da mensuração (ISO curto: "2026-05"). Ajuda credibilidade. */
   measuredAt: string;
-  /** Flag opcional — quando true, o card é renderizado com selo "Exemplo" para não induzir buyers a acreditar em prova social fabricada. */
+  /** Flag opcional · quando true, o card é renderizado com selo "Exemplo" para não induzir buyers a acreditar em prova social fabricada. */
   isPlaceholder?: boolean;
 }
 

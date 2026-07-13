@@ -37,7 +37,7 @@ const fadeUp = {
 
 const solutions = [
   { icon: Zap, title: "Eficiência Incomparável", desc: "Agentes de IA executam tarefas complexas 24/7 com precisão e velocidade superiores, eliminando gargalos." },
-  { icon: TrendingDown, title: "Estrutura de Custo Radicalmente Menor", desc: "Custo por agente muito abaixo de um equivalente CLT — sem encargos trabalhistas, férias ou 13º. Economia real varia por empresa e depende do escopo replicado." },
+  { icon: TrendingDown, title: "Estrutura de Custo Radicalmente Menor", desc: "Custo por agente muito abaixo de um equivalente CLT · sem encargos trabalhistas, férias ou 13º. Economia real varia por empresa e depende do escopo replicado." },
   { icon: Globe2, title: "Escalabilidade Ilimitada", desc: "Lide com picos de demanda e expanda globalmente sem fricção. Squads de IA que se adaptam instantaneamente." },
 ];
 

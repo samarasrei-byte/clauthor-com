@@ -45,7 +45,7 @@ const useCases = [
   { title: "Bancos & Seguradoras", desc: "Análise de crédito, KYC, sinistros e compliance com auditoria criptográfica." },
   { title: "Indústria & Logística", desc: "Otimização de cadeia, previsão de demanda e atendimento técnico autônomo." },
   { title: "Saúde & Farma", desc: "Triagem, agendamento, faturamento TISS e suporte regulatório com trilha completa." },
-  { title: "Jurídico Corporativo", desc: "Squad Jurídica integrada com OpenClaw, Astrea e DocuSign — peças, prazos e contratos." },
+  { title: "Jurídico Corporativo", desc: "Squad Jurídica integrada com OpenClaw, Astrea e DocuSign · peças, prazos e contratos." },
 ];
 
 const compliance = ["LGPD", "GDPR", "SOC 2 Type II*", "ISO 27001*", "HIPAA-ready*", "PCI DSS*"];
@@ -54,7 +54,7 @@ const Enterprise = () => {
   return (
     <>
       <SEO
-        title="Clauthor Enterprise — AI Workforce for Large Organizations"
+        title="Clauthor Enterprise · AI Workforce for Large Organizations"
         description="Dedicated AI squads, white-glove support, SSO, SCIM, VPC peering and signed audit trails. Built for Fortune 500 and large enterprises."
       />
 

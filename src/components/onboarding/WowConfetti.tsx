@@ -1,5 +1,5 @@
 /**
- * WowConfetti — celebração no "Aprovar". Puro framer-motion, sem lib externa.
+ * WowConfetti · celebração no "Aprovar". Puro framer-motion, sem lib externa.
  */
 import { motion } from "framer-motion";
 import { useMemo } from "react";

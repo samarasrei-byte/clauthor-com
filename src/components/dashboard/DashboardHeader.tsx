@@ -16,7 +16,7 @@ const DashboardHeader = ({ locale, remainingCredits, credits }: DashboardHeaderP
 
   const hour = new Date().getHours();
   // Fallback humano: 1) nome completo, 2) prefixo do e-mail capitalizado, 3) genérico "por aí".
-  // NUNCA usar "Control Panel" como nome — é rótulo de UI, não de pessoa.
+  // NUNCA usar "Control Panel" como nome · é rótulo de UI, não de pessoa.
   const rawName = user?.user_metadata?.full_name?.trim();
   const emailPrefix = user?.email?.split("@")[0]?.replace(/[._-]+/g, " ").trim();
   const emailFirst = emailPrefix ? emailPrefix.split(" ")[0] : "";

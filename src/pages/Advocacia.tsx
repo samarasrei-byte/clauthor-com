@@ -12,7 +12,7 @@ import ClauthorLogo from "@/components/ClauthorLogo";
 import ThemeToggle from "@/components/ThemeToggle";
 import type { HireIntent } from "@/pages/Auth";
 
-// Squad oficial — 6 agentes alinhados aos slugs do plano Growth (sem duplicidade)
+// Squad oficial · 6 agentes alinhados aos slugs do plano Growth (sem duplicidade)
 const agents = [
   {
     slug: "captacao_juridica",
@@ -210,7 +210,7 @@ const plans: Array<{
     setup: "R$ 9.997",
     monthlyLabel: "R$ 4.997",
     monthlyValue: 499700,
-    desc: "Sistema operacional jurídico completo com arquitetura MCP — 14 agentes orquestrados",
+    desc: "Sistema operacional jurídico completo com arquitetura MCP · 14 agentes orquestrados",
     features: [
       "14 agentes (squad comercial + 6 agentes MCP especializados)",
       "Orquestrador inteligente: Segurança, Processual, Prazos, Redator, Estratégico, Financeiro",
@@ -266,7 +266,7 @@ export default function Advocacia() {
       }
       el.setAttribute(attr, value);
     };
-    setMeta('meta[name="description"]', "content", "6 agentes de IA especializados em advocacia. Captação, qualificação, contratos e relacionamento — tudo automatizado e em conformidade com a OAB.");
+    setMeta('meta[name="description"]', "content", "6 agentes de IA especializados em advocacia. Captação, qualificação, contratos e relacionamento · tudo automatizado e em conformidade com a OAB.");
     setMeta('meta[property="og:title"]', "content", "Squad Jurídico com IA | Clauthor");
     setMeta('meta[property="og:description"]', "content", "Automatize captação e atendimento jurídico com 6 agentes de IA prontos para usar.");
   }, []);
@@ -287,7 +287,7 @@ export default function Advocacia() {
       toast.success("Redirecionando para o painel do advogado...");
       navigate("/advocacia/painel");
     } else {
-      // Block 2.3 — preserve redirect target via search param + state
+      // Block 2.3 · preserve redirect target via search param + state
       navigate("/auth?redirect=/advocacia/onboarding&vertical=advocacia", {
         state: { hireIntent: plan.intent, signup: true, from: { pathname: "/advocacia/onboarding" } },
       });
@@ -547,7 +547,7 @@ export default function Advocacia() {
         </div>
       </section>
 
-      {/* WORKFORCE MCP — Vitrine completa com 15 agentes (ícones lucide, sem emoji) */}
+      {/* WORKFORCE MCP · Vitrine completa com 15 agentes (ícones lucide, sem emoji) */}
       <section className="py-20 border-t border-border/40 bg-muted/20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center mb-10 max-w-2xl mx-auto">
@@ -558,7 +558,7 @@ export default function Advocacia() {
               Toda a squad jurídica orquestrada
             </h2>
             <p className="mt-3 text-muted-foreground text-base">
-              7 agentes MCP (núcleo inteligente) + 4 comerciais + 4 operacionais. Sem duplicidade — cada agente tem papel único.
+              7 agentes MCP (núcleo inteligente) + 4 comerciais + 4 operacionais. Sem duplicidade · cada agente tem papel único.
             </p>
             <div className="mt-5">
               <Link to="/apresentacaoadv">
@@ -710,7 +710,7 @@ export default function Advocacia() {
                 </div>
                 <div className="flex-1">
                   <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 hover:bg-amber-500/20 mb-2">
-                    Beta — Máximo 5 escritórios nesta fase
+                    Beta · Máximo 5 escritórios nesta fase
                   </Badge>
                   <p className="text-sm text-foreground/80">
                     Cada escritório opera em instância isolada. Seus dados de clientes nunca se misturam com outros escritórios.

@@ -1,5 +1,5 @@
 /**
- * WowVoiceCapture — bloco de gravação por voz para a variante A/B "voice"
+ * WowVoiceCapture · bloco de gravação por voz para a variante A/B "voice"
  * do InstantWow. Chama STT via edge function; ao transcrever, chama
  * onTranscript(text) e o pai preenche o textarea.
  */
@@ -65,7 +65,7 @@ export function WowVoiceCapture({ onTranscript, disabled }: Props) {
             <span className="text-muted-foreground">Convertendo áudio em texto...</span>
           )}
           {voice.state === "done" && (
-            <span className="text-emerald-500">Texto preenchido — ajuste se precisar.</span>
+            <span className="text-emerald-500">Texto preenchido · ajuste se precisar.</span>
           )}
           {voice.state === "idle" && (
             <span className="text-muted-foreground">Até 30 segundos. Fale como se estivesse contando a um sócio.</span>

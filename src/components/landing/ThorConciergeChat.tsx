@@ -1,5 +1,5 @@
 /**
- * ThorConciergeChat — chat LLM real (streaming) para o hero da home e /thor.
+ * ThorConciergeChat · chat LLM real (streaming) para o hero da home e /thor.
  *
  * Substitui o funil scripted anterior. Conversa livre, estilo ChatGPT, com o
  * Thor agindo como consultor. Ao detectar a linha `RECOMENDACAO: <dept>` no
@@ -67,7 +67,7 @@ interface Recommendation {
  *   RECOMENDACAO: departamento:comercial
  *   RECOMENDACAO: squad
  *   RECOMENDACAO: agente
- *   RECOMENDACAO: comercial          (legado — vira departamento)
+ *   RECOMENDACAO: comercial          (legado · vira departamento)
  */
 function splitRecommendation(text: string): { visible: string; reco?: Recommendation } {
   const match = text.match(/RECOMENDACAO\s*:\s*([a-zA-Z_]+)(?:\s*:\s*([a-zA-Z_]+))?\s*$/im);
@@ -88,7 +88,7 @@ const INTRO: ChatMessage = {
   id: "intro",
   role: "assistant",
   content:
-    "Oi, sou o Thor. Me conta qual é a sua maior dor hoje — e, se quiser, o tamanho da empresa ou o orçamento que tem em mente. Com isso eu já monto a solução com melhor custo-benefício.",
+    "Oi, sou o Thor. Me conta qual é a sua maior dor hoje · e, se quiser, o tamanho da empresa ou o orçamento que tem em mente. Com isso eu já monto a solução com melhor custo-benefício.",
 };
 
 const SUGGESTIONS = [
@@ -220,7 +220,7 @@ export default function ThorConciergeChat({
                 );
               }
             } catch {
-              /* chunk parcial — ignora */
+              /* chunk parcial · ignora */
             }
           }
         }
@@ -294,7 +294,7 @@ export default function ThorConciergeChat({
         className,
       )}
     >
-      {/* Header — Airy editorial */}
+      {/* Header · Airy editorial */}
       <header className="px-8 py-5 border-b border-border/40 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className={cn("h-2 w-2 rounded-full transition-colors", isStreaming ? "bg-primary animate-pulse" : "bg-primary")} />
@@ -341,7 +341,7 @@ export default function ThorConciergeChat({
           ),
         )}
 
-        {/* Recommendation CTA — editorial card */}
+        {/* Recommendation CTA · editorial card */}
         {recommendation && !isStreaming && (
           <div className="rounded-2xl border border-border/50 bg-muted/30 p-5">
             <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 font-semibold mb-2">
@@ -401,7 +401,7 @@ export default function ThorConciergeChat({
         )}
       </div>
 
-      {/* Footer — chips + composer */}
+      {/* Footer · chips + composer */}
       <footer className="px-8 pb-7 pt-2">
         {messages.length === 1 && (
           <div className="flex flex-wrap gap-2 mb-5">

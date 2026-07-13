@@ -1,12 +1,12 @@
 /**
- * DepartmentLiveDemo — simulação cinematográfica de ~60s do departamento
+ * DepartmentLiveDemo · simulação cinematográfica de ~60s do departamento
  * trabalhando em tempo real.
  *
  * Zero backend: usa `setTimeout` sobre `department.timelineDemo` para revelar
  * eventos um a um, com contador animado do outcome sincronizado à progressão.
  *
  * Regras:
- * - Timeline é apenas exibição — se o usuário fechar o dialog, tudo pausa/reset.
+ * - Timeline é apenas exibição · se o usuário fechar o dialog, tudo pausa/reset.
  * - Ao chegar no último evento, aparece CTA "Contratar departamento".
  * - Sem chamadas de rede, sem persistência, sem estado global.
  */
@@ -189,7 +189,7 @@ const DepartmentLiveDemo = ({
             <div className="flex-1 text-left">
               <div className="flex items-center gap-2">
                 <DialogTitle className="text-lg font-semibold">
-                  {department.name} — ao vivo
+                  {department.name} · ao vivo
                 </DialogTitle>
                 <span
                   className="rounded-full border border-amber-500/40 bg-amber-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-amber-600 dark:text-amber-400"
@@ -199,7 +199,7 @@ const DepartmentLiveDemo = ({
                 </span>
               </div>
               <DialogDescription className="text-xs">
-                Cenário ilustrativo de um dia de trabalho — dados de exemplo, não de cliente real.
+                Cenário ilustrativo de um dia de trabalho · dados de exemplo, não de cliente real.
               </DialogDescription>
             </div>
           </div>

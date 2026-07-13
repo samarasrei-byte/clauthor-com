@@ -20,7 +20,7 @@ import SEO from "@/components/SEO";
 
 const TOUR_STEPS = [
   { title: "Bem-vindo ao seu novo departamento", body: "O Thor vai te guiar pelas 4 áreas onde você acompanha a operação. Leva 30 segundos." },
-  { title: "Second Brain", body: "Aqui você vê agenda, notícias e tarefas em andamento — o cérebro externo do seu negócio." },
+  { title: "Second Brain", body: "Aqui você vê agenda, notícias e tarefas em andamento · o cérebro externo do seu negócio." },
   { title: "Aprovações", body: "Toda ação de impacto passa por você. Aprovar ou recusar em 1 clique." },
   { title: "Agentes ao vivo", body: "Veja seus agentes trabalhando e conversando em tempo real. Isso é o dia a dia do departamento." },
 ];
@@ -71,7 +71,7 @@ function ThorTour({ onDone }: { onDone: () => void }) {
 }
 
 /* -------------------------------------------------- */
-/* Second Brain Panel (mock data — plug real feeds later) */
+/* Second Brain Panel (mock data · plug real feeds later) */
 /* -------------------------------------------------- */
 
 function SecondBrain({ deptName }: { deptName: string }) {
@@ -90,8 +90,8 @@ function SecondBrain({ deptName }: { deptName: string }) {
     { time: "16:15", title: "Review semanal do pipeline" },
   ];
   const news = [
-    `Nova onda de investimento em automação B2B — impacto direto no ${deptName}`,
-    "Concorrente lançou funcionalidade similar — oportunidade de diferenciação",
+    `Nova onda de investimento em automação B2B · impacto direto no ${deptName}`,
+    "Concorrente lançou funcionalidade similar · oportunidade de diferenciação",
     "Mudança regulatória em vigor a partir de janeiro",
   ];
 

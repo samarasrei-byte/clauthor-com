@@ -1,5 +1,5 @@
 /**
- * deptSelection — carrinho global de departamentos (Fase 3).
+ * deptSelection · carrinho global de departamentos (Fase 3).
  *
  * Regras:
  * - Um departamento por linha; sem quantidade (não faz sentido "2x Comercial").

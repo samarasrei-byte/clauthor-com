@@ -14,7 +14,7 @@ import ReactMarkdown from "react-markdown";
 type Msg = { role: "user" | "assistant"; content: string };
 
 // ------------------------------------------------------------
-// 15 agentes — vitrine completa com ícones lucide (sem emoji)
+// 15 agentes · vitrine completa com ícones lucide (sem emoji)
 // ------------------------------------------------------------
 type AgentCard = {
   icon: any;
@@ -610,7 +610,7 @@ export default function ApresentacaoAdv() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    document.title = "Apresentação · Squad Jurídica MCP — Clauthor";
+    document.title = "Apresentação · Squad Jurídica MCP · Clauthor";
     const meta = document.querySelector('meta[name="description"]');
     if (meta) {
       meta.setAttribute(
@@ -726,7 +726,7 @@ export default function ApresentacaoAdv() {
         </div>
       </section>
 
-      {/* AGENTES — 15 cards */}
+      {/* AGENTES · 15 cards */}
       <section id="agentes" className="py-20 bg-card/30 border-b border-border/40">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-12">
@@ -956,7 +956,7 @@ export default function ApresentacaoAdv() {
         </div>
       </section>
 
-      {/* CALCULADORA DE ROI — 3 CENÁRIOS */}
+      {/* CALCULADORA DE ROI · 3 CENÁRIOS */}
       <section className="py-20 border-b border-border/40">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-12">
@@ -1054,7 +1054,7 @@ export default function ApresentacaoAdv() {
         </div>
       </section>
 
-      {/* GATILHOS — CUSTO DE NÃO DECIDIR + AUTORIDADE */}
+      {/* GATILHOS · CUSTO DE NÃO DECIDIR + AUTORIDADE */}
       <section className="py-20 border-b border-border/40 bg-card/30">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">
@@ -1115,7 +1115,7 @@ export default function ApresentacaoAdv() {
         </div>
       </section>
 
-      {/* PLANOS — resumo */}
+      {/* PLANOS · resumo */}
       <section className="py-20">
         <div className="max-w-6xl mx-auto px-6">
           <div className="text-center max-w-2xl mx-auto mb-14">

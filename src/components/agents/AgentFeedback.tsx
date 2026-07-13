@@ -51,7 +51,7 @@ export default function AgentFeedback({ agentId, agentName, userMessage, assista
       toast.error("Não foi possível registrar o feedback");
       return;
     }
-    toast.success(r === 1 ? "Obrigado pelo feedback!" : "Anotado — vamos melhorar.");
+    toast.success(r === 1 ? "Obrigado pelo feedback!" : "Anotado · vamos melhorar.");
     setShowBox(false);
   };
 

@@ -1,5 +1,5 @@
 /**
- * canonical-copy.ts — Single Source of Truth para números comerciais.
+ * canonical-copy.ts · Single Source of Truth para números comerciais.
  *
  * Toda vez que uma inconsistência aparecer entre landing/pricing/dashboard/ROI
  * (agente barato demais, CLT com valor divergente, contagem de agentes errada,
@@ -41,7 +41,7 @@ export const CANONICAL = {
     overheadMultiplier: 1.8,
   },
   workforce: {
-    /** Sempre renderizado como "+200" — jamais "200" ou "225". */
+    /** Sempre renderizado como "+200" · jamais "200" ou "225". */
     agentCountLabel: "+200",
     departmentCount: 20,
   },

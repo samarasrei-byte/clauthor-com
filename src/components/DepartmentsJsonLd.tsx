@@ -44,7 +44,7 @@ export default function DepartmentsJsonLd() {
         "@type": "Product",
         name: meta.name,
         category: meta.category,
-        description: `${meta.name} operado por ${d.agents.length} agentes autônomos CLAUTHOR — substitui uma equipe humana de ${d.headcount} pessoas.`,
+        description: `${meta.name} operado por ${d.agents.length} agentes autônomos CLAUTHOR · substitui uma equipe humana de ${d.headcount} pessoas.`,
         brand: { "@type": "Brand", name: "CLAUTHOR" },
         offers: {
           "@type": "Offer",

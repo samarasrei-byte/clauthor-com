@@ -1,5 +1,5 @@
 /**
- * useWowFlow — state machine do momento "uau" pós-signup.
+ * useWowFlow · state machine do momento "uau" pós-signup.
  * Estados: idle → capturing → generating → ready → approved | error
  * Streaming direto da Edge Function wow-generate; fallback para template
  * pré-gerado se algo falhar. Zero espera desnecessária pro usuário.
@@ -214,7 +214,7 @@ export function useWowFlow() {
       if (tenantId) {
         await supabase.from("approvals").insert({
           tenant_id: tenantId,
-          title: `${option.outputLabel} — ${company}`.slice(0, 240),
+          title: `${option.outputLabel} · ${company}`.slice(0, 240),
           delivery_type: "document",
           status: "approved",
           content: {

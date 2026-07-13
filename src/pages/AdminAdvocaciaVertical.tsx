@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Scale, Search, ArrowLeft, ExternalLink, Users, Activity, Loader2 } from "lucide-react";
 
 /**
- * AdminAdvocaciaVertical — Painel admin para a vertical jurídica.
+ * AdminAdvocaciaVertical · Painel admin para a vertical jurídica.
  * Permite ao admin@clauthor.com ver todos os tenants jurídicos, métricas
  * agregadas e abrir o painel de qualquer cliente para suporte.
  */
@@ -120,7 +120,7 @@ const AdminAdvocaciaVertical = () => {
               <Users className="h-4 w-4 text-muted-foreground" />
             </div>
             <div className="text-2xl font-semibold">
-              {isLoading ? "—" : tenants.length}
+              {isLoading ? "·" : tenants.length}
             </div>
           </Card>
           <Card className="p-4">
@@ -132,7 +132,7 @@ const AdminAdvocaciaVertical = () => {
             </div>
             <div className="text-2xl font-semibold">
               {isLoading
-                ? "—"
+                ? "·"
                 : tenants.reduce((s: number, t: any) => s + (t.executions30d || 0), 0)}
             </div>
           </Card>
@@ -145,7 +145,7 @@ const AdminAdvocaciaVertical = () => {
             </div>
             <div className="text-2xl font-semibold">
               {isLoading
-                ? "—"
+                ? "·"
                 : tenants.reduce((s: number, t: any) => s + (t.subscriptionsCount || 0), 0)}
             </div>
           </Card>

@@ -1,5 +1,5 @@
 /**
- * WowKpiCard — surfaces InstantWow TTFV + conversion at a glance
+ * WowKpiCard · surfaces InstantWow TTFV + conversion at a glance
  * inside the admin overview; deep-links to /admin/kpis for the full dashboard.
  */
 import { useQuery } from "@tanstack/react-query";
@@ -10,7 +10,7 @@ import { Badge } from "@/components/ui/badge";
 import { Timer, Zap, ArrowRight, Users } from "lucide-react";
 
 function fmtMs(ms: number | null | undefined) {
-  if (ms == null) return "—";
+  if (ms == null) return "·";
   if (ms < 1000) return `${Math.round(ms)}ms`;
   if (ms < 60_000) return `${(ms / 1000).toFixed(1)}s`;
   return `${(ms / 60_000).toFixed(1)}min`;

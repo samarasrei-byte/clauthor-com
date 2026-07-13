@@ -13,7 +13,7 @@ interface TourStep {
   position: "right" | "bottom";
 }
 
-// Tour reduzido a 2 tooltips leves — recap + checkout já cobrem o onboarding pago.
+// Tour reduzido a 2 tooltips leves · recap + checkout já cobrem o onboarding pago.
 const TOUR_STEPS: TourStep[] = [
   { target: "nav-overview", title: "Seu painel", description: "Aqui você vê seus agentes, métricas e ações rápidas em um só lugar.", position: "right" },
   { target: "nav-chat", title: "Fale com o Thor", description: "Converse com o Thor a qualquer momento para ajustar o time ou pedir uma nova execução.", position: "right" },

@@ -1,5 +1,5 @@
 /**
- * AdminKpiDashboard — percentis de Time-To-First-Value + funil InstantWow.
+ * AdminKpiDashboard · percentis de Time-To-First-Value + funil InstantWow.
  * Acesso restrito a admin (has_role check nas funções SQL).
  */
 import { Helmet } from "react-helmet-async";
@@ -15,7 +15,7 @@ type Range = "24h" | "7d" | "30d" | "90d";
 const RANGE_HOURS: Record<Range, number> = { "24h": 24, "7d": 168, "30d": 720, "90d": 2160 };
 
 function fmtMs(ms: number | null | undefined) {
-  if (ms == null) return "—";
+  if (ms == null) return "·";
   if (ms < 1000) return `${Math.round(ms)}ms`;
   if (ms < 60_000) return `${(ms / 1000).toFixed(1)}s`;
   return `${(ms / 60_000).toFixed(1)}min`;
@@ -112,7 +112,7 @@ export default function AdminKpiDashboard() {
   return (
     <>
       <Helmet>
-        <title>KPIs — Time-To-First-Value | Clauthor Admin</title>
+        <title>KPIs · Time-To-First-Value | Clauthor Admin</title>
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       <div className="min-h-dvh bg-background text-foreground">

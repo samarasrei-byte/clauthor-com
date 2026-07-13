@@ -1,5 +1,5 @@
 /**
- * WorkspaceHub — Consolidado (7 → 4 tabs).
+ * WorkspaceHub · Consolidado (7 → 4 tabs).
  *
  * Antes: Empresa / Inbox / Squads / Kanban / Files / Approvals / Composer.
  * Depois:
@@ -8,7 +8,7 @@
  *   3. Orquestração (Squads + Composer)
  *   4. Execução (Tarefas + Arquivos)
  *
- * A sub-navegação usa `ToggleGroup` shadcn — NÃO Tabs aninhadas — para
+ * A sub-navegação usa `ToggleGroup` shadcn · NÃO Tabs aninhadas · para
  * evitar duplicação de semântica ARIA. O deep-link `?view=<key>` mantém
  * compatibilidade com links antigos e permite abrir uma sub-view direto.
  */
@@ -159,7 +159,7 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
   );
 };
 
-/** Sub-nav em pill — ToggleGroup evita nested Tabs ARIA. */
+/** Sub-nav em pill · ToggleGroup evita nested Tabs ARIA. */
 interface SubNavProps {
   value: string;
   onValueChange: (value: string) => void;

@@ -56,7 +56,7 @@ const AuthPage = () => {
   const hireIntent = state?.hireIntent || null;
 
   // Se o visitante veio do quiz da landing, mostramos um card persistente com
-  // o departamento pré-selecionado — mesmo antes do hireIntent existir.
+  // o departamento pré-selecionado · mesmo antes do hireIntent existir.
   const quizPreselection = useMemo(() => {
     const diag = loadDiagnosis();
     if (!diag) return null;
@@ -80,7 +80,7 @@ const AuthPage = () => {
     };
   }, []);
 
-  // Block 2.1 + 2.2 — detect advocacia context (URL param, redirect target, or referrer)
+  // Block 2.1 + 2.2 · detect advocacia context (URL param, redirect target, or referrer)
   const isAdvocaciaContext =
     verticalParam === "advocacia" ||
     (redirectParam?.includes("/advocacia") ?? false) ||
@@ -93,7 +93,7 @@ const AuthPage = () => {
     }
   }, [wantsSignup]);
 
-  // Block 2.1 — page title based on context
+  // Block 2.1 · page title based on context
   useEffect(() => {
     document.title = isAdvocaciaContext
       ? "Entrar | Clauthor Advocacia"
@@ -153,7 +153,7 @@ const AuthPage = () => {
             localStorage.setItem("hireIntent", JSON.stringify(hireIntent));
           }
           // Fluxo unificado: se o visitante já fez o diagnóstico na landing,
-          // Thor continua a mesma linha de raciocínio direto no painel — sem passar
+          // Thor continua a mesma linha de raciocínio direto no painel · sem passar
           // por /welcome (que é um onboarding duplicado). Só cai em /welcome quem
           // se cadastrou sem passar pelo quiz.
           const hasDiagnosis = (() => {
@@ -207,7 +207,7 @@ const AuthPage = () => {
           </p>
         </div>
 
-        {/* Quiz preselection — persistente acima do card de cadastro. */}
+        {/* Quiz preselection · persistente acima do card de cadastro. */}
         {!hireIntent && quizPreselection && !isAdvocaciaContext && (
           <motion.div
             initial={{ opacity: 0, y: -10 }}
@@ -226,7 +226,7 @@ const AuthPage = () => {
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-primary" />
                 </span>
                 <p className="text-[10px] font-bold tracking-[0.18em] text-primary uppercase">
-                  Seu departamento — precisa ser ativado
+                  Seu departamento · precisa ser ativado
                 </p>
               </div>
 
@@ -263,7 +263,7 @@ const AuthPage = () => {
               <div className="flex items-center gap-2 pt-1">
                 <Lock className="h-3 w-3 text-muted-foreground/60 shrink-0" />
                 <p className="text-[11px] text-muted-foreground leading-tight">
-                  <span className="text-foreground font-medium">Crie sua conta</span> para conhecer o time. O pagamento acontece dentro do painel — só depois que você decidir ativar.
+                  <span className="text-foreground font-medium">Crie sua conta</span> para conhecer o time. O pagamento acontece dentro do painel · só depois que você decidir ativar.
                 </p>
               </div>
             </div>
@@ -340,7 +340,7 @@ const AuthPage = () => {
                 <Label className="text-xs font-medium text-muted-foreground">{t("auth.email")}</Label>
                 <HelpTooltip
                   id="auth-email"
-                  text="Seu e-mail é o login. Enviamos apenas notificações importantes — sem spam. Prefira o e-mail profissional."
+                  text="Seu e-mail é o login. Enviamos apenas notificações importantes · sem spam. Prefira o e-mail profissional."
                   position="right"
                   size={12}
                   autoShow={false}

@@ -3,7 +3,7 @@ import { forwardRef, type SVGProps } from "react";
 /**
  * Minimalist mark used site-wide where a "sparkle/AI" hint is needed.
  * Redesigned: no star. A hairline diamond with a small orbit dot.
- * Feels Apple/Linear — quiet, geometric, modern.
+ * Feels Apple/Linear · quiet, geometric, modern.
  */
 export interface SparklesProps extends Omit<SVGProps<SVGSVGElement>, "ref"> {
   size?: number | string;
@@ -37,9 +37,9 @@ export const Sparkles = forwardRef<SVGSVGElement, SparklesProps>(
       aria-hidden="true"
       {...props}
     >
-      {/* Hairline diamond (rotated square) — geometric, no star */}
+      {/* Hairline diamond (rotated square) · geometric, no star */}
       <path d="M13 4 L20 12 L13 20 L6 12 Z" />
-      {/* Small orbit dot — subtle accent */}
+      {/* Small orbit dot · subtle accent */}
       <circle cx="19.5" cy="4.5" r="1" fill={color} stroke="none" />
     </svg>
   ),

@@ -27,7 +27,7 @@ const AppLayout = () => {
   const isHomePage = location.pathname === "/";
 
   // Adiar hidratação de add-ons não-críticos (dialogs, greeter, gate) até o
-  // browser sinalizar idle — libera o LCP da rota atual primeiro.
+  // browser sinalizar idle · libera o LCP da rota atual primeiro.
   const [addonsReady, setAddonsReady] = useState(false);
   useEffect(() => {
     const w = window as any;

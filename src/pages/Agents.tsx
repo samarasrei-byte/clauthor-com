@@ -99,7 +99,7 @@ const AgentsPage = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
-      <SEO title="My Agents — Workforce Dashboard | Clauthor" description="Manage your active AI agents: run, pause, configure, monitor executions and outcomes in real time." path="/agents" />
+      <SEO title="My Agents · Workforce Dashboard | Clauthor" description="Manage your active AI agents: run, pause, configure, monitor executions and outcomes in real time." path="/agents" />
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between">
         <div>
           <h1 className="font-display text-3xl font-bold mb-1 flex items-center gap-2">

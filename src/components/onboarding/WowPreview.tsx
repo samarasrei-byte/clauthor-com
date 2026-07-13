@@ -1,5 +1,5 @@
 /**
- * WowPreview — renderiza o output em formato "documento" com efeito de digitação
+ * WowPreview · renderiza o output em formato "documento" com efeito de digitação
  * (usa o próprio streaming: sem timer artificial, o texto cresce à medida que
  * chega). Fallback já vem "pronto", então cai instantâneo.
  */

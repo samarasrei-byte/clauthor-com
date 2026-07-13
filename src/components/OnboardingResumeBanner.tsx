@@ -47,7 +47,7 @@ export default function OnboardingResumeBanner() {
         <Diamond className="h-4 w-4 text-primary shrink-0" />
         <p className="text-sm text-foreground flex-1 min-w-0">
           <span className="font-medium">Complete seu diagnóstico</span>
-          <span className="text-muted-foreground hidden sm:inline"> — 60s para descobrir o agente ideal para sua dor.</span>
+          <span className="text-muted-foreground hidden sm:inline"> · 60s para descobrir o agente ideal para sua dor.</span>
         </p>
         <Button asChild size="sm" className="gap-1.5 shrink-0">
           <Link to="/welcome">

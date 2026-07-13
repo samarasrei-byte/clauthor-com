@@ -1,5 +1,5 @@
 /**
- * AgentsWorkingScene — cena futurista Apple-like com agentes
+ * AgentsWorkingScene · cena futurista Apple-like com agentes
  * "conversando" ao vivo dentro do card do departamento.
  *
  * Layout de chat: bolhas alternadas esquerda/direita, cada agente com
@@ -96,7 +96,7 @@ const AgentsWorkingScene = ({ agentSlugs, dialogue, className }: AgentsWorkingSc
         animate={{ x: "320%" }}
         transition={{ duration: 3.6, repeat: Infinity, ease: "easeInOut", repeatDelay: 1.4 }}
       />
-      {/* Halo vermelho difuso no rodapé — ancora o brand */}
+      {/* Halo vermelho difuso no rodapé · ancora o brand */}
       <div
         className="pointer-events-none absolute -bottom-10 left-1/2 h-24 w-2/3 -translate-x-1/2 rounded-full blur-2xl opacity-40"
         style={{ background: "radial-gradient(closest-side, hsl(var(--destructive) / 0.35), transparent)" }}

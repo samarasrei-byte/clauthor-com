@@ -633,9 +633,9 @@ const StepBlueprint = ({ state, onDeploy, deploying }: any) => {
       </Section>
 
       <Section title="Stack">
-        <p className="text-xs text-muted-foreground"><b>Ferramentas:</b> {state.tools.join(", ") || "—"}</p>
-        <p className="text-xs text-muted-foreground"><b>Integrações:</b> {state.integrations.join(", ") || "—"}</p>
-        <p className="text-xs text-muted-foreground"><b>Canais:</b> {state.channels.join(", ") || "—"}</p>
+        <p className="text-xs text-muted-foreground"><b>Ferramentas:</b> {state.tools.join(", ") || "·"}</p>
+        <p className="text-xs text-muted-foreground"><b>Integrações:</b> {state.integrations.join(", ") || "·"}</p>
+        <p className="text-xs text-muted-foreground"><b>Canais:</b> {state.channels.join(", ") || "·"}</p>
       </Section>
 
       <Section title="Governança">

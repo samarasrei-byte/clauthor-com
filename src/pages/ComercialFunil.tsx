@@ -201,7 +201,7 @@ export default function ComercialFunil() {
   return (
     <>
       <Helmet>
-        <title>Sales Pipeline — CRM Funil | Clauthor</title>
+        <title>Sales Pipeline · CRM Funil | Clauthor</title>
         <meta
           name="description"
           content="Visual sales pipeline (Kanban) for commercial deals with drag-and-drop stages, values and integrated AI closer suggestions."
