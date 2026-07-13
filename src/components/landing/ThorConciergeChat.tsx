@@ -28,8 +28,8 @@ interface ChatMessage {
   id: string;
   role: Role;
   content: string;
-  /** Departamento recomendado extraído da resposta (se houver). */
-  deptId?: string;
+  /** Recomendação extraída da resposta (se houver). */
+  reco?: Recommendation;
 }
 
 interface ThorConciergeChatProps {
