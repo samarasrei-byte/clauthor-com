@@ -172,7 +172,7 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="text-[44px] sm:text-6xl md:text-7xl lg:text-[88px] font-semibold tracking-[-0.035em] leading-[0.98] max-w-5xl mb-8"
           >
-            Converse com o Thor.
+            <span className="text-black">Converse com o Thor.</span>
             <br />
             <span className="text-muted-foreground">Ele monta a solução certa.</span>
           </motion.h1>
