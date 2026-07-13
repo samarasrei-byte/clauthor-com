@@ -16,6 +16,7 @@ import { useTranslation } from "react-i18next";
 import Footer from "@/components/Footer";
 import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
+import PanelMockup from "@/components/landing/PanelMockup";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { trackKpi } from "@/lib/kpiTracker";
@@ -367,64 +368,7 @@ const HomePage = () => {
             </p>
           </div>
 
-          <div className="relative rounded-t-3xl border-t border-x border-white/10 bg-white/[0.03] overflow-hidden">
-            <div className="flex items-center gap-1.5 px-5 py-3 border-b border-white/10">
-              <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-              <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-              <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
-              <span className="ml-auto text-[10px] font-mono uppercase tracking-[0.14em] text-white/40">
-                clauthor · live
-              </span>
-            </div>
-            <div className="grid grid-cols-12 gap-4 h-[380px] p-5 overflow-hidden">
-              <div className="col-span-3 space-y-2 border-r border-white/10 pr-4">
-                <div className="h-3 w-2/3 bg-white/15 rounded-full" />
-                <div className="pt-3 space-y-1.5">
-                  <div className="h-8 rounded-lg bg-white/[0.06] border border-white/10 flex items-center px-3">
-                    <div className="h-2 w-16 bg-white/50 rounded-full" />
-                  </div>
-                  {[0, 1, 2, 3].map((i) => (
-                    <div key={i} className="h-8 rounded-lg bg-white/[0.03] flex items-center px-3">
-                      <div className="h-2 w-14 bg-white/20 rounded-full" />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="col-span-9 space-y-4">
-                <div className="flex items-start justify-between">
-                  <div className="space-y-2">
-                    <div className="h-5 w-64 bg-white/15 rounded-full" />
-                    <div className="h-3 w-40 bg-white/10 rounded-full" />
-                  </div>
-                  <div className="h-9 w-28 bg-primary rounded-full" />
-                </div>
-                <div className="grid grid-cols-3 gap-3">
-                  {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className="p-4 rounded-xl bg-black border border-white/10 space-y-2"
-                    >
-                      <div className="h-2 w-16 bg-white/30 rounded-full" />
-                      <div className={`h-7 w-20 rounded-md ${i === 1 ? "bg-primary" : "bg-white/80"}`} />
-                      <div className="h-2 w-full bg-white/10 rounded-full" />
-                    </div>
-                  ))}
-                </div>
-                <div className="p-4 rounded-xl bg-black border border-white/10 space-y-2.5">
-                  <div className="flex items-center gap-2">
-                    <div className="h-6 w-6 rounded-full bg-primary/25 flex items-center justify-center">
-                      <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
-                    </div>
-                    <div className="h-3 w-48 bg-white/25 rounded-full" />
-                  </div>
-                  <div className="h-2 w-full bg-white/10 rounded-full" />
-                  <div className="h-2 w-5/6 bg-white/10 rounded-full" />
-                  <div className="h-2 w-2/3 bg-white/10 rounded-full" />
-                </div>
-              </div>
-            </div>
-            <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
-          </div>
+          <PanelMockup />
         </div>
       </section>
 
@@ -445,13 +389,13 @@ const HomePage = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-6 [column-fill:_balance]">
             {CEO_TESTIMONIALS.map((c) => (
               <motion.figure
                 key={c.name}
                 whileHover={{ y: -4 }}
                 transition={{ type: "spring", stiffness: 300, damping: 24 }}
-                className="group p-7 rounded-2xl bg-card border border-border/60 hover:border-foreground/25 hover:shadow-[0_25px_60px_-25px_hsl(0_0%_0%/0.25)] transition-all flex flex-col"
+                className="group mb-6 break-inside-avoid p-7 rounded-2xl bg-card border border-border/60 hover:border-foreground/25 hover:shadow-[0_25px_60px_-25px_hsl(0_0%_0%/0.25)] transition-all flex flex-col"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div className="inline-flex items-center gap-2">
