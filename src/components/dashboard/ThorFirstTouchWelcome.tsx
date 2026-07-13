@@ -63,30 +63,30 @@ export default function ThorFirstTouchWelcome({ onGuideMe, openDelayMs = 900 }: 
     return full.split(/[ @]/)[0] || "guerreiro";
   }, [user]);
 
-  const storageKey = user ? `${STORAGE_KEY}-${user.id}` : null;
+  const { hasSeen, markSeen, isLoading: tpLoading } = useThorTouchpoints();
 
   useEffect(() => {
-    if (!storageKey || isLoading) return;
-    if (typeof window === "undefined") return;
-    // Admin não precisa desse toque (tem acesso total ao catálogo)
+    if (!user || isLoading || tpLoading) return;
     if (isAdmin) return;
-    // Só aparece quando há departamento ativo — se o usuário ainda não
-    // contratou nada, o empty state cuida.
     if (departments.length === 0) return;
-    try {
-      if (localStorage.getItem(storageKey)) return;
-    } catch { /* ignore */ }
+    if (hasSeen("first_touch_dashboard")) return;
     const t = setTimeout(() => setOpen(true), openDelayMs);
     return () => clearTimeout(t);
-  }, [storageKey, isLoading, isAdmin, departments.length, openDelayMs]);
+  }, [user, isLoading, tpLoading, isAdmin, departments.length, openDelayMs, hasSeen]);
 
   const dismiss = (reason: "understood" | "guide" | "close") => {
-    if (storageKey) {
-      try { localStorage.setItem(storageKey, new Date().toISOString()); } catch { /* ignore */ }
-    }
+    void markSeen("first_touch_dashboard", {
+      ctaTaken: reason === "guide",
+      metadata: {
+        reason,
+        departments_active: departments.length,
+        department_names: departments.slice(0, 5).map((d) => d.department_name),
+      },
+    });
     setOpen(false);
     if (reason === "guide") onGuideMe?.();
   };
+
 
   const deptList = departments.slice(0, 4);
   const extra = Math.max(0, departments.length - deptList.length);
