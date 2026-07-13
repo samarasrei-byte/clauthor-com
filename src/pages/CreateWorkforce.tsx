@@ -25,6 +25,7 @@ import {
   WORKFORCE_CATALOG, WORKFORCE_CATALOG_COUNT, DEPARTMENTS,
   SUGGESTED_TOOLS, SUGGESTED_INTEGRATIONS, SUGGESTED_CHANNELS
 } from "@/data/workforceCatalog";
+import ThorConsultantPanel, { type ThorRecommendation } from "@/components/thor/ThorConsultantPanel";
 
 const STEPS = [
   { id: 1, label: "Objetivo de negócio", hint: "O que você quer alcançar" },
