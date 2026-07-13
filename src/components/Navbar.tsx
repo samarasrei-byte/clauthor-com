@@ -59,7 +59,7 @@ const Navbar = () => {
           { label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }), href: "/departamentos" },
           { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
           { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
-          { label: "Developers", href: "/developers" },
+          
         ]),
   ];
 
@@ -225,7 +225,7 @@ const Navbar = () => {
                 { href: "/departamentos", label: t("navbar.ai_teams_label") },
                 { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }) },
                 { href: "/enterprise", label: "Enterprise" },
-                { href: "/developers", label: "Developers" },
+                
               ].map((item) => (
                 <Link
                   key={item.href}

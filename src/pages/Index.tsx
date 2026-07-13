@@ -34,6 +34,8 @@ const FEATURED_DEPT_IDS = ["comercial", "atendimento", "marketing", "juridico", 
 
 const CEO_TESTIMONIALS = [
   {
+    lang: "PT-BR",
+    flag: "🇧🇷",
     quote:
       "Substituí um time de seis SDRs por um departamento comercial da Clauthor. Em 45 dias o pipeline triplicou e o custo caiu 78%.",
     name: "Rafael Mendes",
@@ -41,39 +43,58 @@ const CEO_TESTIMONIALS = [
     metric: "3,1× pipeline",
   },
   {
+    lang: "EN",
+    flag: "🇺🇸",
     quote:
-      "O departamento jurídico revisa 400 contratos por mês. Meu escritório voltou a ter margem para atender casos estratégicos.",
-    name: "Camila Prado",
-    role: "Sócia-fundadora · Prado & Associados",
-    metric: "-62% tempo",
+      "We replaced an entire back-office team with Clauthor's finance department. Reconciliation runs 24/7 and I finally have real cash predictability.",
+    name: "Sarah Whitfield",
+    role: "CFO · Northline Capital",
+    metric: "-47% cost",
   },
   {
+    lang: "ES",
+    flag: "🇪🇸",
     quote:
-      "Marketing autônomo. Postagens, campanhas, análise. Meu head de marketing hoje só valida — não executa mais nada.",
-    name: "Diego Alcântara",
-    role: "CMO · Nuvia SaaS",
-    metric: "+412% output",
-  },
-  {
-    quote:
-      "Atendimento em 14 idiomas, 24/7. Meu NPS subiu 34 pontos em 3 meses e demiti a operadora terceirizada.",
-    name: "Larissa Ono",
+      "El departamento de atención al cliente responde en catorce idiomas sin descanso. Nuestro NPS subió 34 puntos en tres meses.",
+    name: "Alejandro Ruiz",
     role: "COO · Global Trade Hub",
     metric: "NPS +34",
   },
   {
+    lang: "FR",
+    flag: "🇫🇷",
     quote:
-      "Financeiro rodando conciliação e cobrança sem CLT. Enxuguei o back-office e ganhei previsibilidade de caixa.",
-    name: "Bruno Salgado",
-    role: "CFO · Vertex Construtora",
-    metric: "-47% custo",
+      "Le département juridique de Clauthor examine plus de 400 contrats par mois. Mon cabinet retrouve enfin du temps pour les dossiers stratégiques.",
+    name: "Camille Laurent",
+    role: "Associée · Laurent & Cie",
+    metric: "-62% temps",
   },
   {
+    lang: "IT",
+    flag: "🇮🇹",
     quote:
-      "Contratei o departamento de RH da Clauthor no mesmo dia que perdi minha analista sênior. Nem senti a saída.",
-    name: "Patrícia Kimura",
-    role: "CEO · Osmose Digital",
+      "Marketing autonomo. Post, campagne, analisi. Il mio direttore marketing oggi si limita ad approvare — non esegue più nulla.",
+    name: "Marco Bellini",
+    role: "CMO · Nuvia SaaS Italia",
+    metric: "+412% output",
+  },
+  {
+    lang: "JA",
+    flag: "🇯🇵",
+    quote:
+      "Clauthorの人事部門を導入した日に、シニアアナリストが退職しました。それでも業務は一切止まらず、むしろ加速しました。",
+    name: "小野 詩織 · Shiori Ono",
+    role: "CEO · Osmose Digital 東京",
     metric: "0 gap",
+  },
+  {
+    lang: "ZH",
+    flag: "🇨🇳",
+    quote:
+      "Clauthor 的销售部门就像一支永不下班的团队。90 天内我们的合格线索翻了三倍,而人力成本几乎归零。",
+    name: "陈 建华 · Jianhua Chen",
+    role: "创始人 · Vertex 建设集团",
+    metric: "3× leads",
   },
 ];
 
@@ -125,7 +146,7 @@ const HomePage = () => {
     .filter((d): d is NonNullable<typeof d> => Boolean(d));
 
   return (
-    <div className="relative overflow-x-hidden bg-background text-foreground">
+    <div className="light relative overflow-x-hidden bg-background text-foreground">
       {/* ═══════════ HERO ═══════════ */}
       <section
         className="relative max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28"
@@ -368,12 +389,11 @@ const HomePage = () => {
                 className="group p-7 rounded-2xl bg-card border border-border/60 hover:border-foreground/25 transition-colors flex flex-col"
               >
                 <div className="flex items-center justify-between mb-6">
-                  <div className="flex gap-0.5 text-foreground">
-                    {"★★★★★".split("").map((s, i) => (
-                      <span key={i} className="text-[13px]">
-                        {s}
-                      </span>
-                    ))}
+                  <div className="inline-flex items-center gap-2">
+                    <span className="text-lg leading-none" aria-hidden>{c.flag}</span>
+                    <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                      {c.lang}
+                    </span>
                   </div>
                   <span className="text-[10px] font-semibold text-primary uppercase tracking-[0.14em]">
                     {c.metric}
@@ -384,7 +404,7 @@ const HomePage = () => {
                 </blockquote>
                 <figcaption className="flex items-center gap-3 pt-5 border-t border-border/50">
                   <div className="h-9 w-9 rounded-full bg-foreground/[0.06] flex items-center justify-center text-[11px] font-semibold text-foreground">
-                    {c.name.split(" ").map((n) => n[0]).slice(0, 2).join("")}
+                    {c.name.replace(/·.*$/, "").trim().split(/\s+/).map((n) => n[0]).slice(0, 2).join("")}
                   </div>
                   <div className="min-w-0">
                     <div className="text-sm font-semibold text-foreground truncate">
