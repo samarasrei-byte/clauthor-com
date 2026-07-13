@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
-import { LayoutDashboard, Bot, BarChart3, CreditCard, Settings, Brain, MessageSquare, Plug, ChevronLeft, Building2, KanbanSquare, Layers3, Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio, CheckSquare, FolderOpen } from "lucide-react";
+import { LayoutDashboard, Bot, BarChart3, CreditCard, Settings, Brain, MessageSquare, Plug, ChevronLeft, Building2, KanbanSquare, Layers3, Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio, CheckSquare, FolderOpen, BriefcaseBusiness } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
@@ -42,6 +42,7 @@ import DiagnosisRecapDialog from "@/components/dashboard/DiagnosisRecapDialog";
 const ThorFirstTouchWelcome = lazy(() => import("@/components/dashboard/ThorFirstTouchWelcome"));
 const ThorTokenAlert = lazy(() => import("@/components/dashboard/ThorTokenAlert"));
 const ThorCenter = lazy(() => import("@/components/dashboard/ThorCenter"));
+const ProductivityHub = lazy(() => import("@/components/dashboard/ProductivityHub"));
 import { useThorLiveAlerts } from "@/hooks/useThorLiveAlerts";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
@@ -448,6 +449,7 @@ const ClientDashboard = () => {
     // ─── Meu trabalho: o que eu faço no dia a dia ───
     { id: "overview",  label: t("dashboard.command_center"), icon: LayoutDashboard, group: zoneWork },
     { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: zoneWork },
+    { id: "productivity", label: "Central de Produtividade", icon: BriefcaseBusiness, group: zoneWork },
     // Chat unificado: sem entrada própria · o Command Center é o hub conversacional,
     // e conversar com um agente específico entra por "Meus Agentes" → agente.
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}`, group: zoneWork }] : []),
@@ -471,7 +473,7 @@ const ClientDashboard = () => {
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "agent-chat-active",
-    "intelligence-hub", "omnix", "thor-center", "workspace",
+    "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
     "integrations", "system",
   ]);
   const sidebarItems: SidebarItem[] = isAdmin
@@ -537,6 +539,7 @@ const ClientDashboard = () => {
     "war-room-live": "War Room Live",
     chat: selectedAgent?.name || "Chat",
     inbox: "Inbox",
+    productivity: "Central de Produtividade",
   }), [t, selectedAgent]);
 
   const breadcrumbLabel = breadcrumbMap[activeSection] || activeSection;
@@ -752,6 +755,12 @@ const ClientDashboard = () => {
                 {activeSection === "thor-center" && (
                   <Suspense fallback={<SectionLoader />}>
                     <ThorCenter onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
+
+                {activeSection === "productivity" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ProductivityHub onNavigate={handleSidebarNav} />
                   </Suspense>
                 )}
 
