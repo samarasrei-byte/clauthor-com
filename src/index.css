@@ -501,6 +501,84 @@
     transform: rotate(12deg) scale(1.05);
     transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
+
+  /* ============================================================
+     TYPOGRAPHY SYSTEM — 6 named styles + editorial numerals
+     ============================================================ */
+  .type-display {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-weight: 400;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+  }
+  .type-headline {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 600;
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+  }
+  .type-title {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 1.125rem;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+  }
+  .type-body {
+    font-family: 'Instrument Sans', 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.9375rem;
+    line-height: 1.65;
+    letter-spacing: -0.005em;
+    color: hsl(var(--foreground) / 0.88);
+  }
+  .type-caption {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: hsl(var(--muted-foreground));
+  }
+  .type-eyebrow {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 500;
+    font-size: 0.6875rem;
+    line-height: 1;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: hsl(var(--muted-foreground));
+  }
+  .type-numeric {
+    font-family: 'Instrument Serif', Georgia, serif;
+    font-style: italic;
+    font-weight: 400;
+    font-variant-numeric: lining-nums tabular-nums;
+    letter-spacing: -0.02em;
+  }
+
+  /* Surface elevation — quiet hierarchy without shadows */
+  .surface-0 { background-color: hsl(var(--surface-0)); }
+  .surface-1 { background-color: hsl(var(--surface-1)); }
+  .surface-2 { background-color: hsl(var(--surface-2)); }
+  .surface-3 { background-color: hsl(var(--surface-3)); }
+  .hairline { border: 1px solid hsl(var(--hairline)); }
+  .hairline-t { border-top: 1px solid hsl(var(--hairline)); }
+  .hairline-b { border-bottom: 1px solid hsl(var(--hairline)); }
+  .shadow-cold-sm { box-shadow: 0 1px 0 hsl(var(--hairline)), 0 4px 12px hsl(0 0% 0% / 0.25); }
+  .shadow-cold-md { box-shadow: 0 1px 0 hsl(var(--hairline)), 0 8px 32px hsl(0 0% 0% / 0.3); }
+
+  /* Motion — cinematic curves, no bounce */
+  .ease-cinematic { transition-timing-function: var(--ease-expo-out); }
+  .ease-quart { transition-timing-function: var(--ease-quart-out); }
+  .ease-in-fast { transition-timing-function: var(--ease-in); }
+
+  .focus-ring:focus-visible {
+    outline: 2px solid hsl(var(--primary) / 0.55);
+    outline-offset: 3px;
+    border-radius: calc(var(--radius) + 2px);
+  }
 }
 
 /* Navbar - clean glass effect, theme-aware */
