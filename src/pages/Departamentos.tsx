@@ -56,6 +56,8 @@ const Departamentos = () => {
   const [checkoutData, setCheckoutData] = useState<CheckoutSummaryData | null>(null);
   const categories = getCategoryLabels(t);
   const [searchParams] = useSearchParams();
+  const cartItems = useDeptSelection((s) => s.items);
+  const cartToggle = useDeptSelection((s) => s.toggle);
 
   // Pre-select category from onboarding (?dept=marketing)
   // With `&auto=1` (from landing "Contratar"), auto-fires the checkout.
