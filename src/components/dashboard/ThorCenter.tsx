@@ -54,11 +54,21 @@ const PERIOD_MS: Record<Period, number | null> = {
 };
 const PERIOD_LABEL: Record<Period, string> = { "24h": "24h", "7d": "7 dias", "30d": "30 dias", all: "Tudo" };
 
+const PERIOD_STORAGE_KEY = "clauthor-thor-center-period";
+
 export default function ThorCenter({ onNavigate }: Props) {
   const { user } = useAuth();
   const { touchpoints, isLoading } = useThorTouchpoints();
   const qc = useQueryClient();
-  const [period, setPeriod] = useState<Period>("30d");
+  const [period, setPeriodState] = useState<Period>(() => {
+    if (typeof window === "undefined") return "30d";
+    const saved = localStorage.getItem(PERIOD_STORAGE_KEY);
+    return (saved && (saved in PERIOD_MS) ? saved : "30d") as Period;
+  });
+  const setPeriod = (p: Period) => {
+    setPeriodState(p);
+    try { localStorage.setItem(PERIOD_STORAGE_KEY, p); } catch { /* ignore */ }
+  };
 
   // Realtime: mantém timeline e atalhos vivos quando o Thor registra algo novo
   useEffect(() => {
@@ -177,6 +187,42 @@ export default function ThorCenter({ onNavigate }: Props) {
     qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
   };
 
+  const resolveApproval = async (approvalId: string) => {
+    if (!user?.id) return;
+    const { error } = await supabase
+      .from("approvals")
+      .update({ status: "approved", approved_by: user.id, approved_at: new Date().toISOString() })
+      .eq("id", approvalId)
+      .eq("status", "pending");
+    if (error) {
+      toast.error("Não consegui marcar como resolvido.");
+      return;
+    }
+    toast.success("Aprovação marcada como resolvida.", {
+      description: "Some do Thor Center. Você pode revisar em Aprovações se precisar.",
+      action: { label: "Desfazer", onClick: async () => {
+        await supabase.from("approvals")
+          .update({ status: "pending", approved_by: null, approved_at: null })
+          .eq("id", approvalId);
+        qc.invalidateQueries({ queryKey: ["thor-center-approvals", user.id] });
+      }},
+    });
+    qc.invalidateQueries({ queryKey: ["thor-center-approvals", user.id] });
+  };
+
+  // Contagens por tipo dentro do período ativo (para mostrar no header/quick actions)
+  const periodCounts = useMemo(() => {
+    const cutoff = PERIOD_MS[period];
+    const min = cutoff ? Date.now() - cutoff : 0;
+    const inPeriod = (iso: string) => (cutoff == null ? true : new Date(iso).getTime() >= min);
+    return {
+      touchpoints: touchpoints.filter((t) => inPeriod(t.seen_at)).length,
+      tokenAlerts: tokenAlerts.filter((n) => inPeriod(n.created_at)).length,
+      approvals: pendingApprovals.items.filter((a) => inPeriod(a.created_at)).length,
+      ambient: ambientSignals.filter((s) => inPeriod(s.created_at)).length,
+    };
+  }, [period, touchpoints, tokenAlerts, pendingApprovals.items, ambientSignals]);
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -208,6 +254,8 @@ export default function ThorCenter({ onNavigate }: Props) {
           icon={<Inbox className="h-4 w-4 text-primary" />}
           label="Aprovações pendentes"
           value={pendingApprovals.count}
+          periodValue={periodCounts.approvals}
+          periodLabel={PERIOD_LABEL[period]}
           hint={pendingApprovals.count === 0 ? "Nada te esperando ✨" : "Requer sua decisão"}
           onClick={() => onNavigate?.("approvals")}
         />
@@ -215,6 +263,8 @@ export default function ThorCenter({ onNavigate }: Props) {
           icon={<Bell className="h-4 w-4 text-amber-500" />}
           label="Alertas de tokens"
           value={tokenAlerts.length}
+          periodValue={periodCounts.tokenAlerts}
+          periodLabel={PERIOD_LABEL[period]}
           hint={tokenAlerts.length === 0 ? "Consumo saudável" : "Confira o histórico abaixo"}
           onClick={() => onNavigate?.("system")}
         />
@@ -222,10 +272,13 @@ export default function ThorCenter({ onNavigate }: Props) {
           icon={<Radar className="h-4 w-4 text-destructive" />}
           label="Sinais críticos"
           value={ambientSignals.length}
+          periodValue={periodCounts.ambient}
+          periodLabel={PERIOD_LABEL[period]}
           hint={ambientSignals.length === 0 ? "Nada urgente" : "Detectados pelo Thor"}
           onClick={() => onNavigate?.("overview")}
         />
       </div>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Timeline (2/3) */}
@@ -309,19 +362,31 @@ export default function ThorCenter({ onNavigate }: Props) {
                 <p className="text-sm text-muted-foreground">Nada pendente. Aproveita o café ☕</p>
               )}
               {pendingApprovals.items.map((a) => (
-                <button
+                <div
                   key={a.id}
-                  onClick={() => onNavigate?.("approvals")}
-                  className="w-full text-left rounded-lg border border-border/50 bg-background/40 p-2.5 hover:bg-muted/40 transition-colors group"
+                  className="w-full rounded-lg border border-border/50 bg-background/40 p-2.5 hover:bg-muted/40 transition-colors group"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.("approvals")}
+                      className="min-w-0 flex-1 text-left"
+                    >
                       <p className="text-sm font-medium truncate">{a.title || "Aprovação pendente"}</p>
                       <p className="text-[11px] text-muted-foreground">{relativeDate(a.created_at)}</p>
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-7 w-7 shrink-0"
+                      title="Marcar como resolvido"
+                      onClick={(e) => { e.stopPropagation(); void resolveApproval(a.id); }}
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                    </Button>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1.5 group-hover:translate-x-0.5 transition-transform" />
                   </div>
-                </button>
+                </div>
               ))}
               {ambientSignals.map((s) => (
                 <div
@@ -376,8 +441,12 @@ export default function ThorCenter({ onNavigate }: Props) {
 }
 
 function QuickAction({
-  icon, label, value, hint, onClick,
-}: { icon: React.ReactNode; label: string; value: number; hint: string; onClick?: () => void }) {
+  icon, label, value, hint, onClick, periodValue, periodLabel,
+}: {
+  icon: React.ReactNode; label: string; value: number; hint: string; onClick?: () => void;
+  periodValue?: number; periodLabel?: string;
+}) {
+  const showPeriodChip = typeof periodValue === "number" && !!periodLabel && periodLabel !== "Tudo";
   return (
     <button
       onClick={onClick}
@@ -390,7 +459,14 @@ function QuickAction({
         <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
       </div>
       <p className="font-display font-bold text-3xl mt-2 leading-none">{value}</p>
-      <p className="text-xs text-muted-foreground mt-1">{hint}</p>
+      <div className="mt-1 flex items-center gap-2 flex-wrap">
+        <p className="text-xs text-muted-foreground">{hint}</p>
+        {showPeriodChip && (
+          <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-primary/30 text-primary/80">
+            {periodValue} nas últimas {periodLabel!.toLowerCase()}
+          </Badge>
+        )}
+      </div>
     </button>
   );
 }
