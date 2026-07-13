@@ -88,14 +88,14 @@ const INTRO: ChatMessage = {
   id: "intro",
   role: "assistant",
   content:
-    "Oi, sou o Thor. Antes de te mostrar preço, deixa eu entender seu cenário — qual sua maior dor hoje, e quantas pessoas tem na sua empresa?",
+    "Oi, sou o Thor. Me conta qual é a sua maior dor hoje — e, se quiser, o tamanho da empresa ou o orçamento que tem em mente. Com isso eu já monto a solução com melhor custo-benefício.",
 };
 
 const SUGGESTIONS = [
-  "Empresa de 5 pessoas, preciso gerar leads",
-  "Média empresa, atendimento sobrecarregado",
+  "Preciso escalar comercial, budget ~R$ 1.500/mês",
+  "Atendimento sobrecarregado, empresa de 20 pessoas",
   "Quero automatizar jurídico",
-  "Testar 1 agente antes de contratar time",
+  "Só quero testar 1 agente antes",
 ];
 
 /* -------------------------------------------------------------------------- */
@@ -287,84 +287,62 @@ export default function ThorConciergeChat({
   return (
     <div
       className={cn(
-        "relative w-full rounded-3xl border border-border/60 bg-card/40 backdrop-blur-xl overflow-hidden",
-        "shadow-[0_8px_40px_-12px_rgba(0,0,0,0.35)]",
+        "relative w-full rounded-2xl border border-border/40 bg-background overflow-hidden",
         className,
       )}
     >
-      {/* Header */}
-      <div className="flex items-center gap-3 px-5 py-4 border-b border-border/60 bg-background/40">
-        <div className="relative flex h-9 w-9 items-center justify-center rounded-full bg-foreground text-background">
-          <Diamond className="h-4 w-4" strokeWidth={2} />
-          <span
-            className={cn(
-              "absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-card",
-              isStreaming ? "bg-primary animate-pulse" : "bg-emerald-500",
-            )}
-          />
+      {/* Header — minimal Apple-like */}
+      <div className="flex items-center gap-2.5 px-5 py-3.5 border-b border-border/40">
+        <div className="relative flex h-7 w-7 items-center justify-center rounded-full bg-foreground text-background">
+          <Diamond className="h-3 w-3" strokeWidth={2.5} />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-semibold text-foreground leading-tight">Thor · Clauthor</p>
-          <p className="text-[11px] text-muted-foreground">
-            {isStreaming ? "digitando..." : "online · resposta em segundos"}
+          <p className="text-[13px] font-medium text-foreground leading-tight tracking-tight">Thor</p>
+          <p className="text-[11px] text-muted-foreground/80 leading-tight mt-0.5">
+            {isStreaming ? "digitando…" : "online"}
           </p>
         </div>
       </div>
 
       {/* Messages */}
-      <div ref={scrollRef} className={cn("overflow-y-auto px-5 py-6 space-y-5", minHeight, "max-h-[520px]")}>
+      <div ref={scrollRef} className={cn("overflow-y-auto px-5 py-6 space-y-4", minHeight, "max-h-[520px]")}>
         {messages.map((m) => (
           <div
             key={m.id}
-            className={cn("flex gap-3", m.role === "user" ? "flex-row-reverse" : "flex-row")}
+            className={cn("flex", m.role === "user" ? "justify-end" : "justify-start")}
           >
-            <div
-              className={cn(
-                "flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[11px] font-bold",
-                m.role === "user"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-foreground text-background",
-              )}
-            >
-              {m.role === "user" ? "V" : "T"}
-            </div>
-            <div
-              className={cn(
-                "max-w-[85%] rounded-2xl px-4 py-2.5 text-[14.5px] leading-relaxed",
-                m.role === "user"
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-background/70 text-foreground border border-border/50",
-              )}
-            >
-              {m.role === "assistant" ? (
-                <div className="prose prose-sm prose-neutral dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1.5">
+            {m.role === "assistant" ? (
+              <div className="max-w-[92%] text-[14.5px] leading-[1.55] text-foreground">
+                <div className="prose prose-sm prose-neutral dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-1.5 [&_p]:text-foreground">
                   <ReactMarkdown>{m.content || (isStreaming ? "…" : "")}</ReactMarkdown>
                 </div>
-              ) : (
+              </div>
+            ) : (
+              <div className="max-w-[80%] rounded-[18px] bg-primary px-3.5 py-2 text-[14.5px] leading-[1.45] text-primary-foreground">
                 <p className="whitespace-pre-wrap">{m.content}</p>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         ))}
 
-        {/* Recommendation CTA */}
+        {/* Recommendation CTA — minimal card */}
         {recommendation && !isStreaming && (
-          <div className="mt-2 ml-10 rounded-2xl border border-primary/30 bg-primary/[0.04] p-4">
-            <p className="text-[11px] uppercase tracking-[0.14em] text-primary font-semibold mb-1">
-              Recomendação do Thor
+          <div className="mt-4 rounded-xl border border-border/50 bg-muted/30 p-4">
+            <p className="text-[10.5px] uppercase tracking-[0.14em] text-muted-foreground font-medium mb-1.5">
+              Recomendação
             </p>
             {recommendation.kind === "departamento" && recommendedPkg ? (
               <>
-                <p className="text-base font-semibold text-foreground mb-1">
+                <p className="text-[15px] font-semibold text-foreground mb-0.5 tracking-tight">
                   Departamento {recommendedPkg.name}
                 </p>
-                <p className="text-sm text-muted-foreground mb-3">{recommendedPkg.painPoint}</p>
+                <p className="text-[13px] text-muted-foreground mb-3 leading-relaxed">{recommendedPkg.painPoint}</p>
                 <div className="flex items-center justify-between gap-3">
-                  <div className="text-sm">
-                    <span className="text-foreground font-bold">{formatBRL(recommendedPkg.priceMonthly)}</span>
-                    <span className="text-muted-foreground">/mês · {recommendedPkg.agentSlugs.length} agentes</span>
+                  <div className="text-[13px]">
+                    <span className="text-foreground font-semibold">{formatBRL(recommendedPkg.priceMonthly)}</span>
+                    <span className="text-muted-foreground">/mês</span>
                   </div>
-                  <Button size="sm" onClick={goToRecommended} className="gap-1.5">
+                  <Button size="sm" onClick={goToRecommended} className="gap-1.5 rounded-full h-8 px-3.5">
                     Ver departamento
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
@@ -372,25 +350,25 @@ export default function ThorConciergeChat({
               </>
             ) : recommendation.kind === "squad" ? (
               <>
-                <p className="text-base font-semibold text-foreground mb-1">Monte seu Squad de IA</p>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Escolha 2 a 5 especialistas e veja o custo em tempo real. Ideal quando você precisa de um time enxuto.
+                <p className="text-[15px] font-semibold text-foreground mb-0.5 tracking-tight">Monte seu Squad</p>
+                <p className="text-[13px] text-muted-foreground mb-3 leading-relaxed">
+                  2 a 5 especialistas que colaboram. Custo em tempo real, ideal quando a dor cruza mais de uma função.
                 </p>
                 <div className="flex justify-end">
-                  <Button size="sm" onClick={goToRecommended} className="gap-1.5">
-                    Montar meu Squad
+                  <Button size="sm" onClick={goToRecommended} className="gap-1.5 rounded-full h-8 px-3.5">
+                    Montar Squad
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
                 </div>
               </>
             ) : (
               <>
-                <p className="text-base font-semibold text-foreground mb-1">Começar com 1 agente</p>
-                <p className="text-sm text-muted-foreground mb-3">
-                  Teste um especialista antes de contratar um time inteiro. Perfeito para empresas pequenas ou provas de conceito.
+                <p className="text-[15px] font-semibold text-foreground mb-0.5 tracking-tight">Começar com 1 agente</p>
+                <p className="text-[13px] text-muted-foreground mb-3 leading-relaxed">
+                  Prova de conceito ou tarefa muito específica. A partir de R$ 197/mês.
                 </p>
                 <div className="flex justify-end">
-                  <Button size="sm" onClick={goToRecommended} className="gap-1.5">
+                  <Button size="sm" onClick={goToRecommended} className="gap-1.5 rounded-full h-8 px-3.5">
                     Ver marketplace
                     <ArrowRight className="h-3.5 w-3.5" />
                   </Button>
@@ -401,15 +379,15 @@ export default function ThorConciergeChat({
         )}
       </div>
 
-      {/* Suggestions (só antes da primeira msg do usuário) */}
+      {/* Suggestions */}
       {messages.length === 1 && (
-        <div className="px-5 pb-2 flex flex-wrap gap-2">
+        <div className="px-5 pb-3 flex flex-wrap gap-1.5">
           {SUGGESTIONS.map((s) => (
             <button
               key={s}
               onClick={() => sendMessage(s)}
               disabled={isStreaming}
-              className="text-xs px-3 py-1.5 rounded-full border border-border/60 bg-background/60 text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/[0.04] transition-colors disabled:opacity-50"
+              className="text-[12px] px-3 py-1.5 rounded-full border border-border/50 bg-transparent text-muted-foreground hover:text-foreground hover:border-border transition-colors disabled:opacity-50"
             >
               {s}
             </button>
@@ -417,33 +395,30 @@ export default function ThorConciergeChat({
         </div>
       )}
 
-      {/* Composer */}
-      <form onSubmit={handleSubmit} className="border-t border-border/60 bg-background/40 p-3">
-        <div className="flex items-end gap-2">
+      {/* Composer — Apple-like pill */}
+      <form onSubmit={handleSubmit} className="border-t border-border/40 px-3 py-3">
+        <div className="flex items-end gap-2 rounded-2xl border border-border/50 bg-muted/30 px-3 py-2 focus-within:border-border transition-colors">
           <Textarea
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Descreva sua dor ou faça uma pergunta ao Thor..."
+            placeholder="Envie uma mensagem"
             rows={1}
             maxLength={2000}
             disabled={isStreaming}
-            className="min-h-[44px] max-h-32 resize-none bg-background/60 border-border/60 focus-visible:ring-1 focus-visible:ring-primary/40"
+            className="min-h-[28px] max-h-32 resize-none border-0 bg-transparent p-0 text-[14.5px] shadow-none focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-muted-foreground/60"
           />
           <Button
             type="submit"
             size="icon"
             disabled={isStreaming || !input.trim()}
-            className="h-11 w-11 shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.55)] disabled:shadow-none transition-all"
+            className="h-7 w-7 shrink-0 rounded-full bg-foreground text-background hover:bg-foreground/90 disabled:bg-muted disabled:text-muted-foreground/40 transition-colors"
             aria-label="Enviar"
           >
-            {isStreaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+            {isStreaming ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />}
           </Button>
         </div>
-        <p className="mt-2 px-1 text-[10.5px] text-muted-foreground/70">
-          O Thor pode cometer erros. Confirme informações importantes antes de decidir.
-        </p>
       </form>
     </div>
   );
