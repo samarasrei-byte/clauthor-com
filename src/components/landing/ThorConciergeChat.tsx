@@ -8,7 +8,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import { ArrowRight, Loader2, Send, Diamond } from "lucide-react";
+import { ArrowRight, Loader2, Diamond } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
