@@ -11,6 +11,7 @@ const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
 const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
 const AssistantHierarchy = lazy(() => import("./AssistantHierarchy"));
+const CartFab = lazy(() => import("./CartFab"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 const NAVBAR_HIDDEN_ROUTES = ["/thor"];
