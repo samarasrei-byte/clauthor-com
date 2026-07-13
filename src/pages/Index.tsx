@@ -15,6 +15,7 @@ import { useTranslation } from "react-i18next";
 
 import Footer from "@/components/Footer";
 import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
+import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { trackKpi } from "@/lib/kpiTracker";
