@@ -52,7 +52,7 @@ const AppLayout = () => {
         onClose={() => setTestDriveAgent(null)}
       />
 
-      {addonsReady && (
+      {addonsReady && showThor && (
         <Suspense fallback={null}>
           {/* Hierarquia única: 1º contato = só Thor (onboarding). Depois = greeting + updates. */}
           <AssistantHierarchy />
