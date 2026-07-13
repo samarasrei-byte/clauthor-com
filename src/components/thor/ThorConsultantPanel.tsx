@@ -76,6 +76,7 @@ export default function ThorConsultantPanel({
   const [loading, setLoading] = useState(false);
   const [rec, setRec] = useState<ThorRecommendation | null>(null);
   const [collapsed, setCollapsed] = useState(false);
+  const { markSeen } = useThorTouchpoints();
 
   const analyze = async () => {
     const trimmed = objective.trim();
