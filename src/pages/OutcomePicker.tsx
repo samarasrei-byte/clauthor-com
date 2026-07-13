@@ -100,7 +100,7 @@ const OutcomePicker = () => {
             O que você quer <span className="text-primary">alcançar</span>?
           </h1>
           <p className="text-muted-foreground text-base md:text-lg max-w-xl mx-auto">
-            Não escolha agentes. Descreva o resultado — Thor monta o time por você.
+            Não escolha agentes. Descreva o resultado · Thor monta o time por você.
           </p>
         </motion.div>
 

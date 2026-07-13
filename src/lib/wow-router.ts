@@ -1,5 +1,5 @@
 /**
- * Wow Router — mapa determinístico dor → agente/template ideal.
+ * Wow Router · mapa determinístico dor → agente/template ideal.
  * Usado pelo InstantWow para gerar o primeiro entregável em <90s.
  */
 
@@ -93,7 +93,7 @@ export const PAIN_OPTIONS: PainOption[] = [
     systemPrompt:
       "Você é Thor, CEO de IA da Clauthor. Entregue planos de ação diretos, com 5 passos priorizados. Português brasileiro, tom executivo.",
     userPromptTemplate: (company, pain) =>
-      `A empresa "${company}" trouxe este desafio:\n\n${pain}\n\nEntregue um plano de ação em 5 pontos, priorizados por impacto vs. esforço. Formato: **Ponto N:** título — descrição (1-2 frases).`,
+      `A empresa "${company}" trouxe este desafio:\n\n${pain}\n\nEntregue um plano de ação em 5 pontos, priorizados por impacto vs. esforço. Formato: **Ponto N:** título · descrição (1-2 frases).`,
   },
 ];
 

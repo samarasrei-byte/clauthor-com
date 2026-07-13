@@ -44,7 +44,7 @@ export default function FeedbackTrendsPanel() {
   const stats = useMemo(() => {
     const byAgent = new Map<string, { name: string; up: number; down: number; comments: string[] }>();
     for (const r of rows) {
-      const key = r.agent_name || r.agent_id || "—";
+      const key = r.agent_name || r.agent_id || "·";
       const entry = byAgent.get(key) || { name: key, up: 0, down: 0, comments: [] as string[] };
       if (r.rating === 1) entry.up += 1;
       else entry.down += 1;

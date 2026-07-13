@@ -6,8 +6,8 @@ import { InstantWow } from "@/components/onboarding/InstantWow";
 import RevolutionaryOnboarding from "@/components/onboarding/RevolutionaryOnboarding";
 
 /**
- * Rota dedicada de onboarding — ativada logo após o signup em /auth.
- * Fase 1: InstantWow (momento uau em <90s — primeiro entregável real).
+ * Rota dedicada de onboarding · ativada logo após o signup em /auth.
+ * Fase 1: InstantWow (momento uau em <90s · primeiro entregável real).
  * Fase 2 (opcional): RevolutionaryOnboarding para quem quer explorar mais.
  */
 export default function Welcome() {
@@ -52,7 +52,7 @@ export default function Welcome() {
   return (
     <>
       <Helmet>
-        <title>Bem-vindo à Clauthor — Primeiro entregável em 90 segundos</title>
+        <title>Bem-vindo à Clauthor · Primeiro entregável em 90 segundos</title>
         <meta name="description" content="20 departamentos, squads customizáveis e +200 especialistas de IA orquestrados. Veja seu primeiro entregável real em menos de 90 segundos." />
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>

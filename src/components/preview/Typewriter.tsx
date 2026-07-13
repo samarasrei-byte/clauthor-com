@@ -1,5 +1,5 @@
 /**
- * Typewriter — renderiza texto caractere-por-caractere.
+ * Typewriter · renderiza texto caractere-por-caractere.
  * Uso: <Typewriter text="olá" speed={22} startDelay={200} />
  */
 import { useEffect, useState } from "react";

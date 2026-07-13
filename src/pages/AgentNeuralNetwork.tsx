@@ -1,6 +1,6 @@
 import { Suspense, useMemo, useRef, useState, useCallback } from "react";
 
-// Pre-flight WebGL probe — avoids the R3F `Error creating WebGL context` crash
+// Pre-flight WebGL probe · avoids the R3F `Error creating WebGL context` crash
 // on devices/browsers without GPU acceleration (headless, locked-down enterprise, etc).
 const isWebGLAvailable = (): boolean => {
   if (typeof window === "undefined") return false;
@@ -513,7 +513,7 @@ function InfoPanel({
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
           </span>
-          <span className="text-[10px] text-emerald-400">Online — Pronto</span>
+          <span className="text-[10px] text-emerald-400">Online · Pronto</span>
         </div>
       </div>
     </motion.div>
@@ -587,7 +587,7 @@ export default function AgentNeuralNetwork() {
         )}
       </AnimatePresence>
 
-      {/* 3D Canvas — only mount if WebGL is available */}
+      {/* 3D Canvas · only mount if WebGL is available */}
       {isWebGLAvailable() ? (
         <Canvas
           camera={{ position: [0, 3, 7], fov: 50 }}
@@ -624,7 +624,7 @@ export default function AgentNeuralNetwork() {
           REDE NEURAL
         </h1>
         <p className="text-[10px] text-muted-foreground">
-          Workforce de IA — Topologia de Agentes em Tempo Real
+          Workforce de IA · Topologia de Agentes em Tempo Real
         </p>
       </div>
     </div>

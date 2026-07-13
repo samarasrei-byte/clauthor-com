@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SectionLoader from "@/components/ui/section-loader";
-// GuidedOnboarding legado removido — RevolutionaryOnboardingGate global cobre esse fluxo.
+// GuidedOnboarding legado removido · RevolutionaryOnboardingGate global cobre esse fluxo.
 import HeroBriefing from "@/components/dashboard/HeroBriefing";
 import NextStepsCard from "@/components/dashboard/NextStepsCard";
-// FirstTimeTour removido — ThorLiveGuide já cobre onboarding em 5 passos.
+// FirstTimeTour removido · ThorLiveGuide já cobre onboarding em 5 passos.
 
 const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
@@ -76,7 +76,7 @@ const DashboardOverview = ({
       <ErrorBoundary>
         <Suspense fallback={<SectionLoader />}>
           <div className="space-y-5">
-            {/* PRIMEIRA DOBRA — uma voz, um CTA. */}
+            {/* PRIMEIRA DOBRA · uma voz, um CTA. */}
             <HeroBriefing
               agentsCount={agents.length}
               activeAgents={activeAgents}
@@ -96,7 +96,7 @@ const DashboardOverview = ({
               }}
             />
 
-            {/* Momento "uau" pós-signup — destaca o primeiro entregável aprovado (7 dias). */}
+            {/* Momento "uau" pós-signup · destaca o primeiro entregável aprovado (7 dias). */}
             <FirstDeliveryCard onOpenApprovals={() => onSetActiveSection("approvals")} />
 
             {/* Guia de configuração da conta (progressive disclosure) */}
@@ -136,7 +136,7 @@ const DashboardOverview = ({
 
                 <LiveActivityFeed />
 
-                {/* Progressive disclosure — reduces first-render noise */}
+                {/* Progressive disclosure · reduces first-render noise */}
                 <div className="pt-2">
                   <button
                     onClick={() => setShowAdvanced(v => !v)}

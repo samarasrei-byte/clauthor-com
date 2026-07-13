@@ -1,5 +1,5 @@
 /**
- * ThorGuestTour — tour guiado de 5 passos para usuários NÃO autenticados
+ * ThorGuestTour · tour guiado de 5 passos para usuários NÃO autenticados
  * que iniciaram checkout. Objetivo: demonstrar valor antes de exigir cadastro.
  *
  * Padrão idêntico ao DashboardTour, mas:
@@ -46,7 +46,7 @@ export function ThorGuestTour({ cartLabel, totalMonthly, onActivate, onDismiss }
       target: "guest-header",
       title: `Bem-vindo ao seu ${cartLabel}`,
       description:
-        "Este é um preview do painel que você recebe após ativar. Todos os dados abaixo são exemplos — os seus vão ser reais em minutos.",
+        "Este é um preview do painel que você recebe após ativar. Todos os dados abaixo são exemplos · os seus vão ser reais em minutos.",
       position: "bottom",
       icon: "welcome",
     },
@@ -54,7 +54,7 @@ export function ThorGuestTour({ cartLabel, totalMonthly, onActivate, onDismiss }
       target: "guest-agents",
       title: "Seus agentes rodando 24/7",
       description:
-        "Cada agente executa tarefas específicas do seu departamento sem parar. Você não gerencia agentes — você comanda resultados.",
+        "Cada agente executa tarefas específicas do seu departamento sem parar. Você não gerencia agentes · você comanda resultados.",
       position: "right",
       icon: "agents",
     },

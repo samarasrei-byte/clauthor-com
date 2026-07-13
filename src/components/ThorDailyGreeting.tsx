@@ -369,7 +369,7 @@ export default function ThorDailyGreeting() {
       return `Seu departamento de ${onboardingProfile.department} está pronto para ganhar velocidade.`;
     }
     if (onboardingProfile.path === "team" && onboardingProfile.teamGoal) {
-      return `Seu time está focado em ${onboardingProfile.teamGoal.toLowerCase()} — vamos avançar.`;
+      return `Seu time está focado em ${onboardingProfile.teamGoal.toLowerCase()} · vamos avançar.`;
     }
     if (onboardingProfile.path === "agent" && onboardingProfile.agentArea) {
       return `Seu agente de ${onboardingProfile.agentArea} está a postos.`;
@@ -378,7 +378,7 @@ export default function ThorDailyGreeting() {
   })();
 
   const subtitle = isAdmin
-    ? "Você tem acesso ilimitado — a forja segue acesa."
+    ? "Você tem acesso ilimitado · a forja segue acesa."
     : onboardingHint ?? `${fmt(remainingCredits)} tokens disponíveis no seu cofre.`;
 
   return (
@@ -506,7 +506,7 @@ export default function ThorDailyGreeting() {
 
             {isAdmin && (
               <p className="text-[11px] text-muted-foreground">
-                Acesso ilimitado — nenhum limite de consumo aplicado à sua conta.
+                Acesso ilimitado · nenhum limite de consumo aplicado à sua conta.
               </p>
             )}
           </motion.div>
@@ -539,7 +539,7 @@ export default function ThorDailyGreeting() {
             ) : yesterdaySummary.total === 0 && yesterdaySummary.tokensUsed === 0 ? (
               <p className="text-[11px] text-muted-foreground flex items-center gap-1.5 py-1">
                 <Clock className="h-3 w-3" />
-                Nenhuma execução registrada — comece o dia com um agente.
+                Nenhuma execução registrada · comece o dia com um agente.
               </p>
             ) : (
               <div className="space-y-2">
@@ -667,7 +667,7 @@ function MiniStat({
         {delta && (
           <span className={`inline-flex items-center gap-0.5 text-[9px] font-mono ${deltaColor}`}>
             <DeltaIcon className="h-2.5 w-2.5" />
-            {delta.direction === "flat" ? "—" : `${delta.pct}%`}
+            {delta.direction === "flat" ? "·" : `${delta.pct}%`}
           </span>
         )}
       </div>

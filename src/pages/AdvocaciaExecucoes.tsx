@@ -80,7 +80,7 @@ export default function AdvocaciaExecucoes() {
   const [statusFilter, setStatusFilter] = useState<string>("all");
 
   useEffect(() => {
-    document.title = "Auditoria de Execuções MCP — Clauthor";
+    document.title = "Auditoria de Execuções MCP · Clauthor";
   }, []);
 
   const { data: execs, isLoading } = useQuery({
@@ -204,7 +204,7 @@ export default function AdvocaciaExecucoes() {
           />
           <KPICard
             label="Tempo médio"
-            value={stats ? `${(stats.avgMs / 1000).toFixed(1)}s` : "—"}
+            value={stats ? `${(stats.avgMs / 1000).toFixed(1)}s` : "·"}
             icon={Clock}
             color="text-emerald-500"
             bg="bg-emerald-500/10"
@@ -487,7 +487,7 @@ function EmptyAudit() {
       </div>
       <h3 className="text-sm font-semibold mb-1">Nenhuma execução registrada</h3>
       <p className="text-xs text-muted-foreground max-w-sm mx-auto mb-4">
-        Use o Assistente MCP no painel para começar — toda execução aparece aqui com auditoria completa.
+        Use o Assistente MCP no painel para começar · toda execução aparece aqui com auditoria completa.
       </p>
       <Link to="/advocacia/painel/mcp">
         <Button size="sm" className="gap-1.5">

@@ -25,7 +25,7 @@ const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardG
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
-// Onboarding legado (Quick/FirstAccess/MagicMoment) removido — substituído pelo
+// Onboarding legado (Quick/FirstAccess/MagicMoment) removido · substituído pelo
 // RevolutionaryOnboardingGate global montado em AppLayout.
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
@@ -60,7 +60,7 @@ const ClientDashboard = () => {
   const [selectedAgent, setSelectedAgent] = useState<{ id: string; name: string } | null>(null);
   const [pendingTaskMessage, setPendingTaskMessage] = useState<string | null>(null);
   const [omnixMounted, setOmnixMounted] = useState(false);
-  // showSmartOnboarding removido — Revolutionary gate global cuida do primeiro contato.
+  // showSmartOnboarding removido · Revolutionary gate global cuida do primeiro contato.
   const [showBoardGate, setShowBoardGate] = useState(false);
   const [showLiveGuide, setShowLiveGuide] = useState(() => {
     if (typeof window === "undefined") return false;
@@ -76,7 +76,7 @@ const ClientDashboard = () => {
     siteSummary: string | null;
   } | null>(null);
   
-  // MagicMoment removido — parte do fluxo legado.
+  // MagicMoment removido · parte do fluxo legado.
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
     if (!user) return false;
     return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
@@ -151,7 +151,7 @@ const ClientDashboard = () => {
   }, [user, diagnosisRecapData]);
 
   const handleRecapActivate = useCallback(() => {
-    // hireIntent já foi setado pelo dialog. Fecha modal — useHireIntentFlow abre o CheckoutSummaryDialog.
+    // hireIntent já foi setado pelo dialog. Fecha modal · useHireIntentFlow abre o CheckoutSummaryDialog.
     if (!user) return;
     setShowDiagnosisRecap(false);
     markDiagnosisRecapSeen();
@@ -236,7 +236,7 @@ const ClientDashboard = () => {
     const pendingCheckout = typeof window !== "undefined" && !!localStorage.getItem("hireIntent");
     if (pendingCheckout) return;
     // Se a pessoa veio do quiz da landing, o diagnóstico JÁ conta como onboarding.
-    // Não mandamos ela pra /welcome — Thor continua a conversa direto aqui.
+    // Não mandamos ela pra /welcome · Thor continua a conversa direto aqui.
     const hasDiagnosis = typeof window !== "undefined" && !!localStorage.getItem("clauthor:diagnosis");
     if (hasDiagnosis) return;
     navigate("/welcome", { replace: true });
@@ -297,7 +297,7 @@ const ClientDashboard = () => {
     contractedCount === 0 &&
     activeSection === "overview";
 
-  // First-access modal legacy removido — GuidedOnboarding cuida disso globalmente.
+  // First-access modal legacy removido · GuidedOnboarding cuida disso globalmente.
 
 
   const { data: templates = [] } = useQuery({
@@ -441,7 +441,7 @@ const ClientDashboard = () => {
     // ─── Meu trabalho: o que eu faço no dia a dia ───
     { id: "overview",  label: t("dashboard.command_center"), icon: LayoutDashboard, group: zoneWork },
     { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: zoneWork },
-    // Chat unificado: sem entrada própria — o Command Center é o hub conversacional,
+    // Chat unificado: sem entrada própria · o Command Center é o hub conversacional,
     // e conversar com um agente específico entra por "Meus Agentes" → agente.
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}`, group: zoneWork }] : []),
     { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3, group: zoneWork },

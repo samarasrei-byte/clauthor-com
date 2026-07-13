@@ -207,7 +207,7 @@ const Departamentos = () => {
 
   return (
     <div className="min-h-dvh pt-20 pb-16 px-4 relative">
-      <SEO title="AI Departments — Pre-built Squads | Clauthor" description="Explore 20 ready-made AI departments: Sales, Marketing, Legal, Finance, HR, Support and more. Deploy in minutes." path="/departamentos" />
+      <SEO title="AI Departments · Pre-built Squads | Clauthor" description="Explore 20 ready-made AI departments: Sales, Marketing, Legal, Finance, HR, Support and more. Deploy in minutes." path="/departamentos" />
       <DepartmentsJsonLd />
       <div className="max-w-7xl mx-auto relative mb-6">
       </div>
@@ -252,7 +252,7 @@ const Departamentos = () => {
           </div>
         </motion.div>
 
-        {/* Inline Thor chat — user talks to Thor without leaving the page */}
+        {/* Inline Thor chat · user talks to Thor without leaving the page */}
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -299,10 +299,10 @@ const Departamentos = () => {
             const deptClt = (region.departmentClt as Record<string, number>)[dept.id] || dept.cltCost;
             const savings = deptClt - deptPrice;
             const rawPercent = deptClt > 0 ? Math.round((savings / deptClt) * 100) : 0;
-            // Cap at 95% — "-100%" is not credible (implies zero cost)
+            // Cap at 95% · "-100%" is not credible (implies zero cost)
             const savingsPercent = Math.min(rawPercent, 95);
             const rawMultiplier = deptPrice > 0 ? deptClt / deptPrice : 0;
-            // Cap displayed multiplier — "241x" reads as hype. Real CLT ratio is real,
+            // Cap displayed multiplier · "241x" reads as hype. Real CLT ratio is real,
             // but keep it in credible SaaS range and prefer "%" for smaller diffs.
             const savingsMultiplier = rawMultiplier >= 20 ? 20 : Math.floor(rawMultiplier);
             return (
@@ -423,7 +423,7 @@ const Departamentos = () => {
                     )}
                   </button>
 
-                  {/* Add-to-cart secondary action — permite montar carrinho sem sair da listagem */}
+                  {/* Add-to-cart secondary action · permite montar carrinho sem sair da listagem */}
                   {(() => {
                     const inCart = cartItems.some((c) => c.id === dept.id);
                     return (

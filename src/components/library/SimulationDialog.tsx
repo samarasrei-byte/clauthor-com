@@ -1,6 +1,6 @@
 /**
  * SimulationDialog.tsx
- * Sandbox de simulação — antes de contratar, o usuário vê projeção de 30 dias
+ * Sandbox de simulação · antes de contratar, o usuário vê projeção de 30 dias
  * do agente rodando com dados dele. Prova de ROI em 5 minutos.
  */
 import { useState } from "react";

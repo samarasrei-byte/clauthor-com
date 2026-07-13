@@ -6,7 +6,7 @@ import { CANONICAL } from "@/lib/canonical-copy";
  * Trava contra regressão dos preços âncora canônicos.
  * Se estes valores divergirem, landing/ROIBenchmark/planos ficam desalinhados.
  */
-describe("pricing — canonical anchor", () => {
+describe("pricing · canonical anchor", () => {
   it("pt (BRL) starter = CANONICAL.agent.monthly.BRL", () => {
     const r = getRegion("pt");
     expect(r.plans.starter).toBe(CANONICAL.agent.monthly.BRL);

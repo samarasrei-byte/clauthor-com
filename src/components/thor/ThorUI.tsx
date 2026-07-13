@@ -6,7 +6,7 @@ import { memo, useMemo, useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Send, X, Loader2, Volume2, VolumeX, Maximize2, Minimize2, Mic, MicOff, Play } from "lucide-react";
 import ReactMarkdown from "react-markdown";
-// Avatar minimalista (orb) — substitui foto do Thor no chat
+// Avatar minimalista (orb) · substitui foto do Thor no chat
 const ThorAvatar = ({ size = 24 }: { size?: number }) => (
   <div
     className="rounded-full shrink-0 mt-0.5 relative overflow-hidden"

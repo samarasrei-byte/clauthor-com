@@ -52,7 +52,7 @@ function detectType(mime: string, name: string): FileType {
 }
 
 function formatSize(bytes: number | null) {
-  if (!bytes) return "—";
+  if (!bytes) return "·";
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
@@ -259,7 +259,7 @@ const FilesLibrary = () => {
         </div>
       )}
 
-      {/* Category chips — replace tabs */}
+      {/* Category chips · replace tabs */}
       <div className="flex flex-wrap gap-2">
         <CategoryChip active={filter === "all"} onClick={() => setFilter("all")} icon={Filter} label="Todos" count={counts.all || 0} />
         {(Object.keys(TYPE_META) as FileType[]).map((t) => {

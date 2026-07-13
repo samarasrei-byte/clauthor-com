@@ -49,7 +49,7 @@ const ConnectorDetailDialog = ({ connector, open, onOpenChange, connectedKeys, o
       if (popup && !popup.closed) {
         try { popup.location.href = authUrl; } catch { window.location.href = authUrl; }
       } else {
-        // Popup blocked — fall back to a redirect in this tab.
+        // Popup blocked · fall back to a redirect in this tab.
         window.location.href = authUrl;
       }
       toast.success("Autorize a Meta na janela aberta. Você será redirecionado para /settings/social ao concluir.");
@@ -57,7 +57,7 @@ const ConnectorDetailDialog = ({ connector, open, onOpenChange, connectedKeys, o
     } catch (e: unknown) {
       try { popup?.close(); } catch { /* ignore */ }
       const msg = e instanceof Error ? e.message : "Falha ao iniciar OAuth Meta";
-      toast.error(msg + " — verifique se META_APP_ID e META_APP_SECRET estão configurados.");
+      toast.error(msg + " · verifique se META_APP_ID e META_APP_SECRET estão configurados.");
     } finally {
       setMetaConnecting(false);
     }

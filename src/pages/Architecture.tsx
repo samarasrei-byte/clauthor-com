@@ -543,7 +543,7 @@ const INTEGRATIONS = [
 const Architecture = () => {
   return (
     <div className="min-h-dvh bg-background text-foreground overflow-x-hidden">
-      <SEO title="Platform Architecture — Clauthor AI Stack" description="Deep dive into Clauthor's autonomous AI architecture: orchestration, RAG, memory, integrations and command center." path="/architecture" />
+      <SEO title="Platform Architecture · Clauthor AI Stack" description="Deep dive into Clauthor's autonomous AI architecture: orchestration, RAG, memory, integrations and command center." path="/architecture" />
 
       <div className="max-w-6xl mx-auto px-4 pt-6">
       </div>

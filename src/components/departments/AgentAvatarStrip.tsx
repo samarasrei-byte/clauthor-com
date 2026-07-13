@@ -1,5 +1,5 @@
 /**
- * AgentAvatarStrip — renderiza avatares empilhados de agentes de um departamento.
+ * AgentAvatarStrip · renderiza avatares empilhados de agentes de um departamento.
  *
  * Sem dependência de imagens: gera iniciais coloridas a partir do nome.
  * Usa lookup em WORKFORCE para descobrir o nome de cada slug; se o slug não

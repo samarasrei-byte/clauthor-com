@@ -1,5 +1,5 @@
 /**
- * Fallback outputs pré-gerados por categoria — usados quando a Edge Function
+ * Fallback outputs pré-gerados por categoria · usados quando a Edge Function
  * falha, dá timeout ou o usuário está offline. Garante que ninguém saia do
  * InstantWow sem ver um "uau".
  */
@@ -10,7 +10,7 @@ export const WOW_FALLBACKS: Record<PainCategory, (company: string) => string> = 
 
 Oi [Nome],
 
-Notei que a ${company} está crescendo — parabéns. Trabalho com times comerciais parecidos e um padrão se repete: leads bons somem no meio do funil por falta de cadência.
+Notei que a ${company} está crescendo · parabéns. Trabalho com times comerciais parecidos e um padrão se repete: leads bons somem no meio do funil por falta de cadência.
 
 Nas últimas 4 semanas, ajudei 3 empresas do seu porte a recuperar 22% do pipeline "esquecido" com uma sequência simples de 5 toques.
 
@@ -18,7 +18,7 @@ Faz sentido 15min essa semana? Se sim, respondo com 2 horários.
 
 Abraço,
 [Seu nome]`,
-  juridico: (company) => `**MINUTA — ACORDO DE CONFIDENCIALIDADE (NDA)**
+  juridico: (company) => `**MINUTA · ACORDO DE CONFIDENCIALIDADE (NDA)**
 
 **Partes:** ${company} ("Divulgadora") e [INSERIR CONTRAPARTE] ("Receptora").
 
@@ -36,7 +36,7 @@ _[INSERIR CIDADE], [INSERIR DATA]_
 _Documento gerado para revisão do advogado._`,
   marketing: (company) => `**3 Headlines para ${company}:**
 
-1. O jeito antigo de vender já não funciona — descubra o que mudou em 2026.
+1. O jeito antigo de vender já não funciona · descubra o que mudou em 2026.
 2. ${company}: chega de posts que ninguém vê. Sua audiência está pronta.
 3. 15 minutos por dia. 3x mais leads qualificados. Sem ads.
 
@@ -46,7 +46,7 @@ Ninguém compra mais pelo feed. E mesmo assim, sua empresa continua postando.
 
 Eu passei 6 meses estudando o que faz um post B2B converter em 2026, e o padrão é claro: quem escreve pra 1 pessoa específica vende. Quem escreve pra "o mercado" some.
 
-Na ${company}, começamos essa mudança e o engajamento dobrou em 21 dias — sem aumentar budget.
+Na ${company}, começamos essa mudança e o engajamento dobrou em 21 dias · sem aumentar budget.
 
 Se você trabalha com marketing B2B e quer entender o método, comenta "quero" que te mando o passo-a-passo. 👇`,
   operacoes: (company) => `**Objetivo:** Reduzir retrabalho operacional em ${company} em 30 dias.
@@ -73,13 +73,13 @@ Se você trabalha com marketing B2B e quer entender o método, comenta "quero" q
 **Alerta de risco:** se runway < 4 meses, congele qualquer contratação e priorize colecionar recebíveis.`,
   outro: (company) => `**Plano de ação para ${company}:**
 
-**Ponto 1: Diagnóstico honesto** — liste em 1 página o que está funcionando e o que não está. Sem eufemismo.
+**Ponto 1: Diagnóstico honesto** · liste em 1 página o que está funcionando e o que não está. Sem eufemismo.
 
-**Ponto 2: Corte 1 iniciativa hoje** — a que consome mais tempo e entrega menos. Foco é subtração.
+**Ponto 2: Corte 1 iniciativa hoje** · a que consome mais tempo e entrega menos. Foco é subtração.
 
-**Ponto 3: Escolha 1 KPI-farol** — a métrica que, se subir, tudo melhora (ex: receita recorrente, NPS, tempo de ciclo).
+**Ponto 3: Escolha 1 KPI-farol** · a métrica que, se subir, tudo melhora (ex: receita recorrente, NPS, tempo de ciclo).
 
-**Ponto 4: Ritual semanal de 30min** — mesma hora, todo início de semana, revisar o KPI-farol e 3 blockers.
+**Ponto 4: Ritual semanal de 30min** · mesma hora, todo início de semana, revisar o KPI-farol e 3 blockers.
 
-**Ponto 5: Aprenda em público** — poste 1 insight por semana no LinkedIn. Marketing e recrutamento saem de graça.`,
+**Ponto 5: Aprenda em público** · poste 1 insight por semana no LinkedIn. Marketing e recrutamento saem de graça.`,
 };

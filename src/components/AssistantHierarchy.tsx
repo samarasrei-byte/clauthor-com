@@ -9,7 +9,7 @@ const CURRENT_UPDATES_VERSION = "2026.07.08";
 const UPDATES_STORAGE_KEY = `clauthor-updates-seen-${CURRENT_UPDATES_VERSION}`;
 
 /**
- * Hierarquia de assistentes — só UM canal fala com o usuário por vez.
+ * Hierarquia de assistentes · só UM canal fala com o usuário por vez.
  *
  * O primeiro contato (onboarding pendente) agora vive na rota dedicada
  * `/welcome`, para onde o signup redireciona. Aqui cuidamos apenas de:
@@ -34,7 +34,7 @@ export default function AssistantHierarchy() {
 
   if (loading || hasUnseenUpdate === null) return null;
 
-  // Primeiro contato sem respostas: não abre modal aqui — /welcome + banner
+  // Primeiro contato sem respostas: não abre modal aqui · /welcome + banner
   // conduzem a jornada.
   if (!answers) return null;
 

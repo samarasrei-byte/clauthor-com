@@ -81,8 +81,8 @@ function timeAgo(iso: string) {
 }
 
 const INSTAGRAM_CAROUSEL_SLIDES = [
-  { url: ironbergSlide1.url, alt: "Post Ironberg — A maioria desiste, os fortes continuam" },
-  { url: ironbergSlide2.url, alt: "Post Ironberg — Não é sobre treinar, é sobre se tornar uma máquina" },
+  { url: ironbergSlide1.url, alt: "Post Ironberg · A maioria desiste, os fortes continuam" },
+  { url: ironbergSlide2.url, alt: "Post Ironberg · Não é sobre treinar, é sobre se tornar uma máquina" },
 ] as const;
 
 // ─────────────── DEMO DATA (exemplo de post para revisão) ───────────────
@@ -90,7 +90,7 @@ const now = Date.now();
 const DEMO_APPROVALS: Approval[] = [
   {
     id: "demo-post-1",
-    title: "Post Instagram — Ironberg Training Center",
+    title: "Post Instagram · Ironberg Training Center",
     delivery_type: "post",
     status: "pending",
     preview_url: null,
@@ -115,7 +115,7 @@ const DEMO_APPROVALS: Approval[] = [
   },
   {
     id: "demo-email-1",
-    title: "E-mail — Sequência de boas-vindas (passo 2)",
+    title: "E-mail · Sequência de boas-vindas (passo 2)",
     delivery_type: "email",
     status: "in_revision",
     preview_url: null,
@@ -130,7 +130,7 @@ const DEMO_APPROVALS: Approval[] = [
   },
   {
     id: "demo-creative-1",
-    title: "Criativo — Anúncio Meta Ads (variação A)",
+    title: "Criativo · Anúncio Meta Ads (variação A)",
     delivery_type: "creative",
     status: "approved",
     preview_url: null,
@@ -145,7 +145,7 @@ const DEMO_APPROVALS: Approval[] = [
   },
   {
     id: "demo-video-1",
-    title: "Vídeo — Influencer Avatar IA (edição final)",
+    title: "Vídeo · Influencer Avatar IA (edição final)",
     delivery_type: "video",
     status: "pending",
     preview_url: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
@@ -158,7 +158,7 @@ const DEMO_APPROVALS: Approval[] = [
     __demo: true,
     content: {
       format: "Reels 9:16 • 32s",
-      avatar: "Influencer Avatar — Sofia (HeyGen)",
+      avatar: "Influencer Avatar · Sofia (HeyGen)",
       script:
         "Hook (0–3s): Você ainda edita vídeo manualmente?\nDesenvolvimento (3–22s): mostre o agente clonando voz, cortando silêncios e gerando legendas.\nCTA (22–32s): Teste grátis em clauthor.com",
       cuts: [
@@ -166,12 +166,12 @@ const DEMO_APPROVALS: Approval[] = [
         { at: "00:08", note: "B-roll: timeline editando sozinha" },
         { at: "00:22", note: "Logo + CTA piscando" },
       ],
-      caption_overlay: "Edição 100% por IA — voz, cortes e legenda automáticos.",
+      caption_overlay: "Edição 100% por IA · voz, cortes e legenda automáticos.",
     },
   },
   {
     id: "demo-proposal-1",
-    title: "Proposta Comercial — Squad de Vendas IA",
+    title: "Proposta Comercial · Squad de Vendas IA",
     delivery_type: "proposal",
     status: "pending",
     preview_url: null,
@@ -184,12 +184,12 @@ const DEMO_APPROVALS: Approval[] = [
     __demo: true,
     content: {
       client: "TechFlow Soluções",
-      headline: "Squad de Vendas com IA — 3 agentes 24/7",
+      headline: "Squad de Vendas com IA · 3 agentes 24/7",
       summary: "Time autônomo cobrindo prospecção, qualificação e follow-up. Setup em 7 dias.",
       items: [
-        { title: "Hunter — prospecção LinkedIn", price: "R$ 2.900/mês" },
-        { title: "SDR — qualificação por WhatsApp", price: "R$ 3.400/mês" },
-        { title: "Closer — follow-up e fechamento", price: "R$ 4.200/mês" },
+        { title: "Hunter · prospecção LinkedIn", price: "R$ 2.900/mês" },
+        { title: "SDR · qualificação por WhatsApp", price: "R$ 3.400/mês" },
+        { title: "Closer · follow-up e fechamento", price: "R$ 4.200/mês" },
       ],
       total: "R$ 10.500/mês",
       validity: "Válido por 7 dias",
@@ -197,7 +197,7 @@ const DEMO_APPROVALS: Approval[] = [
   },
   {
     id: "demo-stories-1",
-    title: "Stories — Anúncio Black Friday (3 frames)",
+    title: "Stories · Anúncio Black Friday (3 frames)",
     delivery_type: "stories",
     status: "pending",
     preview_url: null,
@@ -209,13 +209,13 @@ const DEMO_APPROVALS: Approval[] = [
     approved_at: null,
     __demo: true,
     content: {
-      caption: "Stories vertical 9:16 — gancho forte, CTA clicável, swipe up para checkout.",
+      caption: "Stories vertical 9:16 · gancho forte, CTA clicável, swipe up para checkout.",
       cta: "Arrasta pra cima",
     },
   },
   {
     id: "demo-document-1",
-    title: "Documento — Briefing de campanha Q4",
+    title: "Documento · Briefing de campanha Q4",
     delivery_type: "document",
     status: "in_revision",
     preview_url: null,
@@ -227,7 +227,7 @@ const DEMO_APPROVALS: Approval[] = [
     approved_at: null,
     __demo: true,
     content: {
-      doc_title: "Campanha Q4 — Estratégia 360º",
+      doc_title: "Campanha Q4 · Estratégia 360º",
       sections: [
         "1. Contexto e objetivos",
         "2. Persona, dor e gatilhos",
@@ -457,12 +457,12 @@ const ApprovalsCenter = () => {
             </Badge>
             <h1 className="text-3xl font-semibold tracking-tight">Central de Aprovações</h1>
             <p className="text-sm text-muted-foreground">
-              Cada entrega gerada pelos seus agentes passa por aqui. Aprove em um clique, peça ajustes em linguagem natural — o agente reescreve sozinho.
+              Cada entrega gerada pelos seus agentes passa por aqui. Aprove em um clique, peça ajustes em linguagem natural · o agente reescreve sozinho.
             </p>
             {isDemoMode && (
               <div className="inline-flex items-center gap-1.5 text-[11px] text-amber-500 mt-1">
                 <Sparkles className="h-3 w-3" />
-                Modo demonstração — exemplos prontos para você sentir o fluxo.
+                Modo demonstração · exemplos prontos para você sentir o fluxo.
               </div>
             )}
           </div>
@@ -640,7 +640,7 @@ const ApprovalsCenter = () => {
                     {showVersions.map((v, i) => (
                       <div key={v.id} className="flex items-center gap-3 text-xs p-2.5 rounded-lg bg-muted/40 border border-border/40">
                         <Badge variant={i === 0 ? "default" : "outline"} className="text-[10px]">v{v.version_number}</Badge>
-                        <span className="flex-1 truncate text-muted-foreground">{v.notes || "—"}</span>
+                        <span className="flex-1 truncate text-muted-foreground">{v.notes || "·"}</span>
                         <span className="text-muted-foreground/60">há {timeAgo(v.created_at)}</span>
                       </div>
                     ))}
@@ -836,7 +836,7 @@ const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps)
             </>
           ) : (
             <>
-              <div className="text-sm font-medium">{content?.subject || "—"}</div>
+              <div className="text-sm font-medium">{content?.subject || "·"}</div>
               {content?.preheader && <div className="text-xs text-muted-foreground">{content.preheader}</div>}
             </>
           )}
@@ -857,7 +857,7 @@ const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps)
         <div className="bg-gradient-to-br from-amber-500/10 via-card to-card px-5 py-4 border-b border-border/40 flex items-center gap-3">
           <FileSignature className="h-5 w-5 text-amber-500" />
           <div className="flex-1">
-            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato — análise antes da assinatura</div>
+            <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato · análise antes da assinatura</div>
             <div className="text-sm font-semibold">{content?.contract_party_a} ⇄ {content?.contract_party_b}</div>
           </div>
           {content?.signature_required && <Badge className="bg-amber-500/15 text-amber-600 border-amber-500/30">Assinatura</Badge>}
@@ -893,7 +893,7 @@ const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps)
     return (
       <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
         <div className="bg-gradient-to-br from-primary/10 via-card to-card px-5 py-4 border-b border-border/40">
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Proposta comercial — {content?.client}</div>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Proposta comercial · {content?.client}</div>
           {editing ? (
             <Input className="mt-1" value={content?.headline || ""} onChange={(e) => patch({ headline: e.target.value })} />
           ) : (
@@ -998,7 +998,7 @@ const PreviewBlock = ({ approval, editing, draft, setDraft }: PreviewBlockProps)
 const Field = ({ label, value, editing, onChange }: { label: string; value: string; editing: boolean; onChange: (v: string) => void }) => (
   <div className="space-y-1">
     <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{label}</div>
-    {editing ? <Input value={value || ""} onChange={(e) => onChange(e.target.value)} /> : <div className="text-sm font-medium">{value || "—"}</div>}
+    {editing ? <Input value={value || ""} onChange={(e) => onChange(e.target.value)} /> : <div className="text-sm font-medium">{value || "·"}</div>}
   </div>
 );
 
@@ -1193,7 +1193,7 @@ const ApprovalCard = ({ approval, onOpen, onApprove, onRequestChanges, onReject,
 const CardPreview = ({ approval }: { approval: Approval }) => {
   const { delivery_type, content, preview_url } = approval;
 
-  // Post Instagram — mini preview de carrossel
+  // Post Instagram · mini preview de carrossel
   if (delivery_type === "post" && content?.platform === "instagram") {
     const firstSlide = content?.carousel_slides?.[0]?.url;
     const slidesCount = content?.carousel_slides?.length ?? 0;
@@ -1231,7 +1231,7 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
     return (
       <div className="aspect-[16/10] bg-gradient-to-br from-sky-500/10 via-background to-primary/10 p-4 flex flex-col justify-center border-b border-border/40">
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Assunto</div>
-        <div className="text-sm font-semibold line-clamp-2">{content?.subject || "—"}</div>
+        <div className="text-sm font-semibold line-clamp-2">{content?.subject || "·"}</div>
         {content?.preheader && <div className="text-[11px] text-muted-foreground mt-1 line-clamp-1">{content.preheader}</div>}
       </div>
     );
@@ -1252,7 +1252,7 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
     return (
       <div className="aspect-[16/10] relative bg-gradient-to-br from-amber-500/15 via-background to-background p-4 border-b border-border/40">
         <FileSignature className="h-5 w-5 text-amber-500 mb-2" />
-        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato — assinatura</div>
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Contrato · assinatura</div>
         <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.contract_party_a} ⇄ {content?.contract_party_b}</div>
         <div className="text-[11px] text-muted-foreground mt-1">{content?.contract_value}</div>
       </div>
@@ -1263,7 +1263,7 @@ const CardPreview = ({ approval }: { approval: Approval }) => {
     return (
       <div className="aspect-[16/10] relative bg-gradient-to-br from-primary/15 via-background to-background p-4 border-b border-border/40">
         <FileText className="h-5 w-5 text-primary mb-2" />
-        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Proposta — {content?.client}</div>
+        <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Proposta · {content?.client}</div>
         <div className="text-sm font-semibold line-clamp-2 mt-0.5">{content?.headline}</div>
         <div className="text-[11px] text-primary font-semibold mt-1">{content?.total}</div>
       </div>

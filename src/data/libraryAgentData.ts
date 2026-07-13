@@ -14,7 +14,7 @@ export const agentKeys = ALL_AGENT_SLUGS as readonly string[];
 export const featuredKeys = ["voice_ai", "orchestrator", "ceo", "hunter_linkedin"] as const;
 
 /**
- * 40 agentes-âncora — a curadoria pública da library.
+ * 40 agentes-âncora · a curadoria pública da library.
  *
  * Critério: cobertura equilibrada de departamentos + social proof real + capabilities
  * completas. Os demais slugs continuam existindo no workforce (200+) mas ficam

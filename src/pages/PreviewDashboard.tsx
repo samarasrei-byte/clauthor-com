@@ -1,5 +1,5 @@
 /**
- * PreviewDashboard — preview do painel para usuários NÃO autenticados que
+ * PreviewDashboard · preview do painel para usuários NÃO autenticados que
  * escolheram um departamento no checkout. Usa DADOS REAIS do departamento
  * (agentes, dor, outcome, timeline de execução) para mostrar exatamente o
  * que aquele squad vai fazer pela empresa dele.
@@ -96,7 +96,7 @@ export default function PreviewDashboard() {
     [items],
   );
 
-  // Departamento em foco (o primeiro) — o preview conta a história desse dept
+  // Departamento em foco (o primeiro) · o preview conta a história desse dept
   const focusPkg = packages[0];
 
   const cartLabel =
@@ -164,7 +164,7 @@ export default function PreviewDashboard() {
     });
   };
 
-  // Sem package correspondente (dept custom sem dados) — fallback simples
+  // Sem package correspondente (dept custom sem dados) · fallback simples
   if (!focusPkg) {
     return (
       <div className="min-h-dvh flex items-center justify-center p-8">
@@ -254,7 +254,7 @@ export default function PreviewDashboard() {
           </motion.div>
         )}
 
-        {/* 2) O que esse departamento FAZ por você — bloco hero */}
+        {/* 2) O que esse departamento FAZ por você · bloco hero */}
         <Card
           data-tour="guest-header"
           className="p-6 sm:p-8 bg-card/60 border-border/50 rounded-2xl"
@@ -362,7 +362,7 @@ export default function PreviewDashboard() {
               </div>
             </Card>
 
-            {/* Timeline REAL — o que acontece na prática */}
+            {/* Timeline REAL · o que acontece na prática */}
             <Card className="p-6 bg-card/60 border-border/50 rounded-2xl">
               <div className="flex items-center gap-2 mb-1">
                 <Activity className="w-4 h-4 text-primary" />

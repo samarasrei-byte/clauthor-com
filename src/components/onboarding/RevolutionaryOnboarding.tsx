@@ -292,7 +292,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
   }, [isOpen, step]);
 
   // Auto-start: assim que o painel abre, roda a animação de boas-vindas e
-  // avança para a escolha de departamento em ~2.4s — sem clique manual.
+  // avança para a escolha de departamento em ~2.4s · sem clique manual.
   useEffect(() => {
     if (!isOpen || step !== "welcome") return;
     const t = setTimeout(() => setStep("department"), 2400);
@@ -380,7 +380,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       price_monthly: dept.priceMonthly,
       source: "onboarding",
     });
-    // Vai direto para Fusão e finaliza — sem etapa de Match/Vaga.
+    // Vai direto para Fusão e finaliza · sem etapa de Match/Vaga.
     setStep("analyzing");
     setTimeout(() => { finishOnboarding(classification); }, 1400);
   }
@@ -413,9 +413,9 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
       if ((data as any)?.error) throw new Error((data as any).error);
       setTimeout(() => { finishOnboarding(data as Classification); }, 1200);
     } catch (e: any) {
-      // Fallback local — nunca deixa o usuário travado
+      // Fallback local · nunca deixa o usuário travado
       console.warn("[onboarding] classify failed, using fallback", e);
-      toast.message("Análise offline — usando recomendação inicial", {
+      toast.message("Análise offline · usando recomendação inicial", {
         description: "Você pode refinar no painel depois.",
       });
       setTimeout(() => { finishOnboarding(buildFallback()); }, 900);
@@ -482,7 +482,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
   const NeedIcon = result ? NEED_META[result.need_type].icon : Bot;
   const needMeta = result ? NEED_META[result.need_type] : NEED_META.agent;
 
-  /* Narrative log — accumulates on the left */
+  /* Narrative log · accumulates on the left */
   const narrative: { key: Step; lines: (string | React.ReactNode)[] }[] = [
     { key: "welcome",  lines: [`Estabelecendo canal seguro${firstName ? ` com ${firstName}` : ""}…`, "+200 especialistas online. Aguardando seu sinal."] },
     { key: "input",    lines: [method === "url" ? "Canal aberto. Aponte para o domínio." : method === "text" ? "Canal aberto. Descreva o negócio em texto." : "Escolha o vetor de entrada."] },
@@ -600,7 +600,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                   </motion.div>
                 )}
 
-                {/* DEPARTMENT — escolha do departamento pronto (Bloco 5) */}
+                {/* DEPARTMENT · escolha do departamento pronto (Bloco 5) */}
                 {step === "department" && (
                   <motion.div
                     key="department"
@@ -656,7 +656,7 @@ export default function RevolutionaryOnboarding({ isOpen, onComplete, onSkip }: 
                         onClick={() => setStep("input")}
                         className="text-white/60 hover:text-white hover:bg-white/5 rounded-full gap-2 h-11 px-5"
                       >
-                        Não sei ainda — deixe o Thor descobrir <ArrowRight className="w-4 h-4" />
+                        Não sei ainda · deixe o Thor descobrir <ArrowRight className="w-4 h-4" />
                       </Button>
                     </div>
                   </motion.div>

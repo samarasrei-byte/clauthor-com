@@ -61,7 +61,7 @@ export default function ThorGreetingMetricsCard() {
         <div className="flex items-center justify-between">
           <CardTitle className="text-base flex items-center gap-2">
             <Zap className="h-4 w-4 text-primary" />
-            Popup diário do Thor — últimos {WINDOW_DAYS} dias
+            Popup diário do Thor · últimos {WINDOW_DAYS} dias
           </CardTitle>
           <Badge variant="outline" className="text-[10px] font-mono">
             {isLoading ? "…" : `${stats.impressions} impressões`}

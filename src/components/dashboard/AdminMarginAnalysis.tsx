@@ -240,7 +240,7 @@ const AdminMarginAnalysis = () => {
             <p className="font-semibold text-amber-500">Regras para preservar margem</p>
             <ul className="space-y-0.5 text-muted-foreground list-disc list-inside">
               <li>Departamentos com margem &lt; 55% (vermelho) precisam de rate limit + overage transparente.</li>
-              <li>Roteamento inteligente (Sonnet apenas para tarefas complexas) é obrigatório — sem isso, Suporte e Criação viram prejuízo.</li>
+              <li>Roteamento inteligente (Sonnet apenas para tarefas complexas) é obrigatório · sem isso, Suporte e Criação viram prejuízo.</li>
               <li>Alerta ao cliente ao atingir 80% do consumo evita surpresa e churn.</li>
               <li>Cache semântico + contexto comprimido reduzem input tokens em 40-60%.</li>
             </ul>
@@ -252,7 +252,7 @@ const AdminMarginAnalysis = () => {
         <CardContent className="p-4 flex items-start gap-3">
           <DollarSign className="h-4 w-4 text-primary shrink-0 mt-0.5" />
           <div className="text-xs text-muted-foreground">
-            Preços vêm de <code className="bg-muted px-1 rounded">src/lib/pricing.ts</code> — edite lá para ver o impacto aqui em tempo real.
+            Preços vêm de <code className="bg-muted px-1 rounded">src/lib/pricing.ts</code> · edite lá para ver o impacto aqui em tempo real.
             Perfis de uso (tokens/ação) são estimativas médias por depto; ajuste em <code className="bg-muted px-1 rounded">AdminMarginAnalysis.tsx</code> conforme dados reais forem coletados de <code className="bg-muted px-1 rounded">token_usage</code>.
           </div>
         </CardContent>

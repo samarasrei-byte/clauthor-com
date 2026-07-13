@@ -1,6 +1,6 @@
 /**
  * AmbientThorCard.tsx
- * Home ambiente logada — mostra "Thor está rodando" em vez de dashboard vazio.
+ * Home ambiente logada · mostra "Thor está rodando" em vez de dashboard vazio.
  * Puxa últimas ações do usuário (execution_logs) e apresenta como card proativo.
  */
 import { useEffect, useState } from "react";

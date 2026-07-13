@@ -10,7 +10,7 @@ import { ArrowLeft, Check, Copy, Plug, Terminal, Zap, Shield, Workflow, Boxes, B
 import { Sparkles } from "@/components/icons/Sparkles";
 
 /**
- * /mcp — Setup do CLAUTHOR MCP Server
+ * /mcp · Setup do CLAUTHOR MCP Server
  * Mostra endpoint, exemplos JSON-RPC e configs prontas para
  * Claude Desktop, Claude Code, Cursor, Windsurf e ChatGPT.
  */
@@ -101,7 +101,7 @@ export default function MCPServer() {
       {
         icon: Workflow,
         title: "Orquestração nativa no Claude Code",
-        desc: "O Claude decide qual agente CLAUTHOR chamar a cada turn — sem você trocar de janela.",
+        desc: "O Claude decide qual agente CLAUTHOR chamar a cada turn · sem você trocar de janela.",
       },
       {
         icon: Zap,
@@ -118,7 +118,7 @@ export default function MCPServer() {
   );
 
   useEffect(() => {
-    document.title = "MCP Server — CLAUTHOR | 206 agentes no Claude & Cursor";
+    document.title = "MCP Server · CLAUTHOR | 206 agentes no Claude & Cursor";
     const meta = document.querySelector('meta[name="description"]') ?? document.head.appendChild(Object.assign(document.createElement("meta"), { name: "description" }));
     meta.setAttribute("content", "Setup do CLAUTHOR MCP Server: expõe 206 agentes WORKFORCE como tools nativas para Claude Code, Claude Desktop, Cursor e qualquer cliente MCP.");
   }, []);
@@ -210,7 +210,7 @@ export default function MCPServer() {
 
               <TabsContent value="claude-code" className="space-y-3 pt-4">
                 <p className="text-sm text-muted-foreground">
-                  Comando único no terminal — o Claude Code persiste a conexão e disponibiliza
+                  Comando único no terminal · o Claude Code persiste a conexão e disponibiliza
                   todos os agentes automaticamente no próximo prompt.
                 </p>
                 <CopyBlock code={claudeCodeCmd} label="Comando Claude Code copiado" />

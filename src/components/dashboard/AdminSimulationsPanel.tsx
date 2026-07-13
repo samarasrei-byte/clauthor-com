@@ -1,5 +1,5 @@
 /**
- * AdminSimulationsPanel — Funil simulação → contratação por agente + drill-down.
+ * AdminSimulationsPanel · Funil simulação → contratação por agente + drill-down.
  */
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";

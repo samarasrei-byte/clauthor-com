@@ -15,7 +15,7 @@ export interface PremiumCTAButtonProps
 }
 
 /**
- * PremiumCTAButton — Apple/Tesla/Notion clean.
+ * PremiumCTAButton · Apple/Tesla/Notion clean.
  * Sem glow, sem gradient, sem sweep. Pura hierarquia tipográfica.
  * solid: fundo branco puro + texto preto (CTA primário).
  * outline: hairline branca + texto branco (CTA secundário premium).

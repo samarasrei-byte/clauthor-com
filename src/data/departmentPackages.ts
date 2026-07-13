@@ -1,5 +1,5 @@
 /**
- * Departamentos Prontos — packages pré-configurados vendidos como solução.
+ * Departamentos Prontos · packages pré-configurados vendidos como solução.
  *
  * Cada package amarra:
  * - Uma dor específica de PME BR
@@ -9,7 +9,7 @@
  * - Um preço mensal em BRL
  *
  * IMPORTANTE: todos os `agentSlugs` DEVEM existir em `ALL_AGENT_SLUGS`.
- * Este arquivo é puramente frontend — não há tabela nem edge function envolvida.
+ * Este arquivo é puramente frontend · não há tabela nem edge function envolvida.
  */
 import type { LucideIcon } from "lucide-react";
 import {
@@ -64,7 +64,7 @@ export interface DepartmentPackage {
 }
 
 /**
- * Currency helper — BRL formatado como "R$ 1.997".
+ * Currency helper · BRL formatado como "R$ 1.997".
  * Colocado aqui para não vazar dependência de i18n na data layer.
  */
 export const formatBRL = (value: number): string => {
@@ -78,7 +78,7 @@ export const formatBRL = (value: number): string => {
 };
 
 /**
- * Preços por dificuldade do departamento — varia de R$ 1.477,30 (mais simples)
+ * Preços por dificuldade do departamento · varia de R$ 1.477,30 (mais simples)
  * a R$ 1.878,00 (mais complexo). Aplicado globalmente via `priceMonthly`.
  */
 export const DEPARTMENT_PRICE_BY_ID: Record<string, number> = {
@@ -364,7 +364,7 @@ export const getDepartmentById = (id: string): DepartmentPackage | undefined =>
   DEPARTMENT_PACKAGES.find((d) => d.id === id);
 
 /**
- * Tokens de cor departamentais — espelha o esquema já em uso em `Library.tsx`.
+ * Tokens de cor departamentais · espelha o esquema já em uso em `Library.tsx`.
  * Mantido aqui para que componentes de departamento não precisem duplicar o mapa.
  */
 export const DEPT_COLOR_TOKENS: Record<DeptColorKey, {

@@ -22,9 +22,9 @@ const STEPS: Step[] = [
     description:
       "Use a busca ou filtre por categoria (Comunicação, CRM, Ads...). Cada card mostra um badge:",
     bullets: [
-      "🟢 API ativa — pronto para uso imediato",
-      "🟡 Beta — funcional, mas em ajustes finais",
-      "⚪ Em breve — ainda não implementado (não gaste credenciais)",
+      "🟢 API ativa · pronto para uso imediato",
+      "🟡 Beta · funcional, mas em ajustes finais",
+      "⚪ Em breve · ainda não implementado (não gaste credenciais)",
     ],
   },
   {
@@ -39,7 +39,7 @@ const STEPS: Step[] = [
     description:
       "Dois modos, escolha o do card:",
     bullets: [
-      "OAuth (1 clique): Meta Ads, Instagram, LinkedIn — abre popup do provedor, você autoriza, pronto.",
+      "OAuth (1 clique): Meta Ads, Instagram, LinkedIn · abre popup do provedor, você autoriza, pronto.",
       "API Key: cole a chave no campo indicado. Sempre marcada como password e cifrada em repouso.",
       "Nunca compartilhe a chave em chat, e-mail ou print. Se vazar, revogue no provedor e reconecte aqui.",
     ],
@@ -48,11 +48,11 @@ const STEPS: Step[] = [
     icon: ShieldCheck,
     title: "4. Segurança e isolamento",
     description:
-      "Suas credenciais nunca aparecem em texto puro na plataforma. Cada tenant tem chaves próprias — nem outros usuários da sua empresa acessam. Você pode revogar a qualquer momento no card do conector.",
+      "Suas credenciais nunca aparecem em texto puro na plataforma. Cada tenant tem chaves próprias · nem outros usuários da sua empresa acessam. Você pode revogar a qualquer momento no card do conector.",
   },
   {
     icon: CheckCircle2,
-    title: "5. Pronto — agentes ativos",
+    title: "5. Pronto · agentes ativos",
     description:
       "Ao aparecer o selo verde 'Vinculado', seus agentes já podem executar ações reais nessa integração. Teste no Playground ou dispare uma tarefa.",
   },
@@ -65,7 +65,7 @@ const CREDENTIAL_SOURCES: { name: string; url: string; hint: string }[] = [
   { name: "Notion", url: "https://www.notion.so/my-integrations", hint: "New integration → copie o Internal Integration Token" },
   { name: "LinkedIn", url: "https://www.linkedin.com/developers/apps", hint: "Crie app → Auth → gere Access Token com scopes necessários" },
   { name: "Slack", url: "https://api.slack.com/apps", hint: "Create app → Incoming Webhooks + Bot Token (xoxb-)" },
-  { name: "Meta Ads / Instagram", url: "#", hint: "Clique em 'Conexão rápida via OAuth Meta' no card — 1 clique." },
+  { name: "Meta Ads / Instagram", url: "#", hint: "Clique em 'Conexão rápida via OAuth Meta' no card · 1 clique." },
   { name: "HubSpot", url: "https://app.hubspot.com/private-apps", hint: "Settings → Private Apps → Create private app → copie o token (pat-...)" },
   { name: "Google Sheets", url: "https://console.cloud.google.com/apis/credentials", hint: "Service Account → JSON key. Compartilhe a planilha com o e-mail do service account." },
   { name: "Pipedrive", url: "https://app.pipedrive.com/settings/api", hint: "Seu perfil → Settings → API → copie o Personal API token" },

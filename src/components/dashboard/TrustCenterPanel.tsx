@@ -53,7 +53,7 @@ export default function TrustCenterPanel() {
             <Shield className="h-5 w-5 text-primary" /> Trust Center
           </h3>
           <p className="text-sm text-muted-foreground mt-1">
-            Trilha de auditoria imutável (SHA-256 encadeado) — prova criptográfica de cada ação dos agentes.
+            Trilha de auditoria imutável (SHA-256 encadeado) · prova criptográfica de cada ação dos agentes.
           </p>
         </div>
         <Badge variant="outline" className="gap-1 border-emerald-500/40 text-emerald-500">

@@ -5,7 +5,7 @@ import HelpButton from "./HelpButton";
 const ThorLiveGuide = lazy(() => import("./ThorLiveGuide"));
 
 /**
- * FloatingDock — Single mount point for every floating UI element.
+ * FloatingDock · Single mount point for every floating UI element.
  *
  * Zone contract (collision-free by design):
  *   ┌──────────────────────────────────────────────────────────┐
@@ -22,7 +22,7 @@ const ThorLiveGuide = lazy(() => import("./ThorLiveGuide"));
  *   - bottom-right  → HelpButton
  *
  * Rules for adding a new floating widget:
- *   1. Pick a free zone (or extend ZONES) — never overlap an existing FAB.
+ *   1. Pick a free zone (or extend ZONES) · never overlap an existing FAB.
  *   2. FABs use z-40; the active guidance overlay uses z-50; modals/dialogs ≥ z-60.
  *   3. Mount it ONLY here, never inline in a page.
  *   4. Mobile: each widget collapses ≤ 56px and respects safe-area-inset-bottom.

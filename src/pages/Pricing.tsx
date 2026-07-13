@@ -18,7 +18,7 @@ import { getRegion, formatPrice } from "@/lib/pricing";
 import { departments } from "@/data/departmentData";
 
 /**
- * Pricing page — departament-first pricing model.
+ * Pricing page · departament-first pricing model.
  *
  * Hierarchy (canonical, see mem://design/messaging-pitch):
  *   1. Departamento = unidade primária de preço
@@ -59,7 +59,7 @@ const Pricing = () => {
   return (
     <div className="min-h-dvh pt-24 pb-16 px-4 relative">
       <SEO
-        title="Preços — Contrate um departamento inteiro de IA | Clauthor"
+        title="Preços · Contrate um departamento inteiro de IA | Clauthor"
         description="20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados. Preço fixo por departamento, sem taxa por assento."
         path="/pricing"
       />
@@ -83,7 +83,7 @@ const Pricing = () => {
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-3">
             20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados.
-            Preço fixo por departamento — sem taxa por assento, sem surpresa.
+            Preço fixo por departamento · sem taxa por assento, sem surpresa.
           </p>
           <p className="text-sm text-foreground/70 font-medium">
             Cada departamento inclui um <span className="text-primary font-bold">squad de especialistas</span>, tokens mensais e execuções auditáveis.

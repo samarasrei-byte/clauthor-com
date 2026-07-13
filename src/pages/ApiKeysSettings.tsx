@@ -191,7 +191,7 @@ export default function ApiKeysSettings() {
             <h1 className="text-3xl font-semibold tracking-tight text-foreground">API Keys</h1>
             <p className="text-sm text-muted-foreground mt-2 max-w-xl leading-relaxed">
               Crie chaves para acessar a API CLAUTHOR de forma programática. Cada chave é exibida
-              uma única vez — guarde em local seguro.
+              uma única vez · guarde em local seguro.
             </p>
           </div>
           <Button onClick={() => setCreateOpen(true)} className="gap-2">

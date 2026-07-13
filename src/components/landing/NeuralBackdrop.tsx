@@ -1,5 +1,5 @@
 /**
- * NeuralBackdrop — versão minimalista Apple/Tesla.
+ * NeuralBackdrop · versão minimalista Apple/Tesla.
  * Fundo preto sólido + grid sutil + vinheta. Sem aurora, sem glow.
  */
 interface Props {

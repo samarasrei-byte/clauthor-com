@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import LiveDemoRunner from "@/components/developers/LiveDemoRunner";
 
 /**
- * /developers — página técnica para power users (Claude Code, Cursor, Codex).
+ * /developers · página técnica para power users (Claude Code, Cursor, Codex).
  * Dark-only, terminal-first, zero fluff. Números duros, curl real, MCP em 3 linhas.
  *
  * Design brief: um crítico Claude Code precisa dizer "sensacional" nos primeiros 10s.
@@ -34,7 +34,7 @@ const SCRIPT: StreamLine[] = [
   { t: "agent", agent: "analyst.roas", color: "rose", text: "configurando tracking UTM + dashboard live" },
   { t: "ok", text: "peças aprovadas por brand-guard (score 0.94)", meta: "1.2s" },
   { t: "ok", text: "campanhas publicadas: meta_ads_id=23851 · google_ads_id=87421", meta: "3.4s" },
-  { t: "warn", text: "orçamento diário excede baseline em 22% — pausado, aguarda aprovação humana" },
+  { t: "warn", text: "orçamento diário excede baseline em 22% · pausado, aguarda aprovação humana" },
   { t: "done", text: "run finalizado · 5 agentes · 12 tool calls · 84.302 tokens", meta: "$0.41" },
 ];
 
@@ -141,13 +141,13 @@ function OrchestrationTerminal() {
 // ─── Benchmark table ───────────────────────────────
 const BENCH_ROWS = [
   { metric: "Agentes em paralelo", clauthor: "20", cc: "1", winner: "clauthor" },
-  { metric: "Memória persistente entre runs", clauthor: "4 camadas (pgvector)", cc: "—", winner: "clauthor" },
+  { metric: "Memória persistente entre runs", clauthor: "4 camadas (pgvector)", cc: "·", winner: "clauthor" },
   { metric: "Tool calls por sessão", clauthor: "ilimitado", cc: "limitado por contexto", winner: "clauthor" },
   { metric: "Latência p50 (chat completion)", clauthor: "412ms", cc: "890ms", winner: "clauthor" },
   { metric: "Latência p95", clauthor: "1.2s", cc: "3.4s", winner: "clauthor" },
   { metric: "Custo médio por outcome", clauthor: "$0.09", cc: "$0.34", winner: "clauthor" },
   { metric: "MCP nativo (Claude Desktop/Cursor)", clauthor: "✓", cc: "N/A", winner: "clauthor" },
-  { metric: "Replay determinístico", clauthor: "✓ (seed + trace)", cc: "—", winner: "clauthor" },
+  { metric: "Replay determinístico", clauthor: "✓ (seed + trace)", cc: "·", winner: "clauthor" },
   { metric: "RLS multi-tenant", clauthor: "✓ Postgres nativo", cc: "N/A", winner: "clauthor" },
   { metric: "Custo por 1M tokens de saída", clauthor: "$1.20 (gateway)", cc: "$15 (Sonnet)", winner: "clauthor" },
 ];
@@ -326,9 +326,9 @@ function LiveMetrics() {
 // ─── Feature grid ───────────────────────────────
 const FEATURES = [
   { icon: Network, title: "Orquestração hierárquica de 10 camadas", body: "Do intent do usuário até tool calls determinísticos. Sem loops infinitos, sem retry cego." },
-  { icon: Layers, title: "Memória de 4 camadas (episódica, semântica, procedural, RAG)", body: "pgvector nativo. Runs anteriores viram contexto — sem colar histórico manualmente." },
+  { icon: Layers, title: "Memória de 4 camadas (episódica, semântica, procedural, RAG)", body: "pgvector nativo. Runs anteriores viram contexto · sem colar histórico manualmente." },
   { icon: GitBranch, title: "Replay determinístico", body: "Toda execução tem seed + trace. Rode o mesmo run com o mesmo output byte-a-byte." },
-  { icon: Cpu, title: "Model routing automático", body: "gpt-5.5 pra reasoning, gemini-flash pra classificação, embedding-3 pra vetores — escolha por intent." },
+  { icon: Cpu, title: "Model routing automático", body: "gpt-5.5 pra reasoning, gemini-flash pra classificação, embedding-3 pra vetores · escolha por intent." },
   { icon: Lock, title: "RLS Postgres em toda tabela", body: "Multi-tenant no nível do banco. Nenhum agente vê dado de tenant diferente, nunca." },
   { icon: Activity, title: "Observabilidade cirúrgica", body: "Tokens, custo, latência e tool trace por request. OpenAPI real, sem SDK bloatware." },
 ];
@@ -338,7 +338,7 @@ export default function Developers() {
   return (
     <>
       <Helmet>
-        <title>Developers · Clauthor — AI agents for engineers</title>
+        <title>Developers · Clauthor · AI agents for engineers</title>
         <meta
           name="description"
           content="Multi-agent orchestration for developers. Native MCP for Claude Desktop, Cursor, and Codex. Deterministic replay, p50 412ms, $0.09 per outcome. Real curl, real streaming, real Postgres."
@@ -411,7 +411,7 @@ export default function Developers() {
         </section>
 
 
-        {/* LIVE DEMO — real streaming */}
+        {/* LIVE DEMO · real streaming */}
         <section className="border-b border-white/[0.05]">
           <div className="max-w-[1240px] mx-auto px-6 py-16">
             <div className="max-w-2xl mb-8">
@@ -511,8 +511,8 @@ export default function Developers() {
               <ul className="space-y-2 text-sm font-mono text-foreground/70">
                 <li className="flex gap-2"><span className="text-emerald-400">→</span> 20 departamentos como namespaces (clauthor.growth, clauthor.sales, ...)</li>
                 <li className="flex gap-2"><span className="text-emerald-400">→</span> OAuth 2.1 nativo (Supabase Auth como authorization server)</li>
-                <li className="flex gap-2"><span className="text-emerald-400">→</span> RLS aplicado por token — o agente só vê o que o usuário pode ver</li>
-                <li className="flex gap-2"><span className="text-emerald-400">→</span> Dynamic client registration (DCR) — zero config manual</li>
+                <li className="flex gap-2"><span className="text-emerald-400">→</span> RLS aplicado por token · o agente só vê o que o usuário pode ver</li>
+                <li className="flex gap-2"><span className="text-emerald-400">→</span> Dynamic client registration (DCR) · zero config manual</li>
               </ul>
             </div>
             <div className="rounded-xl border border-white/[0.08] bg-[#0a0a0f] p-6 font-mono text-[12px] leading-7">

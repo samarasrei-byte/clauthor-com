@@ -1,5 +1,5 @@
 /**
- * Home — Apple-inspired minimal & premium.
+ * Home · Apple-inspired minimal & premium.
  *
  * Princípios:
  *  - Tipografia enorme, hierarquia rígida, muito respiro
@@ -183,7 +183,7 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-14 leading-relaxed"
           >
-            Um agente, um squad ou um departamento inteiro — o Thor entende seu
+            Um agente, um squad ou um departamento inteiro · o Thor entende seu
             cenário e recomenda o caminho certo. A partir de{" "}
             <span className="text-foreground font-medium">R$ 197/mês</span>.
           </motion.p>

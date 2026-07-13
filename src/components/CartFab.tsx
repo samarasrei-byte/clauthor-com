@@ -5,7 +5,7 @@ import { useDeptSelection } from "@/stores/deptSelection";
 import { formatBRL } from "@/data/departmentPackages";
 
 /**
- * CartFab — pílula flutuante que aparece quando há departamentos no carrinho.
+ * CartFab · pílula flutuante que aparece quando há departamentos no carrinho.
  * Some no próprio /checkout e em rotas admin/dashboard pra não poluir.
  */
 const HIDDEN_PREFIXES = ["/checkout", "/dashboard", "/admin", "/auth", "/thor"];

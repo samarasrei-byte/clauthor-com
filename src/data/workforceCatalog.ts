@@ -45,7 +45,7 @@ export const WORKFORCE_CATALOG: AgentTemplate[] = [
   t("sdr-in", "SDR Inbound", "vendas", "Qualifica leads que chegam pelo site", { suggestedIntegrations: ["hubspot", "rdstation"], defaultKPIs: ["lead-to-MQL", "tempo resposta"], resultTags: ["qualificar leads"] }),
   t("closer", "Closer / AE", "vendas", "Conduz reuniões de demo e fecha negócios", { suggestedIntegrations: ["zoom", "hubspot", "docusign"], recommendedAutonomy: "coordinator", baselineCostCredits: 3500, resultTags: ["fechar deals"] }),
   t("ae-enterprise", "AE Enterprise", "vendas", "Gerencia contas estratégicas e contratos longos", { suggestedIntegrations: ["salesforce", "docusign"], recommendedAutonomy: "coordinator", baselineCostCredits: 4200 }),
-  t("bdr", "BDR — Pesquisador de mercado", "vendas", "Mapeia ICP e enriquece bases", { suggestedIntegrations: ["apollo", "linkedin"], baselineCostCredits: 1500 }),
+  t("bdr", "BDR · Pesquisador de mercado", "vendas", "Mapeia ICP e enriquece bases", { suggestedIntegrations: ["apollo", "linkedin"], baselineCostCredits: 1500 }),
   t("rev-ops", "Rev Ops", "vendas", "Gestão de pipeline e previsões", { suggestedIntegrations: ["hubspot", "google-sheets"], recommendedAutonomy: "coordinator" }),
   t("proposal-writer", "Redator de Propostas", "vendas", "Gera propostas comerciais personalizadas", { defaultKPIs: ["propostas/dia", "taxa fechamento"] }),
   t("contract-negotiator", "Negociador de Contratos", "vendas", "Negocia termos comerciais", { recommendedAutonomy: "specialist" }),
@@ -93,7 +93,7 @@ export const WORKFORCE_CATALOG: AgentTemplate[] = [
   t("ap", "Contas a Pagar", "financeiro", "Conferência e agendamento de pagamentos", { recommendedAutonomy: "operator" }),
   t("ar", "Contas a Receber", "financeiro", "Cobrança e conciliação de recebíveis" ),
   t("treasury", "Tesouraria", "financeiro", "Gestão de caixa e aplicações" ),
-  t("fp-a", "FP&A — Planejamento", "financeiro", "Orçamento, forecast e cenários", { recommendedAutonomy: "coordinator" }),
+  t("fp-a", "FP&A · Planejamento", "financeiro", "Orçamento, forecast e cenários", { recommendedAutonomy: "coordinator" }),
   t("tax", "Tributos & Fiscal", "financeiro", "Apuração de impostos e obrigações" ),
   t("billing", "Faturamento", "financeiro", "Emite notas e gere ciclos de cobrança", { suggestedIntegrations: ["stripe", "nfe"] }),
   t("expense", "Despesas Corporativas", "financeiro", "Conferência de reembolsos" ),
@@ -197,12 +197,12 @@ export const WORKFORCE_CATALOG: AgentTemplate[] = [
   t("returns-logistics", "Logística Reversa", "logistica", "Coordena devoluções" ),
   t("tracking-agent", "Agente de Rastreio", "logistica", "Atualiza clientes em tempo real" ),
 
-  // EXECUTIVO (7) — C-Level virtuais
+  // EXECUTIVO (7) · C-Level virtuais
   t("ceo-virtual", "CEO Virtual", "executivo", "Define visão e prioridades estratégicas", { recommendedAutonomy: "executive", baselineCostCredits: 6000 }),
   t("coo-virtual", "COO Virtual", "executivo", "Coordena operações da empresa", { recommendedAutonomy: "executive", baselineCostCredits: 5500 }),
   t("cmo-virtual", "CMO Virtual", "executivo", "Estratégia de marketing C-Level", { recommendedAutonomy: "executive", baselineCostCredits: 5000 }),
   t("cto-virtual", "CTO Virtual", "executivo", "Estratégia de tecnologia C-Level", { recommendedAutonomy: "executive", baselineCostCredits: 5500 }),
-  t("cpo-virtual", "CPO Virtual — Produto", "executivo", "Estratégia de produto C-Level", { recommendedAutonomy: "executive", baselineCostCredits: 5000 }),
+  t("cpo-virtual", "CPO Virtual · Produto", "executivo", "Estratégia de produto C-Level", { recommendedAutonomy: "executive", baselineCostCredits: 5000 }),
   t("chro-virtual", "CHRO Virtual", "executivo", "Estratégia de pessoas C-Level", { recommendedAutonomy: "executive", baselineCostCredits: 4800 }),
   t("chief-of-staff", "Chief of Staff IA", "executivo", "Braço direito do CEO", { recommendedAutonomy: "coordinator", baselineCostCredits: 4000 }),
 ];

@@ -1,5 +1,5 @@
 /**
- * Rota /thor — wrapper full-screen do chat concierge.
+ * Rota /thor · wrapper full-screen do chat concierge.
  * Toda a lógica está em <ThorConciergeChat />.
  */
 import ThorConciergeChat from "@/components/landing/ThorConciergeChat";

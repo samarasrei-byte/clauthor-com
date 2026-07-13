@@ -7,7 +7,7 @@ import { useEffect, useState, lazy, Suspense } from "react";
 const NeuralBackdrop = lazy(() => import("./NeuralBackdrop"));
 
 /**
- * HeroTerminal — landing hero redesigned as a split-screen with a live agent
+ * HeroTerminal · landing hero redesigned as a split-screen with a live agent
  * terminal on the right. Dark + Clauthor red accent. All copy in pt-BR.
  */
 
@@ -73,7 +73,7 @@ const HeroTerminal = () => {
 
 
       <div className="relative z-10 max-w-[1200px] mx-auto w-full grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14 items-center">
-        {/* LEFT — Message */}
+        {/* LEFT · Message */}
         <motion.div
           initial={{ opacity: 0, x: -24 }}
           animate={{ opacity: 1, x: 0 }}
@@ -137,7 +137,7 @@ const HeroTerminal = () => {
           </div>
         </motion.div>
 
-        {/* RIGHT — Terminal */}
+        {/* RIGHT · Terminal */}
         <motion.div
           initial={{ opacity: 0, x: 24 }}
           animate={{ opacity: 1, x: 0 }}

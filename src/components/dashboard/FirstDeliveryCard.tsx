@@ -1,5 +1,5 @@
 /**
- * FirstDeliveryCard — destaca no dashboard o primeiro entregável aprovado
+ * FirstDeliveryCard · destaca no dashboard o primeiro entregável aprovado
  * do usuário (fluxo InstantWow). Reforça o momento "uau" e conduz para o
  * Approvals Center ou o Replay auditável da run.
  *
@@ -72,13 +72,13 @@ export function FirstDeliveryCard({ onOpenApprovals }: Props) {
   const ageDays = Math.floor(
     (Date.now() - new Date(approval.created_at).getTime()) / (1000 * 60 * 60 * 24),
   );
-  // Some após 7 dias — o momento "uau" já cumpriu seu papel.
+  // Some após 7 dias · o momento "uau" já cumpriu seu papel.
   if (ageDays > 7) return null;
 
   const handleDismiss = () => {
     try { localStorage.setItem(DISMISS_KEY, "1"); } catch { /* ignore */ }
     // trigger refetch by dispatching storage event? Simpler: force reload of parent via state
-    // Keep it lean: just hide via memo re-eval — user reloads page anyway.
+    // Keep it lean: just hide via memo re-eval · user reloads page anyway.
     window.dispatchEvent(new Event("first-delivery-dismissed"));
   };
 
@@ -113,7 +113,7 @@ export function FirstDeliveryCard({ onOpenApprovals }: Props) {
             </h3>
             <p className="text-xs md:text-sm text-muted-foreground mt-1">
               Você aprovou seu primeiro output para <span className="text-foreground">{company}</span>.
-              Este é o começo do seu histórico auditável — cada execução do seu squad fica registrada.
+              Este é o começo do seu histórico auditável · cada execução do seu squad fica registrada.
             </p>
 
             <div className="flex flex-wrap items-center gap-2 mt-4">

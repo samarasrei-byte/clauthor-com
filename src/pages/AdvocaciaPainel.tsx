@@ -23,7 +23,7 @@ import ClauthorLogo from "@/components/ClauthorLogo";
 import ThemeToggle from "@/components/ThemeToggle";
 
 /**
- * AdvocaciaPainel — workspace vertical isolado para advogados.
+ * AdvocaciaPainel · workspace vertical isolado para advogados.
  * Sidebar minimalista com toggle expand/collapse (icon-rail).
  * Configurações = painel completo (Equipe, Suporte, WhatsApp, Integrações, Conta).
  */
@@ -44,7 +44,7 @@ const SIDEBAR_GROUPS: SidebarGroup[] = [
       { to: "/advocacia/painel/configuracoes", label: "Configurações", icon: SettingsIcon },
     ],
   },
-  // Grupo "Em breve" ocultado da navegação principal (Fase 1 — corte de PRO fantasma).
+  // Grupo "Em breve" ocultado da navegação principal (Fase 1 · corte de PRO fantasma).
   // Descomentar quando cada item tiver rota funcional real.
   // {
   //   label: "Em breve",
@@ -423,14 +423,14 @@ export const AdvocaciaPainelHome = () => {
         <p className="text-sm text-muted-foreground mt-1">Aqui está o que seus agentes fizeram por você.</p>
       </div>
 
-      {/* Block 3.1 — Onboarding checklist (localStorage advocacia_onboarding_v1) */}
+      {/* Block 3.1 · Onboarding checklist (localStorage advocacia_onboarding_v1) */}
       <OnboardingChecklistCard />
 
-      {/* Block 3.2 — KPI placeholders */}
+      {/* Block 3.2 · KPI placeholders */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <KpiCard icon={Inbox} label="Leads captados este mês" value="0" hint="Atualizado em tempo real" />
         <KpiCard icon={FileText} label="Contratos gerados" value="0" hint="Análises e propostas" />
-        <KpiCard icon={CheckCircle2} label="Execuções de agente" value={isLoading ? "—" : String(stats?.execToday ?? 0)} hint="Ações automatizadas hoje" />
+        <KpiCard icon={CheckCircle2} label="Execuções de agente" value={isLoading ? "·" : String(stats?.execToday ?? 0)} hint="Ações automatizadas hoje" />
       </div>
 
       {nextStep && (
@@ -495,7 +495,7 @@ export const AdvocaciaPainelHome = () => {
   );
 };
 
-// ─── Block 3.1 — Onboarding Checklist Card ───
+// ─── Block 3.1 · Onboarding Checklist Card ───
 const ONBOARDING_KEY = "advocacia_onboarding_v1";
 type OnboardingStep = { id: string; label: string };
 const ONBOARDING_STEPS: OnboardingStep[] = [
@@ -623,7 +623,7 @@ export const AdvocaciaPainelConfiguracoes = () => {
     <div className="max-w-5xl mx-auto px-6 py-8">
       <div className="mb-6">
         <h1 className="text-2xl font-semibold tracking-tight">Configurações</h1>
-        <p className="text-sm text-muted-foreground mt-1">Equipe, suporte, integrações e conta — tudo em um só lugar.</p>
+        <p className="text-sm text-muted-foreground mt-1">Equipe, suporte, integrações e conta · tudo em um só lugar.</p>
       </div>
 
       <Tabs defaultValue="conta" className="w-full">
@@ -691,7 +691,7 @@ const ContaTab = () => {
               {sub?.status === "active" ? "Assinatura ativa" : "Sem assinatura ativa"}
             </p>
             <Badge className="mt-2" variant={sub?.status === "active" ? "default" : "secondary"}>
-              {sub?.agent_id ? `Agente ${sub.agent_id.slice(0, 8)}` : "—"}
+              {sub?.agent_id ? `Agente ${sub.agent_id.slice(0, 8)}` : "·"}
             </Badge>
           </div>
           <Button asChild variant="outline" size="sm">
@@ -815,7 +815,7 @@ const WhatsAppTab = () => {
 
   return (
     <div className="space-y-4">
-      {/* Block 4.1 — WhatsApp Beta Notice */}
+      {/* Block 4.1 · WhatsApp Beta Notice */}
       <Card className="p-4 bg-amber-500/5 border-amber-500/30">
         <div className="flex items-start gap-3">
           <div className="shrink-0 w-8 h-8 rounded-md bg-amber-500/15 text-amber-600 dark:text-amber-400 flex items-center justify-center">
@@ -823,7 +823,7 @@ const WhatsAppTab = () => {
           </div>
           <div className="flex-1">
             <Badge className="bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40 hover:bg-amber-500/20 mb-1.5 text-[10px]">
-              Beta — Máximo 5 escritórios nesta fase
+              Beta · Máximo 5 escritórios nesta fase
             </Badge>
             <p className="text-xs text-foreground/80">
               Cada escritório opera em instância isolada. Seus dados de clientes nunca se misturam com outros escritórios.
@@ -841,7 +841,7 @@ const WhatsAppTab = () => {
             <div>
               <h3 className="text-sm font-semibold">Chat de WhatsApp</h3>
               <p className="text-xs text-muted-foreground mt-0.5">
-                {connected ? `Conectado: ${onb?.whatsapp_number ?? "—"}` : "Conecte para que seus agentes recebam e enviem mensagens."}
+                {connected ? `Conectado: ${onb?.whatsapp_number ?? "·"}` : "Conecte para que seus agentes recebam e enviem mensagens."}
               </p>
             </div>
           </div>

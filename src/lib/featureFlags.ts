@@ -1,5 +1,5 @@
 /**
- * Feature flags — controlled via VITE_FEATURE_* env vars.
+ * Feature flags · controlled via VITE_FEATURE_* env vars.
  * Default = false para superfícies experimentais/incompletas, evitando expor
  * módulos que ainda não estão em GA. Setar VITE_FEATURE_<NAME>=1 no .env local
  * ou em produção para reativar.

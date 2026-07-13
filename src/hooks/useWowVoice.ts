@@ -1,5 +1,5 @@
 /**
- * useWowVoice — grava até 30s com MediaRecorder, sobe pra elevenlabs-stt
+ * useWowVoice · grava até 30s com MediaRecorder, sobe pra elevenlabs-stt
  * e devolve o transcript. Erros são silenciosos; UI mostra estado via flags.
  */
 import { useCallback, useEffect, useRef, useState } from "react";

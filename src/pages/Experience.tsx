@@ -1,10 +1,10 @@
 /**
- * /experience — Mesa Redonda dos Agentes.
+ * /experience · Mesa Redonda dos Agentes.
  *
  * Showcase cinematográfico: um departamento inteiro em ação, com agentes
  * dispostos em círculo, conversando entre si e produzindo resultado em
  * tempo real. Simulação 100% orquestrada a partir de `timelineDemo` de
- * `departmentPackages` — sem custo de LLM, sem backend.
+ * `departmentPackages` · sem custo de LLM, sem backend.
  *
  * Estética: minimalista/futurista (Apple × Tesla × Arrival), acento vermelho
  * `--destructive`, glass sutil, halo animado, tipografia display generosa.
@@ -32,7 +32,7 @@ import {
 
 type ChatEntry = DepartmentTimelineEvent & { idx: number };
 
-/** Diretiva injetada ao vivo pelo usuário — aparece no feed como comando. */
+/** Diretiva injetada ao vivo pelo usuário · aparece no feed como comando. */
 interface Directive {
   id: string;
   text: string;
@@ -52,7 +52,7 @@ const initialsFrom = (name: string) =>
     .map((w) => w[0]?.toUpperCase() ?? "")
     .join("");
 
-/** Distribui N agentes em um círculo — retorna posições relativas [0..1]. */
+/** Distribui N agentes em um círculo · retorna posições relativas [0..1]. */
 const circleLayout = (n: number, radius: number) =>
   Array.from({ length: n }, (_, i) => {
     const angle = (i / n) * Math.PI * 2 - Math.PI / 2;
@@ -371,7 +371,7 @@ const ExperiencePage = () => {
   const [ctxPain, setCtxPain] = useState<string | null>(null);
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Hidratação via ?ctx=<id> — vem do Thor Concierge
+  // Hidratação via ?ctx=<id> · vem do Thor Concierge
   useEffect(() => {
     if (!ctxId) return;
     let cancelled = false;
@@ -395,7 +395,7 @@ const ExperiencePage = () => {
           setDirectives(
             leads.slice(0, 3).map((l, i) => ({
               id: `ctx-lead-${i}`,
-              text: `${l.name} · ${l.role} — ${l.signal}`,
+              text: `${l.name} · ${l.role} · ${l.signal}`,
               time,
               afterIdx: -1,
             })),
@@ -492,7 +492,7 @@ const ExperiencePage = () => {
   return (
     <div className="relative min-h-dvh bg-background text-foreground overflow-hidden">
       <Helmet>
-        <title>Experience — Mesa Redonda dos Agentes · Clauthor</title>
+        <title>Experience · Mesa Redonda dos Agentes · Clauthor</title>
         <meta
           name="description"
           content="Veja um departamento inteiro de IA em ação: agentes conversando na mesma tela, produzindo resultado em tempo real."
@@ -548,7 +548,7 @@ const ExperiencePage = () => {
             )}
           </h1>
           <p className="mt-3 text-[14px] sm:text-[16px] text-muted-foreground max-w-xl mx-auto">
-            {ctxPain ? `${ctxPain} — ${dept.outcome}.` : `${dept.painPoint} — ${dept.outcome}.`}
+            {ctxPain ? `${ctxPain} · ${dept.outcome}.` : `${dept.painPoint} · ${dept.outcome}.`}
           </p>
         </div>
 

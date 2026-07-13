@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 
 /**
- * useAdminGuard — Camada extra de RBAC no cliente.
+ * useAdminGuard · Camada extra de RBAC no cliente.
  *
  * `ProtectedRoute requireAdmin` já bloqueia navegação; este hook adiciona uma
  * revalidação SERVER-SIDE via `has_role(auth.uid(), 'admin')` no momento em
@@ -33,7 +33,7 @@ export function useAdminGuard(redirectTo: string = "/dashboard") {
       });
       if (cancel) return;
       if (error || data !== true) {
-        toast.error("Acesso restrito — permissão de administrador necessária.");
+        toast.error("Acesso restrito · permissão de administrador necessária.");
         navigate(redirectTo, { replace: true });
         setVerified(false);
       } else {
