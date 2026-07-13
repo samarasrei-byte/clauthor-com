@@ -223,6 +223,38 @@ export default function ThorCenter({ onNavigate }: Props) {
     };
   }, [period, touchpoints, tokenAlerts, pendingApprovals.items, ambientSignals]);
 
+  // Aprovações paradas (>=48h) vêm primeiro para o usuário destravar antes
+  const sortedApprovals = useMemo(() => {
+    const now = Date.now();
+    return [...pendingApprovals.items].sort((a, b) => {
+      const ageA = now - new Date(a.created_at).getTime();
+      const ageB = now - new Date(b.created_at).getTime();
+      const staleA = ageA >= 48 * 3600 * 1000 ? 1 : 0;
+      const staleB = ageB >= 48 * 3600 * 1000 ? 1 : 0;
+      if (staleA !== staleB) return staleB - staleA;
+      return b.created_at.localeCompare(a.created_at);
+    });
+  }, [pendingApprovals.items]);
+
+  // Sinais críticos agrupados por kind para reduzir ruído visual
+  const groupedSignals = useMemo(() => {
+    const groups = new Map<string, typeof ambientSignals>();
+    for (const s of ambientSignals) {
+      const arr = groups.get(s.kind) ?? [];
+      arr.push(s);
+      groups.set(s.kind, arr);
+    }
+    return Array.from(groups.entries()).sort((a, b) => b[1].length - a[1].length);
+  }, [ambientSignals]);
+
+  const SIGNAL_KIND_LABELS: Record<string, string> = {
+    radar: "Radar",
+    alert: "Alertas",
+    token: "Tokens",
+    approval: "Aprovações",
+    execution: "Execuções",
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
