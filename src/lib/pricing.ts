@@ -28,6 +28,8 @@ export interface RegionalPricing {
     financeiro: number;
     criacao: number;
     suporte: number;
+    /** Alias de `suporte` — mesmo departamento, ID canônico em edge functions e ThorConcierge. */
+    atendimento: number;
     rh: number;
   };
   departmentClt: {
