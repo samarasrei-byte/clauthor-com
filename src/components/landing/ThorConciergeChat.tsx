@@ -341,63 +341,49 @@ export default function ThorConciergeChat({
           ),
         )}
 
-        {/* Recommendation CTA · editorial card */}
+        {/* Recommendation · editorial card matching passo 3 do onboarding */}
         {recommendation && !isStreaming && (
-          <div className="rounded-2xl border border-border/50 bg-muted/30 p-5">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 font-semibold mb-2">
-              Recomendação
+          <article className="rounded-2xl border border-primary/25 bg-primary/[0.03] p-6 space-y-5">
+            <div className="space-y-1">
+              <p className="type-eyebrow text-primary">Com base no que você me disse</p>
+              <h3 className="font-serif italic text-2xl md:text-[26px] leading-tight tracking-tight text-foreground">
+                {recommendation.kind === "departamento" && recommendedPkg
+                  ? `Departamento de ${recommendedPkg.name}.`
+                  : recommendation.kind === "squad"
+                  ? "Uma squad enxuta faz mais sentido."
+                  : "Comece com um agente especialista."}
+              </h3>
+            </div>
+
+            <p className="type-body text-foreground/75 leading-relaxed">
+              {recommendation.kind === "departamento" && recommendedPkg
+                ? recommendedPkg.painPoint
+                : recommendation.kind === "squad"
+                ? "2 a 5 especialistas colaborando · custo em tempo real, ideal quando a dor cruza mais de uma função."
+                : "Prova de conceito ou tarefa muito específica · a partir de R$ 197/mês."}
             </p>
-            {recommendation.kind === "departamento" && recommendedPkg ? (
-              <>
-                <p className="text-[16px] font-semibold text-foreground mb-1 tracking-tight" style={chatBodyFont}>
-                  Departamento {recommendedPkg.name}
-                </p>
-                <p className="text-[13.5px] text-muted-foreground mb-4 leading-relaxed" style={chatBodyFont}>
-                  {recommendedPkg.painPoint}
-                </p>
-                <div className="flex items-center justify-between gap-3">
-                  <div className="text-[13.5px]" style={chatBodyFont}>
-                    <span className="text-foreground font-semibold">{formatBRL(recommendedPkg.priceMonthly)}</span>
-                    <span className="text-muted-foreground">/mês</span>
-                  </div>
-                  <Button size="sm" onClick={goToRecommended} className="gap-1.5 rounded-full h-8 px-4">
-                    Ver departamento
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-1">
+              {recommendation.kind === "departamento" && recommendedPkg ? (
+                <div className="type-body">
+                  <span className="text-foreground font-medium">{formatBRL(recommendedPkg.priceMonthly)}</span>
+                  <span className="text-muted-foreground">/mês · time completo</span>
                 </div>
-              </>
-            ) : recommendation.kind === "squad" ? (
-              <>
-                <p className="text-[16px] font-semibold text-foreground mb-1 tracking-tight" style={chatBodyFont}>
-                  Monte seu Squad
-                </p>
-                <p className="text-[13.5px] text-muted-foreground mb-4 leading-relaxed" style={chatBodyFont}>
-                  2 a 5 especialistas que colaboram. Custo em tempo real, ideal quando a dor cruza mais de uma função.
-                </p>
-                <div className="flex justify-end">
-                  <Button size="sm" onClick={goToRecommended} className="gap-1.5 rounded-full h-8 px-4">
-                    Montar Squad
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </>
-            ) : (
-              <>
-                <p className="text-[16px] font-semibold text-foreground mb-1 tracking-tight" style={chatBodyFont}>
-                  Começar com 1 agente
-                </p>
-                <p className="text-[13.5px] text-muted-foreground mb-4 leading-relaxed" style={chatBodyFont}>
-                  Prova de conceito ou tarefa muito específica. A partir de R$ 197/mês.
-                </p>
-                <div className="flex justify-end">
-                  <Button size="sm" onClick={goToRecommended} className="gap-1.5 rounded-full h-8 px-4">
-                    Ver marketplace
-                    <ArrowRight className="h-3.5 w-3.5" />
-                  </Button>
-                </div>
-              </>
-            )}
-          </div>
+              ) : <span />}
+              <Button
+                size="sm"
+                onClick={goToRecommended}
+                className="gap-1.5 h-10 px-5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+              >
+                {recommendation.kind === "departamento"
+                  ? "Ativar departamento"
+                  : recommendation.kind === "squad"
+                  ? "Montar squad"
+                  : "Ver marketplace"}
+                <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
+              </Button>
+            </div>
+          </article>
         )}
       </div>
 
