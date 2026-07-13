@@ -33,8 +33,8 @@ const initialsOf = (name: string): string => {
   return (parts[0][0] + parts[1][0]).toUpperCase();
 };
 
-/** Falas curtas e alternadas simulando uma conversa entre agentes. */
-const DIALOGUE: readonly string[] = [
+/** Falas curtas e alternadas (fallback quando não há diálogo do depto). */
+const DEFAULT_DIALOGUE: readonly string[] = [
   "Achei 47 leads no ICP.",
   "Qualifiquei 24, mando pro CRM.",
   "Ok, disparo cadência agora.",
@@ -45,6 +45,8 @@ const DIALOGUE: readonly string[] = [
 
 interface AgentsWorkingSceneProps {
   agentSlugs: readonly string[];
+  /** Falas específicas do departamento (ex: derivadas de timelineDemo.outcome). */
+  dialogue?: readonly string[];
   className?: string;
 }
 
