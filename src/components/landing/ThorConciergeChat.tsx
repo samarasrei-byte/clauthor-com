@@ -212,10 +212,10 @@ export default function ThorConciergeChat({
               const delta = json?.choices?.[0]?.delta?.content;
               if (typeof delta === "string" && delta.length > 0) {
                 full += delta;
-                const { visible, deptId } = splitRecommendation(full);
+                const { visible, reco } = splitRecommendation(full);
                 setMessages((prev) =>
                   prev.map((m) =>
-                    m.id === assistantId ? { ...m, content: visible, deptId } : m,
+                    m.id === assistantId ? { ...m, content: visible, reco } : m,
                   ),
                 );
               }
@@ -226,12 +226,13 @@ export default function ThorConciergeChat({
         }
 
         // Finaliza extração
-        const { visible, deptId } = splitRecommendation(full);
+        const { visible, reco } = splitRecommendation(full);
         setMessages((prev) =>
-          prev.map((m) => (m.id === assistantId ? { ...m, content: visible || full, deptId } : m)),
+          prev.map((m) => (m.id === assistantId ? { ...m, content: visible || full, reco } : m)),
         );
-        if (deptId) {
-          trackKpi("thor_guide_section_play", { source, section: `chat_recommended_${deptId}` });
+        if (reco) {
+          const tag = reco.kind === "departamento" ? `departamento_${reco.deptId}` : reco.kind;
+          trackKpi("thor_guide_section_play", { source, section: `chat_recommended_${tag}` });
         }
       } catch (err: any) {
         if (err?.name !== "AbortError") {
