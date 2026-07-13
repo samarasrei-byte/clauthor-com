@@ -322,26 +322,72 @@ const AuthPage = () => {
           <form onSubmit={handleSubmit} className="space-y-4">
             {!isLogin && (
               <div className="space-y-1.5">
-                <Label className="text-xs font-medium text-muted-foreground">{t("auth.full_name")}</Label>
+                <div className="flex items-center gap-1.5">
+                  <Label className="text-xs font-medium text-muted-foreground">{t("auth.full_name")}</Label>
+                  <HelpTooltip
+                    id="auth-fullname"
+                    text="Usamos seu nome para personalizar os agentes e o painel. Pode ser o nome que você usa profissionalmente."
+                    position="right"
+                    size={12}
+                    autoShow={false}
+                  />
+                </div>
                 <Input placeholder={t("auth.your_name")} value={fullName} onChange={(e) => setFullName(e.target.value)} className="h-11 bg-background/50 border-border/40 rounded-xl focus:border-primary/50 transition-colors" required autoFocus={!isLogin} />
               </div>
             )}
             <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-muted-foreground">{t("auth.email")}</Label>
+              <div className="flex items-center gap-1.5">
+                <Label className="text-xs font-medium text-muted-foreground">{t("auth.email")}</Label>
+                <HelpTooltip
+                  id="auth-email"
+                  text="Seu e-mail é o login. Enviamos apenas notificações importantes — sem spam. Prefira o e-mail profissional."
+                  position="right"
+                  size={12}
+                  autoShow={false}
+                />
+              </div>
               <Input type="email" placeholder={t("auth.your_email")} value={email} onChange={(e) => setEmail(e.target.value)} className="h-11 bg-background/50 border-border/40 rounded-xl focus:border-primary/50 transition-colors" required autoFocus={isLogin} />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-xs font-medium text-muted-foreground">{t("auth.password")}</Label>
+              <div className="flex items-center gap-1.5">
+                <Label className="text-xs font-medium text-muted-foreground">{t("auth.password")}</Label>
+                <HelpTooltip
+                  id="auth-password"
+                  text="Mínimo de 6 caracteres. Use uma combinação de letras, números e símbolos. Você pode alterá-la depois no perfil."
+                  position="right"
+                  size={12}
+                  autoShow={false}
+                />
+              </div>
               <div className="relative">
                 <Input type={showPassword ? "text" : "password"} placeholder="••••••••" value={password} onChange={(e) => setPassword(e.target.value)} className="h-11 bg-background/50 border-border/40 rounded-xl pr-12 focus:border-primary/50 transition-colors" required minLength={6} />
-                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors">
+                <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors" aria-label={showPassword ? "Ocultar senha" : "Mostrar senha"}>
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
+              {!isLogin && (
+                <p className="text-[10px] text-muted-foreground/70 pl-0.5">Mínimo de 6 caracteres.</p>
+              )}
             </div>
-            <Button type="submit" className="w-full h-11 glow font-semibold rounded-xl group" disabled={isLoading || isGoogleLoading}>
-              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : (<>{isLogin ? t("auth.login") : t("auth.register")}<ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" /></>)}
+            <Button
+              type="submit"
+              className="w-full h-12 rounded-xl group font-semibold text-sm bg-[hsl(var(--primary))] hover:bg-[hsl(var(--primary))]/90 text-white shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all"
+              disabled={isLoading || isGoogleLoading}
+            >
+              {isLoading ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <>
+                  {isLogin ? t("auth.login") : t("auth.create_account", { defaultValue: "Crie sua conta" })}
+                  <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </>
+              )}
             </Button>
+            {!isLogin && (
+              <p className="text-[11px] text-center text-muted-foreground leading-relaxed pt-1">
+                Grátis para explorar · Sem cartão de crédito · Ative um departamento só quando quiser
+              </p>
+            )}
             {isLogin && (
               <button
                 type="button"
