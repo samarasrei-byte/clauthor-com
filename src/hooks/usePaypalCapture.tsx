@@ -64,6 +64,8 @@ export function usePaypalCapture() {
             : [subIntent.agent_slug];
 
           const provisionedAgents: string[] = [];
+          // Mapa slug → agent_id para permitir split por departamento (multi-cart).
+          const slugToAgentId: Record<string, string> = {};
 
           for (const slug of slugsToProvision) {
             const { data: template } = await supabase
@@ -90,6 +92,7 @@ export function usePaypalCapture() {
             if (existing) {
               // Agent already exists - reuse it instead of creating a duplicate
               provisionedAgents.push(existing.id);
+              slugToAgentId[slug] = existing.id;
               // Ensure it's active
               await supabase.from("agents").update({ status: "active" }).eq("id", existing.id);
               continue;
@@ -121,6 +124,7 @@ export function usePaypalCapture() {
               continue;
             }
             provisionedAgents.push(agent.id);
+            slugToAgentId[slug] = agent.id;
           }
 
           if (provisionedAgents.length === 0) {
