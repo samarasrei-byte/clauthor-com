@@ -40,6 +40,8 @@ import DashboardEmptyState from "@/components/dashboard/DashboardEmptyState";
 import { loadDiagnosis, loadThorBriefing, hasSeenDiagnosisRecap, markDiagnosisRecapSeen } from "@/lib/diagnosis-routing";
 import DiagnosisRecapDialog from "@/components/dashboard/DiagnosisRecapDialog";
 const ThorFirstTouchWelcome = lazy(() => import("@/components/dashboard/ThorFirstTouchWelcome"));
+const ThorTokenAlert = lazy(() => import("@/components/dashboard/ThorTokenAlert"));
+const ThorCenter = lazy(() => import("@/components/dashboard/ThorCenter"));
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
@@ -452,6 +454,7 @@ const ClientDashboard = () => {
 
     // ─── IA & Voz: assistente global ───
     { id: "omnix", label: "THOR", icon: Brain, group: zoneAI },
+    { id: "thor-center", label: "Centro do Thor", icon: Sparkles, group: zoneAI },
 
     // ─── Configuração ───
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: zoneConfig },
@@ -462,7 +465,7 @@ const ClientDashboard = () => {
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "agent-chat-active",
-    "intelligence-hub", "omnix", "workspace",
+    "intelligence-hub", "omnix", "thor-center", "workspace",
     "integrations", "system",
   ]);
   const sidebarItems: SidebarItem[] = isAdmin
@@ -707,8 +710,12 @@ const ClientDashboard = () => {
 
                 {activeSection === "overview" && !showEmptyState && (
                   <>
-                    {/* AmbientThorCard removido: HeroBriefing dentro de DashboardOverview
-                        agora consolida greeting + status + CTA numa única voz. */}
+                    <Suspense fallback={null}>
+                      <ThorTokenAlert
+                        onOpenThor={() => setActiveSection("omnix")}
+                        onBuyCredits={() => setActiveSection("system")}
+                      />
+                    </Suspense>
                     <DashboardOverview
                     loadingAgents={loadingAgents}
                     boardCount={boardCount}
@@ -734,6 +741,12 @@ const ClientDashboard = () => {
                     onSelectAgentBySlug={handleSelectAgentBySlug}
                   />
                   </>
+                )}
+
+                {activeSection === "thor-center" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ThorCenter onNavigate={handleSidebarNav} />
+                  </Suspense>
                 )}
 
                 <DashboardSectionRenderer

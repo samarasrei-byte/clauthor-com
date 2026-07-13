@@ -3961,6 +3961,42 @@ export type Database = {
         }
         Relationships: []
       }
+      thor_touchpoints: {
+        Row: {
+          context: string
+          created_at: string
+          cta_taken: boolean
+          dismissed_at: string | null
+          id: string
+          metadata: Json
+          seen_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          context: string
+          created_at?: string
+          cta_taken?: boolean
+          dismissed_at?: string | null
+          id?: string
+          metadata?: Json
+          seen_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          context?: string
+          created_at?: string
+          cta_taken?: boolean
+          dismissed_at?: string | null
+          id?: string
+          metadata?: Json
+          seen_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       token_usage: {
         Row: {
           action_type: string
