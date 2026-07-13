@@ -279,16 +279,6 @@ const Navbar = () => {
                   ))}
                 </div>
               )}
-              {user && (
-                <>
-                  <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] text-muted-foreground hover:text-foreground">
-                    {t("nav.dashboard")}
-                  </Link>
-                  <Link to="/agents" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] text-muted-foreground hover:text-foreground">
-                    {t("nav.my_agents")}
-                  </Link>
-                </>
-              )}
               {isAdmin && (
                 <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 px-3 py-2.5 rounded-lg text-[14px] text-muted-foreground hover:text-foreground">
                   <ShieldCheck className="h-4 w-4" strokeWidth={1.5} />
