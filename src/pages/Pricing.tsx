@@ -60,7 +60,7 @@ const Pricing = () => {
     <div className="min-h-dvh pt-24 pb-16 px-4 relative">
       <SEO
         title="Preços · Contrate um departamento inteiro de IA | Clauthor"
-        description="20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados. Preço fixo por departamento, sem taxa por assento."
+        description="20 departamentos prontos. +200 especialistas de IA orquestrados. Preço fixo por departamento, sem taxa por assento."
         path="/pricing"
       />
 
@@ -79,14 +79,14 @@ const Pricing = () => {
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
             Contrate um <span className="gradient-text">departamento inteiro</span>.
             <br />
-            <span className="text-foreground/70 text-3xl sm:text-4xl lg:text-5xl">Monte seu squad em minutos.</span>
+            <span className="text-foreground/70 text-3xl sm:text-4xl lg:text-5xl">Pronto em minutos.</span>
           </h1>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto mb-3">
-            20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados.
+            20 departamentos prontos. +200 especialistas de IA orquestrados.
             Preço fixo por departamento · sem taxa por assento, sem surpresa.
           </p>
           <p className="text-sm text-foreground/70 font-medium">
-            Cada departamento inclui um <span className="text-primary font-bold">squad de especialistas</span>, tokens mensais e execuções auditáveis.
+            Cada departamento inclui uma <span className="text-primary font-bold">equipe de especialistas</span>, tokens mensais e tarefas auditáveis.
           </p>
         </motion.div>
 
