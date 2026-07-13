@@ -622,6 +622,11 @@ const ClientDashboard = () => {
 
       <OnboardingResumeBanner />
 
+      <Suspense fallback={null}>
+        <ThorFirstTouchWelcome onGuideMe={() => setActiveSection("omnix")} />
+      </Suspense>
+
+
       <div className="flex h-full">
         <div className="hidden lg:block relative z-10">
           <DashboardSidebar items={sidebarItems} activeItem={activeSection} onItemChange={handleSidebarNav} />
