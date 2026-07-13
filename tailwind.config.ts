@@ -55,6 +55,12 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         "primary-glow": "hsl(var(--primary-glow))",
+        surface: {
+          0: "hsl(var(--surface-0))",
+          1: "hsl(var(--surface-1))",
+          2: "hsl(var(--surface-2))",
+          3: "hsl(var(--surface-3))",
+        },
         "accent-cyan": "hsl(var(--accent-cyan))",
         "accent-emerald": "hsl(var(--accent-emerald))",
         "accent-amber": "hsl(var(--accent-amber))",
