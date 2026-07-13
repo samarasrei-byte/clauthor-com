@@ -454,6 +454,7 @@ const ClientDashboard = () => {
 
     // ─── IA & Voz: assistente global ───
     { id: "omnix", label: "THOR", icon: Brain, group: zoneAI },
+    { id: "thor-center", label: "Centro do Thor", icon: Sparkles, group: zoneAI },
 
     // ─── Configuração ───
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: zoneConfig },
