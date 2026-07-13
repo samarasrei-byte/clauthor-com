@@ -480,14 +480,27 @@ export default function ThorConciergeChat({
   return (
     <div
       className={cn(
-        "relative w-full flex flex-col rounded-2xl border border-border/40 bg-background overflow-hidden",
-        "shadow-[0_8px_30px_rgb(0,0,0,0.04)]",
+        "relative w-full flex flex-col rounded-3xl border border-border/50 bg-card/60 backdrop-blur-xl overflow-hidden",
+        "shadow-[0_32px_64px_-12px_rgba(0,0,0,0.55)]",
         className,
       )}
     >
-      <header className="px-8 py-5 border-b border-border/40 flex items-center justify-between">
+      {/* Ambient holographic glows */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full bg-primary/10 blur-[100px]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-24 -left-24 h-64 w-64 rounded-full bg-primary/[0.07] blur-[100px]"
+      />
+
+      <header className="relative z-10 px-6 sm:px-8 py-5 border-b border-border/40 flex items-center justify-between bg-background/20 backdrop-blur-sm">
         <div className="flex items-center gap-3">
-          <div className={cn("h-2 w-2 rounded-full transition-colors", isStreaming ? "bg-primary animate-pulse" : "bg-primary")} />
+          <span className="relative flex h-2.5 w-2.5 items-center justify-center">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary/60 opacity-75" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary shadow-[0_0_10px_hsl(var(--primary)/0.6)]" />
+          </span>
           <h2 className="text-sm font-medium tracking-tight text-foreground">
             Converse com o Thor
           </h2>
@@ -501,27 +514,31 @@ export default function ThorConciergeChat({
             Esquecer tudo sobre mim
           </button>
         ) : (
-          <div className="flex items-center gap-1.5">
-            <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
-            <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
-            <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
+          <div className="flex items-center gap-1.5" aria-hidden>
+            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/25" />
+            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/25" />
+            <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/25" />
           </div>
         )}
       </header>
 
       <div
         ref={scrollRef}
-        className={cn("flex-1 overflow-y-auto px-8 py-8 flex flex-col gap-10", minHeight, "max-h-[560px]")}
+        className={cn(
+          "relative z-10 flex-1 overflow-y-auto px-6 sm:px-8 py-8 flex flex-col gap-10",
+          minHeight,
+          "max-h-[560px]",
+        )}
       >
         {messages.map((m) =>
           m.role === "assistant" ? (
-            <div key={m.id} className="flex flex-col gap-3 max-w-[92%]">
-              <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/60">
-                Thor
+            <div key={m.id} className="flex flex-col gap-3 max-w-[92%] animate-fade-in">
+              <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-primary/90">
+                Thor System
               </span>
               {(m.content || (isStreaming && !m.tutorial)) && (
-                <div className="text-[15px] leading-[1.65] text-foreground" style={chatBodyFont}>
-                  <div className="prose prose-sm prose-neutral dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-2 [&_p]:text-foreground [&_p]:leading-[1.65]">
+                <div className="text-[15px] leading-[1.7] font-light text-foreground/90" style={chatBodyFont}>
+                  <div className="prose prose-sm prose-neutral dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-2 [&_p]:text-foreground/90 [&_p]:leading-[1.7] [&_p]:font-light [&_strong]:text-foreground [&_strong]:font-medium">
                     <ReactMarkdown>{m.content || (isStreaming ? "…" : "")}</ReactMarkdown>
                   </div>
                 </div>
@@ -529,9 +546,9 @@ export default function ThorConciergeChat({
               {m.tutorial && <TutorialCard tutorial={m.tutorial} />}
             </div>
           ) : (
-            <div key={m.id} className="flex flex-col items-end gap-2">
+            <div key={m.id} className="flex flex-col items-end gap-2 animate-fade-in">
               <div
-                className="max-w-[80%] bg-muted/50 border border-border/20 px-5 py-3 rounded-2xl text-[15px] leading-[1.5] text-foreground"
+                className="max-w-[80%] bg-primary/[0.08] border border-primary/25 px-5 py-3 rounded-2xl rounded-tr-sm text-[15px] leading-[1.55] text-foreground"
                 style={chatBodyFont}
               >
                 <p className="whitespace-pre-wrap">{m.content}</p>
@@ -541,7 +558,7 @@ export default function ThorConciergeChat({
         )}
 
         {recommendation && !isStreaming && (
-          <article className="rounded-2xl border border-primary/25 bg-primary/[0.03] p-6 space-y-5">
+          <article className="rounded-2xl border border-primary/25 bg-primary/[0.04] p-6 space-y-5 animate-fade-in">
             <div className="space-y-1">
               <p className="type-eyebrow text-primary">Com base no que você me disse</p>
               <h3 className="font-serif italic text-2xl md:text-[26px] leading-tight tracking-tight text-foreground">
@@ -571,7 +588,7 @@ export default function ThorConciergeChat({
               <Button
                 size="sm"
                 onClick={goToRecommended}
-                className="gap-1.5 h-10 px-5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+                className="gap-1.5 h-10 px-5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-medium shadow-[0_0_20px_hsl(var(--primary)/0.25)]"
               >
                 {recommendation.kind === "departamento"
                   ? "Ativar departamento"
@@ -585,7 +602,7 @@ export default function ThorConciergeChat({
         )}
       </div>
 
-      <footer className="px-8 pb-7 pt-2">
+      <footer className="relative z-10 px-6 sm:px-8 pb-7 pt-2 bg-background/20 backdrop-blur-sm">
         {messages.length === 1 && (
           <div className="flex flex-wrap gap-2 mb-5">
             {SUGGESTIONS.map((s) => (
@@ -593,7 +610,7 @@ export default function ThorConciergeChat({
                 key={s}
                 onClick={() => sendMessage(s)}
                 disabled={isStreaming}
-                className="px-4 py-1.5 rounded-full border border-border/60 text-xs font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground hover:border-border transition-all disabled:opacity-50"
+                className="px-4 py-2 rounded-full border border-border/60 bg-card/40 text-xs font-medium text-muted-foreground hover:border-primary/40 hover:text-foreground hover:bg-card/70 transition-all disabled:opacity-50"
               >
                 {s}
               </button>
@@ -604,9 +621,8 @@ export default function ThorConciergeChat({
         <form
           onSubmit={handleSubmit}
           className={cn(
-            "relative flex items-end gap-2 rounded-2xl border bg-background transition-all",
-            "border-border/60 focus-within:border-primary/50 focus-within:shadow-[0_0_0_4px_rgba(0,0,0,0.02)]",
-            "dark:focus-within:shadow-[0_0_0_4px_rgba(255,255,255,0.02)]",
+            "relative flex items-center rounded-2xl border bg-background/60 transition-all",
+            "border-border/60 focus-within:border-primary/40 focus-within:ring-1 focus-within:ring-primary/20 focus-within:shadow-[0_0_24px_-6px_hsl(var(--primary)/0.35)]",
           )}
         >
           <Textarea
@@ -614,34 +630,45 @@ export default function ThorConciergeChat({
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Descreva sua empresa, sua dor, ou pergunte como integrar uma ferramenta…"
+            placeholder="Pergunte qualquer coisa ao Thor…"
             rows={1}
             maxLength={2000}
             disabled={isStreaming}
             style={chatBodyFont}
-            className="flex-1 min-h-[60px] max-h-40 resize-none bg-transparent border-0 rounded-2xl pl-5 pr-2 py-4 text-[15px] leading-[1.5] shadow-none placeholder:text-muted-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0"
+            className="flex-1 min-h-[60px] max-h-40 resize-none bg-transparent border-0 rounded-2xl pl-6 pr-16 py-4 text-[15px] leading-[1.5] shadow-none placeholder:text-muted-foreground/50 focus-visible:ring-0 focus-visible:ring-offset-0"
           />
           <Button
             type="submit"
             size="icon"
             disabled={isStreaming || !input.trim()}
-            className="mb-2.5 mr-2.5 h-9 w-9 rounded-xl bg-primary text-primary-foreground hover:bg-primary/90 disabled:bg-muted disabled:text-muted-foreground/40 shadow-sm transition-all shrink-0"
+            className={cn(
+              "absolute right-2 top-1/2 -translate-y-1/2 h-10 w-10 rounded-xl",
+              "bg-primary text-primary-foreground hover:bg-primary/90",
+              "disabled:bg-muted disabled:text-muted-foreground/40",
+              "shadow-[0_0_20px_hsl(var(--primary)/0.35)] hover:shadow-[0_0_28px_hsl(var(--primary)/0.5)]",
+              "active:scale-95 transition-all group shrink-0",
+            )}
             aria-label="Enviar mensagem"
           >
-            {isStreaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <ArrowUp className="h-4 w-4" strokeWidth={2.5} />}
+            {isStreaming ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <ArrowUp className="h-4 w-4 transition-transform group-hover:-translate-y-0.5" strokeWidth={2.5} />
+            )}
           </Button>
         </form>
 
-        <div className="mt-2.5 flex items-center justify-between px-1 text-[11px] text-muted-foreground/50">
-          <span className="hidden sm:inline">
-            <kbd className="font-sans">Enter</kbd> para enviar ·{" "}
-            <kbd className="font-sans">Shift + Enter</kbd> quebra linha
+        <div className="mt-3 flex items-center justify-between px-1 text-[10px] text-muted-foreground/50 uppercase tracking-[0.18em]">
+          <span className="hidden sm:inline font-medium">
+            Enter para enviar · Shift + Enter quebra linha
           </span>
-          <span className="sm:hidden">Toque no botão para enviar</span>
-          {input.length > 1600 && (
-            <span className={cn("tabular-nums", input.length > 1900 && "text-destructive")}>
+          <span className="sm:hidden font-medium">Toque para enviar</span>
+          {input.length > 1600 ? (
+            <span className={cn("tabular-nums normal-case tracking-normal", input.length > 1900 && "text-destructive")}>
               {input.length} / 2000
             </span>
+          ) : (
+            <span className="font-medium text-muted-foreground/40">Thor · Clauthor</span>
           )}
         </div>
       </footer>
