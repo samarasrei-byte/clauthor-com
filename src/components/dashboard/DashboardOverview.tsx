@@ -78,6 +78,9 @@ const DashboardOverview = ({
       <ErrorBoundary>
         <Suspense fallback={<SectionLoader />}>
           <div className="space-y-5">
+            {/* Ambient Agents · sinais proativos detectados sem prompt */}
+            <AmbientSignalsPanel onNavigate={onSetActiveSection} />
+
             {/* PRIMEIRA DOBRA · P2 · ROI do mês em destaque · prova visível */}
             <MonthlyROICard onCTA={() => onSetActiveSection("omnix")} />
 
