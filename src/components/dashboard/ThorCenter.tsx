@@ -500,7 +500,7 @@ export default function ThorCenter({ onNavigate }: Props) {
                     </Badge>
                     {signals.length > 1 && (
                       <button
-                        onClick={() => void resolveSignalsBulk(signals.map((s) => s.id))}
+                        onClick={() => requestBulkResolve(kind, signals.map((s) => s.id))}
                         className="ml-auto text-[10px] text-muted-foreground hover:text-primary transition-colors"
                         title={`Resolver os ${signals.length} sinais deste grupo`}
                       >
