@@ -223,6 +223,38 @@ export default function ThorCenter({ onNavigate }: Props) {
     };
   }, [period, touchpoints, tokenAlerts, pendingApprovals.items, ambientSignals]);
 
+  // Aprovações paradas (>=48h) vêm primeiro para o usuário destravar antes
+  const sortedApprovals = useMemo(() => {
+    const now = Date.now();
+    return [...pendingApprovals.items].sort((a, b) => {
+      const ageA = now - new Date(a.created_at).getTime();
+      const ageB = now - new Date(b.created_at).getTime();
+      const staleA = ageA >= 48 * 3600 * 1000 ? 1 : 0;
+      const staleB = ageB >= 48 * 3600 * 1000 ? 1 : 0;
+      if (staleA !== staleB) return staleB - staleA;
+      return b.created_at.localeCompare(a.created_at);
+    });
+  }, [pendingApprovals.items]);
+
+  // Sinais críticos agrupados por kind para reduzir ruído visual
+  const groupedSignals = useMemo(() => {
+    const groups = new Map<string, typeof ambientSignals>();
+    for (const s of ambientSignals) {
+      const arr = groups.get(s.kind) ?? [];
+      arr.push(s);
+      groups.set(s.kind, arr);
+    }
+    return Array.from(groups.entries()).sort((a, b) => b[1].length - a[1].length);
+  }, [ambientSignals]);
+
+  const SIGNAL_KIND_LABELS: Record<string, string> = {
+    radar: "Radar",
+    alert: "Alertas",
+    token: "Tokens",
+    approval: "Aprovações",
+    execution: "Execuções",
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -361,7 +393,7 @@ export default function ThorCenter({ onNavigate }: Props) {
               {pendingApprovals.items.length === 0 && ambientSignals.length === 0 && (
                 <p className="text-sm text-muted-foreground">Nada pendente. Aproveita o café ☕</p>
               )}
-              {pendingApprovals.items.map((a) => {
+              {sortedApprovals.map((a) => {
                 const ageHours = (Date.now() - new Date(a.created_at).getTime()) / 3600000;
                 const stale = ageHours >= 48;
                 return (
@@ -402,30 +434,42 @@ export default function ThorCenter({ onNavigate }: Props) {
                   </div>
                 );
               })}
-              {ambientSignals.map((s) => (
-                <div
-                  key={s.id}
-                  className={cn(
-                    "rounded-lg border p-2.5",
-                    s.severity === "critical" ? "border-destructive/40 bg-destructive/5" : "border-amber-500/30 bg-amber-500/5",
-                  )}
-                >
-                  <div className="flex items-start gap-2">
-                    <AlertTriangle className={cn("h-4 w-4 mt-0.5 shrink-0", s.severity === "critical" ? "text-destructive" : "text-amber-500")} />
-                    <div className="min-w-0 flex-1">
-                      <p className="text-sm font-medium">{s.title}</p>
-                      <p className="text-[11px] text-muted-foreground">{relativeDate(s.created_at)}</p>
-                    </div>
-                    <Button
-                      size="icon"
-                      variant="ghost"
-                      className="h-7 w-7 shrink-0"
-                      title="Marcar como resolvido"
-                      onClick={() => resolveSignal(s.id)}
-                    >
-                      <Check className="h-3.5 w-3.5" />
-                    </Button>
+              {groupedSignals.map(([kind, signals]) => (
+                <div key={kind} className="space-y-1.5">
+                  <div className="flex items-center gap-1.5 px-1 pt-1">
+                    <span className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                      {SIGNAL_KIND_LABELS[kind] ?? kind}
+                    </span>
+                    <Badge variant="outline" className="text-[9px] px-1 py-0 border-border/50 text-muted-foreground">
+                      {signals.length}
+                    </Badge>
                   </div>
+                  {signals.map((s) => (
+                    <div
+                      key={s.id}
+                      className={cn(
+                        "rounded-lg border p-2.5",
+                        s.severity === "critical" ? "border-destructive/40 bg-destructive/5" : "border-amber-500/30 bg-amber-500/5",
+                      )}
+                    >
+                      <div className="flex items-start gap-2">
+                        <AlertTriangle className={cn("h-4 w-4 mt-0.5 shrink-0", s.severity === "critical" ? "text-destructive" : "text-amber-500")} />
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium">{s.title}</p>
+                          <p className="text-[11px] text-muted-foreground">{relativeDate(s.created_at)}</p>
+                        </div>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-7 w-7 shrink-0"
+                          title="Marcar como resolvido"
+                          onClick={() => resolveSignal(s.id)}
+                        >
+                          <Check className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               ))}
             </CardContent>
