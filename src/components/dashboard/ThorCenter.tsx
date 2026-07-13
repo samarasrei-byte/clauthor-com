@@ -406,11 +406,25 @@ export default function ThorCenter({ onNavigate }: Props) {
         {/* Ações pendentes (1/3) */}
         <div className="space-y-4">
           <Card>
-            <CardHeader className="pb-3">
+            <CardHeader className="pb-3 flex flex-row items-center justify-between gap-2 space-y-0">
               <CardTitle className="text-base flex items-center gap-2">
                 <Inbox className="h-4 w-4 text-primary" />
                 Precisam de você
               </CardTitle>
+              {staleCount > 0 && (
+                <button
+                  onClick={() => setOnlyStale((v) => !v)}
+                  className={cn(
+                    "text-[10px] uppercase tracking-widest px-2 py-1 rounded-md border transition-colors",
+                    onlyStale
+                      ? "border-amber-500/50 bg-amber-500/10 text-amber-600 dark:text-amber-400"
+                      : "border-border/50 text-muted-foreground hover:bg-muted/40",
+                  )}
+                  title={onlyStale ? "Mostrar todas" : "Mostrar só as paradas (>48h)"}
+                >
+                  {onlyStale ? "todas" : `só paradas · ${staleCount}`}
+                </button>
+              )}
             </CardHeader>
             <CardContent className="space-y-2">
               {pendingApprovals.items.length === 0 && ambientSignals.length === 0 && (
