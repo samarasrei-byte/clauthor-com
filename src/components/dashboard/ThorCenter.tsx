@@ -167,7 +167,7 @@ export default function ThorCenter({ onNavigate }: Props) {
   const resolveSignal = async (signalId: string) => {
     const { error } = await supabase
       .from("ambient_signals")
-      .update({ status: "resolved", resolved_at: new Date().toISOString() })
+      .update({ status: "resolved" })
       .eq("id", signalId);
     if (error) {
       toast.error("Não consegui marcar como resolvido.");
