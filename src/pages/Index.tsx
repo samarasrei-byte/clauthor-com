@@ -219,20 +219,20 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ═══════════ NUMBERS ═══════════ */}
-      <section className="border-y border-border/60" aria-label="Escala">
-        <div className="max-w-6xl mx-auto px-6 py-14 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
+      {/* ═══════════ NUMBERS (dark contrast band) ═══════════ */}
+      <section className="dark bg-black text-white" aria-label="Escala">
+        <div className="max-w-6xl mx-auto px-6 py-16 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
           {[
-            { value: "35.827", label: "Empresas ativas" },
-            { value: "+200", label: "Especialistas" },
-            { value: "R$ 1.700", label: "Custo mensal" },
-            { value: "14", label: "Idiomas nativos" },
+            { value: "35.827", label: "Empresas ativas", accent: false },
+            { value: "+200", label: "Especialistas", accent: false },
+            { value: "R$ 1.700", label: "Custo mensal", accent: true },
+            { value: "14", label: "Idiomas nativos", accent: false },
           ].map((s) => (
             <div key={s.label} className="text-center md:text-left">
-              <div className="text-4xl md:text-5xl font-semibold tracking-tight text-foreground">
+              <div className={`text-4xl md:text-5xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}>
                 {s.value}
               </div>
-              <div className="mt-1.5 text-xs uppercase tracking-[0.14em] text-muted-foreground">
+              <div className="mt-1.5 text-xs uppercase tracking-[0.14em] text-white/50">
                 {s.label}
               </div>
             </div>
