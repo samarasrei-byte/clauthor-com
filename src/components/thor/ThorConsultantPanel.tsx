@@ -276,7 +276,19 @@ export default function ThorConsultantPanel({
 
               <div className="flex flex-wrap gap-2 pt-1">
                 {onAccept && (
-                  <Button onClick={() => onAccept(rec)} className="gap-2">
+                  <Button
+                    onClick={() => {
+                      void markSeen("consultant_recommendation", {
+                        ctaTaken: true,
+                        metadata: {
+                          accepted_scale: rec.scale,
+                          departments: rec.departments.map((d) => d.label),
+                        },
+                      });
+                      onAccept(rec);
+                    }}
+                    className="gap-2"
+                  >
                     Aplicar recomendação <ArrowRight className="h-4 w-4" />
                   </Button>
                 )}
