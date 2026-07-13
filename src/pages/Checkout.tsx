@@ -243,15 +243,42 @@ export default function Checkout() {
               </div>
               <div className="space-y-3">
                 <div>
-                  <Label className="text-xs">Nome da empresa *</Label>
+                  <div className="flex items-center gap-1.5">
+                    <Label className="text-xs">Nome da empresa *</Label>
+                    <HelpTooltip
+                      id="checkout-company"
+                      text="Nome oficial do seu negócio. Os agentes usam isso ao assinar e-mails, propostas e conteúdos gerados. Você pode ajustar depois."
+                      position="right"
+                      size={12}
+                      autoShow={false}
+                    />
+                  </div>
                   <Input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Ex: Clauthor Tech" />
                 </div>
                 <div>
-                  <Label className="text-xs">Segmento / indústria</Label>
+                  <div className="flex items-center gap-1.5">
+                    <Label className="text-xs">Segmento / indústria</Label>
+                    <HelpTooltip
+                      id="checkout-industry"
+                      text="Em qual mercado você atua? Ajuda os agentes a adotarem o vocabulário certo (ex: SaaS B2B, e-commerce, clínica médica, escritório de advocacia)."
+                      position="right"
+                      size={12}
+                      autoShow={false}
+                    />
+                  </div>
                   <Input value={industry} onChange={(e) => setIndustry(e.target.value)} placeholder="Ex: SaaS B2B" />
                 </div>
                 <div>
-                  <Label className="text-xs">Principal meta nos próximos 30 dias</Label>
+                  <div className="flex items-center gap-1.5">
+                    <Label className="text-xs">Principal meta nos próximos 30 dias</Label>
+                    <HelpTooltip
+                      id="checkout-goal"
+                      text="Objetivo mais importante do próximo mês. Os agentes priorizam tarefas alinhadas a essa meta (ex: 20 reuniões qualificadas, reduzir churn em 10%)."
+                      position="right"
+                      size={12}
+                      autoShow={false}
+                    />
+                  </div>
                   <Input value={goal} onChange={(e) => setGoal(e.target.value)} placeholder="Ex: 20 reuniões qualificadas" />
                 </div>
               </div>
