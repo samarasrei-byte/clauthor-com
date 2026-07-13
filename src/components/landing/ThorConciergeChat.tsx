@@ -343,7 +343,7 @@ export default function ThorConciergeChat({
               key={s}
               onClick={() => sendMessage(s)}
               disabled={isStreaming}
-              className="text-xs px-3 py-1.5 rounded-full border border-border/60 bg-background/60 text-muted-foreground hover:text-foreground hover:border-foreground/40 transition-colors disabled:opacity-50"
+              className="text-xs px-3 py-1.5 rounded-full border border-border/60 bg-background/60 text-muted-foreground hover:text-primary hover:border-primary/40 hover:bg-primary/[0.04] transition-colors disabled:opacity-50"
             >
               {s}
             </button>
@@ -369,7 +369,7 @@ export default function ThorConciergeChat({
             type="submit"
             size="icon"
             disabled={isStreaming || !input.trim()}
-            className="h-11 w-11 shrink-0"
+            className="h-11 w-11 shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.55)] disabled:shadow-none transition-all"
             aria-label="Enviar"
           >
             {isStreaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
