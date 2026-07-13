@@ -348,25 +348,55 @@ export default function ThorConciergeChat({
         ))}
 
         {/* Recommendation CTA */}
-        {recommendedPkg && !isStreaming && (
+        {recommendation && !isStreaming && (
           <div className="mt-2 ml-10 rounded-2xl border border-primary/30 bg-primary/[0.04] p-4">
             <p className="text-[11px] uppercase tracking-[0.14em] text-primary font-semibold mb-1">
               Recomendação do Thor
             </p>
-            <p className="text-base font-semibold text-foreground mb-1">
-              Departamento {recommendedPkg.name}
-            </p>
-            <p className="text-sm text-muted-foreground mb-3">{recommendedPkg.painPoint}</p>
-            <div className="flex items-center justify-between gap-3">
-              <div className="text-sm">
-                <span className="text-foreground font-bold">{formatBRL(recommendedPkg.priceMonthly)}</span>
-                <span className="text-muted-foreground">/mês · {recommendedPkg.agentSlugs.length} agentes</span>
-              </div>
-              <Button size="sm" onClick={goToRecommended} className="gap-1.5">
-                Ver departamento
-                <ArrowRight className="h-3.5 w-3.5" />
-              </Button>
-            </div>
+            {recommendation.kind === "departamento" && recommendedPkg ? (
+              <>
+                <p className="text-base font-semibold text-foreground mb-1">
+                  Departamento {recommendedPkg.name}
+                </p>
+                <p className="text-sm text-muted-foreground mb-3">{recommendedPkg.painPoint}</p>
+                <div className="flex items-center justify-between gap-3">
+                  <div className="text-sm">
+                    <span className="text-foreground font-bold">{formatBRL(recommendedPkg.priceMonthly)}</span>
+                    <span className="text-muted-foreground">/mês · {recommendedPkg.agentSlugs.length} agentes</span>
+                  </div>
+                  <Button size="sm" onClick={goToRecommended} className="gap-1.5">
+                    Ver departamento
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </>
+            ) : recommendation.kind === "squad" ? (
+              <>
+                <p className="text-base font-semibold text-foreground mb-1">Monte seu Squad de IA</p>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Escolha 2 a 5 especialistas e veja o custo em tempo real. Ideal quando você precisa de um time enxuto.
+                </p>
+                <div className="flex justify-end">
+                  <Button size="sm" onClick={goToRecommended} className="gap-1.5">
+                    Montar meu Squad
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <>
+                <p className="text-base font-semibold text-foreground mb-1">Começar com 1 agente</p>
+                <p className="text-sm text-muted-foreground mb-3">
+                  Teste um especialista antes de contratar um time inteiro. Perfeito para empresas pequenas ou provas de conceito.
+                </p>
+                <div className="flex justify-end">
+                  <Button size="sm" onClick={goToRecommended} className="gap-1.5">
+                    Ver marketplace
+                    <ArrowRight className="h-3.5 w-3.5" />
+                  </Button>
+                </div>
+              </>
+            )}
           </div>
         )}
       </div>
