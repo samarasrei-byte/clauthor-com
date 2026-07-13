@@ -51,6 +51,7 @@ const painToDept: Record<Pain, string> = {
 const deptLabel: Record<string, string> = {
   comercial: "Comercial & Vendas",
   suporte: "Atendimento & Sucesso",
+  atendimento: "Atendimento & Sucesso",
   marketing: "Marketing & Conteúdo",
   operacoes: "Operações",
   juridico: "Jurídico",
@@ -59,6 +60,15 @@ const deptLabel: Record<string, string> = {
   rh: "Pessoas & RH",
   financeiro: "Financeiro",
 };
+
+/** Normalize aliases coming from the home Thor chat. */
+const deptAlias: Record<string, string> = {
+  atendimento: "suporte",
+};
+
+export function normalizeDeptId(id: string): string {
+  return deptAlias[id] ?? id;
+}
 
 const empathyByPain: Record<Pain, string> = {
   leads_vendas: "Vender mais sem contratar mais é a dor #1 de quem escala.",
@@ -118,5 +128,52 @@ export function recommend(input: OnboardingInput): RecommendationResult {
     primary,
     alternatives,
     empathyLine: empathyByPain[input.pain],
+  };
+}
+
+/** Home Thor chat delivers only a coarse recommendation. This rebuilds a full
+ *  RecommendationResult so /welcome can render the passo-3 UI directly. */
+export function fromHomeChat(input: {
+  kind: "departamento" | "squad" | "agente";
+  deptId?: string;
+}): RecommendationResult {
+  const deptId = normalizeDeptId(input.deptId ?? "comercial");
+  const label = deptLabel[deptId] ?? deptId;
+
+  const departmentRec: Recommendation = {
+    kind: "department",
+    targetId: deptId,
+    title: `Departamento de ${label}`,
+    pitch: "Uma operação completa · 6 a 9 agentes coordenados, entrega desde o primeiro dia, a partir de R$ 1.700/mês.",
+    cta: "Ativar departamento",
+    href: `/departamentos/${deptId}`,
+  };
+  const squadRec: Recommendation = {
+    kind: "squad",
+    targetId: deptId,
+    title: `Squad enxuta de ${label}`,
+    pitch: "3 a 4 agentes essenciais · ideal para times pequenos que precisam de resultado sem overhead.",
+    cta: "Montar squad",
+    href: `/team-builder?preset=${deptId}`,
+  };
+  const agentRec: Recommendation = {
+    kind: "agent",
+    targetId: deptId,
+    title: `Especialista solo de ${label}`,
+    pitch: "Um único agente focado · ideal para testar o método antes de escalar.",
+    cta: "Contratar agente",
+    href: `/library?dept=${deptId}`,
+  };
+
+  const primary =
+    input.kind === "departamento" ? departmentRec :
+    input.kind === "squad" ? squadRec :
+    agentRec;
+  const alternatives = [departmentRec, squadRec, agentRec].filter(r => r !== primary);
+
+  return {
+    primary,
+    alternatives,
+    empathyLine: "Você já conversou com o Thor · aqui está a recomendação, pronta pra ativar.",
   };
 }
