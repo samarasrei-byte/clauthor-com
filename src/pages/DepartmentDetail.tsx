@@ -20,6 +20,9 @@ export default function DepartmentDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const dept = slug ? getDepartmentById(slug) : undefined;
+  const inCart = useDeptSelection((s) => (dept ? s.has(dept.id) : false));
+  const addToCart = useDeptSelection((s) => s.add);
+  const removeFromCart = useDeptSelection((s) => s.remove);
 
   const agents = useMemo(() => {
     if (!dept) return [];
@@ -33,6 +36,33 @@ export default function DepartmentDetail() {
   const Icon = dept.icon;
   const savings = HUMAN_TEAM_COST - dept.priceMonthly;
   const savingsPct = Math.round((savings / HUMAN_TEAM_COST) * 100);
+
+  const handleAdd = () => {
+    if (inCart) {
+      removeFromCart(dept.id);
+      toast.message(`${dept.name} removido do carrinho`);
+    } else {
+      addToCart({
+        id: dept.id,
+        name: dept.name,
+        priceMonthly: dept.priceMonthly,
+        agentSlugs: [...dept.agentSlugs],
+      });
+      toast.success(`${dept.name} adicionado ao carrinho`);
+    }
+  };
+
+  const handleBuyNow = () => {
+    if (!inCart) {
+      addToCart({
+        id: dept.id,
+        name: dept.name,
+        priceMonthly: dept.priceMonthly,
+        agentSlugs: [...dept.agentSlugs],
+      });
+    }
+    navigate("/checkout");
+  };
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
