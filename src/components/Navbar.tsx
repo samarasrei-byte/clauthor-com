@@ -199,7 +199,7 @@ const Navbar = () => {
                   </Button>
                 </Link>
                 <Link to="/auth" state={{ signup: true }}>
-                  <PremiumCTAButton size="sm" showArrow={false}>
+                  <PremiumCTAButton variant="red" size="sm" showArrow={false}>
                     {t("auth.create_account")}
                   </PremiumCTAButton>
                 </Link>
