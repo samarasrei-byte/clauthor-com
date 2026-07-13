@@ -97,7 +97,7 @@ export default function DepartmentDetail() {
         {/* Outcome */}
         <Card className="p-6 bg-white/[0.02] border-white/10 rounded-2xl">
           <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-white/40 font-medium">
-            <CheckCircle2 className="w-4 h-4" /> Outcome garantido
+            <CheckCircle2 className="w-4 h-4" /> Cobertura de execução
           </div>
           <p className="mt-2 text-xl md:text-2xl text-white font-medium">{dept.outcome}</p>
         </Card>
