@@ -230,11 +230,27 @@ export default function ThorCenter({ onNavigate }: Props) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* Timeline (2/3) */}
         <Card className="lg:col-span-2">
-          <CardHeader className="pb-3">
+          <CardHeader className="pb-3 flex flex-row items-center justify-between gap-3 space-y-0">
             <CardTitle className="text-base flex items-center gap-2">
               <Clock className="h-4 w-4 text-primary" />
               Histórico de conversas com o Thor
             </CardTitle>
+            <div className="flex gap-1">
+              {(Object.keys(PERIOD_LABEL) as Period[]).map((p) => (
+                <button
+                  key={p}
+                  onClick={() => setPeriod(p)}
+                  className={cn(
+                    "text-[11px] px-2 py-1 rounded-md border transition-colors",
+                    period === p
+                      ? "border-primary/50 bg-primary/10 text-primary"
+                      : "border-border/50 text-muted-foreground hover:bg-muted/40",
+                  )}
+                >
+                  {PERIOD_LABEL[p]}
+                </button>
+              ))}
+            </div>
           </CardHeader>
           <CardContent>
             {isLoading ? (
