@@ -62,14 +62,18 @@ const Departamentos = () => {
   // Pre-select category from onboarding (?dept=marketing)
   // With `&auto=1` (from landing "Contratar"), auto-fires the checkout.
   useEffect(() => {
-    const dept = searchParams.get("dept");
-    if (!dept) return;
+    const rawDept = searchParams.get("dept");
+    if (!rawDept) return;
+    // Alias flagship-package ids → canonical departmentData ids.
+    const deptAlias: Record<string, string> = {
+      atendimento: "suporte",
+      vendas: "comercial",
+    };
+    const dept = deptAlias[rawDept] ?? rawDept;
     const deptToCategory: Record<string, string> = {
       marketing: "criativo",
-      vendas: "vendas",
       comercial: "vendas",
       suporte: "corp",
-      atendimento: "corp",
       financeiro: "corp",
       juridico: "corp",
       rh: "corp",
@@ -82,6 +86,8 @@ const Departamentos = () => {
       if (target) {
         // Defer to next tick so `user`/region are resolved.
         setTimeout(() => handleHireDepartment(target), 0);
+      } else {
+        toast.error(`Departamento "${rawDept}" não encontrado. Escolha um da lista abaixo.`);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
