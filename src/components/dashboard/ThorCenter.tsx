@@ -54,11 +54,21 @@ const PERIOD_MS: Record<Period, number | null> = {
 };
 const PERIOD_LABEL: Record<Period, string> = { "24h": "24h", "7d": "7 dias", "30d": "30 dias", all: "Tudo" };
 
+const PERIOD_STORAGE_KEY = "clauthor-thor-center-period";
+
 export default function ThorCenter({ onNavigate }: Props) {
   const { user } = useAuth();
   const { touchpoints, isLoading } = useThorTouchpoints();
   const qc = useQueryClient();
-  const [period, setPeriod] = useState<Period>("30d");
+  const [period, setPeriodState] = useState<Period>(() => {
+    if (typeof window === "undefined") return "30d";
+    const saved = localStorage.getItem(PERIOD_STORAGE_KEY);
+    return (saved && (saved in PERIOD_MS) ? saved : "30d") as Period;
+  });
+  const setPeriod = (p: Period) => {
+    setPeriodState(p);
+    try { localStorage.setItem(PERIOD_STORAGE_KEY, p); } catch { /* ignore */ }
+  };
 
   // Realtime: mantém timeline e atalhos vivos quando o Thor registra algo novo
   useEffect(() => {
