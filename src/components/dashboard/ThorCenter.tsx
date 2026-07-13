@@ -157,8 +157,25 @@ export default function ThorCenter({ onNavigate }: Props) {
       kind: "notification" as const,
       message: n.message,
     }));
-    return [...fromTouchpoints, ...fromAlerts].sort((a, b) => b.when.localeCompare(a.when)).slice(0, 20);
-  }, [touchpoints, tokenAlerts]);
+    const merged = [...fromTouchpoints, ...fromAlerts].sort((a, b) => b.when.localeCompare(a.when));
+    const cutoff = PERIOD_MS[period];
+    if (cutoff == null) return merged.slice(0, 40);
+    const min = Date.now() - cutoff;
+    return merged.filter((e) => new Date(e.when).getTime() >= min).slice(0, 40);
+  }, [touchpoints, tokenAlerts, period]);
+
+  const resolveSignal = async (signalId: string) => {
+    const { error } = await supabase
+      .from("ambient_signals")
+      .update({ status: "resolved", resolved_at: new Date().toISOString() })
+      .eq("id", signalId);
+    if (error) {
+      toast.error("Não consegui marcar como resolvido.");
+      return;
+    }
+    toast.success("Marcado como resolvido.");
+    qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
+  };
 
   return (
     <div className="space-y-6">
