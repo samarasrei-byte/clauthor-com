@@ -50,11 +50,11 @@ export default function ThorFirstTouchWelcome({ onGuideMe, openDelayMs = 900 }: 
     queryFn: async () => {
       const { data } = await supabase
         .from("contracted_departments")
-        .select("department_name, department_slug, status, created_at")
+        .select("department_name, status, created_at")
         .eq("user_id", user!.id)
         .eq("status", "active")
         .order("created_at", { ascending: false });
-      return (data ?? []) as Array<{ department_name: string; department_slug: string | null }>;
+      return (data ?? []) as Array<{ department_name: string }>;
     },
   });
 
