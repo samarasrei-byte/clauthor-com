@@ -527,7 +527,7 @@ export default function ThorCenter({ onNavigate }: Props) {
                           variant="ghost"
                           className="h-7 w-7 shrink-0"
                           title="Marcar como resolvido"
-                          onClick={() => resolveSignal(s.id)}
+                          onClick={() => resolveSignal(s.id, s.kind)}
                         >
                           <Check className="h-3.5 w-3.5" />
                         </Button>
