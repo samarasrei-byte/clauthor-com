@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, CheckCircle2, Diamond, TrendingDown, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, Diamond, Plus, TrendingDown, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,8 @@ import { getDepartmentById, formatBRL } from "@/data/departmentPackages";
 import { WORKFORCE_CATALOG } from "@/data/workforceCatalog";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
 import SEO from "@/components/SEO";
+import { useDeptSelection } from "@/stores/deptSelection";
+import { toast } from "sonner";
 
 // Custo médio de uma equipe humana equivalente para um departamento (CLT + encargos + gestão)
 const HUMAN_TEAM_COST = 90000;
