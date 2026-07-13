@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useCredits, useTokenUsage } from "@/hooks/useCredits";
-import { LayoutDashboard, Bot, BarChart3, CreditCard, Settings, Brain, MessageSquare, Plug, ChevronLeft, Building2, KanbanSquare, Layers3, Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio, CheckSquare, FolderOpen } from "lucide-react";
+import { LayoutDashboard, Bot, BarChart3, CreditCard, Settings, Brain, MessageSquare, Plug, ChevronLeft, Building2, KanbanSquare, Layers3, Clock, Radar, Orbit, Inbox, Rewind, TrendingUp, Dna, Workflow, Radio, CheckSquare, FolderOpen, BriefcaseBusiness } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
