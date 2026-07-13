@@ -229,7 +229,18 @@ export default function ThorCenter({ onNavigate }: Props) {
         qc.invalidateQueries({ queryKey: ["thor-center-approvals", user.id] });
       }},
     });
+    trackKpi("thor_center_approval_resolved", { source: "dashboard" });
     qc.invalidateQueries({ queryKey: ["thor-center-approvals", user.id] });
+  };
+
+  // Bulk confirm: só pede confirmação quando o grupo é grande (>= 3)
+  const [bulkConfirm, setBulkConfirm] = useState<{ kind: string; ids: string[] } | null>(null);
+  const requestBulkResolve = (kind: string, ids: string[]) => {
+    if (ids.length >= 3) {
+      setBulkConfirm({ kind, ids });
+    } else {
+      void resolveSignalsBulk(ids, kind);
+    }
   };
 
   // Contagens por tipo dentro do período ativo (para mostrar no header/quick actions)
