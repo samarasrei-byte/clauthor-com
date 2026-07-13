@@ -129,16 +129,19 @@ export default function ThorConciergeChat({
   // Cancela stream ao desmontar.
   useEffect(() => () => abortRef.current?.abort(), []);
 
-  const recommendedDept = useMemo(() => {
+  const recommendation = useMemo<Recommendation | undefined>(() => {
     for (let i = messages.length - 1; i >= 0; i--) {
-      if (messages[i].deptId) return messages[i].deptId;
+      if (messages[i].reco) return messages[i].reco;
     }
     return undefined;
   }, [messages]);
 
   const recommendedPkg = useMemo(
-    () => (recommendedDept ? DEPARTMENT_PACKAGES.find((d) => d.id === recommendedDept) : undefined),
-    [recommendedDept],
+    () =>
+      recommendation?.kind === "departamento" && recommendation.deptId
+        ? DEPARTMENT_PACKAGES.find((d) => d.id === recommendation.deptId)
+        : undefined,
+    [recommendation],
   );
 
   const sendMessage = useCallback(
