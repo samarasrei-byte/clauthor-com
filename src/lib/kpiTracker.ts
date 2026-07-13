@@ -83,6 +83,8 @@ export interface KpiEventPayload {
   cached?: boolean;
   kind?: "departamento" | "squad" | "agente";
   dept_id?: string | null;
+  count?: number;
+  signal_kind?: string;
 }
 
 
