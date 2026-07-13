@@ -114,6 +114,9 @@ const PERSIST_SET = new Set<KpiEventName>([
   "wow_voice_transcribed",
   "wow_voice_failed",
   "time_to_first_value",
+  "thor_center_approval_resolved",
+  "thor_center_signal_resolved",
+  "thor_center_signal_bulk_resolved",
 ]);
 
 interface PendingEvent { event: string; payload: Record<string, unknown> }
