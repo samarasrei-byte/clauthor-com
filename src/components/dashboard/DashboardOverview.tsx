@@ -76,7 +76,9 @@ const DashboardOverview = ({
       <ErrorBoundary>
         <Suspense fallback={<SectionLoader />}>
           <div className="space-y-5">
-            {/* PRIMEIRA DOBRA · uma voz, um CTA. */}
+            {/* PRIMEIRA DOBRA · P2 · ROI do mês em destaque · prova visível */}
+            <MonthlyROICard onCTA={() => onSetActiveSection("omnix")} />
+
             <HeroBriefing
               agentsCount={agents.length}
               activeAgents={activeAgents}
