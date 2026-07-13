@@ -429,8 +429,12 @@ export default function ThorCenter({ onNavigate }: Props) {
 }
 
 function QuickAction({
-  icon, label, value, hint, onClick,
-}: { icon: React.ReactNode; label: string; value: number; hint: string; onClick?: () => void }) {
+  icon, label, value, hint, onClick, periodValue, periodLabel,
+}: {
+  icon: React.ReactNode; label: string; value: number; hint: string; onClick?: () => void;
+  periodValue?: number; periodLabel?: string;
+}) {
+  const showPeriodChip = typeof periodValue === "number" && !!periodLabel && periodLabel !== "Tudo";
   return (
     <button
       onClick={onClick}
@@ -443,7 +447,14 @@ function QuickAction({
         <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
       </div>
       <p className="font-display font-bold text-3xl mt-2 leading-none">{value}</p>
-      <p className="text-xs text-muted-foreground mt-1">{hint}</p>
+      <div className="mt-1 flex items-center gap-2 flex-wrap">
+        <p className="text-xs text-muted-foreground">{hint}</p>
+        {showPeriodChip && (
+          <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-primary/30 text-primary/80">
+            {periodValue} nas últimas {periodLabel!.toLowerCase()}
+          </Badge>
+        )}
+      </div>
     </button>
   );
 }
