@@ -30,6 +30,7 @@ const DashboardSkeleton = lazy(() => import("./DashboardSkeleton"));
 const LiveActivityFeed = lazy(() => import("./LiveActivityFeed").then(m => ({ default: m.LiveActivityFeed })));
 const ContractedDepartments = lazy(() => import("./ContractedDepartments"));
 const FirstDeliveryCard = lazy(() => import("./FirstDeliveryCard"));
+const AmbientSignalsPanel = lazy(() => import("./AmbientSignalsPanel"));
 
 
 interface Props {
