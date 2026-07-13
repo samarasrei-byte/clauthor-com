@@ -33,17 +33,10 @@ export default function Checkout() {
     if (empty) return;
 
     if (!user) {
-      navigate("/auth", {
-        state: {
-          hireIntent: {
-            type: "cart",
-            label: `${items.length} departamento${items.length > 1 ? "s" : ""}`,
-            departments: items.map((i) => ({ id: i.id, slugs: i.agentSlugs })),
-          },
-          signup: true,
-          from: { pathname: "/checkout" },
-        },
-      });
+      // Fluxo novo: usuários não cadastrados veem um preview do painel com
+      // tour guiado do Thor ANTES de serem forçados a criar conta. Reduz atrito
+      // e aumenta compreensão de valor. hireIntent é reconstruído no CTA final.
+      navigate("/preview-dashboard");
       return;
     }
 

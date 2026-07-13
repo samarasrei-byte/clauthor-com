@@ -106,6 +106,7 @@ const DepartmentDetail = lazyRetry(() => import("./pages/DepartmentDetail"));
 const HireAndOnboard = lazyRetry(() => import("./pages/HireAndOnboard"));
 const DepartmentActivated = lazyRetry(() => import("./pages/DepartmentActivated"));
 const Checkout = lazyRetry(() => import("./pages/Checkout"));
+const PreviewDashboard = lazyRetry(() => import("./pages/PreviewDashboard"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -183,6 +184,7 @@ const App = () => (
                   <Route path="/departamentos/:slug" element={<DepartmentDetail />} />
                   <Route path="/contratar/:slug" element={<ProtectedRoute><HireAndOnboard /></ProtectedRoute>} />
                   <Route path="/checkout" element={<Checkout />} />
+                  <Route path="/preview-dashboard" element={<PreviewDashboard />} />
                   <Route path="/departamento-ativo/:slug" element={<ProtectedRoute><DepartmentActivated /></ProtectedRoute>} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />
                   <Route path="/termos" element={<Terms />} />
