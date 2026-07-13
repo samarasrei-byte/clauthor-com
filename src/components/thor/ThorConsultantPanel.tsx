@@ -22,6 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { WORKFORCE_CATALOG, DEPARTMENTS } from "@/data/workforceCatalog";
 import { cn } from "@/lib/utils";
 import type { WorkforceScale, DepartmentKey } from "@/lib/workforce/types";
+import { useThorTouchpoints } from "@/hooks/useThorTouchpoints";
 
 export interface ThorRecommendation {
   scale: WorkforceScale;
@@ -75,6 +76,7 @@ export default function ThorConsultantPanel({
   const [loading, setLoading] = useState(false);
   const [rec, setRec] = useState<ThorRecommendation | null>(null);
   const [collapsed, setCollapsed] = useState(false);
+  const { markSeen } = useThorTouchpoints();
 
   const analyze = async () => {
     const trimmed = objective.trim();
@@ -117,6 +119,15 @@ export default function ThorConsultantPanel({
         channels: bp.channels ?? [],
         autonomy: bp.autonomy ?? "specialist",
         name: bp.name ?? "",
+      });
+      // Register touchpoint for Thor Center history
+      void markSeen("consultant_recommendation", {
+        metadata: {
+          objective: trimmed.slice(0, 200),
+          scale: bp.scale,
+          departments: departments.map((d) => d.label),
+          templates_count: bp.selectedTemplates.length,
+        },
       });
     } catch (e: any) {
       toast.error(e?.message || "Não consegui analisar agora. Tente novamente.");
@@ -265,7 +276,19 @@ export default function ThorConsultantPanel({
 
               <div className="flex flex-wrap gap-2 pt-1">
                 {onAccept && (
-                  <Button onClick={() => onAccept(rec)} className="gap-2">
+                  <Button
+                    onClick={() => {
+                      void markSeen("consultant_recommendation", {
+                        ctaTaken: true,
+                        metadata: {
+                          accepted_scale: rec.scale,
+                          departments: rec.departments.map((d) => d.label),
+                        },
+                      });
+                      onAccept(rec);
+                    }}
+                    className="gap-2"
+                  >
                     Aplicar recomendação <ArrowRight className="h-4 w-4" />
                   </Button>
                 )}
