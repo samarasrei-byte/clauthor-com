@@ -264,6 +264,7 @@ export default function ThorConciergeChat({
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
+            apikey: PUBLISHABLE_KEY,
           },
           body: JSON.stringify({
             session_id: sessionIdRef.current,
