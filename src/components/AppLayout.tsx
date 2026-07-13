@@ -11,11 +11,12 @@ const ExitIntentCapture = lazy(() => import("./ExitIntentCapture"));
 const JourneyProgressBar = lazy(() => import("./JourneyProgressBar"));
 const SoundWaveIntro = lazy(() => import("./intro/SoundWaveIntro"));
 const AssistantHierarchy = lazy(() => import("./AssistantHierarchy"));
+const CartFab = lazy(() => import("./CartFab"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 const NAVBAR_HIDDEN_ROUTES = ["/thor"];
 // Rotas de checkout / pós-checkout que devem ter layout limpo (sem Navbar/Thor)
-const CHECKOUT_ROUTE_PREFIXES = ["/contratar/", "/departamento-ativo/"];
+const CHECKOUT_ROUTE_PREFIXES = ["/contratar/", "/departamento-ativo/", "/checkout"];
 
 const AppLayout = () => {
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
@@ -56,6 +57,12 @@ const AppLayout = () => {
         <Suspense fallback={null}>
           {/* Hierarquia única: 1º contato = só Thor (onboarding). Depois = greeting + updates. */}
           <AssistantHierarchy />
+        </Suspense>
+      )}
+
+      {!isCheckoutRoute && (
+        <Suspense fallback={null}>
+          <CartFab />
         </Suspense>
       )}
     </div>

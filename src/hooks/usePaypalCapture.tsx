@@ -64,6 +64,8 @@ export function usePaypalCapture() {
             : [subIntent.agent_slug];
 
           const provisionedAgents: string[] = [];
+          // Mapa slug → agent_id para permitir split por departamento (multi-cart).
+          const slugToAgentId: Record<string, string> = {};
 
           for (const slug of slugsToProvision) {
             const { data: template } = await supabase
@@ -90,6 +92,7 @@ export function usePaypalCapture() {
             if (existing) {
               // Agent already exists - reuse it instead of creating a duplicate
               provisionedAgents.push(existing.id);
+              slugToAgentId[slug] = existing.id;
               // Ensure it's active
               await supabase.from("agents").update({ status: "active" }).eq("id", existing.id);
               continue;
@@ -121,6 +124,7 @@ export function usePaypalCapture() {
               continue;
             }
             provisionedAgents.push(agent.id);
+            slugToAgentId[slug] = agent.id;
           }
 
           if (provisionedAgents.length === 0) {
@@ -143,7 +147,8 @@ export function usePaypalCapture() {
             current_period_end: periodEnd.toISOString(),
           });
 
-          // 4b. Persist contracted department (snapshot user context so agents/dashboard can use)
+          // 4b. Persist contracted department(s). Multi-cart usa `subIntent.departments`
+          //     e emite uma linha por departamento; single mantém comportamento antigo.
           if (subIntent.is_department) {
             try {
               const { data: profile } = await supabase
@@ -153,24 +158,47 @@ export function usePaypalCapture() {
                 .maybeSingle();
 
               const answers = ((profile as any)?.onboarding_answers as any) || {};
-              await supabase.from("contracted_departments").insert({
-                user_id: user.id,
-                department_id: subIntent.department_id || "comercial",
-                department_name: subIntent.agent_name,
-                monthly_price_cents: priceInCents,
-                currency: subIntent.currency || "BRL",
-                agent_count: provisionedAgents.length,
-                agent_ids: provisionedAgents,
-                subscription_id: subIntent.subscription_id,
-                pain_point: answers.pain || answers.detected_pain || null,
-                company_snapshot: {
-                  name: (profile as any)?.company_name || null,
-                  contact_name: (profile as any)?.full_name || null,
-                  email: (profile as any)?.email || null,
-                },
-                onboarding_snapshot: answers,
-                status: "active",
-              });
+              const companySnapshot = {
+                name: (profile as any)?.company_name || null,
+                contact_name: (profile as any)?.full_name || null,
+                email: (profile as any)?.email || null,
+              };
+
+              const deptRows: Array<{
+                id: string;
+                name: string;
+                slugs: string[];
+                priceMonthly?: number;
+              }> = Array.isArray(subIntent.departments) && subIntent.departments.length > 0
+                ? subIntent.departments
+                : [{
+                    id: subIntent.department_id || "comercial",
+                    name: subIntent.agent_name,
+                    slugs: subIntent.department_slugs || [],
+                    priceMonthly: subIntent.price || 0,
+                  }];
+
+              for (const d of deptRows) {
+                const deptAgentIds = (d.slugs || [])
+                  .map((s) => slugToAgentId[s])
+                  .filter((v): v is string => !!v);
+                const deptPriceCents = Math.round((d.priceMonthly || 0) * 100);
+
+                await supabase.from("contracted_departments").insert({
+                  user_id: user.id,
+                  department_id: d.id,
+                  department_name: d.name,
+                  monthly_price_cents: deptPriceCents || priceInCents,
+                  currency: subIntent.currency || "BRL",
+                  agent_count: deptAgentIds.length || provisionedAgents.length,
+                  agent_ids: deptAgentIds.length ? deptAgentIds : provisionedAgents,
+                  subscription_id: subIntent.subscription_id,
+                  pain_point: answers.pain || answers.detected_pain || null,
+                  company_snapshot: companySnapshot,
+                  onboarding_snapshot: answers,
+                  status: "active",
+                });
+              }
             } catch (e) {
               console.warn("[contracted_departments] insert failed", e);
             }
@@ -241,6 +269,11 @@ export function usePaypalCapture() {
           queryClient.invalidateQueries({ queryKey: ["user-agents"] });
           queryClient.invalidateQueries({ queryKey: ["payment-history"] });
           queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
+
+          // Limpa o carrinho de departamentos (multi-cart) após ativação bem-sucedida.
+          try {
+            localStorage.removeItem("clauthor_dept_cart_v1");
+          } catch { /* ignore storage errors */ }
 
           // ── Vertical-specific post-checkout redirect (Advocacia) ──
           // UX: leva direto ao painel isolado pra evitar overload do dashboard genérico.

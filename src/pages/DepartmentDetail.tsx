@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, CheckCircle2, Diamond, TrendingDown, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, Diamond, Plus, TrendingDown, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +10,8 @@ import { getDepartmentById, formatBRL } from "@/data/departmentPackages";
 import { WORKFORCE_CATALOG } from "@/data/workforceCatalog";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
 import SEO from "@/components/SEO";
+import { useDeptSelection } from "@/stores/deptSelection";
+import { toast } from "sonner";
 
 // Custo médio de uma equipe humana equivalente para um departamento (CLT + encargos + gestão)
 const HUMAN_TEAM_COST = 90000;
@@ -18,6 +20,9 @@ export default function DepartmentDetail() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const dept = slug ? getDepartmentById(slug) : undefined;
+  const inCart = useDeptSelection((s) => (dept ? s.has(dept.id) : false));
+  const addToCart = useDeptSelection((s) => s.add);
+  const removeFromCart = useDeptSelection((s) => s.remove);
 
   const agents = useMemo(() => {
     if (!dept) return [];
@@ -31,6 +36,33 @@ export default function DepartmentDetail() {
   const Icon = dept.icon;
   const savings = HUMAN_TEAM_COST - dept.priceMonthly;
   const savingsPct = Math.round((savings / HUMAN_TEAM_COST) * 100);
+
+  const handleAdd = () => {
+    if (inCart) {
+      removeFromCart(dept.id);
+      toast.message(`${dept.name} removido do carrinho`);
+    } else {
+      addToCart({
+        id: dept.id,
+        name: dept.name,
+        priceMonthly: dept.priceMonthly,
+        agentSlugs: [...dept.agentSlugs],
+      });
+      toast.success(`${dept.name} adicionado ao carrinho`);
+    }
+  };
+
+  const handleBuyNow = () => {
+    if (!inCart) {
+      addToCart({
+        id: dept.id,
+        name: dept.name,
+        priceMonthly: dept.priceMonthly,
+        agentSlugs: [...dept.agentSlugs],
+      });
+    }
+    navigate("/checkout");
+  };
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -65,7 +97,7 @@ export default function DepartmentDetail() {
         {/* Outcome */}
         <Card className="p-6 bg-white/[0.02] border-white/10 rounded-2xl">
           <div className="flex items-center gap-2 text-xs uppercase tracking-wider text-white/40 font-medium">
-            <CheckCircle2 className="w-4 h-4" /> Outcome garantido
+            <CheckCircle2 className="w-4 h-4" /> Cobertura de execução
           </div>
           <p className="mt-2 text-xl md:text-2xl text-white font-medium">{dept.outcome}</p>
         </Card>
@@ -135,7 +167,7 @@ export default function DepartmentDetail() {
                 <div className="mt-1 text-2xl font-semibold text-white">
                   {formatBRL(dept.priceMonthly)}
                 </div>
-                <div className="text-xs text-white/40">por mês, outcome incluso</div>
+                <div className="text-xs text-white/40">por mês, cobertura completa</div>
               </div>
               <div>
                 <div className="text-xs text-emerald-400/70 uppercase tracking-wider">Você economiza</div>
@@ -156,10 +188,16 @@ export default function DepartmentDetail() {
               {formatBRL(dept.priceMonthly)}<span className="text-sm text-white/40"> / mês</span>
             </div>
           </div>
-          <div className="flex gap-2">
-            <Button variant="outline" onClick={() => navigate("/departamentos")}>Ver outros</Button>
-            <PremiumCTAButton variant="red" onClick={() => navigate(`/contratar/${dept.id}`)}>
-              Contratar por {formatBRL(dept.priceMonthly)} <ArrowRight className="w-4 h-4 ml-2" />
+          <div className="flex flex-wrap gap-2 justify-end">
+            <Button variant="outline" onClick={handleAdd} className="gap-2">
+              {inCart ? (
+                <><Check className="w-4 h-4" /> No carrinho</>
+              ) : (
+                <><Plus className="w-4 h-4" /> Adicionar ao carrinho</>
+              )}
+            </Button>
+            <PremiumCTAButton variant="red" onClick={handleBuyNow}>
+              Ir para checkout <ArrowRight className="w-4 h-4 ml-2" />
             </PremiumCTAButton>
           </div>
         </div>

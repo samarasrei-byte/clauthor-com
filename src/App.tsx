@@ -105,6 +105,7 @@ const ComercialFunil = lazyRetry(() => import("./pages/ComercialFunil"));
 const DepartmentDetail = lazyRetry(() => import("./pages/DepartmentDetail"));
 const HireAndOnboard = lazyRetry(() => import("./pages/HireAndOnboard"));
 const DepartmentActivated = lazyRetry(() => import("./pages/DepartmentActivated"));
+const Checkout = lazyRetry(() => import("./pages/Checkout"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -181,6 +182,7 @@ const App = () => (
                   <Route path="/departamentos" element={<Departamentos />} />
                   <Route path="/departamentos/:slug" element={<DepartmentDetail />} />
                   <Route path="/contratar/:slug" element={<ProtectedRoute><HireAndOnboard /></ProtectedRoute>} />
+                  <Route path="/checkout" element={<Checkout />} />
                   <Route path="/departamento-ativo/:slug" element={<ProtectedRoute><DepartmentActivated /></ProtectedRoute>} />
                   <Route path="/agente/:slug" element={<AgentLanding />} />
                   <Route path="/termos" element={<Terms />} />
