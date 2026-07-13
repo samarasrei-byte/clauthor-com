@@ -14,12 +14,15 @@ const AssistantHierarchy = lazy(() => import("./AssistantHierarchy"));
 
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 const NAVBAR_HIDDEN_ROUTES = ["/thor"];
+// Rotas de checkout / pós-checkout que devem ter layout limpo (sem Navbar/Thor)
+const CHECKOUT_ROUTE_PREFIXES = ["/contratar/", "/departamento-ativo/"];
 
 const AppLayout = () => {
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
   const location = useLocation();
-  const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname);
-  const showNavbar = !NAVBAR_HIDDEN_ROUTES.includes(location.pathname);
+  const isCheckoutRoute = CHECKOUT_ROUTE_PREFIXES.some((p) => location.pathname.startsWith(p));
+  const showThor = !THOR_HIDDEN_ROUTES.includes(location.pathname) && !isCheckoutRoute;
+  const showNavbar = !NAVBAR_HIDDEN_ROUTES.includes(location.pathname) && !isCheckoutRoute;
   const isHomePage = location.pathname === "/";
 
   // Adiar hidratação de add-ons não-críticos (dialogs, greeter, gate) até o
