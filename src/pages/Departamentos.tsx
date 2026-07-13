@@ -12,7 +12,7 @@ import type { HireIntent } from "./Auth";
 import {
   Building2, ArrowRight, Flame, Bot, Zap,
   CheckCircle2, TrendingUp, Network, Lightbulb, ThumbsUp, Send,
-  Loader2, Clock, Users, Shield, Rocket, X, Filter
+  Loader2, Clock, Users, Shield, Rocket, X, Filter, Plus, Check
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import SquadConsultant from "@/components/pricing/SquadConsultant";
