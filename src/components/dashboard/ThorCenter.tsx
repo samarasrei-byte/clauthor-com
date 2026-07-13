@@ -362,19 +362,31 @@ export default function ThorCenter({ onNavigate }: Props) {
                 <p className="text-sm text-muted-foreground">Nada pendente. Aproveita o café ☕</p>
               )}
               {pendingApprovals.items.map((a) => (
-                <button
+                <div
                   key={a.id}
-                  onClick={() => onNavigate?.("approvals")}
-                  className="w-full text-left rounded-lg border border-border/50 bg-background/40 p-2.5 hover:bg-muted/40 transition-colors group"
+                  className="w-full rounded-lg border border-border/50 bg-background/40 p-2.5 hover:bg-muted/40 transition-colors group"
                 >
                   <div className="flex items-start justify-between gap-2">
-                    <div className="min-w-0">
+                    <button
+                      type="button"
+                      onClick={() => onNavigate?.("approvals")}
+                      className="min-w-0 flex-1 text-left"
+                    >
                       <p className="text-sm font-medium truncate">{a.title || "Aprovação pendente"}</p>
                       <p className="text-[11px] text-muted-foreground">{relativeDate(a.created_at)}</p>
-                    </div>
-                    <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0 group-hover:translate-x-0.5 transition-transform" />
+                    </button>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-7 w-7 shrink-0"
+                      title="Marcar como resolvido"
+                      onClick={(e) => { e.stopPropagation(); void resolveApproval(a.id); }}
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                    </Button>
+                    <ArrowRight className="h-4 w-4 text-muted-foreground shrink-0 mt-1.5 group-hover:translate-x-0.5 transition-transform" />
                   </div>
-                </button>
+                </div>
               ))}
               {ambientSignals.map((s) => (
                 <div
