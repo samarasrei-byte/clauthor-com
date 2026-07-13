@@ -757,6 +757,12 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {activeSection === "productivity" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ProductivityHub onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
+
                 <DashboardSectionRenderer
                   activeSection={activeSection}
                   realChartData={realChartData}
