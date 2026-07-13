@@ -77,7 +77,11 @@ const Navbar = () => {
       initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.4 }}
-      className={`fixed top-0 left-0 right-0 z-50 bg-background/60 backdrop-blur-2xl border-b border-border/30 ${mobileOpen ? "z-[9999]" : ""}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-colors duration-300 border-b ${
+        scrolled
+          ? "bg-black/95 backdrop-blur-2xl border-white/10 [&_*]:!text-white/80"
+          : "bg-background/60 backdrop-blur-2xl border-border/30"
+      } ${mobileOpen ? "z-[9999]" : ""}`}
       style={{ paddingTop: 'env(safe-area-inset-top)' }}
     >
       <div className="max-w-[1120px] mx-auto px-5 sm:px-6">
