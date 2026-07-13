@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, CheckCircle2, Loader2, Diamond } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Loader2, Diamond, Shield } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
+import ClauthorLogo from "@/components/ClauthorLogo";
 
 export default function HireAndOnboard() {
   const { slug } = useParams<{ slug: string }>();
@@ -28,41 +29,106 @@ export default function HireAndOnboard() {
   const Icon = dept.icon;
 
   const activate = async () => {
+    // Sem login: preserva contexto e manda para /auth.
+    // O Auth já salva hireIntent em localStorage e redireciona de volta.
     if (!user) {
-      toast.error("Faça login para ativar o departamento");
-      navigate("/auth");
+      navigate("/auth", {
+        state: {
+          hireIntent: {
+            type: "department",
+            label: dept.name,
+            departmentId: dept.id,
+            slugs: [...dept.agentSlugs],
+          },
+          signup: true,
+          from: { pathname: `/contratar/${dept.id}` },
+        },
+      });
       return;
     }
     if (!company.trim()) {
       toast.error("Informe o nome da empresa");
       return;
     }
+
     setLoading(true);
-    const { error } = await (supabase.from("contracted_departments" as any) as any).insert({
-      user_id: user.id,
-      department_id: dept.id,
-      department_name: dept.name,
-      monthly_price_cents: dept.priceMonthly * 100,
-      currency: "BRL",
-      agent_count: dept.agentSlugs.length,
-      agent_ids: dept.agentSlugs,
-      pain_point: dept.painPoint,
-      company_snapshot: { name: company, industry, goal },
-      onboarding_snapshot: { completed_at: new Date().toISOString() },
-      status: "active",
-    });
-    setLoading(false);
-    if (error) {
-      toast.error("Erro ao ativar. Tente novamente.");
-      return;
+    try {
+      // Persiste snapshot do onboarding no profile ANTES do redirect PayPal,
+      // pra usePaypalCapture conseguir montar contracted_departments.
+      await supabase
+        .from("profiles")
+        .update({
+          company_name: company,
+          onboarding_answers: {
+            industry,
+            goal,
+            completed_at: new Date().toISOString(),
+          },
+        })
+        .eq("user_id", user.id);
+
+      const returnBase = `${window.location.origin}/dashboard`;
+
+      // Cria subscription PayPal real via edge function.
+      const { data, error } = await supabase.functions.invoke("paypal-checkout", {
+        body: {
+          action: "create_subscription",
+          agent_slug: `dept-${dept.id}`,
+          agent_name: dept.name,
+          amount: dept.priceMonthly,
+          currency: "BRL",
+          return_url: `${returnBase}?subscription=success`,
+          cancel_url: `${returnBase}?subscription=cancelled`,
+        },
+      });
+
+      if (error) throw error;
+      if (!data?.success || !data?.subscription_id || !data?.approve_url) {
+        throw new Error("PayPal não retornou aprovação. Tente de novo.");
+      }
+
+      // Intent lido no retorno por usePaypalCapture.
+      sessionStorage.setItem(
+        "paypal_subscription",
+        JSON.stringify({
+          subscription_id: data.subscription_id,
+          agent_slug: `dept-${dept.id}`,
+          agent_name: dept.name,
+          price: dept.priceMonthly,
+          currency: "BRL",
+          tier: "advanced",
+          is_department: true,
+          department_id: dept.id,
+          department_slugs: [...dept.agentSlugs],
+        }),
+      );
+
+      // Redireciona pro fluxo de aprovação PayPal.
+      window.location.href = data.approve_url;
+    } catch (err: any) {
+      console.error("[HireAndOnboard] PayPal error", err);
+      toast.error(err?.message || "Erro ao iniciar pagamento. Tente novamente.");
+      setLoading(false);
     }
-    toast.success(`${dept.name} ativado com sucesso!`);
-    navigate(`/departamento-ativo/${dept.id}`);
   };
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <SEO title={`Contratar ${dept.name} · Clauthor`} description={`Ative o ${dept.name} e comece agora.`} />
+
+      {/* Header minimalista de checkout — sem Navbar global */}
+      <header className="border-b border-white/[0.06] bg-background/80 backdrop-blur-md sticky top-0 z-30">
+        <div className="max-w-3xl mx-auto px-6 h-14 flex items-center justify-between">
+          <Link to={`/departamentos/${dept.id}`} className="inline-flex items-center gap-1.5 text-sm text-white/60 hover:text-white transition-colors">
+            <ArrowLeft className="w-4 h-4" /> Voltar
+          </Link>
+          <ClauthorLogo className="h-5 opacity-70" />
+          <div className="inline-flex items-center gap-1.5 text-[11px] text-white/40">
+            <Shield className="w-3 h-3" /> Checkout seguro
+          </div>
+        </div>
+      </header>
+
 
       <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
         <Link to={`/departamentos/${dept.id}`} className="inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-white">
