@@ -15,7 +15,7 @@ const AssistantHierarchy = lazy(() => import("./AssistantHierarchy"));
 const THOR_HIDDEN_ROUTES = ["/pitch"];
 const NAVBAR_HIDDEN_ROUTES = ["/thor"];
 // Rotas de checkout / pós-checkout que devem ter layout limpo (sem Navbar/Thor)
-const CHECKOUT_ROUTE_PREFIXES = ["/contratar/", "/departamento-ativo/"];
+const CHECKOUT_ROUTE_PREFIXES = ["/contratar/", "/departamento-ativo/", "/checkout"];
 
 const AppLayout = () => {
   const [testDriveAgent, setTestDriveAgent] = useState<{ key: string; name: string } | null>(null);
