@@ -176,14 +176,14 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
                 <Info className="h-4 w-4" strokeWidth={1.5} />
               </button>
             </TooltipTrigger>
-            <TooltipContent className="max-w-[280px] text-xs leading-relaxed">
-              Horas poupadas = tarefas entregues × {MINUTES_SAVED_PER_TASK} min.
-              <br />
-              Economia = (horas × R$ {HOURLY_RATE_BRL}/h) − custo dos
-              departamentos ativos ({formatBRL(metrics.deptCost)}/mês).
+            <TooltipContent className="max-w-[300px] text-xs leading-relaxed">
+              Cada departamento tem sua própria taxa de tempo poupado por
+              tarefa e custo/hora do equivalente humano — a economia é somada
+              depto a depto e descontada do custo mensal ({formatBRL(metrics.deptCost)}/mês).
               <br />
               Estimativa conservadora, calculada só sobre execuções bem-sucedidas.
             </TooltipContent>
+
           </Tooltip>
         </TooltipProvider>
       </header>
