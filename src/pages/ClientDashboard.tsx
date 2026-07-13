@@ -79,11 +79,16 @@ const ClientDashboard = () => {
     siteSummary: string | null;
   } | null>(null);
   
+  
   // MagicMoment removido · parte do fluxo legado.
   const [boardGateSkipped, setBoardGateSkipped] = useState(() => {
     if (!user) return false;
     return !!localStorage.getItem(`clauthor_board_gate_skipped_${user.id}`);
   });
+
+  // Canal global do Thor: escuta em tempo real alertas críticos de tokens
+  // e sinais ambient, e toasts persistem com CTA para abrir o Centro do Thor.
+  useThorLiveAlerts({ onOpenThorCenter: () => setActiveSection("thor-center") });
 
   // ── First-time redirect to THOR ──
   // CRÍTICO: NÃO redirecionar pra Thor se o usuário acabou de escolher um plano.
