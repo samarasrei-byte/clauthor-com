@@ -128,7 +128,7 @@ export const departments: Department[] = [
       { key: "presentation_designer", icon: FileText, role: "Designer de Apresentações", tokens: "1M" },
       { key: "ux_researcher", icon: Lightbulb, role: "UX Researcher", tokens: "1M" },
     ],
-    headcount: 9, cltCost: 70000, clauthorCost: 2997, discount: 20,
+    headcount: 9, cltCost: 70000, clauthorCost: 1297, discount: 20,
   },
   {
     id: "suporte", icon: MessageSquare, color: "text-primary",
@@ -146,7 +146,7 @@ export const departments: Department[] = [
       { key: "qa_support", icon: CheckCircle2, role: "QA de Atendimento", tokens: "1M" },
       { key: "omnichannel", icon: Network, role: "Omnichannel 24/7", tokens: "1M" },
     ],
-    headcount: 8, cltCost: 52000, clauthorCost: 2997, discount: 20,
+    headcount: 8, cltCost: 52000, clauthorCost: 1547, discount: 20,
   },
   {
     id: "rh", icon: GraduationCap, color: "text-primary",
@@ -279,7 +279,7 @@ export const departments: Department[] = [
       { key: "sourcing_analyst", icon: Search, role: "Sourcing Analyst", tokens: "1.5M" },
       { key: "contract_manager", icon: FileText, role: "Contract Manager", tokens: "1.5M" },
     ],
-    headcount: 6, cltCost: 66000, clauthorCost: 2997, discount: 25,
+    headcount: 6, cltCost: 66000, clauthorCost: 1697, discount: 25,
   },
   {
     id: "logistica", icon: Truck, color: "text-primary",
@@ -295,7 +295,7 @@ export const departments: Department[] = [
       { key: "returns_mgr", icon: Repeat, role: "Gestor de Devoluções", tokens: "1M" },
       { key: "fleet_mgr", icon: Truck, role: "Coordenador de Frota", tokens: "1.5M" },
     ],
-    headcount: 6, cltCost: 60000, clauthorCost: 2497, discount: 25,
+    headcount: 6, cltCost: 60000, clauthorCost: 1797, discount: 25,
   },
   {
     id: "qualidade", icon: ClipboardCheck, color: "text-primary",
