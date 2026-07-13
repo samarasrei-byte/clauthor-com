@@ -11,6 +11,7 @@ import { useTenantId } from "@/hooks/useTenantId";
 import { getPainOption, type PainCategory } from "@/lib/wow-router";
 import { WOW_FALLBACKS } from "@/data/wowTemplates";
 import { trackKpi } from "@/lib/kpiTracker";
+import { computeHeuristicConfidence } from "@/lib/confidence";
 import logger from "@/lib/logger";
 
 function currentWowVariant(): "form" | "voice" | undefined {
@@ -212,6 +213,16 @@ export function useWowFlow() {
     // Persist as approved delivery. Best-effort: even if DB fails, UX segue.
     try {
       if (tenantId) {
+        const elapsedMs =
+          (timingsRef.current.outputReadyAt ?? Date.now()) -
+          (timingsRef.current.formSubmittedAt ?? timingsRef.current.signupAt);
+        const confidence_score = computeHeuristicConfidence({
+          output,
+          usedFallback,
+          elapsedMs,
+          relevanceKeywords: [pain.slice(0, 40), painCategory],
+        });
+
         await supabase.from("approvals").insert({
           tenant_id: tenantId,
           title: `${option.outputLabel} · ${company}`.slice(0, 240),
@@ -226,7 +237,14 @@ export function useWowFlow() {
             source: "instant_wow",
             used_fallback: usedFallback,
             mcp_run_id: runIdRef.current,
+            confidence_score,
+            confidence_signals: {
+              output_chars: output.length,
+              used_fallback: usedFallback,
+              elapsed_ms: elapsedMs,
+            },
           },
+
 
           created_by: user.id,
           approved_by: user.id,
