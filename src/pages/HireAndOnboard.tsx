@@ -131,9 +131,7 @@ export default function HireAndOnboard() {
 
 
       <div className="max-w-3xl mx-auto px-6 py-10 space-y-8">
-        <Link to={`/departamentos/${dept.id}`} className="inline-flex items-center gap-1.5 text-sm text-white/50 hover:text-white">
-          <ArrowLeft className="w-4 h-4" /> Voltar
-        </Link>
+
 
         {/* Confirmation */}
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
@@ -192,7 +190,7 @@ export default function HireAndOnboard() {
             <div className="text-3xl font-semibold text-white">{formatBRL(dept.priceMonthly)}</div>
           </div>
           <PremiumCTAButton variant="red" onClick={activate} disabled={loading}>
-            {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Ativando…</> : "Ativar Departamento"}
+            {loading ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Redirecionando ao PayPal…</> : `Pagar ${formatBRL(dept.priceMonthly)}/mês com PayPal`}
           </PremiumCTAButton>
         </div>
       </div>
