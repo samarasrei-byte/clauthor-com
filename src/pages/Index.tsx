@@ -75,7 +75,7 @@ const CEO_TESTIMONIALS = [
     lang: "IT",
     flag: "🇮🇹",
     quote:
-      "Marketing autonomo. Post, campagne, analisi. Il mio direttore marketing oggi si limita ad approvare — non esegue più nulla.",
+      "Marketing autonomo. Post, campagne, analisi. Il mio direttore marketing oggi si limita ad approvare, non esegue più nulla.",
     name: "Marco Bellini",
     role: "CMO · Nuvia SaaS Italia",
     metric: "+412% output",
