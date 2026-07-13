@@ -69,7 +69,7 @@ export const departments: Department[] = [
       { key: "voice_ai", icon: Phone, role: "Operador de Telefonia", tokens: "1M" },
       { key: "crm_manager", icon: Star, role: "Gestor de CRM", tokens: "1M" },
     ],
-    headcount: 8, cltCost: 78000, clauthorCost: 1547, discount: 25,
+    headcount: 8, cltCost: 78000, clauthorCost: 1878, discount: 25,
   },
   {
     id: "marketing", icon: Megaphone, color: "text-primary",
@@ -90,7 +90,7 @@ export const departments: Department[] = [
       { key: "email_marketing", icon: FileText, role: "Email Marketing Manager", tokens: "1M" },
       { key: "community_mgr", icon: Users, role: "Community Manager", tokens: "1M" },
     ],
-    headcount: 11, cltCost: 88000, clauthorCost: 1447, discount: 30,
+    headcount: 11, cltCost: 88000, clauthorCost: 1797, discount: 30,
   },
   {
     id: "financeiro", icon: BarChart3, color: "text-primary",
@@ -109,7 +109,7 @@ export const departments: Department[] = [
       { key: "tax_compliance", icon: Shield, role: "Analista Fiscal", tokens: "1.5M" },
       { key: "credit_recovery", icon: Star, role: "Regularizador de Crédito", tokens: "1M" },
     ],
-    headcount: 9, cltCost: 84000, clauthorCost: 1497, discount: 25,
+    headcount: 9, cltCost: 84000, clauthorCost: 1697, discount: 25,
   },
   {
     id: "criacao", icon: Palette, color: "text-primary",
@@ -162,7 +162,7 @@ export const departments: Department[] = [
       { key: "employer_branding", icon: Award, role: "Employer Branding", tokens: "1M" },
       { key: "labor_compliance", icon: ShieldCheck, role: "Compliance Trabalhista", tokens: "1M" },
     ],
-    headcount: 6, cltCost: 42000, clauthorCost: 1497, discount: 20,
+    headcount: 6, cltCost: 42000, clauthorCost: 1477, discount: 20,
   },
   {
     id: "prospeccao", icon: Crosshair, color: "text-primary",
