@@ -44,7 +44,8 @@ export type KpiEventName =
   | "wow_voice_started"
   | "wow_voice_transcribed"
   | "wow_voice_failed"
-  | "time_to_first_value";
+  | "time_to_first_value"
+  | "home_recommendation_shown";
 
 
 export interface KpiEventPayload {
