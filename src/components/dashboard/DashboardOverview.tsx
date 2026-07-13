@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useTranslation } from "react-i18next";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import SectionLoader from "@/components/ui/section-loader";
-// GuidedOnboarding legado removido · RevolutionaryOnboardingGate global cobre esse fluxo.
+// GuidedOnboarding legado removido · fluxo unificado no Thor + QuickOnboarding.
 import HeroBriefing from "@/components/dashboard/HeroBriefing";
 import NextStepsCard from "@/components/dashboard/NextStepsCard";
 import MonthlyROICard from "@/components/dashboard/MonthlyROICard";
