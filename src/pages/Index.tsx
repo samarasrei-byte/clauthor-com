@@ -478,7 +478,7 @@ const HomePage = () => {
                     <div className="text-xs text-muted-foreground truncate">{c.role}</div>
                   </div>
                 </figcaption>
-              </figure>
+              </motion.figure>
             ))}
           </div>
         </div>
