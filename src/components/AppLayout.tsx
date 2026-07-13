@@ -59,6 +59,12 @@ const AppLayout = () => {
           <AssistantHierarchy />
         </Suspense>
       )}
+
+      {!isCheckoutRoute && (
+        <Suspense fallback={null}>
+          <CartFab />
+        </Suspense>
+      )}
     </div>
   );
 };
