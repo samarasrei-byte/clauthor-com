@@ -233,6 +233,13 @@ export default function ThorConciergeChat({
         if (reco) {
           const tag = reco.kind === "departamento" ? `departamento_${reco.deptId}` : reco.kind;
           trackKpi("thor_guide_section_play", { source, section: `chat_recommended_${tag}` });
+          trackKpi("home_recommendation_shown", { source, kind: reco.kind, dept_id: reco.deptId ?? null });
+          try {
+            sessionStorage.setItem(
+              "clauthor_home_recommendation",
+              JSON.stringify({ kind: reco.kind, deptId: reco.deptId, ts: Date.now() }),
+            );
+          } catch { /* ignore */ }
         }
       } catch (err: any) {
         if (err?.name !== "AbortError") {
