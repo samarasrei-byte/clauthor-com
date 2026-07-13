@@ -99,61 +99,12 @@ const Navbar = () => {
             <ClauthorLogo size="md" />
           </Link>
 
-          {/* Desktop Nav */}
+          {/* Desktop Nav · P1 canônica: 4 diretas + "Mais" */}
           <div className="hidden md:flex items-center gap-0">
-            {/* Solutions dropdown */}
-            <div ref={solutionsRef} className="relative">
-              <button
-                onClick={() => setSolutionsOpen(!solutionsOpen)}
-                aria-haspopup="menu"
-                aria-expanded={solutionsOpen}
-                aria-controls="nav-solutions-menu"
-                className={`px-3 py-1 rounded-md text-[13px] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
-                  solutionsOpen
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {t("navbar.solutions")}
-                <ChevronDown aria-hidden="true" className={`h-3 w-3 transition-transform ${solutionsOpen ? "rotate-180" : ""}`} />
-              </button>
-              <AnimatePresence>
-                {solutionsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                    transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                    id="nav-solutions-menu"
-                    role="menu"
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[260px] rounded-xl bg-popover border border-border/50 shadow-lg shadow-black/[0.08] dark:shadow-black/[0.3] p-1 z-50"
-                  >
-                    {[
-                      { href: "/departamentos", label: t("navbar.ai_teams_label"), desc: "20 departamentos prontos com +200 especialistas de IA" },
-                      { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Monte seu Squad" }), desc: "Escolha os especialistas e veja o custo em tempo real" },
-                      { href: "/marketplace", label: t("navbar.marketplace_label"), desc: "Especialistas de IA individuais (avançado)" },
-                      { href: "/enterprise", label: "Enterprise", desc: "Squads dedicadas, SSO, SLA 99.9% e suporte white-glove" },
-                    ].map((item) => (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        onClick={() => setSolutionsOpen(false)}
-                        className="flex flex-col gap-0.5 px-3 py-2.5 rounded-lg hover:bg-accent/60 transition-colors"
-                      >
-                        <span className="text-[13px] font-medium text-foreground">{item.label}</span>
-                        <span className="text-[11px] text-muted-foreground leading-snug">{item.desc}</span>
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Direct links */}
-            {navLinks.filter(l => !l.dropdown).map((item) => (
+            {navLinks.map((item) => (
               <Link
                 key={item.href}
-                to={item.href!}
+                to={item.href}
                 className={`px-3 py-1 rounded-md text-[13px] transition-colors ${
                   location.pathname === item.href
                     ? "text-foreground"
@@ -163,6 +114,49 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+
+            {/* "Mais" dropdown · Team Builder · Marketplace · Enterprise · Devs · API */}
+            {!user && (
+              <div ref={solutionsRef} className="relative">
+                <button
+                  onClick={() => setSolutionsOpen(!solutionsOpen)}
+                  aria-haspopup="menu"
+                  aria-expanded={solutionsOpen}
+                  aria-controls="nav-more-menu"
+                  className={`px-3 py-1 rounded-md text-[13px] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                    solutionsOpen ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {t("navbar.more", { defaultValue: "Mais" })}
+                  <ChevronDown aria-hidden="true" className={`h-3 w-3 transition-transform ${solutionsOpen ? "rotate-180" : ""}`} />
+                </button>
+                <AnimatePresence>
+                  {solutionsOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                      transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                      id="nav-more-menu"
+                      role="menu"
+                      className="absolute top-full right-0 mt-2 w-[280px] rounded-xl bg-popover border border-border/50 shadow-lg shadow-black/[0.08] dark:shadow-black/[0.3] p-1 z-50"
+                    >
+                      {moreLinks.map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setSolutionsOpen(false)}
+                          className="flex flex-col gap-0.5 px-3 py-2.5 rounded-lg hover:bg-accent/60 transition-colors"
+                        >
+                          <span className="text-[13px] font-medium text-foreground">{item.label}</span>
+                          <span className="text-[11px] text-muted-foreground leading-snug">{item.desc}</span>
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
             {isAdmin && (
               <Link
                 to="/admin"
