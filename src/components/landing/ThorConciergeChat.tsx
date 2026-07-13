@@ -1,9 +1,13 @@
 /**
  * ThorConciergeChat · chat LLM real (streaming) para o hero da home e /thor.
  *
- * Substitui o funil scripted anterior. Conversa livre, estilo ChatGPT, com o
- * Thor agindo como consultor. Ao detectar a linha `RECOMENDACAO: <dept>` no
- * final da resposta, mostra um CTA para o departamento recomendado.
+ * Agora com MEMÓRIA persistente:
+ *  - Sessão anônima via localStorage `clauthor_session` (uuid do navegador).
+ *  - Se o usuário estiver logado, memória é indexada por user_id (Supabase auth).
+ *  - No mount, busca facts salvos → cumprimenta lembrando empresa/dor.
+ *  - Depois de cada turno, envia transcript+facts pro backend.
+ *
+ * Também renderiza TUTORIAL: <slug> como TutorialCard inline.
  */
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -16,6 +20,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { trackKpi } from "@/lib/kpiTracker";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
+import { supabase } from "@/integrations/supabase/client";
+import { getTutorial, type IntegrationTutorial } from "@/lib/integrationTutorials";
+import TutorialCard from "@/components/landing/TutorialCard";
 
 /* -------------------------------------------------------------------------- */
 /*  Tipos                                                                     */
@@ -28,8 +35,8 @@ interface ChatMessage {
   id: string;
   role: Role;
   content: string;
-  /** Recomendação extraída da resposta (se houver). */
   reco?: Recommendation;
+  tutorial?: IntegrationTutorial;
 }
 
 interface ThorConciergeChatProps {
@@ -52,6 +59,20 @@ const PUBLISHABLE_KEY =
   import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
   import.meta.env.VITE_SUPABASE_ANON_KEY;
 
+const SESSION_KEY = "clauthor_session";
+
+function getSessionId(): string {
+  try {
+    const existing = localStorage.getItem(SESSION_KEY);
+    if (existing) return existing;
+    const fresh = uid();
+    localStorage.setItem(SESSION_KEY, fresh);
+    return fresh;
+  } catch {
+    return uid();
+  }
+}
+
 const VALID_DEPTS = new Set(["comercial", "atendimento", "marketing", "juridico", "financeiro", "rh"]);
 
 type RecoKind = "departamento" | "squad" | "agente";
@@ -61,30 +82,56 @@ interface Recommendation {
   deptId?: string;
 }
 
-/**
- * Extrai "RECOMENDACAO: <tipo>[:<dept>]" da resposta.
- * Formatos aceitos:
- *   RECOMENDACAO: departamento:comercial
- *   RECOMENDACAO: squad
- *   RECOMENDACAO: agente
- *   RECOMENDACAO: comercial          (legado · vira departamento)
- */
-function splitRecommendation(text: string): { visible: string; reco?: Recommendation } {
-  const match = text.match(/RECOMENDACAO\s*:\s*([a-zA-Z_]+)(?:\s*:\s*([a-zA-Z_]+))?\s*$/im);
-  if (!match) return { visible: text };
-  const visible = text.replace(match[0], "").trimEnd();
-  const a = match[1].toLowerCase().trim();
-  const b = match[2]?.toLowerCase().trim();
-
-  if (a === "departamento" && b && VALID_DEPTS.has(b)) return { visible, reco: { kind: "departamento", deptId: b } };
-  if (a === "squad") return { visible, reco: { kind: "squad" } };
-  if (a === "agente") return { visible, reco: { kind: "agente" } };
-  // legado: id direto de departamento
-  if (VALID_DEPTS.has(a)) return { visible, reco: { kind: "departamento", deptId: a } };
-  return { visible };
+interface ThorMemory {
+  facts: {
+    company_name?: string;
+    industry?: string;
+    size?: string;
+    main_pain?: string;
+    budget?: string;
+    recommended_kind?: RecoKind;
+    recommended_dept_id?: string;
+    integrations_asked?: string[];
+  };
+  transcript: Array<{ role: Role; content: string; ts?: number }>;
 }
 
-const INTRO: ChatMessage = {
+/**
+ * Extrai markers "RECOMENDACAO: ..." e "TUTORIAL: <slug>" do texto.
+ * Ambos ficam na última linha; apenas um por resposta.
+ */
+function parseMarkers(text: string): {
+  visible: string;
+  reco?: Recommendation;
+  tutorial?: IntegrationTutorial;
+} {
+  let visible = text;
+  let reco: Recommendation | undefined;
+  let tutorial: IntegrationTutorial | undefined;
+
+  // TUTORIAL primeiro (marker mais específico)
+  const tutMatch = visible.match(/TUTORIAL\s*:\s*([a-z0-9_-]+)\s*$/im);
+  if (tutMatch) {
+    const t = getTutorial(tutMatch[1]);
+    if (t) tutorial = t;
+    visible = visible.replace(tutMatch[0], "").trimEnd();
+  }
+
+  const recoMatch = visible.match(/RECOMENDACAO\s*:\s*([a-zA-Z_]+)(?:\s*:\s*([a-zA-Z_]+))?\s*$/im);
+  if (recoMatch) {
+    visible = visible.replace(recoMatch[0], "").trimEnd();
+    const a = recoMatch[1].toLowerCase().trim();
+    const b = recoMatch[2]?.toLowerCase().trim();
+    if (a === "departamento" && b && VALID_DEPTS.has(b)) reco = { kind: "departamento", deptId: b };
+    else if (a === "squad") reco = { kind: "squad" };
+    else if (a === "agente") reco = { kind: "agente" };
+    else if (VALID_DEPTS.has(a)) reco = { kind: "departamento", deptId: a };
+  }
+
+  return { visible, reco, tutorial };
+}
+
+const DEFAULT_INTRO: ChatMessage = {
   id: "intro",
   role: "assistant",
   content:
@@ -94,9 +141,34 @@ const INTRO: ChatMessage = {
 const SUGGESTIONS = [
   "Preciso escalar comercial, budget ~R$ 1.500/mês",
   "Atendimento sobrecarregado, empresa de 20 pessoas",
-  "Quero automatizar jurídico",
+  "Como faço pra conectar o Facebook?",
   "Só quero testar 1 agente antes",
 ];
+
+function buildHydratedIntro(facts: ThorMemory["facts"]): ChatMessage | null {
+  const hasAny = facts.company_name || facts.main_pain || facts.recommended_kind;
+  if (!hasAny) return null;
+
+  const parts: string[] = ["Oi de novo."];
+  if (facts.company_name && facts.main_pain) {
+    parts.push(`Na última conversa você me disse que a **${facts.company_name}** sofria com **${facts.main_pain}**.`);
+  } else if (facts.main_pain) {
+    parts.push(`Da última vez a gente falou sobre **${facts.main_pain}**.`);
+  } else if (facts.company_name) {
+    parts.push(`A gente estava conversando sobre a **${facts.company_name}**.`);
+  }
+  if (facts.recommended_kind === "departamento" && facts.recommended_dept_id) {
+    parts.push(`Cheguei a te indicar o **Departamento de ${facts.recommended_dept_id}**. Quer avançar com ele hoje ou tem algo novo?`);
+  } else {
+    parts.push("Quer continuar de onde a gente parou, ou tem algo novo?");
+  }
+
+  return {
+    id: "intro-hydrated",
+    role: "assistant",
+    content: parts.join(" "),
+  };
+}
 
 /* -------------------------------------------------------------------------- */
 /*  Componente                                                                */
@@ -108,12 +180,46 @@ export default function ThorConciergeChat({
   className,
 }: ThorConciergeChatProps) {
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<ChatMessage[]>([INTRO]);
+  const [messages, setMessages] = useState<ChatMessage[]>([DEFAULT_INTRO]);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
+  const [memoryFacts, setMemoryFacts] = useState<ThorMemory["facts"]>({});
   const abortRef = useRef<AbortController | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const sessionIdRef = useRef<string>("");
+
+  // Session id (persistente por navegador)
+  if (!sessionIdRef.current) sessionIdRef.current = getSessionId();
+
+  /* ---------------------------- Load memory on mount --------------------- */
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData.session?.access_token ?? PUBLISHABLE_KEY;
+        const res = await fetch(
+          `${CHAT_ENDPOINT}?session_id=${encodeURIComponent(sessionIdRef.current)}`,
+          {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
+        if (!res.ok) return;
+        const data = (await res.json()) as ThorMemory;
+        if (cancelled) return;
+        setMemoryFacts(data.facts ?? {});
+        const hydrated = buildHydratedIntro(data.facts ?? {});
+        if (hydrated) setMessages([hydrated]);
+      } catch (err) {
+        console.warn("[ThorConciergeChat] memory load failed", err);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Auto-scroll para a última mensagem enquanto streama.
   useEffect(() => {
@@ -144,6 +250,33 @@ export default function ThorConciergeChat({
     [recommendation],
   );
 
+  /* ------------------------------ Save memory ---------------------------- */
+  const persistMemory = useCallback(
+    async (updates: {
+      facts?: Partial<ThorMemory["facts"]>;
+      transcript?: Array<{ role: Role; content: string }>;
+    }) => {
+      try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData.session?.access_token ?? PUBLISHABLE_KEY;
+        await fetch(CHAT_ENDPOINT, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            session_id: sessionIdRef.current,
+            save: updates,
+          }),
+        });
+      } catch (err) {
+        console.warn("[ThorConciergeChat] memory save failed", err);
+      }
+    },
+    [],
+  );
+
   const sendMessage = useCallback(
     async (text: string) => {
       const clean = text.trim();
@@ -153,7 +286,6 @@ export default function ThorConciergeChat({
       const assistantId = uid();
       const assistantMsg: ChatMessage = { id: assistantId, role: "assistant", content: "" };
 
-      // Snapshot antes do setState para enviar ao servidor.
       const history = [...messages, userMsg].map((m) => ({ role: m.role, content: m.content }));
 
       setMessages((prev) => [...prev, userMsg, assistantMsg]);
@@ -165,24 +297,26 @@ export default function ThorConciergeChat({
       abortRef.current = controller;
 
       try {
+        const { data: sessionData } = await supabase.auth.getSession();
+        const token = sessionData.session?.access_token ?? PUBLISHABLE_KEY;
+
         const res = await fetch(CHAT_ENDPOINT, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ messages: history }),
+          body: JSON.stringify({
+            messages: history,
+            session_id: sessionIdRef.current,
+          }),
           signal: controller.signal,
         });
 
         if (!res.ok || !res.body) {
-          if (res.status === 429) {
-            toast.error("Muitas mensagens em pouco tempo. Aguarde alguns segundos.");
-          } else if (res.status === 402) {
-            toast.error("Créditos esgotados. Fale com o time.");
-          } else {
-            toast.error("Não consegui responder agora. Tenta de novo em instantes.");
-          }
+          if (res.status === 429) toast.error("Muitas mensagens em pouco tempo. Aguarde alguns segundos.");
+          else if (res.status === 402) toast.error("Créditos esgotados. Fale com o time.");
+          else toast.error("Não consegui responder agora. Tenta de novo em instantes.");
           setMessages((prev) => prev.filter((m) => m.id !== assistantId));
           return;
         }
@@ -197,7 +331,6 @@ export default function ThorConciergeChat({
           if (done) break;
           buffer += decoder.decode(value, { stream: true });
 
-          // Parse SSE lines
           const lines = buffer.split("\n");
           buffer = lines.pop() ?? "";
 
@@ -212,10 +345,12 @@ export default function ThorConciergeChat({
               const delta = json?.choices?.[0]?.delta?.content;
               if (typeof delta === "string" && delta.length > 0) {
                 full += delta;
-                const { visible, reco } = splitRecommendation(full);
+                const parsed = parseMarkers(full);
                 setMessages((prev) =>
                   prev.map((m) =>
-                    m.id === assistantId ? { ...m, content: visible, reco } : m,
+                    m.id === assistantId
+                      ? { ...m, content: parsed.visible, reco: parsed.reco, tutorial: parsed.tutorial }
+                      : m,
                   ),
                 );
               }
@@ -225,21 +360,49 @@ export default function ThorConciergeChat({
           }
         }
 
-        // Finaliza extração
-        const { visible, reco } = splitRecommendation(full);
+        const parsed = parseMarkers(full);
         setMessages((prev) =>
-          prev.map((m) => (m.id === assistantId ? { ...m, content: visible || full, reco } : m)),
+          prev.map((m) =>
+            m.id === assistantId
+              ? { ...m, content: parsed.visible || full, reco: parsed.reco, tutorial: parsed.tutorial }
+              : m,
+          ),
         );
-        if (reco) {
-          const tag = reco.kind === "departamento" ? `departamento_${reco.deptId}` : reco.kind;
+
+        // -------- Persist memory ------------------------------------------
+        const factPatch: Partial<ThorMemory["facts"]> = {};
+        if (parsed.reco) {
+          factPatch.recommended_kind = parsed.reco.kind;
+          if (parsed.reco.deptId) factPatch.recommended_dept_id = parsed.reco.deptId;
+
+          const tag = parsed.reco.kind === "departamento" ? `departamento_${parsed.reco.deptId}` : parsed.reco.kind;
           trackKpi("thor_guide_section_play", { source, section: `chat_recommended_${tag}` });
-          trackKpi("home_recommendation_shown", { source, kind: reco.kind, dept_id: reco.deptId ?? null });
+          trackKpi("home_recommendation_shown", { source, kind: parsed.reco.kind, dept_id: parsed.reco.deptId ?? null });
           try {
             sessionStorage.setItem(
               "clauthor_home_recommendation",
-              JSON.stringify({ kind: reco.kind, deptId: reco.deptId, ts: Date.now() }),
+              JSON.stringify({ kind: parsed.reco.kind, deptId: parsed.reco.deptId, ts: Date.now() }),
             );
           } catch { /* ignore */ }
+        }
+        if (parsed.tutorial) {
+          const prev = memoryFacts.integrations_asked ?? [];
+          if (!prev.includes(parsed.tutorial.slug)) {
+            factPatch.integrations_asked = [...prev, parsed.tutorial.slug];
+          }
+        }
+
+        const finalTranscript = [
+          ...messages.map((m) => ({ role: m.role, content: m.content })),
+          { role: userMsg.role, content: userMsg.content },
+          { role: assistantMsg.role, content: parsed.visible || full },
+        ];
+        persistMemory({
+          facts: Object.keys(factPatch).length > 0 ? factPatch : undefined,
+          transcript: finalTranscript,
+        });
+        if (Object.keys(factPatch).length > 0) {
+          setMemoryFacts((prev) => ({ ...prev, ...factPatch }));
         }
       } catch (err: any) {
         if (err?.name !== "AbortError") {
@@ -252,7 +415,7 @@ export default function ThorConciergeChat({
         abortRef.current = null;
       }
     },
-    [isStreaming, messages, source],
+    [isStreaming, messages, source, memoryFacts.integrations_asked, persistMemory],
   );
 
   const handleSubmit = useCallback(
@@ -293,6 +456,25 @@ export default function ThorConciergeChat({
 
   const chatBodyFont = { fontFamily: "'Instrument Sans', 'Inter', sans-serif" };
 
+  const hasMemory =
+    Boolean(memoryFacts.company_name || memoryFacts.main_pain || memoryFacts.recommended_kind);
+
+  const handleForget = useCallback(async () => {
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token ?? PUBLISHABLE_KEY;
+      await fetch(
+        `${CHAT_ENDPOINT}?session_id=${encodeURIComponent(sessionIdRef.current)}`,
+        { method: "DELETE", headers: { Authorization: `Bearer ${token}` } },
+      );
+      setMemoryFacts({});
+      setMessages([DEFAULT_INTRO]);
+      toast.success("Pronto, comecei do zero.");
+    } catch {
+      toast.error("Não consegui limpar agora. Tenta de novo.");
+    }
+  }, []);
+
   return (
     <div
       className={cn(
@@ -301,7 +483,6 @@ export default function ThorConciergeChat({
         className,
       )}
     >
-      {/* Header · Airy editorial */}
       <header className="px-8 py-5 border-b border-border/40 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className={cn("h-2 w-2 rounded-full transition-colors", isStreaming ? "bg-primary animate-pulse" : "bg-primary")} />
@@ -309,32 +490,41 @@ export default function ThorConciergeChat({
             Converse com o Thor
           </h2>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
-          <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
-          <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
-        </div>
+        {hasMemory ? (
+          <button
+            type="button"
+            onClick={handleForget}
+            className="text-[11px] text-muted-foreground/70 hover:text-foreground transition-colors"
+          >
+            Esquecer tudo sobre mim
+          </button>
+        ) : (
+          <div className="flex items-center gap-1.5">
+            <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
+            <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
+            <span className="h-1 w-1 rounded-full bg-muted-foreground/30" />
+          </div>
+        )}
       </header>
 
-      {/* Messages */}
       <div
         ref={scrollRef}
         className={cn("flex-1 overflow-y-auto px-8 py-8 flex flex-col gap-10", minHeight, "max-h-[560px]")}
       >
         {messages.map((m) =>
           m.role === "assistant" ? (
-            <div key={m.id} className="flex flex-col gap-2 max-w-[92%]">
+            <div key={m.id} className="flex flex-col gap-3 max-w-[92%]">
               <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground/60">
                 Thor
               </span>
-              <div
-                className="text-[15px] leading-[1.65] text-foreground"
-                style={chatBodyFont}
-              >
-                <div className="prose prose-sm prose-neutral dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-2 [&_p]:text-foreground [&_p]:leading-[1.65]">
-                  <ReactMarkdown>{m.content || (isStreaming ? "…" : "")}</ReactMarkdown>
+              {(m.content || (isStreaming && !m.tutorial)) && (
+                <div className="text-[15px] leading-[1.65] text-foreground" style={chatBodyFont}>
+                  <div className="prose prose-sm prose-neutral dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0 [&_p]:my-2 [&_p]:text-foreground [&_p]:leading-[1.65]">
+                    <ReactMarkdown>{m.content || (isStreaming ? "…" : "")}</ReactMarkdown>
+                  </div>
                 </div>
-              </div>
+              )}
+              {m.tutorial && <TutorialCard tutorial={m.tutorial} />}
             </div>
           ) : (
             <div key={m.id} className="flex flex-col items-end gap-2">
@@ -348,7 +538,6 @@ export default function ThorConciergeChat({
           ),
         )}
 
-        {/* Recommendation · editorial card matching passo 3 do onboarding */}
         {recommendation && !isStreaming && (
           <article className="rounded-2xl border border-primary/25 bg-primary/[0.03] p-6 space-y-5">
             <div className="space-y-1">
@@ -394,7 +583,6 @@ export default function ThorConciergeChat({
         )}
       </div>
 
-      {/* Footer · chips + composer */}
       <footer className="px-8 pb-7 pt-2">
         {messages.length === 1 && (
           <div className="flex flex-wrap gap-2 mb-5">
