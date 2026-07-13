@@ -46,7 +46,7 @@ export function LanguageSelector() {
       </DropdownMenuTrigger>
       <DropdownMenuContent 
         align="end" 
-        className="w-48 max-h-80 overflow-y-auto glass-card border-white/10 z-[100]"
+        className="w-48 max-h-80 overflow-y-auto bg-popover/95 backdrop-blur-xl border border-border shadow-xl z-[100]"
       >
         {languages.map((lang) => (
           <DropdownMenuItem
