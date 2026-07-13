@@ -20,10 +20,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
+  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 import { useAuth } from "@/hooks/useAuth";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { useThorTouchpoints } from "@/hooks/useThorTouchpoints";
+import { trackKpi } from "@/lib/kpiTracker";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -175,7 +180,7 @@ export default function ThorCenter({ onNavigate }: Props) {
     return merged.filter((e) => new Date(e.when).getTime() >= min).slice(0, 40);
   }, [touchpoints, tokenAlerts, period]);
 
-  const resolveSignal = async (signalId: string) => {
+  const resolveSignal = async (signalId: string, kind?: string) => {
     const { error } = await supabase
       .from("ambient_signals")
       .update({ status: "resolved" })
@@ -185,10 +190,11 @@ export default function ThorCenter({ onNavigate }: Props) {
       return;
     }
     toast.success("Marcado como resolvido.");
+    trackKpi("thor_center_signal_resolved", { source: "dashboard", signal_kind: kind });
     qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
   };
 
-  const resolveSignalsBulk = async (ids: string[]) => {
+  const resolveSignalsBulk = async (ids: string[], kind?: string) => {
     if (ids.length === 0) return;
     const { error } = await supabase
       .from("ambient_signals")
@@ -199,6 +205,7 @@ export default function ThorCenter({ onNavigate }: Props) {
       return;
     }
     toast.success(`${ids.length} sinais resolvidos.`);
+    trackKpi("thor_center_signal_bulk_resolved", { source: "dashboard", signal_kind: kind, count: ids.length });
     qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
   };
 
@@ -222,7 +229,18 @@ export default function ThorCenter({ onNavigate }: Props) {
         qc.invalidateQueries({ queryKey: ["thor-center-approvals", user.id] });
       }},
     });
+    trackKpi("thor_center_approval_resolved", { source: "dashboard" });
     qc.invalidateQueries({ queryKey: ["thor-center-approvals", user.id] });
+  };
+
+  // Bulk confirm: só pede confirmação quando o grupo é grande (>= 3)
+  const [bulkConfirm, setBulkConfirm] = useState<{ kind: string; ids: string[] } | null>(null);
+  const requestBulkResolve = (kind: string, ids: string[]) => {
+    if (ids.length >= 3) {
+      setBulkConfirm({ kind, ids });
+    } else {
+      void resolveSignalsBulk(ids, kind);
+    }
   };
 
   // Contagens por tipo dentro do período ativo (para mostrar no header/quick actions)
@@ -482,7 +500,7 @@ export default function ThorCenter({ onNavigate }: Props) {
                     </Badge>
                     {signals.length > 1 && (
                       <button
-                        onClick={() => void resolveSignalsBulk(signals.map((s) => s.id))}
+                        onClick={() => requestBulkResolve(kind, signals.map((s) => s.id))}
                         className="ml-auto text-[10px] text-muted-foreground hover:text-primary transition-colors"
                         title={`Resolver os ${signals.length} sinais deste grupo`}
                       >
@@ -509,7 +527,7 @@ export default function ThorCenter({ onNavigate }: Props) {
                           variant="ghost"
                           className="h-7 w-7 shrink-0"
                           title="Marcar como resolvido"
-                          onClick={() => resolveSignal(s.id)}
+                          onClick={() => resolveSignal(s.id, s.kind)}
                         >
                           <Check className="h-3.5 w-3.5" />
                         </Button>
@@ -540,6 +558,29 @@ export default function ThorCenter({ onNavigate }: Props) {
           </Card>
         </div>
       </div>
+
+      <AlertDialog open={!!bulkConfirm} onOpenChange={(o) => { if (!o) setBulkConfirm(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Resolver {bulkConfirm?.ids.length ?? 0} sinais?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Todos os sinais deste grupo serão marcados como resolvidos e sairão do Thor Center.
+              Essa ação não pode ser desfeita em lote.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (bulkConfirm) void resolveSignalsBulk(bulkConfirm.ids, bulkConfirm.kind);
+                setBulkConfirm(null);
+              }}
+            >
+              Resolver todos
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

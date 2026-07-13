@@ -45,7 +45,10 @@ export type KpiEventName =
   | "wow_voice_transcribed"
   | "wow_voice_failed"
   | "time_to_first_value"
-  | "home_recommendation_shown";
+  | "home_recommendation_shown"
+  | "thor_center_approval_resolved"
+  | "thor_center_signal_resolved"
+  | "thor_center_signal_bulk_resolved";
 
 
 export interface KpiEventPayload {
@@ -80,6 +83,8 @@ export interface KpiEventPayload {
   cached?: boolean;
   kind?: "departamento" | "squad" | "agente";
   dept_id?: string | null;
+  count?: number;
+  signal_kind?: string;
 }
 
 
