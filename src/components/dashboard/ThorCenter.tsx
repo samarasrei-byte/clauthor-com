@@ -332,11 +332,20 @@ export default function ThorCenter({ onNavigate }: Props) {
                   )}
                 >
                   <div className="flex items-start gap-2">
-                    <AlertTriangle className={cn("h-4 w-4 mt-0.5", s.severity === "critical" ? "text-destructive" : "text-amber-500")} />
-                    <div className="min-w-0">
+                    <AlertTriangle className={cn("h-4 w-4 mt-0.5 shrink-0", s.severity === "critical" ? "text-destructive" : "text-amber-500")} />
+                    <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium">{s.title}</p>
                       <p className="text-[11px] text-muted-foreground">{relativeDate(s.created_at)}</p>
                     </div>
+                    <Button
+                      size="icon"
+                      variant="ghost"
+                      className="h-7 w-7 shrink-0"
+                      title="Marcar como resolvido"
+                      onClick={() => resolveSignal(s.id)}
+                    >
+                      <Check className="h-3.5 w-3.5" />
+                    </Button>
                   </div>
                 </div>
               ))}
