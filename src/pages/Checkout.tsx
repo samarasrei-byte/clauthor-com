@@ -7,13 +7,14 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
-import { formatBRL } from "@/data/departmentPackages";
+import { formatBRL, getDepartmentById } from "@/data/departmentPackages";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useDeptSelection } from "@/stores/deptSelection";
 import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
+import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
 
 export default function Checkout() {
   const navigate = useNavigate();
