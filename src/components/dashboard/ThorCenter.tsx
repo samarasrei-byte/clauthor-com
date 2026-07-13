@@ -7,14 +7,15 @@
  * Objetivo: o cliente nunca fica sem saber o que o Thor já falou com ele
  * e sempre encontra os próximos passos concretos num único lugar.
  */
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { formatDistanceToNow } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { motion } from "framer-motion";
 import {
   Brain, Bell, Sparkles, ArrowRight, CheckCircle2, AlertTriangle,
-  Coins, Radar, Inbox, ExternalLink, Clock,
+  Coins, Radar, Inbox, ExternalLink, Clock, Check,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
