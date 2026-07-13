@@ -55,18 +55,28 @@ const Navbar = () => {
     navigate("/");
   };
 
-  const navLinks = [
-    { label: t("navbar.solutions"), dropdown: true },
-    ...(user
-      ? [
-          { label: t("nav.dashboard"), href: "/dashboard" },
-          { label: t("nav.my_agents"), href: "/agents" },
-        ]
-      : [
-          // Header enxuto: Soluções · Preços · Como funciona (departamentos vive dentro de Soluções).
-          { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
-          { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
-        ]),
+  // P1 · consolidação: menu principal enxuto e canônico.
+  //  Público:  Departamentos · Como funciona · Preços · Comunidade · Entrar
+  //  Logado:   Painel · Meus agentes  (o resto vive em "Mais")
+  //  "Mais":   Team Builder · Marketplace · Enterprise · Developers · API
+  const navLinks = user
+    ? [
+        { label: t("nav.dashboard"), href: "/dashboard" },
+        { label: t("nav.my_agents"), href: "/agents" },
+      ]
+    : [
+        { label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }), href: "/departamentos" },
+        { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
+        { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
+        { label: t("nav.community", { defaultValue: "Comunidade" }), href: "/community" },
+      ];
+
+  const moreLinks = [
+    { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Monte seu Squad" }), desc: "Escolha especialistas e veja o custo em tempo real" },
+    { href: "/marketplace", label: t("navbar.marketplace_label", { defaultValue: "Marketplace" }), desc: "Especialistas de IA individuais (avançado)" },
+    { href: "/enterprise", label: "Enterprise", desc: "Squads dedicadas, SSO, SLA 99.9% e suporte white-glove" },
+    { href: "/developers", label: "Developers", desc: "APIs, MCP Server e integrações" },
+    { href: "/api-docs", label: "API Docs", desc: "Documentação técnica completa" },
   ];
 
 
@@ -89,61 +99,12 @@ const Navbar = () => {
             <ClauthorLogo size="md" />
           </Link>
 
-          {/* Desktop Nav */}
+          {/* Desktop Nav · P1 canônica: 4 diretas + "Mais" */}
           <div className="hidden md:flex items-center gap-0">
-            {/* Solutions dropdown */}
-            <div ref={solutionsRef} className="relative">
-              <button
-                onClick={() => setSolutionsOpen(!solutionsOpen)}
-                aria-haspopup="menu"
-                aria-expanded={solutionsOpen}
-                aria-controls="nav-solutions-menu"
-                className={`px-3 py-1 rounded-md text-[13px] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
-                  solutionsOpen
-                    ? "text-foreground"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {t("navbar.solutions")}
-                <ChevronDown aria-hidden="true" className={`h-3 w-3 transition-transform ${solutionsOpen ? "rotate-180" : ""}`} />
-              </button>
-              <AnimatePresence>
-                {solutionsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 6, scale: 0.98 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 6, scale: 0.98 }}
-                    transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
-                    id="nav-solutions-menu"
-                    role="menu"
-                    className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[260px] rounded-xl bg-popover border border-border/50 shadow-lg shadow-black/[0.08] dark:shadow-black/[0.3] p-1 z-50"
-                  >
-                    {[
-                      { href: "/departamentos", label: t("navbar.ai_teams_label"), desc: "20 departamentos prontos com +200 especialistas de IA" },
-                      { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Monte seu Squad" }), desc: "Escolha os especialistas e veja o custo em tempo real" },
-                      { href: "/marketplace", label: t("navbar.marketplace_label"), desc: "Especialistas de IA individuais (avançado)" },
-                      { href: "/enterprise", label: "Enterprise", desc: "Squads dedicadas, SSO, SLA 99.9% e suporte white-glove" },
-                    ].map((item) => (
-                      <Link
-                        key={item.href}
-                        to={item.href}
-                        onClick={() => setSolutionsOpen(false)}
-                        className="flex flex-col gap-0.5 px-3 py-2.5 rounded-lg hover:bg-accent/60 transition-colors"
-                      >
-                        <span className="text-[13px] font-medium text-foreground">{item.label}</span>
-                        <span className="text-[11px] text-muted-foreground leading-snug">{item.desc}</span>
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            {/* Direct links */}
-            {navLinks.filter(l => !l.dropdown).map((item) => (
+            {navLinks.map((item) => (
               <Link
                 key={item.href}
-                to={item.href!}
+                to={item.href}
                 className={`px-3 py-1 rounded-md text-[13px] transition-colors ${
                   location.pathname === item.href
                     ? "text-foreground"
@@ -153,6 +114,49 @@ const Navbar = () => {
                 {item.label}
               </Link>
             ))}
+
+            {/* "Mais" dropdown · Team Builder · Marketplace · Enterprise · Devs · API */}
+            {!user && (
+              <div ref={solutionsRef} className="relative">
+                <button
+                  onClick={() => setSolutionsOpen(!solutionsOpen)}
+                  aria-haspopup="menu"
+                  aria-expanded={solutionsOpen}
+                  aria-controls="nav-more-menu"
+                  className={`px-3 py-1 rounded-md text-[13px] transition-colors flex items-center gap-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 ${
+                    solutionsOpen ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {t("navbar.more", { defaultValue: "Mais" })}
+                  <ChevronDown aria-hidden="true" className={`h-3 w-3 transition-transform ${solutionsOpen ? "rotate-180" : ""}`} />
+                </button>
+                <AnimatePresence>
+                  {solutionsOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 6, scale: 0.98 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 6, scale: 0.98 }}
+                      transition={{ duration: 0.15, ease: [0.16, 1, 0.3, 1] }}
+                      id="nav-more-menu"
+                      role="menu"
+                      className="absolute top-full right-0 mt-2 w-[280px] rounded-xl bg-popover border border-border/50 shadow-lg shadow-black/[0.08] dark:shadow-black/[0.3] p-1 z-50"
+                    >
+                      {moreLinks.map((item) => (
+                        <Link
+                          key={item.href}
+                          to={item.href}
+                          onClick={() => setSolutionsOpen(false)}
+                          className="flex flex-col gap-0.5 px-3 py-2.5 rounded-lg hover:bg-accent/60 transition-colors"
+                        >
+                          <span className="text-[13px] font-medium text-foreground">{item.label}</span>
+                          <span className="text-[11px] text-muted-foreground leading-snug">{item.desc}</span>
+                        </Link>
+                      ))}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
             {isAdmin && (
               <Link
                 to="/admin"
@@ -230,13 +234,19 @@ const Navbar = () => {
             className="md:hidden border-t border-border/30 bg-background/95 backdrop-blur-2xl overflow-hidden max-h-[calc(100dvh-3rem)] overflow-y-auto"
           >
             <div className="px-5 py-5 space-y-0.5">
-              {[
-                { href: "/marketplace", label: t("navbar.marketplace_label") },
-                { href: "/departamentos", label: t("navbar.ai_teams_label") },
-                { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Build Team" }) },
-                { href: "/enterprise", label: "Enterprise" },
-                
-              ].map((item) => (
+              {/* Principais */}
+              {(user
+                ? [
+                    { href: "/dashboard", label: t("nav.dashboard") },
+                    { href: "/agents", label: t("nav.my_agents") },
+                  ]
+                : [
+                    { href: "/departamentos", label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }) },
+                    { href: "/how-it-works", label: t("nav.how_it_works", { defaultValue: "Como funciona" }) },
+                    { href: "/pricing", label: t("nav.pricing", { defaultValue: "Preços" }) },
+                    { href: "/community", label: t("nav.community", { defaultValue: "Comunidade" }) },
+                  ]
+              ).map((item) => (
                 <Link
                   key={item.href}
                   to={item.href}
@@ -250,15 +260,24 @@ const Navbar = () => {
                   {item.label}
                 </Link>
               ))}
-              {user && (
-                <>
-                  <Link to="/dashboard" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] text-muted-foreground hover:text-foreground">
-                    {t("nav.dashboard")}
-                  </Link>
-                  <Link to="/agents" onClick={() => setMobileOpen(false)} className="block px-3 py-2.5 rounded-lg text-[14px] text-muted-foreground hover:text-foreground">
-                    {t("nav.my_agents")}
-                  </Link>
-                </>
+
+              {/* "Mais" · secundárias · só público */}
+              {!user && (
+                <div className="pt-3 mt-2 border-t border-border/30">
+                  <p className="px-3 pb-1 text-[10px] uppercase tracking-[0.14em] text-muted-foreground/70">
+                    {t("navbar.more", { defaultValue: "Mais" })}
+                  </p>
+                  {moreLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      to={item.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="block px-3 py-2 rounded-lg text-[13px] text-muted-foreground hover:text-foreground"
+                    >
+                      {item.label}
+                    </Link>
+                  ))}
+                </div>
               )}
               {isAdmin && (
                 <Link to="/admin" onClick={() => setMobileOpen(false)} className="flex items-center gap-1.5 px-3 py-2.5 rounded-lg text-[14px] text-muted-foreground hover:text-foreground">
