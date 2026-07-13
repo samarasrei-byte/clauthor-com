@@ -105,6 +105,7 @@ const ComercialFunil = lazyRetry(() => import("./pages/ComercialFunil"));
 const DepartmentDetail = lazyRetry(() => import("./pages/DepartmentDetail"));
 const HireAndOnboard = lazyRetry(() => import("./pages/HireAndOnboard"));
 const DepartmentActivated = lazyRetry(() => import("./pages/DepartmentActivated"));
+const Checkout = lazyRetry(() => import("./pages/Checkout"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
