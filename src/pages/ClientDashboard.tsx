@@ -743,6 +743,12 @@ const ClientDashboard = () => {
                   </>
                 )}
 
+                {activeSection === "thor-center" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <ThorCenter onNavigate={handleSidebarNav} />
+                  </Suspense>
+                )}
+
                 <DashboardSectionRenderer
                   activeSection={activeSection}
                   realChartData={realChartData}
