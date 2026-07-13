@@ -187,6 +187,20 @@ export default function ThorCenter({ onNavigate }: Props) {
     qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
   };
 
+  const resolveSignalsBulk = async (ids: string[]) => {
+    if (ids.length === 0) return;
+    const { error } = await supabase
+      .from("ambient_signals")
+      .update({ status: "resolved" })
+      .in("id", ids);
+    if (error) {
+      toast.error("Não consegui resolver o grupo inteiro.");
+      return;
+    }
+    toast.success(`${ids.length} sinais resolvidos.`);
+    qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
+  };
+
   const resolveApproval = async (approvalId: string) => {
     if (!user?.id) return;
     const { error } = await supabase
