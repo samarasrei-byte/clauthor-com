@@ -48,6 +48,10 @@ const Typewriter = ({ text, delay = 0 }: { text: string; delay?: number }) => {
 const PanelMockup = () => {
   return (
     <div className="relative rounded-t-3xl border-t border-x border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent overflow-hidden shadow-[0_-30px_80px_-30px_hsl(0_85%_55%/0.15)]">
+      {/* Mobile: horizontal scroll preserves the desktop dashboard look
+          without collapsing KPI labels over values. */}
+      <div className="overflow-x-auto md:overflow-visible [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="min-w-[720px] md:min-w-0">
       {/* Chrome */}
       <div className="flex items-center gap-1.5 px-5 py-3 border-b border-white/10 bg-black/40">
         <span className="h-2.5 w-2.5 rounded-full bg-white/15" />
@@ -63,6 +67,7 @@ const PanelMockup = () => {
       </div>
 
       <div className="grid grid-cols-12 h-[440px] overflow-hidden">
+
         {/* Sidebar */}
         <aside className="col-span-3 border-r border-white/10 p-4 space-y-1 bg-black/20">
           <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-white/40 px-2 pb-2">
@@ -156,8 +161,11 @@ const PanelMockup = () => {
           </div>
         </main>
       </div>
+        </div>
+      </div>
       <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-black via-black/80 to-transparent pointer-events-none" />
     </div>
+
   );
 };
 
