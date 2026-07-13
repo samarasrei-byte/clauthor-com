@@ -15,6 +15,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useTranslation } from "react-i18next";
+import ThorConsultantPanel from "@/components/thor/ThorConsultantPanel";
 
 const sectorOptions = ["Atendimento", "Vendas", "Marketing", "Financeiro", "RH", "Jurídico", "TI", "Outro"];
 const toneOptions = ["Formal", "Amigável", "Técnico", "Casual", "Corporativo"];
