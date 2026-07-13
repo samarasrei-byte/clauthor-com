@@ -267,10 +267,22 @@ export default function ThorConciergeChat({
   );
 
   const goToRecommended = useCallback(() => {
-    if (!recommendedDept) return;
-    trackKpi("thor_guide_section_play", { source, section: `chat_cta_${recommendedDept}` });
-    navigate(`/departamentos/${recommendedDept}`);
-  }, [navigate, recommendedDept, source]);
+    if (!recommendation) return;
+    if (recommendation.kind === "departamento" && recommendation.deptId) {
+      trackKpi("thor_guide_section_play", { source, section: `chat_cta_departamento_${recommendation.deptId}` });
+      navigate(`/departamentos/${recommendation.deptId}`);
+      return;
+    }
+    if (recommendation.kind === "squad") {
+      trackKpi("thor_guide_section_play", { source, section: "chat_cta_squad" });
+      navigate("/team-builder");
+      return;
+    }
+    if (recommendation.kind === "agente") {
+      trackKpi("thor_guide_section_play", { source, section: "chat_cta_agente" });
+      navigate("/marketplace");
+    }
+  }, [navigate, recommendation, source]);
 
   return (
     <div
