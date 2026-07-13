@@ -447,9 +447,11 @@ const HomePage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {CEO_TESTIMONIALS.map((c) => (
-              <figure
+              <motion.figure
                 key={c.name}
-                className="group p-7 rounded-2xl bg-card border border-border/60 hover:border-foreground/25 transition-colors flex flex-col"
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                className="group p-7 rounded-2xl bg-card border border-border/60 hover:border-foreground/25 hover:shadow-[0_25px_60px_-25px_hsl(0_0%_0%/0.25)] transition-all flex flex-col"
               >
                 <div className="flex items-center justify-between mb-6">
                   <div className="inline-flex items-center gap-2">
