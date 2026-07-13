@@ -447,36 +447,38 @@ const HomePage = () => {
         <CaseStudySection />
       </Suspense>
 
-      {/* ═══════════ CTA FINAL ═══════════ */}
-      <section className="max-w-4xl mx-auto px-6 py-32 sm:py-40 text-center" aria-label="CTA">
-        <motion.h2
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.035em] leading-[0.98] text-foreground mb-8"
-        >
-          Seu departamento
-          <br />
-          <span className="text-primary">começa em 90 segundos.</span>
-        </motion.h2>
-        <p className="text-lg text-muted-foreground max-w-lg mx-auto mb-12">
-          Escolha a dor. A Clauthor entrega o time. Você comanda de casa.
-        </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-          <button
-            onClick={() => startFlow("final")}
-            className="group inline-flex items-center gap-2 px-9 py-4 rounded-full bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-opacity"
+      {/* ═══════════ CTA FINAL (dark) ═══════════ */}
+      <section className="dark bg-black text-white" aria-label="CTA">
+        <div className="max-w-4xl mx-auto px-6 py-32 sm:py-40 text-center">
+          <motion.h2
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.035em] leading-[0.98] text-white mb-8"
           >
-            Escolher meu departamento
-            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-          </button>
-          <Link
-            to="/thor"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Falar com o Thor primeiro →
-          </Link>
+            Seu departamento
+            <br />
+            <span className="text-primary">começa em 90 segundos.</span>
+          </motion.h2>
+          <p className="text-lg text-white/60 max-w-lg mx-auto mb-12">
+            Escolha a dor. A Clauthor entrega o time. Você comanda de casa.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <button
+              onClick={() => startFlow("final")}
+              className="group inline-flex items-center gap-2 px-9 py-4 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]"
+            >
+              Escolher meu departamento
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+            </button>
+            <Link
+              to="/thor"
+              className="text-sm text-white/60 hover:text-white transition-colors"
+            >
+              Falar com o Thor primeiro →
+            </Link>
+          </div>
         </div>
       </section>
 
