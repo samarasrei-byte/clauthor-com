@@ -51,6 +51,7 @@ const painToDept: Record<Pain, string> = {
 const deptLabel: Record<string, string> = {
   comercial: "Comercial & Vendas",
   suporte: "Atendimento & Sucesso",
+  atendimento: "Atendimento & Sucesso",
   marketing: "Marketing & Conteúdo",
   operacoes: "Operações",
   juridico: "Jurídico",
@@ -59,6 +60,15 @@ const deptLabel: Record<string, string> = {
   rh: "Pessoas & RH",
   financeiro: "Financeiro",
 };
+
+/** Normalize aliases coming from the home Thor chat. */
+const deptAlias: Record<string, string> = {
+  atendimento: "suporte",
+};
+
+export function normalizeDeptId(id: string): string {
+  return deptAlias[id] ?? id;
+}
 
 const empathyByPain: Record<Pain, string> = {
   leads_vendas: "Vender mais sem contratar mais é a dor #1 de quem escala.",
