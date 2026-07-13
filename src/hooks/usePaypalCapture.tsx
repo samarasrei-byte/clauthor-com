@@ -270,6 +270,11 @@ export function usePaypalCapture() {
           queryClient.invalidateQueries({ queryKey: ["payment-history"] });
           queryClient.invalidateQueries({ queryKey: ["subscriptions"] });
 
+          // Limpa o carrinho de departamentos (multi-cart) após ativação bem-sucedida.
+          try {
+            localStorage.removeItem("clauthor_dept_cart_v1");
+          } catch { /* ignore storage errors */ }
+
           // ── Vertical-specific post-checkout redirect (Advocacia) ──
           // UX: leva direto ao painel isolado pra evitar overload do dashboard genérico.
           if (localStorage.getItem("advocacia_post_checkout") === "1") {
