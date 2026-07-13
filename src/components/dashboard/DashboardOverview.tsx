@@ -30,6 +30,7 @@ const DashboardSkeleton = lazy(() => import("./DashboardSkeleton"));
 const LiveActivityFeed = lazy(() => import("./LiveActivityFeed").then(m => ({ default: m.LiveActivityFeed })));
 const ContractedDepartments = lazy(() => import("./ContractedDepartments"));
 const FirstDeliveryCard = lazy(() => import("./FirstDeliveryCard"));
+const AmbientSignalsPanel = lazy(() => import("./AmbientSignalsPanel"));
 
 
 interface Props {
@@ -77,6 +78,9 @@ const DashboardOverview = ({
       <ErrorBoundary>
         <Suspense fallback={<SectionLoader />}>
           <div className="space-y-5">
+            {/* Ambient Agents · sinais proativos detectados sem prompt */}
+            <AmbientSignalsPanel onNavigate={onSetActiveSection} />
+
             {/* PRIMEIRA DOBRA · P2 · ROI do mês em destaque · prova visível */}
             <MonthlyROICard onCTA={() => onSetActiveSection("omnix")} />
 
