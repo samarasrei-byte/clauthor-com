@@ -25,8 +25,7 @@ const CompanyBoardGate = lazy(() => import("@/components/dashboard/CompanyBoardG
 const DepartmentSetup = lazy(() => import("@/components/dashboard/DepartmentSetup"));
 const CompanyOnboardingWizard = lazy(() => import("@/components/dashboard/CompanyOnboardingWizard"));
 import PostPaymentCelebration from "@/components/dashboard/PostPaymentCelebration";
-// Onboarding legado (Quick/FirstAccess/MagicMoment) removido · substituído pelo
-// RevolutionaryOnboardingGate global montado em AppLayout.
+// Onboarding legado removido · fluxo unificado no Thor + QuickOnboarding.
 import { usePaypalCapture } from "@/hooks/usePaypalCapture";
 import { useHireIntentFlow } from "@/hooks/useHireIntentFlow";
 import { usePostPaymentFlow } from "@/hooks/usePostPaymentFlow";
@@ -250,8 +249,7 @@ const ClientDashboard = () => {
     return !!localStorage.getItem("hireIntent") || !!checkoutSummary;
   }, [checkoutSummary]);
 
-  // Onboarding do primeiro contato agora é 100% delegado ao RevolutionaryOnboardingGate
-  // (montado em AppLayout via useGuidedOnboarding). Nada a fazer aqui.
+  // Onboarding do primeiro contato agora é delegado ao Thor + QuickOnboarding.
 
   const { credits, remainingCredits, usagePercentage } = useCredits();
   usePaypalCapture();
@@ -607,8 +605,6 @@ const ClientDashboard = () => {
         </div>
       )}
 
-      {/* QuickOnboardingWizard + MagicMomentCard + FirstAccessOnboarding removidos.
-          Onboarding do primeiro contato: RevolutionaryOnboardingGate global (AppLayout). */}
 
       <CheckoutSummaryDialog data={checkoutSummary} onApprove={handleApprove} onCancel={cancelCheckout} />
 
