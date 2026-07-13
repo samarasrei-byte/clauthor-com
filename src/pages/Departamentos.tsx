@@ -417,7 +417,35 @@ const Departamentos = () => {
                     )}
                   </button>
 
-
+                  {/* Add-to-cart secondary action — permite montar carrinho sem sair da listagem */}
+                  {(() => {
+                    const inCart = cartItems.some((c) => c.id === dept.id);
+                    return (
+                      <button
+                        type="button"
+                        onClick={() =>
+                          cartToggle({
+                            id: dept.id,
+                            name: t(`squads.dept_${dept.id}`),
+                            priceMonthly: deptPrice,
+                            agentSlugs: dept.agents.map((a) => a.key),
+                          })
+                        }
+                        className={`w-full h-9 rounded-lg text-xs font-medium inline-flex items-center justify-center gap-1.5 transition-colors ${
+                          inCart
+                            ? "border border-emerald-500/30 bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/15"
+                            : "border border-white/10 bg-white/[0.02] text-white/70 hover:bg-white/[0.05] hover:text-white"
+                        }`}
+                        aria-label={inCart ? "Remover do carrinho" : "Adicionar ao carrinho"}
+                      >
+                        {inCart ? (
+                          <><Check className="h-3.5 w-3.5" /> No carrinho</>
+                        ) : (
+                          <><Plus className="h-3.5 w-3.5" /> Adicionar ao carrinho</>
+                        )}
+                      </button>
+                    );
+                  })()}
                 </div>
               </motion.div>
             );
