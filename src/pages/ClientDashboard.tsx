@@ -39,6 +39,7 @@ import OnboardingResumeBanner from "@/components/OnboardingResumeBanner";
 import DashboardEmptyState from "@/components/dashboard/DashboardEmptyState";
 import { loadDiagnosis, loadThorBriefing, hasSeenDiagnosisRecap, markDiagnosisRecapSeen } from "@/lib/diagnosis-routing";
 import DiagnosisRecapDialog from "@/components/dashboard/DiagnosisRecapDialog";
+const ThorFirstTouchWelcome = lazy(() => import("@/components/dashboard/ThorFirstTouchWelcome"));
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
   window.location.reload();
