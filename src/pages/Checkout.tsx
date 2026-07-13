@@ -196,7 +196,33 @@ export default function Checkout() {
               </div>
             </Card>
 
-            {/* Included */}
+
+            {/* Live agent scenes per cart item */}
+            <div className="space-y-3">
+              <div className="flex items-center gap-2">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-70 animate-ping" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400" />
+                </span>
+                <div className="text-xs uppercase tracking-wider text-white/50">
+                  Seu time já está esquentando
+                </div>
+              </div>
+              {items.map((i) => {
+                const dept = getDepartmentById(i.id);
+                const dialogue = dept?.timelineDemo?.map((t) => t.outcome).filter(Boolean);
+                return (
+                  <div key={`scene-${i.id}`} className="space-y-1.5">
+                    <div className="text-[11px] text-white/60 px-1">{i.name}</div>
+                    <AgentsWorkingScene
+                      agentSlugs={i.agentSlugs}
+                      dialogue={dialogue}
+                    />
+                  </div>
+                );
+              })}
+            </div>
+
             <Card className="p-6 bg-white/[0.02] border-white/10 rounded-2xl">
               <div className="text-xs uppercase tracking-wider text-white/40 mb-3">Incluso</div>
               <ul className="space-y-2 text-sm text-white/80">
