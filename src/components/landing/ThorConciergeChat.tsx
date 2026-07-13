@@ -369,7 +369,7 @@ export default function ThorConciergeChat({
             type="submit"
             size="icon"
             disabled={isStreaming || !input.trim()}
-            className="h-11 w-11 shrink-0"
+            className="h-11 w-11 shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_8px_24px_-8px_hsl(var(--primary)/0.55)] disabled:shadow-none transition-all"
             aria-label="Enviar"
           >
             {isStreaming ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
