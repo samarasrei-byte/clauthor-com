@@ -19,6 +19,17 @@ import { useTenantId } from "@/hooks/useTenantId";
 import { cn } from "@/lib/utils";
 import ironbergSlide1 from "@/assets/approval-ironberg/ironberg-1.png.asset.json";
 import ironbergSlide2 from "@/assets/approval-ironberg/ironberg-2.png.asset.json";
+import ConfidenceBadge, { normalizeConfidence, derivedConfidence } from "./ConfidenceBadge";
+
+// Extrai o confidence score do content ou deriva de forma determinística (fallback demo).
+const getApprovalConfidence = (a: { id: string; content?: any; __demo?: boolean }): number | null => {
+  const raw = a.content?.confidence_score ?? a.content?.confidence;
+  const norm = normalizeConfidence(raw);
+  if (norm != null) return norm;
+  // Fallback determinístico apenas para demos ou quando o agente não reportou.
+  if (a.__demo) return derivedConfidence(a.id);
+  return null;
+};
 
 
 type Status = "pending" | "in_revision" | "approved" | "rejected";
