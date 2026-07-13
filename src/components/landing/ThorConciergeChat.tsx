@@ -54,28 +54,48 @@ const PUBLISHABLE_KEY =
 
 const VALID_DEPTS = new Set(["comercial", "atendimento", "marketing", "juridico", "financeiro", "rh"]);
 
-/** Extrai "RECOMENDACAO: <dept>" da resposta e devolve o texto limpo + deptId. */
-function splitRecommendation(text: string): { visible: string; deptId?: string } {
-  const match = text.match(/RECOMENDACAO\s*:\s*([a-zA-Z_]+)\s*$/im);
+type RecoKind = "departamento" | "squad" | "agente";
+
+interface Recommendation {
+  kind: RecoKind;
+  deptId?: string;
+}
+
+/**
+ * Extrai "RECOMENDACAO: <tipo>[:<dept>]" da resposta.
+ * Formatos aceitos:
+ *   RECOMENDACAO: departamento:comercial
+ *   RECOMENDACAO: squad
+ *   RECOMENDACAO: agente
+ *   RECOMENDACAO: comercial          (legado — vira departamento)
+ */
+function splitRecommendation(text: string): { visible: string; reco?: Recommendation } {
+  const match = text.match(/RECOMENDACAO\s*:\s*([a-zA-Z_]+)(?:\s*:\s*([a-zA-Z_]+))?\s*$/im);
   if (!match) return { visible: text };
-  const dept = match[1].toLowerCase().trim();
   const visible = text.replace(match[0], "").trimEnd();
-  if (!VALID_DEPTS.has(dept)) return { visible };
-  return { visible, deptId: dept };
+  const a = match[1].toLowerCase().trim();
+  const b = match[2]?.toLowerCase().trim();
+
+  if (a === "departamento" && b && VALID_DEPTS.has(b)) return { visible, reco: { kind: "departamento", deptId: b } };
+  if (a === "squad") return { visible, reco: { kind: "squad" } };
+  if (a === "agente") return { visible, reco: { kind: "agente" } };
+  // legado: id direto de departamento
+  if (VALID_DEPTS.has(a)) return { visible, reco: { kind: "departamento", deptId: a } };
+  return { visible };
 }
 
 const INTRO: ChatMessage = {
   id: "intro",
   role: "assistant",
   content:
-    "Sou o Thor, consultor da Clauthor. Me conta rapidamente: qual dor da sua operação está travando o crescimento hoje?",
+    "Oi, sou o Thor. Antes de te mostrar preço, deixa eu entender seu cenário — qual sua maior dor hoje, e quantas pessoas tem na sua empresa?",
 };
 
 const SUGGESTIONS = [
-  "Meu time comercial não bate meta",
-  "Atendimento está sobrecarregado",
-  "Preciso escalar marketing",
+  "Empresa de 5 pessoas, preciso gerar leads",
+  "Média empresa, atendimento sobrecarregado",
   "Quero automatizar jurídico",
+  "Testar 1 agente antes de contratar time",
 ];
 
 /* -------------------------------------------------------------------------- */
