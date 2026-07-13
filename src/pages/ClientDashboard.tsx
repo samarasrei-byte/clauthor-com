@@ -42,6 +42,7 @@ import DiagnosisRecapDialog from "@/components/dashboard/DiagnosisRecapDialog";
 const ThorFirstTouchWelcome = lazy(() => import("@/components/dashboard/ThorFirstTouchWelcome"));
 const ThorTokenAlert = lazy(() => import("@/components/dashboard/ThorTokenAlert"));
 const ThorCenter = lazy(() => import("@/components/dashboard/ThorCenter"));
+const ProductivityHub = lazy(() => import("@/components/dashboard/ProductivityHub"));
 import { useThorLiveAlerts } from "@/hooks/useThorLiveAlerts";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
