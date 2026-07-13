@@ -72,6 +72,24 @@ export function useThorLiveAlerts({ onOpenThorCenter }: Options = {}) {
           });
         },
       )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "approvals", filter: `created_by=eq.${user.id}` },
+        (payload) => {
+          const row = payload.new as { id?: string; title?: string; status?: string };
+          if (!row?.id || seenIds.current.has(row.id)) return;
+          if (row.status !== "pending") return;
+          seenIds.current.add(row.id);
+
+          toast.info(row.title ?? "Nova aprovação esperando você", {
+            description: "O Thor está segurando esse item até sua decisão.",
+            duration: 8000,
+            action: onOpenThorCenter
+              ? { label: "Ver no Thor Center", onClick: onOpenThorCenter }
+              : undefined,
+          });
+        },
+      )
       .subscribe();
 
     return () => {
