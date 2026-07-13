@@ -187,6 +187,42 @@ export default function ThorCenter({ onNavigate }: Props) {
     qc.invalidateQueries({ queryKey: ["thor-center-ambient", user?.id] });
   };
 
+  const resolveApproval = async (approvalId: string) => {
+    if (!user?.id) return;
+    const { error } = await supabase
+      .from("approvals")
+      .update({ status: "approved", approved_by: user.id, approved_at: new Date().toISOString() })
+      .eq("id", approvalId)
+      .eq("status", "pending");
+    if (error) {
+      toast.error("Não consegui marcar como resolvido.");
+      return;
+    }
+    toast.success("Aprovação marcada como resolvida.", {
+      description: "Some do Thor Center. Você pode revisar em Aprovações se precisar.",
+      action: { label: "Desfazer", onClick: async () => {
+        await supabase.from("approvals")
+          .update({ status: "pending", approved_by: null, approved_at: null })
+          .eq("id", approvalId);
+        qc.invalidateQueries({ queryKey: ["thor-center-approvals", user.id] });
+      }},
+    });
+    qc.invalidateQueries({ queryKey: ["thor-center-approvals", user.id] });
+  };
+
+  // Contagens por tipo dentro do período ativo (para mostrar no header/quick actions)
+  const periodCounts = useMemo(() => {
+    const cutoff = PERIOD_MS[period];
+    const min = cutoff ? Date.now() - cutoff : 0;
+    const inPeriod = (iso: string) => (cutoff == null ? true : new Date(iso).getTime() >= min);
+    return {
+      touchpoints: touchpoints.filter((t) => inPeriod(t.seen_at)).length,
+      tokenAlerts: tokenAlerts.filter((n) => inPeriod(n.created_at)).length,
+      approvals: pendingApprovals.items.filter((a) => inPeriod(a.created_at)).length,
+      ambient: ambientSignals.filter((s) => inPeriod(s.created_at)).length,
+    };
+  }, [period, touchpoints, tokenAlerts, pendingApprovals.items, ambientSignals]);
+
   return (
     <div className="space-y-6">
       {/* Header */}
