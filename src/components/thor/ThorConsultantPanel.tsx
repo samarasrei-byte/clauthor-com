@@ -22,6 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { WORKFORCE_CATALOG, DEPARTMENTS } from "@/data/workforceCatalog";
 import { cn } from "@/lib/utils";
 import type { WorkforceScale, DepartmentKey } from "@/lib/workforce/types";
+import { useThorTouchpoints } from "@/hooks/useThorTouchpoints";
 
 export interface ThorRecommendation {
   scale: WorkforceScale;
