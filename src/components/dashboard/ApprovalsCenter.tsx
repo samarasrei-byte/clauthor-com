@@ -1171,6 +1171,8 @@ const ApprovalCard = ({ approval, onOpen, onApprove, onRequestChanges, onReject,
               </Badge>
               <Badge variant="outline" className="text-[10px]">v{approval.current_version}</Badge>
               <Badge variant="secondary" className="text-[10px]">{DELIVERY_LABEL[approval.delivery_type]}</Badge>
+              <ConfidenceBadge score={getApprovalConfidence(approval)} compact />
+
             </div>
             <div className="text-sm font-medium truncate">{approval.title}</div>
             <div className="text-[11px] text-muted-foreground flex items-center gap-1.5">
