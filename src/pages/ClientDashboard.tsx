@@ -539,6 +539,7 @@ const ClientDashboard = () => {
     "war-room-live": "War Room Live",
     chat: selectedAgent?.name || "Chat",
     inbox: "Inbox",
+    productivity: "Central de Produtividade",
   }), [t, selectedAgent]);
 
   const breadcrumbLabel = breadcrumbMap[activeSection] || activeSection;
