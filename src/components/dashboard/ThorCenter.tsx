@@ -558,6 +558,29 @@ export default function ThorCenter({ onNavigate }: Props) {
           </Card>
         </div>
       </div>
+
+      <AlertDialog open={!!bulkConfirm} onOpenChange={(o) => { if (!o) setBulkConfirm(null); }}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Resolver {bulkConfirm?.ids.length ?? 0} sinais?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Todos os sinais deste grupo serão marcados como resolvidos e sairão do Thor Center.
+              Essa ação não pode ser desfeita em lote.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                if (bulkConfirm) void resolveSignalsBulk(bulkConfirm.ids, bulkConfirm.kind);
+                setBulkConfirm(null);
+              }}
+            >
+              Resolver todos
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
