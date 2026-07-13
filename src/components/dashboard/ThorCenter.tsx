@@ -257,7 +257,9 @@ export default function ThorCenter({ onNavigate }: Props) {
               <p className="text-sm text-muted-foreground">Carregando…</p>
             ) : timeline.length === 0 ? (
               <div className="text-center py-8 text-sm text-muted-foreground">
-                O Thor ainda não precisou te alertar. Bom sinal — sua operação está saudável.
+                {period === "all"
+                  ? "O Thor ainda não precisou te alertar. Bom sinal — sua operação está saudável."
+                  : `Nada registrado nas últimas ${PERIOD_LABEL[period].toLowerCase()}. Amplie o filtro se quiser ver mais.`}
               </div>
             ) : (
               <ScrollArea className="max-h-[440px] pr-2">
