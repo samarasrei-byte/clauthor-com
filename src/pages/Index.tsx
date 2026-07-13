@@ -282,34 +282,69 @@ const HomePage = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border/60 rounded-3xl overflow-hidden border border-border/60">
-          {featured.map((dept) => {
+          {featured.map((dept, idx) => {
             const Icon = DEPT_ICONS[dept.id] ?? Briefcase;
+            const isFeatured = idx === 0;
             return (
-              <button
+              <motion.button
                 key={dept.id}
                 onClick={() => {
                   trackKpi("thor_guide_section_play", { source: "landing", section: `dept_${dept.id}` });
                   navigate(`/departamentos/${dept.id}`);
                 }}
-                className="group text-left p-8 bg-background hover:bg-card transition-colors flex flex-col min-h-[280px]"
+                whileHover={{ y: -4 }}
+                transition={{ type: "spring", stiffness: 300, damping: 24 }}
+                className={`group relative text-left p-8 transition-all flex flex-col min-h-[280px] ${
+                  isFeatured
+                    ? "bg-foreground text-background hover:shadow-[0_30px_80px_-20px_hsl(0_85%_55%/0.35)]"
+                    : "bg-background hover:bg-card hover:shadow-[0_20px_60px_-25px_hsl(0_0%_0%/0.25)]"
+                }`}
               >
-                <Icon className="h-6 w-6 text-foreground mb-8" strokeWidth={1.5} />
-                <h3 className="text-xl font-semibold text-foreground mb-2 tracking-tight">
+                {isFeatured && (
+                  <span className="absolute top-6 right-6 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+                    ● Mais contratado
+                  </span>
+                )}
+                <Icon
+                  className={`h-6 w-6 mb-8 ${isFeatured ? "text-background" : "text-foreground"}`}
+                  strokeWidth={1.5}
+                />
+                <h3
+                  className={`text-xl font-semibold mb-2 tracking-tight ${
+                    isFeatured ? "text-background" : "text-foreground"
+                  }`}
+                >
                   {dept.name}
                 </h3>
-                <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-6">
+                <p
+                  className={`text-sm leading-relaxed flex-1 mb-6 ${
+                    isFeatured ? "text-background/70" : "text-muted-foreground"
+                  }`}
+                >
                   {dept.painPoint}
                 </p>
-                <div className="flex items-center justify-between pt-5 border-t border-border/50">
-                  <span className="text-xs text-muted-foreground">
+                <div
+                  className={`flex items-center justify-between pt-5 border-t ${
+                    isFeatured ? "border-background/15" : "border-border/50"
+                  }`}
+                >
+                  <span
+                    className={`text-xs ${isFeatured ? "text-background/60" : "text-muted-foreground"}`}
+                  >
                     {dept.agentSlugs.length} agentes · 24/7
                   </span>
-                  <span className="text-sm font-semibold text-foreground group-hover:text-primary transition-colors inline-flex items-center gap-1">
+                  <span
+                    className={`text-sm font-semibold inline-flex items-center gap-1 transition-colors ${
+                      isFeatured
+                        ? "text-background group-hover:text-primary"
+                        : "text-foreground group-hover:text-primary"
+                    }`}
+                  >
                     {formatBRL(dept.priceMonthly)}
                     <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
                   </span>
                 </div>
-              </button>
+              </motion.button>
             );
           })}
         </div>
