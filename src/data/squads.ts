@@ -106,7 +106,7 @@ export const SQUADS: Squad[] = [
       { name: "BI", role: "Consolida NPS reputacional" },
     ],
     tiers: [
-      { name: "Starter", price: 297, tagline: "Até 200 menções/mês", features: ["1 canal (Google ou Reclame Aqui)", "Respostas em 1 idioma", "Suporte por e-mail"] },
+      { name: "Starter", price: 597, tagline: "Até 400 menções/mês", features: ["1 canal (Google ou Reclame Aqui)", "Respostas em 1 idioma", "Suporte por e-mail"] },
       { name: "Growth", price: 697, tagline: "Até 1.500 menções/mês", features: ["Todos os canais principais", "Aprovação humana opcional", "Alertas WhatsApp", "Relatório semanal"], highlighted: true },
       { name: "Pro", price: 1497, tagline: "Volume ilimitado + multi-marca", features: ["Multi-loja / multi-marca", "Integração CRM", "Playbook de crise dedicado", "CSM dedicado"] },
     ],
@@ -116,7 +116,7 @@ export const SQUADS: Squad[] = [
       { q: "E se a IA errar o tom da marca?", a: "Cada squad passa por 5 dias de calibração com exemplos reais seus antes de entrar em produção." },
     ],
     seoTitle: "Reputação IA — Squad que gerencia Google, Reclame Aqui e redes sociais 24h | Clauthor",
-    seoDescription: "Contrate um squad de IA que monitora e responde avaliações no Google, Reclame Aqui, Instagram e Facebook — no tom da sua marca, 24h por dia. A partir de R$ 297/mês.",
+    seoDescription: "Contrate um squad de IA que monitora e responde avaliações no Google, Reclame Aqui, Instagram e Facebook — no tom da sua marca, 24h por dia. A partir de R$ 597/mês.",
     overrideHref: "/reputacao-ia",
     featured: true,
     demand: "TOP",
@@ -164,7 +164,7 @@ export const SQUADS: Squad[] = [
       { name: "Supervisor", role: "Escala pra humano com contexto" },
     ],
     tiers: [
-      { name: "Starter", price: 397, tagline: "Até 2.000 conversas/mês", features: ["WhatsApp OU site", "Horário comercial", "1 idioma"] },
+      { name: "Starter", price: 697, tagline: "Até 3.000 conversas/mês", features: ["WhatsApp OU site", "Horário comercial", "1 idioma"] },
       { name: "Growth", price: 797, tagline: "Até 10.000 conversas/mês", features: ["WhatsApp + Instagram + site", "24h/7", "Handoff humano", "CSAT tracking"], highlighted: true },
       { name: "Pro", price: 1697, tagline: "Volume ilimitado + multi-idioma", features: ["Todos os canais", "Multi-idioma", "Integração CRM/ERP", "SLA dedicado"] },
     ],
@@ -174,7 +174,7 @@ export const SQUADS: Squad[] = [
       { q: "Aprende com nossa base?", a: "Sim. Nos primeiros 5 dias treinamos com sua FAQ, catálogo e conversas antigas. Depois disso ele evolui sozinho a cada semana." },
     ],
     seoTitle: "Atendimento IA 24h — Squad de WhatsApp, Instagram e chat automatizado | Clauthor",
-    seoDescription: "Squad de IA que atende no WhatsApp, Instagram DM e chat do site em segundos. Resolve 80% dos tickets, escala pro humano só quando precisa. A partir de R$ 397/mês.",
+    seoDescription: "Squad de IA que atende no WhatsApp, Instagram DM e chat do site em segundos. Resolve 80% dos tickets, escala pro humano só quando precisa. A partir de R$ 697/mês.",
     demand: "TOP",
   },
   {
@@ -221,7 +221,7 @@ export const SQUADS: Squad[] = [
       { name: "Scheduler", role: "Marca reunião no Calendar" },
     ],
     tiers: [
-      { name: "Starter", price: 497, tagline: "1 conta LinkedIn · 200 leads/mês", features: ["Só LinkedIn", "1 cadência", "Report mensal"] },
+      { name: "Starter", price: 797, tagline: "1 conta LinkedIn · 300 leads/mês", features: ["Só LinkedIn", "1 cadência", "Report mensal"] },
       { name: "Growth", price: 997, tagline: "3 contas · 800 leads/mês", features: ["LinkedIn + e-mail", "Cadência de 5 toques", "Integração CRM", "Reunião no Calendar"], highlighted: true },
       { name: "Pro", price: 2497, tagline: "10+ contas · volume alto", features: ["Multi-vertical", "A/B testing contínuo", "CSM dedicado", "Playbook customizado"] },
     ],
@@ -231,7 +231,7 @@ export const SQUADS: Squad[] = [
       { q: "E se meu ICP estiver errado?", a: "O squad testa 3 hipóteses de ICP nas primeiras 4 semanas e ajusta baseado em taxa de resposta real." },
     ],
     seoTitle: "SDR IA — Squad de prospecção outbound no LinkedIn e e-mail | Clauthor",
-    seoDescription: "Squad de IA que prospecta seu ICP no LinkedIn e e-mail, personaliza cada abordagem e entrega reunião marcada no Calendar. Sem contratar SDR. A partir de R$ 497/mês.",
+    seoDescription: "Squad de IA que prospecta seu ICP no LinkedIn e e-mail, personaliza cada abordagem e entrega reunião marcada no Calendar. Sem contratar SDR. A partir de R$ 797/mês.",
     demand: "TOP",
   },
   {
@@ -392,7 +392,7 @@ export const SQUADS: Squad[] = [
       { name: "Publisher", role: "Agenda e publica após aprovação" },
     ],
     tiers: [
-      { name: "Starter", price: 397, tagline: "2 canais sociais", features: ["8 posts/mês", "Sem blog", "Aprovação por e-mail"] },
+      { name: "Starter", price: 697, tagline: "2 canais sociais", features: ["10 posts/mês", "Sem blog", "Aprovação por e-mail"] },
       { name: "Growth", price: 697, tagline: "Social + blog SEO", features: ["16 posts/mês", "2 artigos SEO/semana", "Calendário mensal", "Aprovação em painel"], highlighted: true },
       { name: "Pro", price: 1497, tagline: "Alto volume + multi-idioma", features: ["Volume ilimitado", "Multi-idioma", "Cluster SEO estratégico", "CSM dedicado"] },
     ],
@@ -402,7 +402,7 @@ export const SQUADS: Squad[] = [
       { q: "SEO dá resultado em quanto tempo?", a: "Primeiros posicionamentos em 60-90 dias. Tráfego orgânico consistente a partir do 4º mês." },
     ],
     seoTitle: "Conteúdo IA — Squad de posts sociais, blog SEO e roteiros | Clauthor",
-    seoDescription: "Squad de IA que produz posts para Instagram, LinkedIn, artigos de blog otimizados para SEO e roteiros de vídeo — no tom da sua marca. A partir de R$ 397/mês.",
+    seoDescription: "Squad de IA que produz posts para Instagram, LinkedIn, artigos de blog otimizados para SEO e roteiros de vídeo — no tom da sua marca. A partir de R$ 697/mês.",
     demand: "ALTA",
   },
   {
@@ -449,7 +449,7 @@ export const SQUADS: Squad[] = [
       { name: "Review Hunter", role: "Solicita e organiza avaliações" },
     ],
     tiers: [
-      { name: "Starter", price: 497, tagline: "Até 200 SKUs", features: ["Ficha de produto", "Recuperação por e-mail", "1 canal de atendimento"] },
+      { name: "Starter", price: 797, tagline: "Até 300 SKUs", features: ["Ficha de produto", "Recuperação por e-mail", "1 canal de atendimento"] },
       { name: "Growth", price: 897, tagline: "Até 2.000 SKUs", features: ["Todos os fluxos ativos", "WhatsApp + e-mail", "Integração plataforma", "Review pós-entrega"], highlighted: true },
       { name: "Pro", price: 1997, tagline: "Volume ilimitado + multi-loja", features: ["Multi-marca", "Multi-idioma", "Custom fluxos", "CSM dedicado"] },
     ],
@@ -459,7 +459,7 @@ export const SQUADS: Squad[] = [
       { q: "Quanto recupero de carrinho?", a: "Média de mercado: 8-15% do carrinho abandonado convertido. Nossos clientes tiram entre 12-22% com o squad ativo." },
     ],
     seoTitle: "E-commerce IA — Squad que cuida da loja: ficha, carrinho, atendimento | Clauthor",
-    seoDescription: "Squad de IA para e-commerce: otimiza ficha de produto, recupera carrinho abandonado, atende pré e pós-venda. Integra Shopify, VTEX, Nuvemshop. A partir de R$ 497/mês.",
+    seoDescription: "Squad de IA para e-commerce: otimiza ficha de produto, recupera carrinho abandonado, atende pré e pós-venda. Integra Shopify, VTEX, Nuvemshop. A partir de R$ 797/mês.",
     demand: "ALTA",
   },
   {
@@ -505,7 +505,7 @@ export const SQUADS: Squad[] = [
       { name: "Curador", role: "Monta shortlist com fit cultural" },
     ],
     tiers: [
-      { name: "Starter", price: 497, tagline: "1 vaga/mês", features: ["3 portais", "Triagem básica", "Shortlist Top 3"] },
+      { name: "Starter", price: 797, tagline: "2 vagas/mês", features: ["3 portais", "Triagem básica", "Shortlist Top 3"] },
       { name: "Growth", price: 997, tagline: "Até 5 vagas/mês", features: ["Todos os portais", "Entrevista por chat", "Shortlist Top 5", "Fit cultural"], highlighted: true },
       { name: "Pro", price: 2497, tagline: "Volume alto + entrevista vídeo", features: ["Vagas ilimitadas", "Entrevista vídeo assíncrona", "Teste técnico integrado", "CSM dedicado"] },
     ],
@@ -515,7 +515,7 @@ export const SQUADS: Squad[] = [
       { q: "Serve pra vaga técnica?", a: "Sim. Integramos teste técnico (frontend/backend/data) e a IA analisa código antes de te entregar." },
     ],
     seoTitle: "RH IA — Squad de recrutamento que tria, entrevista e entrega shortlist | Clauthor",
-    seoDescription: "Squad de IA de recrutamento: publica vaga em LinkedIn e Gupy, tria currículos, faz entrevista inicial e entrega shortlist pronto. A partir de R$ 497/mês.",
+    seoDescription: "Squad de IA de recrutamento: publica vaga em LinkedIn e Gupy, tria currículos, faz entrevista inicial e entrega shortlist pronto. A partir de R$ 797/mês.",
     demand: "ALTA",
   },
   {
@@ -561,7 +561,7 @@ export const SQUADS: Squad[] = [
       { name: "QBR Bot", role: "Monta revisão trimestral" },
     ],
     tiers: [
-      { name: "Starter", price: 497, tagline: "Até 200 clientes", features: ["Health-score básico", "Alerta por e-mail", "Onboarding padrão"] },
+      { name: "Starter", price: 797, tagline: "Até 300 clientes", features: ["Health-score básico", "Alerta por e-mail", "Onboarding padrão"] },
       { name: "Growth", price: 897, tagline: "Até 2.000 clientes", features: ["Onboarding customizado", "Playbook por segmento", "QBR trimestral", "Integração CRM"], highlighted: true },
       { name: "Pro", price: 1997, tagline: "Volume alto + multi-produto", features: ["Multi-produto / multi-plano", "CSM humano incluído", "Custom playbooks", "CSM dedicado"] },
     ],
@@ -571,7 +571,7 @@ export const SQUADS: Squad[] = [
       { q: "Vale a pena pra SaaS pequeno?", a: "Sim. Empresas com 50+ clientes já veem redução de churn no 2º mês." },
     ],
     seoTitle: "Sucesso do Cliente IA — Squad que reduz churn e faz onboarding | Clauthor",
-    seoDescription: "Squad de IA para Customer Success: onboarding guiado, health-score, alerta de churn e ativação de conta fria. Reduza churn em 40%. A partir de R$ 497/mês.",
+    seoDescription: "Squad de IA para Customer Success: onboarding guiado, health-score, alerta de churn e ativação de conta fria. Reduza churn em 40%. A partir de R$ 797/mês.",
     demand: "ALTA",
   },
   {
@@ -616,7 +616,7 @@ export const SQUADS: Squad[] = [
       { name: "Analista Inadimplência", role: "Report e priorização" },
     ],
     tiers: [
-      { name: "Starter", price: 297, tagline: "Até 200 cobranças/mês", features: ["1 canal", "Régua básica", "Report mensal"] },
+      { name: "Starter", price: 597, tagline: "Até 400 cobranças/mês", features: ["1 canal", "Régua básica", "Report mensal"] },
       { name: "Growth", price: 597, tagline: "Até 2.000 cobranças/mês", features: ["WhatsApp + e-mail", "Régua customizada", "Conciliação bancária", "Report semanal"], highlighted: true },
       { name: "Pro", price: 1297, tagline: "Volume alto + multi-CNPJ", features: ["Multi-empresa", "Integração ERP", "Cobrança jurídica escalada", "CSM dedicado"] },
     ],
@@ -626,7 +626,7 @@ export const SQUADS: Squad[] = [
       { q: "Quanto reduz de inadimplência?", a: "Média dos clientes: -30% a -55% em 90 dias." },
     ],
     seoTitle: "Financeiro IA — Squad de cobrança automatizada e conciliação | Clauthor",
-    seoDescription: "Squad de IA financeiro: cobrança por WhatsApp e e-mail, conciliação bancária, emissão de boleto/Pix. Reduza inadimplência em até 55%. A partir de R$ 297/mês.",
+    seoDescription: "Squad de IA financeiro: cobrança por WhatsApp e e-mail, conciliação bancária, emissão de boleto/Pix. Reduza inadimplência em até 55%. A partir de R$ 597/mês.",
     demand: "ALTA",
   },
   {
