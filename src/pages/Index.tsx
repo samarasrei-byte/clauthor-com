@@ -649,14 +649,14 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
-              Como funciona
+              {t("home.how_eyebrow")}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
-              Três passos.{" "}
-              <span className="text-muted-foreground">Zero fricção.</span>
+              {t("home.how_title1")}{" "}
+              <span className="text-muted-foreground">{t("home.how_title2")}</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-xl">
-              Do primeiro clique à operação rodando sozinha em menos de dois minutos.
+              {t("home.how_desc")}
             </p>
           </div>
 
@@ -664,18 +664,18 @@ const HomePage = () => {
             {[
               {
                 step: "01",
-                title: "Escolha o departamento",
-                copy: "Comercial, Marketing, Financeiro, Jurídico, RH ou Atendimento. Cada um chega com agentes especializados prontos.",
+                title: t("home.how_s1_title"),
+                copy: t("home.how_s1_copy"),
               },
               {
                 step: "02",
-                title: "Aprove o squad",
-                copy: "O Thor monta a equipe ideal para sua operação. Você revisa, ajusta e aprova em um clique.",
+                title: t("home.how_s2_title"),
+                copy: t("home.how_s2_copy"),
               },
               {
                 step: "03",
-                title: "Você comanda de casa",
-                copy: "Os agentes executam 24/7 em 14 idiomas. Você aprova entregas ou apenas acompanha o resultado.",
+                title: t("home.how_s3_title"),
+                copy: t("home.how_s3_copy"),
               },
             ].map((s, i) => (
               <motion.div
