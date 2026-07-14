@@ -109,52 +109,61 @@ const SectionCard = ({
   </motion.section>
 );
 
-const AgendaCard = () => (
-  <SectionCard
-    icon={CalendarDays}
-    title="Agenda"
-    description="Seus próximos compromissos do dia"
-    action={
-      <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8">
-        Abrir calendário
-        <ArrowRight className="h-3 w-3" />
-      </Button>
-    }
-  >
-    <ul className="space-y-2">
-      {MOCK_EVENTS.map((e) => (
-        <li
-          key={e.id}
-          className="group flex items-center gap-3 p-3 rounded-xl border border-border/30 bg-background/40 hover:bg-background/70 hover:border-border/60 transition-all"
-        >
-          <div className="flex flex-col items-center justify-center w-14 shrink-0">
-            <span className="text-sm font-semibold tabular-nums">{e.time}</span>
-            <span className="text-[10px] text-muted-foreground">{e.duration}</span>
-          </div>
-          <div className="w-px self-stretch bg-border/40" />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full shrink-0" style={{ background: e.color }} />
-              <p className="text-sm font-medium truncate">{e.title}</p>
+const AgendaCard = () => {
+  const openCalendar = () => window.open("https://calendar.google.com", "_blank", "noopener,noreferrer");
+  return (
+    <SectionCard
+      icon={CalendarDays}
+      title="Agenda"
+      description="Seus próximos compromissos do dia"
+      action={
+        <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8" onClick={openCalendar}>
+          Abrir calendário
+          <ArrowRight className="h-3 w-3" />
+        </Button>
+      }
+    >
+      <ul className="space-y-2">
+        {MOCK_EVENTS.map((e) => (
+          <li
+            key={e.id}
+            onClick={() =>
+              toast({
+                title: e.title,
+                description: `${e.time} · ${e.duration}${e.location ? ` · ${e.location}` : ""}`,
+              })
+            }
+            className="group flex items-center gap-3 p-3 rounded-xl border border-border/30 bg-background/40 hover:bg-background/70 hover:border-border/60 transition-all cursor-pointer"
+          >
+            <div className="flex flex-col items-center justify-center w-14 shrink-0">
+              <span className="text-sm font-semibold tabular-nums">{e.time}</span>
+              <span className="text-[10px] text-muted-foreground">{e.duration}</span>
             </div>
-            <div className="flex items-center gap-3 mt-1 text-[11px] text-muted-foreground">
-              <span className="inline-flex items-center gap-1">
-                <Badge variant="outline" className="h-4 px-1.5 text-[9px] font-medium border-border/40">{e.category}</Badge>
-              </span>
-              {e.location && (
-                <span className="inline-flex items-center gap-1 truncate">
-                  <MapPin className="h-3 w-3" strokeWidth={1.5} />
-                  <span className="truncate">{e.location}</span>
+            <div className="w-px self-stretch bg-border/40" />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full shrink-0" style={{ background: e.color }} />
+                <p className="text-sm font-medium truncate">{e.title}</p>
+              </div>
+              <div className="flex items-center gap-3 mt-1 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1">
+                  <Badge variant="outline" className="h-4 px-1.5 text-[9px] font-medium border-border/40">{e.category}</Badge>
                 </span>
-              )}
+                {e.location && (
+                  <span className="inline-flex items-center gap-1 truncate">
+                    <MapPin className="h-3 w-3" strokeWidth={1.5} />
+                    <span className="truncate">{e.location}</span>
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-          <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors" />
-        </li>
-      ))}
-    </ul>
-  </SectionCard>
-);
+            <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors" />
+          </li>
+        ))}
+      </ul>
+    </SectionCard>
+  );
+};
 
 const priorityStyle = (p: "Alta" | "Média" | "Baixa") =>
   p === "Alta"
