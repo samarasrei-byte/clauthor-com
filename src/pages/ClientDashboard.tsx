@@ -43,7 +43,7 @@ const ThorFirstTouchWelcome = lazy(() => import("@/components/dashboard/ThorFirs
 const ThorTokenAlert = lazy(() => import("@/components/dashboard/ThorTokenAlert"));
 const ThorCenter = lazy(() => import("@/components/dashboard/ThorCenter"));
 const ProductivityHub = lazy(() => import("@/components/dashboard/ProductivityHub"));
-const AIWorkspace = lazy(() => import("@/components/dashboard/AIWorkspace"));
+// AIWorkspace agora é carregado dentro do WorkspaceHub (aba "IA Live")
 import { useThorLiveAlerts } from "@/hooks/useThorLiveAlerts";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
