@@ -524,7 +524,7 @@ const AIWorkspace = () => {
             <ScrollArea className="h-[320px] pr-2">
               <div className="relative space-y-4 border-l border-border pl-4">
                 {timeline.map((e) => {
-                  const a = agentById[e.agentId];
+                  const a = agentByKey[e.agentId];
                   return (
                     <motion.div
                       key={e.id}
