@@ -267,6 +267,112 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ═══════════ DOIS CAMINHOS · Squad vs Departamento ═══════════ */}
+      <section className="border-t border-border/60" aria-label="Squad ou Departamento">
+        <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
+          <div className="mb-14 max-w-3xl">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
+              Dois caminhos
+            </p>
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
+              Comece com um squad.{" "}
+              <span className="text-muted-foreground">Escale para um departamento.</span>
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-xl">
+              Você escolhe o tamanho da mordida. Do primeiro time vertical ao departamento inteiro.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-5">
+            {/* Squad · entrada PME */}
+            <motion.button
+              onClick={() => {
+                trackKpi("home_path_select", { section: "squad" });
+                navigate("/squads");
+              }}
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+              className="group relative text-left p-8 sm:p-10 rounded-3xl border border-border/60 bg-background hover:bg-card hover:shadow-[0_20px_60px_-25px_hsl(0_0%_0%/0.35)] transition-all flex flex-col min-h-[360px]"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
+                  ● Squad
+                </span>
+                <span className="text-[11px] text-muted-foreground">Comece rápido</span>
+              </div>
+
+              <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-foreground mb-4">
+                Comece rápido.
+              </h3>
+              <p className="text-base text-muted-foreground leading-relaxed mb-8 flex-1">
+                Um time vertical de 4 a 7 agentes de IA para resolver <span className="text-foreground">uma dor específica</span>.
+                Ativação em minutos, sem equipe técnica. Ideal para PME e profissionais liberais.
+              </p>
+
+              <ul className="space-y-2 mb-8 text-sm text-foreground/85">
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> Reputação IA, Atendimento 24h, SDR, Financeiro, Conteúdo</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> Self-serve, sem onboarding pesado</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> Cancelamento livre</li>
+              </ul>
+
+              <div className="flex items-center justify-between pt-6 border-t border-border/50">
+                <div>
+                  <div className="text-[11px] uppercase tracking-wider text-muted-foreground">A partir de</div>
+                  <div className="text-2xl font-semibold text-foreground">R$ 597<span className="text-sm font-normal text-muted-foreground">/mês</span></div>
+                </div>
+                <span className="text-sm font-semibold inline-flex items-center gap-1 text-foreground group-hover:text-primary transition-colors">
+                  Ver squads
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </motion.button>
+
+            {/* Departamento · core empresa */}
+            <motion.button
+              onClick={() => {
+                trackKpi("home_path_select", { section: "departamento" });
+                navigate("/departamentos");
+              }}
+              whileHover={{ y: -4 }}
+              transition={{ type: "spring", stiffness: 300, damping: 24 }}
+              className="group relative text-left p-8 sm:p-10 rounded-3xl bg-foreground text-background hover:shadow-[0_30px_80px_-20px_hsl(0_85%_55%/0.4)] transition-all flex flex-col min-h-[360px]"
+            >
+              <div className="flex items-center justify-between mb-8">
+                <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
+                  ● Departamento
+                </span>
+                <span className="text-[11px] text-background/60">Transforme a operação</span>
+              </div>
+
+              <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
+                Transforme sua empresa.
+              </h3>
+              <p className="text-base text-background/70 leading-relaxed mb-8 flex-1">
+                Um departamento inteiro em IA · 20+ agentes cobrindo <span className="text-background">uma área completa</span>
+                {" "}(Comercial, Marketing, Financeiro, Jurídico...). Para média e grande empresa que quer trocar operação por decisão.
+              </p>
+
+              <ul className="space-y-2 mb-8 text-sm text-background/90">
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> 20 departamentos · +200 especialistas de IA</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> Onboarding assistido em 7 dias</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> 35.827 empresas já confiam</li>
+              </ul>
+
+              <div className="flex items-center justify-between pt-6 border-t border-background/15">
+                <div>
+                  <div className="text-[11px] uppercase tracking-wider text-background/60">A partir de</div>
+                  <div className="text-2xl font-semibold">R$ 1.700<span className="text-sm font-normal text-background/60">/mês</span></div>
+                </div>
+                <span className="text-sm font-semibold inline-flex items-center gap-1 group-hover:text-primary transition-colors">
+                  Ver departamentos
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </span>
+              </div>
+            </motion.button>
+          </div>
+        </div>
+      </section>
+
       {/* ═══════════ DEPARTAMENTOS ═══════════ */}
       <section className="max-w-6xl mx-auto px-6 py-24 sm:py-32" aria-label="Departamentos">
         <div className="mb-16 max-w-3xl">

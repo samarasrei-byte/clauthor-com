@@ -48,7 +48,8 @@ export type KpiEventName =
   | "home_recommendation_shown"
   | "thor_center_approval_resolved"
   | "thor_center_signal_resolved"
-  | "thor_center_signal_bulk_resolved";
+  | "thor_center_signal_bulk_resolved"
+  | "home_path_select";
 
 
 export interface KpiEventPayload {
