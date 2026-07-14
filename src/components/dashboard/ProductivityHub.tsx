@@ -594,7 +594,7 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
       ) : (
         <>
           {/* Daily summary — hero */}
-          <DailySummaryCard />
+          <DailySummaryCard onRefresh={handleRefresh} refreshing={refreshing} />
 
           {/* Grid: Agenda + Inbox */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -603,7 +603,7 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
           </div>
 
           {/* News full width */}
-          <NewsCard />
+          <NewsCard onNavigate={onNavigate} />
 
           {/* Integrations */}
           <IntegrationsCard onNavigate={onNavigate} />
