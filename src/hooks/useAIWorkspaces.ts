@@ -223,7 +223,7 @@ export function useWorkspaceMessages(workspaceId: string | null, tenantId: strin
   return { messages, loading, sendMessage };
 }
 
-export const WORKSPACE_MESSAGE_META_KEY = WS_META_KEY;
+
 
 /**
  * Hook: tarefas Kanban unificadas — lê/escreve `agent_tasks` (mesma fonte
