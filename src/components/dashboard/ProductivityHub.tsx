@@ -306,19 +306,31 @@ const InboxCard = () => {
   );
 };
 
-const NewsCard = () => {
+const NewsCard = ({ onNavigate }: { onNavigate?: (id: string) => void }) => {
   const [activeTopic, setActiveTopic] = useState<string>("Todos");
   const items = useMemo(
     () => (activeTopic === "Todos" ? MOCK_NEWS : MOCK_NEWS.filter((n) => n.topic === activeTopic)),
     [activeTopic]
   );
+  const openInterests = () => {
+    if (onNavigate) {
+      onNavigate("settings");
+    } else {
+      toast({
+        title: "Personalize seus interesses",
+        description: "Selecione tópicos usando os filtros acima para refinar suas notícias.",
+      });
+    }
+  };
+  const openNews = (n: (typeof MOCK_NEWS)[number]) =>
+    window.open(n.url, "_blank", "noopener,noreferrer");
   return (
     <SectionCard
       icon={Newspaper}
       title="Notícias"
       description="Selecionadas com base nos seus interesses"
       action={
-        <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8">
+        <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8" onClick={openInterests}>
           <Settings className="h-3 w-3" />
           Interesses
         </Button>
@@ -348,7 +360,11 @@ const NewsCard = () => {
           </p>
         )}
         {items.map((n) => (
-          <article key={n.id} className="group rounded-xl border border-border/30 bg-background/40 overflow-hidden hover:border-border/60 hover:-translate-y-0.5 transition-all">
+          <article
+            key={n.id}
+            onClick={() => openNews(n)}
+            className="group rounded-xl border border-border/30 bg-background/40 overflow-hidden hover:border-border/60 hover:-translate-y-0.5 transition-all cursor-pointer"
+          >
             <div className="aspect-[16/9] overflow-hidden bg-muted/30">
               <img
                 src={n.image}
@@ -366,9 +382,9 @@ const NewsCard = () => {
               <p className="text-[11px] text-muted-foreground line-clamp-2 mb-2">{n.summary}</p>
               <div className="flex items-center justify-between">
                 <span className="text-[10px] text-muted-foreground/80">{n.source}</span>
-                <button className="text-[10px] font-medium text-primary inline-flex items-center gap-1 hover:gap-1.5 transition-all">
+                <span className="text-[10px] font-medium text-primary inline-flex items-center gap-1 group-hover:gap-1.5 transition-all">
                   Ler notícia <ExternalLink className="h-3 w-3" />
-                </button>
+                </span>
               </div>
             </div>
           </article>
