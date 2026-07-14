@@ -141,10 +141,10 @@ const DEFAULT_INTRO: ChatMessage = {
 };
 
 const SUGGESTIONS = [
-  "Preciso escalar comercial, budget ~R$ 1.500/mês",
-  "Atendimento sobrecarregado, empresa de 20 pessoas",
-  "Como faço pra conectar o Facebook?",
-  "Só quero testar 1 agente antes",
+  "Somos uma pequena empresa e a dor é gerar leads",
+  "Empresa média, atendimento não dá conta do volume",
+  "Grande empresa: preciso escalar comercial sem contratar",
+  "Minha maior dor hoje é fechar mais vendas",
 ];
 
 function buildHydratedIntro(facts: ThorMemory["facts"]): ChatMessage | null {
