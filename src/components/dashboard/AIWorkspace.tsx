@@ -340,6 +340,30 @@ const AIWorkspace = () => {
 
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* Visual mode toggle */}
+          <div className="flex items-center rounded-lg border border-border/60 bg-background/60 p-0.5 text-[10px] font-medium uppercase tracking-wider">
+            <button
+              type="button"
+              onClick={() => setVisualMode("minimal")}
+              className={cn(
+                "rounded-md px-2 py-1 transition-colors",
+                visualMode === "minimal" ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Minimal
+            </button>
+            <button
+              type="button"
+              onClick={() => setVisualMode("holo")}
+              className={cn(
+                "rounded-md px-2 py-1 transition-colors",
+                visualMode === "holo" ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground"
+              )}
+            >
+              Holo 3D
+            </button>
+          </div>
+
           {/* Seletor de Workspace */}
           <Select value={activeId ?? undefined} onValueChange={(v) => setActiveId(v)} disabled={wsLoading || workspaces.length === 0}>
             <SelectTrigger className="w-[220px] border-white/10 bg-background/60 backdrop-blur">
