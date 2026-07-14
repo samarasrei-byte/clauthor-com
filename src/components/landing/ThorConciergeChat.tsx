@@ -185,6 +185,7 @@ export default function ThorConciergeChat({
 }: ThorConciergeChatProps) {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<ChatMessage[]>([DEFAULT_INTRO]);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [memoryFacts, setMemoryFacts] = useState<ThorMemory["facts"]>({});
