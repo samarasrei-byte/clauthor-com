@@ -850,10 +850,10 @@ const HomePage = () => {
       <section className="max-w-6xl mx-auto px-6 py-24" aria-label="Escala">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-6 text-center md:text-left">
           {[
-            { value: String(totalSquads), label: "Squads orquestrados" },
-            { value: String(CLAUTHOR_ORG_CHART.length), label: "Departamentos" },
-            { value: "99.9%", label: "Uptime" },
-            { value: "24/7", label: "Operação global" },
+            { value: String(totalSquads), label: t("home.scale2_squads") },
+            { value: String(CLAUTHOR_ORG_CHART.length), label: t("home.scale2_depts") },
+            { value: "99.9%", label: t("home.scale2_uptime") },
+            { value: "24/7", label: t("home.scale2_ops") },
           ].map((s) => (
             <div key={s.label}>
               <p className="text-4xl md:text-5xl font-semibold tracking-tight text-foreground mb-2">
