@@ -612,31 +612,71 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
 
         <TabsContent value="timeline">
           <Card className="p-4">
-            <ScrollArea className="h-[320px] pr-2">
-              <div className="relative space-y-4 border-l border-border pl-4">
-                {timeline.map((e) => {
-                  const a = agentByKey[e.agentId];
-                  return (
-                    <motion.div
-                      key={e.id}
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="relative"
-                    >
-                      <span className="absolute -left-[19px] top-1.5 h-2 w-2 rounded-full border border-primary bg-background" />
-                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                        {fmtTime(e.ts)}
-                        {a && (
-                          <Badge variant="outline" className="h-5 px-1.5 text-[10px]">
-                            {a.emoji} {a.name}
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="text-sm">{e.message}</div>
-                    </motion.div>
-                  );
-                })}
+            <div className="mb-3 flex items-center justify-between">
+              <div className="text-xs text-muted-foreground">
+                {timeline.length} evento{timeline.length !== 1 ? "s" : ""}
               </div>
+              <div className="flex items-center gap-1.5">
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 gap-1 text-xs"
+                  onClick={() => setTimeline(INITIAL_TIMELINE)}
+                  aria-label="Recarregar timeline"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" /> Recarregar
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 gap-1 text-xs text-muted-foreground hover:text-destructive"
+                  onClick={() => setTimeline([])}
+                  disabled={timeline.length === 0}
+                  aria-label="Limpar timeline"
+                >
+                  <Trash2 className="h-3.5 w-3.5" /> Limpar
+                </Button>
+              </div>
+            </div>
+            <ScrollArea className="h-[320px] pr-2">
+              {timeline.length === 0 ? (
+                <div className="flex h-[280px] flex-col items-center justify-center gap-2 text-xs text-muted-foreground">
+                  <Clock className="h-6 w-6 opacity-40" />
+                  Nenhum evento na timeline.
+                </div>
+              ) : (
+                <div className="relative space-y-4 border-l border-border pl-4">
+                  {timeline.map((e) => {
+                    const a = agentByKey[e.agentId];
+                    return (
+                      <motion.div
+                        key={e.id}
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="relative"
+                      >
+                        <span className="absolute -left-[19px] top-1.5 h-2 w-2 rounded-full border border-primary bg-background" />
+                        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                          {fmtTime(e.ts)}
+                          {a && (
+                            <button
+                              type="button"
+                              onClick={() => setGraphQuery(a.name)}
+                              className="inline-flex"
+                              title={`Filtrar grafo por ${a.name}`}
+                            >
+                              <Badge variant="outline" className="h-5 cursor-pointer px-1.5 text-[10px] transition-colors hover:border-primary/60 hover:bg-primary/10">
+                                {a.emoji} {a.name}
+                              </Badge>
+                            </button>
+                          )}
+                        </div>
+                        <div className="text-sm">{e.message}</div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
             </ScrollArea>
           </Card>
         </TabsContent>
@@ -644,12 +684,12 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
         <TabsContent value="memory">
           <Card className="p-4">
             <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-              <MemoryCard title="Projetos"   count={12} desc="Landing pages, campanhas, funis." />
-              <MemoryCard title="Conversas"  count={148} desc="Threads recentes indexadas." />
-              <MemoryCard title="Arquivos"   count={37} desc="Documentos, planilhas, mídia." />
-              <MemoryCard title="Clientes"   count={5}  desc="Perfis e contexto de cada conta." />
-              <MemoryCard title="Objetivos"  count={9}  desc="Metas ativas com progresso." />
-              <MemoryCard title="Regras"     count={22} desc="Guardrails e prompts base." />
+              <MemoryCard title="Projetos"  count={memoryCounts?.projetos ?? 0}  desc="Workspaces ativos."             onClick={() => onNavigate?.("workspace")} />
+              <MemoryCard title="Conversas" count={memoryCounts?.conversas ?? 0} desc="Mensagens sincronizadas."       onClick={() => onNavigate?.("chat")} />
+              <MemoryCard title="Arquivos"  count={memoryCounts?.arquivos ?? 0}  desc="Documentos e mídia na Library." onClick={() => onNavigate?.("library")} />
+              <MemoryCard title="Agentes"   count={memoryCounts?.agentes ?? 0}   desc="Especialistas contratados."     onClick={() => onNavigate?.("agents")} />
+              <MemoryCard title="Regras"    count={memoryCounts?.regras ?? 0}    desc="Prompts base e guardrails."     onClick={() => onNavigate?.("agents")} />
+              <MemoryCard title="Aprovações" count={tasks.filter(t => t.status === "review").length} desc="Itens aguardando revisão." onClick={() => onNavigate?.("approvals")} />
             </div>
           </Card>
         </TabsContent>
