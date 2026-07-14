@@ -217,25 +217,17 @@ const AIWorkspace = () => {
     await sendMessage(txt);
   };
 
+  // Cria tarefa rápida no Kanban unificado (agent_tasks). Para missões
+  // estruturadas multi-step, o fluxo canônico é `Orquestração › Composer`.
   const handleDelegate = async () => {
     const t = taskInput.trim();
     if (!t || !activeId) return;
     setTaskInput("");
-    // Cria a tarefa raiz + notifica os agentes via chat persistido
-    await createTask({ title: t, agent_key: "strat", agent_name: "Estratégia", status: "doing", priority: "high" });
-    const chain: Array<{ key: string; name: string; emoji: string; message: string }> = [
-      { key: "strat",    name: "Estratégia",   emoji: "🧠", message: `Recebi a missão: "${t}". Dividindo em etapas.` },
-      { key: "research", name: "Pesquisador",  emoji: "🔎", message: "Buscando referências e insights de mercado." },
-      { key: "copy",     name: "Copywriter",   emoji: "✍️", message: "Rascunhando copy inicial da entrega." },
-      { key: "designer", name: "Designer",     emoji: "🎨", message: "Preparando layout base." },
-      { key: "dev",      name: "Desenvolvedor",emoji: "💻", message: "Iniciando implementação técnica." },
-    ];
-    for (let i = 0; i < chain.length; i++) {
-      const step = chain[i];
-      setTimeout(() => {
-        sendMessage(step.message, { key: step.key, name: step.name, emoji: step.emoji });
-      }, i * 700);
-    }
+    await createTask({ title: t, status: "doing", priority: "high" });
+    // Sinaliza no chat que a tarefa entrou no Kanban — sem simular chain fake.
+    sendMessage(`📌 Nova tarefa no Kanban: "${t}"`, {
+      key: "system", name: "Workspace", emoji: "⚡",
+    });
   };
 
   const handleCreateWorkspace = async () => {
@@ -413,25 +405,32 @@ const AIWorkspace = () => {
       </motion.div>
 
 
-      {/* ─── Delegação ─── */}
+      {/* ─── Delegação rápida (Kanban unificado) ─── */}
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5 p-4">
-        <div className="mb-3 flex items-center gap-2 text-sm font-medium">
-          <Wand2 className="h-4 w-4 text-primary" />
-          Delegar missão — a equipe divide automaticamente
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm">
+          <div className="flex items-center gap-2 font-medium">
+            <Wand2 className="h-4 w-4 text-primary" />
+            Tarefa rápida — cai direto no Kanban
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Para missões multi-etapa estruturadas, use{" "}
+            <span className="font-medium text-primary">Orquestração › Composer</span>.
+          </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <Input
             value={taskInput}
             onChange={(e) => setTaskInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleDelegate()}
-            placeholder='Ex: "Criar uma landing page para vender um curso de IA"'
+            placeholder='Ex: "Landing para curso de IA" · vira card no Kanban'
             className="flex-1"
           />
           <Button onClick={handleDelegate} className="gap-2">
-            <Sparkles className="h-4 w-4" /> Delegar
+            <Sparkles className="h-4 w-4" /> Criar
           </Button>
         </div>
       </Card>
+
 
       {/* ─── Grid principal ─── */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

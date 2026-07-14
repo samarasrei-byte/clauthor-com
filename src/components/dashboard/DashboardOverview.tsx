@@ -15,7 +15,7 @@ const CompanyBoardAlert = lazy(() => import("./CompanyBoardAlert"));
 const ROIDashboard = lazy(() => import("./ROIDashboard"));
 const ExecutionHealthBanner = lazy(() => import("./ExecutionHealthBanner"));
 const MarketplaceReviews = lazy(() => import("./MarketplaceReviews"));
-const QuickIntegrations = lazy(() => import("./QuickIntegrations"));
+// QuickIntegrations removido: era subset duplicado do MyIntegrationsPanel
 const MyIntegrationsPanel = lazy(() => import("./MyIntegrationsPanel"));
 const ReferralsPanel = lazy(() => import("./ReferralsPanel"));
 const TrustCenterPanel = lazy(() => import("./TrustCenterPanel"));
@@ -188,7 +188,7 @@ const DashboardOverview = ({
                           totalTokensUsed={totalTokensUsed}
                           estimatedSavings={estimatedSavings}
                         />
-                        <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
+                        {/* Consolidado: só MyIntegrationsPanel (QuickIntegrations era subset duplicado) */}
                         <MyIntegrationsPanel onNavigate={onSetActiveSection} />
                         <ReferralsPanel />
                         <TrustCenterPanel />

@@ -196,78 +196,117 @@ export function useWorkspaceMessages(workspaceId: string | null, tenantId: strin
 }
 
 /**
- * Hook: tarefas Kanban do workspace com Realtime.
+ * Hook: tarefas Kanban unificadas — lê/escreve `agent_tasks` (mesma fonte
+ * do módulo Execução › Tarefas). Antes usava `ai_workspace_tasks` (duplicidade).
+ * O workspace_id é armazenado em `agent_tasks.category` como `ws:<uuid>` para
+ * preservar o agrupamento por ambiente sem migração de schema.
  */
+const WS_CATEGORY_PREFIX = "ws:";
+
+// Vocabulário compartilhado. Mapeia para/de as convenções antigas do Kanban.
+const IN_STATUSES: TaskStatus[] = ["backlog", "doing", "review", "done"];
+
+function normalizeStatus(raw: string | null | undefined): TaskStatus {
+  const v = (raw ?? "").toLowerCase();
+  if (v === "open" || v === "backlog") return "backlog";
+  if (v === "in_progress" || v === "doing") return "doing";
+  if (v === "review") return "review";
+  if (v === "done" || v === "completed") return "done";
+  return "backlog";
+}
+
 export function useWorkspaceTasks(workspaceId: string | null, tenantId: string | null | undefined) {
   const { user } = useAuth();
   const [tasks, setTasks] = useState<AIWorkspaceTask[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const rowToTask = useCallback((row: any): AIWorkspaceTask => ({
+    id: row.id,
+    workspace_id: workspaceId ?? "",
+    tenant_id: row.tenant_id,
+    created_by: row.user_id ?? null,
+    title: row.title,
+    description: row.description ?? null,
+    agent_key: null,
+    agent_name: null,
+    status: normalizeStatus(row.status),
+    priority: (row.priority ?? "normal") as TaskPriority,
+    metadata: {},
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  }), [workspaceId]);
+
   useEffect(() => {
-    if (!workspaceId) { setTasks([]); return; }
+    if (!workspaceId || !user?.id) { setTasks([]); return; }
     let cancelled = false;
     setLoading(true);
     supabase
-      .from("ai_workspace_tasks")
+      .from("agent_tasks")
       .select("*")
-      .eq("workspace_id", workspaceId)
+      .eq("user_id", user.id)
+      .eq("category", `${WS_CATEGORY_PREFIX}${workspaceId}`)
       .order("created_at", { ascending: false })
+      .limit(200)
       .then(({ data, error }) => {
         if (cancelled) return;
         if (error) console.error("[useWorkspaceTasks]", error);
-        else setTasks((data ?? []) as AIWorkspaceTask[]);
+        else setTasks((data ?? []).map(rowToTask));
         setLoading(false);
       });
     return () => { cancelled = true; };
-  }, [workspaceId]);
+  }, [workspaceId, user?.id, rowToTask]);
 
+  // Realtime em agent_tasks filtrado pela categoria do workspace
   useEffect(() => {
-    if (!workspaceId) return;
+    if (!workspaceId || !user?.id) return;
     const channel = supabase
-      .channel(`workspace_tasks:${workspaceId}`)
+      .channel(`agent_tasks_ws:${workspaceId}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "ai_workspace_tasks", filter: `workspace_id=eq.${workspaceId}` },
+        { event: "*", schema: "public", table: "agent_tasks", filter: `user_id=eq.${user.id}` },
         (payload) => {
+          const cat = (payload.new as any)?.category ?? (payload.old as any)?.category;
+          if (cat !== `${WS_CATEGORY_PREFIX}${workspaceId}`) return;
           if (payload.eventType === "INSERT") {
-            const row = payload.new as AIWorkspaceTask;
+            const row = rowToTask(payload.new);
             setTasks((prev) => (prev.some((t) => t.id === row.id) ? prev : [row, ...prev]));
           } else if (payload.eventType === "UPDATE") {
-            const row = payload.new as AIWorkspaceTask;
+            const row = rowToTask(payload.new);
             setTasks((prev) => prev.map((t) => (t.id === row.id ? row : t)));
           } else if (payload.eventType === "DELETE") {
-            const oldRow = payload.old as AIWorkspaceTask;
-            setTasks((prev) => prev.filter((t) => t.id !== oldRow.id));
+            const id = (payload.old as any).id;
+            setTasks((prev) => prev.filter((t) => t.id !== id));
           }
         }
       )
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, [workspaceId]);
+  }, [workspaceId, user?.id, rowToTask]);
 
   const createTask = useCallback(async (input: {
     title: string; agent_key?: string; agent_name?: string; status?: TaskStatus; priority?: TaskPriority;
   }) => {
-    if (!workspaceId || !tenantId || !input.title.trim()) return;
-    const { error } = await supabase.from("ai_workspace_tasks").insert({
-      workspace_id: workspaceId,
+    if (!workspaceId || !tenantId || !user?.id || !input.title.trim()) return;
+    const { error } = await supabase.from("agent_tasks").insert({
+      user_id: user.id,
       tenant_id: tenantId,
-      created_by: user?.id ?? null,
       title: input.title.trim(),
-      agent_key: input.agent_key ?? null,
-      agent_name: input.agent_name ?? null,
       status: input.status ?? "backlog",
       priority: input.priority ?? "normal",
+      category: `${WS_CATEGORY_PREFIX}${workspaceId}`,
     });
     if (error) { console.error(error); toast.error("Falha ao criar tarefa."); }
   }, [workspaceId, tenantId, user?.id]);
 
   const updateTaskStatus = useCallback(async (id: string, status: TaskStatus) => {
-    // Otimista
     setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, status } : t)));
-    const { error } = await supabase.from("ai_workspace_tasks").update({ status }).eq("id", id);
+    const { error } = await supabase.from("agent_tasks").update({ status }).eq("id", id);
     if (error) { console.error(error); toast.error("Falha ao atualizar tarefa."); }
   }, []);
 
   return { tasks, loading, createTask, updateTaskStatus };
 }
+
+// Marker de vocabulário — usado por outros módulos que precisem filtrar tasks.
+export const WORKSPACE_TASK_CATEGORY_PREFIX = WS_CATEGORY_PREFIX;
+export const WORKSPACE_TASK_STATUSES = IN_STATUSES;
