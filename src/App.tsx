@@ -203,6 +203,7 @@ const App = () => (
                   <Route path="/thor" element={<ThorConcierge />} />
                   <Route path="/reputacao-ia" element={<ReputacaoIA />} />
                   <Route path="/reputacao" element={<ReputacaoIA />} />
+                  <Route path="/squads" element={<SquadsPage />} />
                   
                   
                 </Route>
