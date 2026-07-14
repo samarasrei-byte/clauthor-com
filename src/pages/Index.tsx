@@ -459,7 +459,7 @@ const HomePage = () => {
                   <div className="text-2xl font-semibold text-white">R$ 597<span className="text-sm font-normal text-white/50">/mês</span></div>
                 </div>
                 <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
-                  Ver squads
+                  {t("home.paths_squad_see")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
@@ -481,34 +481,31 @@ const HomePage = () => {
               />
               <div className="relative flex items-center justify-between mb-8">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
-                  ● Departamento
+                  {t("home.paths_dept_badge")}
                 </span>
-                <span className="text-[11px] text-white/50">Recomendado · transforme a operação</span>
+                <span className="text-[11px] text-white/50">{t("home.paths_dept_recommended")}</span>
               </div>
 
               <h3 className="relative text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
-                Transforme sua empresa.
+                {t("home.paths_dept_title")}
               </h3>
               <p className="relative text-base text-white/70 leading-relaxed mb-8 flex-1">
-                Um departamento inteiro em IA · 20+ agentes cobrindo{" "}
-                <span className="text-white">uma área completa</span> (Comercial, Marketing,
-                Financeiro, Jurídico...). Para média e grande empresa que quer trocar operação
-                por decisão.
+                <Trans i18nKey="home.paths_dept_desc" components={{ 1: <span className="text-white" /> }} />
               </p>
 
               <ul className="relative space-y-2 mb-8 text-sm text-white/85">
-                <li className="flex items-center gap-2"><span className="text-primary">▪</span> 20 departamentos · +200 especialistas de IA</li>
-                <li className="flex items-center gap-2"><span className="text-primary">▪</span> Onboarding assistido em 7 dias</li>
-                <li className="flex items-center gap-2"><span className="text-primary">▪</span> 35.827 empresas já confiam</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> {t("home.paths_dept_bullet1")}</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> {t("home.paths_dept_bullet2")}</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> {t("home.paths_dept_bullet3")}</li>
               </ul>
 
               <div className="relative flex items-center justify-between pt-6 border-t border-white/15">
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-white/50">A partir de</div>
+                  <div className="text-[11px] uppercase tracking-wider text-white/50">{t("home.paths_dept_from")}</div>
                   <div className="text-2xl font-semibold text-white">R$ 1.477<span className="text-sm font-normal text-white/50">/mês</span></div>
                 </div>
                 <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
-                  Ver departamentos
+                  {t("home.paths_dept_see")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
