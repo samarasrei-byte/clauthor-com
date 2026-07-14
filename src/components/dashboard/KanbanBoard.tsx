@@ -54,6 +54,9 @@ const KanbanBoard = () => {
   const [view, setView] = useState<ViewMode>("focus");
   const [filterPriority, setFilterPriority] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [filterAgent, setFilterAgent] = useState("all");
+  const [filterWindow, setFilterWindow] = useState<"all" | "24h" | "7d" | "30d">("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [draggedTask, setDraggedTask] = useState<string | null>(null);
   const [dragOverStatus, setDragOverStatus] = useState<string | null>(null);
