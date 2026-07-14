@@ -774,15 +774,15 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="text-center mb-16 max-w-2xl mx-auto">
             <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-4">
-              Painel
+              {t("home.panel_eyebrow")}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-white mb-6">
-              Você comanda.
+              {t("home.panel_title1")}
               <br />
-              <span className="text-primary">A IA executa.</span>
+              <span className="text-primary">{t("home.panel_title2")}</span>
             </h2>
             <p className="text-lg text-white/60">
-              Aprove, ajuste ou apenas observe. Cada agente reporta em tempo real.
+              {t("home.panel_desc")}
             </p>
           </div>
 
@@ -795,15 +795,15 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
-              Depoimentos
+              {t("home.testi_eyebrow")}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
-              CEOs que deixaram
+              {t("home.testi_title1")}
               <br />
-              <span className="text-muted-foreground">de operar no braço.</span>
+              <span className="text-muted-foreground">{t("home.testi_title2")}</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-xl">
-              +35.000 fundadores e diretores em 14 países já opera com Clauthor.
+              {t("home.testi_desc")}
             </p>
           </div>
 
