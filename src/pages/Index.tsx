@@ -564,14 +564,14 @@ const HomePage = () => {
       <section className="max-w-6xl mx-auto px-6 py-24 sm:py-32" aria-label="Departamentos">
         <div className="mb-16 max-w-3xl">
           <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
-            Departamentos
+            {t("home.dept_section_eyebrow")}
           </p>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
-            Escolha o que quer{" "}
-            <span className="text-muted-foreground">parar de fazer.</span>
+            {t("home.dept_section_title1")}{" "}
+            <span className="text-muted-foreground">{t("home.dept_section_title2")}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-xl">
-            Cada departamento chega pronto para operar. Você escolhe a dor, a Clauthor entrega o time.
+            {t("home.dept_section_desc")}
           </p>
         </div>
 
