@@ -330,7 +330,7 @@ const HomePage = () => {
             {/* Departamento · core empresa */}
             <motion.button
               onClick={() => {
-                trackKpi("home_path_select", { path: "departamento" });
+                trackKpi("home_path_select", { section: "departamento" });
                 navigate("/departamentos");
               }}
               whileHover={{ y: -4 }}
