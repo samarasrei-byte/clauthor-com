@@ -277,7 +277,7 @@ const HomePage = () => {
               <div className="flex items-center gap-2 mb-4 px-2">
                 <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                 <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
-                  Thor · consultor IA · online
+                  {t("home.thor_status")}
                 </span>
               </div>
               <ThorConciergeChat source="landing" minHeight="360px" seedPrompt={seedPrompt} />
