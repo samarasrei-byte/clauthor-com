@@ -729,7 +729,7 @@ const HomePage = () => {
               </div>
             </div>
             {[
-              { label: "Custo mensal", clt: "R$ 90.000", cla: "R$ 1.700" },
+              { label: "Custo mensal", clt: "R$ 90.000", cla: "R$ 1.477" },
               { label: "Setup", clt: "3 a 6 meses", cla: "90 segundos" },
               { label: "Cobertura", clt: "8h · 5 dias", cla: "24/7 · 365 dias" },
               { label: "Idiomas", clt: "1 a 2", cla: "14 nativos" },
