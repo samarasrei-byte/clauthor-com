@@ -569,7 +569,7 @@ const AIWorkspace = () => {
 
         <TabsContent value="workflow">
           <Card className="p-4">
-            <WorkflowCanvas />
+            {visualMode === "holo" ? <WorkflowCanvasHolo /> : <WorkflowCanvas />}
             <p className="mt-3 text-xs text-muted-foreground">
               As conexões ficam animadas conforme os agentes executam. Cada nó é um especialista com contexto próprio.
             </p>
