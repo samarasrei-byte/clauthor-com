@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Sparkles, Network, Workflow, Plus, Search, Cpu, Activity,
   Clock, Coins, Gauge, Circle, MessageSquare, CheckCircle2,
-  ChevronRight, X, Bot, Wand2, Radio, Send,
+  ChevronRight, X, Bot, Wand2, Radio, Send, RotateCcw, Trash2,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -23,6 +23,9 @@ import {
   useAIWorkspaces, useWorkspaceMessages, useWorkspaceTasks,
   type TaskStatus, type AIWorkspaceTask,
 } from "@/hooks/useAIWorkspaces";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 
 
 /* ────────────────────────────────────────────────────────────────
