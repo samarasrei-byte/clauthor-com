@@ -320,26 +320,45 @@ const AIWorkspace = () => {
                 variant="outline"
                 className="border-primary/40 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--primary)/0.25)]"
               >
-                <span className="mr-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+                <Radio className="mr-1 h-3 w-3 animate-pulse" />
                 Neural Sync
               </Badge>
             </h1>
             <p className="text-sm text-muted-foreground">
-              Sua equipe de agentes trabalhando 24/7 — conversando, delegando e construindo memória compartilhada.
+              {activeWorkspace
+                ? `Ambiente ativo: ${activeWorkspace.name} — conversas e tarefas sincronizadas em tempo real.`
+                : "Sua equipe de agentes trabalhando 24/7 — sincronizada via Realtime."}
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* Seletor de Workspace */}
+          <Select value={activeId ?? undefined} onValueChange={(v) => setActiveId(v)} disabled={wsLoading || workspaces.length === 0}>
+            <SelectTrigger className="w-[220px] border-white/10 bg-background/60 backdrop-blur">
+              <SelectValue placeholder={wsLoading ? "Carregando..." : "Selecionar workspace"} />
+            </SelectTrigger>
+            <SelectContent>
+              {workspaces.map((w) => (
+                <SelectItem key={w.id} value={w.id}>
+                  <span className="mr-1.5">{w.emoji ?? "🧠"}</span>{w.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => setCreatingWs(true)}>
+            <Plus className="h-4 w-4" /> Workspace
+          </Button>
           <Button
             size="sm"
             className="gap-2 bg-gradient-to-r from-primary to-fuchsia-500 text-white shadow-lg shadow-primary/30 hover:opacity-90"
             onClick={() => setCreatorOpen(true)}
           >
-            <Plus className="h-4 w-4" /> Novo Agente
+            <Plus className="h-4 w-4" /> Agente
           </Button>
         </div>
       </motion.header>
+
 
       {/* ─── Live Status Bar ─── */}
       <motion.div
