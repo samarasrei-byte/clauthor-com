@@ -1,7 +1,7 @@
 import { useState, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart3, FileText, Star, Activity, Radio, Orbit } from "lucide-react";
+import { BarChart3, FileText, Star, Activity, Radio, Orbit, Eye } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
 
 const AnalyticsSection = lazy(() => import("./AnalyticsSection"));
@@ -10,8 +10,10 @@ const AIQualityDashboard = lazy(() => import("./AIQualityDashboard"));
 const LogsSection = lazy(() => import("./LogsSection"));
 const WarRoomLive = lazy(() => import("./WarRoomLive"));
 const AgentNeuralNetwork = lazy(() => import("@/pages/AgentNeuralNetwork"));
+const LiveExecutionPanel = lazy(() => import("./LiveExecutionPanel"));
 
 export type IntelligenceTab =
+  | "live"
   | "analytics"
   | "results"
   | "ai-quality"
