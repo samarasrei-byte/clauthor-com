@@ -192,7 +192,7 @@ const HomePage = () => {
             className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.03] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-primary/80 mb-8"
           >
             <Network className="h-3.5 w-3.5" strokeWidth={2} />
-            35.827 empresas · 14 idiomas · operação 24/7
+            {t("home.hero_badge")}
           </motion.div>
 
           <motion.h1
@@ -201,9 +201,9 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="font-display text-[40px] sm:text-5xl md:text-6xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-6"
           >
-            <span className="text-foreground">Qual é a dor</span>
+            <span className="text-foreground">{t("home.hero_title_line1")}</span>
             <br />
-            <span className="gradient-text">que tá te tirando o sono?</span>
+            <span className="gradient-text">{t("home.hero_title_line2")}</span>
           </motion.h1>
 
           <motion.p
@@ -212,9 +212,9 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-base md:text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed"
           >
-            Escolha o que mais te incomoda hoje. O Thor entende o tamanho da sua operação e
-            recomenda em 60 segundos: um agente, um squad ou um departamento inteiro.
-            A partir de <span className="text-foreground font-medium">R$ 597/mês</span>.
+            {t("home.hero_subtitle_prefix")}
+            <span className="text-foreground font-medium">{t("home.hero_price")}</span>
+            {t("home.hero_subtitle_suffix")}
           </motion.p>
 
           {/* Stats pills · Departamentos-style */}
@@ -225,9 +225,9 @@ const HomePage = () => {
             className="flex flex-wrap items-center justify-center gap-2 mb-10"
           >
             {[
-              { icon: Bot, value: "+200", label: "agentes" },
-              { icon: Building2, value: "20", label: "departamentos" },
-              { icon: Zap, value: "24/7", label: "operação" },
+              { icon: Bot, value: "+200", label: t("home.stat_agents") },
+              { icon: Building2, value: "20", label: t("home.stat_departments") },
+              { icon: Zap, value: "24/7", label: t("home.stat_operation") },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/40 border border-border text-sm">
                 <s.icon className="h-3.5 w-3.5 text-primary/70" strokeWidth={2} />
