@@ -223,7 +223,7 @@ export function useWorkspaceMessages(workspaceId: string | null, tenantId: strin
   return { messages, loading, sendMessage };
 }
 
-export const WORKSPACE_MESSAGE_META_KEY = WS_META_KEY;
+
 
 /**
  * Hook: tarefas Kanban unificadas — lê/escreve `agent_tasks` (mesma fonte
@@ -338,5 +338,3 @@ export function useWorkspaceTasks(workspaceId: string | null, tenantId: string |
 }
 
 // Marker de vocabulário — usado por outros módulos que precisem filtrar tasks.
-export const WORKSPACE_TASK_CATEGORY_PREFIX = WS_CATEGORY_PREFIX;
-export const WORKSPACE_TASK_STATUSES = IN_STATUSES;
