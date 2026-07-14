@@ -153,7 +153,11 @@ const fmtTime = (ts: number) => {
 
 /* ═══════════════════════════════════════════════════════════════ */
 
-const AIWorkspace = () => {
+interface AIWorkspaceProps {
+  onNavigate?: (section: string) => void;
+}
+
+const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
   const [agents, setAgents] = useState<WorkspaceAgent[]>(DEFAULT_AGENTS);
   const [chatInput, setChatInput] = useState("");
   const [taskInput, setTaskInput] = useState("");
