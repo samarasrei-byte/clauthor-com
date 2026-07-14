@@ -324,7 +324,7 @@ const HomePage = () => {
                         <Icon className="h-4 w-4 text-primary" strokeWidth={2} />
                       </div>
                       <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-                        {squad.agents} agentes
+                        {squad.agents} {t("home.squads_agents_short")}
                       </span>
                     </div>
                     <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-1.5">
