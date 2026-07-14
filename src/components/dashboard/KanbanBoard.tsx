@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Clock, AlertCircle, Circle, Plus, Bot, Calendar, Flag, Loader2, Trash2, Zap, Activity, ChevronRight, Layers, Target, Eye, Filter, LayoutGrid, List } from "lucide-react";
+import { CheckCircle2, Clock, AlertCircle, Circle, Plus, Bot, Calendar, Flag, Loader2, Trash2, Zap, Activity, ChevronRight, Layers, Target, Eye, Filter, LayoutGrid, List, Search, X } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
