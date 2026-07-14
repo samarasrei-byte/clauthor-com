@@ -203,9 +203,11 @@ const HomePage = () => {
     <div className="light relative overflow-x-hidden bg-background text-foreground">
       {/* ═══════════ HERO ═══════════ */}
       <section
-        className="relative max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28"
+        className="dark relative bg-black text-white"
         aria-label="Hero"
       >
+        <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
+
         <div className="flex flex-col items-center text-center">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
