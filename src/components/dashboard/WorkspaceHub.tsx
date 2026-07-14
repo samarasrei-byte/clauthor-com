@@ -164,6 +164,12 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
             {execView === "kanban" ? <KanbanBoard /> : <FilesLibrary />}
           </Suspense>
         </TabsContent>
+
+        <TabsContent value="ai-live" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <AIWorkspace />
+          </Suspense>
+        </TabsContent>
       </Tabs>
     </div>
   );
