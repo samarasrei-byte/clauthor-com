@@ -636,13 +636,21 @@ const TypingDots = () => (
   </span>
 );
 
+const NEXT_STATUS: Record<TaskStatus, TaskStatus | null> = {
+  backlog: "doing",
+  doing: "review",
+  review: "done",
+  done: null,
+};
+
 const KanbanColumn = ({
-  title, tasks, agents, tone,
+  title, tasks, agentByKey, tone, onMove,
 }: {
   title: string;
-  tasks: Task[];
-  agents: Record<string, WorkspaceAgent>;
+  tasks: AIWorkspaceTask[];
+  agentByKey: Record<string, WorkspaceAgent>;
   tone: string;
+  onMove: (id: string, next: TaskStatus) => void;
 }) => (
   <div className={cn("rounded-lg p-2", tone)}>
     <div className="mb-2 flex items-center justify-between px-1 text-xs font-medium">
@@ -651,21 +659,31 @@ const KanbanColumn = ({
     </div>
     <div className="space-y-1.5">
       {tasks.map((t) => {
-        const a = agents[t.agentId];
+        const a = t.agent_key ? agentByKey[t.agent_key] : undefined;
+        const next = NEXT_STATUS[t.status];
         return (
           <motion.div
             key={t.id}
             layout
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-md border bg-card p-2 text-xs shadow-sm"
+            className="group rounded-md border bg-card p-2 text-xs shadow-sm transition-colors hover:border-primary/40"
           >
             <div className="line-clamp-2 font-medium">{t.title}</div>
-            {a && (
-              <div className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground">
-                <span>{a.emoji}</span> {a.name}
-              </div>
-            )}
+            <div className="mt-1 flex items-center justify-between gap-1 text-[10px] text-muted-foreground">
+              <span className="flex items-center gap-1">
+                {a ? <><span>{a.emoji}</span> {a.name}</> : (t.agent_name ?? "—")}
+              </span>
+              {next && (
+                <button
+                  type="button"
+                  onClick={() => onMove(t.id, next)}
+                  className="opacity-0 transition-opacity group-hover:opacity-100 text-primary hover:underline"
+                >
+                  → {next}
+                </button>
+              )}
+            </div>
           </motion.div>
         );
       })}
@@ -677,6 +695,7 @@ const KanbanColumn = ({
     </div>
   </div>
 );
+
 
 const BrainGraph = ({ filteredIds }: { filteredIds: Set<string> }) => (
   <div className="relative h-[280px] w-full overflow-hidden rounded-lg bg-gradient-to-br from-muted/30 to-transparent">
