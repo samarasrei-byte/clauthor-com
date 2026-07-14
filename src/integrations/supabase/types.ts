@@ -954,6 +954,148 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_workspace_messages: {
+        Row: {
+          agent_emoji: string | null
+          agent_key: string | null
+          agent_name: string | null
+          author_id: string | null
+          author_kind: string
+          content: string
+          created_at: string
+          id: string
+          metadata: Json
+          tenant_id: string
+          workspace_id: string
+        }
+        Insert: {
+          agent_emoji?: string | null
+          agent_key?: string | null
+          agent_name?: string | null
+          author_id?: string | null
+          author_kind?: string
+          content: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          tenant_id: string
+          workspace_id: string
+        }
+        Update: {
+          agent_emoji?: string | null
+          agent_key?: string | null
+          agent_name?: string | null
+          author_id?: string | null
+          author_kind?: string
+          content?: string
+          created_at?: string
+          id?: string
+          metadata?: Json
+          tenant_id?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_workspace_messages_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "ai_workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_workspace_tasks: {
+        Row: {
+          agent_key: string | null
+          agent_name: string | null
+          created_at: string
+          created_by: string | null
+          description: string | null
+          id: string
+          metadata: Json
+          priority: string
+          status: string
+          tenant_id: string
+          title: string
+          updated_at: string
+          workspace_id: string
+        }
+        Insert: {
+          agent_key?: string | null
+          agent_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json
+          priority?: string
+          status?: string
+          tenant_id: string
+          title: string
+          updated_at?: string
+          workspace_id: string
+        }
+        Update: {
+          agent_key?: string | null
+          agent_name?: string | null
+          created_at?: string
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json
+          priority?: string
+          status?: string
+          tenant_id?: string
+          title?: string
+          updated_at?: string
+          workspace_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_workspace_tasks_workspace_id_fkey"
+            columns: ["workspace_id"]
+            isOneToOne: false
+            referencedRelation: "ai_workspaces"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_workspaces: {
+        Row: {
+          created_at: string
+          description: string | null
+          emoji: string | null
+          id: string
+          is_default: boolean
+          name: string
+          owner_id: string
+          tenant_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          id?: string
+          is_default?: boolean
+          name: string
+          owner_id: string
+          tenant_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          emoji?: string | null
+          id?: string
+          is_default?: boolean
+          name?: string
+          owner_id?: string
+          tenant_id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       ambient_signals: {
         Row: {
           acted_at: string | null
