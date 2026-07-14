@@ -176,7 +176,7 @@ const Squads = () => {
               </p>
               <ul className="space-y-2 text-sm text-foreground/85">
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> Ativação em minutos, self-serve</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> A partir de R$ 297/mês</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> A partir de R$ 597/mês</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> Escopo vertical (1 função)</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> Cancelamento livre</li>
               </ul>
