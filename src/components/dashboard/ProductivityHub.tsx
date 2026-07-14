@@ -55,9 +55,9 @@ const MOCK_INBOX = {
 const NEWS_TOPICS = ["Inteligência Artificial", "Tecnologia", "Negócios", "Marketing", "Programação", "Economia", "Startups"];
 
 const MOCK_NEWS = [
-  { id: "n1", topic: "Inteligência Artificial", title: "Anthropic lança Claude Opus 4.8 com raciocínio multi-passo", summary: "Nova geração melhora análise técnica e reduz alucinações em 40%.", source: "The Verge", time: "há 12 min", image: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?w=400&h=240&fit=crop" },
-  { id: "n2", topic: "Startups", title: "Fintechs brasileiras captam R$ 2,3 bi no trimestre", summary: "Setor lidera aportes no país mesmo em cenário global mais seco.", source: "Brazil Journal", time: "há 1h", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=240&fit=crop" },
-  { id: "n3", topic: "Tecnologia", title: "Apple aposta em chips M5 com foco em IA local", summary: "Nova arquitetura promete rodar modelos de 70B parâmetros no MacBook.", source: "Bloomberg", time: "há 2h", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=240&fit=crop" },
+  { id: "n1", topic: "Inteligência Artificial", title: "Anthropic lança Claude Opus 4.8 com raciocínio multi-passo", summary: "Nova geração melhora análise técnica e reduz alucinações em 40%.", source: "The Verge", time: "há 12 min", image: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?w=400&h=240&fit=crop", url: "https://www.theverge.com/ai-artificial-intelligence" },
+  { id: "n2", topic: "Startups", title: "Fintechs brasileiras captam R$ 2,3 bi no trimestre", summary: "Setor lidera aportes no país mesmo em cenário global mais seco.", source: "Brazil Journal", time: "há 1h", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=240&fit=crop", url: "https://braziljournal.com/" },
+  { id: "n3", topic: "Tecnologia", title: "Apple aposta em chips M5 com foco em IA local", summary: "Nova arquitetura promete rodar modelos de 70B parâmetros no MacBook.", source: "Bloomberg", time: "há 2h", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=240&fit=crop", url: "https://www.bloomberg.com/technology" },
 ];
 
 const INTEGRATIONS = [
