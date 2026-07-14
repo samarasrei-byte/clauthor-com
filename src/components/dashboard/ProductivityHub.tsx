@@ -394,7 +394,7 @@ const NewsCard = ({ onNavigate }: { onNavigate?: (id: string) => void }) => {
   );
 };
 
-const DailySummaryCard = () => {
+const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; refreshing?: boolean }) => {
   const priorities = [
     "Assinar contrato Ironberg antes das 12h",
     "Revisar proposta Acme com Marina",
@@ -407,8 +407,14 @@ const DailySummaryCard = () => {
       description="Gerado automaticamente pela IA"
       className="border-primary/25 bg-gradient-to-br from-primary/[0.06] to-transparent"
       action={
-        <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8 border-primary/30 text-primary hover:bg-primary/10">
-          <RefreshCw className="h-3 w-3" />
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1.5 text-xs h-8 border-primary/30 text-primary hover:bg-primary/10"
+          onClick={onRefresh}
+          disabled={refreshing}
+        >
+          <RefreshCw className={cn("h-3 w-3", refreshing && "animate-spin")} />
           Atualizar
         </Button>
       }
