@@ -197,7 +197,6 @@ const HomePage = () => {
           >
             <ThorConciergeChat source="landing" minHeight="min-h-[520px]" />
           </motion.div>
-          </motion.div>
 
           <motion.div
             initial={{ opacity: 0 }}
