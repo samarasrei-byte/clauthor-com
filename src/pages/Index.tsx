@@ -381,8 +381,11 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* ═══════════ NUMBERS (dark contrast band) ═══════════ */}
-      <section className="dark relative bg-black text-white overflow-hidden" aria-label="Escala">
+      {/* ═══════════ DOIS CAMINHOS + ESCALA · seção dark unificada ═══════════ */}
+      <section
+        className="dark relative bg-black text-white overflow-hidden"
+        aria-label="Squad ou Departamento"
+      >
         {/* Grain overlay */}
         <div
           aria-hidden
@@ -392,57 +395,28 @@ const HomePage = () => {
               "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>\")",
           }}
         />
-        <div className="relative max-w-6xl mx-auto px-6 py-20 grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
-          {[
-            { num: 35827, prefix: "", suffix: "", label: "Empresas ativas", accent: false, sub: null as string | null },
-            { num: 200, prefix: "+", suffix: "", label: "Especialistas de IA", accent: false, sub: null },
-            { num: 1700, prefix: "R$ ", suffix: "", label: "Custo mensal", accent: true, sub: "vs R$ 90.000 CLT" },
-            { num: 14, prefix: "", suffix: "", label: "Idiomas nativos", accent: false, sub: null },
-          ].map((s) => (
-            <motion.div
-              key={s.label}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.5 }}
-              className="text-center md:text-left"
-            >
-              <AnimatedCounter
-                value={s.num}
-                prefix={s.prefix}
-                suffix={s.suffix}
-                duration={2}
-                className={`block text-4xl md:text-5xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}
-              />
-              <div className="mt-1.5 text-xs uppercase tracking-[0.14em] text-white/50">
-                {s.label}
-              </div>
-              {s.sub && (
-                <div className="mt-1 text-[11px] text-white/40 line-through decoration-white/30">
-                  {s.sub}
-                </div>
-              )}
-            </motion.div>
-          ))}
-        </div>
-      </section>
+        {/* Glow atmosférico */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-32 left-1/2 -translate-x-1/2 h-[400px] w-[600px] rounded-full bg-primary/[0.08] blur-[120px]"
+        />
 
-      {/* ═══════════ DOIS CAMINHOS · Squad vs Departamento ═══════════ */}
-      <section className="border-t border-border/60" aria-label="Squad ou Departamento">
-        <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
-          <div className="mb-14 max-w-3xl">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
+        <div className="relative max-w-6xl mx-auto px-6 py-24 sm:py-32">
+          {/* ── Header ─────────────────────────────────────────────── */}
+          <div className="mb-16 max-w-3xl">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-4">
               Dois caminhos
             </p>
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
+            <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-white mb-6">
               Comece com um squad.{" "}
-              <span className="text-muted-foreground">Escale para um departamento.</span>
+              <span className="text-white/40">Escale para um departamento.</span>
             </h2>
-            <p className="text-lg text-muted-foreground max-w-xl">
+            <p className="text-lg text-white/60 max-w-xl">
               Você escolhe o tamanho da mordida. Do primeiro time vertical ao departamento inteiro.
             </p>
           </div>
 
+          {/* ── Cards ──────────────────────────────────────────────── */}
           <div className="grid md:grid-cols-2 gap-5">
             {/* Squad · entrada PME */}
             <motion.button
@@ -452,42 +426,43 @@ const HomePage = () => {
               }}
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className="group relative text-left p-8 sm:p-10 rounded-3xl border border-border/60 bg-background hover:bg-card hover:shadow-[0_20px_60px_-25px_hsl(0_0%_0%/0.35)] transition-all flex flex-col min-h-[360px]"
+              className="group relative text-left p-8 sm:p-10 rounded-3xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.06] hover:border-white/20 backdrop-blur-sm transition-all flex flex-col min-h-[360px]"
             >
               <div className="flex items-center justify-between mb-8">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
                   ● Squad
                 </span>
-                <span className="text-[11px] text-muted-foreground">Comece rápido</span>
+                <span className="text-[11px] text-white/40">Comece rápido</span>
               </div>
 
-              <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-foreground mb-4">
+              <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
                 Comece rápido.
               </h3>
-              <p className="text-base text-muted-foreground leading-relaxed mb-8 flex-1">
-                Um time vertical de 4 a 7 agentes de IA para resolver <span className="text-foreground">uma dor específica</span>.
-                Ativação em minutos, sem equipe técnica. Ideal para PME e profissionais liberais.
+              <p className="text-base text-white/60 leading-relaxed mb-8 flex-1">
+                Um time vertical de 4 a 7 agentes de IA para resolver{" "}
+                <span className="text-white">uma dor específica</span>. Ativação em minutos, sem
+                equipe técnica. Ideal para PME e profissionais liberais.
               </p>
 
-              <ul className="space-y-2 mb-8 text-sm text-foreground/85">
+              <ul className="space-y-2 mb-8 text-sm text-white/80">
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Reputação IA, Atendimento 24h, SDR, Financeiro, Conteúdo</li>
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Self-serve, sem onboarding pesado</li>
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Cancelamento livre</li>
               </ul>
 
-              <div className="flex items-center justify-between pt-6 border-t border-border/50">
+              <div className="flex items-center justify-between pt-6 border-t border-white/10">
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-muted-foreground">A partir de</div>
-                  <div className="text-2xl font-semibold text-foreground">R$ 597<span className="text-sm font-normal text-muted-foreground">/mês</span></div>
+                  <div className="text-[11px] uppercase tracking-wider text-white/50">A partir de</div>
+                  <div className="text-2xl font-semibold text-white">R$ 597<span className="text-sm font-normal text-white/50">/mês</span></div>
                 </div>
-                <span className="text-sm font-semibold inline-flex items-center gap-1 text-foreground group-hover:text-primary transition-colors">
+                <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
                   Ver squads
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
             </motion.button>
 
-            {/* Departamento · core empresa */}
+            {/* Departamento · core empresa · destaque com fundo vermelho sutil */}
             <motion.button
               onClick={() => {
                 trackKpi("home_path_select", { section: "departamento" });
@@ -495,43 +470,90 @@ const HomePage = () => {
               }}
               whileHover={{ y: -4 }}
               transition={{ type: "spring", stiffness: 300, damping: 24 }}
-              className="group relative text-left p-8 sm:p-10 rounded-3xl bg-foreground text-background hover:shadow-[0_30px_80px_-20px_hsl(0_85%_55%/0.4)] transition-all flex flex-col min-h-[360px]"
+              className="group relative text-left p-8 sm:p-10 rounded-3xl overflow-hidden bg-gradient-to-br from-primary/[0.12] via-white/[0.04] to-white/[0.02] border border-primary/30 hover:border-primary/50 hover:shadow-[0_30px_80px_-20px_hsl(var(--primary)/0.5)] transition-all flex flex-col min-h-[360px]"
             >
-              <div className="flex items-center justify-between mb-8">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -top-24 -right-16 h-64 w-64 rounded-full bg-primary/20 blur-[100px]"
+              />
+              <div className="relative flex items-center justify-between mb-8">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
                   ● Departamento
                 </span>
-                <span className="text-[11px] text-background/60">Transforme a operação</span>
+                <span className="text-[11px] text-white/50">Recomendado · transforme a operação</span>
               </div>
 
-              <h3 className="text-3xl sm:text-4xl font-semibold tracking-tight mb-4">
+              <h3 className="relative text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
                 Transforme sua empresa.
               </h3>
-              <p className="text-base text-background/70 leading-relaxed mb-8 flex-1">
-                Um departamento inteiro em IA · 20+ agentes cobrindo <span className="text-background">uma área completa</span>
-                {" "}(Comercial, Marketing, Financeiro, Jurídico...). Para média e grande empresa que quer trocar operação por decisão.
+              <p className="relative text-base text-white/70 leading-relaxed mb-8 flex-1">
+                Um departamento inteiro em IA · 20+ agentes cobrindo{" "}
+                <span className="text-white">uma área completa</span> (Comercial, Marketing,
+                Financeiro, Jurídico...). Para média e grande empresa que quer trocar operação
+                por decisão.
               </p>
 
-              <ul className="space-y-2 mb-8 text-sm text-background/90">
+              <ul className="relative space-y-2 mb-8 text-sm text-white/85">
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> 20 departamentos · +200 especialistas de IA</li>
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> Onboarding assistido em 7 dias</li>
                 <li className="flex items-center gap-2"><span className="text-primary">▪</span> 35.827 empresas já confiam</li>
               </ul>
 
-              <div className="flex items-center justify-between pt-6 border-t border-background/15">
+              <div className="relative flex items-center justify-between pt-6 border-t border-white/15">
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-background/60">A partir de</div>
-                  <div className="text-2xl font-semibold">R$ 1.700<span className="text-sm font-normal text-background/60">/mês</span></div>
+                  <div className="text-[11px] uppercase tracking-wider text-white/50">A partir de</div>
+                  <div className="text-2xl font-semibold text-white">R$ 1.477<span className="text-sm font-normal text-white/50">/mês</span></div>
                 </div>
-                <span className="text-sm font-semibold inline-flex items-center gap-1 group-hover:text-primary transition-colors">
+                <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
                   Ver departamentos
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
             </motion.button>
           </div>
+
+          {/* ── Escala · faixa de prova (fundida à mesma seção) ─── */}
+          <div className="relative mt-20 pt-12 border-t border-white/10">
+            <p className="text-[10px] uppercase tracking-[0.24em] text-white/40 mb-8 text-center">
+              A escala que já opera hoje
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
+              {[
+                { num: 35827, prefix: "", suffix: "", label: "Empresas ativas", accent: false, sub: null as string | null },
+                { num: 200, prefix: "+", suffix: "", label: "Especialistas de IA", accent: false, sub: null },
+                { num: 1477, prefix: "R$ ", suffix: "", label: "Custo mensal a partir de", accent: true, sub: "vs R$ 90.000 CLT" },
+                { num: 14, prefix: "", suffix: "", label: "Idiomas nativos", accent: false, sub: null },
+              ].map((s) => (
+                <motion.div
+                  key={s.label}
+                  initial={{ opacity: 0, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-80px" }}
+                  transition={{ duration: 0.5 }}
+                  className="text-center md:text-left"
+                >
+                  <AnimatedCounter
+                    value={s.num}
+                    prefix={s.prefix}
+                    suffix={s.suffix}
+                    duration={2}
+                    className={`block text-3xl md:text-4xl font-semibold tracking-tight ${s.accent ? "text-primary" : "text-white"}`}
+                  />
+                  <div className="mt-1.5 text-[11px] uppercase tracking-[0.14em] text-white/50">
+                    {s.label}
+                  </div>
+                  {s.sub && (
+                    <div className="mt-1 text-[10px] text-white/35 line-through decoration-white/25">
+                      {s.sub}
+                    </div>
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
+
 
       {/* ═══════════ DEPARTAMENTOS ═══════════ */}
       <section className="max-w-6xl mx-auto px-6 py-24 sm:py-32" aria-label="Departamentos">
@@ -707,7 +729,7 @@ const HomePage = () => {
               </div>
             </div>
             {[
-              { label: "Custo mensal", clt: "R$ 90.000", cla: "R$ 1.700" },
+              { label: "Custo mensal", clt: "R$ 90.000", cla: "R$ 1.477" },
               { label: "Setup", clt: "3 a 6 meses", cla: "90 segundos" },
               { label: "Cobertura", clt: "8h · 5 dias", cla: "24/7 · 365 dias" },
               { label: "Idiomas", clt: "1 a 2", cla: "14 nativos" },

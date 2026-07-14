@@ -89,7 +89,7 @@ export function recommend(input: OnboardingInput): RecommendationResult {
     targetId: deptId,
     title: `Departamento de ${deptLabel[deptId] ?? deptId}`,
     pitch:
-      "Uma operação completa · 6 a 9 agentes coordenados, entrega desde o primeiro dia, a partir de R$ 1.700/mês.",
+      "Uma operação completa · 6 a 9 agentes coordenados, entrega desde o primeiro dia, a partir de R$ 1.477/mês.",
     cta: "Ativar departamento",
     href: `/departamentos/${deptId}`,
   };
@@ -144,7 +144,7 @@ export function fromHomeChat(input: {
     kind: "department",
     targetId: deptId,
     title: `Departamento de ${label}`,
-    pitch: "Uma operação completa · 6 a 9 agentes coordenados, entrega desde o primeiro dia, a partir de R$ 1.700/mês.",
+    pitch: "Uma operação completa · 6 a 9 agentes coordenados, entrega desde o primeiro dia, a partir de R$ 1.477/mês.",
     cta: "Ativar departamento",
     href: `/departamentos/${deptId}`,
   };

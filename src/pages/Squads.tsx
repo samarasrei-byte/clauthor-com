@@ -208,7 +208,7 @@ const Squads = () => {
               </p>
               <ul className="space-y-2 text-sm text-foreground/85">
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> Onboarding assistido (7 dias)</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> A partir de R$ 1.700/mês</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> A partir de R$ 1.477/mês</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> 20 departamentos disponíveis</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> +200 especialistas de IA</li>
               </ul>
