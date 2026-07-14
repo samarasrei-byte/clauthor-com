@@ -658,9 +658,9 @@ const AgentCard = ({ agent }: { agent: WorkspaceAgent }) => {
         "ring-1", meta.ring
       )}>
         <div className="flex items-start gap-3">
-          <div className={cn("relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br text-lg", agent.color)}>
+          <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/40 text-base">
             <span>{agent.emoji}</span>
-            <span className={cn("absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-background", meta.dot)} />
+            <span className={cn("absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-background", meta.dot)} />
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center justify-between gap-2">
