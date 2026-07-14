@@ -184,6 +184,33 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
   const { messages, sendMessage } = useWorkspaceMessages(activeId, tenantId);
   const { tasks, createTask, updateTaskStatus } = useWorkspaceTasks(activeId, tenantId);
 
+  // ── Memory counts (real data) ──
+  const { user } = useAuth();
+  const { data: memoryCounts } = useQuery({
+    queryKey: ["ia-live-memory-counts", user?.id],
+    enabled: !!user,
+    queryFn: async () => {
+      const uid = user!.id;
+      const q = (table: string, col = "user_id") =>
+        supabase.from(table as any).select("*", { count: "exact", head: true }).eq(col, uid);
+      const [ws, msgs, files, agentsCount, prompts] = await Promise.all([
+        q("ai_workspaces"),
+        q("ai_workspace_messages"),
+        q("files"),
+        q("agents"),
+        q("agent_prompt_versions", "created_by"),
+      ]);
+      return {
+        projetos: ws.count ?? 0,
+        conversas: msgs.count ?? 0,
+        arquivos: files.count ?? 0,
+        agentes: agentsCount.count ?? 0,
+        regras: prompts.count ?? 0,
+      };
+    },
+    staleTime: 60_000,
+  });
+
   const agentByKey = useMemo(
     () => Object.fromEntries(agents.map((a) => [a.id, a])),
     [agents]
