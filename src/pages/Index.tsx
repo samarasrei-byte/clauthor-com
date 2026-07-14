@@ -172,9 +172,9 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="text-[44px] sm:text-6xl md:text-7xl lg:text-[88px] font-semibold tracking-[-0.035em] leading-[0.98] max-w-5xl mb-8"
           >
-            <span className="text-black dark:text-white">Converse com o Thor.</span>
+            <span className="text-black dark:text-white">Contrate um squad de IA.</span>
             <br />
-            <span className="text-muted-foreground">Ele monta a solução certa.</span>
+            <span className="text-muted-foreground">Um time inteiro. Uma dor resolvida.</span>
           </motion.h1>
 
           <motion.p
@@ -183,9 +183,9 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-14 leading-relaxed"
           >
-            Um agente, um squad ou um departamento inteiro · o Thor entende seu
-            cenário e recomenda o caminho certo. A partir de{" "}
-            <span className="text-foreground font-medium">R$ 197/mês</span>.
+            Um agente, um squad ou um departamento inteiro. Escolha o time certo
+            para cada função. A partir de{" "}
+            <span className="text-foreground font-medium">R$ 297/mês</span>.
           </motion.p>
 
           {/* Showcase de squads · vitrine principal na home */}
