@@ -516,7 +516,7 @@ const KanbanBoard = () => {
                           initial={{ width: 0 }}
                           animate={{ width: `${progress}%` }}
                           transition={{ duration: 0.8, ease: "easeOut" }}
-                          className="h-full rounded-full bg-gradient-to-r from-primary to-accent-emerald"
+                          className="h-full rounded-full bg-primary"
                         />
                       </div>
                     </div>
