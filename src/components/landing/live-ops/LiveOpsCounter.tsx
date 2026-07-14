@@ -59,29 +59,29 @@ export default function LiveOpsCounter() {
 
   return (
     <div
-      className="grid grid-cols-1 sm:grid-cols-3 gap-px rounded-3xl overflow-hidden border border-white/10 bg-white/[0.03]"
+      className="grid grid-cols-1 sm:grid-cols-3 gap-px rounded-3xl overflow-hidden border border-white/10 bg-white/10"
       role="group"
       aria-label="Operação em tempo real"
     >
       {METRICS.map((m, idx) => (
-        <div key={m.label} className="relative p-8 sm:p-10 bg-background/40">
-          <div className="flex items-center gap-2 mb-4">
+        <div key={m.label} className="relative p-8 sm:p-10 bg-black">
+          <div className="flex items-center gap-2 mb-6">
             <span
               className="h-2 w-2 rounded-full bg-primary animate-pulse shadow-[0_0_10px_hsl(var(--primary))]"
               aria-hidden
             />
-            <span className="text-[10px] uppercase tracking-[0.22em] text-white/50">Ao vivo</span>
+            <span className="text-[10px] uppercase tracking-[0.24em] text-white/70">Ao vivo</span>
           </div>
           <motion.div
             key={values[idx]}
-            initial={{ opacity: 0.6, y: -2 }}
+            initial={{ opacity: 0.7, y: -2 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.35, ease: "easeOut" }}
-            className="text-4xl sm:text-5xl font-semibold tracking-tight text-white tabular-nums"
+            className="font-display text-5xl sm:text-6xl font-semibold tracking-[-0.03em] text-white tabular-nums"
           >
             {m.format(values[idx])}
           </motion.div>
-          <p className="mt-3 text-sm text-white/60 leading-snug">{m.label}</p>
+          <p className="mt-4 text-sm text-white/70 leading-snug">{m.label}</p>
         </div>
       ))}
     </div>
