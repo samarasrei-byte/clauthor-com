@@ -336,11 +336,11 @@ const HomePage = () => {
                     </p>
                     <div className="flex items-center justify-between pt-3 border-t border-border">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-[10px] text-muted-foreground">a partir de R$</span>
+                        <span className="text-[10px] text-muted-foreground">{t("home.squads_from")}</span>
                         <span className="text-lg font-semibold text-foreground">
                           {squad.tiers[0].price.toLocaleString("pt-BR")}
                         </span>
-                        <span className="text-[10px] text-muted-foreground">/mês</span>
+                        <span className="text-[10px] text-muted-foreground">{t("home.squads_per_month")}</span>
                       </div>
                       <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                     </div>
