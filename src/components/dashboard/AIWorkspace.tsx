@@ -260,25 +260,63 @@ const AIWorkspace = () => {
   const estCost = (totalTokens / 1000) * 0.02;
 
   return (
-    <div className="space-y-6 pb-8">
+    <div className="relative space-y-6 pb-8">
+      {/* ─── Futuristic ambient backdrop ─── */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 -top-8 -z-10 h-[520px] overflow-hidden rounded-[32px]"
+      >
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.18),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(168,85,247,0.18),transparent_60%)]" />
+        <div
+          className="absolute inset-0 opacity-[0.06]"
+          style={{
+            backgroundImage:
+              "linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+            maskImage: "radial-gradient(ellipse at 50% 30%, black 40%, transparent 80%)",
+          }}
+        />
+        <motion.div
+          className="absolute -left-16 top-10 h-64 w-64 rounded-full bg-primary/25 blur-3xl"
+          animate={{ x: [0, 40, 0], y: [0, 20, 0] }}
+          transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute right-0 top-24 h-72 w-72 rounded-full bg-fuchsia-500/20 blur-3xl"
+          animate={{ x: [0, -30, 0], y: [0, -10, 0] }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        />
+      </div>
+
       {/* ─── Header ─── */}
       <motion.header
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between"
+        className="relative flex flex-col gap-4 rounded-2xl border border-white/10 bg-background/40 p-4 backdrop-blur-xl md:flex-row md:items-center md:justify-between md:p-5"
       >
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/40 to-purple-500/40 blur-xl" />
-            <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-purple-500 shadow-lg">
+            <motion.div
+              className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/50 to-fuchsia-500/50 blur-2xl"
+              animate={{ opacity: [0.6, 1, 0.6] }}
+              transition={{ duration: 4, repeat: Infinity }}
+            />
+            <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-primary to-fuchsia-500 shadow-lg shadow-primary/30 ring-1 ring-white/20">
               <Brain className="h-6 w-6 text-white" />
             </div>
           </div>
           <div>
             <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
-              AI Workspace
-              <Badge variant="outline" className="border-primary/30 bg-primary/5 text-primary">
-                <Sparkles className="mr-1 h-3 w-3" /> Live
+              <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
+                AI Workspace
+              </span>
+              <Badge
+                variant="outline"
+                className="border-primary/40 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--primary)/0.25)]"
+              >
+                <span className="mr-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+                Neural Sync
               </Badge>
             </h1>
             <p className="text-sm text-muted-foreground">
@@ -288,7 +326,11 @@ const AIWorkspace = () => {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <Button variant="outline" size="sm" className="gap-2" onClick={() => setCreatorOpen(true)}>
+          <Button
+            size="sm"
+            className="gap-2 bg-gradient-to-r from-primary to-fuchsia-500 text-white shadow-lg shadow-primary/30 hover:opacity-90"
+            onClick={() => setCreatorOpen(true)}
+          >
             <Plus className="h-4 w-4" /> Novo Agente
           </Button>
         </div>
@@ -308,6 +350,7 @@ const AIWorkspace = () => {
         <StatCard icon={Coins}    label="Tokens"          value={(totalTokens / 1000).toFixed(1) + "k"} />
         <StatCard icon={Gauge}    label="Eficiência"      value="94%" hint={`~ $${estCost.toFixed(2)}`} />
       </motion.div>
+
 
       {/* ─── Delegação ─── */}
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5 p-4">
@@ -524,11 +567,12 @@ const AIWorkspace = () => {
 const StatCard = ({
   icon: Icon, label, value, hint,
 }: { icon: any; label: string; value: string | number; hint?: string }) => (
-  <Card className="p-3">
+  <Card className="relative overflow-hidden border-white/10 bg-background/40 p-3 backdrop-blur-xl transition-all hover:border-primary/30 hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)]">
+    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
-      <Icon className="h-3.5 w-3.5" /> {label}
+      <Icon className="h-3.5 w-3.5 text-primary" /> {label}
     </div>
-    <div className="mt-1 text-lg font-semibold">{value}</div>
+    <div className="mt-1 text-lg font-semibold tabular-nums tracking-tight">{value}</div>
     {hint && <div className="text-[10px] text-muted-foreground">{hint}</div>}
   </Card>
 );
