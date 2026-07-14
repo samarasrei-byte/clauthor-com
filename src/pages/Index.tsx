@@ -195,7 +195,7 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.22 }}
             className="w-full max-w-2xl"
           >
-            <ThorConciergeChat source="landing" minHeight="min-h-[360px]" />
+            <ThorConciergeChat source="landing" minHeight="min-h-[520px]" />
           </motion.div>
 
           <motion.div
