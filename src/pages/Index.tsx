@@ -11,7 +11,7 @@ import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Briefcase, Headphones, Megaphone, Scale, Wallet, Users, MessageSquareWarning, TrendingDown, Repeat, LineChart, HelpCircle, Network, Bot, Building2, Zap } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
-import { useTranslation } from "react-i18next";
+import { useTranslation, Trans } from "react-i18next";
 
 import Footer from "@/components/Footer";
 import { SQUADS } from "@/data/squads";
@@ -459,7 +459,7 @@ const HomePage = () => {
                   <div className="text-2xl font-semibold text-white">R$ 597<span className="text-sm font-normal text-white/50">/mês</span></div>
                 </div>
                 <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
-                  Ver squads
+                  {t("home.paths_squad_see")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
@@ -481,34 +481,31 @@ const HomePage = () => {
               />
               <div className="relative flex items-center justify-between mb-8">
                 <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
-                  ● Departamento
+                  {t("home.paths_dept_badge")}
                 </span>
-                <span className="text-[11px] text-white/50">Recomendado · transforme a operação</span>
+                <span className="text-[11px] text-white/50">{t("home.paths_dept_recommended")}</span>
               </div>
 
               <h3 className="relative text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
-                Transforme sua empresa.
+                {t("home.paths_dept_title")}
               </h3>
               <p className="relative text-base text-white/70 leading-relaxed mb-8 flex-1">
-                Um departamento inteiro em IA · 20+ agentes cobrindo{" "}
-                <span className="text-white">uma área completa</span> (Comercial, Marketing,
-                Financeiro, Jurídico...). Para média e grande empresa que quer trocar operação
-                por decisão.
+                <Trans i18nKey="home.paths_dept_desc" components={{ 1: <span className="text-white" /> }} />
               </p>
 
               <ul className="relative space-y-2 mb-8 text-sm text-white/85">
-                <li className="flex items-center gap-2"><span className="text-primary">▪</span> 20 departamentos · +200 especialistas de IA</li>
-                <li className="flex items-center gap-2"><span className="text-primary">▪</span> Onboarding assistido em 7 dias</li>
-                <li className="flex items-center gap-2"><span className="text-primary">▪</span> 35.827 empresas já confiam</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> {t("home.paths_dept_bullet1")}</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> {t("home.paths_dept_bullet2")}</li>
+                <li className="flex items-center gap-2"><span className="text-primary">▪</span> {t("home.paths_dept_bullet3")}</li>
               </ul>
 
               <div className="relative flex items-center justify-between pt-6 border-t border-white/15">
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-white/50">A partir de</div>
+                  <div className="text-[11px] uppercase tracking-wider text-white/50">{t("home.paths_dept_from")}</div>
                   <div className="text-2xl font-semibold text-white">R$ 1.477<span className="text-sm font-normal text-white/50">/mês</span></div>
                 </div>
                 <span className="text-sm font-semibold inline-flex items-center gap-1 text-white group-hover:text-primary transition-colors">
-                  Ver departamentos
+                  {t("home.paths_dept_see")}
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </span>
               </div>
@@ -518,14 +515,14 @@ const HomePage = () => {
           {/* ── Escala · faixa de prova (fundida à mesma seção) ─── */}
           <div className="relative mt-20 pt-12 border-t border-white/10">
             <p className="text-[10px] uppercase tracking-[0.24em] text-white/40 mb-8 text-center">
-              A escala que já opera hoje
+              {t("home.scale_eyebrow")}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
               {[
-                { num: 35827, prefix: "", suffix: "", label: "Empresas ativas", accent: false, sub: null as string | null },
-                { num: 200, prefix: "+", suffix: "", label: "Especialistas de IA", accent: false, sub: null },
-                { num: 1477, prefix: "R$ ", suffix: "", label: "Custo mensal a partir de", accent: true, sub: "vs R$ 90.000 CLT" },
-                { num: 14, prefix: "", suffix: "", label: "Idiomas nativos", accent: false, sub: null },
+                { num: 35827, prefix: "", suffix: "", label: t("home.scale_companies"), accent: false, sub: null as string | null },
+                { num: 200, prefix: "+", suffix: "", label: t("home.scale_specialists"), accent: false, sub: null },
+                { num: 1477, prefix: "R$ ", suffix: "", label: t("home.scale_cost"), accent: true, sub: "vs R$ 90.000 CLT" },
+                { num: 14, prefix: "", suffix: "", label: t("home.scale_langs"), accent: false, sub: null },
               ].map((s) => (
                 <motion.div
                   key={s.label}
@@ -567,14 +564,14 @@ const HomePage = () => {
       <section className="max-w-6xl mx-auto px-6 py-24 sm:py-32" aria-label="Departamentos">
         <div className="mb-16 max-w-3xl">
           <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
-            Departamentos
+            {t("home.dept_section_eyebrow")}
           </p>
           <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
-            Escolha o que quer{" "}
-            <span className="text-muted-foreground">parar de fazer.</span>
+            {t("home.dept_section_title1")}{" "}
+            <span className="text-muted-foreground">{t("home.dept_section_title2")}</span>
           </h2>
           <p className="text-lg text-muted-foreground max-w-xl">
-            Cada departamento chega pronto para operar. Você escolhe a dor, a Clauthor entrega o time.
+            {t("home.dept_section_desc")}
           </p>
         </div>
 
@@ -599,7 +596,7 @@ const HomePage = () => {
               >
                 {isFeatured && (
                   <span className="absolute top-6 right-6 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
-                    ● Mais contratado
+                    {t("home.dept_most_hired")}
                   </span>
                 )}
                 <Icon
@@ -628,7 +625,7 @@ const HomePage = () => {
                   <span
                     className={`text-xs ${isFeatured ? "text-background/60" : "text-muted-foreground"}`}
                   >
-                    {dept.agentSlugs.length} agentes · 24/7
+                    {t("home.dept_agents_247", { count: dept.agentSlugs.length })}
                   </span>
                   <span
                     className={`text-sm font-semibold inline-flex items-center gap-1 transition-colors ${
@@ -652,14 +649,14 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
-              Como funciona
+              {t("home.how_eyebrow")}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
-              Três passos.{" "}
-              <span className="text-muted-foreground">Zero fricção.</span>
+              {t("home.how_title1")}{" "}
+              <span className="text-muted-foreground">{t("home.how_title2")}</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-xl">
-              Do primeiro clique à operação rodando sozinha em menos de dois minutos.
+              {t("home.how_desc")}
             </p>
           </div>
 
@@ -667,18 +664,18 @@ const HomePage = () => {
             {[
               {
                 step: "01",
-                title: "Escolha o departamento",
-                copy: "Comercial, Marketing, Financeiro, Jurídico, RH ou Atendimento. Cada um chega com agentes especializados prontos.",
+                title: t("home.how_s1_title"),
+                copy: t("home.how_s1_copy"),
               },
               {
                 step: "02",
-                title: "Aprove o squad",
-                copy: "O Thor monta a equipe ideal para sua operação. Você revisa, ajusta e aprova em um clique.",
+                title: t("home.how_s2_title"),
+                copy: t("home.how_s2_copy"),
               },
               {
                 step: "03",
-                title: "Você comanda de casa",
-                copy: "Os agentes executam 24/7 em 14 idiomas. Você aprova entregas ou apenas acompanha o resultado.",
+                title: t("home.how_s3_title"),
+                copy: t("home.how_s3_copy"),
               },
             ].map((s, i) => (
               <motion.div
@@ -715,11 +712,11 @@ const HomePage = () => {
         <div className="max-w-5xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
-              Comparativo
+              {t("home.compare_eyebrow")}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
-              O time tradicional{" "}
-              <span className="text-muted-foreground">vs. a Clauthor.</span>
+              {t("home.compare_title1")}{" "}
+              <span className="text-muted-foreground">{t("home.compare_title2")}</span>
             </h2>
           </div>
 
@@ -727,22 +724,22 @@ const HomePage = () => {
             {/* Header row */}
             <div className="grid grid-cols-3 border-b border-border/60 bg-card/40">
               <div className="p-5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground font-semibold">
-                Métrica
+                {t("home.compare_col_metric")}
               </div>
               <div className="p-5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground font-semibold border-l border-border/60">
-                Departamento CLT
+                {t("home.compare_col_clt")}
               </div>
               <div className="p-5 text-[11px] uppercase tracking-[0.14em] text-primary font-semibold border-l border-border/60 bg-primary/[0.03]">
-                Departamento Clauthor
+                {t("home.compare_col_cla")}
               </div>
             </div>
             {[
-              { label: "Custo mensal", clt: "R$ 90.000", cla: "R$ 1.477" },
-              { label: "Setup", clt: "3 a 6 meses", cla: "90 segundos" },
-              { label: "Cobertura", clt: "8h · 5 dias", cla: "24/7 · 365 dias" },
-              { label: "Idiomas", clt: "1 a 2", cla: "14 nativos" },
-              { label: "Escala", clt: "Contratar · demitir", cla: "Instantânea" },
-              { label: "Turnover", clt: "23% ao ano", cla: "Zero" },
+              { label: t("home.compare_row_cost"), clt: "R$ 90.000", cla: "R$ 1.477" },
+              { label: t("home.compare_row_setup"), clt: t("home.compare_v_setup_clt"), cla: t("home.compare_v_setup_cla") },
+              { label: t("home.compare_row_cov"), clt: t("home.compare_v_cov_clt"), cla: t("home.compare_v_cov_cla") },
+              { label: t("home.compare_row_langs"), clt: t("home.compare_v_lang_clt"), cla: t("home.compare_v_lang_cla") },
+              { label: t("home.compare_row_scale"), clt: t("home.compare_v_scale_clt"), cla: t("home.compare_v_scale_cla") },
+              { label: t("home.compare_row_turn"), clt: t("home.compare_v_turn_clt"), cla: t("home.compare_v_turn_cla") },
             ].map((row, i, arr) => (
               <motion.div
                 key={row.label}
@@ -765,7 +762,7 @@ const HomePage = () => {
           </div>
 
           <p className="mt-6 text-xs text-muted-foreground text-center">
-            Fontes: FGV (custo médio departamento com 6 pessoas + encargos), Great Place to Work (turnover médio Brasil).
+            {t("home.compare_sources")}
           </p>
         </div>
       </section>
@@ -777,15 +774,15 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="text-center mb-16 max-w-2xl mx-auto">
             <p className="text-[11px] uppercase tracking-[0.18em] text-white/50 mb-4">
-              Painel
+              {t("home.panel_eyebrow")}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-white mb-6">
-              Você comanda.
+              {t("home.panel_title1")}
               <br />
-              <span className="text-primary">A IA executa.</span>
+              <span className="text-primary">{t("home.panel_title2")}</span>
             </h2>
             <p className="text-lg text-white/60">
-              Aprove, ajuste ou apenas observe. Cada agente reporta em tempo real.
+              {t("home.panel_desc")}
             </p>
           </div>
 
@@ -798,15 +795,15 @@ const HomePage = () => {
         <div className="max-w-6xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
-              Depoimentos
+              {t("home.testi_eyebrow")}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
-              CEOs que deixaram
+              {t("home.testi_title1")}
               <br />
-              <span className="text-muted-foreground">de operar no braço.</span>
+              <span className="text-muted-foreground">{t("home.testi_title2")}</span>
             </h2>
             <p className="text-lg text-muted-foreground max-w-xl">
-              +35.000 fundadores e diretores em 14 países já opera com Clauthor.
+              {t("home.testi_desc")}
             </p>
           </div>
 
@@ -853,10 +850,10 @@ const HomePage = () => {
       <section className="max-w-6xl mx-auto px-6 py-24" aria-label="Escala">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-y-12 gap-x-6 text-center md:text-left">
           {[
-            { value: String(totalSquads), label: "Squads orquestrados" },
-            { value: String(CLAUTHOR_ORG_CHART.length), label: "Departamentos" },
-            { value: "99.9%", label: "Uptime" },
-            { value: "24/7", label: "Operação global" },
+            { value: String(totalSquads), label: t("home.scale2_squads") },
+            { value: String(CLAUTHOR_ORG_CHART.length), label: t("home.scale2_depts") },
+            { value: "99.9%", label: t("home.scale2_uptime") },
+            { value: "24/7", label: t("home.scale2_ops") },
           ].map((s) => (
             <div key={s.label}>
               <p className="text-4xl md:text-5xl font-semibold tracking-tight text-foreground mb-2">
@@ -885,26 +882,26 @@ const HomePage = () => {
             transition={{ duration: 0.6 }}
             className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.035em] leading-[0.98] text-white mb-8"
           >
-            Seu departamento
+            {t("home.final_title1")}
             <br />
-            <span className="text-primary">começa em 90 segundos.</span>
+            <span className="text-primary">{t("home.final_title2")}</span>
           </motion.h2>
           <p className="text-lg text-white/60 max-w-lg mx-auto mb-12">
-            Escolha a dor. A Clauthor entrega o time. Você comanda de casa.
+            {t("home.final_desc")}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <button
               onClick={() => startFlow("final")}
               className="group inline-flex items-center gap-2 px-9 py-4 rounded-full bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition-opacity shadow-[0_10px_40px_-10px_hsl(var(--primary)/0.6)]"
             >
-              Escolher meu departamento
+              {t("home.final_cta")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
             <Link
               to="/thor"
               className="text-sm text-white/60 hover:text-white transition-colors"
             >
-              Falar com o Thor primeiro →
+              {t("home.final_thor")}
             </Link>
           </div>
         </div>
