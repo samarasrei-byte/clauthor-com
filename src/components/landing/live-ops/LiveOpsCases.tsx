@@ -44,7 +44,7 @@ export default function LiveOpsCases() {
 
           {/* Métrica principal */}
           <div className="relative mb-6">
-            <div className="font-serif italic text-[44px] sm:text-[56px] leading-[0.95] tracking-tight text-white">
+            <div className="font-display font-semibold text-[44px] sm:text-[56px] leading-[0.95] tracking-[-0.035em] text-white">
               {study.headlineMetric.value}
             </div>
             <p className="mt-2 text-sm text-white/70">{study.headlineMetric.label}</p>
