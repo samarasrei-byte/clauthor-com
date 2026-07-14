@@ -1,21 +1,14 @@
 import { useState, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart3, Radio, TrendingUp, DollarSign, Orbit, Rewind, Dna } from "lucide-react";
+import { BarChart3, Radio, Orbit } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
 
 const InsightsHub = lazy(() => import("./InsightsHub"));
 const WarRoomLive = lazy(() => import("./WarRoomLive"));
-const PredictiveDashboard = lazy(() => import("./PredictiveDashboard"));
-const OutcomeBilling = lazy(() => import("./OutcomeBilling"));
 const AgentNeuralNetwork = lazy(() => import("@/pages/AgentNeuralNetwork"));
-const AgentReplay = lazy(() => import("./AgentReplay"));
-const AgentDNA = lazy(() => import("./AgentDNA"));
-const BenchmarksPanel = lazy(() => import("./BenchmarksPanel"));
 
-export type IntelligenceTab =
-  | "reports" | "war-room" | "predictive" | "outcomes"
-  | "neural-network" | "agent-replay" | "agent-dna" | "benchmarks";
+export type IntelligenceTab = "reports" | "war-room" | "neural-network";
 
 interface IntelligenceHubProps {
   chartData: any[];
@@ -46,25 +39,8 @@ const IntelligenceHub = ({
             <Radio className="h-3.5 w-3.5" />
             {t("dashboard.intelligence_tab_war_room", { defaultValue: "War Room" })}
           </TabsTrigger>
-          <TabsTrigger value="predictive" className="gap-1.5 text-xs">
-            <TrendingUp className="h-3.5 w-3.5" />
-            {t("dashboard.intelligence_tab_predictive", { defaultValue: "Preditivo" })}
-          </TabsTrigger>
-          <TabsTrigger value="outcomes" className="gap-1.5 text-xs">
-            <DollarSign className="h-3.5 w-3.5" />
-            {t("dashboard.intelligence_tab_outcomes", { defaultValue: "Receita por Resultado" })}
-          </TabsTrigger>
           <TabsTrigger value="neural-network" className="gap-1.5 text-xs">
             <Orbit className="h-3.5 w-3.5" /> Rede Neural
-          </TabsTrigger>
-          <TabsTrigger value="agent-replay" className="gap-1.5 text-xs">
-            <Rewind className="h-3.5 w-3.5" /> Replay
-          </TabsTrigger>
-          <TabsTrigger value="agent-dna" className="gap-1.5 text-xs">
-            <Dna className="h-3.5 w-3.5" /> DNA
-          </TabsTrigger>
-          <TabsTrigger value="benchmarks" className="gap-1.5 text-xs">
-            <TrendingUp className="h-3.5 w-3.5" /> Benchmarks
           </TabsTrigger>
         </TabsList>
 
@@ -83,23 +59,8 @@ const IntelligenceHub = ({
         <TabsContent value="war-room" className="mt-4">
           <Suspense fallback={<SectionLoader />}><WarRoomLive /></Suspense>
         </TabsContent>
-        <TabsContent value="predictive" className="mt-4">
-          <Suspense fallback={<SectionLoader />}><PredictiveDashboard /></Suspense>
-        </TabsContent>
-        <TabsContent value="outcomes" className="mt-4">
-          <Suspense fallback={<SectionLoader />}><OutcomeBilling /></Suspense>
-        </TabsContent>
         <TabsContent value="neural-network" className="mt-4">
           <Suspense fallback={<SectionLoader />}><AgentNeuralNetwork /></Suspense>
-        </TabsContent>
-        <TabsContent value="agent-replay" className="mt-4">
-          <Suspense fallback={<SectionLoader />}><AgentReplay /></Suspense>
-        </TabsContent>
-        <TabsContent value="agent-dna" className="mt-4">
-          <Suspense fallback={<SectionLoader />}><AgentDNA /></Suspense>
-        </TabsContent>
-        <TabsContent value="benchmarks" className="mt-4">
-          <Suspense fallback={<SectionLoader />}><BenchmarksPanel /></Suspense>
         </TabsContent>
       </Tabs>
     </div>
@@ -107,4 +68,3 @@ const IntelligenceHub = ({
 };
 
 export default IntelligenceHub;
-

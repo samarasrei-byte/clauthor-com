@@ -21,15 +21,11 @@ const AgentsSection = lazy(() => import("./AgentsSection"));
 const SettingsPage = lazy(() => import("./SettingsPage"));
 const PaymentHistoryTable = lazy(() => import("./PaymentHistoryTable"));
 const UnifiedInbox = lazy(() => import("./UnifiedInbox"));
-const AgentReplay = lazy(() => import("./AgentReplay"));
-const PredictiveDashboard = lazy(() => import("./PredictiveDashboard"));
-const AgentDNA = lazy(() => import("./AgentDNA"));
 const MissionComposer = lazy(() => import("./MissionComposer"));
 const WarRoomLive = lazy(() => import("./WarRoomLive"));
 const IntelligenceHub = lazy(() => import("./IntelligenceHub"));
 const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const FilesLibrary = lazy(() => import("./FilesLibrary"));
-const BenchmarksPanel = lazy(() => import("./BenchmarksPanel"));
 const WorkspaceHub = lazy(() => import("./WorkspaceHub"));
 const SystemHub = lazy(() => import("./SystemHub"));
 
@@ -61,9 +57,7 @@ const DashboardSectionRenderer = ({
       {activeSection === "integrations" && <Suspense fallback={<SectionLoader />}><Integrations /></Suspense>}
 
       {(activeSection === "insights" || activeSection === "intelligence-hub" ||
-        activeSection === "war-room-live" || activeSection === "predictive" ||
-        activeSection === "neural-network" || activeSection === "agent-replay" ||
-        activeSection === "agent-dna" || activeSection === "benchmarks") && (
+        activeSection === "war-room-live" || activeSection === "neural-network") && (
         <Suspense fallback={<SectionLoader />}>
           <IntelligenceHub
             chartData={realChartData}
@@ -74,11 +68,7 @@ const DashboardSectionRenderer = ({
             onNavigate={onNavigate}
             defaultTab={
               activeSection === "war-room-live" ? "war-room" :
-              activeSection === "predictive" ? "predictive" :
-              activeSection === "neural-network" ? "neural-network" :
-              activeSection === "agent-replay" ? "agent-replay" :
-              activeSection === "agent-dna" ? "agent-dna" :
-              activeSection === "benchmarks" ? "benchmarks" : "reports"
+              activeSection === "neural-network" ? "neural-network" : "reports"
             }
           />
         </Suspense>
