@@ -287,7 +287,7 @@ const HomePage = () => {
             {/* Squad · entrada PME */}
             <motion.button
               onClick={() => {
-                trackKpi("home_path_select", { path: "squad" });
+                trackKpi("home_path_select", { section: "squad" });
                 navigate("/squads");
               }}
               whileHover={{ y: -4 }}
