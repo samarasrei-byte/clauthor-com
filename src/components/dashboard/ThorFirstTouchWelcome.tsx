@@ -1,7 +1,7 @@
 /**
  * ThorFirstTouchWelcome · o Thor abordando o usuário na primeira entrada
  * do painel. Objetivo: nenhum cliente (jovem, sênior, técnico ou leigo)
- * pode se sentir perdido — ele é recebido pelo nome, com os departamentos
+ * pode se sentir perdido, ele é recebido pelo nome, com os departamentos
  * contratados listados e a promessa explícita de acompanhamento (tokens,
  * aprovações, próximos passos).
  *
@@ -135,7 +135,7 @@ export default function ThorFirstTouchWelcome({ onGuideMe, openDelayMs = 900 }: 
                 Thor · online
               </Badge>
               <h2 className="font-display font-bold text-xl leading-tight">
-                Opa, {firstName}! Tô aqui — não vai ficar perdido não.
+                Opa, {firstName}! Tô aqui, não vai ficar perdido não.
               </h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Sou o Thor, seu copiloto. Vi que você já ativou {departments.length === 1 ? "o departamento" : `${departments.length} departamentos`} —
@@ -180,7 +180,7 @@ export default function ThorFirstTouchWelcome({ onGuideMe, openDelayMs = 900 }: 
             <PromiseRow
               icon={<Bell className="h-4 w-4 text-primary" />}
               title="Alertas do que importa"
-              desc="Aprovações pendentes, agentes travados e oportunidades — chego junto."
+              desc="Aprovações pendentes, agentes travados e oportunidades, chego junto."
             />
             <PromiseRow
               icon={<Compass className="h-4 w-4 text-primary" />}

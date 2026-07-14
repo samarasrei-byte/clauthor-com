@@ -30,7 +30,7 @@ export const DEFAULT_ROI_CONFIG: DepartmentRoiConfig = {
 
 /**
  * Configuração por department_id (mesmo id usado em contracted_departments).
- * Ajuste conservador — vide docs/audits/AUDITORIA_PRECOS_DEPARTAMENTOS_2026.md.
+ * Ajuste conservador, vide docs/audits/AUDITORIA_PRECOS_DEPARTAMENTOS_2026.md.
  */
 export const DEPARTMENT_ROI_CONFIG: Record<string, DepartmentRoiConfig> = {
   comercial:    { minutesSavedPerTask: 15, hourlyRateBRL: 90 },

@@ -69,7 +69,7 @@ const Squads = () => {
             <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto mb-8">
               Squads são times verticais de 4 a 7 agentes de IA especializados em resolver{" "}
               <strong className="text-foreground">uma dor de negócio</strong>. Sem contratar pessoas,
-              sem departamento inteiro — só o resultado.
+              sem departamento inteiro, só o resultado.
             </p>
             <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-muted-foreground mb-10">
               <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Ativação em minutos</div>

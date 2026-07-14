@@ -18,7 +18,7 @@
  * Regras de honestidade:
  *   - Só usa dados reais (nada de mock).
  *   - Estimativas são conservadoras e explicadas no card.
- *   - Se ainda não há tarefas no mês, mostra estado zerado com CTA — nunca
+ *   - Se ainda não há tarefas no mês, mostra estado zerado com CTA, nunca
  *     inventa número.
  *
  * Design: usa tokens semânticos (bg-card, border-border/60, text-primary).
@@ -198,7 +198,7 @@ export default function MonthlyROICard({ onCTA }: MonthlyROICardProps) {
             </TooltipTrigger>
             <TooltipContent className="max-w-[300px] text-xs leading-relaxed">
               Cada departamento tem sua própria taxa de tempo poupado por
-              tarefa e custo/hora do equivalente humano — a economia é somada
+              tarefa e custo/hora do equivalente humano, a economia é somada
               depto a depto e descontada do custo mensal ({formatBRL(metrics.deptCost)}/mês).
               <br />
               Estimativa conservadora, calculada só sobre execuções bem-sucedidas.

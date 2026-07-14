@@ -1,7 +1,7 @@
 /**
  * Live Ops Events · feed simulado de outputs dos agentes rodando 24/7.
  *
- * Não é log real (por privacidade dos clientes) — é uma amostra
+ * Não é log real (por privacidade dos clientes), é uma amostra
  * representativa do TIPO de output que a operação gera. Cada evento é
  * anonimizado e plausível dentro dos casos reais em `caseStudies.ts`.
  *

@@ -1,5 +1,5 @@
 /**
- * Glossário canônico da Clauthor (P1 — foco/consolidação).
+ * Glossário canônico da Clauthor (P1, foco/consolidação).
  *
  * Fonte única para os 4 conceitos que o usuário final vê. Todo o resto
  * (Squad, Workforce, Command Center, Control Tower, Neural Network,

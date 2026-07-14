@@ -1,5 +1,5 @@
 /**
- * TutorialCard — card editorial que renderiza um passo-a-passo de integração
+ * TutorialCard, card editorial que renderiza um passo-a-passo de integração
  * dentro da bolha de mensagem do Thor. Linguagem 100% leiga.
  */
 import { useNavigate } from "react-router-dom";

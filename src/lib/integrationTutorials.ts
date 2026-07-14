@@ -1,5 +1,5 @@
 /**
- * Catálogo de tutoriais de integração — versão frontend.
+ * Catálogo de tutoriais de integração, versão frontend.
  * ESPELHO de supabase/functions/_shared/integrationTutorials.ts.
  * Mantenha os dois arquivos em sync.
  */
@@ -39,10 +39,10 @@ const TUTORIALS: IntegrationTutorial[] = [
     ],
     steps: [
       { title: "Abrir a tela de conexões da Clauthor", description: "Aqui dentro da Clauthor, clique no botão azul **'Abrir integração agora'** logo abaixo. Vamos abrir uma nova aba pra você." },
-      { title: "Clicar em 'Conectar Facebook'", description: "Você vai ver um botão azul com o logo do Facebook. Clique nele — o Facebook vai abrir pedindo sua permissão." },
+      { title: "Clicar em 'Conectar Facebook'", description: "Você vai ver um botão azul com o logo do Facebook. Clique nele, o Facebook vai abrir pedindo sua permissão." },
       { title: "Autorizar a Clauthor", description: "Faça login no Facebook (se já não estiver logado) e clique em **'Continuar como [seu nome]'**. Depois clique em **'Sim, conceder acesso'**." },
       { title: "Escolher a página", description: "Marque a caixinha da página da sua empresa e clique em **'Avançar'**." },
-      { title: "Voltar para a Clauthor", description: "A tela vai voltar sozinha para cá com uma mensagem verde de sucesso. Pronto — o Thor já está conectado." },
+      { title: "Voltar para a Clauthor", description: "A tela vai voltar sozinha para cá com uma mensagem verde de sucesso. Pronto, o Thor já está conectado." },
     ],
     cta: { label: "Abrir integração agora", href: "/settings/connections?open=facebook" },
   },
@@ -83,7 +83,7 @@ const TUTORIALS: IntegrationTutorial[] = [
       { title: "Abrir a tela de conexões", description: "Clique em **'Abrir integração agora'** logo abaixo." },
       { title: "Iniciar cadastro guiado", description: "Clique no botão verde **'Conectar WhatsApp'**. Uma janela do Meta vai abrir." },
       { title: "Escolher a conta comercial", description: "Escolha uma conta existente ou clique em **'Criar nova conta'** e preencha nome da empresa e e-mail." },
-      { title: "Cadastrar o número de telefone", description: "Digite com DDI, ex: **+55 11 91234-5678**. O Meta envia um código por SMS — digite os 6 dígitos que chegarem." },
+      { title: "Cadastrar o número de telefone", description: "Digite com DDI, ex: **+55 11 91234-5678**. O Meta envia um código por SMS, digite os 6 dígitos que chegarem." },
       { title: "Escolher o nome do remetente", description: "Nome que aparece pros clientes (ex: **Padaria da Ana**). Sem emoji." },
       { title: "Aguardar aprovação", description: "O Meta revisa em até **48 horas** (geralmente 30 minutos). Você recebe e-mail avisando." },
     ],
@@ -98,7 +98,7 @@ const TUTORIALS: IntegrationTutorial[] = [
     summary: "Conecte a conta do Gmail para o Thor ler e responder e-mails.",
     prereq: [
       "Uma conta Google (Gmail comum ou Google Workspace).",
-      "Estar logado nessa conta no navegador ajuda — mas não é obrigatório.",
+      "Estar logado nessa conta no navegador ajuda, mas não é obrigatório.",
     ],
     steps: [
       { title: "Abrir a tela de conexões", description: "Clique em **'Abrir integração agora'** aqui em baixo." },

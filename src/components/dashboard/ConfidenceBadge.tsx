@@ -4,7 +4,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { cn } from "@/lib/utils";
 
 /**
- * Confidence Score visível — sinaliza calibração do agente sobre a própria entrega.
+ * Confidence Score visível, sinaliza calibração do agente sobre a própria entrega.
  * Bandas (base: pesquisa de calibração LLM · Anthropic/OpenAI 2025):
  *  · ≥ 90 → alta confiança · aprovar direto
  *  · 70-89 → média · revisar pontos-chave
@@ -33,7 +33,7 @@ export function normalizeConfidence(v: ConfidenceInput): number | null {
   return null;
 }
 
-/** Deterministic fallback (0-100) from any stable string id — só para demos, nunca sobrescreve real. */
+/** Deterministic fallback (0-100) from any stable string id, só para demos, nunca sobrescreve real. */
 export function derivedConfidence(seed: string): number {
   let h = 0;
   for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0;
@@ -48,7 +48,7 @@ function band(score: number) {
       icon: ShieldCheck,
       chip: "bg-emerald-500/10 text-emerald-500 border-emerald-500/25",
       dot: "bg-emerald-500",
-      advice: "Agente está seguro. Pode aprovar direto — histórico similar teve alta taxa de sucesso.",
+      advice: "Agente está seguro. Pode aprovar direto, histórico similar teve alta taxa de sucesso.",
     };
   if (score >= 70)
     return {
@@ -63,7 +63,7 @@ function band(score: number) {
     icon: ShieldAlert,
     chip: "bg-rose-500/10 text-rose-500 border-rose-500/25",
     dot: "bg-rose-500",
-    advice: "Agente pediu ajuda humana. Não aprove sem revisar — falta contexto ou dados críticos.",
+    advice: "Agente pediu ajuda humana. Não aprove sem revisar, falta contexto ou dados críticos.",
   };
 }
 
