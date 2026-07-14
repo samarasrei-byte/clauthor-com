@@ -3,7 +3,7 @@
  * Identidade visual Clauthor: fundo dark (--background), accent vermelho
  * via tokens semânticos (--primary), tipografia herdada do design system
  * (Space Grotesk display + Inter body definidos em index.html/tailwind).
- * Puramente frontend — sem lógica de negócio.
+ * Puramente frontend, sem lógica de negócio.
  */
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
@@ -49,7 +49,7 @@ const ReputacaoIA = () => {
     <div className="min-h-dvh bg-background text-foreground antialiased">
       <SEO
         title="Reputação IA · Gestão de reputação online com Inteligência Artificial | Clauthor"
-        description="A Reputação IA da Clauthor monitora e responde automaticamente avaliações no Google Meu Negócio, Reclame Aqui, Instagram, Facebook e LinkedIn — proteja sua marca 24h por dia."
+        description="A Reputação IA da Clauthor monitora e responde automaticamente avaliações no Google Meu Negócio, Reclame Aqui, Instagram, Facebook e LinkedIn, proteja sua marca 24h por dia."
         path="/reputacao-ia"
       />
 
@@ -321,7 +321,7 @@ const ReputacaoIA = () => {
 
             {[
               { title: "Conecte suas contas", desc: "Google, redes sociais e plataformas de avaliação em poucos cliques." },
-              { title: "A IA começa a monitorar automaticamente", desc: "Sem configuração técnica — a IA já entende seu negócio." },
+              { title: "A IA começa a monitorar automaticamente", desc: "Sem configuração técnica, a IA já entende seu negócio." },
               { title: "Ela responde com inteligência contextual", desc: "No tom da sua marca, seguindo suas regras e políticas." },
               { title: "Você acompanha tudo em um painel inteligente", desc: "Métricas, alertas, evolução e insights em tempo real." },
             ].map((step, i) => (
@@ -471,7 +471,7 @@ const ReputacaoIA = () => {
               { q: "Posso aprovar respostas antes que sejam publicadas?", a: "Sim. É possível trabalhar em modo automático (a IA responde direto) ou mediante aprovação prévia." },
               { q: "Funciona com o Google Meu Negócio?", a: "Sim. A Reputação IA se conecta ao Google Meu Negócio e responde avaliações automaticamente." },
               { q: "Funciona com o Reclame Aqui?", a: "Sim. Monitora, responde e acompanha os casos até a resolução dentro do Reclame Aqui." },
-              { q: "Funciona nas redes sociais?", a: "Sim. Instagram, Facebook e LinkedIn — comentários, DMs e menções." },
+              { q: "Funciona nas redes sociais?", a: "Sim. Instagram, Facebook e LinkedIn, comentários, DMs e menções." },
               { q: "Consigo acompanhar tudo?", a: "Sim. Você terá um painel completo com métricas, indicadores, alertas em tempo real e histórico de todas as interações." },
             ].map((item, i) => (
               <AccordionItem

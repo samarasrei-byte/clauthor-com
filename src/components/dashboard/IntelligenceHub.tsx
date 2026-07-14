@@ -36,7 +36,7 @@ const IntelligenceHub = ({
   onNavigate, onGoToAgents, defaultTab = "analytics",
 }: IntelligenceHubProps) => {
   const { t } = useTranslation();
-  // "reports" era o wrapper antigo — aponta para analytics por padrão
+  // "reports" era o wrapper antigo, aponta para analytics por padrão
   const initial = defaultTab === "reports" ? "analytics" : defaultTab;
   const [tab, setTab] = useState<string>(initial);
 

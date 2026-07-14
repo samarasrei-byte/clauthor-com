@@ -1,7 +1,7 @@
 /**
  * ThorTokenAlert · banner proativo do Thor no topo do dashboard quando o
  * consumo de tokens cruzar 80%, 90% ou 100%. Cada patamar aparece apenas
- * UMA vez por ciclo (persistido em `thor_touchpoints`) — depois disso o
+ * UMA vez por ciclo (persistido em `thor_touchpoints`), depois disso o
  * usuário volta a ver o card apenas no Centro do Thor.
  *
  * Copy explica o impacto ("seus agentes vão parar em ~X dias") e oferece
@@ -76,7 +76,7 @@ export default function ThorTokenAlert({ onOpenThor, onBuyCredits, className }: 
       : "Tô te avisando: já usou 80% do cofre.";
 
   const impact = critical
-    ? "Zerou o saldo — nenhum agente executa até você recarregar. Nenhuma tarefa em fila roda."
+    ? "Zerou o saldo, nenhum agente executa até você recarregar. Nenhuma tarefa em fila roda."
     : daysLeft !== null && daysLeft > 0
       ? `No ritmo atual, você tem cerca de ${daysLeft} ${daysLeft === 1 ? "dia" : "dias"} antes dos agentes pararem.`
       : "No ritmo atual, você deve zerar o cofre antes do fim do ciclo.";

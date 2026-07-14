@@ -1,5 +1,5 @@
 /**
- * Confidence heuristic — score 0-100 baseado em sinais mensuráveis do output do agente.
+ * Confidence heuristic, score 0-100 baseado em sinais mensuráveis do output do agente.
  *
  * Racional (auditável, sem "achismo"):
  *  · Fallback ativado    → agente NÃO usou modelo → -25

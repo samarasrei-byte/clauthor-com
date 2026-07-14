@@ -53,7 +53,7 @@ export default function LiveOpsSection() {
             </h3>
             <p className="text-sm text-white/60 leading-relaxed">
               Cada linha do feed ao lado é o tipo de output que sua operação começa a produzir
-              a partir do dia 1. Anonimizado para preservar privacidade — o padrão é real.
+              a partir do dia 1. Anonimizado para preservar privacidade, o padrão é real.
             </p>
           </div>
           <div className="lg:col-span-3">

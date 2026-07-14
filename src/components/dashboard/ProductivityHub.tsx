@@ -30,14 +30,14 @@ import { toast } from "@/hooks/use-toast";
 // ─── Mock data ────────────────────────────────────────────────────────────
 const MOCK_EVENTS = [
   { id: "e1", time: "09:00", title: "Daily · Squad Comercial", duration: "30 min", location: "Google Meet", category: "Reunião", color: "hsl(var(--primary))" },
-  { id: "e2", time: "10:30", title: "Revisão de proposta — Acme", duration: "1h", location: "Sala Virtual", category: "Cliente", color: "hsl(220 90% 60%)" },
+  { id: "e2", time: "10:30", title: "Revisão de proposta, Acme", duration: "1h", location: "Sala Virtual", category: "Cliente", color: "hsl(220 90% 60%)" },
   { id: "e3", time: "14:00", title: "Sprint Planning", duration: "1h30", location: "Zoom", category: "Interno", color: "hsl(280 80% 65%)" },
   { id: "e4", time: "16:00", title: "1:1 com o Thor", duration: "20 min", location: undefined, category: "IA", color: "hsl(160 70% 45%)" },
 ];
 
 const MOCK_INBOX = {
   action: [
-    { id: "a1", from: "Marina Souza", subject: "Contrato Ironberg — precisa da sua assinatura", priority: "Alta" as const },
+    { id: "a1", from: "Marina Souza", subject: "Contrato Ironberg, precisa da sua assinatura", priority: "Alta" as const },
     { id: "a2", from: "Financeiro Clauthor", subject: "Fatura pendente #23491", priority: "Média" as const },
     { id: "a3", from: "Rafael (Squad Legal)", subject: "Revisar cláusula 4.2 antes das 18h", priority: "Alta" as const },
   ],
@@ -47,7 +47,7 @@ const MOCK_INBOX = {
   ],
   low: [
     { id: "l1", from: "Newsletter TechCrunch", subject: "As 5 startups de IA para observar em 2026" },
-    { id: "l2", from: "Promoções AWS", subject: "Créditos em Bedrock — até 30/11" },
+    { id: "l2", from: "Promoções AWS", subject: "Créditos em Bedrock, até 30/11" },
     { id: "l3", from: "LinkedIn", subject: "Você tem 12 novas visualizações" },
   ],
 };
@@ -269,7 +269,7 @@ const InboxCard = () => {
           </div>
         )}
 
-        {/* Baixa prioridade — colapsado */}
+        {/* Baixa prioridade, colapsado */}
         {lowItems.length > 0 && (
           <div>
             <button
@@ -426,7 +426,7 @@ const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; r
             <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/80">Agenda</span>
           </div>
           <p className="text-xs text-foreground/90 leading-relaxed">
-            <span className="font-semibold">{MOCK_EVENTS.length} compromissos</span> — destaque para revisão de proposta com <span className="font-medium">Acme</span> às 10:30 e 1:1 com o Thor às 16h.
+            <span className="font-semibold">{MOCK_EVENTS.length} compromissos</span>, destaque para revisão de proposta com <span className="font-medium">Acme</span> às 10:30 e 1:1 com o Thor às 16h.
           </p>
         </div>
 
@@ -436,7 +436,7 @@ const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; r
             <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/80">Caixa de entrada</span>
           </div>
           <p className="text-xs text-foreground/90 leading-relaxed">
-            <span className="font-semibold">{MOCK_INBOX.action.length + MOCK_INBOX.info.length + MOCK_INBOX.low.length} e-mails</span> — {MOCK_INBOX.action.length} exigem resposta, {MOCK_INBOX.info.length} informativos, {MOCK_INBOX.low.length} baixa prioridade.
+            <span className="font-semibold">{MOCK_INBOX.action.length + MOCK_INBOX.info.length + MOCK_INBOX.low.length} e-mails</span>, {MOCK_INBOX.action.length} exigem resposta, {MOCK_INBOX.info.length} informativos, {MOCK_INBOX.low.length} baixa prioridade.
           </p>
         </div>
 
@@ -593,7 +593,7 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
         </div>
       ) : (
         <>
-          {/* Daily summary — hero */}
+          {/* Daily summary, hero */}
           <DailySummaryCard onRefresh={handleRefresh} refreshing={refreshing} />
 
           {/* Grid: Agenda + Inbox */}

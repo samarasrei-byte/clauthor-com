@@ -1,7 +1,7 @@
 /**
  * AdminRoiConfig · edição das taxas de ROI por departamento.
  *
- * Somente `admin` (app_role) enxerga essa rota — proteção via ProtectedRoute
+ * Somente `admin` (app_role) enxerga essa rota, proteção via ProtectedRoute
  * requireAdmin no App.tsx. As policies da tabela `department_roi_config` já
  * bloqueiam writes pra qualquer outro role, então mesmo se alguém chegasse
  * na URL sem ser admin, o INSERT/UPDATE retornaria 403.

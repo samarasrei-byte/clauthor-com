@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 // P1 · Consolidação: SalesChatbot, SupportChat, SocialProofToasts e
-// ExitIntentCapture não são mais renderizados no layout — o Thor é o único
+// ExitIntentCapture não são mais renderizados no layout, o Thor é o único
 // concierge visível. Os arquivos seguem existindo por 1 sprint como legado.
 import AgentLivePreview from "./library/AgentLivePreview";
 const AssistantHierarchy = lazy(() => import("./AssistantHierarchy"));

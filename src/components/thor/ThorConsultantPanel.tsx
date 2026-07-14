@@ -1,5 +1,5 @@
 /**
- * ThorConsultantPanel — Thor atua como consultor antes da criação.
+ * ThorConsultantPanel, Thor atua como consultor antes da criação.
  *
  * Recebe o objetivo do usuário, chama a edge function `workforce-architect`
  * e devolve uma recomendação estruturada: escala sugerida (agente/squad/
@@ -7,7 +7,7 @@
  * e racional. O usuário pode aceitar (aplicar recomendação) ou seguir com a
  * criação direta.
  *
- * Não substitui os fluxos existentes — é um passo consultivo opcional que
+ * Não substitui os fluxos existentes, é um passo consultivo opcional que
  * aparece no topo de CreateAgent e CreateWorkforce.
  */
 import { useMemo, useState } from "react";

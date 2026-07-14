@@ -315,7 +315,7 @@ export default function ThorCenter({ onNavigate }: Props) {
             </Badge>
           </div>
           <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
-            Tudo que o Thor te avisou, recomendou e o que ainda espera decisão sua — num só lugar.
+            Tudo que o Thor te avisou, recomendou e o que ainda espera decisão sua, num só lugar.
             Sempre que eu chegar aqui é porque tem impacto real na sua operação.
           </p>
         </div>
@@ -384,7 +384,7 @@ export default function ThorCenter({ onNavigate }: Props) {
             ) : timeline.length === 0 ? (
               <div className="text-center py-8 text-sm text-muted-foreground">
                 {period === "all"
-                  ? "O Thor ainda não precisou te alertar. Bom sinal — sua operação está saudável."
+                  ? "O Thor ainda não precisou te alertar. Bom sinal, sua operação está saudável."
                   : `Nada registrado nas últimas ${PERIOD_LABEL[period].toLowerCase()}. Amplie o filtro se quiser ver mais.`}
               </div>
             ) : (

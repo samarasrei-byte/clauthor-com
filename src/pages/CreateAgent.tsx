@@ -260,7 +260,7 @@ const CreateAgentPage = () => {
           </CardContent>
         </Card>
 
-        {/* Thor consultor — analisa contexto antes de escolher caminho */}
+        {/* Thor consultor, analisa contexto antes de escolher caminho */}
         <ThorConsultantPanel
           intendedScale="agent"
           onAccept={(rec) => {

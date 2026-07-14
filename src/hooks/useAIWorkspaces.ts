@@ -226,7 +226,7 @@ export function useWorkspaceMessages(workspaceId: string | null, tenantId: strin
 
 
 /**
- * Hook: tarefas Kanban unificadas — lê/escreve `agent_tasks` (mesma fonte
+ * Hook: tarefas Kanban unificadas, lê/escreve `agent_tasks` (mesma fonte
  * do módulo Execução › Tarefas). Antes usava `ai_workspace_tasks` (duplicidade).
  * O workspace_id é armazenado em `agent_tasks.category` como `ws:<uuid>` para
  * preservar o agrupamento por ambiente sem migração de schema.
@@ -337,4 +337,4 @@ export function useWorkspaceTasks(workspaceId: string | null, tenantId: string |
   return { tasks, loading, createTask, updateTaskStatus };
 }
 
-// Marker de vocabulário — usado por outros módulos que precisem filtrar tasks.
+// Marker de vocabulário, usado por outros módulos que precisem filtrar tasks.

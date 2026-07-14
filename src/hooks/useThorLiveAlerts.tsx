@@ -1,5 +1,5 @@
 /**
- * useThorLiveAlerts — canal global do Thor.
+ * useThorLiveAlerts, canal global do Thor.
  *
  * Escuta em tempo real:
  *  - notifications: token_limit_100 (crítico) e token_limit_90 (aviso)

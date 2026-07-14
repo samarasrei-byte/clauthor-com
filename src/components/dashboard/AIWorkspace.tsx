@@ -29,7 +29,7 @@ import { useAuth } from "@/hooks/useAuth";
 
 
 /* ────────────────────────────────────────────────────────────────
- * AI Workspace — colaboração multi-agente em tempo real (mock).
+ * AI Workspace, colaboração multi-agente em tempo real (mock).
  * Integrado ao Painel do Cliente. Sem novas dependências.
  * ──────────────────────────────────────────────────────────────── */
 
@@ -265,7 +265,7 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
     if (!t || !activeId) return;
     setTaskInput("");
     await createTask({ title: t, status: "doing", priority: "high" });
-    // Sinaliza no chat que a tarefa entrou no Kanban — sem simular chain fake.
+    // Sinaliza no chat que a tarefa entrou no Kanban, sem simular chain fake.
     sendMessage(`📌 Nova tarefa no Kanban: "${t}"`, {
       key: "system", name: "Workspace", emoji: "⚡",
     });
@@ -367,7 +367,7 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
             <p className="text-xs text-muted-foreground">
               {activeWorkspace
                 ? "Conversas e tarefas sincronizadas em tempo real."
-                : "Sua equipe de agentes trabalhando 24/7 — sincronizada via Realtime."}
+                : "Sua equipe de agentes trabalhando 24/7, sincronizada via Realtime."}
             </p>
           </div>
         </div>
@@ -446,7 +446,7 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm">
           <div className="flex items-center gap-2 font-medium">
             <Wand2 className="h-4 w-4 text-primary" />
-            Tarefa rápida — cai direto no Kanban
+            Tarefa rápida, cai direto no Kanban
           </div>
           <p className="text-xs text-muted-foreground">
             Para missões multi-etapa estruturadas, use{" "}
@@ -500,7 +500,7 @@ const AIWorkspace = ({ onNavigate }: AIWorkspaceProps = {}) => {
             <AnimatePresence initial={false}>
               {messages.length === 0 && (
                 <div className="py-8 text-center text-xs text-muted-foreground">
-                  Nenhuma mensagem ainda — delegue uma missão ou converse com a equipe.
+                  Nenhuma mensagem ainda, delegue uma missão ou converse com a equipe.
                 </div>
               )}
               {messages.map((msg) => {

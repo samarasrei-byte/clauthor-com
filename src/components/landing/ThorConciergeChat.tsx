@@ -640,8 +640,8 @@ export default function ThorConciergeChat({
                   {recommendation.kind === "departamento" && recommendedPkg
                     ? recommendedPkg.outcome
                     : recommendation.kind === "squad"
-                    ? "2 a 5 especialistas colaborando — ideal quando a dor cruza mais de uma função."
-                    : "Prova de conceito ou tarefa muito específica — o jeito mais rápido de sentir a IA operando."}
+                    ? "2 a 5 especialistas colaborando, ideal quando a dor cruza mais de uma função."
+                    : "Prova de conceito ou tarefa muito específica, o jeito mais rápido de sentir a IA operando."}
                 </p>
               </div>
 
