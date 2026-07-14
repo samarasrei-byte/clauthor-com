@@ -26,7 +26,7 @@ export default function TutorialCard({ tutorial, className }: TutorialCardProps)
             Em breve
           </span>
         </div>
-        <h4 className="font-serif italic text-xl leading-tight text-foreground">{tutorial.name}</h4>
+        <h4 className="font-display font-semibold text-xl leading-tight tracking-[-0.02em] text-foreground">{tutorial.name}</h4>
         <p className="type-body text-foreground/70">{tutorial.summary}</p>
         <Button
           variant="outline"
@@ -60,7 +60,7 @@ export default function TutorialCard({ tutorial, className }: TutorialCardProps)
             {tutorial.difficulty}
           </span>
         </div>
-        <h4 className="font-serif italic text-2xl leading-tight tracking-tight text-foreground">
+        <h4 className="font-display font-semibold text-2xl leading-tight tracking-[-0.02em] text-foreground">
           Conectar {tutorial.name}
         </h4>
         <p className="type-body text-foreground/75 leading-relaxed">{tutorial.summary}</p>

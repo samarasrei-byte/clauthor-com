@@ -213,7 +213,7 @@ export default function ThorOnboardingFlow({
                 {STEP_LABELS[step]}
               </span>
             </div>
-            <DialogTitle className="font-serif italic text-2xl leading-tight text-foreground">
+            <DialogTitle className="font-display font-semibold text-2xl leading-tight tracking-[-0.02em] text-foreground">
               {step === 0 && "Vamos deixar tudo pronto pra você."}
               {step === 1 && "Me conta mais sobre a operação."}
               {step === 2 && "Como vamos plugar a IA no seu dia?"}

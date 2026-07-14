@@ -641,7 +641,7 @@ export default function ThorConciergeChat({
 
               {/* Título · nome puro (sem duplicar "Departamento") */}
               <div className="space-y-3">
-                <h3 className="font-serif italic text-[28px] sm:text-[32px] leading-[1.05] tracking-tight text-foreground">
+                <h3 className="font-display font-semibold text-[28px] sm:text-[32px] leading-[1.05] tracking-[-0.03em] text-foreground">
                   {recommendation.kind === "departamento" && recommendedPkg
                     ? recommendedPkg.name
                     : recommendation.kind === "squad"
