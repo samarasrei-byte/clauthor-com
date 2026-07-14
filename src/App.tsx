@@ -109,6 +109,7 @@ const DepartmentActivated = lazyRetry(() => import("./pages/DepartmentActivated"
 const Checkout = lazyRetry(() => import("./pages/Checkout"));
 const PreviewDashboard = lazyRetry(() => import("./pages/PreviewDashboard"));
 const ReputacaoIA = lazyRetry(() => import("./pages/ReputacaoIA"));
+const SquadsPage = lazyRetry(() => import("./pages/Squads"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
