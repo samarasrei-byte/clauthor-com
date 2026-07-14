@@ -188,7 +188,7 @@ const DashboardOverview = ({
                           totalTokensUsed={totalTokensUsed}
                           estimatedSavings={estimatedSavings}
                         />
-                        <QuickIntegrations onSetupCompany={() => onSetActiveSection("integrations")} />
+                        {/* Consolidado: só MyIntegrationsPanel (QuickIntegrations era subset duplicado) */}
                         <MyIntegrationsPanel onNavigate={onSetActiveSection} />
                         <ReferralsPanel />
                         <TrustCenterPanel />
