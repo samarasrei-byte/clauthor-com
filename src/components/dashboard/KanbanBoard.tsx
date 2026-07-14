@@ -493,7 +493,7 @@ const KanbanBoard = () => {
                   className="rounded-xl border border-border/10 overflow-hidden"
                 >
                   {/* Agent Header */}
-                  <div className="px-4 py-3 bg-gradient-to-r from-card/60 to-transparent flex items-center justify-between">
+                  <div className="px-4 py-3 border-b border-border/20 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center relative">
                         <Bot className="h-4 w-4 text-primary" />
