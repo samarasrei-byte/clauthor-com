@@ -9,7 +9,7 @@
  */
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Briefcase, Headphones, Megaphone, Scale, Wallet, Users, MessageSquareWarning, TrendingDown, Repeat, LineChart, HelpCircle } from "lucide-react";
+import { ArrowRight, Briefcase, Headphones, Megaphone, Scale, Wallet, Users, MessageSquareWarning, TrendingDown, Repeat, LineChart, HelpCircle, Network, Bot, Building2, Zap } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
