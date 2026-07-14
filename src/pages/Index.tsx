@@ -596,7 +596,7 @@ const HomePage = () => {
               >
                 {isFeatured && (
                   <span className="absolute top-6 right-6 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
-                    ● Mais contratado
+                    {t("home.dept_most_hired")}
                   </span>
                 )}
                 <Icon
