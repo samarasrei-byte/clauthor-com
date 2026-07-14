@@ -23,6 +23,7 @@ import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { supabase } from "@/integrations/supabase/client";
 import { getTutorial, type IntegrationTutorial } from "@/lib/integrationTutorials";
 import TutorialCard from "@/components/landing/TutorialCard";
+import ThorOnboardingFlow, { type OnboardingReco } from "@/components/landing/ThorOnboardingFlow";
 
 /* -------------------------------------------------------------------------- */
 /*  Tipos                                                                     */
@@ -184,6 +185,7 @@ export default function ThorConciergeChat({
 }: ThorConciergeChatProps) {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<ChatMessage[]>([DEFAULT_INTRO]);
+  const [onboardingOpen, setOnboardingOpen] = useState(false);
   const [input, setInput] = useState("");
   const [isStreaming, setIsStreaming] = useState(false);
   const [memoryFacts, setMemoryFacts] = useState<ThorMemory["facts"]>({});
@@ -461,21 +463,31 @@ export default function ThorConciergeChat({
 
   const goToRecommended = useCallback(() => {
     if (!recommendation) return;
-    if (recommendation.kind === "departamento" && recommendation.deptId) {
-      trackKpi("thor_guide_section_play", { source, section: `chat_cta_departamento_${recommendation.deptId}` });
-      navigate(`/departamentos/${recommendation.deptId}`);
-      return;
+    trackKpi("thor_guide_section_play", {
+      source,
+      section:
+        recommendation.kind === "departamento"
+          ? `chat_cta_departamento_${recommendation.deptId ?? "none"}`
+          : `chat_cta_${recommendation.kind}`,
+    });
+    setOnboardingOpen(true);
+  }, [recommendation, source]);
+
+  const onboardingReco = useMemo<OnboardingReco | null>(() => {
+    if (!recommendation) return null;
+    if (recommendation.kind === "departamento" && recommendedPkg) {
+      return {
+        kind: "departamento",
+        deptId: recommendation.deptId,
+        label: recommendedPkg.name,
+        priceLabel: `${formatBRL(recommendedPkg.priceMonthly)}/mês`,
+      };
     }
     if (recommendation.kind === "squad") {
-      trackKpi("thor_guide_section_play", { source, section: "chat_cta_squad" });
-      navigate("/team-builder");
-      return;
+      return { kind: "squad", label: "Squad sob medida", priceLabel: "R$ 597/mês" };
     }
-    if (recommendation.kind === "agente") {
-      trackKpi("thor_guide_section_play", { source, section: "chat_cta_agente" });
-      navigate("/marketplace");
-    }
-  }, [navigate, recommendation, source]);
+    return { kind: "agente", label: "Agente especialista", priceLabel: "R$ 197/mês" };
+  }, [recommendation, recommendedPkg]);
 
   const chatBodyFont = { fontFamily: "'Instrument Sans', 'Inter', sans-serif" };
 
@@ -832,6 +844,13 @@ export default function ThorConciergeChat({
           )}
         </div>
       </footer>
+
+      <ThorOnboardingFlow
+        open={onboardingOpen}
+        onOpenChange={setOnboardingOpen}
+        reco={onboardingReco}
+        source={source}
+      />
     </div>
   );
 }

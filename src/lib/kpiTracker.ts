@@ -50,7 +50,11 @@ export type KpiEventName =
   | "thor_center_signal_resolved"
   | "thor_center_signal_bulk_resolved"
   | "home_path_select"
-  | "home_pain_quiz_click";
+  | "home_pain_quiz_click"
+  | "thor_onboarding_started"
+  | "thor_onboarding_step"
+  | "thor_onboarding_completed"
+  | "thor_onboarding_abandoned";
 
 
 export interface KpiEventPayload {
@@ -88,6 +92,10 @@ export interface KpiEventPayload {
   count?: number;
   signal_kind?: string;
   pain_id?: string;
+  step?: number;
+  target?: "panel" | "checkout" | "human";
+  reco_kind?: "departamento" | "squad" | "agente";
+  reco_id?: string;
 }
 
 
