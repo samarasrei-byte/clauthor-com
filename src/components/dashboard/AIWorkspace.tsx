@@ -558,7 +558,7 @@ const AIWorkspace = () => {
                       animate={{ opacity: 1, x: 0 }}
                       className="relative"
                     >
-                      <span className="absolute -left-[21px] top-1.5 h-3 w-3 rounded-full bg-primary shadow-md shadow-primary/40" />
+                      <span className="absolute -left-[19px] top-1.5 h-2 w-2 rounded-full border border-primary bg-background" />
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         {fmtTime(e.ts)}
                         {a && (
@@ -639,8 +639,7 @@ const AIWorkspace = () => {
 const StatCard = ({
   icon: Icon, label, value, hint,
 }: { icon: any; label: string; value: string | number; hint?: string }) => (
-  <Card className="relative overflow-hidden border-white/10 bg-background/40 p-3 backdrop-blur-xl transition-all hover:border-primary/30 hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)]">
-    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
+  <Card className="relative border-border/60 bg-background/40 p-3 transition-colors hover:border-primary/40">
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
       <Icon className="h-3.5 w-3.5 text-primary" /> {label}
     </div>
