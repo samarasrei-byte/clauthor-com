@@ -567,11 +567,12 @@ const AIWorkspace = () => {
 const StatCard = ({
   icon: Icon, label, value, hint,
 }: { icon: any; label: string; value: string | number; hint?: string }) => (
-  <Card className="p-3">
+  <Card className="relative overflow-hidden border-white/10 bg-background/40 p-3 backdrop-blur-xl transition-all hover:border-primary/30 hover:shadow-[0_0_24px_hsl(var(--primary)/0.15)]">
+    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent" />
     <div className="flex items-center gap-2 text-xs text-muted-foreground">
-      <Icon className="h-3.5 w-3.5" /> {label}
+      <Icon className="h-3.5 w-3.5 text-primary" /> {label}
     </div>
-    <div className="mt-1 text-lg font-semibold">{value}</div>
+    <div className="mt-1 text-lg font-semibold tabular-nums tracking-tight">{value}</div>
     {hint && <div className="text-[10px] text-muted-foreground">{hint}</div>}
   </Card>
 );
