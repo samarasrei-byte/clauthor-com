@@ -43,6 +43,8 @@ interface ThorConciergeChatProps {
   source?: KpiSource;
   minHeight?: string;
   className?: string;
+  /** Quando mudar para uma string não-vazia, envia automaticamente como se o usuário tivesse digitado. */
+  seedPrompt?: string;
 }
 
 /* -------------------------------------------------------------------------- */
@@ -178,6 +180,7 @@ export default function ThorConciergeChat({
   source = "landing",
   minHeight = "min-h-[420px]",
   className,
+  seedPrompt,
 }: ThorConciergeChatProps) {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<ChatMessage[]>([DEFAULT_INTRO]);
@@ -234,6 +237,19 @@ export default function ThorConciergeChat({
 
   // Cancela stream ao desmontar.
   useEffect(() => () => abortRef.current?.abort(), []);
+
+  // Seed prompt vindo do quiz de dor da home · dispara uma vez por mudança.
+  const lastSeedRef = useRef<string>("");
+  useEffect(() => {
+    if (!seedPrompt) return;
+    if (seedPrompt === lastSeedRef.current) return;
+    if (isStreaming) return;
+    lastSeedRef.current = seedPrompt;
+    sendMessageRef.current?.(seedPrompt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seedPrompt, isStreaming]);
+
+  const sendMessageRef = useRef<((t: string) => void) | null>(null);
 
   const recommendation = useMemo<Recommendation | undefined>(() => {
     for (let i = messages.length - 1; i >= 0; i--) {
@@ -419,6 +435,11 @@ export default function ThorConciergeChat({
     },
     [isStreaming, messages, source, memoryFacts.integrations_asked, persistMemory],
   );
+
+  // Mantém o ref apontando para o sendMessage mais recente para o seedPrompt effect.
+  useEffect(() => {
+    sendMessageRef.current = sendMessage;
+  }, [sendMessage]);
 
   const handleSubmit = useCallback(
     (e?: React.FormEvent) => {

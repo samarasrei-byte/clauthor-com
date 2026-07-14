@@ -7,9 +7,9 @@
  *  - Anima\u00e7\u00f5es discretas, sem gradientes coloridos, sem \u00edcones decorativos ruidosos
  *  - Chat LLM real como abertura (Thor consultor)
  */
-import { lazy, Suspense, useEffect } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Briefcase, Headphones, Megaphone, Scale, Wallet, Users } from "lucide-react";
+import { ArrowRight, Briefcase, Headphones, Megaphone, Scale, Wallet, Users, MessageSquareWarning, TrendingDown, Repeat, LineChart, HelpCircle } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -101,9 +101,59 @@ const CEO_TESTIMONIALS = [
   },
 ];
 
+const PAIN_QUIZ: Array<{ id: string; icon: React.ElementType; label: string; prompt: string }> = [
+  {
+    id: "whatsapp",
+    icon: MessageSquareWarning,
+    label: "Perco cliente no WhatsApp / demoro pra responder",
+    prompt: "Estou perdendo cliente porque demoro pra responder no WhatsApp. Qual solução da Clauthor resolve isso?",
+  },
+  {
+    id: "leads",
+    icon: TrendingDown,
+    label: "Não gero leads qualificados o suficiente",
+    prompt: "Meu problema é gerar leads qualificados de forma consistente. O que a Clauthor recomenda?",
+  },
+  {
+    id: "repetitivo",
+    icon: Repeat,
+    label: "Meu time gasta 60% do dia em tarefa repetitiva",
+    prompt: "Meu time perde muito tempo em tarefas repetitivas de operação. Qual a solução da Clauthor?",
+  },
+  {
+    id: "kpi",
+    icon: LineChart,
+    label: "Não tenho visibilidade real dos números",
+    prompt: "Não tenho visibilidade em tempo real dos KPIs do meu negócio. O que vocês recomendam?",
+  },
+  {
+    id: "juridico",
+    icon: Scale,
+    label: "Contratos e jurídico travam meu negócio",
+    prompt: "Contratos e questões jurídicas atrasam minha operação. O que a Clauthor faz nisso?",
+  },
+  {
+    id: "explorar",
+    icon: HelpCircle,
+    label: "Ainda não sei · me mostra o que vocês fazem",
+    prompt: "Ainda não sei bem o que preciso. Pode me explicar como a Clauthor funciona e o que faz mais sentido pra mim?",
+  },
+];
+
 const HomePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [seedPrompt, setSeedPrompt] = useState<string>("");
+  const chatRef = useRef<HTMLDivElement | null>(null);
+
+  const pickPain = (item: (typeof PAIN_QUIZ)[number]) => {
+    trackKpi("home_pain_quiz_click", { pain_id: item.id });
+    setSeedPrompt(item.prompt);
+    // Rolagem suave até o chat para o usuário ver a resposta do Thor.
+    setTimeout(() => {
+      chatRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 100);
+  };
 
   useEffect(() => {
     document.title = t("home.seo_title");
@@ -171,30 +221,55 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="text-[44px] sm:text-6xl md:text-7xl lg:text-[88px] font-semibold tracking-[-0.035em] leading-[0.98] max-w-5xl mb-8"
+            className="text-[40px] sm:text-5xl md:text-6xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-6"
           >
-            <span className="text-black dark:text-white">Contrate um squad de IA.</span>
-            <br />
-            <span className="text-muted-foreground">Um time inteiro. Uma dor resolvida.</span>
+            <span className="text-black dark:text-white">Qual é a dor que tá te tirando o sono?</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed"
+            className="text-base md:text-lg text-muted-foreground max-w-2xl mb-10 leading-relaxed"
           >
-            Um agente, um squad ou um departamento inteiro. Conte pro Thor a sua
-            dor e o tamanho da sua operação · ele indica o time certo em 60 segundos.
-            A partir de{" "}
-            <span className="text-foreground font-medium">R$ 597/mês</span>.
+            Escolha o que mais te incomoda hoje. O Thor entende o tamanho da sua operação e
+            recomenda em 60 segundos: um agente, um squad ou um departamento inteiro.
+            A partir de <span className="text-foreground font-medium">R$ 597/mês</span>.
           </motion.p>
 
-          {/* Chat qualificador · Thor concierge */}
+          {/* Quiz de dor · seis caminhos claros */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.22 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="w-full max-w-4xl grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-10"
+          >
+            {PAIN_QUIZ.map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => pickPain(item)}
+                  className="group flex items-start gap-3 text-left rounded-2xl border border-border bg-card p-4 hover:border-primary/50 hover:bg-card/80 hover:-translate-y-0.5 transition-all"
+                >
+                  <span className="mt-0.5 h-9 w-9 shrink-0 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <Icon className="h-4 w-4 text-primary" strokeWidth={2} />
+                  </span>
+                  <span className="text-sm text-foreground leading-snug font-medium">
+                    {item.label}
+                  </span>
+                </button>
+              );
+            })}
+          </motion.div>
+
+          {/* Chat qualificador · Thor concierge (recebe seedPrompt do quiz) */}
+          <motion.div
+            ref={chatRef}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.28 }}
             className="w-full max-w-3xl mb-16"
           >
             <div className="dark rounded-3xl bg-black text-white p-4 sm:p-6 shadow-[0_30px_80px_-20px_hsl(0_0%_0%/0.4)] border border-white/10">
@@ -204,9 +279,10 @@ const HomePage = () => {
                   Thor · consultor IA · online
                 </span>
               </div>
-              <ThorConciergeChat source="landing" minHeight="360px" />
+              <ThorConciergeChat source="landing" minHeight="360px" seedPrompt={seedPrompt} />
             </div>
           </motion.div>
+
 
           {/* Showcase de squads · vitrine principal na home */}
           <motion.div
