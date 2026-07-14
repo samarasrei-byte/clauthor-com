@@ -138,8 +138,8 @@ export default function ThorFirstTouchWelcome({ onGuideMe, openDelayMs = 900 }: 
                 Opa, {firstName}! Tô aqui, não vai ficar perdido não.
               </h2>
               <p className="text-sm text-muted-foreground leading-relaxed">
-                Sou o Thor, seu copiloto. Vi que você já ativou {departments.length === 1 ? "o departamento" : `${departments.length} departamentos`} —
-                pode deixar comigo, vou te guiar em tudo daqui pra frente.
+                Sou o Thor, seu copiloto. Vi que você já ativou {departments.length === 1 ? "o departamento" : `${departments.length} departamentos`}.
+                Pode deixar comigo, vou te guiar em tudo daqui pra frente.
               </p>
             </div>
           </div>
