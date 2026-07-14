@@ -441,7 +441,7 @@ const KanbanBoard = () => {
                       </div>
                       <div className="flex items-center gap-1.5 shrink-0">
                         <span className={cn("text-[9px] font-semibold px-1.5 py-0.5 rounded-full border", pr.ring, pr.color)}>{pr.label}</span>
-                        <span className={cn("flex items-center gap-1 text-[9px] font-medium px-1.5 py-0.5 rounded-full", st.color, `bg-gradient-to-r ${st.bg}`)}>
+                        <span className={cn("flex items-center gap-1 text-[9px] font-medium px-1.5 py-0.5 rounded-full border border-border/40 bg-background/40", st.color)}>
                           <st.icon className="h-2.5 w-2.5" />
                           {st.label}
                         </span>
