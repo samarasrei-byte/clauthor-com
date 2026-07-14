@@ -572,7 +572,13 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
             <RefreshCw className={cn("h-3.5 w-3.5", refreshing && "animate-spin")} />
             Atualizar
           </Button>
-          <Button variant="outline" size="icon" className="h-8 w-8" aria-label="Configurações">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            aria-label="Configurações"
+            onClick={() => onNavigate?.("settings")}
+          >
             <Settings className="h-3.5 w-3.5" />
           </Button>
         </div>
