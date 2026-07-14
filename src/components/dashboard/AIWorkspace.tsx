@@ -269,12 +269,14 @@ const AIWorkspace = () => {
       {/* ─── Futuristic ambient backdrop ─── */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 -top-8 -z-10 h-[520px] overflow-hidden rounded-[32px]"
+        className="pointer-events-none absolute inset-x-0 -top-8 -z-10 h-[640px] overflow-hidden rounded-[32px]"
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.18),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(168,85,247,0.18),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,hsl(var(--primary)/0.22),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(168,85,247,0.22),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_left,rgba(14,165,233,0.18),transparent_55%)]" />
+        {/* Neural grid */}
         <div
-          className="absolute inset-0 opacity-[0.06]"
+          className="absolute inset-0 opacity-[0.07]"
           style={{
             backgroundImage:
               "linear-gradient(currentColor 1px, transparent 1px), linear-gradient(90deg, currentColor 1px, transparent 1px)",
@@ -282,15 +284,27 @@ const AIWorkspace = () => {
             maskImage: "radial-gradient(ellipse at 50% 30%, black 40%, transparent 80%)",
           }}
         />
+        {/* Scanline holográfico */}
+        <motion.div
+          className="absolute inset-x-0 h-[2px] bg-gradient-to-r from-transparent via-primary/60 to-transparent"
+          initial={{ top: "-2%" }}
+          animate={{ top: ["-2%", "102%"] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+        />
         <motion.div
           className="absolute -left-16 top-10 h-64 w-64 rounded-full bg-primary/25 blur-3xl"
           animate={{ x: [0, 40, 0], y: [0, 20, 0] }}
           transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
         />
         <motion.div
-          className="absolute right-0 top-24 h-72 w-72 rounded-full bg-fuchsia-500/20 blur-3xl"
+          className="absolute right-0 top-24 h-72 w-72 rounded-full bg-fuchsia-500/25 blur-3xl"
           animate={{ x: [0, -30, 0], y: [0, -10, 0] }}
           transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+        />
+        <motion.div
+          className="absolute left-1/3 bottom-0 h-56 w-56 rounded-full bg-cyan-500/20 blur-3xl"
+          animate={{ x: [0, 20, 0], y: [0, -20, 0] }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
         />
       </div>
 
@@ -298,27 +312,49 @@ const AIWorkspace = () => {
       <motion.header
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative flex flex-col gap-4 rounded-2xl border border-white/10 bg-background/40 p-4 backdrop-blur-xl md:flex-row md:items-center md:justify-between md:p-5"
+        className="relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-white/10 bg-background/40 p-4 backdrop-blur-xl md:flex-row md:items-center md:justify-between md:p-5"
       >
-        <div className="flex items-center gap-3">
+        {/* Moldura conic-gradient animada (holographic border) */}
+        <motion.div
+          aria-hidden
+          className="pointer-events-none absolute -inset-px rounded-2xl opacity-70"
+          style={{
+            background:
+              "conic-gradient(from 0deg, hsl(var(--primary)/0.6), transparent 25%, rgba(168,85,247,0.6) 50%, transparent 75%, hsl(var(--primary)/0.6))",
+            WebkitMask:
+              "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
+            WebkitMaskComposite: "xor",
+            maskComposite: "exclude",
+            padding: "1px",
+          }}
+          animate={{ rotate: 360 }}
+          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+        />
+        {/* Cantos brackets */}
+        <span aria-hidden className="pointer-events-none absolute left-2 top-2 h-3 w-3 border-l-2 border-t-2 border-primary/70" />
+        <span aria-hidden className="pointer-events-none absolute right-2 top-2 h-3 w-3 border-r-2 border-t-2 border-primary/70" />
+        <span aria-hidden className="pointer-events-none absolute left-2 bottom-2 h-3 w-3 border-l-2 border-b-2 border-primary/70" />
+        <span aria-hidden className="pointer-events-none absolute right-2 bottom-2 h-3 w-3 border-r-2 border-b-2 border-primary/70" />
+
+        <div className="relative flex items-center gap-3">
           <div className="relative">
             <motion.div
-              className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/50 to-fuchsia-500/50 blur-2xl"
-              animate={{ opacity: [0.6, 1, 0.6] }}
+              className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/60 to-fuchsia-500/60 blur-2xl"
+              animate={{ opacity: [0.5, 1, 0.5], scale: [0.95, 1.05, 0.95] }}
               transition={{ duration: 4, repeat: Infinity }}
             />
-            <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-primary to-fuchsia-500 shadow-lg shadow-primary/30 ring-1 ring-white/20">
+            <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-primary to-fuchsia-500 shadow-lg shadow-primary/40 ring-1 ring-white/20">
               <Brain className="h-6 w-6 text-white" />
             </div>
           </div>
           <div>
             <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
-              <span className="bg-gradient-to-r from-foreground via-foreground to-foreground/70 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-foreground via-primary to-fuchsia-500 bg-clip-text text-transparent">
                 AI Workspace
               </span>
               <Badge
                 variant="outline"
-                className="border-primary/40 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--primary)/0.25)]"
+                className="border-primary/40 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--primary)/0.35)]"
               >
                 <Radio className="mr-1 h-3 w-3 animate-pulse" />
                 Neural Sync
@@ -331,6 +367,7 @@ const AIWorkspace = () => {
             </p>
           </div>
         </div>
+
 
         <div className="flex flex-wrap items-center gap-2">
           {/* Seletor de Workspace */}

@@ -16,7 +16,7 @@ import { useState, lazy, Suspense, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Inbox, Layers3, KanbanSquare, FolderOpen, CheckSquare, Workflow, Building2, MessageSquare, Cog, Rocket } from "lucide-react";
+import { Inbox, Layers3, KanbanSquare, FolderOpen, CheckSquare, Workflow, Building2, MessageSquare, Cog, Rocket, Brain } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
 
 const UnifiedInbox = lazy(() => import("./UnifiedInbox"));
@@ -26,6 +26,7 @@ const FilesLibrary = lazy(() => import("./FilesLibrary"));
 const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const MissionComposer = lazy(() => import("./MissionComposer"));
 const CompanyHub = lazy(() => import("./CompanyHub"));
+const AIWorkspace = lazy(() => import("./AIWorkspace"));
 
 // Legacy tab keys (mantidos para compat com deep-links existentes) → nova tab consolidada.
 const LEGACY_TAB_MAP: Record<string, { tab: WorkspaceTab; view?: string }> = {
@@ -36,9 +37,11 @@ const LEGACY_TAB_MAP: Record<string, { tab: WorkspaceTab; view?: string }> = {
   "mission-composer": { tab: "orquestracao", view: "composer" },
   kanban: { tab: "execucao", view: "kanban" },
   files: { tab: "execucao", view: "files" },
+  "ai-workspace": { tab: "ai-live" },
+  "ai-live": { tab: "ai-live" },
 };
 
-export type WorkspaceTab = "empresa" | "comunicacao" | "orquestracao" | "execucao";
+export type WorkspaceTab = "empresa" | "comunicacao" | "orquestracao" | "execucao" | "ai-live";
 
 interface Props {
   defaultTab?: string;
@@ -99,6 +102,13 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
           <TabsTrigger value="execucao" className="gap-1.5 text-xs">
             <Rocket className="h-3.5 w-3.5" /> Execução
           </TabsTrigger>
+          <TabsTrigger
+            value="ai-live"
+            className="gap-1.5 text-xs relative data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary/20 data-[state=active]:to-fuchsia-500/20 data-[state=active]:text-primary"
+          >
+            <Brain className="h-3.5 w-3.5" /> IA Live
+            <span className="ml-1 inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_hsl(var(--primary))] animate-pulse" />
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="empresa" className="mt-4">
@@ -152,6 +162,12 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
           />
           <Suspense fallback={<SectionLoader />}>
             {execView === "kanban" ? <KanbanBoard /> : <FilesLibrary />}
+          </Suspense>
+        </TabsContent>
+
+        <TabsContent value="ai-live" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <AIWorkspace />
           </Suspense>
         </TabsContent>
       </Tabs>
