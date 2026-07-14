@@ -205,7 +205,7 @@ const KanbanBoard = () => {
                   onClick={() => setView(v.id)}
                   className={cn(
                     "flex items-center gap-1 px-2.5 py-1.5 rounded-md text-[10px] font-medium transition-all",
-                    view === v.id ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                    view === v.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <v.icon className="h-3 w-3" />
