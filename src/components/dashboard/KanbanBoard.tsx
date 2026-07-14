@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, Clock, AlertCircle, Circle, Plus, Bot, Calendar, Flag, Loader2, Trash2, Zap, Activity, ChevronRight, Layers, Target, Eye, Filter, LayoutGrid, List } from "lucide-react";
+import { CheckCircle2, Clock, AlertCircle, Circle, Plus, Bot, Calendar, Flag, Loader2, Trash2, Zap, Activity, ChevronRight, Layers, Target, Eye, Filter, LayoutGrid, List, Search, X } from "lucide-react";
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -54,6 +54,9 @@ const KanbanBoard = () => {
   const [view, setView] = useState<ViewMode>("focus");
   const [filterPriority, setFilterPriority] = useState("all");
   const [filterStatus, setFilterStatus] = useState("all");
+  const [filterAgent, setFilterAgent] = useState("all");
+  const [filterWindow, setFilterWindow] = useState<"all" | "24h" | "7d" | "30d">("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [createOpen, setCreateOpen] = useState(false);
   const [draggedTask, setDraggedTask] = useState<string | null>(null);
   const [dragOverStatus, setDragOverStatus] = useState<string | null>(null);
@@ -126,12 +129,32 @@ const KanbanBoard = () => {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["kanban-tasks"] }); toast.success("Missão removida"); },
   });
 
+  const agentOptions = useMemo(() => {
+    const set = new Set<string>();
+    for (const t of tasks) if (t.agent_name) set.add(t.agent_name);
+    return Array.from(set).sort();
+  }, [tasks]);
+
   const filtered = useMemo(() => {
     let result = tasks;
     if (filterPriority !== "all") result = result.filter(t => t.priority === filterPriority);
     if (filterStatus !== "all") result = result.filter(t => t.status === filterStatus);
+    if (filterAgent !== "all") result = result.filter(t => (t.agent_name || "Sem agente") === filterAgent);
+    if (filterWindow !== "all") {
+      const ms = filterWindow === "24h" ? 864e5 : filterWindow === "7d" ? 7 * 864e5 : 30 * 864e5;
+      const cutoff = Date.now() - ms;
+      result = result.filter(t => new Date(t.created_at).getTime() >= cutoff);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      result = result.filter(t =>
+        t.title.toLowerCase().includes(q) ||
+        (t.description || "").toLowerCase().includes(q) ||
+        (t.agent_name || "").toLowerCase().includes(q)
+      );
+    }
     return result;
-  }, [tasks, filterPriority, filterStatus]);
+  }, [tasks, filterPriority, filterStatus, filterAgent, filterWindow, searchQuery]);
 
   const statusGroups = useMemo(() => {
     const map: Record<string, Task[]> = { open: [], in_progress: [], done: [], atrasada: [] };
@@ -285,7 +308,60 @@ const KanbanBoard = () => {
           ))}
         </div>
 
+        {/* Search + Agent + Time window */}
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+          <div className="relative flex-1">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground/50" />
+            <Input
+              value={searchQuery}
+              onChange={e => setSearchQuery(e.target.value)}
+              placeholder="Buscar por título, descrição ou agente..."
+              className="h-8 pl-8 pr-8 text-xs bg-background/40 border-border/40"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground/60 hover:text-foreground"
+                aria-label="Limpar busca"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+          <Select value={filterAgent} onValueChange={setFilterAgent}>
+            <SelectTrigger className="h-8 w-full sm:w-[180px] text-xs bg-background/40 border-border/40">
+              <div className="flex items-center gap-1.5">
+                <Bot className="h-3 w-3 text-muted-foreground/70" />
+                <SelectValue placeholder="Agente" />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos os agentes</SelectItem>
+              {agentOptions.map(a => (
+                <SelectItem key={a} value={a}>{a}</SelectItem>
+              ))}
+              <SelectItem value="Sem agente">Sem agente</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={filterWindow} onValueChange={(v) => setFilterWindow(v as typeof filterWindow)}>
+            <SelectTrigger className="h-8 w-full sm:w-[150px] text-xs bg-background/40 border-border/40">
+              <div className="flex items-center gap-1.5">
+                <Clock className="h-3 w-3 text-muted-foreground/70" />
+                <SelectValue />
+              </div>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Sempre</SelectItem>
+              <SelectItem value="24h">Últimas 24h</SelectItem>
+              <SelectItem value="7d">Últimos 7 dias</SelectItem>
+              <SelectItem value="30d">Últimos 30 dias</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
         {/* Priority filter */}
+
         <div className="flex items-center gap-2">
           <Filter className="h-3 w-3 text-muted-foreground/50" />
           <div className="flex gap-1">
