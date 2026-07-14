@@ -500,7 +500,11 @@ const IntegrationsCard = ({ onNavigate }: { onNavigate?: (id: string) => void })
         const meta = statusMeta[it.status];
         const Icon = meta.icon;
         return (
-          <li key={it.id} className="flex items-center gap-3 p-3 rounded-xl border border-border/30 bg-background/40 hover:border-border/60 transition-colors">
+          <li
+            key={it.id}
+            onClick={() => onNavigate?.("integrations")}
+            className="flex items-center gap-3 p-3 rounded-xl border border-border/30 bg-background/40 hover:border-border/60 transition-colors cursor-pointer"
+          >
             <div className="w-8 h-8 rounded-lg bg-muted/30 flex items-center justify-center shrink-0">
               <Plug className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.5} />
             </div>
