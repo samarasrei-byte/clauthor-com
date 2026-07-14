@@ -216,7 +216,7 @@ const KanbanBoard = () => {
 
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
               <DialogTrigger asChild>
-                <Button size="sm" className="h-8 text-xs gap-1.5 glow">
+                <Button size="sm" className="h-8 text-xs gap-1.5">
                   <Plus className="h-3.5 w-3.5" /> Nova Missão
                 </Button>
               </DialogTrigger>
