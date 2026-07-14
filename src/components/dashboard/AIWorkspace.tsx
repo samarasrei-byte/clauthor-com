@@ -158,6 +158,13 @@ const AIWorkspace = () => {
   const [chatInput, setChatInput] = useState("");
   const [taskInput, setTaskInput] = useState("");
   const [graphQuery, setGraphQuery] = useState("");
+  const [visualMode, setVisualMode] = useState<"minimal" | "holo">(() => {
+    if (typeof window === "undefined") return "minimal";
+    return (localStorage.getItem("ia-live-visual-mode") as "minimal" | "holo") || "minimal";
+  });
+  useEffect(() => {
+    if (typeof window !== "undefined") localStorage.setItem("ia-live-visual-mode", visualMode);
+  }, [visualMode]);
   const [creatorOpen, setCreatorOpen] = useState(false);
   const [creatingWs, setCreatingWs] = useState(false);
   const [newWsName, setNewWsName] = useState("");
