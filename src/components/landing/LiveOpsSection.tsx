@@ -78,7 +78,7 @@ export default function LiveOpsSection() {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              to="/thor-concierge"
+              to="/thor"
               className="inline-flex items-center gap-2 rounded-full border border-white/20 text-white px-6 py-3 text-sm font-medium hover:bg-white/5 transition-colors"
             >
               Falar com Thor
