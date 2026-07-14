@@ -17,6 +17,7 @@ import Footer from "@/components/Footer";
 import { SQUADS } from "@/data/squads";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import PanelMockup from "@/components/landing/PanelMockup";
+import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
 import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { trackKpi } from "@/lib/kpiTracker";
@@ -181,18 +182,37 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-14 leading-relaxed"
+            className="text-lg md:text-xl text-muted-foreground max-w-2xl mb-10 leading-relaxed"
           >
-            Um agente, um squad ou um departamento inteiro. Escolha o time certo
-            para cada função. A partir de{" "}
-            <span className="text-foreground font-medium">R$ 297/mês</span>.
+            Um agente, um squad ou um departamento inteiro. Conte pro Thor a sua
+            dor e o tamanho da sua operação · ele indica o time certo em 60 segundos.
+            A partir de{" "}
+            <span className="text-foreground font-medium">R$ 597/mês</span>.
           </motion.p>
+
+          {/* Chat qualificador · Thor concierge */}
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.22 }}
+            className="w-full max-w-3xl mb-16"
+          >
+            <div className="dark rounded-3xl bg-black text-white p-4 sm:p-6 shadow-[0_30px_80px_-20px_hsl(0_0%_0%/0.4)] border border-white/10">
+              <div className="flex items-center gap-2 mb-4 px-2">
+                <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
+                  Thor · consultor IA · online
+                </span>
+              </div>
+              <ThorConciergeChat source="landing" minHeight="360px" />
+            </div>
+          </motion.div>
 
           {/* Showcase de squads · vitrine principal na home */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.22 }}
+            transition={{ duration: 0.6, delay: 0.28 }}
             className="w-full max-w-6xl"
           >
             <div className="flex items-end justify-between mb-6 px-1">
@@ -201,7 +221,7 @@ const HomePage = () => {
                   Squads · times prontos
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
-                  Os squads mais procurados
+                  Ou explore os squads mais procurados
                 </h2>
               </div>
               <Link
