@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Sparkles, Network, Workflow, Plus, Search, Cpu, Activity,
-  Clock, Coins, Gauge, Circle, MessageSquare, CheckCircle2, Loader2,
-  ChevronRight, X, Bot, Wand2,
+  Clock, Coins, Gauge, Circle, MessageSquare, CheckCircle2,
+  ChevronRight, X, Bot, Wand2, Radio, Send,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,12 +12,18 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  useAIWorkspaces, useWorkspaceMessages, useWorkspaceTasks,
+  type TaskStatus, type AIWorkspaceTask,
+} from "@/hooks/useAIWorkspaces";
+
 
 /* ────────────────────────────────────────────────────────────────
  * AI Workspace — colaboração multi-agente em tempo real (mock).
