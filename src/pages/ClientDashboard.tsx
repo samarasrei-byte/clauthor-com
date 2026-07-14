@@ -492,6 +492,8 @@ const ClientDashboard = () => {
       const agent = agents.find(a => a.id === agentId);
       if (agent) { setPreviousSection(activeSection); setSelectedAgent({ id: agent.id, name: agent.name }); setActiveSection("chat"); return; }
     }
+    // Deep-link legado: ai-workspace agora vive dentro de Workspace → aba "IA Live"
+    if (id === "ai-workspace") { setActiveSection("workspace"); return; }
     if (id === "chat") setPreviousSection(activeSection);
     setActiveSection(id);
   };
