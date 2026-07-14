@@ -65,9 +65,10 @@ export default function LiveOpsCases() {
           )}
 
           {/* Quote */}
-          <blockquote className="relative text-[15px] leading-relaxed text-white/75 italic mb-4 before:content-['“'] before:mr-1 before:text-primary/60 before:text-2xl before:font-serif after:content-['”'] after:ml-1 after:text-primary/60 after:text-2xl after:font-serif">
-            {study.quote}
+          <blockquote className="relative text-[15px] leading-relaxed text-white/75 mb-4">
+            &ldquo;{study.quote}&rdquo;
           </blockquote>
+
 
           <div className="relative text-[11px] uppercase tracking-[0.14em] text-white/45">
             {study.attribution.name} · {study.attribution.role}
