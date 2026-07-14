@@ -180,6 +180,7 @@ export default function ThorConciergeChat({
   source = "landing",
   minHeight = "min-h-[420px]",
   className,
+  seedPrompt,
 }: ThorConciergeChatProps) {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<ChatMessage[]>([DEFAULT_INTRO]);
