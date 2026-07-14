@@ -493,11 +493,12 @@ const AIWorkspace = () => {
             <Badge variant="secondary" className="text-xs">{tasks.length}</Badge>
           </div>
           <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-            <KanbanColumn title="Backlog" tasks={tasks.filter(t => t.status === "backlog")} agents={agentById} tone="bg-muted/40" />
-            <KanbanColumn title="Fazendo" tasks={tasks.filter(t => t.status === "doing")}   agents={agentById} tone="bg-sky-500/10" />
-            <KanbanColumn title="Revisão" tasks={tasks.filter(t => t.status === "review")} agents={agentById} tone="bg-amber-500/10" />
-            <KanbanColumn title="Feito"   tasks={tasks.filter(t => t.status === "done")}   agents={agentById} tone="bg-emerald-500/10" />
+            <KanbanColumn title="Backlog" tasks={tasks.filter(t => t.status === "backlog")} agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-muted/40" />
+            <KanbanColumn title="Fazendo" tasks={tasks.filter(t => t.status === "doing")}   agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-sky-500/10" />
+            <KanbanColumn title="Revisão" tasks={tasks.filter(t => t.status === "review")}  agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-amber-500/10" />
+            <KanbanColumn title="Feito"   tasks={tasks.filter(t => t.status === "done")}    agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-emerald-500/10" />
           </div>
+
         </Card>
       </div>
 
