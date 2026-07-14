@@ -542,6 +542,7 @@ const ClientDashboard = () => {
     chat: selectedAgent?.name || "Chat",
     inbox: "Inbox",
     productivity: "Central de Produtividade",
+    "ai-workspace": "AI Workspace",
   }), [t, selectedAgent]);
 
   const breadcrumbLabel = breadcrumbMap[activeSection] || activeSection;
