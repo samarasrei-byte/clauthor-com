@@ -295,17 +295,17 @@ const HomePage = () => {
             <div className="flex items-end justify-between mb-6 px-1">
               <div className="text-left">
                 <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground mb-1">
-                  Squads · times prontos
+                  {t("home.squads_eyebrow")}
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
-                  Ou explore os squads mais procurados
+                  {t("home.squads_title")}
                 </h2>
               </div>
               <Link
                 to="/squads"
                 className="hidden sm:inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Ver todos os {SQUADS.length} squads <ArrowRight className="h-3.5 w-3.5" />
+                {t("home.squads_see_all", { count: SQUADS.length })} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
