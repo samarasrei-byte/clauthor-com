@@ -43,6 +43,7 @@ const ThorFirstTouchWelcome = lazy(() => import("@/components/dashboard/ThorFirs
 const ThorTokenAlert = lazy(() => import("@/components/dashboard/ThorTokenAlert"));
 const ThorCenter = lazy(() => import("@/components/dashboard/ThorCenter"));
 const ProductivityHub = lazy(() => import("@/components/dashboard/ProductivityHub"));
+const AIWorkspace = lazy(() => import("@/components/dashboard/AIWorkspace"));
 import { useThorLiveAlerts } from "@/hooks/useThorLiveAlerts";
 
 const lazyRetry = (fn: () => Promise<any>) => lazy(() => fn().catch(() => {
@@ -450,6 +451,7 @@ const ClientDashboard = () => {
     { id: "overview",  label: t("dashboard.command_center"), icon: LayoutDashboard, group: zoneWork },
     { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: zoneWork },
     { id: "productivity", label: "Central de Produtividade", icon: BriefcaseBusiness, group: zoneWork },
+    { id: "ai-workspace", label: "AI Workspace", icon: Brain, group: zoneWork },
     // Chat unificado: sem entrada própria · o Command Center é o hub conversacional,
     // e conversar com um agente específico entra por "Meus Agentes" → agente.
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}`, group: zoneWork }] : []),
@@ -473,7 +475,7 @@ const ClientDashboard = () => {
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "agent-chat-active",
-    "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
+    "intelligence-hub", "omnix", "thor-center", "workspace", "productivity", "ai-workspace",
     "integrations", "system",
   ]);
   const sidebarItems: SidebarItem[] = isAdmin
@@ -540,6 +542,7 @@ const ClientDashboard = () => {
     chat: selectedAgent?.name || "Chat",
     inbox: "Inbox",
     productivity: "Central de Produtividade",
+    "ai-workspace": "AI Workspace",
   }), [t, selectedAgent]);
 
   const breadcrumbLabel = breadcrumbMap[activeSection] || activeSection;
@@ -763,6 +766,13 @@ const ClientDashboard = () => {
                     <ProductivityHub onNavigate={handleSidebarNav} />
                   </Suspense>
                 )}
+
+                {activeSection === "ai-workspace" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <AIWorkspace />
+                  </Suspense>
+                )}
+
 
                 <DashboardSectionRenderer
                   activeSection={activeSection}
