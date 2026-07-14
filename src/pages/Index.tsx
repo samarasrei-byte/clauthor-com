@@ -712,11 +712,11 @@ const HomePage = () => {
         <div className="max-w-5xl mx-auto px-6 py-24 sm:py-32">
           <div className="mb-16 max-w-3xl">
             <p className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-4">
-              Comparativo
+              {t("home.compare_eyebrow")}
             </p>
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-semibold tracking-[-0.03em] leading-[1.02] text-foreground mb-6">
-              O time tradicional{" "}
-              <span className="text-muted-foreground">vs. a Clauthor.</span>
+              {t("home.compare_title1")}{" "}
+              <span className="text-muted-foreground">{t("home.compare_title2")}</span>
             </h2>
           </div>
 
@@ -724,22 +724,22 @@ const HomePage = () => {
             {/* Header row */}
             <div className="grid grid-cols-3 border-b border-border/60 bg-card/40">
               <div className="p-5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground font-semibold">
-                Métrica
+                {t("home.compare_col_metric")}
               </div>
               <div className="p-5 text-[11px] uppercase tracking-[0.14em] text-muted-foreground font-semibold border-l border-border/60">
-                Departamento CLT
+                {t("home.compare_col_clt")}
               </div>
               <div className="p-5 text-[11px] uppercase tracking-[0.14em] text-primary font-semibold border-l border-border/60 bg-primary/[0.03]">
-                Departamento Clauthor
+                {t("home.compare_col_cla")}
               </div>
             </div>
             {[
-              { label: "Custo mensal", clt: "R$ 90.000", cla: "R$ 1.477" },
-              { label: "Setup", clt: "3 a 6 meses", cla: "90 segundos" },
-              { label: "Cobertura", clt: "8h · 5 dias", cla: "24/7 · 365 dias" },
-              { label: "Idiomas", clt: "1 a 2", cla: "14 nativos" },
-              { label: "Escala", clt: "Contratar · demitir", cla: "Instantânea" },
-              { label: "Turnover", clt: "23% ao ano", cla: "Zero" },
+              { label: t("home.compare_row_cost"), clt: "R$ 90.000", cla: "R$ 1.477" },
+              { label: t("home.compare_row_setup"), clt: t("home.compare_v_setup_clt"), cla: t("home.compare_v_setup_cla") },
+              { label: t("home.compare_row_cov"), clt: t("home.compare_v_cov_clt"), cla: t("home.compare_v_cov_cla") },
+              { label: t("home.compare_row_langs"), clt: t("home.compare_v_lang_clt"), cla: t("home.compare_v_lang_cla") },
+              { label: t("home.compare_row_scale"), clt: t("home.compare_v_scale_clt"), cla: t("home.compare_v_scale_cla") },
+              { label: t("home.compare_row_turn"), clt: t("home.compare_v_turn_clt"), cla: t("home.compare_v_turn_cla") },
             ].map((row, i, arr) => (
               <motion.div
                 key={row.label}
@@ -762,7 +762,7 @@ const HomePage = () => {
           </div>
 
           <p className="mt-6 text-xs text-muted-foreground text-center">
-            Fontes: FGV (custo médio departamento com 6 pessoas + encargos), Great Place to Work (turnover médio Brasil).
+            {t("home.compare_sources")}
           </p>
         </div>
       </section>
