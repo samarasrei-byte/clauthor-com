@@ -338,5 +338,3 @@ export function useWorkspaceTasks(workspaceId: string | null, tenantId: string |
 }
 
 // Marker de vocabulário — usado por outros módulos que precisem filtrar tasks.
-export const WORKSPACE_TASK_CATEGORY_PREFIX = WS_CATEGORY_PREFIX;
-export const WORKSPACE_TASK_STATUSES = IN_STATUSES;
