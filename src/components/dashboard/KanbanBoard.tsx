@@ -129,12 +129,32 @@ const KanbanBoard = () => {
     onSuccess: () => { queryClient.invalidateQueries({ queryKey: ["kanban-tasks"] }); toast.success("Missão removida"); },
   });
 
+  const agentOptions = useMemo(() => {
+    const set = new Set<string>();
+    for (const t of tasks) if (t.agent_name) set.add(t.agent_name);
+    return Array.from(set).sort();
+  }, [tasks]);
+
   const filtered = useMemo(() => {
     let result = tasks;
     if (filterPriority !== "all") result = result.filter(t => t.priority === filterPriority);
     if (filterStatus !== "all") result = result.filter(t => t.status === filterStatus);
+    if (filterAgent !== "all") result = result.filter(t => (t.agent_name || "Sem agente") === filterAgent);
+    if (filterWindow !== "all") {
+      const ms = filterWindow === "24h" ? 864e5 : filterWindow === "7d" ? 7 * 864e5 : 30 * 864e5;
+      const cutoff = Date.now() - ms;
+      result = result.filter(t => new Date(t.created_at).getTime() >= cutoff);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.trim().toLowerCase();
+      result = result.filter(t =>
+        t.title.toLowerCase().includes(q) ||
+        (t.description || "").toLowerCase().includes(q) ||
+        (t.agent_name || "").toLowerCase().includes(q)
+      );
+    }
     return result;
-  }, [tasks, filterPriority, filterStatus]);
+  }, [tasks, filterPriority, filterStatus, filterAgent, filterWindow, searchQuery]);
 
   const statusGroups = useMemo(() => {
     const map: Record<string, Task[]> = { open: [], in_progress: [], done: [], atrasada: [] };
