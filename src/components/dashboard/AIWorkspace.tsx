@@ -405,25 +405,32 @@ const AIWorkspace = () => {
       </motion.div>
 
 
-      {/* ─── Delegação ─── */}
+      {/* ─── Delegação rápida (Kanban unificado) ─── */}
       <Card className="border-primary/20 bg-gradient-to-br from-primary/5 via-transparent to-purple-500/5 p-4">
-        <div className="mb-3 flex items-center gap-2 text-sm font-medium">
-          <Wand2 className="h-4 w-4 text-primary" />
-          Delegar missão — a equipe divide automaticamente
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 text-sm">
+          <div className="flex items-center gap-2 font-medium">
+            <Wand2 className="h-4 w-4 text-primary" />
+            Tarefa rápida — cai direto no Kanban
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Para missões multi-etapa estruturadas, use{" "}
+            <span className="font-medium text-primary">Orquestração › Composer</span>.
+          </p>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <Input
             value={taskInput}
             onChange={(e) => setTaskInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleDelegate()}
-            placeholder='Ex: "Criar uma landing page para vender um curso de IA"'
+            placeholder='Ex: "Landing para curso de IA" · vira card no Kanban'
             className="flex-1"
           />
           <Button onClick={handleDelegate} className="gap-2">
-            <Sparkles className="h-4 w-4" /> Delegar
+            <Sparkles className="h-4 w-4" /> Criar
           </Button>
         </div>
       </Card>
+
 
       {/* ─── Grid principal ─── */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
