@@ -882,7 +882,7 @@ const HomePage = () => {
             transition={{ duration: 0.6 }}
             className="text-5xl sm:text-6xl md:text-7xl font-semibold tracking-[-0.035em] leading-[0.98] text-white mb-8"
           >
-            Seu departamento
+            {t("home.final_title1")}
             <br />
             <span className="text-primary">{t("home.final_title2")}</span>
           </motion.h2>
