@@ -102,43 +102,13 @@ const CEO_TESTIMONIALS = [
   },
 ];
 
-const PAIN_QUIZ: Array<{ id: string; icon: React.ElementType; label: string; prompt: string }> = [
-  {
-    id: "whatsapp",
-    icon: MessageSquareWarning,
-    label: "Perco cliente no WhatsApp / demoro pra responder",
-    prompt: "Estou perdendo cliente porque demoro pra responder no WhatsApp. Qual solução da Clauthor resolve isso?",
-  },
-  {
-    id: "leads",
-    icon: TrendingDown,
-    label: "Não gero leads qualificados o suficiente",
-    prompt: "Meu problema é gerar leads qualificados de forma consistente. O que a Clauthor recomenda?",
-  },
-  {
-    id: "repetitivo",
-    icon: Repeat,
-    label: "Meu time gasta 60% do dia em tarefa repetitiva",
-    prompt: "Meu time perde muito tempo em tarefas repetitivas de operação. Qual a solução da Clauthor?",
-  },
-  {
-    id: "kpi",
-    icon: LineChart,
-    label: "Não tenho visibilidade real dos números",
-    prompt: "Não tenho visibilidade em tempo real dos KPIs do meu negócio. O que vocês recomendam?",
-  },
-  {
-    id: "juridico",
-    icon: Scale,
-    label: "Contratos e jurídico travam meu negócio",
-    prompt: "Contratos e questões jurídicas atrasam minha operação. O que a Clauthor faz nisso?",
-  },
-  {
-    id: "explorar",
-    icon: HelpCircle,
-    label: "Ainda não sei · me mostra o que vocês fazem",
-    prompt: "Ainda não sei bem o que preciso. Pode me explicar como a Clauthor funciona e o que faz mais sentido pra mim?",
-  },
+const PAIN_QUIZ_IDS: Array<{ id: string; icon: React.ElementType }> = [
+  { id: "whatsapp", icon: MessageSquareWarning },
+  { id: "leads", icon: TrendingDown },
+  { id: "repetitivo", icon: Repeat },
+  { id: "kpi", icon: LineChart },
+  { id: "juridico", icon: Scale },
+  { id: "explorar", icon: HelpCircle },
 ];
 
 const HomePage = () => {
@@ -146,6 +116,12 @@ const HomePage = () => {
   const navigate = useNavigate();
   const [seedPrompt, setSeedPrompt] = useState<string>("");
   const chatRef = useRef<HTMLDivElement | null>(null);
+
+  const PAIN_QUIZ = PAIN_QUIZ_IDS.map((p) => ({
+    ...p,
+    label: t(`home.pain_${p.id}_label`),
+    prompt: t(`home.pain_${p.id}_prompt`),
+  }));
 
   const pickPain = (item: (typeof PAIN_QUIZ)[number]) => {
     trackKpi("home_pain_quiz_click", { pain_id: item.id });
@@ -216,7 +192,7 @@ const HomePage = () => {
             className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.03] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-primary/80 mb-8"
           >
             <Network className="h-3.5 w-3.5" strokeWidth={2} />
-            35.827 empresas · 14 idiomas · operação 24/7
+            {t("home.hero_badge")}
           </motion.div>
 
           <motion.h1
@@ -225,9 +201,9 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="font-display text-[40px] sm:text-5xl md:text-6xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-6"
           >
-            <span className="text-foreground">Qual é a dor</span>
+            <span className="text-foreground">{t("home.hero_title_line1")}</span>
             <br />
-            <span className="gradient-text">que tá te tirando o sono?</span>
+            <span className="gradient-text">{t("home.hero_title_line2")}</span>
           </motion.h1>
 
           <motion.p
@@ -236,9 +212,9 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-base md:text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed"
           >
-            Escolha o que mais te incomoda hoje. O Thor entende o tamanho da sua operação e
-            recomenda em 60 segundos: um agente, um squad ou um departamento inteiro.
-            A partir de <span className="text-foreground font-medium">R$ 597/mês</span>.
+            {t("home.hero_subtitle_prefix")}
+            <span className="text-foreground font-medium">{t("home.hero_price")}</span>
+            {t("home.hero_subtitle_suffix")}
           </motion.p>
 
           {/* Stats pills · Departamentos-style */}
@@ -249,9 +225,9 @@ const HomePage = () => {
             className="flex flex-wrap items-center justify-center gap-2 mb-10"
           >
             {[
-              { icon: Bot, value: "+200", label: "agentes" },
-              { icon: Building2, value: "20", label: "departamentos" },
-              { icon: Zap, value: "24/7", label: "operação" },
+              { icon: Bot, value: "+200", label: t("home.stat_agents") },
+              { icon: Building2, value: "20", label: t("home.stat_departments") },
+              { icon: Zap, value: "24/7", label: t("home.stat_operation") },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/40 border border-border text-sm">
                 <s.icon className="h-3.5 w-3.5 text-primary/70" strokeWidth={2} />
@@ -301,7 +277,7 @@ const HomePage = () => {
               <div className="flex items-center gap-2 mb-4 px-2">
                 <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
                 <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
-                  Thor · consultor IA · online
+                  {t("home.thor_status")}
                 </span>
               </div>
               <ThorConciergeChat source="landing" minHeight="360px" seedPrompt={seedPrompt} />
@@ -319,17 +295,17 @@ const HomePage = () => {
             <div className="flex items-end justify-between mb-6 px-1">
               <div className="text-left">
                 <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground mb-1">
-                  Squads · times prontos
+                  {t("home.squads_eyebrow")}
                 </div>
                 <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
-                  Ou explore os squads mais procurados
+                  {t("home.squads_title")}
                 </h2>
               </div>
               <Link
                 to="/squads"
                 className="hidden sm:inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Ver todos os {SQUADS.length} squads <ArrowRight className="h-3.5 w-3.5" />
+                {t("home.squads_see_all", { count: SQUADS.length })} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
 
@@ -348,7 +324,7 @@ const HomePage = () => {
                         <Icon className="h-4 w-4 text-primary" strokeWidth={2} />
                       </div>
                       <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
-                        {squad.agents} agentes
+                        {squad.agents} {t("home.squads_agents_short")}
                       </span>
                     </div>
                     <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-1.5">
@@ -360,11 +336,11 @@ const HomePage = () => {
                     </p>
                     <div className="flex items-center justify-between pt-3 border-t border-border">
                       <div className="flex items-baseline gap-1">
-                        <span className="text-[10px] text-muted-foreground">a partir de R$</span>
+                        <span className="text-[10px] text-muted-foreground">{t("home.squads_from")}</span>
                         <span className="text-lg font-semibold text-foreground">
                           {squad.tiers[0].price.toLocaleString("pt-BR")}
                         </span>
-                        <span className="text-[10px] text-muted-foreground">/mês</span>
+                        <span className="text-[10px] text-muted-foreground">{t("home.squads_per_month")}</span>
                       </div>
                       <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
                     </div>
@@ -378,7 +354,7 @@ const HomePage = () => {
                 to="/squads"
                 className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
               >
-                Ver todos os {SQUADS.length} squads <ArrowRight className="h-3.5 w-3.5" />
+                {t("home.squads_see_all", { count: SQUADS.length })} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           </motion.div>
@@ -393,14 +369,14 @@ const HomePage = () => {
               onClick={() => startFlow("hero_primary")}
               className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-opacity"
             >
-              Ver todos os departamentos
+              {t("home.cta_view_departments")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
             <Link
               to="/pricing"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Ver preços →
+              {t("home.cta_view_pricing")}
             </Link>
           </motion.div>
         </div>
