@@ -87,6 +87,7 @@ export interface KpiEventPayload {
   dept_id?: string | null;
   count?: number;
   signal_kind?: string;
+  pain_id?: string;
 }
 
 
