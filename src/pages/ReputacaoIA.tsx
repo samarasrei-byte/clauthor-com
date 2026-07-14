@@ -348,20 +348,20 @@ const ReputacaoIA = () => {
 
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
             {[
-              { emoji: "🏥", label: "Clínicas" },
-              { emoji: "⚖️", label: "Escritórios" },
-              { emoji: "🍽", label: "Restaurantes" },
-              { emoji: "🛒", label: "Lojas" },
-              { emoji: "🏭", label: "Indústrias" },
-              { emoji: "🚗", label: "Concessionárias" },
-              { emoji: "🏨", label: "Hotéis" },
-              { emoji: "🏢", label: "Imobiliárias" },
-              { emoji: "🛍", label: "E-commerce" },
-              { emoji: "🛠", label: "Prestadores" },
+              { icon: Stethoscope, label: "Clínicas" },
+              { icon: Scale, label: "Escritórios" },
+              { icon: UtensilsCrossed, label: "Restaurantes" },
+              { icon: Store, label: "Lojas" },
+              { icon: Factory, label: "Indústrias" },
+              { icon: Car, label: "Concessionárias" },
+              { icon: Hotel, label: "Hotéis" },
+              { icon: Building2, label: "Imobiliárias" },
+              { icon: ShoppingBag, label: "E-commerce" },
+              { icon: Wrench, label: "Prestadores" },
             ].map((seg) => (
               <motion.div key={seg.label} {...fadeUp}>
-                <div className="flex flex-col items-center gap-2 p-5 rounded-2xl bg-card/50 border border-border hover:border-primary/30 hover:bg-card transition-all cursor-default">
-                  <span className="text-3xl">{seg.emoji}</span>
+                <div className="group flex flex-col items-center gap-3 p-6 rounded-2xl bg-card/50 border border-border hover:border-primary/40 hover:bg-card transition-all cursor-default">
+                  <seg.icon className="h-7 w-7 text-muted-foreground group-hover:text-primary transition-colors" strokeWidth={1.5} />
                   <span className="text-sm font-medium text-foreground">{seg.label}</span>
                 </div>
               </motion.div>
