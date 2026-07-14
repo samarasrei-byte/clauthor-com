@@ -302,59 +302,30 @@ const AIWorkspace = () => {
 
       {/* ─── Header ─── */}
       <motion.header
-        initial={{ opacity: 0, y: -12 }}
+        initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-white/10 bg-background/40 p-4 backdrop-blur-xl md:flex-row md:items-center md:justify-between md:p-5"
+        className="relative flex flex-col gap-4 rounded-xl border border-border/60 bg-background/50 p-4 backdrop-blur md:flex-row md:items-center md:justify-between md:p-5"
       >
-        {/* Moldura conic-gradient animada (holographic border) */}
-        <motion.div
-          aria-hidden
-          className="pointer-events-none absolute -inset-px rounded-2xl opacity-70"
-          style={{
-            background:
-              "conic-gradient(from 0deg, hsl(var(--primary)/0.6), transparent 25%, rgba(168,85,247,0.6) 50%, transparent 75%, hsl(var(--primary)/0.6))",
-            WebkitMask:
-              "linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0)",
-            WebkitMaskComposite: "xor",
-            maskComposite: "exclude",
-            padding: "1px",
-          }}
-          animate={{ rotate: 360 }}
-          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
-        />
-        {/* Cantos brackets */}
-        <span aria-hidden className="pointer-events-none absolute left-2 top-2 h-3 w-3 border-l-2 border-t-2 border-primary/70" />
-        <span aria-hidden className="pointer-events-none absolute right-2 top-2 h-3 w-3 border-r-2 border-t-2 border-primary/70" />
-        <span aria-hidden className="pointer-events-none absolute left-2 bottom-2 h-3 w-3 border-l-2 border-b-2 border-primary/70" />
-        <span aria-hidden className="pointer-events-none absolute right-2 bottom-2 h-3 w-3 border-r-2 border-b-2 border-primary/70" />
-
         <div className="relative flex items-center gap-3">
-          <div className="relative">
-            <motion.div
-              className="absolute inset-0 rounded-2xl bg-gradient-to-br from-primary/60 to-fuchsia-500/60 blur-2xl"
-              animate={{ opacity: [0.5, 1, 0.5], scale: [0.95, 1.05, 0.95] }}
-              transition={{ duration: 4, repeat: Infinity }}
-            />
-            <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary via-primary to-fuchsia-500 shadow-lg shadow-primary/40 ring-1 ring-white/20">
-              <Brain className="h-6 w-6 text-white" />
-            </div>
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-primary/30 bg-primary/5">
+            <Brain className="h-5 w-5 text-primary" />
           </div>
           <div>
-            <h1 className="flex items-center gap-2 text-2xl font-semibold tracking-tight">
-              <span className="bg-gradient-to-r from-foreground via-primary to-fuchsia-500 bg-clip-text text-transparent">
-                AI Workspace
-              </span>
+            <h1 className="flex flex-wrap items-center gap-2 text-xl font-semibold tracking-tight">
               <Badge
                 variant="outline"
-                className="border-primary/40 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--primary)/0.35)]"
+                className="border-primary/40 bg-primary/10 text-primary"
               >
                 <Radio className="mr-1 h-3 w-3 animate-pulse" />
-                Neural Sync
+                IA Live
               </Badge>
+              <span className="text-foreground">
+                {activeWorkspace?.name ?? "AI Workspace"}
+              </span>
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs text-muted-foreground">
               {activeWorkspace
-                ? `Ambiente ativo: ${activeWorkspace.name} — conversas e tarefas sincronizadas em tempo real.`
+                ? "Conversas e tarefas sincronizadas em tempo real."
                 : "Sua equipe de agentes trabalhando 24/7 — sincronizada via Realtime."}
             </p>
           </div>
