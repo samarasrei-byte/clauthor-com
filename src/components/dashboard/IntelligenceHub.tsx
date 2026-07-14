@@ -35,7 +35,7 @@ interface IntelligenceHubProps {
 
 const IntelligenceHub = ({
   chartData, totalExecutions, recentLogs, locale,
-  onNavigate, onGoToAgents, defaultTab = "analytics",
+  onNavigate, onGoToAgents, defaultTab = "live",
 }: IntelligenceHubProps) => {
   const { t } = useTranslation();
   // "reports" era o wrapper antigo, aponta para analytics por padrão
@@ -43,6 +43,7 @@ const IntelligenceHub = ({
   const [tab, setTab] = useState<string>(initial);
 
   const tabs = [
+    { id: "live", label: "Ao Vivo", icon: Eye },
     { id: "analytics", label: t("dashboard.analytics", { defaultValue: "Analytics" }), icon: BarChart3 },
     { id: "results", label: t("dashboard.results", { defaultValue: "Resultados" }), icon: FileText },
     { id: "ai-quality", label: t("dashboard.ai_quality", { defaultValue: "Qualidade IA" }), icon: Star },
@@ -63,7 +64,14 @@ const IntelligenceHub = ({
           ))}
         </TabsList>
 
+        <TabsContent value="live" className="mt-4">
+          <Suspense fallback={<SectionLoader />}>
+            <LiveExecutionPanel />
+          </Suspense>
+        </TabsContent>
+
         <TabsContent value="analytics" className="mt-4">
+
           <Suspense fallback={<SectionLoader />}>
             <AnalyticsSection
               chartData={chartData}
