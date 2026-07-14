@@ -354,7 +354,7 @@ const HomePage = () => {
                 to="/squads"
                 className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
               >
-                Ver todos os {SQUADS.length} squads <ArrowRight className="h-3.5 w-3.5" />
+                {t("home.squads_see_all", { count: SQUADS.length })} <ArrowRight className="h-3.5 w-3.5" />
               </Link>
             </div>
           </motion.div>
@@ -369,14 +369,14 @@ const HomePage = () => {
               onClick={() => startFlow("hero_primary")}
               className="group inline-flex items-center gap-2 px-8 py-3.5 rounded-full bg-foreground text-background text-sm font-semibold hover:opacity-90 transition-opacity"
             >
-              Ver todos os departamentos
+              {t("home.cta_view_departments")}
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
             </button>
             <Link
               to="/pricing"
               className="text-sm text-muted-foreground hover:text-foreground transition-colors"
             >
-              Ver preços →
+              {t("home.cta_view_pricing")}
             </Link>
           </motion.div>
         </div>
