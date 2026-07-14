@@ -625,7 +625,7 @@ const HomePage = () => {
                   <span
                     className={`text-xs ${isFeatured ? "text-background/60" : "text-muted-foreground"}`}
                   >
-                    {dept.agentSlugs.length} agentes · 24/7
+                    {t("home.dept_agents_247", { count: dept.agentSlugs.length })}
                   </span>
                   <span
                     className={`text-sm font-semibold inline-flex items-center gap-1 transition-colors ${
