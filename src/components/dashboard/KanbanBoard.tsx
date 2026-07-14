@@ -59,6 +59,18 @@ const KanbanBoard = () => {
   const [dragOverStatus, setDragOverStatus] = useState<string | null>(null);
   const [newTask, setNewTask] = useState({ title: "", description: "", priority: "medium" as TaskPriority, due_date: "" });
 
+  // Normaliza vocabulário: AI Workspace usa backlog/doing/review; Kanban clássico
+  // usa open/in_progress. Ambos convivem na mesma tabela `agent_tasks`.
+  const normalizeStatus = (raw: string, dueDate: string | null): string => {
+    const v = (raw || "").toLowerCase();
+    let mapped = v;
+    if (v === "backlog") mapped = "open";
+    else if (v === "doing" || v === "review") mapped = "in_progress";
+    else if (v === "completed") mapped = "done";
+    if (mapped !== "done" && dueDate && new Date(dueDate) < new Date()) return "atrasada";
+    return mapped;
+  };
+
   const { data: tasks = [], isLoading } = useQuery({
     queryKey: ["kanban-tasks", user?.id],
     queryFn: async () => {
@@ -72,7 +84,7 @@ const KanbanBoard = () => {
       return (data || []).map((t: any) => ({
         ...t,
         agent_name: t.agent?.name || null,
-        status: t.status !== "done" && t.due_date && new Date(t.due_date) < new Date() ? "atrasada" : t.status,
+        status: normalizeStatus(t.status, t.due_date),
       })) as Task[];
     },
     enabled: !!user,
