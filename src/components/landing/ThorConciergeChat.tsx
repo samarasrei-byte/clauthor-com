@@ -579,45 +579,126 @@ export default function ThorConciergeChat({
         )}
 
         {recommendation && !isStreaming && (
-          <article className="rounded-2xl border border-primary/25 bg-primary/[0.04] p-6 space-y-5 animate-fade-in">
-            <div className="space-y-1">
-              <p className="type-eyebrow text-primary">Com base no que você me disse</p>
-              <h3 className="font-serif italic text-2xl md:text-[26px] leading-tight tracking-tight text-foreground">
-                {recommendation.kind === "departamento" && recommendedPkg
-                  ? `Departamento de ${recommendedPkg.name}.`
-                  : recommendation.kind === "squad"
-                  ? "Uma squad enxuta faz mais sentido."
-                  : "Comece com um agente especialista."}
-              </h3>
-            </div>
+          <article
+            className={cn(
+              "relative rounded-3xl overflow-hidden animate-fade-in",
+              "border border-primary/30 bg-gradient-to-br from-primary/[0.08] via-background/60 to-background/80",
+              "shadow-[0_30px_80px_-30px_hsl(var(--primary)/0.45)]",
+            )}
+          >
+            {/* Glow decorativo */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -top-24 -right-16 h-56 w-56 rounded-full bg-primary/25 blur-[90px]"
+            />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,hsl(var(--primary)/0.10),transparent_55%)]"
+            />
 
-            <p className="type-body text-foreground/75 leading-relaxed">
-              {recommendation.kind === "departamento" && recommendedPkg
-                ? recommendedPkg.painPoint
-                : recommendation.kind === "squad"
-                ? "2 a 5 especialistas colaborando · custo em tempo real, ideal quando a dor cruza mais de uma função."
-                : "Prova de conceito ou tarefa muito específica · a partir de R$ 197/mês."}
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 pt-1">
-              {recommendation.kind === "departamento" && recommendedPkg ? (
-                <div className="type-body">
-                  <span className="text-foreground font-medium">{formatBRL(recommendedPkg.priceMonthly)}</span>
-                  <span className="text-muted-foreground">/mês · time completo</span>
+            <div className="relative p-7 sm:p-8 space-y-6">
+              {/* Header · eyebrow + ícone do dept */}
+              <div className="flex items-start justify-between gap-4">
+                <div className="space-y-1.5">
+                  <div className="flex items-center gap-2">
+                    <span className="h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_8px_hsl(var(--primary)/0.9)]" />
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary/90">
+                      Recomendação do Thor
+                    </p>
+                  </div>
+                  <p className="text-[13px] text-foreground/60 leading-snug max-w-sm">
+                    Com base no que você me contou, essa é a melhor entrega de valor pro seu caso.
+                  </p>
                 </div>
-              ) : <span />}
-              <Button
-                size="sm"
-                onClick={goToRecommended}
-                className="gap-1.5 h-10 px-5 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 font-medium shadow-[0_0_20px_hsl(var(--primary)/0.25)]"
-              >
-                {recommendation.kind === "departamento"
-                  ? "Ativar departamento"
-                  : recommendation.kind === "squad"
-                  ? "Montar squad"
-                  : "Ver marketplace"}
-                <ArrowRight className="h-4 w-4" strokeWidth={1.75} />
-              </Button>
+                {recommendation.kind === "departamento" && recommendedPkg && (
+                  <div className="shrink-0 h-11 w-11 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center">
+                    <recommendedPkg.icon className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  </div>
+                )}
+              </div>
+
+              {/* Título · nome puro (sem duplicar "Departamento") */}
+              <div className="space-y-3">
+                <h3 className="font-serif italic text-[28px] sm:text-[32px] leading-[1.05] tracking-tight text-foreground">
+                  {recommendation.kind === "departamento" && recommendedPkg
+                    ? recommendedPkg.name
+                    : recommendation.kind === "squad"
+                    ? "Uma squad enxuta faz mais sentido."
+                    : "Comece com um agente especialista."}
+                </h3>
+                <p className="text-[15px] leading-relaxed text-foreground/80">
+                  {recommendation.kind === "departamento" && recommendedPkg
+                    ? recommendedPkg.outcome
+                    : recommendation.kind === "squad"
+                    ? "2 a 5 especialistas colaborando — ideal quando a dor cruza mais de uma função."
+                    : "Prova de conceito ou tarefa muito específica · a partir de R$ 197/mês."}
+                </p>
+              </div>
+
+              {/* Stats row · só para departamento */}
+              {recommendation.kind === "departamento" && recommendedPkg && (
+                <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border/50 bg-background/40 p-3">
+                  <div className="text-center px-1">
+                    <div className="text-lg font-semibold text-foreground tabular-nums">
+                      {recommendedPkg.agentSlugs.length}
+                    </div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-0.5">
+                      Agentes
+                    </div>
+                  </div>
+                  <div className="text-center px-1 border-x border-border/40">
+                    <div className="text-lg font-semibold text-foreground">24/7</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-0.5">
+                      Operação
+                    </div>
+                  </div>
+                  <div className="text-center px-1">
+                    <div className="text-lg font-semibold text-foreground">&lt; 5min</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-0.5">
+                      Ativação
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Preço + CTA */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pt-1">
+                {recommendation.kind === "departamento" && recommendedPkg ? (
+                  <div className="flex flex-col">
+                    <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                      Investimento mensal
+                    </span>
+                    <div className="flex items-baseline gap-1.5">
+                      <span className="text-[32px] font-semibold text-foreground tracking-tight leading-none">
+                        {formatBRL(recommendedPkg.priceMonthly)}
+                      </span>
+                      <span className="text-sm text-muted-foreground">/mês</span>
+                    </div>
+                    <span className="text-[11px] text-muted-foreground/80 mt-1">
+                      Time completo · sem taxa de setup
+                    </span>
+                  </div>
+                ) : (
+                  <span />
+                )}
+                <Button
+                  size="lg"
+                  onClick={goToRecommended}
+                  className={cn(
+                    "gap-2 h-12 px-6 rounded-xl font-semibold text-[15px]",
+                    "bg-primary text-primary-foreground hover:bg-primary/90",
+                    "shadow-[0_10px_30px_-8px_hsl(var(--primary)/0.55)] hover:shadow-[0_14px_40px_-8px_hsl(var(--primary)/0.7)]",
+                    "hover:-translate-y-0.5 transition-all",
+                  )}
+                >
+                  {recommendation.kind === "departamento"
+                    ? "Ativar departamento"
+                    : recommendation.kind === "squad"
+                    ? "Montar squad"
+                    : "Ver marketplace"}
+                  <ArrowRight className="h-4 w-4" strokeWidth={2.25} />
+                </Button>
+              </div>
             </div>
           </article>
         )}
