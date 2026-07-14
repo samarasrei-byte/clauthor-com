@@ -155,57 +155,33 @@ const fmtTime = (ts: number) => {
 
 const AIWorkspace = () => {
   const [agents, setAgents] = useState<WorkspaceAgent[]>(DEFAULT_AGENTS);
-  const [chat, setChat] = useState<ChatEntry[]>(INITIAL_CHAT);
-  const [timeline, setTimeline] = useState<TimelineEntry[]>(INITIAL_TIMELINE);
-  const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
+  const [chatInput, setChatInput] = useState("");
   const [taskInput, setTaskInput] = useState("");
   const [graphQuery, setGraphQuery] = useState("");
-  const [typing, setTyping] = useState<string | null>(null);
   const [creatorOpen, setCreatorOpen] = useState(false);
+  const [creatingWs, setCreatingWs] = useState(false);
+  const [newWsName, setNewWsName] = useState("");
+  const [timeline, setTimeline] = useState<TimelineEntry[]>(INITIAL_TIMELINE);
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
 
-  const agentById = useMemo(
+  // ── Realtime data ──
+  const { workspaces, activeId, setActiveId, activeWorkspace, loading: wsLoading, createWorkspace } = useAIWorkspaces();
+  const tenantId = activeWorkspace?.tenant_id ?? null;
+  const { messages, sendMessage } = useWorkspaceMessages(activeId, tenantId);
+  const { tasks, createTask, updateTaskStatus } = useWorkspaceTasks(activeId, tenantId);
+
+  const agentByKey = useMemo(
     () => Object.fromEntries(agents.map((a) => [a.id, a])),
     [agents]
   );
 
-  /* Auto-scroll do chat */
+  // Auto-scroll do chat
   useEffect(() => {
     const el = chatScrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [chat.length, typing]);
+  }, [messages.length]);
 
-  /* Simula agentes conversando periodicamente */
-  useEffect(() => {
-    const messages = [
-      { agentId: "strat",    content: "Ajustando prioridades da sprint atual." },
-      { agentId: "analyst",  content: "Métricas de conversão subiram 12% hoje." },
-      { agentId: "copy",     content: "Revisando CTA principal com base nos dados." },
-      { agentId: "dev",      content: "Deploy da nova versão em staging." },
-      { agentId: "designer", content: "Atualizando paleta para tema escuro." },
-      { agentId: "research", content: "Novo estudo de referência anexado à memória." },
-    ];
-
-    const interval = setInterval(() => {
-      const pick = messages[Math.floor(Math.random() * messages.length)];
-      setTyping(pick.agentId);
-      setTimeout(() => {
-        setChat((prev) => [
-          ...prev.slice(-30),
-          { id: `c-${Date.now()}`, agentId: pick.agentId, content: pick.content, ts: Date.now() },
-        ]);
-        setTimeline((prev) => [
-          { id: `t-${Date.now()}`, agentId: pick.agentId, message: pick.content, ts: Date.now() },
-          ...prev.slice(0, 12),
-        ]);
-        setTyping(null);
-      }, 1400);
-    }, 8000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  /* Rotaciona status dos agentes para dar vida */
+  // Rotaciona status dos agentes só para dar vida na UI
   useEffect(() => {
     const interval = setInterval(() => {
       setAgents((prev) =>
@@ -220,35 +196,57 @@ const AIWorkspace = () => {
     return () => clearInterval(interval);
   }, []);
 
-  /* Delegação: divide a tarefa em sub-tarefas automáticas */
-  const handleDelegate = () => {
+  // Timeline reflete os últimos messages recebidos via Realtime
+  useEffect(() => {
+    const latest = messages.slice(-6).reverse();
+    setTimeline(
+      latest.map((m) => ({
+        id: m.id,
+        agentId: m.agent_key ?? "strat",
+        message: m.content,
+        ts: new Date(m.created_at).getTime(),
+      }))
+    );
+  }, [messages]);
+
+  // ── Handlers ──
+  const handleSendChat = async () => {
+    const txt = chatInput.trim();
+    if (!txt || !activeId) return;
+    setChatInput("");
+    await sendMessage(txt);
+  };
+
+  const handleDelegate = async () => {
     const t = taskInput.trim();
-    if (!t) return;
-    const chain: Array<{ agentId: string; message: string }> = [
-      { agentId: "strat",    message: `Recebi a missão: "${t}". Dividindo em etapas.` },
-      { agentId: "research", message: "Buscando referências e insights de mercado." },
-      { agentId: "copy",     message: "Rascunhando copy inicial da entrega." },
-      { agentId: "designer", message: "Preparando layout base." },
-      { agentId: "dev",      message: "Iniciando implementação técnica." },
-      { agentId: "analyst",  message: "Definindo métricas de sucesso." },
-    ];
+    if (!t || !activeId) return;
     setTaskInput("");
-    setTasks((prev) => [
-      { id: `k-${Date.now()}`, title: t, agentId: "strat", status: "doing" },
-      ...prev,
-    ]);
-    chain.forEach((step, idx) => {
+    // Cria a tarefa raiz + notifica os agentes via chat persistido
+    await createTask({ title: t, agent_key: "strat", agent_name: "Estratégia", status: "doing", priority: "high" });
+    const chain: Array<{ key: string; name: string; emoji: string; message: string }> = [
+      { key: "strat",    name: "Estratégia",   emoji: "🧠", message: `Recebi a missão: "${t}". Dividindo em etapas.` },
+      { key: "research", name: "Pesquisador",  emoji: "🔎", message: "Buscando referências e insights de mercado." },
+      { key: "copy",     name: "Copywriter",   emoji: "✍️", message: "Rascunhando copy inicial da entrega." },
+      { key: "designer", name: "Designer",     emoji: "🎨", message: "Preparando layout base." },
+      { key: "dev",      name: "Desenvolvedor",emoji: "💻", message: "Iniciando implementação técnica." },
+    ];
+    for (let i = 0; i < chain.length; i++) {
+      const step = chain[i];
       setTimeout(() => {
-        setChat((prev) => [
-          ...prev,
-          { id: `c-${Date.now()}-${idx}`, agentId: step.agentId, content: step.message, ts: Date.now() },
-        ]);
-        setTimeline((prev) => [
-          { id: `t-${Date.now()}-${idx}`, agentId: step.agentId, message: step.message, ts: Date.now() },
-          ...prev.slice(0, 12),
-        ]);
-      }, idx * 900);
-    });
+        sendMessage(step.message, { key: step.key, name: step.name, emoji: step.emoji });
+      }, i * 700);
+    }
+  };
+
+  const handleCreateWorkspace = async () => {
+    const name = newWsName.trim();
+    if (!name) return;
+    const created = await createWorkspace(name);
+    if (created) {
+      setActiveId(created.id);
+      setNewWsName("");
+      setCreatingWs(false);
+    }
   };
 
   const filteredGraphNodes = useMemo(() => {
@@ -259,13 +257,14 @@ const AIWorkspace = () => {
 
   const filteredIds = new Set(filteredGraphNodes.map((n) => n.id));
 
-  /* KPIs */
+  // KPIs (agentes = visual; tarefas = reais)
   const activeAgents = agents.filter((a) => a.status !== "offline").length;
   const activeTasks = tasks.filter((t) => t.status !== "done").length;
   const totalTokens = agents.reduce((acc, a) => acc + a.tokens, 0);
   const estCost = (totalTokens / 1000) * 0.02;
 
   return (
+
     <div className="relative space-y-6 pb-8">
       {/* ─── Futuristic ambient backdrop ─── */}
       <div
