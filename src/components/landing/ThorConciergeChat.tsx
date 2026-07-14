@@ -238,6 +238,19 @@ export default function ThorConciergeChat({
   // Cancela stream ao desmontar.
   useEffect(() => () => abortRef.current?.abort(), []);
 
+  // Seed prompt vindo do quiz de dor da home · dispara uma vez por mudança.
+  const lastSeedRef = useRef<string>("");
+  useEffect(() => {
+    if (!seedPrompt) return;
+    if (seedPrompt === lastSeedRef.current) return;
+    if (isStreaming) return;
+    lastSeedRef.current = seedPrompt;
+    sendMessageRef.current?.(seedPrompt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seedPrompt, isStreaming]);
+
+  const sendMessageRef = useRef<((t: string) => void) | null>(null);
+
   const recommendation = useMemo<Recommendation | undefined>(() => {
     for (let i = messages.length - 1; i >= 0; i--) {
       if (messages[i].reco) return messages[i].reco;
