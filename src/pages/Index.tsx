@@ -188,14 +188,78 @@ const HomePage = () => {
             <span className="text-foreground font-medium">R$ 197/mês</span>.
           </motion.p>
 
-          {/* Chat LLM real como CTA principal */}
+          {/* Showcase de squads · vitrine principal na home */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.22 }}
-            className="dark w-full max-w-2xl rounded-3xl bg-background text-foreground"
+            className="w-full max-w-6xl"
           >
-            <ThorConciergeChat source="landing" minHeight="min-h-[520px]" />
+            <div className="flex items-end justify-between mb-6 px-1">
+              <div className="text-left">
+                <div className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                  Squads · times prontos
+                </div>
+                <h2 className="text-2xl sm:text-3xl font-semibold tracking-tight text-foreground">
+                  Os squads mais procurados
+                </h2>
+              </div>
+              <Link
+                to="/squads"
+                className="hidden sm:inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Ver todos os {SQUADS.length} squads <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {SQUADS.filter((s) => s.demand === "TOP").slice(0, 6).map((squad) => {
+                const Icon = squad.icon;
+                const href = squad.overrideHref ?? `/squads/${squad.slug}`;
+                return (
+                  <Link
+                    key={squad.slug}
+                    to={href}
+                    className="group text-left rounded-2xl border border-border bg-card p-5 hover:border-primary/40 hover:bg-card/80 transition-all"
+                  >
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="h-10 w-10 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                        <Icon className="h-4 w-4 text-primary" strokeWidth={2} />
+                      </div>
+                      <span className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground">
+                        {squad.agents} agentes
+                      </span>
+                    </div>
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-1.5">
+                      {squad.category}
+                    </div>
+                    <h3 className="text-lg font-semibold text-foreground mb-2">{squad.name}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed line-clamp-2 mb-4">
+                      {squad.tagline}
+                    </p>
+                    <div className="flex items-center justify-between pt-3 border-t border-border">
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-[10px] text-muted-foreground">a partir de R$</span>
+                        <span className="text-lg font-semibold text-foreground">
+                          {squad.tiers[0].price.toLocaleString("pt-BR")}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground">/mês</span>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className="mt-6 flex sm:hidden justify-center">
+              <Link
+                to="/squads"
+                className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+              >
+                Ver todos os {SQUADS.length} squads <ArrowRight className="h-3.5 w-3.5" />
+              </Link>
+            </div>
           </motion.div>
 
           <motion.div
