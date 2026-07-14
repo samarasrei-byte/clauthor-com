@@ -558,7 +558,7 @@ const AIWorkspace = () => {
                       animate={{ opacity: 1, x: 0 }}
                       className="relative"
                     >
-                      <span className="absolute -left-[21px] top-1.5 h-3 w-3 rounded-full bg-primary shadow-md shadow-primary/40" />
+                      <span className="absolute -left-[19px] top-1.5 h-2 w-2 rounded-full border border-primary bg-background" />
                       <div className="flex items-center gap-2 text-xs text-muted-foreground">
                         {fmtTime(e.ts)}
                         {a && (
