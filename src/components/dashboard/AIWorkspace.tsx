@@ -1128,19 +1128,25 @@ const WorkflowCanvasHolo = () => (
 );
 
 
-const MemoryCard = ({ title, count, desc }: { title: string; count: number; desc: string }) => (
-  <motion.div whileHover={{ y: -2 }}>
-    <Card className="p-3">
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium">{title}</div>
-        <Badge variant="secondary" className="text-xs">{count}</Badge>
-      </div>
-      <p className="mt-1 text-xs text-muted-foreground">{desc}</p>
-      <div className="mt-2 flex items-center gap-1 text-[10px] text-primary">
+const MemoryCard = ({ title, count, desc, onClick }: { title: string; count: number; desc: string; onClick?: () => void }) => (
+  <motion.button
+    type="button"
+    onClick={onClick}
+    whileHover={{ y: -2 }}
+    disabled={!onClick}
+    className="group block w-full rounded-lg border border-border/60 bg-card p-3 text-left transition-colors hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 disabled:cursor-default disabled:hover:border-border/60"
+  >
+    <div className="flex items-center justify-between">
+      <div className="text-sm font-medium">{title}</div>
+      <Badge variant="secondary" className="text-xs tabular-nums">{count}</Badge>
+    </div>
+    <p className="mt-1 text-xs text-muted-foreground">{desc}</p>
+    {onClick && (
+      <div className="mt-2 flex items-center gap-1 text-[10px] text-primary transition-transform group-hover:translate-x-0.5">
         Explorar <ChevronRight className="h-3 w-3" />
       </div>
-    </Card>
-  </motion.div>
+    )}
+  </motion.button>
 );
 
 /* ─── Agent Creator ─── */
