@@ -762,11 +762,14 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {/* AI Workspace agora vive dentro do Workspace (aba "IA Live") */}
                 {activeSection === "ai-workspace" && (
                   <Suspense fallback={<SectionLoader />}>
-                    <AIWorkspace />
+                    <WorkspaceHubRedirect />
                   </Suspense>
                 )}
+
+
 
 
                 <DashboardSectionRenderer
