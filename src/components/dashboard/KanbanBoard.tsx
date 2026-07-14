@@ -371,9 +371,8 @@ const KanbanBoard = () => {
                 onDrop={() => handleDrop(statusId)}
                 onDragLeave={() => setDragOverStatus(null)}
                 className={cn(
-                  "rounded-xl border p-3 min-h-[200px] transition-all duration-200",
-                  isOver ? "ring-2 ring-primary/30 border-primary/20 scale-[1.01]" : "border-border/10",
-                  `bg-gradient-to-b ${config.bg}`
+                  "rounded-xl border p-3 min-h-[200px] transition-colors bg-card/20",
+                  isOver ? "ring-1 ring-primary/40 border-primary/30" : "border-border/20"
                 )}
               >
                 <div className="flex items-center justify-between mb-3">
