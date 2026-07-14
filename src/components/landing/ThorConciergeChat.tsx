@@ -43,6 +43,8 @@ interface ThorConciergeChatProps {
   source?: KpiSource;
   minHeight?: string;
   className?: string;
+  /** Quando mudar para uma string não-vazia, envia automaticamente como se o usuário tivesse digitado. */
+  seedPrompt?: string;
 }
 
 /* -------------------------------------------------------------------------- */
