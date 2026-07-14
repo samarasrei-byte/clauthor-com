@@ -767,6 +767,13 @@ const ClientDashboard = () => {
                   </Suspense>
                 )}
 
+                {activeSection === "ai-workspace" && (
+                  <Suspense fallback={<SectionLoader />}>
+                    <AIWorkspace />
+                  </Suspense>
+                )}
+
+
                 <DashboardSectionRenderer
                   activeSection={activeSection}
                   realChartData={realChartData}
