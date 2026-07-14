@@ -786,41 +786,101 @@ const KanbanColumn = ({
 );
 
 
+/* ─── Holographic Brain Graph (3D-ish) ─── */
 const BrainGraph = ({ filteredIds }: { filteredIds: Set<string> }) => (
-  <div className="relative h-[280px] w-full overflow-hidden rounded-lg bg-gradient-to-br from-muted/30 to-transparent">
-    <svg viewBox="0 0 780 400" className="h-full w-full">
+  <div className="relative h-[320px] w-full overflow-hidden rounded-xl border border-primary/20 bg-[radial-gradient(circle_at_50%_120%,hsl(var(--primary)/0.25),transparent_60%),radial-gradient(circle_at_20%_10%,hsl(280_90%_60%/0.15),transparent_55%),radial-gradient(circle_at_85%_15%,hsl(190_90%_55%/0.15),transparent_55%)]">
+    {/* Neural grid backdrop */}
+    <div
+      className="pointer-events-none absolute inset-0 opacity-40"
+      style={{
+        backgroundImage:
+          "linear-gradient(hsl(var(--primary)/0.08) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)/0.08) 1px, transparent 1px)",
+        backgroundSize: "32px 32px",
+        maskImage: "radial-gradient(circle at 50% 50%, black 40%, transparent 85%)",
+      }}
+    />
+    {/* Horizon glow */}
+    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-primary/20 to-transparent blur-xl" />
+
+    <svg viewBox="0 0 780 400" className="relative h-full w-full" style={{ transform: "perspective(900px) rotateX(18deg)" }}>
+      <defs>
+        <radialGradient id="brainNodeGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="currentColor" stopOpacity="0.9" />
+          <stop offset="60%" stopColor="currentColor" stopOpacity="0.15" />
+          <stop offset="100%" stopColor="currentColor" stopOpacity="0" />
+        </radialGradient>
+        <filter id="brainBlur" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="6" />
+        </filter>
+        <linearGradient id="brainEdge" x1="0" x2="1">
+          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.1" />
+          <stop offset="50%" stopColor="hsl(var(--primary))" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="hsl(280 90% 65%)" stopOpacity="0.1" />
+        </linearGradient>
+      </defs>
+
+      {/* Edges with traveling photons */}
       {GRAPH_EDGES.map(([from, to], i) => {
         const a = GRAPH_NODES.find((n) => n.id === from)!;
         const b = GRAPH_NODES.find((n) => n.id === to)!;
         const active = filteredIds.has(from) && filteredIds.has(to);
         return (
-          <motion.line
-            key={i}
-            x1={a.x} y1={a.y} x2={b.x} y2={b.y}
-            stroke={active ? "hsl(var(--primary))" : "hsl(var(--border))"}
-            strokeWidth={active ? 1.5 : 1}
-            strokeOpacity={active ? 0.8 : 0.4}
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: 1 }}
-            transition={{ duration: 1, delay: i * 0.05 }}
-          />
+          <g key={i}>
+            <motion.line
+              x1={a.x} y1={a.y} x2={b.x} y2={b.y}
+              stroke="url(#brainEdge)"
+              strokeWidth={active ? 1.6 : 0.9}
+              strokeOpacity={active ? 0.9 : 0.35}
+              initial={{ pathLength: 0 }}
+              animate={{ pathLength: 1 }}
+              transition={{ duration: 1.2, delay: i * 0.05 }}
+            />
+            <motion.circle
+              r={2.4}
+              fill="hsl(var(--primary))"
+              filter="url(#brainBlur)"
+              initial={{ opacity: 0 }}
+              animate={{ cx: [a.x, b.x], cy: [a.y, b.y], opacity: [0, 1, 0] }}
+              transition={{ duration: 2.4, repeat: Infinity, delay: i * 0.25, ease: "easeInOut" }}
+            />
+          </g>
         );
       })}
-      {GRAPH_NODES.map((n) => {
+
+      {/* Nodes as holographic orbs */}
+      {GRAPH_NODES.map((n, i) => {
         const active = filteredIds.has(n.id);
         return (
           <motion.g
             key={n.id}
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: active ? 1 : 0.35, scale: 1 }}
-            transition={{ type: "spring", stiffness: 200 }}
+            initial={{ opacity: 0, scale: 0.4 }}
+            animate={{ opacity: active ? 1 : 0.5, scale: 1 }}
+            transition={{ type: "spring", stiffness: 180, delay: i * 0.04 }}
+            style={{ color: n.color }}
           >
-            <circle cx={n.x} cy={n.y} r={active ? 22 : 16} fill={n.color} fillOpacity={0.15} />
-            <circle cx={n.x} cy={n.y} r={active ? 8 : 6}  fill={n.color} />
+            {/* Orbit ring */}
+            <motion.ellipse
+              cx={n.x} cy={n.y} rx={active ? 34 : 24} ry={active ? 12 : 8}
+              fill="none" stroke={n.color} strokeOpacity={0.35} strokeWidth={0.8} strokeDasharray="3 4"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
+              style={{ transformOrigin: `${n.x}px ${n.y}px` }}
+            />
+            {/* Halo */}
+            <circle cx={n.x} cy={n.y} r={active ? 26 : 18} fill="url(#brainNodeGlow)" opacity={active ? 0.85 : 0.4} />
+            {/* Core */}
+            <motion.circle
+              cx={n.x} cy={n.y} r={active ? 9 : 6}
+              fill={n.color}
+              animate={{ r: active ? [9, 11, 9] : [6, 7, 6] }}
+              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+            />
+            <circle cx={n.x - 2} cy={n.y - 2} r={2} fill="white" opacity={0.85} />
             <text
-              x={n.x} y={n.y + 22}
+              x={n.x} y={n.y + 30}
               textAnchor="middle"
-              className="fill-foreground text-[10px] font-medium"
+              className="fill-foreground text-[10px] font-semibold uppercase tracking-wider"
+              style={{ filter: "drop-shadow(0 0 4px hsl(var(--primary)/0.5))" }}
             >
               {n.label}
             </text>
@@ -828,45 +888,118 @@ const BrainGraph = ({ filteredIds }: { filteredIds: Set<string> }) => (
         );
       })}
     </svg>
+
+    {/* HUD corner brackets */}
+    <div className="pointer-events-none absolute left-2 top-2 h-4 w-4 border-l-2 border-t-2 border-primary/60" />
+    <div className="pointer-events-none absolute right-2 top-2 h-4 w-4 border-r-2 border-t-2 border-primary/60" />
+    <div className="pointer-events-none absolute bottom-2 left-2 h-4 w-4 border-b-2 border-l-2 border-primary/60" />
+    <div className="pointer-events-none absolute bottom-2 right-2 h-4 w-4 border-b-2 border-r-2 border-primary/60" />
   </div>
 );
 
+/* ─── Holographic Workflow Canvas (3D-ish) ─── */
 const WorkflowCanvas = () => (
-  <div className="relative h-[220px] w-full overflow-x-auto rounded-lg bg-gradient-to-br from-muted/30 to-transparent">
-    <svg viewBox="0 0 800 200" className="h-full w-full min-w-[720px]">
+  <div className="relative h-[260px] w-full overflow-x-auto rounded-xl border border-primary/20 bg-[radial-gradient(circle_at_50%_120%,hsl(var(--primary)/0.22),transparent_60%),radial-gradient(circle_at_10%_0%,hsl(190_90%_55%/0.15),transparent_60%)]">
+    {/* Perspective floor grid */}
+    <div
+      className="pointer-events-none absolute inset-0 opacity-50"
+      style={{
+        backgroundImage:
+          "linear-gradient(hsl(var(--primary)/0.1) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--primary)/0.1) 1px, transparent 1px)",
+        backgroundSize: "40px 40px",
+        maskImage: "linear-gradient(to bottom, transparent, black 30%, black 70%, transparent)",
+      }}
+    />
+    {/* Scanline */}
+    <motion.div
+      className="pointer-events-none absolute inset-y-0 w-px bg-gradient-to-b from-transparent via-primary/70 to-transparent"
+      initial={{ left: "0%" }}
+      animate={{ left: ["0%", "100%", "0%"] }}
+      transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+    />
+
+    <svg viewBox="0 0 800 200" className="relative h-full w-full min-w-[760px]" style={{ transform: "perspective(1000px) rotateX(10deg)" }}>
+      <defs>
+        <linearGradient id="wfPipe" x1="0" x2="1">
+          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.15" />
+          <stop offset="50%" stopColor="hsl(190 90% 60%)" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="hsl(280 90% 65%)" stopOpacity="0.15" />
+        </linearGradient>
+        <linearGradient id="wfCard" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="hsl(var(--card))" stopOpacity="0.95" />
+          <stop offset="100%" stopColor="hsl(var(--primary)/0.15)" stopOpacity="1" />
+        </linearGradient>
+        <filter id="wfGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="b" />
+          <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+        </filter>
+      </defs>
+
+      {/* Edges as glowing pipes with photons */}
       {WORKFLOW_EDGES.map(([from, to], i) => {
         const a = WORKFLOW_NODES.find((n) => n.id === from)!;
         const b = WORKFLOW_NODES.find((n) => n.id === to)!;
         return (
           <g key={i}>
             <line x1={a.x + 50} y1={a.y} x2={b.x - 50} y2={b.y}
-              stroke="hsl(var(--primary))" strokeOpacity={0.4} strokeWidth={1.5} strokeDasharray="4 4" />
+              stroke="url(#wfPipe)" strokeWidth={2.4} strokeLinecap="round" />
+            <line x1={a.x + 50} y1={a.y} x2={b.x - 50} y2={b.y}
+              stroke="hsl(var(--primary))" strokeOpacity={0.9} strokeWidth={0.8} strokeDasharray="2 6" />
             <motion.circle
-              r={3} fill="hsl(var(--primary))"
+              r={4} fill="hsl(var(--primary))" filter="url(#wfGlow)"
               initial={{ opacity: 0 }}
               animate={{
                 cx: [a.x + 50, b.x - 50],
                 cy: [a.y, b.y],
-                opacity: [0, 1, 0],
+                opacity: [0, 1, 1, 0],
               }}
-              transition={{ duration: 2, repeat: Infinity, delay: i * 0.3 }}
+              transition={{ duration: 2.2, repeat: Infinity, delay: i * 0.35, ease: "linear" }}
             />
           </g>
         );
       })}
-      {WORKFLOW_NODES.map((n) => (
-        <g key={n.id}>
+
+      {/* Nodes as holographic capsules */}
+      {WORKFLOW_NODES.map((n, i) => (
+        <motion.g
+          key={n.id}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.08 }}
+        >
+          {/* base shadow */}
+          <ellipse cx={n.x} cy={n.y + 24} rx={44} ry={4} fill="hsl(var(--primary))" opacity={0.15} />
+          {/* card body */}
           <rect
-            x={n.x - 50} y={n.y - 18} width={100} height={36} rx={10}
-            className="fill-card stroke-border"
+            x={n.x - 52} y={n.y - 20} width={104} height={40} rx={12}
+            fill="url(#wfCard)"
+            stroke="hsl(var(--primary)/0.6)"
             strokeWidth={1}
+            filter="url(#wfGlow)"
           />
-          <text x={n.x} y={n.y + 4} textAnchor="middle" className="fill-foreground text-[11px] font-medium">
+          {/* top accent line */}
+          <line x1={n.x - 44} y1={n.y - 14} x2={n.x + 44} y2={n.y - 14}
+            stroke="hsl(var(--primary))" strokeOpacity={0.8} strokeWidth={1} />
+          {/* status dot */}
+          <motion.circle
+            cx={n.x - 40} cy={n.y + 12} r={3}
+            fill="hsl(190 95% 60%)"
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 1.6, repeat: Infinity, delay: i * 0.2 }}
+          />
+          <text x={n.x} y={n.y + 4} textAnchor="middle"
+            className="fill-foreground text-[11px] font-semibold uppercase tracking-wide">
             {n.label}
           </text>
-        </g>
+        </motion.g>
       ))}
     </svg>
+
+    {/* HUD corners */}
+    <div className="pointer-events-none absolute left-2 top-2 h-4 w-4 border-l-2 border-t-2 border-primary/60" />
+    <div className="pointer-events-none absolute right-2 top-2 h-4 w-4 border-r-2 border-t-2 border-primary/60" />
+    <div className="pointer-events-none absolute bottom-2 left-2 h-4 w-4 border-b-2 border-l-2 border-primary/60" />
+    <div className="pointer-events-none absolute bottom-2 right-2 h-4 w-4 border-b-2 border-r-2 border-primary/60" />
   </div>
 );
 
