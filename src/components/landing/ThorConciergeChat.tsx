@@ -844,6 +844,13 @@ export default function ThorConciergeChat({
           )}
         </div>
       </footer>
+
+      <ThorOnboardingFlow
+        open={onboardingOpen}
+        onOpenChange={setOnboardingOpen}
+        reco={onboardingReco}
+        source={source}
+      />
     </div>
   );
 }
