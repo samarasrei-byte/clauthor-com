@@ -589,9 +589,43 @@ const AIWorkspace = () => {
         onOpenChange={setCreatorOpen}
         onCreate={(a) => setAgents((prev) => [...prev, a])}
       />
+
+      {/* ─── Workspace Creator ─── */}
+      <Dialog open={creatingWs} onOpenChange={setCreatingWs}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" /> Novo Workspace
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs">Nome</Label>
+              <Input
+                value={newWsName}
+                onChange={(e) => setNewWsName(e.target.value)}
+                placeholder="Ex: AI Workspace 3"
+                onKeyDown={(e) => e.key === "Enter" && handleCreateWorkspace()}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Cada workspace tem seu próprio chat e Kanban isolados, sincronizados em tempo real.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setCreatingWs(false)} className="gap-1">
+              <X className="h-4 w-4" /> Cancelar
+            </Button>
+            <Button onClick={handleCreateWorkspace} disabled={!newWsName.trim()} className="gap-1">
+              <Plus className="h-4 w-4" /> Criar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
 
 /* ────────────────── Subcomponents ────────────────── */
 
