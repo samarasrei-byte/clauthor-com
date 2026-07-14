@@ -102,6 +102,13 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
           <TabsTrigger value="execucao" className="gap-1.5 text-xs">
             <Rocket className="h-3.5 w-3.5" /> Execução
           </TabsTrigger>
+          <TabsTrigger
+            value="ai-live"
+            className="gap-1.5 text-xs relative data-[state=active]:bg-gradient-to-r data-[state=active]:from-primary/20 data-[state=active]:to-fuchsia-500/20 data-[state=active]:text-primary"
+          >
+            <Brain className="h-3.5 w-3.5" /> IA Live
+            <span className="ml-1 inline-flex h-1.5 w-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_hsl(var(--primary))] animate-pulse" />
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="empresa" className="mt-4">
