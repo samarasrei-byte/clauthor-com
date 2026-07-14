@@ -555,6 +555,11 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* ═══════════ PROVA DE VIDA · operação em tempo real ═══════════ */}
+      <LiveOpsSection />
+
+
+
 
       {/* ═══════════ DEPARTAMENTOS ═══════════ */}
       <section className="max-w-6xl mx-auto px-6 py-24 sm:py-32" aria-label="Departamentos">
