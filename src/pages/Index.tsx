@@ -404,7 +404,9 @@ const HomePage = () => {
             </Link>
           </motion.div>
         </div>
+        </div>
       </section>
+
 
       {/* ═══════════ DOIS CAMINHOS + ESCALA · seção dark unificada ═══════════ */}
       <section
