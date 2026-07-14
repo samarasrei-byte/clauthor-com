@@ -205,7 +205,7 @@ const KanbanBoard = () => {
                   onClick={() => setView(v.id)}
                   className={cn(
                     "flex items-center gap-1 px-2.5 py-1.5 rounded-md text-[10px] font-medium transition-all",
-                    view === v.id ? "bg-primary text-primary-foreground shadow-sm" : "text-muted-foreground hover:text-foreground"
+                    view === v.id ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   <v.icon className="h-3 w-3" />
@@ -216,7 +216,7 @@ const KanbanBoard = () => {
 
             <Dialog open={createOpen} onOpenChange={setCreateOpen}>
               <DialogTrigger asChild>
-                <Button size="sm" className="h-8 text-xs gap-1.5 glow">
+                <Button size="sm" className="h-8 text-xs gap-1.5">
                   <Plus className="h-3.5 w-3.5" /> Nova Missão
                 </Button>
               </DialogTrigger>
@@ -371,9 +371,8 @@ const KanbanBoard = () => {
                 onDrop={() => handleDrop(statusId)}
                 onDragLeave={() => setDragOverStatus(null)}
                 className={cn(
-                  "rounded-xl border p-3 min-h-[200px] transition-all duration-200",
-                  isOver ? "ring-2 ring-primary/30 border-primary/20 scale-[1.01]" : "border-border/10",
-                  `bg-gradient-to-b ${config.bg}`
+                  "rounded-xl border p-3 min-h-[200px] transition-colors bg-card/20",
+                  isOver ? "ring-1 ring-primary/40 border-primary/30" : "border-border/20"
                 )}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -442,7 +441,7 @@ const KanbanBoard = () => {
                       </div>
                       <div className="flex items-center gap-1.5 shrink-0">
                         <span className={cn("text-[9px] font-semibold px-1.5 py-0.5 rounded-full border", pr.ring, pr.color)}>{pr.label}</span>
-                        <span className={cn("flex items-center gap-1 text-[9px] font-medium px-1.5 py-0.5 rounded-full", st.color, `bg-gradient-to-r ${st.bg}`)}>
+                        <span className={cn("flex items-center gap-1 text-[9px] font-medium px-1.5 py-0.5 rounded-full border border-border/40 bg-background/40", st.color)}>
                           <st.icon className="h-2.5 w-2.5" />
                           {st.label}
                         </span>
@@ -494,7 +493,7 @@ const KanbanBoard = () => {
                   className="rounded-xl border border-border/10 overflow-hidden"
                 >
                   {/* Agent Header */}
-                  <div className="px-4 py-3 bg-gradient-to-r from-card/60 to-transparent flex items-center justify-between">
+                  <div className="px-4 py-3 border-b border-border/20 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center relative">
                         <Bot className="h-4 w-4 text-primary" />
@@ -517,7 +516,7 @@ const KanbanBoard = () => {
                           initial={{ width: 0 }}
                           animate={{ width: `${progress}%` }}
                           transition={{ duration: 0.8, ease: "easeOut" }}
-                          className="h-full rounded-full bg-gradient-to-r from-primary to-accent-emerald"
+                          className="h-full rounded-full bg-primary"
                         />
                       </div>
                     </div>
