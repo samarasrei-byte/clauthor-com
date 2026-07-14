@@ -12,7 +12,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
-import { ArrowRight, ArrowUp, Loader2 } from "lucide-react";
+import { ArrowRight, ArrowUp, Loader2, Users, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -615,6 +615,16 @@ export default function ThorConciergeChat({
                     <recommendedPkg.icon className="h-5 w-5 text-primary" strokeWidth={1.75} />
                   </div>
                 )}
+                {recommendation.kind === "squad" && (
+                  <div className="shrink-0 h-11 w-11 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center">
+                    <Users className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  </div>
+                )}
+                {recommendation.kind === "agente" && (
+                  <div className="shrink-0 h-11 w-11 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center">
+                    <Sparkles className="h-5 w-5 text-primary" strokeWidth={1.75} />
+                  </div>
+                )}
               </div>
 
               {/* Título · nome puro (sem duplicar "Departamento") */}
@@ -631,11 +641,11 @@ export default function ThorConciergeChat({
                     ? recommendedPkg.outcome
                     : recommendation.kind === "squad"
                     ? "2 a 5 especialistas colaborando — ideal quando a dor cruza mais de uma função."
-                    : "Prova de conceito ou tarefa muito específica · a partir de R$ 197/mês."}
+                    : "Prova de conceito ou tarefa muito específica — o jeito mais rápido de sentir a IA operando."}
                 </p>
               </div>
 
-              {/* Stats row · só para departamento */}
+              {/* Stats row */}
               {recommendation.kind === "departamento" && recommendedPkg && (
                 <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border/50 bg-background/40 p-3">
                   <div className="text-center px-1">
@@ -660,27 +670,75 @@ export default function ThorConciergeChat({
                   </div>
                 </div>
               )}
+              {recommendation.kind === "squad" && (
+                <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border/50 bg-background/40 p-3">
+                  <div className="text-center px-1">
+                    <div className="text-lg font-semibold text-foreground tabular-nums">2–5</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-0.5">
+                      Agentes
+                    </div>
+                  </div>
+                  <div className="text-center px-1 border-x border-border/40">
+                    <div className="text-lg font-semibold text-foreground">Flex</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-0.5">
+                      Escopo
+                    </div>
+                  </div>
+                  <div className="text-center px-1">
+                    <div className="text-lg font-semibold text-foreground">&lt; 10min</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-0.5">
+                      Montagem
+                    </div>
+                  </div>
+                </div>
+              )}
+              {recommendation.kind === "agente" && (
+                <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border/50 bg-background/40 p-3">
+                  <div className="text-center px-1">
+                    <div className="text-lg font-semibold text-foreground tabular-nums">1</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-0.5">
+                      Especialista
+                    </div>
+                  </div>
+                  <div className="text-center px-1 border-x border-border/40">
+                    <div className="text-lg font-semibold text-foreground">Foco</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-0.5">
+                      Tarefa única
+                    </div>
+                  </div>
+                  <div className="text-center px-1">
+                    <div className="text-lg font-semibold text-foreground">&lt; 2min</div>
+                    <div className="text-[10px] uppercase tracking-[0.14em] text-muted-foreground mt-0.5">
+                      Ativação
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Preço + CTA */}
               <div className="flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4 pt-1">
-                {recommendation.kind === "departamento" && recommendedPkg ? (
-                  <div className="flex flex-col">
-                    <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-1">
-                      Investimento mensal
+                <div className="flex flex-col">
+                  <span className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground mb-1">
+                    {recommendation.kind === "departamento" ? "Investimento mensal" : "A partir de"}
+                  </span>
+                  <div className="flex items-baseline gap-1.5">
+                    <span className="text-[32px] font-semibold text-foreground tracking-tight leading-none">
+                      {recommendation.kind === "departamento" && recommendedPkg
+                        ? formatBRL(recommendedPkg.priceMonthly)
+                        : recommendation.kind === "squad"
+                        ? "R$ 597"
+                        : "R$ 197"}
                     </span>
-                    <div className="flex items-baseline gap-1.5">
-                      <span className="text-[32px] font-semibold text-foreground tracking-tight leading-none">
-                        {formatBRL(recommendedPkg.priceMonthly)}
-                      </span>
-                      <span className="text-sm text-muted-foreground">/mês</span>
-                    </div>
-                    <span className="text-[11px] text-muted-foreground/80 mt-1">
-                      Time completo · sem taxa de setup
-                    </span>
+                    <span className="text-sm text-muted-foreground">/mês</span>
                   </div>
-                ) : (
-                  <span />
-                )}
+                  <span className="text-[11px] text-muted-foreground/80 mt-1">
+                    {recommendation.kind === "departamento"
+                      ? "Time completo · sem taxa de setup"
+                      : recommendation.kind === "squad"
+                      ? "Squad sob medida · escala pra departamento quando quiser"
+                      : "Um especialista · upgrade pra squad a qualquer momento"}
+                  </span>
+                </div>
                 <Button
                   size="lg"
                   onClick={goToRecommended}
