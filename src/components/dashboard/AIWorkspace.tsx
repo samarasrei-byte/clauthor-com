@@ -535,7 +535,7 @@ const AIWorkspace = () => {
               />
             </div>
           </div>
-          <BrainGraph filteredIds={filteredIds} />
+          {visualMode === "holo" ? <BrainGraphHolo filteredIds={filteredIds} /> : <BrainGraph filteredIds={filteredIds} />}
           <p className="mt-2 text-center text-xs text-muted-foreground">
             {filteredGraphNodes.length} nós conectados na sua memória viva.
           </p>
