@@ -1,8 +1,10 @@
-import { Activity, Bot, CheckCircle, Clock } from "lucide-react";
+import { Activity, Bot, CheckCircle, Clock, Search, AlertTriangle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { cn } from "@/lib/utils";
 
 interface LogsSectionProps {
   recentLogs: any[];
@@ -10,74 +12,147 @@ interface LogsSectionProps {
   onGoToAgents?: () => void;
 }
 
+type StatusFilter = "all" | "success" | "error";
+type TimeFilter = "24h" | "7d" | "30d" | "all";
+
+const TIME_WINDOWS: Record<TimeFilter, number> = {
+  "24h": 24 * 60 * 60 * 1000,
+  "7d": 7 * 24 * 60 * 60 * 1000,
+  "30d": 30 * 24 * 60 * 60 * 1000,
+  all: Infinity,
+};
+
 const LogsSection = ({ recentLogs, locale, onGoToAgents }: LogsSectionProps) => {
   const { t } = useTranslation();
-  const [filter, setFilter] = useState<"all" | "success" | "error">("all");
+  const [status, setStatus] = useState<StatusFilter>("all");
+  const [timeframe, setTimeframe] = useState<TimeFilter>("7d");
+  const [query, setQuery] = useState("");
 
-  const filteredLogs = recentLogs.filter(l => filter === "all" || l.status === filter);
+  const filtered = useMemo(() => {
+    const now = Date.now();
+    const window = TIME_WINDOWS[timeframe];
+    const q = query.trim().toLowerCase();
+    return recentLogs.filter((l) => {
+      if (status !== "all" && l.status !== status) return false;
+      if (window !== Infinity && now - new Date(l.created_at).getTime() > window) return false;
+      if (q) {
+        const hay = `${l.agent_name ?? ""} ${l.action ?? ""} ${l.status ?? ""}`.toLowerCase();
+        if (!hay.includes(q)) return false;
+      }
+      return true;
+    });
+  }, [recentLogs, status, timeframe, query]);
 
-  const getStatusIcon = (status: string) => {
-    if (status === "success") return <CheckCircle className="h-3.5 w-3.5 text-primary" />;
-    if (status === "error") return <Activity className="h-3.5 w-3.5 text-destructive" />;
+  const counts = useMemo(() => ({
+    success: recentLogs.filter((l) => l.status === "success").length,
+    error: recentLogs.filter((l) => l.status === "error").length,
+  }), [recentLogs]);
+
+  const getStatusIcon = (s: string) => {
+    if (s === "success") return <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />;
+    if (s === "error") return <AlertTriangle className="h-3.5 w-3.5 text-destructive" />;
     return <Clock className="h-3.5 w-3.5 text-muted-foreground" />;
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="font-display text-xl font-bold">{t("dashboard.execution_logs")} ({recentLogs.length})</h2>
-        <div className="flex items-center gap-1.5">
-          {(["all", "success", "error"] as const).map(f => (
+    <div className="space-y-5">
+      <div className="flex items-start justify-between flex-wrap gap-3">
+        <div>
+          <h2 className="font-display font-semibold text-xl tracking-[-0.02em]">Auditoria de execuções</h2>
+          <p className="text-xs text-muted-foreground mt-1">
+            {filtered.length} de {recentLogs.length} · <span className="text-emerald-400">{counts.success} sucesso</span> · <span className="text-destructive">{counts.error} erros</span>
+          </p>
+        </div>
+        <div className="flex items-center gap-1.5 flex-wrap">
+          <div className="relative">
+            <Search className="absolute left-2.5 top-2 h-3.5 w-3.5 text-muted-foreground" />
+            <Input
+              placeholder="Buscar agente ou ação…"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              className="pl-8 h-8 text-xs w-52"
+            />
+          </div>
+          <div className="flex gap-0.5 bg-muted/30 rounded-md p-0.5">
+            {(["24h", "7d", "30d", "all"] as TimeFilter[]).map((tf) => (
+              <button
+                key={tf}
+                onClick={() => setTimeframe(tf)}
+                className={cn(
+                  "text-[10px] px-2 py-1 rounded transition-colors",
+                  timeframe === tf ? "bg-primary/15 text-primary" : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {tf === "all" ? "Tudo" : tf}
+              </button>
+            ))}
+          </div>
+          {(["all", "success", "error"] as StatusFilter[]).map((f) => (
             <Button
               key={f}
               size="sm"
-              variant={filter === f ? "default" : "ghost"}
-              className="text-xs h-7"
-              onClick={() => setFilter(f)}
+              variant={status === f ? "default" : "ghost"}
+              className="text-xs h-8"
+              onClick={() => setStatus(f)}
             >
-              {f === "all" ? t("dashboard.filter_all", { defaultValue: "Todos" })
-                : f === "success" ? t("dashboard.filter_success", { defaultValue: "Sucesso" })
-                : t("dashboard.filter_error", { defaultValue: "Erro" })}
+              {f === "all" ? "Todos" : f === "success" ? "Sucesso" : "Erros"}
             </Button>
           ))}
         </div>
       </div>
 
       <div className="glass-card rounded-2xl overflow-hidden">
-        {filteredLogs.length === 0 ? (
+        {filtered.length === 0 ? (
           <div className="p-12 text-center space-y-3">
             <Activity className="h-10 w-10 text-muted-foreground/30 mx-auto" />
-            <p className="text-muted-foreground font-medium">{t("dashboard.no_logs_found")}</p>
-            <p className="text-xs text-muted-foreground/60">
-              {t("dashboard.logs_hint", { defaultValue: "Os logs aparecerão aqui quando seus agentes começarem a executar ações." })}
+            <p className="text-muted-foreground font-medium">
+              {recentLogs.length === 0 ? t("dashboard.no_logs_found") : "Nenhum log corresponde aos filtros."}
             </p>
-            {onGoToAgents && (
+            {onGoToAgents && recentLogs.length === 0 && (
               <Button variant="outline" size="sm" onClick={onGoToAgents} className="mt-2 gap-1.5">
                 <Bot className="h-3.5 w-3.5" /> {t("dashboard.view_agents", { defaultValue: "Ver Agentes" })}
               </Button>
             )}
           </div>
         ) : (
-          <div className="divide-y divide-border/10 max-h-[600px] overflow-y-auto">
-            {filteredLogs.map((log: any) => (
-              <div key={log.id} className="p-4 hover:bg-card/50 transition-colors flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  {getStatusIcon(log.status)}
-                  <div>
-                    <p className="text-sm font-medium">{log.agent_name}</p>
-                    <p className="text-xs text-muted-foreground">{log.action}</p>
+          <div className="relative max-h-[600px] overflow-y-auto">
+            {/* Vertical rail */}
+            <span className="absolute left-[27px] top-4 bottom-4 w-px bg-gradient-to-b from-border/60 via-border/30 to-transparent pointer-events-none" />
+            <div className="divide-y divide-border/10">
+              {filtered.map((log: any) => (
+                <div key={log.id} className="relative p-4 pl-12 hover:bg-card/50 transition-colors">
+                  <span className={cn(
+                    "absolute left-[22px] top-5 h-2.5 w-2.5 rounded-full border-2 border-background",
+                    log.status === "success" ? "bg-emerald-400" : log.status === "error" ? "bg-destructive" : "bg-muted-foreground",
+                  )} />
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        {getStatusIcon(log.status)}
+                        <p className="text-sm font-medium truncate">{log.agent_name || "Agente"}</p>
+                        {log.execution_time_ms ? (
+                          <span className="text-[10px] text-muted-foreground">{log.execution_time_ms}ms</span>
+                        ) : null}
+                      </div>
+                      <p className="text-xs text-muted-foreground mt-0.5 truncate">{log.action}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <Badge variant="secondary" className={cn(
+                        "text-[10px]",
+                        log.status === "success" ? "bg-emerald-500/10 text-emerald-400" :
+                        log.status === "error" ? "bg-destructive/10 text-destructive" :
+                        "bg-muted text-muted-foreground",
+                      )}>
+                        {log.status}
+                      </Badge>
+                      <p className="text-[10px] text-muted-foreground mt-1">
+                        {new Date(log.created_at).toLocaleString(locale, { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
+                      </p>
+                    </div>
                   </div>
                 </div>
-                <div className="text-right">
-                  <Badge variant="secondary" className={`text-[10px] ${log.status === "success" ? "bg-primary/10 text-primary" : log.status === "error" ? "bg-destructive/10 text-destructive" : "bg-muted text-muted-foreground"}`}>
-                    {log.status}
-                  </Badge>
-                  <p className="text-[10px] text-muted-foreground mt-1">
-                    {new Date(log.created_at).toLocaleString(locale, { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
-                  </p>
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
         )}
       </div>
