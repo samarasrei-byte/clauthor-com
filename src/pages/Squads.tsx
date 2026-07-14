@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
 import { SQUADS, type Squad } from "@/data/squads";
 
 const fadeUp = {
@@ -70,10 +71,23 @@ const Squads = () => {
               <strong className="text-foreground">uma dor de negócio</strong>. Sem contratar pessoas,
               sem departamento inteiro — só o resultado.
             </p>
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-muted-foreground">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 text-sm text-muted-foreground mb-10">
               <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Ativação em minutos</div>
               <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Sem equipe técnica</div>
               <div className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Cancele quando quiser</div>
+            </div>
+          </motion.div>
+
+          {/* Chat qualificador · Thor identifica dor + tamanho e recomenda o squad certo */}
+          <motion.div {...fadeUp} className="max-w-3xl mx-auto text-left">
+            <div className="dark rounded-3xl bg-black text-white p-4 sm:p-6 shadow-[0_30px_80px_-20px_hsl(0_0%_0%/0.4)] border border-white/10">
+              <div className="flex items-center gap-2 mb-4 px-2">
+                <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-white/60">
+                  Não sabe qual squad · conte a dor pro Thor
+                </span>
+              </div>
+              <ThorConciergeChat source="landing" minHeight="320px" />
             </div>
           </motion.div>
         </div>
