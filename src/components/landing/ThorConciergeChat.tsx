@@ -23,6 +23,7 @@ import { DEPARTMENT_PACKAGES, formatBRL } from "@/data/departmentPackages";
 import { supabase } from "@/integrations/supabase/client";
 import { getTutorial, type IntegrationTutorial } from "@/lib/integrationTutorials";
 import TutorialCard from "@/components/landing/TutorialCard";
+import ThorOnboardingFlow, { type OnboardingReco } from "@/components/landing/ThorOnboardingFlow";
 
 /* -------------------------------------------------------------------------- */
 /*  Tipos                                                                     */
