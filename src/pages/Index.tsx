@@ -9,7 +9,7 @@
  */
 import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Briefcase, Headphones, Megaphone, Scale, Wallet, Users, MessageSquareWarning, TrendingDown, Repeat, LineChart, HelpCircle } from "lucide-react";
+import { ArrowRight, Briefcase, Headphones, Megaphone, Scale, Wallet, Users, MessageSquareWarning, TrendingDown, Repeat, LineChart, HelpCircle, Network, Bot, Building2, Zap } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -211,32 +211,54 @@ const HomePage = () => {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground mb-10"
+            className="inline-flex items-center gap-2 rounded-full border border-primary/15 bg-primary/[0.03] px-4 py-1.5 text-[11px] font-medium uppercase tracking-[0.16em] text-primary/80 mb-8"
           >
-            <span className="h-px w-6 bg-border" />
+            <Network className="h-3.5 w-3.5" strokeWidth={2} />
             35.827 empresas · 14 idiomas · operação 24/7
-            <span className="h-px w-6 bg-border" />
           </motion.div>
 
           <motion.h1
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.05 }}
-            className="text-[40px] sm:text-5xl md:text-6xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-6"
+            className="font-display text-[40px] sm:text-5xl md:text-6xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-6"
           >
-            <span className="text-black dark:text-white">Qual é a dor que tá te tirando o sono?</span>
+            <span className="text-foreground">Qual é a dor</span>
+            <br />
+            <span className="gradient-text">que tá te tirando o sono?</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.15 }}
-            className="text-base md:text-lg text-muted-foreground max-w-2xl mb-10 leading-relaxed"
+            className="text-base md:text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed"
           >
             Escolha o que mais te incomoda hoje. O Thor entende o tamanho da sua operação e
             recomenda em 60 segundos: um agente, um squad ou um departamento inteiro.
             A partir de <span className="text-foreground font-medium">R$ 597/mês</span>.
           </motion.p>
+
+          {/* Stats pills · Departamentos-style */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="flex flex-wrap items-center justify-center gap-2 mb-10"
+          >
+            {[
+              { icon: Bot, value: "+200", label: "agentes" },
+              { icon: Building2, value: "20", label: "departamentos" },
+              { icon: Zap, value: "24/7", label: "operação" },
+            ].map((s) => (
+              <div key={s.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/40 border border-border text-sm">
+                <s.icon className="h-3.5 w-3.5 text-primary/70" strokeWidth={2} />
+                <span className="font-display font-bold text-foreground">{s.value}</span>
+                <span className="text-xs text-muted-foreground">{s.label}</span>
+              </div>
+            ))}
+          </motion.div>
+
 
           {/* Quiz de dor · seis caminhos claros */}
           <motion.div
