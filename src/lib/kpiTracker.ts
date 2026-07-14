@@ -49,7 +49,8 @@ export type KpiEventName =
   | "thor_center_approval_resolved"
   | "thor_center_signal_resolved"
   | "thor_center_signal_bulk_resolved"
-  | "home_path_select";
+  | "home_path_select"
+  | "home_pain_quiz_click";
 
 
 export interface KpiEventPayload {
