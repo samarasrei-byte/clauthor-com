@@ -2,8 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Brain, Sparkles, Network, Workflow, Plus, Search, Cpu, Activity,
-  Clock, Coins, Gauge, Circle, MessageSquare, CheckCircle2, Loader2,
-  ChevronRight, X, Bot, Wand2,
+  Clock, Coins, Gauge, Circle, MessageSquare, CheckCircle2,
+  ChevronRight, X, Bot, Wand2, Radio, Send,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -12,12 +12,18 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import {
   Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  useAIWorkspaces, useWorkspaceMessages, useWorkspaceTasks,
+  type TaskStatus, type AIWorkspaceTask,
+} from "@/hooks/useAIWorkspaces";
+
 
 /* ────────────────────────────────────────────────────────────────
  * AI Workspace — colaboração multi-agente em tempo real (mock).
@@ -149,57 +155,33 @@ const fmtTime = (ts: number) => {
 
 const AIWorkspace = () => {
   const [agents, setAgents] = useState<WorkspaceAgent[]>(DEFAULT_AGENTS);
-  const [chat, setChat] = useState<ChatEntry[]>(INITIAL_CHAT);
-  const [timeline, setTimeline] = useState<TimelineEntry[]>(INITIAL_TIMELINE);
-  const [tasks, setTasks] = useState<Task[]>(INITIAL_TASKS);
+  const [chatInput, setChatInput] = useState("");
   const [taskInput, setTaskInput] = useState("");
   const [graphQuery, setGraphQuery] = useState("");
-  const [typing, setTyping] = useState<string | null>(null);
   const [creatorOpen, setCreatorOpen] = useState(false);
+  const [creatingWs, setCreatingWs] = useState(false);
+  const [newWsName, setNewWsName] = useState("");
+  const [timeline, setTimeline] = useState<TimelineEntry[]>(INITIAL_TIMELINE);
   const chatScrollRef = useRef<HTMLDivElement | null>(null);
 
-  const agentById = useMemo(
+  // ── Realtime data ──
+  const { workspaces, activeId, setActiveId, activeWorkspace, loading: wsLoading, createWorkspace } = useAIWorkspaces();
+  const tenantId = activeWorkspace?.tenant_id ?? null;
+  const { messages, sendMessage } = useWorkspaceMessages(activeId, tenantId);
+  const { tasks, createTask, updateTaskStatus } = useWorkspaceTasks(activeId, tenantId);
+
+  const agentByKey = useMemo(
     () => Object.fromEntries(agents.map((a) => [a.id, a])),
     [agents]
   );
 
-  /* Auto-scroll do chat */
+  // Auto-scroll do chat
   useEffect(() => {
     const el = chatScrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
-  }, [chat.length, typing]);
+  }, [messages.length]);
 
-  /* Simula agentes conversando periodicamente */
-  useEffect(() => {
-    const messages = [
-      { agentId: "strat",    content: "Ajustando prioridades da sprint atual." },
-      { agentId: "analyst",  content: "Métricas de conversão subiram 12% hoje." },
-      { agentId: "copy",     content: "Revisando CTA principal com base nos dados." },
-      { agentId: "dev",      content: "Deploy da nova versão em staging." },
-      { agentId: "designer", content: "Atualizando paleta para tema escuro." },
-      { agentId: "research", content: "Novo estudo de referência anexado à memória." },
-    ];
-
-    const interval = setInterval(() => {
-      const pick = messages[Math.floor(Math.random() * messages.length)];
-      setTyping(pick.agentId);
-      setTimeout(() => {
-        setChat((prev) => [
-          ...prev.slice(-30),
-          { id: `c-${Date.now()}`, agentId: pick.agentId, content: pick.content, ts: Date.now() },
-        ]);
-        setTimeline((prev) => [
-          { id: `t-${Date.now()}`, agentId: pick.agentId, message: pick.content, ts: Date.now() },
-          ...prev.slice(0, 12),
-        ]);
-        setTyping(null);
-      }, 1400);
-    }, 8000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  /* Rotaciona status dos agentes para dar vida */
+  // Rotaciona status dos agentes só para dar vida na UI
   useEffect(() => {
     const interval = setInterval(() => {
       setAgents((prev) =>
@@ -214,35 +196,57 @@ const AIWorkspace = () => {
     return () => clearInterval(interval);
   }, []);
 
-  /* Delegação: divide a tarefa em sub-tarefas automáticas */
-  const handleDelegate = () => {
+  // Timeline reflete os últimos messages recebidos via Realtime
+  useEffect(() => {
+    const latest = messages.slice(-6).reverse();
+    setTimeline(
+      latest.map((m) => ({
+        id: m.id,
+        agentId: m.agent_key ?? "strat",
+        message: m.content,
+        ts: new Date(m.created_at).getTime(),
+      }))
+    );
+  }, [messages]);
+
+  // ── Handlers ──
+  const handleSendChat = async () => {
+    const txt = chatInput.trim();
+    if (!txt || !activeId) return;
+    setChatInput("");
+    await sendMessage(txt);
+  };
+
+  const handleDelegate = async () => {
     const t = taskInput.trim();
-    if (!t) return;
-    const chain: Array<{ agentId: string; message: string }> = [
-      { agentId: "strat",    message: `Recebi a missão: "${t}". Dividindo em etapas.` },
-      { agentId: "research", message: "Buscando referências e insights de mercado." },
-      { agentId: "copy",     message: "Rascunhando copy inicial da entrega." },
-      { agentId: "designer", message: "Preparando layout base." },
-      { agentId: "dev",      message: "Iniciando implementação técnica." },
-      { agentId: "analyst",  message: "Definindo métricas de sucesso." },
-    ];
+    if (!t || !activeId) return;
     setTaskInput("");
-    setTasks((prev) => [
-      { id: `k-${Date.now()}`, title: t, agentId: "strat", status: "doing" },
-      ...prev,
-    ]);
-    chain.forEach((step, idx) => {
+    // Cria a tarefa raiz + notifica os agentes via chat persistido
+    await createTask({ title: t, agent_key: "strat", agent_name: "Estratégia", status: "doing", priority: "high" });
+    const chain: Array<{ key: string; name: string; emoji: string; message: string }> = [
+      { key: "strat",    name: "Estratégia",   emoji: "🧠", message: `Recebi a missão: "${t}". Dividindo em etapas.` },
+      { key: "research", name: "Pesquisador",  emoji: "🔎", message: "Buscando referências e insights de mercado." },
+      { key: "copy",     name: "Copywriter",   emoji: "✍️", message: "Rascunhando copy inicial da entrega." },
+      { key: "designer", name: "Designer",     emoji: "🎨", message: "Preparando layout base." },
+      { key: "dev",      name: "Desenvolvedor",emoji: "💻", message: "Iniciando implementação técnica." },
+    ];
+    for (let i = 0; i < chain.length; i++) {
+      const step = chain[i];
       setTimeout(() => {
-        setChat((prev) => [
-          ...prev,
-          { id: `c-${Date.now()}-${idx}`, agentId: step.agentId, content: step.message, ts: Date.now() },
-        ]);
-        setTimeline((prev) => [
-          { id: `t-${Date.now()}-${idx}`, agentId: step.agentId, message: step.message, ts: Date.now() },
-          ...prev.slice(0, 12),
-        ]);
-      }, idx * 900);
-    });
+        sendMessage(step.message, { key: step.key, name: step.name, emoji: step.emoji });
+      }, i * 700);
+    }
+  };
+
+  const handleCreateWorkspace = async () => {
+    const name = newWsName.trim();
+    if (!name) return;
+    const created = await createWorkspace(name);
+    if (created) {
+      setActiveId(created.id);
+      setNewWsName("");
+      setCreatingWs(false);
+    }
   };
 
   const filteredGraphNodes = useMemo(() => {
@@ -253,13 +257,14 @@ const AIWorkspace = () => {
 
   const filteredIds = new Set(filteredGraphNodes.map((n) => n.id));
 
-  /* KPIs */
+  // KPIs (agentes = visual; tarefas = reais)
   const activeAgents = agents.filter((a) => a.status !== "offline").length;
   const activeTasks = tasks.filter((t) => t.status !== "done").length;
   const totalTokens = agents.reduce((acc, a) => acc + a.tokens, 0);
   const estCost = (totalTokens / 1000) * 0.02;
 
   return (
+
     <div className="relative space-y-6 pb-8">
       {/* ─── Futuristic ambient backdrop ─── */}
       <div
@@ -315,26 +320,45 @@ const AIWorkspace = () => {
                 variant="outline"
                 className="border-primary/40 bg-primary/10 text-primary shadow-[0_0_20px_hsl(var(--primary)/0.25)]"
               >
-                <span className="mr-1 inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
+                <Radio className="mr-1 h-3 w-3 animate-pulse" />
                 Neural Sync
               </Badge>
             </h1>
             <p className="text-sm text-muted-foreground">
-              Sua equipe de agentes trabalhando 24/7 — conversando, delegando e construindo memória compartilhada.
+              {activeWorkspace
+                ? `Ambiente ativo: ${activeWorkspace.name} — conversas e tarefas sincronizadas em tempo real.`
+                : "Sua equipe de agentes trabalhando 24/7 — sincronizada via Realtime."}
             </p>
           </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* Seletor de Workspace */}
+          <Select value={activeId ?? undefined} onValueChange={(v) => setActiveId(v)} disabled={wsLoading || workspaces.length === 0}>
+            <SelectTrigger className="w-[220px] border-white/10 bg-background/60 backdrop-blur">
+              <SelectValue placeholder={wsLoading ? "Carregando..." : "Selecionar workspace"} />
+            </SelectTrigger>
+            <SelectContent>
+              {workspaces.map((w) => (
+                <SelectItem key={w.id} value={w.id}>
+                  <span className="mr-1.5">{w.emoji ?? "🧠"}</span>{w.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <Button size="sm" variant="outline" className="gap-1" onClick={() => setCreatingWs(true)}>
+            <Plus className="h-4 w-4" /> Workspace
+          </Button>
           <Button
             size="sm"
             className="gap-2 bg-gradient-to-r from-primary to-fuchsia-500 text-white shadow-lg shadow-primary/30 hover:opacity-90"
             onClick={() => setCreatorOpen(true)}
           >
-            <Plus className="h-4 w-4" /> Novo Agente
+            <Plus className="h-4 w-4" /> Agente
           </Button>
         </div>
       </motion.header>
+
 
       {/* ─── Live Status Bar ─── */}
       <motion.div
@@ -397,14 +421,22 @@ const AIWorkspace = () => {
             </h2>
             <Badge variant="outline" className="text-xs">
               <span className="mr-1 h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500 inline-block" />
-              tempo real
+              Realtime
             </Badge>
           </div>
           <div ref={chatScrollRef} className="flex-1 space-y-3 overflow-y-auto pr-2">
             <AnimatePresence initial={false}>
-              {chat.map((msg) => {
-                const a = agentById[msg.agentId];
-                if (!a) return null;
+              {messages.length === 0 && (
+                <div className="py-8 text-center text-xs text-muted-foreground">
+                  Nenhuma mensagem ainda — delegue uma missão ou converse com a equipe.
+                </div>
+              )}
+              {messages.map((msg) => {
+                const localAgent = msg.agent_key ? agentByKey[msg.agent_key] : null;
+                const emoji = msg.agent_emoji ?? localAgent?.emoji ?? (msg.author_kind === "user" ? "🧑" : "🤖");
+                const name = msg.agent_name ?? localAgent?.name ?? (msg.author_kind === "user" ? "Você" : "Sistema");
+                const color = localAgent?.color ?? "from-slate-500 to-slate-600";
+                const ts = new Date(msg.created_at).getTime();
                 return (
                   <motion.div
                     key={msg.id}
@@ -414,14 +446,14 @@ const AIWorkspace = () => {
                     className="flex gap-2"
                   >
                     <Avatar className="h-8 w-8 shrink-0">
-                      <AvatarFallback className={cn("bg-gradient-to-br text-white text-sm", a.color)}>
-                        {a.emoji}
+                      <AvatarFallback className={cn("bg-gradient-to-br text-white text-sm", color)}>
+                        {emoji}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 text-xs">
-                        <span className="font-medium">{a.name}</span>
-                        <span className="text-muted-foreground">{fmtTime(msg.ts)}</span>
+                        <span className="font-medium">{name}</span>
+                        <span className="text-muted-foreground">{fmtTime(ts)}</span>
                       </div>
                       <div className="mt-0.5 rounded-lg bg-muted/60 px-3 py-2 text-sm">
                         {msg.content}
@@ -430,26 +462,24 @@ const AIWorkspace = () => {
                   </motion.div>
                 );
               })}
-              {typing && agentById[typing] && (
-                <motion.div
-                  key="typing"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex items-center gap-2 text-xs text-muted-foreground"
-                >
-                  <Avatar className="h-6 w-6">
-                    <AvatarFallback className={cn("bg-gradient-to-br text-white text-xs", agentById[typing].color)}>
-                      {agentById[typing].emoji}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>{agentById[typing].name} está digitando</span>
-                  <TypingDots />
-                </motion.div>
-              )}
             </AnimatePresence>
           </div>
+          {/* Composer */}
+          <div className="mt-2 flex gap-2 border-t pt-2">
+            <Input
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleSendChat())}
+              placeholder="Escreva para a equipe..."
+              className="flex-1"
+              disabled={!activeId}
+            />
+            <Button size="sm" onClick={handleSendChat} disabled={!activeId || !chatInput.trim()} className="gap-1">
+              <Send className="h-3.5 w-3.5" />
+            </Button>
+          </div>
         </Card>
+
 
         {/* Brain Graph */}
         <Card className="p-4">
@@ -482,11 +512,12 @@ const AIWorkspace = () => {
             <Badge variant="secondary" className="text-xs">{tasks.length}</Badge>
           </div>
           <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-            <KanbanColumn title="Backlog" tasks={tasks.filter(t => t.status === "backlog")} agents={agentById} tone="bg-muted/40" />
-            <KanbanColumn title="Fazendo" tasks={tasks.filter(t => t.status === "doing")}   agents={agentById} tone="bg-sky-500/10" />
-            <KanbanColumn title="Revisão" tasks={tasks.filter(t => t.status === "review")} agents={agentById} tone="bg-amber-500/10" />
-            <KanbanColumn title="Feito"   tasks={tasks.filter(t => t.status === "done")}   agents={agentById} tone="bg-emerald-500/10" />
+            <KanbanColumn title="Backlog" tasks={tasks.filter(t => t.status === "backlog")} agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-muted/40" />
+            <KanbanColumn title="Fazendo" tasks={tasks.filter(t => t.status === "doing")}   agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-sky-500/10" />
+            <KanbanColumn title="Revisão" tasks={tasks.filter(t => t.status === "review")}  agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-amber-500/10" />
+            <KanbanColumn title="Feito"   tasks={tasks.filter(t => t.status === "done")}    agentByKey={agentByKey} onMove={updateTaskStatus} tone="bg-emerald-500/10" />
           </div>
+
         </Card>
       </div>
 
@@ -512,7 +543,7 @@ const AIWorkspace = () => {
             <ScrollArea className="h-[320px] pr-2">
               <div className="relative space-y-4 border-l border-border pl-4">
                 {timeline.map((e) => {
-                  const a = agentById[e.agentId];
+                  const a = agentByKey[e.agentId];
                   return (
                     <motion.div
                       key={e.id}
@@ -558,9 +589,43 @@ const AIWorkspace = () => {
         onOpenChange={setCreatorOpen}
         onCreate={(a) => setAgents((prev) => [...prev, a])}
       />
+
+      {/* ─── Workspace Creator ─── */}
+      <Dialog open={creatingWs} onOpenChange={setCreatingWs}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" /> Novo Workspace
+            </DialogTitle>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div>
+              <Label className="text-xs">Nome</Label>
+              <Input
+                value={newWsName}
+                onChange={(e) => setNewWsName(e.target.value)}
+                placeholder="Ex: AI Workspace 3"
+                onKeyDown={(e) => e.key === "Enter" && handleCreateWorkspace()}
+              />
+            </div>
+            <p className="text-xs text-muted-foreground">
+              Cada workspace tem seu próprio chat e Kanban isolados, sincronizados em tempo real.
+            </p>
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setCreatingWs(false)} className="gap-1">
+              <X className="h-4 w-4" /> Cancelar
+            </Button>
+            <Button onClick={handleCreateWorkspace} disabled={!newWsName.trim()} className="gap-1">
+              <Plus className="h-4 w-4" /> Criar
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
+
 
 /* ────────────────── Subcomponents ────────────────── */
 
@@ -624,13 +689,21 @@ const TypingDots = () => (
   </span>
 );
 
+const NEXT_STATUS: Record<TaskStatus, TaskStatus | null> = {
+  backlog: "doing",
+  doing: "review",
+  review: "done",
+  done: null,
+};
+
 const KanbanColumn = ({
-  title, tasks, agents, tone,
+  title, tasks, agentByKey, tone, onMove,
 }: {
   title: string;
-  tasks: Task[];
-  agents: Record<string, WorkspaceAgent>;
+  tasks: AIWorkspaceTask[];
+  agentByKey: Record<string, WorkspaceAgent>;
   tone: string;
+  onMove: (id: string, next: TaskStatus) => void;
 }) => (
   <div className={cn("rounded-lg p-2", tone)}>
     <div className="mb-2 flex items-center justify-between px-1 text-xs font-medium">
@@ -639,21 +712,31 @@ const KanbanColumn = ({
     </div>
     <div className="space-y-1.5">
       {tasks.map((t) => {
-        const a = agents[t.agentId];
+        const a = t.agent_key ? agentByKey[t.agent_key] : undefined;
+        const next = NEXT_STATUS[t.status];
         return (
           <motion.div
             key={t.id}
             layout
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-md border bg-card p-2 text-xs shadow-sm"
+            className="group rounded-md border bg-card p-2 text-xs shadow-sm transition-colors hover:border-primary/40"
           >
             <div className="line-clamp-2 font-medium">{t.title}</div>
-            {a && (
-              <div className="mt-1 flex items-center gap-1 text-[10px] text-muted-foreground">
-                <span>{a.emoji}</span> {a.name}
-              </div>
-            )}
+            <div className="mt-1 flex items-center justify-between gap-1 text-[10px] text-muted-foreground">
+              <span className="flex items-center gap-1">
+                {a ? <><span>{a.emoji}</span> {a.name}</> : (t.agent_name ?? "—")}
+              </span>
+              {next && (
+                <button
+                  type="button"
+                  onClick={() => onMove(t.id, next)}
+                  className="opacity-0 transition-opacity group-hover:opacity-100 text-primary hover:underline"
+                >
+                  → {next}
+                </button>
+              )}
+            </div>
           </motion.div>
         );
       })}
@@ -665,6 +748,7 @@ const KanbanColumn = ({
     </div>
   </div>
 );
+
 
 const BrainGraph = ({ filteredIds }: { filteredIds: Set<string> }) => (
   <div className="relative h-[280px] w-full overflow-hidden rounded-lg bg-gradient-to-br from-muted/30 to-transparent">
