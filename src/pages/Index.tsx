@@ -117,6 +117,12 @@ const HomePage = () => {
   const [seedPrompt, setSeedPrompt] = useState<string>("");
   const chatRef = useRef<HTMLDivElement | null>(null);
 
+  const PAIN_QUIZ = PAIN_QUIZ_IDS.map((p) => ({
+    ...p,
+    label: t(`home.pain_${p.id}_label`),
+    prompt: t(`home.pain_${p.id}_prompt`),
+  }));
+
   const pickPain = (item: (typeof PAIN_QUIZ)[number]) => {
     trackKpi("home_pain_quiz_click", { pain_id: item.id });
     setSeedPrompt(item.prompt);
