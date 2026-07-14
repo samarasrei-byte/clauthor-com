@@ -14,7 +14,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
 import Footer from "@/components/Footer";
-import ThorConciergeChat from "@/components/landing/ThorConciergeChat";
+import { SQUADS } from "@/data/squads";
 import AnimatedCounter from "@/components/dashboard/AnimatedCounter";
 import PanelMockup from "@/components/landing/PanelMockup";
 import { CLAUTHOR_ORG_CHART } from "@/data/clauthorOrgChart";
