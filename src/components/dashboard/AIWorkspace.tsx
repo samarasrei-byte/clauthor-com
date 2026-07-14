@@ -402,14 +402,22 @@ const AIWorkspace = () => {
             </h2>
             <Badge variant="outline" className="text-xs">
               <span className="mr-1 h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500 inline-block" />
-              tempo real
+              Realtime
             </Badge>
           </div>
           <div ref={chatScrollRef} className="flex-1 space-y-3 overflow-y-auto pr-2">
             <AnimatePresence initial={false}>
-              {chat.map((msg) => {
-                const a = agentById[msg.agentId];
-                if (!a) return null;
+              {messages.length === 0 && (
+                <div className="py-8 text-center text-xs text-muted-foreground">
+                  Nenhuma mensagem ainda — delegue uma missão ou converse com a equipe.
+                </div>
+              )}
+              {messages.map((msg) => {
+                const localAgent = msg.agent_key ? agentByKey[msg.agent_key] : null;
+                const emoji = msg.agent_emoji ?? localAgent?.emoji ?? (msg.author_kind === "user" ? "🧑" : "🤖");
+                const name = msg.agent_name ?? localAgent?.name ?? (msg.author_kind === "user" ? "Você" : "Sistema");
+                const color = localAgent?.color ?? "from-slate-500 to-slate-600";
+                const ts = new Date(msg.created_at).getTime();
                 return (
                   <motion.div
                     key={msg.id}
@@ -419,14 +427,14 @@ const AIWorkspace = () => {
                     className="flex gap-2"
                   >
                     <Avatar className="h-8 w-8 shrink-0">
-                      <AvatarFallback className={cn("bg-gradient-to-br text-white text-sm", a.color)}>
-                        {a.emoji}
+                      <AvatarFallback className={cn("bg-gradient-to-br text-white text-sm", color)}>
+                        {emoji}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
                       <div className="flex items-center gap-2 text-xs">
-                        <span className="font-medium">{a.name}</span>
-                        <span className="text-muted-foreground">{fmtTime(msg.ts)}</span>
+                        <span className="font-medium">{name}</span>
+                        <span className="text-muted-foreground">{fmtTime(ts)}</span>
                       </div>
                       <div className="mt-0.5 rounded-lg bg-muted/60 px-3 py-2 text-sm">
                         {msg.content}
@@ -435,26 +443,24 @@ const AIWorkspace = () => {
                   </motion.div>
                 );
               })}
-              {typing && agentById[typing] && (
-                <motion.div
-                  key="typing"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  className="flex items-center gap-2 text-xs text-muted-foreground"
-                >
-                  <Avatar className="h-6 w-6">
-                    <AvatarFallback className={cn("bg-gradient-to-br text-white text-xs", agentById[typing].color)}>
-                      {agentById[typing].emoji}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>{agentById[typing].name} está digitando</span>
-                  <TypingDots />
-                </motion.div>
-              )}
             </AnimatePresence>
           </div>
+          {/* Composer */}
+          <div className="mt-2 flex gap-2 border-t pt-2">
+            <Input
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && !e.shiftKey && (e.preventDefault(), handleSendChat())}
+              placeholder="Escreva para a equipe..."
+              className="flex-1"
+              disabled={!activeId}
+            />
+            <Button size="sm" onClick={handleSendChat} disabled={!activeId || !chatInput.trim()} className="gap-1">
+              <Send className="h-3.5 w-3.5" />
+            </Button>
+          </div>
         </Card>
+
 
         {/* Brain Graph */}
         <Card className="p-4">
