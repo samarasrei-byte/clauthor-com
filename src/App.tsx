@@ -108,6 +108,7 @@ const HireAndOnboard = lazyRetry(() => import("./pages/HireAndOnboard"));
 const DepartmentActivated = lazyRetry(() => import("./pages/DepartmentActivated"));
 const Checkout = lazyRetry(() => import("./pages/Checkout"));
 const PreviewDashboard = lazyRetry(() => import("./pages/PreviewDashboard"));
+const ReputacaoIA = lazyRetry(() => import("./pages/ReputacaoIA"));
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -199,6 +200,8 @@ const App = () => (
                   <Route path="/experience" element={<Experience />} />
                   <Route path="/mesa-redonda" element={<Experience />} />
                   <Route path="/thor" element={<ThorConcierge />} />
+                  <Route path="/reputacao-ia" element={<ReputacaoIA />} />
+                  <Route path="/reputacao" element={<ReputacaoIA />} />
                   
                   
                 </Route>
