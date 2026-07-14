@@ -436,6 +436,11 @@ export default function ThorConciergeChat({
     [isStreaming, messages, source, memoryFacts.integrations_asked, persistMemory],
   );
 
+  // Mantém o ref apontando para o sendMessage mais recente para o seedPrompt effect.
+  useEffect(() => {
+    sendMessageRef.current = sendMessage;
+  }, [sendMessage]);
+
   const handleSubmit = useCallback(
     (e?: React.FormEvent) => {
       e?.preventDefault();
