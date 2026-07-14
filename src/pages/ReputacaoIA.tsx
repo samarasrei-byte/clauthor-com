@@ -27,7 +27,7 @@ const fadeUp = {
 };
 
 const PrimaryCTA = ({ label = "Contratar Reputação IA" }: { label?: string }) => (
-  <a href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
+  <a href="/thor" target="_blank" rel="noopener noreferrer">
     <Button size="lg" className="gap-2 h-12 px-7 rounded-full font-medium glow">
       <Shield className="h-4 w-4" strokeWidth={2} />
       {label}
@@ -36,7 +36,7 @@ const PrimaryCTA = ({ label = "Contratar Reputação IA" }: { label?: string }) 
 );
 
 const SecondaryCTA = ({ label = "Solicitar Demonstração" }: { label?: string }) => (
-  <a href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
+  <a href="/thor" target="_blank" rel="noopener noreferrer">
     <Button size="lg" variant="outline" className="gap-2 h-12 px-7 rounded-full border-border text-foreground hover:bg-card/60 font-medium">
       {label}
       <ArrowRight className="h-4 w-4" />

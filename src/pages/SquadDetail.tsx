@@ -87,7 +87,7 @@ const SquadDetail = () => {
                     <ArrowRight className="h-4 w-4" />
                   </Button>
                 </a>
-                <a href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
+                <a href="/thor" target="_blank" rel="noopener noreferrer">
                   <Button size="lg" variant="outline" className="gap-2 h-12 px-7 rounded-full border-border hover:bg-card font-medium">
                     Falar com especialista
                   </Button>
@@ -283,7 +283,7 @@ const SquadDetail = () => {
                     ))}
                   </ul>
                   <a
-                    href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe"
+                    href="/thor"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block"
@@ -345,7 +345,7 @@ const SquadDetail = () => {
               A partir de R$ {squad.tiers[0].price.toLocaleString("pt-BR")}/mês. Sem contrato longo, sem taxa de setup.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-              <a href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
+              <a href="/thor" target="_blank" rel="noopener noreferrer">
                 <Button size="lg" className="gap-2 h-12 px-7 rounded-full font-medium glow">
                   <Sparkles className="h-4 w-4" />
                   Contratar {highlighted.name}

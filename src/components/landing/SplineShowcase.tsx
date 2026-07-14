@@ -67,7 +67,7 @@ const SplineShowcase = ({ variant = "home" }: SplineShowcaseProps) => {
                         <ArrowRight className="h-4 w-4" />
                       </Button>
                     </Link>
-                    <a href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
+                    <a href="/thor" target="_blank" rel="noopener noreferrer">
                       <Button variant="outline" className="gap-2 border-border/40">
                         {t("spline.cta_meeting", { defaultValue: "Agendar reunião" })}
                       </Button>
@@ -76,7 +76,7 @@ const SplineShowcase = ({ variant = "home" }: SplineShowcaseProps) => {
                 )}
 
                 {variant === "waitlist" && (
-                  <a href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe" target="_blank" rel="noopener noreferrer">
+                  <a href="/thor" target="_blank" rel="noopener noreferrer">
                     <Button variant="outline" className="gap-2 border-primary/20 text-primary hover:bg-primary/5">
                       {t("spline.cta_meeting", { defaultValue: "Agendar reunião" })}
                       <ArrowRight className="h-4 w-4" />
