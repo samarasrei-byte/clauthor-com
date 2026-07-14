@@ -34,7 +34,7 @@ const Squads = () => {
     <div className="min-h-dvh bg-background text-foreground antialiased">
       <SEO
         title="Squads IA · Times de Inteligência Artificial prontos para PME | Clauthor"
-        description="Squads verticais: Reputação, Atendimento 24h, SDR, Vendas, Tráfego Pago, Conteúdo, E-commerce, RH, Sucesso do Cliente, Financeiro e Jurídico. A partir de R$ 297/mês."
+        description="Squads verticais de IA: Reputação, Atendimento 24h, SDR, Vendas, Tráfego Pago, Conteúdo, E-commerce, RH, Sucesso do Cliente, Financeiro, Jurídico, Growth Analytics e Operações. A partir de R$ 597/mês."
         path="/squads"
       />
 
