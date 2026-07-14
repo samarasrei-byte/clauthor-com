@@ -45,7 +45,7 @@ interface ThorOnboardingFlowProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   reco: OnboardingReco | null;
-  source?: string;
+  source?: "landing" | "onboarding" | "dashboard" | "live_demo" | "departamentos_page" | "diagnosis_recap" | "thor_guide" | "replay" | "approvals" | "activity" | "task" | "instant_wow";
 }
 
 const STEP_LABELS = ["Confirmação", "Contexto", "Setup", "Ativar"];
