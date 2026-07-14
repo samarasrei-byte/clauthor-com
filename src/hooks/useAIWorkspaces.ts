@@ -135,65 +135,95 @@ export function useAIWorkspaces() {
 
 /**
  * Hook: mensagens de um workspace com Realtime.
+ * Unificado com `chat_messages` (mesma tabela do UnifiedInbox/SquadChat).
+ * O workspace_id vive em `metadata->>workspace_id` para preservar o agrupamento
+ * sem migração de schema. Assim, o mesmo histórico alimenta o Inbox e o AI Workspace.
  */
+const WS_META_KEY = "workspace_id";
+
 export function useWorkspaceMessages(workspaceId: string | null, tenantId: string | null | undefined) {
   const { user } = useAuth();
   const [messages, setMessages] = useState<AIWorkspaceMessage[]>([]);
   const [loading, setLoading] = useState(false);
 
+  const rowToMsg = useCallback((row: any): AIWorkspaceMessage => {
+    const meta = (row.metadata ?? {}) as Record<string, any>;
+    return {
+      id: row.id,
+      workspace_id: meta[WS_META_KEY] ?? workspaceId ?? "",
+      tenant_id: row.tenant_id,
+      author_id: row.user_id ?? null,
+      author_kind: (meta.author_kind ?? (row.role === "assistant" ? "agent" : "user")) as AuthorKind,
+      agent_key: meta.agent_key ?? null,
+      agent_name: row.agent_name ?? meta.agent_name ?? null,
+      agent_emoji: meta.agent_emoji ?? null,
+      content: row.content,
+      metadata: meta,
+      created_at: row.created_at,
+    };
+  }, [workspaceId]);
+
   useEffect(() => {
-    if (!workspaceId) { setMessages([]); return; }
+    if (!workspaceId || !tenantId) { setMessages([]); return; }
     let cancelled = false;
     setLoading(true);
     supabase
-      .from("ai_workspace_messages")
+      .from("chat_messages")
       .select("*")
-      .eq("workspace_id", workspaceId)
+      .eq("tenant_id", tenantId)
+      .contains("metadata", { [WS_META_KEY]: workspaceId })
       .order("created_at", { ascending: true })
       .limit(100)
       .then(({ data, error }) => {
         if (cancelled) return;
         if (error) console.error("[useWorkspaceMessages]", error);
-        else setMessages((data ?? []) as AIWorkspaceMessage[]);
+        else setMessages((data ?? []).map(rowToMsg));
         setLoading(false);
       });
     return () => { cancelled = true; };
-  }, [workspaceId]);
+  }, [workspaceId, tenantId, rowToMsg]);
 
   useEffect(() => {
-    if (!workspaceId) return;
+    if (!workspaceId || !tenantId) return;
     const channel = supabase
-      .channel(`workspace_messages:${workspaceId}`)
+      .channel(`chat_messages_ws:${workspaceId}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "ai_workspace_messages", filter: `workspace_id=eq.${workspaceId}` },
+        { event: "INSERT", schema: "public", table: "chat_messages", filter: `tenant_id=eq.${tenantId}` },
         (payload) => {
-          const row = payload.new as AIWorkspaceMessage;
+          const meta = ((payload.new as any)?.metadata ?? {}) as Record<string, any>;
+          if (meta[WS_META_KEY] !== workspaceId) return;
+          const row = rowToMsg(payload.new);
           setMessages((prev) => (prev.some((m) => m.id === row.id) ? prev : [...prev, row]));
         }
       )
       .subscribe();
     return () => { supabase.removeChannel(channel); };
-  }, [workspaceId]);
+  }, [workspaceId, tenantId, rowToMsg]);
 
   const sendMessage = useCallback(async (content: string, agent?: { key: string; name: string; emoji: string }) => {
-    if (!workspaceId || !tenantId || !content.trim()) return;
-    const payload = {
-      workspace_id: workspaceId,
+    if (!workspaceId || !tenantId || !user?.id || !content.trim()) return;
+    const { error } = await supabase.from("chat_messages").insert({
+      user_id: user.id,
       tenant_id: tenantId,
-      author_id: user?.id ?? null,
-      author_kind: agent ? "agent" : "user",
-      agent_key: agent?.key ?? null,
-      agent_name: agent?.name ?? null,
-      agent_emoji: agent?.emoji ?? null,
+      role: agent ? "assistant" : "user",
       content: content.trim(),
-    };
-    const { error } = await supabase.from("ai_workspace_messages").insert(payload);
+      agent_name: agent?.name ?? null,
+      metadata: {
+        [WS_META_KEY]: workspaceId,
+        author_kind: agent ? "agent" : "user",
+        agent_key: agent?.key ?? null,
+        agent_name: agent?.name ?? null,
+        agent_emoji: agent?.emoji ?? null,
+      },
+    });
     if (error) { console.error(error); toast.error("Falha ao enviar mensagem."); }
   }, [workspaceId, tenantId, user?.id]);
 
   return { messages, loading, sendMessage };
 }
+
+export const WORKSPACE_MESSAGE_META_KEY = WS_META_KEY;
 
 /**
  * Hook: tarefas Kanban unificadas — lê/escreve `agent_tasks` (mesma fonte
