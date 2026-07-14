@@ -515,14 +515,14 @@ const HomePage = () => {
           {/* ── Escala · faixa de prova (fundida à mesma seção) ─── */}
           <div className="relative mt-20 pt-12 border-t border-white/10">
             <p className="text-[10px] uppercase tracking-[0.24em] text-white/40 mb-8 text-center">
-              A escala que já opera hoje
+              {t("home.scale_eyebrow")}
             </p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-y-10 gap-x-6">
               {[
-                { num: 35827, prefix: "", suffix: "", label: "Empresas ativas", accent: false, sub: null as string | null },
-                { num: 200, prefix: "+", suffix: "", label: "Especialistas de IA", accent: false, sub: null },
-                { num: 1477, prefix: "R$ ", suffix: "", label: "Custo mensal a partir de", accent: true, sub: "vs R$ 90.000 CLT" },
-                { num: 14, prefix: "", suffix: "", label: "Idiomas nativos", accent: false, sub: null },
+                { num: 35827, prefix: "", suffix: "", label: t("home.scale_companies"), accent: false, sub: null as string | null },
+                { num: 200, prefix: "+", suffix: "", label: t("home.scale_specialists"), accent: false, sub: null },
+                { num: 1477, prefix: "R$ ", suffix: "", label: t("home.scale_cost"), accent: true, sub: "vs R$ 90.000 CLT" },
+                { num: 14, prefix: "", suffix: "", label: t("home.scale_langs"), accent: false, sub: null },
               ].map((s) => (
                 <motion.div
                   key={s.label}
