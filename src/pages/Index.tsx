@@ -101,9 +101,59 @@ const CEO_TESTIMONIALS = [
   },
 ];
 
+const PAIN_QUIZ: Array<{ id: string; icon: React.ElementType; label: string; prompt: string }> = [
+  {
+    id: "whatsapp",
+    icon: MessageSquareWarning,
+    label: "Perco cliente no WhatsApp / demoro pra responder",
+    prompt: "Estou perdendo cliente porque demoro pra responder no WhatsApp. Qual solução da Clauthor resolve isso?",
+  },
+  {
+    id: "leads",
+    icon: TrendingDown,
+    label: "Não gero leads qualificados o suficiente",
+    prompt: "Meu problema é gerar leads qualificados de forma consistente. O que a Clauthor recomenda?",
+  },
+  {
+    id: "repetitivo",
+    icon: Repeat,
+    label: "Meu time gasta 60% do dia em tarefa repetitiva",
+    prompt: "Meu time perde muito tempo em tarefas repetitivas de operação. Qual a solução da Clauthor?",
+  },
+  {
+    id: "kpi",
+    icon: LineChart,
+    label: "Não tenho visibilidade real dos números",
+    prompt: "Não tenho visibilidade em tempo real dos KPIs do meu negócio. O que vocês recomendam?",
+  },
+  {
+    id: "juridico",
+    icon: Scale,
+    label: "Contratos e jurídico travam meu negócio",
+    prompt: "Contratos e questões jurídicas atrasam minha operação. O que a Clauthor faz nisso?",
+  },
+  {
+    id: "explorar",
+    icon: HelpCircle,
+    label: "Ainda não sei · me mostra o que vocês fazem",
+    prompt: "Ainda não sei bem o que preciso. Pode me explicar como a Clauthor funciona e o que faz mais sentido pra mim?",
+  },
+];
+
 const HomePage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [seedPrompt, setSeedPrompt] = useState<string>("");
+  const chatRef = useRef<HTMLDivElement | null>(null);
+
+  const pickPain = (item: (typeof PAIN_QUIZ)[number]) => {
+    trackKpi("home_pain_quiz_click", { pain_id: item.id });
+    setSeedPrompt(item.prompt);
+    // Rolagem suave até o chat para o usuário ver a resposta do Thor.
+    setTimeout(() => {
+      chatRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 100);
+  };
 
   useEffect(() => {
     document.title = t("home.seo_title");
