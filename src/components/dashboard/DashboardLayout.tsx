@@ -110,6 +110,7 @@ const DashboardLayout = () => {
 
         <Suspense fallback={null}>
           <AssistantHierarchy />
+          <LiveTasksTicker />
         </Suspense>
       </div>
     </FloatingDockProvider>
