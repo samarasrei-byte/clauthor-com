@@ -25,6 +25,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { toast } from "@/hooks/use-toast";
 
 // ─── Mock data ────────────────────────────────────────────────────────────
 const MOCK_EVENTS = [
@@ -54,9 +55,9 @@ const MOCK_INBOX = {
 const NEWS_TOPICS = ["Inteligência Artificial", "Tecnologia", "Negócios", "Marketing", "Programação", "Economia", "Startups"];
 
 const MOCK_NEWS = [
-  { id: "n1", topic: "Inteligência Artificial", title: "Anthropic lança Claude Opus 4.8 com raciocínio multi-passo", summary: "Nova geração melhora análise técnica e reduz alucinações em 40%.", source: "The Verge", time: "há 12 min", image: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?w=400&h=240&fit=crop" },
-  { id: "n2", topic: "Startups", title: "Fintechs brasileiras captam R$ 2,3 bi no trimestre", summary: "Setor lidera aportes no país mesmo em cenário global mais seco.", source: "Brazil Journal", time: "há 1h", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=240&fit=crop" },
-  { id: "n3", topic: "Tecnologia", title: "Apple aposta em chips M5 com foco em IA local", summary: "Nova arquitetura promete rodar modelos de 70B parâmetros no MacBook.", source: "Bloomberg", time: "há 2h", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=240&fit=crop" },
+  { id: "n1", topic: "Inteligência Artificial", title: "Anthropic lança Claude Opus 4.8 com raciocínio multi-passo", summary: "Nova geração melhora análise técnica e reduz alucinações em 40%.", source: "The Verge", time: "há 12 min", image: "https://images.unsplash.com/photo-1677756119517-756a188d2d94?w=400&h=240&fit=crop", url: "https://www.theverge.com/ai-artificial-intelligence" },
+  { id: "n2", topic: "Startups", title: "Fintechs brasileiras captam R$ 2,3 bi no trimestre", summary: "Setor lidera aportes no país mesmo em cenário global mais seco.", source: "Brazil Journal", time: "há 1h", image: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=240&fit=crop", url: "https://braziljournal.com/" },
+  { id: "n3", topic: "Tecnologia", title: "Apple aposta em chips M5 com foco em IA local", summary: "Nova arquitetura promete rodar modelos de 70B parâmetros no MacBook.", source: "Bloomberg", time: "há 2h", image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=240&fit=crop", url: "https://www.bloomberg.com/technology" },
 ];
 
 const INTEGRATIONS = [
@@ -108,52 +109,61 @@ const SectionCard = ({
   </motion.section>
 );
 
-const AgendaCard = () => (
-  <SectionCard
-    icon={CalendarDays}
-    title="Agenda"
-    description="Seus próximos compromissos do dia"
-    action={
-      <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8">
-        Abrir calendário
-        <ArrowRight className="h-3 w-3" />
-      </Button>
-    }
-  >
-    <ul className="space-y-2">
-      {MOCK_EVENTS.map((e) => (
-        <li
-          key={e.id}
-          className="group flex items-center gap-3 p-3 rounded-xl border border-border/30 bg-background/40 hover:bg-background/70 hover:border-border/60 transition-all"
-        >
-          <div className="flex flex-col items-center justify-center w-14 shrink-0">
-            <span className="text-sm font-semibold tabular-nums">{e.time}</span>
-            <span className="text-[10px] text-muted-foreground">{e.duration}</span>
-          </div>
-          <div className="w-px self-stretch bg-border/40" />
-          <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full shrink-0" style={{ background: e.color }} />
-              <p className="text-sm font-medium truncate">{e.title}</p>
+const AgendaCard = () => {
+  const openCalendar = () => window.open("https://calendar.google.com", "_blank", "noopener,noreferrer");
+  return (
+    <SectionCard
+      icon={CalendarDays}
+      title="Agenda"
+      description="Seus próximos compromissos do dia"
+      action={
+        <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8" onClick={openCalendar}>
+          Abrir calendário
+          <ArrowRight className="h-3 w-3" />
+        </Button>
+      }
+    >
+      <ul className="space-y-2">
+        {MOCK_EVENTS.map((e) => (
+          <li
+            key={e.id}
+            onClick={() =>
+              toast({
+                title: e.title,
+                description: `${e.time} · ${e.duration}${e.location ? ` · ${e.location}` : ""}`,
+              })
+            }
+            className="group flex items-center gap-3 p-3 rounded-xl border border-border/30 bg-background/40 hover:bg-background/70 hover:border-border/60 transition-all cursor-pointer"
+          >
+            <div className="flex flex-col items-center justify-center w-14 shrink-0">
+              <span className="text-sm font-semibold tabular-nums">{e.time}</span>
+              <span className="text-[10px] text-muted-foreground">{e.duration}</span>
             </div>
-            <div className="flex items-center gap-3 mt-1 text-[11px] text-muted-foreground">
-              <span className="inline-flex items-center gap-1">
-                <Badge variant="outline" className="h-4 px-1.5 text-[9px] font-medium border-border/40">{e.category}</Badge>
-              </span>
-              {e.location && (
-                <span className="inline-flex items-center gap-1 truncate">
-                  <MapPin className="h-3 w-3" strokeWidth={1.5} />
-                  <span className="truncate">{e.location}</span>
+            <div className="w-px self-stretch bg-border/40" />
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full shrink-0" style={{ background: e.color }} />
+                <p className="text-sm font-medium truncate">{e.title}</p>
+              </div>
+              <div className="flex items-center gap-3 mt-1 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1">
+                  <Badge variant="outline" className="h-4 px-1.5 text-[9px] font-medium border-border/40">{e.category}</Badge>
                 </span>
-              )}
+                {e.location && (
+                  <span className="inline-flex items-center gap-1 truncate">
+                    <MapPin className="h-3 w-3" strokeWidth={1.5} />
+                    <span className="truncate">{e.location}</span>
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-          <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors" />
-        </li>
-      ))}
-    </ul>
-  </SectionCard>
-);
+            <ChevronRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-muted-foreground/80 transition-colors" />
+          </li>
+        ))}
+      </ul>
+    </SectionCard>
+  );
+};
 
 const priorityStyle = (p: "Alta" | "Média" | "Baixa") =>
   p === "Alta"
@@ -164,13 +174,39 @@ const priorityStyle = (p: "Alta" | "Média" | "Baixa") =>
 
 const InboxCard = () => {
   const [lowOpen, setLowOpen] = useState(false);
+  const [actionItems, setActionItems] = useState(MOCK_INBOX.action);
+  const [infoItems, setInfoItems] = useState(MOCK_INBOX.info);
+  const [lowItems, setLowItems] = useState(MOCK_INBOX.low);
+
+  const handleReply = (id: string, subject: string) => {
+    setActionItems((prev) => prev.filter((m) => m.id !== id));
+    toast({ title: "Resposta enviada", description: `"${subject}" marcado como respondido.` });
+  };
+
+  const handleClear = () => {
+    const total = actionItems.length + infoItems.length + lowItems.length;
+    if (total === 0) {
+      toast({ title: "Caixa já está vazia" });
+      return;
+    }
+    setActionItems([]);
+    setInfoItems([]);
+    setLowItems([]);
+    toast({ title: "Caixa limpa", description: `${total} e-mails arquivados.` });
+  };
+
   return (
     <SectionCard
       icon={Inbox}
       title="Caixa de Entrada Inteligente"
       description="Organizada automaticamente pela IA"
       action={
-        <Button variant="ghost" size="sm" className="gap-1.5 text-xs h-8 text-muted-foreground">
+        <Button
+          variant="ghost"
+          size="sm"
+          className="gap-1.5 text-xs h-8 text-muted-foreground"
+          onClick={handleClear}
+        >
           Limpar caixa
         </Button>
       }
@@ -180,86 +216,121 @@ const InboxCard = () => {
         <div>
           <div className="flex items-center justify-between mb-2">
             <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-destructive/80">Ação necessária</span>
-            <Badge variant="outline" className="h-4 px-1.5 text-[9px] border-destructive/30 text-destructive">{MOCK_INBOX.action.length}</Badge>
+            <Badge variant="outline" className="h-4 px-1.5 text-[9px] border-destructive/30 text-destructive">{actionItems.length}</Badge>
           </div>
-          <ul className="space-y-1.5">
-            {MOCK_INBOX.action.map((m) => (
-              <li key={m.id} className="group flex items-center gap-3 p-2.5 rounded-lg border border-border/30 bg-background/40 hover:border-destructive/30 transition-colors">
-                <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" strokeWidth={1.5} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-medium truncate">{m.subject}</p>
-                  <p className="text-[10px] text-muted-foreground truncate">{m.from}</p>
-                </div>
-                <span className={cn("text-[9px] font-medium px-1.5 py-0.5 rounded border", priorityStyle(m.priority))}>{m.priority}</span>
-                <Button size="sm" variant="outline" className="h-7 text-[10px] px-2">Responder</Button>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Informações */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/70">Informações</span>
-            <Badge variant="outline" className="h-4 px-1.5 text-[9px] border-border/40">{MOCK_INBOX.info.length}</Badge>
-          </div>
-          <ul className="space-y-1.5">
-            {MOCK_INBOX.info.map((m) => (
-              <li key={m.id} className="flex items-center gap-3 p-2.5 rounded-lg border border-border/20 bg-background/30 hover:bg-background/50 transition-colors">
-                <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" strokeWidth={1.5} />
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs truncate">{m.subject}</p>
-                  <p className="text-[10px] text-muted-foreground truncate">{m.from}</p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-
-        {/* Baixa prioridade — colapsado */}
-        <div>
-          <button
-            onClick={() => setLowOpen((v) => !v)}
-            className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-muted/20 transition-colors text-left"
-          >
-            <div className="flex items-center gap-2">
-              <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform", !lowOpen && "-rotate-90")} />
-              <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/70">Baixa prioridade</span>
-              <Badge variant="outline" className="h-4 px-1.5 text-[9px] border-border/40">{MOCK_INBOX.low.length}</Badge>
-            </div>
-          </button>
-          {lowOpen && (
-            <ul className="mt-1.5 space-y-1.5">
-              {MOCK_INBOX.low.map((m) => (
-                <li key={m.id} className="flex items-center gap-3 p-2.5 rounded-lg border border-border/15 bg-background/20 opacity-80">
-                  <Mail className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" strokeWidth={1.5} />
+          {actionItems.length === 0 ? (
+            <p className="text-[11px] text-muted-foreground py-3 text-center">Nenhum e-mail pendente 🎉</p>
+          ) : (
+            <ul className="space-y-1.5">
+              {actionItems.map((m) => (
+                <li key={m.id} className="group flex items-center gap-3 p-2.5 rounded-lg border border-border/30 bg-background/40 hover:border-destructive/30 transition-colors">
+                  <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" strokeWidth={1.5} />
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs text-muted-foreground truncate">{m.subject}</p>
-                    <p className="text-[10px] text-muted-foreground/70 truncate">{m.from}</p>
+                    <p className="text-xs font-medium truncate">{m.subject}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">{m.from}</p>
                   </div>
+                  <span className={cn("text-[9px] font-medium px-1.5 py-0.5 rounded border", priorityStyle(m.priority))}>{m.priority}</span>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-7 text-[10px] px-2"
+                    onClick={() => handleReply(m.id, m.subject)}
+                  >
+                    Responder
+                  </Button>
                 </li>
               ))}
             </ul>
           )}
         </div>
+
+        {/* Informações */}
+        {infoItems.length > 0 && (
+          <div>
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/70">Informações</span>
+              <Badge variant="outline" className="h-4 px-1.5 text-[9px] border-border/40">{infoItems.length}</Badge>
+            </div>
+            <ul className="space-y-1.5">
+              {infoItems.map((m) => (
+                <li
+                  key={m.id}
+                  onClick={() => toast({ title: m.subject, description: `De: ${m.from}` })}
+                  className="flex items-center gap-3 p-2.5 rounded-lg border border-border/20 bg-background/30 hover:bg-background/50 transition-colors cursor-pointer"
+                >
+                  <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" strokeWidth={1.5} />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs truncate">{m.subject}</p>
+                    <p className="text-[10px] text-muted-foreground truncate">{m.from}</p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Baixa prioridade — colapsado */}
+        {lowItems.length > 0 && (
+          <div>
+            <button
+              onClick={() => setLowOpen((v) => !v)}
+              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-muted/20 transition-colors text-left"
+            >
+              <div className="flex items-center gap-2">
+                <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform", !lowOpen && "-rotate-90")} />
+                <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/70">Baixa prioridade</span>
+                <Badge variant="outline" className="h-4 px-1.5 text-[9px] border-border/40">{lowItems.length}</Badge>
+              </div>
+            </button>
+            {lowOpen && (
+              <ul className="mt-1.5 space-y-1.5">
+                {lowItems.map((m) => (
+                  <li
+                    key={m.id}
+                    onClick={() => toast({ title: m.subject, description: `De: ${m.from}` })}
+                    className="flex items-center gap-3 p-2.5 rounded-lg border border-border/15 bg-background/20 opacity-80 hover:opacity-100 cursor-pointer transition-opacity"
+                  >
+                    <Mail className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" strokeWidth={1.5} />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs text-muted-foreground truncate">{m.subject}</p>
+                      <p className="text-[10px] text-muted-foreground/70 truncate">{m.from}</p>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        )}
       </div>
     </SectionCard>
   );
 };
 
-const NewsCard = () => {
+const NewsCard = ({ onNavigate }: { onNavigate?: (id: string) => void }) => {
   const [activeTopic, setActiveTopic] = useState<string>("Todos");
   const items = useMemo(
     () => (activeTopic === "Todos" ? MOCK_NEWS : MOCK_NEWS.filter((n) => n.topic === activeTopic)),
     [activeTopic]
   );
+  const openInterests = () => {
+    if (onNavigate) {
+      onNavigate("settings");
+    } else {
+      toast({
+        title: "Personalize seus interesses",
+        description: "Selecione tópicos usando os filtros acima para refinar suas notícias.",
+      });
+    }
+  };
+  const openNews = (n: (typeof MOCK_NEWS)[number]) =>
+    window.open(n.url, "_blank", "noopener,noreferrer");
   return (
     <SectionCard
       icon={Newspaper}
       title="Notícias"
       description="Selecionadas com base nos seus interesses"
       action={
-        <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8">
+        <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8" onClick={openInterests}>
           <Settings className="h-3 w-3" />
           Interesses
         </Button>
@@ -289,7 +360,11 @@ const NewsCard = () => {
           </p>
         )}
         {items.map((n) => (
-          <article key={n.id} className="group rounded-xl border border-border/30 bg-background/40 overflow-hidden hover:border-border/60 hover:-translate-y-0.5 transition-all">
+          <article
+            key={n.id}
+            onClick={() => openNews(n)}
+            className="group rounded-xl border border-border/30 bg-background/40 overflow-hidden hover:border-border/60 hover:-translate-y-0.5 transition-all cursor-pointer"
+          >
             <div className="aspect-[16/9] overflow-hidden bg-muted/30">
               <img
                 src={n.image}
@@ -307,9 +382,9 @@ const NewsCard = () => {
               <p className="text-[11px] text-muted-foreground line-clamp-2 mb-2">{n.summary}</p>
               <div className="flex items-center justify-between">
                 <span className="text-[10px] text-muted-foreground/80">{n.source}</span>
-                <button className="text-[10px] font-medium text-primary inline-flex items-center gap-1 hover:gap-1.5 transition-all">
+                <span className="text-[10px] font-medium text-primary inline-flex items-center gap-1 group-hover:gap-1.5 transition-all">
                   Ler notícia <ExternalLink className="h-3 w-3" />
-                </button>
+                </span>
               </div>
             </div>
           </article>
@@ -319,7 +394,7 @@ const NewsCard = () => {
   );
 };
 
-const DailySummaryCard = () => {
+const DailySummaryCard = ({ onRefresh, refreshing }: { onRefresh?: () => void; refreshing?: boolean }) => {
   const priorities = [
     "Assinar contrato Ironberg antes das 12h",
     "Revisar proposta Acme com Marina",
@@ -332,8 +407,14 @@ const DailySummaryCard = () => {
       description="Gerado automaticamente pela IA"
       className="border-primary/25 bg-gradient-to-br from-primary/[0.06] to-transparent"
       action={
-        <Button variant="outline" size="sm" className="gap-1.5 text-xs h-8 border-primary/30 text-primary hover:bg-primary/10">
-          <RefreshCw className="h-3 w-3" />
+        <Button
+          variant="outline"
+          size="sm"
+          className="gap-1.5 text-xs h-8 border-primary/30 text-primary hover:bg-primary/10"
+          onClick={onRefresh}
+          disabled={refreshing}
+        >
+          <RefreshCw className={cn("h-3 w-3", refreshing && "animate-spin")} />
           Atualizar
         </Button>
       }
@@ -419,7 +500,11 @@ const IntegrationsCard = ({ onNavigate }: { onNavigate?: (id: string) => void })
         const meta = statusMeta[it.status];
         const Icon = meta.icon;
         return (
-          <li key={it.id} className="flex items-center gap-3 p-3 rounded-xl border border-border/30 bg-background/40 hover:border-border/60 transition-colors">
+          <li
+            key={it.id}
+            onClick={() => onNavigate?.("integrations")}
+            className="flex items-center gap-3 p-3 rounded-xl border border-border/30 bg-background/40 hover:border-border/60 transition-colors cursor-pointer"
+          >
             <div className="w-8 h-8 rounded-lg bg-muted/30 flex items-center justify-center shrink-0">
               <Plug className="h-3.5 w-3.5 text-muted-foreground" strokeWidth={1.5} />
             </div>
@@ -487,7 +572,13 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
             <RefreshCw className={cn("h-3.5 w-3.5", refreshing && "animate-spin")} />
             Atualizar
           </Button>
-          <Button variant="outline" size="icon" className="h-8 w-8" aria-label="Configurações">
+          <Button
+            variant="outline"
+            size="icon"
+            className="h-8 w-8"
+            aria-label="Configurações"
+            onClick={() => onNavigate?.("settings")}
+          >
             <Settings className="h-3.5 w-3.5" />
           </Button>
         </div>
@@ -503,7 +594,7 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
       ) : (
         <>
           {/* Daily summary — hero */}
-          <DailySummaryCard />
+          <DailySummaryCard onRefresh={handleRefresh} refreshing={refreshing} />
 
           {/* Grid: Agenda + Inbox */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -512,7 +603,7 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
           </div>
 
           {/* News full width */}
-          <NewsCard />
+          <NewsCard onNavigate={onNavigate} />
 
           {/* Integrations */}
           <IntegrationsCard onNavigate={onNavigate} />
