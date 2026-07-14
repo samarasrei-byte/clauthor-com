@@ -1,20 +1,18 @@
 /**
- * /squads · página de squads verticais (produto de entrada para PME).
- * Cada squad = 3–7 agentes especializados em 1 função de negócio.
- * Preços praticados no tier maior (Growth) — deixa espaço para Starter/Pro
- * em cada landing dedicada.
- * Puramente frontend, identidade Clauthor via tokens semânticos.
+ * /squads · vitrine de todos os squads verticais.
+ * Cada card leva para /squads/:slug (ou rota dedicada, ex.: /reputacao-ia).
+ * Fonte única: src/data/squads.ts
  */
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import {
-  Shield, MessageSquare, Target, Wallet, PenSquare,
-  ArrowRight, CheckCircle2, Sparkles, Zap, Users, TrendingUp,
+  ArrowRight, CheckCircle2, Sparkles, Zap, Users, TrendingUp, Flame,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Footer from "@/components/Footer";
 import SEO from "@/components/SEO";
+import { SQUADS, type Squad } from "@/data/squads";
 
 const fadeUp = {
   initial: { opacity: 0, y: 24 },
@@ -23,108 +21,20 @@ const fadeUp = {
   transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] as const },
 };
 
-type Squad = {
-  id: string;
-  icon: typeof Shield;
-  name: string;
-  tagline: string;
-  price: number;
-  agents: number;
-  features: string[];
-  href: string;
-  featured?: boolean;
+const demandBadge: Record<NonNullable<Squad["demand"]>, { label: string; className: string }> = {
+  TOP: { label: "Mais procurado", className: "bg-primary text-primary-foreground" },
+  ALTA: { label: "Alta demanda", className: "bg-foreground/90 text-background" },
+  NOVA: { label: "Novo", className: "bg-card border border-primary/40 text-primary" },
 };
 
-const SQUADS: Squad[] = [
-  {
-    id: "reputacao",
-    icon: Shield,
-    name: "Reputação IA",
-    tagline: "Proteja sua marca 24h por dia. IA monitora e responde avaliações no Google, Reclame Aqui, Instagram, Facebook e LinkedIn.",
-    price: 697,
-    agents: 7,
-    features: [
-      "Google Meu Negócio + Reclame Aqui",
-      "Instagram, Facebook e LinkedIn",
-      "Detecção de crises em tempo real",
-      "Análise de sentimento + BI",
-      "Painel unificado de menções",
-    ],
-    href: "/reputacao-ia",
-    featured: true,
-  },
-  {
-    id: "atendimento",
-    icon: MessageSquare,
-    name: "Atendimento IA 24h",
-    tagline: "Time de IA que responde clientes no WhatsApp, Instagram DM e chat do site — sem escala humana, sem cliente esperando.",
-    price: 797,
-    agents: 5,
-    features: [
-      "WhatsApp Business + Instagram DM",
-      "Chat do site + e-mail",
-      "Roteirização por intenção",
-      "Escalação para humano quando preciso",
-      "Histórico unificado por cliente",
-    ],
-    href: "#",
-  },
-  {
-    id: "sdr",
-    icon: Target,
-    name: "SDR IA (Hunter)",
-    tagline: "Prospecção outbound automatizada no LinkedIn e e-mail. ICP, cadência, follow-up e reunião marcada — sem SDR humano.",
-    price: 997,
-    agents: 6,
-    features: [
-      "Prospecção LinkedIn (multi-conta)",
-      "E-mail cadência 5 toques",
-      "Enriquecimento de lead (Hunter/Apollo)",
-      "Qualificação automática",
-      "Agendamento direto no Calendar",
-    ],
-    href: "#",
-  },
-  {
-    id: "financeiro",
-    icon: Wallet,
-    name: "Financeiro IA",
-    tagline: "Cobrança automatizada, conciliação bancária e follow-up de inadimplentes. Reduza inadimplência sem pisar em cliente.",
-    price: 597,
-    agents: 4,
-    features: [
-      "Cobrança automática (WhatsApp + e-mail)",
-      "Régua de cobrança customizável",
-      "Conciliação bancária",
-      "Emissão de boletos e Pix",
-      "Relatório de inadimplência",
-    ],
-    href: "#",
-  },
-  {
-    id: "conteudo",
-    icon: PenSquare,
-    name: "Conteúdo IA",
-    tagline: "Time completo de marketing de conteúdo: posts sociais, artigos de blog e SEO — no seu tom, na sua frequência.",
-    price: 697,
-    agents: 6,
-    features: [
-      "Instagram + LinkedIn + Facebook",
-      "Blog SEO (2–4 posts/semana)",
-      "Calendário editorial",
-      "Roteiros de vídeo curto",
-      "Aprovação antes de publicar",
-    ],
-    href: "#",
-  },
-];
-
 const Squads = () => {
+  const targetHref = (s: Squad) => s.overrideHref ?? `/squads/${s.slug}`;
+
   return (
     <div className="min-h-dvh bg-background text-foreground antialiased">
       <SEO
         title="Squads IA · Times de Inteligência Artificial prontos para PME | Clauthor"
-        description="Squads verticais da Clauthor: Reputação IA, Atendimento 24h, SDR IA, Financeiro IA e Conteúdo IA. Contrate um time completo de IA a partir de R$ 597/mês."
+        description="Squads verticais: Reputação, Atendimento 24h, SDR, Vendas, Tráfego Pago, Conteúdo, E-commerce, RH, Sucesso do Cliente, Financeiro e Jurídico. A partir de R$ 297/mês."
         path="/squads"
       />
 
@@ -145,7 +55,7 @@ const Squads = () => {
           <motion.div {...fadeUp}>
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/[0.08] px-3 py-1.5 text-xs font-medium text-primary mb-6">
               <Sparkles className="h-3.5 w-3.5" />
-              Squads IA · Times prontos para PME
+              {SQUADS.length} squads · os times mais procurados do mercado
             </div>
             <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05] mb-6">
               Contrate um{" "}
@@ -173,76 +83,70 @@ const Squads = () => {
       <section className="pb-20 px-5">
         <div className="max-w-[1200px] mx-auto">
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {SQUADS.map((squad) => (
-              <motion.div key={squad.id} {...fadeUp}>
-                <Card
-                  className={`relative p-6 h-full rounded-2xl bg-card/60 transition-all flex flex-col ${
-                    squad.featured
-                      ? "border-primary/40 shadow-[0_0_40px_-10px_hsl(var(--primary)/0.35)] hover:border-primary/60"
-                      : "border-border hover:border-primary/30 hover:bg-card"
-                  }`}
-                >
-                  {squad.featured && (
-                    <div className="absolute -top-2.5 left-6 inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground">
-                      <Sparkles className="h-3 w-3" /> Mais vendido
-                    </div>
-                  )}
+            {SQUADS.map((squad) => {
+              const Icon = squad.icon;
+              const demand = squad.demand ? demandBadge[squad.demand] : null;
+              return (
+                <motion.div key={squad.slug} {...fadeUp}>
+                  <Card
+                    className={`relative p-6 h-full rounded-2xl bg-card/60 transition-all flex flex-col ${
+                      squad.featured
+                        ? "border-primary/40 shadow-[0_0_40px_-10px_hsl(var(--primary)/0.35)] hover:border-primary/60"
+                        : "border-border hover:border-primary/30 hover:bg-card"
+                    }`}
+                  >
+                    {demand && (
+                      <div className={`absolute -top-2.5 left-6 inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider ${demand.className}`}>
+                        {squad.demand === "TOP" && <Flame className="h-3 w-3" />}
+                        {demand.label}
+                      </div>
+                    )}
 
-                  <div className="flex items-center justify-between mb-5">
-                    <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
-                      <squad.icon className="h-5 w-5 text-primary" strokeWidth={2} />
-                    </div>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                      <Users className="h-3.5 w-3.5" />
-                      <span>{squad.agents} agentes</span>
-                    </div>
-                  </div>
-
-                  <h3 className="font-display text-xl font-semibold text-foreground mb-2">{squad.name}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-5">{squad.tagline}</p>
-
-                  <ul className="space-y-2 mb-6 flex-1">
-                    {squad.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2 text-sm text-foreground/85">
-                        <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
-                        <span>{f}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="pt-5 border-t border-border">
-                    <div className="flex items-baseline gap-1 mb-4">
-                      <span className="text-xs text-muted-foreground">R$</span>
-                      <span className="font-display text-3xl font-semibold text-foreground">
-                        {squad.price.toLocaleString("pt-BR")}
-                      </span>
-                      <span className="text-sm text-muted-foreground">/mês</span>
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="h-12 w-12 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center">
+                        <Icon className="h-5 w-5 text-primary" strokeWidth={2} />
+                      </div>
+                      <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                        <Users className="h-3.5 w-3.5" />
+                        <span>{squad.agents} agentes</span>
+                      </div>
                     </div>
 
-                    {squad.href.startsWith("/") ? (
-                      <Link to={squad.href} className="block">
-                        <Button className="w-full gap-2 rounded-full glow">
-                          Contratar squad
+                    <div className="text-[10px] font-mono uppercase tracking-widest text-muted-foreground mb-2">
+                      {squad.category}
+                    </div>
+                    <h3 className="font-display text-xl font-semibold text-foreground mb-2">{squad.name}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed mb-5">{squad.tagline}</p>
+
+                    <ul className="space-y-2 mb-6 flex-1">
+                      {squad.features.slice(0, 4).map((f) => (
+                        <li key={f} className="flex items-start gap-2 text-sm text-foreground/85">
+                          <CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" />
+                          <span>{f}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="pt-5 border-t border-border">
+                      <div className="flex items-baseline gap-1 mb-4">
+                        <span className="text-xs text-muted-foreground">a partir de R$</span>
+                        <span className="font-display text-3xl font-semibold text-foreground">
+                          {squad.tiers[0]?.price.toLocaleString("pt-BR") ?? squad.price.toLocaleString("pt-BR")}
+                        </span>
+                        <span className="text-sm text-muted-foreground">/mês</span>
+                      </div>
+
+                      <Link to={targetHref(squad)} className="block">
+                        <Button className={`w-full gap-2 rounded-full ${squad.featured ? "glow" : ""}`} variant={squad.featured ? "default" : "outline"}>
+                          Ver squad
                           <ArrowRight className="h-4 w-4" />
                         </Button>
                       </Link>
-                    ) : (
-                      <a
-                        href="https://www.g8prospect.com.br/agendar/60e4cd8d-5765-4902-a51b-87d5b9f025fe"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="block"
-                      >
-                        <Button variant="outline" className="w-full gap-2 rounded-full border-border hover:bg-card">
-                          Solicitar acesso antecipado
-                          <ArrowRight className="h-4 w-4" />
-                        </Button>
-                      </a>
-                    )}
-                  </div>
-                </Card>
-              </motion.div>
-            ))}
+                    </div>
+                  </Card>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -272,7 +176,7 @@ const Squads = () => {
               </p>
               <ul className="space-y-2 text-sm text-foreground/85">
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> Ativação em minutos, self-serve</li>
-                <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> A partir de R$ 597/mês</li>
+                <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> A partir de R$ 297/mês</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> Escopo vertical (1 função)</li>
                 <li className="flex items-start gap-2"><CheckCircle2 className="h-4 w-4 text-primary shrink-0 mt-0.5" /> Cancelamento livre</li>
               </ul>
