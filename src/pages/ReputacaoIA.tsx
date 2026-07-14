@@ -11,6 +11,7 @@ import {
   Shield, Star, Zap, TrendingUp, Heart, MessageSquare, AlertTriangle,
   BarChart3, Clock, CheckCircle2, ArrowRight, Sparkles, Users, Bell,
   ThumbsUp, Instagram, Facebook, Linkedin, Globe, Search, Radar,
+  Stethoscope, Scale, UtensilsCrossed, Store, Factory, Car, Hotel, Building2, ShoppingBag, Wrench,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
