@@ -106,7 +106,7 @@ export default function AgentsLiveFeed() {
     let mounted = true;
     (async () => {
       const { data } = await supabase
-        .from("execution_steps" as never)
+        .from("execution_steps")
         .select("id, run_id, agent_slug, title, tool_name, step_type, created_at")
         .order("created_at", { ascending: false })
         .limit(20);
