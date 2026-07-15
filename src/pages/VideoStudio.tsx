@@ -130,6 +130,8 @@ export default function VideoStudio() {
   }, [user]);
 
   // Realtime steps for the active generation
+  // Fix: escutar INSERT + UPDATE (status muda de 'processing' -> 'completed')
+  // + deduplicar por id caso o loadSteps inicial e o realtime cheguem simultâneos.
   useEffect(() => {
     if (!activeId) return;
     setSteps([]);
@@ -138,9 +140,18 @@ export default function VideoStudio() {
       .channel(`video-steps-${activeId}-${Math.random().toString(36).slice(2)}`)
       .on(
         "postgres_changes",
-        { event: "INSERT", schema: "public", table: "video_generation_steps", filter: `generation_id=eq.${activeId}` },
+        { event: "*", schema: "public", table: "video_generation_steps", filter: `generation_id=eq.${activeId}` },
         (payload) => {
-          setSteps((prev) => [...prev, payload.new as Step]);
+          const row = (payload.new ?? payload.old) as Step | undefined;
+          if (!row?.id) return;
+          setSteps((prev) => {
+            if (payload.eventType === "DELETE") return prev.filter((s) => s.id !== row.id);
+            const idx = prev.findIndex((s) => s.id === row.id);
+            if (idx === -1) return [...prev, row];
+            const next = [...prev];
+            next[idx] = row;
+            return next;
+          });
         },
       )
       .subscribe();
