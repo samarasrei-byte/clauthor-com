@@ -102,14 +102,14 @@ Deno.serve(async (req) => {
     }
 
     // Check provider credentials
-    const geminiKey = Deno.env.get("GEMINI_API_KEY");
+    const geminiKey = Deno.env.get("GEMINI_API_KEY") ?? Deno.env.get("GOOGLE_API_KEY");
     const replicateKey = Deno.env.get("LOVABLE_CONNECTOR_REPLICATE_API_KEY");
     const lovableKey = Deno.env.get("LOVABLE_API_KEY");
 
     if (body.provider === "veo3" && !geminiKey) {
       return json({
         error: "provider_not_configured",
-        message: "Veo 3 precisa da GEMINI_API_KEY configurada. Peça ao admin para adicioná-la nos secrets.",
+        message: "Veo 3 precisa da chave Google (GEMINI_API_KEY ou GOOGLE_API_KEY) configurada nos secrets.",
         provider: "veo3",
       }, 503);
     }
