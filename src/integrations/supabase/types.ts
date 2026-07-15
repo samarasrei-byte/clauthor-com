@@ -4366,6 +4366,202 @@ export type Database = {
         }
         Relationships: []
       }
+      video_edits: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          error: string | null
+          id: string
+          operation: string
+          output_url: string | null
+          params: Json
+          source_generation_id: string | null
+          status: string
+          storage_path: string | null
+          tenant_id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          operation: string
+          output_url?: string | null
+          params?: Json
+          source_generation_id?: string | null
+          status?: string
+          storage_path?: string | null
+          tenant_id: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          error?: string | null
+          id?: string
+          operation?: string
+          output_url?: string | null
+          params?: Json
+          source_generation_id?: string | null
+          status?: string
+          storage_path?: string | null
+          tenant_id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_edits_source_generation_id_fkey"
+            columns: ["source_generation_id"]
+            isOneToOne: false
+            referencedRelation: "video_generations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_generation_steps: {
+        Row: {
+          created_at: string
+          generation_id: string
+          id: string
+          message: string | null
+          payload: Json | null
+          status: string
+          step_type: string
+        }
+        Insert: {
+          created_at?: string
+          generation_id: string
+          id?: string
+          message?: string | null
+          payload?: Json | null
+          status?: string
+          step_type: string
+        }
+        Update: {
+          created_at?: string
+          generation_id?: string
+          id?: string
+          message?: string | null
+          payload?: Json | null
+          status?: string
+          step_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "video_generation_steps_generation_id_fkey"
+            columns: ["generation_id"]
+            isOneToOne: false
+            referencedRelation: "video_generations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      video_generations: {
+        Row: {
+          aspect_ratio: string
+          completed_at: string | null
+          cost_credits: number | null
+          created_at: string
+          duration_s: number
+          error: string | null
+          id: string
+          input_image_url: string | null
+          metadata: Json | null
+          model: string | null
+          output_url: string | null
+          progress: number
+          prompt: string
+          provider: string
+          provider_job_id: string | null
+          status: string
+          storage_path: string | null
+          tenant_id: string
+          thumbnail_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          aspect_ratio?: string
+          completed_at?: string | null
+          cost_credits?: number | null
+          created_at?: string
+          duration_s?: number
+          error?: string | null
+          id?: string
+          input_image_url?: string | null
+          metadata?: Json | null
+          model?: string | null
+          output_url?: string | null
+          progress?: number
+          prompt: string
+          provider: string
+          provider_job_id?: string | null
+          status?: string
+          storage_path?: string | null
+          tenant_id: string
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          aspect_ratio?: string
+          completed_at?: string | null
+          cost_credits?: number | null
+          created_at?: string
+          duration_s?: number
+          error?: string | null
+          id?: string
+          input_image_url?: string | null
+          metadata?: Json | null
+          model?: string | null
+          output_url?: string | null
+          progress?: number
+          prompt?: string
+          provider?: string
+          provider_job_id?: string | null
+          status?: string
+          storage_path?: string | null
+          tenant_id?: string
+          thumbnail_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      video_plan_quotas: {
+        Row: {
+          allow_lovable: boolean
+          allow_replicate: boolean
+          allow_veo3: boolean
+          created_at: string
+          max_duration_s: number
+          monthly_limit: number
+          plan_type: string
+        }
+        Insert: {
+          allow_lovable?: boolean
+          allow_replicate?: boolean
+          allow_veo3?: boolean
+          created_at?: string
+          max_duration_s?: number
+          monthly_limit?: number
+          plan_type: string
+        }
+        Update: {
+          allow_lovable?: boolean
+          allow_replicate?: boolean
+          allow_veo3?: boolean
+          created_at?: string
+          max_duration_s?: number
+          monthly_limit?: number
+          plan_type?: string
+        }
+        Relationships: []
+      }
       waitlist: {
         Row: {
           company: string | null
@@ -4550,6 +4746,7 @@ export type Database = {
         Args: { _api_key_id: string; _plan: string }
         Returns: Json
       }
+      check_video_quota: { Args: { _user_id: string }; Returns: Json }
       get_benchmark_percentiles: {
         Args: {
           _company_size?: string

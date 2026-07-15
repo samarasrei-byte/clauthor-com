@@ -1,5 +1,5 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
-import { LogOut, Home, Shield, Coins, AlertTriangle, X } from "lucide-react";
+import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard } from "lucide-react";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
@@ -78,6 +78,11 @@ const DashboardLayout = () => {
             <Link to="/">
               <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
                 <Home className="h-4 w-4" />
+              </Button>
+            </Link>
+            <Link to="/video-studio" title="Video Studio">
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
+                <Clapperboard className="h-4 w-4" />
               </Button>
             </Link>
             {isAdmin && (
