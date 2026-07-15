@@ -144,6 +144,30 @@ const ArtDirector = () => {
     setManualPrompt("");
   };
 
+  if (access.loading) {
+    return (
+      <div className="h-full grid place-items-center bg-background">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+  if (!access.hasAccess) {
+    return (
+      <ModulePaywall
+        module="art"
+        moduleLabel="Diretor de Arte"
+        moduleDescription="Duo de agentes — Diretor de Conteúdo refina o briefing e o Artista gera imagens com Lovable AI."
+        requiredDepartments={access.requiredDepartments}
+        benefits={[
+          "Conversa refinada com Diretor de Conteúdo",
+          "Geração de imagens em múltiplos formatos",
+          "Galeria com download em 1 clique",
+          "Prompt manual e prompt sugerido pelo diretor",
+        ]}
+      />
+    );
+  }
+
   return (
     <div className="h-full overflow-y-auto">
       <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-10 py-6 sm:py-10 space-y-6">
