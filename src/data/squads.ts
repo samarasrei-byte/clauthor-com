@@ -13,6 +13,8 @@ import {
   Shield, MessageSquare, Target, Wallet, PenSquare,
   Handshake, Megaphone, ShoppingBag, UserCheck, HeartHandshake, Scale,
   LineChart, Boxes,
+  MessageCircle, Stethoscope, UtensilsCrossed, Home, Calculator,
+  GraduationCap, Scissors, ClipboardList, ShieldCheck, Mic,
   type LucideIcon,
 } from "lucide-react";
 
