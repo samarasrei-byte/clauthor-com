@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useModuleAccess } from "@/hooks/useModuleAccess";
+import ModulePaywall from "@/components/paywall/ModulePaywall";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
