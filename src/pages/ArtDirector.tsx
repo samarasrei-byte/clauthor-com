@@ -191,7 +191,7 @@ export default function ArtDirector() {
     a.href = `data:image/png;base64,${item.b64}`;
     a.download = `clauthor-art-${item.id.slice(0, 8)}.png`;
     a.click();
-    trackKpi("video_share_click", { event: "video_share_click", target: "download" });
+    trackKpi("video_share_click", { target: "download" });
   };
 
   const clearChat = () => {
@@ -726,7 +726,7 @@ function ShareBlock({
   onCopyPrompt: () => void;
 }) {
   const handleMeta = (target: "facebook" | "instagram") => {
-    trackKpi("video_share_click", { event: "video_share_click", target });
+    trackKpi("video_share_click", { target });
     toast.info("Meta em modo Development", {
       description: "OAuth admin será ativado no próximo turno para publicar direto no Facebook e Instagram.",
     });
