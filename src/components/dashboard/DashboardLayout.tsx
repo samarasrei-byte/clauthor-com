@@ -80,6 +80,11 @@ const DashboardLayout = () => {
                 <Home className="h-4 w-4" />
               </Button>
             </Link>
+            <Link to="/video-studio" title="Video Studio">
+              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
+                <Clapperboard className="h-4 w-4" />
+              </Button>
+            </Link>
             {isAdmin && (
               <Link to="/admin">
                 <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-8 w-8">
