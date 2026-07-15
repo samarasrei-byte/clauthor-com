@@ -1,5 +1,5 @@
 import { Outlet, Link, useNavigate } from "react-router-dom";
-import { LogOut, Home, Shield, Coins, AlertTriangle, X } from "lucide-react";
+import { LogOut, Home, Shield, Coins, AlertTriangle, X, Clapperboard } from "lucide-react";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
