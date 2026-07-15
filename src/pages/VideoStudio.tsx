@@ -263,6 +263,31 @@ export default function VideoStudio() {
     toast.success("Status atualizado.");
   }
 
+  // ─── Gate premium: só libera se admin ou contratou departamento compatível ───
+  if (access.loading) {
+    return (
+      <div className="h-full grid place-items-center bg-background">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+  if (!access.hasAccess) {
+    return (
+      <ModulePaywall
+        moduleLabel="Video Studio"
+        moduleDescription="Geração e edição de vídeos com IA — Veo 3, Replicate e Lovable AI direto do dashboard."
+        requiredDepartments={access.requiredDepartments}
+        benefits={[
+          "Vídeos ilimitados dentro da cota do plano",
+          "Timeline ao vivo do processamento",
+          "Biblioteca com signed URLs regeneradas automaticamente",
+          "Aspect ratios 16:9, 9:16 e 1:1 para todas as redes",
+          "Integração direta com os agentes de Marketing e Comercial",
+        ]}
+      />
+    );
+  }
+
   return (
     <>
       <Helmet>
