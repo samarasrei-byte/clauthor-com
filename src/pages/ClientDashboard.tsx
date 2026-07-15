@@ -18,6 +18,7 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import MobileNavSheet from "@/components/dashboard/MobileNavSheet";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import DashboardSectionRenderer from "@/components/dashboard/DashboardSectionRenderer";
+const AgentsLiveFeed = lazy(() => import("@/components/dashboard/AgentsLiveFeed"));
 import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
