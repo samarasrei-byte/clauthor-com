@@ -19,6 +19,8 @@ import {
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useModuleAccess } from "@/hooks/useModuleAccess";
+import ModulePaywall from "@/components/paywall/ModulePaywall";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -78,6 +80,8 @@ export default function VideoStudio() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const access = useModuleAccess("video");
+
 
   const [provider, setProvider] = useState<Provider>("replicate");
   const [prompt, setPrompt] = useState("");
@@ -257,6 +261,31 @@ export default function VideoStudio() {
     await supabase.functions.invoke("video-poll", { body: {} });
     await loadGenerations();
     toast.success("Status atualizado.");
+  }
+
+  // ─── Gate premium: só libera se admin ou contratou departamento compatível ───
+  if (access.loading) {
+    return (
+      <div className="h-full grid place-items-center bg-background">
+        <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+      </div>
+    );
+  }
+  if (!access.hasAccess) {
+    return (
+      <ModulePaywall
+        moduleLabel="Video Studio"
+        moduleDescription="Geração e edição de vídeos com IA — Veo 3, Replicate e Lovable AI direto do dashboard."
+        requiredDepartments={access.requiredDepartments}
+        benefits={[
+          "Vídeos ilimitados dentro da cota do plano",
+          "Timeline ao vivo do processamento",
+          "Biblioteca com signed URLs regeneradas automaticamente",
+          "Aspect ratios 16:9, 9:16 e 1:1 para todas as redes",
+          "Integração direta com os agentes de Marketing e Comercial",
+        ]}
+      />
+    );
   }
 
   return (
