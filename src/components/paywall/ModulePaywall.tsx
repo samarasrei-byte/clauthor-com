@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { Lock, Sparkles, ArrowRight, CheckCircle2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -5,11 +6,13 @@ import { Helmet } from "react-helmet-async";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { DEPARTMENT_PACKAGES } from "@/data/departmentPackages";
+import { trackKpi } from "@/lib/kpiTracker";
 
 interface ModulePaywallProps {
-  moduleLabel: string;             // "Video Studio"
+  module?: string;
+  moduleLabel: string;
   moduleDescription: string;
-  requiredDepartments: string[];   // ids em DEPARTMENT_PACKAGES
+  requiredDepartments: string[];
   benefits?: string[];
 }
 
@@ -18,6 +21,7 @@ interface ModulePaywallProps {
  * sem ter contratado o(s) departamento(s) necessário(s).
  */
 export default function ModulePaywall({
+  module,
   moduleLabel,
   moduleDescription,
   requiredDepartments,
@@ -27,6 +31,23 @@ export default function ModulePaywall({
   const options = requiredDepartments
     .map((id) => DEPARTMENT_PACKAGES.find((d) => d.id === id))
     .filter(Boolean) as (typeof DEPARTMENT_PACKAGES)[number][];
+
+  useEffect(() => {
+    trackKpi("paywall_view", {
+      module,
+      required_departments: requiredDepartments,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [module]);
+
+  const handleHire = (deptId: string) => {
+    trackKpi("paywall_cta_click", {
+      module,
+      cta_department_id: deptId,
+      required_departments: requiredDepartments,
+    });
+    navigate(`/departamento/${deptId}`);
+  };
 
   const formatPrice = (brl: number) =>
     new Intl.NumberFormat("pt-BR", {
@@ -95,7 +116,7 @@ export default function ModulePaywall({
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 + i * 0.05 }}
-                    onClick={() => navigate(`/departamento/${dept.id}`)}
+                    onClick={() => handleHire(dept.id)}
                     className="group text-left rounded-2xl border border-border/50 hover:border-primary/60 bg-card/50 hover:bg-card p-5 transition-all"
                   >
                     <div className="flex items-center gap-4">
