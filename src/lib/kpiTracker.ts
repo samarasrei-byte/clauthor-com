@@ -56,7 +56,8 @@ export type KpiEventName =
   | "thor_onboarding_completed"
   | "thor_onboarding_abandoned"
   | "paywall_view"
-  | "paywall_cta_click";
+  | "paywall_cta_click"
+  | "video_share_click";
 
 
 export interface KpiEventPayload {
@@ -95,7 +96,8 @@ export interface KpiEventPayload {
   signal_kind?: string;
   pain_id?: string;
   step?: number;
-  target?: "panel" | "checkout" | "human";
+  target?: "panel" | "checkout" | "human" | "facebook" | "instagram" | "copy" | "download";
+  generation_id?: string;
   reco_kind?: "departamento" | "squad" | "agente";
   reco_id?: string;
   module?: string;
