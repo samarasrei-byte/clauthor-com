@@ -105,16 +105,16 @@ export default function ModulePaywall({
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold tracking-tight">{dept.name}</h3>
                         <p className="text-xs text-muted-foreground line-clamp-1">
-                          {dept.tagline}
+                          {dept.outcome}
                         </p>
                       </div>
                       <div className="text-right shrink-0">
                         <div className="text-sm font-mono font-semibold">
-                          {formatPrice(dept.monthlyPriceCents)}
+                          {formatPrice(dept.priceMonthly)}
                           <span className="text-muted-foreground/70 text-xs font-normal">/mês</span>
                         </div>
                         <div className="text-[10px] text-muted-foreground">
-                          {dept.agents.length} agentes
+                          {dept.agentSlugs.length} agentes
                         </div>
                       </div>
                       <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all" />
