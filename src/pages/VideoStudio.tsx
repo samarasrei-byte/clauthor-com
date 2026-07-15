@@ -68,10 +68,10 @@ interface Step {
   created_at: string;
 }
 
-const PROVIDER_META: Record<Provider, { label: string; sub: string; icon: string; requiresConfig: boolean }> = {
+const PROVIDER_META: Record<Provider, { label: string; sub: string; icon: string; requiresConfig: boolean; comingSoon?: boolean }> = {
   veo3: { label: "Veo 3", sub: "Google · alta qualidade", icon: "✨", requiresConfig: true },
   replicate: { label: "Replicate", sub: "Multi-modelo · rápido", icon: "⚡", requiresConfig: true },
-  lovable: { label: "Lovable AI", sub: "Gerenciado · em breve", icon: "🎬", requiresConfig: false },
+  lovable: { label: "Lovable AI", sub: "Em breve", icon: "🎬", requiresConfig: false, comingSoon: true },
 };
 
 export default function VideoStudio() {
@@ -152,6 +152,7 @@ export default function VideoStudio() {
 
   const providerAvailable = (p: Provider): boolean => {
     if (!quota) return false;
+    if (PROVIDER_META[p].comingSoon) return false; // hard-disable "coming soon" providers
     if (p === "veo3") return quota.allow_veo3;
     if (p === "replicate") return quota.allow_replicate;
     return quota.allow_lovable;
