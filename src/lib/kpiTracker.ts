@@ -54,7 +54,9 @@ export type KpiEventName =
   | "thor_onboarding_started"
   | "thor_onboarding_step"
   | "thor_onboarding_completed"
-  | "thor_onboarding_abandoned";
+  | "thor_onboarding_abandoned"
+  | "paywall_view"
+  | "paywall_cta_click";
 
 
 export interface KpiEventPayload {
@@ -96,6 +98,9 @@ export interface KpiEventPayload {
   target?: "panel" | "checkout" | "human";
   reco_kind?: "departamento" | "squad" | "agente";
   reco_id?: string;
+  module?: string;
+  required_departments?: string[];
+  cta_department_id?: string;
 }
 
 
