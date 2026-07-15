@@ -18,6 +18,7 @@ import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import MobileNavSheet from "@/components/dashboard/MobileNavSheet";
 import DashboardOverview from "@/components/dashboard/DashboardOverview";
 import DashboardSectionRenderer from "@/components/dashboard/DashboardSectionRenderer";
+const AgentsLiveFeed = lazy(() => import("@/components/dashboard/AgentsLiveFeed"));
 import SettingsBillingContent from "@/components/dashboard/SettingsBillingContent";
 
 import { DashboardTour } from "@/components/dashboard/DashboardTour";
@@ -706,6 +707,11 @@ const ClientDashboard = () => {
               <div className="max-w-[1200px] mx-auto px-4 sm:px-6 py-5 pb-24 lg:pb-6 space-y-5">
                 <DashboardHeader locale={locale} remainingCredits={remainingCredits} credits={credits} />
                 <MobileNavSheet sidebarItems={sidebarItems} activeSection={activeSection} breadcrumbLabel={breadcrumbLabel} onNavigate={handleSidebarNav} />
+
+                <Suspense fallback={null}>
+                  <AgentsLiveFeed />
+                </Suspense>
+
 
 
                 {activeSection === "overview" && showEmptyState && (
