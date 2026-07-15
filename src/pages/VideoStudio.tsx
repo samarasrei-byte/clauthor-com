@@ -274,6 +274,7 @@ export default function VideoStudio() {
   if (!access.hasAccess) {
     return (
       <ModulePaywall
+        module="video"
         moduleLabel="Video Studio"
         moduleDescription="Geração e edição de vídeos com IA — Veo 3, Replicate e Lovable AI direto do dashboard."
         requiredDepartments={access.requiredDepartments}
