@@ -708,6 +708,11 @@ const ClientDashboard = () => {
                 <DashboardHeader locale={locale} remainingCredits={remainingCredits} credits={credits} />
                 <MobileNavSheet sidebarItems={sidebarItems} activeSection={activeSection} breadcrumbLabel={breadcrumbLabel} onNavigate={handleSidebarNav} />
 
+                <Suspense fallback={null}>
+                  <AgentsLiveFeed />
+                </Suspense>
+
+
 
                 {activeSection === "overview" && showEmptyState && (
                   <DashboardEmptyState
