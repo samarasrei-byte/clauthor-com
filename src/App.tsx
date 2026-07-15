@@ -242,6 +242,7 @@ const App = () => (
                   <Route path="/app/agente/:slug" element={<AgentWorkspace />} />
                   <Route path="/settings/api-keys" element={<ApiKeysSettings />} />
                   <Route path="/comercial/funil" element={<ComercialFunil />} />
+                  <Route path="/video-studio" element={<VideoStudio />} />
                 </Route>
 
                 {/* Admin */}
