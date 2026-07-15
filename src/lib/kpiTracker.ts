@@ -98,6 +98,9 @@ export interface KpiEventPayload {
   target?: "panel" | "checkout" | "human";
   reco_kind?: "departamento" | "squad" | "agente";
   reco_id?: string;
+  module?: string;
+  required_departments?: string[];
+  cta_department_id?: string;
 }
 
 
