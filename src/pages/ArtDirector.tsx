@@ -14,6 +14,8 @@ import {
   Palette, Sparkles, Loader2, Send, Wand2, Download, Copy, Image as ImageIcon,
   Trash2, RefreshCw, MessageSquare,
 } from "lucide-react";
+import { useModuleAccess } from "@/hooks/useModuleAccess";
+import ModulePaywall from "@/components/paywall/ModulePaywall";
 
 /**
  * /art-director · Duo de agentes:
