@@ -80,6 +80,8 @@ export default function VideoStudio() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
+  const access = useModuleAccess("video");
+
 
   const [provider, setProvider] = useState<Provider>("replicate");
   const [prompt, setPrompt] = useState("");
