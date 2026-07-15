@@ -177,8 +177,22 @@ export default function VideoStudio() {
       console.error(error);
       return;
     }
-    setGenerations((data ?? []) as VideoGeneration[]);
-    if (data && data.length > 0 && !activeId) setActiveId(data[0].id);
+    // Re-sign URLs on the fly — the stored output_url expires after 24h,
+    // so we always generate a fresh signed URL from storage_path when reading.
+    const rows = (data ?? []) as VideoGeneration[];
+    const resigned = await Promise.all(
+      rows.map(async (g: any) => {
+        if (g.status === "completed" && g.storage_path) {
+          const { data: signed } = await supabase.storage
+            .from("videos")
+            .createSignedUrl(g.storage_path, 60 * 60 * 24);
+          if (signed?.signedUrl) return { ...g, output_url: signed.signedUrl };
+        }
+        return g;
+      }),
+    );
+    setGenerations(resigned as VideoGeneration[]);
+    if (resigned.length > 0 && !activeId) setActiveId(resigned[0].id);
   }
 
   async function loadSteps(genId: string) {
