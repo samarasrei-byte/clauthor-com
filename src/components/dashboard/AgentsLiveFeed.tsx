@@ -106,7 +106,7 @@ export default function AgentsLiveFeed() {
     let mounted = true;
     (async () => {
       const { data } = await supabase
-        .from("execution_steps" as never)
+        .from("execution_steps")
         .select("id, run_id, agent_slug, title, tool_name, step_type, created_at")
         .order("created_at", { ascending: false })
         .limit(20);
@@ -196,7 +196,7 @@ export default function AgentsLiveFeed() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.25 }}
-                  onClick={() => navigate(`/execution-replay/${it.run_id}`)}
+                  onClick={() => navigate(`/replay/${it.run_id}`)}
                   className={cn(
                     "shrink-0 w-[240px] text-left rounded-xl p-2.5 border bg-background/40 hover:bg-background/70 transition-all group",
                     "border-white/[0.06] hover:border-white/[0.15]",

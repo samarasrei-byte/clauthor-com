@@ -68,10 +68,10 @@ interface Step {
   created_at: string;
 }
 
-const PROVIDER_META: Record<Provider, { label: string; sub: string; icon: string; requiresConfig: boolean }> = {
+const PROVIDER_META: Record<Provider, { label: string; sub: string; icon: string; requiresConfig: boolean; comingSoon?: boolean }> = {
   veo3: { label: "Veo 3", sub: "Google · alta qualidade", icon: "✨", requiresConfig: true },
   replicate: { label: "Replicate", sub: "Multi-modelo · rápido", icon: "⚡", requiresConfig: true },
-  lovable: { label: "Lovable AI", sub: "Gerenciado · em breve", icon: "🎬", requiresConfig: false },
+  lovable: { label: "Lovable AI", sub: "Em breve", icon: "🎬", requiresConfig: false, comingSoon: true },
 };
 
 export default function VideoStudio() {
@@ -152,6 +152,7 @@ export default function VideoStudio() {
 
   const providerAvailable = (p: Provider): boolean => {
     if (!quota) return false;
+    if (PROVIDER_META[p].comingSoon) return false; // hard-disable "coming soon" providers
     if (p === "veo3") return quota.allow_veo3;
     if (p === "replicate") return quota.allow_replicate;
     return quota.allow_lovable;
@@ -176,8 +177,22 @@ export default function VideoStudio() {
       console.error(error);
       return;
     }
-    setGenerations((data ?? []) as VideoGeneration[]);
-    if (data && data.length > 0 && !activeId) setActiveId(data[0].id);
+    // Re-sign URLs on the fly — the stored output_url expires after 24h,
+    // so we always generate a fresh signed URL from storage_path when reading.
+    const rows = (data ?? []) as VideoGeneration[];
+    const resigned = await Promise.all(
+      rows.map(async (g: any) => {
+        if (g.status === "completed" && g.storage_path) {
+          const { data: signed } = await supabase.storage
+            .from("videos")
+            .createSignedUrl(g.storage_path, 60 * 60 * 24);
+          if (signed?.signedUrl) return { ...g, output_url: signed.signedUrl };
+        }
+        return g;
+      }),
+    );
+    setGenerations(resigned as VideoGeneration[]);
+    if (resigned.length > 0 && !activeId) setActiveId(resigned[0].id);
   }
 
   async function loadSteps(genId: string) {
