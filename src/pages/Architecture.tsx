@@ -1078,7 +1078,7 @@ const Architecture = () => {
                     { label: "SSL Let's Encrypt instalado no VPS", done: false },
                     { label: "Cloudflare SSL → Full (strict)", done: false },
                     { label: "Templates dos 200 agentes populados", done: true },
-                    { label: "AI Gateway configurado (LOVABLE_API_KEY)", done: true },
+                    { label: "AI Gateway configurado", done: true },
                     { label: "Edge Functions deployadas", done: true },
                     { label: "RLS policies ativas", done: true },
                     { label: "Sistema multi-tenant operacional", done: true },

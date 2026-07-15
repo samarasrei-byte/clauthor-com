@@ -110,7 +110,7 @@ const ClientDashboard = () => {
     if (hireIntent) return;
 
     // Se a pessoa veio do quiz da landing, o Thor continua a mesma linha de
-    // conversa usando o briefing já gerado por Firecrawl + Lovable AI.
+    // conversa usando o briefing já gerado por Firecrawl + Clauthor AI.
     const diag = loadDiagnosis();
     const { briefing, siteSummary } = loadThorBriefing();
 

@@ -123,10 +123,10 @@ export default function AdvocaciaAudit() {
       fixLabel: o.oab_number ? undefined : "Cadastrar OAB",
     });
 
-    // 5. Lovable AI Gateway disponível (test ping)
+    // 5. Clauthor AI Gateway disponível (test ping)
     rows.push({
       id: "ai-gateway",
-      label: "Lovable AI Gateway (Gemini/GPT)",
+      label: "Clauthor AI Gateway (Gemini/GPT)",
       status: "ok",
       detail: "Modelos Gemini 2.5 Flash e GPT-5 disponíveis sem API key adicional.",
     });

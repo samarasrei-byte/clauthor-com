@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 
 /**
  * LiveDemoRunner · hits the public `dev-live-demo` edge function and streams
- * a real multi-agent orchestration narrative (via Lovable AI Gateway).
+ * a real multi-agent orchestration narrative (via Clauthor AI Gateway).
  * No auth. Rate limited by IP at the edge.
  */
 
@@ -274,7 +274,7 @@ export default function LiveDemoRunner() {
         </div>
 
         <div className="text-[10px] font-mono text-foreground/30 uppercase tracking-widest border-t border-white/[0.05] pt-3">
-          demo público · lovable ai gateway · gemini-2.5-flash · sem cadastro
+          demo público · clauthor ai gateway · gemini-2.5-flash · sem cadastro
         </div>
       </div>
     </div>
