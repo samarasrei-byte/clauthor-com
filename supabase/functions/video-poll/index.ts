@@ -41,7 +41,7 @@ Deno.serve(async (req) => {
 });
 
 async function pollOne(supa: SupabaseClient, job: any) {
-  const geminiKey = Deno.env.get("GEMINI_API_KEY");
+  const geminiKey = Deno.env.get("GEMINI_API_KEY") ?? Deno.env.get("GOOGLE_API_KEY");
   const replicateKey = Deno.env.get("LOVABLE_CONNECTOR_REPLICATE_API_KEY");
   const lovableKey = Deno.env.get("LOVABLE_API_KEY");
 
