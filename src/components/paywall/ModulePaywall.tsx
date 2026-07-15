@@ -28,12 +28,12 @@ export default function ModulePaywall({
     .map((id) => DEPARTMENT_PACKAGES.find((d) => d.id === id))
     .filter(Boolean) as (typeof DEPARTMENT_PACKAGES)[number][];
 
-  const formatPrice = (cents: number) =>
+  const formatPrice = (brl: number) =>
     new Intl.NumberFormat("pt-BR", {
       style: "currency",
       currency: "BRL",
       maximumFractionDigits: 0,
-    }).format(cents / 100);
+    }).format(brl);
 
   return (
     <>
