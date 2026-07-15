@@ -96,7 +96,8 @@ export interface KpiEventPayload {
   signal_kind?: string;
   pain_id?: string;
   step?: number;
-  target?: "panel" | "checkout" | "human";
+  target?: "panel" | "checkout" | "human" | "facebook" | "instagram" | "copy" | "download";
+  generation_id?: string;
   reco_kind?: "departamento" | "squad" | "agente";
   reco_id?: string;
   module?: string;
