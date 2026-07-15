@@ -52,6 +52,7 @@ const INITIAL: ChatMsg[] = [{
 }];
 
 const ArtDirector = () => {
+  const access = useModuleAccess("art");
   const [messages, setMessages] = useState<ChatMsg[]>(INITIAL);
   const [input, setInput] = useState("");
   const [gallery, setGallery] = useState<ArtItem[]>([]);
