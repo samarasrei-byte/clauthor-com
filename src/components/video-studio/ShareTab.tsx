@@ -31,7 +31,7 @@ export default function ShareTab({ outputUrl, prompt, generationId }: Props) {
     trackKpi("video_share_click", {
       generation_id: generationId,
       target,
-    } as never);
+    });
 
     if (target === "copy") {
       if (!outputUrl) return;
