@@ -54,7 +54,9 @@ export type KpiEventName =
   | "thor_onboarding_started"
   | "thor_onboarding_step"
   | "thor_onboarding_completed"
-  | "thor_onboarding_abandoned";
+  | "thor_onboarding_abandoned"
+  | "paywall_view"
+  | "paywall_cta_click";
 
 
 export interface KpiEventPayload {
