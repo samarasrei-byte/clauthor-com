@@ -216,7 +216,15 @@ export default function VideoStudio() {
       .select("*")
       .eq("generation_id", genId)
       .order("created_at", { ascending: true });
-    setSteps((data ?? []) as Step[]);
+    // Merge com estado atual — evita perder eventos realtime que chegaram
+    // entre setSteps([]) e a resposta do fetch inicial.
+    setSteps((prev) => {
+      const byId = new Map(prev.map((s) => [s.id, s]));
+      for (const row of (data ?? []) as Step[]) byId.set(row.id, row);
+      return Array.from(byId.values()).sort(
+        (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+      );
+    });
   }
 
   async function handleGenerate() {
