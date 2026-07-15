@@ -45,7 +45,7 @@ const FAQS: FAQ[] = [
     tag: "Risco Técnico",
     icon: AlertTriangle,
     q: "E se a OpenAI mudar os preços ou cortar API? Vocês quebram.",
-    a: "Multi-model gateway desde o dia zero, Gemini, Claude, GPT, Llama via Lovable AI Gateway. Switch de provider é config, não refactor. Margem bruta calculada já assumindo 3x o custo atual de tokens. Além disso, 60% dos workloads rodam em modelos abertos self-hosted no roadmap (Llama 3.3, Qwen). Vendor lock-in zero."
+    a: "Multi-model gateway desde o dia zero, Gemini, Claude, GPT, Llama via Clauthor AI Gateway. Switch de provider é config, não refactor. Margem bruta calculada já assumindo 3x o custo atual de tokens. Além disso, 60% dos workloads rodam em modelos abertos self-hosted no roadmap (Llama 3.3, Qwen). Vendor lock-in zero."
   },
   {
     tag: "Churn",

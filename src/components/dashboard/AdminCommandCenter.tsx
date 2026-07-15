@@ -495,7 +495,7 @@ const AdminCommandCenter = ({
             </CardHeader>
             <CardContent className="space-y-1.5 px-4 pb-3">
               {[
-                { name: "Lovable AI Gateway", status: "online", icon: Brain, color: "text-primary" },
+                { name: "Clauthor AI Gateway", status: "online", icon: Brain, color: "text-primary" },
                 { name: "Database (PostgreSQL)", status: "online", icon: Database, color: "text-emerald-400" },
                 { name: "Edge Functions", status: "online", icon: Cpu, color: "text-cyan-400" },
                 { name: "Stripe (Pagamentos)", status: "pendente", icon: DollarSign, color: "text-amber-400" },

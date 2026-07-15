@@ -156,7 +156,7 @@ const ArtDirector = () => {
       <ModulePaywall
         module="art"
         moduleLabel="Diretor de Arte"
-        moduleDescription="Duo de agentes — Diretor de Conteúdo refina o briefing e o Artista gera imagens com Lovable AI."
+        moduleDescription="Duo de agentes — Diretor de Conteúdo refina o briefing e o Artista gera imagens com Clauthor AI."
         requiredDepartments={access.requiredDepartments}
         benefits={[
           "Conversa refinada com Diretor de Conteúdo",
@@ -177,7 +177,7 @@ const ArtDirector = () => {
             <Palette className="w-5 h-5 text-primary" />
             <Badge variant="outline" className="text-xs">Duo de agentes</Badge>
             <Badge variant="outline" className="text-xs text-emerald-600 border-emerald-500/40">
-              <Sparkles className="w-3 h-3 mr-1" /> Lovable AI
+              <Sparkles className="w-3 h-3 mr-1" /> Clauthor AI
             </Badge>
           </div>
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-semibold tracking-tight">

@@ -73,7 +73,7 @@ interface Step {
 const PROVIDER_META: Record<Provider, { label: string; sub: string; icon: string; requiresConfig: boolean; comingSoon?: boolean }> = {
   veo3: { label: "Veo 3", sub: "Google · alta qualidade", icon: "✨", requiresConfig: true },
   replicate: { label: "Replicate", sub: "Multi-modelo · rápido", icon: "⚡", requiresConfig: true },
-  lovable: { label: "Lovable AI", sub: "Em breve", icon: "🎬", requiresConfig: false, comingSoon: true },
+  lovable: { label: "Clauthor AI", sub: "Em breve", icon: "🎬", requiresConfig: false, comingSoon: true },
 };
 
 export default function VideoStudio() {
@@ -276,7 +276,7 @@ export default function VideoStudio() {
       <ModulePaywall
         module="video"
         moduleLabel="Video Studio"
-        moduleDescription="Geração e edição de vídeos com IA — Veo 3, Replicate e Lovable AI direto do dashboard."
+        moduleDescription="Geração e edição de vídeos com IA — Veo 3, Replicate e Clauthor AI direto do dashboard."
         requiredDepartments={access.requiredDepartments}
         benefits={[
           "Vídeos ilimitados dentro da cota do plano",
@@ -293,7 +293,7 @@ export default function VideoStudio() {
     <>
       <Helmet>
         <title>Video Studio · Command Center</title>
-        <meta name="description" content="Gere e edite vídeos com IA — Veo 3, Replicate e Lovable AI direto do dashboard." />
+        <meta name="description" content="Gere e edite vídeos com IA — Veo 3, Replicate e Clauthor AI direto do dashboard." />
       </Helmet>
 
       <div className="h-full overflow-y-auto bg-background">
