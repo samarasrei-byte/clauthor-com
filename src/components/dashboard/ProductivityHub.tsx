@@ -165,13 +165,6 @@ const AgendaCard = () => {
   );
 };
 
-const priorityStyle = (p: "Alta" | "Média" | "Baixa") =>
-  p === "Alta"
-    ? "bg-destructive/10 text-destructive border-destructive/20"
-    : p === "Média"
-      ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
-      : "bg-muted/40 text-muted-foreground border-border/40";
-
 // InboxCard removido · duplicava o UnifiedInbox em Workspace › Comunicação.
 // A CTA compacta em ProductivityHub agora aponta para o inbox real.
 
