@@ -219,7 +219,9 @@ const App = () => (
                 <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                   <Route path="/dashboard" element={<ClientDashboard />} />
                   <Route path="/primeiro-resultado" element={<ProtectedRoute><FirstOutputFlow /></ProtectedRoute>} />
+                  <Route path="/whatsapp" element={<ProtectedRoute><WhatsAppInbox /></ProtectedRoute>} />
                   <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
+
 
                   <Route path="/agents" element={<Agents />} />
                   <Route path="/create-agent" element={<CreateWorkforce />} />
