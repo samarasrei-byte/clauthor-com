@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { trackKpi } from "@/lib/kpiTracker";
+import { SocialIconsBar } from "@/components/social/SocialIconsBar";
+
 
 interface Props {
   outputUrl: string | null;
