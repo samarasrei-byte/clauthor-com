@@ -14,6 +14,8 @@ import { CheckCircle2, XCircle, Loader2, ExternalLink, Send, Activity, ShieldChe
 import { Sparkles } from "@/components/icons/Sparkles";
 import { Linkedin, Youtube } from "lucide-react";
 import { logger } from "@/lib/logger";
+import { SocialIconsBar } from "@/components/social/SocialIconsBar";
+
 
 /**
  * /settings/social · Conexões Sociais (per-user OAuth)
