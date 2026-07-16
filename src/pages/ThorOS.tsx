@@ -75,7 +75,7 @@ export default function ThorOS() {
     }
     setResult(null);
     setStage("planning");
-    trackKpi("thor_os_orchestrate", { objective_len: objective.length });
+    trackKpi("thor_os_orchestrate", { chars: objective.length });
 
     // Simulação visual de fases enquanto o backend roda sync
     const planTimer = window.setTimeout(() => setStage("delegating"), 2000);
