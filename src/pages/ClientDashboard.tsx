@@ -505,7 +505,7 @@ const ClientDashboard = () => {
 
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
   const CLIENT_ALLOWED = new Set([
-    "overview", "agents", "agent-chat-active",
+    "overview", "agents", "squads", "agent-chat-active",
     "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
     "approvals", "integrations", "system",
   ]);
