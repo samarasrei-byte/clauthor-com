@@ -6,6 +6,7 @@ import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 import QuickOnboarding from "@/components/onboarding/QuickOnboarding";
 import RevolutionaryOnboarding from "@/components/onboarding/RevolutionaryOnboarding";
 import RecommendationStep from "@/components/onboarding/steps/RecommendationStep";
+import CompanyDnaWizard from "@/components/onboarding/CompanyDnaWizard";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import { fromHomeChat, type RecommendationResult } from "@/lib/onboarding-recommendation";
 
@@ -28,8 +29,10 @@ export default function Welcome() {
   const { save } = useGuidedOnboarding();
   const [params] = useSearchParams();
   const explore = params.get("explore") === "1";
-
   const [homeReco, setHomeReco] = useState<HomeReco | null>(null);
+  const [dnaDone, setDnaDone] = useState<boolean>(() => {
+    try { return sessionStorage.getItem("clauthor_dna_done") === "1"; } catch { return false; }
+  });
 
   useEffect(() => {
     if (!isLoading && !user) navigate("/auth", { replace: true });
@@ -92,6 +95,17 @@ export default function Welcome() {
       </Helmet>
       {explore ? (
         <RevolutionaryOnboarding isOpen onSkip={handleSkip} onComplete={() => { /* self-navigates */ }} />
+      ) : !dnaDone ? (
+        <CompanyDnaWizard
+          onDone={() => {
+            try { sessionStorage.setItem("clauthor_dna_done", "1"); } catch { /* ignore */ }
+            setDnaDone(true);
+          }}
+          onSkip={() => {
+            try { sessionStorage.setItem("clauthor_dna_done", "1"); } catch { /* ignore */ }
+            setDnaDone(true);
+          }}
+        />
       ) : hydratedResult ? (
         <main className="min-h-dvh bg-background text-foreground flex flex-col">
           <header className="w-full px-6 md:px-10 pt-8 pb-4 flex items-center justify-between">

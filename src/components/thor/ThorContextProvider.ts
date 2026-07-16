@@ -22,6 +22,16 @@ export interface ThorDashboardContext {
   unreadNotifications: number;
   hasCompanyData: boolean;
   topAgentByExecutions: string | null;
+  companyDna: {
+    scope: "own" | "client";
+    clientLabel: string | null;
+    industry: string | null;
+    coreBusiness: string | null;
+    primaryColor: string | null;
+    secondaryColor: string | null;
+    fonts: string[];
+    painPoints: string[];
+  } | null;
 }
 
 let cachedContext: ThorDashboardContext | null = null;
@@ -40,7 +50,7 @@ export async function fetchThorDashboardContext(userId: string): Promise<ThorDas
 
   try {
     // Parallel fetch all data
-    const [agentsRes, creditsRes, tasksRes, logsRes, tenantRes, notifRes, boardRes] = await Promise.all([
+    const [agentsRes, creditsRes, tasksRes, logsRes, tenantRes, notifRes, boardRes, dnaRes] = await Promise.all([
       supabase.from("agents").select("id, name, status, total_executions").eq("user_id", userId),
       supabase.from("user_credits").select("*").eq("user_id", userId).maybeSingle(),
       supabase.from("agent_tasks").select("id, status, due_date").eq("user_id", userId).in("status", ["open", "in_progress"]).limit(100),
@@ -48,6 +58,7 @@ export async function fetchThorDashboardContext(userId: string): Promise<ThorDas
       supabase.from("tenant_members").select("tenant_id").eq("user_id", userId).limit(1).maybeSingle(),
       supabase.from("notifications").select("id").eq("user_id", userId).eq("is_read", false).limit(50),
       supabase.from("company_board").select("id").eq("user_id", userId).limit(1),
+      supabase.from("company_dna").select("scope, client_label, industry, core_business, brand_colors, fonts, pain_points").eq("user_id", userId).eq("is_active", true).order("updated_at", { ascending: false }).limit(1).maybeSingle(),
     ]);
 
     const agents = agentsRes.data || [];
@@ -90,6 +101,22 @@ export async function fetchThorDashboardContext(userId: string): Promise<ThorDas
       unreadNotifications: notifications.length,
       hasCompanyData: board.length > 0,
       topAgentByExecutions: topAgent?.name || null,
+      companyDna: (() => {
+        const d = dnaRes.data;
+        if (!d) return null;
+        const colors = (d.brand_colors ?? {}) as Record<string, string | null>;
+        const fonts = ((d.fonts ?? []) as Array<{ family?: string }>).map(f => f.family).filter(Boolean) as string[];
+        return {
+          scope: (d.scope as "own" | "client") ?? "own",
+          clientLabel: d.client_label ?? null,
+          industry: d.industry ?? null,
+          coreBusiness: d.core_business ?? null,
+          primaryColor: colors.primary ?? null,
+          secondaryColor: colors.secondary ?? null,
+          fonts,
+          painPoints: d.pain_points ?? [],
+        };
+      })(),
     };
 
     cachedContext = ctx;
@@ -111,6 +138,19 @@ export function formatContextForPrompt(ctx: ThorDashboardContext): string {
     `- Créditos: ${ctx.remainingCredits.toLocaleString()} restantes de ${ctx.totalCredits.toLocaleString()} (${ctx.usagePercent}% usado)`,
     `- Agentes contratados: ${ctx.totalAgents} (${ctx.activeAgents} ativos)`,
   ];
+
+  if (ctx.companyDna) {
+    const d = ctx.companyDna;
+    lines.push("");
+    lines.push("## DNA DA EMPRESA (use no tom, exemplos e criação de conteúdo)");
+    if (d.scope === "client" && d.clientLabel) lines.push(`- Marca: ${d.clientLabel} (cliente atendido)`);
+    if (d.industry) lines.push(`- Setor: ${d.industry}`);
+    if (d.coreBusiness) lines.push(`- Core business: ${d.coreBusiness}`);
+    if (d.primaryColor || d.secondaryColor) lines.push(`- Cores da marca: primária=${d.primaryColor || "-"} · secundária=${d.secondaryColor || "-"}`);
+    if (d.fonts.length) lines.push(`- Tipografia: ${d.fonts.join(", ")}`);
+    if (d.painPoints.length) lines.push(`- Dores principais: ${d.painPoints.join("; ")}`);
+    lines.push("");
+  }
 
   if (ctx.agentNames.length > 0) {
     lines.push(`- Nomes: ${ctx.agentNames.join(", ")}`);
