@@ -116,12 +116,18 @@ Deno.serve(async (req) => {
     const replicateKey = Deno.env.get("LOVABLE_CONNECTOR_REPLICATE_API_KEY");
     const lovableKey = Deno.env.get("LOVABLE_API_KEY");
 
+    // Se pediram Veo3 mas a chave Google não está configurada e Replicate está,
+    // já entramos no fluxo com fallback (Replicate) — sem quebrar a UX.
     if (body.provider === "veo3" && !geminiKey) {
-      return json({
-        error: "provider_not_configured",
-        message: "Veo 3 precisa da chave Google (GEMINI_API_KEY ou GOOGLE_API_KEY) configurada nos secrets.",
-        provider: "veo3",
-      }, 503);
+      if (replicateKey && q.allow_replicate) {
+        body.provider = "replicate";
+      } else {
+        return json({
+          error: "provider_not_configured",
+          message: "Veo 3 precisa da chave Google (GEMINI_API_KEY ou GOOGLE_API_KEY) configurada nos secrets.",
+          provider: "veo3",
+        }, 503);
+      }
     }
     if (body.provider === "replicate" && !replicateKey) {
       return json({
