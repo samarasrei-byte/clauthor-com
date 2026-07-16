@@ -1729,6 +1729,63 @@ export type Database = {
         }
         Relationships: []
       }
+      company_dna: {
+        Row: {
+          brand_colors: Json
+          client_label: string | null
+          core_business: string | null
+          created_at: string
+          favicon_url: string | null
+          fonts: Json
+          id: string
+          industry: string | null
+          is_active: boolean
+          logo_url: string | null
+          pain_points: string[]
+          raw_scrape: Json | null
+          scope: string
+          source_url: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          brand_colors?: Json
+          client_label?: string | null
+          core_business?: string | null
+          created_at?: string
+          favicon_url?: string | null
+          fonts?: Json
+          id?: string
+          industry?: string | null
+          is_active?: boolean
+          logo_url?: string | null
+          pain_points?: string[]
+          raw_scrape?: Json | null
+          scope?: string
+          source_url?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          brand_colors?: Json
+          client_label?: string | null
+          core_business?: string | null
+          created_at?: string
+          favicon_url?: string | null
+          fonts?: Json
+          id?: string
+          industry?: string | null
+          is_active?: boolean
+          logo_url?: string | null
+          pain_points?: string[]
+          raw_scrape?: Json | null
+          scope?: string
+          source_url?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       contracted_departments: {
         Row: {
           agent_count: number
