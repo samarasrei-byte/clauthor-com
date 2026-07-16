@@ -101,6 +101,22 @@ export async function fetchThorDashboardContext(userId: string): Promise<ThorDas
       unreadNotifications: notifications.length,
       hasCompanyData: board.length > 0,
       topAgentByExecutions: topAgent?.name || null,
+      companyDna: (() => {
+        const d = dnaRes.data;
+        if (!d) return null;
+        const colors = (d.brand_colors ?? {}) as Record<string, string | null>;
+        const fonts = ((d.fonts ?? []) as Array<{ family?: string }>).map(f => f.family).filter(Boolean) as string[];
+        return {
+          scope: (d.scope as "own" | "client") ?? "own",
+          clientLabel: d.client_label ?? null,
+          industry: d.industry ?? null,
+          coreBusiness: d.core_business ?? null,
+          primaryColor: colors.primary ?? null,
+          secondaryColor: colors.secondary ?? null,
+          fonts,
+          painPoints: d.pain_points ?? [],
+        };
+      })(),
     };
 
     cachedContext = ctx;
