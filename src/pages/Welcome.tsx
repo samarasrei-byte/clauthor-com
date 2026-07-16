@@ -95,6 +95,17 @@ export default function Welcome() {
       </Helmet>
       {explore ? (
         <RevolutionaryOnboarding isOpen onSkip={handleSkip} onComplete={() => { /* self-navigates */ }} />
+      ) : !dnaDone ? (
+        <CompanyDnaWizard
+          onDone={() => {
+            try { sessionStorage.setItem("clauthor_dna_done", "1"); } catch { /* ignore */ }
+            setDnaDone(true);
+          }}
+          onSkip={() => {
+            try { sessionStorage.setItem("clauthor_dna_done", "1"); } catch { /* ignore */ }
+            setDnaDone(true);
+          }}
+        />
       ) : hydratedResult ? (
         <main className="min-h-dvh bg-background text-foreground flex flex-col">
           <header className="w-full px-6 md:px-10 pt-8 pb-4 flex items-center justify-between">
