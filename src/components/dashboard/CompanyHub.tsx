@@ -119,11 +119,11 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
   const limits = planLimits[planType] || planLimits.free;
   const activeAgents = agents.filter(a => a.status === "active").length;
 
-  const stats = [
-    { label: "Agentes Ativos", value: activeAgents, max: limits.agents === -1 ? "∞" : limits.agents, icon: Bot, color: "text-primary" },
-    { label: "Membros", value: teamMembers.length, max: limits.members, icon: Users, color: "text-accent-emerald" },
-    { label: "Dados da Empresa", value: boardCount, max: null, icon: BookOpen, color: "text-accent-amber" },
-    { label: "Credenciais", value: credentialCount, max: null, icon: Shield, color: "text-accent-violet" },
+  const stats: import("./KpiStrip").KpiItem[] = [
+    { label: "Agentes Ativos", value: activeAgents, max: limits.agents === -1 ? "∞" : limits.agents, icon: Bot, accent: "primary" },
+    { label: "Membros", value: teamMembers.length, max: limits.members, icon: Users, accent: "emerald" },
+    { label: "Dados da Empresa", value: boardCount, icon: BookOpen, accent: "amber" },
+    { label: "Credenciais", value: credentialCount, icon: Shield, accent: "violet" },
   ];
 
   return (
