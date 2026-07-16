@@ -50,7 +50,7 @@ export async function fetchThorDashboardContext(userId: string): Promise<ThorDas
 
   try {
     // Parallel fetch all data
-    const [agentsRes, creditsRes, tasksRes, logsRes, tenantRes, notifRes, boardRes] = await Promise.all([
+    const [agentsRes, creditsRes, tasksRes, logsRes, tenantRes, notifRes, boardRes, dnaRes] = await Promise.all([
       supabase.from("agents").select("id, name, status, total_executions").eq("user_id", userId),
       supabase.from("user_credits").select("*").eq("user_id", userId).maybeSingle(),
       supabase.from("agent_tasks").select("id, status, due_date").eq("user_id", userId).in("status", ["open", "in_progress"]).limit(100),
@@ -58,6 +58,7 @@ export async function fetchThorDashboardContext(userId: string): Promise<ThorDas
       supabase.from("tenant_members").select("tenant_id").eq("user_id", userId).limit(1).maybeSingle(),
       supabase.from("notifications").select("id").eq("user_id", userId).eq("is_read", false).limit(50),
       supabase.from("company_board").select("id").eq("user_id", userId).limit(1),
+      supabase.from("company_dna").select("scope, client_label, industry, core_business, brand_colors, fonts, pain_points").eq("user_id", userId).eq("is_active", true).order("updated_at", { ascending: false }).limit(1).maybeSingle(),
     ]);
 
     const agents = agentsRes.data || [];
