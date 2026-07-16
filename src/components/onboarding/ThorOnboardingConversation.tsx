@@ -305,7 +305,8 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
     setFinishing(true);
     const dnaSaved = await persistDna(answers);
     let pendingDeptId: string | null = null;
-    if (confirmed && recommendation?.primary.kind === "department") {
+    const wantsDept = answers.contract_kind === "departamento" || !answers.contract_kind;
+    if (confirmed && wantsDept && recommendation?.primary.kind === "department") {
       pendingDeptId = await createPendingDepartment(
         recommendation.primary.targetId,
         answers.pain ?? null,
