@@ -35,6 +35,7 @@ interface Props {
     dnaSaved: boolean;
     recommendation: RecommendationResult | null;
     pendingDeptId: string | null;
+    contractKind: ContractKind | null;
   }) => void;
   onSkip: () => void;
 }
