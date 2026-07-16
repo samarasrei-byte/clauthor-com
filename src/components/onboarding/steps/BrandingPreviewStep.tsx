@@ -49,7 +49,7 @@ export default function BrandingPreviewStep({ colors, fonts, logo, onColorsChang
     <div className="space-y-8">
       <header className="space-y-3 text-center">
         <p className="type-eyebrow text-muted-foreground">02 · Identidade visual</p>
-        <h1 className="type-display font-serif italic text-4xl md:text-5xl tracking-tight text-foreground">
+        <h1 className="type-display font-display text-4xl md:text-5xl tracking-tight text-foreground">
           Este é o DNA da sua marca.
         </h1>
         <p className="type-body text-muted-foreground max-w-lg mx-auto">

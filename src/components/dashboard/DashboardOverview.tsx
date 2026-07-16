@@ -31,6 +31,7 @@ const LiveActivityFeed = lazy(() => import("./LiveActivityFeed").then(m => ({ de
 const ContractedDepartments = lazy(() => import("./ContractedDepartments"));
 const FirstDeliveryCard = lazy(() => import("./FirstDeliveryCard"));
 const AmbientSignalsPanel = lazy(() => import("./AmbientSignalsPanel"));
+const PendingDepartmentCard = lazy(() => import("./PendingDepartmentCard"));
 
 
 interface Props {
@@ -78,6 +79,9 @@ const DashboardOverview = ({
       <ErrorBoundary>
         <Suspense fallback={<SectionLoader />}>
           <div className="space-y-5">
+            {/* Departamento pendente (do onboarding conversacional) · abre checkout inline */}
+            <PendingDepartmentCard />
+
             {/* Ambient Agents · sinais proativos detectados sem prompt */}
             <AmbientSignalsPanel onNavigate={onSetActiveSection} />
 

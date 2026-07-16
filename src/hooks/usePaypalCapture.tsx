@@ -184,20 +184,41 @@ export function usePaypalCapture() {
                   .filter((v): v is string => !!v);
                 const deptPriceCents = Math.round((d.priceMonthly || 0) * 100);
 
-                await supabase.from("contracted_departments").insert({
-                  user_id: user.id,
-                  department_id: d.id,
-                  department_name: d.name,
-                  monthly_price_cents: deptPriceCents || priceInCents,
-                  currency: subIntent.currency || "BRL",
-                  agent_count: deptAgentIds.length || provisionedAgents.length,
-                  agent_ids: deptAgentIds.length ? deptAgentIds : provisionedAgents,
-                  subscription_id: subIntent.subscription_id,
-                  pain_point: answers.pain || answers.detected_pain || null,
-                  company_snapshot: companySnapshot,
-                  onboarding_snapshot: answers,
-                  status: "active",
-                });
+                // Promote existing pending_payment row if any (from onboarding).
+                const { data: pendingRow } = await supabase
+                  .from("contracted_departments")
+                  .select("id")
+                  .eq("user_id", user.id)
+                  .eq("department_id", d.id)
+                  .eq("status", "pending_payment")
+                  .order("created_at", { ascending: false })
+                  .limit(1)
+                  .maybeSingle();
+
+                if (pendingRow?.id) {
+                  await supabase.from("contracted_departments").update({
+                    status: "active",
+                    subscription_id: subIntent.subscription_id,
+                    monthly_price_cents: deptPriceCents || priceInCents,
+                    agent_count: deptAgentIds.length || provisionedAgents.length,
+                    agent_ids: deptAgentIds.length ? deptAgentIds : provisionedAgents,
+                  }).eq("id", pendingRow.id);
+                } else {
+                  await supabase.from("contracted_departments").insert({
+                    user_id: user.id,
+                    department_id: d.id,
+                    department_name: d.name,
+                    monthly_price_cents: deptPriceCents || priceInCents,
+                    currency: subIntent.currency || "BRL",
+                    agent_count: deptAgentIds.length || provisionedAgents.length,
+                    agent_ids: deptAgentIds.length ? deptAgentIds : provisionedAgents,
+                    subscription_id: subIntent.subscription_id,
+                    pain_point: answers.pain || answers.detected_pain || null,
+                    company_snapshot: companySnapshot,
+                    onboarding_snapshot: answers,
+                    status: "active",
+                  });
+                }
               }
             } catch (e) {
               console.warn("[contracted_departments] insert failed", e);

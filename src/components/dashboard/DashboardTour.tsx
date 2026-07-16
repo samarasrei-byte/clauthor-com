@@ -13,10 +13,12 @@ interface TourStep {
   position: "right" | "bottom";
 }
 
-// Tour reduzido a 2 tooltips leves · recap + checkout já cobrem o onboarding pago.
+// Tour com 4 passos: painel, departamento pendente, Thor, arquivos/aprovações.
 const TOUR_STEPS: TourStep[] = [
-  { target: "nav-overview", title: "Seu painel", description: "Aqui você vê seus agentes, métricas e ações rápidas em um só lugar.", position: "right" },
-  { target: "nav-chat", title: "Fale com o Thor", description: "Converse com o Thor a qualquer momento para ajustar o time ou pedir uma nova execução.", position: "right" },
+  { target: "nav-overview", title: "Seu painel", description: "Aqui você vê agentes, métricas e ações rápidas em um só lugar.", position: "right" },
+  { target: "pending-department", title: "Seu departamento", description: "Este é o time que o Thor montou pra você. Clique em 'Ativar' quando estiver pronto — o pagamento acontece aqui mesmo.", position: "right" },
+  { target: "nav-chat", title: "Fale com o Thor", description: "A qualquer momento converse com o Thor pra ajustar o time ou pedir uma execução.", position: "right" },
+  { target: "nav-approvals", title: "Aprovações e arquivos", description: "Tudo que os agentes produzem aparece aqui para você revisar e aprovar.", position: "right" },
 ];
 
 export function DashboardTour() {
@@ -69,10 +71,24 @@ export function DashboardTour() {
     };
 
     updatePosition();
+    // Auto-skip step if target never mounts (e.g. no pending department card).
+    const skipTimer = setTimeout(() => {
+      const el = document.querySelector(`[data-tour="${step.target}"]`);
+      if (!el) {
+        if (currentStep < TOUR_STEPS.length - 1) {
+          setCurrentStep((prev) => prev + 1);
+        } else {
+          completeTour();
+        }
+      }
+    }, 1200);
+
+    updatePosition();
     const timer = setTimeout(updatePosition, 300); // after sidebar animations
     window.addEventListener("resize", updatePosition);
     return () => {
       clearTimeout(timer);
+      clearTimeout(skipTimer);
       window.removeEventListener("resize", updatePosition);
     };
   }, [currentStep, dismissed, tourCompleted]);
