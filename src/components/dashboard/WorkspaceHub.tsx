@@ -155,11 +155,6 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="ai-live" className="mt-4">
-          <Suspense fallback={<SectionLoader />}>
-            <AIWorkspace onNavigate={onNavigate} />
-          </Suspense>
-        </TabsContent>
       </Tabs>
     </div>
   );
