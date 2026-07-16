@@ -41,6 +41,7 @@ interface Props {
 
 type StepId =
   | "greet"
+  | "contract_kind"
   | "company_name"
   | "site"
   | "industry"
@@ -50,15 +51,19 @@ type StepId =
   | "confirm"
   | "done";
 
+type ContractKind = "squad" | "departamento" | "agente";
+
 interface StepDef {
   id: StepId;
   ask: (ctx: Answers) => string;
   placeholder?: string;
   optional?: boolean;
   parse?: (raw: string) => string;
+  choices?: { value: ContractKind; label: string; hint: string }[];
 }
 
 interface Answers {
+  contract_kind?: ContractKind;
   company_name?: string;
   site?: string;
   industry?: string;
