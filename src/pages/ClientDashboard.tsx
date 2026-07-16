@@ -473,9 +473,18 @@ const ClientDashboard = () => {
     ...rebrandedDeptItems,
     ...rebrandedSoloItems,
 
-    // ─── IA & Voz: assistente global ───
-    { id: "omnix", label: "THOR", icon: Brain, group: zoneAI },
-    { id: "thor-center", label: "Centro do Thor", icon: Sparkles, group: zoneAI },
+    // ─── IA & Voz: assistente global (THOR unificado) ───
+    {
+      id: "omnix",
+      label: "THOR",
+      icon: Brain,
+      group: zoneAI,
+      children: [
+        { id: "omnix", label: "Chat", icon: Brain },
+        { id: "thor-center", label: "Central", icon: Sparkles },
+        { id: "thor-os", label: "OS (Orquestrador)", icon: Sparkles },
+      ],
+    },
 
     // ─── Configuração ───
     { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: zoneConfig },
