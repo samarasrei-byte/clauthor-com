@@ -412,8 +412,26 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
                 Você não paga nada agora · a ativação acontece no painel.
               </p>
             </div>
+          ) : currentStep?.choices ? (
+            <div className="pt-4 border-t border-[hsl(var(--hairline))]">
+              <div className="grid gap-2 sm:grid-cols-3">
+                {currentStep.choices.map((c) => (
+                  <button
+                    key={c.value}
+                    type="button"
+                    disabled={finishing}
+                    onClick={() => commitAnswer(c.value, c.label)}
+                    className="text-left rounded-lg border border-[hsl(var(--hairline))] hover:border-primary/60 hover:bg-primary/5 transition-colors p-3"
+                  >
+                    <div className="text-sm font-medium text-foreground">{c.label}</div>
+                    <div className="type-caption text-muted-foreground mt-0.5">{c.hint}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : (
             <div className="pt-4 border-t border-[hsl(var(--hairline))]">
+
               <div className="flex items-center gap-2">
                 <input
                   ref={inputRef}
