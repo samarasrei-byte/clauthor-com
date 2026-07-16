@@ -217,6 +217,7 @@ const App = () => (
                 {/* Dashboard pages with minimal header + sidebar only */}
                 <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                   <Route path="/dashboard" element={<ClientDashboard />} />
+                  <Route path="/primeiro-resultado" element={<ProtectedRoute><FirstOutputFlow /></ProtectedRoute>} />
                   <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
 
                   <Route path="/agents" element={<Agents />} />
