@@ -74,10 +74,16 @@ const DashboardSectionRenderer = ({
         </Suspense>
       )}
 
+      {activeSection === "approvals" && (
+        <Suspense fallback={<SectionLoader />}>
+          <ApprovalsCenter />
+        </Suspense>
+      )}
+
       {(activeSection === "workspace" || activeSection === "empresa" ||
         activeSection === "inbox" || activeSection === "squads" ||
         activeSection === "kanban" || activeSection === "files" ||
-        activeSection === "approvals" || activeSection === "mission-composer") && (
+        activeSection === "mission-composer") && (
         <Suspense fallback={<SectionLoader />}>
           <WorkspaceHub
             defaultTab={
