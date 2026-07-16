@@ -4246,6 +4246,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ttfo_events: {
+        Row: {
+          created_at: string
+          error: string | null
+          id: string
+          output_preview: string | null
+          prompt: string
+          routed_department: string | null
+          routed_need_type: string | null
+          routed_recommendation: string | null
+          success: boolean
+          tenant_id: string | null
+          ttfa_ms: number | null
+          ttfo_ms: number | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          output_preview?: string | null
+          prompt: string
+          routed_department?: string | null
+          routed_need_type?: string | null
+          routed_recommendation?: string | null
+          success?: boolean
+          tenant_id?: string | null
+          ttfa_ms?: number | null
+          ttfo_ms?: number | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          error?: string | null
+          id?: string
+          output_preview?: string | null
+          prompt?: string
+          routed_department?: string | null
+          routed_need_type?: string | null
+          routed_recommendation?: string | null
+          success?: boolean
+          tenant_id?: string | null
+          ttfa_ms?: number | null
+          ttfo_ms?: number | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_activity_stream: {
         Row: {
           created_at: string
