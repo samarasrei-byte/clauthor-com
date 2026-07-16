@@ -58,6 +58,12 @@ verify_jwt = false
 [functions.whatsapp-webhook]
 verify_jwt = false
 
+[functions.whatsapp-send]
+verify_jwt = true
+
+[functions.whatsapp-configure]
+verify_jwt = true
+
 [functions.company-scanner]
 verify_jwt = false
 
