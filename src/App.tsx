@@ -204,6 +204,7 @@ const App = () => (
                   <Route path="/experience" element={<Experience />} />
                   <Route path="/mesa-redonda" element={<Experience />} />
                   <Route path="/thor" element={<ThorConcierge />} />
+                  <Route path="/thor-os" element={<ProtectedRoute><ThorOS /></ProtectedRoute>} />
                   <Route path="/reputacao-ia" element={<ReputacaoIA />} />
                   <Route path="/reputacao" element={<ReputacaoIA />} />
                   <Route path="/squads" element={<SquadsPage />} />
