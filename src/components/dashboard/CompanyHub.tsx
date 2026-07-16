@@ -182,32 +182,8 @@ const CompanyHub = ({ agents, nameToSlug, onNavigate, onOpenAgent, onSetupCompan
         <TabsContent value="overview" className="mt-4 space-y-6">
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        {stats.map((stat, i) => {
-          const Icon = stat.icon;
-          return (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="glass-card rounded-xl p-4 border border-border/10"
-            >
-              <div className="flex items-center gap-2 mb-2">
-                <Icon className={cn("h-4 w-4", stat.color)} />
-                <span className="text-[10px] text-muted-foreground font-medium">{stat.label}</span>
-              </div>
-              <div className="flex items-end gap-1">
-                <span className="font-display text-2xl font-bold">{stat.value}</span>
-                {stat.max && <span className="text-xs text-muted-foreground mb-0.5">/ {stat.max}</span>}
-              </div>
-              {stat.max && typeof stat.max === "number" && (
-                <Progress value={(stat.value / stat.max) * 100} className="h-1 mt-2" />
-              )}
-            </motion.div>
-          );
-        })}
-      </div>
+      <KpiStrip items={stats} />
+
 
       {/* Credits Overview */}
       {credits && (
