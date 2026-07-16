@@ -329,6 +329,23 @@ serve(async (req) => {
     );
   }
 
+  // Rate limit per token (60 req/min per client)
+  const rlKey = `mcp:${authHeader.slice(7, 47)}`;
+  const rl = checkRateLimit(rlKey, 60, 60_000);
+  if (!rl.allowed) {
+    return new Response(
+      JSON.stringify(rpcError(null, -32002, `Rate limit exceeded, retry in ${rl.retryAfter}s`)),
+      {
+        status: 429,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Retry-After": String(rl.retryAfter ?? 60),
+        },
+      },
+    );
+  }
+
   let body: JsonRpcRequest | JsonRpcRequest[];
   try {
     body = await req.json();
