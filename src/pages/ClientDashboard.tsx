@@ -448,14 +448,24 @@ const ClientDashboard = () => {
 
   // Itens completos (vistos por admin). Cliente vê apenas o subset estável.
   const allSidebarItems: SidebarItem[] = [
-    // ─── Meu trabalho: o que eu faço no dia a dia ───
+    // ─── Meu trabalho: consolidado em 2 entradas ───
+    // Command Center = hub/dashboard. Workspace = tudo que se faz (tarefas, produtividade, inteligência, aprovações).
     { id: "overview",  label: t("dashboard.command_center"), icon: LayoutDashboard, group: zoneWork },
-    { id: "workspace", label: "Workspace", icon: Layers3, badge: pendingTaskCount || undefined, group: zoneWork },
-    { id: "productivity", label: "Central de Produtividade", icon: BriefcaseBusiness, group: zoneWork },
+    {
+      id: "workspace",
+      label: "Workspace",
+      icon: Layers3,
+      badge: pendingTaskCount || undefined,
+      group: zoneWork,
+      children: [
+        { id: "productivity", label: "Produtividade", icon: BriefcaseBusiness },
+        { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3 },
+        { id: "approvals", label: "Central de Aprovações", icon: Sparkles },
+      ],
+    },
     // Chat unificado: sem entrada própria · o Command Center é o hub conversacional,
     // e conversar com um agente específico entra por "Meus Agentes" → agente.
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}`, group: zoneWork }] : []),
-    { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3, group: zoneWork },
 
     // ─── Meu time: agentes e departamentos ───
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: zoneTeam },
