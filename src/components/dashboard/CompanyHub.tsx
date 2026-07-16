@@ -18,6 +18,7 @@ const ContentPipelinePanel = lazy(() => import("@/components/dashboard/ContentPi
 const DeliverablesHub = lazy(() => import("@/components/dashboard/DeliverablesHub"));
 
 import SectionLoader from "@/components/ui/section-loader";
+import KpiStrip from "./KpiStrip";
 
 interface CompanyHubProps {
   agents: any[];
