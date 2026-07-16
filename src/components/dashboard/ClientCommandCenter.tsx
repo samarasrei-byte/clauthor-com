@@ -133,6 +133,29 @@ const ClientCommandCenter = ({
         onNavigateKnowledge={() => onNavigate?.("settings")}
       />
 
+      {/* First-output CTA · o "aha moment" cronometrado */}
+      <motion.button
+        initial={{ opacity: 0, y: -8 }}
+        animate={{ opacity: 1, y: 0 }}
+        onClick={() => window.location.assign("/primeiro-resultado")}
+        className="w-full group relative overflow-hidden rounded-2xl border border-primary/30 bg-gradient-to-r from-primary/10 via-primary/5 to-transparent px-5 py-4 text-left hover:border-primary/50 transition-all"
+      >
+        <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-primary/20 blur-3xl pointer-events-none opacity-60 group-hover:opacity-100 transition-opacity" />
+        <div className="relative flex items-center justify-between gap-4">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="h-10 w-10 rounded-xl bg-primary/15 border border-primary/25 flex items-center justify-center shrink-0">
+              <Sparkles className="h-4 w-4 text-primary" />
+            </div>
+            <div className="min-w-0">
+              <div className="text-[10px] uppercase tracking-widest text-primary/80 font-medium mb-0.5">Novo · Primeiro resultado em &lt; 90s</div>
+              <div className="text-sm font-medium truncate">Peça algo pra sua empresa e veja o primeiro output cronometrado.</div>
+            </div>
+          </div>
+          <ArrowRight className="h-4 w-4 text-primary shrink-0 group-hover:translate-x-0.5 transition-transform" />
+        </div>
+      </motion.button>
+
+
       {/* Status Cards */}
       <KpiStrip
         items={[
