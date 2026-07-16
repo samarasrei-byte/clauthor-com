@@ -29,8 +29,10 @@ export default function Welcome() {
   const { save } = useGuidedOnboarding();
   const [params] = useSearchParams();
   const explore = params.get("explore") === "1";
-
   const [homeReco, setHomeReco] = useState<HomeReco | null>(null);
+  const [dnaDone, setDnaDone] = useState<boolean>(() => {
+    try { return sessionStorage.getItem("clauthor_dna_done") === "1"; } catch { return false; }
+  });
 
   useEffect(() => {
     if (!isLoading && !user) navigate("/auth", { replace: true });
