@@ -78,6 +78,7 @@ const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
 
 const Experience = lazyRetry(() => import("./pages/Experience"));
 const ThorConcierge = lazyRetry(() => import("./pages/ThorConcierge"));
+const ThorOS = lazyRetry(() => import("./pages/ThorOS"));
 const VideoStudio = lazyRetry(() => import("./pages/VideoStudio"));
 const HunterDashboard = lazyRetry(() => import("./pages/HunterDashboard"));
 const HunterLinkedIn = lazyRetry(() => import("./pages/HunterLinkedIn"));
