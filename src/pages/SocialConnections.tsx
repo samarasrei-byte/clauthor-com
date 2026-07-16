@@ -600,6 +600,20 @@ const SocialConnections = () => {
         ))}
       </div>
 
+      {/* ─── Em breve: Pinterest, Threads, WhatsApp Business ─── */}
+      <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="space-y-3">
+        <div className="flex items-center gap-2">
+          <h2 className="text-sm font-semibold text-foreground">Em breve</h2>
+          <Badge variant="outline" className="text-[10px] uppercase tracking-wider">OAuth em desenvolvimento</Badge>
+        </div>
+        <p className="text-xs text-muted-foreground">
+          Estamos preparando as integrações abaixo. A estrutura OAuth já está pronta — só falta ativarmos as credenciais do provedor.
+        </p>
+        <SocialIconsBar filter={["pinterest", "threads", "whatsapp"]} />
+      </motion.div>
+
+
+
       {/* Meta test-publish result panel */}
       {metaTestResult && (
         <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
