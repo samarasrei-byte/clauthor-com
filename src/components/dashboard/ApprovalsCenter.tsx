@@ -524,7 +524,35 @@ const ApprovalsCenter = () => {
         />
       </div>
 
-
+      {/* ── Category filter (alinhado com Workspace) ────────────── */}
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mr-1">Área</span>
+        {([
+          { id: "all", label: "Todas" },
+          { id: "empresa", label: "Empresa" },
+          { id: "comunicacao", label: "Comunicação" },
+          { id: "orquestracao", label: "Orquestração" },
+          { id: "execucao", label: "Execução" },
+        ] as const).map(({ id, label }) => {
+          const active = category === id;
+          const count = categoryCounts[id];
+          return (
+            <button
+              key={id}
+              onClick={() => setCategory(id)}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border transition-colors",
+                active
+                  ? "bg-primary/10 text-primary border-primary/30"
+                  : "bg-muted/20 text-muted-foreground border-border/30 hover:bg-muted/30 hover:text-foreground",
+              )}
+            >
+              {label}
+              <span className={cn("text-[10px] px-1 rounded", active ? "bg-primary/20" : "bg-background/60")}>{count}</span>
+            </button>
+          );
+        })}
+      </div>
 
 
       {/* ── Tabs ────────────────────────────────────────────────── */}
