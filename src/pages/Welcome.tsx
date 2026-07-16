@@ -11,6 +11,13 @@ interface HomeReco {
   kind: "departamento" | "squad" | "agente";
   deptId?: string;
   ts: number;
+  company_name?: string | null;
+  industry?: string | null;
+  size?: string | null;
+  budget?: string | null;
+  main_pain?: string | null;
+  business_summary?: string | null;
+  last_user_message?: string | null;
 }
 
 /**
@@ -31,23 +38,21 @@ export default function Welcome() {
   const { save } = useGuidedOnboarding();
   const [params] = useSearchParams();
   const explore = params.get("explore") === "1";
-  const [homeReco, setHomeReco] = useState<HomeReco | null>(null);
+  const [homeReco, setHomeReco] = useState<HomeReco | null>(() => {
+    if (typeof window === "undefined") return null;
+    try {
+      const raw = sessionStorage.getItem("clauthor_home_recommendation");
+      if (!raw) return null;
+      const parsed = JSON.parse(raw) as HomeReco;
+      if (Date.now() - (parsed.ts ?? 0) < 24 * 60 * 60 * 1000) return parsed;
+    } catch { /* ignore */ }
+    return null;
+  });
   const [fallback, setFallback] = useState<"none" | "quick">("none");
 
   useEffect(() => {
     if (!isLoading && !user) navigate("/auth", { replace: true });
   }, [isLoading, user, navigate]);
-
-  useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem("clauthor_home_recommendation");
-      if (!raw) return;
-      const parsed = JSON.parse(raw) as HomeReco;
-      if (Date.now() - (parsed.ts ?? 0) < 24 * 60 * 60 * 1000) {
-        setHomeReco(parsed);
-      }
-    } catch { /* ignore */ }
-  }, []);
 
   if (isLoading || !user) {
     return (

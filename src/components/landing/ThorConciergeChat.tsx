@@ -399,9 +399,29 @@ export default function ThorConciergeChat({
           trackKpi("thor_guide_section_play", { source, section: `chat_recommended_${tag}` });
           trackKpi("home_recommendation_shown", { source, kind: parsed.reco.kind, dept_id: parsed.reco.deptId ?? null });
           try {
+            const mergedFacts = { ...memoryFacts, ...factPatch };
+            const summaryParts: string[] = [];
+            if (mergedFacts.company_name) summaryParts.push(`Empresa ${mergedFacts.company_name}`);
+            if (mergedFacts.industry) summaryParts.push(`setor ${mergedFacts.industry}`);
+            if (mergedFacts.size) summaryParts.push(`porte ${mergedFacts.size}`);
+            if (mergedFacts.main_pain) summaryParts.push(`dor: ${mergedFacts.main_pain}`);
+            if (mergedFacts.budget) summaryParts.push(`orçamento ${mergedFacts.budget}`);
+            const business_summary = summaryParts.length ? summaryParts.join(" · ") : null;
             sessionStorage.setItem(
               "clauthor_home_recommendation",
-              JSON.stringify({ kind: parsed.reco.kind, deptId: parsed.reco.deptId, ts: Date.now() }),
+              JSON.stringify({
+                kind: parsed.reco.kind,
+                deptId: parsed.reco.deptId,
+                ts: Date.now(),
+                company_name: mergedFacts.company_name ?? null,
+                industry: mergedFacts.industry ?? null,
+                size: mergedFacts.size ?? null,
+                budget: mergedFacts.budget ?? null,
+                main_pain: mergedFacts.main_pain ?? null,
+                business_summary,
+                last_user_message: userMsg.content.slice(0, 500),
+                agents: null,
+              }),
             );
           } catch { /* ignore */ }
         }

@@ -20,6 +20,13 @@ interface HomeReco {
   kind: "departamento" | "squad" | "agente";
   deptId?: string;
   ts: number;
+  company_name?: string | null;
+  industry?: string | null;
+  size?: string | null;
+  budget?: string | null;
+  main_pain?: string | null;
+  business_summary?: string | null;
+  last_user_message?: string | null;
 }
 
 interface Props {
@@ -129,14 +136,28 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
     [homeReco],
   );
 
-  // Kickoff: greeting + first question
+  // Kickoff: greeting + first question (pre-hydrated with any facts from home chat)
   useEffect(() => {
+    const memoryBits: string[] = [];
+    if (homeReco?.company_name) memoryBits.push(`sua empresa é a **${homeReco.company_name}**`);
+    if (homeReco?.industry) memoryBits.push(`vocês atuam com **${homeReco.industry}**`);
+    if (homeReco?.main_pain) memoryBits.push(`a dor principal é **${homeReco.main_pain}**`);
+    const memorySentence = memoryBits.length
+      ? ` Lembro do que você me contou na home: ${memoryBits.join(", ")}. Vou só confirmar rapidinho — se algo mudou, você me corrige.`
+      : "";
     const greeting = recommendation
-      ? `Oi! Sou o Thor. Você já me contou lá na home que precisa de **${recommendation.primary.title.toLowerCase()}** — legal. Antes de destravar seu painel, deixa eu conhecer sua empresa em 6 perguntas rápidas. Isso vai personalizar tudo daqui pra frente.`
-      : "Oi! Sou o Thor, seu copiloto na Clauthor. Antes de montar seu time, deixa eu conhecer sua empresa em 6 perguntas rápidas. Você pode pular qualquer uma que quiser.";
+      ? `Oi! Sou o Thor. Você já me contou lá na home que precisa de **${recommendation.primary.title.toLowerCase()}** — legal.${memorySentence} Antes de destravar seu painel, deixa eu conhecer sua empresa em 6 perguntas rápidas.`
+      : `Oi! Sou o Thor, seu copiloto na Clauthor.${memorySentence} Antes de montar seu time, deixa eu conhecer sua empresa em 6 perguntas rápidas. Você pode pular qualquer uma que quiser.`;
+    // Pre-fill answers with anything we already know
+    const prefill: Answers = {};
+    if (homeReco?.company_name) prefill.company_name = homeReco.company_name;
+    if (homeReco?.industry) prefill.industry = homeReco.industry;
+    if (homeReco?.size) prefill.team_size = homeReco.size;
+    if (homeReco?.main_pain) prefill.pain = homeReco.main_pain;
+    setAnswers(prefill);
     setMessages([
       { id: uid(), role: "assistant", content: greeting },
-      { id: uid(), role: "assistant", content: STEPS[0].ask({}) },
+      { id: uid(), role: "assistant", content: STEPS[0].ask(prefill) },
     ]);
     setStepIdx(0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
