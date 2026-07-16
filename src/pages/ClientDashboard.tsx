@@ -479,8 +479,9 @@ const ClientDashboard = () => {
     // e conversar com um agente específico entra por "Meus Agentes" → agente.
     ...(chatSidebarItem && selectedAgent ? [{ ...chatSidebarItem, id: `agent-chat-active`, label: `· ${selectedAgent.name}`, group: zoneWork }] : []),
 
-    // ─── Meu time: agentes e departamentos ───
+    // ─── Meu time: Agentes → Squads → Departamentos (hierarquia canônica) ───
     { id: "agents", label: t("dashboard.agents_tab"), icon: Bot, badge: agents.length || undefined, group: zoneTeam },
+    { id: "squads", label: t("dashboard.squads", { defaultValue: "Squads" }), icon: Layers3, group: zoneTeam },
     ...rebrandedDeptItems,
     ...rebrandedSoloItems,
 
@@ -504,7 +505,7 @@ const ClientDashboard = () => {
 
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
   const CLIENT_ALLOWED = new Set([
-    "overview", "agents", "agent-chat-active",
+    "overview", "agents", "squads", "agent-chat-active",
     "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
     "approvals", "integrations", "system",
   ]);
