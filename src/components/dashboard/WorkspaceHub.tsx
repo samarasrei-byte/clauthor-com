@@ -16,22 +16,20 @@ import { useState, lazy, Suspense, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Inbox, Layers3, KanbanSquare, FolderOpen, CheckSquare, Workflow, Building2, MessageSquare, Cog, Rocket } from "lucide-react";
+import { Layers3, KanbanSquare, FolderOpen, Workflow, Building2, MessageSquare, Cog, Rocket } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
 
 const UnifiedInbox = lazy(() => import("./UnifiedInbox"));
 const SquadManager = lazy(() => import("./SquadManager"));
 const KanbanBoard = lazy(() => import("./KanbanBoard"));
 const FilesLibrary = lazy(() => import("./FilesLibrary"));
-const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const MissionComposer = lazy(() => import("./MissionComposer"));
 const CompanyHub = lazy(() => import("./CompanyHub"));
 
-// Legacy tab keys → nova tab consolidada. "ai-live"/"ai-workspace" agora vivem em Intelligence › Ao Vivo.
+// Legacy tab keys → nova tab consolidada. Aprovações agora vive na rota dedicada "approvals".
 const LEGACY_TAB_MAP: Record<string, { tab: WorkspaceTab; view?: string }> = {
   empresa: { tab: "empresa" },
-  inbox: { tab: "comunicacao", view: "inbox" },
-  approvals: { tab: "comunicacao", view: "approvals" },
+  inbox: { tab: "comunicacao" },
   squads: { tab: "orquestracao", view: "squads" },
   "mission-composer": { tab: "orquestracao", view: "composer" },
   kanban: { tab: "execucao", view: "kanban" },
@@ -64,9 +62,6 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
   })();
 
   const [tab, setTab] = useState<string>(initial.tab);
-  const [commView, setCommView] = useState<"inbox" | "approvals">(
-    initial.view === "approvals" ? "approvals" : "inbox"
-  );
   const [orchView, setOrchView] = useState<"squads" | "composer">(
     initial.view === "composer" ? "composer" : "squads"
   );
@@ -76,12 +71,12 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
 
   // Persiste view no querystring para deep-linking.
   useEffect(() => {
-    const currentView = tab === "comunicacao" ? commView : tab === "orquestracao" ? orchView : tab === "execucao" ? execView : null;
+    const currentView = tab === "orquestracao" ? orchView : tab === "execucao" ? execView : null;
     const params = new URLSearchParams(searchParams);
     if (currentView) params.set("view", currentView); else params.delete("view");
     setSearchParams(params, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, commView, orchView, execView]);
+  }, [tab, orchView, execView]);
 
   return (
     <div className="space-y-4">
@@ -114,16 +109,8 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
         </TabsContent>
 
         <TabsContent value="comunicacao" className="mt-4 space-y-4">
-          <SubNav
-            value={commView}
-            onValueChange={(v) => v && setCommView(v as "inbox" | "approvals")}
-            items={[
-              { value: "inbox", icon: Inbox, label: "Inbox" },
-              { value: "approvals", icon: CheckSquare, label: "Aprovações" },
-            ]}
-          />
           <Suspense fallback={<SectionLoader />}>
-            {commView === "inbox" ? <UnifiedInbox onOpenChat={onSelectAgent} /> : <ApprovalsCenter />}
+            <UnifiedInbox onOpenChat={onSelectAgent} />
           </Suspense>
         </TabsContent>
 
