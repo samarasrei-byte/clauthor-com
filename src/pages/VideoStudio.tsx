@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet-async";
@@ -9,14 +9,13 @@ import {
   Lock,
   RefreshCw,
   Clapperboard,
-  ChevronDown,
+  Settings2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useModuleAccess } from "@/hooks/useModuleAccess";
 import ModulePaywall from "@/components/paywall/ModulePaywall";
 import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import {
   Select,
@@ -25,13 +24,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import MediaDropzone from "@/components/video-studio/MediaDropzone";
 import VideoStage from "@/components/video-studio/VideoStage";
 import VideoInspector from "@/components/video-studio/VideoInspector";
 import LibraryStrip from "@/components/video-studio/LibraryStrip";
-import type { UploadedMedia } from "@/hooks/useVideoUpload";
+import ThorVideoCopilot from "@/components/video-studio/ThorVideoCopilot";
+import { useVideoCopilot } from "@/hooks/useVideoCopilot";
 
 type Provider = "veo3" | "replicate" | "lovable";
 
@@ -74,11 +78,11 @@ interface Step {
 
 const PROVIDER_META: Record<
   Provider,
-  { label: string; sub: string; Icon: typeof Sparkles; requiresConfig: boolean; comingSoon?: boolean }
+  { label: string; sub: string; Icon: typeof Sparkles; comingSoon?: boolean }
 > = {
-  veo3: { label: "Veo 3", sub: "Google · alta qualidade", Icon: Sparkles, requiresConfig: true },
-  replicate: { label: "Replicate", sub: "Multi-modelo · rápido", Icon: Zap, requiresConfig: true },
-  lovable: { label: "Clauthor AI", sub: "Em breve", Icon: Clapperboard, requiresConfig: false, comingSoon: true },
+  veo3: { label: "Veo 3", sub: "Google · alta qualidade", Icon: Sparkles },
+  replicate: { label: "Replicate", sub: "Multi-modelo · rápido", Icon: Zap },
+  lovable: { label: "Clauthor AI", sub: "Em breve", Icon: Clapperboard, comingSoon: true },
 };
 
 export default function VideoStudio() {
@@ -88,27 +92,22 @@ export default function VideoStudio() {
   const access = useModuleAccess("video");
 
   const [provider, setProvider] = useState<Provider>("veo3");
-  const [prompt, setPrompt] = useState("");
   const [aspect, setAspect] = useState("16:9");
   const [duration, setDuration] = useState(5);
-  const [attachment, setAttachment] = useState<UploadedMedia | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [composerOpen, setComposerOpen] = useState(true);
 
   const [quota, setQuota] = useState<Quota | null>(null);
   const [generations, setGenerations] = useState<VideoGeneration[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [steps, setSteps] = useState<Step[]>([]);
 
-  const promptRef = useRef<HTMLTextAreaElement | null>(null);
+  const copilot = useVideoCopilot();
 
-  // Preencher prompt via ?prompt=
+  // ?prompt= param pre-fills the final prompt (from Marketing agent link, etc)
   useEffect(() => {
     const q = searchParams.get("prompt");
-    if (q && !prompt) {
-      setPrompt(q);
-      setComposerOpen(true);
-      // limpa o param para não repetir em navegações internas
+    if (q) {
+      copilot.setFinalPrompt(q);
       searchParams.delete("prompt");
       setSearchParams(searchParams, { replace: true });
     }
@@ -124,7 +123,7 @@ export default function VideoStudio() {
   useEffect(() => {
     if (!user) return;
     const channel = supabase
-      .channel(`video-gens-${user.id}-${Math.random().toString(36).slice(2)}`)
+      .channel(`video-gens-${user.id}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "video_generations", filter: `user_id=eq.${user.id}` },
@@ -152,7 +151,7 @@ export default function VideoStudio() {
     setSteps([]);
     void loadSteps(activeId);
     const channel = supabase
-      .channel(`video-steps-${activeId}-${Math.random().toString(36).slice(2)}`)
+      .channel(`video-steps-${activeId}`)
       .on(
         "postgres_changes",
         { event: "*", schema: "public", table: "video_generation_steps", filter: `generation_id=eq.${activeId}` },
@@ -190,10 +189,7 @@ export default function VideoStudio() {
 
   async function loadQuota() {
     const { data, error } = await supabase.rpc("check_video_quota", { _user_id: user!.id });
-    if (error) {
-      console.error(error);
-      return;
-    }
+    if (error) return console.error(error);
     setQuota(data as unknown as Quota);
   }
 
@@ -203,10 +199,7 @@ export default function VideoStudio() {
       .select("*")
       .order("created_at", { ascending: false })
       .limit(30);
-    if (error) {
-      console.error(error);
-      return;
-    }
+    if (error) return console.error(error);
     const rows = (data ?? []) as VideoGeneration[];
     const resigned = await Promise.all(
       rows.map(async (g: any) => {
@@ -239,8 +232,9 @@ export default function VideoStudio() {
   }
 
   async function handleGenerate() {
-    if (!prompt.trim() || prompt.trim().length < 3) {
-      toast.error("Descreva a cena com pelo menos 3 caracteres.");
+    const finalPrompt = copilot.finalPrompt?.trim();
+    if (!finalPrompt || finalPrompt.length < 3) {
+      toast.error("Termine a conversa com o Thor para gerar o prompt.");
       return;
     }
     if (!quota) {
@@ -256,9 +250,11 @@ export default function VideoStudio() {
       const { data, error } = await supabase.functions.invoke("video-generate", {
         body: {
           provider,
-          prompt: prompt.trim(),
+          prompt: finalPrompt,
           input_image_url:
-            attachment && attachment.kind === "image" ? attachment.signedUrl : null,
+            copilot.attachment && copilot.attachment.kind === "image"
+              ? copilot.attachment.signedUrl
+              : null,
           aspect_ratio: aspect,
           duration_s: duration,
         },
@@ -275,8 +271,7 @@ export default function VideoStudio() {
       toast.success("Vídeo em produção — acompanhe no Inspector.");
       const genId = (data as any)?.generation?.id;
       if (genId) setActiveId(genId);
-      setPrompt("");
-      setAttachment(null);
+      copilot.reset();
       await loadQuota();
     } catch (e) {
       console.error(e);
@@ -308,11 +303,11 @@ export default function VideoStudio() {
         moduleDescription="Geração e edição de vídeos com IA — Veo 3, Replicate e Clauthor AI direto do dashboard."
         requiredDepartments={access.requiredDepartments}
         benefits={[
+          "Copiloto Thor guia você na criação do prompt ideal",
           "Vídeos ilimitados dentro da cota do plano",
           "Timeline ao vivo do processamento",
           "Biblioteca com signed URLs regeneradas automaticamente",
-          "Aspect ratios 16:9, 9:16 e 1:1 para todas as redes",
-          "Integração direta com os agentes de Marketing e Comercial",
+          "Integração com DNA da empresa (cores/tom da marca)",
         ]}
       />
     );
@@ -326,29 +321,29 @@ export default function VideoStudio() {
         <title>Video Studio · Command Center</title>
         <meta
           name="description"
-          content="Gere e edite vídeos com IA — Veo 3, Replicate e Clauthor AI direto do dashboard."
+          content="Gere vídeos com IA guiado pelo copiloto Thor — Veo 3 e Replicate direto do dashboard."
         />
       </Helmet>
 
       <div className="h-full overflow-y-auto bg-background">
-        {/* Sticky header estilo Apple */}
-        <div className="sticky top-0 z-30 backdrop-blur-xl bg-background/80 border-b border-border/50">
-          <div className="max-w-[1600px] mx-auto px-6 py-4 flex items-center justify-between">
+        {/* Sticky header estilo Notion */}
+        <div className="sticky top-0 z-30 backdrop-blur-xl bg-background/80 border-b border-border/40">
+          <div className="max-w-[1600px] mx-auto px-6 py-3.5 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-foreground/[0.04] flex items-center justify-center">
+              <div className="w-8 h-8 rounded-lg bg-foreground/[0.04] flex items-center justify-center">
                 <Clapperboard strokeWidth={1.5} className="w-4 h-4 text-foreground" />
               </div>
               <div>
-                <h1 className="text-[17px] font-semibold tracking-tight text-foreground leading-none">
+                <h1 className="text-[15px] font-semibold tracking-tight text-foreground leading-none">
                   Video Studio
                 </h1>
                 <p className="text-[11px] text-muted-foreground mt-1">
-                  Direção cinematográfica com agentes de IA
+                  Direção cinematográfica guiada por Thor
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2.5">
               {quota && (
                 <>
                   <Badge variant="outline" className="text-[10px] uppercase tracking-wider font-medium">
@@ -356,10 +351,101 @@ export default function VideoStudio() {
                   </Badge>
                   <div className="text-xs text-muted-foreground hidden sm:block">
                     <span className="font-medium text-foreground">{quota.used}</span>
-                    <span className="opacity-60"> / {quota.monthly_limit} este mês</span>
+                    <span className="opacity-60"> / {quota.monthly_limit}</span>
                   </div>
                 </>
               )}
+
+              {/* Advanced settings popover */}
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button variant="ghost" size="sm" className="h-8 gap-1.5 text-[11px]">
+                    <Settings2 strokeWidth={1.5} className="w-3.5 h-3.5" />
+                    <span className="hidden sm:inline">Configurações</span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-80 p-4 space-y-4">
+                  <div>
+                    <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-2">
+                      Provider
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      {(["veo3", "replicate", "lovable"] as Provider[]).map((p) => {
+                        const meta = PROVIDER_META[p];
+                        const available = providerAvailable(p);
+                        const active = provider === p;
+                        const Icon = meta.Icon;
+                        return (
+                          <button
+                            key={p}
+                            type="button"
+                            onClick={() => available && setProvider(p)}
+                            disabled={!available}
+                            className={cn(
+                              "relative text-left px-2.5 py-2 rounded-lg border transition-all",
+                              active && available
+                                ? "border-primary/60 bg-primary/[0.04] ring-1 ring-primary/20"
+                                : "border-border/60 bg-background/40 hover:border-muted-foreground/40",
+                              !available && "opacity-40 cursor-not-allowed",
+                            )}
+                          >
+                            <div className="flex items-center justify-between">
+                              <Icon strokeWidth={1.5} className="w-3.5 h-3.5 text-foreground" />
+                              {!available && <Lock strokeWidth={1.5} className="w-3 h-3 text-muted-foreground" />}
+                            </div>
+                            <div className="mt-1 text-[11px] font-medium text-foreground">
+                              {meta.label}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2">
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1.5">
+                        Aspect
+                      </div>
+                      <Select value={aspect} onValueChange={setAspect}>
+                        <SelectTrigger className="h-8 text-xs">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="16:9">16:9</SelectItem>
+                          <SelectItem value="9:16">9:16</SelectItem>
+                          <SelectItem value="1:1">1:1</SelectItem>
+                          <SelectItem value="4:3">4:3</SelectItem>
+                          <SelectItem value="21:9">21:9</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div>
+                      <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1.5">
+                        Duração
+                      </div>
+                      <Select value={String(duration)} onValueChange={(v) => setDuration(parseInt(v, 10))}>
+                        <SelectTrigger className="h-8 text-xs">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="5">5s</SelectItem>
+                          <SelectItem value="10" disabled={!!quota && quota.max_duration_s < 10}>
+                            10s {quota && quota.max_duration_s < 10 && "🔒"}
+                          </SelectItem>
+                          <SelectItem value="15" disabled={!!quota && quota.max_duration_s < 15}>
+                            15s {quota && quota.max_duration_s < 15 && "🔒"}
+                          </SelectItem>
+                          <SelectItem value="30" disabled={!!quota && quota.max_duration_s < 30}>
+                            30s {quota && quota.max_duration_s < 30 && "🔒"}
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+
               <Button variant="ghost" size="sm" onClick={handleRefreshPoll} className="h-8 w-8 p-0">
                 <RefreshCw strokeWidth={1.5} className="w-4 h-4" />
               </Button>
@@ -367,146 +453,34 @@ export default function VideoStudio() {
           </div>
         </div>
 
-        <div className="max-w-[1600px] mx-auto p-6 space-y-6">
-          {/* Composer colapsável */}
-          <motion.div
-            initial={false}
-            animate={{ opacity: 1 }}
-            className="rounded-2xl border border-border/60 bg-card/40 backdrop-blur overflow-hidden"
-          >
-            <button
-              type="button"
-              onClick={() => setComposerOpen((v) => !v)}
-              className="w-full flex items-center justify-between px-5 py-3 hover:bg-muted/20 transition-colors"
-            >
-              <div className="flex items-center gap-2">
-                <Sparkles strokeWidth={1.5} className="w-4 h-4 text-primary" />
-                <span className="text-sm font-medium text-foreground">Nova geração</span>
-              </div>
-              <ChevronDown
-                strokeWidth={1.5}
-                className={cn(
-                  "w-4 h-4 text-muted-foreground transition-transform",
-                  composerOpen ? "rotate-180" : "rotate-0",
-                )}
+        <div className="max-w-[1600px] mx-auto p-6">
+          {/* Grid principal 3 colunas: Copiloto | Palco | Inspector */}
+          <div className="grid grid-cols-1 lg:grid-cols-[380px_minmax(0,1fr)_360px] gap-5">
+            {/* Coluna esquerda: Copiloto Thor */}
+            <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.24 }}>
+              <ThorVideoCopilot
+                messages={copilot.messages}
+                step={copilot.step}
+                attachment={copilot.attachment}
+                onAttachmentChange={copilot.setAttachment}
+                thinking={copilot.thinking}
+                finalPrompt={copilot.finalPrompt}
+                onFinalPromptChange={copilot.setFinalPrompt}
+                onSend={copilot.sendUserMessage}
+                onReset={copilot.reset}
+                onGenerate={handleGenerate}
+                canGenerate={!!copilot.finalPrompt && !!quota?.can_generate}
+                submitting={submitting}
               />
-            </button>
+            </motion.div>
 
-            {composerOpen && (
-              <div className="px-5 pb-5 space-y-4 border-t border-border/50 pt-4">
-                {/* Providers */}
-                <div className="grid grid-cols-3 gap-2">
-                  {(["veo3", "replicate", "lovable"] as Provider[]).map((p) => {
-                    const meta = PROVIDER_META[p];
-                    const available = providerAvailable(p);
-                    const active = provider === p;
-                    const Icon = meta.Icon;
-                    return (
-                      <button
-                        key={p}
-                        type="button"
-                        onClick={() => available && setProvider(p)}
-                        disabled={!available}
-                        className={cn(
-                          "relative text-left px-3 py-2.5 rounded-xl border transition-all",
-                          active && available
-                            ? "border-primary/60 bg-primary/[0.04] ring-1 ring-primary/20"
-                            : "border-border/60 bg-background/40 hover:border-muted-foreground/40",
-                          !available && "opacity-40 cursor-not-allowed",
-                        )}
-                      >
-                        <div className="flex items-center justify-between">
-                          <Icon strokeWidth={1.5} className="w-4 h-4 text-foreground" />
-                          {!available && <Lock strokeWidth={1.5} className="w-3 h-3 text-muted-foreground" />}
-                        </div>
-                        <div className="mt-1.5 text-sm font-medium text-foreground">{meta.label}</div>
-                        <div className="text-[10px] text-muted-foreground mt-0.5">{meta.sub}</div>
-                      </button>
-                    );
-                  })}
-                </div>
-
-                {/* Prompt */}
-                <Textarea
-                  ref={promptRef}
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="Um close-up cinematográfico de uma xícara de café fumegante sobre madeira, luz da manhã…"
-                  rows={3}
-                  className="resize-none bg-background/40 border-border/60 focus-visible:ring-primary/30"
-                />
-
-                {/* Grid opções + upload */}
-                <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1.4fr] gap-3">
-                  <Select value={aspect} onValueChange={setAspect}>
-                    <SelectTrigger className="h-9 bg-background/40 border-border/60 text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="16:9">16:9 · landscape</SelectItem>
-                      <SelectItem value="9:16">9:16 · vertical</SelectItem>
-                      <SelectItem value="1:1">1:1 · square</SelectItem>
-                      <SelectItem value="4:3">4:3</SelectItem>
-                      <SelectItem value="21:9">21:9 · cinema</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <Select value={String(duration)} onValueChange={(v) => setDuration(parseInt(v, 10))}>
-                    <SelectTrigger className="h-9 bg-background/40 border-border/60 text-xs">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="5">5 segundos</SelectItem>
-                      <SelectItem value="10" disabled={!!quota && quota.max_duration_s < 10}>
-                        10 segundos {quota && quota.max_duration_s < 10 && "(upgrade)"}
-                      </SelectItem>
-                      <SelectItem value="15" disabled={!!quota && quota.max_duration_s < 15}>
-                        15 segundos {quota && quota.max_duration_s < 15 && "(upgrade)"}
-                      </SelectItem>
-                      <SelectItem value="30" disabled={!!quota && quota.max_duration_s < 30}>
-                        30 segundos {quota && quota.max_duration_s < 30 && "(enterprise)"}
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <MediaDropzone value={attachment} onChange={setAttachment} accept="both" />
-                </div>
-
-                <div className="flex items-center justify-between pt-1">
-                  <div className="text-[11px] text-muted-foreground">
-                    {quota && !quota.can_generate ? (
-                      <span className="text-destructive">Limite mensal atingido.</span>
-                    ) : (
-                      <span>Renderização leva 1–5 minutos.</span>
-                    )}
-                  </div>
-                  <Button
-                    onClick={handleGenerate}
-                    disabled={submitting || !prompt.trim() || !quota?.can_generate}
-                    className="gap-2 h-9 rounded-full px-5"
-                  >
-                    {submitting ? (
-                      <Loader2 strokeWidth={1.5} className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Sparkles strokeWidth={1.5} className="w-4 h-4" />
-                    )}
-                    Gerar vídeo
-                  </Button>
-                </div>
-              </div>
-            )}
-          </motion.div>
-
-          {/* Grid stage + inspector */}
-          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-6">
-            <div className="space-y-6 min-w-0">
-              <VideoStage
-                gen={activeGen}
-                onFocusComposer={() => {
-                  setComposerOpen(true);
-                  setTimeout(() => promptRef.current?.focus(), 150);
-                }}
-              />
+            {/* Coluna central: Palco + biblioteca */}
+            <div className="space-y-5 min-w-0">
+              <VideoStage gen={activeGen} onFocusComposer={() => copilot.reset()} />
               <LibraryStrip generations={generations} activeId={activeId} onSelect={setActiveId} />
             </div>
+
+            {/* Coluna direita: Inspector */}
             <VideoInspector gen={activeGen} steps={steps} providerLabel={providerLabel} />
           </div>
         </div>
