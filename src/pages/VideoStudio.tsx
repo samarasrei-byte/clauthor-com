@@ -35,6 +35,7 @@ import VideoStage from "@/components/video-studio/VideoStage";
 import VideoInspector from "@/components/video-studio/VideoInspector";
 import LibraryStrip from "@/components/video-studio/LibraryStrip";
 import ThorVideoCopilot from "@/components/video-studio/ThorVideoCopilot";
+import CopilotTour from "@/components/video-studio/CopilotTour";
 import { useVideoCopilot } from "@/hooks/useVideoCopilot";
 
 type Provider = "veo3" | "replicate" | "lovable";
@@ -324,6 +325,8 @@ export default function VideoStudio() {
           content="Gere vídeos com IA guiado pelo copiloto Thor — Veo 3 e Replicate direto do dashboard."
         />
       </Helmet>
+
+      <CopilotTour />
 
       <div className="h-full overflow-y-auto bg-background">
         {/* Sticky header estilo Notion */}

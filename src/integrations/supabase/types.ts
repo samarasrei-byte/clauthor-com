@@ -5109,6 +5109,7 @@ export type Database = {
         Args: { _tenant_id: string; _user_id: string }
         Returns: boolean
       }
+      is_video_path_owner: { Args: { _path: string }; Returns: boolean }
       log_api_call: {
         Args: { _api_key_id: string; _endpoint: string; _status: number }
         Returns: undefined
