@@ -452,12 +452,30 @@ const ApprovalsCenter = () => {
     return { total, approved, pending, rate, avgHours, revisions, today, avgConfidence, lowConfCount };
   }, [approvals]);
 
-  const filtered = approvals.filter((a) => a.status === tab);
+  // Categoria funcional (Workspace alinhada) por delivery_type.
+  const CATEGORY_OF: Record<DeliveryType, "empresa" | "comunicacao" | "orquestracao" | "execucao"> = {
+    contract: "empresa", proposal: "empresa", document: "empresa", report: "empresa",
+    email: "comunicacao", post: "comunicacao", stories: "comunicacao",
+    automation: "orquestracao", landing: "orquestracao",
+    creative: "execucao", video: "execucao", article: "execucao", other: "execucao",
+  };
+
+  const byCategory = (a: Approval) =>
+    category === "all" || CATEGORY_OF[a.delivery_type] === category;
+
+  const filtered = approvals.filter((a) => a.status === tab && byCategory(a));
   const counts: Record<Status, number> = {
-    pending: approvals.filter((a) => a.status === "pending").length,
-    in_revision: approvals.filter((a) => a.status === "in_revision").length,
-    approved: approvals.filter((a) => a.status === "approved").length,
-    rejected: approvals.filter((a) => a.status === "rejected").length,
+    pending: approvals.filter((a) => a.status === "pending" && byCategory(a)).length,
+    in_revision: approvals.filter((a) => a.status === "in_revision" && byCategory(a)).length,
+    approved: approvals.filter((a) => a.status === "approved" && byCategory(a)).length,
+    rejected: approvals.filter((a) => a.status === "rejected" && byCategory(a)).length,
+  };
+  const categoryCounts = {
+    all: approvals.filter((a) => a.status === tab).length,
+    empresa: approvals.filter((a) => a.status === tab && CATEGORY_OF[a.delivery_type] === "empresa").length,
+    comunicacao: approvals.filter((a) => a.status === tab && CATEGORY_OF[a.delivery_type] === "comunicacao").length,
+    orquestracao: approvals.filter((a) => a.status === tab && CATEGORY_OF[a.delivery_type] === "orquestracao").length,
+    execucao: approvals.filter((a) => a.status === tab && CATEGORY_OF[a.delivery_type] === "execucao").length,
   };
 
   return (
