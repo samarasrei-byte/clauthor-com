@@ -473,7 +473,7 @@ const ClientDashboard = () => {
     ...rebrandedDeptItems,
     ...rebrandedSoloItems,
 
-    // ─── IA & Voz: assistente global (THOR unificado) ───
+    // ─── IA & Voz: THOR unificado (Chat + Central) ───
     {
       id: "omnix",
       label: "THOR",
@@ -482,7 +482,6 @@ const ClientDashboard = () => {
       children: [
         { id: "omnix", label: "Chat", icon: Brain },
         { id: "thor-center", label: "Central", icon: Sparkles },
-        { id: "thor-os", label: "OS (Orquestrador)", icon: Sparkles },
       ],
     },
 
