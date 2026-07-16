@@ -1,12 +1,15 @@
 /**
- * IntelligenceHub · Consolidado (7 → 4 tabs).
+ * IntelligenceHub · Consolidado (7 → 4 tabs, sem duplicidade).
  *
- * Antes: Ao Vivo / Analytics / Resultados / Qualidade IA / Logs / War Room / Rede Neural.
- * Depois:
- *   1. Ao Vivo (Execuções + War Room + IA Live + Rede Neural via SubNav)
- *   2. Analytics (Métricas + Resultados via SubNav)
+ * Estrutura minimalista:
+ *   1. Ao Vivo    — Execuções (feed operacional) + Rede Neural (mapa)
+ *   2. Analytics  — Métricas agregadas (sem sub-nav)
  *   3. Qualidade IA
- *   4. Logs
+ *   4. Logs       — Eventos brutos + Resultados detalhados (histórico)
+ *
+ * War Room e IA Live foram unificados dentro de "Execuções" (mesmo domínio:
+ * o que está acontecendo agora). Resultados saiu de Analytics porque é
+ * histórico, não agregado — vive em Logs junto com os eventos.
  *
  * SubNav usa ToggleGroup para não aninhar Tabs (ARIA correto).
  */
@@ -14,17 +17,15 @@ import { useState, lazy, Suspense } from "react";
 import { useTranslation } from "react-i18next";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { BarChart3, FileText, Star, Activity, Radio, Orbit, Eye, Brain, Zap } from "lucide-react";
+import { BarChart3, FileText, Star, Activity, Orbit, Eye, Zap, ScrollText } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
 
 const AnalyticsSection = lazy(() => import("./AnalyticsSection"));
 const ExecutionResultsPanel = lazy(() => import("./ExecutionResultsPanel"));
 const AIQualityDashboard = lazy(() => import("./AIQualityDashboard"));
 const LogsSection = lazy(() => import("./LogsSection"));
-const WarRoomLive = lazy(() => import("./WarRoomLive"));
 const AgentNeuralNetwork = lazy(() => import("@/pages/AgentNeuralNetwork"));
 const LiveExecutionPanel = lazy(() => import("./LiveExecutionPanel"));
-const AIWorkspace = lazy(() => import("./AIWorkspace"));
 
 export type IntelligenceTab =
   | "live"
@@ -36,17 +37,18 @@ export type IntelligenceTab =
   | "neural-network"
   | "reports";
 
-// Legacy → nova tab + sub-view
+// Legacy → nova tab + sub-view. War Room / IA Live viraram "Execuções".
+// "Resultados" migrou de Analytics para Logs.
 const LEGACY_MAP: Record<string, { tab: string; view?: string }> = {
   live: { tab: "live", view: "executions" },
-  "war-room": { tab: "live", view: "war-room" },
+  "war-room": { tab: "live", view: "executions" },
+  "ai-live": { tab: "live", view: "executions" },
   "neural-network": { tab: "live", view: "neural" },
-  "ai-live": { tab: "live", view: "ai-live" },
-  analytics: { tab: "analytics", view: "metrics" },
-  results: { tab: "analytics", view: "results" },
-  reports: { tab: "analytics", view: "metrics" },
+  analytics: { tab: "analytics" },
+  reports: { tab: "analytics" },
+  results: { tab: "logs", view: "results" },
   "ai-quality": { tab: "ai-quality" },
-  logs: { tab: "logs" },
+  logs: { tab: "logs", view: "events" },
 };
 
 interface IntelligenceHubProps {
@@ -67,11 +69,11 @@ const IntelligenceHub = ({
   const legacy = LEGACY_MAP[defaultTab] || { tab: "live", view: "executions" };
 
   const [tab, setTab] = useState<string>(legacy.tab);
-  const [liveView, setLiveView] = useState<"executions" | "war-room" | "ai-live" | "neural">(
-    (["war-room", "ai-live", "neural"].includes(legacy.view || "") ? legacy.view : "executions") as any
+  const [liveView, setLiveView] = useState<"executions" | "neural">(
+    legacy.view === "neural" ? "neural" : "executions"
   );
-  const [analyticsView, setAnalyticsView] = useState<"metrics" | "results">(
-    legacy.view === "results" ? "results" : "metrics"
+  const [logsView, setLogsView] = useState<"events" | "results">(
+    legacy.view === "results" ? "results" : "events"
   );
 
   const tabs = [
@@ -96,43 +98,26 @@ const IntelligenceHub = ({
         <TabsContent value="live" className="mt-4 space-y-4">
           <SubNav
             value={liveView}
-            onValueChange={(v) => v && setLiveView(v as any)}
+            onValueChange={(v) => v && setLiveView(v as "executions" | "neural")}
             items={[
               { value: "executions", icon: Zap, label: "Execuções" },
-              { value: "war-room", icon: Radio, label: "War Room" },
-              { value: "ai-live", icon: Brain, label: "IA Live" },
               { value: "neural", icon: Orbit, label: "Rede Neural" },
             ]}
           />
           <Suspense fallback={<SectionLoader />}>
-            {liveView === "executions" && <LiveExecutionPanel />}
-            {liveView === "war-room" && <WarRoomLive />}
-            {liveView === "ai-live" && <AIWorkspace onNavigate={onNavigate} />}
-            {liveView === "neural" && <AgentNeuralNetwork />}
+            {liveView === "executions" ? <LiveExecutionPanel /> : <AgentNeuralNetwork />}
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="analytics" className="mt-4 space-y-4">
-          <SubNav
-            value={analyticsView}
-            onValueChange={(v) => v && setAnalyticsView(v as any)}
-            items={[
-              { value: "metrics", icon: BarChart3, label: "Métricas" },
-              { value: "results", icon: FileText, label: "Resultados" },
-            ]}
-          />
+        <TabsContent value="analytics" className="mt-4">
           <Suspense fallback={<SectionLoader />}>
-            {analyticsView === "metrics" ? (
-              <AnalyticsSection
-                chartData={chartData}
-                totalExecutions={totalExecutions}
-                recentLogs={recentLogs}
-                locale={locale}
-                onGoToAgents={onGoToAgents}
-              />
-            ) : (
-              <ExecutionResultsPanel onNavigate={onNavigate} />
-            )}
+            <AnalyticsSection
+              chartData={chartData}
+              totalExecutions={totalExecutions}
+              recentLogs={recentLogs}
+              locale={locale}
+              onGoToAgents={onGoToAgents}
+            />
           </Suspense>
         </TabsContent>
 
@@ -142,13 +127,25 @@ const IntelligenceHub = ({
           </Suspense>
         </TabsContent>
 
-        <TabsContent value="logs" className="mt-4">
+        <TabsContent value="logs" className="mt-4 space-y-4">
+          <SubNav
+            value={logsView}
+            onValueChange={(v) => v && setLogsView(v as "events" | "results")}
+            items={[
+              { value: "events", icon: ScrollText, label: "Eventos" },
+              { value: "results", icon: FileText, label: "Resultados" },
+            ]}
+          />
           <Suspense fallback={<SectionLoader />}>
-            <LogsSection
-              recentLogs={recentLogs}
-              locale={locale}
-              onGoToAgents={onGoToAgents}
-            />
+            {logsView === "events" ? (
+              <LogsSection
+                recentLogs={recentLogs}
+                locale={locale}
+                onGoToAgents={onGoToAgents}
+              />
+            ) : (
+              <ExecutionResultsPanel onNavigate={onNavigate} />
+            )}
           </Suspense>
         </TabsContent>
       </Tabs>
