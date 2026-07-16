@@ -160,10 +160,11 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
       ? ` Lembro do que você me contou na home: ${memoryBits.join(", ")}. Vou só confirmar rapidinho — se algo mudou, você me corrige.`
       : "";
     const greeting = recommendation
-      ? `Oi! Sou o Thor. Você já me contou lá na home que precisa de **${recommendation.primary.title.toLowerCase()}** — legal.${memorySentence} Antes de destravar seu painel, deixa eu conhecer sua empresa em 6 perguntas rápidas.`
-      : `Oi! Sou o Thor, seu copiloto na Clauthor.${memorySentence} Antes de montar seu time, deixa eu conhecer sua empresa em 6 perguntas rápidas. Você pode pular qualquer uma que quiser.`;
+      ? `Oi! Sou o Thor. Você já me contou lá na home que precisa de **${recommendation.primary.title.toLowerCase()}** — legal.${memorySentence} Antes de destravar seu painel, deixa eu confirmar 7 coisas rápidas.`
+      : `Oi! Sou o Thor, seu copiloto na Clauthor.${memorySentence} Antes de montar seu time, são 7 perguntas rápidas — você pode pular qualquer uma.`;
     // Pre-fill answers with anything we already know
     const prefill: Answers = {};
+    if (homeReco?.kind) prefill.contract_kind = homeReco.kind as ContractKind;
     if (homeReco?.company_name) prefill.company_name = homeReco.company_name;
     if (homeReco?.industry) prefill.industry = homeReco.industry;
     if (homeReco?.size) prefill.team_size = homeReco.size;
