@@ -8,6 +8,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { useTranslation } from "react-i18next";
 import TeachAgentsModal from "./TeachAgentsModal";
+import KpiStrip from "./KpiStrip";
 
 interface ClientCommandCenterProps {
   activeAgents: number;
