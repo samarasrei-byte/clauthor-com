@@ -257,6 +257,7 @@ const ApprovalsCenter = () => {
   const { data: tenantId } = useTenantId();
   const qc = useQueryClient();
   const [tab, setTab] = useState<Status>("pending");
+  const [category, setCategory] = useState<"all" | "empresa" | "comunicacao" | "orquestracao" | "execucao">("all");
   const [selected, setSelected] = useState<Approval | null>(null);
   const [feedbackOpen, setFeedbackOpen] = useState<{ mode: "reject" | "request_changes"; approval: Approval } | null>(null);
   const [feedbackText, setFeedbackText] = useState("");
