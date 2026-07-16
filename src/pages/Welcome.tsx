@@ -6,6 +6,7 @@ import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 import QuickOnboarding from "@/components/onboarding/QuickOnboarding";
 import RevolutionaryOnboarding from "@/components/onboarding/RevolutionaryOnboarding";
 import RecommendationStep from "@/components/onboarding/steps/RecommendationStep";
+import CompanyDnaWizard from "@/components/onboarding/CompanyDnaWizard";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import { fromHomeChat, type RecommendationResult } from "@/lib/onboarding-recommendation";
 
