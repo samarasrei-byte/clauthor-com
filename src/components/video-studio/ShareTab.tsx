@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { trackKpi } from "@/lib/kpiTracker";
+import { SocialIconsBar } from "@/components/social/SocialIconsBar";
+
 
 interface Props {
   outputUrl: string | null;
@@ -144,6 +146,27 @@ export default function ShareTab({ outputUrl, prompt, generationId, mediaType = 
         <ShareButton icon={<Link2 strokeWidth={1.5} className="w-4 h-4" />} label="Copiar link" hint="URL assinada 24h" onClick={() => handleShare("copy")} disabled={disabled} />
         <ShareButton icon={<Download strokeWidth={1.5} className="w-4 h-4" />} label="Baixar" hint={mediaType === "video" ? "MP4 original" : "PNG original"} onClick={() => handleShare("download")} disabled={disabled} />
       </div>
+
+      {/* ─── Barra completa: 9 redes sociais ─── */}
+      <div className="pt-3 space-y-2 border-t border-border/40">
+        <div className="text-[11px] uppercase tracking-wider text-muted-foreground font-medium">
+          Todas as redes
+        </div>
+        <SocialIconsBar
+          compact
+          onSelect={(net) => {
+            if (!net.ready) {
+              toast.info(`${net.name} — integração em breve`);
+              return;
+            }
+            if (net.key === "facebook") handleShare("facebook");
+            else if (net.key === "instagram") handleShare("instagram");
+            else toast.info(`${net.name} — publicação será liberada em breve`);
+          }}
+        />
+      </div>
+
+
 
       {disabled && (
         <div className="text-[11px] text-muted-foreground text-center pt-2">
