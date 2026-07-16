@@ -39,6 +39,15 @@ import { cn } from "@/lib/utils";
 import { useModuleAccess } from "@/hooks/useModuleAccess";
 import ModulePaywall from "@/components/paywall/ModulePaywall";
 import { trackKpi } from "@/lib/kpiTracker";
+import { useTenantId } from "@/hooks/useTenantId";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 type ChatRole = "user" | "assistant";
 interface ChatMsg {
