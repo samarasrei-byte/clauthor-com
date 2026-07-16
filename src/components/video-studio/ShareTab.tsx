@@ -62,8 +62,8 @@ export default function ShareTab({ outputUrl, prompt, generationId, mediaType = 
         setPages([]);
         setIgAccounts([]);
       } else {
-        const p = (data.pages ?? []) as FbPage[];
-        const ig = (data.instagram_accounts ?? []) as IgAccount[];
+        const p = (data.pages ?? []) as unknown as FbPage[];
+        const ig = (data.instagram_accounts ?? []) as unknown as IgAccount[];
         setPages(p);
         setIgAccounts(ig);
         if (p.length && !selectedPageId) setSelectedPageId(p[0].id);
