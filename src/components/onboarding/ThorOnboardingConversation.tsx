@@ -249,11 +249,17 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
 
   const askAt = (idx: number, nextAnswers: Answers) => {
     if (idx >= STEPS.length) {
-      // move to confirm step
       const dept = recommendation?.primary;
-      const confirmMsg = dept
-        ? `Perfeito, entendi tudo. Baseado no que você me contou, minha recomendação continua sendo **${dept.title}** — ${dept.pitch} Faz sentido pra você?`
-        : "Perfeito, entendi tudo. Vou te levar ao painel pra você escolher o time ideal.";
+      const kind = nextAnswers.contract_kind;
+      const kindLabel =
+        kind === "squad" ? "um **squad vertical**" :
+        kind === "agente" ? "**agentes individuais**" :
+        "um **departamento completo**";
+      const confirmMsg = dept && kind === "departamento"
+        ? `Perfeito, entendi tudo. Como você escolheu ${kindLabel}, minha recomendação é **${dept.title}** — ${dept.pitch} Faz sentido pra você?`
+        : kind
+          ? `Perfeito. Você escolheu ${kindLabel} — vou te levar ao painel pra escolher e ativar. Bora?`
+          : "Perfeito, entendi tudo. Vou te levar ao painel pra você escolher o time ideal.";
       setMessages((prev) => [
         ...prev,
         { id: uid(), role: "assistant", content: confirmMsg },
@@ -269,24 +275,30 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
     setStepIdx(idx);
   };
 
-  const handleSubmitAnswer = (raw: string) => {
+  const commitAnswer = (rawValue: string, displayText: string) => {
     if (!currentStep || confirming || finishing) return;
-    const trimmed = raw.trim();
-    if (!trimmed && !currentStep.optional) return;
-    const parsed = currentStep.parse ? currentStep.parse(trimmed) : trimmed;
-    const visible = trimmed || "(pular)";
-    setMessages((prev) => [...prev, { id: uid(), role: "user", content: visible }]);
+    const parsed = currentStep.parse ? currentStep.parse(rawValue) : rawValue;
+    setMessages((prev) => [...prev, { id: uid(), role: "user", content: displayText }]);
     setInput("");
     const key: keyof Answers =
+      currentStep.id === "contract_kind" ? "contract_kind" :
       currentStep.id === "company_name" ? "company_name" :
       currentStep.id === "site" ? "site" :
       currentStep.id === "industry" ? "industry" :
       currentStep.id === "colors" ? "primary_color" :
       currentStep.id === "team_size" ? "team_size" :
       "pain";
-    const nextAnswers: Answers = { ...answers, [key]: parsed || undefined };
+    const nextAnswers: Answers = { ...answers, [key]: (parsed || undefined) as any };
     setAnswers(nextAnswers);
     setTimeout(() => askAt(stepIdx + 1, nextAnswers), 350);
+  };
+
+  const handleSubmitAnswer = (raw: string) => {
+    if (!currentStep || confirming || finishing) return;
+    if (currentStep.choices) return; // chip step: use commitAnswer via chip click
+    const trimmed = raw.trim();
+    if (!trimmed && !currentStep.optional) return;
+    commitAnswer(trimmed, trimmed || "(pular)");
   };
 
   const finalize = async (confirmed: boolean) => {
