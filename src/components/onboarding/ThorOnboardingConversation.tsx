@@ -320,7 +320,17 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
       });
     }
     setFinishing(false);
-    onDone({ dnaSaved, recommendation: confirmed ? recommendation : null, pendingDeptId });
+    const contractKind = (answers.contract_kind ?? null) as ContractKind | null;
+    try {
+      const { trackKpi } = await import("@/lib/kpiTracker");
+      trackKpi("thor_onboarding_completed", {
+        source: "onboarding",
+        kind: contractKind ?? undefined,
+        dept_id: recommendation?.primary.kind === "department" ? recommendation.primary.targetId : null,
+        pain: answers.pain,
+      });
+    } catch { /* non-blocking */ }
+    onDone({ dnaSaved, recommendation: confirmed ? recommendation : null, pendingDeptId, contractKind });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
