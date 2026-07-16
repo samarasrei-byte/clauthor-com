@@ -257,6 +257,7 @@ const ApprovalsCenter = () => {
   const { data: tenantId } = useTenantId();
   const qc = useQueryClient();
   const [tab, setTab] = useState<Status>("pending");
+  const [category, setCategory] = useState<"all" | "empresa" | "comunicacao" | "orquestracao" | "execucao">("all");
   const [selected, setSelected] = useState<Approval | null>(null);
   const [feedbackOpen, setFeedbackOpen] = useState<{ mode: "reject" | "request_changes"; approval: Approval } | null>(null);
   const [feedbackText, setFeedbackText] = useState("");
@@ -451,12 +452,30 @@ const ApprovalsCenter = () => {
     return { total, approved, pending, rate, avgHours, revisions, today, avgConfidence, lowConfCount };
   }, [approvals]);
 
-  const filtered = approvals.filter((a) => a.status === tab);
+  // Categoria funcional (Workspace alinhada) por delivery_type.
+  const CATEGORY_OF: Record<DeliveryType, "empresa" | "comunicacao" | "orquestracao" | "execucao"> = {
+    contract: "empresa", proposal: "empresa", document: "empresa", report: "empresa",
+    email: "comunicacao", post: "comunicacao", stories: "comunicacao",
+    automation: "orquestracao", landing: "orquestracao",
+    creative: "execucao", video: "execucao", article: "execucao", other: "execucao",
+  };
+
+  const byCategory = (a: Approval) =>
+    category === "all" || CATEGORY_OF[a.delivery_type] === category;
+
+  const filtered = approvals.filter((a) => a.status === tab && byCategory(a));
   const counts: Record<Status, number> = {
-    pending: approvals.filter((a) => a.status === "pending").length,
-    in_revision: approvals.filter((a) => a.status === "in_revision").length,
-    approved: approvals.filter((a) => a.status === "approved").length,
-    rejected: approvals.filter((a) => a.status === "rejected").length,
+    pending: approvals.filter((a) => a.status === "pending" && byCategory(a)).length,
+    in_revision: approvals.filter((a) => a.status === "in_revision" && byCategory(a)).length,
+    approved: approvals.filter((a) => a.status === "approved" && byCategory(a)).length,
+    rejected: approvals.filter((a) => a.status === "rejected" && byCategory(a)).length,
+  };
+  const categoryCounts = {
+    all: approvals.filter((a) => a.status === tab).length,
+    empresa: approvals.filter((a) => a.status === tab && CATEGORY_OF[a.delivery_type] === "empresa").length,
+    comunicacao: approvals.filter((a) => a.status === tab && CATEGORY_OF[a.delivery_type] === "comunicacao").length,
+    orquestracao: approvals.filter((a) => a.status === tab && CATEGORY_OF[a.delivery_type] === "orquestracao").length,
+    execucao: approvals.filter((a) => a.status === tab && CATEGORY_OF[a.delivery_type] === "execucao").length,
   };
 
   return (
@@ -505,7 +524,35 @@ const ApprovalsCenter = () => {
         />
       </div>
 
-
+      {/* ── Category filter (alinhado com Workspace) ────────────── */}
+      <div className="flex flex-wrap items-center gap-1.5">
+        <span className="text-[10px] uppercase tracking-wider text-muted-foreground/70 mr-1">Área</span>
+        {([
+          { id: "all", label: "Todas" },
+          { id: "empresa", label: "Empresa" },
+          { id: "comunicacao", label: "Comunicação" },
+          { id: "orquestracao", label: "Orquestração" },
+          { id: "execucao", label: "Execução" },
+        ] as const).map(({ id, label }) => {
+          const active = category === id;
+          const count = categoryCounts[id];
+          return (
+            <button
+              key={id}
+              onClick={() => setCategory(id)}
+              className={cn(
+                "inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-medium border transition-colors",
+                active
+                  ? "bg-primary/10 text-primary border-primary/30"
+                  : "bg-muted/20 text-muted-foreground border-border/30 hover:bg-muted/30 hover:text-foreground",
+              )}
+            >
+              {label}
+              <span className={cn("text-[10px] px-1 rounded", active ? "bg-primary/20" : "bg-background/60")}>{count}</span>
+            </button>
+          );
+        })}
+      </div>
 
 
       {/* ── Tabs ────────────────────────────────────────────────── */}
