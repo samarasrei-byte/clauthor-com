@@ -16,22 +16,20 @@ import { useState, lazy, Suspense, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Inbox, Layers3, KanbanSquare, FolderOpen, CheckSquare, Workflow, Building2, MessageSquare, Cog, Rocket } from "lucide-react";
+import { Layers3, KanbanSquare, FolderOpen, Workflow, Building2, MessageSquare, Cog, Rocket } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
 
 const UnifiedInbox = lazy(() => import("./UnifiedInbox"));
 const SquadManager = lazy(() => import("./SquadManager"));
 const KanbanBoard = lazy(() => import("./KanbanBoard"));
 const FilesLibrary = lazy(() => import("./FilesLibrary"));
-const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const MissionComposer = lazy(() => import("./MissionComposer"));
 const CompanyHub = lazy(() => import("./CompanyHub"));
 
-// Legacy tab keys → nova tab consolidada. "ai-live"/"ai-workspace" agora vivem em Intelligence › Ao Vivo.
+// Legacy tab keys → nova tab consolidada. Aprovações agora vive na rota dedicada "approvals".
 const LEGACY_TAB_MAP: Record<string, { tab: WorkspaceTab; view?: string }> = {
   empresa: { tab: "empresa" },
-  inbox: { tab: "comunicacao", view: "inbox" },
-  approvals: { tab: "comunicacao", view: "approvals" },
+  inbox: { tab: "comunicacao" },
   squads: { tab: "orquestracao", view: "squads" },
   "mission-composer": { tab: "orquestracao", view: "composer" },
   kanban: { tab: "execucao", view: "kanban" },
