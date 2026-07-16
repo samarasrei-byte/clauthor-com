@@ -458,6 +458,7 @@ const ClientDashboard = () => {
       badge: pendingTaskCount || undefined,
       group: zoneWork,
       children: [
+        { id: "workspace", label: "Visão geral", icon: Layers3 },
         { id: "productivity", label: "Produtividade", icon: BriefcaseBusiness },
         { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3 },
         { id: "approvals", label: "Central de Aprovações", icon: Sparkles },
