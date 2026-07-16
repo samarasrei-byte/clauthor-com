@@ -133,27 +133,15 @@ const ClientCommandCenter = ({
       />
 
       {/* Status Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {[
-          { label: t("cmd.active_agents", { defaultValue: "Agentes Ativos" }), value: isDemo ? `5 (${t("cmd.demo", { defaultValue: "demo" })})` : String(activeAgents), icon: Bot, sub: isDemo ? t("cmd.demo_mode", { defaultValue: "Modo demonstração" }) : t("cmd.operating", { defaultValue: "Operando" }), color: "primary" },
-          { label: t("cmd.knowledge", { defaultValue: "Conhecimento" }), value: hasKnowledge ? t("cmd.active_fem", { defaultValue: "Ativa" }) : t("cmd.empty_fem", { defaultValue: "Vazia" }), icon: Brain, sub: hasKnowledge ? t("cmd.synced", { defaultValue: "Sincronizada" }) : t("cmd.needs_attention", { defaultValue: "Requer atenção" }), color: "muted" },
-          { label: t("cmd.integrations", { defaultValue: "Integrações" }), value: "0", icon: LinkIcon, sub: t("cmd.ready_plur", { defaultValue: "Prontas" }), color: "muted" },
-          { label: t("cmd.network", { defaultValue: "Rede" }), value: "100%", icon: Cpu, sub: t("cmd.optimized", { defaultValue: "Otimizada" }), color: "primary" },
-        ].map((card, i) => (
-          <motion.div 
-            key={card.label}
-            initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-            className="bg-card/40 border border-border/40 rounded-xl p-4 backdrop-blur-md flex flex-col gap-1.5 relative overflow-hidden"
-          >
-            <div className="flex items-center justify-between text-muted-foreground">
-              <span className="text-[9px] font-mono uppercase tracking-widest font-semibold">{card.label}</span>
-              <card.icon className="h-3.5 w-3.5 text-primary/70" />
-            </div>
-            <div className="text-2xl font-display font-bold text-foreground tracking-tight">{card.value}</div>
-            <div className="text-[10px] text-muted-foreground font-medium">{card.sub}</div>
-          </motion.div>
-        ))}
-      </div>
+      <KpiStrip
+        items={[
+          { label: t("cmd.active_agents", { defaultValue: "Agentes Ativos" }), value: isDemo ? `5 (${t("cmd.demo", { defaultValue: "demo" })})` : String(activeAgents), icon: Bot, sub: isDemo ? t("cmd.demo_mode", { defaultValue: "Modo demonstração" }) : t("cmd.operating", { defaultValue: "Operando" }), accent: "primary" },
+          { label: t("cmd.knowledge", { defaultValue: "Conhecimento" }), value: hasKnowledge ? t("cmd.active_fem", { defaultValue: "Ativa" }) : t("cmd.empty_fem", { defaultValue: "Vazia" }), icon: Brain, sub: hasKnowledge ? t("cmd.synced", { defaultValue: "Sincronizada" }) : t("cmd.needs_attention", { defaultValue: "Requer atenção" }), accent: hasKnowledge ? "emerald" : "amber" },
+          { label: t("cmd.integrations", { defaultValue: "Integrações" }), value: "0", icon: LinkIcon, sub: t("cmd.ready_plur", { defaultValue: "Prontas" }), accent: "muted" },
+          { label: t("cmd.network", { defaultValue: "Rede" }), value: "100%", icon: Cpu, sub: t("cmd.optimized", { defaultValue: "Otimizada" }), accent: "primary" },
+        ]}
+      />
+
 
       {/* Demo Mode Banner */}
       {isDemo && !isExecuting && (
