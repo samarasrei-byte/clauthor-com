@@ -41,6 +41,7 @@ interface Props {
 
 type StepId =
   | "greet"
+  | "contract_kind"
   | "company_name"
   | "site"
   | "industry"
@@ -50,15 +51,19 @@ type StepId =
   | "confirm"
   | "done";
 
+type ContractKind = "squad" | "departamento" | "agente";
+
 interface StepDef {
   id: StepId;
   ask: (ctx: Answers) => string;
   placeholder?: string;
   optional?: boolean;
   parse?: (raw: string) => string;
+  choices?: { value: ContractKind; label: string; hint: string }[];
 }
 
 interface Answers {
+  contract_kind?: ContractKind;
   company_name?: string;
   site?: string;
   industry?: string;
@@ -70,6 +75,15 @@ interface Answers {
 const uid = () => Math.random().toString(36).slice(2, 10);
 
 const STEPS: StepDef[] = [
+  {
+    id: "contract_kind",
+    ask: () => "Antes de tudo: como você prefere começar? Você pode mudar depois no painel.",
+    choices: [
+      { value: "squad", label: "Squad vertical", hint: "4–7 especialistas focados numa dor específica" },
+      { value: "departamento", label: "Departamento completo", hint: "Time de IA cobrindo uma área inteira" },
+      { value: "agente", label: "Agentes individuais", hint: "Escolho função por função" },
+    ],
+  },
   {
     id: "company_name",
     ask: () => "Qual é o nome da sua empresa? Se ainda não tem, pode escrever o nome do projeto.",
@@ -146,10 +160,11 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
       ? ` Lembro do que você me contou na home: ${memoryBits.join(", ")}. Vou só confirmar rapidinho — se algo mudou, você me corrige.`
       : "";
     const greeting = recommendation
-      ? `Oi! Sou o Thor. Você já me contou lá na home que precisa de **${recommendation.primary.title.toLowerCase()}** — legal.${memorySentence} Antes de destravar seu painel, deixa eu conhecer sua empresa em 6 perguntas rápidas.`
-      : `Oi! Sou o Thor, seu copiloto na Clauthor.${memorySentence} Antes de montar seu time, deixa eu conhecer sua empresa em 6 perguntas rápidas. Você pode pular qualquer uma que quiser.`;
+      ? `Oi! Sou o Thor. Você já me contou lá na home que precisa de **${recommendation.primary.title.toLowerCase()}** — legal.${memorySentence} Antes de destravar seu painel, deixa eu confirmar 7 coisas rápidas.`
+      : `Oi! Sou o Thor, seu copiloto na Clauthor.${memorySentence} Antes de montar seu time, são 7 perguntas rápidas — você pode pular qualquer uma.`;
     // Pre-fill answers with anything we already know
     const prefill: Answers = {};
+    if (homeReco?.kind) prefill.contract_kind = homeReco.kind as ContractKind;
     if (homeReco?.company_name) prefill.company_name = homeReco.company_name;
     if (homeReco?.industry) prefill.industry = homeReco.industry;
     if (homeReco?.size) prefill.team_size = homeReco.size;
@@ -234,11 +249,17 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
 
   const askAt = (idx: number, nextAnswers: Answers) => {
     if (idx >= STEPS.length) {
-      // move to confirm step
       const dept = recommendation?.primary;
-      const confirmMsg = dept
-        ? `Perfeito, entendi tudo. Baseado no que você me contou, minha recomendação continua sendo **${dept.title}** — ${dept.pitch} Faz sentido pra você?`
-        : "Perfeito, entendi tudo. Vou te levar ao painel pra você escolher o time ideal.";
+      const kind = nextAnswers.contract_kind;
+      const kindLabel =
+        kind === "squad" ? "um **squad vertical**" :
+        kind === "agente" ? "**agentes individuais**" :
+        "um **departamento completo**";
+      const confirmMsg = dept && kind === "departamento"
+        ? `Perfeito, entendi tudo. Como você escolheu ${kindLabel}, minha recomendação é **${dept.title}** — ${dept.pitch} Faz sentido pra você?`
+        : kind
+          ? `Perfeito. Você escolheu ${kindLabel} — vou te levar ao painel pra escolher e ativar. Bora?`
+          : "Perfeito, entendi tudo. Vou te levar ao painel pra você escolher o time ideal.";
       setMessages((prev) => [
         ...prev,
         { id: uid(), role: "assistant", content: confirmMsg },
@@ -254,31 +275,38 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
     setStepIdx(idx);
   };
 
-  const handleSubmitAnswer = (raw: string) => {
+  const commitAnswer = (rawValue: string, displayText: string) => {
     if (!currentStep || confirming || finishing) return;
-    const trimmed = raw.trim();
-    if (!trimmed && !currentStep.optional) return;
-    const parsed = currentStep.parse ? currentStep.parse(trimmed) : trimmed;
-    const visible = trimmed || "(pular)";
-    setMessages((prev) => [...prev, { id: uid(), role: "user", content: visible }]);
+    const parsed = currentStep.parse ? currentStep.parse(rawValue) : rawValue;
+    setMessages((prev) => [...prev, { id: uid(), role: "user", content: displayText }]);
     setInput("");
     const key: keyof Answers =
+      currentStep.id === "contract_kind" ? "contract_kind" :
       currentStep.id === "company_name" ? "company_name" :
       currentStep.id === "site" ? "site" :
       currentStep.id === "industry" ? "industry" :
       currentStep.id === "colors" ? "primary_color" :
       currentStep.id === "team_size" ? "team_size" :
       "pain";
-    const nextAnswers: Answers = { ...answers, [key]: parsed || undefined };
+    const nextAnswers: Answers = { ...answers, [key]: (parsed || undefined) as any };
     setAnswers(nextAnswers);
     setTimeout(() => askAt(stepIdx + 1, nextAnswers), 350);
+  };
+
+  const handleSubmitAnswer = (raw: string) => {
+    if (!currentStep || confirming || finishing) return;
+    if (currentStep.choices) return; // chip step: use commitAnswer via chip click
+    const trimmed = raw.trim();
+    if (!trimmed && !currentStep.optional) return;
+    commitAnswer(trimmed, trimmed || "(pular)");
   };
 
   const finalize = async (confirmed: boolean) => {
     setFinishing(true);
     const dnaSaved = await persistDna(answers);
     let pendingDeptId: string | null = null;
-    if (confirmed && recommendation?.primary.kind === "department") {
+    const wantsDept = answers.contract_kind === "departamento" || !answers.contract_kind;
+    if (confirmed && wantsDept && recommendation?.primary.kind === "department") {
       pendingDeptId = await createPendingDepartment(
         recommendation.primary.targetId,
         answers.pain ?? null,
@@ -384,8 +412,26 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
                 Você não paga nada agora · a ativação acontece no painel.
               </p>
             </div>
+          ) : currentStep?.choices ? (
+            <div className="pt-4 border-t border-[hsl(var(--hairline))]">
+              <div className="grid gap-2 sm:grid-cols-3">
+                {currentStep.choices.map((c) => (
+                  <button
+                    key={c.value}
+                    type="button"
+                    disabled={finishing}
+                    onClick={() => commitAnswer(c.value, c.label)}
+                    className="text-left rounded-lg border border-[hsl(var(--hairline))] hover:border-primary/60 hover:bg-primary/5 transition-colors p-3"
+                  >
+                    <div className="text-sm font-medium text-foreground">{c.label}</div>
+                    <div className="type-caption text-muted-foreground mt-0.5">{c.hint}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
           ) : (
             <div className="pt-4 border-t border-[hsl(var(--hairline))]">
+
               <div className="flex items-center gap-2">
                 <input
                   ref={inputRef}
