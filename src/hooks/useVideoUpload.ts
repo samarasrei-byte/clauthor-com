@@ -5,6 +5,7 @@ import { useTenantId } from "@/hooks/useTenantId";
 
 const MAX_IMAGE_BYTES = 20 * 1024 * 1024;
 const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
+const MAX_RETRIES = 3;
 
 export interface UploadedMedia {
   kind: "image" | "video";
@@ -15,10 +16,14 @@ export interface UploadedMedia {
   filename: string;
 }
 
+async function sleep(ms: number) {
+  return new Promise((r) => setTimeout(r, ms));
+}
+
 /**
  * Uploads a file to the `videos` storage bucket under
- * `{tenant_id}/uploads/{uuid}-{safeName}` and returns a fresh 24h signed URL.
- * Applies size limits (20 MB image, 100 MB video) and surfaces toast errors.
+ * `{tenant_id}/uploads/{uuid}-{safeName}` with exponential backoff retry
+ * and returns a fresh 24h signed URL.
  */
 export function useVideoUpload() {
   const { data: tenantId } = useTenantId();
@@ -47,20 +52,42 @@ export function useVideoUpload() {
     }
 
     setUploading(true);
-    setProgress(10);
+    setProgress(5);
+
+    const safeName = file.name.replace(/[^\w.\-]+/g, "_").slice(-80);
+    const path = `${tenantId}/uploads/${crypto.randomUUID()}-${safeName}`;
+
     try {
-      const safeName = file.name.replace(/[^\w.\-]+/g, "_").slice(-80);
-      const path = `${tenantId}/uploads/${crypto.randomUUID()}-${safeName}`;
-      const { error } = await supabase.storage.from("videos").upload(path, file, {
-        cacheControl: "3600",
-        upsert: false,
-        contentType: file.type,
-      });
-      if (error) {
-        toast.error(`Falha no upload: ${error.message}`);
+      let lastError: Error | null = null;
+      for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        setProgress(10 + (attempt - 1) * 20);
+        const { error } = await supabase.storage.from("videos").upload(path, file, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type,
+        });
+        if (!error) {
+          lastError = null;
+          break;
+        }
+        lastError = error as unknown as Error;
+        console.warn(`[useVideoUpload] attempt ${attempt} failed:`, error.message);
+        // Non-retryable errors: signature/auth/size — break early
+        if (
+          /already exists|permission|forbidden|payload too large/i.test(error.message)
+        ) {
+          break;
+        }
+        if (attempt < MAX_RETRIES) {
+          await sleep(500 * 2 ** (attempt - 1));
+        }
+      }
+      if (lastError) {
+        toast.error(`Falha no upload após ${MAX_RETRIES} tentativas: ${lastError.message}`);
         return null;
       }
-      setProgress(80);
+
+      setProgress(85);
       const { data: signed, error: signErr } = await supabase.storage
         .from("videos")
         .createSignedUrl(path, 60 * 60 * 24);
