@@ -596,11 +596,25 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
           {/* Daily summary, hero */}
           <DailySummaryCard onRefresh={handleRefresh} refreshing={refreshing} />
 
-          {/* Grid: Agenda + Inbox */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <AgendaCard />
-            <InboxCard />
-          </div>
+          {/* Agenda em largura total. Inbox real vive em Workspace › Comunicação. */}
+          <AgendaCard />
+
+          {/* CTA para o inbox real (evita duplicação com o UnifiedInbox no Workspace) */}
+          <button
+            onClick={() => onNavigate?.("workspace")}
+            className="w-full flex items-center justify-between gap-3 rounded-xl border border-border/10 bg-muted/5 hover:bg-muted/10 transition-colors px-4 py-3 text-left group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Inbox className="h-4 w-4 text-primary" strokeWidth={1.75} />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Caixa de entrada unificada</p>
+                <p className="text-[11px] text-muted-foreground">Mensagens de agentes e integrações · Workspace › Comunicação</p>
+              </div>
+            </div>
+            <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+          </button>
 
           {/* News full width */}
           <NewsCard onNavigate={onNavigate} />
