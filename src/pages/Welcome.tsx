@@ -1,14 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { useAuth } from "@/hooks/useAuth";
 import { useGuidedOnboarding } from "@/hooks/useGuidedOnboarding";
 import QuickOnboarding from "@/components/onboarding/QuickOnboarding";
 import RevolutionaryOnboarding from "@/components/onboarding/RevolutionaryOnboarding";
-import RecommendationStep from "@/components/onboarding/steps/RecommendationStep";
-import CompanyDnaWizard from "@/components/onboarding/CompanyDnaWizard";
-import ClauthorLogo from "@/components/ClauthorLogo";
-import { fromHomeChat, type RecommendationResult } from "@/lib/onboarding-recommendation";
+import ThorOnboardingConversation from "@/components/onboarding/ThorOnboardingConversation";
 
 interface HomeReco {
   kind: "departamento" | "squad" | "agente";
@@ -17,11 +14,16 @@ interface HomeReco {
 }
 
 /**
- * Rota dedicada de onboarding · ativada logo após o signup em /auth.
- * - Se o Thor da home já recomendou algo (sessionStorage), pula direto para
- *   o passo 3 · não pergunta duas vezes.
- * - Caso contrário, roda o fluxo curto de 3 passos.
- * - `?explore=1` → RevolutionaryOnboarding clássico como fallback.
+ * Rota dedicada de onboarding conversacional · Thor 3.0.
+ * - Conversa curta (6 perguntas) para coletar DNA da empresa.
+ * - Reconfirma a recomendação vinda do chat da home (ou pede exploração).
+ * - Ao final, cria contracted_departments com status='pending_payment'
+ *   se o usuário confirmou o departamento sugerido.
+ * - Redireciona pro /dashboard?first=1 (tour dispara).
+ *
+ * Fallbacks:
+ *   ?explore=1 → RevolutionaryOnboarding clássico.
+ *   Sem reco da home e usuário pular → QuickOnboarding.
  */
 export default function Welcome() {
   const navigate = useNavigate();
@@ -30,9 +32,7 @@ export default function Welcome() {
   const [params] = useSearchParams();
   const explore = params.get("explore") === "1";
   const [homeReco, setHomeReco] = useState<HomeReco | null>(null);
-  const [dnaDone, setDnaDone] = useState<boolean>(() => {
-    try { return sessionStorage.getItem("clauthor_dna_done") === "1"; } catch { return false; }
-  });
+  const [fallback, setFallback] = useState<"none" | "quick">("none");
 
   useEffect(() => {
     if (!isLoading && !user) navigate("/auth", { replace: true });
@@ -43,17 +43,11 @@ export default function Welcome() {
       const raw = sessionStorage.getItem("clauthor_home_recommendation");
       if (!raw) return;
       const parsed = JSON.parse(raw) as HomeReco;
-      // valid for 24h
       if (Date.now() - (parsed.ts ?? 0) < 24 * 60 * 60 * 1000) {
         setHomeReco(parsed);
       }
     } catch { /* ignore */ }
   }, []);
-
-  const hydratedResult = useMemo<RecommendationResult | null>(
-    () => (homeReco ? fromHomeChat({ kind: homeReco.kind, deptId: homeReco.deptId }) : null),
-    [homeReco],
-  );
 
   if (isLoading || !user) {
     return (
@@ -68,68 +62,58 @@ export default function Welcome() {
     navigate("/dashboard", { replace: true });
   };
 
-  const handleActivateHydrated = async (href: string) => {
-    if (!homeReco) return;
-    await save({
-      path: homeReco.kind === "departamento" ? "department" : homeReco.kind === "squad" ? "team" : "agent",
-      teamGoal: "home_thor_chat",
-      department: homeReco.deptId,
-      companySize: "",
-      processMaturity: "",
-    });
+  const handleDone = async ({
+    recommendation,
+    pendingDeptId,
+  }: {
+    dnaSaved: boolean;
+    recommendation: unknown;
+    pendingDeptId: string | null;
+  }) => {
+    // Persist onboarding metadata into profiles (unlocks assistants hierarchy).
+    if (homeReco) {
+      await save({
+        path: homeReco.kind === "departamento" ? "department" : homeReco.kind === "squad" ? "team" : "agent",
+        teamGoal: "onboarding_conversation",
+        department: homeReco.deptId,
+        companySize: "",
+        processMaturity: "",
+      });
+    } else {
+      await save({
+        path: "team",
+        teamGoal: "onboarding_conversation",
+        companySize: "",
+        processMaturity: "",
+      });
+    }
     try { sessionStorage.removeItem("clauthor_home_recommendation"); } catch { /* ignore */ }
-    navigate(href, { replace: true });
-  };
 
-  const handleExploreAll = () => {
-    try { sessionStorage.removeItem("clauthor_home_recommendation"); } catch { /* ignore */ }
-    navigate("/departamentos", { replace: true });
+    // Send to dashboard; dashboard picks up first=1 and pending_dept for tour + card.
+    const dest = new URL("/dashboard", window.location.origin);
+    dest.searchParams.set("first", "1");
+    if (pendingDeptId) dest.searchParams.set("pending_dept", pendingDeptId);
+    void recommendation;
+    navigate(dest.pathname + dest.search, { replace: true });
   };
 
   return (
     <>
       <Helmet>
-        <title>Bem-vindo à Clauthor · Sua recomendação em 60 segundos</title>
-        <meta name="description" content="Responda 3 perguntas rápidas e receba na hora o departamento, squad ou agente ideal para a sua operação." />
+        <title>Bem-vindo à Clauthor · Conheça sua operação em 60 segundos</title>
+        <meta name="description" content="Conversa curta com o Thor para conhecer sua empresa, aplicar sua identidade e personalizar o painel." />
         <meta name="robots" content="noindex,nofollow" />
       </Helmet>
       {explore ? (
         <RevolutionaryOnboarding isOpen onSkip={handleSkip} onComplete={() => { /* self-navigates */ }} />
-      ) : !dnaDone ? (
-        <CompanyDnaWizard
-          onDone={() => {
-            try { sessionStorage.setItem("clauthor_dna_done", "1"); } catch { /* ignore */ }
-            setDnaDone(true);
-          }}
-          onSkip={() => {
-            try { sessionStorage.setItem("clauthor_dna_done", "1"); } catch { /* ignore */ }
-            setDnaDone(true);
-          }}
-        />
-      ) : hydratedResult ? (
-        <main className="min-h-dvh bg-background text-foreground flex flex-col">
-          <header className="w-full px-6 md:px-10 pt-8 pb-4 flex items-center justify-between">
-            <ClauthorLogo size="md" />
-            <button
-              type="button"
-              onClick={handleSkip}
-              className="type-caption text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Pular por agora
-            </button>
-          </header>
-          <section className="flex-1 flex items-center justify-center px-6 md:px-10 py-12">
-            <div className="w-full max-w-2xl animate-fade-in" style={{ animationDuration: "400ms" }}>
-              <RecommendationStep
-                result={hydratedResult}
-                onActivate={handleActivateHydrated}
-                onExploreAll={handleExploreAll}
-              />
-            </div>
-          </section>
-        </main>
-      ) : (
+      ) : fallback === "quick" ? (
         <QuickOnboarding onSkip={handleSkip} />
+      ) : (
+        <ThorOnboardingConversation
+          homeReco={homeReco}
+          onDone={handleDone}
+          onSkip={handleSkip}
+        />
       )}
     </>
   );
