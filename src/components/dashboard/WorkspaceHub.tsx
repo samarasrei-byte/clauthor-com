@@ -16,7 +16,7 @@ import { useState, lazy, Suspense, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Inbox, Layers3, KanbanSquare, FolderOpen, CheckSquare, Workflow, Building2, MessageSquare, Cog, Rocket, Brain } from "lucide-react";
+import { Inbox, Layers3, KanbanSquare, FolderOpen, CheckSquare, Workflow, Building2, MessageSquare, Cog, Rocket } from "lucide-react";
 import SectionLoader from "@/components/ui/section-loader";
 
 const UnifiedInbox = lazy(() => import("./UnifiedInbox"));
@@ -26,9 +26,8 @@ const FilesLibrary = lazy(() => import("./FilesLibrary"));
 const ApprovalsCenter = lazy(() => import("./ApprovalsCenter"));
 const MissionComposer = lazy(() => import("./MissionComposer"));
 const CompanyHub = lazy(() => import("./CompanyHub"));
-const AIWorkspace = lazy(() => import("./AIWorkspace"));
 
-// Legacy tab keys (mantidos para compat com deep-links existentes) → nova tab consolidada.
+// Legacy tab keys → nova tab consolidada. "ai-live"/"ai-workspace" agora vivem em Intelligence › Ao Vivo.
 const LEGACY_TAB_MAP: Record<string, { tab: WorkspaceTab; view?: string }> = {
   empresa: { tab: "empresa" },
   inbox: { tab: "comunicacao", view: "inbox" },
@@ -37,11 +36,9 @@ const LEGACY_TAB_MAP: Record<string, { tab: WorkspaceTab; view?: string }> = {
   "mission-composer": { tab: "orquestracao", view: "composer" },
   kanban: { tab: "execucao", view: "kanban" },
   files: { tab: "execucao", view: "files" },
-  "ai-workspace": { tab: "ai-live" },
-  "ai-live": { tab: "ai-live" },
 };
 
-export type WorkspaceTab = "empresa" | "comunicacao" | "orquestracao" | "execucao" | "ai-live";
+export type WorkspaceTab = "empresa" | "comunicacao" | "orquestracao" | "execucao";
 
 interface Props {
   defaultTab?: string;
