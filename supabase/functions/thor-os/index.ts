@@ -220,6 +220,11 @@ Deno.serve(async (req) => {
       total_ms: Date.now() - started,
     });
   } catch (e) {
-    return jsonResponse({ ok: false, error: (e as Error).message || "Erro interno" }, 200);
+    const err = e as Error;
+    if (err instanceof GatewayError) {
+      const status = err.status === 429 || err.status === 402 ? err.status : 502;
+      return jsonResponse({ ok: false, error: err.message }, status);
+    }
+    return jsonResponse({ ok: false, error: err.message || "Erro interno" }, 500);
   }
 });
