@@ -114,16 +114,8 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
         </TabsContent>
 
         <TabsContent value="comunicacao" className="mt-4 space-y-4">
-          <SubNav
-            value={commView}
-            onValueChange={(v) => v && setCommView(v as "inbox" | "approvals")}
-            items={[
-              { value: "inbox", icon: Inbox, label: "Inbox" },
-              { value: "approvals", icon: CheckSquare, label: "Aprovações" },
-            ]}
-          />
           <Suspense fallback={<SectionLoader />}>
-            {commView === "inbox" ? <UnifiedInbox onOpenChat={onSelectAgent} /> : <ApprovalsCenter />}
+            <UnifiedInbox onOpenChat={onSelectAgent} />
           </Suspense>
         </TabsContent>
 
