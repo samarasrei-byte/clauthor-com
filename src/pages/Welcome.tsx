@@ -70,35 +70,38 @@ export default function Welcome() {
   const handleDone = async ({
     recommendation,
     pendingDeptId,
+    contractKind,
   }: {
     dnaSaved: boolean;
     recommendation: unknown;
     pendingDeptId: string | null;
+    contractKind: "squad" | "departamento" | "agente" | null;
   }) => {
+    const effectiveKind = contractKind ?? homeReco?.kind ?? null;
     // Persist onboarding metadata into profiles (unlocks assistants hierarchy).
-    if (homeReco) {
-      await save({
-        path: homeReco.kind === "departamento" ? "department" : homeReco.kind === "squad" ? "team" : "agent",
-        teamGoal: "onboarding_conversation",
-        department: homeReco.deptId,
-        companySize: "",
-        processMaturity: "",
-      });
-    } else {
-      await save({
-        path: "team",
-        teamGoal: "onboarding_conversation",
-        companySize: "",
-        processMaturity: "",
-      });
-    }
+    await save({
+      path: effectiveKind === "departamento" ? "department" : effectiveKind === "agente" ? "agent" : "team",
+      teamGoal: "onboarding_conversation",
+      department: homeReco?.deptId,
+      companySize: "",
+      processMaturity: "",
+    });
     try { sessionStorage.removeItem("clauthor_home_recommendation"); } catch { /* ignore */ }
 
-    // Send to dashboard; dashboard picks up first=1 and pending_dept for tour + card.
+    void recommendation;
+
+    // Route by contract kind. Squad → /squads · Agente → /library · Departamento (default) → /dashboard.
+    if (effectiveKind === "squad") {
+      navigate("/squads?from=onboarding", { replace: true });
+      return;
+    }
+    if (effectiveKind === "agente") {
+      navigate("/library?from=onboarding", { replace: true });
+      return;
+    }
     const dest = new URL("/dashboard", window.location.origin);
     dest.searchParams.set("first", "1");
     if (pendingDeptId) dest.searchParams.set("pending_dept", pendingDeptId);
-    void recommendation;
     navigate(dest.pathname + dest.search, { replace: true });
   };
 
