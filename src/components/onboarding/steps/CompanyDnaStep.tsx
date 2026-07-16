@@ -26,7 +26,7 @@ export default function CompanyDnaStep({
     <div className="space-y-10">
       <header className="space-y-3 text-center">
         <p className="type-eyebrow text-muted-foreground">01 · Site da { scope === "client" ? "marca" : "empresa" }</p>
-        <h1 className="type-display font-serif italic text-4xl md:text-5xl tracking-tight text-foreground">
+        <h1 className="type-display font-display text-4xl md:text-5xl tracking-tight text-foreground">
           Cole o site — o Thor cuida do resto.
         </h1>
         <p className="type-body text-muted-foreground max-w-lg mx-auto">

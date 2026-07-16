@@ -14,10 +14,10 @@ export default function RecommendationStep({ result, onActivate, onExploreAll }:
     <div className="space-y-10">
       <header className="space-y-3 text-center">
         <p className="type-eyebrow text-primary">Com base no que você nos disse</p>
-        <h1 className="type-display font-serif italic text-4xl md:text-5xl tracking-tight text-foreground">
+        <h1 className="type-display font-display text-4xl md:text-5xl tracking-tight text-foreground">
           {primary.title}.
         </h1>
-        <p className="type-body text-muted-foreground max-w-xl mx-auto italic">
+        <p className="type-body text-muted-foreground max-w-xl mx-auto">
           {empathyLine}
         </p>
       </header>

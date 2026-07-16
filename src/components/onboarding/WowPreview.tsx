@@ -49,7 +49,7 @@ export function WowPreview({ agentLabel, outputLabel, output, isStreaming, compa
         </div>
         <div className="prose prose-sm dark:prose-invert max-w-none whitespace-pre-wrap font-[450] leading-relaxed text-foreground">
           {output || (
-            <span className="text-muted-foreground italic">Aquecendo o agente…</span>
+            <span className="text-muted-foreground">Aquecendo o agente…</span>
           )}
           {isStreaming && output && (
             <span className="inline-block w-1.5 h-4 bg-primary/70 ml-0.5 animate-pulse align-middle" />

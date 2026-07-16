@@ -32,7 +32,7 @@ export default function ContextStep({ sector, size, familiarity, onChange }: Pro
     <div className="space-y-10">
       <header className="space-y-3 text-center">
         <p className="type-eyebrow text-muted-foreground">02 · Contexto</p>
-        <h1 className="type-display font-serif italic text-4xl md:text-5xl tracking-tight text-foreground">
+        <h1 className="type-display font-display text-4xl md:text-5xl tracking-tight text-foreground">
           Rapidamente sobre você.
         </h1>
         <p className="type-body text-muted-foreground max-w-lg mx-auto">
