@@ -192,10 +192,21 @@ const ClientDashboard = () => {
     if (activeSection === "omnix" && !omnixMounted) setOmnixMounted(true);
   }, [activeSection, omnixMounted]);
 
-  // Deep-link via ?tab=xxx (permite /dashboard?tab=omnix vindo do redirect /omnix)
-  const [searchParamsDeep] = useSearchParams();
+  // Deep-link via ?tab=xxx (permite /dashboard?tab=omnix vindo do redirect /omnix).
+  // Também remapeia links legados de Workspace › Aprovações → rota dedicada "approvals".
+  const [searchParamsDeep, setSearchParamsDeep] = useSearchParams();
   useEffect(() => {
     const tab = searchParamsDeep.get("tab");
+    const view = searchParamsDeep.get("view");
+    // Legacy redirect: ?tab=workspace&view=approvals ou ?tab=inbox&view=approvals → approvals.
+    if (view === "approvals" && (tab === "workspace" || tab === "inbox" || tab === "comunicacao" || !tab)) {
+      const next = new URLSearchParams(searchParamsDeep);
+      next.set("tab", "approvals");
+      next.delete("view");
+      setSearchParamsDeep(next, { replace: true });
+      setActiveSection("approvals");
+      return;
+    }
     if (tab && tab !== activeSection) {
       setActiveSection(tab);
       if (tab === "omnix") setOmnixMounted(true);
