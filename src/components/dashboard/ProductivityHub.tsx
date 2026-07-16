@@ -10,9 +10,7 @@ import {
   Settings,
   Clock,
   MapPin,
-  ChevronDown,
   ChevronRight,
-  Mail,
   ExternalLink,
   CheckCircle2,
   XCircle,
@@ -165,146 +163,9 @@ const AgendaCard = () => {
   );
 };
 
-const priorityStyle = (p: "Alta" | "Média" | "Baixa") =>
-  p === "Alta"
-    ? "bg-destructive/10 text-destructive border-destructive/20"
-    : p === "Média"
-      ? "bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
-      : "bg-muted/40 text-muted-foreground border-border/40";
+// InboxCard removido · duplicava o UnifiedInbox em Workspace › Comunicação.
+// A CTA compacta em ProductivityHub agora aponta para o inbox real.
 
-const InboxCard = () => {
-  const [lowOpen, setLowOpen] = useState(false);
-  const [actionItems, setActionItems] = useState(MOCK_INBOX.action);
-  const [infoItems, setInfoItems] = useState(MOCK_INBOX.info);
-  const [lowItems, setLowItems] = useState(MOCK_INBOX.low);
-
-  const handleReply = (id: string, subject: string) => {
-    setActionItems((prev) => prev.filter((m) => m.id !== id));
-    toast({ title: "Resposta enviada", description: `"${subject}" marcado como respondido.` });
-  };
-
-  const handleClear = () => {
-    const total = actionItems.length + infoItems.length + lowItems.length;
-    if (total === 0) {
-      toast({ title: "Caixa já está vazia" });
-      return;
-    }
-    setActionItems([]);
-    setInfoItems([]);
-    setLowItems([]);
-    toast({ title: "Caixa limpa", description: `${total} e-mails arquivados.` });
-  };
-
-  return (
-    <SectionCard
-      icon={Inbox}
-      title="Caixa de Entrada Inteligente"
-      description="Organizada automaticamente pela IA"
-      action={
-        <Button
-          variant="ghost"
-          size="sm"
-          className="gap-1.5 text-xs h-8 text-muted-foreground"
-          onClick={handleClear}
-        >
-          Limpar caixa
-        </Button>
-      }
-    >
-      <div className="space-y-4">
-        {/* Ação necessária */}
-        <div>
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-destructive/80">Ação necessária</span>
-            <Badge variant="outline" className="h-4 px-1.5 text-[9px] border-destructive/30 text-destructive">{actionItems.length}</Badge>
-          </div>
-          {actionItems.length === 0 ? (
-            <p className="text-[11px] text-muted-foreground py-3 text-center">Nenhum e-mail pendente 🎉</p>
-          ) : (
-            <ul className="space-y-1.5">
-              {actionItems.map((m) => (
-                <li key={m.id} className="group flex items-center gap-3 p-2.5 rounded-lg border border-border/30 bg-background/40 hover:border-destructive/30 transition-colors">
-                  <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" strokeWidth={1.5} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium truncate">{m.subject}</p>
-                    <p className="text-[10px] text-muted-foreground truncate">{m.from}</p>
-                  </div>
-                  <span className={cn("text-[9px] font-medium px-1.5 py-0.5 rounded border", priorityStyle(m.priority))}>{m.priority}</span>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-7 text-[10px] px-2"
-                    onClick={() => handleReply(m.id, m.subject)}
-                  >
-                    Responder
-                  </Button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        {/* Informações */}
-        {infoItems.length > 0 && (
-          <div>
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/70">Informações</span>
-              <Badge variant="outline" className="h-4 px-1.5 text-[9px] border-border/40">{infoItems.length}</Badge>
-            </div>
-            <ul className="space-y-1.5">
-              {infoItems.map((m) => (
-                <li
-                  key={m.id}
-                  onClick={() => toast({ title: m.subject, description: `De: ${m.from}` })}
-                  className="flex items-center gap-3 p-2.5 rounded-lg border border-border/20 bg-background/30 hover:bg-background/50 transition-colors cursor-pointer"
-                >
-                  <Mail className="h-3.5 w-3.5 text-muted-foreground shrink-0" strokeWidth={1.5} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs truncate">{m.subject}</p>
-                    <p className="text-[10px] text-muted-foreground truncate">{m.from}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
-        {/* Baixa prioridade, colapsado */}
-        {lowItems.length > 0 && (
-          <div>
-            <button
-              onClick={() => setLowOpen((v) => !v)}
-              className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-muted/20 transition-colors text-left"
-            >
-              <div className="flex items-center gap-2">
-                <ChevronDown className={cn("h-3.5 w-3.5 text-muted-foreground transition-transform", !lowOpen && "-rotate-90")} />
-                <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground/70">Baixa prioridade</span>
-                <Badge variant="outline" className="h-4 px-1.5 text-[9px] border-border/40">{lowItems.length}</Badge>
-              </div>
-            </button>
-            {lowOpen && (
-              <ul className="mt-1.5 space-y-1.5">
-                {lowItems.map((m) => (
-                  <li
-                    key={m.id}
-                    onClick={() => toast({ title: m.subject, description: `De: ${m.from}` })}
-                    className="flex items-center gap-3 p-2.5 rounded-lg border border-border/15 bg-background/20 opacity-80 hover:opacity-100 cursor-pointer transition-opacity"
-                  >
-                    <Mail className="h-3.5 w-3.5 text-muted-foreground/60 shrink-0" strokeWidth={1.5} />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-xs text-muted-foreground truncate">{m.subject}</p>
-                      <p className="text-[10px] text-muted-foreground/70 truncate">{m.from}</p>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
-      </div>
-    </SectionCard>
-  );
-};
 
 const NewsCard = ({ onNavigate }: { onNavigate?: (id: string) => void }) => {
   const [activeTopic, setActiveTopic] = useState<string>("Todos");
@@ -596,11 +457,25 @@ const ProductivityHub = ({ onNavigate }: ProductivityHubProps) => {
           {/* Daily summary, hero */}
           <DailySummaryCard onRefresh={handleRefresh} refreshing={refreshing} />
 
-          {/* Grid: Agenda + Inbox */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <AgendaCard />
-            <InboxCard />
-          </div>
+          {/* Agenda em largura total. Inbox real vive em Workspace › Comunicação. */}
+          <AgendaCard />
+
+          {/* CTA para o inbox real (evita duplicação com o UnifiedInbox no Workspace) */}
+          <button
+            onClick={() => onNavigate?.("workspace")}
+            className="w-full flex items-center justify-between gap-3 rounded-xl border border-border/10 bg-muted/5 hover:bg-muted/10 transition-colors px-4 py-3 text-left group"
+          >
+            <div className="flex items-center gap-3">
+              <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                <Inbox className="h-4 w-4 text-primary" strokeWidth={1.75} />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Caixa de entrada unificada</p>
+                <p className="text-[11px] text-muted-foreground">Mensagens de agentes e integrações · Workspace › Comunicação</p>
+              </div>
+            </div>
+            <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+          </button>
 
           {/* News full width */}
           <NewsCard onNavigate={onNavigate} />
