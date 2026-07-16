@@ -244,13 +244,12 @@ async function dispatchProvider(
   if (gen.provider === "veo3") {
     // Gemini Veo 3 long-running operation
     const url = `https://generativelanguage.googleapis.com/v1beta/models/${gen.model}:predictLongRunning?key=${keys.geminiKey}`;
-    const instances = [{ prompt: gen.prompt }];
+    const instances: any[] = [{ prompt: gen.prompt }];
     if (gen.input_image_url) {
-      // Fetch image and inline
       const imgRes = await fetch(gen.input_image_url);
       const imgBuf = new Uint8Array(await imgRes.arrayBuffer());
       const b64 = btoa(String.fromCharCode(...imgBuf));
-      (instances[0] as any).image = { bytesBase64Encoded: b64, mimeType: imgRes.headers.get("content-type") ?? "image/png" };
+      instances[0].image = { bytesBase64Encoded: b64, mimeType: imgRes.headers.get("content-type") ?? "image/png" };
     }
     const res = await fetch(url, {
       method: "POST",
@@ -264,10 +263,37 @@ async function dispatchProvider(
         },
       }),
     });
+
     if (!res.ok) {
       const errBody = await res.text();
+      const quotaHit =
+        res.status === 429 ||
+        res.status === 403 ||
+        /quota|rate.?limit|resource.?exhausted|exceed/i.test(errBody);
+
+      // Auto-fallback Veo3 → Replicate quando a Google esgota cota / rate-limita.
+      if (quotaHit && keys.replicateKey && keys.lovableKey) {
+        await logStep(
+          supa,
+          gen.id,
+          "fallback",
+          "in_progress",
+          `Veo 3 sem cota (${res.status}). Migrando automaticamente para Replicate.`,
+          { veo3_status: res.status, veo3_error: errBody.slice(0, 500) },
+        );
+        const fallbackModel = "wan-video/wan-2.2-i2v-fast";
+        await supa
+          .from("video_generations")
+          .update({ provider: "replicate", model: fallbackModel })
+          .eq("id", gen.id);
+        gen.provider = "replicate";
+        gen.model = fallbackModel;
+        return await dispatchProvider(supa, gen, keys);
+      }
+
       throw new Error(`Veo3 [${res.status}]: ${errBody}`);
     }
+
     const op = await res.json();
     await supa
       .from("video_generations")
