@@ -22,6 +22,16 @@ export interface ThorDashboardContext {
   unreadNotifications: number;
   hasCompanyData: boolean;
   topAgentByExecutions: string | null;
+  companyDna: {
+    scope: "own" | "client";
+    clientLabel: string | null;
+    industry: string | null;
+    coreBusiness: string | null;
+    primaryColor: string | null;
+    secondaryColor: string | null;
+    fonts: string[];
+    painPoints: string[];
+  } | null;
 }
 
 let cachedContext: ThorDashboardContext | null = null;
