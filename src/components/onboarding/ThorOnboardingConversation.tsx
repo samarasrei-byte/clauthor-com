@@ -76,6 +76,15 @@ const uid = () => Math.random().toString(36).slice(2, 10);
 
 const STEPS: StepDef[] = [
   {
+    id: "contract_kind",
+    ask: () => "Antes de tudo: como você prefere começar? Você pode mudar depois no painel.",
+    choices: [
+      { value: "squad", label: "Squad vertical", hint: "4–7 especialistas focados numa dor específica" },
+      { value: "departamento", label: "Departamento completo", hint: "Time de IA cobrindo uma área inteira" },
+      { value: "agente", label: "Agentes individuais", hint: "Escolho função por função" },
+    ],
+  },
+  {
     id: "company_name",
     ask: () => "Qual é o nome da sua empresa? Se ainda não tem, pode escrever o nome do projeto.",
     placeholder: "Ex.: Acme Consultoria",
