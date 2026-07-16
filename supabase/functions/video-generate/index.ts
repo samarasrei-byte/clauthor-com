@@ -38,6 +38,16 @@ Deno.serve(async (req) => {
     // Service client for privileged writes/reads
     const supa = createClient(supabaseUrl, serviceKey);
 
+    // Reconcile stuck jobs: mark queued/processing older than 20min as failed
+    const staleCutoff = new Date(Date.now() - 20 * 60_000).toISOString();
+    await supa
+      .from("video_generations")
+      .update({ status: "failed", error: "timeout: nenhum progresso em 20min" })
+      .eq("user_id", userId)
+      .in("status", ["queued", "processing"])
+      .lt("updated_at", staleCutoff);
+
+
     const raw = await req.json();
     const parsed = BodySchema.safeParse(raw);
     if (!parsed.success) {

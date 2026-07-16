@@ -19,6 +19,7 @@
 
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { checkRateLimit } from "../_shared/security.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -325,6 +326,23 @@ serve(async (req) => {
     return new Response(
       JSON.stringify(rpcError(null, -32001, "Unauthorized — Bearer token required")),
       { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+    );
+  }
+
+  // Rate limit per token (60 req/min per client)
+  const rlKey = `mcp:${authHeader.slice(7, 47)}`;
+  const rl = checkRateLimit(rlKey, 60, 60_000);
+  if (!rl.allowed) {
+    return new Response(
+      JSON.stringify(rpcError(null, -32002, `Rate limit exceeded, retry in ${rl.retryAfter}s`)),
+      {
+        status: 429,
+        headers: {
+          ...corsHeaders,
+          "Content-Type": "application/json",
+          "Retry-After": String(rl.retryAfter ?? 60),
+        },
+      },
     );
   }
 
