@@ -129,7 +129,7 @@ const FirstOutputFlow = () => {
       <SEO
         title="Primeiro resultado em 90 segundos · Clauthor"
         description="Diga o que sua empresa precisa. THOR roteia, o agente executa e entrega o primeiro output real em menos de 90 segundos."
-        canonical="/primeiro-resultado"
+        path="/primeiro-resultado"
       />
       <div className="min-h-screen bg-background">
         <div className="max-w-3xl mx-auto px-4 py-16 md:py-24">
