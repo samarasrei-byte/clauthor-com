@@ -139,6 +139,19 @@ export function formatContextForPrompt(ctx: ThorDashboardContext): string {
     `- Agentes contratados: ${ctx.totalAgents} (${ctx.activeAgents} ativos)`,
   ];
 
+  if (ctx.companyDna) {
+    const d = ctx.companyDna;
+    lines.push("");
+    lines.push("## DNA DA EMPRESA (use no tom, exemplos e criação de conteúdo)");
+    if (d.scope === "client" && d.clientLabel) lines.push(`- Marca: ${d.clientLabel} (cliente atendido)`);
+    if (d.industry) lines.push(`- Setor: ${d.industry}`);
+    if (d.coreBusiness) lines.push(`- Core business: ${d.coreBusiness}`);
+    if (d.primaryColor || d.secondaryColor) lines.push(`- Cores da marca: primária=${d.primaryColor || "-"} · secundária=${d.secondaryColor || "-"}`);
+    if (d.fonts.length) lines.push(`- Tipografia: ${d.fonts.join(", ")}`);
+    if (d.painPoints.length) lines.push(`- Dores principais: ${d.painPoints.join("; ")}`);
+    lines.push("");
+  }
+
   if (ctx.agentNames.length > 0) {
     lines.push(`- Nomes: ${ctx.agentNames.join(", ")}`);
   }
