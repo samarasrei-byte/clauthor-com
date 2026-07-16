@@ -33,6 +33,7 @@ function lazyRetry(factory: () => Promise<any>) {
 const Index = lazyRetry(() => import("./pages/Index"));
 const ClientDashboard = lazyRetry(() => import("./pages/ClientDashboard"));
 const ExecutionReplay = lazyRetry(() => import("./pages/ExecutionReplay"));
+const FirstOutputFlow = lazyRetry(() => import("./pages/FirstOutputFlow"));
 
 const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
 const AdminKpiDashboard = lazyRetry(() => import("./pages/AdminKpiDashboard"));
