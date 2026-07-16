@@ -62,9 +62,6 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
   })();
 
   const [tab, setTab] = useState<string>(initial.tab);
-  const [commView, setCommView] = useState<"inbox" | "approvals">(
-    initial.view === "approvals" ? "approvals" : "inbox"
-  );
   const [orchView, setOrchView] = useState<"squads" | "composer">(
     initial.view === "composer" ? "composer" : "squads"
   );
@@ -74,12 +71,12 @@ const WorkspaceHub = ({ defaultTab, agents, nameToSlug, onNavigate, onSelectAgen
 
   // Persiste view no querystring para deep-linking.
   useEffect(() => {
-    const currentView = tab === "comunicacao" ? commView : tab === "orquestracao" ? orchView : tab === "execucao" ? execView : null;
+    const currentView = tab === "orquestracao" ? orchView : tab === "execucao" ? execView : null;
     const params = new URLSearchParams(searchParams);
     if (currentView) params.set("view", currentView); else params.delete("view");
     setSearchParams(params, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tab, commView, orchView, execView]);
+  }, [tab, orchView, execView]);
 
   return (
     <div className="space-y-4">
