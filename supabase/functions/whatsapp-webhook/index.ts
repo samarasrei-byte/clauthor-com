@@ -30,8 +30,13 @@ const admin = createClient(SUPABASE_URL, SERVICE_KEY, {
 });
 
 // ── HMAC signature verification (Meta X-Hub-Signature-256) ────────────────
+// FAIL-CLOSED: se META_APP_SECRET não estiver configurado, recusamos POSTs.
+// Isso impede spoofing em produção quando o secret é acidentalmente removido.
 async function verifySignature(rawBody: string, signature: string | null): Promise<boolean> {
-  if (!META_APP_SECRET) return true; // dev mode: sem app secret configurado
+  if (!META_APP_SECRET) {
+    console.error("[whatsapp-webhook] META_APP_SECRET não configurado — rejeitando POST (fail-closed)");
+    return false;
+  }
   if (!signature || !signature.startsWith("sha256=")) return false;
   const expected = signature.slice(7);
   const key = await crypto.subtle.importKey(

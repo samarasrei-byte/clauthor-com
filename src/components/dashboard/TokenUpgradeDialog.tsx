@@ -164,9 +164,13 @@ export default function TokenUpgradeDialog({ trigger }: TokenUpgradeDialogProps)
 
     setPaypalLoading(true);
     try {
+      // pack_slug/plan_slug é a autoridade do preço no server. amount é apenas
+      // referência que o backend valida contra o catálogo.
+      const packSlug = selectedPlan ? `plan-${selectedPlan}` : selectedPack!;
       const { data, error } = await supabase.functions.invoke("paypal-checkout", {
         body: {
           action: "create_order",
+          pack_slug: packSlug,
           amount: priceNum,
           currency: "USD",
           description: selectedItemName || "Clauthor Upgrade",

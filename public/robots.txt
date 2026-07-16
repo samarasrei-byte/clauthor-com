@@ -13,4 +13,4 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://www.clauthor.com/sitemap.xml
+Sitemap: https://clauthor.com/sitemap.xml

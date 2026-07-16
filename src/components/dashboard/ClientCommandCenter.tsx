@@ -10,19 +10,35 @@ import { useTranslation } from "react-i18next";
 import TeachAgentsModal from "./TeachAgentsModal";
 import KpiStrip from "./KpiStrip";
 
+/**
+ * Props consumidas de fato pelo componente. As demais métricas (executions,
+ * tokens, savings, credits, subscriptions, logs) já são renderizadas em
+ * <KpiStrip/> pelo pai (DashboardOverview) — não precisamos duplicar aqui.
+ * Mantemos opcionais os campos legados p/ compatibilidade com callsites
+ * antigos, mas o componente só usa activeAgents + agents.
+ */
 interface ClientCommandCenterProps {
   activeAgents: number;
-  totalExecutions: number;
-  totalTokensUsed: number;
-  usagePercentage: number;
-  estimatedSavings: number;
-  credits: any;
-  remainingCredits: number;
-  agents: any[];
-  subscriptions: any[];
-  recentLogs: any[];
-  tokenUsage: any[];
+  agents?: any[];
   onNavigate?: (section: string) => void;
+  /** @deprecated — não usado; mantido só p/ retrocompat. */
+  totalExecutions?: number;
+  /** @deprecated */
+  totalTokensUsed?: number;
+  /** @deprecated */
+  usagePercentage?: number;
+  /** @deprecated */
+  estimatedSavings?: number;
+  /** @deprecated */
+  credits?: any;
+  /** @deprecated */
+  remainingCredits?: number;
+  /** @deprecated */
+  subscriptions?: any[];
+  /** @deprecated */
+  recentLogs?: any[];
+  /** @deprecated */
+  tokenUsage?: any[];
 }
 
 const ClientCommandCenter = ({

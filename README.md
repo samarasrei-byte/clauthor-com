@@ -1,81 +1,66 @@
-# Welcome to your Lovable project
+# CLAUTHOR
 
-## Project info
+**Contrate um departamento inteiro de IA em minutos.**
+20 departamentos. Squads customizáveis. +200 especialistas de IA orquestrados por um único comando.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+- 🌐 Produção: <https://clauthor.com>
+- 📚 Docs: <https://docs.clauthor.com>
+- 💬 Suporte: <mailto:support@clauthor.com>
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## Stack
 
-**Use Lovable**
+| Camada | Tecnologia |
+|--------|-----------|
+| Frontend | React 18 + Vite 5 + TypeScript 5 + Tailwind v3 + shadcn/ui |
+| Backend | Lovable Cloud (Supabase gerenciado) — Postgres + Edge Functions Deno |
+| IA | Lovable AI Gateway (OpenAI GPT-5.5, Gemini, GPT-4o STT, etc.) |
+| Pagamentos | PayPal (assinaturas + one-time) |
+| Comunicação | WhatsApp Business Cloud API, Meta Ads, LinkedIn, Email |
+| Assinatura de docs | ClickSign, DocuSign |
+| Prospecção | Hunter (LinkedIn multi-tenant), PhantomBuster |
+| MCP | Servidor MCP nativo para Claude Desktop / Cursor |
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## Arquitetura
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Pipeline hierárquico de 10 camadas** com 20 departamentos e ~225 agentes
+- **Memória hierárquica em 4 camadas** (episódica, semântica, procedural) via pgvector
+- **Multi-tenant** com RLS em 100% das 109 tabelas públicas
+- **Smart Approvals Center** para governança de ações de alto risco
+- **Faturamento híbrido**: Starter Plan + Outcome-Based Pricing
 
-**Use your preferred IDE**
+## Desenvolvimento local
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+Este é um projeto Lovable. A forma recomendada de editar é pelo editor Lovable — o preview roda automaticamente no sandbox.
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+Para rodar manualmente:
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+bun install
+bun run dev        # Vite em http://localhost:8080
+bun run build      # build de produção
+bun run test       # vitest
+bun run test:e2e   # playwright
 ```
 
-**Edit a file directly in GitHub**
+Copie `.env.example` para `.env` e preencha com valores do seu projeto Cloud (a Lovable já faz isso automaticamente ao conectar Cloud).
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Deploy
 
-**Use GitHub Codespaces**
+- **Frontend**: publicado via botão *Publish* no editor Lovable. Muda vão pra live após clicar em *Update* no diálogo de publish.
+- **Edge Functions & migrations**: deploy automático a cada mudança no branch principal.
+- **Domínio**: `clauthor.com` (canônico, sem `www`) — configurado em Project Settings → Domains.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Segurança
 
-## Documentação interna
+- RLS habilitado em 100% das tabelas públicas
+- Roles gerenciadas em tabela dedicada `user_roles` + `has_role()` SECURITY DEFINER
+- Nunca há `service_role` no cliente
+- Secrets injetados em runtime via `Deno.env.get` (nunca commitados)
+- HMAC verification em webhooks (WhatsApp, DocuSign, ClickSign, PayPal)
+- Auditoria contínua via `security-audit` edge function
 
-Auditorias e análises de produto vivem em [`docs/audits/`](./docs/audits):
+## Licença
 
-- [IA Jurídica](./docs/audits/AUDITORIA_IA_JURIDICA.md)
-- [Lançamento Rede Neural](./docs/audits/AUDITORIA_LANCAMENTO_REDE_NEURAL.md)
-- [Preços Marketplace](./docs/audits/AUDITORIA_PRECOS_MARKETPLACE.md)
-
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Proprietário © CLAUTHOR — Todos os direitos reservados.
