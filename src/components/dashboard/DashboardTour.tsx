@@ -88,6 +88,7 @@ export function DashboardTour() {
     window.addEventListener("resize", updatePosition);
     return () => {
       clearTimeout(timer);
+      clearTimeout(skipTimer);
       window.removeEventListener("resize", updatePosition);
     };
   }, [currentStep, dismissed, tourCompleted]);
