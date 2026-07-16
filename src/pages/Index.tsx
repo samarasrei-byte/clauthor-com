@@ -201,9 +201,9 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.05 }}
             className="font-display text-[40px] sm:text-5xl md:text-6xl lg:text-[76px] font-semibold tracking-[-0.035em] leading-[1.02] max-w-5xl mb-6"
           >
-            <span className="text-foreground">{t("home.hero_title_line1")}</span>
+            <span className="text-foreground">Primeiro entendemos sua empresa.</span>
             <br />
-            <span className="gradient-text">{t("home.hero_title_line2")}</span>
+            <span className="gradient-text">Depois montamos a IA certa.</span>
           </motion.h1>
 
           <motion.p
@@ -212,12 +212,13 @@ const HomePage = () => {
             transition={{ duration: 0.6, delay: 0.15 }}
             className="text-base md:text-lg text-muted-foreground max-w-2xl mb-8 leading-relaxed"
           >
-            {t("home.hero_subtitle_prefix")}
-            <span className="text-foreground font-medium">{t("home.hero_price")}</span>
-            {t("home.hero_subtitle_suffix")}
+            Sem vender volume de agentes. O Thor faz um diagnóstico do seu mercado, concorrentes
+            e dores — e recomenda apenas os agentes que fazem sentido para o{" "}
+            <span className="text-foreground font-medium">seu porte, orçamento e cenário</span>.
+            De uma pequena operação a um time enterprise.
           </motion.p>
 
-          {/* Stats pills · Departamentos-style */}
+          {/* Pílulas consultivas · foco em resultado, não em volume */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -225,9 +226,9 @@ const HomePage = () => {
             className="flex flex-wrap items-center justify-center gap-2 mb-10"
           >
             {[
-              { icon: Bot, value: "+200", label: t("home.stat_agents") },
-              { icon: Building2, value: "20", label: t("home.stat_departments") },
-              { icon: Zap, value: "24/7", label: t("home.stat_operation") },
+              { icon: Network, value: "Diagnóstico", label: "primeiro, sempre" },
+              { icon: Building2, value: "SMB → Enterprise", label: "escala sob medida" },
+              { icon: Zap, value: "Só o necessário", label: "sem inflar contrato" },
             ].map((s) => (
               <div key={s.label} className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-card/40 border border-border text-sm">
                 <s.icon className="h-3.5 w-3.5 text-primary/70" strokeWidth={2} />
