@@ -34,6 +34,7 @@ const Index = lazyRetry(() => import("./pages/Index"));
 const ClientDashboard = lazyRetry(() => import("./pages/ClientDashboard"));
 const ExecutionReplay = lazyRetry(() => import("./pages/ExecutionReplay"));
 const FirstOutputFlow = lazyRetry(() => import("./pages/FirstOutputFlow"));
+const WhatsAppInbox = lazyRetry(() => import("./pages/WhatsAppInbox"));
 
 const AdminDashboard = lazyRetry(() => import("./pages/AdminDashboard"));
 const AdminKpiDashboard = lazyRetry(() => import("./pages/AdminKpiDashboard"));
