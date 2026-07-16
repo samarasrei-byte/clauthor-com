@@ -71,6 +71,19 @@ export function DashboardTour() {
     };
 
     updatePosition();
+    // Auto-skip step if target never mounts (e.g. no pending department card).
+    const skipTimer = setTimeout(() => {
+      const el = document.querySelector(`[data-tour="${step.target}"]`);
+      if (!el) {
+        if (currentStep < TOUR_STEPS.length - 1) {
+          setCurrentStep((prev) => prev + 1);
+        } else {
+          completeTour();
+        }
+      }
+    }, 1200);
+
+    updatePosition();
     const timer = setTimeout(updatePosition, 300); // after sidebar animations
     window.addEventListener("resize", updatePosition);
     return () => {
