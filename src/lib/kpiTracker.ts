@@ -57,7 +57,8 @@ export type KpiEventName =
   | "thor_onboarding_abandoned"
   | "paywall_view"
   | "paywall_cta_click"
-  | "video_share_click";
+  | "video_share_click"
+  | "thor_os_orchestrate";
 
 
 export interface KpiEventPayload {

@@ -78,6 +78,7 @@ const ScrumBoard = lazyRetry(() => import("./pages/ScrumBoard"));
 
 const Experience = lazyRetry(() => import("./pages/Experience"));
 const ThorConcierge = lazyRetry(() => import("./pages/ThorConcierge"));
+const ThorOS = lazyRetry(() => import("./pages/ThorOS"));
 const VideoStudio = lazyRetry(() => import("./pages/VideoStudio"));
 const HunterDashboard = lazyRetry(() => import("./pages/HunterDashboard"));
 const HunterLinkedIn = lazyRetry(() => import("./pages/HunterLinkedIn"));
@@ -203,6 +204,7 @@ const App = () => (
                   <Route path="/experience" element={<Experience />} />
                   <Route path="/mesa-redonda" element={<Experience />} />
                   <Route path="/thor" element={<ThorConcierge />} />
+                  <Route path="/thor-os" element={<ProtectedRoute><ThorOS /></ProtectedRoute>} />
                   <Route path="/reputacao-ia" element={<ReputacaoIA />} />
                   <Route path="/reputacao" element={<ReputacaoIA />} />
                   <Route path="/squads" element={<SquadsPage />} />
