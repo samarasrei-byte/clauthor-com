@@ -326,6 +326,8 @@ export default function VideoStudio() {
         />
       </Helmet>
 
+      <CopilotTour />
+
       <div className="h-full overflow-y-auto bg-background">
         {/* Sticky header estilo Notion */}
         <div className="sticky top-0 z-30 backdrop-blur-xl bg-background/80 border-b border-border/40">
