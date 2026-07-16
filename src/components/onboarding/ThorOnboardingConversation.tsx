@@ -175,7 +175,7 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
     if (!user) return null;
     const pkg = DEPARTMENT_PACKAGES.find((p) => p.id === deptSlug);
     if (!pkg) return null;
-    const monthlyCents = Math.round((pkg.price_brl ?? 1700) * 100);
+    const monthlyCents = Math.round((pkg.priceMonthly ?? 1700) * 100);
     const { data, error } = await supabase
       .from("contracted_departments")
       .insert({
@@ -185,7 +185,7 @@ export default function ThorOnboardingConversation({ homeReco, onDone, onSkip }:
         department_icon: null,
         monthly_price_cents: monthlyCents,
         currency: "BRL",
-        agent_count: pkg.agents?.length ?? 0,
+        agent_count: pkg.agentSlugs?.length ?? 0,
         agent_ids: [],
         pain_point: pain,
         company_snapshot: {
