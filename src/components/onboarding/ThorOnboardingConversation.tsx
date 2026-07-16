@@ -20,6 +20,13 @@ interface HomeReco {
   kind: "departamento" | "squad" | "agente";
   deptId?: string;
   ts: number;
+  company_name?: string | null;
+  industry?: string | null;
+  size?: string | null;
+  budget?: string | null;
+  main_pain?: string | null;
+  business_summary?: string | null;
+  last_user_message?: string | null;
 }
 
 interface Props {
