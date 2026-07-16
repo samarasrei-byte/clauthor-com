@@ -725,22 +725,73 @@ function ShareBlock({
   onDownload: () => void;
   onCopyPrompt: () => void;
 }) {
-  const handleMeta = (target: "facebook" | "instagram") => {
-    trackKpi("video_share_click", { target });
-    toast.info("Meta em modo Development", {
-      description: "OAuth admin será ativado no próximo turno para publicar direto no Facebook e Instagram.",
-    });
+  const { data: tenantId } = useTenantId();
+  const [target, setTarget] = useState<"facebook" | "instagram" | null>(null);
+  const [caption, setCaption] = useState(item.prompt);
+  const [publishing, setPublishing] = useState(false);
+  const [result, setResult] = useState<{ ok: boolean; detail: string } | null>(null);
+
+  const openMeta = (t: "facebook" | "instagram") => {
+    trackKpi("video_share_click", { target: t });
+    setCaption(item.prompt);
+    setResult(null);
+    setTarget(t);
   };
+
+  const publish = async () => {
+    if (!target) return;
+    if (!tenantId) {
+      toast.error("Tenant indisponível — recarregue a página.");
+      return;
+    }
+    setPublishing(true);
+    setResult(null);
+    try {
+      // 1) b64 → Blob → upload → signed URL
+      const bin = atob(item.b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      const blob = new Blob([bytes], { type: "image/png" });
+      const path = `${tenantId}/art/${item.id}.png`;
+      const { error: upErr } = await supabase.storage
+        .from("videos")
+        .upload(path, blob, { contentType: "image/png", upsert: true, cacheControl: "3600" });
+      if (upErr) throw new Error(`Upload falhou: ${upErr.message}`);
+      const { data: signed, error: signErr } = await supabase.storage
+        .from("videos")
+        .createSignedUrl(path, 60 * 60 * 24);
+      if (signErr || !signed?.signedUrl) throw new Error("Não foi possível gerar link público.");
+
+      // 2) meta-publish
+      const { data, error } = await supabase.functions.invoke("meta-publish", {
+        body: { platform: target, media_type: "image", media_url: signed.signedUrl, caption },
+      });
+      if (error) throw error;
+      if (data?.ok) {
+        setResult({ ok: true, detail: data.detail ?? `Publicado em ${target}.` });
+        toast.success(`Publicado em ${target === "facebook" ? "Facebook" : "Instagram"}.`);
+      } else {
+        const msg = data?.detail || data?.error?.message || data?.stage || "Falha ao publicar.";
+        setResult({ ok: false, detail: msg });
+        toast.error(msg);
+      }
+    } catch (e) {
+      const msg = (e as Error).message || "Erro ao publicar";
+      setResult({ ok: false, detail: msg });
+      toast.error(msg);
+    } finally {
+      setPublishing(false);
+    }
+  };
+
   return (
     <div className="space-y-3">
-      <div className="text-[11px] uppercase tracking-widest text-muted-foreground">
-        Publicar
-      </div>
+      <div className="text-[11px] uppercase tracking-widest text-muted-foreground">Publicar</div>
       <div className="grid grid-cols-2 gap-2">
-        <Button size="sm" variant="outline" className="h-9 gap-2" onClick={() => handleMeta("facebook")}>
+        <Button size="sm" variant="outline" className="h-9 gap-2" onClick={() => openMeta("facebook")}>
           <Facebook strokeWidth={1.5} className="w-3.5 h-3.5" /> Facebook
         </Button>
-        <Button size="sm" variant="outline" className="h-9 gap-2" onClick={() => handleMeta("instagram")}>
+        <Button size="sm" variant="outline" className="h-9 gap-2" onClick={() => openMeta("instagram")}>
           <Instagram strokeWidth={1.5} className="w-3.5 h-3.5" /> Instagram
         </Button>
         <Button size="sm" variant="outline" className="h-9 gap-2" onClick={onCopyPrompt}>
@@ -751,9 +802,35 @@ function ShareBlock({
         </Button>
       </div>
       <div className="text-[11px] text-muted-foreground leading-relaxed">
-        Meta App em <b>Development Mode</b> — apenas admins autorizados publicam. A integração OAuth
-        real será liberada assim que as credenciais Meta forem adicionadas.
+        Publica direto na sua conta Meta conectada. Conecte em <b>Ajustes → Integrações</b> caso ainda não tenha.
       </div>
+
+      <Dialog open={!!target} onOpenChange={(o) => !o && !publishing && setTarget(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {target === "facebook" ? <Facebook strokeWidth={1.5} className="w-5 h-5" /> : <Instagram strokeWidth={1.5} className="w-5 h-5" />}
+              Publicar em {target === "facebook" ? "Facebook" : "Instagram"}
+            </DialogTitle>
+            <DialogDescription>Usa sua conta Meta conectada. A imagem é armazenada temporariamente por 24h.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <div className="text-xs font-medium">Legenda</div>
+            <Textarea value={caption} onChange={(e) => setCaption(e.target.value)} rows={4} className="text-sm resize-none" />
+          </div>
+          {result && (
+            <div className={cn("rounded-lg border p-3 text-xs", result.ok ? "border-emerald-500/30 bg-emerald-500/5 text-emerald-500" : "border-destructive/30 bg-destructive/5 text-destructive")}>
+              {result.detail}
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setTarget(null)} disabled={publishing}>Cancelar</Button>
+            <Button onClick={publish} disabled={publishing}>
+              {publishing ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Publicando…</> : "Publicar agora"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
