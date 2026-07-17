@@ -33,6 +33,7 @@ function lazyRetry(factory: () => Promise<any>) {
 const Index = lazyRetry(() => import("./pages/Index"));
 const ClientDashboard = lazyRetry(() => import("./pages/ClientDashboard"));
 const ActivationStatus = lazyRetry(() => import("./pages/ActivationStatus"));
+const AgentInbox = lazyRetry(() => import("./pages/AgentInbox"));
 const ExecutionReplay = lazyRetry(() => import("./pages/ExecutionReplay"));
 const FirstOutputFlow = lazyRetry(() => import("./pages/FirstOutputFlow"));
 const WhatsAppInbox = lazyRetry(() => import("./pages/WhatsAppInbox"));
