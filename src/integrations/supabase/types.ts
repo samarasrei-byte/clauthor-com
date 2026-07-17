@@ -3512,9 +3512,11 @@ export type Database = {
           onboarded_at: string | null
           onboarding_answers: Json | null
           onboarding_completed: boolean
+          pain_raw: string | null
           tour_completed: boolean
           updated_at: string
           user_id: string
+          walkthrough_completed: boolean
         }
         Insert: {
           avatar_url?: string | null
@@ -3526,9 +3528,11 @@ export type Database = {
           onboarded_at?: string | null
           onboarding_answers?: Json | null
           onboarding_completed?: boolean
+          pain_raw?: string | null
           tour_completed?: boolean
           updated_at?: string
           user_id: string
+          walkthrough_completed?: boolean
         }
         Update: {
           avatar_url?: string | null
@@ -3540,9 +3544,11 @@ export type Database = {
           onboarded_at?: string | null
           onboarding_answers?: Json | null
           onboarding_completed?: boolean
+          pain_raw?: string | null
           tour_completed?: boolean
           updated_at?: string
           user_id?: string
+          walkthrough_completed?: boolean
         }
         Relationships: []
       }
