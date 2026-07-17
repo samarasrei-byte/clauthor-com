@@ -16,7 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useTenantId } from "@/hooks/useTenantId";
 import { cn } from "@/lib/utils";
-import { SocialIconsBar, SOCIAL_NETWORKS, type SocialNetworkDef } from "@/components/social/SocialIconsBar";
+import { SOCIAL_NETWORKS, type SocialNetworkDef } from "@/components/social/SocialIconsBar";
 
 // ─── Types ────────────────────────────────────────────────────────────────
 type Kind = "video" | "image";
