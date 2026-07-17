@@ -56,6 +56,9 @@ const MediaGalleryPanel = () => {
   const qc = useQueryClient();
   const [filter, setFilter] = useState<Filter>("all");
   const [query, setQuery] = useState("");
+  const [period, setPeriod] = useState<Period>("all");
+  const [sort, setSort] = useState<Sort>("recent");
+  const [status, setStatus] = useState<Status>("all");
   const [selected, setSelected] = useState<MediaItem | null>(null);
 
   // Videos: video_generations concluídos
