@@ -18,6 +18,7 @@ import { useTranslation } from "react-i18next";
 
 import { getRegion, formatPrice } from "@/lib/pricing";
 import { departments } from "@/data/departmentData";
+import { DEPARTMENT_PACKAGES } from "@/data/departmentPackages";
 
 /**
  * Pricing page · departament-first pricing model.
