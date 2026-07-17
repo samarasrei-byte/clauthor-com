@@ -646,4 +646,14 @@ const FilterChip = ({ active, onClick, icon: Icon, label, count, accent }: {
   </button>
 );
 
+const ActiveChip = ({ label, onClear }: { label: string; onClear: () => void }) => (
+  <button
+    onClick={onClear}
+    className="inline-flex items-center gap-1 px-2.5 h-6 rounded-full text-[10px] font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/15 transition-colors"
+  >
+    {label}
+    <XIcon className="h-2.5 w-2.5" />
+  </button>
+);
+
 export default MediaGalleryPanel;
