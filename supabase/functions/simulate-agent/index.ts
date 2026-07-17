@@ -21,6 +21,30 @@ serve(async (req) => {
       );
     }
 
+    // Best-effort resolve user id from auth header for traces
+    let currentUserId: string | null = null;
+    try {
+      const authHeader = req.headers.get("Authorization");
+      if (authHeader?.startsWith("Bearer ")) {
+        const supaUser = createClient(
+          Deno.env.get("SUPABASE_URL")!,
+          Deno.env.get("SUPABASE_ANON_KEY")!,
+          { global: { headers: { Authorization: authHeader } } },
+        );
+        const { data } = await supaUser.auth.getUser();
+        currentUserId = data?.user?.id ?? null;
+      }
+    } catch { /* traces optional */ }
+
+    const run = currentUserId
+      ? await startRun({
+          userId: currentUserId,
+          agentName: `simulate:${agentSlug ?? agentName}`,
+          name: "simulate-agent",
+          metadata: { agentSlug, agentName },
+        })
+      : null;
+
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY not configured");
 
