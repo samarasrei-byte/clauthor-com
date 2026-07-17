@@ -42,7 +42,7 @@ const Pricing = () => {
     .map((id) => departments.find((d) => d.id === id))
     .filter((d): d is (typeof departments)[number] => Boolean(d));
 
-  const roiDept = departments.find((d) => d.id === roiDeptId) ?? departments[0];
+  const roiDept = DEPARTMENT_PACKAGES.find((d) => d.id === roiDeptId) ?? DEPARTMENT_PACKAGES[0];
 
   const tokenPacks = [
     { amount: t("pricing_page.token_pack1"), price: fp(region.tokenPacks.pack5m), discount: null },
