@@ -1080,6 +1080,15 @@ Exemplo de redirecionamento:
     console.log(`[SmartRouter] complexity=${taskComplexity} quality=${agentQualityMode} model=${selectedModel}`);
 
     // === SINGLE CALL with tools - no more double call ===
+    const run: RunHandle = await startRun({
+      userId,
+      agentId: agentId || null,
+      agentName: agentName || "agent-chat",
+      name: `chat:${actionType}`,
+      input: { message: lastUserContent.slice(0, 500) },
+      metadata: { model: selectedModel, complexity: taskComplexity, quality: agentQualityMode },
+    });
+    const llmStart = Date.now();
     const firstResponse = await fetchAI({
       model: selectedModel,
       messages: [
@@ -1092,6 +1101,7 @@ Exemplo de redirecionamento:
     }, { qualityMode: agentQualityMode });
 
     if (!firstResponse.ok) {
+      finishRun(run, { status: "error", output: { http: firstResponse.status } }).catch(() => {});
       if (firstResponse.status === 429) return new Response(JSON.stringify({ error: "Rate limit exceeded." }), { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       if (firstResponse.status === 402) return new Response(JSON.stringify({ error: "AI service payment required." }), { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } });
       const errorText = await firstResponse.text();
@@ -1100,6 +1110,15 @@ Exemplo de redirecionamento:
     }
 
     const aiResponse = await firstResponse.json();
+    logSpan(run, {
+      spanType: "llm_call",
+      name: "first_response",
+      status: "ok",
+      model: selectedModel,
+      tokensInput: aiResponse.usage?.prompt_tokens ?? 0,
+      tokensOutput: aiResponse.usage?.completion_tokens ?? 0,
+      latencyMs: Date.now() - llmStart,
+    }).catch(() => {});
     const firstChoice = aiResponse.choices?.[0];
     const toolCalls = firstChoice?.message?.tool_calls;
     const toolResults: any[] = [];
