@@ -139,10 +139,26 @@ export default function AgentTraces() {
       );
   }, [traces]);
 
-  const selectedRunData = useMemo(
-    () => runs.find((r) => r.runId === selectedRun),
-    [runs, selectedRun],
+  const filteredRuns = useMemo(
+    () => (filterAgent ? runs.filter((r) => r.root.agent_id === filterAgent) : runs),
+    [runs, filterAgent],
   );
+
+  const selectedRunData = useMemo(
+    () => filteredRuns.find((r) => r.runId === selectedRun),
+    [filteredRuns, selectedRun],
+  );
+
+  // Auto-select run from ?run= or first matching agent run
+  useEffect(() => {
+    if (selectedRun) return;
+    if (filterRun && runs.some((r) => r.runId === filterRun)) {
+      setSelectedRun(filterRun);
+    } else if (filterAgent && filteredRuns.length > 0) {
+      setSelectedRun(filteredRuns[0].runId);
+    }
+  }, [filterRun, filterAgent, filteredRuns, runs, selectedRun]);
+
 
   // Aggregate metrics
   const metrics = useMemo(() => {
