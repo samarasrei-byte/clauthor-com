@@ -132,9 +132,15 @@ const Departamentos = () => {
     setCheckoutData(checkoutInfo);
 
     // Create PayPal plan for inline checkout
-    createPayPalPlan(`dept-${dept.id}`, `Departamento ${checkoutInfo.label}`, deptPrice, region.currency).then((planId) => {
-      setCheckoutData((prev) => prev ? { ...prev, planId } : prev);
-    });
+    createPayPalPlan(`dept-${dept.id}`, `Departamento ${checkoutInfo.label}`, deptPrice, region.currency)
+      .then((planId) => {
+        setCheckoutData((prev) => prev ? { ...prev, planId } : prev);
+      })
+      .catch((err) => {
+        const f = err?.friendly ?? { title: "Não conseguimos iniciar o pagamento", description: "Tente novamente em instantes." };
+        toast.error(f.title, { description: f.description });
+        setCheckoutData(null);
+      });
   }, [user, navigate, t, lang, region]);
 
   const handleApproveCheckout = useCallback((subscriptionId: string) => {
