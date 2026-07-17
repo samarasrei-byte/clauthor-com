@@ -233,6 +233,17 @@ export default function Checkout() {
               })}
             </div>
 
+            {/* Integrações necessárias por departamento no carrinho */}
+            {items.length > 0 && (
+              <div className="space-y-3">
+                {items.map((i) => (
+                  <IntegrationMatrix key={`int-${i.id}`} departmentId={i.id} compact />
+                ))}
+              </div>
+            )}
+
+
+
             <Card className="p-6 bg-white/[0.02] border-white/10 rounded-2xl">
               <div className="text-xs uppercase tracking-wider text-white/40 mb-3">Incluso</div>
               <ul className="space-y-2 text-sm text-white/80">
