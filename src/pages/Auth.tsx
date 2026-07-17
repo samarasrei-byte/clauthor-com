@@ -214,12 +214,12 @@ const AuthPage = () => {
         </div>
 
         {/* Middle · orbital neural viz + tagline */}
-        <div className="relative z-10 flex-1 flex flex-col justify-center py-12">
+        <div className="relative z-10 flex-1 flex flex-col justify-center py-8">
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.7 }}
-            className="font-display text-4xl xl:text-5xl font-bold leading-[1.05] tracking-tight max-w-md"
+            className="font-display text-3xl xl:text-5xl font-bold leading-[1.05] tracking-tight max-w-md"
           >
             Você comanda.
             <br />
