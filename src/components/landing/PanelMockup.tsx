@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Briefcase, Headphones, Megaphone, Scale, Wallet, Users, CheckCircle2, ArrowUpRight, ArrowRight } from "lucide-react";
+import { Briefcase, Headphones, Megaphone, Scale, Wallet, Users, ArrowUpRight, ArrowRight } from "lucide-react";
 
 const DEPTS = [
   { icon: Briefcase, label: "Comercial", active: true, badge: 3 },
