@@ -2148,6 +2148,59 @@ export type Database = {
         }
         Relationships: []
       }
+      department_activation_steps: {
+        Row: {
+          attempts: number
+          completed_at: string | null
+          contracted_department_id: string
+          created_at: string
+          error_message: string | null
+          id: string
+          metadata: Json
+          started_at: string | null
+          status: string
+          step: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attempts?: number
+          completed_at?: string | null
+          contracted_department_id: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json
+          started_at?: string | null
+          status?: string
+          step: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attempts?: number
+          completed_at?: string | null
+          contracted_department_id?: string
+          created_at?: string
+          error_message?: string | null
+          id?: string
+          metadata?: Json
+          started_at?: string | null
+          status?: string
+          step?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "department_activation_steps_contracted_department_id_fkey"
+            columns: ["contracted_department_id"]
+            isOneToOne: false
+            referencedRelation: "contracted_departments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       department_roi_config: {
         Row: {
           created_at: string
