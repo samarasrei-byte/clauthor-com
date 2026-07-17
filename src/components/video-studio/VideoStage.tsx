@@ -1,4 +1,4 @@
-import { Download, Link2, Loader2, PlayCircle, XCircle, Sparkles } from "lucide-react";
+import { Download, Link2, Loader2, PlayCircle, XCircle, Sparkles, Megaphone, Rocket, Film, Store, Camera, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 
@@ -12,16 +12,76 @@ interface Gen {
   error: string | null;
 }
 
+export interface StageTemplate {
+  id: string;
+  label: string;
+  sub: string;
+  icon: typeof Sparkles;
+  prompt: string;
+}
+
+const TEMPLATES: StageTemplate[] = [
+  {
+    id: "launch",
+    label: "Post de lançamento",
+    sub: "30s · vertical",
+    icon: Rocket,
+    prompt:
+      "Vídeo vertical 9:16 de 30 segundos anunciando o lançamento de um produto. Câmera cinemática se aproxima do produto sobre pedestal iluminado, luz dramática lateral, partículas suaves ao fundo, revelação heroica no clímax com o nome do produto surgindo em tipografia sans-serif elegante.",
+  },
+  {
+    id: "demo",
+    label: "Demo de produto",
+    sub: "15s · 16:9",
+    icon: Film,
+    prompt:
+      "Vídeo horizontal 16:9 de 15 segundos mostrando um produto em uso. Enquadramentos rápidos em close-up nas mãos usando o produto, iluminação natural clara, cortes ritmados, foco em textura e detalhe, mood otimista e limpo estilo Apple.",
+  },
+  {
+    id: "reels",
+    label: "Reels viral",
+    sub: "15s · 9:16",
+    icon: Zap,
+    prompt:
+      "Vídeo vertical 9:16 de 15 segundos estilo Reels viral. Sequência de takes energéticos com transições rápidas de whip pan, cores saturadas, movimento constante da câmera, close-ups expressivos de pessoas reagindo com surpresa e alegria, ambiente urbano vibrante.",
+  },
+  {
+    id: "institutional",
+    label: "Institucional",
+    sub: "20s · 16:9",
+    icon: Camera,
+    prompt:
+      "Vídeo horizontal 16:9 institucional de 20 segundos. Câmera em movimento suave em dolly sobre escritório moderno, pessoas colaborando em silêncio, luz natural de janelas grandes, paleta neutra sofisticada, tom sério e confiante estilo B2B enterprise.",
+  },
+  {
+    id: "offer",
+    label: "Anúncio de oferta",
+    sub: "10s · 1:1",
+    icon: Store,
+    prompt:
+      "Vídeo quadrado 1:1 de 10 segundos anunciando promoção relâmpago. Produto girando 360° sobre fundo colorido saturado, elementos gráficos com preço grande aparecendo em pop-in animado, ritmo acelerado, mood urgente e persuasivo estilo e-commerce.",
+  },
+  {
+    id: "bts",
+    label: "Behind the scenes",
+    sub: "20s · 9:16",
+    icon: Megaphone,
+    prompt:
+      "Vídeo vertical 9:16 de 20 segundos estilo bastidor. Handheld com leve tremor natural, iluminação prática de set, pessoas trabalhando em foco documental, cortes em jump cut, granulado sutil, mood autêntico e humano.",
+  },
+];
+
 interface Props {
   gen: Gen | null;
   onFocusComposer?: () => void;
+  onPickTemplate?: (t: StageTemplate) => void;
 }
 
 /**
- * Palco central estilo Apple TV: player 16:9 grande, controles nativos,
- * poster do thumbnail, e ações rápidas discretas abaixo.
+ * Palco central. Empty state agora carrega 6 templates prontos que pré-preenchem
+ * o prompt final — remove a fricção do "e agora, o que eu escrevo?".
  */
-export default function VideoStage({ gen, onFocusComposer }: Props) {
+export default function VideoStage({ gen, onFocusComposer, onPickTemplate }: Props) {
   const handleCopy = async () => {
     if (!gen?.output_url) return;
     await navigator.clipboard.writeText(gen.output_url);
@@ -32,7 +92,7 @@ export default function VideoStage({ gen, onFocusComposer }: Props) {
     <div className="rounded-2xl overflow-hidden border border-border/60 bg-card/40 backdrop-blur shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
       <div className="relative aspect-video bg-gradient-to-br from-neutral-950 to-neutral-900">
         {!gen ? (
-          <EmptyStage onGenerate={onFocusComposer} />
+          <EmptyStage onGenerate={onFocusComposer} onPickTemplate={onPickTemplate} />
         ) : gen.status === "completed" && gen.output_url ? (
           <video
             src={gen.output_url}
@@ -80,20 +140,53 @@ export default function VideoStage({ gen, onFocusComposer }: Props) {
   );
 }
 
-function EmptyStage({ onGenerate }: { onGenerate?: () => void }) {
+function EmptyStage({
+  onGenerate,
+  onPickTemplate,
+}: {
+  onGenerate?: () => void;
+  onPickTemplate?: (t: StageTemplate) => void;
+}) {
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-8">
-      <div className="w-14 h-14 rounded-full bg-white/5 backdrop-blur border border-white/10 flex items-center justify-center mb-5">
-        <PlayCircle strokeWidth={1.2} className="w-7 h-7 text-white/70" />
+    <div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6 py-8 overflow-y-auto">
+      <div className="w-12 h-12 rounded-full bg-white/5 backdrop-blur border border-white/10 flex items-center justify-center mb-4">
+        <PlayCircle strokeWidth={1.2} className="w-6 h-6 text-white/70" />
       </div>
-      <div className="text-lg font-medium text-white/95 tracking-tight">Seu palco está pronto</div>
-      <div className="text-sm text-white/50 mt-1 max-w-sm">
-        Descreva a cena e nossos agentes cinematográficos produzem o vídeo em minutos.
+      <div className="text-base font-medium text-white/95 tracking-tight">Comece por um template</div>
+      <div className="text-xs text-white/50 mt-1 mb-5 max-w-sm">
+        Clique num modelo e o Thor abre o prompt já preenchido — você só ajusta.
       </div>
+
+      {onPickTemplate && (
+        <div className="w-full max-w-3xl grid grid-cols-2 sm:grid-cols-3 gap-2">
+          {TEMPLATES.map((t) => {
+            const Icon = t.icon;
+            return (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => onPickTemplate(t)}
+                className="group text-left rounded-xl border border-white/10 bg-white/[0.03] hover:bg-white/[0.07] hover:border-white/25 transition-all px-3 py-2.5"
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <Icon strokeWidth={1.5} className="w-3.5 h-3.5 text-white/70 group-hover:text-white transition" />
+                  <span className="text-[12px] font-medium text-white/90">{t.label}</span>
+                </div>
+                <div className="text-[10px] font-mono uppercase tracking-wider text-white/40">{t.sub}</div>
+              </button>
+            );
+          })}
+        </div>
+      )}
+
       {onGenerate && (
-        <Button size="sm" variant="secondary" className="mt-5 gap-2" onClick={onGenerate}>
-          <Sparkles strokeWidth={1.5} className="w-4 h-4" /> Gerar primeiro vídeo
-        </Button>
+        <button
+          type="button"
+          onClick={onGenerate}
+          className="mt-5 text-[11px] text-white/50 hover:text-white/80 underline underline-offset-4 transition"
+        >
+          ou conversar do zero com o Thor <Sparkles strokeWidth={1.5} className="inline w-3 h-3 ml-1" />
+        </button>
       )}
     </div>
   );
