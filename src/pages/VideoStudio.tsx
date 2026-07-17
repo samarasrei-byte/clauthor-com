@@ -281,7 +281,13 @@ export default function VideoStudio() {
       toast.error("Erro inesperado ao iniciar geração.");
     } finally {
       setSubmitting(false);
-    }
+  }
+
+  function handlePickTemplate(t: StageTemplate) {
+    copilot.setFinalPrompt(t.prompt);
+    toast.success(`Template "${t.label}" carregado — revise e gere.`);
+  }
+
   }
 
   async function handleRefreshPoll() {
