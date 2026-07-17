@@ -1253,6 +1253,7 @@ Exemplo de redirecionamento:
       }
     }
 
+    finishRun(run, { status: "ok", output: { tokens: totalTokens } }).catch(() => {});
     return new Response(JSON.stringify({ message: assistantMessage, tokens_used: totalTokens, remaining_credits: remainingCredits - totalTokens, credit_warning: creditWarning }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
 
   } catch (error) {
