@@ -505,6 +505,9 @@ const ClientDashboard = () => {
     ...rebrandedDeptItems,
     ...rebrandedSoloItems,
 
+    // Inbox do Agente (rota dedicada) — mostra badge de não lidas
+    { id: "route:/dashboard/inbox", label: "Inbox do Agente", icon: Inbox, badge: inboxUnread || undefined, group: zoneWork },
+
     // ─── IA & Voz: THOR unificado (Chat + Overview) ───
     // "Overview" (não "Central") evita colisão de nome com "Central de Aprovações"
     {
