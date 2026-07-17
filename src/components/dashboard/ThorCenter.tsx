@@ -302,21 +302,20 @@ export default function ThorCenter({ onNavigate }: Props) {
       <motion.div
         initial={{ opacity: 0, y: -6 }}
         animate={{ opacity: 1, y: 0 }}
-        className="flex items-start gap-4 rounded-2xl border border-primary/30 bg-gradient-to-br from-primary/10 via-background to-background p-5"
+        className="flex items-start gap-3 rounded-xl border border-primary/25 bg-gradient-to-br from-primary/[0.06] via-background to-background p-4"
       >
-        <div className="w-12 h-12 rounded-2xl bg-primary/15 border border-primary/40 flex items-center justify-center">
-          <Brain className="h-6 w-6 text-primary" />
+        <div className="w-10 h-10 rounded-xl bg-primary/15 border border-primary/30 flex items-center justify-center shrink-0">
+          <Brain className="h-5 w-5 text-primary" />
         </div>
-        <div className="flex-1">
+        <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="font-display font-bold text-2xl leading-tight">Centro do Thor</h1>
-            <Badge variant="outline" className="text-[10px] uppercase tracking-widest border-primary/40 text-primary">
+            <h1 className="font-display font-semibold text-lg leading-tight">Centro do Thor</h1>
+            <Badge variant="outline" className="text-[9px] uppercase tracking-widest border-primary/40 text-primary px-1.5 py-0">
               seu copiloto
             </Badge>
           </div>
-          <p className="text-sm text-muted-foreground mt-1 max-w-2xl">
-            Tudo que o Thor te avisou, recomendou e o que ainda espera decisão sua, num só lugar.
-            Sempre que eu chegar aqui é porque tem impacto real na sua operação.
+          <p className="text-xs text-muted-foreground mt-1 max-w-2xl leading-relaxed">
+            Avisos, recomendações e decisões pendentes — só o que tem impacto real na sua operação.
           </p>
         </div>
       </motion.div>
@@ -595,20 +594,20 @@ function QuickAction({
   return (
     <button
       onClick={onClick}
-      className="rounded-xl border border-border/60 bg-card/60 p-4 text-left hover:border-primary/40 hover:bg-card transition-colors group"
+      className="rounded-xl border border-border/60 bg-card/60 p-3.5 text-left hover:border-primary/40 hover:bg-card transition-colors group"
     >
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs text-muted-foreground uppercase tracking-wider">
-          {icon} {label}
+        <div className="flex items-center gap-1.5 text-[10px] font-medium text-muted-foreground uppercase tracking-wider">
+          {icon} <span className="truncate">{label}</span>
         </div>
-        <ArrowRight className="h-4 w-4 text-muted-foreground group-hover:translate-x-0.5 transition-transform" />
+        <ArrowRight className="h-3.5 w-3.5 text-muted-foreground/60 group-hover:translate-x-0.5 group-hover:text-primary transition-all" />
       </div>
-      <p className="font-display font-bold text-3xl mt-2 leading-none">{value}</p>
-      <div className="mt-1 flex items-center gap-2 flex-wrap">
-        <p className="text-xs text-muted-foreground">{hint}</p>
+      <p className="font-display font-semibold text-2xl mt-1.5 leading-none tabular-nums">{value}</p>
+      <div className="mt-1.5 flex items-center gap-1.5 flex-wrap">
+        <p className="text-[11px] text-muted-foreground truncate">{hint}</p>
         {showPeriodChip && (
-          <Badge variant="outline" className="text-[10px] px-1.5 py-0 border-primary/30 text-primary/80">
-            {periodValue} nas últimas {periodLabel!.toLowerCase()}
+          <Badge variant="outline" className="text-[9px] px-1.5 py-0 border-border/50 text-muted-foreground/80 font-normal">
+            {periodValue} · {periodLabel!.toLowerCase()}
           </Badge>
         )}
       </div>
