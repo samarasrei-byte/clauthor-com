@@ -40,6 +40,56 @@ const Typewriter = ({ text, delay = 0 }: { text: string; delay?: number }) => {
   return <span>{shown}</span>;
 };
 
+interface LiveKpiProps {
+  label: string;
+  base: number;
+  incrementEvery: number;
+  step?: number;
+  formatter?: (v: number) => string;
+  delta: string;
+  accent?: boolean;
+  delay?: number;
+}
+
+const LiveKpi = ({ label, base, incrementEvery, step = 1, formatter, delta, accent, delay = 0 }: LiveKpiProps) => {
+  const [value, setValue] = useState(base);
+  const [pulse, setPulse] = useState(false);
+
+  useEffect(() => {
+    const id = setInterval(() => {
+      setValue((v) => +(v + step).toFixed(2));
+      setPulse(true);
+      setTimeout(() => setPulse(false), 600);
+    }, incrementEvery);
+    return () => clearInterval(id);
+  }, [incrementEvery, step]);
+
+  const display = formatter ? formatter(value) : value.toLocaleString("pt-BR");
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4, delay }}
+      className="p-3.5 rounded-xl bg-black/40 border border-white/10"
+    >
+      <div className="text-[10px] uppercase tracking-[0.12em] text-white/45 mb-2">{label}</div>
+      <div
+        className={`text-2xl font-semibold tracking-tight transition-colors duration-500 ${
+          accent ? "text-primary" : "text-white"
+        } ${pulse ? "!text-primary" : ""}`}
+      >
+        {display}
+      </div>
+      <div className="mt-1 inline-flex items-center gap-1 text-[10px] text-white/50">
+        <ArrowUpRight className="h-2.5 w-2.5 text-primary" />
+        {delta}
+      </div>
+    </motion.div>
+  );
+};
+
 const PanelMockup = () => {
   return (
     <div className="relative rounded-t-3xl border-t border-x border-white/10 bg-gradient-to-b from-white/[0.04] to-transparent overflow-hidden shadow-[0_-30px_80px_-30px_hsl(0_85%_55%/0.15)]">
