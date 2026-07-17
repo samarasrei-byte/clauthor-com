@@ -95,12 +95,30 @@ Deno.serve(async (req) => {
       ...body.messages,
     ];
 
+    const run = currentUserId
+      ? await startRun({
+          userId: currentUserId,
+          agentName: "video-copilot",
+          name: `video-copilot:${body.step}`,
+          metadata: { step: body.step, hasImage: body.hasImage ?? false },
+        })
+      : null;
+    const llmStart = Date.now();
     const result = await streamAIChat({
       model: "openai/gpt-5.5",
       messages: modelMessages,
       temperature: 0.8,
       max_tokens: 600,
     });
+    if (run) {
+      logSpan(run, {
+        spanType: "llm_call",
+        name: "streamAIChat",
+        model: "openai/gpt-5.5",
+        latencyMs: Date.now() - llmStart,
+      }).catch(() => {});
+      finishRun(run, { status: "ok" }).catch(() => {});
+    }
 
     return result.response;
   } catch (e) {
