@@ -178,6 +178,8 @@ export function usePaypalCapture() {
                     priceMonthly: subIntent.price || 0,
                   }];
 
+              const touchedDeptIds: string[] = [];
+
               for (const d of deptRows) {
                 const deptAgentIds = (d.slugs || [])
                   .map((s) => slugToAgentId[s])
@@ -203,8 +205,9 @@ export function usePaypalCapture() {
                     agent_count: deptAgentIds.length || provisionedAgents.length,
                     agent_ids: deptAgentIds.length ? deptAgentIds : provisionedAgents,
                   }).eq("id", pendingRow.id);
+                  touchedDeptIds.push(pendingRow.id);
                 } else {
-                  await supabase.from("contracted_departments").insert({
+                  const { data: inserted } = await supabase.from("contracted_departments").insert({
                     user_id: user.id,
                     department_id: d.id,
                     department_name: d.name,
@@ -217,7 +220,23 @@ export function usePaypalCapture() {
                     company_snapshot: companySnapshot,
                     onboarding_snapshot: answers,
                     status: "active",
-                  });
+                  }).select("id").single();
+                  if (inserted?.id) touchedDeptIds.push(inserted.id);
+                }
+              }
+
+              // Record activation timeline (best-effort, non-blocking).
+              for (const deptId of touchedDeptIds) {
+                for (const step of ["checkout", "subscription", "provisioning", "deploy"] as const) {
+                  supabase.functions
+                    .invoke("activation-progress", {
+                      body: {
+                        contracted_department_id: deptId,
+                        step,
+                        status: "done",
+                      },
+                    })
+                    .catch((err) => console.warn(`[activation-progress ${step}]`, err));
                 }
               }
             } catch (e) {

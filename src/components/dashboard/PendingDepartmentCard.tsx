@@ -149,6 +149,12 @@ export default function PendingDepartmentCard() {
             >
               Ativar agora <ArrowRight className="w-4 h-4" />
             </button>
+            <a
+              href="/dashboard/ativacao"
+              className="inline-flex items-center justify-center h-11 px-4 rounded-lg text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Ver status de ativação
+            </a>
             <button
               type="button"
               onClick={() => setDismissed(true)}
