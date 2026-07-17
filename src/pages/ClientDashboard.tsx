@@ -474,6 +474,7 @@ const ClientDashboard = () => {
       children: [
         { id: "productivity", label: "Produtividade", icon: BriefcaseBusiness },
         { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3 },
+        { id: "media", label: "Mídia", icon: LayoutDashboard },
         { id: "approvals", label: "Central de Aprovações", icon: CheckSquare },
       ],
     },
@@ -525,7 +526,7 @@ const ClientDashboard = () => {
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "squads", "agent-chat-active",
     "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
-    "approvals", "integrations", "system",
+    "approvals", "media", "integrations", "system",
   ]);
 
   const sidebarItems: SidebarItem[] = isAdmin
@@ -590,6 +591,7 @@ const ClientDashboard = () => {
     kanban: t("dashboard.tasks_kanban", { defaultValue: "Tarefas" }),
     files: "Arquivos",
     approvals: "Aprovações",
+    media: "Mídia",
     squads: "Equipes",
     "neural-network": "Painel Neural",
     "mission-composer": "Mission Composer",
