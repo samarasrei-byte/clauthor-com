@@ -15,6 +15,7 @@ import {
   LineChart, Boxes,
   MessageCircle, Stethoscope, UtensilsCrossed, Home, Calculator,
   GraduationCap, Scissors, ClipboardList, ShieldCheck, Mic,
+  Crown, Search, Video,
   type LucideIcon,
 } from "lucide-react";
 
