@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import HelpTooltip from "@/components/HelpTooltip";
+import { friendlyCheckoutError } from "@/lib/checkout-errors";
 
 export default function HireAndOnboard() {
   const { slug } = useParams<{ slug: string }>();
@@ -108,7 +109,14 @@ export default function HireAndOnboard() {
       window.location.href = data.approve_url;
     } catch (err: any) {
       console.error("[HireAndOnboard] PayPal error", err);
-      toast.error(err?.message || "Erro ao iniciar pagamento. Tente novamente.");
+      const friendly = friendlyCheckoutError(err);
+      toast.error(friendly.title, {
+        description: friendly.description,
+        action: friendly.reloadFixes
+          ? { label: "Recarregar", onClick: () => window.location.reload() }
+          : undefined,
+        duration: 8000,
+      });
       setLoading(false);
     }
   };
