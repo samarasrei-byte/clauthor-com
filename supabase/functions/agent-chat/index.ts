@@ -1173,6 +1173,7 @@ Exemplo de redirecionamento:
       ];
 
       if (wantStream) {
+         finishRun(run, { status: "ok", output: { tool_calls: toolCalls.length } }).catch(() => {});
          return streamResponse(secondMessages, planLimits, toolResults, creditWarning, optimizedMessages, fullSystemPrompt, credits, supabase, adminClient, tenantId, userId, agentId, actionType, toolCalls, selectedModel);
        } else {
          const secondResponse = await fetchAI({ model: selectedModel, messages: secondMessages, max_tokens: planLimits.maxResponseTokens, stream: false }, { qualityMode: agentQualityMode });
