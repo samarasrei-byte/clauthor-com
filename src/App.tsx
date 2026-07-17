@@ -221,6 +221,7 @@ const App = () => (
                 <Route element={<ProtectedRoute><DashboardLayout /></ProtectedRoute>}>
                   <Route path="/dashboard" element={<ClientDashboard />} />
                   <Route path="/dashboard/ativacao" element={<ActivationStatus />} />
+                  <Route path="/dashboard/inbox" element={<AgentInbox />} />
                   <Route path="/primeiro-resultado" element={<ProtectedRoute><FirstOutputFlow /></ProtectedRoute>} />
                   <Route path="/whatsapp" element={<ProtectedRoute><WhatsAppInbox /></ProtectedRoute>} />
                   <Route path="/replay/:runId" element={<ProtectedRoute><ExecutionReplay /></ProtectedRoute>} />
