@@ -39,6 +39,7 @@ export default function Welcome() {
   const { save } = useGuidedOnboarding();
   const [params] = useSearchParams();
   const explore = params.get("explore") === "1";
+  const mode = params.get("mode"); // "full" = fluxo conversacional completo (power user)
   const [homeReco, setHomeReco] = useState<HomeReco | null>(() => {
     if (typeof window === "undefined") return null;
     try {
