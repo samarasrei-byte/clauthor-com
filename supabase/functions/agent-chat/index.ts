@@ -13,6 +13,7 @@ import { incrementAgentUsage, resolvePriceTier, type AgentUsageResult } from "..
 
 import { decryptValueForExecution } from "./crypto.ts";
 import { corsHeaders, handleCors, jsonResponse, errorResponse, streamResponse } from "../_shared/cors.ts";
+import { startRun, logSpan, finishRun, type RunHandle } from "../_shared/agent-traces.ts";
 
 // ── Episodic memory (long-term) helpers ───────────────────────────────────
 const EPISODIC_EMBED_MODEL = "openai/text-embedding-3-small";
