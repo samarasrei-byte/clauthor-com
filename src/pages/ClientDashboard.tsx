@@ -452,6 +452,7 @@ const ClientDashboard = () => {
   const zoneTeam    = t("dashboard.zone_team",    { defaultValue: "Meu time" });
   const zoneAI      = t("dashboard.zone_ai",      { defaultValue: "IA & Voz" });
   const zoneConfig  = t("dashboard.zone_config",  { defaultValue: "Configuração" });
+  const zoneAdmin   = "Admin";
   // (compat) grupo dos departamentos gerados dinamicamente acima
   const teamGroup   = zoneTeam;
 
@@ -461,8 +462,8 @@ const ClientDashboard = () => {
 
   // Itens completos (vistos por admin). Cliente vê apenas o subset estável.
   const allSidebarItems: SidebarItem[] = [
-    // ─── Meu trabalho: consolidado em 2 entradas ───
-    // Command Center = hub/dashboard. Workspace = tudo que se faz (tarefas, produtividade, inteligência, aprovações).
+    // ─── Meu trabalho: consolidado ───
+    // Command Center = única visão geral. Workspace = onde se trabalha (sem "visão geral" duplicada).
     { id: "overview",  label: t("dashboard.command_center"), icon: LayoutDashboard, group: zoneWork },
     {
       id: "workspace",
@@ -471,10 +472,9 @@ const ClientDashboard = () => {
       badge: pendingTaskCount || undefined,
       group: zoneWork,
       children: [
-        { id: "workspace", label: "Visão geral", icon: Layers3 },
         { id: "productivity", label: "Produtividade", icon: BriefcaseBusiness },
         { id: "intelligence-hub", label: t("dashboard.intelligence_hub", { defaultValue: "Inteligência" }), icon: BarChart3 },
-        { id: "approvals", label: "Central de Aprovações", icon: Sparkles },
+        { id: "approvals", label: "Central de Aprovações", icon: CheckSquare },
       ],
     },
     // Chat unificado: sem entrada própria · o Command Center é o hub conversacional,
@@ -487,7 +487,8 @@ const ClientDashboard = () => {
     ...rebrandedDeptItems,
     ...rebrandedSoloItems,
 
-    // ─── IA & Voz: THOR unificado (Chat + Central) ───
+    // ─── IA & Voz: THOR unificado (Chat + Overview) ───
+    // "Overview" (não "Central") evita colisão de nome com "Central de Aprovações"
     {
       id: "omnix",
       label: "THOR",
@@ -495,22 +496,38 @@ const ClientDashboard = () => {
       group: zoneAI,
       children: [
         { id: "omnix", label: "Chat", icon: Brain },
-        { id: "thor-center", label: "Central", icon: Sparkles },
+        { id: "thor-center", label: "Overview", icon: Radar },
       ],
     },
 
-    // ─── Configuração ───
-    { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug, group: zoneConfig },
-    { id: "system", label: t("dashboard.nav_system", { defaultValue: "Sistema" }), icon: Settings, group: zoneConfig },
+    // ─── Configuração: Sistema agrega Integrações + Config ───
+    {
+      id: "system",
+      label: t("dashboard.nav_system", { defaultValue: "Sistema" }),
+      icon: Settings,
+      group: zoneConfig,
+      children: [
+        { id: "integrations", label: t("dashboard.integrations", { defaultValue: "Integrações" }), icon: Plug },
+        { id: "system", label: "Operações & Config", icon: Settings },
+      ],
+    },
+
+    // ─── Admin (só admin vê, via filtro CLIENT_ALLOWED abaixo) ───
+    { id: "admin-route:/admin", label: "Admin Dashboard", icon: Radar, group: zoneAdmin },
+    { id: "admin-route:/admin/kpi", label: "KPI Dashboard", icon: TrendingUp, group: zoneAdmin },
+    { id: "admin-route:/admin/roi", label: "ROI Config", icon: BarChart3, group: zoneAdmin },
+    { id: "admin-route:/admin/advocacia", label: "Vertical Advocacia", icon: Building2, group: zoneAdmin },
   ];
 
 
   // Itens exclusivos do cliente (experiência limpa, sem PRO incompleto).
+  // Admin routes (admin-route:*) entram automaticamente pra admin via isAdmin abaixo.
   const CLIENT_ALLOWED = new Set([
     "overview", "agents", "squads", "agent-chat-active",
     "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
     "approvals", "integrations", "system",
   ]);
+
   const sidebarItems: SidebarItem[] = isAdmin
     ? allSidebarItems
     : allSidebarItems.filter((it) =>
@@ -521,6 +538,12 @@ const ClientDashboard = () => {
 
   // ── Navigation ──
   const handleSidebarNav = (id: string) => {
+    // Admin routes (rotas separadas, não sections)
+    if (id.startsWith("admin-route:")) {
+      const route = id.replace("admin-route:", "");
+      navigate(route);
+      return;
+    }
     if (id.startsWith("agent-chat-")) {
       const agentId = id.replace("agent-chat-", "");
       const agent = agents.find(a => a.id === agentId);
@@ -531,6 +554,7 @@ const ClientDashboard = () => {
     if (id === "chat") setPreviousSection(activeSection);
     setActiveSection(id);
   };
+
 
   // Register Thor in the FloatingDock (bottom-center reserved zone).
   const { registerThor } = useFloatingDock();
