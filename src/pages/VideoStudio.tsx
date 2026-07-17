@@ -447,11 +447,27 @@ export default function VideoStudio() {
               />
             </motion.div>
 
-            {/* Coluna central: Palco + biblioteca */}
-            <div className="space-y-5 min-w-0">
-              <VideoStage gen={activeGen} onFocusComposer={() => copilot.reset()} />
+            {/* Coluna central: Palco + ações + biblioteca */}
+            <div className="space-y-4 min-w-0">
+              <VideoStage
+                gen={activeGen}
+                onFocusComposer={() => copilot.reset()}
+                onPickTemplate={handlePickTemplate}
+              />
+              <StageActions
+                provider={provider}
+                onProviderChange={setProvider}
+                providerAvailable={providerAvailable}
+                finalPrompt={copilot.finalPrompt}
+                onFinalPromptChange={copilot.setFinalPrompt}
+                onGenerate={handleGenerate}
+                canGenerate={!!copilot.finalPrompt && !!quota?.can_generate && !submitting}
+                submitting={submitting}
+                quotaRemaining={quota?.remaining}
+              />
               <LibraryStrip generations={generations} activeId={activeId} onSelect={setActiveId} />
             </div>
+
 
             {/* Coluna direita: Inspector */}
             <VideoInspector gen={activeGen} steps={steps} providerLabel={providerLabel} />
