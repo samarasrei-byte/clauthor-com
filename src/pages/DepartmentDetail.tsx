@@ -10,6 +10,7 @@ import { getDepartmentById, formatBRL } from "@/data/departmentPackages";
 import { WORKFORCE_CATALOG } from "@/data/workforceCatalog";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
 import IntegrationMatrix from "@/components/departments/IntegrationMatrix";
+import RoiCalculator from "@/components/departments/RoiCalculator";
 import SEO from "@/components/SEO";
 import { useDeptSelection } from "@/stores/deptSelection";
 import { toast } from "sonner";
