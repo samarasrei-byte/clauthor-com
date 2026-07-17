@@ -566,6 +566,11 @@ const ClientDashboard = () => {
       navigate(route);
       return;
     }
+    // Rotas dedicadas fora do sistema de "sections" (ex.: Inbox do Agente)
+    if (id.startsWith("route:")) {
+      navigate(id.replace("route:", ""));
+      return;
+    }
     if (id.startsWith("agent-chat-")) {
       const agentId = id.replace("agent-chat-", "");
       const agent = agents.find(a => a.id === agentId);
