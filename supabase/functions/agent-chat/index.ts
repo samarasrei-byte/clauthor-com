@@ -1195,6 +1195,7 @@ Exemplo de redirecionamento:
           }
         }
 
+        finishRun(run, { status: "ok", output: { tool_calls: toolCalls.length, tokens: totalTokens } }).catch(() => {});
         return new Response(JSON.stringify({ message: assistantMessage, tokens_used: totalTokens, remaining_credits: remainingCredits - totalTokens, credit_warning: creditWarning, tool_results: toolResults }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
       }
     }
