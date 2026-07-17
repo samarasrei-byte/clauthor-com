@@ -33,10 +33,13 @@ export function DashboardTour() {
     queryFn: async () => {
       const { data } = await supabase
         .from("profiles")
-        .select("tour_completed")
+        .select("tour_completed, walkthrough_completed")
         .eq("user_id", user!.id)
         .maybeSingle();
-      return data?.tour_completed ?? false;
+      // Skip legacy tour when the new conversational walkthrough already ran
+      // OR when the user explicitly completed the tour before.
+      const row = data as { tour_completed?: boolean; walkthrough_completed?: boolean } | null;
+      return (row?.tour_completed ?? false) || (row?.walkthrough_completed ?? false);
     },
     enabled: !!user,
     staleTime: Infinity,
