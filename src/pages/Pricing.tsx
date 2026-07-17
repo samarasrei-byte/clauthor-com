@@ -268,7 +268,7 @@ const Pricing = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {departments.map((d) => (
+                  {DEPARTMENT_PACKAGES.map((d) => (
                     <SelectItem key={d.id} value={d.id}>
                       {d.name}
                     </SelectItem>
