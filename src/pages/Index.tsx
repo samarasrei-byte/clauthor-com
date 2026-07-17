@@ -897,9 +897,10 @@ const HomePage = () => {
       </section>
 
       {/* Case study section (dados reais quando existirem) */}
-      <Suspense fallback={<div className="h-24" />}>
+      <Suspense fallback={<div className="h-24 bg-background" />}>
         <CaseStudySection />
       </Suspense>
+
 
       {/* ═══════════ CTA FINAL (dark) ═══════════ */}
       <section className="dark bg-black text-white" aria-label="CTA">
