@@ -237,7 +237,7 @@ const AuthPage = () => {
           </motion.p>
 
           {/* Orbital rings */}
-          <div className="relative mt-14 h-56 w-56">
+          <div className="relative mt-10 h-40 w-40 xl:h-56 xl:w-56 hidden xl:block">
             <motion.div
               animate={{ rotate: 360 }}
               transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
