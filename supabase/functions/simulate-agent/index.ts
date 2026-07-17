@@ -1,6 +1,8 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { resolveDepartmentPromptForAgent } from "../_shared/department-prompts.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { startRun, logSpan, finishRun } from "../_shared/agent-traces.ts";
 
 /**
  * simulate-agent
