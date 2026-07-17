@@ -55,10 +55,11 @@ const Navbar = () => {
     navigate("/");
   };
 
-  // P1 · consolidação: menu principal enxuto e canônico.
-  //  Público:  Departamentos · Como funciona · Preços · Comunidade · Entrar
+  // P1 · foco 2026: menu público reduzido ao funil de conversão principal.
+  //  Público:  Departamentos · Como funciona · Preços · Entrar
   //  Logado:   Painel · Meus agentes  (o resto vive em "Mais")
-  //  "Mais":   Team Builder · Marketplace · Enterprise · Developers · API
+  //  "Mais":   Enterprise · Developers  (Marketplace/TeamBuilder/API Docs
+  //            continuam acessíveis por deep link, mas fora do funil leigo)
   const navLinks = user
     ? [
         { label: t("nav.dashboard"), href: "/dashboard" },
@@ -68,16 +69,13 @@ const Navbar = () => {
         { label: t("navbar.ai_teams_label", { defaultValue: "Departamentos" }), href: "/departamentos" },
         { label: t("nav.how_it_works", { defaultValue: "Como funciona" }), href: "/how-it-works" },
         { label: t("nav.pricing", { defaultValue: "Preços" }), href: "/pricing" },
-        { label: t("nav.community", { defaultValue: "Comunidade" }), href: "/community" },
       ];
 
   const moreLinks = [
-    { href: "/team-builder", label: t("navbar.team_builder_label", { defaultValue: "Monte seu Squad" }), desc: "Escolha especialistas e veja o custo em tempo real" },
-    { href: "/marketplace", label: t("navbar.marketplace_label", { defaultValue: "Marketplace" }), desc: "Especialistas de IA individuais (avançado)" },
     { href: "/enterprise", label: "Enterprise", desc: "Squads dedicadas, SSO, SLA 99.9% e suporte white-glove" },
-    { href: "/developers", label: "Developers", desc: "APIs, MCP Server e integrações" },
-    { href: "/api-docs", label: "API Docs", desc: "Documentação técnica completa" },
+    { href: "/developers", label: "Developers", desc: "APIs, MCP Server e documentação técnica" },
   ];
+
 
 
   return (
