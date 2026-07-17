@@ -75,6 +75,9 @@ const SPAN_COLOR: Record<Trace["span_type"], string> = {
 export default function AgentTraces() {
   const { user } = useAuth();
   const [selectedRun, setSelectedRun] = useState<string | null>(null);
+  const [searchParams] = useSearchParams();
+  const filterAgent = searchParams.get("agent");
+  const filterRun = searchParams.get("run");
 
   const { data: traces = [], isLoading } = useQuery({
     queryKey: ["agent-traces", user?.id],
