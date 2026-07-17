@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import HelpTooltip from "@/components/HelpTooltip";
+import { friendlyCheckoutError } from "@/lib/checkout-errors";
 
 export default function HireAndOnboard() {
   const { slug } = useParams<{ slug: string }>();
