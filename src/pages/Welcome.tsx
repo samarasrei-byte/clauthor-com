@@ -118,12 +118,14 @@ export default function Welcome() {
         <RevolutionaryOnboarding isOpen onSkip={handleSkip} onComplete={() => { /* self-navigates */ }} />
       ) : fallback === "quick" ? (
         <QuickOnboarding onSkip={handleSkip} />
-      ) : (
+      ) : mode === "full" ? (
         <ThorOnboardingConversation
           homeReco={homeReco}
           onDone={handleDone}
           onSkip={handleSkip}
         />
+      ) : (
+        <OnboardingZero />
       )}
     </>
   );
