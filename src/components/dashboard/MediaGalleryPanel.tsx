@@ -127,9 +127,9 @@ const MediaGalleryPanel = () => {
 
   // ─── Approval mutation: sempre passa pelo agente ────────────────────────
   const approvalMutation = useMutation({
-    mutationFn: async ({ item, decision, notes }: { item: MediaItem; decision: "approve" | "reject"; notes: string }) => {
+    mutationFn: async ({ item, decision, notes, networks }: { item: MediaItem; decision: "approve" | "reject"; notes: string; networks: string[] }) => {
       if (!tenantId || !user) throw new Error("Sem tenant");
-      const { error } = await supabase.from("approvals").insert({
+      const { data: inserted, error } = await supabase.from("approvals").insert({
         tenant_id: tenantId,
         created_by: user.id,
         title: `[${decision === "approve" ? "Aprovado" : "Ajuste"}] ${item.title}`.slice(0, 200),
@@ -142,9 +142,28 @@ const MediaGalleryPanel = () => {
           media_id: item.source_id,
           client_decision: decision,
           client_notes: notes,
+          networks,
         } as any,
-      });
+      }).select("id").single();
       if (error) throw error;
+
+      // Notify the responsible agent/team (best-effort, non-blocking on UX)
+      try {
+        await supabase.functions.invoke("media-approval-notify", {
+          body: {
+            approval_id: inserted.id,
+            decision,
+            media_kind: item.kind,
+            media_id: item.source_id,
+            media_title: item.title,
+            media_url: item.url,
+            notes,
+            networks,
+          },
+        });
+      } catch (e) {
+        console.warn("[media-approval-notify] falhou:", e);
+      }
     },
     onSuccess: (_d, vars) => {
       toast.success(
