@@ -1130,6 +1130,7 @@ Exemplo de redirecionamento:
         let fnArgs: any = {};
         try { fnArgs = JSON.parse(toolCall.function?.arguments || "{}"); } catch { fnArgs = {}; }
         console.log(`[Autonomy] Tool requested: ${fnName}`, fnArgs);
+        const toolStart = Date.now();
 
         if (fnName === "delegate_to_agent") {
           // Delegation goes through autonomy engine
@@ -1138,6 +1139,12 @@ Exemplo de redirecionamento:
             () => delegateToAgent(fnArgs, adminClient, userId, tenantId, agentId || "general", 0)
           );
           toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...autonomyResult });
+          logSpan(run, {
+            spanType: "tool_call", name: fnName,
+            status: autonomyResult.success ? "ok" : "error",
+            input: fnArgs, output: autonomyResult.result,
+            latencyMs: Date.now() - toolStart,
+          }).catch(() => {});
         } else {
           // All tools go through autonomy engine for risk classification
           const autonomyResult = await autonomousExecute(
@@ -1145,6 +1152,12 @@ Exemplo de redirecionamento:
             () => executeTool(fnName, fnArgs, adminClient, userId, tenantId, agentId || "general", policyContext, credits.used_credits, credits.total_credits)
           );
           toolResults.push({ tool_call_id: toolCall.id, tool_name: fnName, args: fnArgs, ...autonomyResult });
+          logSpan(run, {
+            spanType: "tool_call", name: fnName,
+            status: autonomyResult.success ? "ok" : "error",
+            input: fnArgs, output: autonomyResult.result,
+            latencyMs: Date.now() - toolStart,
+          }).catch(() => {});
         }
       }
 
