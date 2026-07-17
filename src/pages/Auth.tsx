@@ -173,9 +173,9 @@ const AuthPage = () => {
   ];
 
   return (
-    <div className="min-h-dvh w-full flex -mt-16 relative overflow-hidden bg-background">
+    <div className="min-h-dvh w-full flex flex-col lg:flex-row -mt-16 pt-16 lg:pt-0 relative bg-background">
       {/* ================= LEFT · Immersive Showcase (desktop) ================= */}
-      <aside className="hidden lg:flex relative w-1/2 xl:w-[55%] flex-col justify-between p-12 xl:p-16 overflow-hidden bg-[#050505] text-white">
+      <aside className="hidden lg:flex relative w-1/2 xl:w-[55%] flex-col justify-between p-8 xl:p-14 overflow-hidden bg-[#050505] text-white min-h-dvh">
         {/* Animated aurora orbs */}
         <div className="absolute inset-0 pointer-events-none">
           <motion.div
