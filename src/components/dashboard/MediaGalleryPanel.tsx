@@ -422,7 +422,7 @@ const MediaModal = ({ item, onClose, onDecision, pending }: {
                 <Button
                   className="w-full gap-2"
                   disabled={pending}
-                  onClick={() => onDecision("approve", buildNotePayload(notes, pickedNetworks))}
+                  onClick={() => onDecision("approve", notes, pickedNetworks)}
                 >
                   {pending ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
                   Aprovar e enviar ao agente
