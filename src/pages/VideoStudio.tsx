@@ -281,6 +281,7 @@ export default function VideoStudio() {
       toast.error("Erro inesperado ao iniciar geração.");
     } finally {
       setSubmitting(false);
+    }
   }
 
   function handlePickTemplate(t: StageTemplate) {
@@ -288,7 +289,7 @@ export default function VideoStudio() {
     toast.success(`Template "${t.label}" carregado — revise e gere.`);
   }
 
-  }
+
 
   async function handleRefreshPoll() {
     await supabase.functions.invoke("video-poll", { body: {} });
