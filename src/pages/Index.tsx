@@ -179,10 +179,38 @@ const HomePage = () => {
     <div className="light relative overflow-x-hidden bg-background text-foreground">
       {/* ═══════════ HERO ═══════════ */}
       <section
-        className="dark relative bg-black text-white"
+        className="dark relative bg-[#050505] text-white overflow-hidden isolate"
         aria-label="Hero"
       >
-        <div className="max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
+        {/* Aurora orbs — mesmo efeito da tela de login */}
+        <div aria-hidden className="absolute inset-0 pointer-events-none z-0">
+          <motion.div
+            animate={{ x: [0, 60, -30, 0], y: [0, -40, 30, 0], scale: [1, 1.15, 0.95, 1] }}
+            transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute top-[10%] left-[8%] w-[560px] h-[560px] rounded-full blur-[130px] will-change-transform"
+            style={{ background: "radial-gradient(circle, hsl(var(--primary) / 0.55), transparent 65%)" }}
+          />
+          <motion.div
+            animate={{ x: [0, -50, 40, 0], y: [0, 40, -30, 0], scale: [1, 0.9, 1.1, 1] }}
+            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+            className="absolute bottom-[8%] right-[6%] w-[500px] h-[500px] rounded-full blur-[140px] will-change-transform"
+            style={{ background: "radial-gradient(circle, #6366f1aa, transparent 65%)" }}
+          />
+        </div>
+        {/* Grid overlay futurista */}
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-[0.07] pointer-events-none z-0"
+          style={{
+            backgroundImage:
+              "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
+            backgroundSize: "56px 56px",
+            maskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+            WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 80%)",
+          }}
+        />
+        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-24 pb-20 sm:pt-32 sm:pb-28">
+
 
         <div className="flex flex-col items-center text-center">
           <motion.div
