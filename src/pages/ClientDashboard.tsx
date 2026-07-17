@@ -550,6 +550,7 @@ const ClientDashboard = () => {
     "intelligence-hub", "omnix", "thor-center", "workspace", "productivity",
     "approvals", "media", "integrations", "system",
     "route:/dashboard/inbox",
+    "route:/dashboard/traces",
   ]);
 
   const sidebarItems: SidebarItem[] = isAdmin
