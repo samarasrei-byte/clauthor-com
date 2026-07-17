@@ -11,11 +11,14 @@ import {
 import { Sparkles } from "@/components/icons/Sparkles";
 import SquadPlans from "@/components/pricing/SquadPlans";
 import PricePill from "@/components/pricing/PricePill";
+import RoiCalculator from "@/components/departments/RoiCalculator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { getRegion, formatPrice } from "@/lib/pricing";
 import { departments } from "@/data/departmentData";
+import { DEPARTMENT_PACKAGES } from "@/data/departmentPackages";
 
 /**
  * Pricing page · departament-first pricing model.
@@ -29,6 +32,7 @@ const FLAGSHIP_IDS = ["comercial", "prospeccao", "marketing", "suporte", "financ
 
 const Pricing = () => {
   const [showTokens, setShowTokens] = useState(false);
+  const [roiDeptId, setRoiDeptId] = useState<string>("comercial");
   const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const region = getRegion(lang);
@@ -37,6 +41,8 @@ const Pricing = () => {
   const flagshipDepartments = FLAGSHIP_IDS
     .map((id) => departments.find((d) => d.id === id))
     .filter((d): d is (typeof departments)[number] => Boolean(d));
+
+  const roiDept = DEPARTMENT_PACKAGES.find((d) => d.id === roiDeptId) ?? DEPARTMENT_PACKAGES[0];
 
   const tokenPacks = [
     { amount: t("pricing_page.token_pack1"), price: fp(region.tokenPacks.pack5m), discount: null },
@@ -232,9 +238,52 @@ const Pricing = () => {
         {/* ═════════════ SQUAD PACKS + BUILDER (mantido, agora secundário) ═════════════ */}
         <SquadPlans />
 
+        {/* ═════════════ CALCULADORA DE ROI · qualquer departamento ═════════════ */}
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16"
+          aria-labelledby="roi-picker-title"
+        >
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+            <div>
+              <Badge variant="outline" className="mb-3 border-primary/15 text-primary/80 px-4 py-1.5">
+                <TrendingUp className="h-3.5 w-3.5 mr-2" />
+                Simule antes de contratar
+              </Badge>
+              <h2 id="roi-picker-title" className="font-display text-3xl sm:text-4xl font-bold">
+                Quanto um <span className="gradient-text">departamento de IA</span> economiza no seu negócio?
+              </h2>
+              <p className="text-muted-foreground mt-2 max-w-xl">
+                Escolha um departamento, ajuste os sliders com o seu volume real e veja em quantos dias ele se paga.
+              </p>
+            </div>
+            <div className="w-full md:w-72">
+              <label className="text-xs uppercase tracking-wider text-muted-foreground mb-2 block">
+                Departamento
+              </label>
+              <Select value={roiDeptId} onValueChange={setRoiDeptId}>
+                <SelectTrigger className="bg-white/[0.03] border-white/10">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {DEPARTMENT_PACKAGES.map((d) => (
+                    <SelectItem key={d.id} value={d.id}>
+                      {d.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <RoiCalculator key={roiDept.id} departmentId={roiDept.id} monthlyPrice={roiDept.priceMonthly} />
+        </motion.section>
+
         {/* ═════════════ CLT vs CLAUTHOR ═════════════ */}
         <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="glass-card rounded-2xl p-8 md:p-12 mb-16 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-60 h-60 bg-primary/5 rounded-full blur-[80px]" />
+
           <div className="relative z-10">
             <div className="text-center mb-10">
               <Badge variant="outline" className="mb-4 border-primary/15 text-primary/80 px-4 py-2">
