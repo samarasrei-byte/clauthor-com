@@ -447,6 +447,18 @@ const MediaTile = ({ item, decision, onClick }: { item: MediaItem; decision?: "a
         <Badge variant="outline" className="absolute top-2 left-2 text-[9px] bg-background/80 backdrop-blur border-border/60">
           {item.kind === "video" ? "Vídeo" : "Arte"}
         </Badge>
+        {decision && (
+          <Badge
+            className={cn(
+              "absolute top-2 right-2 text-[9px] backdrop-blur border-0",
+              decision === "approved"
+                ? "bg-emerald-500/90 text-white"
+                : "bg-amber-500/90 text-white",
+            )}
+          >
+            {decision === "approved" ? "Aprovado" : "Ajuste"}
+          </Badge>
+        )}
       </div>
       <div className="p-2.5">
         <div className="text-xs font-medium truncate" title={item.title}>{item.title}</div>
