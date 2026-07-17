@@ -118,6 +118,18 @@ Seja conservador nos números. Use "média" ou "baixa" quando o contexto for vag
       };
     }
 
+    if (run) {
+      logSpan(run, {
+        spanType: "llm_call",
+        name: "roi_projection",
+        model: "google/gemini-2.5-flash",
+        tokensInput: data.usage?.prompt_tokens ?? 0,
+        tokensOutput: data.usage?.completion_tokens ?? 0,
+        latencyMs: Date.now() - llmStart,
+      }).catch(() => {});
+      finishRun(run, { status: "ok", output: { confidence: parsed?.confidence } }).catch(() => {});
+    }
+
     return new Response(JSON.stringify(parsed), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
