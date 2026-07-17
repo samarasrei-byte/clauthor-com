@@ -11,6 +11,8 @@ import {
 import { Sparkles } from "@/components/icons/Sparkles";
 import SquadPlans from "@/components/pricing/SquadPlans";
 import PricePill from "@/components/pricing/PricePill";
+import RoiCalculator from "@/components/departments/RoiCalculator";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
