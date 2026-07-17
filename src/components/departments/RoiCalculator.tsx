@@ -73,8 +73,22 @@ interface RoiCalculatorProps {
 
 export default function RoiCalculator({ departmentId, monthlyPrice, className }: RoiCalculatorProps) {
   const defaults = DEPT_DEFAULTS[departmentId] ?? FALLBACK;
-  const [tasks, setTasks] = useState<number>(defaults.tasksPerMonth);
-  const [rate, setRate] = useState<number>(defaults.hourlyRate);
+
+  // Ler estado inicial da URL (?roi_tasks=&roi_rate=) para permitir compartilhar simulação.
+  const initial = useMemo(() => {
+    if (typeof window === "undefined") return { tasks: defaults.tasksPerMonth, rate: defaults.hourlyRate };
+    const p = new URLSearchParams(window.location.search);
+    const t = Number(p.get("roi_tasks"));
+    const r = Number(p.get("roi_rate"));
+    return {
+      tasks: Number.isFinite(t) && t > 0 ? t : defaults.tasksPerMonth,
+      rate: Number.isFinite(r) && r > 0 ? r : defaults.hourlyRate,
+    };
+  }, [defaults.tasksPerMonth, defaults.hourlyRate]);
+
+  const [tasks, setTasks] = useState<number>(initial.tasks);
+  const [rate, setRate] = useState<number>(initial.rate);
+  const [copied, setCopied] = useState(false);
 
   const { humanCost, savings, savingsPct, breakEvenDays, roiPct, hoursSaved } = useMemo(() => {
     const totalMinutes = tasks * defaults.minutesPerTask;
