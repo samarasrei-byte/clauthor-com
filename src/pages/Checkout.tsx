@@ -15,6 +15,7 @@ import { toast } from "sonner";
 import SEO from "@/components/SEO";
 import ClauthorLogo from "@/components/ClauthorLogo";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
+import IntegrationMatrix from "@/components/departments/IntegrationMatrix";
 import HelpTooltip from "@/components/HelpTooltip";
 import { friendlyCheckoutError } from "@/lib/checkout-errors";
 

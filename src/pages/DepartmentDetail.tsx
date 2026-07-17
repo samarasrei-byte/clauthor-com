@@ -9,6 +9,7 @@ import { PremiumCTAButton } from "@/components/ui/premium-cta-button";
 import { getDepartmentById, formatBRL } from "@/data/departmentPackages";
 import { WORKFORCE_CATALOG } from "@/data/workforceCatalog";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
+import IntegrationMatrix from "@/components/departments/IntegrationMatrix";
 import SEO from "@/components/SEO";
 import { useDeptSelection } from "@/stores/deptSelection";
 import { toast } from "sonner";
@@ -146,6 +147,9 @@ export default function DepartmentDetail() {
             ))}
           </div>
         </section>
+
+        {/* Integrations */}
+        <IntegrationMatrix departmentId={dept.id} />
 
         {/* Economy */}
         <section className="space-y-4">
