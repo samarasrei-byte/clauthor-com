@@ -58,9 +58,10 @@ Deno.serve(async (req) => {
     const commentBody = buildCommentBody(body);
     await admin.from("approval_comments").insert({
       approval_id: approval.id,
+      tenant_id: tenantId,
       user_id: userId,
       body: commentBody,
-      kind: body.decision === "approve" ? "approval" : "revision_request",
+      is_rejection_reason: body.decision === "reject",
     });
 
     // Find tenant admins/owners to notify (agent handlers)
