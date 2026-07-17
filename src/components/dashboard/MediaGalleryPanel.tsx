@@ -275,12 +275,97 @@ const MediaGalleryPanel = () => {
             className="pl-9 h-10 bg-muted/30 border-border/60"
           />
         </div>
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <FilterChip active={filter === "all"} onClick={() => setFilter("all")} icon={LayoutGrid} label="Todos" count={counts.all} />
           <FilterChip active={filter === "video"} onClick={() => setFilter("video")} icon={Film} label="Vídeos" count={counts.video} accent="text-rose-500" />
           <FilterChip active={filter === "image"} onClick={() => setFilter("image")} icon={ImageIcon} label="Artes" count={counts.image} accent="text-emerald-500" />
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <button
+                className={cn(
+                  "flex items-center gap-2 px-3 h-9 rounded-full text-xs font-medium border transition-all",
+                  activeFilterCount > 0
+                    ? "bg-primary/10 text-primary border-primary/40"
+                    : "bg-muted/30 text-muted-foreground border-border/50 hover:border-primary/40 hover:text-foreground",
+                )}
+              >
+                <SlidersHorizontal className="h-3.5 w-3.5" strokeWidth={1.8} />
+                Filtros
+                {activeFilterCount > 0 && (
+                  <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-primary/20">{activeFilterCount}</span>
+                )}
+              </button>
+            </PopoverTrigger>
+            <PopoverContent align="end" className="w-72 p-4 space-y-4">
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-1.5">
+                  <Clock className="h-3 w-3" /> Período
+                </label>
+                <Select value={period} onValueChange={(v) => setPeriod(v as Period)}>
+                  <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todo o histórico</SelectItem>
+                    <SelectItem value="24h">Últimas 24 horas</SelectItem>
+                    <SelectItem value="7d">Últimos 7 dias</SelectItem>
+                    <SelectItem value="30d">Últimos 30 dias</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-1.5">
+                  <CheckCircle2 className="h-3 w-3" /> Status da decisão
+                </label>
+                <Select value={status} onValueChange={(v) => setStatus(v as Status)}>
+                  <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">Todos</SelectItem>
+                    <SelectItem value="none">Aguardando revisão</SelectItem>
+                    <SelectItem value="approved">Aprovados</SelectItem>
+                    <SelectItem value="revision">Com ajuste pedido</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div>
+                <label className="text-[10px] uppercase tracking-wider text-muted-foreground flex items-center gap-1.5 mb-1.5">
+                  <ArrowDownUp className="h-3 w-3" /> Ordenação
+                </label>
+                <Select value={sort} onValueChange={(v) => setSort(v as Sort)}>
+                  <SelectTrigger className="h-9 text-xs"><SelectValue /></SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="recent">Mais recentes primeiro</SelectItem>
+                    <SelectItem value="oldest">Mais antigos primeiro</SelectItem>
+                    <SelectItem value="title">Título (A → Z)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              {activeFilterCount > 0 && (
+                <Button variant="ghost" size="sm" className="w-full gap-1.5 h-8 text-xs" onClick={clearFilters}>
+                  <XIcon className="h-3 w-3" /> Limpar filtros
+                </Button>
+              )}
+            </PopoverContent>
+          </Popover>
         </div>
       </div>
+
+      {/* Active filter chips */}
+      {activeFilterCount > 0 && (
+        <div className="flex flex-wrap gap-1.5 -mt-1">
+          {period !== "all" && (
+            <ActiveChip label={period === "24h" ? "24h" : period === "7d" ? "7 dias" : "30 dias"} onClear={() => setPeriod("all")} />
+          )}
+          {status !== "all" && (
+            <ActiveChip
+              label={status === "none" ? "Aguardando" : status === "approved" ? "Aprovados" : "Ajuste pedido"}
+              onClear={() => setStatus("all")}
+            />
+          )}
+          {sort !== "recent" && (
+            <ActiveChip label={sort === "oldest" ? "Antigos" : "A → Z"} onClear={() => setSort("recent")} />
+          )}
+        </div>
+      )}
 
       {/* Grid */}
       {isLoading ? (
