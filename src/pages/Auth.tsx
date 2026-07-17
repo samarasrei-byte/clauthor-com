@@ -290,7 +290,7 @@ const AuthPage = () => {
       </aside>
 
       {/* ================= RIGHT · Auth form ================= */}
-      <div className="relative flex-1 flex items-center justify-center px-4 py-24 lg:py-12">
+      <div className="relative flex-1 flex items-center justify-center px-4 sm:px-6 py-8 sm:py-12 lg:py-10 min-h-[calc(100dvh-4rem)] lg:min-h-dvh">
         {/* Soft glow behind form on mobile */}
         <div className="absolute inset-0 pointer-events-none lg:hidden">
           <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary/10 blur-[150px] rounded-full" />
