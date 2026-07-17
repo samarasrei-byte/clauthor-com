@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, Check, CheckCircle2, Diamond, Plus, TrendingDown, Users } from "lucide-react";
+import { ArrowLeft, ArrowRight, Check, CheckCircle2, Diamond, Plus, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -10,12 +10,13 @@ import { getDepartmentById, formatBRL } from "@/data/departmentPackages";
 import { WORKFORCE_CATALOG } from "@/data/workforceCatalog";
 import AgentsWorkingScene from "@/components/departments/AgentsWorkingScene";
 import IntegrationMatrix from "@/components/departments/IntegrationMatrix";
+import RoiCalculator from "@/components/departments/RoiCalculator";
 import SEO from "@/components/SEO";
 import { useDeptSelection } from "@/stores/deptSelection";
 import { toast } from "sonner";
 
-// Custo médio de uma equipe humana equivalente para um departamento (CLT + encargos + gestão)
-const HUMAN_TEAM_COST = 90000;
+
+
 
 export default function DepartmentDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -35,8 +36,7 @@ export default function DepartmentDetail() {
   if (!dept) return <Navigate to="/departamentos" replace />;
 
   const Icon = dept.icon;
-  const savings = HUMAN_TEAM_COST - dept.priceMonthly;
-  const savingsPct = Math.round((savings / HUMAN_TEAM_COST) * 100);
+
 
   const handleAdd = () => {
     if (inCart) {
@@ -151,38 +151,9 @@ export default function DepartmentDetail() {
         {/* Integrations */}
         <IntegrationMatrix departmentId={dept.id} />
 
-        {/* Economy */}
-        <section className="space-y-4">
-          <div className="flex items-center gap-2">
-            <TrendingDown className="w-5 h-5 text-emerald-400" />
-            <h2 className="text-2xl font-display font-semibold">Economia potencial</h2>
-          </div>
-          <Card className="p-6 bg-white/[0.02] border-white/10 rounded-2xl">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div>
-                <div className="text-xs text-white/40 uppercase tracking-wider">Equipe humana</div>
-                <div className="mt-1 text-2xl font-semibold text-white/80 line-through decoration-white/30">
-                  {formatBRL(HUMAN_TEAM_COST)}
-                </div>
-                <div className="text-xs text-white/40">por mês</div>
-              </div>
-              <div>
-                <div className="text-xs text-white/40 uppercase tracking-wider">Com Clauthor</div>
-                <div className="mt-1 text-2xl font-semibold text-white">
-                  {formatBRL(dept.priceMonthly)}
-                </div>
-                <div className="text-xs text-white/40">por mês, cobertura completa</div>
-              </div>
-              <div>
-                <div className="text-xs text-emerald-400/70 uppercase tracking-wider">Você economiza</div>
-                <div className="mt-1 text-2xl font-semibold text-emerald-400">
-                  {formatBRL(savings)} <span className="text-sm">({savingsPct}%)</span>
-                </div>
-                <div className="text-xs text-white/40">por mês</div>
-              </div>
-            </div>
-          </Card>
-        </section>
+        {/* ROI Calculator (substitui card estático de economia) */}
+        <RoiCalculator departmentId={dept.id} monthlyPrice={dept.priceMonthly} />
+
 
         {/* CTA */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-6 rounded-2xl border border-white/10 bg-white/[0.02]">
